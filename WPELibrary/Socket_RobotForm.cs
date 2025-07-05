@@ -475,7 +475,7 @@ namespace WPELibrary
             {
                 if (this.cbbSend_SendLIst.SelectedItem != null)
                 {
-                    Operate.SendConfig.SendList.SendListItem item = (Operate.SendConfig.SendList.SendListItem)this.cbbSend_SendLIst.SelectedItem;              
+                    Operate.SendConfig.List.SendListItem item = (Operate.SendConfig.List.SendListItem)this.cbbSend_SendLIst.SelectedItem;              
                     Guid SID = item.SID;
                     string sContent = SID.ToString().ToUpper();
 

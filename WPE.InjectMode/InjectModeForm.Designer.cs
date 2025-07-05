@@ -53,6 +53,12 @@
             AntdUI.SegmentedItem segmentedItem11 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem12 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem13 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem14 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem15 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem16 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem17 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem18 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem19 = new AntdUI.SegmentedItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InjectModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -130,6 +136,10 @@
             this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
+            this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
+            this.tSendList = new AntdUI.Table();
+            this.sSendList = new AntdUI.Segmented();
+            this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -143,7 +153,9 @@
             this.tlpProcessInfo.SuspendLayout();
             this.tpFilterList.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
+            this.tpSendList.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
+            this.tlpSendList.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -326,7 +338,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -340,6 +352,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
+            this.tabInjectMode.SelectedIndex = 2;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -348,7 +361,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
+            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1254,9 +1267,10 @@
             // 
             // tpSendList
             // 
-            this.tpSendList.Location = new System.Drawing.Point(0, 0);
+            this.tpSendList.Controls.Add(this.tlpSendList);
+            this.tpSendList.Location = new System.Drawing.Point(3, 33);
             this.tpSendList.Name = "tpSendList";
-            this.tpSendList.Size = new System.Drawing.Size(0, 0);
+            this.tpSendList.Size = new System.Drawing.Size(1124, 724);
             this.tpSendList.TabIndex = 8;
             this.tpSendList.Text = "发送列表";
             // 
@@ -1352,6 +1366,132 @@
             // 
             this.bgwPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketList_DoWork);
             // 
+            // tlpSendList
+            // 
+            this.tlpSendList.ColumnCount = 1;
+            this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendList.Controls.Add(this.tSendList, 0, 1);
+            this.tlpSendList.Controls.Add(this.sSendList, 0, 0);
+            this.tlpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSendList.Location = new System.Drawing.Point(0, 0);
+            this.tlpSendList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSendList.Name = "tlpSendList";
+            this.tlpSendList.RowCount = 2;
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSendList.Size = new System.Drawing.Size(1124, 724);
+            this.tlpSendList.TabIndex = 2;
+            // 
+            // tSendList
+            // 
+            this.tSendList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tSendList.Bordered = true;
+            this.tSendList.CellImpactHeight = false;
+            this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSendList.GapCell = 6;
+            this.tSendList.Location = new System.Drawing.Point(3, 49);
+            this.tSendList.MultipleRows = true;
+            this.tSendList.Name = "tSendList";
+            this.tSendList.Size = new System.Drawing.Size(1118, 672);
+            this.tSendList.TabIndex = 1;
+            this.tSendList.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellClick);
+            this.tSendList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tSendList_CellButtonClick);
+            // 
+            // sSendList
+            // 
+            this.sSendList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.sSendList.IconAlign = AntdUI.TAlignMini.Left;
+            this.sSendList.IconRatio = 1F;
+            segmentedItem14.Badge = null;
+            segmentedItem14.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem14.BadgeBack = null;
+            segmentedItem14.BadgeMode = false;
+            segmentedItem14.BadgeOffsetX = 0;
+            segmentedItem14.BadgeOffsetY = 0;
+            segmentedItem14.BadgeSize = 0.6F;
+            segmentedItem14.BadgeSvg = null;
+            segmentedItem14.IconSvg = "FolderOpenOutlined";
+            segmentedItem14.ID = "siImport";
+            segmentedItem14.Text = "导入发送列表";
+            segmentedItem14.Tooltip = "";
+            segmentedItem15.Badge = null;
+            segmentedItem15.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem15.BadgeBack = null;
+            segmentedItem15.BadgeMode = false;
+            segmentedItem15.BadgeOffsetX = 0;
+            segmentedItem15.BadgeOffsetY = 0;
+            segmentedItem15.BadgeSize = 0.6F;
+            segmentedItem15.BadgeSvg = null;
+            segmentedItem15.IconSvg = "DeliveredProcedureOutlined";
+            segmentedItem15.ID = "siExport";
+            segmentedItem15.Text = "导出发送列表";
+            segmentedItem15.Tooltip = "";
+            segmentedItem16.Badge = null;
+            segmentedItem16.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem16.BadgeBack = null;
+            segmentedItem16.BadgeMode = false;
+            segmentedItem16.BadgeOffsetX = 0;
+            segmentedItem16.BadgeOffsetY = 0;
+            segmentedItem16.BadgeSize = 0.6F;
+            segmentedItem16.BadgeSvg = null;
+            segmentedItem16.IconSvg = "PlayCircleOutlined";
+            segmentedItem16.ID = "miStart";
+            segmentedItem16.Text = "执行发送";
+            segmentedItem17.Badge = null;
+            segmentedItem17.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem17.BadgeBack = null;
+            segmentedItem17.BadgeMode = false;
+            segmentedItem17.BadgeOffsetX = 0;
+            segmentedItem17.BadgeOffsetY = 0;
+            segmentedItem17.BadgeSize = 0.6F;
+            segmentedItem17.BadgeSvg = null;
+            segmentedItem17.Enabled = false;
+            segmentedItem17.IconSvg = "PauseCircleOutlined";
+            segmentedItem17.ID = "miStop";
+            segmentedItem17.Text = "停止";
+            segmentedItem18.Badge = null;
+            segmentedItem18.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem18.BadgeBack = null;
+            segmentedItem18.BadgeMode = false;
+            segmentedItem18.BadgeOffsetX = 0;
+            segmentedItem18.BadgeOffsetY = 0;
+            segmentedItem18.BadgeSize = 0.6F;
+            segmentedItem18.BadgeSvg = null;
+            segmentedItem18.IconSvg = "FileAddOutlined";
+            segmentedItem18.ID = "siAdd";
+            segmentedItem18.Text = "新增发送";
+            segmentedItem18.Tooltip = "";
+            segmentedItem19.Badge = null;
+            segmentedItem19.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem19.BadgeBack = null;
+            segmentedItem19.BadgeMode = false;
+            segmentedItem19.BadgeOffsetX = 0;
+            segmentedItem19.BadgeOffsetY = 0;
+            segmentedItem19.BadgeSize = 0.6F;
+            segmentedItem19.BadgeSvg = null;
+            segmentedItem19.IconSvg = "DeleteOutlined";
+            segmentedItem19.ID = "siClear";
+            segmentedItem19.Text = "清空所有发送";
+            segmentedItem19.Tooltip = "";
+            this.sSendList.Items.Add(segmentedItem14);
+            this.sSendList.Items.Add(segmentedItem15);
+            this.sSendList.Items.Add(segmentedItem16);
+            this.sSendList.Items.Add(segmentedItem17);
+            this.sSendList.Items.Add(segmentedItem18);
+            this.sSendList.Items.Add(segmentedItem19);
+            this.sSendList.Location = new System.Drawing.Point(3, 3);
+            this.sSendList.Name = "sSendList";
+            this.sSendList.Size = new System.Drawing.Size(1118, 40);
+            this.sSendList.TabIndex = 2;
+            this.sSendList.SelectIndexChanged += new AntdUI.IntEventHandler(this.sSendList_SelectIndexChanged);
+            // 
+            // bgwSendList
+            // 
+            this.bgwSendList.WorkerSupportsCancellation = true;
+            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
+            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
+            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -1386,7 +1526,9 @@
             this.tlpProcessInfo.PerformLayout();
             this.tpFilterList.ResumeLayout(false);
             this.tlpFilterList.ResumeLayout(false);
+            this.tpSendList.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
+            this.tlpSendList.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1468,5 +1610,9 @@
         private System.Windows.Forms.TableLayoutPanel tlpFilterList;
         private AntdUI.Table tFilterList;
         private AntdUI.Segmented sFilterList;
+        private System.Windows.Forms.TableLayoutPanel tlpSendList;
+        private AntdUI.Table tSendList;
+        private AntdUI.Segmented sSendList;
+        private System.ComponentModel.BackgroundWorker bgwSendList;
     }
 }

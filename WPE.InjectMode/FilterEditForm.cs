@@ -14,7 +14,7 @@ namespace WPE.InjectMode
     public partial class FilterEditForm : Form
     {
         private InjectModeForm imForm;
-        private FilterInfo sfiSelect;
+        private FilterInfo fiSelect;
         private DataTable dtFilterNormal = new DataTable();
         private DataTable dtFilterAdvanced_Search = new DataTable();
         private DataTable dtFilterAdvanced_Modify_Head = new DataTable();
@@ -35,7 +35,7 @@ namespace WPE.InjectMode
             }
             else
             {
-                this.sfiSelect = fi;
+                this.fiSelect = fi;
                 this.imForm = form;
             }  
         }        
@@ -54,7 +54,7 @@ namespace WPE.InjectMode
                 this.InitFilterExecuteType();
                 this.ShowFilterData();
 
-                switch (sfiSelect.FMode)
+                switch (fiSelect.FMode)
                 {
                     case Operate.FilterConfig.Filter.FilterMode.Normal:
                         this.rbFilterMode_Normal.Checked = true;
@@ -66,7 +66,7 @@ namespace WPE.InjectMode
                 }
                 this.FilterModeChange();
 
-                switch (sfiSelect.FAction)
+                switch (fiSelect.FAction)
                 {
                     case Operate.FilterConfig.Filter.FilterAction.Replace:
                         this.rbFilterAction_Replace.Checked = true;
@@ -89,7 +89,7 @@ namespace WPE.InjectMode
                         break;
                 }
 
-                switch (sfiSelect.FStartFrom)
+                switch (fiSelect.FStartFrom)
                 {
                     case Operate.FilterConfig.Filter.FilterStartFrom.Head:
                         this.rbFilterModifyFrom_Head.Checked = true;
@@ -101,10 +101,10 @@ namespace WPE.InjectMode
                 }
                 this.FilterModifyFromChange();
 
-                this.cbFilterAction_Execute.Checked = sfiSelect.IsExecute;
+                this.cbFilterAction_Execute.Checked = fiSelect.IsExecute;
                 this.FilterAction_ExecuteChange();
 
-                switch (sfiSelect.FEType)
+                switch (fiSelect.FEType)
                 {
                     case Operate.FilterConfig.Filter.FilterExecuteType.Send:
                         this.cbbFilterAction_ExecuteType.SelectedIndex = 0;
@@ -120,37 +120,37 @@ namespace WPE.InjectMode
                 }
                 this.FilterAction_ExecuteTypeChanged();
 
-                this.cbFilter_AppointHeader.Checked = sfiSelect.AppointHeader;
-                this.txtFilter_HeaderContent.Text = sfiSelect.HeaderContent;
+                this.cbFilter_AppointHeader.Checked = fiSelect.AppointHeader;
+                this.txtFilter_HeaderContent.Text = fiSelect.HeaderContent;
                 this.FilterAppointHeaderChange();
 
-                this.cbFilter_AppointSocket.Checked = sfiSelect.AppointSocket;
-                this.txtFilter_SocketContent.Text = sfiSelect.SocketContent;
+                this.cbFilter_AppointSocket.Checked = fiSelect.AppointSocket;
+                this.txtFilter_SocketContent.Text = fiSelect.SocketContent;
                 this.FilterAppointSocketChange();
 
-                this.cbFilter_AppointLength.Checked = sfiSelect.AppointLength;
-                this.txtFilter_LengthContent.Text = sfiSelect.LengthContent;
+                this.cbFilter_AppointLength.Checked = fiSelect.AppointLength;
+                this.txtFilter_LengthContent.Text = fiSelect.LengthContent;
                 this.FilterAppointLengthChange();
 
-                this.cbFilter_AppointPort.Checked = sfiSelect.AppointPort;
-                this.txtFilter_PortContent.Text = sfiSelect.PortContent;
+                this.cbFilter_AppointPort.Checked = fiSelect.AppointPort;
+                this.txtFilter_PortContent.Text = fiSelect.PortContent;
                 this.FilterAppointPortChange();
 
-                this.cbProgressionContinuous.Checked = sfiSelect.IsProgressionContinuous;
-                this.nudProgressionStep.Value = sfiSelect.ProgressionStep;
-                this.cbProgressionCarry.Checked = sfiSelect.IsProgressionCarry;
-                this.nudProgressionCarry.Value = sfiSelect.ProgressionCarryNumber;
+                this.cbProgressionContinuous.Checked = fiSelect.IsProgressionContinuous;
+                this.nudProgressionStep.Value = fiSelect.ProgressionStep;
+                this.cbProgressionCarry.Checked = fiSelect.IsProgressionCarry;
+                this.nudProgressionCarry.Value = fiSelect.ProgressionCarryNumber;
                 this.ProgressionCarryChange();
 
-                this.txtFilterName.Text = sfiSelect.FName;
-                this.cbFilterFunction_Send.Checked = sfiSelect.FFunction.Send;
-                this.cbFilterFunction_SendTo.Checked = sfiSelect.FFunction.SendTo;
-                this.cbFilterFunction_Recv.Checked = sfiSelect.FFunction.Recv;
-                this.cbFilterFunction_RecvFrom.Checked = sfiSelect.FFunction.RecvFrom;
-                this.cbFilterFunction_WSASend.Checked = sfiSelect.FFunction.WSASend;
-                this.cbFilterFunction_WSASendTo.Checked = sfiSelect.FFunction.WSASendTo;
-                this.cbFilterFunction_WSARecv.Checked = sfiSelect.FFunction.WSARecv;
-                this.cbFilterFunction_WSARecvFrom.Checked = sfiSelect.FFunction.WSARecvFrom;
+                this.txtFilterName.Text = fiSelect.FName;
+                this.cbFilterFunction_Send.Checked = fiSelect.FFunction.Send;
+                this.cbFilterFunction_SendTo.Checked = fiSelect.FFunction.SendTo;
+                this.cbFilterFunction_Recv.Checked = fiSelect.FFunction.Recv;
+                this.cbFilterFunction_RecvFrom.Checked = fiSelect.FFunction.RecvFrom;
+                this.cbFilterFunction_WSASend.Checked = fiSelect.FFunction.WSASend;
+                this.cbFilterFunction_WSASendTo.Checked = fiSelect.FFunction.WSASendTo;
+                this.cbFilterFunction_WSARecv.Checked = fiSelect.FFunction.WSARecv;
+                this.cbFilterFunction_WSARecvFrom.Checked = fiSelect.FFunction.WSARecvFrom;
             }
             catch (Exception ex)
             {
@@ -295,7 +295,7 @@ namespace WPE.InjectMode
         { 
             this.cbbFilterAction_ExecuteType.Items.Clear();
 
-            if (Operate.SendConfig.SendList.lstSend.Count > 0)
+            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
             {
                 this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
                 {
@@ -332,12 +332,13 @@ namespace WPE.InjectMode
         {
             try
             {
-                if (Operate.SendConfig.SendList.lstSend.Count > 0)
+                if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                 {
+                    var selectItems = Operate.SendConfig.List.lstSendInfo.Select(info => new SelectItem(info.SName, info)).ToArray();
+
                     this.cbbFilterAction_Execute.Items.Clear();
-                    this.cbbFilterAction_Execute.Items.AddRange(Operate.SendConfig.SendList.lstSend.ToArray());
-                    
-                    this.cbbFilterAction_Execute.SelectedValue = sfiSelect.SID;
+                    this.cbbFilterAction_Execute.Items.AddRange(selectItems);                    
+                    this.cbbFilterAction_Execute.SelectedValue = Operate.SendConfig.Send.GetSend_ByGuid(fiSelect.SID);
                 }
             }
             catch (Exception ex)
@@ -352,10 +353,11 @@ namespace WPE.InjectMode
             {
                 if (Operate.RobotConfig.RobotList.lstRobot.Count > 0)
                 {
-                    this.cbbFilterAction_Execute.Items.Clear();
-                    this.cbbFilterAction_Execute.Items.AddRange(Operate.RobotConfig.RobotList.lstRobot.ToArray());
+                    var selectItems = Operate.RobotConfig.RobotList.lstRobot.Select(info => new SelectItem(info.RName, info)).ToArray();
 
-                    this.cbbFilterAction_Execute.SelectedValue = sfiSelect.RID;
+                    this.cbbFilterAction_Execute.Items.Clear();
+                    this.cbbFilterAction_Execute.Items.AddRange(selectItems);
+                    this.cbbFilterAction_Execute.SelectedValue = Operate.RobotConfig.Robot.GeRobot_ByGuid(fiSelect.RID);
                 }
             }
             catch (Exception ex)
@@ -368,9 +370,9 @@ namespace WPE.InjectMode
         {
             try
             {
-                if (!string.IsNullOrEmpty(sfiSelect.ProgressionPosition))
+                if (!string.IsNullOrEmpty(fiSelect.ProgressionPosition))
                 {
-                    string[] slProgressionPosition = sfiSelect.ProgressionPosition.Split(',');
+                    string[] slProgressionPosition = fiSelect.ProgressionPosition.Split(',');
 
                     foreach (string sPosition in slProgressionPosition)
                     {
@@ -378,7 +380,7 @@ namespace WPE.InjectMode
                         {
                             if (int.TryParse(sPosition, out int iIndex))
                             {
-                                switch (sfiSelect.FMode)
+                                switch (fiSelect.FMode)
                                 {
                                     case Operate.FilterConfig.Filter.FilterMode.Normal:
 
@@ -388,7 +390,7 @@ namespace WPE.InjectMode
 
                                     case Operate.FilterConfig.Filter.FilterMode.Advanced:
 
-                                        switch (sfiSelect.FStartFrom)
+                                        switch (fiSelect.FStartFrom)
                                         {
                                             case Operate.FilterConfig.Filter.FilterStartFrom.Head:
 
@@ -1358,9 +1360,9 @@ namespace WPE.InjectMode
                 {
                     config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
 
-                    if (!string.IsNullOrEmpty(sfiSelect.FSearch))
+                    if (!string.IsNullOrEmpty(fiSelect.FSearch))
                     {
-                        string[] sSearchAll = sfiSelect.FSearch.Split(',');
+                        string[] sSearchAll = fiSelect.FSearch.Split(',');
 
                         foreach (string s in sSearchAll)
                         {
@@ -1381,19 +1383,16 @@ namespace WPE.InjectMode
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(sfiSelect.FModify))
+                    if (!string.IsNullOrEmpty(fiSelect.FModify))
                     {
-                        string[] sModifyAll = sfiSelect.FModify.Split(',');
-                        //this.LoadAllCount = sModifyAll.Length;
-
-                        //int LoadCount = 0;
+                        string[] sModifyAll = fiSelect.FModify.Split(',');
                         foreach (string s in sModifyAll)
                         {
                             if (int.TryParse(s.Split('|')[0], out int iIndex))
                             {
                                 string sValue = s.Split('|')[1];
 
-                                switch (sfiSelect.FMode)
+                                switch (fiSelect.FMode)
                                 {
                                     case Operate.FilterConfig.Filter.FilterMode.Normal:
 
@@ -1406,7 +1405,7 @@ namespace WPE.InjectMode
 
                                     case Operate.FilterConfig.Filter.FilterMode.Advanced:
 
-                                        switch (sfiSelect.FStartFrom)
+                                        switch (fiSelect.FStartFrom)
                                         {
                                             case Operate.FilterConfig.Filter.FilterStartFrom.Head:
 
@@ -1424,9 +1423,6 @@ namespace WPE.InjectMode
                                                 if (iIndex < this.dtFilterAdvanced_Modify_Position.Columns.Count)
                                                 {
                                                     ((CellText)this.dtFilterAdvanced_Modify_Position.Rows[0][iIndex]).Text = sValue;
-
-                                                    //LoadCount++;
-                                                    //this.bgwFilterInfo.ReportProgress(LoadCount * 100 / LoadAllCount);
                                                 }
 
                                                 break;
@@ -1548,7 +1544,7 @@ namespace WPE.InjectMode
 
                         if (cbbFilterAction_Execute.SelectedValue != null)
                         {
-                            SID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                            SID_New = ((SendInfo)cbbFilterAction_Execute.SelectedValue).SID;
                         }
                     }
                     else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
@@ -1557,7 +1553,7 @@ namespace WPE.InjectMode
 
                         if (cbbFilterAction_Execute.SelectedValue != null)
                         {
-                            RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                            RID_New = ((Socket_RobotInfo)cbbFilterAction_Execute.SelectedValue).RID;
                         }
                     }
                     else
@@ -1693,7 +1689,7 @@ namespace WPE.InjectMode
                 string sModify_New = sbModify.ToString().TrimEnd(',');
 
                 Operate.FilterConfig.Filter.UpdateFilter(
-                    sfiSelect,
+                    fiSelect,
                     sFName_New,
                     bAppointHeader_New,
                     sHeaderContent_New,

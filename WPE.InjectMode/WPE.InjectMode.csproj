@@ -123,6 +123,12 @@
     <Compile Include="SearchPacketForm.Designer.cs">
       <DependentUpon>SearchPacketForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SendEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SendEditForm.Designer.cs">
+      <DependentUpon>SendEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SystemSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -189,6 +195,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SearchPacketForm.resx">
       <DependentUpon>SearchPacketForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SendEditForm.resx">
+      <DependentUpon>SendEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SystemSettingsForm.resx">
       <DependentUpon>SystemSettingsForm.cs</DependentUpon>

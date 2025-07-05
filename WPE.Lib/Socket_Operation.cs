@@ -1372,9 +1372,9 @@ namespace WPE.Lib
             {
                 cbb.Items.Clear();
 
-                foreach (Socket_SendInfo ssi in Operate.SendConfig.SendList.lstSend)
+                foreach (SendInfo ssi in Operate.SendConfig.List.lstSendInfo)
                 {
-                    cbb.Items.Add(new Operate.SendConfig.SendList.SendListItem { SName = ssi.SName, SID = ssi.SID });
+                    cbb.Items.Add(new Operate.SendConfig.List.SendListItem { SName = ssi.SName, SID = ssi.SID });
                 }
             }
             catch (Exception ex)
@@ -1389,9 +1389,9 @@ namespace WPE.Lib
             {
                 tscb.Items.Clear();
 
-                foreach (Socket_SendInfo ssi in Operate.SendConfig.SendList.lstSend)
+                foreach (SendInfo ssi in Operate.SendConfig.List.lstSendInfo)
                 {
-                    tscb.Items.Add(new Operate.SendConfig.SendList.SendListItem { SName = ssi.SName, SID = ssi.SID });
+                    tscb.Items.Add(new Operate.SendConfig.List.SendListItem { SName = ssi.SName, SID = ssi.SID });
                 }
             }
             catch (Exception ex)
@@ -2371,9 +2371,9 @@ namespace WPE.Lib
         }
 
         //发送列表
-        public static List<Socket_SendInfo> GetSelectedSend(DataGridView dgvSendList)
+        public static List<SendInfo> GetSelectedSend(DataGridView dgvSendList)
         {
-            List<Socket_SendInfo> ssiList = new List<Socket_SendInfo>();
+            List<SendInfo> ssiList = new List<SendInfo>();
 
             try
             {
@@ -2381,7 +2381,7 @@ namespace WPE.Lib
                 {
                     if (dgvSendList.Rows[i].Selected)
                     {
-                        ssiList.Add(Operate.SendConfig.SendList.lstSend[i]);
+                        ssiList.Add(Operate.SendConfig.List.lstSendInfo[i]);
                     }
                 }
             }
@@ -3040,7 +3040,7 @@ namespace WPE.Lib
 
         #region//显示发送列表窗体（对话框）
 
-        public static void ShowSendListForm_Dialog(Socket_SendInfo ssi)
+        public static void ShowSendListForm_Dialog(SendInfo ssi)
         {
             //try
             //{

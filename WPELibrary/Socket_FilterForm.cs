@@ -457,9 +457,9 @@ namespace WPELibrary
         {
             try
             {
-                if (Operate.SendConfig.SendList.lstSend.Count > 0)
+                if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                 {
-                    cbbFilterAction_Execute.DataSource = Operate.SendConfig.SendList.lstSend;
+                    cbbFilterAction_Execute.DataSource = Operate.SendConfig.List.lstSendInfo;
                     cbbFilterAction_Execute.DisplayMember = "SName";
                     cbbFilterAction_Execute.ValueMember = "SID";
 

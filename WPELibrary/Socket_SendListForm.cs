@@ -10,15 +10,15 @@ namespace WPELibrary
 {
     public partial class Socket_SendListForm : Form
     {
-        private Socket_SendInfo SSI;
+        private SendInfo SSI;
         private string SendName = string.Empty;
         private BindingList<PacketInfo> SendCollection;
         private PacketInfo spiSelect;
-        private readonly Socket_Send ss = new Socket_Send();
+        private readonly SendExecute ss = new SendExecute();
 
         #region//窗体事件
 
-        public Socket_SendListForm(Socket_SendInfo ssi)
+        public Socket_SendListForm(SendInfo ssi)
         {
             MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
             InitializeComponent();

@@ -460,7 +460,7 @@ namespace WPELibrary
             {
                 if (this.tscbSendList.SelectedItem != null)
                 {
-                    Operate.SendConfig.SendList.SendListItem item = (Operate.SendConfig.SendList.SendListItem)this.tscbSendList.SelectedItem;
+                    Operate.SendConfig.List.SendListItem item = (Operate.SendConfig.List.SendListItem)this.tscbSendList.SelectedItem;
                     Guid SID = item.SID;
                     BindingList<PacketInfo> SCollection = Operate.SendConfig.Send.GetSendCollection_ByGuid(SID);
 

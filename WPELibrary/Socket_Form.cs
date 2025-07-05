@@ -220,7 +220,7 @@ namespace WPELibrary
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
 
                 dgvSendList.AutoGenerateColumns = false;
-                dgvSendList.DataSource = Operate.SendConfig.SendList.lstSend;
+                dgvSendList.DataSource = Operate.SendConfig.List.lstSendInfo;
                 dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
 
                 dgvRobotList.AutoGenerateColumns = false;
@@ -1050,9 +1050,9 @@ namespace WPELibrary
                 {
                     int SIndex = e.RowIndex;
 
-                    if (SIndex > -1 && SIndex < Operate.SendConfig.SendList.lstSend.Count)
+                    if (SIndex > -1 && SIndex < Operate.SendConfig.List.lstSendInfo.Count)
                     {
-                        Socket_Operation.ShowSendListForm_Dialog(Operate.SendConfig.SendList.lstSend[SIndex]);
+                        Socket_Operation.ShowSendListForm_Dialog(Operate.SendConfig.List.lstSendInfo[SIndex]);
                     }
                 }
             }
@@ -1332,7 +1332,7 @@ namespace WPELibrary
                 {
                     if (this.cmsHexBox_tscbSendList.SelectedItem != null)
                     {
-                        Operate.SendConfig.SendList.SendListItem item = (Operate.SendConfig.SendList.SendListItem)this.cmsHexBox_tscbSendList.SelectedItem;
+                        Operate.SendConfig.List.SendListItem item = (Operate.SendConfig.List.SendListItem)this.cmsHexBox_tscbSendList.SelectedItem;
                         Guid SID = item.SID;
                         BindingList<PacketInfo> SCollection = Operate.SendConfig.Send.GetSendCollection_ByGuid(SID);
 
@@ -1496,7 +1496,7 @@ namespace WPELibrary
             {
                 if (this.tscbSendList.SelectedItem != null)
                 {
-                    Operate.SendConfig.SendList.SendListItem item = (Operate.SendConfig.SendList.SendListItem)this.tscbSendList.SelectedItem;
+                    Operate.SendConfig.List.SendListItem item = (Operate.SendConfig.List.SendListItem)this.tscbSendList.SelectedItem;
                     Guid SID = item.SID;
 
                     List<PacketInfo> spiList = Socket_Operation.GetSelectedSocket(this.dgvSocketList);
@@ -1661,46 +1661,46 @@ namespace WPELibrary
             {
                 if (dgvSendList.Rows.Count > 0)
                 {
-                    List<Socket_SendInfo> ssiList = Socket_Operation.GetSelectedSend(this.dgvSendList);
+                    List<SendInfo> ssiList = Socket_Operation.GetSelectedSend(this.dgvSendList);
 
                     if (ssiList.Count > 0)
                     {
                         switch (sItemText)
                         {
                             case "cmsSendList_Top":
-                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Top, ssiList);
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Top, ssiList);
                                 break;
 
                             case "cmsSendList_Up":
-                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Up, ssiList);
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Up, ssiList);
                                 break;
 
                             case "cmsSendList_Down":
-                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Down, ssiList);
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Down, ssiList);
                                 break;
 
                             case "cmsSendList_Bottom":
-                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Bottom, ssiList);
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, ssiList);
                                 break;
 
                             case "cmsSendList_Copy":
-                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Copy, ssiList);
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Copy, ssiList);
                                 break;
 
                             case "cmsSendList_Export":
-                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Export, ssiList);
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Export, ssiList);
                                 break;
 
                             case "cmsSendList_Delete":
-                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Delete, ssiList);
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, ssiList);
                                 break;
                         }
 
                         this.dgvSendList.ClearSelection();
 
-                        foreach (Socket_SendInfo ssi in ssiList)
+                        foreach (SendInfo ssi in ssiList)
                         {
-                            int iIndex = Operate.SendConfig.SendList.lstSend.IndexOf(ssi);
+                            int iIndex = Operate.SendConfig.List.lstSendInfo.IndexOf(ssi);
 
                             if (iIndex > -1 && iIndex < dgvSendList.RowCount)
                             {
@@ -1916,19 +1916,19 @@ namespace WPELibrary
 
         private void tsSendList_Load_Click(object sender, EventArgs e)
         {
-            Operate.SendConfig.SendList.LoadSendList_Dialog();
+            Operate.SendConfig.List.LoadSendList_Dialog(this);
         }
 
         private void tsSendList_Save_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Operate.SendConfig.SendList.lstSend.Count > 0)
+                if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                 {
-                    List<Socket_SendInfo> ssiList = new List<Socket_SendInfo>();
-                    ssiList.AddRange(Operate.SendConfig.SendList.lstSend);
+                    List<SendInfo> ssiList = new List<SendInfo>();
+                    ssiList.AddRange(Operate.SendConfig.List.lstSendInfo);
 
-                    Operate.SendConfig.SendList.SaveSendList_Dialog(string.Empty, ssiList);
+                    Operate.SendConfig.List.SaveSendList_Dialog(this, string.Empty, ssiList);
                 }
             }
             catch (Exception ex)
@@ -1945,7 +1945,7 @@ namespace WPELibrary
                 {
                     this.tsSendList_Start.Enabled = false;
                     this.tsSendList_Stop.Enabled = true;
-                    Operate.SendConfig.SendList.lstExecute.Clear();
+                    Operate.SendConfig.List.lstSendExecute.Clear();
 
                     this.bgwSendList.RunWorkerAsync();
                 }
@@ -1969,7 +1969,7 @@ namespace WPELibrary
         {
             if (dgvSendList.Rows.Count > 0)
             {
-                Operate.SendConfig.SendList.CleanUpSendList_Dialog();
+                Operate.SendConfig.List.CleanUpSendList_Dialog(this);
             }
         }
 
@@ -1981,16 +1981,16 @@ namespace WPELibrary
         {
             try
             {
-                foreach (Socket_SendInfo ssi in Operate.SendConfig.SendList.lstSend)
+                foreach (SendInfo ssi in Operate.SendConfig.List.lstSendInfo)
                 {
                     if (ssi.IsEnable)
                     {
-                        Socket_Send ss = Operate.SendConfig.Send.DoSend(ssi.SID);
+                        SendExecute ss = Operate.SendConfig.Send.DoSend(ssi.SID);
                         if (ss != null)
                         {
                             if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                             { 
-                                Operate.SendConfig.SendList.lstExecute.Add(ss);
+                                Operate.SendConfig.List.lstSendExecute.Add(ss);
                             }
                             else
                             {
@@ -2011,9 +2011,9 @@ namespace WPELibrary
                     }
                 }
 
-                while (Operate.SendConfig.SendList.lstExecute.Count > 0)
+                while (Operate.SendConfig.List.lstSendExecute.Count > 0)
                 {
-                    foreach (Socket_Send ss in Operate.SendConfig.SendList.lstExecute.ToList())
+                    foreach (SendExecute ss in Operate.SendConfig.List.lstSendExecute.ToList())
                     {
                         if (this.bgwSendList.CancellationPending)
                         {
@@ -2022,7 +2022,7 @@ namespace WPELibrary
 
                         if (!ss.Worker.IsBusy)
                         {
-                            Operate.SendConfig.SendList.lstExecute.Remove(ss);
+                            Operate.SendConfig.List.lstSendExecute.Remove(ss);
                         }
                     }
 

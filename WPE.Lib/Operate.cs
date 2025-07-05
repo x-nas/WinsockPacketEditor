@@ -1,6 +1,8 @@
 ﻿using AntdUI;
+using AntdUI.Chat;
 using Be.Windows.Forms;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1897,7 +1899,7 @@ namespace WPE.Lib
             public static void SaveSystemList_ToDB()
             {
                 FilterConfig.List.SaveFilterList_ToDB();
-                SendConfig.SendList.SaveSendList_ToDB();
+                SendConfig.List.SaveSendList_ToDB();
                 RobotConfig.RobotList.SaveRobotList_ToDB();
             }
 
@@ -1912,7 +1914,7 @@ namespace WPE.Lib
                     Task.Run(() =>
                     {
                         FilterConfig.List.LoadFilterList_FromDB();
-                        SendConfig.SendList.LoadSendList_FromDB();
+                        SendConfig.List.LoadSendList_FromDB();
                         RobotConfig.RobotList.LoadRobotList_FromDB();
                     });
                 }
@@ -2079,9 +2081,9 @@ namespace WPE.Lib
                     //发送列表
                     if (bSendList)
                     {
-                        if (SendConfig.SendList.lstSend.Count > 0)
+                        if (SendConfig.List.lstSendInfo.Count > 0)
                         {
-                            XElement xeSendList = SendConfig.SendList.GetSendList_XML(SendConfig.SendList.lstSend.ToList());
+                            XElement xeSendList = SendConfig.List.GetSendList_XML(SendConfig.List.lstSendInfo.ToList());
                             if (xeSendList != null)
                             {
                                 xeBackUp.Add(xeSendList);
@@ -2382,9 +2384,9 @@ namespace WPE.Lib
                         };
                         xdSendList.Add(xeSendList);
 
-                        SendConfig.SendList.LoadSendList_FromXDocument(xdSendList);
-                        SendConfig.SendList.SaveSendList_ToDB();
-                        SendConfig.SendList.SendListClear();
+                        SendConfig.List.LoadSendList_FromXDocument(xdSendList);
+                        SendConfig.List.SaveSendList_ToDB();
+                        SendConfig.List.SendListClear();
                     }
                 }
                 catch (Exception ex)
@@ -8068,7 +8070,7 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//删除滤镜
+                #region//删除滤镜（对话框）
 
                 public static void DeleteFilter_Dialog(Form form, List<FilterInfo> fiList)
                 {
@@ -9730,14 +9732,13 @@ namespace WPE.Lib
 
                 #region//保存滤镜列表到文件（对话框）
 
-                public static void SaveFilterList_Dialog(Form form, string FileName, List<FilterInfo> sfiList)
+                public static void SaveFilterList_Dialog(Form form, string FileName, List<FilterInfo> fiList)
                 {
                     try
                     {
                         if (FilterConfig.List.lstFilterInfo.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-
                             sfdSaveFile.Filter = AntdUI.Localization.Get("FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
 
                             if (!string.IsNullOrEmpty(FileName))
@@ -9769,7 +9770,7 @@ namespace WPE.Lib
 
                                                     AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
                                                     {
-                                                        LocalizationText = "ExportFilterList.Error"
+                                                        LocalizationText = "ExportList.Error"
                                                     });
 
                                                     return false;
@@ -9784,7 +9785,7 @@ namespace WPE.Lib
                                         });
                                     }
 
-                                    if (SaveFilterList(FilePath, sfiList, DoEncrypt))
+                                    if (SaveFilterList(FilePath, fiList, DoEncrypt))
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportFilterList.Success", "导出滤镜列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -9806,7 +9807,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static bool SaveFilterList(string FilePath, List<FilterInfo> sfiList, bool DoEncrypt)
+                private static bool SaveFilterList(string FilePath, List<FilterInfo> fiList, bool DoEncrypt)
                 {
                     try
                     {
@@ -9815,7 +9816,7 @@ namespace WPE.Lib
                             Declaration = new XDeclaration("1.0", "utf-8", "yes")
                         };
 
-                        XElement xeRoot = FilterConfig.List.GetFilterList_XML(sfiList);
+                        XElement xeRoot = FilterConfig.List.GetFilterList_XML(fiList);
                         if (xeRoot == null)
                         {
                             return false;
@@ -9827,7 +9828,6 @@ namespace WPE.Lib
                         if (DoEncrypt)
                         {
                             string sPassword = FilterConfig.List.AESKey;
-
                             if (!string.IsNullOrEmpty(sPassword))
                             {
                                 SystemConfig.EncryptXMLFile(FilePath, sPassword);
@@ -9937,10 +9937,9 @@ namespace WPE.Lib
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
                         {
                             string FilePath = ofdLoadFile.FileName;
-
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                if (LoadFilterList(FilePath, true))
+                                if (LoadFilterList(form, FilePath, true))
                                 {
                                     string Title = AntdUI.Localization.Get("InjectModeForm.ImportFilterList.Success", "导入滤镜列表成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -9961,7 +9960,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static bool LoadFilterList(string FilePath, bool LoadFromUser)
+                private static bool LoadFilterList(Form form, string FilePath, bool LoadFromUser)
                 {
                     try
                     {
@@ -9987,11 +9986,11 @@ namespace WPE.Lib
 
                             if (xdoc == null)
                             {
-                                string sError = AntdUI.Localization.Get("AESKeyError", "加载失败: 密码错误");
+                                string sError = AntdUI.Localization.Get("FilterList.AESKeyError", "加载滤镜列表失败: 密码错误");
 
                                 if (LoadFromUser)
                                 {
-                                    Socket_Operation.ShowMessageBox(sError);
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
                                 }
                                 else
                                 {
@@ -10001,15 +10000,6 @@ namespace WPE.Lib
                             else
                             {
                                 LoadFilterList_FromXDocument(xdoc);
-
-                                if (bEncrypt)
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81));
-                                }
-                                else
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80));
-                                }
                             }
 
                             return true;
@@ -10248,31 +10238,44 @@ namespace WPE.Lib
             {
                 public static string AESKey = string.Empty;
 
-                #region//获取发送集
+                #region//新增发送
 
-                public static BindingList<PacketInfo> GetSendCollection_ByGuid(Guid SID)
+                public static void AddSend_New()
                 {
-                    BindingList<PacketInfo> sscReturn = null;
-
                     try
                     {
-                        if (SID != null && SID != Guid.Empty)
+                        bool IsEnable = false;
+                        Guid SID = Guid.NewGuid();
+                        int SNum = SendConfig.List.lstSendInfo.Count + 1;
+                        string SName = string.Format(AntdUI.Localization.Get("NewSendName", "发送 {0}"), SNum.ToString());
+                        bool SSystemSocket = false;
+                        int SLoopCNT = 1;
+                        int SLoopINT = 1000;
+                        string SNotes = string.Empty;
+                        BindingList<PacketInfo> SCollection = new BindingList<PacketInfo>();
+
+                        Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                public static void AddSend(bool IsEnable, Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, BindingList<PacketInfo> SCollection, string SNotes)
+                {
+                    try
+                    {
+                        if (SID != Guid.Empty && !string.IsNullOrEmpty(SName))
                         {
-                            foreach (Socket_SendInfo ssi in SendConfig.SendList.lstSend)
-                            {
-                                if (ssi.SID == SID)
-                                {
-                                    return ssi.SCollection;
-                                }
-                            }
+                            SendInfo si = new SendInfo(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
+                            SendConfig.List.SendToList(si);
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
-
-                    return sscReturn;
                 }
 
                 #endregion
@@ -10285,7 +10288,7 @@ namespace WPE.Lib
                     {
                         if (SID != null && SID != Guid.Empty && spiList.Count > 0)
                         {
-                            foreach (Socket_SendInfo ssi in SendConfig.SendList.lstSend)
+                            foreach (SendInfo ssi in SendConfig.List.lstSendInfo)
                             {
                                 if (ssi.SID == SID)
                                 {
@@ -10314,6 +10317,306 @@ namespace WPE.Lib
                         spi.PacketTo = PacketTo;
                         spi.PacketBuffer = PacketBuffer;
                         SCollection.Add(spi);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//更新发送
+
+                public static void UpdateSend(SendInfo ssi, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, BindingList<PacketInfo> SCollection, string SNotes)
+                {
+                    try
+                    {
+                        if (ssi != null)
+                        {
+                            ssi.SName = SName;
+                            ssi.SSystemSocket = SSystemSocket;
+                            ssi.SLoopCNT = SLoopCNT;
+                            ssi.SLoopINT = SLoopINT;
+                            ssi.SCollection = new BindingList<PacketInfo>(SCollection.ToList());
+                            ssi.SNotes = SNotes;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//复制发送
+
+                public static void CopySend(SendInfo ssi)
+                {
+                    try
+                    {
+                        bool IsEnable_Copy = false;
+                        Guid SID_New = Guid.NewGuid();
+                        string SName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), ssi.SName);
+                        bool SSystemSocket_Copy = ssi.SSystemSocket;
+                        int SLoopCNT_Copy = ssi.SLoopCNT;
+                        int SLoopINT_Copy = ssi.SLoopINT;
+                        BindingList<PacketInfo> SCollection_Copy = new BindingList<PacketInfo>(ssi.SCollection.ToList());
+                        string SNotes_Copy = ssi.SNotes;
+
+                        Send.AddSend(IsEnable_Copy, SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy, SNotes_Copy);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//删除发送
+
+                public static void DeleteSend_Dialog(Form form, List<SendInfo> siList)
+                {
+                    try
+                    {
+                        if (siList.Count > 0)
+                        {
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "发送列表"), "\r\n确定删除选中的数据吗\r\n\r\n")
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    foreach (SendInfo si in siList)
+                                    {
+                                        SendConfig.List.lstSendInfo.Remove(si);
+                                    }
+
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//获取发送
+
+                public static SendInfo GetSend_ByGuid(Guid SID)
+                {
+                    try
+                    {
+                        if (SID != null && SID != Guid.Empty)
+                        {
+                            foreach (SendInfo si in SendConfig.List.lstSendInfo)
+                            {
+                                if (si.SID == SID)
+                                {
+                                    return si;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//获取发送名称
+
+                public static string GetSendName_ByGuid(Guid SID)
+                {
+                    string sReturn = string.Empty;
+
+                    try
+                    {
+                        if (SID != null && SID != Guid.Empty)
+                        {
+                            foreach (SendInfo ssi in SendConfig.List.lstSendInfo)
+                            {
+                                if (ssi.SID == SID)
+                                {
+                                    return ssi.SName;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return sReturn;
+                }
+
+                #endregion
+
+                #region//获取发送集
+
+                public static BindingList<PacketInfo> GetSendCollection_ByGuid(Guid SID)
+                {
+                    BindingList<PacketInfo> sscReturn = null;
+
+                    try
+                    {
+                        if (SID != null && SID != Guid.Empty)
+                        {
+                            foreach (SendInfo ssi in SendConfig.List.lstSendInfo)
+                            {
+                                if (ssi.SID == SID)
+                                {
+                                    return ssi.SCollection;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return sscReturn;
+                }
+
+                #endregion
+
+                #region//执行发送
+
+                public static SendExecute DoSend(Guid SID)
+                {
+                    return Task.Run(() => DoSendAsync(SID))
+                              .ConfigureAwait(false)
+                              .GetAwaiter()
+                              .GetResult();
+                }
+
+                public static void DoSend_ByIndex(int SendListIndex)
+                {
+                    try
+                    {
+                        if (SendListIndex > -1 && SendListIndex < SendConfig.List.lstSendInfo.Count)
+                        {
+                            Guid SID = SendConfig.List.lstSendInfo[SendListIndex].SID;
+
+                            Task.Run(() => DoSendAsync(SID))
+                              .ConfigureAwait(false)
+                              .GetAwaiter()
+                              .GetResult();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                public static async Task<SendExecute> DoSendAsync(Guid SID)
+                {
+                    SendExecute ssReturn = null;
+
+                    try
+                    {
+                        if (SID != null && SID != Guid.Empty)
+                        {
+                            SendInfo ssi = SendConfig.List.lstSendInfo.Where(item => item.SID == SID).FirstOrDefault();
+
+                            if (ssi != null)
+                            {
+                                if (ssi.SCollection.Count > 0)
+                                {
+                                    ssReturn = new SendExecute();
+                                    await Task.Run(() => ssReturn.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection));
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DoSendAsync), ex.Message);
+                    }
+
+                    return ssReturn;
+                }
+
+                public static void DoSend_ByHotKey(int HOTKEY_ID)
+                {
+                    switch (HOTKEY_ID)
+                    {
+                        case 9001:
+                            Send.DoSend_ByIndex(0);
+                            break;
+
+                        case 9002:
+                            Send.DoSend_ByIndex(1);
+                            break;
+
+                        case 9003:
+                            Send.DoSend_ByIndex(2);
+                            break;
+
+                        case 9004:
+                            Send.DoSend_ByIndex(3);
+                            break;
+
+                        case 9005:
+                            Send.DoSend_ByIndex(4);
+                            break;
+
+                        case 9006:
+                            Send.DoSend_ByIndex(5);
+                            break;
+
+                        case 9007:
+                            Send.DoSend_ByIndex(6);
+                            break;
+
+                        case 9008:
+                            Send.DoSend_ByIndex(7);
+                            break;
+
+                        case 9009:
+                            Send.DoSend_ByIndex(8);
+                            break;
+
+                        case 9010:
+                            Send.DoSend_ByIndex(9);
+                            break;
+
+                        case 9011:
+                            Send.DoSend_ByIndex(10);
+                            break;
+
+                        case 9012:
+                            Send.DoSend_ByIndex(11);
+                            break;
+                    }
+                }
+
+                #endregion
+
+                #region//设置发送是否启用
+
+                public static void SetIsCheck_BySendIndex(int SIndex, bool bCheck)
+                {
+                    try
+                    {
+                        if (SIndex > -1)
+                        {
+                            SendConfig.List.lstSendInfo[SIndex].IsEnable = bCheck;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -10418,286 +10721,6 @@ namespace WPE.Lib
                                 }
 
                                 break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//获取发送名称
-
-                public static string GetSendName_ByGuid(Guid SID)
-                {
-                    string sReturn = string.Empty;
-
-                    try
-                    {
-                        if (SID != null && SID != Guid.Empty)
-                        {
-                            foreach (Socket_SendInfo ssi in SendConfig.SendList.lstSend)
-                            {
-                                if (ssi.SID == SID)
-                                {
-                                    return ssi.SName;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-
-                    return sReturn;
-                }
-
-                #endregion
-
-                #region//新增发送
-
-                public static void AddSend_New()
-                {
-                    try
-                    {
-                        bool IsEnable = false;
-                        Guid SID = Guid.NewGuid();
-                        int SNum = SendConfig.SendList.lstSend.Count + 1;
-                        string SName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_162), SNum.ToString());
-                        bool SSystemSocket = false;
-                        int SLoopCNT = 1;
-                        int SLoopINT = 1000;
-                        string SNotes = string.Empty;
-                        BindingList<PacketInfo> SCollection = new BindingList<PacketInfo>();
-
-                        Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-
-                public static void AddSend(bool IsEnable, Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, BindingList<PacketInfo> SCollection, string SNotes)
-                {
-                    try
-                    {
-                        if (SID != Guid.Empty && !string.IsNullOrEmpty(SName))
-                        {
-                            Socket_SendInfo ssi = new Socket_SendInfo(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
-                            SendConfig.SendList.SendToList(ssi);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//更新发送
-
-                public static void UpdateSend(Socket_SendInfo ssi, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, BindingList<PacketInfo> SCollection, string SNotes)
-                {
-                    try
-                    {
-                        if (ssi != null)
-                        {
-                            ssi.SName = SName;
-                            ssi.SSystemSocket = SSystemSocket;
-                            ssi.SLoopCNT = SLoopCNT;
-                            ssi.SLoopINT = SLoopINT;
-                            ssi.SCollection = new BindingList<PacketInfo>(SCollection.ToList());
-                            ssi.SNotes = SNotes;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//复制发送
-
-                public static void CopySend(Socket_SendInfo ssi)
-                {
-                    try
-                    {
-                        bool IsEnable_Copy = false;
-                        Guid SID_New = Guid.NewGuid();
-                        string SName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), ssi.SName);
-                        bool SSystemSocket_Copy = ssi.SSystemSocket;
-                        int SLoopCNT_Copy = ssi.SLoopCNT;
-                        int SLoopINT_Copy = ssi.SLoopINT;
-                        BindingList<PacketInfo> SCollection_Copy = new BindingList<PacketInfo>(ssi.SCollection.ToList());
-                        string SNotes_Copy = ssi.SNotes;
-
-                        Send.AddSend(IsEnable_Copy, SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy, SNotes_Copy);
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//删除发送
-
-                public static void DeleteSend_Dialog(List<Socket_SendInfo> ssiList)
-                {
-                    try
-                    {
-                        if (ssiList.Count > 0)
-                        {
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
-
-                            if (dr.Equals(DialogResult.OK))
-                            {
-                                foreach (Socket_SendInfo ssi in ssiList)
-                                {
-                                    SendConfig.SendList.lstSend.Remove(ssi);
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//执行发送
-
-                public static Socket_Send DoSend(Guid SID)
-                {
-                    return Task.Run(() => DoSendAsync(SID))
-                              .ConfigureAwait(false)
-                              .GetAwaiter()
-                              .GetResult();
-                }
-
-                public static void DoSend_ByIndex(int SendListIndex)
-                {
-                    try
-                    {
-                        if (SendListIndex > -1 && SendListIndex < SendConfig.SendList.lstSend.Count)
-                        {
-                            Guid SID = SendConfig.SendList.lstSend[SendListIndex].SID;
-
-                            Task.Run(() => DoSendAsync(SID))
-                              .ConfigureAwait(false)
-                              .GetAwaiter()
-                              .GetResult();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-
-                public static async Task<Socket_Send> DoSendAsync(Guid SID)
-                {
-                    Socket_Send ssReturn = null;
-
-                    try
-                    {
-                        if (SID != null && SID != Guid.Empty)
-                        {
-                            Socket_SendInfo ssi = SendConfig.SendList.lstSend.Where(item => item.SID == SID).FirstOrDefault();
-
-                            if (ssi != null)
-                            {
-                                if (ssi.SCollection.Count > 0)
-                                {
-                                    ssReturn = new Socket_Send();
-                                    await Task.Run(() => ssReturn.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection));
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(DoSendAsync), ex.Message);
-                    }
-
-                    return ssReturn;
-                }
-
-                public static void DoSend_ByHotKey(int HOTKEY_ID)
-                {
-                    switch (HOTKEY_ID)
-                    {
-                        case 9001:
-                            Send.DoSend_ByIndex(0);
-                            break;
-
-                        case 9002:
-                            Send.DoSend_ByIndex(1);
-                            break;
-
-                        case 9003:
-                            Send.DoSend_ByIndex(2);
-                            break;
-
-                        case 9004:
-                            Send.DoSend_ByIndex(3);
-                            break;
-
-                        case 9005:
-                            Send.DoSend_ByIndex(4);
-                            break;
-
-                        case 9006:
-                            Send.DoSend_ByIndex(5);
-                            break;
-
-                        case 9007:
-                            Send.DoSend_ByIndex(6);
-                            break;
-
-                        case 9008:
-                            Send.DoSend_ByIndex(7);
-                            break;
-
-                        case 9009:
-                            Send.DoSend_ByIndex(8);
-                            break;
-
-                        case 9010:
-                            Send.DoSend_ByIndex(9);
-                            break;
-
-                        case 9011:
-                            Send.DoSend_ByIndex(10);
-                            break;
-
-                        case 9012:
-                            Send.DoSend_ByIndex(11);
-                            break;
-                    }
-                }
-
-                #endregion
-
-                #region//设置发送是否启用
-
-                public static void SetIsCheck_BySendIndex(int SIndex, bool bCheck)
-                {
-                    try
-                    {
-                        if (SIndex > -1)
-                        {
-                            SendConfig.SendList.lstSend[SIndex].IsEnable = bCheck;
                         }
                     }
                     catch (Exception ex)
@@ -11001,11 +11024,11 @@ namespace WPE.Lib
 
             #region//发送列表
 
-            public static class SendList
+            public static class List
             {
                 public static string AESKey = string.Empty;
-                public static List<Socket_Send> lstExecute = new List<Socket_Send>();
-                public static BindingList<Socket_SendInfo> lstSend = new BindingList<Socket_SendInfo>();
+                public static List<SendExecute> lstSendExecute = new List<SendExecute>();
+                public static BindingList<SendInfo> lstSendInfo = new BindingList<SendInfo>();
 
                 #region//发送列表索引项
 
@@ -11025,7 +11048,7 @@ namespace WPE.Lib
 
                 #region//发送入列表
 
-                public static void SendToList(Socket_SendInfo ssi)
+                public static void SendToList(SendInfo si)
                 {
                     try
                     {
@@ -11033,12 +11056,12 @@ namespace WPE.Lib
                         {
                             SystemConfig.InvokeAction(() =>
                             {
-                                SendConfig.SendList.lstSend.Add(ssi);
+                                SendConfig.List.lstSendInfo.Add(si);
                             });
                         }
                         else
                         {
-                            SendConfig.SendList.lstSend.Add(ssi);
+                            SendConfig.List.lstSendInfo.Add(si);
                         }
                     }
                     catch (Exception ex)
@@ -11051,7 +11074,7 @@ namespace WPE.Lib
 
                 #region//发送列表的列表操作
 
-                public static void UpdateSendList_ByListAction(SystemConfig.ListAction listAction, List<Socket_SendInfo> ssiList)
+                public static void UpdateSendList_ByListAction(Form form, SystemConfig.ListAction listAction, List<SendInfo> siList)
                 {
                     try
                     {
@@ -11059,26 +11082,23 @@ namespace WPE.Lib
                         {
                             case SystemConfig.ListAction.Top:
 
-                                ssiList.Reverse();
-
-                                foreach (Socket_SendInfo ssi in ssiList)
+                                foreach (SendInfo si in siList)
                                 {
-                                    SendConfig.SendList.lstSend.Remove(ssi);
-                                    SendConfig.SendList.lstSend.Insert(0, ssi);
+                                    SendConfig.List.lstSendInfo.Remove(si);
+                                    SendConfig.List.lstSendInfo.Insert(0, si);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Up:
 
-                                foreach (Socket_SendInfo ssi in ssiList)
+                                foreach (SendInfo si in siList)
                                 {
-                                    int iIndex = SendConfig.SendList.lstSend.IndexOf(ssi);
-
+                                    int iIndex = SendConfig.List.lstSendInfo.IndexOf(si);
                                     if (iIndex > 0)
                                     {
-                                        SendConfig.SendList.lstSend.Remove(ssi);
-                                        SendConfig.SendList.lstSend.Insert(iIndex - 1, ssi);
+                                        SendConfig.List.lstSendInfo.Remove(si);
+                                        SendConfig.List.lstSendInfo.Insert(iIndex - 1, si);
                                     }
                                 }
 
@@ -11086,16 +11106,13 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Down:
 
-                                ssiList.Reverse();
-
-                                foreach (Socket_SendInfo ssi in ssiList)
+                                foreach (SendInfo si in siList)
                                 {
-                                    int iIndex = SendConfig.SendList.lstSend.IndexOf(ssi);
-
-                                    if (iIndex > -1 && iIndex < SendConfig.SendList.lstSend.Count - 1)
+                                    int iIndex = SendConfig.List.lstSendInfo.IndexOf(si);
+                                    if (iIndex > -1 && iIndex < SendConfig.List.lstSendInfo.Count - 1)
                                     {
-                                        SendConfig.SendList.lstSend.Remove(ssi);
-                                        SendConfig.SendList.lstSend.Insert(iIndex + 1, ssi);
+                                        SendConfig.List.lstSendInfo.Remove(si);
+                                        SendConfig.List.lstSendInfo.Insert(iIndex + 1, si);
                                     }
                                 }
 
@@ -11103,17 +11120,103 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Bottom:
 
-                                foreach (Socket_SendInfo ssi in ssiList)
+                                foreach (SendInfo si in siList)
                                 {
-                                    SendConfig.SendList.lstSend.Remove(ssi);
-                                    SendConfig.SendList.lstSend.Add(ssi);
+                                    SendConfig.List.lstSendInfo.Remove(si);
+                                    SendConfig.List.lstSendInfo.Add(si);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Copy:
 
-                                foreach (Socket_SendInfo ssi in ssiList)
+                                foreach (SendInfo si in siList)
+                                {
+                                    SendConfig.Send.CopySend(si);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Export:
+
+                                string SName = siList[0].SName;
+                                SendConfig.List.SaveSendList_Dialog(form, SName, siList);
+
+                                break;
+
+                            case SystemConfig.ListAction.Delete:
+
+                                SendConfig.Send.DeleteSend_Dialog(form, siList);
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    try
+                    {
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                siList.Reverse();
+
+                                foreach (SendInfo ssi in siList)
+                                {
+                                    SendConfig.List.lstSendInfo.Remove(ssi);
+                                    SendConfig.List.lstSendInfo.Insert(0, ssi);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                foreach (SendInfo ssi in siList)
+                                {
+                                    int iIndex = SendConfig.List.lstSendInfo.IndexOf(ssi);
+
+                                    if (iIndex > 0)
+                                    {
+                                        SendConfig.List.lstSendInfo.Remove(ssi);
+                                        SendConfig.List.lstSendInfo.Insert(iIndex - 1, ssi);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                siList.Reverse();
+
+                                foreach (SendInfo ssi in siList)
+                                {
+                                    int iIndex = SendConfig.List.lstSendInfo.IndexOf(ssi);
+
+                                    if (iIndex > -1 && iIndex < SendConfig.List.lstSendInfo.Count - 1)
+                                    {
+                                        SendConfig.List.lstSendInfo.Remove(ssi);
+                                        SendConfig.List.lstSendInfo.Insert(iIndex + 1, ssi);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                foreach (SendInfo ssi in siList)
+                                {
+                                    SendConfig.List.lstSendInfo.Remove(ssi);
+                                    SendConfig.List.lstSendInfo.Add(ssi);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Copy:
+
+                                foreach (SendInfo ssi in siList)
                                 {
                                     Send.CopySend(ssi);
                                 }
@@ -11122,14 +11225,14 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Export:
 
-                                string sSName = ssiList[0].SName;
-                                SendConfig.SendList.SaveSendList_Dialog(sSName, ssiList);
+                                string sSName = siList[0].SName;
+                                SendConfig.List.SaveSendList_Dialog(form, sSName, siList);
 
                                 break;
 
                             case SystemConfig.ListAction.Delete:
 
-                                Send.DeleteSend_Dialog(ssiList);
+                                Send.DeleteSend_Dialog(form, siList);
 
                                 break;
                         }
@@ -11144,33 +11247,24 @@ namespace WPE.Lib
 
                 #region//清空发送列表（对话框）
 
-                public static void CleanUpSendList_Dialog()
+                public static void CleanUpSendList_Dialog(Form form)
                 {
-                    try
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "发送列表"), "\r\n确定删除所有数据吗\r\n\r\n")
                     {
-                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-
-                        if (dr.Equals(DialogResult.OK))
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
                         {
-                            SendConfig.SendList.SendListClear();
+                            SendConfig.List.SendListClear();
+                            return true;
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
+                    });
                 }
 
                 public static void SendListClear()
                 {
-                    try
-                    {
-                        lstSend.Clear();
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
+                    lstSendInfo.Clear();
                 }
 
                 #endregion
@@ -11183,7 +11277,7 @@ namespace WPE.Lib
                     {
                         DataBase.DeleteTable_Send();
 
-                        foreach (Socket_SendInfo ssi in SendConfig.SendList.lstSend)
+                        foreach (SendInfo ssi in SendConfig.List.lstSendInfo)
                         {
                             DataBase.InsertTable_Send(ssi);
                         }
@@ -11239,15 +11333,15 @@ namespace WPE.Lib
 
                 #region//保存发送列表到文件（对话框）
 
-                public static void SaveSendList_Dialog(string FileName, List<Socket_SendInfo> ssiList)
+                public static void SaveSendList_Dialog(Form form, string FileName, List<SendInfo> ssiList)
                 {
                     try
                     {
-                        if (SendConfig.SendList.lstSend.Count > 0)
+                        if (SendConfig.List.lstSendInfo.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
 
-                            sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_70) + "（*.sp）|*.sp";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("SendListFile", "发送列表文件") + "（*.sp）|*.sp";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -11265,10 +11359,50 @@ namespace WPE.Lib
 
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    SaveSendList(FilePath, ssiList, true);
+                                    bool DoEncrypt = false;
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportSendList", "导出发送列表");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                string sPW = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(sPW))
+                                                {
+                                                    eForm.EncryptionText_Changed();
 
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_160), FilePath);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ExportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    SendConfig.List.AESKey = sPW;
+                                                    DoEncrypt = true;
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    if (SaveSendList(FilePath, ssiList, DoEncrypt))
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendList.Success", "导出发送列表成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendList.Error", "导出发送列表失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }
@@ -11279,7 +11413,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void SaveSendList(string FilePath, List<Socket_SendInfo> ssiList, bool DoEncrypt)
+                private static bool SaveSendList(string FilePath, List<SendInfo> ssiList, bool DoEncrypt)
                 {
                     try
                     {
@@ -11288,10 +11422,10 @@ namespace WPE.Lib
                             Declaration = new XDeclaration("1.0", "utf-8", "yes")
                         };
 
-                        XElement xeRoot = SendConfig.SendList.GetSendList_XML(ssiList);
+                        XElement xeRoot = SendConfig.List.GetSendList_XML(ssiList);
                         if (xeRoot == null)
                         {
-                            return;
+                            return false;
                         }
 
                         xdoc.Add(xeRoot);
@@ -11299,27 +11433,30 @@ namespace WPE.Lib
 
                         if (DoEncrypt)
                         {
-                            string sPassword = SendConfig.SendList.AESKey;
-
+                            string sPassword = SendConfig.List.AESKey;
                             if (!string.IsNullOrEmpty(sPassword))
                             {
                                 SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
-                public static XElement GetSendList_XML(List<Socket_SendInfo> ssiList)
+                public static XElement GetSendList_XML(List<SendInfo> ssiList)
                 {
                     try
                     {
                         XElement xeRoot = new XElement("SendList");
 
-                        foreach (Socket_SendInfo ssi in ssiList)
+                        foreach (SendInfo ssi in ssiList)
                         {
                             XElement xeSend =
                                 new XElement("Send",
@@ -11371,22 +11508,31 @@ namespace WPE.Lib
 
                 #region//从文件加载发送列表（对话框）
 
-                public static void LoadSendList_Dialog()
+                public static void LoadSendList_Dialog(Form form)
                 {
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-
-                        ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_70) + "（*.sp）|*.sp";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("SendListFile", "发送列表文件") + "（*.sp）|*.sp";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
                         {
                             string FilePath = ofdLoadFile.FileName;
-
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                LoadSendList(FilePath, true);
+                                if (LoadSendList(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportSendList.Success", "导入发送列表成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                }
+                                else
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportSendList.Error", "导入发送列表失败");
+                                    string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                    AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                }                                
                             }
                         }
                     }
@@ -11396,7 +11542,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void LoadSendList(string FilePath, bool LoadFromUser)
+                private static bool LoadSendList(Form form, string FilePath, bool LoadFromUser)
                 {
                     try
                     {
@@ -11405,7 +11551,6 @@ namespace WPE.Lib
                             XDocument xdoc = new XDocument();
 
                             bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
-
                             if (bEncrypt)
                             {
                                 if (LoadFromUser)
@@ -11414,7 +11559,7 @@ namespace WPE.Lib
                                     pwForm.ShowDialog();
                                 }
 
-                                xdoc = SystemConfig.DecryptXMLFile(FilePath, SendConfig.SendList.AESKey);
+                                xdoc = SystemConfig.DecryptXMLFile(FilePath, SendConfig.List.AESKey);
                             }
                             else
                             {
@@ -11423,11 +11568,10 @@ namespace WPE.Lib
 
                             if (xdoc == null)
                             {
-                                string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
-
+                                string sError = AntdUI.Localization.Get("SendList.AESKeyError", "加载发送列表失败: 密码错误");
                                 if (LoadFromUser)
                                 {
-                                    Socket_Operation.ShowMessageBox(sError);
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
                                 }
                                 else
                                 {
@@ -11437,22 +11581,17 @@ namespace WPE.Lib
                             else
                             {
                                 LoadSendList_FromXDocument(xdoc);
-
-                                if (bEncrypt)
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_101));
-                                }
-                                else
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_100));
-                                }
                             }
+
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static void LoadSendList_FromXDocument(XDocument xdoc)
@@ -11727,6 +11866,33 @@ namespace WPE.Lib
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+                }
+
+                #endregion
+
+                #region//获取机器人
+
+                public static Socket_RobotInfo GeRobot_ByGuid(Guid RID)
+                {
+                    try
+                    {
+                        if (RID != null && RID != Guid.Empty)
+                        {
+                            foreach (Socket_RobotInfo ri in RobotConfig.RobotList.lstRobot)
+                            {
+                                if (ri.RID == RID)
+                                {
+                                    return ri;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return null;
                 }
 
                 #endregion
@@ -14132,7 +14298,7 @@ namespace WPE.Lib
                 }
             }
 
-            public static void InsertTable_Send(Socket_SendInfo ssi)
+            public static void InsertTable_Send(SendInfo ssi)
             {
                 try
                 {

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data;
 using System.Reflection;
 using System.Threading;
 
 namespace WPE.Lib
 {
-    public class Socket_Send
+    public class SendExecute
     {
         public bool SystemSocket = false;
         public int LoopCNT = 0;
@@ -23,7 +22,7 @@ namespace WPE.Lib
 
         #region//初始化
 
-        public Socket_Send()
+        public SendExecute()
         {
             this.Worker.WorkerSupportsCancellation = true;
             this.Worker.WorkerReportsProgress = true;

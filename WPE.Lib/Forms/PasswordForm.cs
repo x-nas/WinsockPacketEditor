@@ -78,7 +78,7 @@ namespace WPE.Lib.Forms
 
             //    case Operate.SystemConfig.PWType.SendList_Import:
             //    case Operate.SystemConfig.PWType.SendList_Export:
-            //        WPE.Lib.Operate.SendConfig.SendList.AESKey = Password;
+            //        WPE.Lib.Operate.SendConfig.List.AESKey = Password;
             //        break;
 
             //    case Operate.SystemConfig.PWType.SendCollection_Import:

@@ -145,7 +145,7 @@ namespace WPE.Lib
                                     if (!string.IsNullOrEmpty(sContent))
                                     {
                                         Guid SID = Guid.Parse(sContent);
-                                        Socket_Send ss = Operate.SendConfig.Send.DoSend(SID);
+                                        SendExecute ss = Operate.SendConfig.Send.DoSend(SID);
 
                                         if (ss != null)
                                         {

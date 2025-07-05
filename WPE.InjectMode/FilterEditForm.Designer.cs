@@ -108,12 +108,12 @@
             this.tlpFilterAppoint_Advance = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilterAppoint_Advance2 = new System.Windows.Forms.TableLayoutPanel();
             this.cbFilter_AppointHeader = new AntdUI.Checkbox();
+            this.txtFilter_HeaderContent = new AntdUI.Input();
             this.dFilterAppoint_Advance = new AntdUI.Divider();
             this.pFilterName = new AntdUI.Panel();
             this.tlpFilterName = new System.Windows.Forms.TableLayoutPanel();
             this.dFilterName = new AntdUI.Divider();
             this.txtFilterName = new AntdUI.Input();
-            this.txtFilter_HeaderContent = new AntdUI.Input();
             this.tlpFilterEdit.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tabFilterEdit.SuspendLayout();
@@ -1177,6 +1177,16 @@
             this.cbFilter_AppointHeader.Text = "指定包头";
             this.cbFilter_AppointHeader.CheckedChanged += new AntdUI.BoolEventHandler(this.cbFilter_AppointHeader_CheckedChanged);
             // 
+            // txtFilter_HeaderContent
+            // 
+            this.txtFilter_HeaderContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtFilter_HeaderContent.Location = new System.Drawing.Point(107, 6);
+            this.txtFilter_HeaderContent.Name = "txtFilter_HeaderContent";
+            this.txtFilter_HeaderContent.PlaceholderText = "请输入十六进制和空格";
+            this.txtFilter_HeaderContent.Size = new System.Drawing.Size(221, 39);
+            this.txtFilter_HeaderContent.TabIndex = 33;
+            this.txtFilter_HeaderContent.TextChanged += new System.EventHandler(this.txtFilter_HeaderContent_TextChanged);
+            // 
             // dFilterAppoint_Advance
             // 
             this.dFilterAppoint_Advance.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1237,16 +1247,6 @@
             this.txtFilterName.Size = new System.Drawing.Size(328, 40);
             this.txtFilterName.TabIndex = 1;
             this.txtFilterName.TextChanged += new System.EventHandler(this.txtFilterName_TextChanged);
-            // 
-            // txtFilter_HeaderContent
-            // 
-            this.txtFilter_HeaderContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtFilter_HeaderContent.Location = new System.Drawing.Point(107, 6);
-            this.txtFilter_HeaderContent.Name = "txtFilter_HeaderContent";
-            this.txtFilter_HeaderContent.PlaceholderText = "请输入十六进制和空格";
-            this.txtFilter_HeaderContent.Size = new System.Drawing.Size(221, 39);
-            this.txtFilter_HeaderContent.TabIndex = 33;
-            this.txtFilter_HeaderContent.TextChanged += new System.EventHandler(this.txtFilter_HeaderContent_TextChanged);
             // 
             // FilterEditForm
             // 

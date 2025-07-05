@@ -156,7 +156,7 @@
     <Compile Include="NativeMethods\WS2_32.cs" />
     <Compile Include="NativeMethods\WSock32.cs" />
     <Compile Include="Operate.cs" />
-    <Compile Include="ProcessInfo.cs" />
+    <Compile Include="ClassObject\ProcessInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -168,7 +168,7 @@
     <Compile Include="Proxy_MapLocal.cs" />
     <Compile Include="Proxy_MapRemote.cs" />
     <Compile Include="Socket_BitInfo.cs" />
-    <Compile Include="FilterInfo.cs" />
+    <Compile Include="ClassObject\FilterInfo.cs" />
     <Compile Include="Socket_Operation.cs" />
     <Compile Include="Forms\PasswordForm.cs">
       <SubType>Form</SubType>
@@ -182,14 +182,14 @@
     <Compile Include="Controls\SystemSetting.Designer.cs">
       <DependentUpon>SystemSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="PacketInfo.cs" />
+    <Compile Include="ClassObject\PacketInfo.cs" />
     <Compile Include="Socket_ProxyData.cs" />
     <Compile Include="Socket_ProxyTCP.cs" />
     <Compile Include="Socket_ProxyUDP.cs" />
     <Compile Include="Socket_Robot.cs" />
     <Compile Include="Socket_RobotInfo.cs" />
-    <Compile Include="Socket_Send.cs" />
-    <Compile Include="Socket_SendInfo.cs" />
+    <Compile Include="ClassObject\SendExecute.cs" />
+    <Compile Include="ClassObject\SendInfo.cs" />
     <Compile Include="WebAPI\CCProxy_Controller.cs" />
     <Compile Include="WebAPI\ProxyAccount_Controller.cs" />
     <Compile Include="WebAPI\ProxyInfo_Controller.cs" />
