@@ -17,6 +17,7 @@ namespace WPE.Lib
         public string SendName = string.Empty;
 
         private CancellationTokenSource cts;
+        private SendInfo siSelect;
         private BindingList<PacketInfo> SendCollection;
         public BackgroundWorker Worker = new BackgroundWorker();
 
@@ -41,11 +42,11 @@ namespace WPE.Lib
 
         #region//启动发送
 
-        public void StartSend(string SendName, bool SystemSocket, int LoopCNT, int LoopINT, BindingList<PacketInfo> SendCollection)
+        public void StartSend(SendInfo si)
         {
             try
             {
-                if (SendCollection.Count > 0)
+                if (si != null && si.SCollection.Count > 0)
                 {
                     if (!this.Worker.IsBusy)
                     {
@@ -53,19 +54,20 @@ namespace WPE.Lib
                         this.Send_Success = 0;
                         this.Send_Failure = 0;
 
-                        this.SendName = SendName;
-                        this.SystemSocket = SystemSocket;
-                        this.LoopCNT = LoopCNT;
-                        this.LoopINT = LoopINT;
-                        this.SendCollection = SendCollection;
+                        this.siSelect = si;
+                        this.SendName = si.SName;
+                        this.SystemSocket = si.SSystemSocket;
+                        this.LoopCNT = si.SLoopCNT;
+                        this.LoopINT = si.SLoopINT;
+                        this.SendCollection = si.SCollection;                        
 
                         this.cts = new CancellationTokenSource();
                         this.Worker.RunWorkerAsync();
 
-                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_84), this.SendName);
+                        string sLog = string.Format(AntdUI.Localization.Get("SendExecute.DoSend", "执行发送 [{0}]"), this.SendName);
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                     }
-                }                
+                }         
             }
             catch (Exception ex)
             {
@@ -109,47 +111,55 @@ namespace WPE.Lib
                 {
                     if (Operate.SystemConfig.SystemSocket <= 0)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_49));
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("System.SystemSocket.Error", "系统套接字未设置"));
                         return;
                     }
                 }
 
                 for (int i = 0; i < this.LoopCNT; i++)
                 {
-                    foreach (PacketInfo spi in this.SendCollection)
+                    this.siSelect.AddExecutionCount();
+
+                    for (int j = 0; j < this.SendCollection.Count; j++) 
                     {
-                        if (Worker.CancellationPending)
+                        PacketInfo pi = this.SendCollection[j];
+                        if (pi != null)
                         {
-                            e.Cancel = true;
-                            return;
-                        }
-                        else
-                        {
-                            int Socket = spi.PacketSocket;
-                            if (this.SystemSocket)
+                            if (Worker.CancellationPending)
                             {
-                                Socket = Operate.SystemConfig.SystemSocket;
+                                e.Cancel = true;
+                                return;
                             }
-
-                            if (Socket > 0)
+                            else
                             {
-                                bool bOK = Socket_Operation.SendPacket(Socket, spi.PacketType, string.Empty, spi.PacketTo, spi.PacketBuffer);
-
-                                if (bOK)
+                                int Socket = pi.PacketSocket;
+                                if (this.SystemSocket)
                                 {
-                                    this.Send_Success++;
-                                }
-                                else
-                                {
-                                    this.Send_Failure++;
+                                    Socket = Operate.SystemConfig.SystemSocket;
                                 }
 
-                                this.Total_Send++;
-
-                                if (this.LoopINT > 0)
+                                if (Socket > 0)
                                 {
-                                    Worker.ReportProgress(i);
-                                    Socket_Operation.DoSleepAsync(this.LoopINT, this.cts.Token).Wait();
+                                    bool bOK = Socket_Operation.SendPacket(Socket, pi.PacketType, string.Empty, pi.PacketTo, pi.PacketBuffer);
+
+                                    if (bOK)
+                                    {
+                                        this.Send_Success++;
+                                        this.siSelect.AddExecutionSuccess();
+                                    }
+                                    else
+                                    {
+                                        this.Send_Failure++;
+                                        this.siSelect.AddExecutionFail();
+                                    }
+
+                                    this.Total_Send++;
+
+                                    if (this.LoopINT > 0)
+                                    {
+                                        Worker.ReportProgress(j);
+                                        Socket_Operation.DoSleepAsync(this.LoopINT, this.cts.Token).Wait();
+                                    }
                                 }
                             }
                         }
@@ -179,21 +189,22 @@ namespace WPE.Lib
         {
             try
             {
+                string sMsg = string.Empty;
+
                 if (e.Cancelled)
                 {
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_163), this.SendName);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                    sMsg = string.Format(AntdUI.Localization.Get("SendExecute.Stop", "发送 [{0}] 已停止"), this.SendName);                    
                 }
-                else if (e.Error != null)
+                else if (e.Error != null) 
                 {
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_164), this.SendName, e.Error.Message);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                    sMsg = string.Format(AntdUI.Localization.Get("SendExecute.Error", "发送[{0}] 发生错误: {1}"), this.SendName, e.Error.Message);                    
                 }
                 else
                 {
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_165), this.SendName);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                    sMsg = string.Format(AntdUI.Localization.Get("SendExecute.Success", "发送[{0}] 执行完毕"), this.SendName);                    
                 }
+
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, sMsg);                
             }
             catch (Exception ex)
             {

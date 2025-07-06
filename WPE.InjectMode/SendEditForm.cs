@@ -39,6 +39,8 @@ namespace WPE.InjectMode
 
         private void SendEditForm_Load(object sender, EventArgs e)
         {
+            this.Text = AntdUI.Localization.Get("SendEditForm", "编辑发送");
+
             this.txtSendName.Text = this.siSelect.SName;            
             this.cbSystemSocket.Checked = this.siSelect.SSystemSocket;
             this.nudLoopCNT.Value = this.siSelect.SLoopCNT;
@@ -138,35 +140,26 @@ namespace WPE.InjectMode
 
         private void bExecute_Click(object sender, EventArgs e)
         {
-            if (this.SendCollection.Count == 0)
-            { 
-                return;
-            }
-
-            if (!this.CheckSendInfo())
-            {
-                return;
-            }
-
             try
             {
+                if (this.SendCollection.Count == 0)
+                {
+                    return;
+                }
+
+                if (!this.SaveSend())
+                {
+                    return;
+                }
+
                 if (!this.ss.Worker.IsBusy)
                 {
                     this.bExecute.Loading = true;
                     this.bStop.Enabled = true;
                     this.tlpSendCollectionSettings.Enabled = false;
+                    this.tSendCollection.Enabled = false;
 
-                    //if (this.dgvSendCollection.ContextMenuStrip != null)
-                    //{
-                    //    this.dgvSendCollection.ContextMenuStrip.Enabled = false;
-                    //}
-
-                    string sSendName = this.txtSendName.Text.Trim();
-                    bool bSystemSocket = this.cbSystemSocket.Checked;
-                    int iLoopCNT = ((int)this.nudLoopCNT.Value);
-                    int iLoopINT = ((int)this.nudLoopINT.Value);
-
-                    ss.StartSend(sSendName, bSystemSocket, iLoopCNT, iLoopINT, this.SendCollection);
+                    ss.StartSend(siSelect);
                 }
             }
             catch (Exception ex)
@@ -182,6 +175,9 @@ namespace WPE.InjectMode
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             int iIndex = e.ProgressPercentage;
+            
+            this.tSendCollection.SelectedIndex = iIndex + 1;
+            this.tSendCollection.ScrollLine(iIndex + 1, true);
 
             this.lTotal_Send_CNT.Text = this.ss.Total_Send.ToString();
             this.lSend_Success_CNT.Text = this.ss.Send_Success.ToString();
@@ -219,12 +215,8 @@ namespace WPE.InjectMode
 
                 this.bExecute.Loading = false;
                 this.bStop.Enabled = false;
-                this.tlpSendCollectionSettings.Enabled = true;                
-
-                //if (this.dgvSendCollection.ContextMenuStrip != null)
-                //{
-                //    this.dgvSendCollection.ContextMenuStrip.Enabled = true;
-                //}
+                this.tlpSendCollectionSettings.Enabled = true;
+                this.tSendCollection.Enabled = true;
 
                 this.lTotal_Send_CNT.Text = this.ss.Total_Send.ToString();
                 this.lSend_Success_CNT.Text = this.ss.Send_Success.ToString();
@@ -247,58 +239,46 @@ namespace WPE.InjectMode
 
         #endregion
 
-        #region//保存
+        #region//发送集 - 菜单
 
-        private void bSave_Click(object sender, EventArgs e)
+        private void sSendCollection_SelectIndexChanged(object sender, IntEventArgs e)
         {
-            if (string.IsNullOrEmpty(this.txtSendName.Text.Trim()))
+            switch (this.sSendCollection.SelectIndex)
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "发送名称为空", TType.Error)
-                {
-                    LocalizationText = "SendEditForm.SendName.Error"
-                });
+                //导入
+                case 0:
 
-                return;
+                    Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Import, this.SendCollection.ToList());
+
+                    break;
+
+                //导出
+                case 1:
+
+                    if (this.SendCollection.Count > 0)
+                    {
+                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Export, this.SendCollection.ToList());
+                    }
+
+                    break;
+
+                //清空
+                case 2:
+
+                    if (this.SendCollection.Count > 0)
+                    {
+                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, this.SendCollection.ToList());
+                    }
+
+                    break;
             }
 
-            try
-            {  
-                string SName_New = this.txtSendName.Text.Trim();
-                bool SSystemSocket_New = this.cbSystemSocket.Checked;
-                int SLoopCNT_New = ((int)this.nudLoopCNT.Value);
-                int SLoopINT_New = ((int)this.nudLoopINT.Value);
-                string SNotes_New = this.txtNotes.Text.Trim();
-
-                Operate.SendConfig.Send.UpdateSend(
-                    this.siSelect, 
-                    SName_New, 
-                    SSystemSocket_New, 
-                    SLoopCNT_New, 
-                    SLoopINT_New, 
-                    this.SendCollection, 
-                    SNotes_New);
-
-                this.Close();
-                this.imForm.RefreshSendList();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            this.sSendCollection.SelectIndex = -1;
         }
 
         #endregion
 
-        #region//退出
-
-        private void bExit_Click(object sender, EventArgs e)
-        {
-            this.Dispose();
-        }
-
-        #endregion
-
-        #region//右键菜单
+        #region//发送集 - 右键菜单
 
         private void tSendCollection_CellClick(object sender, TableClickEventArgs e)
         {
@@ -356,6 +336,21 @@ namespace WPE.InjectMode
 
                             break;
 
+                        case "cmsEdit":
+
+                            if (piList.Count > 0)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm())
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
                         case "cmsCopy":
 
                             if (piList.Count > 0)
@@ -373,31 +368,7 @@ namespace WPE.InjectMode
                                 Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
                             }
 
-                            break;
-
-                        case "cmsExport":
-
-                            if (this.SendCollection.Count > 0)
-                            {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Export, piList);
-                            }
-
-                            break;
-
-                        case "cmsImport":
-
-                            Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Import, piList);
-
-                            break;
-
-                        case "cmsClear":
-
-                            if (this.SendCollection.Count > 0)
-                            {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, piList);
-                            }                            
-
-                            break;
+                            break;                        
                     }
 
                     this.tSendCollection.SelectedIndex = -1;
@@ -428,6 +399,11 @@ namespace WPE.InjectMode
                     IconSvg = "VerticalAlignBottomOutlined",
                 },
                     new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("编辑")
+                {
+                    ID = "cmsEdit",
+                    IconSvg = "EditOutlined",
+                },
                     new AntdUI.ContextMenuStripItem("复制")
                 {
                     ID = "cmsCopy",
@@ -437,26 +413,70 @@ namespace WPE.InjectMode
                 {
                     ID = "cmsDelete",
                     IconSvg = "CloseOutlined",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("导出到文件")
-                {
-                    ID = "cmsExport",
-                    IconSvg = "DeliveredProcedureOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("从文件导入")
-                {
-                    ID = "cmsImport",
-                    IconSvg = "FolderOpenOutlined",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("清空列表")
-                {
-                    ID = "cmsClear",
-                    IconSvg = "DeleteOutlined",
-                },
+                },                    
                 }));
             }
+        }
+
+        #endregion
+
+        #region//保存
+
+        private void bSave_Click(object sender, EventArgs e)
+        {
+            if (this.SaveSend())
+            {
+                this.Close();
+                this.imForm.RefreshSendList();
+            }
+        }
+
+        private bool SaveSend()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(this.txtSendName.Text.Trim()))
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(this, "发送名称为空", TType.Error)
+                    {
+                        LocalizationText = "SendEditForm.SendName.Error"
+                    });
+
+                    return false;
+                }
+
+                string SName_New = this.txtSendName.Text.Trim();
+                bool SSystemSocket_New = this.cbSystemSocket.Checked;
+                int SLoopCNT_New = ((int)this.nudLoopCNT.Value);
+                int SLoopINT_New = ((int)this.nudLoopINT.Value);
+                string SNotes_New = this.txtNotes.Text.Trim();
+
+                Operate.SendConfig.Send.UpdateSend(
+                    this.siSelect,
+                    SName_New,
+                    SSystemSocket_New,
+                    SLoopCNT_New,
+                    SLoopINT_New,
+                    this.SendCollection,
+                    SNotes_New);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region//退出
+
+        private void bExit_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using AntdUI;
 using System;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace WPE.Lib
 {
@@ -57,17 +58,60 @@ namespace WPE.Lib
 
         #endregion
 
-        #region//发送已执行次数
+        #region//已执行次数
 
-        int _ExecutionCount;
+        CellText _ExecutionCount = new CellText("0")
+        {
+            Fore = Color.Blue,
+        };
 
-        public int ExecutionCount
+        public CellText ExecutionCount
         {
             get => _ExecutionCount;
             set
             {
                 if (_ExecutionCount == value) return;
                 _ExecutionCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region//成功次数
+
+        CellText _ExecutionSuccess = new CellText("0")
+        {
+            Fore = Color.Green,
+        };
+
+        public CellText ExecutionSuccess
+        {
+            get => _ExecutionSuccess;
+            set
+            {
+                if (_ExecutionSuccess == value) return;
+                _ExecutionSuccess = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region//失败次数
+
+        CellText _ExecutionFail = new CellText("0")
+        {
+            Fore = Color.DarkRed,
+        };
+
+        public CellText ExecutionFail
+        {
+            get => _ExecutionFail;
+            set
+            {
+                if (_ExecutionFail == value) return;
+                _ExecutionFail = value;
                 OnPropertyChanged();
             }
         }
@@ -161,7 +205,12 @@ namespace WPE.Lib
 
         #region//列表操作
 
-        AntdUI.CellLink[] _CellLinks;
+        AntdUI.CellLink[] _CellLinks = new AntdUI.CellLink[]
+        {
+            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
+            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+        };
+
         public AntdUI.CellLink[] CellLinks
         {
             get => _CellLinks;
@@ -194,14 +243,34 @@ namespace WPE.Lib
             this._SLoopINT = SLoopINT;
             this._SCollection = SCollection;
             this._SNotes = SNotes;
-            this._ExecutionCount = 0;
+        }
 
-            CellLinks = new AntdUI.CellLink[]
+        public void AddExecutionCount()
+        {
+            if (int.TryParse(this._ExecutionCount.Text.Trim(), out int iCNT))
             {
-                new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
-                new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
-            };
-        }        
+                iCNT++;
+                this._ExecutionCount.Text = iCNT.ToString();
+            }
+        }
+
+        public void AddExecutionSuccess()
+        {
+            if (int.TryParse(this._ExecutionSuccess.Text.Trim(), out int iCNT))
+            {
+                iCNT++;
+                this._ExecutionSuccess.Text = iCNT.ToString();
+            }
+        }
+
+        public void AddExecutionFail()
+        {
+            if (int.TryParse(this._ExecutionFail.Text.Trim(), out int iCNT))
+            {
+                iCNT++;
+                this._ExecutionFail.Text = iCNT.ToString();
+            }
+        }
 
         #endregion
     }

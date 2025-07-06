@@ -219,7 +219,7 @@ namespace WPELibrary
                             int iLoopCNT = ((int)this.nudLoop_CNT.Value);
                             int iLoopINT = ((int)this.nudLoop_INT.Value);
 
-                            ss.StartSend(this.SendName, bSystemSocket, iLoopCNT, iLoopINT, this.SendCollection);
+                            ss.StartSend(SSI);
                         }
                     }
                 }

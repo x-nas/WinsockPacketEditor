@@ -344,9 +344,12 @@ namespace WPE.InjectMode
                             {
                                 cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
 
-                                if(si.ExecutionCount > 0)
+                                if(int.TryParse(si.ExecutionCount.Text.Trim(), out int iCNT))
                                 {
-                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                    if(iCNT > 0)
+                                    {
+                                        cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                    }
                                 }
                             }
                             else
@@ -361,6 +364,8 @@ namespace WPE.InjectMode
                     },
                 }.SetLocalizationTitleID("Table.SendList.Column."),
                 new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("ExecutionSuccess", "成功次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("ExecutionFail", "失败次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.SendList.Column."),
                 new AntdUI.Column("SSystemSocket", "套接字", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -796,12 +801,9 @@ namespace WPE.InjectMode
 
         private void InitCMS_PacketList()
         {
-            AntdUI.IContextMenuStripItem[] menulist = { };
-
+            AntdUI.IContextMenuStripItem[] menulist_SendList = new AntdUI.IContextMenuStripItem[Operate.SendConfig.List.lstSendInfo.Count];
             if (Operate.SendConfig.List.lstSendInfo.Count > 0)
             {
-                AntdUI.IContextMenuStripItem[] menulist_SendList = new AntdUI.IContextMenuStripItem[Operate.SendConfig.List.lstSendInfo.Count];
-
                 for (int i = 0; i < menulist_SendList.Length; i++)
                 {
                     menulist_SendList[i] = new AntdUI.ContextMenuStripItem(Operate.SendConfig.List.lstSendInfo[i].SName)
@@ -809,31 +811,24 @@ namespace WPE.InjectMode
                         ID = Operate.SendConfig.List.lstSendInfo[i].SID.ToString().ToUpper(),
                     };
                 }
-                
-                menulist = new AntdUI.IContextMenuStripItem[]
+            }
+
+            AntdUI.IContextMenuStripItem[] menulist = { };
+            menulist = new AntdUI.IContextMenuStripItem[]
+            {
+                new AntdUI.ContextMenuStripItem("编辑")
                 {
-                    new AntdUI.ContextMenuStripItem("添加到发送列表")
+                    ID = "cmsEdit",
+                    IconSvg = "EditOutlined",
+                },
+                new AntdUI.ContextMenuStripItem("添加到发送列表")
                 {
-                    ID = "cmsPacketList_ToSendList",
+                    ID = "cmsToSendList",
                     IconSvg = "ProfileOutlined",
-                    LocalizationText = "InjectModeForm.cmsPacketList.ToSendList",
+                    LocalizationText = "InjectModeForm.cmsToSendList",
                     Sub = menulist_SendList,
                 },
-                };
-            }
-            else
-            {
-                menulist = new AntdUI.IContextMenuStripItem[]
-                {
-                    new AntdUI.ContextMenuStripItem("添加到发送列表")
-                    {
-                        Enabled = false,
-                        ID = "cmsPacketList_ToSendList",
-                        IconSvg = "ProfileOutlined",
-                        LocalizationText = "InjectModeForm.cmsPacketList.ToSendList",
-                    },
-                };
-            }
+            };
 
             AntdUI.ContextMenuStrip.open(tPacketList, item =>
             {
@@ -846,11 +841,17 @@ namespace WPE.InjectMode
 
                 switch (item.ID)
                 {
-                    case "cmsPacketList_ToSendList":
+                    case "cmsEdit":
 
                         if (piList.Count > 0)
                         {
-                            //
+                            AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm())
+                            {
+                                Align = AntdUI.TAlignMini.Right,
+                                Mask = true,
+                                MaskClosable = false,
+                                DisplayDelay = 0,
+                            });
                         }
 
                         break;
@@ -1131,7 +1132,7 @@ namespace WPE.InjectMode
                         {
                             this.sSendList.Items[2].Enabled = false;
                             this.sSendList.Items[3].Enabled = true;
-                            
+                            this.tSendList.Enabled = false;
                             Operate.SendConfig.List.lstSendExecute.Clear();
 
                             this.bgwSendList.RunWorkerAsync();
@@ -1741,6 +1742,7 @@ namespace WPE.InjectMode
         {
             this.sSendList.Items[2].Enabled = true;
             this.sSendList.Items[3].Enabled = false;
+            this.tSendList.Enabled = true;
         }
 
         #endregion

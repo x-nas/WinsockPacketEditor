@@ -10251,8 +10251,6 @@ namespace WPE.Lib
 
             public static class Send
             {
-                public static string AESKey = string.Empty;
-
                 #region//新增发送
 
                 public static void AddSend_New()
@@ -10546,20 +10544,20 @@ namespace WPE.Lib
 
                 public static async Task<SendExecute> DoSendAsync(Guid SID)
                 {
-                    SendExecute ssReturn = null;
+                    SendExecute seReturn = null;
 
                     try
                     {
                         if (SID != null && SID != Guid.Empty)
                         {
-                            SendInfo ssi = SendConfig.List.lstSendInfo.Where(item => item.SID == SID).FirstOrDefault();
+                            SendInfo si = SendConfig.List.lstSendInfo.Where(item => item.SID == SID).FirstOrDefault();
 
-                            if (ssi != null)
+                            if (si != null)
                             {
-                                if (ssi.SCollection.Count > 0)
+                                if (si.SCollection.Count > 0)
                                 {
-                                    ssReturn = new SendExecute();
-                                    await Task.Run(() => ssReturn.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection));
+                                    seReturn = new SendExecute();
+                                    await Task.Run(() => seReturn.StartSend(si));
                                 }
                             }
                         }
@@ -10569,7 +10567,7 @@ namespace WPE.Lib
                         Operate.DoLog(nameof(DoSendAsync), ex.Message);
                     }
 
-                    return ssReturn;
+                    return seReturn;
                 }
 
                 public static void DoSend_ByHotKey(int HOTKEY_ID)
@@ -10731,18 +10729,18 @@ namespace WPE.Lib
 
                                 if (piList.Count > 0)
                                 {
-                                    Send.SaveSendCollection_Dialog(string.Empty, piList);
+                                    Send.SaveSendCollection_Dialog(form, string.Empty, piList);
                                 }
                                 else
                                 {
-                                    Send.SaveSendCollection_Dialog(string.Empty, SendCollection.ToList());
+                                    Send.SaveSendCollection_Dialog(form, string.Empty, SendCollection.ToList());
                                 }                                
 
                                 break;
 
                             case SystemConfig.ListAction.Import:
 
-                                Send.LoadSendCollection_Dialog(SendCollection);
+                                Send.LoadSendCollection_Dialog(form, SendCollection);
 
                                 break;
 
@@ -10776,14 +10774,14 @@ namespace WPE.Lib
 
                 #region//保存发送集（对话框）
 
-                public static void SaveSendCollection_Dialog(string FileName, List<PacketInfo> SendCollection)
+                public static void SaveSendCollection_Dialog(Form form, string FileName, List<PacketInfo> SendCollection)
                 {
                     try
                     {
                         if (SendCollection.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_114) + "（*.sc）|*.sc";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("SendCollectionFile", "发送集文件") + "（*.sc）|*.sc";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -10791,20 +10789,56 @@ namespace WPE.Lib
                             }
 
                             sfdSaveFile.RestoreDirectory = true;
-
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                pwForm.ShowDialog();
-
                                 string FilePath = sfdSaveFile.FileName;
-
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    SaveSendCollection(FilePath, SendCollection, true);
+                                    bool DoEncrypt = false;
+                                    string Password = string.Empty;
 
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_166), FilePath);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportSendCollection", "导出发送集");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                Password = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(Password))
+                                                {
+                                                    eForm.EncryptionText_Changed();
+
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ExportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    DoEncrypt = true;
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    if (SaveSendCollection(FilePath, SendCollection, DoEncrypt, Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendCollection.Success", "导出发送集成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendCollection.Error", "导出发送集失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }
@@ -10815,7 +10849,7 @@ namespace WPE.Lib
                     }
                 }
 
-                public static void SaveSendCollection(string FilePath, List<PacketInfo> SendCollection, bool DoEncrypt)
+                public static bool SaveSendCollection(string FilePath, List<PacketInfo> SendCollection, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -10823,18 +10857,20 @@ namespace WPE.Lib
 
                         if (DoEncrypt)
                         {
-                            string sPassword = Send.AESKey;
-
-                            if (!string.IsNullOrEmpty(sPassword))
+                            if (!string.IsNullOrEmpty(Password))
                             {
-                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
                             }
                         }
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 private static void SaveSendCollection_ToXDocument(string FilePath, List<PacketInfo> SendCollection)
@@ -10877,21 +10913,25 @@ namespace WPE.Lib
 
                 #region//加载发送集（对话框）
 
-                public static void LoadSendCollection_Dialog(BindingList<PacketInfo> SendCollection)
+                public static void LoadSendCollection_Dialog(Form form, BindingList<PacketInfo> SendCollection)
                 {
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                        ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_114) + "（*.sc）|*.sc";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("SendCollectionFile", "发送集文件") + "（*.sc）|*.sc";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
                         {
                             string FilePath = ofdLoadFile.FileName;
-
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                LoadSendCollection(FilePath, SendCollection, true);
+                                if (LoadSendCollection(form, FilePath, SendCollection, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportSendCollection.Success", "导入发送集成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                }
                             }
                         }
                     }
@@ -10901,24 +10941,49 @@ namespace WPE.Lib
                     }
                 }
 
-                public static void LoadSendCollection(string FilePath, BindingList<PacketInfo> SendCollection, bool LoadFromUser)
+                public static bool LoadSendCollection(Form form, string FilePath, BindingList<PacketInfo> SendCollection, bool LoadFromUser)
                 {
                     try
                     {
                         if (File.Exists(FilePath))
                         {
-                            XDocument xdoc = new XDocument();
-                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
+                            XDocument xdoc = null;
 
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
                             if (bEncrypt)
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                    pwForm.ShowDialog();
-                                }
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ImportSendCollection", "导入发送集");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                string sPW = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(sPW))
+                                                {
+                                                    eForm.EncryptionText_Changed();
 
-                                xdoc = SystemConfig.DecryptXMLFile(FilePath, Send.AESKey);
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ImportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    xdoc = SystemConfig.DecryptXMLFile(FilePath, sPW);
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
                             }
                             else
                             {
@@ -10927,36 +10992,28 @@ namespace WPE.Lib
 
                             if (xdoc == null)
                             {
-                                string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
-
+                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
-                                    Socket_Operation.ShowMessageBox(sError);
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
                                 }
                                 else
                                 {
                                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
                                 }
-                            }
-                            else
-                            {
-                                LoadSendCollection_FromXDocument(xdoc, SendCollection);
 
-                                if (bEncrypt)
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_168));
-                                }
-                                else
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_167));
-                                }
+                                return false;
                             }
+
+                            LoadSendCollection_FromXDocument(xdoc, SendCollection);
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+                    return false;
                 }
 
                 private static void LoadSendCollection_FromXDocument(XDocument xdoc, BindingList<PacketInfo> SendCollection)
@@ -11289,7 +11346,7 @@ namespace WPE.Lib
 
                 #region//保存发送列表到文件（对话框）
 
-                public static void SaveSendList_Dialog(Form form, string FileName, List<SendInfo> ssiList)
+                public static void SaveSendList_Dialog(Form form, string FileName, List<SendInfo> siList)
                 {
                     try
                     {
@@ -11342,7 +11399,7 @@ namespace WPE.Lib
                                         });
                                     }
 
-                                    if (SaveSendList(FilePath, ssiList, DoEncrypt, Password))
+                                    if (SaveSendList(FilePath, siList, DoEncrypt, Password))
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendList.Success", "导出发送列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -11364,7 +11421,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static bool SaveSendList(string FilePath, List<SendInfo> ssiList, bool DoEncrypt, string Password)
+                private static bool SaveSendList(string FilePath, List<SendInfo> siList, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -11373,7 +11430,7 @@ namespace WPE.Lib
                             Declaration = new XDeclaration("1.0", "utf-8", "yes")
                         };
 
-                        XElement xeRoot = SendConfig.List.GetSendList_XML(ssiList);
+                        XElement xeRoot = SendConfig.List.GetSendList_XML(siList);
                         if (xeRoot == null)
                         {
                             return false;
@@ -11400,38 +11457,38 @@ namespace WPE.Lib
                     return false;
                 }
 
-                public static XElement GetSendList_XML(List<SendInfo> ssiList)
+                public static XElement GetSendList_XML(List<SendInfo> siList)
                 {
                     try
                     {
                         XElement xeRoot = new XElement("SendList");
 
-                        foreach (SendInfo ssi in ssiList)
+                        foreach (SendInfo si in siList)
                         {
                             XElement xeSend =
                                 new XElement("Send",
-                                new XElement("IsEnable", ssi.IsEnable.ToString()),
-                                new XElement("ID", ssi.SID.ToString().ToUpper()),
-                                new XElement("Name", ssi.SName),
-                                new XElement("SystemSocket", ssi.SSystemSocket.ToString()),
-                                new XElement("LoopCNT", ssi.SLoopCNT.ToString()),
-                                new XElement("LoopINT", ssi.SLoopINT.ToString()),
-                                new XElement("Notes", ssi.SNotes)
+                                new XElement("IsEnable", si.IsEnable.ToString()),
+                                new XElement("ID", si.SID.ToString().ToUpper()),
+                                new XElement("Name", si.SName),
+                                new XElement("SystemSocket", si.SSystemSocket.ToString()),
+                                new XElement("LoopCNT", si.SLoopCNT.ToString()),
+                                new XElement("LoopINT", si.SLoopINT.ToString()),
+                                new XElement("Notes", si.SNotes)
                                 );
 
-                            if (ssi.SCollection.Count > 0)
+                            if (si.SCollection.Count > 0)
                             {
                                 XElement xeCollection = new XElement("SendCollection");
 
-                                foreach (PacketInfo spi in ssi.SCollection)
+                                foreach (PacketInfo pi in si.SCollection)
                                 {
-                                    string sBuffer = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, spi.PacketBuffer);
+                                    string sBuffer = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer);
 
                                     XElement xeColl =
                                         new XElement("Collection",
-                                        new XElement("Socket", spi.PacketSocket),
-                                        new XElement("Type", spi.PacketType),
-                                        new XElement("IPTo", spi.PacketTo),
+                                        new XElement("Socket", pi.PacketSocket),
+                                        new XElement("Type", pi.PacketType),
+                                        new XElement("IPTo", pi.PacketTo),
                                         new XElement("Buffer", sBuffer)
                                         );
 

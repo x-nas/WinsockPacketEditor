@@ -111,6 +111,12 @@
     <Compile Include="ListSettingsForm.Designer.cs">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PacketEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PacketEditForm.Designer.cs">
+      <DependentUpon>PacketEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -188,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ListSettingsForm.resx">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PacketEditForm.resx">
+      <DependentUpon>PacketEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

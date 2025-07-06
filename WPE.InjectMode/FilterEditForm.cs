@@ -44,6 +44,8 @@ namespace WPE.InjectMode
         {
             try
             {
+                this.Text = AntdUI.Localization.Get("FilterEditForm", "编辑滤镜");
+
                 this.tabFilterEdit.TabMenuVisible = false;
                 this.tabFilterFrom.TabMenuVisible = false;
                 this.InitTable_FilterNormal();
