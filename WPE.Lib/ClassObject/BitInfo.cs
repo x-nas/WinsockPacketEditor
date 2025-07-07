@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace WPE.Lib
 {    
-    public class Socket_BitInfo
+    public class BitInfo
     {
         private byte _value;
 
@@ -64,7 +64,7 @@ namespace WPE.Lib
             return bytes[0];
         }
 
-        public Socket_BitInfo(byte value, long position)
+        public BitInfo(byte value, long position)
         {
             this._value = value;
             this.Position = position;

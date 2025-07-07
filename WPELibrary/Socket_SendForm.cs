@@ -85,7 +85,7 @@ namespace WPELibrary
                 dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
                 hbPacketData.ByteProvider = dbp;
 
-                DefaultByteCharConverter defConverter = new DefaultByteCharConverter();
+                DefaultByteCharConverter defConverter = new DefaultByteCharConverter();               
                 EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();
                 tscbEncoding.Items.Add(defConverter);
                 tscbEncoding.Items.Add(ebcdicConverter);
@@ -619,7 +619,7 @@ namespace WPELibrary
                 {
                     byte bSelected = hbPacketData.ByteProvider.ReadByte(hbPacketData.SelectionStart);
 
-                    Socket_BitInfo bitInfo = new Socket_BitInfo(bSelected, hbPacketData.SelectionStart);
+                    BitInfo bitInfo = new BitInfo(bSelected, hbPacketData.SelectionStart);
 
                     if (bitInfo != null)
                     {
@@ -836,6 +836,8 @@ namespace WPELibrary
             try
             {
                 hbPacketData.ByteCharConverter = tscbEncoding.SelectedItem as IByteCharConverter;
+
+               
                 this.hbPacketData.Focus();
             }
             catch (Exception ex)

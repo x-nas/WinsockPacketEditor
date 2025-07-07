@@ -39,6 +39,7 @@
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.tlpSendCollectionInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.sSendCollection = new AntdUI.Segmented();
             this.lSend_Fail_CNT = new AntdUI.Label();
             this.lSend_Success_CNT = new AntdUI.Label();
             this.lTotal_Send_CNT = new AntdUI.Label();
@@ -66,7 +67,6 @@
             this.tlpSendName = new System.Windows.Forms.TableLayoutPanel();
             this.dSendName = new AntdUI.Divider();
             this.txtSendName = new AntdUI.Input();
-            this.sSendCollection = new AntdUI.Segmented();
             this.tlpSendEdit.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpSendCollectionInfo.SuspendLayout();
@@ -229,6 +229,54 @@
             this.tlpSendCollectionInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSendCollectionInfo.Size = new System.Drawing.Size(984, 40);
             this.tlpSendCollectionInfo.TabIndex = 6;
+            // 
+            // sSendCollection
+            // 
+            this.sSendCollection.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sSendCollection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.sSendCollection.IconAlign = AntdUI.TAlignMini.Left;
+            this.sSendCollection.IconRatio = 1F;
+            segmentedItem1.Badge = null;
+            segmentedItem1.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem1.BadgeBack = null;
+            segmentedItem1.BadgeMode = false;
+            segmentedItem1.BadgeOffsetX = 0;
+            segmentedItem1.BadgeOffsetY = 0;
+            segmentedItem1.BadgeSize = 0.6F;
+            segmentedItem1.BadgeSvg = null;
+            segmentedItem1.IconSvg = "FolderOpenOutlined";
+            segmentedItem1.ID = "siImport";
+            segmentedItem1.Text = "导入发送集";
+            segmentedItem2.Badge = null;
+            segmentedItem2.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem2.BadgeBack = null;
+            segmentedItem2.BadgeMode = false;
+            segmentedItem2.BadgeOffsetX = 0;
+            segmentedItem2.BadgeOffsetY = 0;
+            segmentedItem2.BadgeSize = 0.6F;
+            segmentedItem2.BadgeSvg = null;
+            segmentedItem2.IconSvg = "DeliveredProcedureOutlined";
+            segmentedItem2.ID = "siExport";
+            segmentedItem2.Text = "导出发送集";
+            segmentedItem3.Badge = null;
+            segmentedItem3.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem3.BadgeBack = null;
+            segmentedItem3.BadgeMode = false;
+            segmentedItem3.BadgeOffsetX = 0;
+            segmentedItem3.BadgeOffsetY = 0;
+            segmentedItem3.BadgeSize = 0.6F;
+            segmentedItem3.BadgeSvg = null;
+            segmentedItem3.IconSvg = "DeleteOutlined";
+            segmentedItem3.ID = "siClear";
+            segmentedItem3.Text = "清空发送集";
+            this.sSendCollection.Items.Add(segmentedItem1);
+            this.sSendCollection.Items.Add(segmentedItem2);
+            this.sSendCollection.Items.Add(segmentedItem3);
+            this.sSendCollection.Location = new System.Drawing.Point(3, 3);
+            this.sSendCollection.Name = "sSendCollection";
+            this.sSendCollection.Size = new System.Drawing.Size(748, 34);
+            this.sSendCollection.TabIndex = 16;
+            this.sSendCollection.SelectIndexChanged += new AntdUI.IntEventHandler(this.sSendCollection_SelectIndexChanged);
             // 
             // lSend_Fail_CNT
             // 
@@ -593,54 +641,6 @@
             this.txtSendName.Size = new System.Drawing.Size(230, 40);
             this.txtSendName.TabIndex = 1;
             this.txtSendName.TextChanged += new System.EventHandler(this.txtSendName_TextChanged);
-            // 
-            // sSendCollection
-            // 
-            this.sSendCollection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sSendCollection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.sSendCollection.IconAlign = AntdUI.TAlignMini.Left;
-            this.sSendCollection.IconRatio = 1F;
-            segmentedItem1.Badge = null;
-            segmentedItem1.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem1.BadgeBack = null;
-            segmentedItem1.BadgeMode = false;
-            segmentedItem1.BadgeOffsetX = 0;
-            segmentedItem1.BadgeOffsetY = 0;
-            segmentedItem1.BadgeSize = 0.6F;
-            segmentedItem1.BadgeSvg = null;
-            segmentedItem1.IconSvg = "FolderOpenOutlined";
-            segmentedItem1.ID = "siImport";
-            segmentedItem1.Text = "导入发送集";
-            segmentedItem2.Badge = null;
-            segmentedItem2.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem2.BadgeBack = null;
-            segmentedItem2.BadgeMode = false;
-            segmentedItem2.BadgeOffsetX = 0;
-            segmentedItem2.BadgeOffsetY = 0;
-            segmentedItem2.BadgeSize = 0.6F;
-            segmentedItem2.BadgeSvg = null;
-            segmentedItem2.IconSvg = "DeliveredProcedureOutlined";
-            segmentedItem2.ID = "siExport";
-            segmentedItem2.Text = "导出发送集";
-            segmentedItem3.Badge = null;
-            segmentedItem3.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem3.BadgeBack = null;
-            segmentedItem3.BadgeMode = false;
-            segmentedItem3.BadgeOffsetX = 0;
-            segmentedItem3.BadgeOffsetY = 0;
-            segmentedItem3.BadgeSize = 0.6F;
-            segmentedItem3.BadgeSvg = null;
-            segmentedItem3.IconSvg = "DeleteOutlined";
-            segmentedItem3.ID = "siClear";
-            segmentedItem3.Text = "清空发送集";
-            this.sSendCollection.Items.Add(segmentedItem1);
-            this.sSendCollection.Items.Add(segmentedItem2);
-            this.sSendCollection.Items.Add(segmentedItem3);
-            this.sSendCollection.Location = new System.Drawing.Point(3, 3);
-            this.sSendCollection.Name = "sSendCollection";
-            this.sSendCollection.Size = new System.Drawing.Size(748, 34);
-            this.sSendCollection.TabIndex = 16;
-            this.sSendCollection.SelectIndexChanged += new AntdUI.IntEventHandler(this.sSendCollection_SelectIndexChanged);
             // 
             // SendEditForm
             // 

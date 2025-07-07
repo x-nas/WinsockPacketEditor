@@ -845,7 +845,7 @@ namespace WPE.InjectMode
 
                         if (piList.Count > 0)
                         {
-                            AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm())
+                            AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, piList[0]))
                             {
                                 Align = AntdUI.TAlignMini.Right,
                                 Mask = true,

@@ -167,7 +167,7 @@
     <Compile Include="Proxy_AuthInfo.cs" />
     <Compile Include="Proxy_MapLocal.cs" />
     <Compile Include="Proxy_MapRemote.cs" />
-    <Compile Include="Socket_BitInfo.cs" />
+    <Compile Include="ClassObject\BitInfo.cs" />
     <Compile Include="ClassObject\FilterInfo.cs" />
     <Compile Include="Socket_Operation.cs" />
     <Compile Include="Forms\PasswordForm.cs">
