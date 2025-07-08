@@ -147,6 +147,19 @@ namespace WPE.InjectMode
                     return;
                 }
 
+                if (this.cbSystemSocket.Checked)
+                {
+                    if (Operate.SystemConfig.SystemSocket <= 0)
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this, "系统套接字未设置", TType.Error)
+                        {
+                            LocalizationText = "System.SystemSocket.Error"
+                        });
+
+                        return;
+                    }
+                }
+
                 if (!this.SaveSend())
                 {
                     return;

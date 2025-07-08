@@ -2,6 +2,7 @@
 using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
@@ -57,11 +58,26 @@ namespace WPE.InjectMode
             EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();         
             
             this.ProgressionPosition_Change();
+            this.Dark_Changed();
         }
 
         private void PacketEditForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.StopSend();
+        }
+
+        private void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.hbPacketData.BackColor = Color.FromArgb(30, 30, 30);
+                this.hbPacketData.ForeColor = Color.Silver;
+            }
+            else
+            {
+                this.hbPacketData.BackColor = Color.White;
+                this.hbPacketData.ForeColor = Color.Black;
+            }
         }
 
         #endregion        
