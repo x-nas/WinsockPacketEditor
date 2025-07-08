@@ -214,14 +214,14 @@ namespace WPE.Lib
                                             Random random = new Random();
                                             iDelay = random.Next(iFrom, iTo + 1);
 
-                                            Socket_Operation.DoSleepAsync(iDelay, this.cts.Token).Wait();
+                                            Operate.SystemConfig.DoSleepAsync(iDelay, this.cts.Token).Wait();
                                         }
                                     }
                                     else
                                     {
                                         if (int.TryParse(sContent, out iDelay))
                                         {
-                                            Socket_Operation.DoSleepAsync(iDelay, this.cts.Token).Wait();
+                                            Operate.SystemConfig.DoSleepAsync(iDelay, this.cts.Token).Wait();
                                         }
                                     }                                    
 

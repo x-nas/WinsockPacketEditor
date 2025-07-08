@@ -1,7 +1,9 @@
 ﻿using AntdUI;
 using Be.Windows.Forms;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using WPE.Lib;
 
@@ -11,6 +13,12 @@ namespace WPE.InjectMode
     {
         private InjectModeForm imForm;
         private PacketInfo piSelect;
+        private int Send_CNT = 0;
+        private int Send_Success = 0;
+        private int Send_Fail = 0;
+        private int SendSocket = 0;
+        private int SendCNT = 0;
+        private int SendINT = 0;
 
         #region//窗体事件
 
@@ -38,25 +46,22 @@ namespace WPE.InjectMode
 
             this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.nudPacketSocket.Value = this.piSelect.PacketSocket;
-            this.txtIPTo.Text = this.piSelect.PacketTo;            
+            this.nudPacketLength.Value = this.piSelect.PacketLen;
+            this.txtPacketTo.Text = this.piSelect.PacketTo;            
 
-            DynamicByteProvider dbp = new DynamicByteProvider(this.piSelect.PacketBuffer);
-            dbp.Changed += new EventHandler(ByteProvider_Changed);
+            DynamicByteProvider dbp = new DynamicByteProvider(this.piSelect.PacketBuffer);            
             dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
             hbPacketData.ByteProvider = dbp;
 
             DefaultByteCharConverter defConverter = new DefaultByteCharConverter();
-            EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();
-
-            this.ddlEncoding.Items.Clear();
-            this.ddlEncoding.Items.Add(defConverter);
-            this.ddlEncoding.Items.Add(ebcdicConverter);
-            this.ddlEncoding.SelectedIndex = 0;            
-
-            this.HexBox_LinePositionChanged();
-            this.HexBox_UpdatePacketLen();
-            this.HexBox_ManageAbility();
+            EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();         
+            
             this.ProgressionPosition_Change();
+        }
+
+        private void PacketEditForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.StopSend();
         }
 
         #endregion        
@@ -108,122 +113,64 @@ namespace WPE.InjectMode
 
         #endregion
 
-        #region//编辑器事件
+        #region//检查发送数据
 
-        private void ByteProvider_Changed(object sender, EventArgs e)
+        private bool CheckSendPacket()
         {
-            this.HexBox_ManageAbility();
+            if ((int)this.nudPacketSocket.Value == 0)
+            {
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "套接字设置错误", TType.Error)
+                {
+                    LocalizationText = "PacketEditForm.SocketError"
+                });
+
+                return false;
+            }
+
+            if (hbPacketData.ByteProvider.Length == 0)
+            {
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "封包数据为空", TType.Error)
+                {
+                    LocalizationText = "PacketEditForm.Empty"
+                });
+
+                return false;
+            }
+
+            if (this.cbProgressionPosition.Checked)
+            {
+                if ((int)this.nudProgressionPosition.Value >= hbPacketData.ByteProvider.Length)
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(this, "递进位置错误", TType.Error)
+                    {
+                        LocalizationText = "PacketEditForm.Progression.Error"
+                    });
+
+                    return false;
+                }
+            }
+
+            return true;
         }
+
+        #endregion
+
+        #region//编辑器事件
 
         private void ByteProvider_LengthChanged(object sender, EventArgs e)
         {
             this.HexBox_UpdatePacketLen();
-        }
-
-        private void HexBox_ManageAbility()
-        {
-            try
-            {
-                if (hbPacketData.ByteProvider == null)
-                {
-                    this.bSave.Enabled = false;
-                    //tsPacketData_Find.Enabled = false;
-                    //tsPacketData_FindNext.Enabled = false;
-                    ddlEncoding.Enabled = false;
-                }
-                else
-                {
-                    this.bSave.Enabled = true;
-                    //tsPacketData_Find.Enabled = true;
-                    //tsPacketData_FindNext.Enabled = true;
-                    ddlEncoding.Enabled = true;
-                }
-
-                HexBox_ManageAbilityForCopyAndPaste();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         private void HexBox_UpdatePacketLen()
         {
             this.nudPacketLength.Value = this.hbPacketData.ByteProvider.Length;
         }
 
-        private void HexBox_ManageAbilityForCopyAndPaste()
+        private void hbPacketData_CurrentPositionInLineChanged(object sender, EventArgs e)
         {
-            //tsPacketData_Copy.Enabled = hbPacketData.CanCopy();
-            //tsPacketData_Cut.Enabled = hbPacketData.CanCut();
-            //tsPacketData_Paste.Enabled = hbPacketData.CanPaste();
-            //tsPacketData_Paste_PasteHex.Enabled = hbPacketData.CanPasteHex();
+            this.nudProgressionPosition.Value = (int)hbPacketData.SelectionStart;
         }
-
-        private void HexBox_LinePositionChanged()
-        {
-            try
-            {
-                int iSelectIndex = (int)hbPacketData.SelectionStart;
-                this.lHexBox_Position.Text = string.Format(AntdUI.Localization.Get("PacketEditForm.Position", "[ 行 {0}  列 {1}  位置 {2} ]"), hbPacketData.CurrentLine, hbPacketData.CurrentPositionInLine, iSelectIndex);
-
-                if (hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > hbPacketData.SelectionStart)
-                {
-                    byte bSelected = hbPacketData.ByteProvider.ReadByte(hbPacketData.SelectionStart);
-
-                    BitInfo bitInfo = new BitInfo(bSelected, hbPacketData.SelectionStart);
-
-                    if (bitInfo != null)
-                    {
-                        long start = hbPacketData.SelectionStart;
-                        long selected = hbPacketData.SelectionLength;
-
-                        if (selected == 0 || selected > 8)
-                        {
-                            selected = 8;
-                        }
-
-                        long last = hbPacketData.ByteProvider.Length;
-                        long end = Math.Min(start + selected, last);
-
-                        byte[] buffer64 = new byte[8];
-                        int iBuffIndex = 0;
-
-                        for (long i = start; i < end; i++)
-                        {
-                            buffer64[iBuffIndex] = hbPacketData.ByteProvider.ReadByte(i);
-                            iBuffIndex++;
-                        }
-                        
-                        this.lBits_Value.Text = bitInfo.ToString();
-                        this.lChar_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Char, buffer64);
-                        this.lByte_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Byte, buffer64);
-                        this.lShort_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Short, buffer64);
-                        this.lUShort_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UShort, buffer64);
-                        this.lInt32_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Int32, buffer64);
-                        this.lUInt32_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UInt32, buffer64);
-                        this.lInt64_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Int64, buffer64);
-                        this.lUInt64_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UInt64, buffer64);
-                        this.lFloat_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Float, buffer64);
-                        this.lDouble_Value.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Double, buffer64);
-                    }
-                }                
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #region//编码
-
-        private void ddlEncoding_SelectedIndexChanged(object sender, IntEventArgs e)
-        {
-            hbPacketData.ByteCharConverter = ddlEncoding.SelectedValue as IByteCharConverter;
-            this.hbPacketData.Focus();
-        }
-
-        #endregion
 
         #endregion
 
@@ -235,57 +182,307 @@ namespace WPE.InjectMode
             {
                 AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbPacketData, (item) =>
                 {
+                    DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+
                     switch (item.ID)
                     {
-                        case "cmsTop":
+                        case "ToFilterList":
 
-                            
+                            if (this.hbPacketData.CanCopy())
+                            {
+                                this.hbPacketData.CopyHex();
+                                byte[] bBufferCopy = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.piSelect, bBufferCopy);
+                            }
+                            else
+                            {
+                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.piSelect, dbp.Bytes.ToArray());
+                            }
 
-                            break;                        
+                            break;
+
+                        case "Cut":
+
+                            this.hbPacketData.Cut();
+
+                            break;
+
+                        case "Copy_Text":
+
+                            this.hbPacketData.Copy();
+
+                            break;
+
+                        case "Copy_Hex":
+
+                            this.hbPacketData.CopyHex();
+
+                            break;
+
+                        case "Paste_Text":
+
+                            this.hbPacketData.Paste();
+
+                            break;
+
+                        case "Paste_Hex":
+
+                            this.hbPacketData.PasteHex();
+
+                            break;
+
+                        case "SelectAll":
+
+                            this.hbPacketData.SelectAll();
+
+                            break;
+
+                        default:
+
+                            if (Guid.TryParse(item.ID, out Guid SID))
+                            {
+                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                if (si != null)
+                                {
+                                    int iSocket = (int)this.nudPacketSocket.Value;
+
+                                    byte[] bBuffer = null;
+                                    if (this.hbPacketData.CanCopy())
+                                    {
+                                        this.hbPacketData.CopyHex();
+                                        bBuffer = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                    }
+                                    else
+                                    {
+                                        bBuffer = dbp.Bytes.ToArray();
+                                    }
+
+                                    List<PacketInfo> piList = new List<PacketInfo>
+                                    {
+                                        new PacketInfo
+                                        {
+                                            PacketSocket = piSelect.PacketSocket,
+                                            PacketType = piSelect.PacketType,
+                                            PacketFrom = piSelect.PacketFrom,
+                                            PacketTo = piSelect.PacketTo,
+                                            PacketBuffer = bBuffer,
+                                            PacketLen = bBuffer.Length,
+                                            PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen),
+                                        }
+                                    };
+
+                                    if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
+                                        {
+                                            LocalizationText = "cmsPacketList_ToSendList.Success"
+                                        });
+                                    }
+                                    else
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                        {
+                                            LocalizationText = "cmsPacketList_ToSendList.Error"
+                                        });
+                                    }
+                                }
+                            }
+
+                            break;
                     }
-                },
-                new AntdUI.IContextMenuStripItem[]
+                }, Operate.PacketConfig.Packet.GetCMS_PacketEdit(this.hbPacketData)));
+            }
+        }
+
+        #endregion
+
+        #region//发送
+
+        private void bSend_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!this.CheckSendPacket())
                 {
-                    new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                    return;
+                }
+
+                if (!bgwSendPacket.IsBusy)
                 {
-                    ID = "cmsTop",
-                    IconSvg = "VerticalAlignTopOutlined",
-                    LocalizationText = "System.cms.Top",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                    this.bSend.Loading = true;
+                    this.bStop.Enabled = true;
+
+                    this.pPacketSocket.Enabled = false;
+                    this.pPacketSend.Enabled = false;
+                    this.pProgression.Enabled = false;
+
+                    this.Send_CNT = 0;
+                    this.Send_Success = 0;
+                    this.Send_Fail = 0;
+
+                    this.lTotal_Send_CNT.Text = this.Send_CNT.ToString();
+                    this.lSend_Success_CNT.Text = this.Send_Success.ToString();
+                    this.lSend_Fail_CNT.Text = this.Send_Fail.ToString();
+
+                    this.SendSocket = (int)this.nudPacketSocket.Value;
+                    this.SendINT = (int)this.nudSendType_Interval.Value;
+                    this.SendCNT = (int)this.nudSendType_Times.Value;
+
+                    this.bgwSendPacket.RunWorkerAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//发送封包（异步）
+
+        private void bgwSendPacket_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+                byte[] bBuff = dbp.Bytes.ToArray();
+
+                if (this.rbSendType_Continuously.Checked)
                 {
-                    ID = "cmsUp",
-                    IconSvg = "ArrowUpOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                    int iSendCount = 0;
+                    while (!bgwSendPacket.CancellationPending)
+                    {
+                        this.DoSendPacket(this.SendSocket, this.piSelect.PacketFrom, this.piSelect.PacketTo, bBuff, iSendCount);
+                        iSendCount++;
+
+                        if (this.SendINT > 0)
+                        {
+                            bgwSendPacket.ReportProgress(iSendCount);
+                            Thread.Sleep(this.SendINT);
+                        }
+                    }
+                }
+                else
                 {
-                    ID = "cmsDown",
-                    IconSvg = "ArrowDownOutlined",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                    for (int i = 0; i < this.SendCNT; i++)
+                    {
+                        if (bgwSendPacket.CancellationPending)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            this.DoSendPacket(this.SendSocket, this.piSelect.PacketFrom, this.piSelect.PacketTo, bBuff, i);
+
+                            if (this.SendINT > 0)
+                            {
+                                bgwSendPacket.ReportProgress(i); 
+                                Thread.Sleep(this.SendINT);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwSendPacket_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            this.lTotal_Send_CNT.Text = this.Send_CNT.ToString();
+            this.lSend_Success_CNT.Text = this.Send_Success.ToString();
+            this.lSend_Fail_CNT.Text = this.Send_Fail.ToString();
+        }
+
+        private void bgwSendPacket_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            this.bSend.Loading = false;
+            this.bStop.Enabled = false;
+
+            this.pPacketSocket.Enabled = true;
+            this.pPacketSend.Enabled = true;
+            this.pProgression.Enabled = true;
+
+            this.lTotal_Send_CNT.Text = this.Send_CNT.ToString();
+            this.lSend_Success_CNT.Text = this.Send_Success.ToString();
+            this.lSend_Fail_CNT.Text = this.Send_Fail.ToString();
+        }
+
+        private void DoSendPacket(int iSocket, string sIPFrom, string sIPTo, byte[] bSendBuff, int SendCount)
+        {
+            try
+            {
+                if (this.cbProgressionPosition.Checked)
                 {
-                    ID = "cmsBottom",
-                    IconSvg = "VerticalAlignBottomOutlined",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("编辑")
+                    int iCarryCount = 0;
+                    int iIndex = (int)this.nudProgressionPosition.Value;
+                    int iStep = (int)this.nudProgressionStep.Value;
+
+                    byte bValue = bSendBuff[iIndex];
+                    bValue = Operate.SystemConfig.GetStepByte(bValue, iStep, out iCarryCount);
+                    bSendBuff[iIndex] = bValue;
+
+                    if (this.cbProgressionCarry.Checked && iCarryCount > 0)
+                    {
+                        for (int i = 0; i < this.nudProgressionCarry.Value; i++)
+                        {
+                            int iIndexPre = iIndex - (i + 1);
+
+                            if (iIndexPre > -1)
+                            {
+                                byte bValuePrev = bSendBuff[iIndexPre];
+                                bValuePrev = Operate.SystemConfig.GetStepByte(bValuePrev, iCarryCount, out iCarryCount);
+                                bSendBuff[iIndexPre] = bValuePrev;
+
+                                if (iCarryCount == 0)
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                bool bSendOK = Operate.PacketConfig.Packet.SendPacket(iSocket, this.piSelect.PacketType, sIPFrom, sIPTo, bSendBuff);
+
+                if (bSendOK)
                 {
-                    ID = "cmsEdit",
-                    IconSvg = "EditOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("复制")
+                    this.Send_Success++;
+                }
+                else
                 {
-                    ID = "cmsCopy",
-                    IconSvg = "CopyOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("删除")
-                {
-                    ID = "cmsDelete",
-                    IconSvg = "CloseOutlined",
-                },
-                }));
+                    this.Send_Fail++;
+                }
+
+                this.Send_CNT++;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//停止
+
+        private void bStop_Click(object sender, EventArgs e)
+        {
+            this.StopSend();
+        }
+
+        private void StopSend()
+        {
+            if (this.bgwSendPacket.IsBusy)
+            {
+                this.bgwSendPacket.CancelAsync();
             }
         }
 
@@ -330,10 +527,6 @@ namespace WPE.InjectMode
                     LocalizationText = "PacketEditForm.Save.Error"
                 });
             }
-            finally
-            {
-                HexBox_ManageAbility();
-            }
         }
 
         #endregion
@@ -345,13 +538,6 @@ namespace WPE.InjectMode
             this.Dispose();
         }
 
-
-
-
-
-
-        #endregion
-
-        
+        #endregion        
     }
 }

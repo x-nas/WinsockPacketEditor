@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using AntdUI.Chat;
+using AntdUI.Svg;
 using Be.Windows.Forms;
 using System;
 using System.Collections.Concurrent;
@@ -246,6 +247,57 @@ namespace WPE.Lib
                     .Where(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)
                     .Select(addr => addr.Address)
                     .ToArray();
+            }
+
+            #endregion
+
+            #region//获取列表的右键菜单
+
+            public static AntdUI.IContextMenuStripItem[] GetCMS_List()
+            {                
+                List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                {
+                    ID = "Top",
+                    IconSvg = "VerticalAlignTopOutlined",
+                    LocalizationText = "InjectModeForm.cmsFilterList.Top",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                {
+                    ID = "Up",
+                    IconSvg = "ArrowUpOutlined",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                {
+                    ID = "Down",
+                    IconSvg = "ArrowDownOutlined",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                {
+                    ID = "Bottom",
+                    IconSvg = "VerticalAlignBottomOutlined",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
+                {
+                    ID = "Copy",
+                    IconSvg = "CopyOutlined",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItem("导出到文件")
+                {
+                    ID = "Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItem("删除")
+                {
+                    ID = "Delete",
+                    IconSvg = "DeleteOutlined",
+                });                
+
+                return menuItems.ToArray();
             }
 
             #endregion
@@ -596,6 +648,19 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//获取指定步长的 Byte
+
+            public static byte GetStepByte(byte bStepByte, int iStepLen, out int iCarryCount)
+            {
+                int iStepValue = bStepByte + iStepLen;
+                iCarryCount = iStepValue / 256;
+                iStepValue = (iStepValue % 256 + 256) % 256;
+
+                return (byte)iStepValue;
+            }
+
+            #endregion
+
             #region//判断是否十六进制字符串（带空格）
 
             public static bool IsHexString(string value)
@@ -626,6 +691,15 @@ namespace WPE.Lib
                 {
                     return false;
                 }
+            }
+
+            #endregion
+
+            #region//支持取消的等待（异步）
+
+            public static async Task DoSleepAsync(int MilliSecond, CancellationToken cancellationToken)
+            {
+                await Task.Delay(MilliSecond, cancellationToken);
             }
 
             #endregion
@@ -6861,6 +6935,99 @@ namespace WPE.Lib
 
                 #endregion
 
+                #region//发送封包
+
+                public static unsafe bool SendPacket(int Socket, Operate.PacketConfig.Packet.PacketType packetType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
+                {
+                    bool bReturn = false;
+                    IntPtr ipSend = IntPtr.Zero;
+
+                    try
+                    {
+                        if (Socket > 0 && bSendBuffer.Length > 0)
+                        {
+                            ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
+                            Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
+
+                            string sIPString = string.Empty;
+                            switch (packetType)
+                            {
+                                case Operate.PacketConfig.Packet.PacketType.WS1_Send:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_Send:
+                                case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_SendTo:
+                                case Operate.PacketConfig.Packet.PacketType.WSASend:
+                                case Operate.PacketConfig.Packet.PacketType.WSASendTo:
+                                    sIPString = sIPTo;
+                                    break;
+                                case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
+                                case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
+                                case Operate.PacketConfig.Packet.PacketType.WSARecv:
+                                case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
+                                case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
+                                    sIPString = sIPFrom;
+                                    break;
+                            }
+
+                            int res = -1;
+                            switch (packetType)
+                            {
+                                case Operate.PacketConfig.Packet.PacketType.WS1_Send:
+                                case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
+                                    res = NativeMethods.WSock32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                                    break;
+                                case Operate.PacketConfig.Packet.PacketType.WS2_Send:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
+                                case Operate.PacketConfig.Packet.PacketType.WSASend:
+                                case Operate.PacketConfig.Packet.PacketType.WSARecv:
+                                case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
+                                    res = NativeMethods.WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                                    break;
+                                case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
+                                case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
+                                    if (!string.IsNullOrEmpty(sIPString))
+                                    {
+                                        Operate.PacketConfig.Packet.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                                        res = NativeMethods.WSock32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
+                                    }
+                                    break;
+                                case Operate.PacketConfig.Packet.PacketType.WS2_SendTo:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
+                                case Operate.PacketConfig.Packet.PacketType.WSASendTo:
+                                case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
+                                    if (!string.IsNullOrEmpty(sIPString))
+                                    {
+                                        Operate.PacketConfig.Packet.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                                        res = NativeMethods.WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
+                                    }
+                                    break;
+                            }
+
+                            if (res > 0)
+                            {
+                                bReturn = true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                    finally
+                    {
+                        if (ipSend != IntPtr.Zero)
+                        {
+                            Marshal.FreeHGlobal(ipSend);
+                        }
+                    }
+
+                    return bReturn;
+                }
+
+                #endregion
+
                 #region//获取封包收发速率
 
                 public static string GetPacketSpeedInfo()
@@ -7347,6 +7514,105 @@ namespace WPE.Lib
                 }
 
                 #endregion
+
+                #region//获取封包编辑的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_PacketEdit(HexBox hbPacketData)
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                    if (SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        {
+                            ID = "ToSendList",
+                            IconSvg = "ProfileOutlined",
+                            LocalizationText = "InjectModeForm.cmsToSendList",
+                            Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
+                        });
+                    }
+                    else
+                    {
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        {
+                            Enabled = false,
+                            ID = "ToSendList",
+                            IconSvg = "ProfileOutlined",
+                            LocalizationText = "InjectModeForm.cmsToSendList",
+                        });
+                    }
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("添加到滤镜列表")
+                    {
+                        ID = "ToFilterList",
+                        IconSvg = "FunnelPlotOutlined",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("剪切")
+                    {
+                        Enabled = hbPacketData.CanCut(),
+                        ID = "Cut",
+                        IconSvg = "ScissorOutlined",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
+                    {
+                        Enabled = hbPacketData.CanCopy(),
+                        ID = "Copy",
+                        IconSvg = "CopyOutlined",
+                        Sub = new AntdUI.IContextMenuStripItem[]
+                        {
+                            new AntdUI.ContextMenuStripItem("复制文本")
+                            {
+                                Enabled = hbPacketData.CanCopy(),
+                                ID = "Copy_Text",
+                                IconSvg = "CopyOutlined",
+                            },
+                            new AntdUI.ContextMenuStripItem("复制十六进制")
+                            {
+                                Enabled = hbPacketData.CanCopy(),
+                                ID = "Copy_Hex",
+                                IconSvg = "CopyOutlined",
+                            },
+                        },
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("粘贴")
+                    {
+                        Enabled = hbPacketData.CanPaste(),
+                        ID = "Paste",
+                        IconSvg = "SnippetsOutlined",
+                        Sub = new AntdUI.IContextMenuStripItem[]
+                        {
+                            new AntdUI.ContextMenuStripItem("粘贴文本")
+                            {
+                                Enabled = hbPacketData.CanPaste(),
+                                ID = "Paste_Text",
+                                IconSvg = "SnippetsOutlined",
+                            },
+                            new AntdUI.ContextMenuStripItem("粘贴十六进制")
+                            {
+                                Enabled = hbPacketData.CanPasteHex(),
+                                ID = "Paste_Hex",
+                                IconSvg = "SnippetsOutlined",
+                            },
+                        },
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("全选")
+                    {
+                        ID = "SelectAll",
+                        IconSvg = "ProfileOutlined",
+                    });
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
             }
 
             #endregion
@@ -7642,6 +7908,44 @@ namespace WPE.Lib
 
                 #endregion
 
+                #region//获取封包列表的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_PacketList()
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("编辑")
+                    {
+                        ID = "Edit",
+                        IconSvg = "EditOutlined",
+                    });
+
+                    if (SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        {
+                            ID = "ToSendList",
+                            IconSvg = "ProfileOutlined",
+                            LocalizationText = "InjectModeForm.cmsToSendList",
+                            Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
+                        });
+                    }
+                    else
+                    {
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        {
+                            Enabled = false,
+                            ID = "ToSendList",
+                            IconSvg = "ProfileOutlined",
+                            LocalizationText = "InjectModeForm.cmsToSendList",                            
+                        });
+                    }
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
+
                 #region//发送封包列表中当前选中的封包
 
                 public static void SendSocketList_BySelect()
@@ -7656,7 +7960,7 @@ namespace WPE.Lib
                             string To = PacketConfig.List.piSelect.PacketTo;
                             byte[] bBuffer = PacketConfig.List.piSelect.PacketBuffer;
 
-                            Socket_Operation.SendPacket(Socket, ptType, From, To, bBuffer);
+                            Operate.PacketConfig.Packet.SendPacket(Socket, ptType, From, To, bBuffer);
                         }
                     }
                     catch (Exception ex)
@@ -8976,7 +9280,7 @@ namespace WPE.Lib
                         }
 
                         byte currentValue = bufferSpan[index];
-                        byte newValue = Socket_Operation.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
+                        byte newValue = SystemConfig.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
                         bufferSpan[index] = newValue;
                         modified = true;
                         sfi.IsProgressionDone = true;
@@ -8990,7 +9294,7 @@ namespace WPE.Lib
                                     break;
 
                                 byte prevValue = bufferSpan[prevIndex];
-                                prevValue = Socket_Operation.GetStepByte(prevValue, carryCount, out carryCount);
+                                prevValue = SystemConfig.GetStepByte(prevValue, carryCount, out carryCount);
                                 bufferSpan[prevIndex] = prevValue;
                                 modified = true;
 
@@ -9112,7 +9416,7 @@ namespace WPE.Lib
                             continue;
 
                         byte currentValue = bufferSpan[index];
-                        byte newValue = Socket_Operation.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
+                        byte newValue = SystemConfig.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
                         bufferSpan[index] = newValue;
                         modified = true;
                         sfi.IsProgressionDone = true;
@@ -9136,7 +9440,7 @@ namespace WPE.Lib
                             break;
 
                         byte prevValue = bufferSpan[prevIndex];
-                        prevValue = Socket_Operation.GetStepByte(prevValue, carryCount, out carryCount);
+                        prevValue = SystemConfig.GetStepByte(prevValue, carryCount, out carryCount);
                         bufferSpan[prevIndex] = prevValue;
                     }
                 }
@@ -9231,7 +9535,7 @@ namespace WPE.Lib
                         }
 
                         byte currentValue = buffer[index];
-                        byte newValue = Socket_Operation.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
+                        byte newValue = SystemConfig.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
                         buffer[index] = newValue;
                         sfi.IsProgressionDone = true;
 
@@ -9244,7 +9548,7 @@ namespace WPE.Lib
                                     break;
 
                                 byte prevValue = buffer[prevIndex];
-                                prevValue = Socket_Operation.GetStepByte(prevValue, carryCount, out carryCount);
+                                prevValue = SystemConfig.GetStepByte(prevValue, carryCount, out carryCount);
                                 buffer[prevIndex] = prevValue;
 
                                 if (carryCount == 0)
@@ -11254,6 +11558,27 @@ namespace WPE.Lib
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+                }
+
+                #endregion
+
+                #region//获取添加到发送列表的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_ToSendList()
+                {
+                    AntdUI.IContextMenuStripItem[] imsReturn = new AntdUI.IContextMenuStripItem[Operate.SendConfig.List.lstSendInfo.Count];
+                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        for (int i = 0; i < imsReturn.Length; i++)
+                        {
+                            imsReturn[i] = new AntdUI.ContextMenuStripItem(Operate.SendConfig.List.lstSendInfo[i].SName)
+                            {
+                                ID = Operate.SendConfig.List.lstSendInfo[i].SID.ToString().ToUpper(),
+                            };
+                        }
+                    }
+
+                    return imsReturn;
                 }
 
                 #endregion

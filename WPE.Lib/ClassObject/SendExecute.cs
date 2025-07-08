@@ -140,7 +140,7 @@ namespace WPE.Lib
 
                                 if (Socket > 0)
                                 {
-                                    bool bOK = Socket_Operation.SendPacket(Socket, pi.PacketType, string.Empty, pi.PacketTo, pi.PacketBuffer);
+                                    bool bOK = Operate.PacketConfig.Packet.SendPacket(Socket, pi.PacketType, string.Empty, pi.PacketTo, pi.PacketBuffer);
 
                                     if (bOK)
                                     {
@@ -158,7 +158,7 @@ namespace WPE.Lib
                                     if (this.LoopINT > 0)
                                     {
                                         Worker.ReportProgress(j);
-                                        Socket_Operation.DoSleepAsync(this.LoopINT, this.cts.Token).Wait();
+                                        Operate.SystemConfig.DoSleepAsync(this.LoopINT, this.cts.Token).Wait();
                                     }
                                 }
                             }

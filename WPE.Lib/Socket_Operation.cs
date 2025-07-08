@@ -2025,18 +2025,7 @@ namespace WPE.Lib
 
         #endregion
 
-        #region//获取指定步长的 Byte
-
-        public static byte GetStepByte(byte bStepByte, int iStepLen, out int iCarryCount)
-        {
-            int iStepValue = bStepByte + iStepLen;
-            iCarryCount = iStepValue / 256;          
-            iStepValue = (iStepValue % 256 + 256) % 256;
-
-            return (byte)iStepValue;
-        }
-
-        #endregion        
+        
 
         
 
@@ -2677,21 +2666,7 @@ namespace WPE.Lib
 
         #endregion
 
-        #region//支持取消的等待（异步）
-
-        public static async Task DoSleepAsync(int MilliSecond, CancellationToken cancellationToken)
-        {
-            try
-            {
-                await Task.Delay(MilliSecond, cancellationToken);
-            }
-            catch (TaskCanceledException)
-            {
-                //
-            }
-        }        
-
-        #endregion
+        
 
         #region//发送 TCP 代理数据
 
@@ -3112,97 +3087,6 @@ namespace WPE.Lib
 
         #endregion        
 
-        #region//发送封包
-
-        public static unsafe bool SendPacket(int Socket, Operate.PacketConfig.Packet.PacketType packetType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
-        {
-            bool bReturn = false;
-            IntPtr ipSend = IntPtr.Zero;
-
-            try
-            {
-                if (Socket > 0 && bSendBuffer.Length > 0)
-                {
-                    ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
-                    Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
-
-                    string sIPString = string.Empty;
-                    switch (packetType)
-                    {
-                        case Operate.PacketConfig.Packet.PacketType.WS1_Send:
-                        case Operate.PacketConfig.Packet.PacketType.WS2_Send:
-                        case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
-                        case Operate.PacketConfig.Packet.PacketType.WS2_SendTo:
-                        case Operate.PacketConfig.Packet.PacketType.WSASend:
-                        case Operate.PacketConfig.Packet.PacketType.WSASendTo:
-                            sIPString = sIPTo;
-                            break;
-                        case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
-                        case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
-                        case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
-                        case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
-                        case Operate.PacketConfig.Packet.PacketType.WSARecv:
-                        case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
-                        case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
-                            sIPString = sIPFrom;
-                            break;
-                    }
-
-                    int res = -1;
-                    switch (packetType)
-                    {
-                        case Operate.PacketConfig.Packet.PacketType.WS1_Send:
-                        case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
-                            res = NativeMethods.WSock32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
-                            break;
-                        case Operate.PacketConfig.Packet.PacketType.WS2_Send:
-                        case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
-                        case Operate.PacketConfig.Packet.PacketType.WSASend:
-                        case Operate.PacketConfig.Packet.PacketType.WSARecv:
-                        case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
-                            res = NativeMethods.WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
-                            break;
-                        case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
-                        case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
-                            if (!string.IsNullOrEmpty(sIPString))
-                            {
-                                Operate.PacketConfig.Packet.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
-                                res = NativeMethods.WSock32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
-                            }
-                            break;
-                        case Operate.PacketConfig.Packet.PacketType.WS2_SendTo:
-                        case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
-                        case Operate.PacketConfig.Packet.PacketType.WSASendTo:
-                        case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
-                            if (!string.IsNullOrEmpty(sIPString))
-                            {
-                                Operate.PacketConfig.Packet.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
-                                res = NativeMethods.WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
-                            }
-                            break;
-                    }
-
-                    if (res > 0)
-                    {
-                        bReturn = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-            finally
-            {
-                if (ipSend != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(ipSend);
-                }
-            }
-
-            return bReturn;
-        }
-
-        #endregion        
+        
     }
 }

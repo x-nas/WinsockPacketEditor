@@ -797,93 +797,7 @@ namespace WPE.InjectMode
 
         #endregion
 
-        #region//封包列表 - 右键菜单
-
-        private void InitCMS_PacketList()
-        {
-            AntdUI.IContextMenuStripItem[] menulist_SendList = new AntdUI.IContextMenuStripItem[Operate.SendConfig.List.lstSendInfo.Count];
-            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
-            {
-                for (int i = 0; i < menulist_SendList.Length; i++)
-                {
-                    menulist_SendList[i] = new AntdUI.ContextMenuStripItem(Operate.SendConfig.List.lstSendInfo[i].SName)
-                    {
-                        ID = Operate.SendConfig.List.lstSendInfo[i].SID.ToString().ToUpper(),
-                    };
-                }
-            }
-
-            AntdUI.IContextMenuStripItem[] menulist = { };
-            menulist = new AntdUI.IContextMenuStripItem[]
-            {
-                new AntdUI.ContextMenuStripItem("编辑")
-                {
-                    ID = "cmsEdit",
-                    IconSvg = "EditOutlined",
-                },
-                new AntdUI.ContextMenuStripItem("添加到发送列表")
-                {
-                    ID = "cmsToSendList",
-                    IconSvg = "ProfileOutlined",
-                    LocalizationText = "InjectModeForm.cmsToSendList",
-                    Sub = menulist_SendList,
-                },
-            };
-
-            AntdUI.ContextMenuStrip.open(tPacketList, item =>
-            {
-                List<PacketInfo> piList = new List<PacketInfo>();
-
-                foreach (int SelectIndex in this.tPacketList.SelectedIndexs)
-                {
-                    piList.Add(Operate.PacketConfig.List.lstPacketInfo[SelectIndex - 1]);
-                }
-
-                switch (item.ID)
-                {
-                    case "cmsEdit":
-
-                        if (piList.Count > 0)
-                        {
-                            AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, piList[0]))
-                            {
-                                Align = AntdUI.TAlignMini.Right,
-                                Mask = true,
-                                MaskClosable = false,
-                                DisplayDelay = 0,
-                            });
-                        }
-
-                        break;
-
-                    default:
-
-                        if (Guid.TryParse(item.ID, out Guid SID))
-                        { 
-                            SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
-                            if (si != null && piList.Count > 0)
-                            {
-                                if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
-                                    {
-                                        LocalizationText = "cmsPacketList_ToSendList.Success"
-                                    });
-                                }
-                                else
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
-                                    {
-                                        LocalizationText = "cmsPacketList_ToSendList.Error"
-                                    });
-                                }
-                            }
-                        }
-
-                        break;
-                }
-            }, menulist);
-        }
+        #region//封包列表 - 右键菜单        
 
         private void tPacketList_CellClick(object sender, TableClickEventArgs e)
         {
@@ -894,7 +808,59 @@ namespace WPE.InjectMode
                     return;
                 }
 
-                this.InitCMS_PacketList();
+                AntdUI.ContextMenuStrip.open(tPacketList, item =>
+                {
+                    List<PacketInfo> piList = new List<PacketInfo>();
+
+                    foreach (int SelectIndex in this.tPacketList.SelectedIndexs)
+                    {
+                        piList.Add(Operate.PacketConfig.List.lstPacketInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Edit":
+
+                            if (piList.Count > 0)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, piList[0]))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        default:
+
+                            if (Guid.TryParse(item.ID, out Guid SID))
+                            {
+                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                if (si != null && piList.Count > 0)
+                                {
+                                    if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
+                                        {
+                                            LocalizationText = "cmsPacketList_ToSendList.Success"
+                                        });
+                                    }
+                                    else
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                        {
+                                            LocalizationText = "cmsPacketList_ToSendList.Error"
+                                        });
+                                    }
+                                }
+                            }
+
+                            break;
+                    }
+                }, Operate.PacketConfig.List.GetCMS_PacketList());
             }
         }
 
@@ -990,7 +956,7 @@ namespace WPE.InjectMode
 
                     switch (item.ID)
                     {
-                        case "cmsFilterList_Top":
+                        case "Top":
 
                             if (fiList.Count > 0)
                             {
@@ -999,7 +965,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsFilterList_Up":
+                        case "Up":
 
                             if (fiList.Count > 0)
                             {
@@ -1008,7 +974,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsFilterList_Down":
+                        case "Down":
 
                             if (fiList.Count > 0)
                             {
@@ -1017,7 +983,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsFilterList_Bottom":
+                        case "Bottom":
 
                             if (fiList.Count > 0)
                             {
@@ -1026,7 +992,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsFilterList_Copy":
+                        case "Copy":
 
                             if (fiList.Count > 0)
                             {
@@ -1036,7 +1002,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsFilterList_Export":
+                        case "Export":
 
                             if (fiList.Count > 0)
                             {
@@ -1045,7 +1011,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsFilterList_Delete":
+                        case "Delete":
 
                             if (fiList.Count > 0)
                             {
@@ -1056,49 +1022,7 @@ namespace WPE.InjectMode
                     }
 
                     this.tFilterList.SelectedIndex = -1;
-                },
-                new AntdUI.IContextMenuStripItem[]
-                {
-                    new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
-                {
-                    ID = "cmsFilterList_Top",
-                    IconSvg = "VerticalAlignTopOutlined",
-                    LocalizationText = "InjectModeForm.cmsFilterList.Top",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
-                {
-                    ID = "cmsFilterList_Up",
-                    IconSvg = "ArrowUpOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
-                {
-                    ID = "cmsFilterList_Down",
-                    IconSvg = "ArrowDownOutlined",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
-                {
-                    ID = "cmsFilterList_Bottom",
-                    IconSvg = "VerticalAlignBottomOutlined",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("复制")
-                {
-                    ID = "cmsFilterList_Copy",
-                    IconSvg = "CopyOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("导出到文件")
-                {
-                    ID = "cmsFilterList_Export",
-                    IconSvg = "DeliveredProcedureOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("删除")
-                {
-                    ID = "cmsFilterList_Delete",
-                    IconSvg = "DeleteOutlined",
-                },
-                }));
+                }, Operate.SystemConfig.GetCMS_List()));                
             }
         }
 
@@ -1222,7 +1146,7 @@ namespace WPE.InjectMode
 
                     switch (item.ID)
                     {
-                        case "cmsSendList_Top":
+                        case "Top":
 
                             if (siList.Count > 0)
                             {
@@ -1231,7 +1155,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsSendList_Up":
+                        case "Up":
 
                             if (siList.Count > 0)
                             {
@@ -1240,7 +1164,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsSendList_Down":
+                        case "Down":
 
                             if (siList.Count > 0)
                             {
@@ -1249,7 +1173,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsSendList_Bottom":
+                        case "Bottom":
 
                             if (siList.Count > 0)
                             {
@@ -1258,7 +1182,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsSendList_Copy":
+                        case "Copy":
 
                             if (siList.Count > 0)
                             {
@@ -1268,7 +1192,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsSendList_Export":
+                        case "Export":
 
                             if (siList.Count > 0)
                             {
@@ -1277,7 +1201,7 @@ namespace WPE.InjectMode
 
                             break;
 
-                        case "cmsSendList_Delete":
+                        case "Delete":
 
                             if (siList.Count > 0)
                             {
@@ -1288,49 +1212,7 @@ namespace WPE.InjectMode
                     }
 
                     this.tSendList.SelectedIndex = -1;
-                },
-                new AntdUI.IContextMenuStripItem[]
-                {
-                    new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
-                {
-                    ID = "cmsSendList_Top",
-                    IconSvg = "VerticalAlignTopOutlined",
-                    LocalizationText = "InjectModeForm.cmsFilterList.Top",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
-                {
-                    ID = "cmsSendList_Up",
-                    IconSvg = "ArrowUpOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
-                {
-                    ID = "cmsSendList_Down",
-                    IconSvg = "ArrowDownOutlined",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
-                {
-                    ID = "cmsSendList_Bottom",
-                    IconSvg = "VerticalAlignBottomOutlined",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("复制")
-                {
-                    ID = "cmsSendList_Copy",
-                    IconSvg = "CopyOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("导出到文件")
-                {
-                    ID = "cmsSendList_Export",
-                    IconSvg = "DeliveredProcedureOutlined",
-                },
-                    new AntdUI.ContextMenuStripItem("删除")
-                {
-                    ID = "cmsSendList_Delete",
-                    IconSvg = "DeleteOutlined",
-                },
-                }));
+                }, Operate.SystemConfig.GetCMS_List()));
             }
         }
 

@@ -261,7 +261,7 @@ namespace WPELibrary
 
                         if (iSend_Interval > 0)
                         {
-                            Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
+                            Operate.SystemConfig.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
                         }
                     }
                 }
@@ -279,7 +279,7 @@ namespace WPELibrary
 
                             if (iSend_Interval > 0)
                             {
-                                Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
+                                Operate.SystemConfig.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
                             }                                
                         }
                     }
@@ -322,7 +322,7 @@ namespace WPELibrary
                     int iStep = (int)this.nudProgressionStep.Value;
 
                     byte bValue = bSendBuff[iIndex];
-                    bValue = Socket_Operation.GetStepByte(bValue, iStep, out iCarryCount);
+                    bValue = Operate.SystemConfig.GetStepByte(bValue, iStep, out iCarryCount);
                     bSendBuff[iIndex] = bValue;
 
                     if (this.cbProgressionCarry.Checked && iCarryCount > 0)
@@ -334,7 +334,7 @@ namespace WPELibrary
                             if (iIndexPre > -1)
                             {
                                 byte bValuePrev = bSendBuff[iIndexPre];
-                                bValuePrev = Socket_Operation.GetStepByte(bValuePrev, iCarryCount, out iCarryCount);
+                                bValuePrev = Operate.SystemConfig.GetStepByte(bValuePrev, iCarryCount, out iCarryCount);
                                 bSendBuff[iIndexPre] = bValuePrev;
 
                                 if (iCarryCount == 0)
@@ -350,7 +350,7 @@ namespace WPELibrary
                     }
                 }
 
-                bool bSendOK = Socket_Operation.SendPacket(iSocket, this.SPI.PacketType, sIPFrom, sIPTo, bSendBuff);
+                bool bSendOK = Operate.PacketConfig.Packet.SendPacket(iSocket, this.SPI.PacketType, sIPFrom, sIPTo, bSendBuff);
 
                 if (bSendOK)
                 {
