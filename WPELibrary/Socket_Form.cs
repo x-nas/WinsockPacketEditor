@@ -224,7 +224,7 @@ namespace WPELibrary
                 dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
 
                 dgvRobotList.AutoGenerateColumns = false;
-                dgvRobotList.DataSource = Operate.RobotConfig.RobotList.lstRobot;
+                dgvRobotList.DataSource = Operate.RobotConfig.List.lstRobotInfo;
                 dgvRobotList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvRobotList, true, null);
 
                 dgvLogList.AutoGenerateColumns = false;
@@ -1076,7 +1076,7 @@ namespace WPELibrary
                     bool bCheck = !bool.Parse(dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
 
                     dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-                    Operate.RobotConfig.RobotList.lstRobot[RIndex].IsEnable = bCheck;
+                    Operate.RobotConfig.List.lstRobotInfo[RIndex].IsEnable = bCheck;
                 }
             }
             catch (Exception ex)
@@ -1091,9 +1091,9 @@ namespace WPELibrary
             {
                 int iSelectIndex = this.dgvRobotList.SelectedRows[0].Index;
 
-                if (iSelectIndex >= 0 && iSelectIndex < Operate.RobotConfig.RobotList.lstRobot.Count)
+                if (iSelectIndex >= 0 && iSelectIndex < Operate.RobotConfig.List.lstRobotInfo.Count)
                 {
-                    Socket_Operation.ShowRobotForm_Dialog(Operate.RobotConfig.RobotList.lstRobot[iSelectIndex]);
+                    Socket_Operation.ShowRobotForm_Dialog(Operate.RobotConfig.List.lstRobotInfo[iSelectIndex]);
                 }
             }
             catch (Exception ex)
@@ -1730,46 +1730,46 @@ namespace WPELibrary
             {
                 if (dgvRobotList.Rows.Count > 0)
                 {
-                    List<Socket_RobotInfo> sriList = Socket_Operation.GetSelectedRobot(this.dgvRobotList);
+                    List<RobotInfo> sriList = Socket_Operation.GetSelectedRobot(this.dgvRobotList);
 
                     if (sriList.Count > 0)
                     {
                         switch (sItemText)
                         {
                             case "cmsRobotList_Top":
-                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Top, sriList);
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Top, sriList);
                                 break;
 
                             case "cmsRobotList_Up":
-                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Up, sriList);
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Up, sriList);
                                 break;
 
                             case "cmsRobotList_Down":
-                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Down, sriList);
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Down, sriList);
                                 break;
 
                             case "cmsRobotList_Bottom":
-                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Bottom, sriList);
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, sriList);
                                 break;
 
                             case "cmsRobotList_Copy":
-                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Copy, sriList);
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Copy, sriList);
                                 break;
 
                             case "cmsRobotList_Export":
-                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Export, sriList);
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Export, sriList);
                                 break;
 
                             case "cmsRobotList_Delete":
-                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Delete, sriList);
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, sriList);
                                 break;
                         }
 
                         this.dgvRobotList.ClearSelection();
 
-                        foreach (Socket_RobotInfo sri in sriList)
+                        foreach (RobotInfo sri in sriList)
                         {
-                            int iIndex = Operate.RobotConfig.RobotList.lstRobot.IndexOf(sri);
+                            int iIndex = Operate.RobotConfig.List.lstRobotInfo.IndexOf(sri);
 
                             if (iIndex > -1 && iIndex < dgvRobotList.RowCount)
                             {
@@ -2054,19 +2054,19 @@ namespace WPELibrary
 
         private void tsRobotList_Load_Click(object sender, EventArgs e)
         {
-            Operate.RobotConfig.RobotList.LoadRobotList_Dialog();
+            Operate.RobotConfig.List.LoadRobotList_Dialog(this);
         }
 
         private void tsRobotList_Save_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Operate.RobotConfig.RobotList.lstRobot.Count > 0)
+                if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                 {
-                    List<Socket_RobotInfo> sriList = new List<Socket_RobotInfo>();
-                    sriList.AddRange(Operate.RobotConfig.RobotList.lstRobot);
+                    List<RobotInfo> sriList = new List<RobotInfo>();
+                    sriList.AddRange(Operate.RobotConfig.List.lstRobotInfo);
 
-                    Operate.RobotConfig.RobotList.SaveRobotList_Dialog(string.Empty, sriList);
+                    Operate.RobotConfig.List.SaveRobotList_Dialog(this, string.Empty, sriList);
                 }
             }
             catch (Exception ex)
@@ -2083,7 +2083,7 @@ namespace WPELibrary
                 {
                     this.tsRobotList_Start.Enabled = false;
                     this.tsRobotList_Stop.Enabled = true;
-                    Operate.RobotConfig.RobotList.lstExecute.Clear();
+                    Operate.RobotConfig.List.lstRobotExecute.Clear();
 
                     this.bgwRobotList.RunWorkerAsync();
                 }
@@ -2107,7 +2107,7 @@ namespace WPELibrary
         {
             if (dgvRobotList.Rows.Count > 0)
             {
-                Operate.RobotConfig.RobotList.CleanUpRobotList_Dialog();
+                Operate.RobotConfig.List.CleanUpRobotList_Dialog(this);
             }
         }
 
@@ -2119,16 +2119,16 @@ namespace WPELibrary
         {
             try
             {
-                foreach (Socket_RobotInfo sri in Operate.RobotConfig.RobotList.lstRobot)
+                foreach (RobotInfo sri in Operate.RobotConfig.List.lstRobotInfo)
                 {
                     if (sri.IsEnable)
                     {
-                        Socket_Robot sr = Operate.RobotConfig.Robot.DoRobot(sri.RID, null);
+                        RobotExecute sr = Operate.RobotConfig.Robot.DoRobot(sri.RID, null);
                         if (sr != null)
                         {
                             if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                             {
-                                Operate.RobotConfig.RobotList.lstExecute.Add(sr);
+                                Operate.RobotConfig.List.lstRobotExecute.Add(sr);
                             }
                             else
                             {
@@ -2149,9 +2149,9 @@ namespace WPELibrary
                     }
                 }
 
-                while (Operate.RobotConfig.RobotList.lstExecute.Count > 0)
+                while (Operate.RobotConfig.List.lstRobotExecute.Count > 0)
                 {
-                    foreach (Socket_Robot sr in Operate.RobotConfig.RobotList.lstExecute.ToList())
+                    foreach (RobotExecute sr in Operate.RobotConfig.List.lstRobotExecute.ToList())
                     {
                         if (this.bgwRobotList.CancellationPending)
                         {
@@ -2160,7 +2160,7 @@ namespace WPELibrary
 
                         if (!sr.Worker.IsBusy)
                         {
-                            Operate.RobotConfig.RobotList.lstExecute.Remove(sr);
+                            Operate.RobotConfig.List.lstRobotExecute.Remove(sr);
                         }
                     }
 

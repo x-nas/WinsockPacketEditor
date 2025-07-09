@@ -1973,7 +1973,7 @@ namespace WPE.Lib
             {
                 FilterConfig.List.SaveFilterList_ToDB();
                 SendConfig.List.SaveSendList_ToDB();
-                RobotConfig.RobotList.SaveRobotList_ToDB();
+                RobotConfig.List.SaveRobotList_ToDB();
             }
 
             #endregion
@@ -1988,7 +1988,7 @@ namespace WPE.Lib
                     {
                         FilterConfig.List.LoadFilterList_FromDB();
                         SendConfig.List.LoadSendList_FromDB();
-                        RobotConfig.RobotList.LoadRobotList_FromDB();
+                        RobotConfig.List.LoadRobotList_FromDB();
                     });
                 }
                 catch (Exception ex)
@@ -2167,9 +2167,9 @@ namespace WPE.Lib
                     //机器人列表
                     if (bRobotList)
                     {
-                        if (RobotConfig.RobotList.lstRobot.Count > 0)
+                        if (RobotConfig.List.lstRobotInfo.Count > 0)
                         {
-                            XElement xeRobotList = RobotConfig.RobotList.GetRobotList_XML(RobotConfig.RobotList.lstRobot.ToList());
+                            XElement xeRobotList = RobotConfig.List.GetRobotList_XML(RobotConfig.List.lstRobotInfo.ToList());
                             if (xeRobotList != null)
                             {
                                 xeBackUp.Add(xeRobotList);
@@ -2482,9 +2482,9 @@ namespace WPE.Lib
                         };
                         xdRobotList.Add(xeRobotList);
 
-                        RobotConfig.RobotList.LoadRobotList_FromXDocument(xdRobotList);
-                        RobotConfig.RobotList.SaveRobotList_ToDB();
-                        RobotConfig.RobotList.RobotListClear();
+                        RobotConfig.List.LoadRobotList_FromXDocument(xdRobotList);
+                        RobotConfig.List.SaveRobotList_ToDB();
+                        RobotConfig.List.RobotListClear();
                     }
                 }
                 catch (Exception ex)
@@ -7984,7 +7984,6 @@ namespace WPE.Lib
                             sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
                             sfdSaveToExcel.FilterIndex = 0;
                             sfdSaveToExcel.RestoreDirectory = true;
-                            sfdSaveToExcel.CreatePrompt = true;
 
                             sfdSaveToExcel.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_76);
 
@@ -12123,7 +12122,7 @@ namespace WPE.Lib
                     {
                         bool IsEnable = false;
                         Guid RID = Guid.NewGuid();
-                        int RNum = RobotConfig.RobotList.lstRobot.Count + 1;
+                        int RNum = RobotConfig.List.lstRobotInfo.Count + 1;
                         string RName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), RNum.ToString());
 
                         AddRobot(IsEnable, RID, RName, Robot.InitInstructions());
@@ -12140,8 +12139,8 @@ namespace WPE.Lib
                     {
                         if (RID != Guid.Empty && !string.IsNullOrEmpty(RName))
                         {
-                            Socket_RobotInfo sri = new Socket_RobotInfo(IsEnable, RID, RName, RInstructions);
-                            RobotConfig.RobotList.RobotToList(sri);
+                            RobotInfo sri = new RobotInfo(IsEnable, RID, RName, RInstructions);
+                            RobotConfig.List.RobotToList(sri);
                         }
                     }
                     catch (Exception ex)
@@ -12154,7 +12153,7 @@ namespace WPE.Lib
 
                 #region//更新机器人
 
-                public static void UpdateRobot(Socket_RobotInfo sri, string RName, DataTable RInstruction)
+                public static void UpdateRobot(RobotInfo sri, string RName, DataTable RInstruction)
                 {
                     try
                     {
@@ -12174,7 +12173,7 @@ namespace WPE.Lib
 
                 #region//复制机器人
 
-                public static void CopyRobot(Socket_RobotInfo sri)
+                public static void CopyRobot(RobotInfo sri)
                 {
                     try
                     {
@@ -12195,21 +12194,27 @@ namespace WPE.Lib
 
                 #region//删除机器人
 
-                public static void DeleteRobot_Dialog(List<Socket_RobotInfo> sriList)
+                public static void DeleteRobot_Dialog(Form form, List<RobotInfo> riList)
                 {
                     try
                     {
-                        if (sriList.Count > 0)
+                        if (riList.Count > 0)
                         {
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
-
-                            if (dr.Equals(DialogResult.OK))
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotList", "机器人列表"), "\r\n确定删除选中的数据吗\r\n\r\n")
                             {
-                                foreach (Socket_RobotInfo sri in sriList)
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
                                 {
-                                    RobotConfig.RobotList.lstRobot.Remove(sri);
+                                    foreach (RobotInfo ri in riList)
+                                    {
+                                        RobotConfig.List.lstRobotInfo.Remove(ri);
+                                    }
+
+                                    return true;
                                 }
-                            }
+                            });
                         }
                     }
                     catch (Exception ex)
@@ -12222,13 +12227,13 @@ namespace WPE.Lib
 
                 #region//获取机器人
 
-                public static Socket_RobotInfo GeRobot_ByGuid(Guid RID)
+                public static RobotInfo GeRobot_ByGuid(Guid RID)
                 {
                     try
                     {
                         if (RID != null && RID != Guid.Empty)
                         {
-                            foreach (Socket_RobotInfo ri in RobotConfig.RobotList.lstRobot)
+                            foreach (RobotInfo ri in RobotConfig.List.lstRobotInfo)
                             {
                                 if (ri.RID == RID)
                                 {
@@ -12704,7 +12709,7 @@ namespace WPE.Lib
 
                 #region//执行机器人            
 
-                public static Socket_Robot DoRobot(Guid RID, Dictionary<string, object> parameters)
+                public static RobotExecute DoRobot(Guid RID, Dictionary<string, object> parameters)
                 {
                     return Task.Run(() => DoRobotAsync(RID, parameters)).GetAwaiter().GetResult();
                 }
@@ -12713,9 +12718,9 @@ namespace WPE.Lib
                 {
                     try
                     {
-                        if (RobotListIndex > -1 && RobotListIndex < RobotConfig.RobotList.lstRobot.Count)
+                        if (RobotListIndex > -1 && RobotListIndex < RobotConfig.List.lstRobotInfo.Count)
                         {
-                            Guid RID = RobotConfig.RobotList.lstRobot[RobotListIndex].RID;
+                            Guid RID = RobotConfig.List.lstRobotInfo[RobotListIndex].RID;
                             Task.Run(() => DoRobotAsync(RID, null)).GetAwaiter().GetResult();
                         }
                     }
@@ -12725,21 +12730,21 @@ namespace WPE.Lib
                     }
                 }
 
-                private static async Task<Socket_Robot> DoRobotAsync(Guid RID, Dictionary<string, object> parameters)
+                private static async Task<RobotExecute> DoRobotAsync(Guid RID, Dictionary<string, object> parameters)
                 {
-                    Socket_Robot srReturn = null;
+                    RobotExecute srReturn = null;
 
                     try
                     {
                         if (RID != Guid.Empty)
                         {
-                            Socket_RobotInfo sri = RobotConfig.RobotList.lstRobot.Where(item => item.RID == RID).FirstOrDefault();
+                            RobotInfo sri = RobotConfig.List.lstRobotInfo.Where(item => item.RID == RID).FirstOrDefault();
 
                             if (sri != null)
                             {
                                 if (sri.RInstruction.Rows.Count > 0)
                                 {
-                                    srReturn = new Socket_Robot();
+                                    srReturn = new RobotExecute();
                                     await Task.Run(() => srReturn.StartRobot(sri.RName, sri.RInstruction, parameters));
                                 }
                             }
@@ -12814,15 +12819,14 @@ namespace WPE.Lib
 
             #region//机器人列表
 
-            public static class RobotList
+            public static class List
             {
-                public static string AESKey = string.Empty;
-                public static List<Socket_Robot> lstExecute = new List<Socket_Robot>();
-                public static BindingList<Socket_RobotInfo> lstRobot = new BindingList<Socket_RobotInfo>();
+                public static List<RobotExecute> lstRobotExecute = new List<RobotExecute>();
+                public static BindingList<RobotInfo> lstRobotInfo = new BindingList<RobotInfo>();
 
                 #region//机器人入列表
 
-                public static void RobotToList(Socket_RobotInfo sri)
+                public static void RobotToList(RobotInfo sri)
                 {
                     try
                     {
@@ -12830,12 +12834,12 @@ namespace WPE.Lib
                         {
                             SystemConfig.InvokeAction(() =>
                             {
-                                RobotConfig.RobotList.lstRobot.Add(sri);
+                                RobotConfig.List.lstRobotInfo.Add(sri);
                             });
                         }
                         else
                         {
-                            RobotConfig.RobotList.lstRobot.Add(sri);
+                            RobotConfig.List.lstRobotInfo.Add(sri);
                         }
                     }
                     catch (Exception ex)
@@ -12848,40 +12852,31 @@ namespace WPE.Lib
 
                 #region//清空机器人列表（对话框）
 
-                public static void CleanUpRobotList_Dialog()
+                public static void CleanUpRobotList_Dialog(Form form)
                 {
-                    try
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotList", "机器人列表"), "\r\n确定删除所有数据吗\r\n\r\n")
                     {
-                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-
-                        if (dr.Equals(DialogResult.OK))
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
                         {
-                            RobotConfig.RobotList.RobotListClear();
+                            RobotConfig.List.RobotListClear();
+                            return true;
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
+                    });
                 }
 
                 public static void RobotListClear()
                 {
-                    try
-                    {
-                        lstRobot.Clear();
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
+                    RobotConfig.List.lstRobotInfo.Clear();
                 }
 
                 #endregion
 
                 #region//机器人列表的列表操作
 
-                public static void UpdateRobotList_ByListAction(SystemConfig.ListAction listAction, List<Socket_RobotInfo> sriList)
+                public static void UpdateRobotList_ByListAction(Form form, SystemConfig.ListAction listAction, List<RobotInfo> riList)
                 {
                     try
                     {
@@ -12889,26 +12884,23 @@ namespace WPE.Lib
                         {
                             case SystemConfig.ListAction.Top:
 
-                                sriList.Reverse();
-
-                                foreach (Socket_RobotInfo sri in sriList)
+                                foreach (RobotInfo ri in riList)
                                 {
-                                    RobotConfig.RobotList.lstRobot.Remove(sri);
-                                    RobotConfig.RobotList.lstRobot.Insert(0, sri);
+                                    RobotConfig.List.lstRobotInfo.Remove(ri);
+                                    RobotConfig.List.lstRobotInfo.Insert(0, ri);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Up:
 
-                                foreach (Socket_RobotInfo sri in sriList)
+                                foreach (RobotInfo ri in riList)
                                 {
-                                    int iIndex = RobotConfig.RobotList.lstRobot.IndexOf(sri);
-
+                                    int iIndex = RobotConfig.List.lstRobotInfo.IndexOf(ri);
                                     if (iIndex > 0)
                                     {
-                                        RobotConfig.RobotList.lstRobot.Remove(sri);
-                                        RobotConfig.RobotList.lstRobot.Insert(iIndex - 1, sri);
+                                        RobotConfig.List.lstRobotInfo.Remove(ri);
+                                        RobotConfig.List.lstRobotInfo.Insert(iIndex - 1, ri);
                                     }
                                 }
 
@@ -12916,16 +12908,13 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Down:
 
-                                sriList.Reverse();
-
-                                foreach (Socket_RobotInfo sri in sriList)
+                                foreach (RobotInfo ri in riList)
                                 {
-                                    int iIndex = RobotConfig.RobotList.lstRobot.IndexOf(sri);
-
-                                    if (iIndex > -1 && iIndex < RobotConfig.RobotList.lstRobot.Count - 1)
+                                    int iIndex = RobotConfig.List.lstRobotInfo.IndexOf(ri);
+                                    if (iIndex > -1 && iIndex < RobotConfig.List.lstRobotInfo.Count - 1)
                                     {
-                                        RobotConfig.RobotList.lstRobot.Remove(sri);
-                                        RobotConfig.RobotList.lstRobot.Insert(iIndex + 1, sri);
+                                        RobotConfig.List.lstRobotInfo.Remove(ri);
+                                        RobotConfig.List.lstRobotInfo.Insert(iIndex + 1, ri);
                                     }
                                 }
 
@@ -12933,33 +12922,33 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Bottom:
 
-                                foreach (Socket_RobotInfo sri in sriList)
+                                foreach (RobotInfo ri in riList)
                                 {
-                                    RobotConfig.RobotList.lstRobot.Remove(sri);
-                                    RobotConfig.RobotList.lstRobot.Add(sri);
+                                    RobotConfig.List.lstRobotInfo.Remove(ri);
+                                    RobotConfig.List.lstRobotInfo.Add(ri);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Copy:
 
-                                foreach (Socket_RobotInfo sri in sriList)
+                                foreach (RobotInfo ri in riList)
                                 {
-                                    Robot.CopyRobot(sri);
+                                    Robot.CopyRobot(ri);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Export:
 
-                                string sRName = sriList[0].RName;
-                                RobotConfig.RobotList.SaveRobotList_Dialog(sRName, sriList);
+                                string sRName = riList[0].RName;
+                                RobotConfig.List.SaveRobotList_Dialog(form, sRName, riList);
 
                                 break;
 
                             case SystemConfig.ListAction.Delete:
 
-                                Robot.DeleteRobot_Dialog(sriList);
+                                Robot.DeleteRobot_Dialog(form, riList);
 
                                 break;
                         }
@@ -12980,7 +12969,7 @@ namespace WPE.Lib
                     {
                         DataBase.DeleteTable_Robot();
 
-                        foreach (Socket_RobotInfo sri in RobotConfig.RobotList.lstRobot)
+                        foreach (RobotInfo sri in RobotConfig.List.lstRobotInfo)
                         {
                             DataBase.InsertTable_Robot(sri);
                         }
@@ -13032,15 +13021,14 @@ namespace WPE.Lib
 
                 #region//保存机器人列表到文件（对话框）
 
-                public static void SaveRobotList_Dialog(string FileName, List<Socket_RobotInfo> sriList)
+                public static void SaveRobotList_Dialog(Form form, string FileName, List<RobotInfo> riList)
                 {
                     try
                     {
-                        if (RobotConfig.RobotList.lstRobot.Count > 0)
+                        if (RobotConfig.List.lstRobotInfo.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-
-                            sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74) + "（*.rp）|*.rp";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("RobotListFile", "机器人列表文件") + "（*.rp）|*.rp";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -13051,17 +13039,54 @@ namespace WPE.Lib
 
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                pwForm.ShowDialog();
-
                                 string FilePath = sfdSaveFile.FileName;
-
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    SaveRobotList(FilePath, sriList, true);
+                                    bool DoEncrypt = false;
+                                    string Password = string.Empty;
 
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_154), FilePath);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportRobotList", "导出机器人列表");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                Password = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(Password))
+                                                {
+                                                    eForm.EncryptionText_Changed();
+
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ExportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    DoEncrypt = true;
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    if (SaveRobotList(FilePath, riList, DoEncrypt, Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportRobotList.Success", "导出机器人列表成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportRobotList.Error", "导出机器人列表失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }
@@ -13072,7 +13097,7 @@ namespace WPE.Lib
                     }
                 }
 
-                public static void SaveRobotList(string FilePath, List<Socket_RobotInfo> sriList, bool DoEncrypt)
+                public static bool SaveRobotList(string FilePath, List<RobotInfo> riList, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -13081,10 +13106,10 @@ namespace WPE.Lib
                             Declaration = new XDeclaration("1.0", "utf-8", "yes")
                         };
 
-                        XElement xeRoot = RobotConfig.RobotList.GetRobotList_XML(sriList);
+                        XElement xeRoot = RobotConfig.List.GetRobotList_XML(riList);
                         if (xeRoot == null)
                         {
-                            return;
+                            return false;
                         }
 
                         xdoc.Add(xeRoot);
@@ -13092,32 +13117,34 @@ namespace WPE.Lib
 
                         if (DoEncrypt)
                         {
-                            string sPassword = RobotConfig.RobotList.AESKey;
-
-                            if (!string.IsNullOrEmpty(sPassword))
+                            if (!string.IsNullOrEmpty(Password))
                             {
-                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
                             }
                         }
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
-                public static XElement GetRobotList_XML(List<Socket_RobotInfo> sriList)
+                public static XElement GetRobotList_XML(List<RobotInfo> riList)
                 {
                     try
                     {
                         XElement xeRoot = new XElement("RobotList");
 
-                        foreach (Socket_RobotInfo sri in sriList)
+                        foreach (RobotInfo ri in riList)
                         {
-                            string IsEnable = sri.IsEnable.ToString();
-                            string sRID = sri.RID.ToString().ToUpper();
-                            string sRName = sri.RName;
-                            DataTable dtRInstruction = sri.RInstruction;
+                            string IsEnable = ri.IsEnable.ToString();
+                            string sRID = ri.RID.ToString().ToUpper();
+                            string sRName = ri.RName;
+                            DataTable dtRInstruction = ri.RInstruction;
 
                             XElement xeRobot =
                                 new XElement("Robot",
@@ -13156,13 +13183,13 @@ namespace WPE.Lib
 
                 #region//从文件加载机器人列表（对话框）
 
-                public static void LoadRobotList_Dialog()
+                public static void LoadRobotList_Dialog(Form form)
                 {
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
 
-                        ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74) + "（*.rp）|*.rp";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("RobotListFile", "机器人列表文件") + "（*.rp）|*.rp";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -13171,7 +13198,12 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                LoadRobotList(FilePath, true);
+                                if (LoadRobotList(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportRobotList.Success", "导入机器人列表成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                }
                             }
                         }
                     }
@@ -13181,25 +13213,49 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void LoadRobotList(string FilePath, bool LoadFromUser)
+                private static bool LoadRobotList(Form form, string FilePath, bool LoadFromUser)
                 {
                     try
                     {
                         if (File.Exists(FilePath))
                         {
-                            XDocument xdoc = new XDocument();
+                            XDocument xdoc = null;
 
                             bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
-
                             if (bEncrypt)
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                    pwForm.ShowDialog();
-                                }
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ImportRobotList", "导入机器人列表");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                string sPW = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(sPW))
+                                                {
+                                                    eForm.EncryptionText_Changed();
 
-                                xdoc = SystemConfig.DecryptXMLFile(FilePath, RobotConfig.RobotList.AESKey);
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ImportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    xdoc = SystemConfig.DecryptXMLFile(FilePath, sPW);
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
                             }
                             else
                             {
@@ -13208,36 +13264,29 @@ namespace WPE.Lib
 
                             if (xdoc == null)
                             {
-                                string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
-
+                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
-                                    Socket_Operation.ShowMessageBox(sError);
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
                                 }
                                 else
                                 {
                                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
                                 }
-                            }
-                            else
-                            {
-                                LoadRobotList_FromXDocument(xdoc);
 
-                                if (bEncrypt)
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72));
-                                }
-                                else
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71));
-                                }
+                                return false;
                             }
+
+                            LoadRobotList_FromXDocument(xdoc);
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static void LoadRobotList_FromXDocument(XDocument xdoc)
@@ -14838,7 +14887,7 @@ namespace WPE.Lib
                 }
             }
 
-            public static void InsertTable_Robot(Socket_RobotInfo sri)
+            public static void InsertTable_Robot(RobotInfo sri)
             {
                 try
                 {

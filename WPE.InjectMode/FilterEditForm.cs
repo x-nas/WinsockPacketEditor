@@ -314,7 +314,7 @@ namespace WPE.InjectMode
 
             this.cbbFilterAction_ExecuteType.Items.Add(new DividerSelectItem());            
 
-            if (Operate.RobotConfig.RobotList.lstRobot.Count > 0)
+            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
             {
                 this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
                 {
@@ -353,9 +353,9 @@ namespace WPE.InjectMode
         {
             try
             {
-                if (Operate.RobotConfig.RobotList.lstRobot.Count > 0)
+                if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                 {
-                    var selectItems = Operate.RobotConfig.RobotList.lstRobot.Select(info => new SelectItem(info.RName, info)).ToArray();
+                    var selectItems = Operate.RobotConfig.List.lstRobotInfo.Select(info => new SelectItem(info.RName, info)).ToArray();
 
                     this.cbbFilterAction_Execute.Items.Clear();
                     this.cbbFilterAction_Execute.Items.AddRange(selectItems);
@@ -1555,7 +1555,7 @@ namespace WPE.InjectMode
 
                         if (cbbFilterAction_Execute.SelectedValue != null)
                         {
-                            RID_New = ((Socket_RobotInfo)cbbFilterAction_Execute.SelectedValue).RID;
+                            RID_New = ((RobotInfo)cbbFilterAction_Execute.SelectedValue).RID;
                         }
                     }
                     else

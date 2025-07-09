@@ -2406,9 +2406,9 @@ namespace WPE.Lib
         }
 
         //机器人列表
-        public static List<Socket_RobotInfo> GetSelectedRobot(DataGridView dgvRobotList)
+        public static List<RobotInfo> GetSelectedRobot(DataGridView dgvRobotList)
         {
-            List<Socket_RobotInfo> sriList = new List<Socket_RobotInfo>();
+            List<RobotInfo> sriList = new List<RobotInfo>();
 
             try
             {
@@ -2416,7 +2416,7 @@ namespace WPE.Lib
                 {
                     if (dgvRobotList.Rows[i].Selected)
                     {
-                        sriList.Add(Operate.RobotConfig.RobotList.lstRobot[i]);
+                        sriList.Add(Operate.RobotConfig.List.lstRobotInfo[i]);
                     }
                 }
             }
@@ -3035,7 +3035,7 @@ namespace WPE.Lib
 
         #region//显示机器人窗体（对话框）
 
-        public static void ShowRobotForm_Dialog(Socket_RobotInfo sri)
+        public static void ShowRobotForm_Dialog(RobotInfo sri)
         {
             //try
             //{

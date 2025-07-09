@@ -59,6 +59,12 @@
             AntdUI.SegmentedItem segmentedItem17 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem18 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem19 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem20 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem21 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem22 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem23 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem24 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem25 = new AntdUI.SegmentedItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InjectModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -140,6 +146,10 @@
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
+            this.tlpRobotList = new System.Windows.Forms.TableLayoutPanel();
+            this.tRobotList = new AntdUI.Table();
+            this.sRobotList = new AntdUI.Segmented();
+            this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -155,7 +165,9 @@
             this.tlpFilterList.SuspendLayout();
             this.tpSendList.SuspendLayout();
             this.tlpSendList.SuspendLayout();
+            this.tpRobotList.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
+            this.tlpRobotList.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -352,6 +364,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
+            this.tabInjectMode.SelectedIndex = 3;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -360,7 +373,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
+            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1397,9 +1410,10 @@
             // 
             // tpRobotList
             // 
-            this.tpRobotList.Location = new System.Drawing.Point(0, 0);
+            this.tpRobotList.Controls.Add(this.tlpRobotList);
+            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
             this.tpRobotList.Name = "tpRobotList";
-            this.tpRobotList.Size = new System.Drawing.Size(0, 0);
+            this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
             this.tpRobotList.TabIndex = 9;
             this.tpRobotList.Text = "机器人列表";
             // 
@@ -1493,6 +1507,132 @@
             this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
             this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
             // 
+            // tlpRobotList
+            // 
+            this.tlpRobotList.ColumnCount = 1;
+            this.tlpRobotList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotList.Controls.Add(this.tRobotList, 0, 1);
+            this.tlpRobotList.Controls.Add(this.sRobotList, 0, 0);
+            this.tlpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpRobotList.Location = new System.Drawing.Point(0, 0);
+            this.tlpRobotList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpRobotList.Name = "tlpRobotList";
+            this.tlpRobotList.RowCount = 2;
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpRobotList.Size = new System.Drawing.Size(1124, 724);
+            this.tlpRobotList.TabIndex = 3;
+            // 
+            // tRobotList
+            // 
+            this.tRobotList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tRobotList.Bordered = true;
+            this.tRobotList.CellImpactHeight = false;
+            this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tRobotList.GapCell = 6;
+            this.tRobotList.Location = new System.Drawing.Point(3, 49);
+            this.tRobotList.MultipleRows = true;
+            this.tRobotList.Name = "tRobotList";
+            this.tRobotList.Size = new System.Drawing.Size(1118, 672);
+            this.tRobotList.TabIndex = 1;
+            this.tRobotList.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellClick);
+            this.tRobotList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tRobotList_CellButtonClick);
+            // 
+            // sRobotList
+            // 
+            this.sRobotList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.sRobotList.IconAlign = AntdUI.TAlignMini.Left;
+            this.sRobotList.IconRatio = 1F;
+            segmentedItem20.Badge = null;
+            segmentedItem20.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem20.BadgeBack = null;
+            segmentedItem20.BadgeMode = false;
+            segmentedItem20.BadgeOffsetX = 0;
+            segmentedItem20.BadgeOffsetY = 0;
+            segmentedItem20.BadgeSize = 0.6F;
+            segmentedItem20.BadgeSvg = null;
+            segmentedItem20.IconSvg = "FolderOpenOutlined";
+            segmentedItem20.ID = "siImport";
+            segmentedItem20.Text = "导入机器人列表";
+            segmentedItem20.Tooltip = "";
+            segmentedItem21.Badge = null;
+            segmentedItem21.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem21.BadgeBack = null;
+            segmentedItem21.BadgeMode = false;
+            segmentedItem21.BadgeOffsetX = 0;
+            segmentedItem21.BadgeOffsetY = 0;
+            segmentedItem21.BadgeSize = 0.6F;
+            segmentedItem21.BadgeSvg = null;
+            segmentedItem21.IconSvg = "DeliveredProcedureOutlined";
+            segmentedItem21.ID = "siExport";
+            segmentedItem21.Text = "导出机器人列表";
+            segmentedItem21.Tooltip = "";
+            segmentedItem22.Badge = null;
+            segmentedItem22.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem22.BadgeBack = null;
+            segmentedItem22.BadgeMode = false;
+            segmentedItem22.BadgeOffsetX = 0;
+            segmentedItem22.BadgeOffsetY = 0;
+            segmentedItem22.BadgeSize = 0.6F;
+            segmentedItem22.BadgeSvg = null;
+            segmentedItem22.IconSvg = "PlayCircleOutlined";
+            segmentedItem22.ID = "miStart";
+            segmentedItem22.Text = "执行机器人";
+            segmentedItem23.Badge = null;
+            segmentedItem23.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem23.BadgeBack = null;
+            segmentedItem23.BadgeMode = false;
+            segmentedItem23.BadgeOffsetX = 0;
+            segmentedItem23.BadgeOffsetY = 0;
+            segmentedItem23.BadgeSize = 0.6F;
+            segmentedItem23.BadgeSvg = null;
+            segmentedItem23.Enabled = false;
+            segmentedItem23.IconSvg = "PauseCircleOutlined";
+            segmentedItem23.ID = "miStop";
+            segmentedItem23.Text = "停止";
+            segmentedItem24.Badge = null;
+            segmentedItem24.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem24.BadgeBack = null;
+            segmentedItem24.BadgeMode = false;
+            segmentedItem24.BadgeOffsetX = 0;
+            segmentedItem24.BadgeOffsetY = 0;
+            segmentedItem24.BadgeSize = 0.6F;
+            segmentedItem24.BadgeSvg = null;
+            segmentedItem24.IconSvg = "FileAddOutlined";
+            segmentedItem24.ID = "siAdd";
+            segmentedItem24.Text = "新增机器人";
+            segmentedItem24.Tooltip = "";
+            segmentedItem25.Badge = null;
+            segmentedItem25.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem25.BadgeBack = null;
+            segmentedItem25.BadgeMode = false;
+            segmentedItem25.BadgeOffsetX = 0;
+            segmentedItem25.BadgeOffsetY = 0;
+            segmentedItem25.BadgeSize = 0.6F;
+            segmentedItem25.BadgeSvg = null;
+            segmentedItem25.IconSvg = "DeleteOutlined";
+            segmentedItem25.ID = "siClear";
+            segmentedItem25.Text = "清空所有机器人";
+            segmentedItem25.Tooltip = "";
+            this.sRobotList.Items.Add(segmentedItem20);
+            this.sRobotList.Items.Add(segmentedItem21);
+            this.sRobotList.Items.Add(segmentedItem22);
+            this.sRobotList.Items.Add(segmentedItem23);
+            this.sRobotList.Items.Add(segmentedItem24);
+            this.sRobotList.Items.Add(segmentedItem25);
+            this.sRobotList.Location = new System.Drawing.Point(3, 3);
+            this.sRobotList.Name = "sRobotList";
+            this.sRobotList.Size = new System.Drawing.Size(1118, 40);
+            this.sRobotList.TabIndex = 2;
+            this.sRobotList.SelectIndexChanged += new AntdUI.IntEventHandler(this.sRobotList_SelectIndexChanged);
+            // 
+            // bgwRobotList
+            // 
+            this.bgwRobotList.WorkerSupportsCancellation = true;
+            this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
+            this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
+            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -1529,7 +1669,9 @@
             this.tlpFilterList.ResumeLayout(false);
             this.tpSendList.ResumeLayout(false);
             this.tlpSendList.ResumeLayout(false);
+            this.tpRobotList.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
+            this.tlpRobotList.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1615,5 +1757,9 @@
         private AntdUI.Table tSendList;
         private AntdUI.Segmented sSendList;
         private System.ComponentModel.BackgroundWorker bgwSendList;
+        private System.Windows.Forms.TableLayoutPanel tlpRobotList;
+        private AntdUI.Table tRobotList;
+        private AntdUI.Segmented sRobotList;
+        private System.ComponentModel.BackgroundWorker bgwRobotList;
     }
 }

@@ -476,9 +476,9 @@ namespace WPELibrary
         {
             try
             {
-                if (Operate.RobotConfig.RobotList.lstRobot.Count > 0)
+                if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                 {
-                    cbbFilterAction_Execute.DataSource = Operate.RobotConfig.RobotList.lstRobot;
+                    cbbFilterAction_Execute.DataSource = Operate.RobotConfig.List.lstRobotInfo;
                     cbbFilterAction_Execute.DisplayMember = "RName";
                     cbbFilterAction_Execute.ValueMember = "RID";
 

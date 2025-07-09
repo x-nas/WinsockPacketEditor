@@ -9,14 +9,14 @@ namespace WPELibrary
 {
     public partial class Socket_RobotForm : Form
     {
-        private Socket_RobotInfo sriSelect;
+        private RobotInfo sriSelect;
         private bool bIsModifierKeys = true;
         private DataTable dtRobotInstruction = new DataTable();
-        private readonly Socket_Robot sr = new Socket_Robot();        
+        private readonly RobotExecute sr = new RobotExecute();        
 
         #region//窗体加载
 
-        public Socket_RobotForm(Socket_RobotInfo sri)
+        public Socket_RobotForm(RobotInfo sri)
         {
             try
             {

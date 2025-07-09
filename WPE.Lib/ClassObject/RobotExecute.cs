@@ -9,7 +9,7 @@ using WindowsInput.Native;
 
 namespace WPE.Lib
 {
-    public class Socket_Robot
+    public class RobotExecute
     {
         public int Instruction_Index = 0;      
         public int Total_Instruction = 0;
@@ -23,7 +23,7 @@ namespace WPE.Lib
 
         #region//初始化
 
-        public Socket_Robot()
+        public RobotExecute()
         {  
             this.Worker.WorkerSupportsCancellation = true;
             this.Worker.WorkerReportsProgress = true;

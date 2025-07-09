@@ -186,8 +186,8 @@
     <Compile Include="Socket_ProxyData.cs" />
     <Compile Include="Socket_ProxyTCP.cs" />
     <Compile Include="Socket_ProxyUDP.cs" />
-    <Compile Include="Socket_Robot.cs" />
-    <Compile Include="Socket_RobotInfo.cs" />
+    <Compile Include="ClassObject\RobotExecute.cs" />
+    <Compile Include="ClassObject\RobotInfo.cs" />
     <Compile Include="ClassObject\SendExecute.cs" />
     <Compile Include="ClassObject\SendInfo.cs" />
     <Compile Include="WebAPI\CCProxy_Controller.cs" />

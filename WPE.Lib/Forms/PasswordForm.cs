@@ -73,7 +73,7 @@ namespace WPE.Lib.Forms
 
             //    case Operate.SystemConfig.PWType.RobotList_Import:
             //    case Operate.SystemConfig.PWType.RobotList_Export:
-            //        WPE.Lib.Operate.RobotConfig.RobotList.AESKey = Password;
+            //        WPE.Lib.Operate.RobotConfig.List.AESKey = Password;
             //        break;
 
             //    case Operate.SystemConfig.PWType.SendList_Import:

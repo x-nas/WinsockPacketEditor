@@ -462,9 +462,9 @@
             // 
             // tlpSend_SocketList
             // 
-            resources.ApplyResources(this.tlpSend_SocketList, "tlpSend_SocketList");
             this.tlpSend_SocketList.Controls.Add(this.lSend_SocketList, 0, 0);
             this.tlpSend_SocketList.Controls.Add(this.bSend_SocketList, 2, 0);
+            resources.ApplyResources(this.tlpSend_SocketList, "tlpSend_SocketList");
             this.tlpSend_SocketList.Name = "tlpSend_SocketList";
             // 
             // lSend_SocketList
@@ -1051,7 +1051,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudSet_SystemSocket_Customize)).EndInit();
             this.gbSend_SocketList.ResumeLayout(false);
             this.tlpSend_SocketList.ResumeLayout(false);
-            this.tlpSend_SocketList.PerformLayout();
             this.gbSend_SendLIst.ResumeLayout(false);
             this.tlpSend_SendLIst.ResumeLayout(false);
             this.tpInstruction_Control.ResumeLayout(false);

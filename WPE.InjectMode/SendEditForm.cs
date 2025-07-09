@@ -14,7 +14,7 @@ namespace WPE.InjectMode
     {
         private InjectModeForm imForm;
         private SendInfo siSelect;
-        private readonly SendExecute ss = new SendExecute();
+        private readonly SendExecute se = new SendExecute();
         private BindingList<PacketInfo> SendCollection;
 
         #region//窗体事件
@@ -48,17 +48,17 @@ namespace WPE.InjectMode
             this.SendCollection = new BindingList<PacketInfo>(this.siSelect.SCollection.ToList());
             this.txtNotes.Text = this.siSelect.SNotes;
 
-            this.ss.Worker.ProgressChanged -= this.Worker_ProgressChanged;
-            this.ss.Worker.ProgressChanged += this.Worker_ProgressChanged;
-            this.ss.Worker.RunWorkerCompleted -= this.Worker_RunWorkerCompleted;
-            this.ss.Worker.RunWorkerCompleted += this.Worker_RunWorkerCompleted;
+            this.se.Worker.ProgressChanged -= this.Worker_ProgressChanged;
+            this.se.Worker.ProgressChanged += this.Worker_ProgressChanged;
+            this.se.Worker.RunWorkerCompleted -= this.Worker_RunWorkerCompleted;
+            this.se.Worker.RunWorkerCompleted += this.Worker_RunWorkerCompleted;
 
             this.InitTable_SendCollection();            
         }
 
         private void SendEditForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.ss.StopSend();
+            this.se.StopSend();
         }
 
         private void InitTable_SendCollection()
@@ -165,14 +165,14 @@ namespace WPE.InjectMode
                     return;
                 }
 
-                if (!this.ss.Worker.IsBusy)
+                if (!this.se.Worker.IsBusy)
                 {
                     this.bExecute.Loading = true;
                     this.bStop.Enabled = true;
                     this.tlpSendCollectionSettings.Enabled = false;
                     this.tSendCollection.Enabled = false;
 
-                    ss.StartSend(siSelect);
+                    se.StartSend(siSelect);
                 }
             }
             catch (Exception ex)
@@ -192,9 +192,9 @@ namespace WPE.InjectMode
             this.tSendCollection.SelectedIndex = iIndex + 1;
             this.tSendCollection.ScrollLine(iIndex + 1, true);
 
-            this.lTotal_Send_CNT.Text = this.ss.Total_Send.ToString();
-            this.lSend_Success_CNT.Text = this.ss.Send_Success.ToString();
-            this.lSend_Fail_CNT.Text = this.ss.Send_Failure.ToString();
+            this.lTotal_Send_CNT.Text = this.se.Total_Send.ToString();
+            this.lSend_Success_CNT.Text = this.se.Send_Success.ToString();
+            this.lSend_Fail_CNT.Text = this.se.Send_Failure.ToString();
         }
 
         private void Worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -231,9 +231,9 @@ namespace WPE.InjectMode
                 this.tlpSendCollectionSettings.Enabled = true;
                 this.tSendCollection.Enabled = true;
 
-                this.lTotal_Send_CNT.Text = this.ss.Total_Send.ToString();
-                this.lSend_Success_CNT.Text = this.ss.Send_Success.ToString();
-                this.lSend_Fail_CNT.Text = this.ss.Send_Failure.ToString();
+                this.lTotal_Send_CNT.Text = this.se.Total_Send.ToString();
+                this.lSend_Success_CNT.Text = this.se.Send_Success.ToString();
+                this.lSend_Fail_CNT.Text = this.se.Send_Failure.ToString();
             }
             catch (Exception ex)
             {
@@ -247,7 +247,7 @@ namespace WPE.InjectMode
 
         private void bStop_Click(object sender, EventArgs e)
         {
-            this.ss.StopSend();
+            this.se.StopSend();
         }
 
         #endregion
