@@ -1,6 +1,4 @@
 ﻿using AntdUI;
-using AntdUI.Chat;
-using AntdUI.Svg;
 using Be.Windows.Forms;
 using System;
 using System.Collections.Concurrent;
