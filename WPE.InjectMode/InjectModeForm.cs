@@ -58,8 +58,6 @@ namespace WPE.InjectMode
             this.InitTable_LogList();
             this.InitComparison();
 
-            this.splitterPacketList.SplitterWidth = 10;
-            this.splitterComparison.SplitterWidth = 10;
             this.tabInjectMode.TabMenuVisible = false;            
             this.mInjectMode.SelectIndex(0, true);
         }
