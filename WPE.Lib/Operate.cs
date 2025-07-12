@@ -27,6 +27,7 @@ using System.Xml.Linq;
 using WPE.Lib.ClassObject;
 using WPE.Lib.Controls;
 using WPE.Lib.Forms;
+using static AntdUI.Input;
 
 namespace WPE.Lib
 {
@@ -37,6 +38,8 @@ namespace WPE.Lib
         public static class SystemConfig
         {
             public static int PID = -1;
+            public static Color col_Del = Color.Red;
+            public static Color col_Add = Color.Green;
             public static string PNAME = string.Empty;
             public static string PATH = string.Empty;
             public static string WebSite_Tutorials_CN = "https://www.wpe64.com/tutorials.html";
@@ -689,6 +692,357 @@ namespace WPE.Lib
                 {
                     return false;
                 }
+            }
+
+            #endregion
+
+            #region//文本对比
+
+            public static async Task<string> CompareData(Font font, string sText_A, string sText_B)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        using (RichTextBox rtbCompare = new RichTextBox())
+                        {
+                            rtbCompare.Font = font;
+
+                            if (sText_A == sText_B)
+                            {
+                                SystemConfig.AppendColoredText(rtbCompare, AntdUI.Localization.Get("System.Compare.Same", "两个数据相同"), Color.RoyalBlue);
+                            }
+                            else
+                            {
+                                string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
+                                string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
+
+                                int la = 0;
+                                int lb = 0;
+
+                                while (la < linesA.Length)
+                                {
+                                    if (lb >= linesB.Length)
+                                    {
+                                        SystemConfig.AppendColoredText(rtbCompare, linesA[la], SystemConfig.col_Del);
+                                    }
+                                    else if (linesA[la] == linesB[lb])
+                                    {
+                                        SystemConfig.AppendColoredText(rtbCompare, linesA[la], rtbCompare.ForeColor);
+                                    }
+                                    else
+                                    {
+                                        if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
+                                        {
+                                            SystemConfig.AppendColoredText(rtbCompare, linesB[lb], SystemConfig.col_Add);
+                                            SystemConfig.AppendColoredText(rtbCompare, "\n" + linesA[la], rtbCompare.ForeColor);
+
+                                            lb++;
+                                        }
+                                        else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
+                                        {
+                                            SystemConfig.AppendColoredText(rtbCompare, linesA[la], SystemConfig.col_Del);
+                                            SystemConfig.AppendColoredText(rtbCompare, "\n" + linesB[lb], rtbCompare.ForeColor);
+
+                                            la++;
+                                        }
+                                        else
+                                        {
+                                            string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
+                                            string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
+
+                                            int wa = 0;
+                                            int wb = 0;
+                                            while (wa < wordsA.Length)
+                                            {
+                                                if (wb >= wordsB.Length)
+                                                {
+                                                    SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], SystemConfig.col_Del);
+                                                }
+                                                else if (wordsA[wa] == wordsB[wb])
+                                                {
+                                                    SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], rtbCompare.ForeColor);
+                                                }
+                                                else
+                                                {
+                                                    if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
+                                                    {
+                                                        SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
+                                                        SystemConfig.AppendColoredText(rtbCompare, " " + wordsA[wa], rtbCompare.ForeColor);
+
+                                                        wb++;
+                                                    }
+                                                    else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
+                                                    {
+                                                        SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], SystemConfig.col_Del);
+                                                        SystemConfig.AppendColoredText(rtbCompare, " " + wordsB[wb], rtbCompare.ForeColor);
+
+                                                        wa++;
+                                                    }
+                                                    else
+                                                    {
+                                                        SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], SystemConfig.col_Del);
+                                                        SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
+                                                    }
+                                                }
+                                                if (wa + 1 < wordsA.Length) SystemConfig.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+
+                                                if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
+                                                {
+                                                    while (wb + 1 < wordsB.Length)
+                                                    {
+                                                        wb++;
+
+                                                        SystemConfig.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+                                                        SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
+                                                    }
+                                                }
+
+                                                wa++;
+                                                wb++;
+                                            }
+                                        }
+                                    }
+
+                                    if (la + 1 < linesA.Length)
+                                    {
+                                        SystemConfig.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
+                                    }
+
+                                    if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
+                                    {
+                                        while (lb + 1 < linesB.Length)
+                                        {
+                                            lb++;
+
+                                            SystemConfig.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
+                                            SystemConfig.AppendColoredText(rtbCompare, linesB[lb], SystemConfig.col_Add);
+                                        }
+                                    }
+
+                                    la++;
+                                    lb++;
+                                }
+                            }
+
+                            sReturn = rtbCompare.Rtf;
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CompareData), ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            private static void AppendColoredText(RichTextBox box, string text, Color color)
+            {
+                try
+                {
+                    box.SelectionStart = box.TextLength;
+                    box.SelectionLength = text.Length;
+
+                    if (color == SystemConfig.col_Add)
+                    {
+                        box.SelectionFont = Operate.PacketConfig.Packet.FontUnderline;
+                    }
+
+                    if (color == SystemConfig.col_Del)
+                    {
+                        box.SelectionFont = Operate.PacketConfig.Packet.FontStrikeout;
+                    }
+
+                    box.SelectionColor = color;
+                    box.AppendText(text);
+
+                    box.SelectionFont = box.Font;
+                    box.SelectionColor = box.ForeColor;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static List<TextStyle> ConvertRtfToTextStyles(string rtfString)
+            {
+                var styles = new List<TextStyle>();
+
+                using (var rtb = new RichTextBox())
+                {
+                    rtb.Rtf = rtfString;
+                    string plainText = rtb.Text;
+
+                    for (int i = 0; i < plainText.Length; i++)
+                    {
+                        rtb.Select(i, 1);
+                        Font currentFont = rtb.SelectionFont;
+                        Color currentColor = rtb.SelectionColor;
+                        Color currentBackColor = rtb.SelectionBackColor;
+
+                        int start = i;
+                        int length = 1;
+
+                        while (i + length < plainText.Length)
+                        {
+                            rtb.Select(i + length, 1);
+                            if (rtb.SelectionFont.Equals(currentFont) &&
+                               rtb.SelectionColor.Equals(currentColor) &&
+                               rtb.SelectionBackColor.Equals(currentBackColor))
+                            {
+                                length++;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                        var backColor = currentBackColor != Color.White ? currentBackColor : (Color?)null;
+                        styles.Add(new TextStyle(start, length, currentFont, currentColor, backColor));
+
+                        i += length - 1;
+                    }
+                }
+
+                return styles;
+            }
+
+            #endregion
+
+            #region//文本查重
+
+            public static (string TextA, string TextB) ComparePackets(string stringA, string stringB, int minBytes)
+            {
+                stringA = CleanAndNormalizeHex(stringA);
+                stringB = CleanAndNormalizeHex(stringB);
+
+                List<string> bytes1 = SplitIntoBytes(stringA);
+                List<string> bytes2 = SplitIntoBytes(stringB);
+
+                var commonSequences = FindCommonSequences(bytes1, bytes2, minBytes);
+
+                char[] result1 = new char[stringA.Length];
+                char[] result2 = new char[stringB.Length];
+
+                for (int i = 0; i < result1.Length; i++) result1[i] = '_';
+                for (int i = 0; i < result2.Length; i++) result2[i] = '_';
+
+                foreach (var seq in commonSequences)
+                {
+                    for (int i = 0; i < seq.Length; i++)
+                    {
+                        int pos = seq.Pos1 * 2 + i * 2;
+                        if (pos + 1 < result1.Length)
+                        {
+                            result1[pos] = stringA[pos];
+                            result1[pos + 1] = stringA[pos + 1];
+                        }
+                    }
+
+                    for (int i = 0; i < seq.Length; i++)
+                    {
+                        int pos = seq.Pos2 * 2 + i * 2;
+                        if (pos + 1 < result2.Length)
+                        {
+                            result2[pos] = stringB[pos];
+                            result2[pos + 1] = stringB[pos + 1];
+                        }
+                    }
+                }
+
+                return (new string(result1), new string(result2));
+            }
+
+            public static string FormatHex(string hex)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < hex.Length; i++)
+                {
+                    sb.Append(hex[i]);
+
+                    if (i % 2 == 1 && i != hex.Length - 1)
+                    {
+                        sb.Append(" ");
+                    }
+                }
+
+                return sb.ToString();
+            }
+
+            private static List<string> SplitIntoBytes(string hex)
+            {
+                List<string> bytes = new List<string>();
+
+                for (int i = 0; i < hex.Length; i += 2)
+                {
+                    if (i + 1 < hex.Length)
+                    {
+                        bytes.Add(hex.Substring(i, 2));
+                    }
+                    else
+                    {
+                        bytes.Add(hex[i] + "0");
+                    }
+                }
+
+                return bytes;
+            }
+
+            private static List<(int Pos1, int Pos2, int Length)> FindCommonSequences(List<string> bytes1, List<string> bytes2, int minLength)
+            {
+                var result = new List<(int, int, int)>();
+
+                for (int i = 0; i < bytes1.Count; i++)
+                {
+                    for (int j = 0; j < bytes2.Count; j++)
+                    {
+                        if (bytes1[i] == bytes2[j])
+                        {
+                            int matchLen = 1;
+                            while (i + matchLen < bytes1.Count && j + matchLen < bytes2.Count && bytes1[i + matchLen] == bytes2[j + matchLen])
+                            {
+                                matchLen++;
+                            }
+
+                            if (matchLen >= minLength)
+                            {
+                                result.Add((i, j, matchLen));
+
+                                i += matchLen - 1;
+                                j += matchLen - 1;
+
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            private static string CleanAndNormalizeHex(string input)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                foreach (char c in input)
+                {
+                    if (char.IsDigit(c))
+                    {
+                        sb.Append(c);
+                    }
+                    else if (char.ToUpper(c) >= 'A' && char.ToUpper(c) <= 'F')
+                    {
+                        sb.Append(char.ToUpper(c));
+                    }
+                }
+
+                return sb.ToString();
             }
 
             #endregion

@@ -82,7 +82,7 @@ namespace WPE.Lib.Forms
             {
                 this.rtbResult.Clear();
                 this.rtbResult.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);
-                this.rtbResult.Rtf = await Socket_Operation.CompareData(this.Font, TextA, TextB);
+                //this.rtbResult.Rtf = await Socket_Operation.CompareData(this.Font, TextA, TextB);
             }            
         }
 

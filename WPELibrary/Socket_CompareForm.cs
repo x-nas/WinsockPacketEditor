@@ -50,7 +50,7 @@ namespace WPELibrary
                     hbModifiedData.ByteProvider = new DynamicByteProvider(this.SPI.PacketBuffer);
                 }
 
-                this.rtbCompare.Rtf = await Socket_Operation.CompareData(this.Font, sRawData, sModifiedData);
+                this.rtbCompare.Rtf = await Operate.SystemConfig.CompareData(this.Font, sRawData, sModifiedData);
             }
             catch (Exception ex)
             {
