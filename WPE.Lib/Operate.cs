@@ -26,8 +26,6 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WPE.Lib.ClassObject;
 using WPE.Lib.Controls;
-using WPE.Lib.Forms;
-using static AntdUI.Input;
 
 namespace WPE.Lib
 {
@@ -698,138 +696,135 @@ namespace WPE.Lib
 
             #region//文本对比
 
-            public static async Task<string> CompareData(Font font, string sText_A, string sText_B)
+            public static string CompareData(Font font, string sText_A, string sText_B)
             {
                 string sReturn = string.Empty;
 
                 try
                 {
-                    await Task.Run(() =>
+                    using (RichTextBox rtbCompare = new RichTextBox())
                     {
-                        using (RichTextBox rtbCompare = new RichTextBox())
+                        rtbCompare.Font = font;
+
+                        if (sText_A == sText_B)
                         {
-                            rtbCompare.Font = font;
+                            SystemConfig.AppendColoredText(rtbCompare, AntdUI.Localization.Get("System.Compare.Same", "两个数据相同"), Color.RoyalBlue);
+                        }
+                        else
+                        {
+                            string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
+                            string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
 
-                            if (sText_A == sText_B)
+                            int la = 0;
+                            int lb = 0;
+
+                            while (la < linesA.Length)
                             {
-                                SystemConfig.AppendColoredText(rtbCompare, AntdUI.Localization.Get("System.Compare.Same", "两个数据相同"), Color.RoyalBlue);
-                            }
-                            else
-                            {
-                                string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
-                                string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
-
-                                int la = 0;
-                                int lb = 0;
-
-                                while (la < linesA.Length)
+                                if (lb >= linesB.Length)
                                 {
-                                    if (lb >= linesB.Length)
+                                    SystemConfig.AppendColoredText(rtbCompare, linesA[la], SystemConfig.col_Del);
+                                }
+                                else if (linesA[la] == linesB[lb])
+                                {
+                                    SystemConfig.AppendColoredText(rtbCompare, linesA[la], rtbCompare.ForeColor);
+                                }
+                                else
+                                {
+                                    if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
+                                    {
+                                        SystemConfig.AppendColoredText(rtbCompare, linesB[lb], SystemConfig.col_Add);
+                                        SystemConfig.AppendColoredText(rtbCompare, "\n" + linesA[la], rtbCompare.ForeColor);
+
+                                        lb++;
+                                    }
+                                    else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
                                     {
                                         SystemConfig.AppendColoredText(rtbCompare, linesA[la], SystemConfig.col_Del);
-                                    }
-                                    else if (linesA[la] == linesB[lb])
-                                    {
-                                        SystemConfig.AppendColoredText(rtbCompare, linesA[la], rtbCompare.ForeColor);
+                                        SystemConfig.AppendColoredText(rtbCompare, "\n" + linesB[lb], rtbCompare.ForeColor);
+
+                                        la++;
                                     }
                                     else
                                     {
-                                        if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
-                                        {
-                                            SystemConfig.AppendColoredText(rtbCompare, linesB[lb], SystemConfig.col_Add);
-                                            SystemConfig.AppendColoredText(rtbCompare, "\n" + linesA[la], rtbCompare.ForeColor);
+                                        string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
+                                        string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
 
-                                            lb++;
-                                        }
-                                        else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
+                                        int wa = 0;
+                                        int wb = 0;
+                                        while (wa < wordsA.Length)
                                         {
-                                            SystemConfig.AppendColoredText(rtbCompare, linesA[la], SystemConfig.col_Del);
-                                            SystemConfig.AppendColoredText(rtbCompare, "\n" + linesB[lb], rtbCompare.ForeColor);
-
-                                            la++;
-                                        }
-                                        else
-                                        {
-                                            string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
-                                            string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
-
-                                            int wa = 0;
-                                            int wb = 0;
-                                            while (wa < wordsA.Length)
+                                            if (wb >= wordsB.Length)
                                             {
-                                                if (wb >= wordsB.Length)
+                                                SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], SystemConfig.col_Del);
+                                            }
+                                            else if (wordsA[wa] == wordsB[wb])
+                                            {
+                                                SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], rtbCompare.ForeColor);
+                                            }
+                                            else
+                                            {
+                                                if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
+                                                {
+                                                    SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
+                                                    SystemConfig.AppendColoredText(rtbCompare, " " + wordsA[wa], rtbCompare.ForeColor);
+
+                                                    wb++;
+                                                }
+                                                else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
                                                 {
                                                     SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], SystemConfig.col_Del);
-                                                }
-                                                else if (wordsA[wa] == wordsB[wb])
-                                                {
-                                                    SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], rtbCompare.ForeColor);
+                                                    SystemConfig.AppendColoredText(rtbCompare, " " + wordsB[wb], rtbCompare.ForeColor);
+
+                                                    wa++;
                                                 }
                                                 else
                                                 {
-                                                    if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
-                                                    {
-                                                        SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
-                                                        SystemConfig.AppendColoredText(rtbCompare, " " + wordsA[wa], rtbCompare.ForeColor);
-
-                                                        wb++;
-                                                    }
-                                                    else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
-                                                    {
-                                                        SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], SystemConfig.col_Del);
-                                                        SystemConfig.AppendColoredText(rtbCompare, " " + wordsB[wb], rtbCompare.ForeColor);
-
-                                                        wa++;
-                                                    }
-                                                    else
-                                                    {
-                                                        SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], SystemConfig.col_Del);
-                                                        SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
-                                                    }
+                                                    SystemConfig.AppendColoredText(rtbCompare, wordsA[wa], SystemConfig.col_Del);
+                                                    SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
                                                 }
-                                                if (wa + 1 < wordsA.Length) SystemConfig.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
-
-                                                if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
-                                                {
-                                                    while (wb + 1 < wordsB.Length)
-                                                    {
-                                                        wb++;
-
-                                                        SystemConfig.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
-                                                        SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
-                                                    }
-                                                }
-
-                                                wa++;
-                                                wb++;
                                             }
+                                            if (wa + 1 < wordsA.Length) SystemConfig.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+
+                                            if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
+                                            {
+                                                while (wb + 1 < wordsB.Length)
+                                                {
+                                                    wb++;
+
+                                                    SystemConfig.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+                                                    SystemConfig.AppendColoredText(rtbCompare, wordsB[wb], SystemConfig.col_Add);
+                                                }
+                                            }
+
+                                            wa++;
+                                            wb++;
                                         }
                                     }
-
-                                    if (la + 1 < linesA.Length)
-                                    {
-                                        SystemConfig.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
-                                    }
-
-                                    if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
-                                    {
-                                        while (lb + 1 < linesB.Length)
-                                        {
-                                            lb++;
-
-                                            SystemConfig.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
-                                            SystemConfig.AppendColoredText(rtbCompare, linesB[lb], SystemConfig.col_Add);
-                                        }
-                                    }
-
-                                    la++;
-                                    lb++;
                                 }
-                            }
 
-                            sReturn = rtbCompare.Rtf;
+                                if (la + 1 < linesA.Length)
+                                {
+                                    SystemConfig.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
+                                }
+
+                                if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
+                                {
+                                    while (lb + 1 < linesB.Length)
+                                    {
+                                        lb++;
+
+                                        SystemConfig.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
+                                        SystemConfig.AppendColoredText(rtbCompare, linesB[lb], SystemConfig.col_Add);
+                                    }
+                                }
+
+                                la++;
+                                lb++;
+                            }
                         }
-                    });
+
+                        sReturn = rtbCompare.Rtf;                        
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -868,9 +863,9 @@ namespace WPE.Lib
                 }
             }
 
-            public static List<TextStyle> ConvertRtfToTextStyles(string rtfString)
+            public static List<AntdUI.Input.TextStyle> ConvertRtfToTextStyles(string rtfString)
             {
-                var styles = new List<TextStyle>();
+                var styles = new List<AntdUI.Input.TextStyle>();
 
                 using (var rtb = new RichTextBox())
                 {
@@ -903,7 +898,7 @@ namespace WPE.Lib
                         }
 
                         var backColor = currentBackColor != Color.White ? currentBackColor : (Color?)null;
-                        styles.Add(new TextStyle(start, length, currentFont, currentColor, backColor));
+                        styles.Add(new AntdUI.Input.TextStyle(start, length, currentFont, currentColor, backColor));
 
                         i += length - 1;
                     }

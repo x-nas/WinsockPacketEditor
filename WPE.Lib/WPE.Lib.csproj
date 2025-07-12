@@ -134,18 +134,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FontLoader.cs" />
-    <Compile Include="Forms\TextCompareForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TextCompareForm.Designer.cs">
-      <DependentUpon>TextCompareForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\TextDuplicateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TextDuplicateForm.Designer.cs">
-      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="IconExtractor\IconExtractor.cs" />
     <Compile Include="IconExtractor\IconUtil.cs" />
     <Compile Include="Localizer.cs" />
@@ -200,18 +188,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\EncryptionPassword.resx">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TextCompareForm.en-US.resx">
-      <DependentUpon>TextCompareForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TextCompareForm.resx">
-      <DependentUpon>TextCompareForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TextDuplicateForm.en-US.resx">
-      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TextDuplicateForm.resx">
-      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SystemSetting.resx">
       <DependentUpon>SystemSetting.cs</DependentUpon>

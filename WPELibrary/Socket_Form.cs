@@ -12,7 +12,6 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WPE.Lib;
 using WPE.Lib.NativeMethods;
-using WPE.Lib.Forms;
 
 namespace WPELibrary
 {
@@ -885,7 +884,7 @@ namespace WPELibrary
             //}
         }
 
-        private async void tSocketList_Tick(object sender, EventArgs e)
+        private void tSocketList_Tick(object sender, EventArgs e)
         {
             try
             {
@@ -2198,8 +2197,7 @@ namespace WPELibrary
 
             if (!Operate.SystemConfig.IsShow_TextCompare)
             {
-                TextCompareForm tcForm = new TextCompareForm(TextA, TextB);
-                tcForm.Show();
+                
             }            
         }
 
@@ -2210,8 +2208,7 @@ namespace WPELibrary
 
             if (!Operate.SystemConfig.IsShow_TextDuplicate)
             {
-                TextDuplicateForm tdForm = new TextDuplicateForm(TextA, TextB);
-                tdForm.Show();
+               
             }
         }
 

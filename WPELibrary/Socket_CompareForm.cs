@@ -27,7 +27,7 @@ namespace WPELibrary
 
         #region//初始化
 
-        private async void InitForm()
+        private void InitForm()
         {
             try
             {
@@ -50,7 +50,7 @@ namespace WPELibrary
                     hbModifiedData.ByteProvider = new DynamicByteProvider(this.SPI.PacketBuffer);
                 }
 
-                this.rtbCompare.Rtf = await Operate.SystemConfig.CompareData(this.Font, sRawData, sModifiedData);
+                //this.rtbCompare.Rtf = await Operate.SystemConfig.CompareData(this.Font, sRawData, sModifiedData);
             }
             catch (Exception ex)
             {

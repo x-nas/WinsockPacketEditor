@@ -2118,44 +2118,58 @@ namespace WPE.InjectMode
 
         #region//分析文本
 
-        private async void bComparison_Click(object sender, EventArgs e)
+        private void bComparison_Click(object sender, EventArgs e)
         {
             try
             {
-                this.txtComparison_Result.Clear();
-
-                if (this.ddlComparisonType.SelectedIndex == 0)
+                this.bComparison.Loading = true;
+                this.txtComparison_Result.Spin(AntdUI.Localization.Get("Loading", "正在加载..."), config =>
                 {
-                    string StringA = this.txtComparison_A.Text.Trim();
-                    string StringB = this.txtComparison_B.Text.Trim();
+                    this.txtComparison_Result.Clear();
 
-                    if (!string.IsNullOrEmpty(StringA) || !string.IsNullOrEmpty(StringB))
+                    if (this.ddlComparisonType.SelectedIndex == 0)
                     {
-                        string rtfString = await Operate.SystemConfig.CompareData(this.Font, StringA, StringB);
-                        var styles = Operate.SystemConfig.ConvertRtfToTextStyles(rtfString);
+                        string StringA = this.txtComparison_A.Text.Trim();
+                        string StringB = this.txtComparison_B.Text.Trim();
 
-                        using (var rtb = new RichTextBox())
+                        if (!string.IsNullOrEmpty(StringA) || !string.IsNullOrEmpty(StringB))
                         {
-                            rtb.Rtf = rtfString;
-                            this.txtComparison_Result.Text = rtb.Text;
-                        }
+                            string rtfString = Operate.SystemConfig.CompareData(this.Font, StringA, StringB);
+                            var styles = Operate.SystemConfig.ConvertRtfToTextStyles(rtfString);
 
-                        foreach (var style in styles)
-                        {
-                            this.txtComparison_Result.SetStyle(style.Start, style.Length, this.Font, style.Fore, style.Back);
+                            using (var rtb = new RichTextBox())
+                            {
+                                rtb.Rtf = rtfString;
+                                this.txtComparison_Result.Text = rtb.Text;
+                            }
+
+                            foreach (var style in styles)
+                            {
+                                if (style.Fore == Color.Red || style.Fore == Color.Green)
+                                {
+                                    this.txtComparison_Result.SetStyle(style.Start, style.Length, this.Font, style.Fore, null);
+                                }
+                                else
+                                {
+                                    this.txtComparison_Result.SetStyle(style.Start, style.Length, this.Font, null, null);
+                                }                                
+                            }
                         }
                     }
-                }
-                else if (this.ddlComparisonType.SelectedIndex == 1)
-                {
-                    this.TextA = this.txtComparison_A.Text.Trim();
-                    this.TextB = this.txtComparison_B.Text.Trim();
-                    int minBytes = (int)nudComparison_DuplicateNum.Value;
-                    var results = Operate.SystemConfig.ComparePackets(this.TextA, this.TextB, minBytes);
+                    else if (this.ddlComparisonType.SelectedIndex == 1)
+                    {
+                        this.TextA = this.txtComparison_A.Text.Trim();
+                        this.TextB = this.txtComparison_B.Text.Trim();
+                        int minBytes = (int)nudComparison_DuplicateNum.Value;
+                        var results = Operate.SystemConfig.ComparePackets(this.TextA, this.TextB, minBytes);
 
-                    this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
-                    this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
-                }
+                        this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
+                        this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
+                    }
+                }, () =>
+                {
+                    this.bComparison.Loading = false;
+                });                
             }
             catch (Exception ex)
             {

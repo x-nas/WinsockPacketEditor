@@ -146,7 +146,7 @@
             this.bStop.Size = new System.Drawing.Size(114, 46);
             this.bStop.TabIndex = 3;
             this.bStop.Text = "停止";
-            this.bStop.Type = AntdUI.TTypeMini.Info;
+            this.bStop.Type = AntdUI.TTypeMini.Primary;
             this.bStop.Click += new System.EventHandler(this.bStop_Click);
             // 
             // bExecute
@@ -182,7 +182,7 @@
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
-            this.bSave.Type = AntdUI.TTypeMini.Info;
+            this.bSave.Type = AntdUI.TTypeMini.Primary;
             this.bSave.Click += new System.EventHandler(this.bSave_Click);
             // 
             // bExit
