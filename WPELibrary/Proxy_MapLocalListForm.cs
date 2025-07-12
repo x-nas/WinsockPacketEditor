@@ -169,7 +169,7 @@ namespace WPELibrary
 
                         if (pml != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Top, pml);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Top, pml);
                         }
 
                         break;
@@ -178,7 +178,7 @@ namespace WPELibrary
 
                         if (pml != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Up, pml);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Up, pml);
                         }
                         
                         break;
@@ -187,7 +187,7 @@ namespace WPELibrary
 
                         if (pml != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Down, pml);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Down, pml);
                         }
                         
                         break;
@@ -196,14 +196,14 @@ namespace WPELibrary
 
                         if (pml != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Bottom, pml);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, pml);
                         }
                         
                         break;
 
                     case "cmsMapLocal_Import":
 
-                        Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Import, pml);
+                        Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Import, pml);
                         bindingSource.ResetBindings(false);
 
                         break;
@@ -212,7 +212,7 @@ namespace WPELibrary
 
                         if (this.dgvMapLocal.Rows.Count > 0)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Export, pml);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Export, pml);
                         }
                         
                         break;
@@ -221,7 +221,7 @@ namespace WPELibrary
 
                         if (this.dgvMapLocal.Rows.Count > 0)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.CleanUp, pml);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.CleanUp, pml);
                             bindingSource.ResetBindings(false);
                         }
                         

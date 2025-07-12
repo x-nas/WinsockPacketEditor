@@ -150,6 +150,7 @@
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
+            this.tlpStatistical = new System.Windows.Forms.TableLayoutPanel();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -167,6 +168,7 @@
             this.tlpSendList.SuspendLayout();
             this.tpRobotList.SuspendLayout();
             this.tlpRobotList.SuspendLayout();
+            this.tpStatistical.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -350,7 +352,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -364,7 +366,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 3;
+            this.tabInjectMode.SelectedIndex = 5;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -1411,7 +1413,7 @@
             // tpRobotList
             // 
             this.tpRobotList.Controls.Add(this.tlpRobotList);
-            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
+            this.tpRobotList.Location = new System.Drawing.Point(-1124, -724);
             this.tpRobotList.Name = "tpRobotList";
             this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
             this.tpRobotList.TabIndex = 9;
@@ -1539,6 +1541,7 @@
             // 
             // tpStatistical
             // 
+            this.tpStatistical.Controls.Add(this.tlpStatistical);
             this.tpStatistical.Location = new System.Drawing.Point(0, 0);
             this.tpStatistical.Name = "tpStatistical";
             this.tpStatistical.Size = new System.Drawing.Size(0, 0);
@@ -1547,9 +1550,9 @@
             // 
             // tpComparison
             // 
-            this.tpComparison.Location = new System.Drawing.Point(0, 0);
+            this.tpComparison.Location = new System.Drawing.Point(3, 33);
             this.tpComparison.Name = "tpComparison";
-            this.tpComparison.Size = new System.Drawing.Size(0, 0);
+            this.tpComparison.Size = new System.Drawing.Size(1124, 724);
             this.tpComparison.TabIndex = 2;
             this.tpComparison.Text = "文本对比";
             // 
@@ -1633,6 +1636,21 @@
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
+            // tlpStatistical
+            // 
+            this.tlpStatistical.ColumnCount = 1;
+            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStatistical.Location = new System.Drawing.Point(0, 0);
+            this.tlpStatistical.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStatistical.Name = "tlpStatistical";
+            this.tlpStatistical.RowCount = 2;
+            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatistical.Size = new System.Drawing.Size(0, 0);
+            this.tlpStatistical.TabIndex = 0;
+            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -1671,6 +1689,7 @@
             this.tlpSendList.ResumeLayout(false);
             this.tpRobotList.ResumeLayout(false);
             this.tlpRobotList.ResumeLayout(false);
+            this.tpStatistical.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -1761,5 +1780,6 @@
         private AntdUI.Table tRobotList;
         private AntdUI.Segmented sRobotList;
         private System.ComponentModel.BackgroundWorker bgwRobotList;
+        private System.Windows.Forms.TableLayoutPanel tlpStatistical;
     }
 }

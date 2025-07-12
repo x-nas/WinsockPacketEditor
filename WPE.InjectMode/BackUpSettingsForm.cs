@@ -34,7 +34,7 @@ namespace WPE.InjectMode
 
         private void bImport_Click(object sender, EventArgs e)
         {
-            Operate.SystemConfig.ImportSystemBackUp_Dialog();
+            Operate.SystemConfig.ImportSystemBackUp_Dialog(this);
         }
 
         #endregion
@@ -56,6 +56,7 @@ namespace WPE.InjectMode
                 bool RobotList = this.cbBackUp_RobotList.Checked;
 
                 Operate.SystemConfig.ExportSystemBackUp_Dialog(
+                    this,
                     FileName,
                     SystemConfig,
                     ProxySet,

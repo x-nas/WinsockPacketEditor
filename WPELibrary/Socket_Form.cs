@@ -624,6 +624,7 @@ namespace WPELibrary
                 bool RobotList = this.cbBackUp_RobotList.Checked;
 
                 Operate.SystemConfig.ExportSystemBackUp_Dialog(
+                    this,
                     FileName,
                     SystemConfig,
                     ProxySet,

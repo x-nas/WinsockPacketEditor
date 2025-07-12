@@ -171,12 +171,6 @@
     <Compile Include="ClassObject\BitInfo.cs" />
     <Compile Include="ClassObject\FilterInfo.cs" />
     <Compile Include="Socket_Operation.cs" />
-    <Compile Include="Forms\PasswordForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PasswordForm.Designer.cs">
-      <DependentUpon>PasswordForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\SystemSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -206,12 +200,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\EncryptionPassword.resx">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PasswordForm.en-US.resx">
-      <DependentUpon>PasswordForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PasswordForm.resx">
-      <DependentUpon>PasswordForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TextCompareForm.en-US.resx">
       <DependentUpon>TextCompareForm.cs</DependentUpon>

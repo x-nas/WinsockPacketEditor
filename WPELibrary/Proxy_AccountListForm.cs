@@ -425,7 +425,7 @@ namespace WPELibrary
 
                 if (gList.Count > 0)
                 {
-                    Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, gList);
+                    Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_Dialog(this, string.Empty, gList);
                 }
             }
             catch (Exception ex)
@@ -440,7 +440,7 @@ namespace WPELibrary
 
         private void bImport_Click(object sender, EventArgs e)
         {
-            Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_Dialog();
+            Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_Dialog(this);
             this.LoadData(string.Empty);
         }
 
@@ -572,7 +572,7 @@ namespace WPELibrary
                                         gExport.Add(pai.AID);
                                     }
 
-                                    Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, gExport);
+                                    Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_Dialog(this, string.Empty, gExport);
 
                                     break;
 

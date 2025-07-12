@@ -55,7 +55,6 @@ namespace WPE.Lib
             public static ushort Remote_Port = 88;
             public static IDisposable WebServer;
             public static PerformanceCounter cpuCounter;
-            public static string AESKey = string.Empty;
             public static bool IsShow_TextCompare = false, IsShow_TextDuplicate = false;
             public static Execute ListExecute = Execute.Sequence;
 
@@ -2001,6 +2000,7 @@ namespace WPE.Lib
             #region//导出系统备份到文件（对话框）
 
             public static void ExportSystemBackUp_Dialog(
+                Form form,
                 string FileName,
                 bool bSystemConfig,
                 bool bProxySet,
@@ -2024,13 +2024,43 @@ namespace WPE.Lib
 
                     if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                     {
-                        PasswordForm pwForm = new PasswordForm(PWType.Export);
-                        pwForm.ShowDialog();
-
                         string FilePath = sfdSaveFile.FileName;
                         if (!string.IsNullOrEmpty(FilePath))
                         {
-                            SystemConfig.ExportSystemBackUp(
+                            bool DoEncrypt = false;
+                            string Password = string.Empty;
+
+                            using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                            {
+                                string Title = AntdUI.Localization.Get("ExportSystemBackUp", "导出系统备份");
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                {
+                                    Keyboard = false,
+                                    MaskClosable = false,
+                                    OnOk = config =>
+                                    {
+                                        Password = eForm.GetPassword();
+                                        if (string.IsNullOrEmpty(Password))
+                                        {
+                                            eForm.EncryptionText_Changed();
+
+                                            AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                            {
+                                                LocalizationText = "ExportList.Error"
+                                            });
+
+                                            return false;
+                                        }
+                                        else
+                                        {
+                                            DoEncrypt = true;
+                                            return true;
+                                        }
+                                    }
+                                });
+                            }
+
+                            bool bOK = SystemConfig.ExportSystemBackUp(
                                 FilePath,
                                 bSystemConfig,
                                 bProxySet,
@@ -2040,10 +2070,21 @@ namespace WPE.Lib
                                 bFilterList,
                                 bSendList,
                                 bRobotList,
-                                true);
+                                DoEncrypt,
+                                Password);
 
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_214), FilePath);
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                            if (bOK)
+                            {
+                                string Title = AntdUI.Localization.Get("InjectModeForm.ExportSystemBackUp.Success", "导出系统备份成功");
+                                AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                            }
+                            else
+                            {
+                                string Title = AntdUI.Localization.Get("InjectModeForm.ExportSystemBackUp.Error", "导出系统备份失败");
+                                string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                            }
                         }
                     }
                 }
@@ -2053,7 +2094,7 @@ namespace WPE.Lib
                 }
             }
 
-            private static void ExportSystemBackUp(
+            private static bool ExportSystemBackUp(
                 string FilePath,
                 bool bSystemConfig,
                 bool bProxySet,
@@ -2063,7 +2104,8 @@ namespace WPE.Lib
                 bool bFilterList,
                 bool bSendList,
                 bool bRobotList,
-                bool DoEncrypt)
+                bool DoEncrypt,
+                string Password)
             {
                 try
                 {
@@ -2181,40 +2223,45 @@ namespace WPE.Lib
 
                     if (DoEncrypt)
                     {
-                        string sPassword = SystemConfig.AESKey;
-
-                        if (!string.IsNullOrEmpty(sPassword))
+                        if (!string.IsNullOrEmpty(Password))
                         {
-                            SystemConfig.EncryptXMLFile(FilePath, sPassword);
+                            SystemConfig.EncryptXMLFile(FilePath, Password);
                         }
                     }
+
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+
+                return false;
             }
 
             #endregion
 
             #region//从文件导入系统备份（对话框）
 
-            public static void ImportSystemBackUp_Dialog()
+            public static void ImportSystemBackUp_Dialog(Form form)
             {
                 try
                 {
                     OpenFileDialog ofdLoadFile = new OpenFileDialog();
-
                     ofdLoadFile.Filter = AntdUI.Localization.Get("WPEBackUpFile", "WPE x64 备份文件") + "（*.sb）|*.sb";
                     ofdLoadFile.RestoreDirectory = true;
 
                     if (ofdLoadFile.ShowDialog() == DialogResult.OK)
                     {
                         string FilePath = ofdLoadFile.FileName;
-
                         if (!string.IsNullOrEmpty(FilePath))
                         {
-                            ImportSystemBackUp(FilePath, true);
+                            if (ImportSystemBackUp(form, FilePath, true))
+                            {
+                                string Title = AntdUI.Localization.Get("InjectModeForm.ImportSystemBackUp.Success", "导入系统备份成功");
+                                AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                            }
                         }
                     }
                 }
@@ -2224,24 +2271,49 @@ namespace WPE.Lib
                 }
             }
 
-            private static void ImportSystemBackUp(string FilePath, bool LoadFromUser)
+            private static bool ImportSystemBackUp(Form form, string FilePath, bool LoadFromUser)
             {
                 try
                 {
                     if (File.Exists(FilePath))
                     {
-                        XDocument xdoc = new XDocument();
+                        XDocument xdoc = null;
 
                         bool bEncrypt = IsEncryptXMLFile(FilePath);
                         if (bEncrypt)
                         {
                             if (LoadFromUser)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Import);
-                                pwForm.ShowDialog();
-                            }
+                                using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
+                                {
+                                    string Title = AntdUI.Localization.Get("ImportSystemBackUp", "导入系统备份");
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                    {
+                                        Keyboard = false,
+                                        MaskClosable = false,
+                                        OnOk = config =>
+                                        {
+                                            string sPW = eForm.GetPassword();
+                                            if (string.IsNullOrEmpty(sPW))
+                                            {
+                                                eForm.EncryptionText_Changed();
 
-                            xdoc = DecryptXMLFile(FilePath, SystemConfig.AESKey);
+                                                AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                {
+                                                    LocalizationText = "ImportList.Error"
+                                                });
+
+                                                return false;
+                                            }
+                                            else
+                                            {
+                                                xdoc = SystemConfig.DecryptXMLFile(FilePath, sPW);
+                                                return true;
+                                            }
+                                        }
+                                    });
+                                }
+                            }
                         }
                         else
                         {
@@ -2250,36 +2322,29 @@ namespace WPE.Lib
 
                         if (xdoc == null)
                         {
-                            string sError = AntdUI.Localization.Get("AESKeyError", "加载失败: 密码错误");
-
+                            string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
                             if (LoadFromUser)
                             {
-                                Socket_Operation.ShowMessageBox(sError);
+                                AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
                             }
                             else
                             {
                                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
                             }
-                        }
-                        else
-                        {
-                            ImportSystemBackUp_FromXDocument(xdoc);
 
-                            if (bEncrypt)
-                            {
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_216));
-                            }
-                            else
-                            {
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_215));
-                            }
+                            return false;
                         }
+
+                        ImportSystemBackUp_FromXDocument(xdoc);
+                        return true;
                     }
                 }
                 catch (Exception ex)
                 {
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+
+                return false;
             }
 
             private static void ImportSystemBackUp_FromXDocument(XDocument xdoc)
@@ -4070,7 +4135,6 @@ namespace WPE.Lib
             {
                 public static bool IsShow_ProxyAccount = false, IsShow_ProxyAuth = false;
                 public static int OnLineTimeOut = 60;
-                public static string AESKey = string.Empty;
                 public static string CCProxy_HTML = string.Empty;
 
                 public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();
@@ -5223,14 +5287,14 @@ namespace WPE.Lib
 
                 #region//保存代理账号列表到文件（对话框）
 
-                public static void SaveProxyAccountList_Dialog(string FileName, List<Guid> gList)
+                public static void SaveProxyAccountList_Dialog(Form form, string FileName, List<Guid> gList)
                 {
                     try
                     {
                         if (ProxyConfig.ProxyAccount.lstProxyAccount.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_189) + "（*.pa）|*.pa";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("ProxyAccountListFile", "代理账号列表文件") + "（*.pa）|*.pa";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -5238,20 +5302,56 @@ namespace WPE.Lib
                             }
 
                             sfdSaveFile.RestoreDirectory = true;
-
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                pwForm.ShowDialog();
-
                                 string FilePath = sfdSaveFile.FileName;
-
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    SaveProxyAccountList(FilePath, gList, true);
+                                    bool DoEncrypt = false;
+                                    string Password = string.Empty;
 
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_190), FilePath);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportProxyAccountList", "导出代理账号列表");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                Password = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(Password))
+                                                {
+                                                    eForm.EncryptionText_Changed();
+
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ExportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    DoEncrypt = true;
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    if (SaveProxyAccountList(FilePath, gList, DoEncrypt, Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportProxyAccountList.Success", "导出代理账号列表成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportProxyAccountList.Error", "导出代理账号列表失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }
@@ -5262,7 +5362,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void SaveProxyAccountList(string FilePath, List<Guid> gList, bool DoEncrypt)
+                private static bool SaveProxyAccountList(string FilePath, List<Guid> gList, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -5274,7 +5374,7 @@ namespace WPE.Lib
                         XElement xeProxyAccountList = ProxyConfig.ProxyAccount.GetProxyAccountList_XML(gList);
                         if (xeProxyAccountList == null)
                         {
-                            return;
+                            return false;
                         }
 
                         xdoc.Add(xeProxyAccountList);
@@ -5282,18 +5382,20 @@ namespace WPE.Lib
 
                         if (DoEncrypt)
                         {
-                            string sPassword = ProxyConfig.ProxyAccount.AESKey;
-
-                            if (!string.IsNullOrEmpty(sPassword))
+                            if (!string.IsNullOrEmpty(Password))
                             {
-                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
                             }
                         }
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static XElement GetProxyAccountList_XML(List<Guid> gList)
@@ -5344,22 +5446,25 @@ namespace WPE.Lib
 
                 #region//从文件加载代理账号列表（对话框）
 
-                public static void LoadProxyAccountList_Dialog()
+                public static void LoadProxyAccountList_Dialog(Form form)
                 {
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-
-                        ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_189) + " (*.pa)|*.pa|INI Files (*.ini)|*.ini";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("ProxyAccountListFile", "代理账号列表文件") + " (*.pa)|*.pa|INI Files (*.ini)|*.ini";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
                         {
                             string FilePath = ofdLoadFile.FileName;
-
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                LoadProxyAccountList(FilePath, true);
+                                if (LoadProxyAccountList(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportProxyAccountList.Success", "导入代理账号列表成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                }
                             }
                         }
                     }
@@ -5369,37 +5474,61 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void LoadProxyAccountList(string FilePath, bool LoadFromUser)
+                private static bool LoadProxyAccountList(Form form, string FilePath, bool LoadFromUser)
                 {
                     try
                     {
                         if (File.Exists(FilePath))
                         {
                             string fileExtension = Path.GetExtension(FilePath);
-
                             if (!string.IsNullOrEmpty(fileExtension))
                             {
                                 if (fileExtension.Equals(".ini"))
                                 {
                                     LoadProxyAccountList_FromInIFile(FilePath);
+                                    return true;
                                 }
                                 else
                                 {
                                     #region//LoadProxyAccountList_FromXDocument
 
-                                    XDocument xdoc = new XDocument();
+                                    XDocument xdoc = null;
 
                                     bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
-
                                     if (bEncrypt)
                                     {
                                         if (LoadFromUser)
                                         {
-                                            PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                            pwForm.ShowDialog();
-                                        }
+                                            using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
+                                            {
+                                                string Title = AntdUI.Localization.Get("ImportProxyAccountList", "导入代理账号列表");
+                                                AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                                {
+                                                    Keyboard = false,
+                                                    MaskClosable = false,
+                                                    OnOk = config =>
+                                                    {
+                                                        string sPW = eForm.GetPassword();
+                                                        if (string.IsNullOrEmpty(sPW))
+                                                        {
+                                                            eForm.EncryptionText_Changed();
 
-                                        xdoc = SystemConfig.DecryptXMLFile(FilePath, ProxyConfig.ProxyAccount.AESKey);
+                                                            AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                            {
+                                                                LocalizationText = "ImportList.Error"
+                                                            });
+
+                                                            return false;
+                                                        }
+                                                        else
+                                                        {
+                                                            xdoc = SystemConfig.DecryptXMLFile(FilePath, sPW);
+                                                            return true;
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
                                     }
                                     else
                                     {
@@ -5408,32 +5537,24 @@ namespace WPE.Lib
 
                                     if (xdoc == null)
                                     {
-                                        string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
-
+                                        string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
                                         if (LoadFromUser)
                                         {
-                                            Socket_Operation.ShowMessageBox(sError);
+                                            AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
                                         }
                                         else
                                         {
                                             Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
                                         }
-                                    }
-                                    else
-                                    {
-                                        LoadProxyAccountList_FromXDocument(xdoc);
 
-                                        if (bEncrypt)
-                                        {
-                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_192));
-                                        }
-                                        else
-                                        {
-                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_191));
-                                        }
+                                        return false;
                                     }
+
+                                    LoadProxyAccountList_FromXDocument(xdoc);
 
                                     #endregion
+
+                                    return true;
                                 }
                             }
                         }
@@ -5442,6 +5563,8 @@ namespace WPE.Lib
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static void LoadProxyAccountList_FromXDocument(XDocument xdoc)
@@ -5707,7 +5830,6 @@ namespace WPE.Lib
 
             public static class ProxyMapping
             {
-                public static string AESKey = string.Empty;
                 public static bool IsShow_MapLocal = false, IsShow_MapRemote = false;
                 public static bool Enable_MapLocal = false, Enable_MapRemote = false;
                 public static List<Proxy_MapLocal> lstMapLocal = new List<Proxy_MapLocal>();
@@ -6007,7 +6129,7 @@ namespace WPE.Lib
 
                 #region//本地代理映射的列表操作
 
-                public static void UpdateMapLocal_ByListAction(SystemConfig.ListAction listAction, Proxy_MapLocal pml)
+                public static void UpdateMapLocal_ByListAction(Form form, SystemConfig.ListAction listAction, Proxy_MapLocal pml)
                 {
                     try
                     {
@@ -6053,13 +6175,13 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Import:
 
-                                ProxyConfig.ProxyMapping.LoadMapLocal_Dialog();
+                                ProxyConfig.ProxyMapping.LoadMapLocal_Dialog(form);
 
                                 break;
 
                             case SystemConfig.ListAction.Export:
 
-                                ProxyConfig.ProxyMapping.SaveMapLocal_Dialog(string.Empty, ProxyConfig.ProxyMapping.lstMapLocal);
+                                ProxyConfig.ProxyMapping.SaveMapLocal_Dialog(form, string.Empty, ProxyConfig.ProxyMapping.lstMapLocal);
 
                                 break;
 
@@ -6080,7 +6202,7 @@ namespace WPE.Lib
 
                 #region//远程代理映射的列表操作
 
-                public static void UpdateMapRemote_ByListAction(SystemConfig.ListAction listAction, Proxy_MapRemote pmr)
+                public static void UpdateMapRemote_ByListAction(Form form, SystemConfig.ListAction listAction, Proxy_MapRemote pmr)
                 {
                     try
                     {
@@ -6126,13 +6248,13 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Import:
 
-                                ProxyConfig.ProxyMapping.LoadMapRemote_Dialog();
+                                ProxyConfig.ProxyMapping.LoadMapRemote_Dialog(form);
 
                                 break;
 
                             case SystemConfig.ListAction.Export:
 
-                                ProxyConfig.ProxyMapping.SaveMapRemote_Dialog(string.Empty, ProxyConfig.ProxyMapping.lstMapRemote);
+                                ProxyConfig.ProxyMapping.SaveMapRemote_Dialog(form, string.Empty, ProxyConfig.ProxyMapping.lstMapRemote);
 
                                 break;
 
@@ -6269,15 +6391,14 @@ namespace WPE.Lib
 
                 #region//保存本地映射到文件（对话框）
 
-                public static void SaveMapLocal_Dialog(string FileName, List<Proxy_MapLocal> pmlList)
+                public static void SaveMapLocal_Dialog(Form form, string FileName, List<Proxy_MapLocal> pmlList)
                 {
                     try
                     {
                         if (ProxyConfig.ProxyMapping.lstMapLocal.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-
-                            sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_220) + "（*.pml）|*.pml";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("MapLocalFile", "本地代理映射文件") + "（*.pml）|*.pml";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -6285,20 +6406,56 @@ namespace WPE.Lib
                             }
 
                             sfdSaveFile.RestoreDirectory = true;
-
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                pwForm.ShowDialog();
-
                                 string FilePath = sfdSaveFile.FileName;
-
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    SaveMapLocal(FilePath, pmlList, true);
+                                    bool DoEncrypt = false;
+                                    string Password = string.Empty;
 
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_221), FilePath);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportMapLocal", "导出本地代理映射");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                Password = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(Password))
+                                                {
+                                                    eForm.EncryptionText_Changed();
+
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ExportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    DoEncrypt = true;
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    if (SaveMapLocal(FilePath, pmlList, DoEncrypt, Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapLocal.Success", "导出本地代理映射成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapLocal.Error", "导出本地代理映射失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }
@@ -6309,7 +6466,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void SaveMapLocal(string FilePath, List<Proxy_MapLocal> pmlList, bool DoEncrypt)
+                private static bool SaveMapLocal(string FilePath, List<Proxy_MapLocal> pmlList, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -6321,7 +6478,7 @@ namespace WPE.Lib
                         XElement xeMapLocal = ProxyConfig.ProxyMapping.GetMapLocal_XML(pmlList);
                         if (xeMapLocal == null)
                         {
-                            return;
+                            return false;
                         }
 
                         xdoc.Add(xeMapLocal);
@@ -6329,18 +6486,20 @@ namespace WPE.Lib
 
                         if (DoEncrypt)
                         {
-                            string sPassword = ProxyConfig.ProxyMapping.AESKey;
-
-                            if (!string.IsNullOrEmpty(sPassword))
+                            if (!string.IsNullOrEmpty(Password))
                             {
-                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
                             }
                         }
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static XElement GetMapLocal_XML(List<Proxy_MapLocal> pmlList)
@@ -6378,15 +6537,14 @@ namespace WPE.Lib
 
                 #region//保存远程映射到文件（对话框）
 
-                public static void SaveMapRemote_Dialog(string FileName, List<Proxy_MapRemote> pmrList)
+                public static void SaveMapRemote_Dialog(Form form, string FileName, List<Proxy_MapRemote> pmrList)
                 {
                     try
                     {
                         if (ProxyConfig.ProxyMapping.lstMapRemote.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-
-                            sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_224) + "（*.pmr）|*.pmr";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("MapRemoteFile", "远程代理映射文件") + "（*.pmr）|*.pmr";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -6394,20 +6552,56 @@ namespace WPE.Lib
                             }
 
                             sfdSaveFile.RestoreDirectory = true;
-
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                pwForm.ShowDialog();
-
                                 string FilePath = sfdSaveFile.FileName;
-
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    SaveMapRemote(FilePath, pmrList, true);
+                                    bool DoEncrypt = false;
+                                    string Password = string.Empty;
 
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_225), FilePath);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportMapRemote", "导出远程代理映射");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                Password = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(Password))
+                                                {
+                                                    eForm.EncryptionText_Changed();
+
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ExportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    DoEncrypt = true;
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                    if (SaveMapRemote(FilePath, pmrList, DoEncrypt, Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapRemote.Success", "导出远程代理映射成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapRemote.Error", "导出远程代理映射失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }
@@ -6418,7 +6612,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void SaveMapRemote(string FilePath, List<Proxy_MapRemote> pmrList, bool DoEncrypt)
+                private static bool SaveMapRemote(string FilePath, List<Proxy_MapRemote> pmrList, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -6430,7 +6624,7 @@ namespace WPE.Lib
                         XElement xeMapRemote = ProxyConfig.ProxyMapping.GetMapRemote_XML(pmrList);
                         if (xeMapRemote == null)
                         {
-                            return;
+                            return false;
                         }
 
                         xdoc.Add(xeMapRemote);
@@ -6438,18 +6632,20 @@ namespace WPE.Lib
 
                         if (DoEncrypt)
                         {
-                            string sPassword = ProxyConfig.ProxyMapping.AESKey;
-
-                            if (!string.IsNullOrEmpty(sPassword))
+                            if (!string.IsNullOrEmpty(Password))
                             {
-                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
                             }
                         }
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static XElement GetMapRemote_XML(List<Proxy_MapRemote> pmrList)
@@ -6490,22 +6686,25 @@ namespace WPE.Lib
 
                 #region//从文件加载本地映射（对话框）
 
-                public static void LoadMapLocal_Dialog()
+                public static void LoadMapLocal_Dialog(Form form)
                 {
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-
-                        ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_220) + "（*.pml）|*.pml";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("MapLocalFile", "本地代理映射文件") + "（*.pml）|*.pml";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
                         {
                             string FilePath = ofdLoadFile.FileName;
-
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                LoadMapLocal(FilePath, true);
+                                if (LoadMapLocal(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportMapLocal.Success", "导入本地代理映射成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                }
                             }
                         }
                     }
@@ -6515,25 +6714,49 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void LoadMapLocal(string FilePath, bool LoadFromUser)
+                private static bool LoadMapLocal(Form form, string FilePath, bool LoadFromUser)
                 {
                     try
                     {
                         if (File.Exists(FilePath))
                         {
-                            XDocument xdoc = new XDocument();
+                            XDocument xdoc = null;
 
                             bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
-
                             if (bEncrypt)
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                    pwForm.ShowDialog();
-                                }
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ImportMapLocal", "导入本地代理映射");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                string sPW = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(sPW))
+                                                {
+                                                    eForm.EncryptionText_Changed();
 
-                                xdoc = SystemConfig.DecryptXMLFile(FilePath, ProxyConfig.ProxyMapping.AESKey);
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ImportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    xdoc = SystemConfig.DecryptXMLFile(FilePath, sPW);
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
                             }
                             else
                             {
@@ -6542,36 +6765,29 @@ namespace WPE.Lib
 
                             if (xdoc == null)
                             {
-                                string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
-
+                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
-                                    Socket_Operation.ShowMessageBox(sError);
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
                                 }
                                 else
                                 {
                                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
                                 }
-                            }
-                            else
-                            {
-                                LoadMapLocal_FromXDocument(xdoc);
 
-                                if (bEncrypt)
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_223));
-                                }
-                                else
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_222));
-                                }
+                                return false;
                             }
+
+                            LoadMapLocal_FromXDocument(xdoc);
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static void LoadMapLocal_FromXDocument(XDocument xdoc)
@@ -6629,22 +6845,25 @@ namespace WPE.Lib
 
                 #region//从文件加载远程映射（对话框）
 
-                public static void LoadMapRemote_Dialog()
+                public static void LoadMapRemote_Dialog(Form form)
                 {
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-
-                        ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_224) + "（*.pmr）|*.pmr";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("MapRemoteFile", "远程代理映射文件") + "（*.pmr）|*.pmr";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
                         {
                             string FilePath = ofdLoadFile.FileName;
-
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                LoadMapRemote(FilePath, true);
+                                if (LoadMapRemote(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportMapRemote.Success", "导入远程代理映射成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                }
                             }
                         }
                     }
@@ -6654,25 +6873,49 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void LoadMapRemote(string FilePath, bool LoadFromUser)
+                private static bool LoadMapRemote(Form form, string FilePath, bool LoadFromUser)
                 {
                     try
                     {
                         if (File.Exists(FilePath))
                         {
-                            XDocument xdoc = new XDocument();
+                            XDocument xdoc = null;
 
                             bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
-
                             if (bEncrypt)
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
-                                    pwForm.ShowDialog();
-                                }
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ImportMapRemote", "导入远程代理映射");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                string sPW = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(sPW))
+                                                {
+                                                    eForm.EncryptionText_Changed();
 
-                                xdoc = SystemConfig.DecryptXMLFile(FilePath, ProxyConfig.ProxyMapping.AESKey);
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ImportList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    xdoc = SystemConfig.DecryptXMLFile(FilePath, sPW);
+                                                    return true;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
                             }
                             else
                             {
@@ -6681,36 +6924,29 @@ namespace WPE.Lib
 
                             if (xdoc == null)
                             {
-                                string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
-
+                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
-                                    Socket_Operation.ShowMessageBox(sError);
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
                                 }
                                 else
                                 {
                                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
                                 }
-                            }
-                            else
-                            {
-                                LoadMapRemote_FromXDocument(xdoc);
 
-                                if (bEncrypt)
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_227));
-                                }
-                                else
-                                {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_226));
-                                }
+                                return false;
                             }
+
+                            LoadMapRemote_FromXDocument(xdoc);
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static void LoadMapRemote_FromXDocument(XDocument xdoc)

@@ -183,7 +183,7 @@ namespace WPELibrary
 
                         if (pmr != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Top, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Top, pmr);
                         }
 
                         break;
@@ -192,7 +192,7 @@ namespace WPELibrary
 
                         if (pmr != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Up, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Up, pmr);
                         }
 
                         break;
@@ -201,7 +201,7 @@ namespace WPELibrary
 
                         if (pmr != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Down, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Down, pmr);
                         }
 
                         break;
@@ -210,14 +210,14 @@ namespace WPELibrary
 
                         if (pmr != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Bottom, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, pmr);
                         }
 
                         break;
 
                     case "cmsMapRemote_Import":
 
-                        Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Import, pmr);
+                        Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Import, pmr);
                         bindingSource.ResetBindings(false);
 
                         break;
@@ -226,7 +226,7 @@ namespace WPELibrary
 
                         if (this.dgvMapRemote.Rows.Count > 0)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Export, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Export, pmr);
                         }
 
                         break;
@@ -235,7 +235,7 @@ namespace WPELibrary
 
                         if (this.dgvMapRemote.Rows.Count > 0)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.CleanUp, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.CleanUp, pmr);
                             bindingSource.ResetBindings(false);
                         }
 
