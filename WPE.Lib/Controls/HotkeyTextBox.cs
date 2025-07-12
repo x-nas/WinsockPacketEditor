@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AntdUI;
+using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -12,8 +13,7 @@ namespace WPE.Lib.Controls
 
         public HotkeyTextBox()
         {
-            this.ReadOnly = true;
-            this.BackColor = SystemColors.Window;
+            this.ReadOnly = true;            
             this.KeyDown += HotkeyTextBox_KeyDown;
             this.KeyUp += HotkeyTextBox_KeyUp;
             this.KeyPress += (s, e) => e.Handled = true;

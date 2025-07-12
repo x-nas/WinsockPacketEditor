@@ -58,9 +58,9 @@ namespace WPE.Lib
 
         #region//滤镜已执行次数
 
-        int _ExecutionCount;
+        long _ExecutionCount;
 
-        public int ExecutionCount
+        public long ExecutionCount
         {
             get => _ExecutionCount;
             set
@@ -479,21 +479,6 @@ namespace WPE.Lib
             }
         }
 
-        #endregion
-
-        #region//列表操作
-
-        AntdUI.CellLink[] _CellLinks;
-        public AntdUI.CellLink[] CellLinks
-        {
-            get => _CellLinks;
-            set
-            {
-                _CellLinks = value;
-                OnPropertyChanged();
-            }
-        }
-
         #endregion        
 
         #region//FilterInfo
@@ -556,13 +541,7 @@ namespace WPE.Lib
             this._ProgressionCount = ProgressionCount;
             this._FSearch = FSearch;          
             this._FModify = FModify;            
-            this._ExecutionCount = 0;
-
-            CellLinks = new AntdUI.CellLink[] 
-            {
-                new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
-                new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
-            };
+            this._ExecutionCount = 0;            
         }
 
         #endregion

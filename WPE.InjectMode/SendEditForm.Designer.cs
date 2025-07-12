@@ -283,7 +283,7 @@
             this.lSend_Fail_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Fail_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Fail_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSend_Fail_CNT.ForeColor = System.Drawing.Color.DarkRed;
+            this.lSend_Fail_CNT.ForeColor = System.Drawing.Color.Red;
             this.lSend_Fail_CNT.Location = new System.Drawing.Point(971, 3);
             this.lSend_Fail_CNT.Name = "lSend_Fail_CNT";
             this.lSend_Fail_CNT.Size = new System.Drawing.Size(10, 34);
@@ -307,7 +307,7 @@
             this.lTotal_Send_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTotal_Send_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTotal_Send_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lTotal_Send_CNT.ForeColor = System.Drawing.Color.Blue;
+            this.lTotal_Send_CNT.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             this.lTotal_Send_CNT.Location = new System.Drawing.Point(831, 3);
             this.lTotal_Send_CNT.Name = "lTotal_Send_CNT";
             this.lTotal_Send_CNT.Size = new System.Drawing.Size(10, 34);
@@ -459,6 +459,7 @@
             0,
             0});
             this.nudLoopINT.Name = "nudLoopINT";
+            this.nudLoopINT.SelectionStart = 3;
             this.nudLoopINT.Size = new System.Drawing.Size(230, 34);
             this.nudLoopINT.SuffixText = "毫秒";
             this.nudLoopINT.TabIndex = 2;
@@ -531,6 +532,7 @@
             0,
             0});
             this.nudLoopCNT.Name = "nudLoopCNT";
+            this.nudLoopCNT.SelectionStart = 1;
             this.nudLoopCNT.Size = new System.Drawing.Size(230, 40);
             this.nudLoopCNT.SuffixText = "次";
             this.nudLoopCNT.TabIndex = 1;

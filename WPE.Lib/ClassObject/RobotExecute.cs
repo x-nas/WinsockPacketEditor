@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using WindowsInput.Native;
+using WPE.Lib.ClassObject;
 
 namespace WPE.Lib
 {
@@ -14,10 +14,11 @@ namespace WPE.Lib
         public int Instruction_Index = 0;      
         public int Total_Instruction = 0;
         public string RobotName = string.Empty;
-        private Dictionary<string, object> _parameters = new Dictionary<string, object>();
+        private Dictionary<string, object> RParameters = new Dictionary<string, object>();
 
         private CancellationTokenSource cts;
-        private DataTable RobotInstruction = new DataTable();
+        private RobotInfo riSelect;
+        private BindingList<InstructionInfo> RInstruction;
         public BackgroundWorker Worker = new BackgroundWorker();
         private readonly WindowsInput.InputSimulator sim = new WindowsInput.InputSimulator();        
 
@@ -42,32 +43,33 @@ namespace WPE.Lib
 
         #region//启动机器人
 
-        public void StartRobot(string RobotName, DataTable dtRobotInstruction, Dictionary<string, object> parameters)
+        public void StartRobot(RobotInfo ri, Dictionary<string, object> parameters)
         {
             try
             {
-                if (dtRobotInstruction.Rows.Count > 0)
+                if (ri != null && ri.RInstruction.Count > 0)
                 {
                     if (!this.Worker.IsBusy)
                     {
                         this.Total_Instruction = 0;
-                        this.RobotName = RobotName;
-                        this.RobotInstruction = dtRobotInstruction;
+
+                        this.riSelect = ri;
+                        this.RobotName = ri.RName;
+                        this.RInstruction = ri.RInstruction;
 
                         if (parameters != null)
                         {
-                            this._parameters = parameters;
+                            this.RParameters = parameters;
                         }
                         else
                         {
-                            this._parameters.Clear();
+                            this.RParameters.Clear();
                         }
 
-                        int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(this.RobotInstruction, true);
-
+                        int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(null, this.RInstruction);
                         if (iReturn > -1)
                         {
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_123), iReturn + 1, this.RobotName);
+                            string sLog = string.Format(AntdUI.Localization.Get("System.Robot.Error", "机器人指令 {0} 错误! [{1}]"), iReturn + 1, this.RobotName);
                             Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                         }
                         else
@@ -75,11 +77,11 @@ namespace WPE.Lib
                             this.cts = new CancellationTokenSource();
                             this.Worker.RunWorkerAsync();
 
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_109), this.RobotName);
+                            string sLog = string.Format(AntdUI.Localization.Get("System.Robot.Start", "启动机器人 [{0}]"), this.RobotName);
                             Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                         }
                     }
-                }                
+                }      
             }
             catch (Exception ex)
             {
@@ -119,12 +121,12 @@ namespace WPE.Lib
         {
             try
             {
-                if (this.RobotInstruction.Rows.Count > 0)
+                if (this.RInstruction.Count > 0)
                 {
                     Stack<int> sLoopStart = new Stack<int>();
                     Dictionary<int, int> dLoopCNT = new Dictionary<int, int>();
 
-                    for (int i = 0; i < this.RobotInstruction.Rows.Count; i++)
+                    for (int i = 0; i < this.RInstruction.Count; i++)
                     {
                         if (Worker.CancellationPending)
                         {
@@ -135,10 +137,8 @@ namespace WPE.Lib
                         {
                             Worker.ReportProgress(i);
 
-                            Operate.RobotConfig.Robot.InstructionType instructionType = (Operate.RobotConfig.Robot.InstructionType)RobotInstruction.Rows[i]["Type"];
-                            string sContent = RobotInstruction.Rows[i]["Content"].ToString();
-
-                            switch (instructionType)
+                            string sContent = RInstruction[i].InstContent;
+                            switch (RInstruction[i].InstType)
                             {
                                 case Operate.RobotConfig.Robot.InstructionType.SendSendList:
 
@@ -166,7 +166,7 @@ namespace WPE.Lib
 
                                     break;
 
-                                case Operate.RobotConfig.Robot.InstructionType.SendSocketList:
+                                case Operate.RobotConfig.Robot.InstructionType.SendPacketList:
 
                                     Operate.PacketConfig.List.SendSocketList_BySelect();
 
@@ -459,7 +459,8 @@ namespace WPE.Lib
                                     break;
                             }
 
-                            if (instructionType != Operate.RobotConfig.Robot.InstructionType.LoopStart && instructionType != Operate.RobotConfig.Robot.InstructionType.LoopEnd)
+                            if (RInstruction[i].InstType != Operate.RobotConfig.Robot.InstructionType.LoopStart && 
+                                RInstruction[i].InstType != Operate.RobotConfig.Robot.InstructionType.LoopEnd)
                             {
                                 this.Total_Instruction++;
                             }
@@ -520,9 +521,9 @@ namespace WPE.Lib
         {
             try
             {
-                if (_parameters.ContainsKey(key))
+                if (this.RParameters.ContainsKey(key))
                 {
-                    return _parameters[key];
+                    return this.RParameters[key];
                 }
             }
             catch (Exception ex)
@@ -537,11 +538,11 @@ namespace WPE.Lib
         {
             try
             {
-                if (_parameters.ContainsKey(key))
+                if (this.RParameters.ContainsKey(key))
                 {
                     try
                     {
-                        return (T)Convert.ChangeType(_parameters[key], typeof(T));
+                        return (T)Convert.ChangeType(this.RParameters[key], typeof(T));
                     }
                     catch
                     {

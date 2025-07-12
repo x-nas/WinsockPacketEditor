@@ -44,7 +44,16 @@ namespace WinsockPacketEditor
         private void InitTableColumns()
         {
             tProcessList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("ICO", string.Empty, AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProcessList.Column."),
+                new AntdUI.Column("ICO", string.Empty, AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellImage((Image)value)
+                        { 
+                            Size = new Size(45, 45),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.ProcessList.Column."),
                 new AntdUI.Column("ProcessName", "进程名称").SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
                 new AntdUI.Column("ProcessID", "进程编号", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
                 new AntdUI.Column("ProcessPath", "路径").SetLocalizationTitleID("Table.ProcessList.Column."),

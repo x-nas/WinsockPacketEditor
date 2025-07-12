@@ -118,7 +118,7 @@ namespace WPE.Lib
 
                 for (int i = 0; i < this.LoopCNT; i++)
                 {
-                    this.siSelect.AddExecutionCount();
+                    this.siSelect.ExecutionCount++;
 
                     for (int j = 0; j < this.SendCollection.Count; j++) 
                     {
@@ -145,12 +145,12 @@ namespace WPE.Lib
                                     if (bOK)
                                     {
                                         this.Send_Success++;
-                                        this.siSelect.AddExecutionSuccess();
+                                        this.siSelect.ExecutionSuccess++;
                                     }
                                     else
                                     {
                                         this.Send_Failure++;
-                                        this.siSelect.AddExecutionFail();
+                                        this.siSelect.ExecutionFail++;
                                     }
 
                                     this.Total_Send++;

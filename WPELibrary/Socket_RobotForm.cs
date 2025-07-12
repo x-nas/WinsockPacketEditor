@@ -48,7 +48,7 @@ namespace WPELibrary
                 this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_93), sriSelect.RName);
 
                 this.txtRobotName.Text = sriSelect.RName;
-                this.dtRobotInstruction = sriSelect.RInstruction.Copy();
+                //this.dtRobotInstruction = sriSelect.RInstruction.Copy();
 
                 this.cbbKeyBoard_KeyType.SelectedIndex = 0;
                 this.cbbMouse.SelectedIndex = 0;
@@ -159,7 +159,7 @@ namespace WPELibrary
 
                 if (this.dtRobotInstruction.Rows.Count > 0)
                 {
-                    int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(this.dtRobotInstruction, false);
+                    int iReturn = 0;
 
                     if (iReturn > -1 && iReturn < dgvRobotInstruction.Rows.Count)
                     {
@@ -170,7 +170,7 @@ namespace WPELibrary
                     }
                 }
 
-                Operate.RobotConfig.Robot.UpdateRobot(sriSelect, RName_New, this.dtRobotInstruction);
+                //Operate.RobotConfig.Robot.UpdateRobot(sriSelect, RName_New, this.dtRobotInstruction);
 
                 this.Close();
             }
@@ -199,7 +199,7 @@ namespace WPELibrary
             {
                 if (this.dtRobotInstruction.Rows.Count > 0)
                 {
-                    int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(this.dtRobotInstruction, false);
+                    int iReturn = 0;
 
                     if (iReturn > -1 && iReturn < dgvRobotInstruction.Rows.Count)
                     {
@@ -221,7 +221,7 @@ namespace WPELibrary
                             this.dgvRobotInstruction.ContextMenuStrip.Enabled = false;
                         }
 
-                        sr.StartRobot(sriSelect.RName, this.dtRobotInstruction, null);
+                        //sr.StartRobot(sriSelect.RName, this.dtRobotInstruction, null);
                     }
                 }                
             }
@@ -496,7 +496,7 @@ namespace WPELibrary
         {
             try
             {
-                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.SendSocketList, string.Empty);
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.SendPacketList, string.Empty);
             }
             catch (Exception ex)
             {

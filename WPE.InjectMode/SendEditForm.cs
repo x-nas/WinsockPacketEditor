@@ -200,8 +200,7 @@ namespace WPE.InjectMode
         private void Worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             try
-            {
-                string sMsg = string.Empty;
+            {                
                 string sSendName = this.txtSendName.Text.Trim();
 
                 if (e.Cancelled)
@@ -305,7 +304,6 @@ namespace WPE.InjectMode
                 AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendCollection, (item) =>
                 {
                     List<PacketInfo> piList = new List<PacketInfo>();
-
                     foreach (int SelectIndex in this.tSendCollection.SelectedIndexs)
                     {
                         piList.Add(this.SendCollection[SelectIndex - 1]);

@@ -123,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassObject\InstructionInfo.cs" />
     <Compile Include="Controls\EncryptionPassword.cs">
       <SubType>UserControl</SubType>
     </Compile>

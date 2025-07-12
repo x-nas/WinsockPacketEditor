@@ -1,7 +1,7 @@
 ﻿using AntdUI;
 using System;
-using System.Data;
-using System.Drawing;
+using System.ComponentModel;
+using WPE.Lib.ClassObject;
 
 namespace WPE.Lib
 {
@@ -60,12 +60,9 @@ namespace WPE.Lib
 
         #region//已执行次数
 
-        CellText _ExecutionCount = new CellText("0")
-        {
-            Fore = Color.Blue,
-        };
+        long _ExecutionCount;
 
-        public CellText ExecutionCount
+        public long ExecutionCount
         {
             get => _ExecutionCount;
             set
@@ -80,9 +77,9 @@ namespace WPE.Lib
 
         #region//指令集        
 
-        protected DataTable _RInstruction;
+        protected BindingList<InstructionInfo> _RInstruction;
 
-        public DataTable RInstruction
+        public BindingList<InstructionInfo> RInstruction
         {
             get { return _RInstruction; }
             set 
@@ -92,46 +89,18 @@ namespace WPE.Lib
             }
         }
 
-        #endregion
-
-        #region//列表操作
-
-        AntdUI.CellLink[] _CellLinks = new AntdUI.CellLink[]
-        {
-            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
-            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
-        };
-
-        public AntdUI.CellLink[] CellLinks
-        {
-            get => _CellLinks;
-            set
-            {
-                _CellLinks = value;
-                OnPropertyChanged();
-            }
-        }
-
         #endregion        
 
         #region//RobotInfo
 
-        public RobotInfo(bool IsEnable, Guid RID, string RName, DataTable RInstructions)
+        public RobotInfo(bool IsEnable, Guid RID, string RName, BindingList<InstructionInfo> RInstructions)
         {
             this._IsEnable = IsEnable;
             this._RID = RID;
             this._RName = RName;
             this._RInstruction = RInstructions;
-        }
-
-        public void AddExecutionCount()
-        {
-            if (int.TryParse(this._ExecutionCount.Text.Trim(), out int iCNT))
-            {
-                iCNT++;
-                this._ExecutionCount.Text = iCNT.ToString();
-            }
-        }
+            this._ExecutionCount = 0;
+        }        
 
         #endregion
     }

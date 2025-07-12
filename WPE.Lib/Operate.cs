@@ -24,6 +24,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using WPE.Lib.ClassObject;
 using WPE.Lib.Controls;
 using WPE.Lib.Forms;
 
@@ -12085,29 +12086,8 @@ namespace WPE.Lib
                     LoopEnd = 3,
                     KeyBoard = 4,
                     Mouse = 5,
-                    SendSocketList = 6,
+                    SendPacketList = 6,
                     SetSystemSocket = 7,
-                }
-
-                #endregion
-
-                #region//初始化指令集
-
-                public static DataTable InitInstructions()
-                {
-                    DataTable dtInstructions = new DataTable();
-
-                    try
-                    {
-                        dtInstructions.Columns.Add("Type", typeof(Robot.InstructionType));
-                        dtInstructions.Columns.Add("Content", typeof(string));
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-
-                    return dtInstructions;
                 }
 
                 #endregion
@@ -12121,9 +12101,10 @@ namespace WPE.Lib
                         bool IsEnable = false;
                         Guid RID = Guid.NewGuid();
                         int RNum = RobotConfig.List.lstRobotInfo.Count + 1;
-                        string RName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), RNum.ToString());
+                        string RName = string.Format(AntdUI.Localization.Get("System.RobotName", "机器人 {0}"), RNum.ToString());
+                        BindingList<InstructionInfo> RInstruction = new BindingList<InstructionInfo>();
 
-                        AddRobot(IsEnable, RID, RName, Robot.InitInstructions());
+                        AddRobot(IsEnable, RID, RName, RInstruction);
                     }
                     catch (Exception ex)
                     {
@@ -12131,14 +12112,14 @@ namespace WPE.Lib
                     }
                 }
 
-                public static void AddRobot(bool IsEnable, Guid RID, string RName, DataTable RInstructions)
+                public static void AddRobot(bool IsEnable, Guid RID, string RName, BindingList<InstructionInfo> RInstructions)
                 {
                     try
                     {
                         if (RID != Guid.Empty && !string.IsNullOrEmpty(RName))
                         {
-                            RobotInfo sri = new RobotInfo(IsEnable, RID, RName, RInstructions);
-                            RobotConfig.List.RobotToList(sri);
+                            RobotInfo ri = new RobotInfo(IsEnable, RID, RName, RInstructions);
+                            RobotConfig.List.RobotToList(ri);
                         }
                     }
                     catch (Exception ex)
@@ -12151,14 +12132,14 @@ namespace WPE.Lib
 
                 #region//更新机器人
 
-                public static void UpdateRobot(RobotInfo sri, string RName, DataTable RInstruction)
+                public static void UpdateRobot(RobotInfo sri, string RName, BindingList<InstructionInfo> RInstruction)
                 {
                     try
                     {
                         if (sri != null)
                         {
                             sri.RName = RName;
-                            sri.RInstruction = RInstruction.Copy();
+                            sri.RInstruction = new BindingList<InstructionInfo>(RInstruction.ToList());
                         }
                     }
                     catch (Exception ex)
@@ -12171,14 +12152,14 @@ namespace WPE.Lib
 
                 #region//复制机器人
 
-                public static void CopyRobot(RobotInfo sri)
+                public static void CopyRobot(RobotInfo ri)
                 {
                     try
                     {
                         bool IsEnable = false;
                         Guid RID_New = Guid.NewGuid();
-                        string RName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), sri.RName);
-                        DataTable RInstruction_Copy = sri.RInstruction.Copy();
+                        string RName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), ri.RName);                        
+                        BindingList<InstructionInfo> RInstruction_Copy = new BindingList<InstructionInfo>(ri.RInstruction.ToList());
 
                         Robot.AddRobot(IsEnable, RID_New, RName_Copy, RInstruction_Copy);
                     }
@@ -12261,35 +12242,35 @@ namespace WPE.Lib
                         switch (instructionType)
                         {
                             case Robot.InstructionType.SendSendList:
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_94);
+                                sReturn = AntdUI.Localization.Get("System.Send", "发送");
                                 break;
 
-                            case Robot.InstructionType.SendSocketList:
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_94);
+                            case Robot.InstructionType.SendPacketList:
+                                sReturn = AntdUI.Localization.Get("System.Send", "发送");
                                 break;
 
                             case Robot.InstructionType.SetSystemSocket:
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_231);
+                                sReturn = AntdUI.Localization.Get("System.Set", "设置");
                                 break;
 
                             case Robot.InstructionType.Delay:
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_95);
+                                sReturn = AntdUI.Localization.Get("System.Delay", "延迟");
                                 break;
 
                             case Robot.InstructionType.LoopStart:
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_96);
+                                sReturn = AntdUI.Localization.Get("System.LoopStart", "循环开始");
                                 break;
 
                             case Robot.InstructionType.LoopEnd:
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_97);
+                                sReturn = AntdUI.Localization.Get("System.LoopEnd", "循环结束");
                                 break;
 
                             case Robot.InstructionType.KeyBoard:
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_105);
+                                sReturn = AntdUI.Localization.Get("System.KeyBoard", "键盘");
                                 break;
 
                             case Robot.InstructionType.Mouse:
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_107);
+                                sReturn = AntdUI.Localization.Get("System.Mouse", "鼠标");
                                 break;
                         }
                     }
@@ -12317,7 +12298,7 @@ namespace WPE.Lib
                                 cReturn = Color.YellowGreen;
                                 break;
 
-                            case Robot.InstructionType.SendSocketList:
+                            case Robot.InstructionType.SendPacketList:
                                 cReturn = Color.YellowGreen;
                                 break;
 
@@ -12373,14 +12354,14 @@ namespace WPE.Lib
                                     Guid SID = Guid.Parse(sContent);
                                     string SName = SendConfig.Send.GetSendName_ByGuid(SID);
 
-                                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_113), SName);
+                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.SendList", "发送列表 - [{0}]"), SName);
                                 }
 
                                 break;
 
-                            case Robot.InstructionType.SendSocketList:
+                            case Robot.InstructionType.SendPacketList:
 
-                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_161);
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.PacketList", "[封包列表] 选中的封包");
 
                                 break;
 
@@ -12388,16 +12369,16 @@ namespace WPE.Lib
 
                                 if (sContent.Equals("PacketConfig.List"))
                                 {
-                                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_228);
+                                    sReturn = AntdUI.Localization.Get("RobotEditForm.SelectPacket", "系统套接字 = 选中封包的套接字");
                                 }
                                 else if (sContent.Equals("FilterSocket"))
                                 {
-                                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_229);
+                                    sReturn = AntdUI.Localization.Get("RobotEditForm.SelectFilter", "系统套接字 = 调用滤镜的套接字");
                                 }
                                 else if (sContent.Contains("Customize") && sContent.Contains("|"))
                                 {
                                     string sSocket = sContent.Split('|')[1];
-                                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_230), sSocket);
+                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.SelectSocket", "系统套接字 = {0}"), sSocket);
                                 }
 
                                 break;
@@ -12406,7 +12387,7 @@ namespace WPE.Lib
 
                                 if (!string.IsNullOrEmpty(sContent))
                                 {
-                                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_115), sContent);
+                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.Millisecond", "{0} 毫秒"), sContent);
                                 }
 
                                 break;
@@ -12415,12 +12396,14 @@ namespace WPE.Lib
 
                                 if (!string.IsNullOrEmpty(sContent))
                                 {
-                                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_116), sContent);
+                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.LoopStart", "循环 {0} 次"), sContent);
                                 }
 
                                 break;
 
                             case Robot.InstructionType.LoopEnd:
+
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.LoopEnd", "循环结束");
 
                                 break;
 
@@ -12434,23 +12417,23 @@ namespace WPE.Lib
                                     switch (kbType)
                                     {
                                         case Robot.KeyBoardType.Press:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_106), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyPress", "按键 {0}"), KeyCode);
                                             break;
 
                                         case Robot.KeyBoardType.Down:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_124), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyDown", "按下 {0}"), KeyCode);
                                             break;
 
                                         case Robot.KeyBoardType.Up:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_125), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyUp", "弹起 {0}"), KeyCode);
                                             break;
 
                                         case Robot.KeyBoardType.Combine:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_130), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyCombine", "组合按键 {0}"), KeyCode);
                                             break;
 
                                         case Robot.KeyBoardType.Text:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_131), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyText", "文本 {0}"), KeyCode);
                                             break;
                                     }
                                 }
@@ -12467,51 +12450,51 @@ namespace WPE.Lib
                                     switch (mType)
                                     {
                                         case Robot.MouseType.LeftClick:
-                                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_117);
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.LeftClick", "左键单击");
                                             break;
 
                                         case Robot.MouseType.RightClick:
-                                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_118);
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.RightClick", "右键单击");
                                             break;
 
                                         case Robot.MouseType.LeftDBClick:
-                                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_119);
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.LeftDBClick", "左键双击");
                                             break;
 
                                         case Robot.MouseType.RightDBClick:
-                                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_120);
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.RightDBClick", "右键双击");
                                             break;
 
                                         case Robot.MouseType.LeftDown:
-                                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_126);
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.LeftDown", "左键按下");
                                             break;
 
                                         case Robot.MouseType.LeftUp:
-                                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_127);
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.LeftUp", "左键弹起");
                                             break;
 
                                         case Robot.MouseType.RightDown:
-                                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_128);
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.RightDown", "右键按下");
                                             break;
 
                                         case Robot.MouseType.RightUp:
-                                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_129);
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.RightUp", "右键弹起");
                                             break;
 
                                         case Robot.MouseType.WheelUp:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_121), MouseCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.WheelUp", "向上滚动 {0}"), MouseCode);
                                             break;
 
                                         case Robot.MouseType.WheelDown:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_122), MouseCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.WheelDown", "向下滚动 {0}"), MouseCode);
                                             break;
 
                                         case Robot.MouseType.MoveTo:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_108), MouseCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.MoveTo", "移动到 ( {0} )"), MouseCode);
                                             break;
 
                                         case Robot.MouseType.MoveBy:
-                                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_132), MouseCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.MoveBy", "相对移动 ( {0} )"), MouseCode);
                                             break;
                                     }
                                 }
@@ -12589,25 +12572,187 @@ namespace WPE.Lib
 
                 #endregion
 
+                #region//新增指令集
+
+                public static void AddRobotInstruction(
+                    BindingList<InstructionInfo> RInstruction, 
+                    RobotConfig.Robot.InstructionType instructionType, 
+                    string InstContent)
+                {
+                    try
+                    {
+                        InstructionInfo ii = new InstructionInfo(instructionType, InstContent);
+                        RInstruction.Add(ii);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//获取指令集的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_RobotInstruction()
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                    {
+                        ID = "Top",
+                        IconSvg = "VerticalAlignTopOutlined",
+                        LocalizationText = "InjectModeForm.cmsFilterList.Top",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                    {
+                        ID = "Up",
+                        IconSvg = "ArrowUpOutlined",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                    {
+                        ID = "Down",
+                        IconSvg = "ArrowDownOutlined",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                    {
+                        ID = "Bottom",
+                        IconSvg = "VerticalAlignBottomOutlined",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("删除")
+                    {
+                        ID = "Delete",
+                        IconSvg = "CloseOutlined",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("清空所有指令")
+                    {
+                        ID = "ClearUp",
+                        IconSvg = "DeleteOutlined",
+                    });
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
+
+                #region//指令集的列表操作
+
+                public static void UpdateInstruction_ByListAction(
+                    Form form, 
+                    Operate.SystemConfig.ListAction listAction, 
+                    BindingList<InstructionInfo> RInstruction,
+                    List<InstructionInfo> iiList)
+                {
+                    try
+                    {
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                foreach (InstructionInfo ii in iiList)
+                                {
+                                    RInstruction.Remove(ii);
+                                    RInstruction.Insert(0, ii);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                foreach (InstructionInfo ii in iiList)
+                                {
+                                    int iIndex = RInstruction.IndexOf(ii);
+                                    if (iIndex > 0)
+                                    {
+                                        RInstruction.Remove(ii);
+                                        RInstruction.Insert(iIndex - 1, ii);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                foreach (InstructionInfo ii in iiList)
+                                {
+                                    int iIndex = RInstruction.IndexOf(ii);
+                                    if (iIndex > -1 && iIndex < RInstruction.Count - 1)
+                                    {
+                                        RInstruction.Remove(ii);
+                                        RInstruction.Insert(iIndex + 1, ii);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                foreach (InstructionInfo ii in iiList)
+                                {
+                                    RInstruction.Remove(ii);
+                                    RInstruction.Add(ii);
+                                }
+
+                                break;                            
+
+                            case SystemConfig.ListAction.Delete:
+
+                                foreach (InstructionInfo ii in iiList)
+                                {
+                                    RInstruction.Remove(ii);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.CleanUp:
+
+                                if (RInstruction.Count > 0)
+                                {
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotInstruction", "指令集列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                                    {
+                                        Icon = TType.Warn,
+                                        Keyboard = false,
+                                        MaskClosable = false,
+                                        OnOk = config =>
+                                        {
+                                            RInstruction.Clear();
+                                            return true;
+                                        }
+                                    });
+                                }
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
                 #region//检查指令集
 
-                public static int CheckRobotInstruction(DataTable dtRInstruction, bool bFromSystem)
+                public static int CheckRobotInstruction(Form form, BindingList<InstructionInfo> RInstruction)
                 {
                     int iReturn = -1;
 
                     try
                     {
-                        if (dtRInstruction != null && dtRInstruction.Rows.Count > 0)
+                        if (RInstruction != null && RInstruction.Count > 0)
                         {
                             List<int> listSendSendList = new List<int>();
                             List<int> listLoopStart = new List<int>();
                             List<int> listLoopEnd = new List<int>();
 
-                            for (int i = 0; i < dtRInstruction.Rows.Count; i++)
+                            for (int i = 0; i < RInstruction.Count; i++)
                             {
-                                Robot.InstructionType instructionType = (Robot.InstructionType)dtRInstruction.Rows[i]["Type"];
-
-                                switch (instructionType)
+                                switch (RInstruction[i].InstType)
                                 {
                                     case Robot.InstructionType.SendSendList:
                                         listSendSendList.Add(i);
@@ -12627,8 +12772,7 @@ namespace WPE.Lib
 
                             foreach (int iSendIndex in listSendSendList)
                             {
-                                string sSendContent = dtRInstruction.Rows[iSendIndex]["Content"].ToString();
-
+                                string sSendContent = RInstruction[iSendIndex].InstContent;
                                 if (!string.IsNullOrEmpty(sSendContent))
                                 {
                                     Guid SID = Guid.Parse(sSendContent);
@@ -12636,11 +12780,12 @@ namespace WPE.Lib
 
                                     if (string.IsNullOrEmpty(SName))
                                     {
-                                        string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iSendIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_103));
-
-                                        if (!bFromSystem)
+                                        if (form != null)
                                         {
-                                            Socket_Operation.ShowMessageBox(sError);
+                                            AntdUI.Message.open(new AntdUI.Message.Config(form, "发送列表不正确", TType.Error)
+                                            {
+                                                LocalizationText = "RobotEditForm.SendList.Error"
+                                            });
                                         }
 
                                         return iSendIndex;
@@ -12664,11 +12809,12 @@ namespace WPE.Lib
                                     iErrorIndex = listLoopEnd[0];
                                 }
 
-                                string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iErrorIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_104));
-
-                                if (!bFromSystem)
+                                if (form != null)
                                 {
-                                    Socket_Operation.ShowMessageBox(sError);
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "循环指令不正确", TType.Error)
+                                    {
+                                        LocalizationText = "RobotEditForm.LoopINST.Error"
+                                    });
                                 }
 
                                 return iErrorIndex;
@@ -12681,11 +12827,12 @@ namespace WPE.Lib
 
                                 if (iLoopStartIndex >= iLoopEndIndex)
                                 {
-                                    string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iLoopEndIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_104));
-
-                                    if (!bFromSystem)
+                                    if (form != null)
                                     {
-                                        Socket_Operation.ShowMessageBox(sError);
+                                        AntdUI.Message.open(new AntdUI.Message.Config(form, "循环指令不正确", TType.Error)
+                                        {
+                                            LocalizationText = "RobotEditForm.LoopINST.Error"
+                                        });
                                     }
 
                                     return iLoopEndIndex;
@@ -12730,20 +12877,20 @@ namespace WPE.Lib
 
                 private static async Task<RobotExecute> DoRobotAsync(Guid RID, Dictionary<string, object> parameters)
                 {
-                    RobotExecute srReturn = null;
+                    RobotExecute reReturn = null;
 
                     try
                     {
                         if (RID != Guid.Empty)
                         {
-                            RobotInfo sri = RobotConfig.List.lstRobotInfo.Where(item => item.RID == RID).FirstOrDefault();
+                            RobotInfo ri = RobotConfig.List.lstRobotInfo.Where(item => item.RID == RID).FirstOrDefault();
 
-                            if (sri != null)
+                            if (ri != null)
                             {
-                                if (sri.RInstruction.Rows.Count > 0)
+                                if (ri.RInstruction.Count > 0)
                                 {
-                                    srReturn = new RobotExecute();
-                                    await Task.Run(() => srReturn.StartRobot(sri.RName, sri.RInstruction, parameters));
+                                    reReturn = new RobotExecute();
+                                    await Task.Run(() => reReturn.StartRobot(ri, parameters));
                                 }
                             }
                         }
@@ -12753,7 +12900,7 @@ namespace WPE.Lib
                         Operate.DoLog(nameof(DoRobotAsync), ex.Message);
                     }
 
-                    return srReturn;
+                    return reReturn;
                 }
 
                 public static void DoRobot_ByHotKey(int HOTKEY_ID)
@@ -12993,20 +13140,18 @@ namespace WPE.Lib
                             Guid RID = Guid.Parse(dataRow["GUID"].ToString());
                             bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
                             string RName = dataRow["Name"].ToString();
+                            BindingList<InstructionInfo> RInstruction = new BindingList<InstructionInfo>();
 
-
-                            DataTable RInstruction = Robot.InitInstructions();
-                            DataTable dtInstruction = DataBase.SelectTable_RobotInstruction(RID);
-
-                            foreach (DataRow row in dtInstruction.Rows)
+                            DataTable dtRInstruction = DataBase.SelectTable_RobotInstruction(RID);
+                            foreach (DataRow row in dtRInstruction.Rows)
                             {
-                                DataRow dr = RInstruction.NewRow();
-                                dr[0] = Robot.GetInstructionType_ByString(row["Type"].ToString());
-                                dr[1] = row["Content"].ToString();
-                                RInstruction.Rows.Add(dr);
+                                RobotConfig.Robot.InstructionType instructionType = RobotConfig.Robot.GetInstructionType_ByString(row["Type"].ToString());
+                                string instructionContent = row["Content"].ToString();
+
+                                RobotConfig.Robot.AddRobotInstruction(RInstruction, instructionType, instructionContent);
                             }
 
-                            Robot.AddRobot(IsEnable, RID, RName, RInstruction);
+                            RobotConfig.Robot.AddRobot(IsEnable, RID, RName, RInstruction);
                         }
                     }
                     catch (Exception ex)
@@ -13142,7 +13287,7 @@ namespace WPE.Lib
                             string IsEnable = ri.IsEnable.ToString();
                             string sRID = ri.RID.ToString().ToUpper();
                             string sRName = ri.RName;
-                            DataTable dtRInstruction = ri.RInstruction;
+                            BindingList<InstructionInfo> RInstruction = ri.RInstruction;
 
                             XElement xeRobot =
                                 new XElement("Robot",
@@ -13151,13 +13296,16 @@ namespace WPE.Lib
                                 new XElement("Name", sRName)
                                 );
 
-                            if (dtRInstruction.Rows.Count > 0)
+                            if (RInstruction.Count > 0)
                             {
                                 XElement xeInstruction = new XElement("Instructions");
 
-                                foreach (DataRow row in dtRInstruction.Rows)
+                                foreach (InstructionInfo ii in RInstruction)
                                 {
-                                    XElement xeInst = new XElement("Inst", new XAttribute("Type", row[0].ToString()), row[1].ToString());
+                                    XElement xeInst = 
+                                        new XElement("Inst", 
+                                        new XAttribute("Type", ii.InstType), ii.InstContent);
+
                                     xeInstruction.Add(xeInst);
                                 }
 
@@ -13306,20 +13454,15 @@ namespace WPE.Lib
                             {
                                 RName = xeRobot.Element("Name").Value;
                             }
+                            
+                            BindingList<InstructionInfo> RInstruction = new BindingList<InstructionInfo>();
 
-                            DataTable RInstruction = Robot.InitInstructions();
                             if (xeRobot.Element("Instructions") != null)
                             {
                                 foreach (XElement xeInstruction in xeRobot.Element("Instructions").Elements())
                                 {
-                                    string sType = xeInstruction.Attribute("Type").Value;
-                                    string sContent = xeInstruction.Value;
-
-                                    DataRow dr = RInstruction.NewRow();
-                                    dr[0] = Robot.GetInstructionType_ByString(sType);
-                                    dr[1] = sContent;
-
-                                    RInstruction.Rows.Add(dr);
+                                    RobotConfig.Robot.InstructionType instructionType = RobotConfig.Robot.GetInstructionType_ByString(xeInstruction.Attribute("Type").Value);                                    
+                                    RobotConfig.Robot.AddRobotInstruction(RInstruction, instructionType, xeInstruction.Value);                                    
                                 }
                             }
 
@@ -14695,7 +14838,7 @@ namespace WPE.Lib
                 }
             }
 
-            public static void InsertTable_Send(SendInfo ssi)
+            public static void InsertTable_Send(SendInfo si)
             {
                 try
                 {
@@ -14723,17 +14866,17 @@ namespace WPE.Lib
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@GUID", ssi.SID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", ssi.IsEnable);
-                            cmd.Parameters.AddWithValue("@Name", ssi.SName);
-                            cmd.Parameters.AddWithValue("@SystemSocket", ssi.SSystemSocket);
-                            cmd.Parameters.AddWithValue("@LoopCNT", ssi.SLoopCNT);
-                            cmd.Parameters.AddWithValue("@LoopINT", ssi.SLoopINT);
-                            cmd.Parameters.AddWithValue("@Notes", ssi.SNotes);
+                            cmd.Parameters.AddWithValue("@GUID", si.SID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
+                            cmd.Parameters.AddWithValue("@Name", si.SName);
+                            cmd.Parameters.AddWithValue("@SystemSocket", si.SSystemSocket);
+                            cmd.Parameters.AddWithValue("@LoopCNT", si.SLoopCNT);
+                            cmd.Parameters.AddWithValue("@LoopINT", si.SLoopINT);
+                            cmd.Parameters.AddWithValue("@Notes", si.SNotes);
                             cmd.ExecuteNonQuery();
                         }
 
-                        foreach (PacketInfo spi in ssi.SCollection)
+                        foreach (PacketInfo pi in si.SCollection)
                         {
                             sql = "INSERT INTO SendCollection (";
                             sql += "GUID,";
@@ -14753,12 +14896,12 @@ namespace WPE.Lib
 
                             using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                             {
-                                cmd.Parameters.AddWithValue("@GUID", ssi.SID.ToString().ToUpper());
-                                cmd.Parameters.AddWithValue("@Socket", spi.PacketSocket);
-                                cmd.Parameters.AddWithValue("@Type", spi.PacketType);
-                                cmd.Parameters.AddWithValue("@IPFrom", spi.PacketFrom);
-                                cmd.Parameters.AddWithValue("@IPTo", spi.PacketTo);
-                                cmd.Parameters.AddWithValue("@Buffer", spi.PacketBuffer);
+                                cmd.Parameters.AddWithValue("@GUID", si.SID.ToString().ToUpper());
+                                cmd.Parameters.AddWithValue("@Socket", pi.PacketSocket);
+                                cmd.Parameters.AddWithValue("@Type", pi.PacketType);
+                                cmd.Parameters.AddWithValue("@IPFrom", pi.PacketFrom);
+                                cmd.Parameters.AddWithValue("@IPTo", pi.PacketTo);
+                                cmd.Parameters.AddWithValue("@Buffer", pi.PacketBuffer);
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -14885,7 +15028,7 @@ namespace WPE.Lib
                 }
             }
 
-            public static void InsertTable_Robot(RobotInfo sri)
+            public static void InsertTable_Robot(RobotInfo ri)
             {
                 try
                 {
@@ -14905,13 +15048,13 @@ namespace WPE.Lib
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@GUID", sri.RID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", sri.IsEnable);
-                            cmd.Parameters.AddWithValue("@Name", sri.RName);
+                            cmd.Parameters.AddWithValue("@GUID", ri.RID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", ri.IsEnable);
+                            cmd.Parameters.AddWithValue("@Name", ri.RName);
                             cmd.ExecuteNonQuery();
                         }
 
-                        foreach (DataRow row in sri.RInstruction.Rows)
+                        foreach (InstructionInfo ii in ri.RInstruction)
                         {
                             sql = "INSERT INTO RobotInstruction (";
                             sql += "GUID,";
@@ -14925,9 +15068,9 @@ namespace WPE.Lib
 
                             using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                             {
-                                cmd.Parameters.AddWithValue("@GUID", sri.RID.ToString().ToUpper());
-                                cmd.Parameters.AddWithValue("@Type", Convert.ToInt32(row["Type"]));
-                                cmd.Parameters.AddWithValue("@Content", row["Content"].ToString());
+                                cmd.Parameters.AddWithValue("@GUID", ri.RID.ToString().ToUpper());
+                                cmd.Parameters.AddWithValue("@Type", ii.InstType);
+                                cmd.Parameters.AddWithValue("@Content", ii.InstContent);
                                 cmd.ExecuteNonQuery();
                             }
                         }

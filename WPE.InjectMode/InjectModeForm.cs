@@ -115,6 +115,11 @@ namespace WPE.InjectMode
             this.tSendList.Refresh();
         }
 
+        public void RefreshRobotList()
+        {
+            this.tRobotList.Refresh();
+        }
+
         #endregion
 
         #region//初始化数据表
@@ -122,7 +127,13 @@ namespace WPE.InjectMode
         private void InitTable_PacketList()
         {
             tPacketList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("PacketImg", string.Empty, AntdUI.ColumnAlign.Center).SetFixed(),
+                new AntdUI.Column("PacketImg", string.Empty, AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellImage((Image)value);
+                    },
+                }.SetFixed(),
                 new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -222,7 +233,16 @@ namespace WPE.InjectMode
                         }
                     },
                 }.SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.FromArgb(22, 119, 255),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
                 new AntdUI.Column("Appoint", "指定类型")
                 {
                     Render = (value, record, rowindex)=>
@@ -312,7 +332,17 @@ namespace WPE.InjectMode
                         return null;
                     },
                 }.SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("CellLinks", "操作").SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
+                            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Column."),
             };
 
             this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));           
@@ -344,13 +374,9 @@ namespace WPE.InjectMode
                             if(si.IsEnable)
                             {
                                 cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
-
-                                if(int.TryParse(si.ExecutionCount.Text.Trim(), out int iCNT))
+                                if(si.ExecutionCount > 0)
                                 {
-                                    if(iCNT > 0)
-                                    {
-                                        cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
-                                    }
+                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
                                 }
                             }
                             else
@@ -364,9 +390,36 @@ namespace WPE.InjectMode
                         return null;
                     },
                 }.SetLocalizationTitleID("Table.SendList.Column."),
-                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.SendList.Column."),
-                new AntdUI.Column("ExecutionSuccess", "成功次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.SendList.Column."),
-                new AntdUI.Column("ExecutionFail", "失败次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.FromArgb(22, 119, 255),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("ExecutionSuccess", "成功次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.Green,
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("ExecutionFail", "失败次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.Red,
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
                 new AntdUI.Column("SSystemSocket", "套接字", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -401,7 +454,17 @@ namespace WPE.InjectMode
                 {
                     LineBreak = true,
                 }.SetLocalizationTitleID("Table.SendList.Column."),
-                new AntdUI.Column("CellLinks", "操作").SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
+                            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.SendList.Column."),
             };
 
             this.tSendList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -433,13 +496,9 @@ namespace WPE.InjectMode
                             if(ri.IsEnable)
                             {
                                 cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
-
-                                if(int.TryParse(ri.ExecutionCount.Text.Trim(), out int iCNT))
+                                if(ri.ExecutionCount > 0)
                                 {
-                                    if(iCNT > 0)
-                                    {
-                                        cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
-                                    }
+                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
                                 }
                             }
                             else
@@ -453,8 +512,27 @@ namespace WPE.InjectMode
                         return null;
                     },
                 }.SetLocalizationTitleID("Table.RobotList.Column."),
-                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.RobotList.Column."),                
-                new AntdUI.Column("CellLinks", "操作").SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.FromArgb(22, 119, 255),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.RobotList.Column."),                
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
+                            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.RobotList.Column."),
             };
 
             this.tRobotList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));

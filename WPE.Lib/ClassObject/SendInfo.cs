@@ -1,7 +1,6 @@
 ﻿using AntdUI;
 using System;
 using System.ComponentModel;
-using System.Drawing;
 
 namespace WPE.Lib
 {
@@ -60,12 +59,9 @@ namespace WPE.Lib
 
         #region//已执行次数
 
-        CellText _ExecutionCount = new CellText("0")
-        {
-            Fore = Color.Blue,
-        };
+        long _ExecutionCount;
 
-        public CellText ExecutionCount
+        public long ExecutionCount
         {
             get => _ExecutionCount;
             set
@@ -80,12 +76,9 @@ namespace WPE.Lib
 
         #region//成功次数
 
-        CellText _ExecutionSuccess = new CellText("0")
-        {
-            Fore = Color.Green,
-        };
+        long _ExecutionSuccess;
 
-        public CellText ExecutionSuccess
+        public long ExecutionSuccess
         {
             get => _ExecutionSuccess;
             set
@@ -100,12 +93,9 @@ namespace WPE.Lib
 
         #region//失败次数
 
-        CellText _ExecutionFail = new CellText("0")
-        {
-            Fore = Color.DarkRed,
-        };
+        long _ExecutionFail;
 
-        public CellText ExecutionFail
+        public long ExecutionFail
         {
             get => _ExecutionFail;
             set
@@ -201,26 +191,6 @@ namespace WPE.Lib
             }
         }
 
-        #endregion
-
-        #region//列表操作
-
-        AntdUI.CellLink[] _CellLinks = new AntdUI.CellLink[]
-        {
-            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
-            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
-        };
-
-        public AntdUI.CellLink[] CellLinks
-        {
-            get => _CellLinks;
-            set
-            {
-                _CellLinks = value;
-                OnPropertyChanged();
-            }
-        }
-
         #endregion        
 
         #region//SendInfo
@@ -243,33 +213,9 @@ namespace WPE.Lib
             this._SLoopINT = SLoopINT;
             this._SCollection = SCollection;
             this._SNotes = SNotes;
-        }
-
-        public void AddExecutionCount()
-        {
-            if (int.TryParse(this._ExecutionCount.Text.Trim(), out int iCNT))
-            {
-                iCNT++;
-                this._ExecutionCount.Text = iCNT.ToString();
-            }
-        }
-
-        public void AddExecutionSuccess()
-        {
-            if (int.TryParse(this._ExecutionSuccess.Text.Trim(), out int iCNT))
-            {
-                iCNT++;
-                this._ExecutionSuccess.Text = iCNT.ToString();
-            }
-        }
-
-        public void AddExecutionFail()
-        {
-            if (int.TryParse(this._ExecutionFail.Text.Trim(), out int iCNT))
-            {
-                iCNT++;
-                this._ExecutionFail.Text = iCNT.ToString();
-            }
+            this._ExecutionCount = 0;
+            this._ExecutionSuccess = 0;
+            this._ExecutionFail = 0;
         }
 
         #endregion

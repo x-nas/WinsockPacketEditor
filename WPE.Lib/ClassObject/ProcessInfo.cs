@@ -7,9 +7,9 @@ namespace WPE.Lib
     {
         #region//进程图标
 
-        AntdUI.CellImage _ICO;
+        Image _ICO;
 
-        public AntdUI.CellImage ICO
+        public Image ICO
         {
             get => _ICO;
             set
@@ -76,14 +76,10 @@ namespace WPE.Lib
 
         public ProcessInfo(Image ico, string processName, int processID, string processPath)
         {
-            ICO = new AntdUI.CellImage(ico)
-            {
-                Size = new Size(45, 45),
-            };
-
-            ProcessName = processName;
-            ProcessID = processID;
-            ProcessPath = processPath;
+            this._ICO = ico;
+            this._ProcessName = processName;
+            this._ProcessID = processID;
+            this._ProcessPath = processPath;
         }
 
         #endregion

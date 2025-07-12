@@ -640,7 +640,7 @@
     <value>0</value>
   </data>
   <data name="tlpSend_SocketList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lSend_SocketList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="bSend_SocketList" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,Absolute,20,Absolute,20" /&gt;&lt;Rows Styles="Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lSend_SocketList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="bSend_SocketList" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,Absolute,20,Absolute,160" /&gt;&lt;Rows Styles="Absolute,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbSend_SocketList.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 83</value>

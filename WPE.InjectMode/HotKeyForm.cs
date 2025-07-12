@@ -18,6 +18,31 @@ namespace WPE.InjectMode
         {
             this.Text = AntdUI.Localization.Get("HotKeyForm", "快捷键设置");
 
+            this.txtHotKey1.BackColor = null;
+            this.txtHotKey1.ForeColor = null;
+            this.txtHotKey2.BackColor = null;
+            this.txtHotKey2.ForeColor = null;
+            this.txtHotKey3.BackColor = null;
+            this.txtHotKey3.ForeColor = null;
+            this.txtHotKey4.BackColor = null;
+            this.txtHotKey4.ForeColor = null;
+            this.txtHotKey5.BackColor = null;
+            this.txtHotKey5.ForeColor = null;
+            this.txtHotKey6.BackColor = null;
+            this.txtHotKey6.ForeColor = null;
+            this.txtHotKey7.BackColor = null;
+            this.txtHotKey7.ForeColor = null;
+            this.txtHotKey8.BackColor = null;
+            this.txtHotKey8.ForeColor = null;
+            this.txtHotKey9.BackColor = null;
+            this.txtHotKey9.ForeColor = null;
+            this.txtHotKey10.BackColor = null;
+            this.txtHotKey10.ForeColor = null;
+            this.txtHotKey11.BackColor = null;
+            this.txtHotKey11.ForeColor = null;
+            this.txtHotKey12.BackColor = null;
+            this.txtHotKey12.ForeColor = null;
+
             this.txtHotKey1.Text = Operate.PacketConfig.Packet.HotKey1;
             this.txtHotKey2.Text = Operate.PacketConfig.Packet.HotKey2;
             this.txtHotKey3.Text = Operate.PacketConfig.Packet.HotKey3;

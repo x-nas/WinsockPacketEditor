@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.Drawing;
 
 namespace WPE.Lib
 {
@@ -24,9 +25,9 @@ namespace WPE.Lib
 
         #region//封包图标
 
-        AntdUI.CellImage _PacketImg;
+        Image _PacketImg;
 
-        public AntdUI.CellImage PacketImg
+        public Image PacketImg
         {
             get => _PacketImg;
             set
@@ -198,7 +199,16 @@ namespace WPE.Lib
             //
         }
 
-        public PacketInfo(DateTime pTime, int pSocket, Operate.PacketConfig.Packet.PacketType pType, string pFrom, string pTo, byte[] pRawBuffer, byte[] pBuffer, int pLen, Operate.FilterConfig.Filter.FilterAction pAction)
+        public PacketInfo(
+            DateTime pTime, 
+            int pSocket, 
+            Operate.PacketConfig.Packet.PacketType pType, 
+            string pFrom, 
+            string pTo, 
+            byte[] pRawBuffer, 
+            byte[] pBuffer, 
+            int pLen, 
+            Operate.FilterConfig.Filter.FilterAction pAction)
         {  
             this._PacketTime = pTime;            
             this._PacketSocket = pSocket;          
@@ -209,7 +219,7 @@ namespace WPE.Lib
             this._PacketBuffer = pBuffer;
             this._PacketLen = pLen;
             this._FilterAction = pAction;
-            this._PacketImg = new AntdUI.CellImage(Operate.PacketConfig.Packet.GetImg_ByPacketType(pType));
+            this._PacketImg = Operate.PacketConfig.Packet.GetImg_ByPacketType(pType);
         }
 
         #endregion        
