@@ -61,11 +61,9 @@ namespace WPE.InjectMode
             this.InitTable_LogList();
             this.InitComparison();
             this.InitExtraction();
-
-            this.hbPacketData.ByteProvider = new DynamicByteProvider(new byte[0]);
+            
             this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
             this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
-
             this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
