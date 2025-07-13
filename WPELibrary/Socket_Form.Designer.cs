@@ -29,6 +29,7 @@ namespace WPELibrary
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -95,7 +96,7 @@ namespace WPELibrary
             this.cTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsSocketList_Send = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSocketList_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsSocketList_SendList = new System.Windows.Forms.ToolStripMenuItem();
@@ -238,7 +239,7 @@ namespace WPELibrary
             this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
             this.tlpHexBox = new System.Windows.Forms.TableLayoutPanel();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
-            this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsHexBox_Send = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsHexBox_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsHexBox_SendList = new System.Windows.Forms.ToolStripMenuItem();
@@ -321,7 +322,7 @@ namespace WPELibrary
             this.tlpExtraction = new System.Windows.Forms.TableLayoutPanel();
             this.pExtraction = new System.Windows.Forms.Panel();
             this.rtbExtraction = new System.Windows.Forms.RichTextBox();
-            this.cmsExtraction = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsExtraction = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsExtraction_Export = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpExtraction_Button = new System.Windows.Forms.TableLayoutPanel();
             this.bExtraction = new System.Windows.Forms.Button();
@@ -332,7 +333,7 @@ namespace WPELibrary
             this.cLogTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLogContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsLogList = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsLogList_CleanUp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsLogList_ToExcel = new System.Windows.Forms.ToolStripMenuItem();
@@ -343,7 +344,7 @@ namespace WPELibrary
             this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cFilterICO = new System.Windows.Forms.DataGridViewImageColumn();
             this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsFilterList_Top = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsFilterList_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsFilterList_Up = new System.Windows.Forms.ToolStripMenuItem();
@@ -369,7 +370,7 @@ namespace WPELibrary
             this.cIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cICO = new System.Windows.Forms.DataGridViewImageColumn();
             this.cName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsSendList = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsSendList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsSendList_Top = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsSendList_Up = new System.Windows.Forms.ToolStripMenuItem();
@@ -395,7 +396,7 @@ namespace WPELibrary
             this.cRIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cImg = new System.Windows.Forms.DataGridViewImageColumn();
             this.cRName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsRobotList = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsRobotList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsRobotList_Top = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsRobotList_Split1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsRobotList_Up = new System.Windows.Forms.ToolStripMenuItem();
@@ -423,9 +424,9 @@ namespace WPELibrary
             this.tsslWinSock = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslSplit3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslTotalBytes = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tSocketInfo = new System.Windows.Forms.Timer();
-            this.niWPE = new System.Windows.Forms.NotifyIcon();
-            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip();
+            this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
+            this.niWPE = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsIcon_Show = new System.Windows.Forms.ToolStripMenuItem();
             this.tss17 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_StartHook = new System.Windows.Forms.ToolStripMenuItem();
@@ -434,7 +435,7 @@ namespace WPELibrary
             this.cmsIcon_CleanUp = new System.Windows.Forms.ToolStripMenuItem();
             this.tss19 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tSocketList = new System.Windows.Forms.Timer();
+            this.tSocketList = new System.Windows.Forms.Timer(this.components);
             this.ofdExtraction = new System.Windows.Forms.OpenFileDialog();
             this.sfdExtraction = new System.Windows.Forms.SaveFileDialog();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();

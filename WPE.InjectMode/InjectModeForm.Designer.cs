@@ -168,20 +168,11 @@
             this.pXOR_From = new AntdUI.Panel();
             this.hbXOR_From = new Be.Windows.Forms.HexBox();
             this.tpTranscoding = new AntdUI.TabPage();
-            this.tpExtraction = new AntdUI.TabPage();
-            this.tpSystemLog = new AntdUI.TabPage();
-            this.tSystemLog = new AntdUI.Table();
-            this.timerPacketList = new System.Windows.Forms.Timer(this.components);
-            this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
-            this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
-            this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
-            this.bgwSendList = new System.ComponentModel.BackgroundWorker();
-            this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
             this.tlpTranscoding = new System.Windows.Forms.TableLayoutPanel();
             this.tlpTranscoding_Button = new System.Windows.Forms.TableLayoutPanel();
-            this.txtTranscoding = new AntdUI.Input();
             this.bEncoding = new AntdUI.Button();
             this.bDecoding = new AntdUI.Button();
+            this.txtTranscoding = new AntdUI.Input();
             this.pTranscoding_Result = new AntdUI.Panel();
             this.tlpTranscoding_Result = new System.Windows.Forms.TableLayoutPanel();
             this.txtANSIbase64 = new AntdUI.Input();
@@ -212,6 +203,23 @@
             this.lUTF7 = new AntdUI.Label();
             this.lBytes = new AntdUI.Label();
             this.txtBytes = new AntdUI.Input();
+            this.tpExtraction = new AntdUI.TabPage();
+            this.splitterExtraction = new AntdUI.Splitter();
+            this.tlpExtractionSelectFile = new System.Windows.Forms.TableLayoutPanel();
+            this.ddlExtraction = new AntdUI.Select();
+            this.udExtraction = new AntdUI.UploadDragger();
+            this.tlpExtractionData = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpExtractionButton = new System.Windows.Forms.TableLayoutPanel();
+            this.button1 = new AntdUI.Button();
+            this.txtExtraction = new AntdUI.Input();
+            this.tpSystemLog = new AntdUI.TabPage();
+            this.tSystemLog = new AntdUI.Table();
+            this.timerPacketList = new System.Windows.Forms.Timer(this.components);
+            this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
+            this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
+            this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
+            this.bgwSendList = new System.ComponentModel.BackgroundWorker();
+            this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -245,11 +253,19 @@
             this.pXOR_To.SuspendLayout();
             this.pXOR_From.SuspendLayout();
             this.tpTranscoding.SuspendLayout();
-            this.tpSystemLog.SuspendLayout();
             this.tlpTranscoding.SuspendLayout();
             this.tlpTranscoding_Button.SuspendLayout();
             this.pTranscoding_Result.SuspendLayout();
             this.tlpTranscoding_Result.SuspendLayout();
+            this.tpExtraction.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitterExtraction)).BeginInit();
+            this.splitterExtraction.Panel1.SuspendLayout();
+            this.splitterExtraction.Panel2.SuspendLayout();
+            this.splitterExtraction.SuspendLayout();
+            this.tlpExtractionSelectFile.SuspendLayout();
+            this.tlpExtractionData.SuspendLayout();
+            this.tlpExtractionButton.SuspendLayout();
+            this.tpSystemLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -432,7 +448,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -446,7 +462,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 7;
+            this.tabInjectMode.SelectedIndex = 8;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -2058,75 +2074,11 @@
             // tpTranscoding
             // 
             this.tpTranscoding.Controls.Add(this.tlpTranscoding);
-            this.tpTranscoding.Location = new System.Drawing.Point(3, 33);
+            this.tpTranscoding.Location = new System.Drawing.Point(-1124, -724);
             this.tpTranscoding.Name = "tpTranscoding";
             this.tpTranscoding.Size = new System.Drawing.Size(1124, 724);
             this.tpTranscoding.TabIndex = 4;
             this.tpTranscoding.Text = "编码转换";
-            // 
-            // tpExtraction
-            // 
-            this.tpExtraction.Location = new System.Drawing.Point(0, 0);
-            this.tpExtraction.Name = "tpExtraction";
-            this.tpExtraction.Size = new System.Drawing.Size(0, 0);
-            this.tpExtraction.TabIndex = 5;
-            this.tpExtraction.Text = "数据提取";
-            // 
-            // tpSystemLog
-            // 
-            this.tpSystemLog.Controls.Add(this.tSystemLog);
-            this.tpSystemLog.Location = new System.Drawing.Point(0, 0);
-            this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(0, 0);
-            this.tpSystemLog.TabIndex = 6;
-            this.tpSystemLog.Text = "系统日志";
-            // 
-            // tSystemLog
-            // 
-            this.tSystemLog.Bordered = true;
-            this.tSystemLog.CellImpactHeight = false;
-            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tSystemLog.EmptyHeader = true;
-            this.tSystemLog.Gap = 8;
-            this.tSystemLog.GapCell = 0;
-            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
-            this.tSystemLog.Name = "tSystemLog";
-            this.tSystemLog.Size = new System.Drawing.Size(0, 0);
-            this.tSystemLog.TabIndex = 2;
-            this.tSystemLog.Text = "table1";
-            // 
-            // timerPacketList
-            // 
-            this.timerPacketList.Enabled = true;
-            this.timerPacketList.Interval = 10;
-            this.timerPacketList.Tick += new System.EventHandler(this.timerPacketList_Tick);
-            // 
-            // timerPacketListInfo
-            // 
-            this.timerPacketListInfo.Enabled = true;
-            this.timerPacketListInfo.Interval = 1000;
-            this.timerPacketListInfo.Tick += new System.EventHandler(this.timerPacketListInfo_Tick);
-            // 
-            // bgwSearchPacketList
-            // 
-            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
-            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
-            // 
-            // bgwPacketList
-            // 
-            this.bgwPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketList_DoWork);
-            // 
-            // bgwSendList
-            // 
-            this.bgwSendList.WorkerSupportsCancellation = true;
-            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
-            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
-            // 
-            // bgwRobotList
-            // 
-            this.bgwRobotList.WorkerSupportsCancellation = true;
-            this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
-            this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
             // tlpTranscoding
             // 
@@ -2166,17 +2118,6 @@
             this.tlpTranscoding_Button.Size = new System.Drawing.Size(144, 718);
             this.tlpTranscoding_Button.TabIndex = 2;
             // 
-            // txtTranscoding
-            // 
-            this.txtTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtTranscoding.Location = new System.Drawing.Point(3, 3);
-            this.txtTranscoding.Multiline = true;
-            this.txtTranscoding.Name = "txtTranscoding";
-            this.txtTranscoding.PlaceholderText = "请输入文本";
-            this.txtTranscoding.Size = new System.Drawing.Size(286, 718);
-            this.txtTranscoding.TabIndex = 4;
-            this.txtTranscoding.TextChanged += new System.EventHandler(this.txtTranscoding_TextChanged);
-            // 
             // bEncoding
             // 
             this.bEncoding.BackExtend = "135, #0fd850, #3cba92";
@@ -2204,6 +2145,17 @@
             this.bDecoding.Text = "解码";
             this.bDecoding.Type = AntdUI.TTypeMini.Warn;
             this.bDecoding.Click += new System.EventHandler(this.bDecoding_Click);
+            // 
+            // txtTranscoding
+            // 
+            this.txtTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtTranscoding.Location = new System.Drawing.Point(3, 3);
+            this.txtTranscoding.Multiline = true;
+            this.txtTranscoding.Name = "txtTranscoding";
+            this.txtTranscoding.PlaceholderText = "请输入文本";
+            this.txtTranscoding.Size = new System.Drawing.Size(286, 718);
+            this.txtTranscoding.TabIndex = 4;
+            this.txtTranscoding.TextChanged += new System.EventHandler(this.txtTranscoding_TextChanged);
             // 
             // pTranscoding_Result
             // 
@@ -2541,6 +2493,190 @@
             this.txtBytes.Size = new System.Drawing.Size(537, 43);
             this.txtBytes.TabIndex = 61;
             // 
+            // tpExtraction
+            // 
+            this.tpExtraction.Controls.Add(this.splitterExtraction);
+            this.tpExtraction.Location = new System.Drawing.Point(3, 33);
+            this.tpExtraction.Name = "tpExtraction";
+            this.tpExtraction.Size = new System.Drawing.Size(1124, 724);
+            this.tpExtraction.TabIndex = 5;
+            this.tpExtraction.Text = "数据提取";
+            // 
+            // splitterExtraction
+            // 
+            this.splitterExtraction.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
+            this.splitterExtraction.Cursor = System.Windows.Forms.Cursors.Default;
+            this.splitterExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitterExtraction.Location = new System.Drawing.Point(0, 0);
+            this.splitterExtraction.Name = "splitterExtraction";
+            this.splitterExtraction.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitterExtraction.Panel1
+            // 
+            this.splitterExtraction.Panel1.Controls.Add(this.tlpExtractionSelectFile);
+            this.splitterExtraction.Panel1MinSize = 0;
+            // 
+            // splitterExtraction.Panel2
+            // 
+            this.splitterExtraction.Panel2.Controls.Add(this.tlpExtractionData);
+            this.splitterExtraction.Panel2MinSize = 0;
+            this.splitterExtraction.Size = new System.Drawing.Size(1124, 724);
+            this.splitterExtraction.SplitterDistance = 300;
+            this.splitterExtraction.SplitterSize = 80;
+            this.splitterExtraction.SplitterWidth = 10;
+            this.splitterExtraction.TabIndex = 0;
+            // 
+            // tlpExtractionSelectFile
+            // 
+            this.tlpExtractionSelectFile.ColumnCount = 1;
+            this.tlpExtractionSelectFile.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionSelectFile.Controls.Add(this.ddlExtraction, 0, 0);
+            this.tlpExtractionSelectFile.Controls.Add(this.udExtraction, 0, 1);
+            this.tlpExtractionSelectFile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpExtractionSelectFile.Location = new System.Drawing.Point(0, 0);
+            this.tlpExtractionSelectFile.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpExtractionSelectFile.Name = "tlpExtractionSelectFile";
+            this.tlpExtractionSelectFile.RowCount = 2;
+            this.tlpExtractionSelectFile.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpExtractionSelectFile.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionSelectFile.Size = new System.Drawing.Size(1124, 300);
+            this.tlpExtractionSelectFile.TabIndex = 0;
+            // 
+            // ddlExtraction
+            // 
+            this.ddlExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlExtraction.Location = new System.Drawing.Point(3, 3);
+            this.ddlExtraction.Name = "ddlExtraction";
+            this.ddlExtraction.PlaceholderText = "请选择提取类型";
+            this.ddlExtraction.Size = new System.Drawing.Size(1118, 44);
+            this.ddlExtraction.TabIndex = 2;
+            this.ddlExtraction.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlExtraction_SelectedIndexChanged);
+            // 
+            // udExtraction
+            // 
+            this.udExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.udExtraction.Location = new System.Drawing.Point(3, 53);
+            this.udExtraction.Multiselect = false;
+            this.udExtraction.Name = "udExtraction";
+            this.udExtraction.Size = new System.Drawing.Size(1118, 244);
+            this.udExtraction.TabIndex = 1;
+            this.udExtraction.Text = "单击或拖动文件到此区域进行数据提取";
+            this.udExtraction.TextDesc = "提取成功后会在下方显示数据内容，点击生成按钮可导出对应格式的数据文件.";
+            // 
+            // tlpExtractionData
+            // 
+            this.tlpExtractionData.ColumnCount = 1;
+            this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionData.Controls.Add(this.tlpExtractionButton, 0, 1);
+            this.tlpExtractionData.Controls.Add(this.txtExtraction, 0, 0);
+            this.tlpExtractionData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpExtractionData.Location = new System.Drawing.Point(0, 0);
+            this.tlpExtractionData.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpExtractionData.Name = "tlpExtractionData";
+            this.tlpExtractionData.RowCount = 2;
+            this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpExtractionData.Size = new System.Drawing.Size(1124, 414);
+            this.tlpExtractionData.TabIndex = 0;
+            // 
+            // tlpExtractionButton
+            // 
+            this.tlpExtractionButton.ColumnCount = 3;
+            this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpExtractionButton.Controls.Add(this.button1, 1, 1);
+            this.tlpExtractionButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpExtractionButton.Location = new System.Drawing.Point(0, 354);
+            this.tlpExtractionButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpExtractionButton.Name = "tlpExtractionButton";
+            this.tlpExtractionButton.RowCount = 3;
+            this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpExtractionButton.Size = new System.Drawing.Size(1124, 60);
+            this.tlpExtractionButton.TabIndex = 2;
+            // 
+            // button1
+            // 
+            this.button1.BackExtend = "135, #6253E1, #04BEFE";
+            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button1.IconSvg = "SaveOutlined";
+            this.button1.Location = new System.Drawing.Point(490, 8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(144, 44);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "生成文件";
+            this.button1.Type = AntdUI.TTypeMini.Primary;
+            this.button1.Click += new System.EventHandler(this.bExtraction_Click);
+            // 
+            // txtExtraction
+            // 
+            this.txtExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtExtraction.Location = new System.Drawing.Point(3, 3);
+            this.txtExtraction.Multiline = true;
+            this.txtExtraction.Name = "txtExtraction";
+            this.txtExtraction.ReadOnly = true;
+            this.txtExtraction.Size = new System.Drawing.Size(1118, 348);
+            this.txtExtraction.TabIndex = 1;
+            // 
+            // tpSystemLog
+            // 
+            this.tpSystemLog.Controls.Add(this.tSystemLog);
+            this.tpSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.Size = new System.Drawing.Size(0, 0);
+            this.tpSystemLog.TabIndex = 6;
+            this.tpSystemLog.Text = "系统日志";
+            // 
+            // tSystemLog
+            // 
+            this.tSystemLog.Bordered = true;
+            this.tSystemLog.CellImpactHeight = false;
+            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSystemLog.EmptyHeader = true;
+            this.tSystemLog.Gap = 8;
+            this.tSystemLog.GapCell = 0;
+            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tSystemLog.Name = "tSystemLog";
+            this.tSystemLog.Size = new System.Drawing.Size(0, 0);
+            this.tSystemLog.TabIndex = 2;
+            this.tSystemLog.Text = "table1";
+            // 
+            // timerPacketList
+            // 
+            this.timerPacketList.Enabled = true;
+            this.timerPacketList.Interval = 10;
+            this.timerPacketList.Tick += new System.EventHandler(this.timerPacketList_Tick);
+            // 
+            // timerPacketListInfo
+            // 
+            this.timerPacketListInfo.Enabled = true;
+            this.timerPacketListInfo.Interval = 1000;
+            this.timerPacketListInfo.Tick += new System.EventHandler(this.timerPacketListInfo_Tick);
+            // 
+            // bgwSearchPacketList
+            // 
+            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
+            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
+            // 
+            // bgwPacketList
+            // 
+            this.bgwPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketList_DoWork);
+            // 
+            // bgwSendList
+            // 
+            this.bgwSendList.WorkerSupportsCancellation = true;
+            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
+            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
+            // 
+            // bgwRobotList
+            // 
+            this.bgwRobotList.WorkerSupportsCancellation = true;
+            this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
+            this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
+            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -2597,11 +2733,19 @@
             this.pXOR_To.ResumeLayout(false);
             this.pXOR_From.ResumeLayout(false);
             this.tpTranscoding.ResumeLayout(false);
-            this.tpSystemLog.ResumeLayout(false);
             this.tlpTranscoding.ResumeLayout(false);
             this.tlpTranscoding_Button.ResumeLayout(false);
             this.pTranscoding_Result.ResumeLayout(false);
             this.tlpTranscoding_Result.ResumeLayout(false);
+            this.tpExtraction.ResumeLayout(false);
+            this.splitterExtraction.Panel1.ResumeLayout(false);
+            this.splitterExtraction.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitterExtraction)).EndInit();
+            this.splitterExtraction.ResumeLayout(false);
+            this.tlpExtractionSelectFile.ResumeLayout(false);
+            this.tlpExtractionData.ResumeLayout(false);
+            this.tlpExtractionButton.ResumeLayout(false);
+            this.tpSystemLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2753,5 +2897,13 @@
         private AntdUI.Label lUTF7;
         private AntdUI.Label lBytes;
         private AntdUI.Input txtBytes;
+        private AntdUI.Splitter splitterExtraction;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionData;
+        private AntdUI.Input txtExtraction;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionSelectFile;
+        private AntdUI.Select ddlExtraction;
+        private AntdUI.UploadDragger udExtraction;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
+        private AntdUI.Button button1;
     }
 }
