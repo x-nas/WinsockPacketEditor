@@ -116,6 +116,8 @@
             this.sPacketList = new AntdUI.Segmented();
             this.splitterPacketList = new AntdUI.Splitter();
             this.tPacketList = new AntdUI.Table();
+            this.pPacketData = new AntdUI.Panel();
+            this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.tlpProcessInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lSpeedInfo = new AntdUI.Label();
             this.lSplit3 = new AntdUI.Label();
@@ -165,8 +167,16 @@
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
-            this.pPacketData = new AntdUI.Panel();
-            this.hbPacketData = new Be.Windows.Forms.HexBox();
+            this.tlpXOR = new System.Windows.Forms.TableLayoutPanel();
+            this.pXOR_From = new AntdUI.Panel();
+            this.pXOR_To = new AntdUI.Panel();
+            this.hbXOR_From = new Be.Windows.Forms.HexBox();
+            this.hbXOR_To = new Be.Windows.Forms.HexBox();
+            this.tlpPacketInfo_XOR_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new AntdUI.Label();
+            this.bXOR = new AntdUI.Button();
+            this.bXOR_ClearUp = new AntdUI.Button();
+            this.txtXOR = new AntdUI.Input();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -177,6 +187,7 @@
             this.splitterPacketList.Panel1.SuspendLayout();
             this.splitterPacketList.Panel2.SuspendLayout();
             this.splitterPacketList.SuspendLayout();
+            this.pPacketData.SuspendLayout();
             this.tlpProcessInfo.SuspendLayout();
             this.tpFilterList.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
@@ -193,8 +204,12 @@
             this.tlpComparisonText.SuspendLayout();
             this.tlpComparisonResult.SuspendLayout();
             this.tlpComparisonButton.SuspendLayout();
+            this.tpXOR.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
-            this.pPacketData.SuspendLayout();
+            this.tlpXOR.SuspendLayout();
+            this.pXOR_From.SuspendLayout();
+            this.pXOR_To.SuspendLayout();
+            this.tlpPacketInfo_XOR_Button.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -377,7 +392,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -391,6 +406,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
+            this.tabInjectMode.SelectedIndex = 6;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -399,7 +415,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
+            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1074,6 +1090,33 @@
             this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
             this.tPacketList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tPacketList_SetRowStyle);
             this.tPacketList.SelectIndexChanged += new System.EventHandler(this.tPacketList_SelectIndexChanged);
+            // 
+            // pPacketData
+            // 
+            this.pPacketData.BorderWidth = 1F;
+            this.pPacketData.Controls.Add(this.hbPacketData);
+            this.pPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pPacketData.Location = new System.Drawing.Point(0, 0);
+            this.pPacketData.Name = "pPacketData";
+            this.pPacketData.Padding = new System.Windows.Forms.Padding(3);
+            this.pPacketData.Size = new System.Drawing.Size(1118, 153);
+            this.pPacketData.TabIndex = 0;
+            // 
+            // hbPacketData
+            // 
+            this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.hbPacketData.ColumnInfoVisible = true;
+            this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbPacketData.LineInfoVisible = true;
+            this.hbPacketData.Location = new System.Drawing.Point(4, 4);
+            this.hbPacketData.Name = "hbPacketData";
+            this.hbPacketData.ReadOnly = true;
+            this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbPacketData.Size = new System.Drawing.Size(1110, 145);
+            this.hbPacketData.StringViewVisible = true;
+            this.hbPacketData.TabIndex = 1;
+            this.hbPacketData.VScrollBarVisible = true;
             // 
             // tlpProcessInfo
             // 
@@ -1812,9 +1855,10 @@
             // 
             // tpXOR
             // 
-            this.tpXOR.Location = new System.Drawing.Point(0, 0);
+            this.tpXOR.Controls.Add(this.tlpXOR);
+            this.tpXOR.Location = new System.Drawing.Point(3, 33);
             this.tpXOR.Name = "tpXOR";
-            this.tpXOR.Size = new System.Drawing.Size(0, 0);
+            this.tpXOR.Size = new System.Drawing.Size(1124, 724);
             this.tpXOR.TabIndex = 3;
             this.tpXOR.Text = "异或计算";
             // 
@@ -1890,32 +1934,158 @@
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
-            // pPacketData
+            // tlpXOR
             // 
-            this.pPacketData.BorderWidth = 1F;
-            this.pPacketData.Controls.Add(this.hbPacketData);
-            this.pPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pPacketData.Location = new System.Drawing.Point(0, 0);
-            this.pPacketData.Name = "pPacketData";
-            this.pPacketData.Padding = new System.Windows.Forms.Padding(3);
-            this.pPacketData.Size = new System.Drawing.Size(1118, 153);
-            this.pPacketData.TabIndex = 0;
+            this.tlpXOR.ColumnCount = 1;
+            this.tlpXOR.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpXOR.Controls.Add(this.tlpPacketInfo_XOR_Button, 0, 1);
+            this.tlpXOR.Controls.Add(this.pXOR_To, 0, 2);
+            this.tlpXOR.Controls.Add(this.pXOR_From, 0, 0);
+            this.tlpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpXOR.Location = new System.Drawing.Point(0, 0);
+            this.tlpXOR.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpXOR.Name = "tlpXOR";
+            this.tlpXOR.RowCount = 3;
+            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpXOR.Size = new System.Drawing.Size(1124, 724);
+            this.tlpXOR.TabIndex = 0;
             // 
-            // hbPacketData
+            // pXOR_From
             // 
-            this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.hbPacketData.ColumnInfoVisible = true;
-            this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hbPacketData.LineInfoVisible = true;
-            this.hbPacketData.Location = new System.Drawing.Point(4, 4);
-            this.hbPacketData.Name = "hbPacketData";
-            this.hbPacketData.ReadOnly = true;
-            this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(1110, 145);
-            this.hbPacketData.StringViewVisible = true;
-            this.hbPacketData.TabIndex = 1;
-            this.hbPacketData.VScrollBarVisible = true;
+            this.pXOR_From.BorderWidth = 1F;
+            this.pXOR_From.Controls.Add(this.hbXOR_From);
+            this.pXOR_From.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pXOR_From.Location = new System.Drawing.Point(3, 3);
+            this.pXOR_From.Name = "pXOR_From";
+            this.pXOR_From.Padding = new System.Windows.Forms.Padding(3);
+            this.pXOR_From.Size = new System.Drawing.Size(1118, 326);
+            this.pXOR_From.TabIndex = 0;
+            this.pXOR_From.Text = "panel1";
+            // 
+            // pXOR_To
+            // 
+            this.pXOR_To.BorderWidth = 1F;
+            this.pXOR_To.Controls.Add(this.hbXOR_To);
+            this.pXOR_To.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pXOR_To.Location = new System.Drawing.Point(3, 395);
+            this.pXOR_To.Name = "pXOR_To";
+            this.pXOR_To.Padding = new System.Windows.Forms.Padding(3);
+            this.pXOR_To.Size = new System.Drawing.Size(1118, 326);
+            this.pXOR_To.TabIndex = 1;
+            this.pXOR_To.Text = "panel2";
+            // 
+            // hbXOR_From
+            // 
+            this.hbXOR_From.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            // 
+            // 
+            // 
+            this.hbXOR_From.BuiltInContextMenu.CopyMenuItemText = "复制";
+            this.hbXOR_From.BuiltInContextMenu.CutMenuItemText = "剪切";
+            this.hbXOR_From.BuiltInContextMenu.PasteMenuItemText = "粘贴";
+            this.hbXOR_From.BuiltInContextMenu.SelectAllMenuItemText = "全选";
+            this.hbXOR_From.ColumnInfoVisible = true;
+            this.hbXOR_From.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hbXOR_From.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbXOR_From.LineInfoVisible = true;
+            this.hbXOR_From.Location = new System.Drawing.Point(4, 4);
+            this.hbXOR_From.Name = "hbXOR_From";
+            this.hbXOR_From.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbXOR_From.Size = new System.Drawing.Size(1110, 318);
+            this.hbXOR_From.TabIndex = 2;
+            this.hbXOR_From.VScrollBarVisible = true;
+            this.hbXOR_From.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbXOR_From_MouseDown);
+            // 
+            // hbXOR_To
+            // 
+            this.hbXOR_To.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            // 
+            // 
+            // 
+            this.hbXOR_To.BuiltInContextMenu.CopyMenuItemText = "复制";
+            this.hbXOR_To.BuiltInContextMenu.CutMenuItemText = "剪切";
+            this.hbXOR_To.BuiltInContextMenu.PasteMenuItemText = "粘贴";
+            this.hbXOR_To.BuiltInContextMenu.SelectAllMenuItemText = "全选";
+            this.hbXOR_To.ColumnInfoVisible = true;
+            this.hbXOR_To.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hbXOR_To.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbXOR_To.LineInfoVisible = true;
+            this.hbXOR_To.Location = new System.Drawing.Point(4, 4);
+            this.hbXOR_To.Name = "hbXOR_To";
+            this.hbXOR_To.ReadOnly = true;
+            this.hbXOR_To.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbXOR_To.Size = new System.Drawing.Size(1110, 318);
+            this.hbXOR_To.TabIndex = 3;
+            this.hbXOR_To.VScrollBarVisible = true;
+            this.hbXOR_To.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbXOR_To_MouseDown);
+            // 
+            // tlpPacketInfo_XOR_Button
+            // 
+            this.tlpPacketInfo_XOR_Button.ColumnCount = 4;
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.label1, 0, 1);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR, 2, 1);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR_ClearUp, 3, 1);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.txtXOR, 1, 1);
+            this.tlpPacketInfo_XOR_Button.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpPacketInfo_XOR_Button.Location = new System.Drawing.Point(0, 332);
+            this.tlpPacketInfo_XOR_Button.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpPacketInfo_XOR_Button.Name = "tlpPacketInfo_XOR_Button";
+            this.tlpPacketInfo_XOR_Button.RowCount = 3;
+            this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpPacketInfo_XOR_Button.Size = new System.Drawing.Size(1124, 60);
+            this.tlpPacketInfo_XOR_Button.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(176, 45);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "异或值（支持循环异或）";
+            // 
+            // bXOR
+            // 
+            this.bXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bXOR.IconSvg = "CalculatorOutlined";
+            this.bXOR.Location = new System.Drawing.Point(887, 7);
+            this.bXOR.Name = "bXOR";
+            this.bXOR.Size = new System.Drawing.Size(114, 45);
+            this.bXOR.TabIndex = 7;
+            this.bXOR.Text = "计算";
+            this.bXOR.Type = AntdUI.TTypeMini.Primary;
+            this.bXOR.Click += new System.EventHandler(this.bXOR_Click);
+            // 
+            // bXOR_ClearUp
+            // 
+            this.bXOR_ClearUp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bXOR_ClearUp.IconSvg = "DeleteOutlined";
+            this.bXOR_ClearUp.Location = new System.Drawing.Point(1007, 7);
+            this.bXOR_ClearUp.Name = "bXOR_ClearUp";
+            this.bXOR_ClearUp.Size = new System.Drawing.Size(114, 45);
+            this.bXOR_ClearUp.TabIndex = 8;
+            this.bXOR_ClearUp.Text = "清空";
+            this.bXOR_ClearUp.Type = AntdUI.TTypeMini.Primary;
+            this.bXOR_ClearUp.Click += new System.EventHandler(this.bXOR_ClearUp_Click);
+            // 
+            // txtXOR
+            // 
+            this.txtXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtXOR.Location = new System.Drawing.Point(185, 7);
+            this.txtXOR.Name = "txtXOR";
+            this.txtXOR.PlaceholderText = "请输入十六进制带空格";
+            this.txtXOR.Size = new System.Drawing.Size(696, 45);
+            this.txtXOR.TabIndex = 9;
+            this.txtXOR.TextChanged += new System.EventHandler(this.txtXOR_TextChanged);
             // 
             // InjectModeForm
             // 
@@ -1947,6 +2117,7 @@
             this.splitterPacketList.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitterPacketList)).EndInit();
             this.splitterPacketList.ResumeLayout(false);
+            this.pPacketData.ResumeLayout(false);
             this.tlpProcessInfo.ResumeLayout(false);
             this.tlpProcessInfo.PerformLayout();
             this.tpFilterList.ResumeLayout(false);
@@ -1965,8 +2136,13 @@
             this.tlpComparisonResult.ResumeLayout(false);
             this.tlpComparisonButton.ResumeLayout(false);
             this.tlpComparisonButton.PerformLayout();
+            this.tpXOR.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
-            this.pPacketData.ResumeLayout(false);
+            this.tlpXOR.ResumeLayout(false);
+            this.pXOR_From.ResumeLayout(false);
+            this.pXOR_To.ResumeLayout(false);
+            this.tlpPacketInfo_XOR_Button.ResumeLayout(false);
+            this.tlpPacketInfo_XOR_Button.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2073,5 +2249,15 @@
         private AntdUI.Select ddlComparisonType;
         private AntdUI.Panel pPacketData;
         private Be.Windows.Forms.HexBox hbPacketData;
+        private System.Windows.Forms.TableLayoutPanel tlpXOR;
+        private AntdUI.Panel pXOR_To;
+        private AntdUI.Panel pXOR_From;
+        private Be.Windows.Forms.HexBox hbXOR_From;
+        private Be.Windows.Forms.HexBox hbXOR_To;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_XOR_Button;
+        private AntdUI.Label label1;
+        private AntdUI.Button bXOR;
+        private AntdUI.Button bXOR_ClearUp;
+        private AntdUI.Input txtXOR;
     }
 }

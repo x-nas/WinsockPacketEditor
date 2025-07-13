@@ -1595,7 +1595,6 @@ namespace WPELibrary
             resources.ApplyResources(this.bHotKey1, "bHotKey1");
             this.bHotKey1.Name = "bHotKey1";
             this.bHotKey1.UseVisualStyleBackColor = true;
-         
             // 
             // bHotKey2
             // 
@@ -1603,7 +1602,6 @@ namespace WPELibrary
             resources.ApplyResources(this.bHotKey2, "bHotKey2");
             this.bHotKey2.Name = "bHotKey2";
             this.bHotKey2.UseVisualStyleBackColor = true;
-       
             // 
             // bHotKey3
             // 
@@ -1611,70 +1609,60 @@ namespace WPELibrary
             resources.ApplyResources(this.bHotKey3, "bHotKey3");
             this.bHotKey3.Name = "bHotKey3";
             this.bHotKey3.UseVisualStyleBackColor = true;
-        
             // 
             // bHotKey4
             // 
             resources.ApplyResources(this.bHotKey4, "bHotKey4");
             this.bHotKey4.Name = "bHotKey4";
             this.bHotKey4.UseVisualStyleBackColor = true;
-         
             // 
             // bHotKey5
             // 
             resources.ApplyResources(this.bHotKey5, "bHotKey5");
             this.bHotKey5.Name = "bHotKey5";
             this.bHotKey5.UseVisualStyleBackColor = true;
-       
             // 
             // bHotKey6
             // 
             resources.ApplyResources(this.bHotKey6, "bHotKey6");
             this.bHotKey6.Name = "bHotKey6";
             this.bHotKey6.UseVisualStyleBackColor = true;
-      
             // 
             // bHotKey7
             // 
             resources.ApplyResources(this.bHotKey7, "bHotKey7");
             this.bHotKey7.Name = "bHotKey7";
             this.bHotKey7.UseVisualStyleBackColor = true;
-       
             // 
             // bHotKey8
             // 
             resources.ApplyResources(this.bHotKey8, "bHotKey8");
             this.bHotKey8.Name = "bHotKey8";
             this.bHotKey8.UseVisualStyleBackColor = true;
-       
             // 
             // bHotKey9
             // 
             resources.ApplyResources(this.bHotKey9, "bHotKey9");
             this.bHotKey9.Name = "bHotKey9";
             this.bHotKey9.UseVisualStyleBackColor = true;
-      
             // 
             // bHotKey10
             // 
             resources.ApplyResources(this.bHotKey10, "bHotKey10");
             this.bHotKey10.Name = "bHotKey10";
             this.bHotKey10.UseVisualStyleBackColor = true;
-      
             // 
             // bHotKey11
             // 
             resources.ApplyResources(this.bHotKey11, "bHotKey11");
             this.bHotKey11.Name = "bHotKey11";
             this.bHotKey11.UseVisualStyleBackColor = true;
-         
             // 
             // bHotKey12
             // 
             resources.ApplyResources(this.bHotKey12, "bHotKey12");
             this.bHotKey12.Name = "bHotKey12";
             this.bHotKey12.UseVisualStyleBackColor = true;
-         
             // 
             // tcSocketInfo_SystemSet
             // 

@@ -301,6 +301,46 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//获取异或计算的右键菜单
+
+            public static AntdUI.IContextMenuStripItem[] GetCMS_XOR(HexBox hbPacketData)
+            {
+                List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+                
+                menuItems.Add(new AntdUI.ContextMenuStripItem("剪切")
+                {
+                    Enabled = hbPacketData.CanCut(),
+                    ID = "Cut",
+                    IconSvg = "ScissorOutlined",
+                });
+
+                menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
+                {
+                    Enabled = hbPacketData.CanCopy(),
+                    ID = "Copy",
+                    IconSvg = "CopyOutlined",                    
+                });
+
+                menuItems.Add(new AntdUI.ContextMenuStripItem("粘贴")
+                {
+                    Enabled = hbPacketData.CanPaste(),
+                    ID = "Paste",
+                    IconSvg = "SnippetsOutlined",                    
+                });
+
+                menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                menuItems.Add(new AntdUI.ContextMenuStripItem("全选")
+                {
+                    ID = "SelectAll",
+                    IconSvg = "ProfileOutlined",
+                });
+
+                return menuItems.ToArray();
+            }
+
+            #endregion
+
             #region//格式化速率字符串
 
             public static string GetDisplayBytes(long size)
