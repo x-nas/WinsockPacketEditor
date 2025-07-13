@@ -42,6 +42,7 @@ namespace WPE.InjectMode
                 AntdUI.Config.TextRenderingHighQuality = parameters.TextRenderingHighQuality;
                 AntdUI.Config.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
                 AntdUI.Config.IsDark = parameters.Dark;
+                AntdUI.Config.SetEmptyImageSvg(Properties.Resources.icon_empty, Properties.Resources.icon_empty_dark);
                 if (parameters.Lang.StartsWith("en"))
                 {
                     AntdUI.Localization.Provider = new Localizer();
@@ -49,7 +50,7 @@ namespace WPE.InjectMode
                 else
                 {
                     AntdUI.Localization.Provider = null;
-                }
+                }                
 
                 AntdUI.Localization.SetLanguage(parameters.Lang);
 

@@ -1554,7 +1554,7 @@ namespace WPELibrary
 
                             if (dgvSocketList.Rows.Count > 0)
                             {
-                                Operate.PacketConfig.List.SaveSocketList_Dialog();
+                                //Operate.PacketConfig.List.SaveSocketList_Dialog();
                             }
 
                             break;

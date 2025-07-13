@@ -3054,9 +3054,8 @@ namespace WPE.Lib
                 try
                 {
                     Process pProcess = Process.GetCurrentProcess();
-                    Operate.PacketConfig.Packet.InjectProcess = string.Format("{0} [{1}]", pProcess.ProcessName, pProcess.Id);
-
-                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + Operate.PacketConfig.Packet.InjectProcess;
+                    PacketConfig.Packet.InjectProcess = string.Format("{0} [{1}]", pProcess.ProcessName, pProcess.Id);
+                    sReturn = string.Format(AntdUI.Localization.Get("System.InjectProcess", "目标进程: {0}"), Operate.PacketConfig.Packet.InjectProcess);
                 }
                 catch (Exception ex)
                 {
@@ -8110,7 +8109,7 @@ namespace WPE.Lib
                         menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
                         {
                             ID = "ToSendList",
-                            IconSvg = "ProfileOutlined",
+                            IconSvg = "PlaySquareOutlined",
                             LocalizationText = "InjectModeForm.cmsToSendList",
                             Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
                         });
@@ -8121,7 +8120,7 @@ namespace WPE.Lib
                         {
                             Enabled = false,
                             ID = "ToSendList",
-                            IconSvg = "ProfileOutlined",
+                            IconSvg = "PlaySquareOutlined",
                             LocalizationText = "InjectModeForm.cmsToSendList",
                         });
                     }
@@ -8502,15 +8501,18 @@ namespace WPE.Lib
                     {
                         ID = "Edit",
                         IconSvg = "EditOutlined",
+                        LocalizationText = "InjectModeForm.Edit",
                     });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
 
                     if (SendConfig.List.lstSendInfo.Count > 0)
                     {
                         menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
                         {
                             ID = "ToSendList",
-                            IconSvg = "ProfileOutlined",
-                            LocalizationText = "InjectModeForm.cmsToSendList",
+                            IconSvg = "PlaySquareOutlined",
+                            LocalizationText = "InjectModeForm.ToSendList",
                             Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
                         });
                     }
@@ -8520,10 +8522,69 @@ namespace WPE.Lib
                         {
                             Enabled = false,
                             ID = "ToSendList",
-                            IconSvg = "ProfileOutlined",
-                            LocalizationText = "InjectModeForm.cmsToSendList",                            
+                            IconSvg = "PlaySquareOutlined",
+                            LocalizationText = "InjectModeForm.ToSendList",                            
                         });
                     }
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("添加到滤镜列表")
+                    {
+                        ID = "ToFilterList",
+                        IconSvg = "FunnelPlotOutlined",
+                        LocalizationText = "InjectModeForm.ToFilterList",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("设置系统套接字")
+                    {
+                        ID = "SYSSocket",
+                        IconSvg = "CheckSquareOutlined",
+                        LocalizationText = "InjectModeForm.SYSSocket",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("查看数据修改")
+                    {
+                        ID = "PacketModification",
+                        IconSvg = "FormOutlined",
+                        LocalizationText = "InjectModeForm.PacketModification",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("导出到Excel")
+                    {
+                        ID = "ToExcel",
+                        IconSvg = "FileExcelOutlined",
+                        LocalizationText = "InjectModeForm.ToExcel",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("添加到文本A")
+                    {
+                        ID = "ToTextA",
+                        IconSvg = "FontColorsOutlined",
+                        LocalizationText = "InjectModeForm.ToTextA",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("添加到文本B")
+                    {
+                        ID = "ToTextB",
+                        IconSvg = "BoldOutlined",
+                        LocalizationText = "InjectModeForm.ToTextB",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("取消选择")
+                    {
+                        ID = "DeSelect",
+                        IconSvg = "DeleteRowOutlined",
+                        LocalizationText = "InjectModeForm.ToTextA",
+                    });
 
                     return menuItems.ToArray();
                 }
@@ -8557,98 +8618,97 @@ namespace WPE.Lib
 
                 #region//保存封包列表为Excel（对话框）
 
-                public static async void SaveSocketList_Dialog()
+                public static void SavePacketList_Dialog(Form form, AntdUI.Table tTable, string FileName, List<PacketInfo> piList)
                 {
                     try
                     {
                         if (PacketConfig.List.lstPacketInfo.Count > 0)
                         {
                             int SaveCount = PacketConfig.List.lstPacketInfo.Count;
+
                             SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
-                            sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
-                            sfdSaveToExcel.FilterIndex = 0;
+                            sfdSaveToExcel.Filter = AntdUI.Localization.Get("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";                            
                             sfdSaveToExcel.RestoreDirectory = true;
 
-                            sfdSaveToExcel.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_76);
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveToExcel.FileName = FileName;
+                            }
 
                             if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
                             {
                                 string FilePath = sfdSaveToExcel.FileName;
-
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_151), SaveCount);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
-
-                                    await SaveSocketListToExcel(FilePath, SaveCount);
-
-                                    sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_150), FilePath);
-                                    Operate.DoLog(nameof(SaveSocketList_Dialog), sLog);
+                                    bool bOK = false;
+                                    tTable.Spin(AntdUI.Localization.Get("Exporting", "正在导出..."), config =>
+                                    {
+                                        bOK = SavePacketListToExcel(FilePath, piList);
+                                    }, () =>
+                                    {
+                                        if (bOK)
+                                        {
+                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Success", "导出到Excel成功");
+                                            AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        }
+                                        else
+                                        {
+                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Error", "导出到Excel失败");
+                                            string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                            AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                        }
+                                    });                                    
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveSocketList_Dialog), ex.Message);
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
                 }
 
-                private static async Task<int> SaveSocketListToExcel(string FilePath, int SaveCount)
+                private static bool SavePacketListToExcel(string filePath, List<PacketInfo> piList)
                 {
-                    int iSuccess = 0;
-
                     try
                     {
-                        await Task.Run(() =>
+                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                        using (var writer = new StreamWriter(stream, Encoding.Default))
                         {
-                            Stream myStream = File.OpenWrite(FilePath);
-                            StreamWriter sw = new StreamWriter(myStream, Encoding.Default);
+                            writer.WriteLine(AntdUI.Localization.Get("ToExcelTitle", "时间戳\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t"));
 
-                            string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_77);
-                            sw.WriteLine(sColTitle);
-
-                            if (SaveCount > PacketConfig.List.lstPacketInfo.Count)
-                            {
-                                SaveCount = PacketConfig.List.lstPacketInfo.Count;
-                            }
-
-                            for (int i = 0; i < SaveCount; i++)
+                            var dataSource = piList.Count > 0 ? piList : PacketConfig.List.lstPacketInfo.ToList();
+                            foreach (var packet in dataSource)
                             {
                                 try
                                 {
-                                    string sColValue = "";
+                                    var lineBuilder = new StringBuilder();
 
-                                    string sTime = PacketConfig.List.lstPacketInfo[i].PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff");
-                                    string sType = PacketConfig.List.lstPacketInfo[i].PacketType.ToString();
-                                    string sSocket = PacketConfig.List.lstPacketInfo[i].PacketSocket.ToString();
-                                    string sFrom = PacketConfig.List.lstPacketInfo[i].PacketFrom;
-                                    string sTo = PacketConfig.List.lstPacketInfo[i].PacketTo;
-                                    string sLen = PacketConfig.List.lstPacketInfo[i].PacketLen.ToString();
-                                    byte[] bBuff = PacketConfig.List.lstPacketInfo[i].PacketBuffer;
-                                    string sData = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, bBuff);
+                                    lineBuilder.Append(packet.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
+                                    lineBuilder.Append(packet.PacketType).Append('\t');
+                                    lineBuilder.Append(packet.PacketSocket).Append('\t');
+                                    lineBuilder.Append(packet.PacketFrom).Append('\t');
+                                    lineBuilder.Append(packet.PacketTo).Append('\t');
+                                    lineBuilder.Append(packet.PacketLen).Append('\t');
+                                    lineBuilder.Append(SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, packet.PacketBuffer)).Append('\t');
 
-                                    sColValue += sTime + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
-                                    sw.WriteLine(sColValue);
-
-                                    iSuccess++;
+                                    writer.WriteLine(lineBuilder.ToString());
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(nameof(SaveSocketListToExcel), ex.Message);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                                 }
                             }
+                        }
 
-                            sw.Close();
-                            myStream.Close();
-                        });
+                        return true;
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveSocketListToExcel), ex.Message);
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return false;
                     }
-
-                    return iSuccess;
                 }
 
                 #endregion
@@ -8780,7 +8840,7 @@ namespace WPE.Lib
                     }
                 }
 
-                public static void AddFilter_ByPacketInfo(PacketInfo spi, byte[] bBuffer)
+                public static bool AddFilter_ByPacketInfo(PacketInfo spi, byte[] bBuffer)
                 {
                     try
                     {
@@ -8803,13 +8863,45 @@ namespace WPE.Lib
                             FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
                             string sFSearch = FilterConfig.Filter.GetFilterString_ByBytes(bBuffer);
 
-                            FilterConfig.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, string.Empty, false, string.Empty, false, string.Empty, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, sFSearch, string.Empty);
+                            FilterConfig.Filter.AddFilter(
+                                false, 
+                                FID, 
+                                sFName, 
+                                false, 
+                                string.Empty, 
+                                false, 
+                                string.Empty, 
+                                false, 
+                                string.Empty, 
+                                false, 
+                                string.Empty, 
+                                FilterMode, 
+                                FilterAction, 
+                                false, 
+                                FilterExecuteType, 
+                                SID, 
+                                RID, 
+                                FilterFunction, 
+                                FilterStartFrom, 
+                                false, 
+                                false, 
+                                1, 
+                                false, 
+                                1, 
+                                string.Empty, 
+                                0, 
+                                sFSearch, 
+                                string.Empty);
+
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static void AddFilter(
@@ -12262,13 +12354,13 @@ namespace WPE.Lib
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
                             sfdSaveFile.Filter = AntdUI.Localization.Get("SendListFile", "发送列表文件") + "（*.sp）|*.sp";
+                            sfdSaveFile.RestoreDirectory = true;
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
                                 sfdSaveFile.FileName = FileName;
                             }
-
-                            sfdSaveFile.RestoreDirectory = true;
+                            
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
                                 string FilePath = sfdSaveFile.FileName;

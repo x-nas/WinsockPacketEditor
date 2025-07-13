@@ -58,6 +58,7 @@ namespace WPE.InjectMode
             this.InitTable_LogList();
             this.InitComparison();
 
+            this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.tabInjectMode.TabMenuVisible = false;            
             this.mInjectMode.SelectIndex(0, true);
         }
@@ -908,7 +909,7 @@ namespace WPE.InjectMode
 
                     if (this.StartHook)
                     {
-                        this.sPacketList.Items[8].IconSvg = "PauseCircleFilled";
+                        this.sPacketList.Items[8].IconSvg = "StopOutlined";
                         this.sPacketList.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StopHook", "停止拦截");
                         this.StartHook = false;
 
@@ -968,29 +969,126 @@ namespace WPE.InjectMode
 
                             break;
 
+                        case "ToFilterList":
+
+                            if (piList.Count > 0)
+                            {
+                                bool bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(piList[0], null);
+                                if (bOK)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到滤镜列表成功", TType.Success)
+                                    {
+                                        LocalizationText = "ToFilterList.Success"
+                                    });
+                                }
+                                else
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到滤镜列表失败", TType.Error)
+                                    {
+                                        LocalizationText = "ToFilterList.Error"
+                                    });
+                                }
+                            }                            
+
+                            break;
+
+                        case "SYSSocket":
+
+                            if (piList.Count > 0)
+                            {
+                                Operate.SystemConfig.SystemSocket = piList[0].PacketSocket;
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "设置系统套接字完成", TType.Success)
+                                {
+                                    LocalizationText = "SYSSocket.Success"
+                                });
+                            }                            
+
+                            break;
+
+                        case "PacketModification":
+
+                            if (piList.Count > 0)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketModificationForm(this, piList[0]))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        case "ToExcel":
+
+                            Operate.PacketConfig.List.SavePacketList_Dialog(this, this.tPacketList, Operate.PacketConfig.Packet.InjectProcess, piList);
+
+                            break;
+
+                        case "ToTextA":
+
+                            if (piList.Count > 0)
+                            {
+                                this.TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
+                                this.txtComparison_A.Text = this.TextA;
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
+                                {
+                                    LocalizationText = "System.ToTextA"
+                                });
+                            }
+
+                            break;
+
+                        case "ToTextB":
+
+                            if (piList.Count > 0)
+                            {
+                                this.TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
+                                this.txtComparison_B.Text = this.TextB;
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
+                                {
+                                    LocalizationText = "System.ToTextB"
+                                });
+                            }
+
+                            break;
+
+                        case "DeSelect":
+
+                            this.tPacketList.SelectedIndex = -1;
+
+                            break;
+
                         default:
 
-                            if (Guid.TryParse(item.ID, out Guid SID))
+                            if (piList.Count > 0)
                             {
-                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
-                                if (si != null && piList.Count > 0)
+                                if (Guid.TryParse(item.ID, out Guid SID))
                                 {
-                                    if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                    SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                    if (si != null && piList.Count > 0)
                                     {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
+                                        if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
                                         {
-                                            LocalizationText = "cmsPacketList_ToSendList.Success"
-                                        });
-                                    }
-                                    else
-                                    {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
+                                            {
+                                                LocalizationText = "cmsPacketList_ToSendList.Success"
+                                            });
+                                        }
+                                        else
                                         {
-                                            LocalizationText = "cmsPacketList_ToSendList.Error"
-                                        });
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                            {
+                                                LocalizationText = "cmsPacketList_ToSendList.Error"
+                                            });
+                                        }
                                     }
                                 }
-                            }
+                            }                            
 
                             break;
                     }

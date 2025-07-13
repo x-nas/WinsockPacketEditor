@@ -116,7 +116,6 @@
             this.sPacketList = new AntdUI.Segmented();
             this.splitterPacketList = new AntdUI.Splitter();
             this.tPacketList = new AntdUI.Table();
-            this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.tlpProcessInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lSpeedInfo = new AntdUI.Label();
             this.lSplit3 = new AntdUI.Label();
@@ -154,6 +153,7 @@
             this.bComparison_Reset = new AntdUI.Button();
             this.bComparison_Clean = new AntdUI.Button();
             this.nudComparison_DuplicateNum = new AntdUI.InputNumber();
+            this.ddlComparisonType = new AntdUI.Select();
             this.tpXOR = new AntdUI.TabPage();
             this.tpTranscoding = new AntdUI.TabPage();
             this.tpExtraction = new AntdUI.TabPage();
@@ -165,7 +165,8 @@
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
-            this.ddlComparisonType = new AntdUI.Select();
+            this.pPacketData = new AntdUI.Panel();
+            this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -193,6 +194,7 @@
             this.tlpComparisonResult.SuspendLayout();
             this.tlpComparisonButton.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
+            this.pPacketData.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -389,7 +391,6 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 5;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -398,7 +399,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1033,7 +1034,7 @@
             // 
             // splitterPacketList
             // 
-            this.splitterPacketList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel2;
+            this.splitterPacketList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterPacketList.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitterPacketList.Location = new System.Drawing.Point(3, 79);
@@ -1047,7 +1048,7 @@
             // 
             // splitterPacketList.Panel2
             // 
-            this.splitterPacketList.Panel2.Controls.Add(this.hbPacketData);
+            this.splitterPacketList.Panel2.Controls.Add(this.pPacketData);
             this.splitterPacketList.Panel2MinSize = 0;
             this.splitterPacketList.Size = new System.Drawing.Size(1118, 612);
             this.splitterPacketList.SplitterDistance = 449;
@@ -1073,21 +1074,6 @@
             this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
             this.tPacketList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tPacketList_SetRowStyle);
             this.tPacketList.SelectIndexChanged += new System.EventHandler(this.tPacketList_SelectIndexChanged);
-            // 
-            // hbPacketData
-            // 
-            this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.hbPacketData.ColumnInfoVisible = true;
-            this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hbPacketData.LineInfoVisible = true;
-            this.hbPacketData.Location = new System.Drawing.Point(0, 0);
-            this.hbPacketData.Name = "hbPacketData";
-            this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(1118, 153);
-            this.hbPacketData.StringViewVisible = true;
-            this.hbPacketData.TabIndex = 0;
-            this.hbPacketData.VScrollBarVisible = true;
             // 
             // tlpProcessInfo
             // 
@@ -1589,7 +1575,7 @@
             // tpComparison
             // 
             this.tpComparison.Controls.Add(this.splitterComparison);
-            this.tpComparison.Location = new System.Drawing.Point(3, 33);
+            this.tpComparison.Location = new System.Drawing.Point(-1124, -724);
             this.tpComparison.Name = "tpComparison";
             this.tpComparison.Size = new System.Drawing.Size(1124, 724);
             this.tpComparison.TabIndex = 2;
@@ -1814,6 +1800,16 @@
             0,
             0});
             // 
+            // ddlComparisonType
+            // 
+            this.ddlComparisonType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlComparisonType.Location = new System.Drawing.Point(3, 7);
+            this.ddlComparisonType.Name = "ddlComparisonType";
+            this.ddlComparisonType.PlaceholderText = "请选择";
+            this.ddlComparisonType.Size = new System.Drawing.Size(194, 46);
+            this.ddlComparisonType.TabIndex = 7;
+            this.ddlComparisonType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlComparisonType_SelectedIndexChanged);
+            // 
             // tpXOR
             // 
             this.tpXOR.Location = new System.Drawing.Point(0, 0);
@@ -1894,15 +1890,32 @@
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
-            // ddlComparisonType
+            // pPacketData
             // 
-            this.ddlComparisonType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ddlComparisonType.Location = new System.Drawing.Point(3, 7);
-            this.ddlComparisonType.Name = "ddlComparisonType";
-            this.ddlComparisonType.PlaceholderText = "请选择";
-            this.ddlComparisonType.Size = new System.Drawing.Size(194, 46);
-            this.ddlComparisonType.TabIndex = 7;
-            this.ddlComparisonType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlComparisonType_SelectedIndexChanged);
+            this.pPacketData.BorderWidth = 1F;
+            this.pPacketData.Controls.Add(this.hbPacketData);
+            this.pPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pPacketData.Location = new System.Drawing.Point(0, 0);
+            this.pPacketData.Name = "pPacketData";
+            this.pPacketData.Padding = new System.Windows.Forms.Padding(3);
+            this.pPacketData.Size = new System.Drawing.Size(1118, 153);
+            this.pPacketData.TabIndex = 0;
+            // 
+            // hbPacketData
+            // 
+            this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.hbPacketData.ColumnInfoVisible = true;
+            this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbPacketData.LineInfoVisible = true;
+            this.hbPacketData.Location = new System.Drawing.Point(4, 4);
+            this.hbPacketData.Name = "hbPacketData";
+            this.hbPacketData.ReadOnly = true;
+            this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbPacketData.Size = new System.Drawing.Size(1110, 145);
+            this.hbPacketData.StringViewVisible = true;
+            this.hbPacketData.TabIndex = 1;
+            this.hbPacketData.VScrollBarVisible = true;
             // 
             // InjectModeForm
             // 
@@ -1953,6 +1966,7 @@
             this.tlpComparisonButton.ResumeLayout(false);
             this.tlpComparisonButton.PerformLayout();
             this.tpSystemLog.ResumeLayout(false);
+            this.pPacketData.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2027,7 +2041,6 @@
         private AntdUI.Label lSendTo_CNT;
         private System.Windows.Forms.Timer timerPacketList;
         private System.Windows.Forms.Timer timerPacketListInfo;
-        private Be.Windows.Forms.HexBox hbPacketData;
         private System.ComponentModel.BackgroundWorker bgwSearchPacketList;
         private AntdUI.Table tSystemLog;
         private System.ComponentModel.BackgroundWorker bgwPacketList;
@@ -2058,5 +2071,7 @@
         private AntdUI.Button bComparison;
         private AntdUI.InputNumber nudComparison_DuplicateNum;
         private AntdUI.Select ddlComparisonType;
+        private AntdUI.Panel pPacketData;
+        private Be.Windows.Forms.HexBox hbPacketData;
     }
 }
