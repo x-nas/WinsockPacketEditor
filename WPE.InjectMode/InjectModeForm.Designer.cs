@@ -461,7 +461,6 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 8;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -470,7 +469,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1153,7 +1152,7 @@
             this.pPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pPacketData.Location = new System.Drawing.Point(0, 0);
             this.pPacketData.Name = "pPacketData";
-            this.pPacketData.Padding = new System.Windows.Forms.Padding(3);
+            this.pPacketData.Padding = new System.Windows.Forms.Padding(6);
             this.pPacketData.Size = new System.Drawing.Size(1118, 153);
             this.pPacketData.TabIndex = 0;
             // 
@@ -1164,14 +1163,15 @@
             this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hbPacketData.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hbPacketData.LineInfoVisible = true;
-            this.hbPacketData.Location = new System.Drawing.Point(4, 4);
+            this.hbPacketData.Location = new System.Drawing.Point(7, 7);
             this.hbPacketData.Name = "hbPacketData";
             this.hbPacketData.ReadOnly = true;
             this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(1110, 145);
+            this.hbPacketData.Size = new System.Drawing.Size(1104, 139);
             this.hbPacketData.StringViewVisible = true;
             this.hbPacketData.TabIndex = 1;
             this.hbPacketData.VScrollBarVisible = true;
+            this.hbPacketData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbPacketData_MouseDown);
             // 
             // tlpProcessInfo
             // 
@@ -2495,7 +2495,7 @@
             // tpExtraction
             // 
             this.tpExtraction.Controls.Add(this.splitterExtraction);
-            this.tpExtraction.Location = new System.Drawing.Point(3, 33);
+            this.tpExtraction.Location = new System.Drawing.Point(-1124, -724);
             this.tpExtraction.Name = "tpExtraction";
             this.tpExtraction.Size = new System.Drawing.Size(1124, 724);
             this.tpExtraction.TabIndex = 5;

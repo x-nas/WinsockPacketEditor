@@ -474,7 +474,7 @@ namespace WPE.Lib
 
             try
             {
-                byte[] bBuffer = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sString);
+                byte[] bBuffer = SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sString);
                 sReturn = Convert.ToBase64String(bBuffer);
             }
             catch (Exception ex)
@@ -504,96 +504,11 @@ namespace WPE.Lib
 
         #endregion
 
-        #region//字符串转byte[]
-
-        public static byte[] StringToBytes(Operate.PacketConfig.Packet.EncodingFormat efFormat, string sString)
-        {
-            byte[] bReturn = new byte[sString.Length];
-
-            try
-            {
-                switch (efFormat)
-                {
-                    case Operate.PacketConfig.Packet.EncodingFormat.Default:
-                        bReturn = Encoding.Default.GetBytes(sString);
-                        break;
-
-                    case Operate.PacketConfig.Packet.EncodingFormat.Hex:
-                        bReturn = Socket_Operation.Hex_To_Bytes(sString);
-                        break;
-
-                    case Operate.PacketConfig.Packet.EncodingFormat.GBK:
-                        bReturn = Encoding.GetEncoding("GBK").GetBytes(sString);
-                        break;
-
-                    case Operate.PacketConfig.Packet.EncodingFormat.Unicode:
-                        bReturn = Encoding.Unicode.GetBytes(sString);
-                        break;
-
-                    case Operate.PacketConfig.Packet.EncodingFormat.UTF7:
-                        bReturn = Encoding.UTF7.GetBytes(sString);
-                        break;
-
-                    case Operate.PacketConfig.Packet.EncodingFormat.UTF8:
-                        bReturn = Encoding.UTF8.GetBytes(sString);
-                        break;
-
-                    case Operate.PacketConfig.Packet.EncodingFormat.UTF16:
-                        bReturn = Encoding.BigEndianUnicode.GetBytes(sString);
-                        break;
-
-                    case Operate.PacketConfig.Packet.EncodingFormat.UTF32:
-                        bReturn = Encoding.UTF32.GetBytes(sString);
-                        break;                
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        #endregion
+        
 
         
 
-        #region//十六进制字符串转byte[]
-
-        private static byte[] Hex_To_Bytes(string hexString)
-        {
-            if (string.IsNullOrEmpty(hexString))
-            {
-                return Array.Empty<byte>();
-            }
-
-            try
-            {
-                hexString = hexString.Replace(" ", "");
-
-                if ((hexString.Length % 2) != 0)
-                {
-                    hexString += " ";
-                }
-
-                byte[] returnBytes = new byte[hexString.Length / 2];
-                Span<byte> span = returnBytes.AsSpan();
-
-                for (int i = 0; i < span.Length; i++)
-                {
-                    span[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
-                }
-
-                return returnBytes;
-            }
-            catch
-            {
-                return Array.Empty<byte>();
-            }
-        }
-
-        #endregion
+        
 
         
 

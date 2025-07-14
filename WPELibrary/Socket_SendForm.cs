@@ -475,7 +475,7 @@ namespace WPELibrary
                         if (this.hbPacketData.CanCopy())
                         {
                             this.hbPacketData.CopyHex();
-                            bBuffer = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());                            
+                            bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());                            
                         }
                         else
                         {
@@ -513,7 +513,7 @@ namespace WPELibrary
                         {
                             this.hbPacketData.CopyHex();
 
-                            byte[] bBufferCopy = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                            byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
                             Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.SPI, bBufferCopy);
                         }
                         else

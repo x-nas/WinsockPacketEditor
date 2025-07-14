@@ -45,14 +45,14 @@ namespace WPE.InjectMode
         {
             this.Text = AntdUI.Localization.Get("PacketEditForm", "编辑封包");
 
-            this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.hbPacketEdit.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.nudPacketSocket.Value = this.piSelect.PacketSocket;
             this.nudPacketLength.Value = this.piSelect.PacketLen;
             this.txtPacketTo.Text = this.piSelect.PacketTo;            
 
             DynamicByteProvider dbp = new DynamicByteProvider(this.piSelect.PacketBuffer);            
             dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
-            hbPacketData.ByteProvider = dbp;
+            hbPacketEdit.ByteProvider = dbp;
 
             DefaultByteCharConverter defConverter = new DefaultByteCharConverter();
             EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();         
@@ -70,13 +70,13 @@ namespace WPE.InjectMode
         {
             if (AntdUI.Config.IsDark)
             {
-                this.hbPacketData.BackColor = Color.FromArgb(30, 30, 30);
-                this.hbPacketData.ForeColor = Color.Silver;
+                this.hbPacketEdit.BackColor = Color.FromArgb(30, 30, 30);
+                this.hbPacketEdit.ForeColor = Color.Silver;
             }
             else
             {
-                this.hbPacketData.BackColor = Color.White;
-                this.hbPacketData.ForeColor = Color.Black;
+                this.hbPacketEdit.BackColor = Color.White;
+                this.hbPacketEdit.ForeColor = Color.Black;
             }
         }
 
@@ -143,7 +143,7 @@ namespace WPE.InjectMode
                 return false;
             }
 
-            if (hbPacketData.ByteProvider.Length == 0)
+            if (hbPacketEdit.ByteProvider.Length == 0)
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "封包数据为空", TType.Error)
                 {
@@ -155,7 +155,7 @@ namespace WPE.InjectMode
 
             if (this.cbProgressionPosition.Checked)
             {
-                if ((int)this.nudProgressionPosition.Value >= hbPacketData.ByteProvider.Length)
+                if ((int)this.nudProgressionPosition.Value >= hbPacketEdit.ByteProvider.Length)
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "递进位置错误", TType.Error)
                     {
@@ -180,76 +180,96 @@ namespace WPE.InjectMode
 
         private void HexBox_UpdatePacketLen()
         {
-            this.nudPacketLength.Value = this.hbPacketData.ByteProvider.Length;
+            this.nudPacketLength.Value = this.hbPacketEdit.ByteProvider.Length;
         }
 
-        private void hbPacketData_CurrentPositionInLineChanged(object sender, EventArgs e)
+        private void hbPacketEdit_CurrentPositionInLineChanged(object sender, EventArgs e)
         {
-            this.nudProgressionPosition.Value = (int)hbPacketData.SelectionStart;
+            this.nudProgressionPosition.Value = (int)hbPacketEdit.SelectionStart;
         }
 
         #endregion
 
         #region//右键菜单
 
-        private void hbPacketData_MouseDown(object sender, MouseEventArgs e)
+        private void hbPacketEdit_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbPacketData, (item) =>
+                DynamicByteProvider dbp = hbPacketEdit.ByteProvider as DynamicByteProvider;
+                if (dbp == null || dbp.Bytes.Count == 0)
                 {
-                    DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+                    return;
+                }
 
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbPacketEdit, (item) =>
+                {
                     switch (item.ID)
                     {
                         case "ToFilterList":
 
-                            if (this.hbPacketData.CanCopy())
+                            bool bOK = false;
+                            if (this.hbPacketEdit.CanCopy())
                             {
-                                this.hbPacketData.CopyHex();
-                                byte[] bBufferCopy = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
-                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.piSelect, bBufferCopy);
+                                this.hbPacketEdit.CopyHex();
+                                byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.piSelect, bBufferCopy);
                             }
                             else
                             {
-                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.piSelect, dbp.Bytes.ToArray());
+                                bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.piSelect, dbp.Bytes.ToArray());
+                            }
+
+                            if (bOK)
+                            {
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到滤镜列表", TType.Success)
+                                {
+                                    LocalizationText = "ToFilterList.Success"
+                                });
+                            }
+                            else
+                            {
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到滤镜列表出错", TType.Error)
+                                {
+                                    LocalizationText = "ToFilterList.Error"
+                                });
                             }
 
                             break;
 
                         case "Cut":
 
-                            this.hbPacketData.Cut();
+                            this.hbPacketEdit.Cut();
 
                             break;
 
                         case "Copy_Text":
 
-                            this.hbPacketData.Copy();
+                            this.hbPacketEdit.Copy();
 
                             break;
 
                         case "Copy_Hex":
 
-                            this.hbPacketData.CopyHex();
+                            this.hbPacketEdit.CopyHex();
 
                             break;
 
                         case "Paste_Text":
 
-                            this.hbPacketData.Paste();
+                            this.hbPacketEdit.Paste();
 
                             break;
 
                         case "Paste_Hex":
 
-                            this.hbPacketData.PasteHex();
+                            this.hbPacketEdit.PasteHex();
 
                             break;
 
                         case "SelectAll":
 
-                            this.hbPacketData.SelectAll();
+                            this.hbPacketEdit.SelectAll();
 
                             break;
 
@@ -263,10 +283,10 @@ namespace WPE.InjectMode
                                     int iSocket = (int)this.nudPacketSocket.Value;
 
                                     byte[] bBuffer = null;
-                                    if (this.hbPacketData.CanCopy())
+                                    if (this.hbPacketEdit.CanCopy())
                                     {
-                                        this.hbPacketData.CopyHex();
-                                        bBuffer = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                        this.hbPacketEdit.CopyHex();
+                                        bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
                                     }
                                     else
                                     {
@@ -306,7 +326,7 @@ namespace WPE.InjectMode
 
                             break;
                     }
-                }, Operate.PacketConfig.Packet.GetCMS_PacketEdit(this.hbPacketData)));
+                }, Operate.PacketConfig.Packet.GetCMS_PacketEdit(this.hbPacketEdit)));
             }
         }
 
@@ -361,7 +381,7 @@ namespace WPE.InjectMode
         {
             try
             {
-                DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+                DynamicByteProvider dbp = hbPacketEdit.ByteProvider as DynamicByteProvider;
                 byte[] bBuff = dbp.Bytes.ToArray();
 
                 if (this.rbSendType_Continuously.Checked)
@@ -510,9 +530,9 @@ namespace WPE.InjectMode
         {
             try
             {
-                if (hbPacketData.ByteProvider != null)
+                if (hbPacketEdit.ByteProvider != null)
                 {
-                    DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+                    DynamicByteProvider dbp = hbPacketEdit.ByteProvider as DynamicByteProvider;
                     if (dbp != null)
                     {
                         dbp.ApplyChanges();
@@ -524,6 +544,7 @@ namespace WPE.InjectMode
                         this.piSelect.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
 
                         this.Close();
+                        this.imForm.RefreshPacketData();
                     }
                     else
                     {

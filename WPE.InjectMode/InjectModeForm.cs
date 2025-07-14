@@ -131,6 +131,15 @@ namespace WPE.InjectMode
             this.tRobotList.Refresh();
         }
 
+        public void RefreshPacketData()
+        {
+            if (Operate.PacketConfig.List.piSelect != null)
+            {
+                DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
+                hbPacketData.ByteProvider = dbp;
+            }            
+        }
+
         #endregion
 
         #region//初始化数据表
@@ -1122,6 +1131,193 @@ namespace WPE.InjectMode
 
         #endregion
 
+        #region//封包数据 - 右键菜单
+
+        private void hbPacketData_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+                if (dbp == null || dbp.Bytes.Count == 0)
+                { 
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbPacketData, (item) =>
+                {
+                    switch (item.ID)
+                    {
+                        case "Edit":
+
+                            if (Operate.PacketConfig.List.piSelect != null)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, Operate.PacketConfig.List.piSelect))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        case "ToFilterList":
+
+                            if (Operate.PacketConfig.List.piSelect != null)
+                            {
+                                bool bOK = false;
+                                if (this.hbPacketData.CanCopy())
+                                {
+                                    this.hbPacketData.CopyHex();
+                                    byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.piSelect, bBufferCopy);
+                                }
+                                else
+                                {
+                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.piSelect, dbp.Bytes.ToArray());
+                                }
+
+                                if (bOK)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到滤镜列表", TType.Success)
+                                    {
+                                        LocalizationText = "ToFilterList.Success"
+                                    });
+                                }
+                                else
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到滤镜列表出错", TType.Error)
+                                    {
+                                        LocalizationText = "ToFilterList.Error"
+                                    });
+                                }
+                            }  
+
+                            break;
+
+                        case "Copy_Text":
+
+                            this.hbPacketData.Copy();
+
+                            break;
+
+                        case "Copy_Hex":
+
+                            this.hbPacketData.CopyHex();
+
+                            break;
+
+                        case "ToTextA":
+
+                            if (this.hbPacketData.CanCopy())
+                            {
+                                this.hbPacketData.CopyHex();
+                                this.TextA = Clipboard.GetText();
+                            }
+                            else
+                            {
+                                this.TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
+                            }
+
+                            this.txtComparison_A.Text = this.TextA;
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
+                            {
+                                LocalizationText = "System.ToTextA"
+                            });
+
+                            break;
+
+                        case "ToTextB":
+
+                            if (this.hbPacketData.CanCopy())
+                            {
+                                this.hbPacketData.CopyHex();
+                                this.TextB = Clipboard.GetText();
+                            }
+                            else
+                            {
+                                this.TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
+                            }
+
+                            this.txtComparison_B.Text = this.TextB;
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
+                            {
+                                LocalizationText = "System.ToTextB"
+                            });
+
+                            break;
+
+                        case "SelectAll":
+
+                            this.hbPacketData.SelectAll();
+
+                            break;
+
+                        default:
+
+                            if (Operate.PacketConfig.List.piSelect == null)
+                            {
+                                return;
+                            }
+
+                            if (Guid.TryParse(item.ID, out Guid SID))
+                            {
+                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                if (si != null)
+                                {
+                                    byte[] bBuffer = null;
+                                    if (this.hbPacketData.CanCopy())
+                                    {
+                                        this.hbPacketData.CopyHex();
+                                        bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                    }
+                                    else
+                                    {
+                                        bBuffer = dbp.Bytes.ToArray();
+                                    }
+
+                                    List<PacketInfo> piList = new List<PacketInfo>
+                                    {
+                                        new PacketInfo
+                                        {
+                                            PacketSocket = Operate.PacketConfig.List.piSelect.PacketSocket,
+                                            PacketType = Operate.PacketConfig.List.piSelect.PacketType,
+                                            PacketFrom = Operate.PacketConfig.List.piSelect.PacketFrom,
+                                            PacketTo = Operate.PacketConfig.List.piSelect.PacketTo,
+                                            PacketBuffer = bBuffer,
+                                            PacketLen = bBuffer.Length,
+                                            PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen),
+                                        }
+                                    };
+
+                                    if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
+                                        {
+                                            LocalizationText = "cmsPacketList_ToSendList.Success"
+                                        });
+                                    }
+                                    else
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                        {
+                                            LocalizationText = "cmsPacketList_ToSendList.Error"
+                                        });
+                                    }
+                                }
+                            }
+
+                            break;
+                    }
+                }, Operate.PacketConfig.Packet.GetCMS_PacketData(this.hbPacketData)));
+            }
+        }
+
+        #endregion
+
         #region//滤镜列表 - 菜单
 
         private void sFilterList_SelectIndexChanged(object sender, IntEventArgs e)
@@ -1849,7 +2045,7 @@ namespace WPE.InjectMode
                     Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstPacketInfo[selectedIndex];
 
                     DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
-                    hbPacketData.ByteProvider = dbp;
+                    hbPacketData.ByteProvider = dbp;                    
                 }
             }
             catch (Exception ex)
@@ -1952,7 +2148,7 @@ namespace WPE.InjectMode
                         {
                             case FindType.Text:
                                 efFormat = Operate.PacketConfig.Packet.EncodingFormat.UTF7;
-                                bSearchContent = Socket_Operation.StringToBytes(efFormat, Operate.PacketConfig.List.FindOptions.Text);
+                                bSearchContent = Operate.SystemConfig.StringToBytes(efFormat, Operate.PacketConfig.List.FindOptions.Text);
                                 break;
 
                             case FindType.Hex:
@@ -2009,8 +2205,6 @@ namespace WPE.InjectMode
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-
-
 
         #endregion
 
@@ -2528,27 +2722,27 @@ namespace WPE.InjectMode
             {
                 string sEncodingText = this.txtTranscoding.Text.Trim();
 
-                this.txtBytes.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sEncodingText));
-                this.txtANSIGBK.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.GBK, sEncodingText));
+                this.txtBytes.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sEncodingText));
+                this.txtANSIGBK.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.GBK, sEncodingText));
 
-                this.txtUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
-                this.txtANSIUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
+                this.txtUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
+                this.txtANSIUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
 
-                this.txtUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
-                this.txtANSIUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
+                this.txtUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
+                this.txtANSIUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
 
-                this.txtUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
-                this.txtANSIUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
+                this.txtUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
+                this.txtANSIUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
 
-                this.txtUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
-                this.txtANSIUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
+                this.txtUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
+                this.txtANSIUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
 
-                this.txtUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
-                this.txtANSIUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
+                this.txtUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
+                this.txtANSIUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
 
                 string sBase64 = Socket_Operation.Base64_Encoding(sEncodingText);
                 this.txtbase64.Text = sBase64;
-                this.txtANSIbase64.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sBase64));
+                this.txtANSIbase64.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sBase64));
             }
             catch (Exception ex)
             {
@@ -2562,26 +2756,26 @@ namespace WPE.InjectMode
             {
                 string sDecodingText = this.txtTranscoding.Text;
 
-                this.txtBytes.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIGBK.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.GBK, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                this.txtBytes.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                this.txtANSIGBK.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.GBK, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                this.txtUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                this.txtUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                this.txtANSIUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                this.txtUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                this.txtUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                this.txtANSIUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                this.txtUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                this.txtUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                this.txtANSIUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                this.txtUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                this.txtUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                this.txtANSIUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                this.txtUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                this.txtUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                this.txtANSIUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
                 this.txtbase64.Text = Socket_Operation.Base64_Decoding(sDecodingText);
-                this.txtANSIbase64.Text = Socket_Operation.Base64_Decoding(Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText)));
+                this.txtANSIbase64.Text = Socket_Operation.Base64_Decoding(Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText)));
             }
             catch (Exception ex)
             {
@@ -2925,8 +3119,8 @@ namespace WPE.InjectMode
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
-        }        
+        }
 
-        #endregion
+        #endregion        
     }
 }

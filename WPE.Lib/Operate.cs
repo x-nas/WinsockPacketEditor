@@ -539,6 +539,59 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//字符串转byte[]
+
+            public static byte[] StringToBytes(Operate.PacketConfig.Packet.EncodingFormat efFormat, string sString)
+            {
+                byte[] bReturn = new byte[sString.Length];
+
+                try
+                {
+                    switch (efFormat)
+                    {
+                        case Operate.PacketConfig.Packet.EncodingFormat.Default:
+                            bReturn = Encoding.Default.GetBytes(sString);
+                            break;
+
+                        case Operate.PacketConfig.Packet.EncodingFormat.Hex:
+                            bReturn = SystemConfig.Hex_To_Bytes(sString);
+                            break;
+
+                        case Operate.PacketConfig.Packet.EncodingFormat.GBK:
+                            bReturn = Encoding.GetEncoding("GBK").GetBytes(sString);
+                            break;
+
+                        case Operate.PacketConfig.Packet.EncodingFormat.Unicode:
+                            bReturn = Encoding.Unicode.GetBytes(sString);
+                            break;
+
+                        case Operate.PacketConfig.Packet.EncodingFormat.UTF7:
+                            bReturn = Encoding.UTF7.GetBytes(sString);
+                            break;
+
+                        case Operate.PacketConfig.Packet.EncodingFormat.UTF8:
+                            bReturn = Encoding.UTF8.GetBytes(sString);
+                            break;
+
+                        case Operate.PacketConfig.Packet.EncodingFormat.UTF16:
+                            bReturn = Encoding.BigEndianUnicode.GetBytes(sString);
+                            break;
+
+                        case Operate.PacketConfig.Packet.EncodingFormat.UTF32:
+                            bReturn = Encoding.UTF32.GetBytes(sString);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            #endregion
+
             #region//byte[]转字符串
 
             public static string BytesToString(Operate.PacketConfig.Packet.EncodingFormat efFormat, ReadOnlySpan<byte> buffer)
@@ -683,6 +736,42 @@ namespace WPE.Lib
                 }
 
                 return sReturn;
+            }
+
+            #endregion
+
+            #region//十六进制字符串转byte[]
+
+            private static byte[] Hex_To_Bytes(string hexString)
+            {
+                if (string.IsNullOrEmpty(hexString))
+                {
+                    return Array.Empty<byte>();
+                }
+
+                try
+                {
+                    hexString = hexString.Replace(" ", "");
+
+                    if ((hexString.Length % 2) != 0)
+                    {
+                        hexString += " ";
+                    }
+
+                    byte[] returnBytes = new byte[hexString.Length / 2];
+                    Span<byte> span = returnBytes.AsSpan();
+
+                    for (int i = 0; i < span.Length; i++)
+                    {
+                        span[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+                    }
+
+                    return returnBytes;
+                }
+                catch
+                {
+                    return Array.Empty<byte>();
+                }
             }
 
             #endregion
@@ -7987,7 +8076,7 @@ namespace WPE.Lib
                         {
                             if (!string.IsNullOrEmpty(headValue))
                             {
-                                byte[] headBytes = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, headValue);
+                                byte[] headBytes = SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, headValue);
 
                                 if (bBuffer.Length >= headBytes.Length)
                                 {
@@ -8134,6 +8223,102 @@ namespace WPE.Lib
                     }
 
                     return sReturn;
+                }
+
+                #endregion
+
+                #region//获取封包数据的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_PacketData(HexBox hbPacketData)
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("编辑")
+                    {
+                        ID = "Edit",
+                        IconSvg = "EditOutlined",
+                        LocalizationText = "InjectModeForm.Edit",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    if (SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        {
+                            ID = "ToSendList",
+                            IconSvg = "PlaySquareOutlined",
+                            LocalizationText = "InjectModeForm.ToSendList",
+                            Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
+                        });
+                    }
+                    else
+                    {
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        {
+                            Enabled = false,
+                            ID = "ToSendList",
+                            IconSvg = "PlaySquareOutlined",
+                            LocalizationText = "InjectModeForm.ToSendList",
+                        });
+                    }
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("添加到滤镜列表")
+                    {
+                        ID = "ToFilterList",
+                        IconSvg = "FunnelPlotOutlined",
+                        LocalizationText = "InjectModeForm.ToFilterList",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
+                    {
+                        Enabled = hbPacketData.CanCopy(),
+                        ID = "Copy",
+                        IconSvg = "CopyOutlined",
+                        Sub = new AntdUI.IContextMenuStripItem[]
+                        {
+                            new AntdUI.ContextMenuStripItem("复制文本")
+                            {
+                                Enabled = hbPacketData.CanCopy(),
+                                ID = "Copy_Text",
+                                IconSvg = "CopyOutlined",
+                            },
+                            new AntdUI.ContextMenuStripItem("复制十六进制")
+                            {
+                                Enabled = hbPacketData.CanCopy(),
+                                ID = "Copy_Hex",
+                                IconSvg = "CopyOutlined",
+                            },
+                        },
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("添加到文本A")
+                    {
+                        ID = "ToTextA",
+                        IconSvg = "FontColorsOutlined",
+                        LocalizationText = "InjectModeForm.ToTextA",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("添加到文本B")
+                    {
+                        ID = "ToTextB",
+                        IconSvg = "BoldOutlined",
+                        LocalizationText = "InjectModeForm.ToTextB",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("全选")
+                    {
+                        ID = "SelectAll",
+                        IconSvg = "ProfileOutlined",
+                    });
+
+                    return menuItems.ToArray();
                 }
 
                 #endregion
@@ -9723,7 +9908,7 @@ namespace WPE.Lib
 
                     try
                     {
-                        byte[] headerBytes = Socket_Operation.StringToBytes(
+                        byte[] headerBytes = SystemConfig.StringToBytes(
                             PacketConfig.Packet.EncodingFormat.Hex,
                             headerContent);
 
@@ -12076,7 +12261,7 @@ namespace WPE.Lib
                                     byte[] bBuffer = null;
                                     if (xeSend.Element("Data") != null)
                                     {
-                                        bBuffer = Socket_Operation.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, xeSend.Element("Data").Value);
+                                        bBuffer = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, xeSend.Element("Data").Value);
                                     }
 
                                     Send.AddSendCollection(SendCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
@@ -12119,7 +12304,7 @@ namespace WPE.Lib
                                     byte[] bBuffer = null;
                                     if (xeCollection.Element("Buffer") != null)
                                     {
-                                        bBuffer = Socket_Operation.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
+                                        bBuffer = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
                                     }
 
                                     Send.AddSendCollection(SendCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
@@ -12736,7 +12921,7 @@ namespace WPE.Lib
                                     byte[] bBuffer = null;
                                     if (xeCollection.Element("Buffer") != null)
                                     {
-                                        bBuffer = Socket_Operation.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
+                                        bBuffer = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
                                     }
 
                                     Send.AddSendCollection(SCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
