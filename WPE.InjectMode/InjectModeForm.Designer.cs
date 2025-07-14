@@ -461,6 +461,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
+            this.tabInjectMode.SelectedIndex = 8;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -469,7 +470,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
+            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1153,6 +1154,7 @@
             this.pPacketData.Location = new System.Drawing.Point(0, 0);
             this.pPacketData.Name = "pPacketData";
             this.pPacketData.Padding = new System.Windows.Forms.Padding(6);
+            this.pPacketData.Radius = 0;
             this.pPacketData.Size = new System.Drawing.Size(1118, 153);
             this.pPacketData.TabIndex = 0;
             // 
@@ -2495,7 +2497,7 @@
             // tpExtraction
             // 
             this.tpExtraction.Controls.Add(this.splitterExtraction);
-            this.tpExtraction.Location = new System.Drawing.Point(-1124, -724);
+            this.tpExtraction.Location = new System.Drawing.Point(3, 33);
             this.tpExtraction.Name = "tpExtraction";
             this.tpExtraction.Size = new System.Drawing.Size(1124, 724);
             this.tpExtraction.TabIndex = 5;
@@ -2613,11 +2615,12 @@
             // txtExtraction
             // 
             this.txtExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtExtraction.Location = new System.Drawing.Point(3, 3);
+            this.txtExtraction.Location = new System.Drawing.Point(0, 0);
+            this.txtExtraction.Margin = new System.Windows.Forms.Padding(0);
             this.txtExtraction.Multiline = true;
             this.txtExtraction.Name = "txtExtraction";
             this.txtExtraction.ReadOnly = true;
-            this.txtExtraction.Size = new System.Drawing.Size(1118, 268);
+            this.txtExtraction.Size = new System.Drawing.Size(1124, 274);
             this.txtExtraction.TabIndex = 1;
             // 
             // tpSystemLog
