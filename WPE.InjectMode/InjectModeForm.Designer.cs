@@ -278,6 +278,7 @@
             this.pageHeader.DividerMargin = 3;
             this.pageHeader.DividerShow = true;
             this.pageHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pageHeader.FullBox = true;
             this.pageHeader.Location = new System.Drawing.Point(0, 0);
             this.pageHeader.Name = "pageHeader";
             this.pageHeader.ShowButton = true;
@@ -290,7 +291,7 @@
             // colorTheme
             // 
             this.colorTheme.Dock = System.Windows.Forms.DockStyle.Right;
-            this.colorTheme.Location = new System.Drawing.Point(966, 0);
+            this.colorTheme.Location = new System.Drawing.Point(918, 0);
             this.colorTheme.Name = "colorTheme";
             this.colorTheme.Padding = new System.Windows.Forms.Padding(5);
             this.colorTheme.Size = new System.Drawing.Size(40, 40);
@@ -303,7 +304,7 @@
             this.btn_mode.Dock = System.Windows.Forms.DockStyle.Right;
             this.btn_mode.Ghost = true;
             this.btn_mode.IconSvg = "SunOutlined";
-            this.btn_mode.Location = new System.Drawing.Point(1006, 0);
+            this.btn_mode.Location = new System.Drawing.Point(958, 0);
             this.btn_mode.Name = "btn_mode";
             this.btn_mode.Radius = 0;
             this.btn_mode.Size = new System.Drawing.Size(50, 40);
@@ -318,7 +319,7 @@
             this.btn_global.DropDownRadius = 6;
             this.btn_global.Ghost = true;
             this.btn_global.IconSvg = "GlobalOutlined";
-            this.btn_global.Location = new System.Drawing.Point(1056, 0);
+            this.btn_global.Location = new System.Drawing.Point(1008, 0);
             this.btn_global.Name = "btn_global";
             this.btn_global.Placement = AntdUI.TAlignFrom.BR;
             this.btn_global.Radius = 0;
@@ -332,7 +333,7 @@
             this.btn_setting.Dock = System.Windows.Forms.DockStyle.Right;
             this.btn_setting.Ghost = true;
             this.btn_setting.IconSvg = "SettingOutlined";
-            this.btn_setting.Location = new System.Drawing.Point(1106, 0);
+            this.btn_setting.Location = new System.Drawing.Point(1058, 0);
             this.btn_setting.Name = "btn_setting";
             this.btn_setting.Radius = 0;
             this.btn_setting.Size = new System.Drawing.Size(50, 40);
@@ -388,7 +389,7 @@
             menuItem6.ID = "miComparison";
             menuItem6.LocalizationText = "InjectModeForm.{id}";
             menuItem6.Text = "文本对比";
-            menuItem7.IconSvg = "CalculatorFilled";
+            menuItem7.IconSvg = "BuildFilled";
             menuItem7.ID = "miXOR";
             menuItem7.LocalizationText = "InjectModeForm.{id}";
             menuItem7.Text = "异或计算";
@@ -447,7 +448,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -461,6 +462,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
+            this.tabInjectMode.SelectedIndex = 7;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -469,7 +471,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
+            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1971,7 +1973,7 @@
             // bXOR
             // 
             this.bXOR.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bXOR.IconSvg = "CalculatorOutlined";
+            this.bXOR.IconSvg = "BuildFilled";
             this.bXOR.Location = new System.Drawing.Point(887, 7);
             this.bXOR.Name = "bXOR";
             this.bXOR.Size = new System.Drawing.Size(114, 45);
@@ -2074,7 +2076,7 @@
             // tpTranscoding
             // 
             this.tpTranscoding.Controls.Add(this.tlpTranscoding);
-            this.tpTranscoding.Location = new System.Drawing.Point(-1124, -724);
+            this.tpTranscoding.Location = new System.Drawing.Point(3, 33);
             this.tpTranscoding.Name = "tpTranscoding";
             this.tpTranscoding.Size = new System.Drawing.Size(1124, 724);
             this.tpTranscoding.TabIndex = 4;
@@ -2665,6 +2667,7 @@
             // bgwPacketList
             // 
             this.bgwPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketList_DoWork);
+            this.bgwPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwPacketList_RunWorkerCompleted);
             // 
             // bgwSendList
             // 

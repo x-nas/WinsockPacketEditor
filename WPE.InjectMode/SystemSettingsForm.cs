@@ -7,11 +7,14 @@ namespace WPE.InjectMode
 {
     public partial class SystemSettingsForm : Form
     {
+        private InjectModeForm imForm;
+
         #region//窗体事件
 
-        public SystemSettingsForm()
+        public SystemSettingsForm(InjectModeForm form)
         {
             InitializeComponent();
+            this.imForm = form;
         }
 
         private void SystemSettingsForm_Load(object sender, EventArgs e)
@@ -19,6 +22,7 @@ namespace WPE.InjectMode
             this.Text = AntdUI.Localization.Get("SystemSettingsForm", "系统设置");
 
             this.cbSpeedMode.Checked = Operate.PacketConfig.Packet.SpeedMode;
+            this.switchFloatButton.Checked = Operate.SystemConfig.IsShow_FloatButton;
 
             switch (Operate.SystemConfig.ListExecute)
             {
@@ -71,6 +75,8 @@ namespace WPE.InjectMode
         private void bSave_Click(object sender, EventArgs e)
         {
             Operate.PacketConfig.Packet.SpeedMode = this.cbSpeedMode.Checked;
+            Operate.SystemConfig.IsShow_FloatButton = this.switchFloatButton.Checked;
+            imForm.InitFloatButton();
 
             if (this.rbListExecute_Together.Checked)
             {

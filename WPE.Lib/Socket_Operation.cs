@@ -176,34 +176,7 @@ namespace WPE.Lib
 
         
 
-        #region//检测网站可访问性
-
-        public static async Task<bool> CheckWebSite(string sURL)
-        {
-            bool bReturn = false;
-
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                {
-                    client.Timeout = TimeSpan.FromSeconds(5);
-                    HttpResponseMessage response = await client.GetAsync(sURL);
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        bReturn = true;
-                    }
-                }  
-            }
-            catch
-            {
-                bReturn = false;
-            }
-
-            return bReturn;
-        }
-
-        #endregion        
+        
 
         #region//启动远程管理
 

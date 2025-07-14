@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using System.IO;
 using WPE.Lib;
 using WPE.Lib.Controls;
+using System.Diagnostics;
 
 namespace WPE.InjectMode
 {
@@ -25,6 +26,7 @@ namespace WPE.InjectMode
         private string TextA = string.Empty;
         private string TextB = string.Empty;       
         private readonly Hook ws = new Hook();
+        private AntdUI.FormFloatButton FloatButton = null;
 
         #region//窗体事件
 
@@ -51,9 +53,9 @@ namespace WPE.InjectMode
             Operate.SystemConfig.LoadInjectMode_FromDB();
             Operate.SystemConfig.LoadSystemList_FromDB();
 
-            this.InitForm();
             this.Dark_Changed();
-
+            this.InitForm();
+            this.InitFloatButton();
             this.InitTable_PacketList();
             this.InitTable_FilterList();
             this.InitTable_SendList();
@@ -114,6 +116,61 @@ namespace WPE.InjectMode
             }
 
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
+        }
+
+        public void InitFloatButton()
+        {
+            if (Operate.SystemConfig.IsShow_FloatButton)
+            {
+                if (FloatButton == null)
+                {
+                    FloatButton = AntdUI.FloatButton.open(new AntdUI.FloatButton.Config(this,
+                        new AntdUI.FloatButton.ConfigBtn[]
+                        {
+                            new AntdUI.FloatButton.ConfigBtn("GitHub", "QuestionOutlined", true)
+                    {
+                        Tooltip = "问题和反馈",
+                        Type= AntdUI.TTypeMini.Success
+                    },
+                            new AntdUI.FloatButton.ConfigBtn("WebSite", "HomeOutlined", true)
+                    {
+                        Tooltip = "访问官网",
+                        Type= AntdUI.TTypeMini.Info
+                    }
+                        }, btn =>
+                        {
+                            btn.Loading = true;
+
+                            AntdUI.ITask.Run(() =>
+                    {
+                        switch (btn.Name)
+                        {
+                            case "GitHub":
+                                Process.Start(Operate.SystemConfig.WPE64_Issuse);
+                                break;
+
+                            case "WebSite":
+                                Process.Start(Operate.SystemConfig.WPE64_URL);
+                                break;
+                        }
+
+                        btn.Loading = false;
+                    });
+                        }));
+                }
+                else
+                {
+                    FloatButton.Show();
+                }
+            }
+            else
+            {
+                if (FloatButton != null)
+                {
+                    FloatButton.Close();
+                    FloatButton = null;
+                }                
+            }            
         }
 
         public void RefreshFilterList()
@@ -908,7 +965,7 @@ namespace WPE.InjectMode
 
                 //系统设置
                 case 5:
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -2063,9 +2120,6 @@ namespace WPE.InjectMode
 
         private void bgwPacketList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            this.tPacketList.Refresh();
-            this.tSystemLog.Refresh();
-
             try
             {
                 if (Operate.PacketConfig.List.AutoRoll)
@@ -2099,6 +2153,12 @@ namespace WPE.InjectMode
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        private void bgwPacketList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            this.tPacketList.Refresh();
+            this.tSystemLog.Refresh();
         }
 
         #endregion

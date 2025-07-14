@@ -12,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
@@ -45,6 +46,7 @@ namespace WPE.Lib
             public static string LastInjection = string.Empty;
             public static string WPE64_URL = "https://www.wpe64.com";
             public static string WPE64_IP = "http://101.132.222.195";
+            public static string WPE64_Issuse = "https://github.com/x-nas/WinsockPacketEditor/issues";
             public static string WPE64_DLL = "WPE.InjectMode.dll";
             public static SystemMode StartMode = SystemMode.None;
             public static DateTime StartTime = DateTime.Now;
@@ -56,8 +58,9 @@ namespace WPE.Lib
             public static ushort Remote_Port = 88;
             public static IDisposable WebServer;
             public static PerformanceCounter cpuCounter;
+            public static bool IsShow_FloatButton = true;
             public static bool IsShow_TextCompare = false, IsShow_TextDuplicate = false;
-            public static Execute ListExecute = Execute.Sequence;
+            public static Execute ListExecute = Execute.Sequence;            
 
             public static Action<Action> InvokeAction { get; set; }
 
@@ -192,6 +195,35 @@ namespace WPE.Lib
                     }
                     return ((AssemblyCompanyAttribute)attributes[0]).Company;
                 }
+            }
+
+            #endregion
+
+            #region//检测网站可访问性
+
+            public static async Task<bool> CheckWebSite(string sURL)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        client.Timeout = TimeSpan.FromSeconds(5);
+                        HttpResponseMessage response = await client.GetAsync(sURL);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            bReturn = true;
+                        }
+                    }
+                }
+                catch
+                {
+                    bReturn = false;
+                }
+
+                return bReturn;
             }
 
             #endregion
@@ -1451,6 +1483,7 @@ namespace WPE.Lib
                         new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
                         new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
                         new XElement("SpeedMode", PacketConfig.Packet.SpeedMode),
+                        new XElement("IsShow_FloatButton", SystemConfig.IsShow_FloatButton),
                         new XElement("ListExecute", ListExecute),
                         new XElement("FilterExecute", FilterConfig.Filter.FilterExecute)
                         );
@@ -1521,7 +1554,8 @@ namespace WPE.Lib
                         LogConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoClear"]);
                         LogConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["LogList_AutoClear_Value"]);
                         PacketConfig.Packet.SpeedMode = Convert.ToBoolean(InjectMode.Rows[0]["SpeedMode"]);
-                        ListExecute = GetListExecute_ByString(InjectMode.Rows[0]["ListExecute"].ToString());
+                        SystemConfig.IsShow_FloatButton = Convert.ToBoolean(InjectMode.Rows[0]["IsShow_FloatButton"]);
+                        SystemConfig.ListExecute = GetListExecute_ByString(InjectMode.Rows[0]["ListExecute"].ToString());
                         FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(InjectMode.Rows[0]["FilterExecute"].ToString());
                     }
                 }
@@ -1799,6 +1833,12 @@ namespace WPE.Lib
                         PacketConfig.Packet.SpeedMode = Convert.ToBoolean(SpeedMode.Value);
                     }
 
+                    XElement IsShow_FloatButton = xeInjectMode.Element("IsShow_FloatButton");
+                    if (IsShow_FloatButton != null)
+                    {
+                        Operate.SystemConfig.IsShow_FloatButton = Convert.ToBoolean(IsShow_FloatButton.Value);
+                    }
+
                     XElement xeListExecute = xeInjectMode.Element("ListExecute");
                     if (xeListExecute != null)
                     {
@@ -1925,6 +1965,7 @@ namespace WPE.Lib
                         new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
                         new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
                         new XElement("SpeedMode", PacketConfig.Packet.SpeedMode),
+                        new XElement("IsShow_FloatButton", SystemConfig.IsShow_FloatButton),
                         new XElement("ListExecute", ListExecute),
                         new XElement("FilterExecute", FilterConfig.Filter.FilterExecute)
                         );
@@ -14819,6 +14860,7 @@ namespace WPE.Lib
                         sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
                         sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
                         sql += "SpeedMode BOOLEAN DEFAULT 0,";//极速模式
+                        sql += "IsShow_FloatButton BOOLEAN DEFAULT 1,";//是否显示悬浮按钮
                         sql += "ListExecute INTEGER DEFAULT 1,";//列表执行模式
                         sql += "FilterExecute INTEGER DEFAULT 1";//滤镜执行模式
                         sql += ");";
@@ -14936,6 +14978,7 @@ namespace WPE.Lib
                         sql += "LogList_AutoClear,";
                         sql += "LogList_AutoClear_Value,";
                         sql += "SpeedMode,";
+                        sql += "IsShow_FloatButton,";
                         sql += "ListExecute,";
                         sql += "FilterExecute";
                         sql += ") VALUES (";                     
@@ -14983,6 +15026,7 @@ namespace WPE.Lib
                         sql += "@LogList_AutoClear,";
                         sql += "@LogList_AutoClear_Value,";
                         sql += "@SpeedMode,";
+                        sql += "@IsShow_FloatButton,";
                         sql += "@ListExecute,";
                         sql += "@FilterExecute";
                         sql += ");";
@@ -15033,6 +15077,7 @@ namespace WPE.Lib
                             cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
                             cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
                             cmd.Parameters.AddWithValue("@SpeedMode", PacketConfig.Packet.SpeedMode);
+                            cmd.Parameters.AddWithValue("@IsShow_FloatButton", SystemConfig.IsShow_FloatButton);
                             cmd.Parameters.AddWithValue("@ListExecute", SystemConfig.ListExecute);
                             cmd.Parameters.AddWithValue("@FilterExecute", FilterConfig.Filter.FilterExecute);
 
