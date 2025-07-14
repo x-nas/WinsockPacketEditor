@@ -94,12 +94,7 @@ namespace WPE.InjectMode
         private void rbString_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
         {
             this.FindTypeChanged();
-        }
-
-        private void rbHex_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
-        {
-            this.FindTypeChanged();
-        }
+        }        
 
         private void FindTypeChanged()
         {

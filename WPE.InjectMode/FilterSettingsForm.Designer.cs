@@ -319,6 +319,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "FilterSettingsForm";
+            this.ShowInTaskbar = false;
             this.Text = "FilterSettings";
             this.Load += new System.EventHandler(this.FilterSettingsForm_Load);
             this.tlpButton.ResumeLayout(false);

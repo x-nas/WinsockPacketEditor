@@ -609,6 +609,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "HotKeyForm";
+            this.ShowInTaskbar = false;
             this.Text = "HotKeyForm";
             this.Load += new System.EventHandler(this.HotKeyForm_Load);
             this.tlpHotKey.ResumeLayout(false);

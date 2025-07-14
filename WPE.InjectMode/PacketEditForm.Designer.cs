@@ -177,7 +177,7 @@
             this.lSend_Fail_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Fail_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Fail_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSend_Fail_CNT.ForeColor = System.Drawing.Color.DarkRed;
+            this.lSend_Fail_CNT.ForeColor = System.Drawing.Color.Red;
             this.lSend_Fail_CNT.Location = new System.Drawing.Point(217, 3);
             this.lSend_Fail_CNT.Name = "lSend_Fail_CNT";
             this.lSend_Fail_CNT.Size = new System.Drawing.Size(10, 39);
@@ -201,7 +201,7 @@
             this.lTotal_Send_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTotal_Send_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTotal_Send_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lTotal_Send_CNT.ForeColor = System.Drawing.Color.Blue;
+            this.lTotal_Send_CNT.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             this.lTotal_Send_CNT.Location = new System.Drawing.Point(77, 3);
             this.lTotal_Send_CNT.Name = "lTotal_Send_CNT";
             this.lTotal_Send_CNT.Size = new System.Drawing.Size(10, 39);
@@ -716,7 +716,6 @@
             // nudPacketLength
             // 
             this.nudPacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudPacketLength.Enabled = false;
             this.nudPacketLength.Location = new System.Drawing.Point(92, 96);
             this.nudPacketLength.Minimum = new decimal(new int[] {
             0,
@@ -790,7 +789,6 @@
             // txtPacketTo
             // 
             this.txtPacketTo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPacketTo.Enabled = false;
             this.txtPacketTo.Location = new System.Drawing.Point(92, 51);
             this.txtPacketTo.Name = "txtPacketTo";
             this.txtPacketTo.ReadOnly = true;
@@ -829,6 +827,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "PacketEditForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PacketEditForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PacketEditForm_FormClosing);

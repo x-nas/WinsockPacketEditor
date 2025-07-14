@@ -315,6 +315,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "HookSettingsForm";
+            this.ShowInTaskbar = false;
             this.Text = "HookSettings";
             this.Load += new System.EventHandler(this.HookSettingsForm_Load);
             this.tlpHookSettings.ResumeLayout(false);

@@ -919,10 +919,13 @@ namespace WPE.InjectMode
 
                 //查找封包
                 case 6:
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SearchPacketForm(this) { Size = new Size(300, 300) })
-                    {                        
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = false,                        
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SearchPacketForm(this)
+                    { 
+                        Size = new Size(1000, 100),
+                    })
+                    {
+                        Align = AntdUI.TAlignMini.Top,
+                        Mask = false,
                         DisplayDelay = 0,
                     });
                     break;

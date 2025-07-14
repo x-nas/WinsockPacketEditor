@@ -502,6 +502,7 @@
             this.nudProgressionStep.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionStep.Location = new System.Drawing.Point(107, 6);
             this.nudProgressionStep.Name = "nudProgressionStep";
+            this.nudProgressionStep.SelectionStart = 1;
             this.nudProgressionStep.Size = new System.Drawing.Size(139, 39);
             this.nudProgressionStep.TabIndex = 42;
             this.nudProgressionStep.Text = "1";
@@ -517,6 +518,7 @@
             this.nudProgressionCarry.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionCarry.Location = new System.Drawing.Point(107, 51);
             this.nudProgressionCarry.Name = "nudProgressionCarry";
+            this.nudProgressionCarry.SelectionStart = 1;
             this.nudProgressionCarry.Size = new System.Drawing.Size(139, 39);
             this.nudProgressionCarry.TabIndex = 43;
             this.nudProgressionCarry.Text = "1";
@@ -1260,6 +1262,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "FilterEditForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FilterEditForm";
             this.Load += new System.EventHandler(this.FilterEditForm_Load);
