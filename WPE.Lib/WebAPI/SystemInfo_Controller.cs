@@ -13,7 +13,7 @@ namespace WPE.Lib.WebAPI
 
         public IHttpActionResult GetCPUAndMemory()
         {
-            return Ok(Socket_Operation.GetCPUAndMemory());
+            return Ok(Operate.SystemConfig.GetCPUAndMemory());
         }
 
         #endregion

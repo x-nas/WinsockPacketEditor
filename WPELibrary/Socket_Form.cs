@@ -46,65 +46,65 @@ namespace WPELibrary
 
         private void Socket_Form_Load(object sender, EventArgs e)
         {
-            this.InitSocketForm();
-            this.InitHexBox_XOR();
-            this.LoadConfigs_Parameter();        
+            //this.InitSocketForm();
+            //this.InitHexBox_XOR();
+            //this.LoadConfigs_Parameter();        
 
-            Socket_Operation.StartRemoteMGT();
-            Operate.SystemConfig.LoadSystemList_FromDB();
-            Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_FromDB();
-            Operate.ProxyConfig.ProxyMapping.LoadProxyMapLocal_FromDB();
-            Operate.ProxyConfig.ProxyMapping.LoadProxyMapRemote_FromDB();
+            //Socket_Operation.StartRemoteMGT();
+            //Operate.SystemConfig.LoadSystemList_FromDB();
+            //Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_FromDB();
+            //Operate.ProxyConfig.ProxyMapping.LoadProxyMapLocal_FromDB();
+            //Operate.ProxyConfig.ProxyMapping.LoadProxyMapRemote_FromDB();
         }
 
         private void Socket_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.SaveConfigs_Parameter();
-            this.ExitMainForm();
+            //this.SaveConfigs_Parameter();
+            //this.ExitMainForm();
         }
 
         private void Socket_Form_Resize(object sender, EventArgs e)
         {
-            try
-            {
-                if (WindowState == FormWindowState.Minimized)
-                {
-                    this.Hide();
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            //try
+            //{
+            //    if (WindowState == FormWindowState.Minimized)
+            //    {
+            //        this.Hide();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            //}
         }
 
         private void niWPE_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (((MouseEventArgs)e).Button == MouseButtons.Left)
-                {
-                    this.ShowMainForm();
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            //try
+            //{
+            //    if (((MouseEventArgs)e).Button == MouseButtons.Left)
+            //    {
+            //        this.ShowMainForm();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            //}
         }
 
         private void ShowMainForm()
         {
-            try
-            {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            //try
+            //{
+            //    this.Show();
+            //    this.WindowState = FormWindowState.Normal;
+            //    this.Activate();
+            //}
+            //catch (Exception ex)
+            //{
+            //    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            //}
         }
 
         public void ExitMainForm()
@@ -114,12 +114,12 @@ namespace WPELibrary
                 ws.ExitHook();
                 this.niWPE.Visible = false;
 
-                Socket_Operation.StopRemoteMGT(this.RunMode);
-                Operate.SystemConfig.SaveSystemList_ToDB();
-                Operate.SystemConfig.SaveRunConfig_ToDB(this.RunMode);
-                Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
-                Operate.ProxyConfig.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
-                Operate.ProxyConfig.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
+                //Socket_Operation.StopRemoteMGT(this.RunMode);
+                //Operate.SystemConfig.SaveSystemList_ToDB();
+                //Operate.SystemConfig.SaveRunConfig_ToDB(this.RunMode);
+                //Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
+                //Operate.ProxyConfig.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
+                //Operate.ProxyConfig.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {
@@ -161,23 +161,23 @@ namespace WPELibrary
         {
             try
             {
-                this.Text = "WPE x64 - " + Operate.SystemConfig.AssemblyVersion;
+                //this.Text = "WPE x64 - " + Operate.SystemConfig.AssemblyVersion;
 
-                tt.SetToolTip(cbWorkingMode_Speed, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
-                tt.SetToolTip(rbFilterSet_Priority, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63));
-                tt.SetToolTip(rbFilterSet_Sequence, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_64));
-                tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
-                tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
+                //tt.SetToolTip(cbWorkingMode_Speed, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
+                //tt.SetToolTip(rbFilterSet_Priority, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63));
+                //tt.SetToolTip(rbFilterSet_Sequence, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_64));
+                //tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
+                //tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
 
-                Operate.SystemConfig.MainHandle = this.Handle;
+                //Operate.SystemConfig.MainHandle = this.Handle;
                 
 
-                this.tSocketInfo.Enabled = true;
-                this.tSocketList.Enabled = true;
+                //this.tSocketInfo.Enabled = true;
+                //this.tSocketList.Enabled = true;
           
-                this.cbbExtraction.SelectedIndex = 0;
+                //this.cbbExtraction.SelectedIndex = 0;
 
-                Socket_Operation.InitCPUAndMemoryCounter();
+                //Socket_Operation.InitCPUAndMemoryCounter();
 
                 
 
@@ -651,7 +651,7 @@ namespace WPELibrary
 
         private void CleanUp_MainForm()
         {
-            this.CleanUp_SocketInfo();
+            //this.CleanUp_SocketInfo();
             this.CleanUp_SocketList();
             this.CleanUp_HexBox();
             this.CleanUp_LogList();
@@ -1803,7 +1803,7 @@ namespace WPELibrary
 
                         if (dgvLogList.Rows.Count > 0)
                         {
-                            Operate.LogConfig.List.SaveLogListToExcel();
+                            //Operate.LogConfig.List.SaveLogListToExcel();
                         }
 
                         break;

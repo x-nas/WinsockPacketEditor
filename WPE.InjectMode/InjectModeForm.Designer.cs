@@ -462,7 +462,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 7;
+            this.tabInjectMode.SelectedIndex = 9;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -2076,7 +2076,7 @@
             // tpTranscoding
             // 
             this.tpTranscoding.Controls.Add(this.tlpTranscoding);
-            this.tpTranscoding.Location = new System.Drawing.Point(3, 33);
+            this.tpTranscoding.Location = new System.Drawing.Point(-1124, -724);
             this.tpTranscoding.Name = "tpTranscoding";
             this.tpTranscoding.Size = new System.Drawing.Size(1124, 724);
             this.tpTranscoding.TabIndex = 4;
@@ -2627,9 +2627,9 @@
             // tpSystemLog
             // 
             this.tpSystemLog.Controls.Add(this.tSystemLog);
-            this.tpSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tpSystemLog.Location = new System.Drawing.Point(3, 33);
             this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(0, 0);
+            this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
             this.tpSystemLog.TabIndex = 6;
             this.tpSystemLog.Text = "系统日志";
             // 
@@ -2642,10 +2642,12 @@
             this.tSystemLog.Gap = 8;
             this.tSystemLog.GapCell = 0;
             this.tSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tSystemLog.MultipleRows = true;
             this.tSystemLog.Name = "tSystemLog";
-            this.tSystemLog.Size = new System.Drawing.Size(0, 0);
+            this.tSystemLog.Size = new System.Drawing.Size(1124, 724);
             this.tSystemLog.TabIndex = 2;
             this.tSystemLog.Text = "table1";
+            this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
             // 
             // timerPacketList
             // 

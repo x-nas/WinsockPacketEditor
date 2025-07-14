@@ -3,17 +3,17 @@ using Be.Windows.Forms;
 using EasyHook;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using System.IO;
 using WPE.Lib;
 using WPE.Lib.Controls;
-using System.Diagnostics;
 
 namespace WPE.InjectMode
 {
@@ -27,6 +27,7 @@ namespace WPE.InjectMode
         private string TextB = string.Empty;       
         private readonly Hook ws = new Hook();
         private AntdUI.FormFloatButton FloatButton = null;
+        private readonly Operate.SystemConfig.SystemMode RunMode = Operate.SystemConfig.SystemMode.Process;
 
         #region//窗体事件
 
@@ -49,9 +50,14 @@ namespace WPE.InjectMode
                     action();
                 }
             };
+            Operate.SystemConfig.InitCPUAndMemoryCounter();
             Operate.SystemConfig.LoadSystemConfig_FromDB();
             Operate.SystemConfig.LoadInjectMode_FromDB();
-            Operate.SystemConfig.LoadSystemList_FromDB();
+            Operate.SystemConfig.LoadSystemList_FromDB();            
+            Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_FromDB();
+            Operate.ProxyConfig.ProxyMapping.LoadProxyMapLocal_FromDB();
+            Operate.ProxyConfig.ProxyMapping.LoadProxyMapRemote_FromDB();
+            Operate.SystemConfig.StartRemoteMGT();
 
             this.Dark_Changed();
             this.InitForm();
@@ -62,8 +68,8 @@ namespace WPE.InjectMode
             this.InitTable_RobotList();
             this.InitTable_LogList();
             this.InitComparison();
-            this.InitExtraction();
-            
+            this.InitExtraction();            
+
             this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
             this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
             this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
@@ -75,9 +81,40 @@ namespace WPE.InjectMode
 
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            ws.ExitHook();
+
+            Operate.SystemConfig.StopRemoteMGT(this.RunMode);
             Operate.SystemConfig.SaveSystemList_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
-            Operate.SystemConfig.SaveSystemList_ToDB();
+            Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
+            Operate.ProxyConfig.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
+            Operate.ProxyConfig.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
+        }
+
+        protected override void WndProc(ref System.Windows.Forms.Message m)
+        {
+            try
+            {
+                if (m.Msg == WPE.Lib.NativeMethods.User32.WM_HOTKEY)
+                {
+                    int HOTKEY_ID = m.WParam.ToInt32();
+
+                    if (this.tabInjectMode.SelectedIndex == 2)
+                    {
+                        Operate.SendConfig.Send.DoSend_ByHotKey(HOTKEY_ID);
+                    }
+                    else if (this.tabInjectMode.SelectedIndex == 3)
+                    {
+                        Operate.RobotConfig.Robot.DoRobot_ByHotKey(HOTKEY_ID);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            base.WndProc(ref m);
         }
 
         private void InitForm()
@@ -1923,6 +1960,83 @@ namespace WPE.InjectMode
 
                     this.tRobotList.SelectedIndex = -1;
                 }, Operate.SystemConfig.GetCMS_List()));
+            }
+        }
+
+        #endregion
+
+        #region//日志列表 - 右键菜单
+
+        private void tSystemLog_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.LogConfig.List.lstLogInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(tSystemLog, item =>
+                {
+                    List<LogInfo> liList = new List<LogInfo>();
+
+                    foreach (int SelectIndex in this.tSystemLog.SelectedIndexs)
+                    {
+                        liList.Add(Operate.LogConfig.List.lstLogInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Copy":
+
+                            if (liList.Count > 0)
+                            {
+                                string LogString = string.Empty;
+                                foreach (LogInfo li in liList)
+                                {
+                                    LogString += li.LogTime.ToString() + ": " + li.FuncName + " - " + li.LogContent + "\r\n";
+                                }
+
+                                Clipboard.SetText(LogString);
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已复制到剪贴板", TType.Success)
+                                {
+                                    LocalizationText = "System.CopyLog"
+                                });
+                            }
+
+                            break;
+
+                        case "ToExcel":
+
+                            Operate.LogConfig.List.SaveLogList_Dialog(this, this.tSystemLog, Operate.PacketConfig.Packet.InjectProcess, liList);
+
+                            break;                
+
+                        case "ClearUp":
+
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("InjectModeForm.miLogList", "日志列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    this.CleanUp_LogList();
+
+                                    return true;
+                                }
+                            });                            
+
+                            break;
+
+                        case "DeSelect":
+
+                            this.tSystemLog.SelectedIndex = -1;
+
+                            break;
+                    }
+                }, Operate.LogConfig.List.GetCMS_LogList());
             }
         }
 

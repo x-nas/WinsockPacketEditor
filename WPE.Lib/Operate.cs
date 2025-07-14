@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using Be.Windows.Forms;
+using Microsoft.Owin.Hosting;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
@@ -228,6 +230,62 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//获取CPU和内存使用率
+
+            public static async void InitCPUAndMemoryCounter()
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        Operate.SystemConfig.cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+                        Operate.SystemConfig.cpuCounter.NextValue();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(InitCPUAndMemoryCounter), ex.Message);
+                    }
+                });
+            }
+
+            public static string[] GetCPUAndMemory()
+            {
+                string[] sReturn = new string[2];
+
+                try
+                {
+                    if (Operate.SystemConfig.cpuCounter != null)
+                    {
+                        // 获取CPU使用率
+                        float cpuUsage = Operate.SystemConfig.cpuCounter.NextValue();
+                        sReturn[0] = $"{cpuUsage:F2}%";
+
+                        // 获取内存使用率
+                        string query = "SELECT TotalVisibleMemorySize, FreePhysicalMemory FROM Win32_OperatingSystem";
+                        using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
+                        {
+                            foreach (ManagementObject obj in searcher.Get())
+                            {
+                                ulong totalMemory = Convert.ToUInt64(obj["TotalVisibleMemorySize"]) / 1024; // MB
+                                ulong freeMemory = Convert.ToUInt64(obj["FreePhysicalMemory"]) / 1024; // MB
+                                ulong usedMemory = totalMemory - freeMemory;
+                                float memoryUsagePercent = (float)usedMemory / totalMemory * 100;
+
+                                sReturn[1] = $"{memoryUsagePercent:F1}%";
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            #endregion
+
             #region//获取列表执行模式
 
             public static Execute GetListExecute_ByString(string sListExecute)
@@ -369,6 +427,62 @@ namespace WPE.Lib
                 });
 
                 return menuItems.ToArray();
+            }
+
+            #endregion
+
+            #region//启动远程管理
+
+            public static void StartRemoteMGT()
+            {
+                try
+                {
+                    if (Operate.SystemConfig.IsRemote)
+                    {
+                        if (!string.IsNullOrEmpty(Operate.SystemConfig.Remote_URL) &&
+                            !string.IsNullOrEmpty(Operate.SystemConfig.Remote_UserName) &&
+                            !string.IsNullOrEmpty(Operate.SystemConfig.Remote_PassWord))
+                        {
+                            string sLog = string.Empty;
+
+                            try
+                            {
+                                Operate.SystemConfig.WebServer = WebApp.Start<WebAPI.Socket_Web>(Operate.SystemConfig.Remote_URL);
+                                Socket_Operation.InitCCProxy_HTML();
+
+                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_178), Operate.SystemConfig.Remote_URL);
+                            }
+                            catch
+                            {
+                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_179), Process.GetCurrentProcess().ProcessName);
+                            }
+
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void StopRemoteMGT(Operate.SystemConfig.SystemMode FromMode)
+            {
+                try
+                {
+                    if (FromMode == Operate.SystemConfig.StartMode)
+                    {
+                        if (Operate.SystemConfig.WebServer != null)
+                        {
+                            Operate.SystemConfig.WebServer.Dispose();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
@@ -11639,7 +11753,7 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//删除发送
+                #region//删除发送（对话框）
 
                 public static void DeleteSend_Dialog(Form form, List<SendInfo> siList)
                 {
@@ -14500,60 +14614,138 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//保存日志列表为Excel
+                #region//获取日志列表的右键菜单
 
-                public static int SaveLogListToExcel()
+                public static AntdUI.IContextMenuStripItem[] GetCMS_LogList()
                 {
-                    int iSuccess = 0;
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
 
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("复制日志信息")
+                    {
+                        ID = "Copy",
+                        IconSvg = "CopyOutlined",
+                        LocalizationText = "InjectModeForm.CopyLog",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("导出到Excel")
+                    {
+                        ID = "ToExcel",
+                        IconSvg = "FileExcelOutlined",
+                        LocalizationText = "InjectModeForm.ToExcel",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("清空日志列表")
+                    {
+                        ID = "ClearUp",
+                        IconSvg = "DeleteOutlined",
+                        LocalizationText = "InjectModeForm.ClearUp",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("取消选择")
+                    {
+                        ID = "DeSelect",
+                        IconSvg = "DeleteRowOutlined",
+                        LocalizationText = "InjectModeForm.DeSelect",
+                    });
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
+
+                #region//保存日志列表为Excel（对话框）
+
+                public static void SaveLogList_Dialog(Form form, AntdUI.Table tTable, string FileName, List<LogInfo> liList)
+                {
                     try
                     {
-                        SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
-                        sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
-                        sfdSaveToExcel.FilterIndex = 0;
-                        sfdSaveToExcel.RestoreDirectory = true;
-                        sfdSaveToExcel.CreatePrompt = true;
-
-                        sfdSaveToExcel.Title = AntdUI.Localization.Get("SaveToExcel", "保存为Excel文件");
-
-                        if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
+                        if (LogConfig.List.lstLogInfo.Count > 0)
                         {
-                            Stream myStream = sfdSaveToExcel.OpenFile();
-                            StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
+                            int SaveCount = LogConfig.List.lstLogInfo.Count;
 
-                            string sColTitle = AntdUI.Localization.Get("ExcelColumn", "记录时间\t模块\t日志内容\t");
-                            sw.WriteLine(sColTitle);
+                            SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
+                            sfdSaveToExcel.Filter = AntdUI.Localization.Get("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
+                            sfdSaveToExcel.RestoreDirectory = true;
 
-                            foreach (LogInfo li in lstLogInfo)
+                            if (!string.IsNullOrEmpty(FileName))
                             {
-                                try
-                                {
-                                    string sColValue = string.Empty;
-                                    string sTime = li.LogTime.ToString("HH:mm:ss:fffffff");
-                                    string sFuncName = li.FuncName;
-                                    string sContent = li.LogContent;
-
-                                    sColValue += sTime + "\t" + sFuncName + "\t" + sContent + "\t";
-                                    sw.WriteLine(sColValue);
-
-                                    iSuccess++;
-                                }
-                                catch
-                                {
-                                    //
-                                }
+                                sfdSaveToExcel.FileName = FileName;
                             }
 
-                            sw.Close();
-                            myStream.Close();
+                            if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveToExcel.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    bool bOK = false;
+                                    tTable.Spin(AntdUI.Localization.Get("Exporting", "正在导出..."), config =>
+                                    {
+                                        bOK = SaveLogListToExcel(FilePath, liList);
+                                    }, () =>
+                                    {
+                                        if (bOK)
+                                        {
+                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Success", "导出到Excel成功");
+                                            AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        }
+                                        else
+                                        {
+                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Error", "导出到Excel失败");
+                                            string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                            AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                        }
+                                    });
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+                }
 
-                    return iSuccess;
+                private static bool SaveLogListToExcel(string filePath, List<LogInfo> liList)
+                {
+                    try
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                        using (var writer = new StreamWriter(stream, Encoding.Default))
+                        {
+                            writer.WriteLine(AntdUI.Localization.Get("ToExcelTitle", "记录时间\t模块\t日志内容\t"));
+
+                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstLogInfo.ToList();
+                            foreach (var log in dataSource)
+                            {
+                                try
+                                {
+                                    var lineBuilder = new StringBuilder();
+
+                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
+                                    lineBuilder.Append(log.FuncName).Append('\t');
+                                    lineBuilder.Append(log.LogContent).Append('\t');
+
+                                    writer.WriteLine(lineBuilder.ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return false;
+                    }
                 }
 
                 #endregion                

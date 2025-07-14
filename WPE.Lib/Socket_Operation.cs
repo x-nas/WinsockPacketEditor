@@ -174,122 +174,6 @@ namespace WPE.Lib
 
         #endregion        
 
-        
-
-        
-
-        #region//启动远程管理
-
-        public static void StartRemoteMGT()
-        {
-            try
-            {
-                if (Operate.SystemConfig.IsRemote)
-                {
-                    if (!string.IsNullOrEmpty(Operate.SystemConfig.Remote_URL) &&
-                        !string.IsNullOrEmpty(Operate.SystemConfig.Remote_UserName) &&
-                        !string.IsNullOrEmpty(Operate.SystemConfig.Remote_PassWord))
-                    {
-                        string sLog = string.Empty;
-
-                        try
-                        {
-                            Operate.SystemConfig.WebServer = WebApp.Start<WebAPI.Socket_Web>(Operate.SystemConfig.Remote_URL);
-                            Socket_Operation.InitCCProxy_HTML();
-
-                            sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_178), Operate.SystemConfig.Remote_URL);
-                        }
-                        catch
-                        {
-                            sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_179), Process.GetCurrentProcess().ProcessName);
-                        }
-
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        public static void StopRemoteMGT(Operate.SystemConfig.SystemMode FromMode)
-        {
-            try
-            {
-                if (FromMode == Operate.SystemConfig.StartMode)
-                {
-                    if (Operate.SystemConfig.WebServer != null)
-                    {
-                        Operate.SystemConfig.WebServer.Dispose();
-                    }
-                }                         
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//获取CPU和内存使用率
-
-        public static async void InitCPUAndMemoryCounter()
-        {
-            await Task.Run(() =>
-            {
-                try
-                {
-                    Operate.SystemConfig.cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                    Operate.SystemConfig.cpuCounter.NextValue();
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(InitCPUAndMemoryCounter), ex.Message);
-                }
-            });            
-        }
-
-        public static string[] GetCPUAndMemory()
-        {
-            string[] sReturn = new string[2];
-
-            try
-            {
-                if (Operate.SystemConfig.cpuCounter != null)
-                {
-                    // 获取CPU使用率
-                    float cpuUsage = Operate.SystemConfig.cpuCounter.NextValue();
-                    sReturn[0] = $"{cpuUsage:F2}%";
-
-                    // 获取内存使用率
-                    string query = "SELECT TotalVisibleMemorySize, FreePhysicalMemory FROM Win32_OperatingSystem";
-                    using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
-                    {
-                        foreach (ManagementObject obj in searcher.Get())
-                        {
-                            ulong totalMemory = Convert.ToUInt64(obj["TotalVisibleMemorySize"]) / 1024; // MB
-                            ulong freeMemory = Convert.ToUInt64(obj["FreePhysicalMemory"]) / 1024; // MB
-                            ulong usedMemory = totalMemory - freeMemory;
-                            float memoryUsagePercent = (float)usedMemory / totalMemory * 100;
-
-                            sReturn[1] = $"{memoryUsagePercent:F1}%";
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        #endregion      
-
         #region//密码字典        
 
         public static string PassWord_Encrypt(string plainText)
@@ -1357,12 +1241,6 @@ namespace WPE.Lib
 
         #endregion
 
-        
-
-        
-
-        
-
         #region//处理 Hook 结果（异步）
 
         public static Task ProcessingHookResultAsync(
@@ -1867,9 +1745,7 @@ namespace WPE.Lib
             }
         }
 
-        #endregion
-
-        
+        #endregion        
 
         #region//获取 SOCKS5 认证格式的封包
 
@@ -1911,10 +1787,6 @@ namespace WPE.Lib
         }
 
         #endregion
-
-        
-
-        
 
         #region//获取端口对应的域名类型
 

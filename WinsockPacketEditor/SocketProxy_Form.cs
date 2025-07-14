@@ -75,7 +75,7 @@ namespace WinsockPacketEditor
 
                 this.SaveConfigs_Parameter();
 
-                Socket_Operation.StopRemoteMGT(this.RunMode);
+                Operate.SystemConfig.StopRemoteMGT(this.RunMode);
                 Operate.SystemConfig.SaveRunConfig_ToDB(this.RunMode);
                 Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
                 Operate.ProxyConfig.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
