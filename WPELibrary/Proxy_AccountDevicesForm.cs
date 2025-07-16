@@ -55,7 +55,7 @@ namespace WPELibrary
                     bool IsLimitDevices = this.cbIsLimitDevices.Checked;
                     int LimitDevices = ((int)this.nudLimitDevices.Value);
                  
-                    Operate.ProxyConfig.ProxyAccount.ProxyAccountDevices_Dialog(this.gList, IsLimitDevices, LimitDevices);
+                    Operate.ProxyConfig.Account.ProxyAccountDevices_Dialog(this.gList, IsLimitDevices, LimitDevices);
                 }
 
                 this.Close();

@@ -40,49 +40,52 @@ namespace WPE.InjectMode
 
         private void InjectModeForm_Load(object sender, EventArgs e)
         {
-            AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
+            Operate.SystemConfig.MainHandle = this.Handle;
+            Operate.SystemConfig.InvokeAction = action =>
             {
-                Operate.SystemConfig.MainHandle = this.Handle;
-                Operate.SystemConfig.InvokeAction = action =>
+                if (this.InvokeRequired)
                 {
-                    if (this.InvokeRequired)
-                    {
-                        this.Invoke(action);
-                    }
-                    else
-                    {
-                        action();
-                    }
-                };
+                    this.Invoke(action);
+                }
+                else
+                {
+                    action();
+                }
+            };
+
+            this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
+            this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
+            this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.tabInjectMode.TabMenuVisible = false;
+            this.mInjectMode.SelectIndex(0, true);
+
+            this.Dark_Changed();
+            this.InitForm();
+            this.InitFloatButton();
+            this.InitTable_PacketList();
+            this.InitTable_FilterList();
+            this.InitTable_SendList();
+            this.InitTable_RobotList();
+            this.InitTable_LogList();
+            this.InitComparison();
+            this.InitExtraction();
+
+            this.pageHeader.Loading = true;
+            AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
+            {  
                 Operate.SystemConfig.InitCPUAndMemoryCounter();
                 Operate.SystemConfig.LoadSystemConfig_FromDB();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();
-                Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_FromDB();
-                Operate.ProxyConfig.ProxyMapping.LoadProxyMapLocal_FromDB();
-                Operate.ProxyConfig.ProxyMapping.LoadProxyMapRemote_FromDB();
+                Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
+                Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
+                Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
                 Operate.SystemConfig.StartRemoteMGT();
-
-                this.Dark_Changed();
-                this.InitForm();
-                this.InitFloatButton();
-                this.InitTable_PacketList();
-                this.InitTable_FilterList();
-                this.InitTable_SendList();
-                this.InitTable_RobotList();
-                this.InitTable_LogList();
-                this.InitComparison();
-                this.InitExtraction();                
-
             }, () =>
             {
-                this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
-                this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
-                this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-                this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-                this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-                this.tabInjectMode.TabMenuVisible = false;
-                this.mInjectMode.SelectIndex(0, true);
+                this.pageHeader.Loading = false;
             });
         }
 
@@ -92,9 +95,9 @@ namespace WPE.InjectMode
             Operate.SystemConfig.StopRemoteMGT(this.RunMode);
             Operate.SystemConfig.SaveSystemList_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
-            Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
-            Operate.ProxyConfig.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
-            Operate.ProxyConfig.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);            
+            Operate.ProxyConfig.Account.SaveProxyAccountList_ToDB(this.RunMode);
+            Operate.ProxyConfig.Mapping.SaveProxyMapLocal_ToDB(this.RunMode);
+            Operate.ProxyConfig.Mapping.SaveProxyMapRemote_ToDB(this.RunMode);            
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)

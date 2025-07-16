@@ -34,7 +34,7 @@ namespace WPE.Lib.WebAPI
                         var username = usernamePassword.Split(':')[0];
                         var password = usernamePassword.Split(':')[1];
 
-                        if (Operate.ProxyConfig.ProxyAccount.IsValidAdmin(username, password))
+                        if (Operate.ProxyConfig.Account.IsValidAdmin(username, password))
                         {
                             var principal = new GenericPrincipal(new GenericIdentity(username), null);
                             context.Request.User = principal;

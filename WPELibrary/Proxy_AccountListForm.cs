@@ -58,12 +58,12 @@ namespace WPELibrary
 
         private void Proxy_AccountListForm_Load(object sender, EventArgs e)
         {
-            Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAccount = true;            
+            Operate.ProxyConfig.Account.IsShow_ProxyAccount = true;            
         }
 
         private void Proxy_AccountListForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAccount = false;
+            Operate.ProxyConfig.Account.IsShow_ProxyAccount = false;
         }
 
         #endregion
@@ -104,59 +104,59 @@ namespace WPELibrary
                 switch (SearchType)
                 {
                     case "UserName":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByUserName(this.Search_UserName);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByUserName(this.Search_UserName);
                         break;
 
                     case "UserName_All":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.lstProxyAccount;
+                        e.Result = Operate.ProxyConfig.Account.lstProxyAccount;
                         break;
 
                     case "IsEnable_True":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsEnable(true);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsEnable(true);
                         break;
 
                     case "IsEnable_False":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsEnable(false);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsEnable(false);
                         break;
 
                     case "IsOnLine_True":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsOnLine(true);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsOnLine(true);
                         break;
 
                     case "IsOnLine_False":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsOnLine(false);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsOnLine(false);
                         break;
 
                     case "IsExpiry_True":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsExpiry(true);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsExpiry(true);
                         break;
 
                     case "IsExpiry_False":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsExpiry(false);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsExpiry(false);
                         break;                        
 
                     case "IsLimitLinks_True":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsLimitLinks(true);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsLimitLinks(true);
                         break;
 
                     case "IsLimitLinks_False":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsLimitLinks(false);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsLimitLinks(false);
                         break;
 
                     case "IsLimitDevices_True":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsLimitDevices(true);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsLimitDevices(true);
                         break;
 
                     case "IsLimitDevices_False":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsLimitDevices(false);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByIsLimitDevices(false);
                         break;
 
                     case "Expire_Time":
-                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByExpireTime(this.Search_ExpireFrom, this.Search_ExpireTo);
+                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByExpireTime(this.Search_ExpireFrom, this.Search_ExpireTo);
                         break;
 
                     default:
-                        e.Result = Operate.ProxyConfig.ProxyAccount.lstProxyAccount;
+                        e.Result = Operate.ProxyConfig.Account.lstProxyAccount;
                         break;
                 }
             }
@@ -377,7 +377,7 @@ namespace WPELibrary
 
                     if (gList.Count > 0)
                     {
-                        Operate.ProxyConfig.ProxyAccount.DeleteProxyAccount_Dialog(gList);
+                        Operate.ProxyConfig.Account.DeleteProxyAccount_Dialog(gList);
                         this.LoadData(string.Empty);
                     }
                 }
@@ -425,7 +425,7 @@ namespace WPELibrary
 
                 if (gList.Count > 0)
                 {
-                    Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_Dialog(this, string.Empty, gList);
+                    Operate.ProxyConfig.Account.SaveProxyAccountList_Dialog(this, string.Empty, gList);
                 }
             }
             catch (Exception ex)
@@ -440,7 +440,7 @@ namespace WPELibrary
 
         private void bImport_Click(object sender, EventArgs e)
         {
-            Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_Dialog(this);
+            Operate.ProxyConfig.Account.LoadProxyAccountList_Dialog(this);
             this.LoadData(string.Empty);
         }
 
@@ -572,7 +572,7 @@ namespace WPELibrary
                                         gExport.Add(pai.AID);
                                     }
 
-                                    Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_Dialog(this, string.Empty, gExport);
+                                    Operate.ProxyConfig.Account.SaveProxyAccountList_Dialog(this, string.Empty, gExport);
 
                                     break;
 
@@ -587,7 +587,7 @@ namespace WPELibrary
 
                                     if (gClear.Count > 0)
                                     {
-                                        Operate.ProxyConfig.ProxyAccount.DeleteProxyAccount_Dialog(gClear);
+                                        Operate.ProxyConfig.Account.DeleteProxyAccount_Dialog(gClear);
                                         this.LoadData(string.Empty);
                                     }                                    
 

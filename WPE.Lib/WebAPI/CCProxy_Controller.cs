@@ -14,15 +14,15 @@ namespace WPE.Lib.WebAPI
 
             try
             {
-                int bodyIndex = Operate.ProxyConfig.ProxyAccount.CCProxy_HTML.IndexOf("<!-- body -->");
-                int tailIndex = Operate.ProxyConfig.ProxyAccount.CCProxy_HTML.IndexOf("<!-- tail -->");
+                int bodyIndex = Operate.ProxyConfig.Account.CCProxy_HTML.IndexOf("<!-- body -->");
+                int tailIndex = Operate.ProxyConfig.Account.CCProxy_HTML.IndexOf("<!-- tail -->");
 
                 if (bodyIndex > 0 && tailIndex > bodyIndex)
                 {
-                    string template = Operate.ProxyConfig.ProxyAccount.CCProxy_HTML.Substring(bodyIndex + "<!-- body -->".Length, tailIndex - bodyIndex - "<!-- body -->".Length);
+                    string template = Operate.ProxyConfig.Account.CCProxy_HTML.Substring(bodyIndex + "<!-- body -->".Length, tailIndex - bodyIndex - "<!-- body -->".Length);
 
                     var sb = new StringBuilder();
-                    foreach (Proxy_AccountInfo pai in Operate.ProxyConfig.ProxyAccount.lstProxyAccount)
+                    foreach (Proxy_AccountInfo pai in Operate.ProxyConfig.Account.lstProxyAccount)
                     {
                         string userTemplate = template
                             .Replace("$username", pai.UserName)
@@ -38,7 +38,7 @@ namespace WPE.Lib.WebAPI
                         sb.Append(userTemplate);
                     }
 
-                    sReturn = Operate.ProxyConfig.ProxyAccount.CCProxy_HTML.Substring(0, bodyIndex) + sb.ToString() + Operate.ProxyConfig.ProxyAccount.CCProxy_HTML.Substring(tailIndex);
+                    sReturn = Operate.ProxyConfig.Account.CCProxy_HTML.Substring(0, bodyIndex) + sb.ToString() + Operate.ProxyConfig.Account.CCProxy_HTML.Substring(tailIndex);
                 }
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace WPE.Lib.WebAPI
                     return false;
                 }
 
-                if (Operate.ProxyConfig.ProxyAccount.CheckProxyAccount_Exist(pai.UserName))
+                if (Operate.ProxyConfig.Account.CheckProxyAccount_Exist(pai.UserName))
                 {
                     return false;
                 }
@@ -78,7 +78,7 @@ namespace WPE.Lib.WebAPI
                 pai.IsLimitDevices = true;
                 pai.LimitDevices = 1;
 
-                return Operate.ProxyConfig.ProxyAccount.AddProxyAccount(
+                return Operate.ProxyConfig.Account.AddProxyAccount(
                     Guid.NewGuid(), 
                     pai.IsEnable, 
                     pai.UserName, 
@@ -114,7 +114,7 @@ namespace WPE.Lib.WebAPI
                     return false;
                 }
 
-                if (!Operate.ProxyConfig.ProxyAccount.CheckProxyAccount_Exist(pai.UserName))
+                if (!Operate.ProxyConfig.Account.CheckProxyAccount_Exist(pai.UserName))
                 {
                     return false;
                 }
@@ -131,7 +131,7 @@ namespace WPE.Lib.WebAPI
 
                 pai.IsLimitDevices = true;
 
-                return Operate.ProxyConfig.ProxyAccount.UpdateProxyAccount_ByCCProxy(
+                return Operate.ProxyConfig.Account.UpdateProxyAccount_ByCCProxy(
                     pai.UserName, 
                     pai.IsEnable, 
                     pai.PassWord, 
@@ -153,7 +153,7 @@ namespace WPE.Lib.WebAPI
 
         public static bool DelUser(string UserName)
         {
-            return Operate.ProxyConfig.ProxyAccount.DeleteProxyAccount_ByUserName(UserName);
+            return Operate.ProxyConfig.Account.DeleteProxyAccount_ByUserName(UserName);
         }
 
         #endregion

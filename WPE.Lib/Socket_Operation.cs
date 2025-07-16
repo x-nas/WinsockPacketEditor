@@ -249,65 +249,7 @@ namespace WPE.Lib
 
         #endregion        
 
-        #region//设置系统代理
-
-        public static bool StartSystemProxy()
-        {
-            bool bReturn = false;
-
-            try
-            {
-                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
-
-                if (key != null)
-                {
-                    string sProxyServer = string.Format("socks5://127.0.0.1:{0}", Operate.ProxyConfig.SocketProxy.ProxyPort);
-
-                    key.SetValue("ProxyEnable", 1, RegistryValueKind.DWord);
-                    key.SetValue("ProxyServer", sProxyServer, RegistryValueKind.String);
-                    key.SetValue("ProxyOverride", string.Empty, RegistryValueKind.String);
-                    key.Close();
-
-                    bReturn = true;
-
-                    Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_148));
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        public static bool StopSystemProxy()
-        {
-            bool bReturn = false;
-
-            try
-            {
-                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
-
-                if (key != null)
-                {
-                    key.SetValue("ProxyEnable", 0, RegistryValueKind.DWord);
-                    key.Close();
-
-                    bReturn = true;
-
-                    Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_149));
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        #endregion
+        
 
         #region//数据格式转换
 
@@ -534,18 +476,18 @@ namespace WPE.Lib
             return Regex.IsMatch(IPString, pattern);
         }
 
-        public static Operate.ProxyConfig.SocketProxy.AddressType GetAddressType_ByString(string IPString)
+        public static Operate.ProxyConfig.Proxy.AddressType GetAddressType_ByString(string IPString)
         {
             if (IsValidIPv4(IPString))
-                return Operate.ProxyConfig.SocketProxy.AddressType.IPv4;
+                return Operate.ProxyConfig.Proxy.AddressType.IPv4;
 
             if (IsValidIPv6(IPString))
-                return Operate.ProxyConfig.SocketProxy.AddressType.IPv6;
+                return Operate.ProxyConfig.Proxy.AddressType.IPv6;
 
             if (IsValidDomain(IPString))
-                return Operate.ProxyConfig.SocketProxy.AddressType.Domain;
+                return Operate.ProxyConfig.Proxy.AddressType.Domain;
 
-            return Operate.ProxyConfig.SocketProxy.AddressType.Invalid;
+            return Operate.ProxyConfig.Proxy.AddressType.Invalid;
         }
 
         #endregion
@@ -919,7 +861,7 @@ namespace WPE.Lib
 
         #region//统计代理速率
 
-        public static void CountProxySpeed(Operate.ProxyConfig.SocketProxy.ProxySpeedType psType, int ProxySpeed)
+        public static void CountProxySpeed(Operate.ProxyConfig.Proxy.ProxySpeedType psType, int ProxySpeed)
         {
             try
             {
@@ -927,12 +869,12 @@ namespace WPE.Lib
                 {
                     switch (psType)
                     {
-                        case Operate.ProxyConfig.SocketProxy.ProxySpeedType.Uplink:
-                            Interlocked.Add(ref Operate.ProxyConfig.SocketProxy.ProxySpeed_Uplink, ProxySpeed);
+                        case Operate.ProxyConfig.Proxy.ProxySpeedType.Uplink:
+                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, ProxySpeed);
                             break;
 
-                        case Operate.ProxyConfig.SocketProxy.ProxySpeedType.Downlink:
-                            Interlocked.Add(ref Operate.ProxyConfig.SocketProxy.ProxySpeed_Downlink, ProxySpeed);
+                        case Operate.ProxyConfig.Proxy.ProxySpeedType.Downlink:
+                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, ProxySpeed);
                             break;
                     }
                 }
@@ -1008,7 +950,7 @@ namespace WPE.Lib
 
         #region//判断接收的数据是否匹配代理步骤
 
-        public static bool CheckDataIsMatchProxyStep(ReadOnlySpan<byte> bData, Operate.ProxyConfig.SocketProxy.ProxyStep proxyStep)
+        public static bool CheckDataIsMatchProxyStep(ReadOnlySpan<byte> bData, Operate.ProxyConfig.Proxy.ProxyStep proxyStep)
         {
             bool bReturn = false;
 
@@ -1018,9 +960,9 @@ namespace WPE.Lib
 
                 switch (proxyStep)
                 {
-                    case Operate.ProxyConfig.SocketProxy.ProxyStep.Handshake:
+                    case Operate.ProxyConfig.Proxy.ProxyStep.Handshake:
 
-                        if (VERSION == ((byte)Operate.ProxyConfig.SocketProxy.ProxyType.Socket5))
+                        if (VERSION == ((byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5))
                         {
                             if (bData.Length > 2)
                             {
@@ -1035,7 +977,7 @@ namespace WPE.Lib
 
                         break;
 
-                    case Operate.ProxyConfig.SocketProxy.ProxyStep.AuthUserName:
+                    case Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName:
 
                         if (VERSION == 0x01)
                         {
@@ -1057,27 +999,27 @@ namespace WPE.Lib
 
                         break;
 
-                    case Operate.ProxyConfig.SocketProxy.ProxyStep.Command:
+                    case Operate.ProxyConfig.Proxy.ProxyStep.Command:
 
-                        if (VERSION == ((byte)Operate.ProxyConfig.SocketProxy.ProxyType.Socket5))
+                        if (VERSION == ((byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5))
                         {
                             if (bData.Length > 4)
                             {
                                 byte ADDRESS_TYPE = bData[3];
-                                Operate.ProxyConfig.SocketProxy.AddressType AddressType = (Operate.ProxyConfig.SocketProxy.AddressType)ADDRESS_TYPE;
+                                Operate.ProxyConfig.Proxy.AddressType AddressType = (Operate.ProxyConfig.Proxy.AddressType)ADDRESS_TYPE;
 
                                 int DST_ADDR = 0;
                                 switch (AddressType)
                                 {
-                                    case Operate.ProxyConfig.SocketProxy.AddressType.IPv4:
+                                    case Operate.ProxyConfig.Proxy.AddressType.IPv4:
                                         DST_ADDR = 4;
                                         break;
 
-                                    case Operate.ProxyConfig.SocketProxy.AddressType.IPv6:
+                                    case Operate.ProxyConfig.Proxy.AddressType.IPv6:
                                         DST_ADDR = 16;
                                         break;
 
-                                    case Operate.ProxyConfig.SocketProxy.AddressType.Domain:
+                                    case Operate.ProxyConfig.Proxy.AddressType.Domain:
                                         byte DST_LENGTH = bData[4];
                                         DST_ADDR = DST_LENGTH + 1;
                                         break;
@@ -1092,7 +1034,7 @@ namespace WPE.Lib
 
                         break;
 
-                    case Operate.ProxyConfig.SocketProxy.ProxyStep.ForwardData:
+                    case Operate.ProxyConfig.Proxy.ProxyStep.ForwardData:
 
                         bReturn = true;
 
@@ -1181,7 +1123,7 @@ namespace WPE.Lib
 
             if (File.Exists(filePath))
             {
-                Operate.ProxyConfig.ProxyAccount.CCProxy_HTML = File.ReadAllText(filePath, Encoding.UTF8);
+                Operate.ProxyConfig.Account.CCProxy_HTML = File.ReadAllText(filePath, Encoding.UTF8);
             }
         }
 
@@ -1413,7 +1355,7 @@ namespace WPE.Lib
         {
             try
             {
-                IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(Operate.ProxyConfig.SocketProxy.ExternalProxy_IP, Operate.ProxyConfig.SocketProxy.ExternalProxy_Port);
+                IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
                 if (ExternalProxyEP == null)
                 {
                     Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_202));
@@ -1434,7 +1376,7 @@ namespace WPE.Lib
 
                     //SOCKS5 握手
                     byte[] handshakeRequest = null;
-                    if (Operate.ProxyConfig.SocketProxy.Enable_ExternalProxy_Auth)
+                    if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
                     {
                         handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
                     }
@@ -1461,13 +1403,13 @@ namespace WPE.Lib
 
                         case 0x02:
                             // 需要用户名/密码认证
-                            if (!Operate.ProxyConfig.SocketProxy.Enable_ExternalProxy_Auth)
+                            if (!Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
                             {
                                 Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_208));
                                 return false;
                             }
 
-                            byte[] AuthRequest = Socket_Operation.CreateSOCKS5AuthPacket(Operate.ProxyConfig.SocketProxy.ExternalProxy_UserName, Operate.ProxyConfig.SocketProxy.ExternalProxy_PassWord);
+                            byte[] AuthRequest = Socket_Operation.CreateSOCKS5AuthPacket(Operate.ProxyConfig.Proxy.ExternalProxy_UserName, Operate.ProxyConfig.Proxy.ExternalProxy_PassWord);
                             if (AuthRequest == null)
                             {
                                 Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_209));
@@ -1580,7 +1522,7 @@ namespace WPE.Lib
             return null;
         }
 
-        public static IPEndPoint GetIPEndPoint_ByAddressType(Operate.ProxyConfig.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData, out string AddressString)
+        public static IPEndPoint GetIPEndPoint_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData, out string AddressString)
         {
             AddressString = string.Empty;
 
@@ -1592,19 +1534,19 @@ namespace WPE.Lib
 
                 switch (addressType)
                 {
-                    case Operate.ProxyConfig.SocketProxy.AddressType.IPv4:
+                    case Operate.ProxyConfig.Proxy.AddressType.IPv4:
                         ip = new IPAddress(bData.Slice(0, 4).ToArray());
                         portPosition = 4;
                         AddressString = ip.ToString();
                         break;
 
-                    case Operate.ProxyConfig.SocketProxy.AddressType.IPv6:
+                    case Operate.ProxyConfig.Proxy.AddressType.IPv6:
                         ip = new IPAddress(bData.Slice(0, 16).ToArray());
                         portPosition = 16;
                         AddressString = ip.ToString();
                         break;
 
-                    case Operate.ProxyConfig.SocketProxy.AddressType.Domain:
+                    case Operate.ProxyConfig.Proxy.AddressType.Domain:
                         byte length = bData[0];
                         var domainBytes = bData.Slice(1, length);
                         AddressString = SystemConfig.BytesToString(
@@ -1642,13 +1584,13 @@ namespace WPE.Lib
 
                 switch (addressType)
                 {
-                    case Operate.ProxyConfig.SocketProxy.AddressType.IPv4:
-                    case Operate.ProxyConfig.SocketProxy.AddressType.IPv6:
+                    case Operate.ProxyConfig.Proxy.AddressType.IPv4:
+                    case Operate.ProxyConfig.Proxy.AddressType.IPv6:
                         return IPAddress.Parse(addressString);
 
-                    case Operate.ProxyConfig.SocketProxy.AddressType.Domain:
+                    case Operate.ProxyConfig.Proxy.AddressType.Domain:
 
-                        if (Operate.ProxyConfig.SocketProxy.DnsCache.TryGetValue(addressString, out var cachedIp))
+                        if (Operate.ProxyConfig.Proxy.DnsCache.TryGetValue(addressString, out var cachedIp))
                         {
                             return cachedIp;
                         }
@@ -1660,7 +1602,7 @@ namespace WPE.Lib
                             var result = ipv4 ?? entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetworkV6)
                                          ?? entry.AddressList.First();
 
-                            Operate.ProxyConfig.SocketProxy.DnsCache.AddOrUpdate(
+                            Operate.ProxyConfig.Proxy.DnsCache.AddOrUpdate(
                                 key: addressString,
                                 addValue: result,
                                 updateValueFactory: (key, oldValue) => result);
@@ -1685,16 +1627,16 @@ namespace WPE.Lib
 
         #region//获取UDP数据包
 
-        public static ReadOnlySpan<byte> GetUDPData_ByAddressType(Operate.ProxyConfig.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
+        public static ReadOnlySpan<byte> GetUDPData_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData)
         {
             try
             {
                 switch (addressType)
                 {
-                    case Operate.ProxyConfig.SocketProxy.AddressType.IPv4:
+                    case Operate.ProxyConfig.Proxy.AddressType.IPv4:
                         return bData.Length >= 10 ? bData.Slice(10) : ReadOnlySpan<byte>.Empty;
 
-                    case Operate.ProxyConfig.SocketProxy.AddressType.Domain:
+                    case Operate.ProxyConfig.Proxy.AddressType.Domain:
 
                         if (bData.Length < 5)
                         {
@@ -1705,7 +1647,7 @@ namespace WPE.Lib
                         int domainStart = 5 + domainLength + 2;
                         return bData.Length >= domainStart ? bData.Slice(domainStart) : ReadOnlySpan<byte>.Empty;
 
-                    case Operate.ProxyConfig.SocketProxy.AddressType.IPv6:
+                    case Operate.ProxyConfig.Proxy.AddressType.IPv6:
                         return bData.Length >= 22 ? bData.Slice(22) : ReadOnlySpan<byte>.Empty;
 
                     default:
@@ -1723,15 +1665,15 @@ namespace WPE.Lib
 
         #region//获取返回给客户端的数据（SOCKS5，IPV4）
 
-        public static byte[] GetProxyReturnData(Operate.ProxyConfig.SocketProxy.CommandResponse CommandResponse, ReadOnlySpan<byte> bServerIP, ReadOnlySpan<byte> bServerPort)
+        public static byte[] GetProxyReturnData(Operate.ProxyConfig.Proxy.CommandResponse CommandResponse, ReadOnlySpan<byte> bServerIP, ReadOnlySpan<byte> bServerPort)
         {
             try
             {
                 Span<byte> response = stackalloc byte[10];
-                response[0] = (byte)Operate.ProxyConfig.SocketProxy.ProxyType.Socket5;
+                response[0] = (byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5;
                 response[1] = (byte)CommandResponse;
                 response[2] = 0x00;
-                response[3] = (byte)Operate.ProxyConfig.SocketProxy.AddressType.IPv4;
+                response[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
                 bServerIP.CopyTo(response.Slice(4, 4));
                 response[8] = bServerPort[1];
                 response[9] = bServerPort[0];
@@ -1790,34 +1732,34 @@ namespace WPE.Lib
 
         #region//获取端口对应的域名类型
 
-        public static Operate.ProxyConfig.SocketProxy.DomainType GetDomainType_ByPort(ushort Port)
+        public static Operate.ProxyConfig.Proxy.DomainType GetDomainType_ByPort(ushort Port)
         {
             try
             {
-                if (Operate.ProxyConfig.SocketProxy.Enable_ExternalProxy)
+                if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
                 {
-                    if (Operate.ProxyConfig.SocketProxy.Enable_ExternalProxy_AppointPort && !string.IsNullOrEmpty(Operate.ProxyConfig.SocketProxy.ExternalProxy_AppointPort))
+                    if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort && !string.IsNullOrEmpty(Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort))
                     {
-                        HashSet<string> ExternalProxyPorts = new HashSet<string>(Operate.ProxyConfig.SocketProxy.ExternalProxy_AppointPort.Split(','));
+                        HashSet<string> ExternalProxyPorts = new HashSet<string>(Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort.Split(','));
 
                         if (ExternalProxyPorts.Contains(Port.ToString()))
                         {
-                            return Operate.ProxyConfig.SocketProxy.DomainType.External;
+                            return Operate.ProxyConfig.Proxy.DomainType.External;
                         }
                     }
                     else
                     {
-                        return Operate.ProxyConfig.SocketProxy.DomainType.External;
+                        return Operate.ProxyConfig.Proxy.DomainType.External;
                     }                    
                 }
 
                 if (Port == 80 || Port == 8080)
                 {
-                    return Operate.ProxyConfig.SocketProxy.DomainType.Http;
+                    return Operate.ProxyConfig.Proxy.DomainType.Http;
                 }
                 else if (Port == 443 || Port == 8443)
                 {
-                    return Operate.ProxyConfig.SocketProxy.DomainType.Https;
+                    return Operate.ProxyConfig.Proxy.DomainType.Https;
                 }
             }
             catch (Exception ex)
@@ -1825,7 +1767,7 @@ namespace WPE.Lib
                 Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return Operate.ProxyConfig.SocketProxy.DomainType.Socket;
+            return Operate.ProxyConfig.Proxy.DomainType.Socket;
         }
 
         #endregion
@@ -1997,7 +1939,7 @@ namespace WPE.Lib
 
         #region//获取服务端地址
 
-        public static string GetServerAddress(Operate.ProxyConfig.SocketProxy.DomainType dtType, string AddressString, ushort port)
+        public static string GetServerAddress(Operate.ProxyConfig.Proxy.DomainType dtType, string AddressString, ushort port)
         {
             if (string.IsNullOrEmpty(AddressString))
             {
@@ -2010,16 +1952,16 @@ namespace WPE.Lib
 
                 switch (dtType)
                 {
-                    case Operate.ProxyConfig.SocketProxy.DomainType.Socket:
+                    case Operate.ProxyConfig.Proxy.DomainType.Socket:
                         protocol = "socket://";
                         break;
-                    case Operate.ProxyConfig.SocketProxy.DomainType.Http:
+                    case Operate.ProxyConfig.Proxy.DomainType.Http:
                         protocol = "http://";
                         break;
-                    case Operate.ProxyConfig.SocketProxy.DomainType.Https:
+                    case Operate.ProxyConfig.Proxy.DomainType.Https:
                         protocol = "https://";
                         break;
-                    case Operate.ProxyConfig.SocketProxy.DomainType.External:
+                    case Operate.ProxyConfig.Proxy.DomainType.External:
                         protocol = "SOCKS5://";
                         break;
                 }
@@ -2387,7 +2329,7 @@ namespace WPE.Lib
         {
             //try
             //{
-            //    if (!Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAccount)
+            //    if (!Operate.ProxyConfig.Account.IsShow_ProxyAccount)
             //    {
             //        Proxy_AccountListForm palForm = new Proxy_AccountListForm();
             //        palForm.Show();
@@ -2420,7 +2362,7 @@ namespace WPE.Lib
         {
             //try
             //{
-            //    if (!Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAuth)
+            //    if (!Operate.ProxyConfig.Account.IsShow_ProxyAuth)
             //    {
             //        Proxy_AccountAuthForm paaForm = new Proxy_AccountAuthForm();
             //        paaForm.Show();
@@ -2520,7 +2462,7 @@ namespace WPE.Lib
         {
             //try
             //{
-            //    if (!Operate.ProxyConfig.ProxyMapping.IsShow_MapLocal)
+            //    if (!Operate.ProxyConfig.Mapping.IsShow_MapLocal)
             //    {
             //        Proxy_MapLocalListForm pmllForm = new Proxy_MapLocalListForm();
             //        pmllForm.Show();
@@ -2553,7 +2495,7 @@ namespace WPE.Lib
         {
             //try
             //{
-            //    if (!Operate.ProxyConfig.ProxyMapping.IsShow_MapRemote)
+            //    if (!Operate.ProxyConfig.Mapping.IsShow_MapRemote)
             //    {
             //        Proxy_MapRemoteListForm pmllForm = new Proxy_MapRemoteListForm();
             //        pmllForm.Show();

@@ -20,12 +20,12 @@ namespace WPELibrary
 
         private void Proxy_MapLocalForm_Load(object sender, EventArgs e)
         {
-            Operate.ProxyConfig.ProxyMapping.IsShow_MapLocal = true;
+            Operate.ProxyConfig.Mapping.IsShow_MapLocal = true;
         }
 
         private void Proxy_MapLocalForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Operate.ProxyConfig.ProxyMapping.IsShow_MapLocal = false;
+            Operate.ProxyConfig.Mapping.IsShow_MapLocal = false;
         }
 
         #endregion
@@ -34,7 +34,7 @@ namespace WPELibrary
 
         private void InitDGV()
         {
-            bindingSource.DataSource = Operate.ProxyConfig.ProxyMapping.lstMapLocal;
+            bindingSource.DataSource = Operate.ProxyConfig.Mapping.lstMapLocal;
             dgvMapLocal.AutoGenerateColumns = false;
             dgvMapLocal.DataSource = bindingSource;
             dgvMapLocal.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvMapLocal, true, null);            
@@ -70,9 +70,9 @@ namespace WPELibrary
             try
             {
                 int iSelectIndex = this.dgvMapLocal.SelectedRows[0].Index;
-                if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.ProxyMapping.lstMapLocal.Count)
+                if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.Mapping.lstMapLocal.Count)
                 {
-                    Socket_Operation.ShowProxyMapLocalForm(Operate.ProxyConfig.ProxyMapping.lstMapLocal[iSelectIndex]);
+                    Socket_Operation.ShowProxyMapLocalForm(Operate.ProxyConfig.Mapping.lstMapLocal[iSelectIndex]);
                     bindingSource.ResetBindings(false);
                 }
             }
@@ -90,7 +90,7 @@ namespace WPELibrary
                 {
                     bool bCheck = Convert.ToBoolean(dgvMapLocal.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
                     dgvMapLocal.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = !bCheck;
-                    Operate.ProxyConfig.ProxyMapping.lstMapLocal[e.RowIndex].IsEnable = !bCheck;
+                    Operate.ProxyConfig.Mapping.lstMapLocal[e.RowIndex].IsEnable = !bCheck;
                 }
             }
             catch (Exception ex)
@@ -120,9 +120,9 @@ namespace WPELibrary
                 if (this.dgvMapLocal.Rows.Count > 0 && this.dgvMapLocal.SelectedRows.Count > 0)
                 {
                     int iSelectIndex = this.dgvMapLocal.SelectedRows[0].Index;
-                    if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.ProxyMapping.lstMapLocal.Count)
+                    if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.Mapping.lstMapLocal.Count)
                     {
-                        Operate.ProxyConfig.ProxyMapping.DelMapLocal(Operate.ProxyConfig.ProxyMapping.lstMapLocal[iSelectIndex]);
+                        Operate.ProxyConfig.Mapping.DelMapLocal(Operate.ProxyConfig.Mapping.lstMapLocal[iSelectIndex]);
                         bindingSource.ResetBindings(false);
                     }
                 }
@@ -157,9 +157,9 @@ namespace WPELibrary
                 if (this.dgvMapLocal.Rows.Count > 0 && this.dgvMapLocal.SelectedRows.Count > 0)
                 {
                     int iSelectIndex = this.dgvMapLocal.SelectedRows[0].Index;
-                    if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.ProxyMapping.lstMapLocal.Count)
+                    if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.Mapping.lstMapLocal.Count)
                     {
-                        pml = Operate.ProxyConfig.ProxyMapping.lstMapLocal[iSelectIndex];
+                        pml = Operate.ProxyConfig.Mapping.lstMapLocal[iSelectIndex];
                     }
                 }                              
 
@@ -169,7 +169,7 @@ namespace WPELibrary
 
                         if (pml != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Top, pml);
+                            Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Top, pml);
                         }
 
                         break;
@@ -178,7 +178,7 @@ namespace WPELibrary
 
                         if (pml != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Up, pml);
+                            Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Up, pml);
                         }
                         
                         break;
@@ -187,7 +187,7 @@ namespace WPELibrary
 
                         if (pml != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Down, pml);
+                            Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Down, pml);
                         }
                         
                         break;
@@ -196,14 +196,14 @@ namespace WPELibrary
 
                         if (pml != null)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, pml);
+                            Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, pml);
                         }
                         
                         break;
 
                     case "cmsMapLocal_Import":
 
-                        Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Import, pml);
+                        Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Import, pml);
                         bindingSource.ResetBindings(false);
 
                         break;
@@ -212,7 +212,7 @@ namespace WPELibrary
 
                         if (this.dgvMapLocal.Rows.Count > 0)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Export, pml);
+                            Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Export, pml);
                         }
                         
                         break;
@@ -221,7 +221,7 @@ namespace WPELibrary
 
                         if (this.dgvMapLocal.Rows.Count > 0)
                         {
-                            Operate.ProxyConfig.ProxyMapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.CleanUp, pml);
+                            Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.CleanUp, pml);
                             bindingSource.ResetBindings(false);
                         }
                         
@@ -230,7 +230,7 @@ namespace WPELibrary
 
                 this.dgvMapLocal.ClearSelection();
 
-                int iIndex = Operate.ProxyConfig.ProxyMapping.lstMapLocal.IndexOf(pml);
+                int iIndex = Operate.ProxyConfig.Mapping.lstMapLocal.IndexOf(pml);
                 if (iIndex > -1 && iIndex < this.dgvMapLocal.RowCount)
                 {
                     this.dgvMapLocal.Rows[iIndex].Selected = true;

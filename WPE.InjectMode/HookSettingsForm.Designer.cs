@@ -77,7 +77,7 @@
             this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpHookSettings.Size = new System.Drawing.Size(484, 511);
+            this.tlpHookSettings.Size = new System.Drawing.Size(484, 561);
             this.tlpHookSettings.TabIndex = 0;
             // 
             // tlpWS2
@@ -103,7 +103,7 @@
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpWS2.Size = new System.Drawing.Size(484, 233);
+            this.tlpWS2.Size = new System.Drawing.Size(484, 283);
             this.tlpWS2.TabIndex = 7;
             // 
             // cbHookWSA_RecvFrom
@@ -245,7 +245,7 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 451);
+            this.tlpButton.Location = new System.Drawing.Point(0, 501);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
@@ -307,7 +307,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 511);
+            this.ClientSize = new System.Drawing.Size(484, 561);
             this.Controls.Add(this.tlpHookSettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));

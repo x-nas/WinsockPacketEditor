@@ -14,15 +14,15 @@ namespace WPE.Lib.WebAPI
 
         public IHttpActionResult GetProxyInfo()
         {
-            string WorkMode = Socket_Operation.GetWorkModeName(Operate.ProxyConfig.SocketProxy.SpeedMode);
-            ulong ProxyTCP = Operate.ProxyConfig.SocketProxy.ProxyTCP_CNT;
-            ulong ProxyUDP = Operate.ProxyConfig.SocketProxy.ProxyUDP_CNT;
-            string ProxyCache = Operate.ProxyConfig.SocketProxyQueue.qSocket_ProxyData.Count.ToString();
+            string WorkMode = Socket_Operation.GetWorkModeName(Operate.ProxyConfig.Proxy.SpeedMode);
+            ulong ProxyTCP = Operate.ProxyConfig.Proxy.ProxyTCP_CNT;
+            ulong ProxyUDP = Operate.ProxyConfig.Proxy.ProxyUDP_CNT;
+            string ProxyCache = Operate.ProxyConfig.Queue.qSocket_ProxyData.Count.ToString();
             ulong ProxyTotal = ProxyTCP + ProxyUDP;
-            string ProxyOnLine = Operate.ProxyConfig.SocketProxy.ProxyOnLineInfo;
-            string ProxyLinks = Operate.ProxyConfig.SocketProxyList.lstProxyTCP.Count.ToString();
-            string ProxySpeed = Operate.ProxyConfig.SocketProxy.ProxySpeedInfo;
-            string ProxyBytes = Operate.ProxyConfig.SocketProxy.ProxyBytesInfo;
+            string ProxyOnLine = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
+            string ProxyLinks = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
+            string ProxySpeed = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
+            string ProxyBytes = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
 
             string[] ProxyInfo = new string[9];
             ProxyInfo[0] = WorkMode;
@@ -47,7 +47,7 @@ namespace WPE.Lib.WebAPI
 
         public IEnumerable<Proxy_AuthInfo> GetProxyAuthList()
         {
-            return Operate.ProxyConfig.ProxyAccount.lstProxyAuth;
+            return Operate.ProxyConfig.Account.lstProxyAuth;
         }
 
         #endregion

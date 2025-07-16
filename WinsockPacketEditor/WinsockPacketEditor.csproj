@@ -367,6 +367,10 @@
       <Project>{6bcb0079-f5db-4894-b089-250ef00aaa2c}</Project>
       <Name>WPE.Lib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WPE.ProxyMode\WPE.ProxyMode.csproj">
+      <Project>{d6c63d9a-44de-4d22-a3f3-1e91876da998}</Project>
+      <Name>WPE.ProxyMode</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <FileAssociation Include=".fp">

@@ -7,7 +7,7 @@ namespace WPE.Lib
         public bool IsEnable { get; set; }
 
         //协议类型
-        public Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType { get; set; }
+        public Operate.ProxyConfig.Proxy.MapProtocol ProtocolType { get; set; }
 
         //主机地址
         public string Host { get; set; }
@@ -21,7 +21,7 @@ namespace WPE.Lib
         //本地文件
         public string LocalPath { get; set; }        
 
-        public Proxy_MapLocal(bool IsEnable, Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType, string Host, int Port, string RemotePath, string LocalPath) 
+        public Proxy_MapLocal(bool IsEnable, Operate.ProxyConfig.Proxy.MapProtocol ProtocolType, string Host, int Port, string RemotePath, string LocalPath) 
         {
             this.IsEnable = IsEnable;
             this.ProtocolType = ProtocolType;

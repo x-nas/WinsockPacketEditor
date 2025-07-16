@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
@@ -152,13 +151,17 @@
             this.sRobotList = new AntdUI.Segmented();
             this.tpStatistical = new AntdUI.TabPage();
             this.tlpStatistical = new System.Windows.Forms.TableLayoutPanel();
+            this.lStatistical_PacketLength = new AntdUI.Label();
             this.chartPacketLength = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.bStatistical = new AntdUI.Button();
             this.tlpStatisticalCharts = new System.Windows.Forms.TableLayoutPanel();
+            this.lStatistical_RobotList = new AntdUI.Label();
+            this.lStatistical_SendList = new AntdUI.Label();
             this.chartRobotList = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartSendList = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartFilterList = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.lStatistical_FilterList = new AntdUI.Label();
             this.tpComparison = new AntdUI.TabPage();
             this.splitterComparison = new AntdUI.Splitter();
             this.tlpComparisonText = new System.Windows.Forms.TableLayoutPanel();
@@ -233,16 +236,12 @@
             this.txtExtraction = new AntdUI.Input();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
-            this.timerPacketList = new System.Windows.Forms.Timer(this.components);
-            this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
+            this.timerPacketList = new System.Windows.Forms.Timer();
+            this.timerPacketListInfo = new System.Windows.Forms.Timer();
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
-            this.lStatistical_FilterList = new AntdUI.Label();
-            this.lStatistical_SendList = new AntdUI.Label();
-            this.lStatistical_RobotList = new AntdUI.Label();
-            this.lStatistical_PacketLength = new AntdUI.Label();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -395,7 +394,7 @@
             menuItem1.ID = "miPacketList";
             menuItem1.LocalizationText = "InjectModeForm.{id}";
             menuItem1.Select = true;
-            menuItem1.Text = "封包列表";
+            menuItem1.Text = "封包管理";
             menuItem2.Badge = "";
             menuItem2.IconSvg = "FunnelPlotFilled";
             menuItem2.ID = "miFilterList";
@@ -478,7 +477,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -492,7 +491,6 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 4;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -501,7 +499,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1682,7 +1680,7 @@
             // tpStatistical
             // 
             this.tpStatistical.Controls.Add(this.tlpStatistical);
-            this.tpStatistical.Location = new System.Drawing.Point(3, 33);
+            this.tpStatistical.Location = new System.Drawing.Point(-1124, -724);
             this.tpStatistical.Name = "tpStatistical";
             this.tpStatistical.Size = new System.Drawing.Size(1124, 724);
             this.tpStatistical.TabIndex = 1;
@@ -1707,6 +1705,16 @@
             this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpStatistical.Size = new System.Drawing.Size(1124, 724);
             this.tlpStatistical.TabIndex = 0;
+            // 
+            // lStatistical_PacketLength
+            // 
+            this.lStatistical_PacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatistical_PacketLength.Location = new System.Drawing.Point(3, 320);
+            this.lStatistical_PacketLength.Name = "lStatistical_PacketLength";
+            this.lStatistical_PacketLength.Size = new System.Drawing.Size(1118, 23);
+            this.lStatistical_PacketLength.TabIndex = 5;
+            this.lStatistical_PacketLength.Text = "封包长度统计数据";
+            this.lStatistical_PacketLength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // chartPacketLength
             // 
@@ -1780,6 +1788,26 @@
             this.tlpStatisticalCharts.Size = new System.Drawing.Size(1124, 317);
             this.tlpStatisticalCharts.TabIndex = 0;
             // 
+            // lStatistical_RobotList
+            // 
+            this.lStatistical_RobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatistical_RobotList.Location = new System.Drawing.Point(751, 3);
+            this.lStatistical_RobotList.Name = "lStatistical_RobotList";
+            this.lStatistical_RobotList.Size = new System.Drawing.Size(370, 23);
+            this.lStatistical_RobotList.TabIndex = 5;
+            this.lStatistical_RobotList.Text = "机器人执行情况";
+            this.lStatistical_RobotList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lStatistical_SendList
+            // 
+            this.lStatistical_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatistical_SendList.Location = new System.Drawing.Point(377, 3);
+            this.lStatistical_SendList.Name = "lStatistical_SendList";
+            this.lStatistical_SendList.Size = new System.Drawing.Size(368, 23);
+            this.lStatistical_SendList.TabIndex = 4;
+            this.lStatistical_SendList.Text = "发送执行情况";
+            this.lStatistical_SendList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // chartRobotList
             // 
             chartArea2.Name = "ChartArea1";
@@ -1835,6 +1863,16 @@
             this.chartFilterList.Size = new System.Drawing.Size(368, 282);
             this.chartFilterList.TabIndex = 0;
             this.chartFilterList.Text = "chart1";
+            // 
+            // lStatistical_FilterList
+            // 
+            this.lStatistical_FilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatistical_FilterList.Location = new System.Drawing.Point(3, 3);
+            this.lStatistical_FilterList.Name = "lStatistical_FilterList";
+            this.lStatistical_FilterList.Size = new System.Drawing.Size(368, 23);
+            this.lStatistical_FilterList.TabIndex = 3;
+            this.lStatistical_FilterList.Text = "滤镜执行情况";
+            this.lStatistical_FilterList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tpComparison
             // 
@@ -2845,46 +2883,6 @@
             this.bgwRobotList.WorkerSupportsCancellation = true;
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
-            // 
-            // lStatistical_FilterList
-            // 
-            this.lStatistical_FilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatistical_FilterList.Location = new System.Drawing.Point(3, 3);
-            this.lStatistical_FilterList.Name = "lStatistical_FilterList";
-            this.lStatistical_FilterList.Size = new System.Drawing.Size(368, 23);
-            this.lStatistical_FilterList.TabIndex = 3;
-            this.lStatistical_FilterList.Text = "滤镜执行情况";
-            this.lStatistical_FilterList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lStatistical_SendList
-            // 
-            this.lStatistical_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatistical_SendList.Location = new System.Drawing.Point(377, 3);
-            this.lStatistical_SendList.Name = "lStatistical_SendList";
-            this.lStatistical_SendList.Size = new System.Drawing.Size(368, 23);
-            this.lStatistical_SendList.TabIndex = 4;
-            this.lStatistical_SendList.Text = "发送执行情况";
-            this.lStatistical_SendList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lStatistical_RobotList
-            // 
-            this.lStatistical_RobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatistical_RobotList.Location = new System.Drawing.Point(751, 3);
-            this.lStatistical_RobotList.Name = "lStatistical_RobotList";
-            this.lStatistical_RobotList.Size = new System.Drawing.Size(370, 23);
-            this.lStatistical_RobotList.TabIndex = 5;
-            this.lStatistical_RobotList.Text = "机器人执行情况";
-            this.lStatistical_RobotList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lStatistical_PacketLength
-            // 
-            this.lStatistical_PacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatistical_PacketLength.Location = new System.Drawing.Point(3, 320);
-            this.lStatistical_PacketLength.Name = "lStatistical_PacketLength";
-            this.lStatistical_PacketLength.Size = new System.Drawing.Size(1118, 23);
-            this.lStatistical_PacketLength.TabIndex = 5;
-            this.lStatistical_PacketLength.Text = "封包长度统计数据";
-            this.lStatistical_PacketLength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // InjectModeForm
             // 

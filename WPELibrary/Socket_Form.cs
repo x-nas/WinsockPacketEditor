@@ -52,9 +52,9 @@ namespace WPELibrary
 
             //Socket_Operation.StartRemoteMGT();
             //Operate.SystemConfig.LoadSystemList_FromDB();
-            //Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_FromDB();
-            //Operate.ProxyConfig.ProxyMapping.LoadProxyMapLocal_FromDB();
-            //Operate.ProxyConfig.ProxyMapping.LoadProxyMapRemote_FromDB();
+            //Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
+            //Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
+            //Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
         }
 
         private void Socket_Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -117,9 +117,9 @@ namespace WPELibrary
                 //Socket_Operation.StopRemoteMGT(this.RunMode);
                 //Operate.SystemConfig.SaveSystemList_ToDB();
                 //Operate.SystemConfig.SaveRunConfig_ToDB(this.RunMode);
-                //Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
-                //Operate.ProxyConfig.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
-                //Operate.ProxyConfig.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
+                //Operate.ProxyConfig.Account.SaveProxyAccountList_ToDB(this.RunMode);
+                //Operate.ProxyConfig.Mapping.SaveProxyMapLocal_ToDB(this.RunMode);
+                //Operate.ProxyConfig.Mapping.SaveProxyMapRemote_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {

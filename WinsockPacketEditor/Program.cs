@@ -1,12 +1,10 @@
-﻿using AntdUI;
-using System;
-using System.Diagnostics;
-using System.Security.Cryptography;
+﻿using System;
 using System.Threading;
 using System.Windows.Forms;
 using WPE.InjectMode;
 using WPE.Lib;
 using WPE.Lib.NativeMethods;
+using WPE.ProxyMode;
 
 namespace WinsockPacketEditor
 {
@@ -50,13 +48,11 @@ namespace WinsockPacketEditor
                                 InjectModeForm imForm = new InjectModeForm();
                                 imForm.Show();
 
-                                Application.Run(new SocketProxy_Form(imForm));
+                                Application.Run(new ProxyModeForm());
 
                                 break;
 
                             case Operate.SystemConfig.SystemMode.Process:
-
-                                //Application.Run(new InjectMode_Form());
 
                                 break;
                         }                        

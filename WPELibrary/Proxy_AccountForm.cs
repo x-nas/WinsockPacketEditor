@@ -35,7 +35,7 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Proxy_AccountInfo pai = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByAccountID(this.SelectAID);
+                    Proxy_AccountInfo pai = Operate.ProxyConfig.Account.GetProxyAccount_ByAccountID(this.SelectAID);
 
                     if (pai != null)
                     {
@@ -157,13 +157,13 @@ namespace WPELibrary
 
                 if (this.SelectAID == null || this.SelectAID == Guid.Empty)
                 {
-                    if (Operate.ProxyConfig.ProxyAccount.CheckProxyAccount_Exist(UserName))
+                    if (Operate.ProxyConfig.Account.CheckProxyAccount_Exist(UserName))
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_177));
                         return;
                     }
 
-                    Operate.ProxyConfig.ProxyAccount.AddProxyAccount(
+                    Operate.ProxyConfig.Account.AddProxyAccount(
                         Guid.NewGuid(), 
                         IsEnable, 
                         UserName, 
@@ -181,7 +181,7 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Operate.ProxyConfig.ProxyAccount.UpdateProxyAccount_ByAccountID(
+                    Operate.ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
                         this.SelectAID, 
                         IsEnable, 
                         PassWord, 

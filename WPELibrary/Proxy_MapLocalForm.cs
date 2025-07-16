@@ -24,7 +24,7 @@ namespace WPELibrary
 
             if (this.pmlSelect != null)
             {
-                if (this.pmlSelect.ProtocolType == Operate.ProxyConfig.SocketProxy.MapProtocol.Http)
+                if (this.pmlSelect.ProtocolType == Operate.ProxyConfig.Proxy.MapProtocol.Http)
                 {
                     this.cbbProtocol.SelectedIndex = 0;
                 }
@@ -44,14 +44,14 @@ namespace WPELibrary
         {
             try
             {
-                Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_New = new Operate.ProxyConfig.SocketProxy.MapProtocol();
+                Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_New = new Operate.ProxyConfig.Proxy.MapProtocol();
                 if (this.cbbProtocol.SelectedIndex == 0)
                 {
-                    ProtocolType_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
+                    ProtocolType_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
                 }
                 else
                 {
-                    ProtocolType_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
+                    ProtocolType_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
                 }
 
                 string Host_New = this.txtHost.Text.Trim();
@@ -67,11 +67,11 @@ namespace WPELibrary
 
                 if (this.pmlSelect == null)
                 {
-                    Operate.ProxyConfig.ProxyMapping.AddMapLocal(false, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
+                    Operate.ProxyConfig.Mapping.AddMapLocal(false, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
                 }
                 else
                 {
-                    Operate.ProxyConfig.ProxyMapping.UpdateMapLocal(this.pmlSelect, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
+                    Operate.ProxyConfig.Mapping.UpdateMapLocal(this.pmlSelect, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
                 }
 
                 this.Close();                

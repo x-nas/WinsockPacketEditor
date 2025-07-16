@@ -28,7 +28,7 @@ namespace WPELibrary
         {
             try
             {
-                string UserName = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByAccountID(this.AccountID).UserName;
+                string UserName = Operate.ProxyConfig.Account.GetProxyAccount_ByAccountID(this.AccountID).UserName;
                 this.Text += " - " + UserName;
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace WPELibrary
             try
             {
                 dgvAccountLogin.AutoGenerateColumns = false;
-                dgvAccountLogin.DataSource = Operate.ProxyConfig.ProxyAccount.LoadProxyAccount_LoginInfo_FromDB(this.AccountID);
+                dgvAccountLogin.DataSource = Operate.ProxyConfig.Account.LoadProxyAccount_LoginInfo_FromDB(this.AccountID);
                 dgvAccountLogin.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvAccountLogin, true, null);
             }
             catch (Exception ex)

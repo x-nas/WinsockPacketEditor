@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPE.Lib", "WPE.Lib\WPE.Lib.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPE.InjectMode", "WPE.InjectMode\WPE.InjectMode.csproj", "{3C3385A9-DC62-46D2-B648-B9ED87B8228E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPE.ProxyMode", "WPE.ProxyMode\WPE.ProxyMode.csproj", "{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3C3385A9-DC62-46D2-B648-B9ED87B8228E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C3385A9-DC62-46D2-B648-B9ED87B8228E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C3385A9-DC62-46D2-B648-B9ED87B8228E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

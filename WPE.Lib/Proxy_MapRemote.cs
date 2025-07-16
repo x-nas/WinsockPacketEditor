@@ -9,7 +9,7 @@ namespace WPE.Lib
         #region//请求地址
 
         //协议类型
-        public Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_From { get; set; }
+        public Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_From { get; set; }
 
         //主机地址
         public string Host_From { get; set; }
@@ -25,7 +25,7 @@ namespace WPE.Lib
         #region//映射地址
 
         //协议类型
-        public Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_To { get; set; }
+        public Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_To { get; set; }
 
         //主机地址
         public string Host_To { get; set; }
@@ -42,11 +42,11 @@ namespace WPE.Lib
 
         public Proxy_MapRemote(
             bool IsEnable, 
-            Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_From, 
+            Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_From, 
             string Host_From, 
             int Port_From, 
             string Path_From,
-            Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_To,
+            Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_To,
             string Host_To,
             int Port_To,
             string Path_To) 

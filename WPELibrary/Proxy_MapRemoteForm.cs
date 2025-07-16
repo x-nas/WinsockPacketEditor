@@ -25,7 +25,7 @@ namespace WPELibrary
 
             if (this.pmrSelect != null)
             {
-                if (this.pmrSelect.ProtocolType_From == Operate.ProxyConfig.SocketProxy.MapProtocol.Http)
+                if (this.pmrSelect.ProtocolType_From == Operate.ProxyConfig.Proxy.MapProtocol.Http)
                 {
                     this.cbbProtocol_From.SelectedIndex = 0;
                 }
@@ -34,11 +34,11 @@ namespace WPELibrary
                 this.nudPort_From.Value = this.pmrSelect.Port_From;
                 this.txtPath_From.Text = this.pmrSelect.Path_From;
 
-                if (this.pmrSelect.ProtocolType_To == Operate.ProxyConfig.SocketProxy.MapProtocol.Http)
+                if (this.pmrSelect.ProtocolType_To == Operate.ProxyConfig.Proxy.MapProtocol.Http)
                 {
                     this.cbbProtocol_To.SelectedIndex = 0;
                 }
-                else if (this.pmrSelect.ProtocolType_To == Operate.ProxyConfig.SocketProxy.MapProtocol.Https)
+                else if (this.pmrSelect.ProtocolType_To == Operate.ProxyConfig.Proxy.MapProtocol.Https)
                 {
                     this.cbbProtocol_To.SelectedIndex = 1;
                 }
@@ -57,24 +57,24 @@ namespace WPELibrary
         {
             try
             {
-                Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_From_New = new Operate.ProxyConfig.SocketProxy.MapProtocol();
+                Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_From_New = new Operate.ProxyConfig.Proxy.MapProtocol();
                 if (this.cbbProtocol_From.SelectedIndex == 0)
                 {
-                    ProtocolType_From_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
+                    ProtocolType_From_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
                 }
                 else
                 {
-                    ProtocolType_From_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
+                    ProtocolType_From_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
                 }
 
-                Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_To_New = new Operate.ProxyConfig.SocketProxy.MapProtocol();
+                Operate.ProxyConfig.Proxy.MapProtocol ProtocolType_To_New = new Operate.ProxyConfig.Proxy.MapProtocol();
                 if (this.cbbProtocol_To.SelectedIndex == 0)
                 {
-                    ProtocolType_To_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
+                    ProtocolType_To_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
                 }
                 else if(this.cbbProtocol_To.SelectedIndex == 1)
                 {
-                    ProtocolType_To_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Https;
+                    ProtocolType_To_New = Operate.ProxyConfig.Proxy.MapProtocol.Https;
                 }
 
                 string Host_From_New = this.txtHost_From.Text.Trim();
@@ -94,7 +94,7 @@ namespace WPELibrary
 
                 if (this.pmrSelect == null)
                 {
-                    Operate.ProxyConfig.ProxyMapping.AddMapRemote(
+                    Operate.ProxyConfig.Mapping.AddMapRemote(
                         false, 
                         ProtocolType_From_New, 
                         Host_From_New, 
@@ -107,7 +107,7 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Operate.ProxyConfig.ProxyMapping.UpdateMapRemote(
+                    Operate.ProxyConfig.Mapping.UpdateMapRemote(
                         this.pmrSelect, 
                         ProtocolType_From_New, 
                         Host_From_New, 

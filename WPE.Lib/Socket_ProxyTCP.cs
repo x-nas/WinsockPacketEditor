@@ -10,11 +10,11 @@ namespace WPE.Lib
         private volatile bool _isDisposed;
         private readonly object _closeLock = new object();
 
-        public Operate.ProxyConfig.SocketProxy.ProxyType ProxyType { get; set; }
-        public Operate.ProxyConfig.SocketProxy.ProxyStep ProxyStep { get; set; }
-        public Operate.ProxyConfig.SocketProxy.CommandType CommandType { get; set; }
-        public Operate.ProxyConfig.SocketProxy.DomainType DomainType { get; set; }
-        public Operate.ProxyConfig.SocketProxy.AddressType AddressType { get; set; }
+        public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; set; }
+        public Operate.ProxyConfig.Proxy.ProxyStep ProxyStep { get; set; }
+        public Operate.ProxyConfig.Proxy.CommandType CommandType { get; set; }
+        public Operate.ProxyConfig.Proxy.DomainType DomainType { get; set; }
+        public Operate.ProxyConfig.Proxy.AddressType AddressType { get; set; }
         public Guid AID { get; set; }
         public ClientConnection Client { get; }
         public ServerConnection Server { get; }
@@ -25,7 +25,7 @@ namespace WPE.Lib
         {
             Client = new ClientConnection(clientSocket, bufferSize);
             Server = new ServerConnection(bufferSize);
-            ProxyStep = Operate.ProxyConfig.SocketProxy.ProxyStep.Handshake;
+            ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Handshake;
         }
 
         #endregion

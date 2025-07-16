@@ -21,24 +21,24 @@ namespace WPELibrary
 
         private void Proxy_AccountAuthForm_Load(object sender, EventArgs e)
         {
-            Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAuth = true;
+            Operate.ProxyConfig.Account.IsShow_ProxyAuth = true;
         }
 
         private void Proxy_AccountAuthForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAuth = false;
+            Operate.ProxyConfig.Account.IsShow_ProxyAuth = false;
         }
 
         private void InitDGV()
         {
             try
             {
-                _authBindingSource.DataSource = Operate.ProxyConfig.ProxyAccount.lstProxyAuth;
+                _authBindingSource.DataSource = Operate.ProxyConfig.Account.lstProxyAuth;
 
                 dgvAuth.AutoGenerateColumns = false;
                 dgvAuth.DataSource = _authBindingSource;
                 dgvAuth.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvAuth, true, null);
-                Operate.ProxyConfig.ProxyAccount.RecProxyAuth += new Operate.ProxyConfig.ProxyAccount.ProxyAuthReceived(Event_RecProxyAuth);
+                Operate.ProxyConfig.Account.RecProxyAuth += new Operate.ProxyConfig.Account.ProxyAuthReceived(Event_RecProxyAuth);
             }
             catch (Exception ex)
             {
@@ -64,7 +64,7 @@ namespace WPELibrary
                         if (this.IsDisposed || dgvAuth.IsDisposed)
                             return;
 
-                        var existingItem = Operate.ProxyConfig.ProxyAccount.lstProxyAuth
+                        var existingItem = Operate.ProxyConfig.Account.lstProxyAuth
                             .FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.AID == pai.AID);
 
                         if (existingItem != null)
@@ -74,7 +74,7 @@ namespace WPELibrary
                         }
                         else
                         {
-                            Operate.ProxyConfig.ProxyAccount.lstProxyAuth.Add(pai);
+                            Operate.ProxyConfig.Account.lstProxyAuth.Add(pai);
                         }
 
                         _authBindingSource.ResetBindings(false);
@@ -104,12 +104,12 @@ namespace WPELibrary
                 else if (e.ColumnIndex == dgvAuth.Columns["cUserName"].Index)
                 {
                     Guid AID = Guid.Parse(dgvAuth.Rows[e.RowIndex].Cells["cAID"].Value.ToString());
-                    e.Value = Operate.ProxyConfig.ProxyAccount.GetUserName_ByAccountID(AID);
+                    e.Value = Operate.ProxyConfig.Account.GetUserName_ByAccountID(AID);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvAuth.Columns["cAuthResult"].Index)
                 {
-                    //e.Value = Operate.ProxyConfig.ProxyAccount.GetImg_ByAuthResult(Convert.ToBoolean(e.Value));
+                    //e.Value = Operate.ProxyConfig.Account.GetImg_ByAuthResult(Convert.ToBoolean(e.Value));
                     e.FormattingApplied = true;
                 }
             }
@@ -125,9 +125,9 @@ namespace WPELibrary
 
         private void ShowAuthListInfo()
         { 
-            this.tsslAuthCount_Value.Text = Operate.ProxyConfig.ProxyAccount.lstProxyAuth.Count.ToString();
-            this.tsslLinksCount_Value.Text = Operate.ProxyConfig.ProxyAccount.GetLinksCount_FromProxyAuthList().ToString();
-            this.tsslDevicesCount_Value.Text = Operate.ProxyConfig.ProxyAccount.GetDevicesCount_FromProxyAuthList().ToString();
+            this.tsslAuthCount_Value.Text = Operate.ProxyConfig.Account.lstProxyAuth.Count.ToString();
+            this.tsslLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromProxyAuthList().ToString();
+            this.tsslDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromProxyAuthList().ToString();
         }
 
         #endregion
@@ -155,7 +155,7 @@ namespace WPELibrary
                     FromIndex = this.dgvAuth.SelectedRows[0].Index + 1;
                 }
 
-                int iIndex = Operate.ProxyConfig.ProxyAccount.SearchForProxyAuthList(FromIndex, FindString);
+                int iIndex = Operate.ProxyConfig.Account.SearchForProxyAuthList(FromIndex, FindString);
                 if (iIndex >= 0 && iIndex < this.dgvAuth.Rows.Count)
                 {
                     this.dgvAuth.Rows[iIndex].Selected = true;

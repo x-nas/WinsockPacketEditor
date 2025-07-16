@@ -16,7 +16,7 @@ namespace WPE.Lib.WebAPI
 
         public IEnumerable<Proxy_AccountInfo> GetProxyAccountList()
         {
-            return Operate.ProxyConfig.ProxyAccount.lstProxyAccount;
+            return Operate.ProxyConfig.Account.lstProxyAccount;
         }
 
         #endregion
@@ -28,7 +28,7 @@ namespace WPE.Lib.WebAPI
 
         public Proxy_AccountInfo GetProxyAccountByID(Guid AID)
         {
-            return Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByAccountID(AID);
+            return Operate.ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace WPE.Lib.WebAPI
         {
             try
             {
-                if (Operate.ProxyConfig.ProxyAccount.CheckProxyAccount_Exist(pai.UserName))
+                if (Operate.ProxyConfig.Account.CheckProxyAccount_Exist(pai.UserName))
                 {
                     return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_177));
                 }
@@ -67,7 +67,7 @@ namespace WPE.Lib.WebAPI
                 }
 
                 pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
-                bool bOK = Operate.ProxyConfig.ProxyAccount.AddProxyAccount(
+                bool bOK = Operate.ProxyConfig.Account.AddProxyAccount(
                     Guid.NewGuid(), 
                     pai.IsEnable, 
                     pai.UserName, 
@@ -109,7 +109,7 @@ namespace WPE.Lib.WebAPI
 
         public IHttpActionResult DeleteProxyAccount([FromBody] Guid AID)
         {
-            bool bOK = Operate.ProxyConfig.ProxyAccount.DeleteProxyAccount_ByAccountID(AID);
+            bool bOK = Operate.ProxyConfig.Account.DeleteProxyAccount_ByAccountID(AID);
 
             if (bOK)
             {
@@ -137,7 +137,7 @@ namespace WPE.Lib.WebAPI
 
             pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
 
-            bool bOK = Operate.ProxyConfig.ProxyAccount.UpdateProxyAccount_ByAccountID(
+            bool bOK = Operate.ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
                 pai.AID, 
                 pai.IsEnable, 
                 pai.PassWord, 
