@@ -456,41 +456,7 @@ namespace WPE.Lib
 
         #endregion        
 
-        #region//判断地址的类型
-
-        private static bool IsValidIPv4(string IPString)
-        {
-            string pattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
-            return Regex.IsMatch(IPString, pattern);           
-        }
-
-        private static bool IsValidIPv6(string IPString)
-        {
-            string pattern = @"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$";
-            return Regex.IsMatch(IPString, pattern);
-        }
-
-        private static bool IsValidDomain(string IPString)
-        {
-            string pattern = @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)+([A-Za-z]{2,}|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
-            return Regex.IsMatch(IPString, pattern);
-        }
-
-        public static Operate.ProxyConfig.Proxy.AddressType GetAddressType_ByString(string IPString)
-        {
-            if (IsValidIPv4(IPString))
-                return Operate.ProxyConfig.Proxy.AddressType.IPv4;
-
-            if (IsValidIPv6(IPString))
-                return Operate.ProxyConfig.Proxy.AddressType.IPv6;
-
-            if (IsValidDomain(IPString))
-                return Operate.ProxyConfig.Proxy.AddressType.Domain;
-
-            return Operate.ProxyConfig.Proxy.AddressType.Invalid;
-        }
-
-        #endregion
+        
 
         #region//解析Http头数据
 
@@ -1349,99 +1315,7 @@ namespace WPE.Lib
 
         #endregion
 
-        #region//检测外部代理服务器
-
-        public static async Task<bool> DetectionExternalProxy()
-        {
-            try
-            {
-                IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                if (ExternalProxyEP == null)
-                {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_202));
-                    return false;
-                }
-
-                using (Socket proxySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-                {
-                    // 设置连接超时
-                    var connectTask = proxySocket.ConnectAsync(ExternalProxyEP);
-                    var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
-
-                    if (await Task.WhenAny(connectTask, timeoutTask) == timeoutTask)
-                    {
-                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_206));
-                        return false;
-                    }
-
-                    //SOCKS5 握手
-                    byte[] handshakeRequest = null;
-                    if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
-                    {
-                        handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
-                    }
-                    else
-                    {
-                        handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
-                    }
-                    await proxySocket.SendAsync(new ArraySegment<byte>(handshakeRequest), SocketFlags.None);
-
-                    byte[] handshakeResponse = new byte[2];
-                    int received = await proxySocket.ReceiveAsync(new ArraySegment<byte>(handshakeResponse), SocketFlags.None);
-
-                    if (handshakeResponse[0] != 0x05)
-                    {
-                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_207));
-                        return false;
-                    }
-
-                    switch (handshakeResponse[1])
-                    {
-                        case 0x00:
-                            // 无需认证
-                            break;
-
-                        case 0x02:
-                            // 需要用户名/密码认证
-                            if (!Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
-                            {
-                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_208));
-                                return false;
-                            }
-
-                            byte[] AuthRequest = Socket_Operation.CreateSOCKS5AuthPacket(Operate.ProxyConfig.Proxy.ExternalProxy_UserName, Operate.ProxyConfig.Proxy.ExternalProxy_PassWord);
-                            if (AuthRequest == null)
-                            {
-                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_209));
-                                return false;
-                            }
-                            await proxySocket.SendAsync(new ArraySegment<byte>(AuthRequest), SocketFlags.None);
-
-                            byte[] AuthResponse = new byte[2];
-                            await proxySocket.ReceiveAsync(new ArraySegment<byte>(AuthResponse), SocketFlags.None);
-                            if (AuthResponse[1] != 0x00)
-                            {
-                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_209));
-                                return false;
-                            }
-                            break;
-
-                        default:
-                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_210));
-                            return false;
-                    }
-                    
-                    return true;
-                }
-            }
-            catch
-            {
-                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_212));
-                return false;
-            }
-        }
-
-        #endregion
+        
 
         #region//判断 Socket 错误码是否是预期的错误
 
@@ -1580,7 +1454,7 @@ namespace WPE.Lib
         {
             try
             {
-                var addressType = Socket_Operation.GetAddressType_ByString(addressString);
+                var addressType = Operate.ProxyConfig.Proxy.GetAddressType_ByString(addressString);
 
                 switch (addressType)
                 {
@@ -1689,46 +1563,7 @@ namespace WPE.Lib
 
         #endregion        
 
-        #region//获取 SOCKS5 认证格式的封包
-
-        public static byte[] CreateSOCKS5AuthPacket(string username, string password)
-        {
-            // 验证输入参数
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || username.Length > 255 || password.Length > 255)
-            {
-                return null;
-            }
-
-            // 计算所需缓冲区大小
-            // 1 (VER) + 1 (ULEN) + username + 1 (PLEN) + password
-            int packetSize = 1 + 1 + username.Length + 1 + password.Length;
-
-            // 创建字节数组
-            byte[] packet = new byte[packetSize];
-            int offset = 0;
-
-            // 版本号 (0x01)
-            packet[offset++] = 0x01;
-
-            // 用户名长度 (1字节)
-            packet[offset++] = (byte)username.Length;
-
-            // 用户名 (UTF8编码)
-            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
-            Buffer.BlockCopy(usernameBytes, 0, packet, offset, usernameBytes.Length);
-            offset += usernameBytes.Length;
-
-            // 密码长度 (1字节)
-            packet[offset++] = (byte)password.Length;
-
-            // 密码 (UTF8编码)
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-            Buffer.BlockCopy(passwordBytes, 0, packet, offset, passwordBytes.Length);
-
-            return packet;
-        }
-
-        #endregion
+        
 
         #region//获取端口对应的域名类型
 

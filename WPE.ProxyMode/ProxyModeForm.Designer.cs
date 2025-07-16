@@ -106,6 +106,7 @@
             this.lWinsockInfo = new AntdUI.Label();
             this.lModuleName = new AntdUI.Label();
             this.lProcessName = new AntdUI.Label();
+            this.tpClientList = new AntdUI.TabPage();
             this.tpAccountList = new AntdUI.TabPage();
             this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
             this.tFilterList = new AntdUI.Table();
@@ -113,7 +114,6 @@
             this.tpStatistical = new AntdUI.TabPage();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
-            this.tpClientList = new AntdUI.TabPage();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
@@ -228,7 +228,7 @@
             menuItem1.ID = "miProxyList";
             menuItem1.LocalizationText = "ProxyModeForm.{id}";
             menuItem1.Select = true;
-            menuItem1.Text = "代理管理";
+            menuItem1.Text = "代理数据";
             menuItem2.IconSvg = "DesktopOutlined";
             menuItem2.ID = "miClientList";
             menuItem2.LocalizationText = "ProxyModeForm.{id}";
@@ -1085,6 +1085,14 @@
             this.lProcessName.TabIndex = 5;
             this.lProcessName.Text = "ProcessName";
             // 
+            // tpClientList
+            // 
+            this.tpClientList.Location = new System.Drawing.Point(0, 0);
+            this.tpClientList.Name = "tpClientList";
+            this.tpClientList.Size = new System.Drawing.Size(0, 0);
+            this.tpClientList.TabIndex = 8;
+            this.tpClientList.Text = "客户端列表";
+            // 
             // tpAccountList
             // 
             this.tpAccountList.Controls.Add(this.tlpFilterList);
@@ -1218,14 +1226,6 @@
             this.tSystemLog.TabIndex = 2;
             this.tSystemLog.Text = "table1";
             // 
-            // tpClientList
-            // 
-            this.tpClientList.Location = new System.Drawing.Point(0, 0);
-            this.tpClientList.Name = "tpClientList";
-            this.tpClientList.Size = new System.Drawing.Size(0, 0);
-            this.tpClientList.TabIndex = 8;
-            this.tpClientList.Text = "客户端列表";
-            // 
             // ProxyModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -1238,7 +1238,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ForeColor = System.Drawing.Color.Black;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.MinimumSize = new System.Drawing.Size(660, 400);
             this.Name = "ProxyModeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

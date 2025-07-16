@@ -53,6 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExternalProxySettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExternalProxySettingsForm.Designer.cs">
+      <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +79,9 @@
     <Compile Include="ProxySettingsForm.Designer.cs">
       <DependentUpon>ProxySettingsForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ExternalProxySettingsForm.resx">
+      <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ListSettingsForm.resx">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
     </EmbeddedResource>

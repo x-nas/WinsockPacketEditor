@@ -193,14 +193,7 @@ namespace WinsockPacketEditor
                 this.cbEnable_MapLocal.Checked = Operate.ProxyConfig.Mapping.Enable_MapLocal;
                 this.cbEnable_MapRemote.Checked = Operate.ProxyConfig.Mapping.Enable_MapRemote;
 
-                this.cbEnable_ExternalProxy.Checked = Operate.ProxyConfig.Proxy.Enable_ExternalProxy;
-                this.txtExternalProxy_IP.Text = Operate.ProxyConfig.Proxy.ExternalProxy_IP;
-                this.txtExternalProxy_Port.Text = Operate.ProxyConfig.Proxy.ExternalProxy_Port.ToString();
-                this.cbExternalProxy_AppointPort.Checked = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort;
-                this.txtExternalProxy_AppointPort.Text = Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort;
-                this.cbExternalProxy_EnableAuth.Checked = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth;
-                this.txtExternalProxy_UserName.Text = Operate.ProxyConfig.Proxy.ExternalProxy_UserName;
-                this.txtExternalProxy_PassWord.Text = Operate.ProxyConfig.Proxy.ExternalProxy_PassWord;
+                
 
                 this.cbSpeedMode.Checked = Operate.ProxyConfig.Proxy.SpeedMode;
 
@@ -228,14 +221,7 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Mapping.Enable_MapLocal = this.cbEnable_MapLocal.Checked;
                 Operate.ProxyConfig.Mapping.Enable_MapRemote = this.cbEnable_MapRemote.Checked;
 
-                Operate.ProxyConfig.Proxy.Enable_ExternalProxy = this.cbEnable_ExternalProxy.Checked;
-                Operate.ProxyConfig.Proxy.ExternalProxy_IP = this.txtExternalProxy_IP.Text.Trim();
-                Operate.ProxyConfig.Proxy.ExternalProxy_Port = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
-                Operate.ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort = this.cbExternalProxy_AppointPort.Checked;
-                Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort = this.txtExternalProxy_AppointPort.Text.Trim();
-                Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth = this.cbExternalProxy_EnableAuth.Checked;
-                Operate.ProxyConfig.Proxy.ExternalProxy_UserName = this.txtExternalProxy_UserName.Text.Trim();
-                Operate.ProxyConfig.Proxy.ExternalProxy_PassWord = this.txtExternalProxy_PassWord.Text.Trim();
+                
 
                 Operate.ProxyConfig.Proxy.SpeedMode = this.cbSpeedMode.Checked;
             }
@@ -370,7 +356,7 @@ namespace WinsockPacketEditor
                 this.SaveConfigs_Parameter();
 
                 this.bExternalProxy_Detection.Enabled = false;
-                bool Result = await Socket_Operation.DetectionExternalProxy();
+                bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(this);
 
                 if (Result)
                 {
@@ -618,7 +604,7 @@ namespace WinsockPacketEditor
                         return false;
                     }
 
-                    Operate.ProxyConfig.Proxy.AddressType atExternalProxy = Socket_Operation.GetAddressType_ByString(ExternalProxyIP);
+                    Operate.ProxyConfig.Proxy.AddressType atExternalProxy = Operate.ProxyConfig.Proxy.GetAddressType_ByString(ExternalProxyIP);
                     if (atExternalProxy != Operate.ProxyConfig.Proxy.AddressType.IPv4 && atExternalProxy != Operate.ProxyConfig.Proxy.AddressType.Domain)
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_203));

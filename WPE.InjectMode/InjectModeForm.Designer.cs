@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
@@ -236,8 +237,8 @@
             this.txtExtraction = new AntdUI.Input();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
-            this.timerPacketList = new System.Windows.Forms.Timer();
-            this.timerPacketListInfo = new System.Windows.Forms.Timer();
+            this.timerPacketList = new System.Windows.Forms.Timer(this.components);
+            this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
@@ -394,7 +395,7 @@
             menuItem1.ID = "miPacketList";
             menuItem1.LocalizationText = "InjectModeForm.{id}";
             menuItem1.Select = true;
-            menuItem1.Text = "封包管理";
+            menuItem1.Text = "封包数据";
             menuItem2.Badge = "";
             menuItem2.IconSvg = "FunnelPlotFilled";
             menuItem2.ID = "miFilterList";
@@ -477,7 +478,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";

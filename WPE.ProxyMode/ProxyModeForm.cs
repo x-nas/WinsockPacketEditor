@@ -314,13 +314,13 @@ namespace WPE.ProxyMode
 
                 //外部代理
                 case 3:
-                    //AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new BackUpSettingsForm())
-                    //{
-                    //    Align = AntdUI.TAlignMini.Right,
-                    //    Mask = true,
-                    //    MaskClosable = false,
-                    //    DisplayDelay = 0,
-                    //});
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ExternalProxySettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
                     break;
 
                 //系统设置
