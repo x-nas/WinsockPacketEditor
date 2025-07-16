@@ -2602,9 +2602,16 @@ namespace WPE.Lib
 
             public static void SaveSystemList_ToDB()
             {
-                FilterConfig.List.SaveFilterList_ToDB();
-                SendConfig.List.SaveSendList_ToDB();
-                RobotConfig.List.SaveRobotList_ToDB();
+                try
+                {
+                    FilterConfig.List.SaveFilterList_ToDB();
+                    SendConfig.List.SaveSendList_ToDB();
+                    RobotConfig.List.SaveRobotList_ToDB();
+                }
+                catch (Exception ex)
+                {
+                    DoLog(nameof(LoadSystemList_FromDB), ex.Message);
+                }                
             }
 
             #endregion
@@ -2615,12 +2622,9 @@ namespace WPE.Lib
             {
                 try
                 {
-                    Task.Run(() =>
-                    {
-                        FilterConfig.List.LoadFilterList_FromDB();
-                        SendConfig.List.LoadSendList_FromDB();
-                        RobotConfig.List.LoadRobotList_FromDB();
-                    });
+                    FilterConfig.List.LoadFilterList_FromDB();
+                    SendConfig.List.LoadSendList_FromDB();
+                    RobotConfig.List.LoadRobotList_FromDB();
                 }
                 catch (Exception ex)
                 {

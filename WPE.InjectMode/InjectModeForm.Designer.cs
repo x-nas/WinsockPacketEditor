@@ -65,6 +65,18 @@
             AntdUI.SegmentedItem segmentedItem23 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem24 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem25 = new AntdUI.SegmentedItem();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InjectModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -140,6 +152,13 @@
             this.sRobotList = new AntdUI.Segmented();
             this.tpStatistical = new AntdUI.TabPage();
             this.tlpStatistical = new System.Windows.Forms.TableLayoutPanel();
+            this.chartPacketLength = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.bStatistical = new AntdUI.Button();
+            this.tlpStatisticalCharts = new System.Windows.Forms.TableLayoutPanel();
+            this.chartRobotList = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartSendList = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartFilterList = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tpComparison = new AntdUI.TabPage();
             this.splitterComparison = new AntdUI.Splitter();
             this.tlpComparisonText = new System.Windows.Forms.TableLayoutPanel();
@@ -220,6 +239,10 @@
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
+            this.lStatistical_FilterList = new AntdUI.Label();
+            this.lStatistical_SendList = new AntdUI.Label();
+            this.lStatistical_RobotList = new AntdUI.Label();
+            this.lStatistical_PacketLength = new AntdUI.Label();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -239,6 +262,13 @@
             this.tpRobotList.SuspendLayout();
             this.tlpRobotList.SuspendLayout();
             this.tpStatistical.SuspendLayout();
+            this.tlpStatistical.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPacketLength)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tlpStatisticalCharts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartRobotList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSendList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartFilterList)).BeginInit();
             this.tpComparison.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterComparison)).BeginInit();
             this.splitterComparison.Panel1.SuspendLayout();
@@ -462,7 +492,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 9;
+            this.tabInjectMode.SelectedIndex = 4;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -1652,9 +1682,9 @@
             // tpStatistical
             // 
             this.tpStatistical.Controls.Add(this.tlpStatistical);
-            this.tpStatistical.Location = new System.Drawing.Point(0, 0);
+            this.tpStatistical.Location = new System.Drawing.Point(3, 33);
             this.tpStatistical.Name = "tpStatistical";
-            this.tpStatistical.Size = new System.Drawing.Size(0, 0);
+            this.tpStatistical.Size = new System.Drawing.Size(1124, 724);
             this.tpStatistical.TabIndex = 1;
             this.tpStatistical.Text = "统计数据";
             // 
@@ -1662,16 +1692,149 @@
             // 
             this.tlpStatistical.ColumnCount = 1;
             this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatistical.Controls.Add(this.lStatistical_PacketLength, 0, 1);
+            this.tlpStatistical.Controls.Add(this.chartPacketLength, 0, 2);
+            this.tlpStatistical.Controls.Add(this.tableLayoutPanel1, 0, 3);
+            this.tlpStatistical.Controls.Add(this.tlpStatisticalCharts, 0, 0);
             this.tlpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatistical.Location = new System.Drawing.Point(0, 0);
             this.tlpStatistical.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatistical.Name = "tlpStatistical";
-            this.tlpStatistical.RowCount = 2;
+            this.tlpStatistical.RowCount = 4;
             this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpStatistical.Size = new System.Drawing.Size(0, 0);
+            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpStatistical.Size = new System.Drawing.Size(1124, 724);
             this.tlpStatistical.TabIndex = 0;
+            // 
+            // chartPacketLength
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.chartPacketLength.ChartAreas.Add(chartArea1);
+            this.chartPacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Enabled = false;
+            legend1.Name = "Legend1";
+            this.chartPacketLength.Legends.Add(legend1);
+            this.chartPacketLength.Location = new System.Drawing.Point(3, 349);
+            this.chartPacketLength.Name = "chartPacketLength";
+            this.chartPacketLength.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartPacketLength.Series.Add(series1);
+            this.chartPacketLength.Size = new System.Drawing.Size(1118, 311);
+            this.chartPacketLength.TabIndex = 4;
+            this.chartPacketLength.Text = "chart1";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.bStatistical, 1, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 663);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1124, 61);
+            this.tableLayoutPanel1.TabIndex = 3;
+            // 
+            // bStatistical
+            // 
+            this.bStatistical.BackExtend = "135, #6253E1, #04BEFE";
+            this.bStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bStatistical.IconSvg = "RedoOutlined";
+            this.bStatistical.Location = new System.Drawing.Point(490, 8);
+            this.bStatistical.Name = "bStatistical";
+            this.bStatistical.Size = new System.Drawing.Size(144, 44);
+            this.bStatistical.TabIndex = 1;
+            this.bStatistical.Text = "刷新数据";
+            this.bStatistical.Type = AntdUI.TTypeMini.Primary;
+            this.bStatistical.Click += new System.EventHandler(this.bStatistical_Click);
+            // 
+            // tlpStatisticalCharts
+            // 
+            this.tlpStatisticalCharts.ColumnCount = 3;
+            this.tlpStatisticalCharts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpStatisticalCharts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpStatisticalCharts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpStatisticalCharts.Controls.Add(this.lStatistical_RobotList, 2, 0);
+            this.tlpStatisticalCharts.Controls.Add(this.lStatistical_SendList, 1, 0);
+            this.tlpStatisticalCharts.Controls.Add(this.chartRobotList, 2, 1);
+            this.tlpStatisticalCharts.Controls.Add(this.chartSendList, 1, 1);
+            this.tlpStatisticalCharts.Controls.Add(this.chartFilterList, 0, 1);
+            this.tlpStatisticalCharts.Controls.Add(this.lStatistical_FilterList, 0, 0);
+            this.tlpStatisticalCharts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStatisticalCharts.Location = new System.Drawing.Point(0, 0);
+            this.tlpStatisticalCharts.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStatisticalCharts.Name = "tlpStatisticalCharts";
+            this.tlpStatisticalCharts.RowCount = 2;
+            this.tlpStatisticalCharts.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpStatisticalCharts.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatisticalCharts.Size = new System.Drawing.Size(1124, 317);
+            this.tlpStatisticalCharts.TabIndex = 0;
+            // 
+            // chartRobotList
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.chartRobotList.ChartAreas.Add(chartArea2);
+            this.chartRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend2.Name = "Legend1";
+            this.chartRobotList.Legends.Add(legend2);
+            this.chartRobotList.Location = new System.Drawing.Point(751, 32);
+            this.chartRobotList.Name = "chartRobotList";
+            this.chartRobotList.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartRobotList.Series.Add(series2);
+            this.chartRobotList.Size = new System.Drawing.Size(370, 282);
+            this.chartRobotList.TabIndex = 2;
+            this.chartRobotList.Text = "chart1";
+            // 
+            // chartSendList
+            // 
+            chartArea3.Name = "ChartArea1";
+            this.chartSendList.ChartAreas.Add(chartArea3);
+            this.chartSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend3.Name = "Legend1";
+            this.chartSendList.Legends.Add(legend3);
+            this.chartSendList.Location = new System.Drawing.Point(377, 32);
+            this.chartSendList.Name = "chartSendList";
+            this.chartSendList.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Fire;
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chartSendList.Series.Add(series3);
+            this.chartSendList.Size = new System.Drawing.Size(368, 282);
+            this.chartSendList.TabIndex = 1;
+            this.chartSendList.Text = "chart1";
+            // 
+            // chartFilterList
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.chartFilterList.ChartAreas.Add(chartArea4);
+            this.chartFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend4.Name = "Legend1";
+            this.chartFilterList.Legends.Add(legend4);
+            this.chartFilterList.Location = new System.Drawing.Point(3, 32);
+            this.chartFilterList.Name = "chartFilterList";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chartFilterList.Series.Add(series4);
+            this.chartFilterList.Size = new System.Drawing.Size(368, 282);
+            this.chartFilterList.TabIndex = 0;
+            this.chartFilterList.Text = "chart1";
             // 
             // tpComparison
             // 
@@ -2627,7 +2790,7 @@
             // tpSystemLog
             // 
             this.tpSystemLog.Controls.Add(this.tSystemLog);
-            this.tpSystemLog.Location = new System.Drawing.Point(3, 33);
+            this.tpSystemLog.Location = new System.Drawing.Point(-1124, -724);
             this.tpSystemLog.Name = "tpSystemLog";
             this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
             this.tpSystemLog.TabIndex = 6;
@@ -2683,6 +2846,46 @@
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
+            // lStatistical_FilterList
+            // 
+            this.lStatistical_FilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatistical_FilterList.Location = new System.Drawing.Point(3, 3);
+            this.lStatistical_FilterList.Name = "lStatistical_FilterList";
+            this.lStatistical_FilterList.Size = new System.Drawing.Size(368, 23);
+            this.lStatistical_FilterList.TabIndex = 3;
+            this.lStatistical_FilterList.Text = "滤镜执行情况";
+            this.lStatistical_FilterList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lStatistical_SendList
+            // 
+            this.lStatistical_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatistical_SendList.Location = new System.Drawing.Point(377, 3);
+            this.lStatistical_SendList.Name = "lStatistical_SendList";
+            this.lStatistical_SendList.Size = new System.Drawing.Size(368, 23);
+            this.lStatistical_SendList.TabIndex = 4;
+            this.lStatistical_SendList.Text = "发送执行情况";
+            this.lStatistical_SendList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lStatistical_RobotList
+            // 
+            this.lStatistical_RobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatistical_RobotList.Location = new System.Drawing.Point(751, 3);
+            this.lStatistical_RobotList.Name = "lStatistical_RobotList";
+            this.lStatistical_RobotList.Size = new System.Drawing.Size(370, 23);
+            this.lStatistical_RobotList.TabIndex = 5;
+            this.lStatistical_RobotList.Text = "机器人执行情况";
+            this.lStatistical_RobotList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lStatistical_PacketLength
+            // 
+            this.lStatistical_PacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatistical_PacketLength.Location = new System.Drawing.Point(3, 320);
+            this.lStatistical_PacketLength.Name = "lStatistical_PacketLength";
+            this.lStatistical_PacketLength.Size = new System.Drawing.Size(1118, 23);
+            this.lStatistical_PacketLength.TabIndex = 5;
+            this.lStatistical_PacketLength.Text = "封包长度统计数据";
+            this.lStatistical_PacketLength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -2723,6 +2926,13 @@
             this.tpRobotList.ResumeLayout(false);
             this.tlpRobotList.ResumeLayout(false);
             this.tpStatistical.ResumeLayout(false);
+            this.tlpStatistical.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chartPacketLength)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tlpStatisticalCharts.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chartRobotList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSendList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartFilterList)).EndInit();
             this.tpComparison.ResumeLayout(false);
             this.splitterComparison.Panel1.ResumeLayout(false);
             this.splitterComparison.Panel2.ResumeLayout(false);
@@ -2911,5 +3121,16 @@
         private AntdUI.UploadDragger udExtraction;
         private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
         private AntdUI.Button button1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private AntdUI.Button bStatistical;
+        private System.Windows.Forms.TableLayoutPanel tlpStatisticalCharts;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartRobotList;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartSendList;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartFilterList;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartPacketLength;
+        private AntdUI.Label lStatistical_PacketLength;
+        private AntdUI.Label lStatistical_RobotList;
+        private AntdUI.Label lStatistical_SendList;
+        private AntdUI.Label lStatistical_FilterList;
     }
 }

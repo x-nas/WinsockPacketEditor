@@ -3,6 +3,7 @@ using Be.Windows.Forms;
 using EasyHook;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -11,6 +12,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Xml.Linq;
 using WPE.Lib;
 using WPE.Lib.Controls;
@@ -38,57 +40,61 @@ namespace WPE.InjectMode
 
         private void InjectModeForm_Load(object sender, EventArgs e)
         {
-            Operate.SystemConfig.MainHandle = this.Handle;
-            Operate.SystemConfig.InvokeAction = action =>
+            AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {
-                if (this.InvokeRequired)
+                Operate.SystemConfig.MainHandle = this.Handle;
+                Operate.SystemConfig.InvokeAction = action =>
                 {
-                    this.Invoke(action);
-                }
-                else
-                {
-                    action();
-                }
-            };
-            Operate.SystemConfig.InitCPUAndMemoryCounter();
-            Operate.SystemConfig.LoadSystemConfig_FromDB();
-            Operate.SystemConfig.LoadInjectMode_FromDB();
-            Operate.SystemConfig.LoadSystemList_FromDB();            
-            Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_FromDB();
-            Operate.ProxyConfig.ProxyMapping.LoadProxyMapLocal_FromDB();
-            Operate.ProxyConfig.ProxyMapping.LoadProxyMapRemote_FromDB();
-            Operate.SystemConfig.StartRemoteMGT();
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(action);
+                    }
+                    else
+                    {
+                        action();
+                    }
+                };
+                Operate.SystemConfig.InitCPUAndMemoryCounter();
+                Operate.SystemConfig.LoadSystemConfig_FromDB();
+                Operate.SystemConfig.LoadInjectMode_FromDB();
+                Operate.SystemConfig.LoadSystemList_FromDB();
+                Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_FromDB();
+                Operate.ProxyConfig.ProxyMapping.LoadProxyMapLocal_FromDB();
+                Operate.ProxyConfig.ProxyMapping.LoadProxyMapRemote_FromDB();
+                Operate.SystemConfig.StartRemoteMGT();
 
-            this.Dark_Changed();
-            this.InitForm();
-            this.InitFloatButton();
-            this.InitTable_PacketList();
-            this.InitTable_FilterList();
-            this.InitTable_SendList();
-            this.InitTable_RobotList();
-            this.InitTable_LogList();
-            this.InitComparison();
-            this.InitExtraction();            
+                this.Dark_Changed();
+                this.InitForm();
+                this.InitFloatButton();
+                this.InitTable_PacketList();
+                this.InitTable_FilterList();
+                this.InitTable_SendList();
+                this.InitTable_RobotList();
+                this.InitTable_LogList();
+                this.InitComparison();
+                this.InitExtraction();                
 
-            this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
-            this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
-            this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.tabInjectMode.TabMenuVisible = false;            
-            this.mInjectMode.SelectIndex(0, true);
+            }, () =>
+            {
+                this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
+                this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
+                this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+                this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+                this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+                this.tabInjectMode.TabMenuVisible = false;
+                this.mInjectMode.SelectIndex(0, true);
+            });
         }
 
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             ws.ExitHook();
-
             Operate.SystemConfig.StopRemoteMGT(this.RunMode);
             Operate.SystemConfig.SaveSystemList_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
             Operate.ProxyConfig.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
-            Operate.ProxyConfig.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
+            Operate.ProxyConfig.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);            
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
@@ -778,12 +784,12 @@ namespace WPE.InjectMode
 
                 this.hbPacketData.BackColor =
                     this.hbXOR_From.BackColor = 
-                    this.hbXOR_To.BackColor = 
+                    this.hbXOR_To.BackColor =                    
                     Color.FromArgb(30, 30, 30);
 
                 this.hbPacketData.ForeColor = 
                     this.hbXOR_From.ForeColor = 
-                    this.hbXOR_To.ForeColor = 
+                    this.hbXOR_To.ForeColor =                   
                     Color.Silver;
             }
             else
@@ -796,14 +802,90 @@ namespace WPE.InjectMode
 
                 this.hbPacketData.BackColor =
                     this.hbXOR_From.BackColor =
-                    this.hbXOR_To.BackColor =
+                    this.hbXOR_To.BackColor =                
                     Color.White;
 
                 this.hbPacketData.ForeColor =
                     this.hbXOR_From.ForeColor =
-                    this.hbXOR_To.ForeColor =
+                    this.hbXOR_To.ForeColor =                
                     Color.Black;
-            }            
+            }
+
+            this.ChartDark_Changed();
+        }
+
+        private void ChartDark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.chartFilterList.BackColor =
+                    this.chartSendList.BackColor =
+                    this.chartRobotList.BackColor =
+                    this.chartPacketLength.BackColor =
+                    this.chartFilterList.ChartAreas[0].BackColor =
+                    this.chartSendList.ChartAreas[0].BackColor =
+                    this.chartRobotList.ChartAreas[0].BackColor =
+                    this.chartPacketLength.ChartAreas[0].BackColor =
+                    this.chartFilterList.Legends[0].BackColor =
+                    this.chartSendList.Legends[0].BackColor =
+                    this.chartRobotList.Legends[0].BackColor =
+                    this.chartPacketLength.Legends[0].BackColor =
+                    Color.FromArgb(30, 30, 30);
+                
+                this.chartFilterList.ForeColor =
+                    this.chartSendList.ForeColor =
+                    this.chartRobotList.ForeColor =
+                    this.chartPacketLength.ForeColor =
+                    this.chartFilterList.Legends[0].ForeColor =
+                    this.chartSendList.Legends[0].ForeColor =
+                    this.chartRobotList.Legends[0].ForeColor =
+                    this.chartPacketLength.Legends[0].ForeColor =
+                    this.chartPacketLength.Series[0].LabelForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisX.LabelStyle.ForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisY.LabelStyle.ForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisX.TitleForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisY.TitleForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisX.LineColor =
+                    this.chartPacketLength.ChartAreas[0].AxisY.LineColor =
+                    this.chartPacketLength.ChartAreas[0].AxisX.MajorGrid.LineColor =
+                    this.chartPacketLength.ChartAreas[0].AxisY.MajorGrid.LineColor =                
+                    Color.Silver;
+            }
+            else
+            {
+                this.chartFilterList.BackColor =
+                    this.chartSendList.BackColor =
+                    this.chartRobotList.BackColor =
+                    this.chartPacketLength.BackColor =
+                    this.chartFilterList.ChartAreas[0].BackColor =
+                    this.chartSendList.ChartAreas[0].BackColor =
+                    this.chartRobotList.ChartAreas[0].BackColor =
+                    this.chartPacketLength.ChartAreas[0].BackColor =
+                    this.chartFilterList.Legends[0].BackColor =
+                    this.chartSendList.Legends[0].BackColor =
+                    this.chartRobotList.Legends[0].BackColor =
+                    this.chartPacketLength.Legends[0].BackColor =
+                    Color.White;
+                
+                this.chartFilterList.ForeColor =
+                    this.chartSendList.ForeColor =
+                    this.chartRobotList.ForeColor =
+                    this.chartPacketLength.ForeColor =
+                    this.chartFilterList.Legends[0].ForeColor =
+                    this.chartSendList.Legends[0].ForeColor =
+                    this.chartRobotList.Legends[0].ForeColor =
+                    this.chartPacketLength.Legends[0].ForeColor =
+                    this.chartPacketLength.Series[0].LabelForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisX.LabelStyle.ForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisY.LabelStyle.ForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisX.TitleForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisY.TitleForeColor =
+                    this.chartPacketLength.ChartAreas[0].AxisX.LineColor =
+                    this.chartPacketLength.ChartAreas[0].AxisY.LineColor =
+                    this.chartPacketLength.ChartAreas[0].AxisX.MajorGrid.LineColor =
+                    this.chartPacketLength.ChartAreas[0].AxisY.MajorGrid.LineColor =                 
+                    Color.Black;
+            }
         }
 
         #endregion
@@ -913,6 +995,7 @@ namespace WPE.InjectMode
 
                 case "miStatistical":
                     this.tabInjectMode.SelectTab("tpStatistical");
+                    this.InitStatistical();
                     break;
 
                 case "miComparison":
@@ -2523,6 +2606,164 @@ namespace WPE.InjectMode
 
         #endregion
 
+        #region//统计数据
+
+        private void InitStatistical()
+        {
+            this.bStatistical.Loading = true;
+            AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
+            {
+                this.InitStatistical_FilterList();
+                this.InitStatistical_SendList();
+                this.InitStatistical_RobotList();
+                this.InitStatistical_PacketLength();
+            }, () =>
+            {
+                this.ChartDark_Changed();
+                this.bStatistical.Loading = false;
+            });
+        }
+
+        private void InitStatistical_FilterList()
+        {
+            chartFilterList.Series.Clear();
+            Series series = new Series();
+            series.ChartType = SeriesChartType.Pie;
+
+            foreach (FilterInfo fi in Operate.FilterConfig.List.lstFilterInfo.ToList())
+            {
+                if (fi.ExecutionCount == 0)
+                {
+                    series.Points.AddXY(fi.FName, 1);
+                }
+                else
+                {
+                    series.Points.AddXY(fi.FName, fi.ExecutionCount);
+                }
+            }
+            series.Label = "#VALX\n#VAL (#PERCENT{P0})";
+            series.Font = this.Font;
+
+            chartFilterList.Series.Add(series);
+            //chartFilterList.Titles.Add("滤镜执行情况");
+            //chartFilterList.Legends.Add(new Legend());
+        }
+
+        private void InitStatistical_SendList()
+        {
+            chartSendList.Series.Clear();
+            Series series = new Series();
+            series.ChartType = SeriesChartType.Pie;
+
+            foreach (SendInfo si in Operate.SendConfig.List.lstSendInfo.ToList())
+            {
+                if (si.ExecutionCount == 0)
+                {
+                    series.Points.AddXY(si.SName, 1);
+                }
+                else
+                {
+                    series.Points.AddXY(si.SName, si.ExecutionCount);
+                }
+            }
+            series.Label = "#VALX\n#VAL (#PERCENT{P0})";
+            series.Font = this.Font;
+
+            chartSendList.Series.Add(series);
+            //chartSendList.Titles.Add("发送执行情况");
+            //chartSendList.Legends.Add(new Legend());
+        }
+
+        private void InitStatistical_RobotList()
+        {
+            chartRobotList.Series.Clear();
+            Series series = new Series();
+            series.ChartType = SeriesChartType.Pie;
+
+            foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo.ToList())
+            {
+                if (ri.ExecutionCount == 0)
+                {
+                    series.Points.AddXY(ri.RName, 1);
+                }
+                else
+                {
+                    series.Points.AddXY(ri.RName, ri.ExecutionCount);
+                }
+            }
+            series.Label = "#VALX\n#VAL (#PERCENT{P0})";
+            series.Font = this.Font;
+
+            chartRobotList.Series.Add(series);
+            //chartRobotList.Titles.Add("机器人执行情况");
+            //chartRobotList.Legends.Add(new Legend());
+        }
+
+        private void InitStatistical_PacketLength()
+        {
+            chartPacketLength.Series.Clear();
+            chartPacketLength.ChartAreas.Clear();
+
+            // 2. 添加图表区域（设置坐标轴和样式）
+            ChartArea chartArea = new ChartArea();
+            chartArea.AxisX.Title = "封包长度（字节）";
+            chartArea.AxisY.Title = "统计个数";
+            chartArea.AxisX.Interval = 0; // X轴刻度间隔
+            chartPacketLength.ChartAreas.Add(chartArea);
+
+            // 3. 添加柱状图系列
+            Series series = new Series("封包长度统计");
+
+            series.ChartType = SeriesChartType.Column;
+
+            DataTable dtPacketLength = Operate.PacketConfig.List.StatisticalSocketList_ByPacketLen();
+            for (int i = 0; i < dtPacketLength.Rows.Count; i++)
+            {
+                // 4. 添加数据点（X轴值, Y轴值）
+                int ValueY = (int)dtPacketLength.Rows[i][1];
+                if (ValueY > 1)
+                {
+                    series.Points.AddXY(dtPacketLength.Rows[i][0].ToString(), ValueY);
+                }
+            }
+
+            // 6. 显示数据标签
+            series.IsValueShownAsLabel = true;
+            series.LabelFormat = "N0"; // 格式化为整数
+            series.Font = new Font("Arial", 10, FontStyle.Bold);
+
+            // 7. 添加到图表
+            chartPacketLength.Series.Add(series);
+
+            // 8. 设置标题
+            //chartPacketLength.Titles.Add("封包长度统计");
+            //chartPacketLength.Titles[0].Font = new Font("微软雅黑", 14, FontStyle.Bold);
+
+            //Series series = new Series();
+            //series.ChartType = SeriesChartType.Column;
+
+            //DataTable dtPacketLength = Operate.PacketConfig.List.StatisticalSocketList_ByPacketLen();
+
+            //for (int i = 0;i < dtPacketLength.Rows.Count;i ++)
+            //{
+            //    series.Points.AddXY(dtPacketLength.Rows[i][0].ToString(), (int)dtPacketLength.Rows[i][1]);
+            //}
+
+            //series.Label = "#VALX\n#VAL (#PERCENT{P0})";
+            //series.Font = this.Font;
+
+            //chartPacketLength.Series.Add(series);
+            //chartPacketLength.Titles.Add("封包长度统计");
+            //chartPacketLength.Legends.Add(new Legend());
+        }
+
+        private void bStatistical_Click(object sender, EventArgs e)
+        {
+            this.InitStatistical();
+        }
+
+        #endregion
+
         #region//文本对比
 
         #region//初始化
@@ -3298,6 +3539,6 @@ namespace WPE.InjectMode
             }            
         }
 
-        #endregion        
+        #endregion
     }
 }
