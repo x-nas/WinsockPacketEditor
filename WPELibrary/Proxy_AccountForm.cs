@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Windows.Forms;
 using WPE.Lib;
+using static WPE.Lib.Operate;
 
 namespace WPELibrary
 {
@@ -35,14 +36,14 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Proxy_AccountInfo pai = Operate.ProxyConfig.Account.GetProxyAccount_ByAccountID(this.SelectAID);
+                    AccountInfo pai = Operate.ProxyConfig.Account.GetProxyAccount_ByAccountID(this.SelectAID);
 
                     if (pai != null)
                     {
                         this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_136), pai.CreateTime.ToString("yyyy-MM-dd HH:mm"));
                         this.cbIsEnable.Checked = pai.IsEnable;
                         this.txtUserName.Text = pai.UserName;
-                        this.txtPassWord.Text = Socket_Operation.PassWord_Decrypt(pai.PassWord);
+                        this.txtPassWord.Text = SystemConfig.PassWord_Decrypt(pai.Password);
                         this.cbIsLimitLinks.Checked = pai.IsLimitLinks;
                         this.cbIsLimitDevices.Checked = pai.IsLimitDevices;
 
@@ -137,7 +138,7 @@ namespace WPELibrary
                 bool IsEnable = this.cbIsEnable.Checked;
                 string UserName = this.txtUserName.Text.Trim();
                 string PassWord = this.txtPassWord.Text.Trim();
-                PassWord = Socket_Operation.PassWord_Encrypt(PassWord);
+                PassWord = SystemConfig.PassWord_Encrypt(PassWord);
                 bool IsLimitLinks = this.cbIsLimitLinks.Checked;
                 int LimitLinks = ((int)this.nudLimitLinks.Value);
                 bool IsLimitDevices = this.cbIsLimitDevices.Checked;

@@ -3,12 +3,8 @@ using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WPE.Lib;
 using WPE.Lib.Controls;
@@ -18,6 +14,7 @@ namespace WPE.ProxyMode
     public partial class ProxyModeForm : Window
     {
         private bool setcolor = false;
+        private readonly Operate.SystemConfig.SystemMode RunMode = Operate.SystemConfig.SystemMode.Proxy;
 
         #region//窗体事件
 
@@ -39,37 +36,41 @@ namespace WPE.ProxyMode
                 {
                     action();
                 }
-            };
-
-            this.Dark_Changed();
-            this.InitForm();
-
-            this.tabProxyMode.TabMenuVisible = false;
-            this.mProxyMode.SelectIndex(0, true);
+            };            
 
             this.pageHeader.Loading = true;
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {                
-                Operate.SystemConfig.InitCPUAndMemoryCounter();
-                Operate.SystemConfig.LoadSystemConfig_FromDB();
+                Operate.SystemConfig.InitCPUAndMemoryCounter();                
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();
                 Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
                 Operate.SystemConfig.StartRemoteMGT();
+
+                this.InitTable_AccountList();
+                
             }, () =>
             {
                 this.pageHeader.Loading = false;                
             });
+
+            this.Dark_Changed();
+            this.InitForm();
+                        
+
+            this.tabProxyMode.TabMenuVisible = false;
+            this.mProxyMode.SelectIndex(0, true);
         }
 
         private void ProxyModeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //Operate.SystemConfig.StopRemoteMGT(this.RunMode);
+            Operate.SystemConfig.StopRemoteMGT(this.RunMode);
+            Operate.SystemConfig.SaveSystemConfig_ToDB();
             //Operate.SystemConfig.SaveSystemList_ToDB();
             //Operate.SystemConfig.SaveInjectMode_ToDB();
-            //Operate.ProxyConfig.Account.SaveProxyAccountList_ToDB(this.RunMode);
+            Operate.ProxyConfig.Account.SaveProxyAccountList_ToDB(this.RunMode);
             //Operate.ProxyConfig.Mapping.SaveProxyMapLocal_ToDB(this.RunMode);
             //Operate.ProxyConfig.Mapping.SaveProxyMapRemote_ToDB(this.RunMode);
         }
@@ -106,6 +107,139 @@ namespace WPE.ProxyMode
             }
 
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
+        }
+
+        public void RefreshAccountList()
+        {
+            this.tAccountList.Binding(GetPageData(this.pAccountList.Current, this.pAccountList.PageSize));
+        }
+
+        #endregion
+
+        #region//初始化表格
+
+        private void InitTable_AccountList()
+        {
+            tAccountList.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.ColumnCheck("IsCheck").SetFixed(),
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((this.pAccountList.Current - 1) * this.pAccountList.PageSize + rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("UserName", "用户名").SetSortOrder().SetDefaultFilter(typeof(string)).SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("IsOnLine", "状态", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is AccountInfo ai)
+                        {
+                            if(ai.IsOnLine)
+                            {
+                                return new AntdUI.CellBadge(AntdUI.TState.Success, "在线");
+                            }
+                            else
+                            {
+                                return new AntdUI.CellBadge(AntdUI.TState.Error, "离线");
+                            }
+                        }
+
+                        return value;
+                    },
+                }.SetSortOrder().SetLocalizationTitleID("Table.AccountList.Column."),                
+                new AntdUI.Column("LimitLinks", "链接数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is AccountInfo ai)
+                        {
+                            if(ai.IsLimitLinks)
+                            {
+                                return new AntdUI.CellTag(ai.LimitLinks.ToString(), AntdUI.TTypeMini.Info);
+                            }
+                            else
+                            {
+                                return new AntdUI.CellTag(AntdUI.Localization.Get("Unlimited", "无限制"), AntdUI.TTypeMini.Success);
+                            }
+                        }
+
+                        return value;
+                    },
+                }.SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("LimitDevices", "设备数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is AccountInfo ai)
+                        {
+                            if(ai.IsLimitDevices)
+                            {
+                                return new AntdUI.CellTag(ai.LimitDevices.ToString(), AntdUI.TTypeMini.Info);
+                            }
+                            else
+                            {
+                                return new AntdUI.CellTag(AntdUI.Localization.Get("Unlimited", "无限制"), AntdUI.TTypeMini.Success);
+                            }
+                        }
+
+                        return value;
+                    },
+                }.SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetDefaultFilter(typeof(DateTime)).SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("LoginTime", "登录时间")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is AccountInfo ai)
+                        {
+                            if(ai.LoginTime == DateTime.MinValue)
+                            {
+                                return null;
+                            }
+                            else
+                            {
+                                return ai.LoginTime;
+                            }
+                        }
+
+                        return value;
+                    },
+                }.SetSortOrder().SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("LoginIP", "登录IP").SetLocalizationTitleID("Table.AccountList.Column."),                
+                new AntdUI.Column("IPLocation", "IP所属地").SetLocalizationTitleID("Table.AccountList.Column."),                
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
+                            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.AccountList.Column."),
+            };
+
+            this.tAccountList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));            
+            this.pAccountList.PageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
+            this.tAccountList.Binding(GetPageData(this.pAccountList.Current, this.pAccountList.PageSize));
+        }        
+
+        private BindingList<AccountInfo> GetPageData(int current, int pageSize)
+        {
+            this.pAccountList.Total = Operate.ProxyConfig.Account.lstAccountInfo.Count;
+
+            var list = new BindingList<AccountInfo>();
+            int start = Math.Abs(current - 1) * pageSize;
+
+            for (int i = start; i < Operate.ProxyConfig.Account.lstAccountInfo.Count && i < start + pageSize; i++)
+            {
+                list.Add(Operate.ProxyConfig.Account.lstAccountInfo[i]);
+            }
+
+            return list;
         }
 
         #endregion
@@ -273,7 +407,7 @@ namespace WPE.ProxyMode
 
         #endregion
 
-        #region//代理管理 - 菜单
+        #region//代理数据 - 菜单
 
         private void sProxyList_SelectIndexChanged(object sender, AntdUI.IntEventArgs e)
         {
@@ -325,13 +459,13 @@ namespace WPE.ProxyMode
 
                 //系统设置
                 case 4:
-                    //AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm(this))
-                    //{
-                    //    Align = AntdUI.TAlignMini.Right,
-                    //    Mask = true,
-                    //    MaskClosable = false,
-                    //    DisplayDelay = 0,
-                    //});
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
                     break;
 
                 //清空数据
@@ -366,5 +500,107 @@ namespace WPE.ProxyMode
         }
 
         #endregion
+
+        #region//账号列表 - 菜单
+
+        private void mAccountList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mAccountList.SelectIndex(-1);
+
+            List<AccountInfo> aiList = new List<AccountInfo>();
+            foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo)
+            {
+                if (ai.IsCheck)
+                {
+                    aiList.Add(ai);
+                }
+            }
+
+            switch (miSelect.ID)
+            {
+                case "miAdd":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new AccountEditForm(this, null))
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "miImport":
+
+                    Operate.ProxyConfig.Account.LoadAccountList_Dialog(this);                                        
+
+                    break;
+
+                case "miExport":
+
+                    if (aiList.Count > 0)
+                    {
+                        Operate.ProxyConfig.Account.SaveAccount_Dialog(this, string.Empty, aiList);
+                    }
+
+                    break;
+
+                case "miClear":
+
+                    if (aiList.Count > 0)
+                    {
+                        Operate.ProxyConfig.Account.DeleteAccount_Dialog(this, aiList);
+                        this.RefreshAccountList();
+                    }                    
+
+                    break;
+            }            
+        }
+
+        private void tAccountList_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is AccountInfo ai)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bEdit":
+
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new AccountEditForm(this, ai))
+                        {
+                            Align = AntdUI.TAlignMini.Right,
+                            Mask = true,
+                            MaskClosable = false,
+                            DisplayDelay = 0,
+                        });
+
+                        break;
+
+                    case "bDelete":
+
+                        List<AccountInfo> aiList = new List<AccountInfo>
+                        {
+                            ai
+                        };
+
+                        Operate.ProxyConfig.Account.DeleteAccount_Dialog(this, aiList);
+                        this.RefreshAccountList();
+
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
+        private void pAccountList_ValueChanged(object sender, PagePageEventArgs e)
+        {
+            this.tAccountList.Binding(GetPageData(e.Current, e.PageSize));
+        }
+
+        private string pAccountList_ShowTotalChanged(object sender, PagePageEventArgs e)
+        {
+            return $"{e.PageSize} / {e.Total}条 {e.PageTotal}页";
+        }
     }
 }

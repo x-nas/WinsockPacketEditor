@@ -21,12 +21,12 @@ namespace WPELibrary
             //
         }
 
-        public Hook(RemoteHooking.IContext InContext, string ChannelName, Operate.SystemConfig.InjectionParameters parameters)
+        public Hook(RemoteHooking.IContext InContext, string ChannelName)
         {
             //
         }
 
-        public unsafe void Run(RemoteHooking.IContext InContext, string ChannelName, Operate.SystemConfig.InjectionParameters parameters)
+        public unsafe void Run(RemoteHooking.IContext InContext, string ChannelName)
         {
             try
             {
@@ -37,21 +37,6 @@ namespace WPELibrary
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-
-                AntdUI.Config.Animation = parameters.Animation;
-                AntdUI.Config.ShadowEnabled = parameters.ShadowEnabled;
-                AntdUI.Config.ShowInWindow = parameters.ShowInWindow;
-                AntdUI.Config.ScrollBarHide = parameters.ScrollBarHide;
-                AntdUI.Config.TextRenderingHighQuality = parameters.TextRenderingHighQuality;
-                AntdUI.Config.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                AntdUI.Config.IsDark = parameters.Dark;
-                AntdUI.Localization.DefaultLanguage = "zh-CN";
-                if (parameters.Lang.StartsWith("en"))
-                {
-                    AntdUI.Localization.Provider = new Localizer();
-                    AntdUI.Localization.SetLanguage(parameters.Lang);
-                }
-                
                 Application.Run(new Socket_Form());
             }
             catch (Exception ex)

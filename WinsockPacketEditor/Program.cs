@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
-using WPE.InjectMode;
 using WPE.Lib;
 using WPE.Lib.NativeMethods;
 using WPE.ProxyMode;

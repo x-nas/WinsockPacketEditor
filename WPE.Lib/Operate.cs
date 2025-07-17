@@ -67,19 +67,7 @@ namespace WPE.Lib
 
             public static Action<Action> InvokeAction { get; set; }
 
-            #region//结构定义
-
-            [Serializable]
-            public class InjectionParameters
-            {
-                public bool Animation { get; set; }
-                public bool ShadowEnabled { get; set; }
-                public bool ShowInWindow { get; set; }
-                public bool ScrollBarHide { get; set; }
-                public bool TextRenderingHighQuality { get; set; }
-                public bool Dark { get; set; }
-                public string Lang { get; set; }
-            }
+            #region//结构定义           
 
             public enum SystemMode
             {
@@ -682,6 +670,180 @@ namespace WPE.Lib
                 }
 
                 return xdReturn;
+            }
+
+            #endregion
+
+            #region//密码字典
+
+            private static readonly Dictionary<char, string> encryptionMap = new Dictionary<char, string>
+        {
+            {'!', "966"},
+            {'"', "965"},
+            {'#', "964"},
+            {'$', "963"},
+            {'%', "962"},
+            {'^', "961"},
+            {'&', "960"},
+            {'*', "959"},
+            {'(', "958"},
+            {')', "957"},
+            {'+', "956"},
+            {',', "955"},
+            {'-', "954"},
+            {'.', "953"},
+            {'/', "952"},
+            {'0', "951"},
+            {'1', "950"},
+            {'2', "949"},
+            {'3', "948"},
+            {'4', "947"},
+            {'5', "946"},
+            {'6', "945"},
+            {'7', "944"},
+            {'8', "943"},
+            {'9', "942"},
+            {':', "941"},
+            {';', "940"},
+            {'<', "939"},
+            {'=', "938"},
+            {'>', "937"},
+            {'?', "936"},
+            {'@', "935"},
+            {'A', "934"},
+            {'B', "933"},
+            {'C', "932"},
+            {'D', "931"},
+            {'E', "930"},
+            {'F', "929"},
+            {'G', "928"},
+            {'H', "927"},
+            {'I', "926"},
+            {'J', "925"},
+            {'K', "924"},
+            {'L', "923"},
+            {'M', "922"},
+            {'N', "921"},
+            {'O', "920"},
+            {'P', "919"},
+            {'Q', "918"},
+            {'R', "917"},
+            {'S', "916"},
+            {'T', "915"},
+            {'U', "914"},
+            {'V', "913"},
+            {'W', "912"},
+            {'X', "911"},
+            {'Y', "910"},
+            {'Z', "909"},
+            {'[', "908"},
+            {'\\', "907"},
+            {']', "906"},
+            {'_', "904"},
+            {'`', "903"},
+            {'a', "902"},
+            {'b', "901"},
+            {'c', "900"},
+            {'d', "899"},
+            {'e', "898"},
+            {'f', "897"},
+            {'g', "896"},
+            {'h', "895"},
+            {'i', "894"},
+            {'j', "893"},
+            {'k', "892"},
+            {'l', "891"},
+            {'m', "890"},
+            {'n', "889"},
+            {'o', "888"},
+            {'p', "887"},
+            {'q', "886"},
+            {'r', "885"},
+            {'s', "884"},
+            {'t', "883"},
+            {'u', "882"},
+            {'v', "881"},
+            {'w', "880"},
+            {'x', "879"},
+            {'y', "878"},
+            {'z', "877"},
+            {'{', "876"},
+            {'|', "875"},
+            {'}', "874"},
+            {'~', "873"}
+        };
+
+            private static readonly Dictionary<string, char> decryptionMap = encryptionMap.ToDictionary(kv => kv.Value, kv => kv.Key);
+            
+            public static string PassWord_Encrypt(string plainText)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(plainText))
+                    {
+                        return string.Empty;
+                    }
+
+                    StringBuilder encrypted = new StringBuilder();
+                    foreach (char c in plainText)
+                    {
+                        if (SystemConfig.encryptionMap.TryGetValue(c, out string code))
+                        {
+                            encrypted.Append(code);
+                        }
+                        else
+                        {
+                            encrypted.Append(c);
+                        }
+                    }
+
+                    return encrypted.ToString();
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return string.Empty;
+            }
+
+            public static string PassWord_Decrypt(string encryptedText)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(encryptedText))
+                    {
+                        return string.Empty;
+                    }
+
+                    StringBuilder plainText = new StringBuilder();
+
+                    int i = 0;
+                    while (i < encryptedText.Length)
+                    {
+                        if (i + 3 <= encryptedText.Length)
+                        {
+                            string code = encryptedText.Substring(i, 3);
+                            if (SystemConfig.decryptionMap.TryGetValue(code, out char c))
+                            {
+                                plainText.Append(c);
+                                i += 3;
+                                continue;
+                            }
+                        }
+
+                        plainText.Append(encryptedText[i]);
+                        i++;
+                    }
+
+                    return plainText.ToString();
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return string.Empty;
             }
 
             #endregion
@@ -1399,6 +1561,8 @@ namespace WPE.Lib
                 try
                 {
                     DataTable SystemConfig = DataBase.SelectTable_SystemConfig();
+
+                    AntdUI.Config.SetEmptyImageSvg(Properties.Resources.icon_empty, Properties.Resources.icon_empty_dark);
 
                     if (SystemConfig.Rows.Count > 0)
                     {
@@ -2777,15 +2941,9 @@ namespace WPE.Lib
                     //代理账号
                     if (bProxyAccount)
                     {
-                        if (ProxyConfig.Account.lstProxyAccount.Count > 0)
+                        if (ProxyConfig.Account.lstAccountInfo.Count > 0)
                         {
-                            List<Guid> gExport = new List<Guid>();
-                            foreach (Proxy_AccountInfo pai in ProxyConfig.Account.lstProxyAccount)
-                            {
-                                gExport.Add(pai.AID);
-                            }
-
-                            XElement xeProxyAccount = ProxyConfig.Account.GetProxyAccountList_XML(gExport);
+                            XElement xeProxyAccount = ProxyConfig.Account.GetAccountList_XML(ProxyConfig.Account.lstAccountInfo.ToList());
                             if (xeProxyAccount != null)
                             {
                                 xeBackUp.Add(xeProxyAccount);
@@ -3067,7 +3225,7 @@ namespace WPE.Lib
                         };
                         ProxyAccountList.Add(xeProxyAccountList);
 
-                        ProxyConfig.Account.LoadProxyAccountList_FromXDocument(ProxyAccountList);
+                        ProxyConfig.Account.LoadAccountList_FromXDocument(ProxyAccountList);
                         DataBase.DeleteTable_ProxyAccount();
                         DataBase.InsertTable_ProxyAccount();
                         DataBase.DeleteTable_ProxyAccount_LoginInfo();
@@ -5043,7 +5201,7 @@ namespace WPE.Lib
                 public static int OnLineTimeOut = 60;
                 public static string CCProxy_HTML = string.Empty;
 
-                public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();
+                public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
 
                 public static BindingList<Proxy_AuthInfo> lstProxyAuth = new BindingList<Proxy_AuthInfo>();
                 public delegate void ProxyAuthReceived(Proxy_AuthInfo pai);
@@ -5234,7 +5392,7 @@ namespace WPE.Lib
                 {
                     try
                     {
-                        foreach (Proxy_AccountInfo pai in ProxyConfig.Account.lstProxyAccount)
+                        foreach (AccountInfo pai in ProxyConfig.Account.lstAccountInfo)
                         {
                             if (pai.UserName.Equals(UserName))
                             {
@@ -5260,11 +5418,11 @@ namespace WPE.Lib
 
                     try
                     {
-                        string pwEncrypt = Socket_Operation.PassWord_Encrypt(PassWord);
+                        string pwEncrypt = SystemConfig.PassWord_Encrypt(PassWord);
 
-                        foreach (Proxy_AccountInfo pai in ProxyConfig.Account.lstProxyAccount)
+                        foreach (AccountInfo pai in ProxyConfig.Account.lstAccountInfo)
                         {
-                            if (pai.IsEnable && pai.UserName.Equals(UserName) && pai.PassWord.Equals(pwEncrypt))
+                            if (pai.IsEnable && pai.UserName.Equals(UserName) && pai.Password.Equals(pwEncrypt))
                             {
                                 if (pai.IsExpiry)
                                 {
@@ -5300,7 +5458,7 @@ namespace WPE.Lib
                     {
                         if (AID != null && AID != Guid.Empty)
                         {
-                            Proxy_AccountInfo paiAccount = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
+                            AccountInfo paiAccount = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
                             Proxy_AuthInfo paiAuth = ProxyConfig.Account.GetProxyAuthInfo(AID, IPAddress);
 
                             if (paiAccount != null && paiAuth != null)
@@ -5336,7 +5494,7 @@ namespace WPE.Lib
                     {
                         if (AID != null && AID != Guid.Empty)
                         {
-                            Proxy_AccountInfo paiAccount = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
+                            AccountInfo paiAccount = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
                             if (paiAccount != null)
                             {
                                 if (paiAccount.IsLimitDevices)
@@ -5378,14 +5536,13 @@ namespace WPE.Lib
 
                 #endregion
 
-
                 #region//设置代理账号的在线情况
 
                 public static void SetOnline_ByAccountID(Guid AID, bool IsOnline)
                 {
                     try
                     {
-                        Proxy_AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
+                        AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
                         if (pai != null)
                         {
                             if (IsOnline)
@@ -5457,7 +5614,7 @@ namespace WPE.Lib
                         {
                             DateTime dtNow = DateTime.Now;
 
-                            foreach (Proxy_AccountInfo pai in ProxyConfig.Account.lstProxyAccount)
+                            foreach (AccountInfo pai in ProxyConfig.Account.lstAccountInfo)
                             {
                                 if (pai.IsOnLine)
                                 {
@@ -5494,7 +5651,7 @@ namespace WPE.Lib
                     {
                         if (AccountID != Guid.Empty && !string.IsNullOrEmpty(IPAddress))
                         {
-                            Proxy_AccountInfo paiItem = ProxyConfig.Account.lstProxyAccount.FirstOrDefault(item => item.AID == AccountID);
+                            AccountInfo paiItem = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AccountID);
 
                             if (paiItem != null)
                             {
@@ -5556,7 +5713,7 @@ namespace WPE.Lib
                         {
                             if (!ProxyConfig.Account.CheckProxyAccount_Exist(UserName))
                             {
-                                Proxy_AccountInfo pai = new Proxy_AccountInfo(
+                                AccountInfo pai = new AccountInfo(
                                     AID,
                                     IsEnable,
                                     UserName,
@@ -5605,7 +5762,7 @@ namespace WPE.Lib
                     {
                         if (AID != null)
                         {
-                            var pai = ProxyConfig.Account.lstProxyAccount.FirstOrDefault(account => account.AID == AID);
+                            var pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
 
                             if (pai != null)
                             {
@@ -5613,7 +5770,7 @@ namespace WPE.Lib
 
                                 if (!string.IsNullOrEmpty(PassWord))
                                 {
-                                    pai.PassWord = PassWord;
+                                    pai.Password = PassWord;
                                 }
 
                                 pai.IsLimitLinks = IsLimitLinks;
@@ -5648,7 +5805,7 @@ namespace WPE.Lib
                     {
                         if (!string.IsNullOrEmpty(UserName))
                         {
-                            var pai = ProxyConfig.Account.lstProxyAccount.FirstOrDefault(account => account.UserName == UserName);
+                            var pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.UserName == UserName);
 
                             if (pai != null)
                             {
@@ -5656,7 +5813,7 @@ namespace WPE.Lib
 
                                 if (!string.IsNullOrEmpty(PassWord))
                                 {
-                                    pai.PassWord = PassWord;
+                                    pai.Password = PassWord;
                                 }
 
                                 pai.IsLimitLinks = IsLimitLinks;
@@ -5678,23 +5835,29 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//删除代理账号
+                #region//删除代理账号                
 
-                public static void DeleteProxyAccount_Dialog(List<Guid> gList)
+                public static void DeleteAccount_Dialog(Form form, List<AccountInfo> aiList)
                 {
                     try
                     {
-                        if (gList.Count > 0)
+                        if (aiList.Count > 0)
                         {
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
-
-                            if (dr.Equals(DialogResult.OK))
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miAccountList", "账号列表"), "\r\n确定删除选中的数据吗\r\n\r\n")
                             {
-                                foreach (Guid gAID in gList)
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
                                 {
-                                    ProxyConfig.Account.DeleteProxyAccount_ByAccountID(gAID);
+                                    foreach (AccountInfo ai in aiList)
+                                    {
+                                        ProxyConfig.Account.lstAccountInfo.Remove(ai);
+                                    }
+
+                                    return true;
                                 }
-                            }
+                            });
                         }
                     }
                     catch (Exception ex)
@@ -5709,7 +5872,7 @@ namespace WPE.Lib
                     {
                         if (AID != null)
                         {
-                            var pai = ProxyConfig.Account.lstProxyAccount.FirstOrDefault(account => account.AID == AID);
+                            var pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
 
                             if (pai != null)
                             {
@@ -5717,7 +5880,7 @@ namespace WPE.Lib
                                 {
                                     SystemConfig.InvokeAction(() =>
                                     {
-                                        ProxyConfig.Account.lstProxyAccount.Remove(pai);
+                                        ProxyConfig.Account.lstAccountInfo.Remove(pai);
                                         ProxyConfig.List.CloseProxyTCP_ByAID(AID);
                                     });
                                 }
@@ -5740,7 +5903,7 @@ namespace WPE.Lib
                     {
                         if (!string.IsNullOrEmpty(UserName))
                         {
-                            var pai = ProxyConfig.Account.lstProxyAccount.FirstOrDefault(account => account.UserName == UserName);
+                            var pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.UserName == UserName);
 
                             if (pai != null)
                             {
@@ -5748,7 +5911,7 @@ namespace WPE.Lib
                                 {
                                     SystemConfig.InvokeAction(() =>
                                     {
-                                        ProxyConfig.Account.lstProxyAccount.Remove(pai);
+                                        ProxyConfig.Account.lstAccountInfo.Remove(pai);
                                     });
                                 }
 
@@ -5774,7 +5937,7 @@ namespace WPE.Lib
                     {
                         if (AID != null)
                         {
-                            Proxy_AccountInfo pai = ProxyConfig.Account.lstProxyAccount.FirstOrDefault(account => account.AID == AID);
+                            AccountInfo pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
 
                             if (pai != null)
                             {
@@ -5790,13 +5953,13 @@ namespace WPE.Lib
                     return string.Empty;
                 }
 
-                public static Proxy_AccountInfo GetProxyAccount_ByAccountID(Guid AID)
+                public static AccountInfo GetProxyAccount_ByAccountID(Guid AID)
                 {
                     try
                     {
                         if (AID != null)
                         {
-                            Proxy_AccountInfo pai = ProxyConfig.Account.lstProxyAccount.FirstOrDefault(account => account.AID == AID);
+                            AccountInfo pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
 
                             if (pai != null)
                             {
@@ -5812,20 +5975,20 @@ namespace WPE.Lib
                     return null;
                 }
 
-                public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByUserName(string UserName)
+                public static BindingList<AccountInfo> GetProxyAccount_ByUserName(string UserName)
                 {
                     try
                     {
                         if (!string.IsNullOrEmpty(UserName))
                         {
-                            BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
-                                (ProxyConfig.Account.lstProxyAccount.Where(account => account.UserName.Contains(UserName)).ToList());
+                            BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                                (ProxyConfig.Account.lstAccountInfo.Where(account => account.UserName.Contains(UserName)).ToList());
 
                             return pai;
                         }
                         else
                         {
-                            return ProxyConfig.Account.lstProxyAccount;
+                            return ProxyConfig.Account.lstAccountInfo;
                         }
                     }
                     catch (Exception ex)
@@ -5836,12 +5999,12 @@ namespace WPE.Lib
                     return null;
                 }
 
-                public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsEnable(bool IsEnable)
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsEnable(bool IsEnable)
                 {
                     try
                     {
-                        BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
-                            (ProxyConfig.Account.lstProxyAccount.Where(account => account.IsEnable == IsEnable).ToList());
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsEnable == IsEnable).ToList());
 
                         return pai;
                     }
@@ -5853,12 +6016,12 @@ namespace WPE.Lib
                     return null;
                 }
 
-                public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsOnLine(bool IsOnLine)
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsOnLine(bool IsOnLine)
                 {
                     try
                     {
-                        BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
-                            (ProxyConfig.Account.lstProxyAccount.Where(account => account.IsOnLine == IsOnLine).ToList());
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsOnLine == IsOnLine).ToList());
 
                         return pai;
                     }
@@ -5870,12 +6033,12 @@ namespace WPE.Lib
                     return null;
                 }
 
-                public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsExpiry(bool IsExpiry)
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsExpiry(bool IsExpiry)
                 {
                     try
                     {
-                        BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
-                            (ProxyConfig.Account.lstProxyAccount.Where(account => account.IsExpiry == IsExpiry).ToList());
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsExpiry == IsExpiry).ToList());
 
                         return pai;
                     }
@@ -5887,12 +6050,12 @@ namespace WPE.Lib
                     return null;
                 }
 
-                public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsLimitLinks(bool IsLimitLinks)
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsLimitLinks(bool IsLimitLinks)
                 {
                     try
                     {
-                        BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
-                            (ProxyConfig.Account.lstProxyAccount.Where(account => account.IsLimitLinks == IsLimitLinks).ToList());
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsLimitLinks == IsLimitLinks).ToList());
 
                         return pai;
                     }
@@ -5904,12 +6067,12 @@ namespace WPE.Lib
                     return null;
                 }
 
-                public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsLimitDevices(bool IsLimitDevices)
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsLimitDevices(bool IsLimitDevices)
                 {
                     try
                     {
-                        BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
-                            (ProxyConfig.Account.lstProxyAccount.Where(account => account.IsLimitDevices == IsLimitDevices).ToList());
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsLimitDevices == IsLimitDevices).ToList());
 
                         return pai;
                     }
@@ -5921,12 +6084,12 @@ namespace WPE.Lib
                     return null;
                 }
 
-                public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByExpireTime(DateTime dtFrom, DateTime dtTo)
+                public static BindingList<AccountInfo> GetProxyAccount_ByExpireTime(DateTime dtFrom, DateTime dtTo)
                 {
                     try
                     {
-                        BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
-                            (ProxyConfig.Account.lstProxyAccount.Where(account => account.ExpiryTime >= dtFrom && account.ExpiryTime <= dtTo).ToList());
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.ExpiryTime >= dtFrom && account.ExpiryTime <= dtTo).ToList());
 
                         return pai;
                     }
@@ -5942,7 +6105,7 @@ namespace WPE.Lib
 
                 #region//代理账号入列表
 
-                public static void ProxyAccountToList(Proxy_AccountInfo pai)
+                public static void ProxyAccountToList(AccountInfo pai)
                 {
                     try
                     {
@@ -5950,12 +6113,12 @@ namespace WPE.Lib
                         {
                             SystemConfig.InvokeAction(() =>
                             {
-                                ProxyConfig.Account.lstProxyAccount.Add(pai);
+                                ProxyConfig.Account.lstAccountInfo.Add(pai);
                             });
                         }
                         else
                         {
-                            ProxyConfig.Account.lstProxyAccount.Add(pai);
+                            ProxyConfig.Account.lstAccountInfo.Add(pai);
                         }
                     }
                     catch (Exception ex)
@@ -5980,7 +6143,7 @@ namespace WPE.Lib
                             {
                                 foreach (Guid gAID in gList)
                                 {
-                                    Proxy_AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
+                                    AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
 
                                     if (pai != null)
                                     {
@@ -6019,7 +6182,7 @@ namespace WPE.Lib
                             {
                                 foreach (Guid gAID in gList)
                                 {
-                                    Proxy_AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
+                                    AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
 
                                     if (pai != null)
                                     {
@@ -6052,7 +6215,7 @@ namespace WPE.Lib
                             {
                                 foreach (Guid gAID in gList)
                                 {
-                                    Proxy_AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
+                                    AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
 
                                     if (pai != null)
                                     {
@@ -6073,7 +6236,7 @@ namespace WPE.Lib
 
                 #region//保存登录信息到数据库
 
-                public static void SaveProxyAccount_LoginInfo_ToDB(Proxy_AccountInfo pai)
+                public static void SaveProxyAccount_LoginInfo_ToDB(AccountInfo pai)
                 {
                     try
                     {
@@ -6140,124 +6303,118 @@ namespace WPE.Lib
 
                 #region//从数据库加载代理账号列表（异步）
 
-                public static async void LoadProxyAccountList_FromDB()
+                public static void LoadProxyAccountList_FromDB()
                 {
-                    await Task.Run(() =>
+                    try
                     {
-                        try
-                        {
-                            DataTable dtProxyAccount = DataBase.SelectTable_ProxyAccount();
+                        DataTable dtProxyAccount = DataBase.SelectTable_ProxyAccount();
 
-                            foreach (DataRow dataRow in dtProxyAccount.Rows)
-                            {
-                                Guid AID = Guid.Parse(dataRow["GUID"].ToString());
-                                bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
-                                string UserName = dataRow["UserName"].ToString();
-                                string PassWord = dataRow["PassWord"].ToString();
-                                DateTime LoginTime = Convert.ToDateTime(dataRow["LoginTime"]);
-                                string LoginIP = dataRow["LoginIP"].ToString();
-                                string IPLocation = dataRow["IPLocation"].ToString();
-                                bool IsLimitLinks = Convert.ToBoolean(dataRow["IsLimitLinks"]);
-                                int LimitLinks = int.Parse(dataRow["LimitLinks"].ToString());
-                                bool IsLimitDevices = Convert.ToBoolean(dataRow["IsLimitDevices"]);
-                                int LimitDevices = int.Parse(dataRow["LimitDevices"].ToString());
-                                bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
-                                DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
-                                DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);
-
-                                ProxyConfig.Account.AddProxyAccount(
-                                    AID,
-                                    IsEnable,
-                                    UserName,
-                                    PassWord,
-                                    LoginTime,
-                                    LoginIP,
-                                    IPLocation,
-                                    IsLimitLinks,
-                                    LimitLinks,
-                                    IsLimitDevices,
-                                    LimitDevices,
-                                    IsExpiry,
-                                    ExpiryTime,
-                                    CreateTime);
-                            }
-                        }
-                        catch (Exception ex)
+                        foreach (DataRow dataRow in dtProxyAccount.Rows)
                         {
-                            Operate.DoLog(nameof(LoadProxyAccountList_FromDB), ex.Message);
+                            Guid AID = Guid.Parse(dataRow["GUID"].ToString());
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                            string UserName = dataRow["UserName"].ToString();
+                            string PassWord = dataRow["PassWord"].ToString();
+                            DateTime LoginTime = Convert.ToDateTime(dataRow["LoginTime"]);
+                            string LoginIP = dataRow["LoginIP"].ToString();
+                            string IPLocation = dataRow["IPLocation"].ToString();
+                            bool IsLimitLinks = Convert.ToBoolean(dataRow["IsLimitLinks"]);
+                            int LimitLinks = int.Parse(dataRow["LimitLinks"].ToString());
+                            bool IsLimitDevices = Convert.ToBoolean(dataRow["IsLimitDevices"]);
+                            int LimitDevices = int.Parse(dataRow["LimitDevices"].ToString());
+                            bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
+                            DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
+                            DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);
+
+                            ProxyConfig.Account.AddProxyAccount(
+                                AID,
+                                IsEnable,
+                                UserName,
+                                PassWord,
+                                LoginTime,
+                                LoginIP,
+                                IPLocation,
+                                IsLimitLinks,
+                                LimitLinks,
+                                IsLimitDevices,
+                                LimitDevices,
+                                IsExpiry,
+                                ExpiryTime,
+                                CreateTime);
                         }
-                    });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadProxyAccountList_FromDB), ex.Message);
+                    }
                 }
 
                 #endregion
 
                 #region//保存代理账号列表到文件（对话框）
 
-                public static void SaveProxyAccountList_Dialog(Form form, string FileName, List<Guid> gList)
+                public static void SaveAccount_Dialog(Form form, string FileName, List<AccountInfo> aiList)
                 {
                     try
                     {
-                        if (ProxyConfig.Account.lstProxyAccount.Count > 0)
+                        SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                        sfdSaveFile.Filter = AntdUI.Localization.Get("ProxyAccountListFile", "代理账号列表文件") + "（*.pa）|*.pa";
+
+                        if (!string.IsNullOrEmpty(FileName))
                         {
-                            SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = AntdUI.Localization.Get("ProxyAccountListFile", "代理账号列表文件") + "（*.pa）|*.pa";
+                            sfdSaveFile.FileName = FileName;
+                        }
 
-                            if (!string.IsNullOrEmpty(FileName))
+                        sfdSaveFile.RestoreDirectory = true;
+                        if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                        {
+                            string FilePath = sfdSaveFile.FileName;
+                            if (!string.IsNullOrEmpty(FilePath))
                             {
-                                sfdSaveFile.FileName = FileName;
-                            }
+                                bool DoEncrypt = false;
+                                string Password = string.Empty;
 
-                            sfdSaveFile.RestoreDirectory = true;
-                            if (sfdSaveFile.ShowDialog() == DialogResult.OK)
-                            {
-                                string FilePath = sfdSaveFile.FileName;
-                                if (!string.IsNullOrEmpty(FilePath))
+                                using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
                                 {
-                                    bool DoEncrypt = false;
-                                    string Password = string.Empty;
-
-                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                                    string Title = AntdUI.Localization.Get("ExportProxyAccountList", "导出代理账号列表");
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportProxyAccountList", "导出代理账号列表");
-                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        Keyboard = false,
+                                        MaskClosable = false,
+                                        OnOk = config =>
                                         {
-                                            Keyboard = false,
-                                            MaskClosable = false,
-                                            OnOk = config =>
+                                            Password = eForm.GetPassword();
+                                            if (string.IsNullOrEmpty(Password))
                                             {
-                                                Password = eForm.GetPassword();
-                                                if (string.IsNullOrEmpty(Password))
-                                                {
-                                                    eForm.EncryptionText_Changed();
+                                                eForm.EncryptionText_Changed();
 
-                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                                    {
-                                                        LocalizationText = "ExportList.Error"
-                                                    });
-
-                                                    return false;
-                                                }
-                                                else
+                                                AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
                                                 {
-                                                    DoEncrypt = true;
-                                                    return true;
-                                                }
+                                                    LocalizationText = "ExportList.Error"
+                                                });
+
+                                                return false;
                                             }
-                                        });
-                                    }
+                                            else
+                                            {
+                                                DoEncrypt = true;
+                                                return true;
+                                            }
+                                        }
+                                    });
+                                }
 
-                                    if (SaveProxyAccountList(FilePath, gList, DoEncrypt, Password))
-                                    {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportProxyAccountList.Success", "导出代理账号列表成功");
-                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
-                                    }
-                                    else
-                                    {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportProxyAccountList.Error", "导出代理账号列表失败");
-                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
-                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                                    }
+                                if (SaveAccountList(FilePath, aiList, DoEncrypt, Password))
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ExportProxyAccountList.Success", "导出代理账号列表成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                }
+                                else
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ExportProxyAccountList.Error", "导出代理账号列表失败");
+                                    string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                    AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                 }
                             }
                         }
@@ -6268,7 +6425,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static bool SaveProxyAccountList(string FilePath, List<Guid> gList, bool DoEncrypt, string Password)
+                private static bool SaveAccountList(string FilePath, List<AccountInfo> aiList, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -6277,7 +6434,7 @@ namespace WPE.Lib
                             Declaration = new XDeclaration("1.0", "utf-8", "yes")
                         };
 
-                        XElement xeProxyAccountList = ProxyConfig.Account.GetProxyAccountList_XML(gList);
+                        XElement xeProxyAccountList = ProxyConfig.Account.GetAccountList_XML(aiList);
                         if (xeProxyAccountList == null)
                         {
                             return false;
@@ -6304,38 +6461,33 @@ namespace WPE.Lib
                     return false;
                 }
 
-                public static XElement GetProxyAccountList_XML(List<Guid> gList)
+                public static XElement GetAccountList_XML(List<AccountInfo> aiList)
                 {
                     try
                     {
                         XElement xeProxyAccountList = new XElement("ProxyAccountList");
 
-                        foreach (Guid gAID in gList)
+                        foreach (AccountInfo ai in aiList)
                         {
-                            Proxy_AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
-
-                            if (pai != null)
-                            {
-                                XElement xeProxyAccount =
+                            XElement xeProxyAccount =
                                     new XElement("ProxyAccount",
-                                    new XElement("IsEnable", pai.IsEnable.ToString()),
-                                    new XElement("AID", pai.AID.ToString().ToUpper()),
-                                    new XElement("UserName", pai.UserName),
-                                    new XElement("PassWord", pai.PassWord),
-                                    new XElement("LoginIP", pai.LoginIP),
-                                    new XElement("IPLocation", pai.IPLocation),
-                                    new XElement("IsOnLine", pai.IsOnLine.ToString()),
-                                    new XElement("IsLimitLinks", pai.IsLimitLinks),
-                                    new XElement("LimitLinks", pai.LimitLinks),
-                                    new XElement("IsLimitDevices", pai.IsLimitDevices),
-                                    new XElement("LimitDevices", pai.LimitDevices),
-                                    new XElement("IsExpiry", pai.IsExpiry),
-                                    new XElement("ExpiryTime", pai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
-                                    new XElement("CreateTime", pai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
+                                    new XElement("IsEnable", ai.IsEnable.ToString()),
+                                    new XElement("AID", ai.AID.ToString().ToUpper()),
+                                    new XElement("UserName", ai.UserName),
+                                    new XElement("PassWord", ai.Password),
+                                    new XElement("LoginIP", ai.LoginIP),
+                                    new XElement("IPLocation", ai.IPLocation),
+                                    new XElement("IsOnLine", ai.IsOnLine.ToString()),
+                                    new XElement("IsLimitLinks", ai.IsLimitLinks),
+                                    new XElement("LimitLinks", ai.LimitLinks),
+                                    new XElement("IsLimitDevices", ai.IsLimitDevices),
+                                    new XElement("LimitDevices", ai.LimitDevices),
+                                    new XElement("IsExpiry", ai.IsExpiry),
+                                    new XElement("ExpiryTime", ai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
+                                    new XElement("CreateTime", ai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
                                     );
 
-                                xeProxyAccountList.Add(xeProxyAccount);
-                            }
+                            xeProxyAccountList.Add(xeProxyAccount);
                         }
 
                         return xeProxyAccountList;
@@ -6352,7 +6504,7 @@ namespace WPE.Lib
 
                 #region//从文件加载代理账号列表（对话框）
 
-                public static void LoadProxyAccountList_Dialog(Form form)
+                public static void LoadAccountList_Dialog(Form form)
                 {
                     try
                     {
@@ -6365,12 +6517,19 @@ namespace WPE.Lib
                             string FilePath = ofdLoadFile.FileName;
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                if (LoadProxyAccountList(form, FilePath, true))
+                                bool bOK = false;
+                                AntdUI.Spin.open(form, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
                                 {
-                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportProxyAccountList.Success", "导入代理账号列表成功");
-                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
-                                }
+                                    bOK = LoadAccountList(form, FilePath, true);
+                                }, () =>
+                                {
+                                    if (bOK)
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ImportProxyAccountList.Success", "导入代理账号列表成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    }
+                                });                                
                             }
                         }
                     }
@@ -6380,7 +6539,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static bool LoadProxyAccountList(Form form, string FilePath, bool LoadFromUser)
+                private static bool LoadAccountList(Form form, string FilePath, bool LoadFromUser)
                 {
                     try
                     {
@@ -6391,7 +6550,7 @@ namespace WPE.Lib
                             {
                                 if (fileExtension.Equals(".ini"))
                                 {
-                                    LoadProxyAccountList_FromInIFile(FilePath);
+                                    LoadAccountList_FromInIFile(FilePath);
                                     return true;
                                 }
                                 else
@@ -6456,7 +6615,7 @@ namespace WPE.Lib
                                         return false;
                                     }
 
-                                    LoadProxyAccountList_FromXDocument(xdoc);
+                                    LoadAccountList_FromXDocument(xdoc);
 
                                     #endregion
 
@@ -6473,7 +6632,7 @@ namespace WPE.Lib
                     return false;
                 }
 
-                public static void LoadProxyAccountList_FromXDocument(XDocument xdoc)
+                public static void LoadAccountList_FromXDocument(XDocument xdoc)
                 {
                     try
                     {
@@ -6594,13 +6753,13 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void LoadProxyAccountList_FromInIFile(string filePath)
+                private static void LoadAccountList_FromInIFile(string filePath)
                 {
                     try
                     {
                         string[] lines = File.ReadAllLines(filePath);
 
-                        Proxy_AccountInfo pai = null;
+                        AccountInfo pai = null;
                         foreach (string line in lines)
                         {
                             string trimmedLine = line.Trim();
@@ -6608,10 +6767,10 @@ namespace WPE.Lib
                             {
                                 if (pai != null)
                                 {
-                                    ProxyConfig.Account.AddProxyAccount_FromIniFile(pai);
+                                    ProxyConfig.Account.AddAccount_FromIniFile(pai);
                                 }
 
-                                pai = new Proxy_AccountInfo();
+                                pai = new AccountInfo();
                             }
                             else if (trimmedLine.Contains("="))
                             {
@@ -6630,7 +6789,7 @@ namespace WPE.Lib
                                         break;
 
                                     case "Password":
-                                        pai.PassWord = value;
+                                        pai.Password = value;
                                         break;
 
                                     case "MaxConn":
@@ -6659,7 +6818,7 @@ namespace WPE.Lib
 
                         if (pai != null)
                         {
-                            ProxyConfig.Account.AddProxyAccount_FromIniFile(pai);
+                            ProxyConfig.Account.AddAccount_FromIniFile(pai);
                         }
                     }
                     catch (Exception ex)
@@ -6668,7 +6827,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void AddProxyAccount_FromIniFile(Proxy_AccountInfo pai)
+                private static void AddAccount_FromIniFile(AccountInfo pai)
                 {
                     try
                     {
@@ -6702,7 +6861,7 @@ namespace WPE.Lib
                                 pai.AID,
                                 pai.IsEnable,
                                 pai.UserName,
-                                pai.PassWord,
+                                pai.Password,
                                 pai.LoginTime,
                                 pai.LoginIP,
                                 pai.IPLocation,
@@ -16701,12 +16860,12 @@ namespace WPE.Lib
                                 cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
                                 cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
 
-                                foreach (Proxy_AccountInfo pai in ProxyConfig.Account.lstProxyAccount)
+                                foreach (AccountInfo pai in ProxyConfig.Account.lstAccountInfo)
                                 {
                                     cmd.Parameters["@GUID"].Value = pai.AID.ToString().ToUpper();
                                     cmd.Parameters["@IsEnable"].Value = pai.IsEnable;
                                     cmd.Parameters["@UserName"].Value = pai.UserName;
-                                    cmd.Parameters["@PassWord"].Value = pai.PassWord;
+                                    cmd.Parameters["@PassWord"].Value = pai.Password;
                                     cmd.Parameters["@LoginTime"].Value = pai.LoginTime;
                                     cmd.Parameters["@LoginIP"].Value = pai.LoginIP;
                                     cmd.Parameters["@IPLocation"].Value = pai.IPLocation;
@@ -16732,7 +16891,7 @@ namespace WPE.Lib
                 }
             }
 
-            public static void InsertOrUpdateTable_ProxyAccount_LoginInfo(Proxy_AccountInfo pai)
+            public static void InsertOrUpdateTable_ProxyAccount_LoginInfo(AccountInfo pai)
             {
                 try
                 {

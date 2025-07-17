@@ -41,10 +41,11 @@
             AntdUI.SegmentedItem segmentedItem5 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem6 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem7 = new AntdUI.SegmentedItem();
-            AntdUI.SegmentedItem segmentedItem8 = new AntdUI.SegmentedItem();
-            AntdUI.SegmentedItem segmentedItem9 = new AntdUI.SegmentedItem();
-            AntdUI.SegmentedItem segmentedItem10 = new AntdUI.SegmentedItem();
-            AntdUI.SegmentedItem segmentedItem11 = new AntdUI.SegmentedItem();
+            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxyModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -108,12 +109,14 @@
             this.lProcessName = new AntdUI.Label();
             this.tpClientList = new AntdUI.TabPage();
             this.tpAccountList = new AntdUI.TabPage();
-            this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
-            this.tFilterList = new AntdUI.Table();
-            this.sFilterList = new AntdUI.Segmented();
+            this.tlpAccountList = new System.Windows.Forms.TableLayoutPanel();
+            this.tAccountList = new AntdUI.Table();
             this.tpStatistical = new AntdUI.TabPage();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.mAccountList = new AntdUI.Menu();
+            this.pAccountList = new AntdUI.Pagination();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
@@ -127,8 +130,9 @@
             this.pPacketData.SuspendLayout();
             this.tlpProcessInfo.SuspendLayout();
             this.tpAccountList.SuspendLayout();
-            this.tlpFilterList.SuspendLayout();
+            this.tlpAccountList.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -287,6 +291,7 @@
             this.tabProxyMode.Pages.Add(this.tpAccountList);
             this.tabProxyMode.Pages.Add(this.tpStatistical);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
+            this.tabProxyMode.SelectedIndex = 2;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -295,7 +300,7 @@
             // tpProxyList
             // 
             this.tpProxyList.Controls.Add(this.tlpPacketList);
-            this.tpProxyList.Location = new System.Drawing.Point(3, 33);
+            this.tpProxyList.Location = new System.Drawing.Point(-1124, -724);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
             this.tpProxyList.TabIndex = 0;
@@ -1095,104 +1100,42 @@
             // 
             // tpAccountList
             // 
-            this.tpAccountList.Controls.Add(this.tlpFilterList);
-            this.tpAccountList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpAccountList.Controls.Add(this.tlpAccountList);
+            this.tpAccountList.Location = new System.Drawing.Point(3, 33);
             this.tpAccountList.Name = "tpAccountList";
             this.tpAccountList.Size = new System.Drawing.Size(1124, 724);
             this.tpAccountList.TabIndex = 7;
             this.tpAccountList.Text = "账号列表";
             // 
-            // tlpFilterList
+            // tlpAccountList
             // 
-            this.tlpFilterList.ColumnCount = 1;
-            this.tlpFilterList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterList.Controls.Add(this.tFilterList, 0, 1);
-            this.tlpFilterList.Controls.Add(this.sFilterList, 0, 0);
-            this.tlpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpFilterList.Location = new System.Drawing.Point(0, 0);
-            this.tlpFilterList.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpFilterList.Name = "tlpFilterList";
-            this.tlpFilterList.RowCount = 2;
-            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpFilterList.Size = new System.Drawing.Size(1124, 724);
-            this.tlpFilterList.TabIndex = 1;
+            this.tlpAccountList.ColumnCount = 1;
+            this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpAccountList.Controls.Add(this.tAccountList, 0, 1);
+            this.tlpAccountList.Controls.Add(this.tableLayoutPanel1, 0, 0);
+            this.tlpAccountList.Controls.Add(this.pAccountList, 0, 2);
+            this.tlpAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpAccountList.Location = new System.Drawing.Point(0, 0);
+            this.tlpAccountList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpAccountList.Name = "tlpAccountList";
+            this.tlpAccountList.RowCount = 3;
+            this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpAccountList.Size = new System.Drawing.Size(1124, 724);
+            this.tlpAccountList.TabIndex = 1;
             // 
-            // tFilterList
+            // tAccountList
             // 
-            this.tFilterList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tFilterList.Bordered = true;
-            this.tFilterList.CellImpactHeight = false;
-            this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tFilterList.GapCell = 6;
-            this.tFilterList.Location = new System.Drawing.Point(3, 49);
-            this.tFilterList.MultipleRows = true;
-            this.tFilterList.Name = "tFilterList";
-            this.tFilterList.Size = new System.Drawing.Size(1118, 672);
-            this.tFilterList.TabIndex = 1;
-            // 
-            // sFilterList
-            // 
-            this.sFilterList.Dock = System.Windows.Forms.DockStyle.Top;
-            this.sFilterList.IconAlign = AntdUI.TAlignMini.Left;
-            this.sFilterList.IconRatio = 1F;
-            segmentedItem8.Badge = null;
-            segmentedItem8.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem8.BadgeBack = null;
-            segmentedItem8.BadgeMode = false;
-            segmentedItem8.BadgeOffsetX = 0;
-            segmentedItem8.BadgeOffsetY = 0;
-            segmentedItem8.BadgeSize = 0.6F;
-            segmentedItem8.BadgeSvg = null;
-            segmentedItem8.IconSvg = "FolderOpenOutlined";
-            segmentedItem8.ID = "siImport";
-            segmentedItem8.Text = "导入滤镜列表";
-            segmentedItem8.Tooltip = "";
-            segmentedItem9.Badge = null;
-            segmentedItem9.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem9.BadgeBack = null;
-            segmentedItem9.BadgeMode = false;
-            segmentedItem9.BadgeOffsetX = 0;
-            segmentedItem9.BadgeOffsetY = 0;
-            segmentedItem9.BadgeSize = 0.6F;
-            segmentedItem9.BadgeSvg = null;
-            segmentedItem9.IconSvg = "DeliveredProcedureOutlined";
-            segmentedItem9.ID = "siExport";
-            segmentedItem9.Text = "导出滤镜列表";
-            segmentedItem9.Tooltip = "";
-            segmentedItem10.Badge = null;
-            segmentedItem10.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem10.BadgeBack = null;
-            segmentedItem10.BadgeMode = false;
-            segmentedItem10.BadgeOffsetX = 0;
-            segmentedItem10.BadgeOffsetY = 0;
-            segmentedItem10.BadgeSize = 0.6F;
-            segmentedItem10.BadgeSvg = null;
-            segmentedItem10.IconSvg = "FileAddOutlined";
-            segmentedItem10.ID = "siAdd";
-            segmentedItem10.Text = "新增滤镜";
-            segmentedItem10.Tooltip = "";
-            segmentedItem11.Badge = null;
-            segmentedItem11.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem11.BadgeBack = null;
-            segmentedItem11.BadgeMode = false;
-            segmentedItem11.BadgeOffsetX = 0;
-            segmentedItem11.BadgeOffsetY = 0;
-            segmentedItem11.BadgeSize = 0.6F;
-            segmentedItem11.BadgeSvg = null;
-            segmentedItem11.IconSvg = "DeleteOutlined";
-            segmentedItem11.ID = "siClear";
-            segmentedItem11.Text = "清空所有滤镜";
-            segmentedItem11.Tooltip = "";
-            this.sFilterList.Items.Add(segmentedItem8);
-            this.sFilterList.Items.Add(segmentedItem9);
-            this.sFilterList.Items.Add(segmentedItem10);
-            this.sFilterList.Items.Add(segmentedItem11);
-            this.sFilterList.Location = new System.Drawing.Point(3, 3);
-            this.sFilterList.Name = "sFilterList";
-            this.sFilterList.Size = new System.Drawing.Size(1118, 40);
-            this.sFilterList.TabIndex = 2;
+            this.tAccountList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tAccountList.CellImpactHeight = false;
+            this.tAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tAccountList.GapCell = 6;
+            this.tAccountList.Location = new System.Drawing.Point(3, 53);
+            this.tAccountList.Name = "tAccountList";
+            this.tAccountList.Size = new System.Drawing.Size(1118, 622);
+            this.tAccountList.TabIndex = 1;
+            this.tAccountList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tAccountList_CellButtonClick);
             // 
             // tpStatistical
             // 
@@ -1225,6 +1168,67 @@
             this.tSystemLog.Size = new System.Drawing.Size(1124, 724);
             this.tSystemLog.TabIndex = 2;
             this.tSystemLog.Text = "table1";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.mAccountList, 1, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1124, 50);
+            this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // mAccountList
+            // 
+            this.mAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mAccountList.Gap = 0;
+            this.mAccountList.IconRatio = 1F;
+            menuItem6.IconSvg = "PlusOutlined";
+            menuItem7.IconSvg = "UserAddOutlined";
+            menuItem7.ID = "miAdd";
+            menuItem7.Text = "新增账号";
+            menuItem8.IconSvg = "FolderOpenOutlined";
+            menuItem8.ID = "miImport";
+            menuItem8.Text = "导入账号列表";
+            menuItem9.IconSvg = "DeliveredProcedureOutlined";
+            menuItem9.ID = "miExport";
+            menuItem9.Text = "导出选中账号";
+            menuItem10.IconSvg = "DeleteOutlined";
+            menuItem10.ID = "miClear";
+            menuItem10.Text = "清空选中账号";
+            menuItem6.Sub.Add(menuItem7);
+            menuItem6.Sub.Add(menuItem8);
+            menuItem6.Sub.Add(menuItem9);
+            menuItem6.Sub.Add(menuItem10);
+            this.mAccountList.Items.Add(menuItem6);
+            this.mAccountList.Location = new System.Drawing.Point(1061, 3);
+            this.mAccountList.Mode = AntdUI.TMenuMode.Horizontal;
+            this.mAccountList.Name = "mAccountList";
+            this.mAccountList.Size = new System.Drawing.Size(60, 39);
+            this.mAccountList.TabIndex = 3;
+            this.mAccountList.Trigger = AntdUI.Trigger.Click;
+            this.mAccountList.SelectChanged += new AntdUI.SelectEventHandler(this.mAccountList_SelectChanged);
+            // 
+            // pAccountList
+            // 
+            this.pAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pAccountList.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.pAccountList.Location = new System.Drawing.Point(3, 681);
+            this.pAccountList.Name = "pAccountList";
+            this.pAccountList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.pAccountList.ShowSizeChanger = true;
+            this.pAccountList.Size = new System.Drawing.Size(1118, 40);
+            this.pAccountList.TabIndex = 3;
+            this.pAccountList.ValueChanged += new AntdUI.PageValueEventHandler(this.pAccountList_ValueChanged);
+            this.pAccountList.ShowTotalChanged += new AntdUI.PageValueRtEventHandler(this.pAccountList_ShowTotalChanged);
             // 
             // ProxyModeForm
             // 
@@ -1260,8 +1264,9 @@
             this.tlpProcessInfo.ResumeLayout(false);
             this.tlpProcessInfo.PerformLayout();
             this.tpAccountList.ResumeLayout(false);
-            this.tlpFilterList.ResumeLayout(false);
+            this.tlpAccountList.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1329,13 +1334,15 @@
         private AntdUI.Label lModuleName;
         private AntdUI.Label lProcessName;
         private AntdUI.TabPage tpAccountList;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterList;
-        private AntdUI.Table tFilterList;
-        private AntdUI.Segmented sFilterList;
+        private System.Windows.Forms.TableLayoutPanel tlpAccountList;
+        private AntdUI.Table tAccountList;
         private AntdUI.TabPage tpStatistical;
         private AntdUI.TabPage tpSystemLog;
         private AntdUI.Table tSystemLog;
         private AntdUI.TabPage tpClientList;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private AntdUI.Menu mAccountList;
+        private AntdUI.Pagination pAccountList;
     }
 }
 

@@ -61,24 +61,6 @@ namespace WPE.InjectMode.Properties {
         }
         
         /// <summary>
-        ///   查找类似 &lt;svg viewBox=&quot;0 0 64 41&quot;&gt;&lt;g transform=&quot;translate(0 1)&quot; fill=&quot;none&quot;&gt;&lt;ellipse fill=&quot;#f5f5f5&quot; cx=&quot;32&quot; cy=&quot;33&quot; rx=&quot;32&quot; ry=&quot;7&quot;&gt;&lt;/ellipse&gt;&lt;g stroke=&quot;#d9d9d9&quot;&gt;&lt;path d=&quot;M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237 [字符串的其余部分被截断]&quot;; 的本地化字符串。
-        /// </summary>
-        internal static string icon_empty {
-            get {
-                return ResourceManager.GetString("icon_empty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 &lt;svg viewBox=&quot;0 0 64 41&quot;&gt;&lt;g transform=&quot;translate(0 1)&quot; fill=&quot;none&quot;&gt;&lt;ellipse fill=&quot;#272727&quot; cx=&quot;32&quot; cy=&quot;33&quot; rx=&quot;32&quot; ry=&quot;7&quot;&gt;&lt;/ellipse&gt;&lt;g stroke=&quot;#3e3e3e&quot;&gt;&lt;path d=&quot;M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237 [字符串的其余部分被截断]&quot;; 的本地化字符串。
-        /// </summary>
-        internal static string icon_empty_dark {
-            get {
-                return ResourceManager.GetString("icon_empty_dark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Bitmap wpe {

@@ -51,7 +51,22 @@ namespace WPE.InjectMode
                 {
                     action();
                 }
-            };
+            };            
+
+            this.pageHeader.Loading = true;
+            AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
+            {  
+                Operate.SystemConfig.InitCPUAndMemoryCounter();
+                Operate.SystemConfig.LoadInjectMode_FromDB();
+                Operate.SystemConfig.LoadSystemList_FromDB();
+                Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
+                Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
+                Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
+                Operate.SystemConfig.StartRemoteMGT();
+            }, () =>
+            {
+                this.pageHeader.Loading = false;
+            });
 
             this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
             this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
@@ -71,30 +86,15 @@ namespace WPE.InjectMode
             this.InitTable_LogList();
             this.InitComparison();
             this.InitExtraction();
-
-            this.pageHeader.Loading = true;
-            AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
-            {  
-                Operate.SystemConfig.InitCPUAndMemoryCounter();
-                Operate.SystemConfig.LoadSystemConfig_FromDB();
-                Operate.SystemConfig.LoadInjectMode_FromDB();
-                Operate.SystemConfig.LoadSystemList_FromDB();
-                Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
-                Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
-                Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
-                Operate.SystemConfig.StartRemoteMGT();
-            }, () =>
-            {
-                this.pageHeader.Loading = false;
-            });
         }
 
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             ws.ExitHook();
             Operate.SystemConfig.StopRemoteMGT(this.RunMode);
-            Operate.SystemConfig.SaveSystemList_ToDB();
+            Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
+            Operate.SystemConfig.SaveSystemList_ToDB();            
             Operate.ProxyConfig.Account.SaveProxyAccountList_ToDB(this.RunMode);
             Operate.ProxyConfig.Mapping.SaveProxyMapLocal_ToDB(this.RunMode);
             Operate.ProxyConfig.Mapping.SaveProxyMapRemote_ToDB(this.RunMode);            
@@ -175,13 +175,13 @@ namespace WPE.InjectMode
                         {
                             new AntdUI.FloatButton.ConfigBtn("GitHub", "QuestionOutlined", true)
                     {
-                        Tooltip = "问题和反馈",
+                        Tooltip = "问题反馈",
                         Type= AntdUI.TTypeMini.Success
                     },
                             new AntdUI.FloatButton.ConfigBtn("WebSite", "HomeOutlined", true)
                     {
                         Tooltip = "访问官网",
-                        Type= AntdUI.TTypeMini.Info
+                        Type= AntdUI.TTypeMini.Default
                     }
                         }, btn =>
                         {
@@ -308,26 +308,24 @@ namespace WPE.InjectMode
                     {
                         if(record is FilterInfo fi)
                         {
-                            AntdUI.CellBadge cellBadge = null;
-
                             if(fi.IsEnable)
                             {
-                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
-
                                 if(fi.ExecutionCount > 0)
                                 {
-                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                    return new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                }
+                                else
+                                {
+                                    return new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
                                 }
                             }
                             else
                             {
-                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                                return new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
                             }
-
-                            return cellBadge;
                         }
 
-                        return null;
+                        return value;
                     },
                 }.SetLocalizationTitleID("Table.Column."),
                 new AntdUI.Column("FAction", "动作", AntdUI.ColumnAlign.Center)

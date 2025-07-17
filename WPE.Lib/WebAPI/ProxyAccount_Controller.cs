@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Http;
+using static WPE.Lib.Operate;
 
 namespace WPE.Lib.WebAPI
 {
@@ -14,9 +15,9 @@ namespace WPE.Lib.WebAPI
         [HttpGet]
         [Route("GetProxyAccountList")]
 
-        public IEnumerable<Proxy_AccountInfo> GetProxyAccountList()
+        public IEnumerable<AccountInfo> GetProxyAccountList()
         {
-            return Operate.ProxyConfig.Account.lstProxyAccount;
+            return Operate.ProxyConfig.Account.lstAccountInfo;
         }
 
         #endregion
@@ -26,7 +27,7 @@ namespace WPE.Lib.WebAPI
         [HttpGet]
         [Route("GetProxyAccountByID")]
 
-        public Proxy_AccountInfo GetProxyAccountByID(Guid AID)
+        public AccountInfo GetProxyAccountByID(Guid AID)
         {
             return Operate.ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
         }
@@ -40,7 +41,7 @@ namespace WPE.Lib.WebAPI
 
         public string GetPassWordDecrypt(string PassWord)
         {
-            return Socket_Operation.PassWord_Decrypt(PassWord);
+            return SystemConfig.PassWord_Decrypt(PassWord);
         }
 
         #endregion
@@ -50,7 +51,7 @@ namespace WPE.Lib.WebAPI
         [HttpPost]
         [Route("AddProxyAccount")]
 
-        public IHttpActionResult AddProxyAccount([FromBody] Proxy_AccountInfo pai)
+        public IHttpActionResult AddProxyAccount([FromBody] AccountInfo pai)
         {
             try
             {
@@ -66,12 +67,12 @@ namespace WPE.Lib.WebAPI
                     pai.ExpiryTime = DateTime.Now;
                 }
 
-                pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
+                pai.Password = SystemConfig.PassWord_Encrypt(pai.Password);
                 bool bOK = Operate.ProxyConfig.Account.AddProxyAccount(
                     Guid.NewGuid(), 
                     pai.IsEnable, 
                     pai.UserName, 
-                    pai.PassWord, 
+                    pai.Password, 
                     pai.LoginTime, 
                     string.Empty, 
                     string.Empty, 
@@ -128,19 +129,19 @@ namespace WPE.Lib.WebAPI
         [HttpPost]
         [Route("UpdateProxyAccount")]
 
-        public IHttpActionResult UpdateProxyAccount([FromBody] Proxy_AccountInfo pai)
+        public IHttpActionResult UpdateProxyAccount([FromBody] AccountInfo pai)
         {
             if (pai.ExpiryTime == null)
             {
                 pai.ExpiryTime = DateTime.Now;
             }
 
-            pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
+            pai.Password = SystemConfig.PassWord_Encrypt(pai.Password);
 
             bool bOK = Operate.ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
                 pai.AID, 
                 pai.IsEnable, 
-                pai.PassWord, 
+                pai.Password, 
                 pai.IsLimitLinks,
                 pai.LimitLinks,
                 pai.IsLimitDevices,

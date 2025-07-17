@@ -186,7 +186,7 @@ namespace WinsockPacketEditor
                 Operate.SystemConfig.LoadRunConfig_FromDB();
 
                 
-                this.cbEnable_Auth.Checked = Operate.ProxyConfig.Proxy.Enable_Auth;                
+                                
 
                 
 
@@ -195,7 +195,7 @@ namespace WinsockPacketEditor
 
                 
 
-                this.cbSpeedMode.Checked = Operate.ProxyConfig.Proxy.SpeedMode;
+                
 
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
@@ -214,7 +214,7 @@ namespace WinsockPacketEditor
             try
             {
                 
-                Operate.ProxyConfig.Proxy.Enable_Auth = this.cbEnable_Auth.Checked;                
+                                
 
                 
 
@@ -223,7 +223,7 @@ namespace WinsockPacketEditor
 
                 
 
-                Operate.ProxyConfig.Proxy.SpeedMode = this.cbSpeedMode.Checked;
+                
             }
             catch (Exception ex)
             {
@@ -1167,8 +1167,8 @@ namespace WinsockPacketEditor
                 ulong ProxyTCP_CNT = Operate.ProxyConfig.Proxy.ProxyTCP_CNT;
                 ulong ProxyUDP_CNT = Operate.ProxyConfig.Proxy.ProxyUDP_CNT;
                 ulong ProxyTotal_CNT = ProxyTCP_CNT + ProxyUDP_CNT;
-                int ProxyAccountOnLine = Socket_Operation.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstProxyAccount);
-                Operate.ProxyConfig.Proxy.ProxyOnLineInfo = ProxyAccountOnLine.ToString() + "/" + Operate.ProxyConfig.Account.lstProxyAccount.Count.ToString();
+                int ProxyAccountOnLine = Socket_Operation.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo);
+                Operate.ProxyConfig.Proxy.ProxyOnLineInfo = ProxyAccountOnLine.ToString() + "/" + Operate.ProxyConfig.Account.lstAccountInfo.Count.ToString();
                 //Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
                 
                 this.tlProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();

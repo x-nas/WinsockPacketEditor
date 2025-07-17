@@ -152,7 +152,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Proxy_AccountInfo.cs" />
+    <Compile Include="ClassObject\AccountInfo.cs" />
     <Compile Include="Proxy_AuthInfo.cs" />
     <Compile Include="Proxy_MapLocal.cs" />
     <Compile Include="Proxy_MapRemote.cs" />

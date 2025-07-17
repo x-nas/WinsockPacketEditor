@@ -15,8 +15,8 @@ namespace WPELibrary
         private string SearchType = string.Empty;
         private string Search_UserName = string.Empty;
         private DateTime Search_ExpireFrom, Search_ExpireTo;
-        private BindingList<Proxy_AccountInfo> allData = new BindingList<Proxy_AccountInfo>();
-        private List<Proxy_AccountInfo> pageData = new List<Proxy_AccountInfo>();
+        private BindingList<AccountInfo> allData = new BindingList<AccountInfo>();
+        private List<AccountInfo> pageData = new List<AccountInfo>();
 
         #region//初始化
 
@@ -108,7 +108,7 @@ namespace WPELibrary
                         break;
 
                     case "UserName_All":
-                        e.Result = Operate.ProxyConfig.Account.lstProxyAccount;
+                        e.Result = Operate.ProxyConfig.Account.lstAccountInfo;
                         break;
 
                     case "IsEnable_True":
@@ -156,7 +156,7 @@ namespace WPELibrary
                         break;
 
                     default:
-                        e.Result = Operate.ProxyConfig.Account.lstProxyAccount;
+                        e.Result = Operate.ProxyConfig.Account.lstAccountInfo;
                         break;
                 }
             }
@@ -170,7 +170,7 @@ namespace WPELibrary
         {
             try
             {
-                this.allData = e.Result as BindingList<Proxy_AccountInfo>;
+                this.allData = e.Result as BindingList<AccountInfo>;
                 this.currentPage = 1;
                 this.ShowAccountList();
                 this.ShowProxyAccountInfo();                
@@ -377,7 +377,7 @@ namespace WPELibrary
 
                     if (gList.Count > 0)
                     {
-                        Operate.ProxyConfig.Account.DeleteProxyAccount_Dialog(gList);
+                        //Operate.ProxyConfig.Account.DeleteProxyAccount_Dialog(gList);
                         this.LoadData(string.Empty);
                     }
                 }
@@ -425,7 +425,7 @@ namespace WPELibrary
 
                 if (gList.Count > 0)
                 {
-                    Operate.ProxyConfig.Account.SaveProxyAccountList_Dialog(this, string.Empty, gList);
+                    //Operate.ProxyConfig.Account.SaveAccount_Dialog(this, string.Empty, gList);
                 }
             }
             catch (Exception ex)
@@ -440,7 +440,7 @@ namespace WPELibrary
 
         private void bImport_Click(object sender, EventArgs e)
         {
-            Operate.ProxyConfig.Account.LoadProxyAccountList_Dialog(this);
+            Operate.ProxyConfig.Account.LoadAccountList_Dialog(this);
             this.LoadData(string.Empty);
         }
 
@@ -567,12 +567,12 @@ namespace WPELibrary
 
                                     List<Guid> gExport = new List<Guid>();
 
-                                    foreach (Proxy_AccountInfo pai in this.allData)
+                                    foreach (AccountInfo pai in this.allData)
                                     {
                                         gExport.Add(pai.AID);
                                     }
 
-                                    Operate.ProxyConfig.Account.SaveProxyAccountList_Dialog(this, string.Empty, gExport);
+                                    //Operate.ProxyConfig.Account.SaveAccountList_Dialog(this, string.Empty, gExport);
 
                                     break;
 
@@ -580,14 +580,14 @@ namespace WPELibrary
 
                                     List<Guid> gClear = new List<Guid>();
 
-                                    foreach (Proxy_AccountInfo pai in this.allData)
+                                    foreach (AccountInfo pai in this.allData)
                                     {
                                         gClear.Add(pai.AID);
                                     }
 
                                     if (gClear.Count > 0)
                                     {
-                                        Operate.ProxyConfig.Account.DeleteProxyAccount_Dialog(gClear);
+                                        //Operate.ProxyConfig.Account.DeleteProxyAccount_Dialog(gClear);
                                         this.LoadData(string.Empty);
                                     }                                    
 
@@ -597,7 +597,7 @@ namespace WPELibrary
 
                                     List<Guid> gAddTime = new List<Guid>();
 
-                                    foreach (Proxy_AccountInfo pai in this.allData)
+                                    foreach (AccountInfo pai in this.allData)
                                     {
                                         gAddTime.Add(pai.AID);
                                     }
@@ -614,7 +614,7 @@ namespace WPELibrary
 
                                     List<Guid> gLinks = new List<Guid>();
 
-                                    foreach (Proxy_AccountInfo pai in this.allData)
+                                    foreach (AccountInfo pai in this.allData)
                                     {
                                         gLinks.Add(pai.AID);
                                     }
@@ -631,7 +631,7 @@ namespace WPELibrary
 
                                     List<Guid> gDevices = new List<Guid>();
 
-                                    foreach (Proxy_AccountInfo pai in this.allData)
+                                    foreach (AccountInfo pai in this.allData)
                                     {
                                         gDevices.Add(pai.AID);
                                     }

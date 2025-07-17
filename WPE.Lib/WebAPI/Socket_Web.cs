@@ -211,7 +211,7 @@ namespace WPE.Lib.WebAPI
                                 IsEdit = Socket_Operation.StringToBool(body["edit"].ToString());
                             }
 
-                            Proxy_AccountInfo pai = new Proxy_AccountInfo();
+                            AccountInfo pai = new AccountInfo();
 
                             if (body["enable"] != null)
                             {
@@ -225,7 +225,7 @@ namespace WPE.Lib.WebAPI
 
                             if (body["password"] != null)
                             {
-                                pai.PassWord = body["password"].ToString();
+                                pai.Password = body["password"].ToString();
                             }
 
                             if (body["autodisable"] != null)

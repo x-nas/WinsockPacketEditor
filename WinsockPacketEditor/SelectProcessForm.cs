@@ -240,25 +240,14 @@ namespace WinsockPacketEditor
                 string channelName = "WPE64";
                 string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
                 string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
-
-                var parameters = new Operate.SystemConfig.InjectionParameters
-                {
-                    Animation = AntdUI.Config.Animation,
-                    ShadowEnabled = AntdUI.Config.ShadowEnabled,
-                    ShowInWindow = AntdUI.Config.ShowInWindow,
-                    ScrollBarHide = AntdUI.Config.ScrollBarHide,
-                    TextRenderingHighQuality = AntdUI.Config.TextRenderingHighQuality,
-                    Dark = AntdUI.Config.IsDark,
-                    Lang = AntdUI.Localization.CurrentLanguage,
-                };
-
+      
                 if (Operate.SystemConfig.PID > -1)
                 {
-                    RemoteHooking.Inject(Operate.SystemConfig.PID, injectionLibrary_x86, injectionLibrary_x64, channelName, parameters);
+                    RemoteHooking.Inject(Operate.SystemConfig.PID, injectionLibrary_x86, injectionLibrary_x64, channelName);
                 }
                 else
                 {
-                    RemoteHooking.CreateAndInject(Operate.SystemConfig.PATH, string.Empty, 0, injectionLibrary_x86, injectionLibrary_x64, out Operate.SystemConfig.PID, channelName, parameters);
+                    RemoteHooking.CreateAndInject(Operate.SystemConfig.PATH, string.Empty, 0, injectionLibrary_x86, injectionLibrary_x64, out Operate.SystemConfig.PID, channelName);
                 }
 
                 Operate.SystemConfig.LastInjection = Operate.SystemConfig.PNAME;

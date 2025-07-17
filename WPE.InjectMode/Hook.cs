@@ -21,38 +21,21 @@ namespace WPE.InjectMode
             //
         }
 
-        public Hook(RemoteHooking.IContext InContext, string ChannelName, Operate.SystemConfig.InjectionParameters parameters)
+        public Hook(RemoteHooking.IContext InContext, string ChannelName)
         {
             //
         }
 
-        public unsafe void Run(RemoteHooking.IContext InContext, string ChannelName, Operate.SystemConfig.InjectionParameters parameters)
+        public unsafe void Run(RemoteHooking.IContext InContext, string ChannelName)
         {
             try
             {
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
                     User32.SetProcessDPIAware();
-                }
+                }               
 
-                AntdUI.Config.Animation = parameters.Animation;
-                AntdUI.Config.ShadowEnabled = parameters.ShadowEnabled;
-                AntdUI.Config.ShowInWindow = parameters.ShowInWindow;
-                AntdUI.Config.ScrollBarHide = parameters.ScrollBarHide;
-                AntdUI.Config.TextRenderingHighQuality = parameters.TextRenderingHighQuality;
-                AntdUI.Config.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                AntdUI.Config.IsDark = parameters.Dark;
-                AntdUI.Config.SetEmptyImageSvg(Properties.Resources.icon_empty, Properties.Resources.icon_empty_dark);
-                if (parameters.Lang.StartsWith("en"))
-                {
-                    AntdUI.Localization.Provider = new Localizer();
-                }
-                else
-                {
-                    AntdUI.Localization.Provider = null;
-                }                
-
-                AntdUI.Localization.SetLanguage(parameters.Lang);
+                Operate.SystemConfig.LoadSystemConfig_FromDB();
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);

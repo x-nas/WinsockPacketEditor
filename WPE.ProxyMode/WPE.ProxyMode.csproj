@@ -53,6 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccountEditForm.Designer.cs">
+      <DependentUpon>AccountEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExternalProxySettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,15 @@
     <Compile Include="ProxySettingsForm.Designer.cs">
       <DependentUpon>ProxySettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SystemSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SystemSettingsForm.Designer.cs">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AccountEditForm.resx">
+      <DependentUpon>AccountEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExternalProxySettingsForm.resx">
       <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -99,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProxySettingsForm.resx">
       <DependentUpon>ProxySettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SystemSettingsForm.resx">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

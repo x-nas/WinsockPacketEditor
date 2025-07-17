@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SocketProxy_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -111,7 +110,7 @@
             this.bStop = new System.Windows.Forms.Button();
             this.bStart = new System.Windows.Forms.Button();
             this.tvProxyData = new System.Windows.Forms.TreeView();
-            this.ilSocketProxy = new System.Windows.Forms.ImageList(this.components);
+            this.ilSocketProxy = new System.Windows.Forms.ImageList();
             this.tpProxyList = new System.Windows.Forms.TabPage();
             this.tcProxyInfo = new System.Windows.Forms.TabControl();
             this.ssSocketProxySpeed = new System.Windows.Forms.StatusStrip();
@@ -121,7 +120,7 @@
             this.tcProxyData = new System.Windows.Forms.TabControl();
             this.tpData = new System.Windows.Forms.TabPage();
             this.hbData = new Be.Windows.Forms.HexBox();
-            this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip();
             this.cmsHexBox_CopyHex = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsHexBox_Copy = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -157,9 +156,9 @@
             this.tlProxyLinks = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlProxyLinks_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.cProxyChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.tSocketProxy = new System.Windows.Forms.Timer(this.components);
-            this.tShowProxyState = new System.Windows.Forms.Timer(this.components);
-            this.tUpdateProxyState = new System.Windows.Forms.Timer(this.components);
+            this.tSocketProxy = new System.Windows.Forms.Timer();
+            this.tShowProxyState = new System.Windows.Forms.Timer();
+            this.tUpdateProxyState = new System.Windows.Forms.Timer();
             this.tlpSocketProxy_Parameter.SuspendLayout();
             this.gbSystemProxy.SuspendLayout();
             this.tlpSystemProxy.SuspendLayout();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Text;
+using static WPE.Lib.Operate;
 
 namespace WPE.Lib.WebAPI
 {
@@ -22,11 +23,11 @@ namespace WPE.Lib.WebAPI
                     string template = Operate.ProxyConfig.Account.CCProxy_HTML.Substring(bodyIndex + "<!-- body -->".Length, tailIndex - bodyIndex - "<!-- body -->".Length);
 
                     var sb = new StringBuilder();
-                    foreach (Proxy_AccountInfo pai in Operate.ProxyConfig.Account.lstProxyAccount)
+                    foreach (AccountInfo pai in Operate.ProxyConfig.Account.lstAccountInfo)
                     {
                         string userTemplate = template
                             .Replace("$username", pai.UserName)
-                            .Replace("$password", Socket_Operation.PassWord_Decrypt(pai.PassWord))
+                            .Replace("$password", SystemConfig.PassWord_Decrypt(pai.Password))
                             .Replace("$checkenable", pai.IsEnable ? "checked" : "")
                             .Replace("$checkusepassword", true ? "checked" : "")
                             .Replace("$checkautodisable", pai.IsExpiry ? "checked" : "")
@@ -53,11 +54,11 @@ namespace WPE.Lib.WebAPI
 
         #region//新增代理账号
 
-        public static bool AddUser(Proxy_AccountInfo pai)
+        public static bool AddUser(AccountInfo pai)
         {
             try
             {
-                if (string.IsNullOrEmpty(pai.UserName) || string.IsNullOrEmpty(pai.PassWord))
+                if (string.IsNullOrEmpty(pai.UserName) || string.IsNullOrEmpty(pai.Password))
                 {
                     return false;
                 }
@@ -74,7 +75,7 @@ namespace WPE.Lib.WebAPI
                     pai.ExpiryTime = DateTime.Now;
                 }
 
-                pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
+                pai.Password = SystemConfig.PassWord_Encrypt(pai.Password);
                 pai.IsLimitDevices = true;
                 pai.LimitDevices = 1;
 
@@ -82,7 +83,7 @@ namespace WPE.Lib.WebAPI
                     Guid.NewGuid(), 
                     pai.IsEnable, 
                     pai.UserName, 
-                    pai.PassWord, 
+                    pai.Password, 
                     pai.LoginTime, 
                     string.Empty, 
                     string.Empty, 
@@ -105,7 +106,7 @@ namespace WPE.Lib.WebAPI
 
         #region//修改代理账号
 
-        public static bool UserUpdate(Proxy_AccountInfo pai)
+        public static bool UserUpdate(AccountInfo pai)
         {
             try
             {
@@ -124,9 +125,9 @@ namespace WPE.Lib.WebAPI
                     pai.ExpiryTime = DateTime.Now;
                 }
 
-                if (!string.IsNullOrEmpty(pai.PassWord))
+                if (!string.IsNullOrEmpty(pai.Password))
                 {
-                    pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
+                    pai.Password = SystemConfig.PassWord_Encrypt(pai.Password);
                 }
 
                 pai.IsLimitDevices = true;
@@ -134,7 +135,7 @@ namespace WPE.Lib.WebAPI
                 return Operate.ProxyConfig.Account.UpdateProxyAccount_ByCCProxy(
                     pai.UserName, 
                     pai.IsEnable, 
-                    pai.PassWord, 
+                    pai.Password, 
                     pai.IsLimitLinks,
                     pai.LimitLinks,                   
                     pai.IsExpiry, 

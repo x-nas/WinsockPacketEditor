@@ -38,108 +38,7 @@ namespace WPE.Lib
         public static DataTable dtSearchFrom = new DataTable();
         public static DataTable dtPacketFormat = new DataTable();
 
-        #region//密码字典
-
-        private static readonly Dictionary<char, string> encryptionMap = new Dictionary<char, string>
-        {
-            {'!', "966"},
-            {'"', "965"},
-            {'#', "964"},
-            {'$', "963"},
-            {'%', "962"},
-            {'^', "961"},
-            {'&', "960"},
-            {'*', "959"},
-            {'(', "958"},
-            {')', "957"},
-            {'+', "956"},
-            {',', "955"},
-            {'-', "954"},
-            {'.', "953"},
-            {'/', "952"},
-            {'0', "951"},
-            {'1', "950"},
-            {'2', "949"},
-            {'3', "948"},
-            {'4', "947"},
-            {'5', "946"},
-            {'6', "945"},
-            {'7', "944"},
-            {'8', "943"},
-            {'9', "942"},
-            {':', "941"},
-            {';', "940"},
-            {'<', "939"},
-            {'=', "938"},
-            {'>', "937"},
-            {'?', "936"},
-            {'@', "935"},
-            {'A', "934"},
-            {'B', "933"},
-            {'C', "932"},
-            {'D', "931"},
-            {'E', "930"},
-            {'F', "929"},
-            {'G', "928"},
-            {'H', "927"},
-            {'I', "926"},
-            {'J', "925"},
-            {'K', "924"},
-            {'L', "923"},
-            {'M', "922"},
-            {'N', "921"},
-            {'O', "920"},
-            {'P', "919"},
-            {'Q', "918"},
-            {'R', "917"},
-            {'S', "916"},
-            {'T', "915"},
-            {'U', "914"},
-            {'V', "913"},
-            {'W', "912"},
-            {'X', "911"},
-            {'Y', "910"},
-            {'Z', "909"},
-            {'[', "908"},
-            {'\\', "907"},
-            {']', "906"},
-            {'_', "904"},
-            {'`', "903"},
-            {'a', "902"},
-            {'b', "901"},
-            {'c', "900"},
-            {'d', "899"},
-            {'e', "898"},
-            {'f', "897"},
-            {'g', "896"},
-            {'h', "895"},
-            {'i', "894"},
-            {'j', "893"},
-            {'k', "892"},
-            {'l', "891"},
-            {'m', "890"},
-            {'n', "889"},
-            {'o', "888"},
-            {'p', "887"},
-            {'q', "886"},
-            {'r', "885"},
-            {'s', "884"},
-            {'t', "883"},
-            {'u', "882"},
-            {'v', "881"},
-            {'w', "880"},
-            {'x', "879"},
-            {'y', "878"},
-            {'z', "877"},
-            {'{', "876"},
-            {'|', "875"},
-            {'}', "874"},
-            {'~', "873"}
-        };
-
-        private static readonly Dictionary<string, char> decryptionMap = encryptionMap.ToDictionary(kv => kv.Value, kv => kv.Key);
-
-        #endregion
+        
 
         #region//判断是否为64位的进程
 
@@ -174,80 +73,7 @@ namespace WPE.Lib
 
         #endregion        
 
-        #region//密码字典        
-
-        public static string PassWord_Encrypt(string plainText)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(plainText))
-                {
-                    return string.Empty;
-                }                    
-
-                StringBuilder encrypted = new StringBuilder();
-                foreach (char c in plainText)
-                {
-                    if (encryptionMap.TryGetValue(c, out string code))
-                    {
-                        encrypted.Append(code);
-                    }
-                    else
-                    {
-                        encrypted.Append(c);
-                    }
-                }
-
-                return encrypted.ToString();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return string.Empty;
-        }
         
-        public static string PassWord_Decrypt(string encryptedText)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(encryptedText))
-                {
-                    return string.Empty;
-                }                    
-
-                StringBuilder plainText = new StringBuilder();
-
-                int i = 0;
-                while (i < encryptedText.Length)
-                {
-                    if (i + 3 <= encryptedText.Length)
-                    {
-                        string code = encryptedText.Substring(i, 3);
-                        if (decryptionMap.TryGetValue(code, out char c))
-                        {
-                            plainText.Append(c);
-                            i += 3;
-                            continue;
-                        }
-                    }
-
-                    plainText.Append(encryptedText[i]);
-                    i++;
-                }
-
-                return plainText.ToString();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return string.Empty;
-        }
-
-        #endregion        
 
         
 
@@ -1609,13 +1435,13 @@ namespace WPE.Lib
 
         #region//获取启用的代理账号数
 
-        public static int GetEnableProxyAccountCount(BindingList<Proxy_AccountInfo> allData)
+        public static int GetEnableProxyAccountCount(BindingList<AccountInfo> allData)
         {
             int iReturn = 0;
 
             try
             {
-                foreach (Proxy_AccountInfo pai in allData)
+                foreach (AccountInfo pai in allData)
                 {
                     if (pai.IsEnable)
                     {
@@ -1634,13 +1460,13 @@ namespace WPE.Lib
 
         #region//获取过期的代理账号数
 
-        public static int GetExpiryProxyAccountCount(BindingList<Proxy_AccountInfo> allData)
+        public static int GetExpiryProxyAccountCount(BindingList<AccountInfo> allData)
         {
             int iReturn = 0;
 
             try
             {
-                foreach (Proxy_AccountInfo pai in allData)
+                foreach (AccountInfo pai in allData)
                 {
                     if (pai.IsEnable && pai.IsExpiry)
                     {
@@ -1662,13 +1488,13 @@ namespace WPE.Lib
 
         #region//获取在线的代理账号数
 
-        public static int GetOnLineProxyAccountCount(BindingList<Proxy_AccountInfo> allData)
+        public static int GetOnLineProxyAccountCount(BindingList<AccountInfo> allData)
         {
             int iReturn = 0;
 
             try
             {
-                foreach (Proxy_AccountInfo pai in allData)
+                foreach (AccountInfo pai in allData)
                 {
                     if (pai.IsOnLine)
                     {
