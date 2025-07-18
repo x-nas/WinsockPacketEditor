@@ -104,7 +104,7 @@ namespace WPELibrary
                 switch (SearchType)
                 {
                     case "UserName":
-                        e.Result = Operate.ProxyConfig.Account.GetProxyAccount_ByUserName(this.Search_UserName);
+                        e.Result = Operate.ProxyConfig.Account.GetAccount_ByUserName(this.Search_UserName);
                         break;
 
                     case "UserName_All":

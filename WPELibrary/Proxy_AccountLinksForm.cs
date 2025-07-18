@@ -55,7 +55,7 @@ namespace WPELibrary
                     bool IsLimitLinks = this.cbIsLimitLinks.Checked;
                     int LimitLinks = ((int)this.nudLimitLinks.Value);
 
-                    Operate.ProxyConfig.Account.ProxyAccountLinks_Dialog(this.gList, IsLimitLinks, LimitLinks);
+                    //Operate.ProxyConfig.Account.ProxyAccountLinks_Dialog(this.gList, IsLimitLinks, LimitLinks);
                 }
 
                 this.Close();

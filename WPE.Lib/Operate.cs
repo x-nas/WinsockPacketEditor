@@ -1,4 +1,5 @@
 ﻿using AntdUI;
+using AntdUI.Svg;
 using Be.Windows.Forms;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
@@ -35,6 +36,15 @@ namespace WPE.Lib
 {
     public static class Operate
     {
+        #region//接口
+
+        public interface IProxyMode
+        {
+            void RefreshAccountList();
+        }
+
+        #endregion
+
         #region//系统配置
 
         public static class SystemConfig
@@ -5604,6 +5614,53 @@ namespace WPE.Lib
 
                 #endregion
 
+                #region//获取账号列表的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_AccountList()
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+                                        
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("批量调整")
+                    {
+                        ID = "Adjust",
+                        IconSvg = "UnorderedListOutlined",
+                        Sub = new AntdUI.IContextMenuStripItem[]
+                        {
+                            new AntdUI.ContextMenuStripItem("过期时间")
+                            {
+                                ID = "ExpiryTime",
+                                IconSvg = "FieldTimeOutlined",
+                            },
+                            new AntdUI.ContextMenuStripItem("链接数")
+                            {
+                                ID = "LimitLinks",
+                                IconSvg = "ForkOutlined",
+                            },
+                            new AntdUI.ContextMenuStripItem("设备数")
+                            {
+                                ID = "LimitDevices",
+                                IconSvg = "TabletOutlined",
+                            },
+                        },
+                    });                    
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());                    
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("批量导出")
+                    {
+                        ID = "Export",
+                        IconSvg = "DeliveredProcedureOutlined",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("批量删除")
+                    {
+                        ID = "Delete",
+                        IconSvg = "DeleteOutlined",
+                    });
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
+
                 #region//更新所有代理账号的在线状态（异步）
 
                 public static async Task UpdateOnlineStatus()
@@ -5841,24 +5898,33 @@ namespace WPE.Lib
                 {
                     try
                     {
-                        if (aiList.Count > 0)
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miAccountList", "账号列表"), "\r\n确定删除数据吗\r\n\r\n")
                         {
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miAccountList", "账号列表"), "\r\n确定删除选中的数据吗\r\n\r\n")
+                            Icon = TType.Warn,
+                            Keyboard = false,
+                            MaskClosable = false,
+                            OnOk = config =>
                             {
-                                Icon = TType.Warn,
-                                Keyboard = false,
-                                MaskClosable = false,
-                                OnOk = config =>
+                                if (aiList == null)
+                                {
+                                    ProxyConfig.Account.lstAccountInfo.Clear();
+                                }
+                                else
                                 {
                                     foreach (AccountInfo ai in aiList)
                                     {
                                         ProxyConfig.Account.lstAccountInfo.Remove(ai);
                                     }
-
-                                    return true;
                                 }
-                            });
-                        }
+
+                                if (form is IProxyMode proxyMode)
+                                {
+                                    proxyMode.RefreshAccountList();
+                                }
+
+                                return true;
+                            }
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -5975,7 +6041,7 @@ namespace WPE.Lib
                     return null;
                 }
 
-                public static BindingList<AccountInfo> GetProxyAccount_ByUserName(string UserName)
+                public static BindingList<AccountInfo> GetAccount_ByUserName(string UserName)
                 {
                     try
                     {
@@ -6129,33 +6195,36 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//设置代理账号加时（对话框）
+                #region//调整过期时间
 
-                public static void ProxyAccountAddTime_Dialog(List<Guid> gList, int Hours)
+                public static void AdjustExpiryTime(List<AccountInfo> aiList, int AddType, int AddHours)
                 {
                     try
                     {
-                        if (gList.Count > 0)
+                        if (aiList.Count > 0)
                         {
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18));
-
-                            if (dr.Equals(DialogResult.OK))
+                            foreach (AccountInfo ai in aiList)
                             {
-                                foreach (Guid gAID in gList)
+                                switch (AddType)
                                 {
-                                    AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
+                                    case 0:
 
-                                    if (pai != null)
-                                    {
-                                        if (pai.ExpiryTime >= DateTime.Now)
+                                        ai.ExpiryTime = ai.ExpiryTime.AddHours(AddHours);
+
+                                        break;
+
+                                    case 1:
+
+                                        if (ai.ExpiryTime >= DateTime.Now)
                                         {
-                                            pai.ExpiryTime = pai.ExpiryTime.AddHours(Hours);
+                                            ai.ExpiryTime = ai.ExpiryTime.AddHours(AddHours);
                                         }
                                         else
                                         {
-                                            pai.ExpiryTime = DateTime.Now.AddHours(Hours);
+                                            ai.ExpiryTime = DateTime.Now.AddHours(AddHours);
                                         }
-                                    }
+
+                                        break;
                                 }
                             }
                         }
@@ -6168,28 +6237,18 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//设置代理账号链接数（对话框）
+                #region//调整链接数
 
-                public static void ProxyAccountLinks_Dialog(List<Guid> gList, bool IsLimitLinks, int LimitLinks)
+                public static void AdjustLimitLinks(List<AccountInfo> aiList, bool IsLimitLinks, int LimitLinks)
                 {
                     try
                     {
-                        if (gList.Count > 0)
+                        if (aiList.Count > 0)
                         {
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18));
-
-                            if (dr.Equals(DialogResult.OK))
+                            foreach (AccountInfo ai in aiList)
                             {
-                                foreach (Guid gAID in gList)
-                                {
-                                    AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
-
-                                    if (pai != null)
-                                    {
-                                        pai.IsLimitLinks = IsLimitLinks;
-                                        pai.LimitLinks = LimitLinks;
-                                    }
-                                }
+                                ai.IsLimitLinks = IsLimitLinks;
+                                ai.LimitLinks = LimitLinks;
                             }
                         }
                     }
@@ -6201,28 +6260,18 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//设置代理账号设备数（对话框）
+                #region//调整设备数
 
-                public static void ProxyAccountDevices_Dialog(List<Guid> gList, bool IsLimitDevices, int LimitDevices)
+                public static void AdjustLimitDevices(List<AccountInfo> aiList, bool IsLimitDevices, int LimitDevices)
                 {
                     try
                     {
-                        if (gList.Count > 0)
+                        if (aiList.Count > 0)
                         {
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18));
-
-                            if (dr.Equals(DialogResult.OK))
+                            foreach (AccountInfo ai in aiList)
                             {
-                                foreach (Guid gAID in gList)
-                                {
-                                    AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(gAID);
-
-                                    if (pai != null)
-                                    {
-                                        pai.IsLimitDevices = IsLimitDevices;
-                                        pai.LimitDevices = LimitDevices;
-                                    }
-                                }
+                                ai.IsLimitDevices = IsLimitDevices;
+                                ai.LimitDevices = LimitDevices;
                             }
                         }
                     }
@@ -6250,9 +6299,9 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//从数据库加载登录信息
+                #region//从数据库加载账号定位信息
 
-                public static DataTable LoadProxyAccount_LoginInfo_FromDB(Guid AID)
+                public static DataTable LoadAccountLocation_FromDB(Guid AID)
                 {
                     DataTable dtReturn = null;
 
@@ -6467,6 +6516,11 @@ namespace WPE.Lib
                     {
                         XElement xeProxyAccountList = new XElement("ProxyAccountList");
 
+                        if (aiList == null)
+                        {
+                            aiList = ProxyConfig.Account.lstAccountInfo.ToList();
+                        }
+
                         foreach (AccountInfo ai in aiList)
                         {
                             XElement xeProxyAccount =
@@ -6517,17 +6571,19 @@ namespace WPE.Lib
                             string FilePath = ofdLoadFile.FileName;
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                bool bOK = false;
                                 AntdUI.Spin.open(form, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
                                 {
-                                    bOK = LoadAccountList(form, FilePath, true);
-                                }, () =>
-                                {
-                                    if (bOK)
+                                    if (LoadAccountList(form, FilePath, true))
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ImportProxyAccountList.Success", "导入代理账号列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);                                        
+                                    }
+                                }, () =>
+                                {
+                                    if (form is IProxyMode proxyMode)
+                                    {
+                                        proxyMode.RefreshAccountList();
                                     }
                                 });                                
                             }

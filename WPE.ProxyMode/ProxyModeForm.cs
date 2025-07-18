@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Reflection;
 using System.Windows.Forms;
 using WPE.Lib;
@@ -11,9 +12,10 @@ using WPE.Lib.Controls;
 
 namespace WPE.ProxyMode
 {
-    public partial class ProxyModeForm : Window
+    public partial class ProxyModeForm : Window, Operate.IProxyMode
     {
         private bool setcolor = false;
+        private BindingList<AccountInfo> lstAccount;
         private readonly Operate.SystemConfig.SystemMode RunMode = Operate.SystemConfig.SystemMode.Proxy;
 
         #region//窗体事件
@@ -50,15 +52,14 @@ namespace WPE.ProxyMode
                 Operate.SystemConfig.StartRemoteMGT();
 
                 this.InitTable_AccountList();
-                
+
             }, () =>
             {
                 this.pageHeader.Loading = false;                
             });
 
             this.Dark_Changed();
-            this.InitForm();
-                        
+            this.InitForm();                        
 
             this.tabProxyMode.TabMenuVisible = false;
             this.mProxyMode.SelectIndex(0, true);
@@ -129,7 +130,7 @@ namespace WPE.ProxyMode
                         return ((this.pAccountList.Current - 1) * this.pAccountList.PageSize + rowindex + 1);
                     },
                 }.SetFixed().SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("UserName", "用户名").SetSortOrder().SetDefaultFilter(typeof(string)).SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("UserName", "用户名").SetSortOrder().SetLocalizationTitleID("Table.AccountList.Column."),
                 new AntdUI.Column("IsOnLine", "状态", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -187,7 +188,7 @@ namespace WPE.ProxyMode
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetDefaultFilter(typeof(DateTime)).SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("Table.AccountList.Column."),
                 new AntdUI.Column("LoginTime", "登录时间")
                 {
                     Render = (value, record, rowindex)=>
@@ -215,8 +216,9 @@ namespace WPE.ProxyMode
                     {
                         return new AntdUI.CellLink[]
                         {
-                            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
-                            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bLocation", null, AntdUI.TTypeMini.Warn).SetIcon("EnvironmentOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.AccountList.Column."),
@@ -229,17 +231,71 @@ namespace WPE.ProxyMode
 
         private BindingList<AccountInfo> GetPageData(int current, int pageSize)
         {
-            this.pAccountList.Total = Operate.ProxyConfig.Account.lstAccountInfo.Count;
+            if (this.lstAccount == null)
+            {
+                this.lstAccount = Operate.ProxyConfig.Account.lstAccountInfo;
+            }
+
+            this.pAccountList.Total = this.lstAccount.Count;
 
             var list = new BindingList<AccountInfo>();
             int start = Math.Abs(current - 1) * pageSize;
 
-            for (int i = start; i < Operate.ProxyConfig.Account.lstAccountInfo.Count && i < start + pageSize; i++)
+            for (int i = start; i < this.lstAccount.Count && i < start + pageSize; i++)
             {
-                list.Add(Operate.ProxyConfig.Account.lstAccountInfo[i]);
+                list.Add(this.lstAccount[i]);
             }
 
+            this.InitCalendar_ExpiryTime();
+
             return list;
+        }
+
+        private void InitCalendar_ExpiryTime()
+        {
+            try
+            {
+                Dictionary<string, int> TimeCounts = new Dictionary<string, int>();
+
+                foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo)
+                {
+                    string ExpiryTime = ai.ExpiryTime.ToString("yyyy-MM-dd");
+
+                    if (TimeCounts.ContainsKey(ExpiryTime))
+                    {
+                        TimeCounts[ExpiryTime]++;
+                    }
+                    else
+                    {
+                        TimeCounts.Add(ExpiryTime, 1);
+                    }
+                }
+
+                dtpExpiryTime.BadgeAction = dates =>
+                {
+                    List<AntdUI.DateBadge> dbList = new List<AntdUI.DateBadge>();
+                    foreach (var kvp in TimeCounts)
+                    {
+                        dbList.Add(new AntdUI.DateBadge(kvp.Key, kvp.Value));
+                    }
+
+                    return dbList;
+                };
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void pAccountList_ValueChanged(object sender, PagePageEventArgs e)
+        {
+            this.tAccountList.Binding(GetPageData(e.Current, e.PageSize));
+        }
+
+        private string pAccountList_ShowTotalChanged(object sender, PagePageEventArgs e)
+        {
+            return $"{e.PageSize} / {e.Total}条 {e.PageTotal}页";
         }
 
         #endregion
@@ -506,16 +562,7 @@ namespace WPE.ProxyMode
         private void mAccountList_SelectChanged(object sender, MenuSelectEventArgs e)
         {
             AntdUI.MenuItem miSelect = e.Value;
-            this.mAccountList.SelectIndex(-1);
-
-            List<AccountInfo> aiList = new List<AccountInfo>();
-            foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo)
-            {
-                if (ai.IsCheck)
-                {
-                    aiList.Add(ai);
-                }
-            }
+            this.mAccountList.SelectIndex(-1);            
 
             switch (miSelect.ID)
             {
@@ -533,25 +580,24 @@ namespace WPE.ProxyMode
 
                 case "miImport":
 
-                    Operate.ProxyConfig.Account.LoadAccountList_Dialog(this);                                        
+                    Operate.ProxyConfig.Account.LoadAccountList_Dialog(this);
 
                     break;
 
                 case "miExport":
 
-                    if (aiList.Count > 0)
+                    if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
                     {
-                        Operate.ProxyConfig.Account.SaveAccount_Dialog(this, string.Empty, aiList);
+                        Operate.ProxyConfig.Account.SaveAccount_Dialog(this, string.Empty, null);
                     }
 
                     break;
 
                 case "miClear":
 
-                    if (aiList.Count > 0)
+                    if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
                     {
-                        Operate.ProxyConfig.Account.DeleteAccount_Dialog(this, aiList);
-                        this.RefreshAccountList();
+                        Operate.ProxyConfig.Account.DeleteAccount_Dialog(this, null);
                     }                    
 
                     break;
@@ -576,6 +622,18 @@ namespace WPE.ProxyMode
 
                         break;
 
+                    case "bLocation":
+
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new LocationForm(this, ai))
+                        {
+                            Align = AntdUI.TAlignMini.Right,
+                            Mask = true,
+                            MaskClosable = false,
+                            DisplayDelay = 0,
+                        });
+
+                        break;
+
                     case "bDelete":
 
                         List<AccountInfo> aiList = new List<AccountInfo>
@@ -584,7 +642,6 @@ namespace WPE.ProxyMode
                         };
 
                         Operate.ProxyConfig.Account.DeleteAccount_Dialog(this, aiList);
-                        this.RefreshAccountList();
 
                         break;
                 }
@@ -593,14 +650,140 @@ namespace WPE.ProxyMode
 
         #endregion
 
-        private void pAccountList_ValueChanged(object sender, PagePageEventArgs e)
+        #region//账号列表 - 右键菜单
+
+        private void tAccountList_CellClick(object sender, TableClickEventArgs e)
         {
-            this.tAccountList.Binding(GetPageData(e.Current, e.PageSize));
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.ProxyConfig.Account.lstAccountInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tAccountList, (item) =>
+                {
+                    List<AccountInfo> aiList = new List<AccountInfo>();
+                    foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo)
+                    {
+                        if (ai.IsCheck)
+                        {
+                            aiList.Add(ai);
+                        }
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "ExpiryTime":
+
+                            if (aiList.Count > 0)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ExpiryTimeForm(this, aiList))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        case "LimitLinks":
+
+                            if (aiList.Count > 0)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new LimitLinksForm(this, aiList))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        case "LimitDevices":
+
+                            if (aiList.Count > 0)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new LimitDevicesForm(this, aiList))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        case "Export":
+
+                            if (aiList.Count > 0)
+                            {
+                                Operate.ProxyConfig.Account.SaveAccount_Dialog(this, string.Empty, aiList);
+                            }
+
+                            break;
+
+                        case "Delete":
+
+                            if (aiList.Count > 0)
+                            {
+                                Operate.ProxyConfig.Account.DeleteAccount_Dialog(this, aiList);
+                            }
+
+                            break;                     
+                    }
+
+                    this.tAccountList.SelectedIndex = -1;
+                }, Operate.ProxyConfig.Account.GetCMS_AccountList()));
+            }
         }
 
-        private string pAccountList_ShowTotalChanged(object sender, PagePageEventArgs e)
+        #endregion
+
+        #region//账号列表 - 搜索
+
+        private void bSearchExpiryTime_Click(object sender, EventArgs e)
         {
-            return $"{e.PageSize} / {e.Total}条 {e.PageTotal}页";
+            try
+            {
+                DateTime dtStart = this.dtpExpiryTime.Value[0];
+                DateTime dtEnd = this.dtpExpiryTime.Value[1];
+
+                this.lstAccount = Operate.ProxyConfig.Account.GetProxyAccount_ByExpireTime(dtStart, dtEnd);
+                this.RefreshAccountList();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }        
+
+        private void txtSearchUserName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13 && sender is Input input)
+            {
+                e.Handled = true;
+
+                string UserName = this.txtSearchUserName.Text.Trim();
+
+                if (string.IsNullOrEmpty(UserName))
+                {
+                    this.lstAccount = Operate.ProxyConfig.Account.lstAccountInfo;
+                }
+                else
+                { 
+                    this.lstAccount = Operate.ProxyConfig.Account.GetAccount_ByUserName(UserName);
+                }
+
+                this.RefreshAccountList();
+            }
         }
+
+        #endregion
     }
 }

@@ -54,7 +54,7 @@ namespace WPELibrary
                         AddHours = AddHours * 24;
                     }
 
-                    Operate.ProxyConfig.Account.ProxyAccountAddTime_Dialog(this.gList, AddHours);
+                    //Operate.ProxyConfig.Account.ProxyAccountAddTime_Dialog(this.gList, AddHours);
                 }
 
                 this.Close();

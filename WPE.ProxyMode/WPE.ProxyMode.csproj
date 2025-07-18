@@ -59,17 +59,41 @@
     <Compile Include="AccountEditForm.Designer.cs">
       <DependentUpon>AccountEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExpiryTimeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExpiryTimeForm.Designer.cs">
+      <DependentUpon>ExpiryTimeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExternalProxySettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExternalProxySettingsForm.Designer.cs">
       <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LimitDevicesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LimitDevicesForm.Designer.cs">
+      <DependentUpon>LimitDevicesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LimitLinksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LimitLinksForm.Designer.cs">
+      <DependentUpon>LimitLinksForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ListSettingsForm.Designer.cs">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LocationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LocationForm.Designer.cs">
+      <DependentUpon>LocationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ProxyModeForm.cs">
       <SubType>Form</SubType>
@@ -94,11 +118,23 @@
     <EmbeddedResource Include="AccountEditForm.resx">
       <DependentUpon>AccountEditForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExpiryTimeForm.resx">
+      <DependentUpon>ExpiryTimeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExternalProxySettingsForm.resx">
       <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LimitDevicesForm.resx">
+      <DependentUpon>LimitDevicesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LimitLinksForm.resx">
+      <DependentUpon>LimitLinksForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ListSettingsForm.resx">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocationForm.resx">
+      <DependentUpon>LocationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
