@@ -1,5 +1,4 @@
 ﻿using AntdUI;
-using AntdUI.Svg;
 using Be.Windows.Forms;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
@@ -1714,7 +1713,7 @@ namespace WPE.Lib
 
             #endregion
 
-            #region//保存注入模式到数据库
+            #region//保存注入模式配置到数据库
 
             public static void SaveInjectMode_ToDB()
             {
@@ -1789,7 +1788,7 @@ namespace WPE.Lib
 
             #endregion
 
-            #region//从数据库加载注入模式
+            #region//从数据库加载注入模式配置
 
             public static void LoadInjectMode_FromDB()
             {
@@ -2148,30 +2147,20 @@ namespace WPE.Lib
 
             #endregion
 
-            #region//保存运行配置到数据库
+            #region//保存代理模式配置到数据库
 
-            public static void SaveRunConfig_ToDB(SystemMode FromMode)
+            public static void SaveProxyMode_ToDB()
             {
-                try
-                {
-                    if (StartMode.Equals(FromMode))
-                    {
-                        DataBase.DeleteTable_RunConfig();
-                        DataBase.InsertTable_RunConfig();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                DataBase.DeleteTable_ProxyMode();
+                DataBase.InsertTable_ProxyMode();
             }
 
-            public static XElement GetProxyConfig_XML()
+            public static XElement GetProxyMode_XML()
             {
                 try
                 {
-                    XElement xeProxyConfig =
-                        new XElement("ProxyConfig",
+                    XElement xeInjectMode =
+                        new XElement("ProxyMode",
                         new XElement("ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto),
                         new XElement("Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5),
                         new XElement("ProxyPort", ProxyConfig.Proxy.ProxyPort),
@@ -2194,72 +2183,7 @@ namespace WPE.Lib
                         new XElement("SpeedMode", ProxyConfig.Proxy.SpeedMode)
                         );
 
-                    return xeProxyConfig;
-                }
-                catch (Exception ex)
-                {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return null;
-            }
-
-            public static XElement GetInjectionConfig_XML()
-            {
-                try
-                {
-                    XElement xeInjectionConfig =
-                        new XElement("InjectionConfig",
-                        new XElement("CheckNotShow", PacketConfig.Packet.CheckNotShow),
-                        new XElement("CheckSocket", PacketConfig.Packet.CheckSocket),
-                        new XElement("CheckSocket_Value", PacketConfig.Packet.CheckSocket_Value),
-                        new XElement("CheckIP", PacketConfig.Packet.CheckIP),
-                        new XElement("CheckIP_Value", PacketConfig.Packet.CheckIP_Value),
-                        new XElement("CheckPort", PacketConfig.Packet.CheckPort),
-                        new XElement("CheckPort_Value", PacketConfig.Packet.CheckPort_Value),
-                        new XElement("CheckHead", PacketConfig.Packet.CheckHead),
-                        new XElement("CheckHead_Value", PacketConfig.Packet.CheckHead_Value),
-                        new XElement("CheckData", PacketConfig.Packet.CheckData),
-                        new XElement("CheckData_Value", PacketConfig.Packet.CheckData_Value),
-                        new XElement("CheckSize", PacketConfig.Packet.CheckLen),
-                        new XElement("CheckLength_Value", PacketConfig.Packet.CheckLength_Value),
-                        new XElement("HookWS1_Send", PacketConfig.Packet.HookWS1_Send),
-                        new XElement("HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo),
-                        new XElement("HookWS1_Recv", PacketConfig.Packet.HookWS1_Recv),
-                        new XElement("HookWS1_RecvFrom", PacketConfig.Packet.HookWS1_RecvFrom),
-                        new XElement("HookWS2_Send", PacketConfig.Packet.HookWS2_Send),
-                        new XElement("HookWS2_SendTo", PacketConfig.Packet.HookWS2_SendTo),
-                        new XElement("HookWS2_Recv", PacketConfig.Packet.HookWS2_Recv),
-                        new XElement("HookWS2_RecvFrom", PacketConfig.Packet.HookWS2_RecvFrom),
-                        new XElement("HookWSA_Send", PacketConfig.Packet.HookWSA_Send),
-                        new XElement("HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo),
-                        new XElement("HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv),
-                        new XElement("HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom),
-                        new XElement("HotKey1", PacketConfig.Packet.HotKey1),
-                        new XElement("HotKey2", PacketConfig.Packet.HotKey2),
-                        new XElement("HotKey3", PacketConfig.Packet.HotKey3),
-                        new XElement("HotKey4", PacketConfig.Packet.HotKey4),
-                        new XElement("HotKey5", PacketConfig.Packet.HotKey5),
-                        new XElement("HotKey6", PacketConfig.Packet.HotKey6),
-                        new XElement("HotKey7", PacketConfig.Packet.HotKey7),
-                        new XElement("HotKey8", PacketConfig.Packet.HotKey8),
-                        new XElement("HotKey9", PacketConfig.Packet.HotKey9),
-                        new XElement("HotKey10", PacketConfig.Packet.HotKey10),
-                        new XElement("HotKey11", PacketConfig.Packet.HotKey11),
-                        new XElement("HotKey12", PacketConfig.Packet.HotKey12),
-                        new XElement("PacketConfig.List_AutoRoll", PacketConfig.List.AutoRoll),
-                        new XElement("PacketConfig.List_AutoClear", PacketConfig.List.AutoClear),
-                        new XElement("PacketConfig.List_AutoClear_Value", PacketConfig.List.AutoClear_Value),
-                        new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
-                        new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
-                        new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
-                        new XElement("SpeedMode", PacketConfig.Packet.SpeedMode),
-                        new XElement("IsShow_FloatButton", SystemConfig.IsShow_FloatButton),
-                        new XElement("ListExecute", ListExecute),
-                        new XElement("FilterExecute", FilterConfig.Filter.FilterExecute)
-                        );
-
-                    return xeInjectionConfig;
+                    return xeInjectMode;
                 }
                 catch (Exception ex)
                 {
@@ -2271,82 +2195,36 @@ namespace WPE.Lib
 
             #endregion
 
-            #region//从数据库加载运行配置
+            #region//从数据库加载代理模式配置
 
-            public static void LoadRunConfig_FromDB()
+            public static void LoadProxyMode_FromDB()
             {
                 try
                 {
-                    DataTable RunConfig = DataBase.SelectTable_RunConfig();
+                    DataTable ProxyMode = DataBase.SelectTable_ProxyMode();
 
-                    if (RunConfig.Rows.Count > 0)
+                    if (ProxyMode.Rows.Count > 0)
                     {
-                        ProxyConfig.Proxy.ProxyIP_Auto = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_ProxyIP_Auto"]);
-                        ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EnableSOCKS5"]);
-                        ProxyConfig.Proxy.ProxyPort = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_ProxyPort"].ToString());
-                        ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EnableAuth"]);
-                        ProxyConfig.Proxy.NoRecord = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_ProxyList_NoRecord"]);
-                        ProxyConfig.Proxy.DelClosed = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_ClientList_DelClosed"]);
-                        LogConfig.List.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoRoll"]);
-                        LogConfig.List.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear"]);
-                        LogConfig.List.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear_Value"]);
-                        ProxyConfig.Mapping.Enable_MapLocal = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_MapLocal"]);
-                        ProxyConfig.Mapping.Enable_MapRemote = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_MapRemote"]);
-                        ProxyConfig.Proxy.Enable_ExternalProxy = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy"]);
-                        ProxyConfig.Proxy.ExternalProxy_IP = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_IP"].ToString();
-                        ProxyConfig.Proxy.ExternalProxy_Port = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_ExternalProxy_Port"].ToString());
-                        ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy_AppointPort"]);
-                        ProxyConfig.Proxy.ExternalProxy_AppointPort = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_AppointPort"].ToString();
-                        ProxyConfig.Proxy.Enable_ExternalProxy_Auth = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy_Auth"]);
-                        ProxyConfig.Proxy.ExternalProxy_UserName = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_UserName"].ToString();
-                        ProxyConfig.Proxy.ExternalProxy_PassWord = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_PassWord"].ToString();
-                        ProxyConfig.Proxy.SpeedMode = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_SpeedMode"]);
-                        PacketConfig.Packet.CheckNotShow = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckNotShow"]);
-                        PacketConfig.Packet.CheckSocket = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckSocket"]);
-                        PacketConfig.Packet.CheckSocket_Value = RunConfig.Rows[0]["InjectionConfig_CheckSocket_Value"].ToString();
-                        PacketConfig.Packet.CheckIP = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckIP"]);
-                        PacketConfig.Packet.CheckIP_Value = RunConfig.Rows[0]["InjectionConfig_CheckIP_Value"].ToString();
-                        PacketConfig.Packet.CheckPort = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckPort"]);
-                        PacketConfig.Packet.CheckPort_Value = RunConfig.Rows[0]["InjectionConfig_CheckPort_Value"].ToString();
-                        PacketConfig.Packet.CheckHead = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckHead"]);
-                        PacketConfig.Packet.CheckHead_Value = RunConfig.Rows[0]["InjectionConfig_CheckHead_Value"].ToString();
-                        PacketConfig.Packet.CheckData = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckData"]);
-                        PacketConfig.Packet.CheckData_Value = RunConfig.Rows[0]["InjectionConfig_CheckData_Value"].ToString();
-                        PacketConfig.Packet.CheckLen = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckSize"]);
-                        PacketConfig.Packet.CheckLength_Value = RunConfig.Rows[0]["InjectionConfig_CheckLength_Value"].ToString();
-                        PacketConfig.Packet.HookWS1_Send = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_Send"]);
-                        PacketConfig.Packet.HookWS1_SendTo = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_SendTo"]);
-                        PacketConfig.Packet.HookWS1_Recv = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_Recv"]);
-                        PacketConfig.Packet.HookWS1_RecvFrom = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_RecvFrom"]);
-                        PacketConfig.Packet.HookWS2_Send = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS2_Send"]);
-                        PacketConfig.Packet.HookWS2_SendTo = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS2_SendTo"]);
-                        PacketConfig.Packet.HookWS2_Recv = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS2_Recv"]);
-                        PacketConfig.Packet.HookWS2_RecvFrom = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS2_RecvFrom"]);
-                        PacketConfig.Packet.HookWSA_Send = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_Send"]);
-                        PacketConfig.Packet.HookWSA_SendTo = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_SendTo"]);
-                        PacketConfig.Packet.HookWSA_Recv = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_Recv"]);
-                        PacketConfig.Packet.HookWSA_RecvFrom = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_RecvFrom"]);
-                        PacketConfig.Packet.HotKey1 = RunConfig.Rows[0]["InjectionConfig_HotKey1"].ToString();
-                        PacketConfig.Packet.HotKey2 = RunConfig.Rows[0]["InjectionConfig_HotKey2"].ToString();
-                        PacketConfig.Packet.HotKey3 = RunConfig.Rows[0]["InjectionConfig_HotKey3"].ToString();
-                        PacketConfig.Packet.HotKey4 = RunConfig.Rows[0]["InjectionConfig_HotKey4"].ToString();
-                        PacketConfig.Packet.HotKey5 = RunConfig.Rows[0]["InjectionConfig_HotKey5"].ToString();
-                        PacketConfig.Packet.HotKey6 = RunConfig.Rows[0]["InjectionConfig_HotKey6"].ToString();
-                        PacketConfig.Packet.HotKey7 = RunConfig.Rows[0]["InjectionConfig_HotKey7"].ToString();
-                        PacketConfig.Packet.HotKey8 = RunConfig.Rows[0]["InjectionConfig_HotKey8"].ToString();
-                        PacketConfig.Packet.HotKey9 = RunConfig.Rows[0]["InjectionConfig_HotKey9"].ToString();
-                        PacketConfig.Packet.HotKey10 = RunConfig.Rows[0]["InjectionConfig_HotKey10"].ToString();
-                        PacketConfig.Packet.HotKey11 = RunConfig.Rows[0]["InjectionConfig_HotKey11"].ToString();
-                        PacketConfig.Packet.HotKey12 = RunConfig.Rows[0]["InjectionConfig_HotKey12"].ToString();
-                        PacketConfig.List.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_PacketConfig.List_AutoRoll"]);
-                        PacketConfig.List.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_PacketConfig.List_AutoClear"]);
-                        PacketConfig.List.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_PacketConfig.List_AutoClear_Value"]);
-                        LogConfig.List.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoRoll"]);
-                        LogConfig.List.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear"]);
-                        LogConfig.List.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear_Value"]);
-                        PacketConfig.Packet.SpeedMode = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_SpeedMode"]);
-                        ListExecute = GetListExecute_ByString(RunConfig.Rows[0]["InjectionConfig_ListExecute"].ToString());
-                        FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(RunConfig.Rows[0]["InjectionConfig_FilterExecute"].ToString());
+                        ProxyConfig.Proxy.ProxyIP_Auto = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyIP_Auto"]);
+                        ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(ProxyMode.Rows[0]["EnableSOCKS5"]);
+                        ProxyConfig.Proxy.ProxyPort = ushort.Parse(ProxyMode.Rows[0]["ProxyPort"].ToString());
+                        ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);
+                        ProxyConfig.Proxy.NoRecord = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_NoRecord"]);
+                        ProxyConfig.Proxy.DelClosed = Convert.ToBoolean(ProxyMode.Rows[0]["ClientList_DelClosed"]);
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(ProxyMode.Rows[0]["LogList_AutoRoll"]);
+                        LogConfig.List.AutoClear = Convert.ToBoolean(ProxyMode.Rows[0]["LogList_AutoClear"]);
+                        LogConfig.List.AutoClear_Value = Convert.ToInt32(ProxyMode.Rows[0]["LogList_AutoClear_Value"]);
+                        ProxyConfig.Mapping.Enable_MapLocal = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapLocal"]);
+                        ProxyConfig.Mapping.Enable_MapRemote = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapRemote"]);
+                        ProxyConfig.Proxy.Enable_ExternalProxy = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy"]);
+                        ProxyConfig.Proxy.ExternalProxy_IP = ProxyMode.Rows[0]["ExternalProxy_IP"].ToString();
+                        ProxyConfig.Proxy.ExternalProxy_Port = ushort.Parse(ProxyMode.Rows[0]["ExternalProxy_Port"].ToString());
+                        ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy_AppointPort"]);
+                        ProxyConfig.Proxy.ExternalProxy_AppointPort = ProxyMode.Rows[0]["ExternalProxy_AppointPort"].ToString();
+                        ProxyConfig.Proxy.Enable_ExternalProxy_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy_Auth"]);
+                        ProxyConfig.Proxy.ExternalProxy_UserName = ProxyMode.Rows[0]["ExternalProxy_UserName"].ToString();
+                        ProxyConfig.Proxy.ExternalProxy_PassWord = ProxyMode.Rows[0]["ExternalProxy_PassWord"].ToString();
+                        ProxyConfig.Proxy.SpeedMode = Convert.ToBoolean(ProxyMode.Rows[0]["SpeedMode"]);
                     }
                 }
                 catch (Exception ex)
@@ -2355,125 +2233,125 @@ namespace WPE.Lib
                 }
             }
 
-            public static void SetProxyConfig_FromXML(XElement xeProxyConfig)
+            public static void SetProxyMode_FromXML(XElement xeProxyMode)
             {
                 try
                 {
-                    XElement ProxyIP_Auto = xeProxyConfig.Element("ProxyIP_Auto");
+                    XElement ProxyIP_Auto = xeProxyMode.Element("ProxyIP_Auto");
                     if (ProxyIP_Auto != null)
                     {
                         ProxyConfig.Proxy.ProxyIP_Auto = Convert.ToBoolean(ProxyIP_Auto.Value);
                     }
 
-                    XElement Enable_SOCKS5 = xeProxyConfig.Element("Enable_SOCKS5");
+                    XElement Enable_SOCKS5 = xeProxyMode.Element("Enable_SOCKS5");
                     if (Enable_SOCKS5 != null)
                     {
                         ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(Enable_SOCKS5.Value);
                     }
 
-                    XElement ProxyPort = xeProxyConfig.Element("ProxyPort");
+                    XElement ProxyPort = xeProxyMode.Element("ProxyPort");
                     if (ProxyPort != null)
                     {
                         ProxyConfig.Proxy.ProxyPort = ushort.Parse(ProxyPort.Value);
                     }
 
-                    XElement Enable_Auth = xeProxyConfig.Element("Enable_Auth");
+                    XElement Enable_Auth = xeProxyMode.Element("Enable_Auth");
                     if (Enable_Auth != null)
                     {
                         ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(Enable_Auth.Value);
                     }
 
-                    XElement NoRecord = xeProxyConfig.Element("NoRecord");
+                    XElement NoRecord = xeProxyMode.Element("NoRecord");
                     if (NoRecord != null)
                     {
                         ProxyConfig.Proxy.NoRecord = Convert.ToBoolean(NoRecord.Value);
                     }
 
-                    XElement DelClosed = xeProxyConfig.Element("DelClosed");
+                    XElement DelClosed = xeProxyMode.Element("DelClosed");
                     if (DelClosed != null)
                     {
                         ProxyConfig.Proxy.DelClosed = Convert.ToBoolean(DelClosed.Value);
                     }
 
-                    XElement LogList_AutoRoll = xeProxyConfig.Element("LogList_AutoRoll");
+                    XElement LogList_AutoRoll = xeProxyMode.Element("LogList_AutoRoll");
                     if (LogList_AutoRoll != null)
                     {
                         LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
                     }
 
-                    XElement LogList_AutoClear = xeProxyConfig.Element("LogList_AutoClear");
+                    XElement LogList_AutoClear = xeProxyMode.Element("LogList_AutoClear");
                     if (LogList_AutoClear != null)
                     {
                         LogConfig.List.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
                     }
 
-                    XElement LogList_AutoClear_Value = xeProxyConfig.Element("LogList_AutoClear_Value");
+                    XElement LogList_AutoClear_Value = xeProxyMode.Element("LogList_AutoClear_Value");
                     if (LogList_AutoClear_Value != null)
                     {
                         LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
                     }
 
-                    XElement Enable_MapLocal = xeProxyConfig.Element("Enable_MapLocal");
+                    XElement Enable_MapLocal = xeProxyMode.Element("Enable_MapLocal");
                     if (Enable_MapLocal != null)
                     {
                         ProxyConfig.Mapping.Enable_MapLocal = Convert.ToBoolean(Enable_MapLocal.Value);
                     }
 
-                    XElement Enable_MapRemote = xeProxyConfig.Element("Enable_MapRemote");
+                    XElement Enable_MapRemote = xeProxyMode.Element("Enable_MapRemote");
                     if (Enable_MapRemote != null)
                     {
                         ProxyConfig.Mapping.Enable_MapRemote = Convert.ToBoolean(Enable_MapRemote.Value);
                     }
 
-                    XElement Enable_ExternalProxy = xeProxyConfig.Element("Enable_ExternalProxy");
+                    XElement Enable_ExternalProxy = xeProxyMode.Element("Enable_ExternalProxy");
                     if (Enable_ExternalProxy != null)
                     {
                         ProxyConfig.Proxy.Enable_ExternalProxy = Convert.ToBoolean(Enable_ExternalProxy.Value);
                     }
 
-                    XElement ExternalProxy_IP = xeProxyConfig.Element("ExternalProxy_IP");
+                    XElement ExternalProxy_IP = xeProxyMode.Element("ExternalProxy_IP");
                     if (ExternalProxy_IP != null)
                     {
                         ProxyConfig.Proxy.ExternalProxy_IP = ExternalProxy_IP.Value;
                     }
 
-                    XElement ExternalProxy_Port = xeProxyConfig.Element("ExternalProxy_Port");
+                    XElement ExternalProxy_Port = xeProxyMode.Element("ExternalProxy_Port");
                     if (ExternalProxy_Port != null)
                     {
                         ProxyConfig.Proxy.ExternalProxy_Port = ushort.Parse(ExternalProxy_Port.Value);
                     }
 
-                    XElement Enable_ExternalProxy_AppointPort = xeProxyConfig.Element("Enable_ExternalProxy_AppointPort");
+                    XElement Enable_ExternalProxy_AppointPort = xeProxyMode.Element("Enable_ExternalProxy_AppointPort");
                     if (Enable_ExternalProxy_AppointPort != null)
                     {
                         ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort = Convert.ToBoolean(Enable_ExternalProxy_AppointPort.Value);
                     }
 
-                    XElement ExternalProxy_AppointPort = xeProxyConfig.Element("ExternalProxy_AppointPort");
+                    XElement ExternalProxy_AppointPort = xeProxyMode.Element("ExternalProxy_AppointPort");
                     if (ExternalProxy_AppointPort != null)
                     {
                         ProxyConfig.Proxy.ExternalProxy_AppointPort = ExternalProxy_AppointPort.Value;
                     }
 
-                    XElement Enable_ExternalProxy_Auth = xeProxyConfig.Element("Enable_ExternalProxy_Auth");
+                    XElement Enable_ExternalProxy_Auth = xeProxyMode.Element("Enable_ExternalProxy_Auth");
                     if (Enable_ExternalProxy_Auth != null)
                     {
                         ProxyConfig.Proxy.Enable_ExternalProxy_Auth = Convert.ToBoolean(Enable_ExternalProxy_Auth.Value);
                     }
 
-                    XElement ExternalProxy_UserName = xeProxyConfig.Element("ExternalProxy_UserName");
+                    XElement ExternalProxy_UserName = xeProxyMode.Element("ExternalProxy_UserName");
                     if (ExternalProxy_UserName != null)
                     {
                         ProxyConfig.Proxy.ExternalProxy_UserName = ExternalProxy_UserName.Value;
                     }
 
-                    XElement ExternalProxy_PassWord = xeProxyConfig.Element("ExternalProxy_PassWord");
+                    XElement ExternalProxy_PassWord = xeProxyMode.Element("ExternalProxy_PassWord");
                     if (ExternalProxy_PassWord != null)
                     {
                         ProxyConfig.Proxy.ExternalProxy_PassWord = ExternalProxy_PassWord.Value;
                     }
 
-                    XElement SpeedMode = xeProxyConfig.Element("SpeedMode");
+                    XElement SpeedMode = xeProxyMode.Element("SpeedMode");
                     if (SpeedMode != null)
                     {
                         ProxyConfig.Proxy.SpeedMode = Convert.ToBoolean(SpeedMode.Value);
@@ -2485,293 +2363,7 @@ namespace WPE.Lib
                 }
             }
 
-            public static void SetInjectionConfig_FromXML(XElement xeInjectionConfig)
-            {
-                try
-                {
-                    XElement CheckNotShow = xeInjectionConfig.Element("CheckNotShow");
-                    if (CheckNotShow != null)
-                    {
-                        PacketConfig.Packet.CheckNotShow = Convert.ToBoolean(CheckNotShow.Value);
-                    }
-
-                    XElement CheckSocket = xeInjectionConfig.Element("CheckSocket");
-                    if (CheckSocket != null)
-                    {
-                        PacketConfig.Packet.CheckSocket = Convert.ToBoolean(CheckSocket.Value);
-                    }
-
-                    XElement CheckSocket_Value = xeInjectionConfig.Element("CheckSocket_Value");
-                    if (CheckSocket_Value != null)
-                    {
-                        PacketConfig.Packet.CheckSocket_Value = CheckSocket_Value.Value;
-                    }
-
-                    XElement CheckIP = xeInjectionConfig.Element("CheckIP");
-                    if (CheckIP != null)
-                    {
-                        PacketConfig.Packet.CheckIP = Convert.ToBoolean(CheckIP.Value);
-                    }
-
-                    XElement CheckIP_Value = xeInjectionConfig.Element("CheckIP_Value");
-                    if (CheckIP_Value != null)
-                    {
-                        PacketConfig.Packet.CheckIP_Value = CheckIP_Value.Value;
-                    }
-
-                    XElement CheckPort = xeInjectionConfig.Element("CheckPort");
-                    if (CheckPort != null)
-                    {
-                        PacketConfig.Packet.CheckPort = Convert.ToBoolean(CheckPort.Value);
-                    }
-
-                    XElement CheckPort_Value = xeInjectionConfig.Element("CheckPort_Value");
-                    if (CheckPort_Value != null)
-                    {
-                        PacketConfig.Packet.CheckPort_Value = CheckPort_Value.Value;
-                    }
-
-                    XElement CheckHead = xeInjectionConfig.Element("CheckHead");
-                    if (CheckHead != null)
-                    {
-                        PacketConfig.Packet.CheckHead = Convert.ToBoolean(CheckHead.Value);
-                    }
-
-                    XElement CheckHead_Value = xeInjectionConfig.Element("CheckHead_Value");
-                    if (CheckHead_Value != null)
-                    {
-                        PacketConfig.Packet.CheckHead_Value = CheckHead_Value.Value;
-                    }
-
-                    XElement CheckData = xeInjectionConfig.Element("CheckData");
-                    if (CheckData != null)
-                    {
-                        PacketConfig.Packet.CheckData = Convert.ToBoolean(CheckData.Value);
-                    }
-
-                    XElement CheckData_Value = xeInjectionConfig.Element("CheckData_Value");
-                    if (CheckData_Value != null)
-                    {
-                        PacketConfig.Packet.CheckData_Value = CheckData_Value.Value;
-                    }
-
-                    XElement CheckSize = xeInjectionConfig.Element("CheckSize");
-                    if (CheckSize != null)
-                    {
-                        PacketConfig.Packet.CheckLen = Convert.ToBoolean(CheckSize.Value);
-                    }
-
-                    XElement CheckLength_Value = xeInjectionConfig.Element("CheckLength_Value");
-                    if (CheckLength_Value != null)
-                    {
-                        PacketConfig.Packet.CheckLength_Value = CheckLength_Value.Value;
-                    }
-
-                    XElement HookWS1_Send = xeInjectionConfig.Element("HookWS1_Send");
-                    if (HookWS1_Send != null)
-                    {
-                        PacketConfig.Packet.HookWS1_Send = Convert.ToBoolean(HookWS1_Send.Value);
-                    }
-
-                    XElement HookWS1_SendTo = xeInjectionConfig.Element("HookWS1_SendTo");
-                    if (HookWS1_SendTo != null)
-                    {
-                        PacketConfig.Packet.HookWS1_SendTo = Convert.ToBoolean(HookWS1_SendTo.Value);
-                    }
-
-                    XElement HookWS1_Recv = xeInjectionConfig.Element("HookWS1_Recv");
-                    if (HookWS1_Recv != null)
-                    {
-                        PacketConfig.Packet.HookWS1_Recv = Convert.ToBoolean(HookWS1_Recv.Value);
-                    }
-
-                    XElement HookWS1_RecvFrom = xeInjectionConfig.Element("HookWS1_RecvFrom");
-                    if (HookWS1_RecvFrom != null)
-                    {
-                        PacketConfig.Packet.HookWS1_RecvFrom = Convert.ToBoolean(HookWS1_RecvFrom.Value);
-                    }
-
-                    XElement HookWS2_Send = xeInjectionConfig.Element("HookWS2_Send");
-                    if (HookWS2_Send != null)
-                    {
-                        PacketConfig.Packet.HookWS2_Send = Convert.ToBoolean(HookWS2_Send.Value);
-                    }
-
-                    XElement HookWS2_SendTo = xeInjectionConfig.Element("HookWS2_SendTo");
-                    if (HookWS2_SendTo != null)
-                    {
-                        PacketConfig.Packet.HookWS2_SendTo = Convert.ToBoolean(HookWS2_SendTo.Value);
-                    }
-
-                    XElement HookWS2_Recv = xeInjectionConfig.Element("HookWS2_Recv");
-                    if (HookWS2_Recv != null)
-                    {
-                        PacketConfig.Packet.HookWS2_Recv = Convert.ToBoolean(HookWS2_Recv.Value);
-                    }
-
-                    XElement HookWS2_RecvFrom = xeInjectionConfig.Element("HookWS2_RecvFrom");
-                    if (HookWS2_RecvFrom != null)
-                    {
-                        PacketConfig.Packet.HookWS2_RecvFrom = Convert.ToBoolean(HookWS2_RecvFrom.Value);
-                    }
-
-                    XElement HookWSA_Send = xeInjectionConfig.Element("HookWSA_Send");
-                    if (HookWSA_Send != null)
-                    {
-                        PacketConfig.Packet.HookWSA_Send = Convert.ToBoolean(HookWSA_Send.Value);
-                    }
-
-                    XElement HookWSA_SendTo = xeInjectionConfig.Element("HookWSA_SendTo");
-                    if (HookWSA_SendTo != null)
-                    {
-                        PacketConfig.Packet.HookWSA_SendTo = Convert.ToBoolean(HookWSA_SendTo.Value);
-                    }
-
-                    XElement HookWSA_Recv = xeInjectionConfig.Element("HookWSA_Recv");
-                    if (HookWSA_Recv != null)
-                    {
-                        PacketConfig.Packet.HookWSA_Recv = Convert.ToBoolean(HookWSA_Recv.Value);
-                    }
-
-                    XElement HookWSA_RecvFrom = xeInjectionConfig.Element("HookWSA_RecvFrom");
-                    if (HookWSA_RecvFrom != null)
-                    {
-                        PacketConfig.Packet.HookWSA_RecvFrom = Convert.ToBoolean(HookWSA_RecvFrom.Value);
-                    }
-
-                    XElement HotKey1 = xeInjectionConfig.Element("HotKey1");
-                    if (HotKey1 != null)
-                    {
-                        PacketConfig.Packet.HotKey1 = HotKey1.Value;
-                    }
-
-                    XElement HotKey2 = xeInjectionConfig.Element("HotKey2");
-                    if (HotKey2 != null)
-                    {
-                        PacketConfig.Packet.HotKey2 = HotKey2.Value;
-                    }
-
-                    XElement HotKey3 = xeInjectionConfig.Element("HotKey3");
-                    if (HotKey3 != null)
-                    {
-                        PacketConfig.Packet.HotKey3 = HotKey3.Value;
-                    }
-
-                    XElement HotKey4 = xeInjectionConfig.Element("HotKey4");
-                    if (HotKey4 != null)
-                    {
-                        PacketConfig.Packet.HotKey4 = HotKey4.Value;
-                    }
-
-                    XElement HotKey5 = xeInjectionConfig.Element("HotKey5");
-                    if (HotKey5 != null)
-                    {
-                        PacketConfig.Packet.HotKey5 = HotKey5.Value;
-                    }
-
-                    XElement HotKey6 = xeInjectionConfig.Element("HotKey6");
-                    if (HotKey6 != null)
-                    {
-                        PacketConfig.Packet.HotKey6 = HotKey6.Value;
-                    }
-
-                    XElement HotKey7 = xeInjectionConfig.Element("HotKey7");
-                    if (HotKey7 != null)
-                    {
-                        PacketConfig.Packet.HotKey7 = HotKey7.Value;
-                    }
-
-                    XElement HotKey8 = xeInjectionConfig.Element("HotKey8");
-                    if (HotKey8 != null)
-                    {
-                        PacketConfig.Packet.HotKey8 = HotKey8.Value;
-                    }
-
-                    XElement HotKey9 = xeInjectionConfig.Element("HotKey9");
-                    if (HotKey9 != null)
-                    {
-                        PacketConfig.Packet.HotKey9 = HotKey9.Value;
-                    }
-
-                    XElement HotKey10 = xeInjectionConfig.Element("HotKey10");
-                    if (HotKey10 != null)
-                    {
-                        PacketConfig.Packet.HotKey10 = HotKey10.Value;
-                    }
-
-                    XElement HotKey11 = xeInjectionConfig.Element("HotKey11");
-                    if (HotKey11 != null)
-                    {
-                        PacketConfig.Packet.HotKey11 = HotKey11.Value;
-                    }
-
-                    XElement HotKey12 = xeInjectionConfig.Element("HotKey12");
-                    if (HotKey12 != null)
-                    {
-                        PacketConfig.Packet.HotKey12 = HotKey12.Value;
-                    }
-
-                    XElement xeSocketList_AutoRoll = xeInjectionConfig.Element("SocketList_AutoRoll");
-                    if (xeSocketList_AutoRoll != null)
-                    {
-                        PacketConfig.List.AutoRoll = Convert.ToBoolean(xeSocketList_AutoRoll.Value);
-                    }
-
-                    XElement xeSocketList_AutoClear = xeInjectionConfig.Element("SocketList_AutoClear");
-                    if (xeSocketList_AutoClear != null)
-                    {
-                        PacketConfig.List.AutoClear = Convert.ToBoolean(xeSocketList_AutoClear.Value);
-                    }
-
-                    XElement xeSocketList_AutoClear_Value = xeInjectionConfig.Element("SocketList_AutoClear_Value");
-                    if (xeSocketList_AutoClear_Value != null)
-                    {
-                        PacketConfig.List.AutoClear_Value = int.Parse(xeSocketList_AutoClear_Value.Value);
-                    }
-
-                    XElement LogList_AutoRoll = xeInjectionConfig.Element("LogList_AutoRoll");
-                    if (LogList_AutoRoll != null)
-                    {
-                        LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
-                    }
-
-                    XElement LogList_AutoClear = xeInjectionConfig.Element("LogList_AutoClear");
-                    if (LogList_AutoClear != null)
-                    {
-                        LogConfig.List.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
-                    }
-
-                    XElement LogList_AutoClear_Value = xeInjectionConfig.Element("LogList_AutoClear_Value");
-                    if (LogList_AutoClear_Value != null)
-                    {
-                        LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
-                    }
-
-                    XElement SpeedMode = xeInjectionConfig.Element("SpeedMode");
-                    if (SpeedMode != null)
-                    {
-                        PacketConfig.Packet.SpeedMode = Convert.ToBoolean(SpeedMode.Value);
-                    }
-
-                    XElement xeListExecute = xeInjectionConfig.Element("ListExecute");
-                    if (xeListExecute != null)
-                    {
-                        ListExecute = GetListExecute_ByString(xeListExecute.Value);
-                    }
-
-                    XElement FilterExecute = xeInjectionConfig.Element("FilterExecute");
-                    if (FilterExecute != null)
-                    {
-                        FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(FilterExecute.Value);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            #endregion
+            #endregion            
 
             #region//保存系统列表到数据库
 
@@ -2941,7 +2533,7 @@ namespace WPE.Lib
                     //代理设置
                     if (bProxySet)
                     {
-                        XElement xeProxyConfig = SystemConfig.GetProxyConfig_XML();
+                        XElement xeProxyConfig = SystemConfig.GetProxyMode_XML();
                         if (xeProxyConfig != null)
                         {
                             xeBackUp.Add(xeProxyConfig);
@@ -2967,7 +2559,7 @@ namespace WPE.Lib
                         //本地映射
                         if (ProxyConfig.Mapping.lstMapLocal.Count > 0)
                         {
-                            XElement xeMapLocal = ProxyConfig.Mapping.GetMapLocal_XML(ProxyConfig.Mapping.lstMapLocal.ToList());
+                            XElement xeMapLocal = ProxyConfig.Mapping.GetMapLocal_XML(ProxyConfig.Mapping.lstMapLocal);
                             if (xeMapLocal != null)
                             {
                                 xeBackUp.Add(xeMapLocal);
@@ -2978,7 +2570,7 @@ namespace WPE.Lib
                     //注入设置
                     if (bInjectionSet)
                     {
-                        XElement xeInjectionConfig = SystemConfig.GetInjectionConfig_XML();
+                        XElement xeInjectionConfig = SystemConfig.GetInjectMode_XML();
                         if (xeInjectionConfig != null)
                         {
                             xeBackUp.Add(xeInjectionConfig);
@@ -3188,17 +2780,17 @@ namespace WPE.Lib
 
                 try
                 {
-                    XElement xeProxyConfig = xdoc.Root.Element("ProxyConfig");
-                    if (xeProxyConfig != null)
+                    XElement xeProxyMode = xdoc.Root.Element("ProxyMode");
+                    if (xeProxyMode != null)
                     {
-                        SetProxyConfig_FromXML(xeProxyConfig);
-                        DataBase.DeleteTable_RunConfig();
-                        DataBase.InsertTable_RunConfig();
+                        SetProxyMode_FromXML(xeProxyMode);
+                        DataBase.DeleteTable_ProxyMode();
+                        DataBase.InsertTable_ProxyMode();
                     }
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import ProxyConfig", ex.Message);
+                    Operate.DoLog("Import ProxyMode", ex.Message);
                 }
 
                 #endregion
@@ -3207,17 +2799,17 @@ namespace WPE.Lib
 
                 try
                 {
-                    XElement xeInjectionConfig = xdoc.Root.Element("InjectionConfig");
-                    if (xeInjectionConfig != null)
+                    XElement xeInjectMode = xdoc.Root.Element("InjectMode");
+                    if (xeInjectMode != null)
                     {
-                        SetInjectionConfig_FromXML(xeInjectionConfig);
-                        DataBase.DeleteTable_RunConfig();
-                        DataBase.InsertTable_RunConfig();
+                        SetInjectMode_FromXML(xeInjectMode);
+                        DataBase.DeleteTable_InjectMode();
+                        DataBase.InsertTable_InjectMode();
                     }
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import InjectionConfig", ex.Message);
+                    Operate.DoLog("Import InjectMode", ex.Message);
                 }
 
                 #endregion
@@ -4304,7 +3896,7 @@ namespace WPE.Lib
 
                                                 if (remoteRule != null)
                                                 {
-                                                    string RemoteURL = remoteRule.ProtocolType_To.ToString() + "://" + remoteRule.Host_To + ":" + remoteRule.Port_To + remoteRule.Path_To;
+                                                    string RemoteURL = remoteRule.ProtocolTypeTo.ToString() + "://" + remoteRule.HostTo + ":" + remoteRule.PortTo + remoteRule.PathTo;
                                                     byte[] remoteResponse = Socket_Operation.GetRemoteMappedData(RemoteURL, request, headers);
                                                     if (remoteResponse != null)
                                                     {
@@ -6324,7 +5916,7 @@ namespace WPE.Lib
 
                 #region//保存代理账号列表到数据库
 
-                public static void SaveProxyAccountList_ToDB(SystemConfig.SystemMode FromMode)
+                public static void SaveAccountList_ToDB(SystemConfig.SystemMode FromMode)
                 {
                     try
                     {
@@ -6577,7 +6169,7 @@ namespace WPE.Lib
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ImportProxyAccountList.Success", "导入代理账号列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);                                        
+                                        Operate.DoLog(nameof(LoadAccountList_Dialog), Title + ": " + FilePath);                                        
                                     }
                                 }, () =>
                                 {
@@ -6798,8 +6390,8 @@ namespace WPE.Lib
 
                             if (!bOK)
                             {
-                                string FailLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_193), UserName);
-                                Operate.DoLog("Import Proxy Account", FailLog);
+                                string FailLog = string.Format(AntdUI.Localization.Get("ImportAccount.Error", "导入账号失败！用户名：{0}"), UserName);
+                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, FailLog);
                             }
                         }
                     }
@@ -6953,8 +6545,8 @@ namespace WPE.Lib
             {
                 public static bool IsShow_MapLocal = false, IsShow_MapRemote = false;
                 public static bool Enable_MapLocal = false, Enable_MapRemote = false;
-                public static List<Proxy_MapLocal> lstMapLocal = new List<Proxy_MapLocal>();
-                public static List<Proxy_MapRemote> lstMapRemote = new List<Proxy_MapRemote>();
+                public static BindingList<MapLocal> lstMapLocal = new BindingList<MapLocal>();
+                public static BindingList<MapRemote> lstMapRemote = new BindingList<MapRemote>();
 
                 #region//获取 MapProtocol 类型
 
@@ -6984,7 +6576,7 @@ namespace WPE.Lib
                     {
                         if (!string.IsNullOrEmpty(Host) && Port > 0)
                         {
-                            Proxy_MapLocal pml = new Proxy_MapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
+                            MapLocal pml = new MapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
                             ProxyConfig.Mapping.lstMapLocal.Add(pml);
                         }
                     }
@@ -7013,7 +6605,7 @@ namespace WPE.Lib
                     {
                         if (!string.IsNullOrEmpty(Host_From) && Port_From > 0 && !string.IsNullOrEmpty(Host_To) && Port_To > 0)
                         {
-                            Proxy_MapRemote pmr = new Proxy_MapRemote(
+                            MapRemote pmr = new MapRemote(
                                 IsEnable,
                                 ProtocolType_From,
                                 Host_From,
@@ -7035,16 +6627,27 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//删除本地代理映射
+                #region//删除本地代理映射（对话框）
 
-                public static void DelMapLocal(Proxy_MapLocal pml)
+                public static void DeleteMapLocal_Dialog(Form form, MapLocal ml)
                 {
                     try
                     {
-                        if (pml != null)
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miAccountList", "本地映射"), "\r\n确定删除数据吗\r\n\r\n")
                         {
-                            ProxyConfig.Mapping.lstMapLocal.Remove(pml);
-                        }
+                            Icon = TType.Warn,
+                            Keyboard = false,
+                            MaskClosable = false,
+                            OnOk = config =>
+                            {
+                                if (ml != null)
+                                {
+                                    ProxyConfig.Mapping.lstMapLocal.Remove(ml);
+                                }
+
+                                return true;
+                            }
+                        });                        
                     }
                     catch (Exception ex)
                     {
@@ -7056,14 +6659,25 @@ namespace WPE.Lib
 
                 #region//删除远程代理映射
 
-                public static void DelMapRemote(Proxy_MapRemote pmr)
+                public static void DeleteMapRemote_Dialog(Form form, MapRemote mr)
                 {
                     try
                     {
-                        if (pmr != null)
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miAccountList", "远程映射"), "\r\n确定删除数据吗\r\n\r\n")
                         {
-                            ProxyConfig.Mapping.lstMapRemote.Remove(pmr);
-                        }
+                            Icon = TType.Warn,
+                            Keyboard = false,
+                            MaskClosable = false,
+                            OnOk = config =>
+                            {
+                                if (mr != null)
+                                {
+                                    ProxyConfig.Mapping.lstMapRemote.Remove(mr);
+                                }
+
+                                return true;
+                            }
+                        });                        
                     }
                     catch (Exception ex)
                     {
@@ -7075,21 +6689,19 @@ namespace WPE.Lib
 
                 #region//清空本地代理映射（对话框）
 
-                public static void CleanUpMapLocal_Dialog()
+                public static void CleanUpMapLocal_Dialog(Form form)
                 {
-                    try
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "本地映射"), "\r\n确定删除所有数据吗\r\n\r\n")
                     {
-                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-
-                        if (dr.Equals(DialogResult.OK))
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
                         {
                             ProxyConfig.Mapping.MapLocalClear();
+                            return true;
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
+                    });
                 }
 
                 public static void MapLocalClear()
@@ -7108,21 +6720,19 @@ namespace WPE.Lib
 
                 #region//清空远程代理映射（对话框）
 
-                public static void CleanUpMapRemote_Dialog()
+                public static void CleanUpMapRemote_Dialog(Form form)
                 {
-                    try
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "远程映射"), "\r\n确定删除所有数据吗\r\n\r\n")
                     {
-                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-
-                        if (dr.Equals(DialogResult.OK))
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
                         {
                             ProxyConfig.Mapping.MapRemoteClear();
+                            return true;
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
+                    });
                 }
 
                 public static void MapRemoteClear()
@@ -7141,7 +6751,7 @@ namespace WPE.Lib
 
                 #region//更新本地代理映射
 
-                public static void UpdateMapLocal(Proxy_MapLocal pml, ProxyConfig.Proxy.MapProtocol ProtocolType, string Host, int Port, string RemotePath, string LocalPath)
+                public static void UpdateMapLocal(MapLocal pml, ProxyConfig.Proxy.MapProtocol ProtocolType, string Host, int Port, string RemotePath, string LocalPath)
                 {
                     try
                     {
@@ -7165,7 +6775,7 @@ namespace WPE.Lib
                 #region//更新远程代理映射
 
                 public static void UpdateMapRemote(
-                    Proxy_MapRemote pmr,
+                    MapRemote pmr,
                     ProxyConfig.Proxy.MapProtocol ProtocolType_From,
                     string Host_From,
                     int Port_From,
@@ -7179,14 +6789,14 @@ namespace WPE.Lib
                     {
                         if (pmr != null && !string.IsNullOrEmpty(Host_From) && Port_From > 0 && !string.IsNullOrEmpty(Host_To) && Port_To > 0)
                         {
-                            pmr.ProtocolType_From = ProtocolType_From;
-                            pmr.Host_From = Host_From;
-                            pmr.Port_From = Port_From;
-                            pmr.Path_From = Path_From;
-                            pmr.ProtocolType_To = ProtocolType_To;
-                            pmr.Host_To = Host_To;
-                            pmr.Port_To = Port_To;
-                            pmr.Path_To = Path_To;
+                            pmr.ProtocolTypeFrom = ProtocolType_From;
+                            pmr.HostFrom = Host_From;
+                            pmr.PortFrom = Port_From;
+                            pmr.PathFrom = Path_From;
+                            pmr.ProtocolTypeTo = ProtocolType_To;
+                            pmr.HostTo = Host_To;
+                            pmr.PortTo = Port_To;
+                            pmr.PathTo = Path_To;
                         }
                     }
                     catch (Exception ex)
@@ -7199,7 +6809,7 @@ namespace WPE.Lib
 
                 #region//查找本地代理映射
 
-                public static Proxy_MapLocal GetMapLocal(ProxyConfig.Proxy.MapProtocol ProtocolType, string host, int port, string path)
+                public static MapLocal GetMapLocal(ProxyConfig.Proxy.MapProtocol ProtocolType, string host, int port, string path)
                 {
                     if (string.IsNullOrEmpty(path))
                     {
@@ -7225,32 +6835,67 @@ namespace WPE.Lib
 
                 #region//查找远程代理映射
 
-                public static Proxy_MapRemote GetMapRemote(ProxyConfig.Proxy.MapProtocol ProtocolType_From, string Host_From, int Port_From, string Path_From)
+                public static MapRemote GetMapRemote(ProxyConfig.Proxy.MapProtocol ProtocolType_From, string Host_From, int Port_From, string Path_From)
                 {
                     if (string.IsNullOrEmpty(Path_From))
                     {
                         return ProxyConfig.Mapping.lstMapRemote.FirstOrDefault(rule =>
                         rule.IsEnable == true &&
-                        rule.ProtocolType_From == ProtocolType_From &&
-                        rule.Host_From.Equals(Host_From, StringComparison.OrdinalIgnoreCase) &&
-                        rule.Port_From == Port_From);
+                        rule.ProtocolTypeFrom == ProtocolType_From &&
+                        rule.HostFrom.Equals(Host_From, StringComparison.OrdinalIgnoreCase) &&
+                        rule.PortFrom == Port_From);
                     }
                     else
                     {
                         return ProxyConfig.Mapping.lstMapRemote.FirstOrDefault(rule =>
                         rule.IsEnable == true &&
-                        rule.ProtocolType_From == ProtocolType_From &&
-                        rule.Host_From.Equals(Host_From, StringComparison.OrdinalIgnoreCase) &&
-                        rule.Port_From == Port_From &&
-                        Path_From.StartsWith(rule.Path_From, StringComparison.OrdinalIgnoreCase));
+                        rule.ProtocolTypeFrom == ProtocolType_From &&
+                        rule.HostFrom.Equals(Host_From, StringComparison.OrdinalIgnoreCase) &&
+                        rule.PortFrom == Port_From &&
+                        Path_From.StartsWith(rule.PathFrom, StringComparison.OrdinalIgnoreCase));
                     }
                 }
 
                 #endregion
 
-                #region//本地代理映射的列表操作
+                #region//获取代理映射的右键菜单
 
-                public static void UpdateMapLocal_ByListAction(Form form, SystemConfig.ListAction listAction, Proxy_MapLocal pml)
+                public static AntdUI.IContextMenuStripItem[] GetCMS_Mapping()
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                    {
+                        ID = "Top",
+                        IconSvg = "VerticalAlignTopOutlined",
+                        LocalizationText = "InjectModeForm.cmsFilterList.Top",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                    {
+                        ID = "Up",
+                        IconSvg = "ArrowUpOutlined",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                    {
+                        ID = "Down",
+                        IconSvg = "ArrowDownOutlined",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                    {
+                        ID = "Bottom",
+                        IconSvg = "VerticalAlignBottomOutlined",
+                    });                    
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
+
+                #region//本地映射的列表操作
+
+                public static void UpdateMapLocal_ByListAction(Form form, SystemConfig.ListAction listAction, MapLocal pml)
                 {
                     try
                     {
@@ -7308,7 +6953,7 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.CleanUp:
 
-                                ProxyConfig.Mapping.CleanUpMapLocal_Dialog();
+                                ProxyConfig.Mapping.CleanUpMapLocal_Dialog(form);
 
                                 break;
                         }
@@ -7321,9 +6966,9 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//远程代理映射的列表操作
+                #region//远程映射的列表操作
 
-                public static void UpdateMapRemote_ByListAction(Form form, SystemConfig.ListAction listAction, Proxy_MapRemote pmr)
+                public static void UpdateMapRemote_ByListAction(Form form, SystemConfig.ListAction listAction, MapRemote pmr)
                 {
                     try
                     {
@@ -7381,7 +7026,7 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.CleanUp:
 
-                                ProxyConfig.Mapping.CleanUpMapRemote_Dialog();
+                                ProxyConfig.Mapping.CleanUpMapRemote_Dialog(form);
 
                                 break;
                         }
@@ -7396,7 +7041,7 @@ namespace WPE.Lib
 
                 #region//保存本地代理映射到数据库
 
-                public static void SaveProxyMapLocal_ToDB(SystemConfig.SystemMode FromMode)
+                public static void SaveMapLocal_ToDB(SystemConfig.SystemMode FromMode)
                 {
                     try
                     {
@@ -7416,7 +7061,7 @@ namespace WPE.Lib
 
                 #region//保存远程代理映射到数据库
 
-                public static void SaveProxyMapRemote_ToDB(SystemConfig.SystemMode FromMode)
+                public static void SaveMapRemote_ToDB(SystemConfig.SystemMode FromMode)
                 {
                     try
                     {
@@ -7512,14 +7157,14 @@ namespace WPE.Lib
 
                 #region//保存本地映射到文件（对话框）
 
-                public static void SaveMapLocal_Dialog(Form form, string FileName, List<Proxy_MapLocal> pmlList)
+                public static void SaveMapLocal_Dialog(Form form, string FileName, BindingList<MapLocal> pmlList)
                 {
                     try
                     {
                         if (ProxyConfig.Mapping.lstMapLocal.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = AntdUI.Localization.Get("MapLocalFile", "本地代理映射文件") + "（*.pml）|*.pml";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("MapLocalFile", "本地映射文件") + "（*.pml）|*.pml";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -7537,7 +7182,7 @@ namespace WPE.Lib
 
                                     using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportMapLocal", "导出本地代理映射");
+                                        string Title = AntdUI.Localization.Get("ExportMapLocal", "导出本地映射");
                                         AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
                                         {
                                             Keyboard = false,
@@ -7567,13 +7212,13 @@ namespace WPE.Lib
 
                                     if (SaveMapLocal(FilePath, pmlList, DoEncrypt, Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapLocal.Success", "导出本地代理映射成功");
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapLocal.Success", "导出本地映射成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapLocal.Error", "导出本地代理映射失败");
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapLocal.Error", "导出本地映射失败");
                                         string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
@@ -7587,7 +7232,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static bool SaveMapLocal(string FilePath, List<Proxy_MapLocal> pmlList, bool DoEncrypt, string Password)
+                private static bool SaveMapLocal(string FilePath, BindingList<MapLocal> pmlList, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -7623,13 +7268,13 @@ namespace WPE.Lib
                     return false;
                 }
 
-                public static XElement GetMapLocal_XML(List<Proxy_MapLocal> pmlList)
+                public static XElement GetMapLocal_XML(BindingList<MapLocal> pmlList)
                 {
                     try
                     {
                         XElement xeMapLocal = new XElement("MapLocal");
 
-                        foreach (Proxy_MapLocal pml in pmlList)
+                        foreach (MapLocal pml in pmlList)
                         {
                             XElement xeLocal =
                                 new XElement("Local",
@@ -7658,14 +7303,14 @@ namespace WPE.Lib
 
                 #region//保存远程映射到文件（对话框）
 
-                public static void SaveMapRemote_Dialog(Form form, string FileName, List<Proxy_MapRemote> pmrList)
+                public static void SaveMapRemote_Dialog(Form form, string FileName, BindingList<MapRemote> pmrList)
                 {
                     try
                     {
                         if (ProxyConfig.Mapping.lstMapRemote.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = AntdUI.Localization.Get("MapRemoteFile", "远程代理映射文件") + "（*.pmr）|*.pmr";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("MapRemoteFile", "远程映射文件") + "（*.pmr）|*.pmr";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -7683,7 +7328,7 @@ namespace WPE.Lib
 
                                     using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportMapRemote", "导出远程代理映射");
+                                        string Title = AntdUI.Localization.Get("ExportMapRemote", "导出远程映射");
                                         AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
                                         {
                                             Keyboard = false,
@@ -7713,13 +7358,13 @@ namespace WPE.Lib
 
                                     if (SaveMapRemote(FilePath, pmrList, DoEncrypt, Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapRemote.Success", "导出远程代理映射成功");
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapRemote.Success", "导出远程映射成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapRemote.Error", "导出远程代理映射失败");
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapRemote.Error", "导出远程映射失败");
                                         string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
@@ -7733,7 +7378,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static bool SaveMapRemote(string FilePath, List<Proxy_MapRemote> pmrList, bool DoEncrypt, string Password)
+                private static bool SaveMapRemote(string FilePath, BindingList<MapRemote> pmrList, bool DoEncrypt, string Password)
                 {
                     try
                     {
@@ -7769,25 +7414,25 @@ namespace WPE.Lib
                     return false;
                 }
 
-                public static XElement GetMapRemote_XML(List<Proxy_MapRemote> pmrList)
+                public static XElement GetMapRemote_XML(BindingList<MapRemote> pmrList)
                 {
                     try
                     {
                         XElement xeMapRemote = new XElement("MapRemote");
 
-                        foreach (Proxy_MapRemote pmr in pmrList)
+                        foreach (MapRemote pmr in pmrList)
                         {
                             XElement xeLocal =
                                 new XElement("Remote",
                                 new XElement("IsEnable", pmr.IsEnable.ToString()),
-                                new XElement("ProtocolType_From", pmr.ProtocolType_From.ToString()),
-                                new XElement("Host_From", pmr.Host_From),
-                                new XElement("Port_From", pmr.Port_From.ToString()),
-                                new XElement("Path_From", pmr.Path_From),
-                                new XElement("ProtocolType_To", pmr.ProtocolType_To.ToString()),
-                                new XElement("Host_To", pmr.Host_To),
-                                new XElement("Port_To", pmr.Port_To.ToString()),
-                                new XElement("Path_To", pmr.Path_To)
+                                new XElement("ProtocolType_From", pmr.ProtocolTypeFrom.ToString()),
+                                new XElement("Host_From", pmr.HostFrom),
+                                new XElement("Port_From", pmr.PortFrom.ToString()),
+                                new XElement("Path_From", pmr.PathFrom),
+                                new XElement("ProtocolType_To", pmr.ProtocolTypeTo.ToString()),
+                                new XElement("Host_To", pmr.HostTo),
+                                new XElement("Port_To", pmr.PortTo.ToString()),
+                                new XElement("Path_To", pmr.PathTo)
                                 );
 
                             xeMapRemote.Add(xeLocal);
@@ -7812,7 +7457,7 @@ namespace WPE.Lib
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                        ofdLoadFile.Filter = AntdUI.Localization.Get("MapLocalFile", "本地代理映射文件") + "（*.pml）|*.pml";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("MapLocalFile", "本地映射文件") + "（*.pml）|*.pml";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -7822,7 +7467,7 @@ namespace WPE.Lib
                             {
                                 if (LoadMapLocal(form, FilePath, true))
                                 {
-                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportMapLocal.Success", "导入本地代理映射成功");
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportMapLocal.Success", "导入本地映射成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                 }
@@ -7850,7 +7495,7 @@ namespace WPE.Lib
                                 {
                                     using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
                                     {
-                                        string Title = AntdUI.Localization.Get("ImportMapLocal", "导入本地代理映射");
+                                        string Title = AntdUI.Localization.Get("ImportMapLocal", "导入本地映射");
                                         AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
                                         {
                                             Keyboard = false,
@@ -7971,7 +7616,7 @@ namespace WPE.Lib
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                        ofdLoadFile.Filter = AntdUI.Localization.Get("MapRemoteFile", "远程代理映射文件") + "（*.pmr）|*.pmr";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("MapRemoteFile", "远程映射文件") + "（*.pmr）|*.pmr";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -7981,7 +7626,7 @@ namespace WPE.Lib
                             {
                                 if (LoadMapRemote(form, FilePath, true))
                                 {
-                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportMapRemote.Success", "导入远程代理映射成功");
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportMapRemote.Success", "导入远程映射成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                 }
@@ -8009,7 +7654,7 @@ namespace WPE.Lib
                                 {
                                     using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
                                     {
-                                        string Title = AntdUI.Localization.Get("ImportMapRemote", "导入远程代理映射");
+                                        string Title = AntdUI.Localization.Get("ImportMapRemote", "导入远程映射");
                                         AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
                                         {
                                             Keyboard = false,
@@ -15280,7 +14925,8 @@ namespace WPE.Lib
                 DataBase.InitdbPath();
 
                 DataBase.CreateTable_SystemConfig();
-                DataBase.CreateTable_InjectMode();                
+                DataBase.CreateTable_InjectMode();
+                DataBase.CreateTable_ProxyMode();
                 DataBase.CreateTable_Filter();
                 DataBase.CreateTable_Send();
                 DataBase.CreateTable_Robot();
@@ -15486,7 +15132,7 @@ namespace WPE.Lib
 
             #endregion
 
-            #region//注入模式
+            #region//注入模式配置表
 
             private static bool CreateTable_InjectMode()
             {
@@ -15775,9 +15421,9 @@ namespace WPE.Lib
 
             #endregion
 
-            #region//运行配置表
+            #region//代理模式配置表
 
-            private static bool CreateTable_RunConfig()
+            private static bool CreateTable_ProxyMode()
             {
                 bool bReturn = false;
 
@@ -15785,74 +15431,27 @@ namespace WPE.Lib
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "CREATE TABLE IF NOT EXISTS RunConfig (";
-
-                        sql += "ProxyConfig_ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP
-                        sql += "ProxyConfig_EnableSOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
-                        sql += "ProxyConfig_ProxyPort INTEGER DEFAULT 1080,";//代理模式 - 代理端口
-                        sql += "ProxyConfig_EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证
-                        sql += "ProxyConfig_ProxyList_NoRecord BOOLEAN DEFAULT 1,";//代理模式 - 不记录数据
-                        sql += "ProxyConfig_ClientList_DelClosed BOOLEAN DEFAULT 1,";//代理模式 - 清理关闭的链接
-                        sql += "ProxyConfig_LogList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 日志列表自动滚动
-                        sql += "ProxyConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 日志列表自动清理
-                        sql += "ProxyConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 日志列表自动清理数值                        
-                        sql += "ProxyConfig_Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
-                        sql += "ProxyConfig_Enable_MapRemote BOOLEAN DEFAULT 0,";//代理模式 - 启用远程代理映射
-                        sql += "ProxyConfig_Enable_ExternalProxy BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理
-                        sql += "ProxyConfig_ExternalProxy_IP TEXT,";//代理模式 - 外部代理IP
-                        sql += "ProxyConfig_ExternalProxy_Port INTEGER DEFAULT 8889,";//代理模式 - 外部代理端口               
-                        sql += "ProxyConfig_Enable_ExternalProxy_AppointPort BOOLEAN DEFAULT 0,";//代理模式 - 启用指定代理端口
-                        sql += "ProxyConfig_ExternalProxy_AppointPort TEXT,";//代理模式 - 指定代理端口
-                        sql += "ProxyConfig_Enable_ExternalProxy_Auth BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理认证
-                        sql += "ProxyConfig_ExternalProxy_UserName TEXT,";//代理模式 - 外部代理用户名
-                        sql += "ProxyConfig_ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
-                        sql += "ProxyConfig_SpeedMode BOOLEAN DEFAULT 0,";//代理模式 - 极速模式
-                        sql += "InjectionConfig_CheckNotShow BOOLEAN DEFAULT 1,";//过滤设置不显示
-                        sql += "InjectionConfig_CheckSocket BOOLEAN DEFAULT 0,";//过滤套接字
-                        sql += "InjectionConfig_CheckSocket_Value TEXT,";//过滤套接字内容
-                        sql += "InjectionConfig_CheckIP BOOLEAN DEFAULT 0,";//过滤IP
-                        sql += "InjectionConfig_CheckIP_Value TEXT,";//过滤IP内容
-                        sql += "InjectionConfig_CheckPort BOOLEAN DEFAULT 0,";//过滤端口
-                        sql += "InjectionConfig_CheckPort_Value TEXT,";//过滤端口内容
-                        sql += "InjectionConfig_CheckHead BOOLEAN DEFAULT 0,";//过滤包头
-                        sql += "InjectionConfig_CheckHead_Value TEXT,";//过滤包头内容
-                        sql += "InjectionConfig_CheckData BOOLEAN DEFAULT 0,";//过滤数据
-                        sql += "InjectionConfig_CheckData_Value TEXT,";//过滤数据内容
-                        sql += "InjectionConfig_CheckSize BOOLEAN DEFAULT 0,";//过滤长度
-                        sql += "InjectionConfig_CheckLength_Value TEXT,";//过滤长度内容
-                        sql += "InjectionConfig_HookWS1_Send BOOLEAN DEFAULT 1,";//发送1.1
-                        sql += "InjectionConfig_HookWS1_SendTo BOOLEAN DEFAULT 1,";//发送到1.1
-                        sql += "InjectionConfig_HookWS1_Recv BOOLEAN DEFAULT 1,";//接收1.1
-                        sql += "InjectionConfig_HookWS1_RecvFrom BOOLEAN DEFAULT 1,";//接收自1.1
-                        sql += "InjectionConfig_HookWS2_Send BOOLEAN DEFAULT 1,";//发送
-                        sql += "InjectionConfig_HookWS2_SendTo BOOLEAN DEFAULT 1,";//发送到
-                        sql += "InjectionConfig_HookWS2_Recv BOOLEAN DEFAULT 1,";//接收
-                        sql += "InjectionConfig_HookWS2_RecvFrom BOOLEAN DEFAULT 1,";//接收自
-                        sql += "InjectionConfig_HookWSA_Send BOOLEAN DEFAULT 1,";//WSA 发送
-                        sql += "InjectionConfig_HookWSA_SendTo BOOLEAN DEFAULT 1,";//WSA 发送到
-                        sql += "InjectionConfig_HookWSA_Recv BOOLEAN DEFAULT 1,";//WSA 接收
-                        sql += "InjectionConfig_HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//WSA 接收自
-                        sql += "InjectionConfig_HotKey1 TEXT,";//快捷键1
-                        sql += "InjectionConfig_HotKey2 TEXT,";//快捷键2
-                        sql += "InjectionConfig_HotKey3 TEXT,";//快捷键3
-                        sql += "InjectionConfig_HotKey4 TEXT,";//快捷键4
-                        sql += "InjectionConfig_HotKey5 TEXT,";//快捷键5
-                        sql += "InjectionConfig_HotKey6 TEXT,";//快捷键6
-                        sql += "InjectionConfig_HotKey7 TEXT,";//快捷键7
-                        sql += "InjectionConfig_HotKey8 TEXT,";//快捷键8
-                        sql += "InjectionConfig_HotKey9 TEXT,";//快捷键9
-                        sql += "InjectionConfig_HotKey10 TEXT,";//快捷键10
-                        sql += "InjectionConfig_HotKey11 TEXT,";//快捷键11
-                        sql += "InjectionConfig_HotKey12 TEXT,";//快捷键12
-                        sql += "InjectionConfig_PacketConfig.List_AutoRoll BOOLEAN DEFAULT 0,";//封包列表自动滚动
-                        sql += "InjectionConfig_PacketConfig.List_AutoClear BOOLEAN DEFAULT 1,";//封包列表自动清理
-                        sql += "InjectionConfig_PacketConfig.List_AutoClear_Value INTEGER DEFAULT 5000,";//封包列表自动清理数值
-                        sql += "InjectionConfig_LogList_AutoRoll BOOLEAN DEFAULT 0,";//日志列表自动滚动
-                        sql += "InjectionConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
-                        sql += "InjectionConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
-                        sql += "InjectionConfig_SpeedMode BOOLEAN DEFAULT 0,";//极速模式
-                        sql += "InjectionConfig_ListExecute INTEGER DEFAULT 1,";//列表执行模式
-                        sql += "InjectionConfig_FilterExecute INTEGER DEFAULT 1";//滤镜执行模式
+                        string sql = "CREATE TABLE IF NOT EXISTS ProxyMode (";
+                        sql += "ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP
+                        sql += "EnableSOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
+                        sql += "ProxyPort INTEGER DEFAULT 1080,";//代理模式 - 代理端口
+                        sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证
+                        sql += "ProxyList_NoRecord BOOLEAN DEFAULT 1,";//代理模式 - 不记录数据
+                        sql += "ClientList_DelClosed BOOLEAN DEFAULT 1,";//代理模式 - 清理关闭的链接
+                        sql += "LogList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 日志列表自动滚动
+                        sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 日志列表自动清理
+                        sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 日志列表自动清理数值                        
+                        sql += "Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
+                        sql += "Enable_MapRemote BOOLEAN DEFAULT 0,";//代理模式 - 启用远程代理映射
+                        sql += "Enable_ExternalProxy BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理
+                        sql += "ExternalProxy_IP TEXT,";//代理模式 - 外部代理IP
+                        sql += "ExternalProxy_Port INTEGER DEFAULT 8889,";//代理模式 - 外部代理端口               
+                        sql += "Enable_ExternalProxy_AppointPort BOOLEAN DEFAULT 0,";//代理模式 - 启用指定代理端口
+                        sql += "ExternalProxy_AppointPort TEXT,";//代理模式 - 指定代理端口
+                        sql += "Enable_ExternalProxy_Auth BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理认证
+                        sql += "ExternalProxy_UserName TEXT,";//代理模式 - 外部代理用户名
+                        sql += "ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
+                        sql += "SpeedMode BOOLEAN DEFAULT 0";//代理模式 - 极速模式
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -15872,7 +15471,7 @@ namespace WPE.Lib
                 return bReturn;
             }
 
-            public static DataTable SelectTable_RunConfig()
+            public static DataTable SelectTable_ProxyMode()
             {
                 DataTable dtReturn = new DataTable();
 
@@ -15880,7 +15479,7 @@ namespace WPE.Lib
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "SELECT * FROM RunConfig;";
+                        string sql = "SELECT * FROM ProxyMode;";
 
                         using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
                         {
@@ -15896,13 +15495,13 @@ namespace WPE.Lib
                 return dtReturn;
             }
 
-            public static void DeleteTable_RunConfig()
+            public static void DeleteTable_ProxyMode()
             {
                 try
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "DELETE FROM RunConfig;";
+                        string sql = "DELETE FROM ProxyMode;";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
@@ -15917,216 +15516,78 @@ namespace WPE.Lib
                 }
             }
 
-            public static void InsertTable_RunConfig()
+            public static void InsertTable_ProxyMode()
             {
                 try
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "INSERT INTO RunConfig (";
-                        sql += "ProxyConfig_ProxyIP_Auto,";
-                        sql += "ProxyConfig_EnableSOCKS5,";
-                        sql += "ProxyConfig_ProxyPort,";
-                        sql += "ProxyConfig_EnableAuth,";
-                        sql += "ProxyConfig_ProxyList_NoRecord,";
-                        sql += "ProxyConfig_ClientList_DelClosed,";
-                        sql += "ProxyConfig_LogList_AutoRoll,";
-                        sql += "ProxyConfig_LogList_AutoClear,";
-                        sql += "ProxyConfig_LogList_AutoClear_Value,";
-                        sql += "ProxyConfig_Enable_MapLocal,";
-                        sql += "ProxyConfig_Enable_MapRemote,";
-                        sql += "ProxyConfig_Enable_ExternalProxy,";
-                        sql += "ProxyConfig_ExternalProxy_IP,";
-                        sql += "ProxyConfig_ExternalProxy_Port,";
-                        sql += "ProxyConfig_Enable_ExternalProxy_AppointPort,";
-                        sql += "ProxyConfig_ExternalProxy_AppointPort,";
-                        sql += "ProxyConfig_Enable_ExternalProxy_Auth,";
-                        sql += "ProxyConfig_ExternalProxy_UserName,";
-                        sql += "ProxyConfig_ExternalProxy_PassWord,";
-                        sql += "ProxyConfig_SpeedMode,";
-                        sql += "InjectionConfig_CheckNotShow,";
-                        sql += "InjectionConfig_CheckSocket,";
-                        sql += "InjectionConfig_CheckSocket_Value,";
-                        sql += "InjectionConfig_CheckIP,";
-                        sql += "InjectionConfig_CheckIP_Value,";
-                        sql += "InjectionConfig_CheckPort,";
-                        sql += "InjectionConfig_CheckPort_Value,";
-                        sql += "InjectionConfig_CheckHead,";
-                        sql += "InjectionConfig_CheckHead_Value,";
-                        sql += "InjectionConfig_CheckData,";
-                        sql += "InjectionConfig_CheckData_Value,";
-                        sql += "InjectionConfig_CheckSize,";
-                        sql += "InjectionConfig_CheckLength_Value,";
-                        sql += "InjectionConfig_HookWS1_Send,";
-                        sql += "InjectionConfig_HookWS1_SendTo,";
-                        sql += "InjectionConfig_HookWS1_Recv,";
-                        sql += "InjectionConfig_HookWS1_RecvFrom,";
-                        sql += "InjectionConfig_HookWS2_Send,";
-                        sql += "InjectionConfig_HookWS2_SendTo,";
-                        sql += "InjectionConfig_HookWS2_Recv,";
-                        sql += "InjectionConfig_HookWS2_RecvFrom,";
-                        sql += "InjectionConfig_HookWSA_Send,";
-                        sql += "InjectionConfig_HookWSA_SendTo,";
-                        sql += "InjectionConfig_HookWSA_Recv,";
-                        sql += "InjectionConfig_HookWSA_RecvFrom,";
-                        sql += "InjectionConfig_HotKey1,";
-                        sql += "InjectionConfig_HotKey2,";
-                        sql += "InjectionConfig_HotKey3,";
-                        sql += "InjectionConfig_HotKey4,";
-                        sql += "InjectionConfig_HotKey5,";
-                        sql += "InjectionConfig_HotKey6,";
-                        sql += "InjectionConfig_HotKey7,";
-                        sql += "InjectionConfig_HotKey8,";
-                        sql += "InjectionConfig_HotKey9,";
-                        sql += "InjectionConfig_HotKey10,";
-                        sql += "InjectionConfig_HotKey11,";
-                        sql += "InjectionConfig_HotKey12,";
-                        sql += "InjectionConfig_PacketConfig.List_AutoRoll,";
-                        sql += "InjectionConfig_PacketConfig.List_AutoClear,";
-                        sql += "InjectionConfig_PacketConfig.List_AutoClear_Value,";
-                        sql += "InjectionConfig_LogList_AutoRoll,";
-                        sql += "InjectionConfig_LogList_AutoClear,";
-                        sql += "InjectionConfig_LogList_AutoClear_Value,";
-                        sql += "InjectionConfig_SpeedMode,";
-                        sql += "InjectionConfig_ListExecute,";
-                        sql += "InjectionConfig_FilterExecute";
+                        string sql = "INSERT INTO ProxyMode (";
+                        sql += "ProxyIP_Auto,";
+                        sql += "EnableSOCKS5,";
+                        sql += "ProxyPort,";
+                        sql += "EnableAuth,";
+                        sql += "ProxyList_NoRecord,";
+                        sql += "ClientList_DelClosed,";
+                        sql += "LogList_AutoRoll,";
+                        sql += "LogList_AutoClear,";
+                        sql += "LogList_AutoClear_Value,";
+                        sql += "Enable_MapLocal,";
+                        sql += "Enable_MapRemote,";
+                        sql += "Enable_ExternalProxy,";
+                        sql += "ExternalProxy_IP,";
+                        sql += "ExternalProxy_Port,";
+                        sql += "Enable_ExternalProxy_AppointPort,";
+                        sql += "ExternalProxy_AppointPort,";
+                        sql += "Enable_ExternalProxy_Auth,";
+                        sql += "ExternalProxy_UserName,";
+                        sql += "ExternalProxy_PassWord,";
+                        sql += "SpeedMode";
                         sql += ") VALUES (";
-                        sql += "@ProxyConfig_ProxyIP_Auto,";
-                        sql += "@ProxyConfig_EnableSOCKS5,";
-                        sql += "@ProxyConfig_ProxyPort,";
-                        sql += "@ProxyConfig_EnableAuth,";
-                        sql += "@ProxyConfig_ProxyList_NoRecord,";
-                        sql += "@ProxyConfig_ClientList_DelClosed,";
-                        sql += "@ProxyConfig_LogList_AutoRoll,";
-                        sql += "@ProxyConfig_LogList_AutoClear,";
-                        sql += "@ProxyConfig_LogList_AutoClear_Value,";
-                        sql += "@ProxyConfig_Enable_MapLocal,";
-                        sql += "@ProxyConfig_Enable_MapRemote,";
-                        sql += "@ProxyConfig_Enable_ExternalProxy,";
-                        sql += "@ProxyConfig_ExternalProxy_IP,";
-                        sql += "@ProxyConfig_ExternalProxy_Port,";
-                        sql += "@ProxyConfig_Enable_ExternalProxy_AppointPort,";
-                        sql += "@ProxyConfig_ExternalProxy_AppointPort,";
-                        sql += "@ProxyConfig_Enable_ExternalProxy_Auth,";
-                        sql += "@ProxyConfig_ExternalProxy_UserName,";
-                        sql += "@ProxyConfig_ExternalProxy_PassWord,";
-                        sql += "@ProxyConfig_SpeedMode,";
-                        sql += "@InjectionConfig_CheckNotShow,";
-                        sql += "@InjectionConfig_CheckSocket,";
-                        sql += "@InjectionConfig_CheckSocket_Value,";
-                        sql += "@InjectionConfig_CheckIP,";
-                        sql += "@InjectionConfig_CheckIP_Value,";
-                        sql += "@InjectionConfig_CheckPort,";
-                        sql += "@InjectionConfig_CheckPort_Value,";
-                        sql += "@InjectionConfig_CheckHead,";
-                        sql += "@InjectionConfig_CheckHead_Value,";
-                        sql += "@InjectionConfig_CheckData,";
-                        sql += "@InjectionConfig_CheckData_Value,";
-                        sql += "@InjectionConfig_CheckSize,";
-                        sql += "@InjectionConfig_CheckLength_Value,";
-                        sql += "@InjectionConfig_HookWS1_Send,";
-                        sql += "@InjectionConfig_HookWS1_SendTo,";
-                        sql += "@InjectionConfig_HookWS1_Recv,";
-                        sql += "@InjectionConfig_HookWS1_RecvFrom,";
-                        sql += "@InjectionConfig_HookWS2_Send,";
-                        sql += "@InjectionConfig_HookWS2_SendTo,";
-                        sql += "@InjectionConfig_HookWS2_Recv,";
-                        sql += "@InjectionConfig_HookWS2_RecvFrom,";
-                        sql += "@InjectionConfig_HookWSA_Send,";
-                        sql += "@InjectionConfig_HookWSA_SendTo,";
-                        sql += "@InjectionConfig_HookWSA_Recv,";
-                        sql += "@InjectionConfig_HookWSA_RecvFrom,";
-                        sql += "@InjectionConfig_HotKey1,";
-                        sql += "@InjectionConfig_HotKey2,";
-                        sql += "@InjectionConfig_HotKey3,";
-                        sql += "@InjectionConfig_HotKey4,";
-                        sql += "@InjectionConfig_HotKey5,";
-                        sql += "@InjectionConfig_HotKey6,";
-                        sql += "@InjectionConfig_HotKey7,";
-                        sql += "@InjectionConfig_HotKey8,";
-                        sql += "@InjectionConfig_HotKey9,";
-                        sql += "@InjectionConfig_HotKey10,";
-                        sql += "@InjectionConfig_HotKey11,";
-                        sql += "@InjectionConfig_HotKey12,";
-                        sql += "@InjectionConfig_PacketConfig.List_AutoRoll,";
-                        sql += "@InjectionConfig_PacketConfig.List_AutoClear,";
-                        sql += "@InjectionConfig_PacketConfig.List_AutoClear_Value,";
-                        sql += "@InjectionConfig_LogList_AutoRoll,";
-                        sql += "@InjectionConfig_LogList_AutoClear,";
-                        sql += "@InjectionConfig_LogList_AutoClear_Value,";
-                        sql += "@InjectionConfig_SpeedMode,";
-                        sql += "@InjectionConfig_ListExecute,";
-                        sql += "@InjectionConfig_FilterExecute";
+                        sql += "@ProxyIP_Auto,";
+                        sql += "@EnableSOCKS5,";
+                        sql += "@ProxyPort,";
+                        sql += "@EnableAuth,";
+                        sql += "@ProxyList_NoRecord,";
+                        sql += "@ClientList_DelClosed,";
+                        sql += "@LogList_AutoRoll,";
+                        sql += "@LogList_AutoClear,";
+                        sql += "@LogList_AutoClear_Value,";
+                        sql += "@Enable_MapLocal,";
+                        sql += "@Enable_MapRemote,";
+                        sql += "@Enable_ExternalProxy,";
+                        sql += "@ExternalProxy_IP,";
+                        sql += "@ExternalProxy_Port,";
+                        sql += "@Enable_ExternalProxy_AppointPort,";
+                        sql += "@ExternalProxy_AppointPort,";
+                        sql += "@Enable_ExternalProxy_Auth,";
+                        sql += "@ExternalProxy_UserName,";
+                        sql += "@ExternalProxy_PassWord,";
+                        sql += "@SpeedMode";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EnableSOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ProxyPort", ProxyConfig.Proxy.ProxyPort);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EnableAuth", ProxyConfig.Proxy.Enable_Auth);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ProxyList_NoRecord", ProxyConfig.Proxy.NoRecord);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ClientList_DelClosed", ProxyConfig.Proxy.DelClosed);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoRoll", LogConfig.List.AutoRoll);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear", LogConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_IP", ProxyConfig.Proxy.ExternalProxy_IP);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_Port", ProxyConfig.Proxy.ExternalProxy_Port);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy_AppointPort", ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_AppointPort", ProxyConfig.Proxy.ExternalProxy_AppointPort);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_SpeedMode", ProxyConfig.Proxy.SpeedMode);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckNotShow", PacketConfig.Packet.CheckNotShow);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckSocket", PacketConfig.Packet.CheckSocket);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckSocket_Value", PacketConfig.Packet.CheckSocket_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckIP", PacketConfig.Packet.CheckIP);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckIP_Value", PacketConfig.Packet.CheckIP_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckPort", PacketConfig.Packet.CheckPort);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckPort_Value", PacketConfig.Packet.CheckPort_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckHead", PacketConfig.Packet.CheckHead);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckHead_Value", PacketConfig.Packet.CheckHead_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckData", PacketConfig.Packet.CheckData);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckData_Value", PacketConfig.Packet.CheckData_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckSize", PacketConfig.Packet.CheckLen);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckLength_Value", PacketConfig.Packet.CheckLength_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_Send", PacketConfig.Packet.HookWS1_Send);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_Recv", PacketConfig.Packet.HookWS1_Recv);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_RecvFrom", PacketConfig.Packet.HookWS1_RecvFrom);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS2_Send", PacketConfig.Packet.HookWS2_Send);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS2_SendTo", PacketConfig.Packet.HookWS2_SendTo);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS2_Recv", PacketConfig.Packet.HookWS2_Recv);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS2_RecvFrom", PacketConfig.Packet.HookWS2_RecvFrom);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_Send", PacketConfig.Packet.HookWSA_Send);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey1", PacketConfig.Packet.HotKey1);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey2", PacketConfig.Packet.HotKey2);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey3", PacketConfig.Packet.HotKey3);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey4", PacketConfig.Packet.HotKey4);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey5", PacketConfig.Packet.HotKey5);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey6", PacketConfig.Packet.HotKey6);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey7", PacketConfig.Packet.HotKey7);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey8", PacketConfig.Packet.HotKey8);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey9", PacketConfig.Packet.HotKey9);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey10", PacketConfig.Packet.HotKey10);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey11", PacketConfig.Packet.HotKey11);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey12", PacketConfig.Packet.HotKey12);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_PacketConfig.List_AutoRoll", PacketConfig.List.AutoRoll);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_PacketConfig.List_AutoClear", PacketConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_PacketConfig.List_AutoClear_Value", PacketConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoRoll", LogConfig.List.AutoRoll);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear", LogConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_SpeedMode", PacketConfig.Packet.SpeedMode);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_ListExecute", SystemConfig.ListExecute);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_FilterExecute", FilterConfig.Filter.FilterExecute);
+                            cmd.Parameters.AddWithValue("@ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto);
+                            cmd.Parameters.AddWithValue("@EnableSOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
+                            cmd.Parameters.AddWithValue("@ProxyPort", ProxyConfig.Proxy.ProxyPort);
+                            cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);
+                            cmd.Parameters.AddWithValue("@ProxyList_NoRecord", ProxyConfig.Proxy.NoRecord);
+                            cmd.Parameters.AddWithValue("@ClientList_DelClosed", ProxyConfig.Proxy.DelClosed);
+                            cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
+                            cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
+                            cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
+                            cmd.Parameters.AddWithValue("@Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote);
+                            cmd.Parameters.AddWithValue("@Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy);
+                            cmd.Parameters.AddWithValue("@ExternalProxy_IP", ProxyConfig.Proxy.ExternalProxy_IP);
+                            cmd.Parameters.AddWithValue("@ExternalProxy_Port", ProxyConfig.Proxy.ExternalProxy_Port);
+                            cmd.Parameters.AddWithValue("@Enable_ExternalProxy_AppointPort", ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort);
+                            cmd.Parameters.AddWithValue("@ExternalProxy_AppointPort", ProxyConfig.Proxy.ExternalProxy_AppointPort);
+                            cmd.Parameters.AddWithValue("@Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth);
+                            cmd.Parameters.AddWithValue("@ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName);
+                            cmd.Parameters.AddWithValue("@ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord);
+                            cmd.Parameters.AddWithValue("@SpeedMode", ProxyConfig.Proxy.SpeedMode);
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -16139,7 +15600,7 @@ namespace WPE.Lib
                 }
             }
 
-            #endregion
+            #endregion            
 
             #region//滤镜列表
 
@@ -17090,7 +16551,7 @@ namespace WPE.Lib
                                 cmd.Parameters.Add(new SQLiteParameter("@RemotePath", DbType.String));
                                 cmd.Parameters.Add(new SQLiteParameter("@LocalPath", DbType.String));
 
-                                foreach (Proxy_MapLocal pml in ProxyConfig.Mapping.lstMapLocal)
+                                foreach (MapLocal pml in ProxyConfig.Mapping.lstMapLocal)
                                 {
                                     cmd.Parameters["@IsEnable"].Value = pml.IsEnable;
                                     cmd.Parameters["@ProtocolType"].Value = pml.ProtocolType;
@@ -17229,17 +16690,17 @@ namespace WPE.Lib
                                 cmd.Parameters.Add(new SQLiteParameter("@Port_To", DbType.Int32));
                                 cmd.Parameters.Add(new SQLiteParameter("@Path_To", DbType.String));
 
-                                foreach (Proxy_MapRemote pmr in ProxyConfig.Mapping.lstMapRemote)
+                                foreach (MapRemote pmr in ProxyConfig.Mapping.lstMapRemote)
                                 {
                                     cmd.Parameters["@IsEnable"].Value = pmr.IsEnable;
-                                    cmd.Parameters["@ProtocolType_From"].Value = pmr.ProtocolType_From.ToString();
-                                    cmd.Parameters["@Host_From"].Value = pmr.Host_From;
-                                    cmd.Parameters["@Port_From"].Value = pmr.Port_From;
-                                    cmd.Parameters["@Path_From"].Value = pmr.Path_From ?? (object)DBNull.Value;
-                                    cmd.Parameters["@ProtocolType_To"].Value = pmr.ProtocolType_To.ToString();
-                                    cmd.Parameters["@Host_To"].Value = pmr.Host_To;
-                                    cmd.Parameters["@Port_To"].Value = pmr.Port_To;
-                                    cmd.Parameters["@Path_To"].Value = pmr.Path_To ?? (object)DBNull.Value;
+                                    cmd.Parameters["@ProtocolType_From"].Value = pmr.ProtocolTypeFrom.ToString();
+                                    cmd.Parameters["@Host_From"].Value = pmr.HostFrom;
+                                    cmd.Parameters["@Port_From"].Value = pmr.PortFrom;
+                                    cmd.Parameters["@Path_From"].Value = pmr.PathFrom ?? (object)DBNull.Value;
+                                    cmd.Parameters["@ProtocolType_To"].Value = pmr.ProtocolTypeTo.ToString();
+                                    cmd.Parameters["@Host_To"].Value = pmr.HostTo;
+                                    cmd.Parameters["@Port_To"].Value = pmr.PortTo;
+                                    cmd.Parameters["@Path_To"].Value = pmr.PathTo ?? (object)DBNull.Value;
 
                                     cmd.ExecuteNonQuery();
                                 }

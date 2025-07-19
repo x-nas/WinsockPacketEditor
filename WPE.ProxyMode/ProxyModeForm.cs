@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.Reflection;
 using System.Windows.Forms;
 using WPE.Lib;
@@ -44,7 +43,7 @@ namespace WPE.ProxyMode
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {                
                 Operate.SystemConfig.InitCPUAndMemoryCounter();                
-                Operate.SystemConfig.LoadInjectMode_FromDB();
+                Operate.SystemConfig.LoadProxyMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();
                 Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
@@ -52,6 +51,7 @@ namespace WPE.ProxyMode
                 Operate.SystemConfig.StartRemoteMGT();
 
                 this.InitTable_AccountList();
+                this.InitTable_LogList();
 
             }, () =>
             {
@@ -66,14 +66,14 @@ namespace WPE.ProxyMode
         }
 
         private void ProxyModeForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Operate.SystemConfig.StopRemoteMGT(this.RunMode);
+        {            
             Operate.SystemConfig.SaveSystemConfig_ToDB();
-            //Operate.SystemConfig.SaveSystemList_ToDB();
-            //Operate.SystemConfig.SaveInjectMode_ToDB();
-            Operate.ProxyConfig.Account.SaveProxyAccountList_ToDB(this.RunMode);
-            //Operate.ProxyConfig.Mapping.SaveProxyMapLocal_ToDB(this.RunMode);
-            //Operate.ProxyConfig.Mapping.SaveProxyMapRemote_ToDB(this.RunMode);
+            Operate.SystemConfig.SaveProxyMode_ToDB();
+            Operate.SystemConfig.SaveSystemList_ToDB();            
+            Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
+            Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB(this.RunMode);
+            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB(this.RunMode);
+            Operate.SystemConfig.StopRemoteMGT(this.RunMode);
         }
 
         private void InitForm()
@@ -227,7 +227,32 @@ namespace WPE.ProxyMode
             this.tAccountList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));            
             this.pAccountList.PageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
             this.tAccountList.Binding(GetPageData(this.pAccountList.Current, this.pAccountList.PageSize));
-        }        
+        }
+
+        private void InitTable_LogList()
+        {
+            tSystemLog.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("LogTime", "时间戳")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
+                    },
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("FuncName", "模块", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.PacketList.Column."),
+            };
+
+            this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tSystemLog.DataSource = Operate.LogConfig.List.lstLogInfo;
+        }
 
         private BindingList<AccountInfo> GetPageData(int current, int pageSize)
         {
@@ -411,6 +436,83 @@ namespace WPE.ProxyMode
 
         #endregion
 
+        #region//清空数据
+
+        private void CleanUp_ProxyListInfo()
+        {
+            this.CleanUp_LogList();
+        }
+
+        private void CleanUp_LogList()
+        {
+            try
+            {
+                Operate.LogConfig.Queue.ClearLogQueue();
+                Operate.LogConfig.List.ClearLogList();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//计时器
+
+        private void timerProxyList_Tick(object sender, EventArgs e)
+        {
+            if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
+            {
+                Operate.LogConfig.List.LogToList();
+            }
+        }
+
+        private void timerProxyListInfo_Tick(object sender, EventArgs e)
+        {
+            this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
+            this.mProxyMode.Items[4].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();            
+
+            if (!this.bgwProxyList.IsBusy)
+            {
+                this.bgwProxyList.RunWorkerAsync();
+            }
+        }
+
+        #endregion
+
+        #region//显示代理列表（异步）
+
+        private void bgwProxyList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                if (Operate.LogConfig.List.AutoRoll)
+                {
+                    tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
+                }
+
+                if (Operate.LogConfig.List.AutoClear)
+                {
+                    if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                    {
+                        this.CleanUp_LogList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwProxyList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.tSystemLog.Refresh();
+        }
+
+        #endregion
+
         #region//主菜单
 
         private void bMenuCollapse_Click(object sender, EventArgs e)
@@ -493,13 +595,13 @@ namespace WPE.ProxyMode
 
                 //映射设置
                 case 2:
-                    //AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HotKeyForm())
-                    //{
-                    //    Align = AntdUI.TAlignMini.Right,
-                    //    Mask = true,
-                    //    MaskClosable = false,
-                    //    DisplayDelay = 0,
-                    //});
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
                     break;
 
                 //外部代理
@@ -525,7 +627,9 @@ namespace WPE.ProxyMode
                     break;
 
                 //清空数据
-                case 5:                    
+                case 5:
+
+                    this.CleanUp_ProxyListInfo();
 
                     break;
 
@@ -781,6 +885,86 @@ namespace WPE.ProxyMode
                 }
 
                 this.RefreshAccountList();
+            }
+        }
+
+
+
+
+        #endregion
+
+        #region//日志列表 - 右键菜单
+
+        private void tSystemLog_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.LogConfig.List.lstLogInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(tSystemLog, item =>
+                {
+                    List<LogInfo> liList = new List<LogInfo>();
+
+                    foreach (int SelectIndex in this.tSystemLog.SelectedIndexs)
+                    {
+                        liList.Add(Operate.LogConfig.List.lstLogInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Copy":
+
+                            if (liList.Count > 0)
+                            {
+                                string LogString = string.Empty;
+                                foreach (LogInfo li in liList)
+                                {
+                                    LogString += li.LogTime.ToString() + ": " + li.FuncName + " - " + li.LogContent + "\r\n";
+                                }
+
+                                Clipboard.SetText(LogString);
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已复制到剪贴板", TType.Success)
+                                {
+                                    LocalizationText = "System.CopyLog"
+                                });
+                            }
+
+                            break;
+
+                        case "ToExcel":
+
+                            Operate.LogConfig.List.SaveLogList_Dialog(this, this.tSystemLog, Operate.PacketConfig.Packet.InjectProcess, liList);
+
+                            break;
+
+                        case "ClearUp":
+
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("InjectModeForm.miLogList", "日志列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    this.CleanUp_LogList();
+
+                                    return true;
+                                }
+                            });
+
+                            break;
+
+                        case "DeSelect":
+
+                            this.tSystemLog.SelectedIndex = -1;
+
+                            break;
+                    }
+                }, Operate.LogConfig.List.GetCMS_LogList());
             }
         }
 

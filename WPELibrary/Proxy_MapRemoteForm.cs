@@ -7,11 +7,11 @@ namespace WPELibrary
 {
     public partial class Proxy_MapRemoteForm : Form
     {
-        private Proxy_MapRemote pmrSelect;
+        private MapRemote pmrSelect;
 
         #region//窗体事件
 
-        public Proxy_MapRemoteForm(Proxy_MapRemote pmr)
+        public Proxy_MapRemoteForm(MapRemote pmr)
         {
             InitializeComponent();
 
@@ -25,27 +25,27 @@ namespace WPELibrary
 
             if (this.pmrSelect != null)
             {
-                if (this.pmrSelect.ProtocolType_From == Operate.ProxyConfig.Proxy.MapProtocol.Http)
+                if (this.pmrSelect.ProtocolTypeFrom == Operate.ProxyConfig.Proxy.MapProtocol.Http)
                 {
                     this.cbbProtocol_From.SelectedIndex = 0;
                 }
 
-                this.txtHost_From.Text = this.pmrSelect.Host_From;
-                this.nudPort_From.Value = this.pmrSelect.Port_From;
-                this.txtPath_From.Text = this.pmrSelect.Path_From;
+                this.txtHost_From.Text = this.pmrSelect.HostFrom;
+                this.nudPort_From.Value = this.pmrSelect.PortFrom;
+                this.txtPath_From.Text = this.pmrSelect.PathFrom;
 
-                if (this.pmrSelect.ProtocolType_To == Operate.ProxyConfig.Proxy.MapProtocol.Http)
+                if (this.pmrSelect.ProtocolTypeTo == Operate.ProxyConfig.Proxy.MapProtocol.Http)
                 {
                     this.cbbProtocol_To.SelectedIndex = 0;
                 }
-                else if (this.pmrSelect.ProtocolType_To == Operate.ProxyConfig.Proxy.MapProtocol.Https)
+                else if (this.pmrSelect.ProtocolTypeTo == Operate.ProxyConfig.Proxy.MapProtocol.Https)
                 {
                     this.cbbProtocol_To.SelectedIndex = 1;
                 }
 
-                this.txtHost_To.Text = this.pmrSelect.Host_To;
-                this.nudPort_To.Value = this.pmrSelect.Port_To;
-                this.txtPath_To.Text = this.pmrSelect.Path_To;
+                this.txtHost_To.Text = this.pmrSelect.HostTo;
+                this.nudPort_To.Value = this.pmrSelect.PortTo;
+                this.txtPath_To.Text = this.pmrSelect.PathTo;
             }
         }
 

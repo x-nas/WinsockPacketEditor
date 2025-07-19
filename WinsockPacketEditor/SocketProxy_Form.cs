@@ -73,13 +73,13 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Proxy.StopSystemProxy(this);
                 }                
 
-                this.SaveConfigs_Parameter();
+                //this.SaveConfigs_Parameter();
 
                 Operate.SystemConfig.StopRemoteMGT(this.RunMode);
-                Operate.SystemConfig.SaveRunConfig_ToDB(this.RunMode);
-                Operate.ProxyConfig.Account.SaveProxyAccountList_ToDB(this.RunMode);
-                Operate.ProxyConfig.Mapping.SaveProxyMapLocal_ToDB(this.RunMode);
-                Operate.ProxyConfig.Mapping.SaveProxyMapRemote_ToDB(this.RunMode);
+                //Operate.SystemConfig.SaveRunConfig_ToDB(this.RunMode);
+                Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
+                Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB(this.RunMode);
+                Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {
@@ -175,63 +175,9 @@ namespace WinsockPacketEditor
             Socket_Operation.ShowProxyAuthForm();
         }
 
-        #endregion
+        #endregion       
 
-        #region//加载本页面的运行配置
-
-        private void LoadConfigs_Parameter()
-        {
-            try
-            {
-                Operate.SystemConfig.LoadRunConfig_FromDB();
-
-                
-                                
-
-                
-
-                this.cbEnable_MapLocal.Checked = Operate.ProxyConfig.Mapping.Enable_MapLocal;
-                this.cbEnable_MapRemote.Checked = Operate.ProxyConfig.Mapping.Enable_MapRemote;
-
-                
-
-                
-
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//保存本页面的运行配置
-
-        private void SaveConfigs_Parameter()
-        {
-            try
-            {
-                
-                                
-
-                
-
-                Operate.ProxyConfig.Mapping.Enable_MapLocal = this.cbEnable_MapLocal.Checked;
-                Operate.ProxyConfig.Mapping.Enable_MapRemote = this.cbEnable_MapRemote.Checked;
-
-                
-
-                
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion        
+        
 
         #region//系统代理
 
@@ -353,7 +299,7 @@ namespace WinsockPacketEditor
         {
             if (this.CheckProxySet())
             {
-                this.SaveConfigs_Parameter();
+                //this.SaveConfigs_Parameter();
 
                 this.bExternalProxy_Detection.Enabled = false;
                 bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(this);
@@ -463,7 +409,7 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Proxy.ProxyTCP_CNT = 0;
                 Operate.ProxyConfig.Proxy.ProxyUDP_CNT = 0;
 
-                this.SaveConfigs_Parameter();
+                //this.SaveConfigs_Parameter();
 
                 string sProxyIP = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_137), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);

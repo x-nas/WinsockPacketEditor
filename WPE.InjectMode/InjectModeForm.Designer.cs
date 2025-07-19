@@ -2749,6 +2749,7 @@
             // ddlExtraction
             // 
             this.ddlExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlExtraction.List = true;
             this.ddlExtraction.Location = new System.Drawing.Point(3, 3);
             this.ddlExtraction.Name = "ddlExtraction";
             this.ddlExtraction.PlaceholderText = "请选择提取类型";

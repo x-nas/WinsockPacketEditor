@@ -95,9 +95,9 @@ namespace WPE.InjectMode
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();            
-            Operate.ProxyConfig.Account.SaveProxyAccountList_ToDB(this.RunMode);
-            Operate.ProxyConfig.Mapping.SaveProxyMapLocal_ToDB(this.RunMode);
-            Operate.ProxyConfig.Mapping.SaveProxyMapRemote_ToDB(this.RunMode);            
+            Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
+            Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB(this.RunMode);
+            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB(this.RunMode);            
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
@@ -3235,6 +3235,7 @@ namespace WPE.InjectMode
 
             this.ddlExtraction.SelectedIndex = 0;
             this.Extraction_Changed();
+            this.udExtraction.UseAdmin();
         }
 
         private void ddlExtraction_SelectedIndexChanged(object sender, IntEventArgs e)

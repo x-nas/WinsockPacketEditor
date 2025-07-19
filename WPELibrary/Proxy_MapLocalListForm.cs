@@ -122,7 +122,7 @@ namespace WPELibrary
                     int iSelectIndex = this.dgvMapLocal.SelectedRows[0].Index;
                     if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.Mapping.lstMapLocal.Count)
                     {
-                        Operate.ProxyConfig.Mapping.DelMapLocal(Operate.ProxyConfig.Mapping.lstMapLocal[iSelectIndex]);
+                        //Operate.ProxyConfig.Mapping.DelMapLocal(Operate.ProxyConfig.Mapping.lstMapLocal[iSelectIndex]);
                         bindingSource.ResetBindings(false);
                     }
                 }
@@ -153,7 +153,7 @@ namespace WPELibrary
 
             try
             {
-                Proxy_MapLocal pml = null;
+                MapLocal pml = null;
                 if (this.dgvMapLocal.Rows.Count > 0 && this.dgvMapLocal.SelectedRows.Count > 0)
                 {
                     int iSelectIndex = this.dgvMapLocal.SelectedRows[0].Index;

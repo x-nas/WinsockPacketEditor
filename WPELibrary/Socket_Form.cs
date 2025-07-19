@@ -244,7 +244,7 @@ namespace WPELibrary
         {
             try
             {
-                Operate.SystemConfig.LoadRunConfig_FromDB();
+                //Operate.SystemConfig.LoadRunConfig_FromDB();
 
                 this.cbHookWS1_Send.Checked = Operate.PacketConfig.Packet.HookWS1_Send;
                 this.cbHookWS1_SendTo.Checked = Operate.PacketConfig.Packet.HookWS1_SendTo;

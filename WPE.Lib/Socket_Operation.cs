@@ -2135,7 +2135,7 @@ namespace WPE.Lib
             //}
         }
 
-        public static void ShowProxyMapLocalForm(Proxy_MapLocal pml)
+        public static void ShowProxyMapLocalForm(MapLocal pml)
         {
             //try
             //{
@@ -2168,7 +2168,7 @@ namespace WPE.Lib
             //}
         }
 
-        public static void ShowProxyMapRemoteForm(Proxy_MapRemote pmr)
+        public static void ShowProxyMapRemoteForm(MapRemote pmr)
         {
             //try
             //{

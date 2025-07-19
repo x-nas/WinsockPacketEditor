@@ -95,6 +95,24 @@
     <Compile Include="LocationForm.Designer.cs">
       <DependentUpon>LocationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MapLocalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MapLocalForm.Designer.cs">
+      <DependentUpon>MapLocalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapRemoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MapRemoteForm.Designer.cs">
+      <DependentUpon>MapRemoteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MapSettingsForm.Designer.cs">
+      <DependentUpon>MapSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProxyModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +153,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LocationForm.resx">
       <DependentUpon>LocationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapLocalForm.resx">
+      <DependentUpon>MapLocalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapRemoteForm.resx">
+      <DependentUpon>MapRemoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapSettingsForm.resx">
+      <DependentUpon>MapSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

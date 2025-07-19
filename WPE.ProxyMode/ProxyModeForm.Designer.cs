@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
@@ -113,13 +114,16 @@
             this.tAccountList = new AntdUI.Table();
             this.tlpAccountListButton = new System.Windows.Forms.TableLayoutPanel();
             this.mAccountList = new AntdUI.Menu();
+            this.txtSearchUserName = new AntdUI.Input();
+            this.dtpExpiryTime = new AntdUI.DatePickerRange();
+            this.bSearchExpiryTime = new AntdUI.Button();
             this.pAccountList = new AntdUI.Pagination();
             this.tpStatistical = new AntdUI.TabPage();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
-            this.txtSearchUserName = new AntdUI.Input();
-            this.dtpExpiryTime = new AntdUI.DatePickerRange();
-            this.bSearchExpiryTime = new AntdUI.Button();
+            this.timerProxyList = new System.Windows.Forms.Timer(this.components);
+            this.bgwProxyList = new System.ComponentModel.BackgroundWorker();
+            this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
@@ -294,7 +298,6 @@
             this.tabProxyMode.Pages.Add(this.tpAccountList);
             this.tabProxyMode.Pages.Add(this.tpStatistical);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.SelectedIndex = 2;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -303,11 +306,11 @@
             // tpProxyList
             // 
             this.tpProxyList.Controls.Add(this.tlpPacketList);
-            this.tpProxyList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpProxyList.Location = new System.Drawing.Point(3, 33);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
             this.tpProxyList.TabIndex = 0;
-            this.tpProxyList.Text = "代理管理";
+            this.tpProxyList.Text = "代理数据";
             // 
             // tlpPacketList
             // 
@@ -1104,7 +1107,7 @@
             // tpAccountList
             // 
             this.tpAccountList.Controls.Add(this.tlpAccountList);
-            this.tpAccountList.Location = new System.Drawing.Point(3, 33);
+            this.tpAccountList.Location = new System.Drawing.Point(-1124, -724);
             this.tpAccountList.Name = "tpAccountList";
             this.tpAccountList.Size = new System.Drawing.Size(1124, 724);
             this.tpAccountList.TabIndex = 7;
@@ -1195,6 +1198,43 @@
             this.mAccountList.Trigger = AntdUI.Trigger.Click;
             this.mAccountList.SelectChanged += new AntdUI.SelectEventHandler(this.mAccountList_SelectChanged);
             // 
+            // txtSearchUserName
+            // 
+            this.txtSearchUserName.AllowClear = true;
+            this.txtSearchUserName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearchUserName.Location = new System.Drawing.Point(811, 2);
+            this.txtSearchUserName.Name = "txtSearchUserName";
+            this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
+            this.txtSearchUserName.PrefixSvg = "SearchOutlined";
+            this.txtSearchUserName.Size = new System.Drawing.Size(244, 45);
+            this.txtSearchUserName.TabIndex = 4;
+            this.txtSearchUserName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearchUserName_KeyPress);
+            // 
+            // dtpExpiryTime
+            // 
+            this.dtpExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dtpExpiryTime.Format = "yyyy-MM-dd HH:mm:ss";
+            this.dtpExpiryTime.LocalizationPlaceholderEnd = "DatePicker.PlaceholderE";
+            this.dtpExpiryTime.LocalizationPlaceholderStart = "DatePicker.PlaceholderS";
+            this.dtpExpiryTime.Location = new System.Drawing.Point(3, 2);
+            this.dtpExpiryTime.Name = "dtpExpiryTime";
+            this.dtpExpiryTime.PlaceholderEnd = "过期结束时间";
+            this.dtpExpiryTime.PlaceholderStart = "过期开始时间";
+            this.dtpExpiryTime.Size = new System.Drawing.Size(494, 45);
+            this.dtpExpiryTime.TabIndex = 5;
+            this.dtpExpiryTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // bSearchExpiryTime
+            // 
+            this.bSearchExpiryTime.BorderWidth = 1F;
+            this.bSearchExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSearchExpiryTime.Location = new System.Drawing.Point(503, 2);
+            this.bSearchExpiryTime.Name = "bSearchExpiryTime";
+            this.bSearchExpiryTime.Size = new System.Drawing.Size(94, 45);
+            this.bSearchExpiryTime.TabIndex = 7;
+            this.bSearchExpiryTime.Text = "查询";
+            this.bSearchExpiryTime.Click += new System.EventHandler(this.bSearchExpiryTime_Click);
+            // 
             // pAccountList
             // 
             this.pAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1227,7 +1267,7 @@
             // 
             // tSystemLog
             // 
-            this.tSystemLog.Bordered = true;
+            this.tSystemLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tSystemLog.CellImpactHeight = false;
             this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tSystemLog.EmptyHeader = true;
@@ -1239,43 +1279,24 @@
             this.tSystemLog.Size = new System.Drawing.Size(1124, 724);
             this.tSystemLog.TabIndex = 2;
             this.tSystemLog.Text = "table1";
+            this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
             // 
-            // txtSearchUserName
+            // timerProxyList
             // 
-            this.txtSearchUserName.AllowClear = true;
-            this.txtSearchUserName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSearchUserName.Location = new System.Drawing.Point(811, 2);
-            this.txtSearchUserName.Name = "txtSearchUserName";
-            this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
-            this.txtSearchUserName.PrefixSvg = "SearchOutlined";
-            this.txtSearchUserName.Size = new System.Drawing.Size(244, 45);
-            this.txtSearchUserName.TabIndex = 4;
-            this.txtSearchUserName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearchUserName_KeyPress);
+            this.timerProxyList.Enabled = true;
+            this.timerProxyList.Interval = 10;
+            this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
             // 
-            // dtpExpiryTime
+            // bgwProxyList
             // 
-            this.dtpExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtpExpiryTime.Format = "yyyy-MM-dd HH:mm:ss";
-            this.dtpExpiryTime.LocalizationPlaceholderEnd = "DatePicker.PlaceholderE";
-            this.dtpExpiryTime.LocalizationPlaceholderStart = "DatePicker.PlaceholderS";
-            this.dtpExpiryTime.Location = new System.Drawing.Point(3, 2);
-            this.dtpExpiryTime.Name = "dtpExpiryTime";
-            this.dtpExpiryTime.PlaceholderEnd = "过期结束时间";
-            this.dtpExpiryTime.PlaceholderStart = "过期开始时间";
-            this.dtpExpiryTime.Size = new System.Drawing.Size(494, 45);
-            this.dtpExpiryTime.TabIndex = 5;
-            this.dtpExpiryTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.bgwProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyList_DoWork);
+            this.bgwProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProxyList_RunWorkerCompleted);
             // 
-            // bSearchExpiryTime
+            // timerProxyListInfo
             // 
-            this.bSearchExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSearchExpiryTime.Location = new System.Drawing.Point(503, 2);
-            this.bSearchExpiryTime.Name = "bSearchExpiryTime";
-            this.bSearchExpiryTime.Size = new System.Drawing.Size(94, 45);
-            this.bSearchExpiryTime.TabIndex = 7;
-            this.bSearchExpiryTime.Text = "查询";
-            this.bSearchExpiryTime.Type = AntdUI.TTypeMini.Primary;
-            this.bSearchExpiryTime.Click += new System.EventHandler(this.bSearchExpiryTime_Click);
+            this.timerProxyListInfo.Enabled = true;
+            this.timerProxyListInfo.Interval = 1000;
+            this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
             // 
             // ProxyModeForm
             // 
@@ -1393,6 +1414,9 @@
         private AntdUI.Input txtSearchUserName;
         private AntdUI.DatePickerRange dtpExpiryTime;
         private AntdUI.Button bSearchExpiryTime;
+        private System.Windows.Forms.Timer timerProxyList;
+        private System.ComponentModel.BackgroundWorker bgwProxyList;
+        private System.Windows.Forms.Timer timerProxyListInfo;
     }
 }
 

@@ -136,7 +136,7 @@ namespace WPELibrary
                     int iSelectIndex = this.dgvMapRemote.SelectedRows[0].Index;
                     if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.Mapping.lstMapRemote.Count)
                     {
-                        Operate.ProxyConfig.Mapping.DelMapRemote(Operate.ProxyConfig.Mapping.lstMapRemote[iSelectIndex]);
+                        //Operate.ProxyConfig.Mapping.DelMapRemote(Operate.ProxyConfig.Mapping.lstMapRemote[iSelectIndex]);
                         bindingSource.ResetBindings(false);
                     }
                 }
@@ -167,7 +167,7 @@ namespace WPELibrary
 
             try
             {
-                Proxy_MapRemote pmr = null;
+                MapRemote pmr = null;
                 if (this.dgvMapRemote.Rows.Count > 0 && this.dgvMapRemote.SelectedRows.Count > 0)
                 {
                     int iSelectIndex = this.dgvMapRemote.SelectedRows[0].Index;

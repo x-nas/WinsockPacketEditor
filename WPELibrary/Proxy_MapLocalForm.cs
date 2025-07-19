@@ -7,11 +7,11 @@ namespace WPELibrary
 {
     public partial class Proxy_MapLocalForm : Form
     {
-        private Proxy_MapLocal pmlSelect;
+        private MapLocal pmlSelect;
 
         #region//窗体事件
 
-        public Proxy_MapLocalForm(Proxy_MapLocal pml)
+        public Proxy_MapLocalForm(MapLocal pml)
         {
             InitializeComponent();
 
