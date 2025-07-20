@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace WPE.Lib
 {
-    public class Socket_ProxyTCP : IDisposable
+    public class ProxyExecute : IDisposable
     {
         private volatile bool _isDisposed;
         private readonly object _closeLock = new object();
@@ -16,23 +16,24 @@ namespace WPE.Lib
         public Operate.ProxyConfig.Proxy.DomainType DomainType { get; set; }
         public Operate.ProxyConfig.Proxy.AddressType AddressType { get; set; }
         public Guid AID { get; set; }
-        public ClientConnection Client { get; }
-        public ServerConnection Server { get; }
+        public TCPClient TCP_Client { get; }
+        public TCPServer TCP_Server { get; }
+        public UDPRelay UDP_Relay { get; }
 
-        #region//Socket_ProxyTCP
+        #region//ProxyExecute
 
-        public Socket_ProxyTCP(Socket clientSocket, int bufferSize)
+        public ProxyExecute(Socket clientSocket, int bufferSize)
         {
-            Client = new ClientConnection(clientSocket, bufferSize);
-            Server = new ServerConnection(bufferSize);
+            TCP_Client = new TCPClient(clientSocket, bufferSize);
+            TCP_Server = new TCPServer(bufferSize);
+            UDP_Relay = new UDPRelay(new IPEndPoint(IPAddress.Any, 0));
+
             ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Handshake;
         }
 
         #endregion
 
-        #region //TCP 客户端
-
-        public class ClientConnection : IDisposable
+        public class TCPClient : IDisposable
         {
             private volatile bool _isDisposed;
 
@@ -42,7 +43,7 @@ namespace WPE.Lib
             public byte[] Buffer { get; private set; }
             public byte[] Data { get; set; }
 
-            public ClientConnection(Socket socket, int bufferSize)
+            public TCPClient(Socket socket, int bufferSize)
             {
                 Socket = socket;
                 EndPoint = socket?.RemoteEndPoint as IPEndPoint;
@@ -92,7 +93,7 @@ namespace WPE.Lib
                     {
                         if (!_isDisposed)
                         {
-                            Operate.DoLog(nameof(ClientConnection.Close), ex.Message);
+                            Operate.DoLog(nameof(TCPClient.Close), ex.Message);
                         }
                     }
                 }
@@ -101,11 +102,7 @@ namespace WPE.Lib
             public void Dispose() => Close();
         }
 
-        #endregion
-
-        #region //TCP 服务端
-
-        public class ServerConnection : IDisposable
+        public class TCPServer : IDisposable
         {
             private volatile bool _isDisposed;
 
@@ -114,7 +111,7 @@ namespace WPE.Lib
             public byte[] Buffer { get; private set; }
             public IPEndPoint EndPoint { get; set; }
 
-            public ServerConnection(int bufferSize)
+            public TCPServer(int bufferSize)
             {
                 Buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
             }
@@ -161,7 +158,7 @@ namespace WPE.Lib
                     {
                         if (!_isDisposed)
                         {
-                            Operate.DoLog(nameof(ServerConnection.Close), ex.Message);
+                            Operate.DoLog(nameof(TCPServer.Close), ex.Message);
                         }
                     }
                 }
@@ -170,7 +167,36 @@ namespace WPE.Lib
             public void Dispose() => Close();
         }
 
-        #endregion
+        public class UDPRelay
+        {
+            public UdpClient ClientUDP { get; set; }
+            public IPEndPoint ClientUDP_EndPoint { get; set; }
+            public DateTime ClientUDP_Time { get; set; }
+            public bool IsActive { get; private set; }
+
+            public UDPRelay(IPEndPoint UDPClient)
+            {
+                this.ClientUDP = new UdpClient(UDPClient);
+                this.ClientUDP_Time = DateTime.Now;
+                this.IsActive = true;
+            }
+
+            public void CloseUDPClient()
+            {
+                if (!IsActive) return;
+
+                IsActive = false;
+
+                try
+                {
+                    ClientUDP?.Close();
+                }
+                finally
+                {
+                    ClientUDP = null;
+                }
+            }
+        }
 
         #region //IDisposable
 
@@ -191,13 +217,13 @@ namespace WPE.Lib
 
                 if (disposing)
                 {
-                    Server?.Close();
-                    Client?.Close();
+                    TCP_Server?.Close();
+                    TCP_Client?.Close();
                 }
             }
         }
 
-        ~Socket_ProxyTCP()
+        ~ProxyExecute()
         {
             Dispose(false);
         }

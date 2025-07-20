@@ -166,9 +166,8 @@
       <DependentUpon>SystemSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="ClassObject\PacketInfo.cs" />
-    <Compile Include="Socket_ProxyData.cs" />
-    <Compile Include="Socket_ProxyTCP.cs" />
-    <Compile Include="Socket_ProxyUDP.cs" />
+    <Compile Include="ClassObject\ProxyInfo.cs" />
+    <Compile Include="ClassObject\ProxyExecute.cs" />
     <Compile Include="ClassObject\RobotExecute.cs" />
     <Compile Include="ClassObject\RobotInfo.cs" />
     <Compile Include="ClassObject\SendExecute.cs" />

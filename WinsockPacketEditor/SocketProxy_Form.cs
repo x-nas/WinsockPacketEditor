@@ -649,19 +649,14 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.ProxyConfig.Queue.qSocket_ProxyTCP.Count > 0)
+                if (Operate.ProxyConfig.Queue.qProxyExecute.Count > 0)
                 {
-                    Operate.ProxyConfig.List.ProxyTCP_ToList();
+                    Operate.ProxyConfig.List.ProxyExecute_ToList();
                 }
 
-                if (Operate.ProxyConfig.Queue.qSocket_ProxyUDP.Count > 0)
+                if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
                 {
-                    Operate.ProxyConfig.List.ProxyUDP_ToList();
-                }
-
-                if (Operate.ProxyConfig.Queue.qSocket_ProxyData.Count > 0)
-                {
-                    Operate.ProxyConfig.List.ProxyData_ToList();
+                    Operate.ProxyConfig.List.ProxyInfo_ToList();
                 }
 
                 if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
@@ -731,15 +726,15 @@ namespace WinsockPacketEditor
 
         private void CleanUp_ProxyData()
         {
-            Operate.ProxyConfig.Queue.ResetProxy_DataQueue();
-            Operate.ProxyConfig.List.ResetProxy_DataList();
+            Operate.ProxyConfig.Queue.ResetProxyInfoQueue();
+            Operate.ProxyConfig.List.ResetProxyInfoList();
             this.tvProxyData.Nodes.Clear();
         }
 
         private void CleanUp_ProxyInfo()
         {
-            Operate.ProxyConfig.Queue.ResetProxy_TCPQueue();
-            Operate.ProxyConfig.List.ResetProxy_TCPList();
+            Operate.ProxyConfig.Queue.ResetProxyExecuteQueue();
+            Operate.ProxyConfig.List.ResetProxyExecuteList();
             this.tvProxyInfo.Nodes.Clear();
         }
 
@@ -799,7 +794,7 @@ namespace WinsockPacketEditor
 
         #region//显示代理列表（异步）
 
-        private async void Event_RecProxyData(Socket_ProxyData spd)
+        private async void Event_RecProxyData(ProxyInfo spd)
         {
             try
             {
@@ -837,10 +832,10 @@ namespace WinsockPacketEditor
 
                     await Task.Run(() =>
                     {
-                        RootNode = Socket_Operation.FindNodeSync(this.tvProxyData.Nodes, spd.Domain);
+                        RootNode = Socket_Operation.FindNodeSync(this.tvProxyData.Nodes, spd.ServerDomain);
                         if (RootNode == null)
                         {
-                            RootNode = Socket_Operation.AddTreeNode(this.tvProxyData, this.tvProxyData.Nodes, spd.Domain, RootImgIndex, null);
+                            RootNode = Socket_Operation.AddTreeNode(this.tvProxyData, this.tvProxyData.Nodes, spd.ServerDomain, RootImgIndex, null);
                             Socket_Operation.AddTreeNode(this.tvProxyData, RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_138), RequestImgIndex, null);
                             Socket_Operation.AddTreeNode(this.tvProxyData, RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139), ResponseImgIndex, null);
                         }
@@ -859,8 +854,8 @@ namespace WinsockPacketEditor
                                     break;
                             }
 
-                            string sDataNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.Buffer.Length);
-                            Socket_Operation.AddTreeNode(this.tvProxyData, DataNode.Nodes, sDataNodeName, DataImgIndex, spd.Buffer);
+                            string sDataNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.PacketBuffer.Length);
+                            Socket_Operation.AddTreeNode(this.tvProxyData, DataNode.Nodes, sDataNodeName, DataImgIndex, spd.PacketBuffer);
                         }
                     });
 
@@ -887,24 +882,24 @@ namespace WinsockPacketEditor
 
         #region//显示客户端列表（异步）
 
-        private async void Event_RecProxyInfo(Socket_ProxyTCP spt)
+        private async void Event_RecProxyInfo(ProxyExecute pe)
         {
             try
             {
-                if (!tvProxyInfo.IsDisposed && spt != null)
+                if (!tvProxyInfo.IsDisposed && pe != null)
                 {
-                    if (spt.CommandType == Operate.ProxyConfig.Proxy.CommandType.Connect)
+                    if (pe.CommandType == Operate.ProxyConfig.Proxy.CommandType.Connect)
                     {
                         int iRootImgIndex = -1;
                         int iChildImgIndex = 5;
 
-                        string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(spt);
-                        string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(spt.AID);
+                        string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
+                        string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
                         string sRootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
 
                         if (!string.IsNullOrEmpty(sRootName))
                         {
-                            string sChildName = spt.Client.Address;
+                            string sChildName = pe.TCP_Client.Address;
 
                             await Task.Run(() =>
                             {
@@ -955,19 +950,19 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    ConcurrentBag<Socket_ProxyTCP> sptRemove = new ConcurrentBag<Socket_ProxyTCP>();
+                    ConcurrentBag<ProxyExecute> peRemove = new ConcurrentBag<ProxyExecute>();
 
-                    var snapshot = Operate.ProxyConfig.List.lstProxyTCP.ToArray();
-                    foreach (Socket_ProxyTCP spt in snapshot)
+                    var snapshot = Operate.ProxyConfig.List.lstProxyExecute.ToArray();
+                    foreach (ProxyExecute pe in snapshot)
                     {
-                        if (spt.Client.Socket == null)
+                        if (pe.TCP_Client.Socket == null)
                         {
-                            string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(spt);
-                            string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(spt.AID);
+                            string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
+                            string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
 
                             if (string.IsNullOrEmpty(ClientUserName))
                             {
-                                TreeNode ClientNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, spt.Client.Address);
+                                TreeNode ClientNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, pe.TCP_Client.Address);
                                 if (ClientNode != null)
                                 {
                                     if (!tvProxyInfo.IsDisposed)
@@ -979,7 +974,7 @@ namespace WinsockPacketEditor
                                     }
                                 }
 
-                                sptRemove.Add(spt);
+                                peRemove.Add(pe);
                             }
                             else
                             {
@@ -988,7 +983,7 @@ namespace WinsockPacketEditor
                                 TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
                                 if (RootNode != null)
                                 {
-                                    TreeNode ClientNode = Socket_Operation.FindNodeSync(RootNode.Nodes, spt.Client.Address);
+                                    TreeNode ClientNode = Socket_Operation.FindNodeSync(RootNode.Nodes, pe.TCP_Client.Address);
 
                                     if (!tvProxyInfo.IsDisposed)
                                     {
@@ -997,21 +992,21 @@ namespace WinsockPacketEditor
                                             if (ClientNode != null)
                                             {
                                                 ClientNode.Remove();
-                                                sptRemove.Add(spt);
+                                                peRemove.Add(pe);
                                             }
 
                                             if (RootNode.Nodes.Count == 0)
                                             {
-                                                Operate.ProxyConfig.Account.DeleteProxyAuthInfo_ByAIDAndIP(spt.AID, ClientIP);
+                                                Operate.ProxyConfig.Account.DeleteProxyAuthInfo_ByAIDAndIP(pe.AID, ClientIP);
 
                                                 if (this.cbDeleteClosed.Checked)
                                                 {
                                                     RootNode.Remove();
                                                 }
 
-                                                if (spt.AID != null && spt.AID != Guid.Empty)
+                                                if (pe.AID != null && pe.AID != Guid.Empty)
                                                 {
-                                                    Operate.ProxyConfig.Account.SetOnline_ByAccountID(spt.AID, false);
+                                                    Operate.ProxyConfig.Account.SetOnline_ByAccountID(pe.AID, false);
                                                 }
                                             }
                                         }));
@@ -1021,9 +1016,9 @@ namespace WinsockPacketEditor
                         }                        
                     }
 
-                    foreach (Socket_ProxyTCP spt in sptRemove)
+                    foreach (ProxyExecute pe in peRemove)
                     {
-                        Operate.ProxyConfig.List.ClearTCP(spt);
+                        Operate.ProxyConfig.List.ClearProxyExecute(pe);
                     }
                 }
                 catch (Exception ex)
@@ -1120,8 +1115,8 @@ namespace WinsockPacketEditor
                 this.tlProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
                 this.tlProxyTCP_CNT.Text = ProxyTCP_CNT.ToString();
                 this.tlProxyUDP_CNT.Text = ProxyUDP_CNT.ToString();
-                this.tlProxyCache_CNT.Text = Operate.ProxyConfig.Queue.qSocket_ProxyData.Count.ToString();
-                this.tlProxyLinks_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
+                this.tlProxyCache_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
+                this.tlProxyLinks_CNT.Text = Operate.ProxyConfig.List.lstProxyExecute.Count.ToString();
                 this.tlProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
                 this.tsslTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
                 this.tsslProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;

@@ -250,11 +250,16 @@ namespace WPE.InjectMode
         private void InitTable_PacketList()
         {
             tPacketList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("PacketImg", string.Empty, AntdUI.ColumnAlign.Center)
+                new AntdUI.Column(string.Empty, string.Empty, AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
                     {
-                        return new AntdUI.CellImage((Image)value);
+                        if(record is PacketInfo pi)
+                        {
+                            return new AntdUI.CellImage(Operate.PacketConfig.Packet.GetImg_ByPacketType(pi.PacketType));
+                        }
+
+                        return value;
                     },
                 }.SetFixed(),
                 new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
@@ -1123,7 +1128,7 @@ namespace WPE.InjectMode
 
                     if (this.StartHook)
                     {
-                        this.sPacketList.Items[8].IconSvg = "StopOutlined";
+                        this.sPacketList.Items[8].IconSvg = "PauseCircleFilled";
                         this.sPacketList.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StopHook", "停止拦截");
                         this.StartHook = false;
 

@@ -17,10 +17,10 @@ namespace WPE.Lib.WebAPI
             string WorkMode = Socket_Operation.GetWorkModeName(Operate.ProxyConfig.Proxy.SpeedMode);
             ulong ProxyTCP = Operate.ProxyConfig.Proxy.ProxyTCP_CNT;
             ulong ProxyUDP = Operate.ProxyConfig.Proxy.ProxyUDP_CNT;
-            string ProxyCache = Operate.ProxyConfig.Queue.qSocket_ProxyData.Count.ToString();
+            string ProxyCache = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
             ulong ProxyTotal = ProxyTCP + ProxyUDP;
             string ProxyOnLine = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
-            string ProxyLinks = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
+            string ProxyLinks = Operate.ProxyConfig.List.lstProxyExecute.Count.ToString();
             string ProxySpeed = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
             string ProxyBytes = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
 

@@ -651,33 +651,7 @@ namespace WPE.Lib
 
         #endregion
 
-        #region//统计代理速率
-
-        public static void CountProxySpeed(Operate.ProxyConfig.Proxy.ProxySpeedType psType, int ProxySpeed)
-        {
-            try
-            {
-                if (ProxySpeed > 0)
-                {
-                    switch (psType)
-                    {
-                        case Operate.ProxyConfig.Proxy.ProxySpeedType.Uplink:
-                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, ProxySpeed);
-                            break;
-
-                        case Operate.ProxyConfig.Proxy.ProxySpeedType.Downlink:
-                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, ProxySpeed);
-                            break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion        
+        
 
         #region//判断文本框输入的字符类型
 

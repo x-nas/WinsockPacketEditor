@@ -1,6 +1,5 @@
 ﻿using AntdUI;
 using System;
-using System.Drawing;
 
 namespace WPE.Lib
 {
@@ -21,23 +20,7 @@ namespace WPE.Lib
             }
         }
 
-        #endregion
-
-        #region//封包图标
-
-        Image _PacketImg;
-
-        public Image PacketImg
-        {
-            get => _PacketImg;
-            set
-            {
-                _PacketImg = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//套接字
 
@@ -219,7 +202,6 @@ namespace WPE.Lib
             this._PacketBuffer = pBuffer;
             this._PacketLen = pLen;
             this._FilterAction = pAction;
-            this._PacketImg = Operate.PacketConfig.Packet.GetImg_ByPacketType(pType);
         }
 
         #endregion        

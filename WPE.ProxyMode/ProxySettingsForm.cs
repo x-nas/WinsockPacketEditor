@@ -24,10 +24,13 @@ namespace WPE.ProxyMode
             {
                 this.Text = AntdUI.Localization.Get("ProxySettingsForm", "代理设置");
 
-                IPAddress[] ipAddresses = Operate.SystemConfig.GetLocalIPAddress();
+                if (Operate.ProxyConfig.Proxy.ProxyServerIP == null)
+                {
+                    Operate.ProxyConfig.Proxy.ProxyServerIP = Operate.SystemConfig.GetLocalIPAddress();
+                }
 
                 this.ddlProxyIP_Appoint.Items.Clear();
-                this.ddlProxyIP_Appoint.Items.AddRange(ipAddresses.Select(ip => ip.ToString()).ToArray());
+                this.ddlProxyIP_Appoint.Items.AddRange(Operate.ProxyConfig.Proxy.ProxyServerIP.Select(ip => new SelectItem(ip.ToString(), ip)).ToArray());
 
                 if (this.ddlProxyIP_Appoint.Items.Count > 0)
                 {
@@ -114,10 +117,12 @@ namespace WPE.ProxyMode
             {
                 if (this.switchSystemProxy.Checked)
                 {
+                    Operate.ProxyConfig.Proxy.Enable_SystemProxy = true;
                     Operate.ProxyConfig.Proxy.StartSystemProxy(this);
                 }
                 else
                 {
+                    Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
                     Operate.ProxyConfig.Proxy.StopSystemProxy(this);
                 }
             }
@@ -147,6 +152,17 @@ namespace WPE.ProxyMode
             Operate.ProxyConfig.Proxy.Enable_SOCKS5 = this.cbEnable_SOCKS5.Checked;
             Operate.ProxyConfig.Proxy.ProxyPort = ((ushort)this.nudSOCKS5Port.Value);
             Operate.ProxyConfig.Proxy.Enable_Auth = this.cbEnable_Auth.Checked;
+
+            if (Operate.ProxyConfig.Proxy.ProxyIP_Auto)
+            {
+                Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
+                Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
+            }
+            else
+            {
+                Operate.ProxyConfig.Proxy.ProxyTCP_IP = (IPAddress)(this.ddlProxyIP_Appoint.SelectedValue);
+                Operate.ProxyConfig.Proxy.ProxyUDP_IP = (IPAddress)(this.ddlProxyIP_Appoint.SelectedValue);
+            }
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "代理设置保存成功", TType.Success)
             {

@@ -30,6 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxySettingsForm));
             this.tlpProxySettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbEnable_Auth = new AntdUI.Checkbox();
+            this.ddlAuthType = new AntdUI.Select();
+            this.dProxyAuth = new AntdUI.Divider();
             this.dSystemProxy = new AntdUI.Divider();
             this.tlpProxyType = new System.Windows.Forms.TableLayoutPanel();
             this.cbEnable_SOCKS5 = new AntdUI.Checkbox();
@@ -43,15 +47,11 @@
             this.cbProxyIP_Auto = new AntdUI.Checkbox();
             this.ddlProxyIP_Appoint = new AntdUI.Select();
             this.switchSystemProxy = new AntdUI.Switch();
-            this.dProxyAuth = new AntdUI.Divider();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.cbEnable_Auth = new AntdUI.Checkbox();
-            this.ddlAuthType = new AntdUI.Select();
             this.tlpProxySettings.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tlpProxyType.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpProxyServerIP.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpProxySettings
@@ -91,6 +91,56 @@
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpProxySettings.Size = new System.Drawing.Size(484, 761);
             this.tlpProxySettings.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.cbEnable_Auth, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.ddlAuthType, 1, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 387);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(484, 100);
+            this.tableLayoutPanel1.TabIndex = 12;
+            // 
+            // cbEnable_Auth
+            // 
+            this.cbEnable_Auth.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbEnable_Auth.Checked = true;
+            this.cbEnable_Auth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbEnable_Auth.Location = new System.Drawing.Point(3, 3);
+            this.cbEnable_Auth.Name = "cbEnable_Auth";
+            this.cbEnable_Auth.Size = new System.Drawing.Size(138, 42);
+            this.cbEnable_Auth.TabIndex = 0;
+            this.cbEnable_Auth.Text = "启用代理认证";
+            this.cbEnable_Auth.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_Auth_CheckedChanged);
+            // 
+            // ddlAuthType
+            // 
+            this.ddlAuthType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlAuthType.List = true;
+            this.ddlAuthType.Location = new System.Drawing.Point(147, 3);
+            this.ddlAuthType.Name = "ddlAuthType";
+            this.ddlAuthType.PlaceholderText = "请选择";
+            this.ddlAuthType.Size = new System.Drawing.Size(334, 42);
+            this.ddlAuthType.TabIndex = 1;
+            // 
+            // dProxyAuth
+            // 
+            this.dProxyAuth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dProxyAuth.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dProxyAuth.Location = new System.Drawing.Point(3, 341);
+            this.dProxyAuth.Name = "dProxyAuth";
+            this.dProxyAuth.Orientation = AntdUI.TOrientation.Left;
+            this.dProxyAuth.Size = new System.Drawing.Size(478, 23);
+            this.dProxyAuth.TabIndex = 11;
+            this.dProxyAuth.Text = "代理认证";
             // 
             // dSystemProxy
             // 
@@ -254,6 +304,7 @@
             // ddlProxyIP_Appoint
             // 
             this.ddlProxyIP_Appoint.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlProxyIP_Appoint.List = true;
             this.ddlProxyIP_Appoint.Location = new System.Drawing.Point(115, 3);
             this.ddlProxyIP_Appoint.Name = "ddlProxyIP_Appoint";
             this.ddlProxyIP_Appoint.PlaceholderText = "请选择";
@@ -269,55 +320,6 @@
             this.switchSystemProxy.Size = new System.Drawing.Size(50, 30);
             this.switchSystemProxy.TabIndex = 10;
             this.switchSystemProxy.CheckedChanged += new AntdUI.BoolEventHandler(this.switchSystemProxy_CheckedChanged);
-            // 
-            // dProxyAuth
-            // 
-            this.dProxyAuth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dProxyAuth.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dProxyAuth.Location = new System.Drawing.Point(3, 341);
-            this.dProxyAuth.Name = "dProxyAuth";
-            this.dProxyAuth.Orientation = AntdUI.TOrientation.Left;
-            this.dProxyAuth.Size = new System.Drawing.Size(478, 23);
-            this.dProxyAuth.TabIndex = 11;
-            this.dProxyAuth.Text = "代理认证";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.cbEnable_Auth, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.ddlAuthType, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 387);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(484, 100);
-            this.tableLayoutPanel1.TabIndex = 12;
-            // 
-            // cbEnable_Auth
-            // 
-            this.cbEnable_Auth.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbEnable_Auth.Checked = true;
-            this.cbEnable_Auth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbEnable_Auth.Location = new System.Drawing.Point(3, 3);
-            this.cbEnable_Auth.Name = "cbEnable_Auth";
-            this.cbEnable_Auth.Size = new System.Drawing.Size(138, 42);
-            this.cbEnable_Auth.TabIndex = 0;
-            this.cbEnable_Auth.Text = "启用代理认证";
-            this.cbEnable_Auth.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_Auth_CheckedChanged);
-            // 
-            // ddlAuthType
-            // 
-            this.ddlAuthType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ddlAuthType.Location = new System.Drawing.Point(147, 3);
-            this.ddlAuthType.Name = "ddlAuthType";
-            this.ddlAuthType.PlaceholderText = "请选择";
-            this.ddlAuthType.Size = new System.Drawing.Size(334, 42);
-            this.ddlAuthType.TabIndex = 1;
             // 
             // ProxySettingsForm
             // 
@@ -336,13 +338,13 @@
             this.Text = "ProxySettingsForm";
             this.Load += new System.EventHandler(this.ProxySettingsForm_Load);
             this.tlpProxySettings.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.tlpProxyType.ResumeLayout(false);
             this.tlpProxyType.PerformLayout();
             this.tlpButton.ResumeLayout(false);
             this.tlpProxyServerIP.ResumeLayout(false);
             this.tlpProxyServerIP.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

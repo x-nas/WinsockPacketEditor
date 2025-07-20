@@ -1,10 +1,12 @@
 ﻿using AntdUI;
-using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WPE.Lib;
 using WPE.Lib.Controls;
@@ -13,7 +15,9 @@ namespace WPE.ProxyMode
 {
     public partial class ProxyModeForm : Window, Operate.IProxyMode
     {
+        private bool StartProxy = true;
         private bool setcolor = false;
+        private static Socket ProxyServer;
         private BindingList<AccountInfo> lstAccount;
         private readonly Operate.SystemConfig.SystemMode RunMode = Operate.SystemConfig.SystemMode.Proxy;
 
@@ -50,6 +54,8 @@ namespace WPE.ProxyMode
                 Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
                 Operate.SystemConfig.StartRemoteMGT();
 
+                this.InitProxyServerIP();
+                this.InitTable_ProxyList();
                 this.InitTable_AccountList();
                 this.InitTable_LogList();
 
@@ -66,7 +72,13 @@ namespace WPE.ProxyMode
         }
 
         private void ProxyModeForm_FormClosing(object sender, FormClosingEventArgs e)
-        {            
+        {
+            if (Operate.ProxyConfig.Proxy.Enable_SystemProxy)
+            {
+                Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
+                Operate.ProxyConfig.Proxy.StopSystemProxy(this);
+            }
+
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();            
@@ -107,7 +119,15 @@ namespace WPE.ProxyMode
                 this.mProxyMode.Items[i].BadgeBack = this.colorTheme.Value;
             }
 
-            Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
+            Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProxySpeed.Text);
+        }
+
+        private void InitProxyServerIP()
+        {
+            if (Operate.ProxyConfig.Proxy.ProxyServerIP == null)
+            {
+                Operate.ProxyConfig.Proxy.ProxyServerIP = Operate.SystemConfig.GetLocalIPAddress();
+            }
         }
 
         public void RefreshAccountList()
@@ -118,6 +138,66 @@ namespace WPE.ProxyMode
         #endregion
 
         #region//初始化表格
+
+        private void InitTable_ProxyList()
+        {
+            tProxyList.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column(string.Empty, string.Empty, AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is ProxyInfo pi)
+                        {
+                            return new AntdUI.CellImage(Operate.ProxyConfig.Proxy.GetImg_ByDataType(pi.DataType));
+                        }
+
+                        return value;
+                    },
+                }.SetFixed(),
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("ProxyTime", "时间戳", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
+                    },
+                }.SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("ProtocolType", "类别", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return value.ToString().ToUpper();
+                    },
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("ClientIP", "客户端IP")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        IPEndPoint clientIP = value as IPEndPoint;
+                        return clientIP.Address.ToString() + ":" + clientIP.Port.ToString();
+                    },
+                }.SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("ServerIP", "服务端IP")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        IPEndPoint serverIP = value as IPEndPoint;
+                        return serverIP.Address.ToString() + ":" + serverIP.Port.ToString();
+                    },
+                }.SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
+            };
+
+            this.tProxyList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tProxyList.DataSource = Operate.ProxyConfig.List.lstProxyInfo;
+        }
 
         private void InitTable_AccountList()
         {
@@ -367,11 +447,23 @@ namespace WPE.ProxyMode
             {
                 BackColor = Color.FromArgb(30, 30, 30);
                 ForeColor = Color.White;
+
+                this.tProxyList.ColumnFore = Color.Silver;
+                this.tProxyList.ForeColor = Color.LimeGreen;
+
+                this.hbProxyData.BackColor = Color.FromArgb(30, 30, 30);
+                this.hbProxyData.ForeColor = Color.Silver;
             }
             else
             {
                 BackColor = Color.White;
                 ForeColor = Color.Black;
+
+                this.tProxyList.ColumnFore = Color.Black;
+                this.tProxyList.ForeColor = Color.Green;
+
+                this.hbProxyData.BackColor = Color.White;
+                this.hbProxyData.ForeColor = Color.Black;
             }
         }        
 
@@ -432,15 +524,43 @@ namespace WPE.ProxyMode
             }
         }
 
-
-
         #endregion
 
         #region//清空数据
 
         private void CleanUp_ProxyListInfo()
         {
+            this.CleanUp_ProxyList();
+            this.CleanUp_HexBox();
             this.CleanUp_LogList();
+        }
+
+        private void CleanUp_ProxyList()
+        {
+            try
+            {
+                Operate.ProxyConfig.Queue.ResetProxyInfoQueue();
+                Operate.ProxyConfig.List.lstProxyInfo.Clear();                
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void CleanUp_HexBox()
+        {
+            if (hbProxyData.ByteProvider != null)
+            {
+                IDisposable byteProvider = hbProxyData.ByteProvider as IDisposable;
+
+                if (byteProvider != null)
+                {
+                    byteProvider.Dispose();
+                }
+
+                hbProxyData.ByteProvider = null;
+            }
         }
 
         private void CleanUp_LogList()
@@ -462,6 +582,16 @@ namespace WPE.ProxyMode
 
         private void timerProxyList_Tick(object sender, EventArgs e)
         {
+            if (Operate.ProxyConfig.Queue.qProxyExecute.Count > 0)
+            {
+                Operate.ProxyConfig.List.ProxyExecute_ToList();
+            }
+
+            if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
+            {
+                Operate.ProxyConfig.List.ProxyInfo_ToList();
+            }
+
             if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
             {
                 Operate.LogConfig.List.LogToList();
@@ -470,13 +600,43 @@ namespace WPE.ProxyMode
 
         private void timerProxyListInfo_Tick(object sender, EventArgs e)
         {
-            this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
-            this.mProxyMode.Items[4].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();            
-
             if (!this.bgwProxyList.IsBusy)
             {
                 this.bgwProxyList.RunWorkerAsync();
             }
+
+            this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
+            this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
+            this.mProxyMode.Items[4].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+
+            this.lProxyTotal_CNT.Text = (Operate.ProxyConfig.Proxy.ProxyTCP_CNT + Operate.ProxyConfig.Proxy.ProxyUDP_CNT).ToString();
+            this.lProxyTCP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyTCP_CNT.ToString();
+            this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyUDP_CNT.ToString();
+            this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
+            this.lProxyLinks_CNT.Text = Operate.ProxyConfig.List.lstProxyExecute.Count.ToString();            
+
+            Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(
+                    "{0}/{1}", 
+                    Socket_Operation.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo), 
+                    Operate.ProxyConfig.Account.lstAccountInfo.Count);
+            this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
+
+            Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
+                AntdUI.Localization.Get("ProxyBytesInfo", "请求: {0}  响应: {1}"), 
+                Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request),
+                Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
+            this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
+
+            decimal dUplink = Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;
+            Operate.ProxyConfig.Proxy.ProxySpeed_Uplink = 0;
+            decimal dDownlink = Operate.ProxyConfig.Proxy.ProxySpeed_Downlink / 1024;
+            Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
+
+            Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
+                AntdUI.Localization.Get("ProxySpeedInfo", "上行: {0} KB/s  下行: {1} KB/s"),
+                dUplink.ToString("0.00"),
+                dDownlink.ToString("0.00"));
+            this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
         }
 
         #endregion
@@ -487,6 +647,20 @@ namespace WPE.ProxyMode
         {
             try
             {
+                if (Operate.ProxyConfig.List.AutoRoll)
+                {
+                    tProxyList.ScrollBar.ValueY = tProxyList.ScrollBar.MaxY;
+                }
+
+                if (Operate.ProxyConfig.List.AutoClear)
+                {
+                    if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.ProxyConfig.List.AutoClear_Value)
+                    {
+                        this.CleanUp_ProxyList();
+                        this.CleanUp_HexBox();
+                    }
+                }
+
                 if (Operate.LogConfig.List.AutoRoll)
                 {
                     tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
@@ -508,6 +682,7 @@ namespace WPE.ProxyMode
 
         private void bgwProxyList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.tProxyList.Refresh();
             this.tSystemLog.Refresh();
         }
 
@@ -636,22 +811,22 @@ namespace WPE.ProxyMode
                 //代理
                 case 6:
 
-                    //if (this.StartHook)
-                    //{
-                    //    this.sPacketList.Items[8].IconSvg = "StopOutlined";
-                    //    this.sPacketList.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StopHook", "停止拦截");
-                    //    this.StartHook = false;
+                    if (this.StartProxy)
+                    {
+                        this.sProxyList.Items[6].IconSvg = "PauseCircleFilled";
+                        this.sProxyList.Items[6].Text = AntdUI.Localization.Get("ProxyModeForm.StopProxy", "停止代理");
+                        this.StartProxy = false;
 
-                    //    this.Start_Hook();
-                    //}
-                    //else
-                    //{
-                    //    this.sPacketList.Items[8].IconSvg = "PlayCircleFilled";
-                    //    this.sPacketList.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StartHook", "开始拦截");
-                    //    this.StartHook = true;
+                        this.Start_Proxy();
+                    }
+                    else
+                    {
+                        this.sProxyList.Items[6].IconSvg = "PlayCircleFilled";
+                        this.sProxyList.Items[6].Text = AntdUI.Localization.Get("ProxyModeForm.StartProxy", "开始代理");
+                        this.StartProxy = true;
 
-                    //    this.Stop_Hook();
-                    //}
+                        this.Stop_Proxy();
+                    }
 
                     break;
             }
@@ -965,6 +1140,185 @@ namespace WPE.ProxyMode
                             break;
                     }
                 }, Operate.LogConfig.List.GetCMS_LogList());
+            }
+        }
+
+        #endregion
+
+        #region//开始代理
+
+        private void Start_Proxy()
+        {
+            try
+            {
+                Operate.ProxyConfig.Proxy.IsListening = true;
+
+                if (Operate.ProxyConfig.Proxy.ProxyTCP_IP == null || Operate.ProxyConfig.Proxy.ProxyUDP_IP == null)
+                {
+                    Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
+                    Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
+                }
+
+                Operate.ProxyConfig.Proxy.ProxyTotal_CNT = 0;
+                Operate.ProxyConfig.Proxy.ProxyTCP_CNT = 0;
+                Operate.ProxyConfig.Proxy.ProxyUDP_CNT = 0;
+
+                string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyServerIP", "代理服务器IP地址: TCP [{0}] UDP [{1}]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);
+
+                if (Operate.ProxyConfig.Proxy.Enable_Auth)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyServer.Auth", "已启用代理服务身份认证"));
+                }
+
+                if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyServer.ExternalProxy", "已启用外部 SOCKS5 代理"));
+                }
+
+                if (ProxyServer == null)
+                {
+                    InitializeServerSocket();
+                }
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "开始 SOCKS5 代理", TType.Success)
+                {
+                    LocalizationText = "ProxyModeForm.StartProxy"
+                });
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitializeServerSocket()
+        {
+            try
+            {
+                ProxyServer?.Close();
+                ProxyServer?.Dispose();
+
+                IPEndPoint ep = new IPEndPoint(Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyPort);
+                ProxyServer = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
+                {
+                    NoDelay = true,
+                    LingerState = new LingerOption(false, 0),
+                    ExclusiveAddressUse = false
+                };
+
+                ProxyServer.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+
+                ProxyServer.Bind(ep);
+                ProxyServer.Listen(backlog: 1000);
+
+                AcceptClients();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void AcceptClients()
+        {
+            try
+            {
+                if (Operate.ProxyConfig.Proxy.IsListening && ProxyServer != null)
+                {
+                    var acceptArgs = new SocketAsyncEventArgs();
+                    acceptArgs.Completed += AcceptCompleted;
+
+                    if (!ProxyServer.AcceptAsync(acceptArgs))
+                    {
+                        AcceptCompleted(null, acceptArgs);
+                    }
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+                // Socket已关闭，正常退出
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Task.Delay(5000).ContinueWith(_ => AcceptClients());
+            }
+        }
+
+        private void AcceptCompleted(object sender, SocketAsyncEventArgs e)
+        {
+            try
+            {
+                if (e.SocketError == SocketError.Success && Operate.ProxyConfig.Proxy.IsListening && e.AcceptSocket != null)
+                {
+                    Operate.ProxyConfig.Proxy.HandleClient(e.AcceptSocket);
+
+                    e.AcceptSocket = null;
+
+                    if (Operate.ProxyConfig.Proxy.IsListening)
+                    {
+                        if (!ProxyServer.AcceptAsync(e))
+                        {
+                            AcceptCompleted(null, e);
+                        }
+                    }
+                    else
+                    {
+                        e.Dispose();
+                    }
+                }
+                else
+                {
+                    e.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                e.Dispose();
+
+                if (Operate.ProxyConfig.Proxy.IsListening)
+                {
+                    Task.Delay(1000).ContinueWith(_ => AcceptClients());
+                }
+            }
+        }
+
+        #endregion
+
+        #region//停止代理
+
+        private void Stop_Proxy()
+        {
+            try
+            {
+                Operate.ProxyConfig.Proxy.IsListening = false;
+
+                if (ProxyServer != null)
+                {
+                    try
+                    {
+                        ProxyServer.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                    finally
+                    {
+                        ProxyServer = null;
+                    }
+                }
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "停止 SOCKS5 代理", TType.Warn)
+                {
+                    LocalizationText = "ProxyModeForm.StopProxy"
+                });
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

@@ -17,7 +17,10 @@ namespace WPE.ProxyMode
         private void ListSettingsForm_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("ListSettingsForm", "列表设置");
-            
+
+            this.cbProxyList_AutoRoll.Checked = Operate.ProxyConfig.List.AutoRoll;
+            this.cbProxyList_AutoClear.Checked = Operate.ProxyConfig.List.AutoClear;
+            this.txtProxyList_AutoClear.Value = Operate.ProxyConfig.List.AutoClear_Value;
             this.cbLogList_AutoRoll.Checked = Operate.LogConfig.List.AutoRoll;
             this.cbLogList_AutoClear.Checked = Operate.LogConfig.List.AutoClear;
             this.txtLogList_AutoClear.Value = Operate.LogConfig.List.AutoClear_Value;
@@ -62,6 +65,9 @@ namespace WPE.ProxyMode
 
         private void bSave_Click(object sender, EventArgs e)
         {
+            Operate.ProxyConfig.List.AutoRoll = this.cbProxyList_AutoRoll.Checked;
+            Operate.ProxyConfig.List.AutoClear = this.cbProxyList_AutoClear.Checked;
+            Operate.ProxyConfig.List.AutoClear_Value = this.txtProxyList_AutoClear.Value;
             Operate.LogConfig.List.AutoRoll = this.cbLogList_AutoRoll.Checked;
             Operate.LogConfig.List.AutoClear = this.cbLogList_AutoClear.Checked;
             Operate.LogConfig.List.AutoClear_Value = this.txtLogList_AutoClear.Value;

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
@@ -237,8 +236,8 @@
             this.txtExtraction = new AntdUI.Input();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
-            this.timerPacketList = new System.Windows.Forms.Timer(this.components);
-            this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
+            this.timerPacketList = new System.Windows.Forms.Timer();
+            this.timerPacketListInfo = new System.Windows.Forms.Timer();
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
@@ -602,7 +601,7 @@
             this.tlpPacketListInfo.Controls.Add(this.lTotal, 0, 1);
             this.tlpPacketListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpPacketListInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tlpPacketListInfo.Location = new System.Drawing.Point(0, 46);
+            this.tlpPacketListInfo.Location = new System.Drawing.Point(0, 35);
             this.tlpPacketListInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpPacketListInfo.Name = "tlpPacketListInfo";
             this.tlpPacketListInfo.RowCount = 3;
@@ -1126,10 +1125,11 @@
             this.sPacketList.Items.Add(segmentedItem7);
             this.sPacketList.Items.Add(segmentedItem8);
             this.sPacketList.Items.Add(segmentedItem9);
-            this.sPacketList.Location = new System.Drawing.Point(3, 3);
+            this.sPacketList.Location = new System.Drawing.Point(0, 0);
+            this.sPacketList.Margin = new System.Windows.Forms.Padding(0);
             this.sPacketList.Name = "sPacketList";
             this.sPacketList.Radius = 0;
-            this.sPacketList.Size = new System.Drawing.Size(1118, 40);
+            this.sPacketList.Size = new System.Drawing.Size(1124, 35);
             this.sPacketList.TabIndex = 3;
             this.sPacketList.SelectIndexChanged += new AntdUI.IntEventHandler(this.sPacketList_SelectIndexChanged);
             // 
@@ -1138,7 +1138,7 @@
             this.splitterPacketList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterPacketList.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterPacketList.Location = new System.Drawing.Point(3, 79);
+            this.splitterPacketList.Location = new System.Drawing.Point(3, 68);
             this.splitterPacketList.Name = "splitterPacketList";
             this.splitterPacketList.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -1151,8 +1151,8 @@
             // 
             this.splitterPacketList.Panel2.Controls.Add(this.pPacketData);
             this.splitterPacketList.Panel2MinSize = 0;
-            this.splitterPacketList.Size = new System.Drawing.Size(1118, 612);
-            this.splitterPacketList.SplitterDistance = 449;
+            this.splitterPacketList.Size = new System.Drawing.Size(1118, 623);
+            this.splitterPacketList.SplitterDistance = 457;
             this.splitterPacketList.SplitterSize = 80;
             this.splitterPacketList.SplitterWidth = 10;
             this.splitterPacketList.TabIndex = 2;
@@ -1170,7 +1170,7 @@
             this.tPacketList.Location = new System.Drawing.Point(0, 0);
             this.tPacketList.MultipleRows = true;
             this.tPacketList.Name = "tPacketList";
-            this.tPacketList.Size = new System.Drawing.Size(1118, 449);
+            this.tPacketList.Size = new System.Drawing.Size(1118, 457);
             this.tPacketList.TabIndex = 0;
             this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
             this.tPacketList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tPacketList_SetRowStyle);
@@ -1185,7 +1185,7 @@
             this.pPacketData.Name = "pPacketData";
             this.pPacketData.Padding = new System.Windows.Forms.Padding(6);
             this.pPacketData.Radius = 0;
-            this.pPacketData.Size = new System.Drawing.Size(1118, 153);
+            this.pPacketData.Size = new System.Drawing.Size(1118, 156);
             this.pPacketData.TabIndex = 0;
             // 
             // hbPacketData
@@ -1199,7 +1199,7 @@
             this.hbPacketData.Name = "hbPacketData";
             this.hbPacketData.ReadOnly = true;
             this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(1104, 139);
+            this.hbPacketData.Size = new System.Drawing.Size(1104, 142);
             this.hbPacketData.StringViewVisible = true;
             this.hbPacketData.TabIndex = 1;
             this.hbPacketData.VScrollBarVisible = true;
