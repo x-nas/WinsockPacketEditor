@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using WPE.Lib;
 using WPE.Lib.NativeMethods;
 using WPE.ProxyMode;
+using WPE.InjectMode;
 
 namespace WinsockPacketEditor
 {
@@ -44,8 +45,8 @@ namespace WinsockPacketEditor
                                 ThreadPool.SetMinThreads(100, 100);
                                 ThreadPool.SetMaxThreads(Environment.ProcessorCount * 2, 1000);
 
-                                //InjectModeForm imForm = new InjectModeForm();
-                                //imForm.Show();
+                                InjectModeForm imForm = new InjectModeForm();
+                                imForm.Show();
 
                                 Application.Run(new ProxyModeForm());
 

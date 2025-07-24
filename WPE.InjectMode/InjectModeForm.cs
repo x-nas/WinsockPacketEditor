@@ -58,10 +58,7 @@ namespace WPE.InjectMode
             {  
                 Operate.SystemConfig.InitCPUAndMemoryCounter();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
-                Operate.SystemConfig.LoadSystemList_FromDB();
-                Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
-                Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
-                Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
+                Operate.SystemConfig.LoadSystemList_FromDB();            
                 Operate.SystemConfig.StartRemoteMGT();
             }, () =>
             {
@@ -94,10 +91,7 @@ namespace WPE.InjectMode
             Operate.SystemConfig.StopRemoteMGT(this.RunMode);
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
-            Operate.SystemConfig.SaveSystemList_ToDB();            
-            Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
-            Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB(this.RunMode);
-            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB(this.RunMode);            
+            Operate.SystemConfig.SaveSystemList_ToDB();
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)

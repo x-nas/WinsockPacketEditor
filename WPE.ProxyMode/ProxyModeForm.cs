@@ -48,13 +48,13 @@ namespace WPE.ProxyMode
             this.pageHeader.Loading = true;
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {                
-                Operate.SystemConfig.InitCPUAndMemoryCounter();                
+                //Operate.SystemConfig.InitCPUAndMemoryCounter();                
                 Operate.SystemConfig.LoadProxyMode_FromDB();
-                Operate.SystemConfig.LoadSystemList_FromDB();
+                //Operate.SystemConfig.LoadSystemList_FromDB();
                 Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
-                Operate.SystemConfig.StartRemoteMGT();
+                //Operate.SystemConfig.StartRemoteMGT();
 
                 this.InitProxyServerIP();
                 this.InitTable_ProxyList();
@@ -84,7 +84,7 @@ namespace WPE.ProxyMode
 
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
-            Operate.SystemConfig.SaveSystemList_ToDB();            
+            //Operate.SystemConfig.SaveSystemList_ToDB();            
             Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
             Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB(this.RunMode);
             Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB(this.RunMode);
