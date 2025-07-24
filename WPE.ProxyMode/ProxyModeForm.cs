@@ -120,9 +120,7 @@ namespace WPE.ProxyMode
             for (int i = 0; i < this.mProxyMode.Items.Count; i++)
             {
                 this.mProxyMode.Items[i].BadgeBack = this.colorTheme.Value;
-            }
-
-            Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProxySpeed.Text);
+            }            
         }
 
         private void InitProxyServerIP()

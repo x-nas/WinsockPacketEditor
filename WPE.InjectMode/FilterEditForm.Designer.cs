@@ -225,7 +225,7 @@
             // 
             this.tabFilterEdit.Controls.Add(this.tpNormal);
             this.tabFilterEdit.Controls.Add(this.tpAdvance);
-            this.tabFilterEdit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabFilterEdit.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabFilterEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterEdit.Location = new System.Drawing.Point(3, 3);
             this.tabFilterEdit.Name = "tabFilterEdit";
@@ -263,6 +263,7 @@
             // tFilterNormal
             // 
             this.tFilterNormal.Bordered = true;
+            this.tFilterNormal.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Dash;
             this.tFilterNormal.CellImpactHeight = true;
             this.tFilterNormal.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterNormal.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -310,6 +311,7 @@
             // tFilterAdvanced_Search
             // 
             this.tFilterAdvanced_Search.Bordered = true;
+            this.tFilterAdvanced_Search.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Dash;
             this.tFilterAdvanced_Search.CellImpactHeight = true;
             this.tFilterAdvanced_Search.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Search.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -338,6 +340,7 @@
             this.tabFilterFrom.Name = "tabFilterFrom";
             this.tabFilterFrom.Pages.Add(this.tpFromHead);
             this.tabFilterFrom.Pages.Add(this.tpFromPosition);
+            this.tabFilterFrom.SelectedIndex = 1;
             this.tabFilterFrom.Size = new System.Drawing.Size(966, 101);
             this.tabFilterFrom.Style = styleLine1;
             this.tabFilterFrom.TabIndex = 2;
@@ -346,7 +349,7 @@
             // tpFromHead
             // 
             this.tpFromHead.Controls.Add(this.tFilterAdvanced_Modify_Head);
-            this.tpFromHead.Location = new System.Drawing.Point(3, 33);
+            this.tpFromHead.Location = new System.Drawing.Point(-960, -65);
             this.tpFromHead.Name = "tpFromHead";
             this.tpFromHead.Size = new System.Drawing.Size(960, 65);
             this.tpFromHead.TabIndex = 0;
@@ -355,6 +358,7 @@
             // tFilterAdvanced_Modify_Head
             // 
             this.tFilterAdvanced_Modify_Head.Bordered = true;
+            this.tFilterAdvanced_Modify_Head.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Dash;
             this.tFilterAdvanced_Modify_Head.CellImpactHeight = true;
             this.tFilterAdvanced_Modify_Head.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Head.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -376,7 +380,7 @@
             // tpFromPosition
             // 
             this.tpFromPosition.Controls.Add(this.tFilterAdvanced_Modify_Position);
-            this.tpFromPosition.Location = new System.Drawing.Point(-960, -65);
+            this.tpFromPosition.Location = new System.Drawing.Point(3, 33);
             this.tpFromPosition.Name = "tpFromPosition";
             this.tpFromPosition.Size = new System.Drawing.Size(960, 65);
             this.tpFromPosition.TabIndex = 1;
@@ -385,6 +389,7 @@
             // tFilterAdvanced_Modify_Position
             // 
             this.tFilterAdvanced_Modify_Position.Bordered = true;
+            this.tFilterAdvanced_Modify_Position.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Dash;
             this.tFilterAdvanced_Modify_Position.CellImpactHeight = true;
             this.tFilterAdvanced_Modify_Position.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Position.Dock = System.Windows.Forms.DockStyle.Fill;

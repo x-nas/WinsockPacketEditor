@@ -816,6 +816,12 @@ namespace WPE.InjectMode
 
         private void ChartDark_Changed()
         {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(ChartDark_Changed));
+                return;
+            }
+
             if (AntdUI.Config.IsDark)
             {
                 this.chartFilterList.BackColor =
@@ -2626,6 +2632,12 @@ namespace WPE.InjectMode
 
         private void InitStatistical_FilterList()
         {
+            if (chartFilterList.InvokeRequired)
+            {
+                chartFilterList.Invoke(new Action(InitStatistical_FilterList));
+                return;
+            }
+
             chartFilterList.Series.Clear();
             Series series = new Series();
             series.ChartType = SeriesChartType.Pie;
@@ -2651,6 +2663,12 @@ namespace WPE.InjectMode
 
         private void InitStatistical_SendList()
         {
+            if (chartSendList.InvokeRequired)
+            {
+                chartSendList.Invoke(new Action(InitStatistical_SendList));
+                return;
+            }
+
             chartSendList.Series.Clear();
             Series series = new Series();
             series.ChartType = SeriesChartType.Pie;
@@ -2676,6 +2694,12 @@ namespace WPE.InjectMode
 
         private void InitStatistical_RobotList()
         {
+            if (chartRobotList.InvokeRequired)
+            {
+                chartRobotList.Invoke(new Action(InitStatistical_RobotList));
+                return;
+            }
+
             chartRobotList.Series.Clear();
             Series series = new Series();
             series.ChartType = SeriesChartType.Pie;
@@ -2701,6 +2725,12 @@ namespace WPE.InjectMode
 
         private void InitStatistical_PacketLength()
         {
+            if (chartPacketLength.InvokeRequired)
+            {
+                chartPacketLength.Invoke(new Action(InitStatistical_PacketLength));
+                return;
+            }
+
             chartPacketLength.Series.Clear();
             chartPacketLength.ChartAreas.Clear();
 

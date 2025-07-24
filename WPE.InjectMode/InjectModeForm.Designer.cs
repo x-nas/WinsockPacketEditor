@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
@@ -236,8 +237,8 @@
             this.txtExtraction = new AntdUI.Input();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
-            this.timerPacketList = new System.Windows.Forms.Timer();
-            this.timerPacketListInfo = new System.Windows.Forms.Timer();
+            this.timerPacketList = new System.Windows.Forms.Timer(this.components);
+            this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();

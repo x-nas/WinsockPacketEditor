@@ -638,6 +638,7 @@
             // ddlSendList
             // 
             this.ddlSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlSendList.List = true;
             this.ddlSendList.Location = new System.Drawing.Point(3, 3);
             this.ddlSendList.Name = "ddlSendList";
             this.ddlSendList.PlaceholderText = "请选择";
@@ -1225,6 +1226,7 @@
             // ddlKeyType
             // 
             this.ddlKeyType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlKeyType.List = true;
             this.ddlKeyType.Location = new System.Drawing.Point(84, 51);
             this.ddlKeyType.Name = "ddlKeyType";
             this.ddlKeyType.PlaceholderText = "请选择";
@@ -1496,6 +1498,7 @@
             // ddlMouseWheel
             // 
             this.ddlMouseWheel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlMouseWheel.List = true;
             this.ddlMouseWheel.Location = new System.Drawing.Point(84, 3);
             this.ddlMouseWheel.Name = "ddlMouseWheel";
             this.ddlMouseWheel.PlaceholderText = "请选择";
@@ -1617,6 +1620,7 @@
             // ddlMouseKey
             // 
             this.ddlMouseKey.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlMouseKey.List = true;
             this.ddlMouseKey.Location = new System.Drawing.Point(84, 3);
             this.ddlMouseKey.Name = "ddlMouseKey";
             this.ddlMouseKey.PlaceholderText = "请选择";
