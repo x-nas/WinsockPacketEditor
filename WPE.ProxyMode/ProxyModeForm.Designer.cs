@@ -297,7 +297,7 @@
             this.tabProxyMode.Pages.Add(this.tpAccountList);
             this.tabProxyMode.Pages.Add(this.tpStatistical);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.SelectedIndex = 1;
+            this.tabProxyMode.SelectedIndex = 2;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -817,7 +817,7 @@
             // tpClientList
             // 
             this.tpClientList.Controls.Add(this.splitterClientList);
-            this.tpClientList.Location = new System.Drawing.Point(3, 33);
+            this.tpClientList.Location = new System.Drawing.Point(-1124, -724);
             this.tpClientList.Name = "tpClientList";
             this.tpClientList.Size = new System.Drawing.Size(1124, 724);
             this.tpClientList.TabIndex = 8;
@@ -1017,7 +1017,7 @@
             // tpAccountList
             // 
             this.tpAccountList.Controls.Add(this.tlpAccountList);
-            this.tpAccountList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpAccountList.Location = new System.Drawing.Point(3, 33);
             this.tpAccountList.Name = "tpAccountList";
             this.tpAccountList.Size = new System.Drawing.Size(1124, 724);
             this.tpAccountList.TabIndex = 7;

@@ -20,8 +20,7 @@ using WPE.Lib.Controls;
 namespace WPE.InjectMode
 {
     public partial class InjectModeForm : Window
-    {  
-        private bool StartHook = true;
+    {
         private bool bWakeUp = true;
         private bool setcolor = false;
         private bool SearchFromHead = true;
@@ -60,6 +59,14 @@ namespace WPE.InjectMode
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();            
                 Operate.SystemConfig.StartRemoteMGT();
+
+                this.InitFloatButton();
+                this.InitTable_PacketList();
+                this.InitTable_FilterList();
+                this.InitTable_SendList();
+                this.InitTable_RobotList();
+                this.InitTable_LogList();
+                
             }, () =>
             {
                 this.pageHeader.Loading = false;
@@ -75,12 +82,6 @@ namespace WPE.InjectMode
 
             this.Dark_Changed();
             this.InitForm();
-            this.InitFloatButton();
-            this.InitTable_PacketList();
-            this.InitTable_FilterList();
-            this.InitTable_SendList();
-            this.InitTable_RobotList();
-            this.InitTable_LogList();
             this.InitComparison();
             this.InitExtraction();
         }
@@ -458,8 +459,8 @@ namespace WPE.InjectMode
                     {
                         return new AntdUI.CellLink[]
                         {
-                            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
-                            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),                            
                         };
                     },
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Column."),
@@ -580,8 +581,8 @@ namespace WPE.InjectMode
                     {
                         return new AntdUI.CellLink[]
                         {
-                            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
-                            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.SendList.Column."),
@@ -648,8 +649,8 @@ namespace WPE.InjectMode
                     {
                         return new AntdUI.CellLink[]
                         {
-                            new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
-                            new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.RobotList.Column."),
@@ -732,7 +733,7 @@ namespace WPE.InjectMode
             }
 
             return null;
-        }       
+        }               
 
         #endregion        
 
@@ -1030,80 +1031,46 @@ namespace WPE.InjectMode
 
         #region//封包列表 - 菜单
 
-        private void sPacketList_SelectIndexChanged(object sender, AntdUI.IntEventArgs e)
+        private void bHookStart_Click(object sender, EventArgs e)
         {
-            switch (this.sPacketList.SelectIndex)
+            this.bHookStart.Enabled = false;
+            this.bHookStop.Enabled = true;
+
+            this.Start_Hook();
+        }
+
+        private void bHookStop_Click(object sender, EventArgs e)
+        {
+            this.bHookStart.Enabled = true;
+            this.bHookStop.Enabled = false;
+
+            this.Stop_Hook();
+        }
+
+        private void bPacketList_Clear_Click(object sender, EventArgs e)
+        {
+            this.CleanUp_PacketListInfo();
+            this.CleanUp_PacketList();
+            this.CleanUp_HexBox();
+            this.CleanUp_LogList();
+
+            AntdUI.Message.open(new AntdUI.Message.Config(this, "已清空数据", TType.Warn)
             {
-                //过滤设置
-                case 0:
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterSettingsForm())
-                    {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = true,
-                        MaskClosable = false,
-                        DisplayDelay = 0,
-                    });
-                    break;
+                LocalizationText = "InjectModeForm.Clear"
+            });
+        }
 
-                //拦截设置
-                case 1:
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HookSettingsForm())
-                    {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = true,
-                        MaskClosable = false,
-                        DisplayDelay = 0,
-                    });
-                    break;
+        private void mPacketList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mPacketList.SelectIndex(-1);
 
-                //列表设置
-                case 2:
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm())
-                    {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = true,
-                        MaskClosable = false,
-                        DisplayDelay = 0,
-                    });
-                    break;
+            switch (miSelect.ID)
+            {
+                case "miPacketListSearch":
 
-                //快捷键设置
-                case 3:
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HotKeyForm())
-                    {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = true,
-                        MaskClosable = false,
-                        DisplayDelay = 0,
-                    });
-                    break;
-
-                //备份设置
-                case 4:
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new BackUpSettingsForm())
-                    {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = true,
-                        MaskClosable = false,
-                        DisplayDelay = 0,
-                    });
-                    break;
-
-                //系统设置
-                case 5:
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm(this))
-                    {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = true,
-                        MaskClosable = false,
-                        DisplayDelay = 0,
-                    });
-                    break;
-
-                //查找封包
-                case 6:
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SearchPacketForm(this)
-                    { 
+                    {
                         Size = new Size(1000, 100),
                     })
                     {
@@ -1111,42 +1078,81 @@ namespace WPE.InjectMode
                         Mask = false,
                         DisplayDelay = 0,
                     });
-                    break;
-
-                //清空数据
-                case 7:
-
-                    this.CleanUp_PacketListInfo();
-                    this.CleanUp_PacketList();
-                    this.CleanUp_HexBox();
-                    this.CleanUp_LogList();
 
                     break;
 
-                //拦截
-                case 8:
+                case "miFilterSettings":
 
-                    if (this.StartHook)
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterSettingsForm())
                     {
-                        this.sPacketList.Items[8].IconSvg = "PauseCircleFilled";
-                        this.sPacketList.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StopHook", "停止拦截");
-                        this.StartHook = false;
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
 
-                        this.Start_Hook();
-                    }
-                    else
+                    break;
+
+                case "miHookSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HookSettingsForm())
                     {
-                        this.sPacketList.Items[8].IconSvg = "PlayCircleFilled";
-                        this.sPacketList.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StartHook", "开始拦截");
-                        this.StartHook = true;
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
 
-                        this.Stop_Hook();
-                    }
+                    break;
+
+                case "miListSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "miHotKeySettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HotKeyForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "miBackUpSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new BackUpSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "miSystemSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm(this))
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
 
                     break;
             }
-
-            this.sPacketList.SelectIndex = -1;
         }
 
         #endregion
@@ -1506,39 +1512,49 @@ namespace WPE.InjectMode
 
         #region//滤镜列表 - 菜单
 
-        private void sFilterList_SelectIndexChanged(object sender, IntEventArgs e)
+        private void bFilterList_Reset_Click(object sender, EventArgs e)
         {
-            switch (this.sFilterList.SelectIndex)
+            Operate.FilterConfig.List.InitFilterList_Count();
+        }
+
+        private void mFilterList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mFilterList.SelectIndex(-1);
+
+            switch (miSelect.ID)
             {
-                //导入
-                case 0:
-                    Operate.FilterConfig.List.LoadFilterList_Dialog(this);
-                    break;
+                case "miAdd":
 
-                //导出
-                case 1:                    
-                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
-                    {
-                        Operate.FilterConfig.List.SaveFilterList_Dialog(this, string.Empty, Operate.FilterConfig.List.lstFilterInfo.ToList());
-                    }
-                    break;
-
-                //新增
-                case 2:                    
                     Operate.FilterConfig.Filter.AddFilter_New();
                     this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+
                     break;
 
-                //清空
-                case 3:                    
+                case "miImport":
+
+                    Operate.FilterConfig.List.LoadFilterList_Dialog(this);
+
+                    break;
+
+                case "miExport":
+
+                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                    {
+                        Operate.FilterConfig.List.SaveFilterList_Dialog(this, string.Empty, null);
+                    }
+
+                    break;
+
+                case "miClear":
+
                     if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                     {
                         Operate.FilterConfig.List.CleanUpFilterList_Dialog(this);
                     }
+
                     break;
             }
-
-            this.sFilterList.SelectIndex = -1;
         }
 
         private void tFilterList_CellButtonClick(object sender, TableButtonEventArgs e)
@@ -1668,65 +1684,67 @@ namespace WPE.InjectMode
 
         #region//发送列表 - 菜单
 
-        private void sSendList_SelectIndexChanged(object sender, IntEventArgs e)
+        private void bSendList_Start_Click(object sender, EventArgs e)
         {
-            switch (this.sSendList.SelectIndex)
+            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
             {
-                //导入
-                case 0:
-                    Operate.SendConfig.List.LoadSendList_Dialog(this);
-                    break;
+                if (!this.bgwSendList.IsBusy)
+                {
+                    this.bSendList_Start.Loading = true;
+                    this.bSendList_Stop.Enabled = true;
+                    this.tSendList.Enabled = false;
 
-                //导出
-                case 1:
-                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
-                    {
-                        Operate.SendConfig.List.SaveSendList_Dialog(this, string.Empty, Operate.SendConfig.List.lstSendInfo.ToList());
-                    }
-                    break;
+                    Operate.SendConfig.List.lstSendExecute.Clear();
 
-                //执行发送
-                case 2:
+                    this.bgwSendList.RunWorkerAsync();
+                }                
+            }
+        }
 
-                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
-                    {
-                        if (!this.bgwSendList.IsBusy)
-                        {
-                            this.sSendList.Items[2].Enabled = false;
-                            this.sSendList.Items[3].Enabled = true;
-                            this.tSendList.Enabled = false;
-                            Operate.SendConfig.List.lstSendExecute.Clear();
+        private void bSendList_Stop_Click(object sender, EventArgs e)
+        {
+            this.bgwSendList.CancelAsync();
+        }
 
-                            this.bgwSendList.RunWorkerAsync();
-                        }
-                    }
+        private void mSendList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mSendList.SelectIndex(-1);
 
-                    break;
+            switch (miSelect.ID)
+            {
+                case "miAdd":
 
-                //停止
-                case 3:
-
-                    this.bgwSendList.CancelAsync();
-
-                    break;
-
-                //新增
-                case 4:
                     Operate.SendConfig.Send.AddSend_New();
                     this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
+
                     break;
 
-                //清空
-                case 5:
+                case "miImport":
+
+                    Operate.SendConfig.List.LoadSendList_Dialog(this);
+
+                    break;
+
+                case "miExport":
+
+                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        Operate.SendConfig.List.SaveSendList_Dialog(this, string.Empty, null);
+                    }
+
+                    break;
+
+                case "miClear":
+
                     if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                     {
                         Operate.SendConfig.List.CleanUpSendList_Dialog(this);
                     }
+
                     break;
             }
-
-            this.sSendList.SelectIndex = -1;
-        }        
+        }
 
         private void tSendList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
@@ -1858,62 +1876,58 @@ namespace WPE.InjectMode
 
         #region//机器人列表 - 菜单
 
-        private void sRobotList_SelectIndexChanged(object sender, IntEventArgs e)
+        private void bRobotList_Start_Click(object sender, EventArgs e)
         {
-            switch (this.sRobotList.SelectIndex)
+            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
             {
-                //导入
-                case 0:
+                if (!this.bgwRobotList.IsBusy)
+                {
+                    this.bRobotList_Start.Loading = true;
+                    this.bRobotList_Stop.Enabled = true;
+                    this.tRobotList.Enabled = false;
 
-                    Operate.RobotConfig.List.LoadRobotList_Dialog(this);
+                    Operate.RobotConfig.List.lstRobotExecute.Clear();
 
-                    break;
+                    this.bgwRobotList.RunWorkerAsync();
+                }
+            }
+        }
 
-                //导出
-                case 1:
+        private void bRobotList_Stop_Click(object sender, EventArgs e)
+        {
+            this.bgwRobotList.CancelAsync();
+        }
 
-                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
-                    {
-                        Operate.RobotConfig.List.SaveRobotList_Dialog(this, string.Empty, Operate.RobotConfig.List.lstRobotInfo.ToList());
-                    }
+        private void mRobotList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mRobotList.SelectIndex(-1);
 
-                    break;
-
-                //执行机器人
-                case 2:
-
-                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
-                    {
-                        if (!this.bgwRobotList.IsBusy)
-                        {
-                            this.sRobotList.Items[2].Enabled = false;
-                            this.sRobotList.Items[3].Enabled = true;
-                            this.tRobotList.Enabled = false;
-                            Operate.RobotConfig.List.lstRobotExecute.Clear();
-
-                            this.bgwRobotList.RunWorkerAsync();
-                        }
-                    }
-
-                    break;
-
-                //停止
-                case 3:
-
-                    this.bgwRobotList.CancelAsync();
-
-                    break;
-
-                //新增
-                case 4:
+            switch (miSelect.ID)
+            {
+                case "miAdd":
 
                     Operate.RobotConfig.Robot.AddRobot_New();
                     this.tRobotList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
 
                     break;
 
-                //清空
-                case 5:
+                case "miImport":
+
+                    Operate.RobotConfig.List.LoadRobotList_Dialog(this);
+
+                    break;
+
+                case "miExport":
+
+                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                    {
+                        Operate.RobotConfig.List.SaveRobotList_Dialog(this, string.Empty, null);
+                    }
+
+                    break;
+
+                case "miClear":
 
                     if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                     {
@@ -1922,8 +1936,6 @@ namespace WPE.InjectMode
 
                     break;
             }
-
-            this.sRobotList.SelectIndex = -1;
         }
 
         private void tRobotList_CellButtonClick(object sender, TableButtonEventArgs e)
@@ -2136,8 +2148,7 @@ namespace WPE.InjectMode
         private void Start_Hook()
         {
             try
-            {
-                Operate.FilterConfig.List.InitFilterList_Count();
+            {                
                 ws.StartHook();
 
                 if (bWakeUp)
@@ -2167,7 +2178,7 @@ namespace WPE.InjectMode
             {
                 ws.StopHook();      
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "停止拦截", TType.Warn)
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "停止拦截", TType.Error)
                 {
                     LocalizationText = "InjectModeForm.StopHook"
                 });
@@ -2480,8 +2491,9 @@ namespace WPE.InjectMode
         {
             try
             {
-                foreach (SendInfo si in Operate.SendConfig.List.lstSendInfo)
+                for (int index = 0; index < Operate.SendConfig.List.lstSendInfo.Count; index++)
                 {
+                    SendInfo si = Operate.SendConfig.List.lstSendInfo[index];
                     if (si.IsEnable)
                     {
                         SendExecute se = Operate.SendConfig.Send.DoSend(si.SID);
@@ -2503,7 +2515,7 @@ namespace WPE.InjectMode
                                         return;
                                     }
 
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(10);
                                 }
                             }
                         }
@@ -2536,8 +2548,8 @@ namespace WPE.InjectMode
 
         private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            this.sSendList.Items[2].Enabled = true;
-            this.sSendList.Items[3].Enabled = false;
+            this.bSendList_Start.Loading = false;
+            this.bSendList_Stop.Enabled = false;
             this.tSendList.Enabled = true;
         }
 
@@ -2605,8 +2617,8 @@ namespace WPE.InjectMode
 
         private void bgwRobotList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            this.sRobotList.Items[2].Enabled = true;
-            this.sRobotList.Items[3].Enabled = false;
+            this.bRobotList_Start.Loading = false;
+            this.bRobotList_Stop.Enabled = false;
             this.tRobotList.Enabled = true;
         }
 
@@ -3252,11 +3264,11 @@ namespace WPE.InjectMode
             this.ddlExtraction.Items.Clear();
             this.ddlExtraction.Items.AddRange(new AntdUI.SelectItem[]
             {
-                    new AntdUI.SelectItem("{ Charles XML 会话文件（.chlsx）} 提取 { 十六进制数据 }")
+                    new AntdUI.SelectItem("[ Charles XML 会话文件（.chlsx）] 提取 [ 十六进制数据 ]")
                     {
                         LocalizationText = "",
                     },
-                    new AntdUI.SelectItem("{ FILT过滤器文件（.filt）} 提取 { WPE64 滤镜文件（.sp）}")
+                    new AntdUI.SelectItem("[ FILT过滤器文件（.filt）] 提取 [ WPE64 滤镜文件（.sp）]")
                     {
                         LocalizationText = "",
                     },
@@ -3569,6 +3581,15 @@ namespace WPE.InjectMode
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
+
+
+
+
+
+
+
+
+
 
         #endregion
     }

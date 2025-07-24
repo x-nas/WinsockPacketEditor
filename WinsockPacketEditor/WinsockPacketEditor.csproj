@@ -192,12 +192,6 @@
     <Compile Include="SelectProcessForm.Designer.cs">
       <DependentUpon>SelectProcessForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SocketProxy_Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SocketProxy_Form.Designer.cs">
-      <DependentUpon>SocketProxy_Form.cs</DependentUpon>
-    </Compile>
     <Compile Include="StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,12 +205,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelectProcessForm.resx">
       <DependentUpon>SelectProcessForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SocketProxy_Form.en-US.resx">
-      <DependentUpon>SocketProxy_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SocketProxy_Form.resx">
-      <DependentUpon>SocketProxy_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>

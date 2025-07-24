@@ -11372,69 +11372,47 @@ namespace WPE.Lib
                     return false;
                 }
 
-                public static XElement GetFilterList_XML(List<FilterInfo> sfiList)
+                public static XElement GetFilterList_XML(List<FilterInfo> fiList)
                 {
                     try
                     {
                         XElement xeRoot = new XElement("FilterList");
 
-                        foreach (FilterInfo sfi in sfiList)
+                        if (fiList == null)
                         {
-                            string sIsEnable = sfi.IsEnable.ToString();
-                            string sFID = sfi.FID.ToString().ToUpper();
-                            string sFName = sfi.FName;
-                            string sFAppointHeader = sfi.AppointHeader.ToString();
-                            string sFHeaderContent = sfi.HeaderContent;
-                            string sFAppointSocket = sfi.AppointSocket.ToString();
-                            string sFSocketContent = sfi.SocketContent.ToString();
-                            string sFAppointLength = sfi.AppointLength.ToString();
-                            string sFLengthContent = sfi.LengthContent.ToString();
-                            string sFAppointPort = sfi.AppointPort.ToString();
-                            string sFPortContent = sfi.PortContent.ToString();
-                            string sFMode = ((int)sfi.FMode).ToString();
-                            string sFAction = ((int)sfi.FAction).ToString();
-                            string sIsExecute = sfi.IsExecute.ToString();
-                            string sFEType = ((int)sfi.FEType).ToString();
-                            string sSID = sfi.SID.ToString().ToUpper();
-                            string sRID = sfi.RID.ToString().ToUpper();
-                            string sFFunction = FilterConfig.Filter.GetFilterFunctionString(sfi.FFunction);
-                            string sFStartFrom = ((int)sfi.FStartFrom).ToString();
-                            string sIsProgressionContinuous = sfi.IsProgressionContinuous.ToString();
-                            string sFProgressionStep = sfi.ProgressionStep.ToString();
-                            string sIsProgressionCarry = sfi.IsProgressionCarry.ToString();
-                            string sFProgressionCarryNumber = sfi.ProgressionCarryNumber.ToString();
-                            string sFProgressionPosition = sfi.ProgressionPosition;
-                            string sFSearch = sfi.FSearch;
-                            string sFModify = sfi.FModify;
+                            fiList = Operate.FilterConfig.List.lstFilterInfo.ToList();
+                        }
 
+                        foreach (FilterInfo fi in fiList)
+                        {
                             XElement xeFilter =
                                 new XElement("Filter",
-                                new XElement("IsEnable", sIsEnable),
-                                new XElement("ID", sFID),
-                                new XElement("Name", sFName),
-                                new XElement("AppointHeader", sFAppointHeader),
-                                new XElement("HeaderContent", sFHeaderContent),
-                                new XElement("AppointSocket", sFAppointSocket),
-                                new XElement("SocketContent", sFSocketContent),
-                                new XElement("AppointLength", sFAppointLength),
-                                new XElement("LengthContent", sFLengthContent),
-                                new XElement("AppointPort", sFAppointPort),
-                                new XElement("PortContent", sFPortContent),
-                                new XElement("Mode", sFMode),
-                                new XElement("Action", sFAction),
-                                new XElement("IsExecute", sIsExecute),
-                                new XElement("ExecuteType", sFEType),
-                                new XElement("SendID", sSID),
-                                new XElement("RobotID", sRID),
-                                new XElement("Function", sFFunction),
-                                new XElement("StartFrom", sFStartFrom),
-                                new XElement("IsProgressionContinuous", sIsProgressionContinuous),
-                                new XElement("ProgressionStep", sFProgressionStep),
-                                new XElement("IsProgressionCarry", sIsProgressionCarry),
-                                new XElement("ProgressionCarryNumber", sFProgressionCarryNumber),
-                                new XElement("ProgressionPosition", sFProgressionPosition),
-                                new XElement("Search", sFSearch),
-                                new XElement("Modify", sFModify)
+                                new XElement("IsEnable", fi.IsEnable.ToString()),
+                                new XElement("ID", fi.FID.ToString().ToUpper()),
+                                new XElement("Name", fi.FName),
+                                new XElement("AppointHeader", fi.AppointHeader.ToString()),
+                                new XElement("HeaderContent", fi.HeaderContent),
+                                new XElement("AppointSocket", fi.AppointSocket.ToString()),
+                                new XElement("SocketContent", fi.SocketContent),
+                                new XElement("AppointLength", fi.AppointLength.ToString()),
+                                new XElement("LengthContent", fi.LengthContent),
+                                new XElement("AppointPort", fi.AppointPort.ToString()),
+                                new XElement("PortContent", fi.PortContent),
+                                new XElement("Mode", fi.FMode),
+                                new XElement("Action", fi.FAction),
+                                new XElement("IsExecute", fi.IsExecute.ToString()),
+                                new XElement("ExecuteType", fi.FEType),
+                                new XElement("SendID", fi.SID.ToString().ToUpper()),
+                                new XElement("RobotID", fi.RID.ToString().ToUpper()),
+                                new XElement("Function", FilterConfig.Filter.GetFilterFunctionString(fi.FFunction)),
+                                new XElement("StartFrom", fi.FStartFrom),
+                                new XElement("IsProgressionContinuous", fi.IsProgressionContinuous.ToString()),
+                                new XElement("ProgressionStep", fi.ProgressionStep),
+                                new XElement("IsProgressionCarry", fi.IsProgressionCarry.ToString()),
+                                new XElement("ProgressionCarryNumber", fi.ProgressionCarryNumber),
+                                new XElement("ProgressionPosition", fi.ProgressionPosition),
+                                new XElement("Search", fi.FSearch),
+                                new XElement("Modify", fi.FModify)
                                 );
 
                             xeRoot.Add(xeFilter);
@@ -13015,6 +12993,11 @@ namespace WPE.Lib
                     {
                         XElement xeRoot = new XElement("SendList");
 
+                        if (siList == null)
+                        {
+                            siList = Operate.SendConfig.List.lstSendInfo.ToList();
+                        }
+
                         foreach (SendInfo si in siList)
                         {
                             XElement xeSend =
@@ -13023,8 +13006,8 @@ namespace WPE.Lib
                                 new XElement("ID", si.SID.ToString().ToUpper()),
                                 new XElement("Name", si.SName),
                                 new XElement("SystemSocket", si.SSystemSocket.ToString()),
-                                new XElement("LoopCNT", si.SLoopCNT.ToString()),
-                                new XElement("LoopINT", si.SLoopINT.ToString()),
+                                new XElement("LoopCNT", si.SLoopCNT),
+                                new XElement("LoopINT", si.SLoopINT),
                                 new XElement("Notes", si.SNotes)
                                 );
 
@@ -14511,25 +14494,25 @@ namespace WPE.Lib
                     {
                         XElement xeRoot = new XElement("RobotList");
 
+                        if (riList == null)
+                        {
+                            riList = Operate.RobotConfig.List.lstRobotInfo.ToList();
+                        }
+
                         foreach (RobotInfo ri in riList)
                         {
-                            string IsEnable = ri.IsEnable.ToString();
-                            string sRID = ri.RID.ToString().ToUpper();
-                            string sRName = ri.RName;
-                            BindingList<InstructionInfo> RInstruction = ri.RInstruction;
-
                             XElement xeRobot =
                                 new XElement("Robot",
-                                new XElement("IsEnable", IsEnable),
-                                new XElement("ID", sRID),
-                                new XElement("Name", sRName)
+                                new XElement("IsEnable", ri.IsEnable.ToString()),
+                                new XElement("ID", ri.RID.ToString().ToUpper()),
+                                new XElement("Name", ri.RName)
                                 );
 
-                            if (RInstruction.Count > 0)
+                            if (ri.RInstruction.Count > 0)
                             {
                                 XElement xeInstruction = new XElement("Instructions");
 
-                                foreach (InstructionInfo ii in RInstruction)
+                                foreach (InstructionInfo ii in ri.RInstruction)
                                 {
                                     XElement xeInst = 
                                         new XElement("Inst", 

@@ -3,6 +3,7 @@ using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
@@ -21,6 +22,7 @@ namespace WPE.ProxyMode
         private bool setcolor = false;
         private static Socket ProxyServer;
         private BindingList<AccountInfo> lstAccount;
+        private AntdUI.FormFloatButton FloatButton = null;
         private readonly Operate.SystemConfig.SystemMode RunMode = Operate.SystemConfig.SystemMode.Proxy;
 
         #region//窗体事件
@@ -57,6 +59,7 @@ namespace WPE.ProxyMode
                 //Operate.SystemConfig.StartRemoteMGT();
 
                 this.InitProxyServerIP();
+                this.InitFloatButton();
                 this.InitTable_ProxyList();
                 this.InitTable_AccountList();
                 this.InitTable_AuthList();
@@ -121,6 +124,61 @@ namespace WPE.ProxyMode
             {
                 this.mProxyMode.Items[i].BadgeBack = this.colorTheme.Value;
             }            
+        }
+
+        public void InitFloatButton()
+        {
+            if (Operate.SystemConfig.IsShow_FloatButton)
+            {
+                if (FloatButton == null)
+                {
+                    FloatButton = AntdUI.FloatButton.open(new AntdUI.FloatButton.Config(this,
+                        new AntdUI.FloatButton.ConfigBtn[]
+                        {
+                            new AntdUI.FloatButton.ConfigBtn("GitHub", "QuestionOutlined", true)
+                    {
+                        Tooltip = "问题反馈",
+                        Type= AntdUI.TTypeMini.Success
+                    },
+                            new AntdUI.FloatButton.ConfigBtn("WebSite", "HomeOutlined", true)
+                    {
+                        Tooltip = "访问官网",
+                        Type= AntdUI.TTypeMini.Default
+                    }
+                        }, btn =>
+                        {
+                            btn.Loading = true;
+
+                            AntdUI.ITask.Run(() =>
+                            {
+                                switch (btn.Name)
+                                {
+                                    case "GitHub":
+                                        Process.Start(Operate.SystemConfig.WPE64_Issuse);
+                                        break;
+
+                                    case "WebSite":
+                                        Process.Start(Operate.SystemConfig.WPE64_URL);
+                                        break;
+                                }
+
+                                btn.Loading = false;
+                            });
+                        }));
+                }
+                else
+                {
+                    FloatButton.Show();
+                }
+            }
+            else
+            {
+                if (FloatButton != null)
+                {
+                    FloatButton.Close();
+                    FloatButton = null;
+                }
+            }
         }
 
         private void InitProxyServerIP()
