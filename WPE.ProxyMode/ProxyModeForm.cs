@@ -1,8 +1,10 @@
 ﻿using AntdUI;
+using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -57,6 +59,7 @@ namespace WPE.ProxyMode
                 this.InitProxyServerIP();
                 this.InitTable_ProxyList();
                 this.InitTable_AccountList();
+                this.InitTable_AuthList();
                 this.InitTable_LogList();
 
             }, () =>
@@ -309,6 +312,47 @@ namespace WPE.ProxyMode
             this.tAccountList.Binding(GetPageData(this.pAccountList.Current, this.pAccountList.PageSize));
         }
 
+        private void InitTable_AuthList()
+        {
+            tAuthList.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("AuthTime", "认证时间").SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("AuthIP", "IP地址").SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("AID", "账号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return Operate.ProxyConfig.Account.GetUserName_ByAccountID((Guid)value);
+                    },
+                }.SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("LinksNumber", "链接数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("DevicesNumber", "设备数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("AuthResult", "认证结果", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if((bool)value)
+                        {
+                            return new CellTag("通过", TTypeMini.Success);
+                        }
+                        else
+                        {
+                            return new CellTag("失败", TTypeMini.Error);
+                        }
+                    },
+                }.SetLocalizationTitleID("Table.AuthList.Column."),
+            };
+
+            this.tAuthList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tAuthList.Binding(Operate.ProxyConfig.Account.lstAuthInfo);
+        }
+
         private void InitTable_LogList()
         {
             tSystemLog.Columns = new AntdUI.ColumnCollection {
@@ -550,6 +594,12 @@ namespace WPE.ProxyMode
 
         private void CleanUp_HexBox()
         {
+            if (hbProxyData.InvokeRequired)
+            {
+                hbProxyData.Invoke(new Action(CleanUp_HexBox));
+                return;
+            }
+
             if (hbProxyData.ByteProvider != null)
             {
                 IDisposable byteProvider = hbProxyData.ByteProvider as IDisposable;
@@ -605,38 +655,39 @@ namespace WPE.ProxyMode
                 this.bgwProxyList.RunWorkerAsync();
             }
 
+            if (!this.bgwClientList.IsBusy)
+            {
+                this.bgwClientList.RunWorkerAsync();
+            }
+
             this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
+            this.mProxyMode.Items[1].Badge = this.treeClientList.Items.Count().ToString();
             this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
             this.mProxyMode.Items[4].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+        }
 
-            this.lProxyTotal_CNT.Text = (Operate.ProxyConfig.Proxy.ProxyTCP_CNT + Operate.ProxyConfig.Proxy.ProxyUDP_CNT).ToString();
-            this.lProxyTCP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyTCP_CNT.ToString();
-            this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyUDP_CNT.ToString();
-            this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
-            this.lProxyLinks_CNT.Text = Operate.ProxyConfig.List.lstProxyExecute.Count.ToString();            
+        #endregion
 
-            Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(
-                    "{0}/{1}", 
-                    Socket_Operation.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo), 
-                    Operate.ProxyConfig.Account.lstAccountInfo.Count);
-            this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
+        #region//显示选中的封包数据
 
-            Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
-                AntdUI.Localization.Get("ProxyBytesInfo", "请求: {0}  响应: {1}"), 
-                Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request),
-                Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
-            this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
+        private void tProxyList_SelectIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int selectedIndex = tProxyList.SelectedIndex - 1;
+                if (selectedIndex >= 0 && selectedIndex < Operate.ProxyConfig.List.lstProxyInfo.Count)
+                {
+                    Operate.ProxyConfig.List.Search_Index = selectedIndex;
+                    Operate.ProxyConfig.List.piSelect = Operate.ProxyConfig.List.lstProxyInfo[selectedIndex];
 
-            decimal dUplink = Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;
-            Operate.ProxyConfig.Proxy.ProxySpeed_Uplink = 0;
-            decimal dDownlink = Operate.ProxyConfig.Proxy.ProxySpeed_Downlink / 1024;
-            Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
-
-            Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
-                AntdUI.Localization.Get("ProxySpeedInfo", "上行: {0} KB/s  下行: {1} KB/s"),
-                dUplink.ToString("0.00"),
-                dDownlink.ToString("0.00"));
-            this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
+                    DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
+                    hbProxyData.ByteProvider = dbp;
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion
@@ -684,6 +735,185 @@ namespace WPE.ProxyMode
         {
             this.tProxyList.Refresh();
             this.tSystemLog.Refresh();
+
+            this.lProxyTotal_CNT.Text = (Operate.ProxyConfig.Proxy.ProxyTCP_CNT + Operate.ProxyConfig.Proxy.ProxyUDP_CNT).ToString();
+            this.lProxyTCP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyTCP_CNT.ToString();
+            this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyUDP_CNT.ToString();
+            this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
+            this.lProxyLinks_CNT.Text = Operate.ProxyConfig.List.lstProxyExecute.Count.ToString();
+
+            this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
+            this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
+            this.lDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromAuthList().ToString();
+
+            Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(
+                    "{0}/{1}",
+                    Socket_Operation.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo),
+                    Operate.ProxyConfig.Account.lstAccountInfo.Count);
+            this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
+
+            Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
+                AntdUI.Localization.Get("ProxyBytesInfo", "请求: {0}  响应: {1}"),
+                Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request),
+                Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
+            this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
+
+            decimal dUplink = Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;
+            Operate.ProxyConfig.Proxy.ProxySpeed_Uplink = 0;
+            decimal dDownlink = Operate.ProxyConfig.Proxy.ProxySpeed_Downlink / 1024;
+            Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
+
+            Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
+                AntdUI.Localization.Get("ProxySpeedInfo", "上行: {0} KB/s  下行: {1} KB/s"),
+                dUplink.ToString("0.00"),
+                dDownlink.ToString("0.00"));
+            this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
+        }
+
+        #endregion
+
+        #region//显示客户端列表（异步）
+
+        private void bgwClientList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                foreach (ProxyExecute pe in Operate.ProxyConfig.List.lstProxyExecute.ToList())
+                {
+                    if (pe.TCP_Client.Socket == null)
+                    {
+                        #region//移除关闭的客户端链接
+
+                        string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
+                        string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
+
+                        if (string.IsNullOrEmpty(ClientUserName))
+                        {
+                            TreeItem tiChild = Operate.SystemConfig.FindNodeByName(this.treeClientList, pe.TCP_Client.Address);
+                            if (tiChild != null)
+                            {
+                                this.treeClientList.Items.Remove(tiChild);
+                            }
+
+                            Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
+                        }
+                        else
+                        {
+                            string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
+
+                            TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, sRootName);
+                            if (tiRoot == null)
+                            {
+                                return;
+                            }
+
+                            TreeItem tiChild = Operate.SystemConfig.FindNodeByName(tiRoot.Sub, pe.TCP_Client.Address);
+                            if (tiChild != null)
+                            {
+                                tiRoot.Sub.Remove(tiChild);                                
+                            }
+                            Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
+
+                            if (tiRoot.Sub.Count == 0)
+                            {
+                                Operate.ProxyConfig.Account.DeleteProxyAuthInfo_ByAIDAndIP(pe.AID, ClientIP);
+
+                                if (Operate.ProxyConfig.Proxy.DelClosed)
+                                {
+                                    this.treeClientList.Items.Remove(tiRoot);
+                                }
+
+                                if (pe.AID != null && pe.AID != Guid.Empty)
+                                {
+                                    Operate.ProxyConfig.Account.SetOnline_ByAccountID(pe.AID, false);
+                                }
+                            }
+                        }
+
+                        #endregion
+                    }
+                    else
+                    {
+                        #region//更新客户端链接
+
+                        if (pe.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
+                        {
+                            string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
+                            string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
+                            string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
+
+                            if (string.IsNullOrEmpty(sRootName))
+                            {
+                                return;
+                            }
+
+                            AntdUI.TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, sRootName);
+                            if (tiRoot == null)
+                            {
+                                tiRoot = new TreeItem(sRootName)
+                                {
+                                    IconSvg = "DesktopOutlined",
+                                };
+                                this.treeClientList.Items.Add(tiRoot);
+                            }
+
+                            string sChildName = pe.TCP_Client.Address;
+                            if (string.IsNullOrEmpty(sChildName))
+                            {
+                                return;
+                            }
+
+                            AntdUI.TreeItem tiChild = Operate.SystemConfig.FindNodeByName(this.treeClientList, sChildName);
+                            if (tiChild == null)
+                            {
+                                tiChild = new TreeItem(sChildName);
+                                switch (pe.DomainType)
+                                {
+                                    case Operate.ProxyConfig.Proxy.DomainType.Http:
+                                        tiChild.IconSvg = "IeOutlined";
+                                        break;
+
+                                    case Operate.ProxyConfig.Proxy.DomainType.Https:
+                                        tiChild.IconSvg = "LockOutlined";
+                                        break;
+
+                                    case Operate.ProxyConfig.Proxy.DomainType.Socket:
+                                        tiChild.IconSvg = "ApiOutlined";
+                                        break;
+
+                                    case Operate.ProxyConfig.Proxy.DomainType.External:
+
+                                        break;
+                                }
+                                tiRoot.Sub.Add(tiChild);
+                            }
+                        }
+
+                        #endregion
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwClientList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                foreach (AuthInfo ai in Operate.ProxyConfig.Account.lstAuthInfo.ToList())
+                {
+                    string ClientIP = ai.AuthIP.ToString();
+                    ai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, ClientIP, this.treeClientList);
+                    ai.DevicesNumber = Operate.ProxyConfig.Account.GetDevicesNumber_ByAccountID(ai.AID);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion

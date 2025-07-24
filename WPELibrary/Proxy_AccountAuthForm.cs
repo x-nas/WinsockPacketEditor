@@ -33,12 +33,12 @@ namespace WPELibrary
         {
             try
             {
-                _authBindingSource.DataSource = Operate.ProxyConfig.Account.lstProxyAuth;
+                _authBindingSource.DataSource = Operate.ProxyConfig.Account.lstAuthInfo;
 
                 dgvAuth.AutoGenerateColumns = false;
                 dgvAuth.DataSource = _authBindingSource;
                 dgvAuth.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvAuth, true, null);
-                Operate.ProxyConfig.Account.RecProxyAuth += new Operate.ProxyConfig.Account.ProxyAuthReceived(Event_RecProxyAuth);
+                //Operate.ProxyConfig.Account.RecProxyAuth += new Operate.ProxyConfig.Account.ProxyAuthReceived(Event_RecProxyAuth);
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace WPELibrary
 
         #region//显示认证列表（异步）        
 
-        private void Event_RecProxyAuth(Proxy_AuthInfo pai)
+        private void Event_RecProxyAuth(AuthInfo pai)
         {
             try
             {
@@ -64,8 +64,8 @@ namespace WPELibrary
                         if (this.IsDisposed || dgvAuth.IsDisposed)
                             return;
 
-                        var existingItem = Operate.ProxyConfig.Account.lstProxyAuth
-                            .FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.AID == pai.AID);
+                        var existingItem = Operate.ProxyConfig.Account.lstAuthInfo
+                            .FirstOrDefault(item => item.AuthIP == pai.AuthIP && item.AID == pai.AID);
 
                         if (existingItem != null)
                         {
@@ -74,7 +74,7 @@ namespace WPELibrary
                         }
                         else
                         {
-                            Operate.ProxyConfig.Account.lstProxyAuth.Add(pai);
+                            Operate.ProxyConfig.Account.lstAuthInfo.Add(pai);
                         }
 
                         _authBindingSource.ResetBindings(false);
@@ -125,9 +125,9 @@ namespace WPELibrary
 
         private void ShowAuthListInfo()
         { 
-            this.tsslAuthCount_Value.Text = Operate.ProxyConfig.Account.lstProxyAuth.Count.ToString();
-            this.tsslLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromProxyAuthList().ToString();
-            this.tsslDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromProxyAuthList().ToString();
+            this.tsslAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
+            //this.tsslLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromProxyAuthList().ToString();
+            //this.tsslDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromProxyAuthList().ToString();
         }
 
         #endregion

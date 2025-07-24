@@ -429,6 +429,33 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//查找树节点
+
+            public static TreeItem FindNodeByName(AntdUI.Tree tree, string name)
+            {
+                return FindNodeByName(tree.Items, name);
+            }
+
+            public static TreeItem FindNodeByName(TreeItemCollection items, string name)
+            {
+                if (items == null || items.Count == 0) return null;
+
+                foreach (var item in items)
+                {
+                    if (item.Name == name || item.Text == name)
+                    {
+                        return item;
+                    }
+
+                    var found = FindNodeByName(item.Sub, name);
+                    if (found != null) return found;
+                }
+
+                return null;
+            }
+
+            #endregion
+
             #region//启动远程管理
 
             public static void StartRemoteMGT()
@@ -4255,37 +4282,14 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//更新 UDP 状态（异步）
+                #region//获取客户端列表名称
 
-                public static async Task UpdateProxyUDP()
+                public static string GetClientListName(string ClientIP, string ClientUserName)
                 {
-                    await Task.Run(() =>
-                    {
-                        try
-                        {
-                            DateTime dtNow = DateTime.Now;
-
-                            for (int i = ProxyConfig.List.lstProxyExecute.Count - 1; i >= 0; i--)
-                            {
-                                var pe = ProxyConfig.List.lstProxyExecute[i];
-                                if (pe.UDP_Relay.ClientUDP != null && pe.UDP_Relay.ClientUDP_Time != null)
-                                {
-                                    TimeSpan timeSpan = dtNow - pe.UDP_Relay.ClientUDP_Time;
-                                    if (timeSpan.TotalSeconds > ProxyConfig.Proxy.UDPCloseTime)
-                                    {
-                                        pe.UDP_Relay.CloseUDPClient();
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Operate.DoLog(nameof(UpdateProxyUDP), ex.Message);
-                        }
-                    });
+                    return string.Format("{0} [{1}]", ClientIP, ClientUserName);
                 }
 
-                #endregion
+                #endregion                
 
                 #region//设置系统代理
 
@@ -4700,9 +4704,11 @@ namespace WPE.Lib
 
             public static class List
             {
+                public static int Search_Index = -1;
                 public static bool AutoRoll = false;
                 public static bool AutoClear = true;
                 public static decimal AutoClear_Value = 5000;
+                public static ProxyInfo piSelect = null;
 
                 public static BindingList<ProxyExecute> lstProxyExecute = new BindingList<ProxyExecute>();
                 public static BindingList<ProxyInfo> lstProxyInfo = new BindingList<ProxyInfo>();                
@@ -4857,7 +4863,7 @@ namespace WPE.Lib
                     lstProxyInfo.Clear();
                 }
 
-                #endregion
+                #endregion                
             }
 
             #endregion
@@ -4866,26 +4872,32 @@ namespace WPE.Lib
 
             public static class Account
             {
-                public static bool IsShow_ProxyAccount = false, IsShow_ProxyAuth = false;
-                public static int OnLineTimeOut = 60;
+                public static bool IsShow_ProxyAccount = false, IsShow_ProxyAuth = false;                
                 public static string CCProxy_HTML = string.Empty;
 
                 public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
-
-                public static BindingList<Proxy_AuthInfo> lstProxyAuth = new BindingList<Proxy_AuthInfo>();
-                public delegate void ProxyAuthReceived(Proxy_AuthInfo pai);
-                public static event ProxyAuthReceived RecProxyAuth;
+                public static BindingList<AuthInfo> lstAuthInfo = new BindingList<AuthInfo>();                
 
                 #region//代理认证入列表            
 
-                public static void AuthResult_ToList(Guid AID, string IPAddress, bool AuthResult)
+                public static void AuthResult_ToList(Guid AID, string AuthIP, bool AuthResult)
                 {
                     try
                     {
                         if (AID != null && AID != Guid.Empty)
                         {
-                            Proxy_AuthInfo pai = new Proxy_AuthInfo(AID, IPAddress, AuthResult, DateTime.Now);
-                            RecProxyAuth?.Invoke(pai);
+                            var existingItem = Operate.ProxyConfig.Account.lstAuthInfo
+                                    .FirstOrDefault(item => item.AuthIP == AuthIP && item.AID == AID);
+
+                            if (existingItem != null)
+                            {
+                                existingItem.AuthResult = AuthResult;
+                                existingItem.AuthTime = DateTime.Now;
+                            }
+                            else
+                            {
+                                Operate.ProxyConfig.Account.lstAuthInfo.Add(new AuthInfo(AID, AuthIP, AuthResult, DateTime.Now));
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -4898,7 +4910,7 @@ namespace WPE.Lib
 
                 #region//查找代理认证            
 
-                public static Proxy_AuthInfo GetProxyAuthInfo(Guid AID, string IPAddress)
+                public static AuthInfo GetProxyAuthInfo(Guid AID, string IPAddress)
                 {
                     try
                     {
@@ -4907,7 +4919,7 @@ namespace WPE.Lib
                             return null;
                         }
 
-                        return ProxyConfig.Account.lstProxyAuth.FirstOrDefault(p => p.AID == AID && p.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase));
+                        return ProxyConfig.Account.lstAuthInfo.FirstOrDefault(p => p.AID == AID && p.AuthIP.Equals(IPAddress, StringComparison.OrdinalIgnoreCase));
                     }
                     catch (Exception ex)
                     {
@@ -4927,11 +4939,11 @@ namespace WPE.Lib
                     {
                         if (AID != null)
                         {
-                            for (int i = ProxyConfig.Account.lstProxyAuth.Count - 1; i >= 0; i--)
+                            for (int i = ProxyConfig.Account.lstAuthInfo.Count - 1; i >= 0; i--)
                             {
-                                if (ProxyConfig.Account.lstProxyAuth[i].AID == AID)
+                                if (ProxyConfig.Account.lstAuthInfo[i].AID == AID)
                                 {
-                                    ProxyConfig.Account.lstProxyAuth.RemoveAt(i);
+                                    ProxyConfig.Account.lstAuthInfo.RemoveAt(i);
                                 }
                             }
                         }
@@ -4948,11 +4960,11 @@ namespace WPE.Lib
                     {
                         if (!string.IsNullOrEmpty(IPAddress) && AID != null)
                         {
-                            Proxy_AuthInfo pai = ProxyConfig.Account.lstProxyAuth.FirstOrDefault(Auth => Auth.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase) && Auth.AID == AID);
+                            AuthInfo pai = ProxyConfig.Account.lstAuthInfo.FirstOrDefault(Auth => Auth.AuthIP.Equals(IPAddress, StringComparison.OrdinalIgnoreCase) && Auth.AID == AID);
 
                             if (pai != null)
                             {
-                                ProxyConfig.Account.lstProxyAuth.Remove(pai);
+                                ProxyConfig.Account.lstAuthInfo.Remove(pai);
                             }
                         }
                     }
@@ -4968,21 +4980,21 @@ namespace WPE.Lib
 
                 public static void ClearProxyAuthList()
                 {
-                    lstProxyAuth.Clear();
+                    lstAuthInfo.Clear();
                 }
 
                 #endregion
 
                 #region//获取代理认证列表的信息
 
-                public static int GetLinksCount_FromProxyAuthList()
+                public static int GetLinksCount_FromAuthList()
                 {
-                    return lstProxyAuth?.Sum(proxy => proxy.LinksNumber) ?? 0;
+                    return lstAuthInfo?.Sum(proxy => proxy.LinksNumber) ?? 0;
                 }
 
-                public static int GetDevicesCount_FromProxyAuthList()
+                public static int GetDevicesCount_FromAuthList()
                 {
-                    return lstProxyAuth?.GroupBy(proxy => proxy.AID).Sum(group => group.First().DevicesNumber) ?? 0;
+                    return lstAuthInfo?.GroupBy(proxy => proxy.AID).Sum(group => group.First().DevicesNumber) ?? 0;
                 }
 
                 #endregion
@@ -5000,7 +5012,7 @@ namespace WPE.Lib
                             return -1;
                         }
 
-                        int listCount = ProxyConfig.Account.lstProxyAuth.Count;
+                        int listCount = ProxyConfig.Account.lstAuthInfo.Count;
                         if (listCount == 0 || fromIndex >= listCount)
                         {
                             return -1;
@@ -5008,8 +5020,8 @@ namespace WPE.Lib
 
                         for (int i = fromIndex; i < listCount; i++)
                         {
-                            string AccountUserName = GetUserName_ByAccountID(ProxyConfig.Account.lstProxyAuth[i].AID);
-                            string IPAddress = ProxyConfig.Account.lstProxyAuth[i].IPAddress;
+                            string AccountUserName = GetUserName_ByAccountID(ProxyConfig.Account.lstAuthInfo[i].AID);
+                            string IPAddress = ProxyConfig.Account.lstAuthInfo[i].AuthIP;
 
                             if (!string.IsNullOrEmpty(AccountUserName) && AccountUserName.Contains(FindString))
                             {
@@ -5128,7 +5140,7 @@ namespace WPE.Lib
                         if (AID != null && AID != Guid.Empty)
                         {
                             AccountInfo paiAccount = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
-                            Proxy_AuthInfo paiAuth = ProxyConfig.Account.GetProxyAuthInfo(AID, IPAddress);
+                            AuthInfo paiAuth = ProxyConfig.Account.GetProxyAuthInfo(AID, IPAddress);
 
                             if (paiAccount != null && paiAuth != null)
                             {
@@ -5176,7 +5188,7 @@ namespace WPE.Lib
                                     }
                                     else if (DevicesNumber == paiAccount.LimitDevices)
                                     {
-                                        Proxy_AuthInfo pai = ProxyConfig.Account.GetProxyAuthInfo(AID, ClientIP);
+                                        AuthInfo pai = ProxyConfig.Account.GetProxyAuthInfo(AID, ClientIP);
 
                                         if (pai != null)
                                         {
@@ -5239,19 +5251,17 @@ namespace WPE.Lib
 
                 #region//获取代理账号的链接数
 
-                public static int GetLinksNumber_ByAccountID(Guid AID, string ClientIP, TreeNodeCollection nodes)
+                public static int GetLinksNumber_ByAccountID(Guid AID, string ClientIP, AntdUI.Tree tree)
                 {
-                    int iReturn = 0;
-
                     try
                     {
                         string ClientUserName = ProxyConfig.Account.GetUserName_ByAccountID(AID);
-                        string RootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
+                        string RootName = ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
 
-                        TreeNode RootNode = Socket_Operation.FindNodeSync(nodes, RootName);
-                        if (RootNode != null)
+                        TreeItem tiRoot = SystemConfig.FindNodeByName(tree, RootName);
+                        if (tiRoot != null)
                         {
-                            iReturn = RootNode.Nodes.Count;
+                            return tiRoot.Sub.Count;
                         }
                     }
                     catch (Exception ex)
@@ -5259,7 +5269,7 @@ namespace WPE.Lib
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
-                    return iReturn;
+                    return 0;
                 }
 
                 #endregion
@@ -5268,7 +5278,7 @@ namespace WPE.Lib
 
                 public static int GetDevicesNumber_ByAccountID(Guid AID)
                 {
-                    return ProxyConfig.Account.lstProxyAuth.Count(p => p.AID == AID);
+                    return ProxyConfig.Account.lstAuthInfo.Count(p => p.AID == AID);
                 }
 
                 #endregion
@@ -5318,46 +5328,7 @@ namespace WPE.Lib
                     return menuItems.ToArray();
                 }
 
-                #endregion
-
-                #region//更新所有代理账号的在线状态（异步）
-
-                public static async Task UpdateOnlineStatus()
-                {
-                    await Task.Run(() =>
-                    {
-                        try
-                        {
-                            DateTime dtNow = DateTime.Now;
-
-                            foreach (AccountInfo pai in ProxyConfig.Account.lstAccountInfo)
-                            {
-                                if (pai.IsOnLine)
-                                {
-                                    if (pai.LoginTime != null)
-                                    {
-                                        TimeSpan timeDiff = dtNow - pai.LoginTime;
-
-                                        if (timeDiff.TotalMinutes > ProxyConfig.Account.OnLineTimeOut)
-                                        {
-                                            pai.IsOnLine = false;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        pai.IsOnLine = false;
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Operate.DoLog(nameof(UpdateOnlineStatus), ex.Message);
-                        }
-                    });
-                }
-
-                #endregion
+                #endregion                
 
                 #region//记录代理账号的IP地址（异步）
 

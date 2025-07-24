@@ -181,7 +181,7 @@ namespace WPE.Lib
                 this.IsActive = true;
             }
 
-            public void CloseUDPClient()
+            public void Close()
             {
                 if (!IsActive) return;
 
@@ -219,6 +219,7 @@ namespace WPE.Lib
                 {
                     TCP_Server?.Close();
                     TCP_Client?.Close();
+                    UDP_Relay?.Close();
                 }
             }
         }

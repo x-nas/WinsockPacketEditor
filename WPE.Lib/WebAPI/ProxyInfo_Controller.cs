@@ -45,9 +45,9 @@ namespace WPE.Lib.WebAPI
         [HttpGet]
         [Route("GetProxyAuthList")]
 
-        public IEnumerable<Proxy_AuthInfo> GetProxyAuthList()
+        public IEnumerable<AuthInfo> GetProxyAuthList()
         {
-            return Operate.ProxyConfig.Account.lstProxyAuth;
+            return Operate.ProxyConfig.Account.lstAuthInfo;
         }
 
         #endregion

@@ -690,8 +690,8 @@ namespace WinsockPacketEditor
         {
             await this.UpdateClientLinks();
             await this.UpdateAccountLinksAndDevices();            
-            await Operate.ProxyConfig.Proxy.UpdateProxyUDP();
-            await Operate.ProxyConfig.Account.UpdateOnlineStatus();
+            //await Operate.ProxyConfig.Proxy.UpdateProxyUDP();
+            //await Operate.ProxyConfig.Account.UpdateOnlineStatus();
         }
 
         #endregion
@@ -895,7 +895,7 @@ namespace WinsockPacketEditor
 
                         string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
                         string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
-                        string sRootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
+                        string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
 
                         if (!string.IsNullOrEmpty(sRootName))
                         {
@@ -978,7 +978,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                string sRootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
+                                string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
 
                                 TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
                                 if (RootNode != null)
@@ -1038,10 +1038,10 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    foreach (Proxy_AuthInfo pai in Operate.ProxyConfig.Account.lstProxyAuth.ToList())
+                    foreach (AuthInfo pai in Operate.ProxyConfig.Account.lstAuthInfo.ToList())
                     {
-                        string ClientIP = pai.IPAddress.ToString();
-                        pai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(pai.AID, ClientIP, this.tvProxyInfo.Nodes);
+                        string ClientIP = pai.AuthIP.ToString();
+                        //pai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(pai.AID, ClientIP, this.tvProxyInfo.Nodes);
                         pai.DevicesNumber = Operate.ProxyConfig.Account.GetDevicesNumber_ByAccountID(pai.AID);
                     }
                 }

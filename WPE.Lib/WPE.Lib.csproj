@@ -153,7 +153,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ClassObject\AccountInfo.cs" />
-    <Compile Include="Proxy_AuthInfo.cs" />
+    <Compile Include="ClassObject\AuthInfo.cs" />
     <Compile Include="ClassObject\MapLocal.cs" />
     <Compile Include="ClassObject\MapRemote.cs" />
     <Compile Include="ClassObject\BitInfo.cs" />
