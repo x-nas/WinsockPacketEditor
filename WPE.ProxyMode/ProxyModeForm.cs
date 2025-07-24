@@ -18,7 +18,6 @@ namespace WPE.ProxyMode
 {
     public partial class ProxyModeForm : Window, Operate.IProxyMode
     {
-        private bool StartProxy = true;
         private bool setcolor = false;
         private static Socket ProxyServer;
         private BindingList<AccountInfo> lstAccount;
@@ -1028,12 +1027,45 @@ namespace WPE.ProxyMode
 
         #region//代理数据 - 菜单
 
-        private void sProxyList_SelectIndexChanged(object sender, AntdUI.IntEventArgs e)
+        private void bProxyStart_Click(object sender, EventArgs e)
         {
-            switch (this.sProxyList.SelectIndex)
+            this.bProxyStart.Enabled = false;
+            this.bProxyStop.Enabled = true;
+
+            this.Start_Proxy();
+        }
+
+        private void bProxyStop_Click(object sender, EventArgs e)
+        {
+            this.bProxyStart.Enabled = true;
+            this.bProxyStop.Enabled = false;
+
+            this.Stop_Proxy();
+        }
+
+        private void bProxyList_Clear_Click(object sender, EventArgs e)
+        {
+            this.CleanUp_ProxyListInfo();
+
+            AntdUI.Message.open(new AntdUI.Message.Config(this, "已清空数据", TType.Warn)
             {
-                //代理设置
-                case 0:
+                LocalizationText = "InjectModeForm.Clear"
+            });
+        }
+
+        private void mProxyList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mProxyList.SelectIndex(-1);
+
+            switch (miSelect.ID)
+            {
+                case "miPacketListSearch":
+
+                    break;
+
+                case "miProxySettings":
+
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ProxySettingsForm())
                     {
                         Align = AntdUI.TAlignMini.Right,
@@ -1041,10 +1073,11 @@ namespace WPE.ProxyMode
                         MaskClosable = false,
                         DisplayDelay = 0,
                     });
-                    break;                
 
-                //列表设置
-                case 1:
+                    break;
+
+                case "miListSettings":
+
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm())
                     {
                         Align = AntdUI.TAlignMini.Right,
@@ -1052,10 +1085,11 @@ namespace WPE.ProxyMode
                         MaskClosable = false,
                         DisplayDelay = 0,
                     });
+
                     break;
 
-                //映射设置
-                case 2:
+                case "miMapSettings":
+
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapSettingsForm())
                     {
                         Align = AntdUI.TAlignMini.Right,
@@ -1063,10 +1097,11 @@ namespace WPE.ProxyMode
                         MaskClosable = false,
                         DisplayDelay = 0,
                     });
+
                     break;
 
-                //外部代理
-                case 3:
+                case "miExternalProxySettings":
+
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ExternalProxySettingsForm())
                     {
                         Align = AntdUI.TAlignMini.Right,
@@ -1074,10 +1109,11 @@ namespace WPE.ProxyMode
                         MaskClosable = false,
                         DisplayDelay = 0,
                     });
+
                     break;
 
-                //系统设置
-                case 4:
+                case "miSystemSettings":
+
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm())
                     {
                         Align = AntdUI.TAlignMini.Right,
@@ -1085,39 +1121,9 @@ namespace WPE.ProxyMode
                         MaskClosable = false,
                         DisplayDelay = 0,
                     });
-                    break;
-
-                //清空数据
-                case 5:
-
-                    this.CleanUp_ProxyListInfo();
-
-                    break;
-
-                //代理
-                case 6:
-
-                    if (this.StartProxy)
-                    {
-                        this.sProxyList.Items[6].IconSvg = "PauseCircleFilled";
-                        this.sProxyList.Items[6].Text = AntdUI.Localization.Get("ProxyModeForm.StopProxy", "停止代理");
-                        this.StartProxy = false;
-
-                        this.Start_Proxy();
-                    }
-                    else
-                    {
-                        this.sProxyList.Items[6].IconSvg = "PlayCircleFilled";
-                        this.sProxyList.Items[6].Text = AntdUI.Localization.Get("ProxyModeForm.StartProxy", "开始代理");
-                        this.StartProxy = true;
-
-                        this.Stop_Proxy();
-                    }
 
                     break;
             }
-
-            this.sProxyList.SelectIndex = -1;
         }
 
         #endregion
@@ -1597,7 +1603,7 @@ namespace WPE.ProxyMode
                     }
                 }
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "停止 SOCKS5 代理", TType.Warn)
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "停止 SOCKS5 代理", TType.Error)
                 {
                     LocalizationText = "ProxyModeForm.StopProxy"
                 });
