@@ -5,9 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
-using WPE.Lib;
 
-namespace WPE.ProxyMode
+namespace WPE.Lib
 {
     public partial class ProxySettingsForm : Form
     {

@@ -2,9 +2,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using WPE.Lib;
 
-namespace WPE.ProxyMode
+namespace WPE.Lib
 {
     public partial class MapSettingsForm : Form
     {

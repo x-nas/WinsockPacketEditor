@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using AntdUI;
-using WPE.Lib;
 
-namespace WPE.InjectMode
+namespace WPE.Lib
 {
     public partial class FilterSettingsForm : Form
     {

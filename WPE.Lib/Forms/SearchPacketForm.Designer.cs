@@ -1,4 +1,4 @@
-﻿namespace WPE.InjectMode
+﻿namespace WPE.Lib
 {
     partial class SearchPacketForm
     {
@@ -39,15 +39,15 @@
             this.hexFind = new Be.Windows.Forms.HexBox();
             this.pSearchType = new AntdUI.Panel();
             this.tlpSearchType = new System.Windows.Forms.TableLayoutPanel();
+            this.rbString = new AntdUI.Radio();
             this.rbHex = new AntdUI.Radio();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bSearch = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
+            this.bSearch = new AntdUI.Button();
             this.pSearchFrom = new AntdUI.Panel();
             this.tlpSearchFrom = new System.Windows.Forms.TableLayoutPanel();
             this.rbFromIndex = new AntdUI.Radio();
             this.rbFromHead = new AntdUI.Radio();
-            this.rbString = new AntdUI.Radio();
             this.tlpSearchSettings.SuspendLayout();
             this.tabSearchType.SuspendLayout();
             this.tpString.SuspendLayout();
@@ -181,6 +181,19 @@
             this.tlpSearchType.Size = new System.Drawing.Size(180, 141);
             this.tlpSearchType.TabIndex = 21;
             // 
+            // rbString
+            // 
+            this.rbString.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.rbString.Checked = true;
+            this.rbString.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbString.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbString.Location = new System.Drawing.Point(3, 30);
+            this.rbString.Name = "rbString";
+            this.rbString.Size = new System.Drawing.Size(95, 39);
+            this.rbString.TabIndex = 3;
+            this.rbString.Text = "查找文本";
+            this.rbString.CheckedChanged += new AntdUI.BoolEventHandler(this.rbString_CheckedChanged);
+            // 
             // rbHex
             // 
             this.rbHex.AutoSizeMode = AntdUI.TAutoSize.Width;
@@ -209,20 +222,6 @@
             this.tlpButton.Size = new System.Drawing.Size(150, 161);
             this.tlpButton.TabIndex = 23;
             // 
-            // bSearch
-            // 
-            this.bSearch.BackExtend = "135, #6253E1, #04BEFE";
-            this.bSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSearch.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.bSearch.IconSvg = "SearchOutlined";
-            this.bSearch.Location = new System.Drawing.Point(3, 3);
-            this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(144, 74);
-            this.bSearch.TabIndex = 8;
-            this.bSearch.Text = "查找下一个";
-            this.bSearch.Type = AntdUI.TTypeMini.Primary;
-            this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
-            // 
             // bExit
             // 
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
@@ -236,6 +235,20 @@
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
+            // 
+            // bSearch
+            // 
+            this.bSearch.BackExtend = "135, #6253E1, #04BEFE";
+            this.bSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSearch.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bSearch.IconSvg = "SearchOutlined";
+            this.bSearch.Location = new System.Drawing.Point(3, 3);
+            this.bSearch.Name = "bSearch";
+            this.bSearch.Size = new System.Drawing.Size(144, 74);
+            this.bSearch.TabIndex = 8;
+            this.bSearch.Text = "查找下一个";
+            this.bSearch.Type = AntdUI.TTypeMini.Primary;
+            this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
             // 
             // pSearchFrom
             // 
@@ -290,19 +303,6 @@
             this.rbFromHead.Size = new System.Drawing.Size(95, 35);
             this.rbFromHead.TabIndex = 4;
             this.rbFromHead.Text = "从头开始";
-            // 
-            // rbString
-            // 
-            this.rbString.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.rbString.Checked = true;
-            this.rbString.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rbString.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.rbString.Location = new System.Drawing.Point(3, 30);
-            this.rbString.Name = "rbString";
-            this.rbString.Size = new System.Drawing.Size(95, 39);
-            this.rbString.TabIndex = 3;
-            this.rbString.Text = "查找文本";
-            this.rbString.CheckedChanged += new AntdUI.BoolEventHandler(this.rbString_CheckedChanged);
             // 
             // SearchPacketForm
             // 

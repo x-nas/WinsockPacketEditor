@@ -1,4 +1,4 @@
-﻿namespace WPE.InjectMode
+﻿namespace WPE.Lib
 {
     partial class SystemSettingsForm
     {
@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SystemSettingsForm));
             this.tlpSystemSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.dFloatButton = new AntdUI.Divider();
             this.tlpFilterActionColor = new System.Windows.Forms.TableLayoutPanel();
             this.lFAColor_Other = new AntdUI.Label();
             this.lFAColor_Change = new AntdUI.Label();
@@ -49,7 +50,6 @@
             this.tlpListExecute = new System.Windows.Forms.TableLayoutPanel();
             this.rbListExecute_Sequence = new AntdUI.Radio();
             this.rbListExecute_Together = new AntdUI.Radio();
-            this.dFloatButton = new AntdUI.Divider();
             this.switchFloatButton = new AntdUI.Switch();
             this.tlpSystemSettings.SuspendLayout();
             this.tlpFilterActionColor.SuspendLayout();
@@ -94,6 +94,17 @@
             this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpSystemSettings.Size = new System.Drawing.Size(484, 581);
             this.tlpSystemSettings.TabIndex = 0;
+            // 
+            // dFloatButton
+            // 
+            this.dFloatButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dFloatButton.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dFloatButton.Location = new System.Drawing.Point(3, 100);
+            this.dFloatButton.Name = "dFloatButton";
+            this.dFloatButton.Orientation = AntdUI.TOrientation.Left;
+            this.dFloatButton.Size = new System.Drawing.Size(478, 23);
+            this.dFloatButton.TabIndex = 19;
+            this.dFloatButton.Text = "悬浮按钮";
             // 
             // tlpFilterActionColor
             // 
@@ -346,17 +357,6 @@
             this.rbListExecute_Together.Size = new System.Drawing.Size(106, 42);
             this.rbListExecute_Together.TabIndex = 1;
             this.rbListExecute_Together.Text = "同时执行";
-            // 
-            // dFloatButton
-            // 
-            this.dFloatButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dFloatButton.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dFloatButton.Location = new System.Drawing.Point(3, 100);
-            this.dFloatButton.Name = "dFloatButton";
-            this.dFloatButton.Orientation = AntdUI.TOrientation.Left;
-            this.dFloatButton.Size = new System.Drawing.Size(478, 23);
-            this.dFloatButton.TabIndex = 19;
-            this.dFloatButton.Text = "悬浮按钮";
             // 
             // switchFloatButton
             // 

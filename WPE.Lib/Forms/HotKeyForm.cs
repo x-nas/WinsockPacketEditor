@@ -1,9 +1,8 @@
 ﻿using AntdUI;
 using System;
 using System.Windows.Forms;
-using WPE.Lib;
 
-namespace WPE.InjectMode
+namespace WPE.Lib
 {
     public partial class HotKeyForm : Form
     {

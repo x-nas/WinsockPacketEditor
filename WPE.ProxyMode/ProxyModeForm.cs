@@ -3,7 +3,6 @@ using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
@@ -16,7 +15,7 @@ using WPE.Lib.Controls;
 
 namespace WPE.ProxyMode
 {
-    public partial class ProxyModeForm : Window, Operate.IProxyMode
+    public partial class ProxyModeForm : Window, InterfaceInfo.IProxyMode
     {
         private bool setcolor = false;
         private static Socket ProxyServer;
@@ -127,57 +126,7 @@ namespace WPE.ProxyMode
 
         public void InitFloatButton()
         {
-            if (Operate.SystemConfig.IsShow_FloatButton)
-            {
-                if (FloatButton == null)
-                {
-                    FloatButton = AntdUI.FloatButton.open(new AntdUI.FloatButton.Config(this,
-                        new AntdUI.FloatButton.ConfigBtn[]
-                        {
-                            new AntdUI.FloatButton.ConfigBtn("GitHub", "QuestionOutlined", true)
-                    {
-                        Tooltip = "问题反馈",
-                        Type= AntdUI.TTypeMini.Success
-                    },
-                            new AntdUI.FloatButton.ConfigBtn("WebSite", "HomeOutlined", true)
-                    {
-                        Tooltip = "访问官网",
-                        Type= AntdUI.TTypeMini.Default
-                    }
-                        }, btn =>
-                        {
-                            btn.Loading = true;
-
-                            AntdUI.ITask.Run(() =>
-                            {
-                                switch (btn.Name)
-                                {
-                                    case "GitHub":
-                                        Process.Start(Operate.SystemConfig.WPE64_Issuse);
-                                        break;
-
-                                    case "WebSite":
-                                        Process.Start(Operate.SystemConfig.WPE64_URL);
-                                        break;
-                                }
-
-                                btn.Loading = false;
-                            });
-                        }));
-                }
-                else
-                {
-                    FloatButton.Show();
-                }
-            }
-            else
-            {
-                if (FloatButton != null)
-                {
-                    FloatButton.Close();
-                    FloatButton = null;
-                }
-            }
+            Operate.SystemConfig.InitFloatButton(this, this.FloatButton);
         }
 
         private void InitProxyServerIP()
@@ -871,13 +820,9 @@ namespace WPE.ProxyMode
 
                             if (tiRoot.Sub.Count == 0)
                             {
+                                this.treeClientList.Items.Remove(tiRoot);
                                 Operate.ProxyConfig.Account.DeleteProxyAuthInfo_ByAIDAndIP(pe.AID, ClientIP);
-
-                                if (Operate.ProxyConfig.Proxy.DelClosed)
-                                {
-                                    this.treeClientList.Items.Remove(tiRoot);
-                                }
-
+                                  
                                 if (pe.AID != null && pe.AID != Guid.Empty)
                                 {
                                     Operate.ProxyConfig.Account.SetOnline_ByAccountID(pe.AID, false);
@@ -1060,7 +1005,17 @@ namespace WPE.ProxyMode
 
             switch (miSelect.ID)
             {
-                case "miPacketListSearch":
+                case "miProxyListSearch":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SearchPacketForm(this)
+                    {
+                        Size = new Size(1000, 100),
+                    })
+                    {
+                        Align = AntdUI.TAlignMini.Top,
+                        Mask = false,
+                        DisplayDelay = 0,
+                    });
 
                     break;
 
@@ -1114,7 +1069,7 @@ namespace WPE.ProxyMode
 
                 case "miSystemSettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -1612,6 +1567,15 @@ namespace WPE.ProxyMode
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//查找封包（异步）
+
+        public void SearchPacketList(bool FromHead)
+        {
+            
         }
 
         #endregion

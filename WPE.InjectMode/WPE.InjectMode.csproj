@@ -70,48 +70,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackUpSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BackUpSettingsForm.Designer.cs">
-      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="FilterEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FilterEditForm.Designer.cs">
       <DependentUpon>FilterEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FilterSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FilterSettingsForm.Designer.cs">
-      <DependentUpon>FilterSettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Hook.cs" />
-    <Compile Include="HookSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="HookSettingsForm.Designer.cs">
-      <DependentUpon>HookSettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="HotKeyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="HotKeyForm.Designer.cs">
-      <DependentUpon>HotKeyForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="InjectModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="InjectModeForm.Designer.cs">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ListSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ListSettingsForm.Designer.cs">
-      <DependentUpon>ListSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PacketEditForm.cs">
       <SubType>Form</SubType>
@@ -137,23 +107,11 @@
     <Compile Include="RobotEditForm.Designer.cs">
       <DependentUpon>RobotEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SearchPacketForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SearchPacketForm.Designer.cs">
-      <DependentUpon>SearchPacketForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="SendEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SendEditForm.Designer.cs">
       <DependentUpon>SendEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SystemSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SystemSettingsForm.Designer.cs">
-      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -188,26 +146,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BackUpSettingsForm.resx">
-      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FilterEditForm.resx">
       <DependentUpon>FilterEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FilterSettingsForm.resx">
-      <DependentUpon>FilterSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="HookSettingsForm.resx">
-      <DependentUpon>HookSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="HotKeyForm.resx">
-      <DependentUpon>HotKeyForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="InjectModeForm.resx">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ListSettingsForm.resx">
-      <DependentUpon>ListSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PacketEditForm.resx">
       <DependentUpon>PacketEditForm.cs</DependentUpon>
@@ -222,14 +165,8 @@
     <EmbeddedResource Include="RobotEditForm.resx">
       <DependentUpon>RobotEditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SearchPacketForm.resx">
-      <DependentUpon>SearchPacketForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="SendEditForm.resx">
       <DependentUpon>SendEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SystemSettingsForm.resx">
-      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

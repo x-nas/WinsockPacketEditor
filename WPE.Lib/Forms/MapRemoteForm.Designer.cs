@@ -1,4 +1,4 @@
-﻿namespace WPE.ProxyMode
+﻿namespace WPE.Lib
 {
     partial class MapRemoteForm
     {

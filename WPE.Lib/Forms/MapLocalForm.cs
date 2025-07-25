@@ -3,9 +3,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using WPE.Lib;
 
-namespace WPE.ProxyMode
+namespace WPE.Lib
 {
     public partial class MapLocalForm : Form
     {

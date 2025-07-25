@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
-using WPE.Lib;
 
-namespace WPE.InjectMode
+namespace WPE.Lib
 {
     public partial class BackUpSettingsForm : Form
     {

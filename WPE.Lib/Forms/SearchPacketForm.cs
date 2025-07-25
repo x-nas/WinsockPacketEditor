@@ -4,22 +4,19 @@ using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using WPE.Lib;
 
-namespace WPE.InjectMode
+namespace WPE.Lib
 {
     public partial class SearchPacketForm : Form
     {
-        private InjectModeForm imForm;
+        private Form form;
 
         #region//窗体初始化
 
-        public SearchPacketForm(InjectModeForm form)
-        {
-            this.imForm = form;
+        public SearchPacketForm(Form form)
+        {  
             InitializeComponent();
-            this.Dark_Changed();
-            this.FindTypeChanged();
+            this.form = form;            
         }
 
         private void SearchPacketForm_Load(object sender, EventArgs e)
@@ -51,6 +48,9 @@ namespace WPE.InjectMode
                     byte[] bNew = new byte[0];
                     hexFind.ByteProvider = new DynamicByteProvider(bNew);
                 }
+
+                this.Dark_Changed();
+                this.FindTypeChanged();
             }
             catch (Exception ex)
             {
@@ -176,7 +176,20 @@ namespace WPE.InjectMode
                 this.rbFromIndex.Checked = true;
             }
 
-            this.imForm.SearchPacketList(FromHead);
+            switch (Operate.SystemConfig.StartMode)
+            {
+                case Operate.SystemConfig.SystemMode.Process:
+
+                    ((InterfaceInfo.IInjectMode)form).SearchPacketList(FromHead);
+
+                    break;
+
+                case Operate.SystemConfig.SystemMode.Proxy:
+
+                    ((InterfaceInfo.IProxyMode)form).SearchPacketList(FromHead);
+
+                    break;
+            }
         }
 
         #endregion

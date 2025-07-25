@@ -4,7 +4,6 @@ using EasyHook;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -19,7 +18,7 @@ using WPE.Lib.Controls;
 
 namespace WPE.InjectMode
 {
-    public partial class InjectModeForm : Window
+    public partial class InjectModeForm : Window, InterfaceInfo.IInjectMode
     {
         private bool bWakeUp = true;
         private bool setcolor = false;
@@ -161,57 +160,7 @@ namespace WPE.InjectMode
 
         public void InitFloatButton()
         {
-            if (Operate.SystemConfig.IsShow_FloatButton)
-            {
-                if (FloatButton == null)
-                {
-                    FloatButton = AntdUI.FloatButton.open(new AntdUI.FloatButton.Config(this,
-                        new AntdUI.FloatButton.ConfigBtn[]
-                        {
-                            new AntdUI.FloatButton.ConfigBtn("GitHub", "QuestionOutlined", true)
-                    {
-                        Tooltip = "问题反馈",
-                        Type= AntdUI.TTypeMini.Success
-                    },
-                            new AntdUI.FloatButton.ConfigBtn("WebSite", "HomeOutlined", true)
-                    {
-                        Tooltip = "访问官网",
-                        Type= AntdUI.TTypeMini.Default
-                    }
-                        }, btn =>
-                        {
-                            btn.Loading = true;
-
-                            AntdUI.ITask.Run(() =>
-                    {
-                        switch (btn.Name)
-                        {
-                            case "GitHub":
-                                Process.Start(Operate.SystemConfig.WPE64_Issuse);
-                                break;
-
-                            case "WebSite":
-                                Process.Start(Operate.SystemConfig.WPE64_URL);
-                                break;
-                        }
-
-                        btn.Loading = false;
-                    });
-                        }));
-                }
-                else
-                {
-                    FloatButton.Show();
-                }
-            }
-            else
-            {
-                if (FloatButton != null)
-                {
-                    FloatButton.Close();
-                    FloatButton = null;
-                }                
-            }            
+            Operate.SystemConfig.InitFloatButton(this, this.FloatButton);  
         }
 
         public void RefreshFilterList()

@@ -1,4 +1,4 @@
-﻿namespace WPE.InjectMode
+﻿namespace WPE.Lib
 {
     partial class FilterSettingsForm
     {

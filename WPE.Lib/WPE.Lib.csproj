@@ -125,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassObject\InstructionInfo.cs" />
+    <Compile Include="ClassObject\InterfaceInfo.cs" />
     <Compile Include="Controls\EncryptionPassword.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -135,6 +136,78 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FontLoader.cs" />
+    <Compile Include="Forms\BackUpSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BackUpSettingsForm.Designer.cs">
+      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ExternalProxySettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExternalProxySettingsForm.Designer.cs">
+      <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FilterSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterSettingsForm.Designer.cs">
+      <DependentUpon>FilterSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HookSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HookSettingsForm.Designer.cs">
+      <DependentUpon>HookSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HotKeyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HotKeyForm.Designer.cs">
+      <DependentUpon>HotKeyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ListSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ListSettingsForm.Designer.cs">
+      <DependentUpon>ListSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MapLocalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MapLocalForm.Designer.cs">
+      <DependentUpon>MapLocalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MapRemoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MapRemoteForm.Designer.cs">
+      <DependentUpon>MapRemoteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MapSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MapSettingsForm.Designer.cs">
+      <DependentUpon>MapSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProxySettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProxySettingsForm.Designer.cs">
+      <DependentUpon>ProxySettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SearchPacketForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SearchPacketForm.Designer.cs">
+      <DependentUpon>SearchPacketForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SystemSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SystemSettingsForm.Designer.cs">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="IconExtractor\IconExtractor.cs" />
     <Compile Include="IconExtractor\IconUtil.cs" />
     <Compile Include="Localizer.cs" />
@@ -191,6 +264,42 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SystemSetting.resx">
       <DependentUpon>SystemSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BackUpSettingsForm.resx">
+      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExternalProxySettingsForm.resx">
+      <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FilterSettingsForm.resx">
+      <DependentUpon>FilterSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HookSettingsForm.resx">
+      <DependentUpon>HookSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HotKeyForm.resx">
+      <DependentUpon>HotKeyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ListSettingsForm.resx">
+      <DependentUpon>ListSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MapLocalForm.resx">
+      <DependentUpon>MapLocalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MapRemoteForm.resx">
+      <DependentUpon>MapRemoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MapSettingsForm.resx">
+      <DependentUpon>MapSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProxySettingsForm.resx">
+      <DependentUpon>ProxySettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SearchPacketForm.resx">
+      <DependentUpon>SearchPacketForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SystemSettingsForm.resx">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

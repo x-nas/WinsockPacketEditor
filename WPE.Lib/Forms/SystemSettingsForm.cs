@@ -1,27 +1,40 @@
 ﻿using AntdUI;
 using System;
 using System.Windows.Forms;
-using WPE.Lib;
 
-namespace WPE.InjectMode
+namespace WPE.Lib
 {
     public partial class SystemSettingsForm : Form
     {
-        private InjectModeForm imForm;
+        private Form form;
 
         #region//窗体事件
 
-        public SystemSettingsForm(InjectModeForm form)
+        public SystemSettingsForm(Form form)
         {
             InitializeComponent();
-            this.imForm = form;
+            this.form = form;
         }
 
         private void SystemSettingsForm_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("SystemSettingsForm", "系统设置");
 
-            this.cbSpeedMode.Checked = Operate.PacketConfig.Packet.SpeedMode;
+            switch (Operate.SystemConfig.StartMode)
+            {
+                case Operate.SystemConfig.SystemMode.Process:
+
+                    this.cbSpeedMode.Checked = Operate.PacketConfig.Packet.SpeedMode;
+
+                    break;
+
+                case Operate.SystemConfig.SystemMode.Proxy:
+
+                    this.cbSpeedMode.Checked = Operate.ProxyConfig.Proxy.SpeedMode;
+
+                    break;
+            }
+            
             this.switchFloatButton.Checked = Operate.SystemConfig.IsShow_FloatButton;
 
             switch (Operate.SystemConfig.ListExecute)
@@ -74,9 +87,22 @@ namespace WPE.InjectMode
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            Operate.PacketConfig.Packet.SpeedMode = this.cbSpeedMode.Checked;
-            Operate.SystemConfig.IsShow_FloatButton = this.switchFloatButton.Checked;
-            imForm.InitFloatButton();
+            switch (Operate.SystemConfig.StartMode)
+            {
+                case Operate.SystemConfig.SystemMode.Process:
+
+                    Operate.PacketConfig.Packet.SpeedMode = this.cbSpeedMode.Checked;
+                    ((InterfaceInfo.IInjectMode)form).InitFloatButton();
+
+                    break;
+
+                case Operate.SystemConfig.SystemMode.Proxy:
+
+                    Operate.ProxyConfig.Proxy.SpeedMode = this.cbSpeedMode.Checked;
+                    ((InterfaceInfo.IProxyMode)form).InitFloatButton();
+
+                    break;
+            }
 
             if (this.rbListExecute_Together.Checked)
             {
@@ -95,6 +121,8 @@ namespace WPE.InjectMode
             {
                 Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Sequence;
             }
+
+            Operate.SystemConfig.IsShow_FloatButton = this.switchFloatButton.Checked;
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "系统设置保存成功", TType.Success)
             {

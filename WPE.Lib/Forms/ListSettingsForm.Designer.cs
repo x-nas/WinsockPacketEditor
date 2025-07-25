@@ -1,4 +1,4 @@
-﻿namespace WPE.InjectMode
+﻿namespace WPE.Lib
 {
     partial class ListSettingsForm
     {
@@ -37,16 +37,16 @@
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.divider1 = new AntdUI.Divider();
-            this.divider2 = new AntdUI.Divider();
-            this.tlpPacketList = new System.Windows.Forms.TableLayoutPanel();
+            this.dPacketList = new AntdUI.Divider();
+            this.dLogList = new AntdUI.Divider();
+            this.tlpProxyList = new System.Windows.Forms.TableLayoutPanel();
             this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
             this.cbPacketList_AutoClear = new AntdUI.Checkbox();
             this.txtPacketList_AutoClear = new AntdUI.InputNumber();
             this.tlpListSettings.SuspendLayout();
             this.tlpLogList.SuspendLayout();
             this.tlpButton.SuspendLayout();
-            this.tlpPacketList.SuspendLayout();
+            this.tlpProxyList.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpListSettings
@@ -54,24 +54,25 @@
             this.tlpListSettings.ColumnCount = 1;
             this.tlpListSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpListSettings.Controls.Add(this.tlpLogList, 0, 5);
-            this.tlpListSettings.Controls.Add(this.tlpButton, 0, 6);
-            this.tlpListSettings.Controls.Add(this.divider1, 0, 0);
-            this.tlpListSettings.Controls.Add(this.divider2, 0, 3);
-            this.tlpListSettings.Controls.Add(this.tlpPacketList, 0, 2);
+            this.tlpListSettings.Controls.Add(this.tlpButton, 0, 7);
+            this.tlpListSettings.Controls.Add(this.dPacketList, 0, 0);
+            this.tlpListSettings.Controls.Add(this.dLogList, 0, 3);
+            this.tlpListSettings.Controls.Add(this.tlpProxyList, 0, 2);
             this.tlpListSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpListSettings.Location = new System.Drawing.Point(0, 0);
             this.tlpListSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tlpListSettings.Name = "tlpListSettings";
-            this.tlpListSettings.RowCount = 7;
+            this.tlpListSettings.RowCount = 8;
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpListSettings.Size = new System.Drawing.Size(484, 461);
-            this.tlpListSettings.TabIndex = 0;
+            this.tlpListSettings.Size = new System.Drawing.Size(484, 761);
+            this.tlpListSettings.TabIndex = 1;
             // 
             // tlpLogList
             // 
@@ -89,7 +90,7 @@
             this.tlpLogList.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLogList.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLogList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLogList.Size = new System.Drawing.Size(484, 183);
+            this.tlpLogList.Size = new System.Drawing.Size(484, 120);
             this.tlpLogList.TabIndex = 6;
             // 
             // txtLogList_AutoClear
@@ -144,7 +145,7 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 401);
+            this.tlpButton.Location = new System.Drawing.Point(0, 701);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
@@ -180,46 +181,46 @@
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
-            // divider1
+            // dPacketList
             // 
-            this.divider1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.divider1.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.divider1.Location = new System.Drawing.Point(3, 3);
-            this.divider1.Name = "divider1";
-            this.divider1.Orientation = AntdUI.TOrientation.Left;
-            this.divider1.Size = new System.Drawing.Size(478, 23);
-            this.divider1.TabIndex = 0;
-            this.divider1.Text = "封包列表";
+            this.dPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dPacketList.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dPacketList.Location = new System.Drawing.Point(3, 3);
+            this.dPacketList.Name = "dPacketList";
+            this.dPacketList.Orientation = AntdUI.TOrientation.Left;
+            this.dPacketList.Size = new System.Drawing.Size(478, 23);
+            this.dPacketList.TabIndex = 0;
+            this.dPacketList.Text = "数据列表";
             // 
-            // divider2
+            // dLogList
             // 
-            this.divider2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.divider2.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.divider2.Location = new System.Drawing.Point(3, 172);
-            this.divider2.Name = "divider2";
-            this.divider2.Orientation = AntdUI.TOrientation.Left;
-            this.divider2.Size = new System.Drawing.Size(478, 23);
-            this.divider2.TabIndex = 1;
-            this.divider2.Text = "日志列表";
+            this.dLogList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dLogList.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLogList.Location = new System.Drawing.Point(3, 172);
+            this.dLogList.Name = "dLogList";
+            this.dLogList.Orientation = AntdUI.TOrientation.Left;
+            this.dLogList.Size = new System.Drawing.Size(478, 23);
+            this.dLogList.TabIndex = 1;
+            this.dLogList.Text = "日志列表";
             // 
-            // tlpPacketList
+            // tlpProxyList
             // 
-            this.tlpPacketList.ColumnCount = 2;
-            this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketList.Controls.Add(this.cbPacketList_AutoRoll, 0, 0);
-            this.tlpPacketList.Controls.Add(this.cbPacketList_AutoClear, 0, 1);
-            this.tlpPacketList.Controls.Add(this.txtPacketList_AutoClear, 1, 1);
-            this.tlpPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpPacketList.Location = new System.Drawing.Point(0, 49);
-            this.tlpPacketList.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpPacketList.Name = "tlpPacketList";
-            this.tlpPacketList.RowCount = 3;
-            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketList.Size = new System.Drawing.Size(484, 120);
-            this.tlpPacketList.TabIndex = 5;
+            this.tlpProxyList.ColumnCount = 2;
+            this.tlpProxyList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProxyList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpProxyList.Controls.Add(this.cbPacketList_AutoRoll, 0, 0);
+            this.tlpProxyList.Controls.Add(this.cbPacketList_AutoClear, 0, 1);
+            this.tlpProxyList.Controls.Add(this.txtPacketList_AutoClear, 1, 1);
+            this.tlpProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpProxyList.Location = new System.Drawing.Point(0, 49);
+            this.tlpProxyList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpProxyList.Name = "tlpProxyList";
+            this.tlpProxyList.RowCount = 3;
+            this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpProxyList.Size = new System.Drawing.Size(484, 120);
+            this.tlpProxyList.TabIndex = 5;
             // 
             // cbPacketList_AutoRoll
             // 
@@ -266,7 +267,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 461);
+            this.ClientSize = new System.Drawing.Size(484, 761);
             this.Controls.Add(this.tlpListSettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -275,14 +276,15 @@
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "ListSettingsForm";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ListSettingsForm";
             this.Load += new System.EventHandler(this.ListSettingsForm_Load);
             this.tlpListSettings.ResumeLayout(false);
             this.tlpLogList.ResumeLayout(false);
             this.tlpLogList.PerformLayout();
             this.tlpButton.ResumeLayout(false);
-            this.tlpPacketList.ResumeLayout(false);
-            this.tlpPacketList.PerformLayout();
+            this.tlpProxyList.ResumeLayout(false);
+            this.tlpProxyList.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -290,18 +292,18 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpListSettings;
-        private AntdUI.Divider divider1;
-        private AntdUI.Divider divider2;
         private System.Windows.Forms.TableLayoutPanel tlpLogList;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
-        private AntdUI.Button bSave;
-        private AntdUI.Button bExit;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketList;
-        private AntdUI.Checkbox cbPacketList_AutoRoll;
-        private AntdUI.Checkbox cbPacketList_AutoClear;
-        private AntdUI.InputNumber txtPacketList_AutoClear;
         private AntdUI.InputNumber txtLogList_AutoClear;
         private AntdUI.Checkbox cbLogList_AutoClear;
         private AntdUI.Checkbox cbLogList_AutoRoll;
+        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private AntdUI.Button bSave;
+        private AntdUI.Button bExit;
+        private AntdUI.Divider dPacketList;
+        private AntdUI.Divider dLogList;
+        private System.Windows.Forms.TableLayoutPanel tlpProxyList;
+        private AntdUI.Checkbox cbPacketList_AutoRoll;
+        private AntdUI.Checkbox cbPacketList_AutoClear;
+        private AntdUI.InputNumber txtPacketList_AutoClear;
     }
 }

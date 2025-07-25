@@ -1,4 +1,4 @@
-﻿namespace WPE.ProxyMode
+﻿namespace WPE.Lib
 {
     partial class ExternalProxySettingsForm
     {
@@ -30,20 +30,20 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExternalProxySettingsForm));
             this.tlpExternalProxy = new System.Windows.Forms.TableLayoutPanel();
+            this.cbEnable_ExternalProxy = new AntdUI.Checkbox();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.dServerIP = new AntdUI.Divider();
             this.tlpServerInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.txtExternalProxy_IP = new AntdUI.Input();
-            this.cbExternalProxy_AppointPort = new AntdUI.Checkbox();
-            this.txtExternalProxy_AppointPort = new AntdUI.Input();
-            this.cbExternalProxy_EnableAuth = new AntdUI.Checkbox();
-            this.txtExternalProxy_UserName = new AntdUI.Input();
-            this.txtExternalProxy_PassWord = new AntdUI.Input();
-            this.cbEnable_ExternalProxy = new AntdUI.Checkbox();
-            this.bExternalProxy_Detection = new AntdUI.Button();
             this.txtExternalProxy_Port = new AntdUI.InputNumber();
+            this.bExternalProxy_Detection = new AntdUI.Button();
+            this.txtExternalProxy_PassWord = new AntdUI.Input();
+            this.txtExternalProxy_UserName = new AntdUI.Input();
+            this.cbExternalProxy_EnableAuth = new AntdUI.Checkbox();
+            this.cbExternalProxy_AppointPort = new AntdUI.Checkbox();
+            this.txtExternalProxy_IP = new AntdUI.Input();
+            this.txtExternalProxy_AppointPort = new AntdUI.Input();
             this.tlpExternalProxy.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpServerInfo.SuspendLayout();
@@ -70,6 +70,18 @@
             this.tlpExternalProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpExternalProxy.Size = new System.Drawing.Size(484, 761);
             this.tlpExternalProxy.TabIndex = 2;
+            // 
+            // cbEnable_ExternalProxy
+            // 
+            this.cbEnable_ExternalProxy.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbEnable_ExternalProxy.Checked = true;
+            this.cbEnable_ExternalProxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbEnable_ExternalProxy.Location = new System.Drawing.Point(3, 52);
+            this.cbEnable_ExternalProxy.Name = "cbEnable_ExternalProxy";
+            this.cbEnable_ExternalProxy.Size = new System.Drawing.Size(138, 45);
+            this.cbEnable_ExternalProxy.TabIndex = 8;
+            this.cbEnable_ExternalProxy.Text = "启用外部代理";
+            this.cbEnable_ExternalProxy.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_ExternalProxy_CheckedChanged);
             // 
             // tlpButton
             // 
@@ -159,104 +171,6 @@
             this.tlpServerInfo.Size = new System.Drawing.Size(484, 600);
             this.tlpServerInfo.TabIndex = 7;
             // 
-            // txtExternalProxy_IP
-            // 
-            this.txtExternalProxy_IP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtExternalProxy_IP.Location = new System.Drawing.Point(147, 3);
-            this.txtExternalProxy_IP.Name = "txtExternalProxy_IP";
-            this.txtExternalProxy_IP.PlaceholderText = "请输入域名或者IP";
-            this.txtExternalProxy_IP.PrefixText = "http://";
-            this.txtExternalProxy_IP.Size = new System.Drawing.Size(334, 46);
-            this.txtExternalProxy_IP.TabIndex = 1;
-            this.txtExternalProxy_IP.TextChanged += new System.EventHandler(this.txtExternalProxy_IP_TextChanged);
-            // 
-            // cbExternalProxy_AppointPort
-            // 
-            this.cbExternalProxy_AppointPort.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbExternalProxy_AppointPort.Checked = true;
-            this.cbExternalProxy_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbExternalProxy_AppointPort.Location = new System.Drawing.Point(3, 126);
-            this.cbExternalProxy_AppointPort.Name = "cbExternalProxy_AppointPort";
-            this.cbExternalProxy_AppointPort.Size = new System.Drawing.Size(106, 45);
-            this.cbExternalProxy_AppointPort.TabIndex = 12;
-            this.cbExternalProxy_AppointPort.Text = "指定端口";
-            this.cbExternalProxy_AppointPort.CheckedChanged += new AntdUI.BoolEventHandler(this.cbExternalProxy_AppointPort_CheckedChanged);
-            // 
-            // txtExternalProxy_AppointPort
-            // 
-            this.txtExternalProxy_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtExternalProxy_AppointPort.Location = new System.Drawing.Point(147, 126);
-            this.txtExternalProxy_AppointPort.Name = "txtExternalProxy_AppointPort";
-            this.txtExternalProxy_AppointPort.PlaceholderText = "比如 80,443";
-            this.txtExternalProxy_AppointPort.PrefixText = "端口号:";
-            this.txtExternalProxy_AppointPort.Size = new System.Drawing.Size(334, 45);
-            this.txtExternalProxy_AppointPort.TabIndex = 13;
-            this.txtExternalProxy_AppointPort.TextChanged += new System.EventHandler(this.txtExternalProxy_AppointPort_TextChanged);
-            // 
-            // cbExternalProxy_EnableAuth
-            // 
-            this.cbExternalProxy_EnableAuth.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbExternalProxy_EnableAuth.Checked = true;
-            this.cbExternalProxy_EnableAuth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbExternalProxy_EnableAuth.Location = new System.Drawing.Point(3, 197);
-            this.cbExternalProxy_EnableAuth.Name = "cbExternalProxy_EnableAuth";
-            this.cbExternalProxy_EnableAuth.Size = new System.Drawing.Size(138, 45);
-            this.cbExternalProxy_EnableAuth.TabIndex = 19;
-            this.cbExternalProxy_EnableAuth.Text = "外部代理认证";
-            this.cbExternalProxy_EnableAuth.CheckedChanged += new AntdUI.BoolEventHandler(this.cbExternalProxy_EnableAuth_CheckedChanged);
-            // 
-            // txtExternalProxy_UserName
-            // 
-            this.txtExternalProxy_UserName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtExternalProxy_UserName.Location = new System.Drawing.Point(147, 197);
-            this.txtExternalProxy_UserName.Name = "txtExternalProxy_UserName";
-            this.txtExternalProxy_UserName.PlaceholderText = "请输入账号";
-            this.txtExternalProxy_UserName.PrefixText = "账号:";
-            this.txtExternalProxy_UserName.Size = new System.Drawing.Size(334, 45);
-            this.txtExternalProxy_UserName.TabIndex = 21;
-            this.txtExternalProxy_UserName.TextChanged += new System.EventHandler(this.txtExternalProxy_UserName_TextChanged);
-            // 
-            // txtExternalProxy_PassWord
-            // 
-            this.txtExternalProxy_PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtExternalProxy_PassWord.Location = new System.Drawing.Point(147, 248);
-            this.txtExternalProxy_PassWord.Name = "txtExternalProxy_PassWord";
-            this.txtExternalProxy_PassWord.PlaceholderText = "请输入密码";
-            this.txtExternalProxy_PassWord.PrefixText = "密码:";
-            this.txtExternalProxy_PassWord.Size = new System.Drawing.Size(334, 45);
-            this.txtExternalProxy_PassWord.TabIndex = 23;
-            this.txtExternalProxy_PassWord.TextChanged += new System.EventHandler(this.txtExternalProxy_PassWord_TextChanged);
-            // 
-            // cbEnable_ExternalProxy
-            // 
-            this.cbEnable_ExternalProxy.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbEnable_ExternalProxy.Checked = true;
-            this.cbEnable_ExternalProxy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbEnable_ExternalProxy.Location = new System.Drawing.Point(3, 52);
-            this.cbEnable_ExternalProxy.Name = "cbEnable_ExternalProxy";
-            this.cbEnable_ExternalProxy.Size = new System.Drawing.Size(138, 45);
-            this.cbEnable_ExternalProxy.TabIndex = 8;
-            this.cbEnable_ExternalProxy.Text = "启用外部代理";
-            this.cbEnable_ExternalProxy.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_ExternalProxy_CheckedChanged);
-            // 
-            // bExternalProxy_Detection
-            // 
-            this.bExternalProxy_Detection.BackExtend = "135, #6253E1, #04BEFE";
-            this.bExternalProxy_Detection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bExternalProxy_Detection.IconSvg = "CompassOutlined";
-            this.bExternalProxy_Detection.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
-            this.bExternalProxy_Detection.LoadingWaveCount = 6;
-            this.bExternalProxy_Detection.LoadingWaveSize = 6;
-            this.bExternalProxy_Detection.LoadingWaveValue = 0.6F;
-            this.bExternalProxy_Detection.LoadingWaveVertical = true;
-            this.bExternalProxy_Detection.Location = new System.Drawing.Point(3, 3);
-            this.bExternalProxy_Detection.Name = "bExternalProxy_Detection";
-            this.bExternalProxy_Detection.Size = new System.Drawing.Size(138, 46);
-            this.bExternalProxy_Detection.TabIndex = 24;
-            this.bExternalProxy_Detection.Text = "检测";
-            this.bExternalProxy_Detection.Type = AntdUI.TTypeMini.Info;
-            this.bExternalProxy_Detection.Click += new System.EventHandler(this.bExternalProxy_Detection_Click);
-            // 
             // txtExternalProxy_Port
             // 
             this.txtExternalProxy_Port.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -279,6 +193,92 @@
             0,
             0});
             // 
+            // bExternalProxy_Detection
+            // 
+            this.bExternalProxy_Detection.BackExtend = "135, #6253E1, #04BEFE";
+            this.bExternalProxy_Detection.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bExternalProxy_Detection.IconSvg = "CompassOutlined";
+            this.bExternalProxy_Detection.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bExternalProxy_Detection.LoadingWaveCount = 6;
+            this.bExternalProxy_Detection.LoadingWaveSize = 6;
+            this.bExternalProxy_Detection.LoadingWaveValue = 0.6F;
+            this.bExternalProxy_Detection.LoadingWaveVertical = true;
+            this.bExternalProxy_Detection.Location = new System.Drawing.Point(3, 3);
+            this.bExternalProxy_Detection.Name = "bExternalProxy_Detection";
+            this.bExternalProxy_Detection.Size = new System.Drawing.Size(138, 46);
+            this.bExternalProxy_Detection.TabIndex = 24;
+            this.bExternalProxy_Detection.Text = "检测";
+            this.bExternalProxy_Detection.Type = AntdUI.TTypeMini.Info;
+            this.bExternalProxy_Detection.Click += new System.EventHandler(this.bExternalProxy_Detection_Click);
+            // 
+            // txtExternalProxy_PassWord
+            // 
+            this.txtExternalProxy_PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtExternalProxy_PassWord.Location = new System.Drawing.Point(147, 248);
+            this.txtExternalProxy_PassWord.Name = "txtExternalProxy_PassWord";
+            this.txtExternalProxy_PassWord.PlaceholderText = "请输入密码";
+            this.txtExternalProxy_PassWord.PrefixText = "密码:";
+            this.txtExternalProxy_PassWord.Size = new System.Drawing.Size(334, 45);
+            this.txtExternalProxy_PassWord.TabIndex = 23;
+            this.txtExternalProxy_PassWord.TextChanged += new System.EventHandler(this.txtExternalProxy_PassWord_TextChanged);
+            // 
+            // txtExternalProxy_UserName
+            // 
+            this.txtExternalProxy_UserName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtExternalProxy_UserName.Location = new System.Drawing.Point(147, 197);
+            this.txtExternalProxy_UserName.Name = "txtExternalProxy_UserName";
+            this.txtExternalProxy_UserName.PlaceholderText = "请输入账号";
+            this.txtExternalProxy_UserName.PrefixText = "账号:";
+            this.txtExternalProxy_UserName.Size = new System.Drawing.Size(334, 45);
+            this.txtExternalProxy_UserName.TabIndex = 21;
+            this.txtExternalProxy_UserName.TextChanged += new System.EventHandler(this.txtExternalProxy_UserName_TextChanged);
+            // 
+            // cbExternalProxy_EnableAuth
+            // 
+            this.cbExternalProxy_EnableAuth.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbExternalProxy_EnableAuth.Checked = true;
+            this.cbExternalProxy_EnableAuth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbExternalProxy_EnableAuth.Location = new System.Drawing.Point(3, 197);
+            this.cbExternalProxy_EnableAuth.Name = "cbExternalProxy_EnableAuth";
+            this.cbExternalProxy_EnableAuth.Size = new System.Drawing.Size(138, 45);
+            this.cbExternalProxy_EnableAuth.TabIndex = 19;
+            this.cbExternalProxy_EnableAuth.Text = "外部代理认证";
+            this.cbExternalProxy_EnableAuth.CheckedChanged += new AntdUI.BoolEventHandler(this.cbExternalProxy_EnableAuth_CheckedChanged);
+            // 
+            // cbExternalProxy_AppointPort
+            // 
+            this.cbExternalProxy_AppointPort.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbExternalProxy_AppointPort.Checked = true;
+            this.cbExternalProxy_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbExternalProxy_AppointPort.Location = new System.Drawing.Point(3, 126);
+            this.cbExternalProxy_AppointPort.Name = "cbExternalProxy_AppointPort";
+            this.cbExternalProxy_AppointPort.Size = new System.Drawing.Size(106, 45);
+            this.cbExternalProxy_AppointPort.TabIndex = 12;
+            this.cbExternalProxy_AppointPort.Text = "指定端口";
+            this.cbExternalProxy_AppointPort.CheckedChanged += new AntdUI.BoolEventHandler(this.cbExternalProxy_AppointPort_CheckedChanged);
+            // 
+            // txtExternalProxy_IP
+            // 
+            this.txtExternalProxy_IP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtExternalProxy_IP.Location = new System.Drawing.Point(147, 3);
+            this.txtExternalProxy_IP.Name = "txtExternalProxy_IP";
+            this.txtExternalProxy_IP.PlaceholderText = "请输入域名或者IP";
+            this.txtExternalProxy_IP.PrefixText = "http://";
+            this.txtExternalProxy_IP.Size = new System.Drawing.Size(334, 46);
+            this.txtExternalProxy_IP.TabIndex = 1;
+            this.txtExternalProxy_IP.TextChanged += new System.EventHandler(this.txtExternalProxy_IP_TextChanged);
+            // 
+            // txtExternalProxy_AppointPort
+            // 
+            this.txtExternalProxy_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtExternalProxy_AppointPort.Location = new System.Drawing.Point(147, 126);
+            this.txtExternalProxy_AppointPort.Name = "txtExternalProxy_AppointPort";
+            this.txtExternalProxy_AppointPort.PlaceholderText = "比如 80,443";
+            this.txtExternalProxy_AppointPort.PrefixText = "端口号:";
+            this.txtExternalProxy_AppointPort.Size = new System.Drawing.Size(334, 45);
+            this.txtExternalProxy_AppointPort.TabIndex = 13;
+            this.txtExternalProxy_AppointPort.TextChanged += new System.EventHandler(this.txtExternalProxy_AppointPort_TextChanged);
+            // 
             // ExternalProxySettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -289,7 +289,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "ExternalProxySettingsForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

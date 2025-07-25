@@ -35,15 +35,6 @@ namespace WPE.Lib
 {
     public static class Operate
     {
-        #region//接口
-
-        public interface IProxyMode
-        {
-            void RefreshAccountList();
-        }
-
-        #endregion
-
         #region//系统配置
 
         public static class SystemConfig
@@ -425,6 +416,65 @@ namespace WPE.Lib
                 });
 
                 return menuItems.ToArray();
+            }
+
+            #endregion
+
+            #region//初始化悬浮按钮
+
+            public static void InitFloatButton(Form form, AntdUI.FormFloatButton FloatButton)
+            {
+                if (SystemConfig.IsShow_FloatButton)
+                {
+                    if (FloatButton == null)
+                    {
+                        FloatButton = AntdUI.FloatButton.open(new AntdUI.FloatButton.Config(form,
+                            new AntdUI.FloatButton.ConfigBtn[]
+                            {
+                            new AntdUI.FloatButton.ConfigBtn("GitHub", "QuestionOutlined", true)
+                    {
+                        Tooltip = "问题反馈",
+                        Type= AntdUI.TTypeMini.Success
+                    },
+                            new AntdUI.FloatButton.ConfigBtn("WebSite", "HomeOutlined", true)
+                    {
+                        Tooltip = "访问官网",
+                        Type= AntdUI.TTypeMini.Default
+                    }
+                            }, btn =>
+                            {
+                                btn.Loading = true;
+
+                                AntdUI.ITask.Run(() =>
+                                {
+                                    switch (btn.Name)
+                                    {
+                                        case "GitHub":
+                                            Process.Start(Operate.SystemConfig.WPE64_Issuse);
+                                            break;
+
+                                        case "WebSite":
+                                            Process.Start(Operate.SystemConfig.WPE64_URL);
+                                            break;
+                                    }
+
+                                    btn.Loading = false;
+                                });
+                            }));
+                    }
+                    else
+                    {
+                        FloatButton.Show();
+                    }
+                }
+                else
+                {
+                    if (FloatButton != null)
+                    {
+                        FloatButton.Close();
+                        FloatButton = null;
+                    }
+                }
             }
 
             #endregion
@@ -2191,9 +2241,7 @@ namespace WPE.Lib
                         new XElement("ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto),
                         new XElement("Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5),
                         new XElement("ProxyPort", ProxyConfig.Proxy.ProxyPort),
-                        new XElement("Enable_Auth", ProxyConfig.Proxy.Enable_Auth),
-                        new XElement("NoRecord", ProxyConfig.Proxy.NoRecord),
-                        new XElement("DelClosed", ProxyConfig.Proxy.DelClosed),
+                        new XElement("Enable_Auth", ProxyConfig.Proxy.Enable_Auth),                   
                         new XElement("ProxyList_AutoRoll", ProxyConfig.List.AutoRoll),
                         new XElement("ProxyList_AutoClear", ProxyConfig.List.AutoClear),
                         new XElement("ProxyList_AutoClear_Value", ProxyConfig.List.AutoClear_Value),
@@ -2238,9 +2286,7 @@ namespace WPE.Lib
                         ProxyConfig.Proxy.ProxyIP_Auto = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyIP_Auto"]);
                         ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(ProxyMode.Rows[0]["EnableSOCKS5"]);
                         ProxyConfig.Proxy.ProxyPort = ushort.Parse(ProxyMode.Rows[0]["ProxyPort"].ToString());
-                        ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);
-                        ProxyConfig.Proxy.NoRecord = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_NoRecord"]);
-                        ProxyConfig.Proxy.DelClosed = Convert.ToBoolean(ProxyMode.Rows[0]["ClientList_DelClosed"]);
+                        ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);                    
                         ProxyConfig.List.AutoRoll = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_AutoRoll"]);
                         ProxyConfig.List.AutoClear = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_AutoClear"]);
                         ProxyConfig.List.AutoClear_Value = Convert.ToInt32(ProxyMode.Rows[0]["ProxyList_AutoClear_Value"]);
@@ -2292,19 +2338,7 @@ namespace WPE.Lib
                     if (Enable_Auth != null)
                     {
                         ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(Enable_Auth.Value);
-                    }
-
-                    XElement NoRecord = xeProxyMode.Element("NoRecord");
-                    if (NoRecord != null)
-                    {
-                        ProxyConfig.Proxy.NoRecord = Convert.ToBoolean(NoRecord.Value);
-                    }
-
-                    XElement DelClosed = xeProxyMode.Element("DelClosed");
-                    if (DelClosed != null)
-                    {
-                        ProxyConfig.Proxy.DelClosed = Convert.ToBoolean(DelClosed.Value);
-                    }
+                    }                    
 
                     XElement ProxyList_AutoRoll = xeProxyMode.Element("ProxyList_AutoRoll");
                     if (ProxyList_AutoRoll != null)
@@ -3281,8 +3315,7 @@ namespace WPE.Lib
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static IPAddress[] ProxyServerIP = null;
                 public static IPAddress ProxyTCP_IP = null;
-                public static IPAddress ProxyUDP_IP = null;
-                public static bool NoRecord = true, DelClosed = true;
+                public static IPAddress ProxyUDP_IP = null;                
                 public static bool SpeedMode = false;
                 public static bool IsListening = false;
                 public static bool ProxyIP_Auto = true;
@@ -5547,7 +5580,7 @@ namespace WPE.Lib
                                     }
                                 }
 
-                                if (form is IProxyMode proxyMode)
+                                if (form is InterfaceInfo.IProxyMode proxyMode)
                                 {
                                     proxyMode.RefreshAccountList();
                                 }
@@ -6211,7 +6244,7 @@ namespace WPE.Lib
                                     }
                                 }, () =>
                                 {
-                                    if (form is IProxyMode proxyMode)
+                                    if (form is InterfaceInfo.IProxyMode proxyMode)
                                     {
                                         proxyMode.RefreshAccountList();
                                     }
@@ -15456,9 +15489,7 @@ namespace WPE.Lib
                         sql += "ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP
                         sql += "EnableSOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
                         sql += "ProxyPort INTEGER DEFAULT 1080,";//代理模式 - 代理端口
-                        sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证
-                        sql += "ProxyList_NoRecord BOOLEAN DEFAULT 1,";//代理模式 - 不记录数据
-                        sql += "ClientList_DelClosed BOOLEAN DEFAULT 1,";//代理模式 - 清理关闭的链接
+                        sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证                    
                         sql += "ProxyList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 代理列表自动滚动
                         sql += "ProxyList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 代理列表自动清理
                         sql += "ProxyList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 代理列表自动清理数值
@@ -15550,9 +15581,7 @@ namespace WPE.Lib
                         sql += "ProxyIP_Auto,";
                         sql += "EnableSOCKS5,";
                         sql += "ProxyPort,";
-                        sql += "EnableAuth,";
-                        sql += "ProxyList_NoRecord,";
-                        sql += "ClientList_DelClosed,";
+                        sql += "EnableAuth,";                  
                         sql += "ProxyList_AutoRoll,";
                         sql += "ProxyList_AutoClear,";
                         sql += "ProxyList_AutoClear_Value,";
@@ -15574,9 +15603,7 @@ namespace WPE.Lib
                         sql += "@ProxyIP_Auto,";
                         sql += "@EnableSOCKS5,";
                         sql += "@ProxyPort,";
-                        sql += "@EnableAuth,";
-                        sql += "@ProxyList_NoRecord,";
-                        sql += "@ClientList_DelClosed,";
+                        sql += "@EnableAuth,";                 
                         sql += "@ProxyList_AutoRoll,";
                         sql += "@ProxyList_AutoClear,";
                         sql += "@ProxyList_AutoClear_Value,";
@@ -15601,9 +15628,7 @@ namespace WPE.Lib
                             cmd.Parameters.AddWithValue("@ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto);
                             cmd.Parameters.AddWithValue("@EnableSOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
                             cmd.Parameters.AddWithValue("@ProxyPort", ProxyConfig.Proxy.ProxyPort);
-                            cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);
-                            cmd.Parameters.AddWithValue("@ProxyList_NoRecord", ProxyConfig.Proxy.NoRecord);
-                            cmd.Parameters.AddWithValue("@ClientList_DelClosed", ProxyConfig.Proxy.DelClosed);
+                            cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);                        
                             cmd.Parameters.AddWithValue("@ProxyList_AutoRoll", ProxyConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@ProxyList_AutoClear", ProxyConfig.List.AutoClear);
                             cmd.Parameters.AddWithValue("@ProxyList_AutoClear_Value", ProxyConfig.List.AutoClear_Value);
