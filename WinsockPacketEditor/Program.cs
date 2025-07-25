@@ -31,7 +31,6 @@ namespace WinsockPacketEditor
                 if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                 {
                     StartForm startForm = new StartForm();
-
                     if (startForm.ShowDialog() == DialogResult.OK)
                     {
                         switch (Operate.SystemConfig.StartMode)

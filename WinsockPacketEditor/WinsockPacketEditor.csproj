@@ -61,7 +61,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon\wpe.ico</ApplicationIcon>
+    <ApplicationIcon>wpe.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>C463B7A3B15443BF437515C7F7B0BC411550FF7F</ManifestCertificateThumbprint>
@@ -350,12 +350,12 @@
     <Compile Include="Forms\SystemSettingsForm.Designer.cs">
       <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IconExtractor\IconExtractor.cs" />
-    <Compile Include="IconExtractor\IconUtil.cs" />
-    <Compile Include="InjectModeForm.cs">
+    <Compile Include="ClassObject\IconExtractor.cs" />
+    <Compile Include="ClassObject\IconUtil.cs" />
+    <Compile Include="Forms\InjectModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InjectModeForm.Designer.cs">
+    <Compile Include="Forms\InjectModeForm.Designer.cs">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MultiLanguage.cs" />
@@ -372,23 +372,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ProxyModeForm.cs">
+    <Compile Include="Forms\ProxyModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProxyModeForm.Designer.cs">
+    <Compile Include="Forms\ProxyModeForm.Designer.cs">
       <DependentUpon>ProxyModeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SelectProcessForm.cs">
+    <Compile Include="Forms\SelectProcessForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SelectProcessForm.Designer.cs">
+    <Compile Include="Forms\SelectProcessForm.Designer.cs">
       <DependentUpon>SelectProcessForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Socket_Operation.cs" />
-    <Compile Include="StartForm.cs">
+    <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StartForm.Designer.cs">
+    <Compile Include="Forms\StartForm.Designer.cs">
       <DependentUpon>StartForm.cs</DependentUpon>
     </Compile>
     <Compile Include="WebAPI\CCProxy_Controller.cs" />
@@ -469,7 +469,7 @@
     <EmbeddedResource Include="Forms\SystemSettingsForm.resx">
       <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InjectModeForm.resx">
+    <EmbeddedResource Include="Forms\InjectModeForm.resx">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -477,13 +477,13 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProxyModeForm.resx">
+    <EmbeddedResource Include="Forms\ProxyModeForm.resx">
       <DependentUpon>ProxyModeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SelectProcessForm.resx">
+    <EmbeddedResource Include="Forms\SelectProcessForm.resx">
       <DependentUpon>SelectProcessForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StartForm.resx">
+    <EmbeddedResource Include="Forms\StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
@@ -510,7 +510,7 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icon\WPE64.ico" />
+    <Content Include="Resources\WPE64.ico" />
     <None Include="Resources\received.png" />
     <None Include="Resources\sent.png" />
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
@@ -582,13 +582,14 @@
     <Content Include="Web\web_images\wpe.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="wpe.ico" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icon\wpe.ico" />
+    <Content Include="Resources\wpe.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -607,49 +608,49 @@
       <Visible>False</Visible>
       <Description>WPE64 Filter List File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".pa">
       <Visible>False</Visible>
       <Description>WPE64 Proxy Account List File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".pml">
       <Visible>False</Visible>
       <Description>WPE64 Proxy MapLocal File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".pmr">
       <Visible>False</Visible>
       <Description>WPE64 Proxy MapRemote File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".rp">
       <Visible>False</Visible>
       <Description>WPE64 Robot List File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".sb">
       <Visible>False</Visible>
       <Description>WPE64 System BackUp File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".sc">
       <Visible>False</Visible>
       <Description>WPE64 Send Collection File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".sp">
       <Visible>False</Visible>
       <Description>WPE64 Send List File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
     </FileAssociation>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
