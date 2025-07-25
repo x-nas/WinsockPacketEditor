@@ -285,7 +285,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Operate.PacketConfig.Packet.SockAddr(), PacketTime);
+                _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Operate.PacketConfig.Packet.SockAddr(), PacketTime);
             }
             catch (Exception ex)
             {
@@ -346,7 +346,7 @@ namespace WinsockPacketEditor
                         new Span<byte>(bNewBuffer).CopyTo(new Span<byte>((byte*)lpBuffer, res));
                     }
 
-                    _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Operate.PacketConfig.Packet.SockAddr(), PacketTime);
+                    _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Operate.PacketConfig.Packet.SockAddr(), PacketTime);
                 }
             }
             catch (Exception ex)
@@ -403,7 +403,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, To, PacketTime);
+                _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, To, PacketTime);
             }
             catch (Exception ex)
             {
@@ -462,7 +462,7 @@ namespace WinsockPacketEditor
                         new Span<byte>(bNewBuffer).CopyTo(new Span<byte>((byte*)lpBuffer, res));
                     }
 
-                    _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, From, PacketTime);
+                    _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, From, PacketTime);
                 }
             }
             catch (Exception ex)
@@ -542,7 +542,7 @@ namespace WinsockPacketEditor
 
                         BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
 
-                        _ = Socket_Operation.ProcessingHookResultAsync(
+                        _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(
                        socket,
                        bRawBuffer,
                        bNewBuffer,
@@ -649,7 +649,7 @@ namespace WinsockPacketEditor
 
                         int bytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
 
-                        _ = Socket_Operation.ProcessingHookResultAsync(
+                        _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(
                             socket,
                             bRawBuffer,
                             bNewBuffer,
@@ -724,7 +724,7 @@ namespace WinsockPacketEditor
 
                             Marshal.WriteInt32(lpNumberOfBytesRecvd, bytesToWrite);
 
-                            _ = Socket_Operation.ProcessingHookResultAsync(
+                            _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(
                                 socket,
                                 bRawBuffer,
                                 bNewBuffer,
@@ -791,7 +791,7 @@ namespace WinsockPacketEditor
 
                             Marshal.WriteInt32(lpNumberOfBytesRecvd, bytesToWrite);
 
-                            _ = Socket_Operation.ProcessingHookResultAsync(
+                            _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(
                                 socket,
                                 bRawBuffer,
                                 bNewBuffer,
@@ -887,7 +887,7 @@ namespace WinsockPacketEditor
 
                         BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
 
-                        _ = Socket_Operation.ProcessingHookResultAsync(
+                        _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(
                        socket,
                        bRawBuffer,
                        bNewBuffer,
@@ -996,7 +996,7 @@ namespace WinsockPacketEditor
                         }
 
                         int bytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
-                        _ = Socket_Operation.ProcessingHookResultAsync(
+                        _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(
                             socket,
                             bRawBuffer,
                             bNewBuffer,
@@ -1073,7 +1073,7 @@ namespace WinsockPacketEditor
 
                             Marshal.WriteInt32(lpNumberOfBytesRecvd, bytesToWrite);
 
-                            _ = Socket_Operation.ProcessingHookResultAsync(
+                            _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(
                                 socket,
                                 bRawBuffer,
                                 bNewBuffer,
@@ -1140,7 +1140,7 @@ namespace WinsockPacketEditor
 
                             Marshal.WriteInt32(lpNumberOfBytesRecvd, bytesToWrite);
 
-                            _ = Socket_Operation.ProcessingHookResultAsync(
+                            _ = Operate.FilterConfig.Filter.ProcessingHookResultAsync(
                                 socket,
                                 bRawBuffer,
                                 bNewBuffer,

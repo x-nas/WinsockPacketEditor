@@ -37,7 +37,7 @@ namespace WinsockPacketEditor
 
         public IHttpActionResult GetSelectMode()
         {
-            string SelectMode = Socket_Operation.GetSystemModeName();
+            string SelectMode = Operate.SystemConfig.GetSystemModeName();
             return Ok(SelectMode);
         }
 

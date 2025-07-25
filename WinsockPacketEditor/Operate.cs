@@ -2,7 +2,9 @@
 using Be.Windows.Forms;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -418,6 +420,89 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//获取中文字符串对应的bool类型
+
+            public static bool GetBoolFromChineseString(string ChineseString)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    switch (ChineseString)
+                    {
+                        case "真":
+                            bReturn = true;
+                            break;
+
+                        case "假":
+                            bReturn = false;
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            #endregion
+
+            #region//获取系统运行模式名称
+
+            public static string GetSystemModeName()
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    switch (Operate.SystemConfig.StartMode)
+                    {
+                        case Operate.SystemConfig.SystemMode.Proxy:
+                            sReturn = AntdUI.Localization.Get("Proxy Mode", "代理模式");
+                            break;
+
+                        case Operate.SystemConfig.SystemMode.Process:
+                            sReturn = AntdUI.Localization.Get("Inject Mode", "注入模式");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+                return sReturn;
+            }
+
+            #endregion
+
+            #region//获取工作模式名称
+
+            public static string GetWorkModeName(bool IsSpeedMode)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    if (IsSpeedMode)
+                    {
+                        sReturn = AntdUI.Localization.Get("Speed Mode", "极速模式");
+                    }
+                    else
+                    {
+                        sReturn = AntdUI.Localization.Get("Normal Mode", "普通模式");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+                return sReturn;
+            }
+
+            #endregion
+
             #region//初始化悬浮按钮
 
             public static void InitFloatButton(Form form, AntdUI.FormFloatButton FloatButton)
@@ -521,7 +606,7 @@ namespace WinsockPacketEditor
                             try
                             {
                                 Operate.SystemConfig.WebServer = WebApp.Start<Socket_Web>(Operate.SystemConfig.Remote_URL);
-                                Socket_Operation.InitCCProxy_HTML();
+                                ProxyConfig.Proxy.InitCCProxy_HTML();
 
                                 sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_178), Operate.SystemConfig.Remote_URL);
                             }
@@ -932,6 +1017,46 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//对字典进行排序
+
+            public static Dictionary<int, int> SortDictionaryByKey(Dictionary<int, int> dictionary, bool ascending = true)
+            {
+                Dictionary<int, int> dReturn = new Dictionary<int, int>();
+
+                try
+                {
+                    dReturn = ascending
+                    ? dictionary.OrderBy(pair => pair.Key).ToDictionary(pair => pair.Key, pair => pair.Value)
+                    : dictionary.OrderByDescending(pair => pair.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dReturn;
+            }
+
+            public static Dictionary<int, int> SortDictionaryByValue(Dictionary<int, int> dictionary, bool ascending = true)
+            {
+                Dictionary<int, int> dReturn = new Dictionary<int, int>();
+
+                try
+                {
+                    dReturn = ascending
+                    ? dictionary.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value)
+                    : dictionary.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dReturn;
+            }
+
+            #endregion
+
             #region//字符串转byte[]
 
             public static byte[] StringToBytes(Operate.PacketConfig.Packet.EncodingFormat efFormat, string sString)
@@ -1182,6 +1307,170 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//返还 Byte[] 占用的内存
+
+            public static void ReturnBuffer(byte[] buffer)
+            {
+                if (buffer != null)
+                {
+                    ArrayPool<byte>.Shared.Return(buffer);
+                }
+            }
+
+            #endregion
+
+            #region//base64 编码，解码
+
+            public static string Base64_Encoding(string sString)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    byte[] bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sString);
+                    sReturn = Convert.ToBase64String(bBuffer);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            public static string Base64_Decoding(string sString)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    byte[] bBuffer = Convert.FromBase64String(sString);
+                    sReturn = Encoding.UTF8.GetString(bBuffer);
+                }
+                catch
+                {
+                    //
+                }
+
+                return sReturn;
+            }
+
+            #endregion
+
+            #region//byte[]转Int16大端
+
+            public static ushort ByteArrayToInt16BigEndian(ReadOnlySpan<byte> bytes)
+            {
+                ushort uReturn = 0;
+
+                try
+                {
+                    if (bytes.Length == 2)
+                    {
+                        uReturn = (ushort)(bytes[0] << 8 | bytes[1]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return uReturn;
+            }
+
+            #endregion
+
+            #region//字符串 1 转 True
+
+            public static bool StringToBool(string bString)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    if (bString.Equals("1"))
+                    {
+                        bReturn = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+                return bReturn;
+            }
+
+            #endregion
+
+            #region//字符串转DateTime
+
+            public static DateTime StringToDateTime(string sDate, string sTime)
+            {
+                DateTime dtReturn = DateTime.MinValue;
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(sDate) && !string.IsNullOrEmpty(sTime))
+                    {
+                        string dateTimeStr = $"{sDate} {sTime}";
+
+                        dtReturn = DateTime.ParseExact(dateTimeStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            #endregion
+
+            #region//转换FILT过滤器的字符串
+
+            public static string ConvertFILTString(string FiltString, bool bPosition)
+            {
+                string Return = string.Empty;
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(FiltString) && FiltString.IndexOf("$") > 0)
+                    {
+                        string[] slFiltString = FiltString.Split('$');
+
+                        for (int i = 0; i < slFiltString.Length - 1; i += 3)
+                        {
+                            int iIndex = int.Parse(slFiltString[i]) - 1;
+                            string sHex = slFiltString[i + 1];
+                            int iHexCount = int.Parse(slFiltString[i + 2]);
+
+                            for (int j = 0; j < iHexCount; j++)
+                            {
+                                int iFIndex = iIndex + j;
+
+                                if (bPosition)
+                                {
+                                    iFIndex += 250;
+                                }
+
+                                Return += iFIndex.ToString() + "|" + sHex.Substring(j * 2, 2) + ",";
+                            }
+                        }
+
+                        Return = Return.TrimEnd(',');
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return Return;
+            }
+
+            #endregion
+
             #region//判断是否十六进制字符串（带空格）
 
             public static bool IsHexString(string value)
@@ -1214,7 +1503,7 @@ namespace WinsockPacketEditor
                 }
             }
 
-            #endregion
+            #endregion            
 
             #region//文本对比
 
@@ -1646,7 +1935,7 @@ namespace WinsockPacketEditor
                 {
                     DataTable SystemConfig = DataBase.SelectTable_SystemConfig();
 
-                    //AntdUI.Config.SetEmptyImageSvg(Properties.Resources.icon_empty, Properties.Resources.icon_empty_dark);
+                    AntdUI.Config.SetEmptyImageSvg(Properties.Resources.icon_empty, Properties.Resources.icon_empty_dark);
 
                     if (SystemConfig.Rows.Count > 0)
                     {
@@ -2816,7 +3105,7 @@ namespace WinsockPacketEditor
                             return false;
                         }
 
-                        ImportSystemBackUp_FromXDocument(xdoc);
+                        ImportSystemBackUp_FromXDocument(form, xdoc);
                         return true;
                     }
                 }
@@ -2828,14 +3117,18 @@ namespace WinsockPacketEditor
                 return false;
             }
 
-            private static void ImportSystemBackUp_FromXDocument(XDocument xdoc)
+            private static void ImportSystemBackUp_FromXDocument(Form form, XDocument xdoc)
             {
                 #region//有效性检测
 
                 string RootName = xdoc.Root.Name.LocalName;
                 if (!RootName.Equals("WPE64_BackUp"))
                 {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_217));
+                    AntdUI.Message.open(new AntdUI.Message.Config(form, "备份文件错误", TType.Error)
+                    {
+                        LocalizationText = "SystemBackUp.Error"
+                    });
+
                     return;
                 }
 
@@ -3486,7 +3779,7 @@ namespace WinsockPacketEditor
                             }
                             proxyBufferSpan.CopyTo(combinedData.Slice(start));                            
 
-                            bool bIsMatch = Socket_Operation.CheckDataIsMatchProxyStep(combinedData, pe.ProxyStep);
+                            bool bIsMatch = ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, pe.ProxyStep);
                             if (bIsMatch)
                             {
                                 switch (pe.ProxyStep)
@@ -3518,7 +3811,7 @@ namespace WinsockPacketEditor
                             ProxyConfig.Proxy.StartReceive(pe);
                         }
                     }
-                    catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
                         pe.TCP_Client.Close();
                     }
@@ -3575,7 +3868,7 @@ namespace WinsockPacketEditor
                                 Span<byte> bAuth = stackalloc byte[2];
                                 bAuth[0] = (byte)ProxyConfig.Proxy.ProxyType.Socket5;
                                 bAuth[1] = (byte)atServer;
-                                Socket_Operation.SendTCPData(pe.TCP_Client.Socket, bAuth);
+                                ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, bAuth);
 
                                 if (atServer == ProxyConfig.Proxy.AuthType.UserName)
                                 {
@@ -3585,7 +3878,7 @@ namespace WinsockPacketEditor
                                     {
                                         ReadOnlySpan<byte> bAuthDate = bData.Slice(iMETHODS_COUNT + 2);
 
-                                        bool bIsMatch = Socket_Operation.CheckDataIsMatchProxyStep(bAuthDate, ProxyConfig.Proxy.ProxyStep.AuthUserName);
+                                        bool bIsMatch = ProxyConfig.Proxy.CheckDataIsMatchProxyStep(bAuthDate, ProxyConfig.Proxy.ProxyStep.AuthUserName);
                                         if (bIsMatch)
                                         {
                                             ProxyConfig.Proxy.AuthUserName(pe, bAuthDate);
@@ -3642,7 +3935,7 @@ namespace WinsockPacketEditor
                             {
                                 // 账号密码验证失败直接返回
                                 bAuth[1] = (byte)0x01;
-                                Socket_Operation.SendTCPData(pe.TCP_Client.Socket, bAuth);
+                                ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, bAuth);
                                 return;
                             }
 
@@ -3651,7 +3944,7 @@ namespace WinsockPacketEditor
                             if (isOverLinks)
                             {
                                 bAuth[1] = (byte)0x01;
-                                Socket_Operation.SendTCPData(pe.TCP_Client.Socket, bAuth);
+                                ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, bAuth);
                                 return;
                             }
 
@@ -3660,7 +3953,7 @@ namespace WinsockPacketEditor
                             if (isOverDevices)
                             {
                                 bAuth[1] = (byte)0x01;
-                                Socket_Operation.SendTCPData(pe.TCP_Client.Socket, bAuth);
+                                ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, bAuth);
                                 return;
                             }
 
@@ -3678,7 +3971,7 @@ namespace WinsockPacketEditor
                                 pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.Command;
                             }
 
-                            Socket_Operation.SendTCPData(pe.TCP_Client.Socket, bAuth);
+                            ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, bAuth);
                         }
                     }
                     catch (Exception ex)
@@ -3707,10 +4000,10 @@ namespace WinsockPacketEditor
                                 ReadOnlySpan<byte> bServerTCP_IP = ProxyConfig.Proxy.ProxyTCP_IP.GetAddressBytes();
                                 ReadOnlySpan<byte> bServerTCP_Port = BitConverter.GetBytes(ProxyConfig.Proxy.ProxyPort);
 
-                                IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(pe.AddressType, bADDRESS, out string AddressString);
+                                IPEndPoint epServer = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(pe.AddressType, bADDRESS, out string AddressString);
                                 if (epServer == null)
                                 {
-                                    Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                     return;
                                 }
 
@@ -3718,9 +4011,9 @@ namespace WinsockPacketEditor
                                 pe.TCP_Server.EndPoint = epServer;
                                 ushort uPort = ((ushort)epServer.Port);
 
-                                pe.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);
-                                pe.TCP_Server.Address = Socket_Operation.GetServerAddress(pe.DomainType, AddressString, uPort);
-                                pe.TCP_Client.Address = Socket_Operation.GetClientAddress(pe.TCP_Client.Socket, AddressString, uPort);
+                                pe.DomainType = ProxyConfig.Proxy.GetDomainType_ByPort(uPort);
+                                pe.TCP_Server.Address = ProxyConfig.Proxy.GetServerAddress(pe.DomainType, AddressString, uPort);
+                                pe.TCP_Client.Address = ProxyConfig.Proxy.GetClientAddress(pe.TCP_Client.Socket, AddressString, uPort);
 
                                 switch (pe.CommandType)
                                 {
@@ -3734,7 +4027,7 @@ namespace WinsockPacketEditor
 
                                                 try
                                                 {
-                                                    IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(ProxyConfig.Proxy.ExternalProxy_IP, ProxyConfig.Proxy.ExternalProxy_Port);
+                                                    IPEndPoint ExternalProxyEP = ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(ProxyConfig.Proxy.ExternalProxy_IP, ProxyConfig.Proxy.ExternalProxy_Port);
                                                     if (ExternalProxyEP == null)
                                                     {
                                                         pe.TCP_Server.Close();
@@ -3810,13 +4103,13 @@ namespace WinsockPacketEditor
 
                                                     if (connectResponse[1] != 0x00)
                                                     {
-                                                        Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                                         return;
                                                     }
 
                                                     ProxyConfig.Proxy.StartServerReceive(pe);
                                                     pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
                                                     ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
                                                 }
@@ -3824,7 +4117,7 @@ namespace WinsockPacketEditor
                                                 {
                                                     pe.TCP_Server.Close();
                                                     pe.TCP_Client.Close();
-                                                    Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                                 }
 
                                                 break;
@@ -3838,13 +4131,13 @@ namespace WinsockPacketEditor
                                                     pe.TCP_Server.Socket.Connect(pe.TCP_Server.EndPoint);
                                                     ProxyConfig.Proxy.StartServerReceive(pe);
                                                     pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
                                                     ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
                                                 }
                                                 catch (SocketException)
                                                 {
-                                                    Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                                 }
 
                                                 break;
@@ -3865,12 +4158,12 @@ namespace WinsockPacketEditor
                                             ReadOnlySpan<byte> bServerUDP_IP = ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
                                             ReadOnlySpan<byte> bServerUDP_Port = BitConverter.GetBytes(((IPEndPoint)pe.UDP_Relay.ClientUDP.Client.LocalEndPoint).Port);
 
-                                            Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));
+                                            ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));
                                             ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
                                         }
                                         catch (SocketException)
                                         {
-                                            Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                            ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                         }
 
                                         #endregion
@@ -3881,7 +4174,7 @@ namespace WinsockPacketEditor
 
                                         #region//不支持的命令
 
-                                        Socket_Operation.SendTCPData(pe.TCP_Client.Socket, Socket_Operation.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Unsupport, bServerTCP_IP, bServerTCP_Port));
+                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Unsupport, bServerTCP_IP, bServerTCP_Port));
 
                                         string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), pe.TCP_Client.Socket.RemoteEndPoint, pe.CommandType);
                                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
@@ -3923,7 +4216,7 @@ namespace WinsockPacketEditor
 
                                     if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
                                     {
-                                        var headers = Socket_Operation.ParseHttpHeaders(request);
+                                        var headers = ProxyConfig.Proxy.ParseHttpHeaders(request);
                                         if (headers.TryGetValue("Host", out string hostHeader))
                                         {
                                             string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
@@ -3944,7 +4237,7 @@ namespace WinsockPacketEditor
                                                     if (File.Exists(localRule.LocalPath))
                                                     {
                                                         byte[] fileBytes = File.ReadAllBytes(localRule.LocalPath);
-                                                        string contentType = Socket_Operation.GetContentType(Path.GetExtension(localRule.LocalPath));
+                                                        string contentType = ProxyConfig.Proxy.GetContentType(Path.GetExtension(localRule.LocalPath));
 
                                                         string response =
                                                             $"HTTP/1.1 200 OK\r\n" +
@@ -3953,13 +4246,13 @@ namespace WinsockPacketEditor
                                                             "Connection: close\r\n\r\n";
 
                                                         byte[] headerBytes = Encoding.UTF8.GetBytes(response);
-                                                        Socket_Operation.SendTCPData(pe.TCP_Client.Socket, headerBytes);
-                                                        Socket_Operation.SendTCPData(pe.TCP_Client.Socket, fileBytes);
+                                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, headerBytes);
+                                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, fileBytes);
                                                         requestHandled = true;
                                                     }
                                                     else
                                                     {
-                                                        Socket_Operation.Send404Response(pe.TCP_Client.Socket);
+                                                        ProxyConfig.Proxy.Send404Response(pe.TCP_Client.Socket);
                                                         requestHandled = true;
                                                     }
                                                 }
@@ -3980,10 +4273,10 @@ namespace WinsockPacketEditor
                                                 if (remoteRule != null)
                                                 {
                                                     string RemoteURL = remoteRule.ProtocolTypeTo.ToString() + "://" + remoteRule.HostTo + ":" + remoteRule.PortTo + remoteRule.PathTo;
-                                                    byte[] remoteResponse = Socket_Operation.GetRemoteMappedData(RemoteURL, request, headers);
+                                                    byte[] remoteResponse = ProxyConfig.Mapping.GetRemoteMappedData(RemoteURL, request, headers);
                                                     if (remoteResponse != null)
                                                     {
-                                                        Socket_Operation.SendTCPData(pe.TCP_Client.Socket, remoteResponse);
+                                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, remoteResponse);
                                                         requestHandled = true;
                                                     }
                                                 }
@@ -3995,7 +4288,7 @@ namespace WinsockPacketEditor
 
                                     if (!requestHandled)
                                     {
-                                        Socket_Operation.SendTCPData(pe.TCP_Server.Socket, bData);
+                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Server.Socket, bData);
                                     }
 
                                     enableProxyQueue = true;
@@ -4004,21 +4297,21 @@ namespace WinsockPacketEditor
 
                                 case ProxyConfig.Proxy.DomainType.Https:
 
-                                    Socket_Operation.SendTCPData(pe.TCP_Server.Socket, bData);
+                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Server.Socket, bData);
                                     enableProxyQueue = true;
 
                                     break;
 
                                 case ProxyConfig.Proxy.DomainType.Socket:
 
-                                    Socket_Operation.SendTCPData(pe.TCP_Server.Socket, bData);
+                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Server.Socket, bData);
                                     enableProxyQueue = true;
 
                                     break;
 
                                 case ProxyConfig.Proxy.DomainType.External:
 
-                                    Socket_Operation.SendTCPData(pe.TCP_Server.Socket, bData);
+                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Server.Socket, bData);
                                     enableProxyQueue = true;
 
                                     break;
@@ -4089,7 +4382,7 @@ namespace WinsockPacketEditor
 
                         if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
                         {
-                            Socket_Operation.SendTCPData(pe.TCP_Client.Socket, receivedData);
+                            ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, receivedData);
 
                             bool enableProxyQueue = false;
                             switch (pe.DomainType)
@@ -4127,7 +4420,7 @@ namespace WinsockPacketEditor
 
                         ProxyConfig.Proxy.StartServerReceive(pe);
                     }
-                    catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
                         pe.TCP_Server.Close();
                         pe.TCP_Client.Close();
@@ -4183,7 +4476,7 @@ namespace WinsockPacketEditor
                     {
                         bool enableProxyQueue = true;
                         IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                        byte[] receivedData = Socket_Operation.ReceiveUDPData(pe.UDP_Relay.ClientUDP, ar, ref remoteEndPoint);
+                        byte[] receivedData = ProxyConfig.Proxy.ReceiveUDPData(pe.UDP_Relay.ClientUDP, ar, ref remoteEndPoint);
                         ReadOnlySpan<byte> bData = receivedData.AsSpan();
                         if (!bData.IsEmpty && !remoteEndPoint.Address.Equals(IPAddress.Any) && remoteEndPoint.Port != 0)
                         {
@@ -4198,18 +4491,18 @@ namespace WinsockPacketEditor
                                     pe.UDP_Relay.ClientUDP_EndPoint = remoteEndPoint;
 
                                     ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
-                                    IPEndPoint targetEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
+                                    IPEndPoint targetEndPoint = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
                                     if (targetEndPoint != null)
                                     {
-                                        ReadOnlySpan<byte> bRequestData = Socket_Operation.GetUDPData_ByAddressType(addressType, bData);
+                                        ReadOnlySpan<byte> bRequestData = ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
                                         if (!bRequestData.IsEmpty)
                                         {
                                             pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
 
                                             Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bRequestData.Length);
                                             Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
-                                            
-                                            Socket_Operation.SendUDPData(pe.UDP_Relay.ClientUDP, bRequestData, targetEndPoint);
+
+                                            ProxyConfig.Proxy.SendUDPData(pe.UDP_Relay.ClientUDP, bRequestData, targetEndPoint);
 
                                             if (enableProxyQueue)
                                             {
@@ -4254,7 +4547,7 @@ namespace WinsockPacketEditor
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bResponseData.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
 
-                                    Socket_Operation.SendUDPData(pe.UDP_Relay.ClientUDP, bResponseData, pe.UDP_Relay.ClientUDP_EndPoint);
+                                    ProxyConfig.Proxy.SendUDPData(pe.UDP_Relay.ClientUDP, bResponseData, pe.UDP_Relay.ClientUDP_EndPoint);
 
                                     if (enableProxyQueue)
                                     {
@@ -4275,7 +4568,7 @@ namespace WinsockPacketEditor
                             ProxyConfig.Proxy.StartUdpReceive(pe);
                         }
                     }
-                    catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
                         //
                     }
@@ -4284,6 +4577,73 @@ namespace WinsockPacketEditor
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         ProxyConfig.Proxy.StartUdpReceive(pe);
                     }
+                }
+
+                #endregion
+
+                #region//发送 TCP 代理数据
+
+                public static int SendTCPData(Socket socket, ReadOnlySpan<byte> bData)
+                {
+                    int iReturn = 0;
+
+                    try
+                    {
+                        if (socket != null && !bData.IsEmpty)
+                        {
+                            iReturn = socket.Send(bData.ToArray(), SocketFlags.None);
+                        }
+                    }
+                    catch
+                    {
+                        //
+                    }
+
+                    return iReturn;
+                }
+
+                #endregion
+
+                #region//发送 UDP 代理数据
+
+                public static int SendUDPData(UdpClient ClientUDP, ReadOnlySpan<byte> bData, IPEndPoint ep)
+                {
+                    int iReturn = 0;
+
+                    try
+                    {
+                        if (ClientUDP != null && !bData.IsEmpty)
+                        {
+                            iReturn = ClientUDP.Send(bData.ToArray(), bData.Length, ep);
+                        }
+                    }
+                    catch
+                    {
+                        //
+                    }
+
+                    return iReturn;
+                }
+
+                #endregion
+
+                #region//接收 UDP 代理数据
+
+                public static byte[] ReceiveUDPData(UdpClient ClientUDP, IAsyncResult ar, ref IPEndPoint ep)
+                {
+                    try
+                    {
+                        if (ClientUDP != null && ClientUDP.Client != null)
+                        {
+                            return ClientUDP.EndReceive(ar, ref ep);
+                        }
+                    }
+                    catch
+                    {
+                        return Array.Empty<byte>();
+                    }
+
+                    return Array.Empty<byte>();
                 }
 
                 #endregion
@@ -4424,13 +4784,116 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//判断接收的数据是否匹配代理步骤
+
+                public static bool CheckDataIsMatchProxyStep(ReadOnlySpan<byte> bData, Operate.ProxyConfig.Proxy.ProxyStep proxyStep)
+                {
+                    bool bReturn = false;
+
+                    try
+                    {
+                        byte VERSION = bData[0];
+
+                        switch (proxyStep)
+                        {
+                            case Operate.ProxyConfig.Proxy.ProxyStep.Handshake:
+
+                                if (VERSION == ((byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5))
+                                {
+                                    if (bData.Length > 2)
+                                    {
+                                        byte METHODS_COUNT = bData[1];
+
+                                        if (bData.Length >= METHODS_COUNT + 2)
+                                        {
+                                            bReturn = true;
+                                        }
+                                    }
+                                }
+
+                                break;
+
+                            case Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName:
+
+                                if (VERSION == 0x01)
+                                {
+                                    if (bData.Length > 2)
+                                    {
+                                        byte USERNAME_LENGTH = bData[1];
+
+                                        if (bData.Length > USERNAME_LENGTH + 2)
+                                        {
+                                            byte PASSWORD_LENGTH = bData[USERNAME_LENGTH + 2];
+
+                                            if (bData.Length == USERNAME_LENGTH + PASSWORD_LENGTH + 3)
+                                            {
+                                                bReturn = true;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                break;
+
+                            case Operate.ProxyConfig.Proxy.ProxyStep.Command:
+
+                                if (VERSION == ((byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5))
+                                {
+                                    if (bData.Length > 4)
+                                    {
+                                        byte ADDRESS_TYPE = bData[3];
+                                        Operate.ProxyConfig.Proxy.AddressType AddressType = (Operate.ProxyConfig.Proxy.AddressType)ADDRESS_TYPE;
+
+                                        int DST_ADDR = 0;
+                                        switch (AddressType)
+                                        {
+                                            case Operate.ProxyConfig.Proxy.AddressType.IPv4:
+                                                DST_ADDR = 4;
+                                                break;
+
+                                            case Operate.ProxyConfig.Proxy.AddressType.IPv6:
+                                                DST_ADDR = 16;
+                                                break;
+
+                                            case Operate.ProxyConfig.Proxy.AddressType.Domain:
+                                                byte DST_LENGTH = bData[4];
+                                                DST_ADDR = DST_LENGTH + 1;
+                                                break;
+                                        }
+
+                                        if (bData.Length == DST_ADDR + 6)
+                                        {
+                                            bReturn = true;
+                                        }
+                                    }
+                                }
+
+                                break;
+
+                            case Operate.ProxyConfig.Proxy.ProxyStep.ForwardData:
+
+                                bReturn = true;
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return bReturn;
+                }
+
+                #endregion
+
                 #region//检测外部代理服务器
 
                 public static async Task<bool> DetectionExternalProxy(Form form)
                 {
                     try
                     {
-                        IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
+                        IPEndPoint ExternalProxyEP = ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
                         if (ExternalProxyEP == null)
                         {
                             AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理设置错误", TType.Error)
@@ -4616,7 +5079,467 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion                
+                #endregion
+
+                #region//初始化CCProxy模板
+
+                public static void InitCCProxy_HTML()
+                {
+                    var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Web", "CCProxy", "cn_acclistadmin.htm");
+
+                    if (File.Exists(filePath))
+                    {
+                        Operate.ProxyConfig.Account.CCProxy_HTML = File.ReadAllText(filePath, Encoding.UTF8);
+                    }
+                }
+
+                #endregion
+
+                #region//解析Http头数据
+
+                public static Dictionary<string, string> ParseHttpHeaders(string request)
+                {
+                    Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+                    try
+                    {
+                        using (StringReader reader = new StringReader(request))
+                        {
+                            string line;
+                            while ((line = reader.ReadLine()) != null && !string.IsNullOrWhiteSpace(line))
+                            {
+                                if (line.Contains(":"))
+                                {
+                                    var parts = line.Split(new[] { ':' }, 2);
+                                    if (parts.Length == 2)
+                                    {
+                                        headers[parts[0].Trim()] = parts[1].Trim();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return headers;
+                }
+
+                #endregion
+
+                #region//发送404响应
+
+                public static void Send404Response(Socket clientSocket)
+                {
+                    try
+                    {
+                        string response =
+                        "HTTP/1.1 404 Not Found\r\n" +
+                        "Content-Type: text/html\r\n" +
+                        "Content-Length: 0\r\n" +
+                        "Connection: close\r\n\r\n";
+
+                        byte[] responseBytes = Encoding.UTF8.GetBytes(response);
+                        ProxyConfig.Proxy.SendTCPData(clientSocket, responseBytes);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region// 获取 Content-Type 类型
+
+                public static string GetContentType(string fileExtension)
+                {
+                    try
+                    {
+                        switch (fileExtension.ToLower())
+                        {
+                            case ".html":
+                            case ".htm":
+                                return "text/html";
+
+                            case ".js":
+                                return "application/javascript";
+
+                            case ".css":
+                                return "text/css";
+
+                            case ".png":
+                                return "image/png";
+
+                            case ".jpg":
+                            case ".jpeg":
+                                return "image/jpeg";
+
+                            case ".gif":
+                                return "image/gif";
+
+                            case ".svg":
+                                return "image/svg+xml";
+
+                            case ".json":
+                                return "application/json";
+
+                            default:
+                                return "application/octet-stream";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return "application/octet-stream";
+                }
+
+                #endregion
+
+                #region//获取IP地址信息        
+
+                public static async Task<string> GetIPLocation(string ipAddress)
+                {
+                    if (string.IsNullOrEmpty(ipAddress))
+                        return string.Empty;
+
+                    if (!IPAddress.TryParse(ipAddress, out _))
+                        return string.Empty;
+
+                    try
+                    {
+                        using (HttpClient client = new HttpClient())
+                        {
+                            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
+                            string url = $"https://ip-api.com/json/{ipAddress}?lang=zh-CN";
+
+                            HttpResponseMessage response = await client.GetAsync(url);
+                            response.EnsureSuccessStatusCode();
+                            string json = await response.Content.ReadAsStringAsync();
+
+                            var data = JObject.Parse(json);
+                            if (data["status"]?.ToString() == "success")
+                            {
+                                return $"{data["country"]} {data["regionName"]} {data["city"]} {data["isp"]}";
+                            }
+                            else
+                            {
+                                string message = data["message"]?.ToString();
+                                switch (message)
+                                {
+                                    case "invalid query":
+                                    case "private range":
+                                    case "reserved range":
+                                        return string.Empty;
+                                    default:
+                                        return string.Empty;
+                                }
+                            }
+                        }
+                    }
+                    catch (HttpRequestException)
+                    {
+                        return string.Empty;
+                    }
+                    catch (Exception)
+                    {
+                        return string.Empty;
+                    }
+                }
+
+                public static IPEndPoint GetIPEndPoint_ByAddressString(string AddressString, ushort Port)
+                {
+                    try
+                    {
+                        IPAddress ipAddress = ProxyConfig.Proxy.ResolveAddress(AddressString);
+                        return new IPEndPoint(ipAddress, Port);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return null;
+                }
+
+                public static IPEndPoint GetIPEndPoint_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData, out string AddressString)
+                {
+                    AddressString = string.Empty;
+
+                    try
+                    {
+                        IPAddress ip = IPAddress.Any;
+                        ushort port = 0;
+                        int portPosition = 0;
+
+                        switch (addressType)
+                        {
+                            case Operate.ProxyConfig.Proxy.AddressType.IPv4:
+                                ip = new IPAddress(bData.Slice(0, 4).ToArray());
+                                portPosition = 4;
+                                AddressString = ip.ToString();
+                                break;
+
+                            case Operate.ProxyConfig.Proxy.AddressType.IPv6:
+                                ip = new IPAddress(bData.Slice(0, 16).ToArray());
+                                portPosition = 16;
+                                AddressString = ip.ToString();
+                                break;
+
+                            case Operate.ProxyConfig.Proxy.AddressType.Domain:
+                                byte length = bData[0];
+                                var domainBytes = bData.Slice(1, length);
+                                AddressString = Operate.SystemConfig.BytesToString(
+                                    Operate.PacketConfig.Packet.EncodingFormat.UTF8,
+                                    domainBytes.ToArray());
+                                ip = ProxyConfig.Proxy.ResolveAddress(AddressString);
+                                portPosition = 1 + length;
+                                break;
+                        }
+
+                        if (ip != null)
+                        {
+                            port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.Slice(portPosition, 2).ToArray());
+                            return new IPEndPoint(ip, port);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return null;
+                }
+
+                private static IPAddress ResolveAddress(string addressString)
+                {
+                    return ResolveAddressAsync(addressString).ConfigureAwait(false).GetAwaiter().GetResult();
+                }
+
+                private static async Task<IPAddress> ResolveAddressAsync(string addressString)
+                {
+                    try
+                    {
+                        var addressType = Operate.ProxyConfig.Proxy.GetAddressType_ByString(addressString);
+
+                        switch (addressType)
+                        {
+                            case Operate.ProxyConfig.Proxy.AddressType.IPv4:
+                            case Operate.ProxyConfig.Proxy.AddressType.IPv6:
+                                return IPAddress.Parse(addressString);
+
+                            case Operate.ProxyConfig.Proxy.AddressType.Domain:
+
+                                if (Operate.ProxyConfig.Proxy.DnsCache.TryGetValue(addressString, out var cachedIp))
+                                {
+                                    return cachedIp;
+                                }
+
+                                try
+                                {
+                                    var entry = await Dns.GetHostEntryAsync(addressString).ConfigureAwait(false);
+                                    var ipv4 = entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+                                    var result = ipv4 ?? entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetworkV6)
+                                                 ?? entry.AddressList.First();
+
+                                    Operate.ProxyConfig.Proxy.DnsCache.AddOrUpdate(
+                                        key: addressString,
+                                        addValue: result,
+                                        updateValueFactory: (key, oldValue) => result);
+
+                                    return result;
+                                }
+                                catch
+                                {
+                                    return null;
+                                }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(nameof(ResolveAddressAsync), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//获取UDP数据包
+
+                public static ReadOnlySpan<byte> GetUDPData_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData)
+                {
+                    try
+                    {
+                        switch (addressType)
+                        {
+                            case Operate.ProxyConfig.Proxy.AddressType.IPv4:
+                                return bData.Length >= 10 ? bData.Slice(10) : ReadOnlySpan<byte>.Empty;
+
+                            case Operate.ProxyConfig.Proxy.AddressType.Domain:
+
+                                if (bData.Length < 5)
+                                {
+                                    return ReadOnlySpan<byte>.Empty;
+                                }
+
+                                byte domainLength = bData[4];
+                                int domainStart = 5 + domainLength + 2;
+                                return bData.Length >= domainStart ? bData.Slice(domainStart) : ReadOnlySpan<byte>.Empty;
+
+                            case Operate.ProxyConfig.Proxy.AddressType.IPv6:
+                                return bData.Length >= 22 ? bData.Slice(22) : ReadOnlySpan<byte>.Empty;
+
+                            default:
+                                return ReadOnlySpan<byte>.Empty;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return ReadOnlySpan<byte>.Empty;
+                    }
+                }
+
+                #endregion
+
+                #region//获取返回给客户端的数据（SOCKS5，IPV4）
+
+                public static byte[] GetProxyReturnData(Operate.ProxyConfig.Proxy.CommandResponse CommandResponse, ReadOnlySpan<byte> bServerIP, ReadOnlySpan<byte> bServerPort)
+                {
+                    try
+                    {
+                        Span<byte> response = stackalloc byte[10];
+                        response[0] = (byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5;
+                        response[1] = (byte)CommandResponse;
+                        response[2] = 0x00;
+                        response[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
+                        bServerIP.CopyTo(response.Slice(4, 4));
+                        response[8] = bServerPort[1];
+                        response[9] = bServerPort[0];
+
+                        return response.ToArray();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return Array.Empty<byte>();
+                    }
+                }
+
+                #endregion
+
+                #region//获取端口对应的域名类型
+
+                public static Operate.ProxyConfig.Proxy.DomainType GetDomainType_ByPort(ushort Port)
+                {
+                    try
+                    {
+                        if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
+                        {
+                            if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort && !string.IsNullOrEmpty(Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort))
+                            {
+                                HashSet<string> ExternalProxyPorts = new HashSet<string>(Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort.Split(','));
+
+                                if (ExternalProxyPorts.Contains(Port.ToString()))
+                                {
+                                    return Operate.ProxyConfig.Proxy.DomainType.External;
+                                }
+                            }
+                            else
+                            {
+                                return Operate.ProxyConfig.Proxy.DomainType.External;
+                            }
+                        }
+
+                        if (Port == 80 || Port == 8080)
+                        {
+                            return Operate.ProxyConfig.Proxy.DomainType.Http;
+                        }
+                        else if (Port == 443 || Port == 8443)
+                        {
+                            return Operate.ProxyConfig.Proxy.DomainType.Https;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return Operate.ProxyConfig.Proxy.DomainType.Socket;
+                }
+
+                #endregion
+
+                #region//获取服务端地址
+
+                public static string GetServerAddress(Operate.ProxyConfig.Proxy.DomainType dtType, string AddressString, ushort port)
+                {
+                    if (string.IsNullOrEmpty(AddressString))
+                    {
+                        return string.Empty;
+                    }
+
+                    try
+                    {
+                        string protocol = string.Empty;
+
+                        switch (dtType)
+                        {
+                            case Operate.ProxyConfig.Proxy.DomainType.Socket:
+                                protocol = "socket://";
+                                break;
+                            case Operate.ProxyConfig.Proxy.DomainType.Http:
+                                protocol = "http://";
+                                break;
+                            case Operate.ProxyConfig.Proxy.DomainType.Https:
+                                protocol = "https://";
+                                break;
+                            case Operate.ProxyConfig.Proxy.DomainType.External:
+                                protocol = "SOCKS5://";
+                                break;
+                        }
+
+                        return string.Format("{0}{1}: {2}", protocol, AddressString, port);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return string.Empty;
+                    }
+                }
+
+                #endregion
+
+                #region//获取客户端地址
+
+                public static string GetClientAddress(Socket clientSocket, string AddressString, ushort port)
+                {
+                    if (string.IsNullOrEmpty(AddressString))
+                    {
+                        return string.Empty;
+                    }
+
+                    try
+                    {
+                        if (clientSocket?.RemoteEndPoint is IPEndPoint remoteEndPoint)
+                        {
+                            return $"{AddressString}: {port} [{remoteEndPoint.Port}]";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return string.Empty;
+                }
+
+                #endregion
             }
 
             #endregion
@@ -5280,6 +6203,32 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//获取在线的代理账号数
+
+                public static int GetOnLineProxyAccountCount(BindingList<AccountInfo> allData)
+                {
+                    int iReturn = 0;
+
+                    try
+                    {
+                        foreach (AccountInfo pai in allData)
+                        {
+                            if (pai.IsOnLine)
+                            {
+                                iReturn++;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return iReturn;
+                }
+
+                #endregion
+
                 #region//获取代理账号的链接数
 
                 public static int GetLinksNumber_ByAccountID(Guid AID, string ClientIP, AntdUI.Tree tree)
@@ -5377,7 +6326,7 @@ namespace WinsockPacketEditor
                                 {
                                     paiItem.LoginIP = IPAddress;
 
-                                    string IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+                                    string IPLocation = await ProxyConfig.Proxy.GetIPLocation(IPAddress);
                                     if (!string.IsNullOrEmpty(IPLocation))
                                     {
                                         paiItem.IPLocation = IPLocation;
@@ -5389,7 +6338,7 @@ namespace WinsockPacketEditor
                                 {
                                     if (string.IsNullOrEmpty(paiItem.IPLocation))
                                     {
-                                        string IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+                                        string IPLocation = await ProxyConfig.Proxy.GetIPLocation(IPAddress);
                                         if (!string.IsNullOrEmpty(IPLocation))
                                         {
                                             paiItem.IPLocation = IPLocation;
@@ -6633,6 +7582,201 @@ namespace WinsockPacketEditor
                     }
 
                     return MProtocol;
+                }
+
+                #endregion
+
+                #region//获取远程代理映射的数据
+
+                public static byte[] GetRemoteMappedData(string remoteUrl, string originalRequest, Dictionary<string, string> headers)
+                {
+                    try
+                    {
+                        // 解析原始请求
+                        string[] requestParts = originalRequest.Split(new[] { "\r\n" }, StringSplitOptions.None);
+                        string[] requestLine = requestParts[0].Split(' ');
+                        string method = requestLine[0];
+                        string path = requestLine.Length > 1 ? requestLine[1] : "/";
+
+                        // 构建新的请求URL
+                        UriBuilder remoteUri = new UriBuilder(remoteUrl);
+                        if (!string.IsNullOrEmpty(path) && path != "/")
+                        {
+                            // 保留原始路径参数
+                            string queryToAppend = remoteUri.Query;
+                            if (!string.IsNullOrEmpty(remoteUri.Query))
+                            {
+                                queryToAppend = "&" + remoteUri.Query.TrimStart('?');
+                            }
+
+                            // 处理路径拼接
+                            string originalPath = path.Split('?')[0];
+                            string originalQuery = path.Contains('?') ? path.Substring(path.IndexOf('?')) : "";
+
+                            remoteUri.Path = remoteUri.Path.TrimEnd('/') + "/" + originalPath.TrimStart('/');
+                            remoteUri.Query = originalQuery.TrimStart('?') + queryToAppend;
+                        }
+
+                        // 创建HTTP请求
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(remoteUri.Uri);
+                        request.Method = method;
+
+                        // 设置超时时间
+                        request.Timeout = 10000; // 10秒超时
+                        request.ReadWriteTimeout = 10000;
+
+                        // 复制原始请求头（排除不应转发的头）
+                        foreach (var header in headers)
+                        {
+                            string headerKey = header.Key.ToLower();
+
+                            // 跳过这些不应该转发的头
+                            if (headerKey == "connection" ||
+                                headerKey == "keep-alive" ||
+                                headerKey == "proxy-connection" ||
+                                headerKey == "te" ||
+                                headerKey == "trailer" ||
+                                headerKey == "transfer-encoding" ||
+                                headerKey == "upgrade")
+                            {
+                                continue;
+                            }
+
+                            switch (headerKey)
+                            {
+                                case "host":
+                                    request.Host = remoteUri.Host;
+                                    break;
+                                case "accept":
+                                    request.Accept = header.Value;
+                                    break;
+                                case "user-agent":
+                                    request.UserAgent = header.Value;
+                                    break;
+                                case "content-type":
+                                    request.ContentType = header.Value;
+                                    break;
+                                case "content-length":
+                                    // 将在处理请求体时设置
+                                    break;
+                                case "referer":
+                                    // 更新Referer为新的远程地址
+                                    if (Uri.TryCreate(header.Value, UriKind.Absolute, out Uri originalReferer))
+                                    {
+                                        string newReferer = remoteUri.Scheme + "://" + remoteUri.Host + originalReferer.PathAndQuery;
+                                        request.Referer = newReferer;
+                                    }
+                                    else
+                                    {
+                                        request.Referer = header.Value;
+                                    }
+                                    break;
+                                default:
+                                    request.Headers[header.Key] = header.Value;
+                                    break;
+                            }
+                        }
+
+                        // 处理请求体（POST/PUT等）
+                        if ((method == "POST" || method == "PUT" || method == "PATCH") &&
+                            headers.TryGetValue("content-length", out string contentLengthStr) &&
+                            int.TryParse(contentLengthStr, out int contentLength) &&
+                            contentLength > 0)
+                        {
+                            // 从原始请求中提取请求体
+                            int bodyStartIndex = originalRequest.IndexOf("\r\n\r\n") + 4;
+                            if (bodyStartIndex >= 4 && bodyStartIndex < originalRequest.Length)
+                            {
+                                string requestBody = originalRequest.Substring(bodyStartIndex);
+
+                                using (Stream requestStream = request.GetRequestStream())
+                                using (StreamWriter writer = new StreamWriter(requestStream))
+                                {
+                                    writer.Write(requestBody);
+                                }
+                            }
+                        }
+
+                        // 获取响应
+                        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                        using (Stream responseStream = response.GetResponseStream())
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            responseStream.CopyTo(memoryStream);
+
+                            // 构建响应头
+                            StringBuilder responseHeaders = new StringBuilder();
+                            responseHeaders.Append($"HTTP/1.1 {(int)response.StatusCode} {response.StatusDescription}\r\n");
+
+                            // 复制响应头（排除不应转发的头）
+                            foreach (string headerName in response.Headers.AllKeys)
+                            {
+                                string lowerHeaderName = headerName.ToLower();
+
+                                if (lowerHeaderName == "transfer-encoding" ||
+                                    lowerHeaderName == "connection" ||
+                                    lowerHeaderName == "keep-alive")
+                                {
+                                    continue;
+                                }
+
+                                responseHeaders.Append($"{headerName}: {response.Headers[headerName]}\r\n");
+                            }
+
+                            responseHeaders.Append("\r\n");
+
+                            // 合并响应头和响应体
+                            byte[] headerBytes = Encoding.UTF8.GetBytes(responseHeaders.ToString());
+                            byte[] responseBytes = memoryStream.ToArray();
+
+                            byte[] fullResponse = new byte[headerBytes.Length + responseBytes.Length];
+                            Buffer.BlockCopy(headerBytes, 0, fullResponse, 0, headerBytes.Length);
+                            Buffer.BlockCopy(responseBytes, 0, fullResponse, headerBytes.Length, responseBytes.Length);
+
+                            return fullResponse;
+                        }
+                    }
+                    catch (WebException webEx) when (webEx.Response is HttpWebResponse errorResponse)
+                    {
+                        // 处理远程服务器返回的错误响应
+                        using (Stream errorStream = errorResponse.GetResponseStream())
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            errorStream?.CopyTo(memoryStream);
+
+                            StringBuilder responseHeaders = new StringBuilder();
+                            responseHeaders.Append($"HTTP/1.1 {(int)errorResponse.StatusCode} {errorResponse.StatusDescription}\r\n");
+
+                            foreach (string headerName in errorResponse.Headers.AllKeys)
+                            {
+                                responseHeaders.Append($"{headerName}: {errorResponse.Headers[headerName]}\r\n");
+                            }
+
+                            responseHeaders.Append("\r\n");
+
+                            byte[] headerBytes = Encoding.UTF8.GetBytes(responseHeaders.ToString());
+                            byte[] responseBytes = memoryStream.ToArray();
+
+                            byte[] fullResponse = new byte[headerBytes.Length + responseBytes.Length];
+                            Buffer.BlockCopy(headerBytes, 0, fullResponse, 0, headerBytes.Length);
+                            Buffer.BlockCopy(responseBytes, 0, fullResponse, headerBytes.Length, responseBytes.Length);
+
+                            return fullResponse;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, $"远程映射失败: {ex.Message}");
+
+                        // 返回500错误响应
+                        string errorResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
+                                              "Content-Type: text/plain\r\n" +
+                                              "Connection: close\r\n" +
+                                              "\r\n" +
+                                              "Remote mapping failed: " + ex.Message;
+
+                        return Encoding.UTF8.GetBytes(errorResponse);
+                    }
                 }
 
                 #endregion
@@ -8059,7 +9203,7 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
                                     if (!string.IsNullOrEmpty(sIPString))
                                     {
-                                        Operate.PacketConfig.Packet.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                                        Operate.PacketConfig.Packet.SockAddr saAddr = PacketConfig.Packet.GetSocketAddr_ByIPString(sIPString);
                                         res = WSock32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
                                     }
                                     break;
@@ -8069,7 +9213,7 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
                                     if (!string.IsNullOrEmpty(sIPString))
                                     {
-                                        Operate.PacketConfig.Packet.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                                        Operate.PacketConfig.Packet.SockAddr saAddr = PacketConfig.Packet.GetSocketAddr_ByIPString(sIPString);
                                         res = WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
                                     }
                                     break;
@@ -8779,6 +9923,217 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion
+
+                #region//获取 SockAddr 对应的 IP 地址和端口
+
+                public static string GetIPString_BySocketAddr(int pSocket, Operate.PacketConfig.Packet.SockAddr pAddr, Operate.PacketConfig.Packet.PacketType pType)
+                {
+                    string sIP_From = string.Empty;
+                    string sIP_To = string.Empty;
+
+                    try
+                    {
+                        sIP_From = PacketConfig.Packet.GetIP_BySocket(pSocket, Operate.PacketConfig.Packet.IPType.From);
+
+                        switch (pType)
+                        {
+                            case Operate.PacketConfig.Packet.PacketType.WS1_Send:
+                            case Operate.PacketConfig.Packet.PacketType.WS2_Send:
+                            case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
+                            case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
+                            case Operate.PacketConfig.Packet.PacketType.WSASend:
+                            case Operate.PacketConfig.Packet.PacketType.WSARecv:
+                            case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
+                                sIP_To = PacketConfig.Packet.GetIP_BySocket(pSocket, Operate.PacketConfig.Packet.IPType.To);
+                                break;
+
+                            case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
+                            case Operate.PacketConfig.Packet.PacketType.WS2_SendTo:
+                            case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
+                            case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
+                            case Operate.PacketConfig.Packet.PacketType.WSASendTo:
+                            case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
+                                sIP_To = PacketConfig.Packet.GetIP_BySockAddr(pAddr);
+                                break;
+                        }
+
+                        if (!string.IsNullOrEmpty(sIP_From) && !string.IsNullOrEmpty(sIP_To))
+                        {
+                            var sb = new StringBuilder(sIP_From);
+                            sb.Append("|");
+                            sb.Append(sIP_To);
+                            return sb.ToString();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return string.Empty;
+                }
+
+                public static string GetIP_BySockAddr(Operate.PacketConfig.Packet.SockAddr saAddr)
+                {
+                    string sReturn = string.Empty;
+
+                    try
+                    {
+                        if (saAddr.sin_family == (short)AddressFamily.InterNetwork)
+                        {
+                            string sIP = Marshal.PtrToStringAnsi(WS2_32.inet_ntoa(saAddr.sin_addr));
+                            string sPort = WS2_32.ntohs(saAddr.sin_port).ToString();
+                            sReturn = $"{sIP}:{sPort}";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return sReturn;
+                }
+
+                public static string GetIP_BySocket(int Socket, Operate.PacketConfig.Packet.IPType IPType)
+                {
+                    string sReturn = "";
+
+                    try
+                    {
+                        Operate.PacketConfig.Packet.SockAddr saAddr = new Operate.PacketConfig.Packet.SockAddr();
+                        saAddr.sin_family = (short)AddressFamily.InterNetwork;
+                        int iAddrLen = Marshal.SizeOf(saAddr);
+
+                        switch (IPType)
+                        {
+                            case Operate.PacketConfig.Packet.IPType.From:
+                                WS2_32.getsockname(Socket, ref saAddr, ref iAddrLen);
+                                break;
+
+                            case Operate.PacketConfig.Packet.IPType.To:
+                                WS2_32.getpeername(Socket, ref saAddr, ref iAddrLen);
+                                break;
+                        }
+
+                        sReturn = GetIP_BySockAddr(saAddr);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return sReturn;
+                }
+
+                #endregion
+
+                #region//获取 IP 地址和端口对应的 SockAddr
+
+                public static Operate.PacketConfig.Packet.SockAddr GetSocketAddr_ByIPString(string IPString)
+                {
+                    Operate.PacketConfig.Packet.SockAddr saReturn = new Operate.PacketConfig.Packet.SockAddr();
+
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(IPString) && IPString.IndexOf(":") > 0)
+                        {
+                            string sIP = IPString.Split(':')[0];
+                            int iPort = int.Parse(IPString.Split(':')[1]);
+
+                            IPAddress ipAddress = IPAddress.Parse(sIP);
+
+                            saReturn.sin_family = ((short)AddressFamily.InterNetwork);
+                            saReturn.sin_port = (ushort)IPAddress.HostToNetworkOrder((short)iPort);
+                            saReturn.sin_addr = (uint)ipAddress.GetHashCode();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return saReturn;
+                }
+
+                #endregion
+
+                #region//统计封包数量
+
+                public static void CountPacketInfo(Operate.PacketConfig.Packet.PacketType ptPacketType, int packetLength)
+                {
+                    try
+                    {
+                        if (packetLength > 0)
+                        {
+                            Interlocked.Increment(ref Operate.PacketConfig.Packet.TotalPackets);
+
+                            switch (ptPacketType)
+                            {
+                                case Operate.PacketConfig.Packet.PacketType.WS1_Send:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_Send:
+                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.Send_CNT);
+                                    Interlocked.Add(ref Operate.PacketConfig.Packet.Total_SendBytes, packetLength);
+                                    break;
+
+                                case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_SendTo:
+                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.SendTo_CNT);
+                                    Interlocked.Add(ref Operate.PacketConfig.Packet.Total_SendBytes, packetLength);
+                                    break;
+
+                                case Operate.PacketConfig.Packet.PacketType.WSASend:
+                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.WSASend_CNT);
+                                    Interlocked.Add(ref Operate.PacketConfig.Packet.Total_SendBytes, packetLength);
+                                    break;
+
+                                case Operate.PacketConfig.Packet.PacketType.WSASendTo:
+                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.WSASendTo_CNT);
+                                    Interlocked.Add(ref Operate.PacketConfig.Packet.Total_SendBytes, packetLength);
+                                    break;
+
+                                case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
+                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.Recv_CNT);
+                                    Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
+                                    break;
+
+                                case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
+                                case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
+                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.RecvFrom_CNT);
+                                    Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
+                                    break;
+
+                                case Operate.PacketConfig.Packet.PacketType.WSARecv:
+                                case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
+                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.WSARecv_CNT);
+                                    Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
+                                    break;
+
+                                case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
+                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.WSARecvFrom_CNT);
+                                    Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
+                                    break;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//判断 Socket 错误码是否是预期的错误
+
+                public static bool IsExpectedSocketError(int errorCode)
+                {
+                    // 10053: 软件导致连接中止
+                    // 10054: 远程主机强迫关闭了一个现有的连接
+                    return errorCode == 10053 || errorCode == 10054;
+                }
+
+                #endregion
             }
 
             #endregion
@@ -8812,11 +10167,11 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        Socket_Operation.CountSocketInfo(ptPacketType, bBuffByte.Length);
+                        PacketConfig.Packet.CountPacketInfo(ptPacketType, bBuffByte.Length);
 
                         if (!PacketConfig.Packet.SpeedMode)
                         {
-                            string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
+                            string sPacketIP = PacketConfig.Packet.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
 
                             if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.Contains("|"))
                             {
@@ -8985,7 +10340,7 @@ namespace WinsockPacketEditor
                             }
                         }
 
-                        Dictionary<int, int> sortedByKeyAsc = Socket_Operation.SortDictionaryByKey(packetLenCount, ascending: true);
+                        Dictionary<int, int> sortedByKeyAsc = SystemConfig.SortDictionaryByKey(packetLenCount, ascending: true);
 
                         foreach (KeyValuePair<int, int> kvp in sortedByKeyAsc)
                         {
@@ -9027,7 +10382,7 @@ namespace WinsockPacketEditor
                             }
                         }
 
-                        Dictionary<int, int> sortedByKeyAsc = Socket_Operation.SortDictionaryByKey(packetLenCount, ascending: true);
+                        Dictionary<int, int> sortedByKeyAsc = SystemConfig.SortDictionaryByKey(packetLenCount, ascending: true);
 
                         foreach (KeyValuePair<int, int> kvp in sortedByKeyAsc)
                         {
@@ -10161,7 +11516,7 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        string packetIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptType);
+                        string packetIP = PacketConfig.Packet.GetIPString_BySocketAddr(iSocket, sAddr, ptType);
                         if (string.IsNullOrEmpty(packetIP))
                             return false;
 
@@ -10814,6 +12169,39 @@ namespace WinsockPacketEditor
                             }
                         }
                     }
+                }
+
+                #endregion
+
+                #region//处理 Hook 结果（异步）
+
+                public static Task ProcessingHookResultAsync(
+                    int socket,
+                    byte[] bRawBuffer,
+                    byte[] bBuffer,
+                    int res,
+                    Operate.PacketConfig.Packet.PacketType ptType,
+                    Operate.FilterConfig.Filter.FilterAction filterAction,
+                    Operate.PacketConfig.Packet.SockAddr sockaddr,
+                    DateTime packetTime)
+                {
+                    if (filterAction == Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay)
+                        return Task.CompletedTask;
+
+                    if (filterAction != Operate.FilterConfig.Filter.FilterAction.Intercept && res <= 0)
+                        return Task.CompletedTask;
+
+                    return Task.Run(() =>
+                    {
+                        try
+                        {
+                            Operate.PacketConfig.Queue.PacketToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, filterAction, packetTime);
+                        }
+                        catch (Exception ex)
+                        {
+                            Operate.DoLog(nameof(ProcessingHookResultAsync), ex.Message);
+                        }
+                    });
                 }
 
                 #endregion

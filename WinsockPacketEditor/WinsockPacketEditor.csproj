@@ -367,11 +367,6 @@
     <Compile Include="Operate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ProxyModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -384,7 +379,11 @@
     <Compile Include="Forms\SelectProcessForm.Designer.cs">
       <DependentUpon>SelectProcessForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Socket_Operation.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -510,9 +509,10 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\WPE64.ico" />
-    <None Include="Resources\received.png" />
-    <None Include="Resources\sent.png" />
+    <Content Include="Images\received.png" />
+    <Content Include="Images\sent.png" />
+    <Content Include="Images\wpe.ico" />
+    <Content Include="Images\WPE64.ico" />
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -589,7 +589,6 @@
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\wpe.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -608,49 +607,49 @@
       <Visible>False</Visible>
       <Description>WPE64 Filter List File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Images\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".pa">
       <Visible>False</Visible>
       <Description>WPE64 Proxy Account List File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Images\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".pml">
       <Visible>False</Visible>
       <Description>WPE64 Proxy MapLocal File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Images\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".pmr">
       <Visible>False</Visible>
       <Description>WPE64 Proxy MapRemote File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Images\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".rp">
       <Visible>False</Visible>
       <Description>WPE64 Robot List File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Images\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".sb">
       <Visible>False</Visible>
       <Description>WPE64 System BackUp File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Images\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".sc">
       <Visible>False</Visible>
       <Description>WPE64 Send Collection File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Images\WPE64.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".sp">
       <Visible>False</Visible>
       <Description>WPE64 Send List File</Description>
       <Progid>WPE64</Progid>
-      <DefaultIcon>Resources\WPE64.ico</DefaultIcon>
+      <DefaultIcon>Images\WPE64.ico</DefaultIcon>
     </FileAssociation>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

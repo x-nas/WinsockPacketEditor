@@ -750,7 +750,7 @@ namespace WinsockPacketEditor
 
             Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(
                     "{0}/{1}",
-                    Socket_Operation.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo),
+                    Operate.ProxyConfig.Account.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo),
                     Operate.ProxyConfig.Account.lstAccountInfo.Count);
             this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
 

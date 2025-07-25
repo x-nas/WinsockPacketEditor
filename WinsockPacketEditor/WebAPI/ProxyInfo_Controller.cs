@@ -14,7 +14,7 @@ namespace WinsockPacketEditor
 
         public IHttpActionResult GetProxyInfo()
         {
-            string WorkMode = Socket_Operation.GetWorkModeName(Operate.ProxyConfig.Proxy.SpeedMode);
+            string WorkMode = Operate.SystemConfig.GetWorkModeName(Operate.ProxyConfig.Proxy.SpeedMode);
             ulong ProxyTCP = Operate.ProxyConfig.Proxy.ProxyTCP_CNT;
             ulong ProxyUDP = Operate.ProxyConfig.Proxy.ProxyUDP_CNT;
             string ProxyCache = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();

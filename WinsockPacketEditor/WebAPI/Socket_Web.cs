@@ -196,26 +196,26 @@ namespace WinsockPacketEditor
                             bool IsAdd = false;
                             if (body["add"] != null)
                             {
-                                IsAdd = Socket_Operation.StringToBool(body["add"].ToString());
+                                IsAdd = Operate.SystemConfig.StringToBool(body["add"].ToString());
                             }
 
                             bool IsDel = false;
                             if (body["delete"] != null)
                             {
-                                IsDel = Socket_Operation.StringToBool(body["delete"].ToString());
+                                IsDel = Operate.SystemConfig.StringToBool(body["delete"].ToString());
                             }
 
                             bool IsEdit = false;
                             if (body["edit"] != null)
                             {
-                                IsEdit = Socket_Operation.StringToBool(body["edit"].ToString());
+                                IsEdit = Operate.SystemConfig.StringToBool(body["edit"].ToString());
                             }
 
                             AccountInfo pai = new AccountInfo();
 
                             if (body["enable"] != null)
                             {
-                                pai.IsEnable = Socket_Operation.StringToBool(body["enable"].ToString());
+                                pai.IsEnable = Operate.SystemConfig.StringToBool(body["enable"].ToString());
                             }
 
                             if (body["username"] != null)
@@ -230,12 +230,12 @@ namespace WinsockPacketEditor
 
                             if (body["autodisable"] != null)
                             {
-                                pai.IsExpiry = Socket_Operation.StringToBool(body["autodisable"].ToString());
+                                pai.IsExpiry = Operate.SystemConfig.StringToBool(body["autodisable"].ToString());
                             }
 
                             if (body["disabledate"] != null && body["disabletime"] != null)
                             {
-                                pai.ExpiryTime = Socket_Operation.StringToDateTime(body["disabledate"].ToString(), body["disabletime"].ToString());
+                                pai.ExpiryTime = Operate.SystemConfig.StringToDateTime(body["disabledate"].ToString(), body["disabletime"].ToString());
                             }
 
                             if (IsAdd)

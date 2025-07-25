@@ -83,9 +83,9 @@ namespace WinsockPacketEditor
 
                         var buffer = Buffer;
                         Buffer = null;
-                        Socket_Operation.ReturnBuffer(buffer);
+                        Operate.SystemConfig.ReturnBuffer(buffer);
                     }
-                    catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
                         // 忽略预期错误
                     }
@@ -148,9 +148,9 @@ namespace WinsockPacketEditor
 
                         var buffer = Buffer;
                         Buffer = null;
-                        Socket_Operation.ReturnBuffer(buffer);
+                        Operate.SystemConfig.ReturnBuffer(buffer);
                     }
-                    catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
                         // 忽略预期错误
                     }

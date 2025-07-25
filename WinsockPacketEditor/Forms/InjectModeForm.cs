@@ -3147,7 +3147,7 @@ namespace WinsockPacketEditor
                 this.txtUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
                 this.txtANSIUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
 
-                string sBase64 = Socket_Operation.Base64_Encoding(sEncodingText);
+                string sBase64 = Operate.SystemConfig.Base64_Encoding(sEncodingText);
                 this.txtbase64.Text = sBase64;
                 this.txtANSIbase64.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sBase64));
             }
@@ -3181,8 +3181,8 @@ namespace WinsockPacketEditor
                 this.txtUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
                 this.txtANSIUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                this.txtbase64.Text = Socket_Operation.Base64_Decoding(sDecodingText);
-                this.txtANSIbase64.Text = Socket_Operation.Base64_Decoding(Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText)));
+                this.txtbase64.Text = Operate.SystemConfig.Base64_Decoding(sDecodingText);
+                this.txtANSIbase64.Text = Operate.SystemConfig.Base64_Decoding(Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText)));
             }
             catch (Exception ex)
             {
@@ -3348,34 +3348,34 @@ namespace WinsockPacketEditor
                                             string sFName = s13;
                                             string sIsExecute = bool.FalseString;
                                             string sRID = Guid.Empty.ToString();
-                                            string sFAppointHeader = Socket_Operation.GetBoolFromChineseString(s4).ToString();
+                                            string sFAppointHeader = Operate.SystemConfig.GetBoolFromChineseString(s4).ToString();
                                             string sFHeaderContent = s5;
-                                            string sFAppointSocket = Socket_Operation.GetBoolFromChineseString(s2).ToString();
+                                            string sFAppointSocket = Operate.SystemConfig.GetBoolFromChineseString(s2).ToString();
                                             string sFSocketContent = s3;
-                                            string sFAppointLength = Socket_Operation.GetBoolFromChineseString(s0).ToString();
+                                            string sFAppointLength = Operate.SystemConfig.GetBoolFromChineseString(s0).ToString();
                                             string sFLengthContent = s1;
 
                                             Operate.FilterConfig.Filter.FilterMode FMode = new Operate.FilterConfig.Filter.FilterMode();
-                                            if (Socket_Operation.GetBoolFromChineseString(s22) == true)
+                                            if (Operate.SystemConfig.GetBoolFromChineseString(s22) == true)
                                             {
                                                 FMode = Operate.FilterConfig.Filter.FilterMode.Normal;
                                             }
-                                            else if (Socket_Operation.GetBoolFromChineseString(s23) == true)
+                                            else if (Operate.SystemConfig.GetBoolFromChineseString(s23) == true)
                                             {
                                                 FMode = Operate.FilterConfig.Filter.FilterMode.Advanced;
                                             }
                                             string sFMode = ((int)FMode).ToString();
 
                                             Operate.FilterConfig.Filter.FilterAction FAction = new Operate.FilterConfig.Filter.FilterAction();
-                                            if (Socket_Operation.GetBoolFromChineseString(s9) == true)
+                                            if (Operate.SystemConfig.GetBoolFromChineseString(s9) == true)
                                             {
                                                 FAction = Operate.FilterConfig.Filter.FilterAction.Replace;
                                             }
-                                            else if (Socket_Operation.GetBoolFromChineseString(s10) == true)
+                                            else if (Operate.SystemConfig.GetBoolFromChineseString(s10) == true)
                                             {
                                                 FAction = Operate.FilterConfig.Filter.FilterAction.Intercept;
                                             }
-                                            else if (Socket_Operation.GetBoolFromChineseString(s11) == true)
+                                            else if (Operate.SystemConfig.GetBoolFromChineseString(s11) == true)
                                             {
                                                 FAction = Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay;
                                             }
@@ -3398,11 +3398,11 @@ namespace WinsockPacketEditor
                                             string sFFunction = Operate.FilterConfig.Filter.GetFilterFunctionString(filterFunction);
 
                                             Operate.FilterConfig.Filter.FilterStartFrom FStartFrom = new Operate.FilterConfig.Filter.FilterStartFrom();
-                                            if (Socket_Operation.GetBoolFromChineseString(s24) == true)
+                                            if (Operate.SystemConfig.GetBoolFromChineseString(s24) == true)
                                             {
                                                 FStartFrom = Operate.FilterConfig.Filter.FilterStartFrom.Head;
                                             }
-                                            else if (Socket_Operation.GetBoolFromChineseString(s25) == true)
+                                            else if (Operate.SystemConfig.GetBoolFromChineseString(s25) == true)
                                             {
                                                 FStartFrom = Operate.FilterConfig.Filter.FilterStartFrom.Position;
                                             }
@@ -3415,22 +3415,22 @@ namespace WinsockPacketEditor
                                             string sFModify = string.Empty;
                                             if (FMode == Operate.FilterConfig.Filter.FilterMode.Normal)
                                             {
-                                                sFProgressionPosition = Socket_Operation.ConvertFILTString(s31, false);
-                                                sFSearch = Socket_Operation.ConvertFILTString(s26, false);
-                                                sFModify = Socket_Operation.ConvertFILTString(s27, false);
+                                                sFProgressionPosition = Operate.SystemConfig.ConvertFILTString(s31, false);
+                                                sFSearch = Operate.SystemConfig.ConvertFILTString(s26, false);
+                                                sFModify = Operate.SystemConfig.ConvertFILTString(s27, false);
                                             }
                                             else if (FMode == Operate.FilterConfig.Filter.FilterMode.Advanced)
                                             {
-                                                sFProgressionPosition = Socket_Operation.ConvertFILTString(s32, false);
-                                                sFSearch = Socket_Operation.ConvertFILTString(s28, false);
+                                                sFProgressionPosition = Operate.SystemConfig.ConvertFILTString(s32, false);
+                                                sFSearch = Operate.SystemConfig.ConvertFILTString(s28, false);
 
                                                 if (FStartFrom == Operate.FilterConfig.Filter.FilterStartFrom.Position)
                                                 {
-                                                    sFModify = Socket_Operation.ConvertFILTString(s29, true);
+                                                    sFModify = Operate.SystemConfig.ConvertFILTString(s29, true);
                                                 }
                                                 else
                                                 {
-                                                    sFModify = Socket_Operation.ConvertFILTString(s29, false);
+                                                    sFModify = Operate.SystemConfig.ConvertFILTString(s29, false);
                                                 }
                                             }
 
