@@ -608,11 +608,11 @@ namespace WinsockPacketEditor
                                 Operate.SystemConfig.WebServer = WebApp.Start<Socket_Web>(Operate.SystemConfig.Remote_URL);
                                 ProxyConfig.Proxy.InitCCProxy_HTML();
 
-                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_178), Operate.SystemConfig.Remote_URL);
+                                sLog = string.Format(AntdUI.Localization.Get("MGT.Enabled", "远程管理已启用：{0}"), Operate.SystemConfig.Remote_URL);
                             }
                             catch
                             {
-                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_179), Process.GetCurrentProcess().ProcessName);
+                                sLog = string.Format(AntdUI.Localization.Get("MGT.Error", "远程管理启动失败: 请使用管理员权限启动 {0}"), Process.GetCurrentProcess().ProcessName);
                             }
 
                             Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
@@ -3506,11 +3506,11 @@ namespace WinsockPacketEditor
                     {
                         if (string.IsNullOrEmpty(pProcess.MainWindowTitle))
                         {
-                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), pProcess.MainModule.ModuleName, pProcess.MainWindowHandle.ToString());
+                            sReturn = string.Format(AntdUI.Localization.Get("ProcessInfo", "{0} 句柄: {1}"), pProcess.MainModule.ModuleName, pProcess.MainWindowHandle.ToString());
                         }
                         else
                         {
-                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                            sReturn = string.Format(AntdUI.Localization.Get("ProcessInfo", "{0} 句柄: {1}"), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
                         }
                     }
                     else
@@ -3893,7 +3893,7 @@ namespace WinsockPacketEditor
                         }
                         else
                         {
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_145), pe.ProxyType);
+                            string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupported", "不支持的 SOCKS 协议版本: {0}"), pe.ProxyType);
                             Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                         }
                     }
@@ -4176,7 +4176,7 @@ namespace WinsockPacketEditor
 
                                         ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Unsupport, bServerTCP_IP, bServerTCP_Port));
 
-                                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), pe.TCP_Client.Socket.RemoteEndPoint, pe.CommandType);
+                                        string sLog = string.Format(AntdUI.Localization.Get("Command.Unsupported", "{0} - 不支持的命令: {1}"), pe.TCP_Client.Socket.RemoteEndPoint, pe.CommandType);
                                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
 
                                         #endregion
@@ -7541,7 +7541,7 @@ namespace WinsockPacketEditor
 
                             if (!bOK)
                             {
-                                string FailLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_193), pai.UserName);
+                                string FailLog = string.Format(AntdUI.Localization.Get("ImportAccount.Error", "导入账号失败！用户名：{0}"), pai.UserName);
                                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, FailLog);
                             }
                         }
@@ -9289,19 +9289,19 @@ namespace WinsockPacketEditor
 
                 private static class PacketTypeNames
                 {
-                    public static readonly string WS1_Send = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_54);
-                    public static readonly string WS2_Send = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_156);
-                    public static readonly string WS1_Recv = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_55);
-                    public static readonly string WS2_Recv = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_157);
-                    public static readonly string WS1_SendTo = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_56);
-                    public static readonly string WS2_SendTo = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_158);
-                    public static readonly string WS1_RecvFrom = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_57);
-                    public static readonly string WS2_RecvFrom = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_159);
-                    public static readonly string WSASend = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_58);
-                    public static readonly string WSARecv = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
-                    public static readonly string WSARecvEx = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
-                    public static readonly string WSASendTo = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_60);
-                    public static readonly string WSARecvFrom = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_61);
+                    public static readonly string WS1_Send = AntdUI.Localization.Get("WS1_Send", "发送 1.1");
+                    public static readonly string WS2_Send = AntdUI.Localization.Get("WS2_Send", "发送");
+                    public static readonly string WS1_Recv = AntdUI.Localization.Get("WS1_Recv", "接收 1.1");
+                    public static readonly string WS2_Recv = AntdUI.Localization.Get("WS2_Recv", "接收");
+                    public static readonly string WS1_SendTo = AntdUI.Localization.Get("WS1_SendTo", "发送到 1.1");
+                    public static readonly string WS2_SendTo = AntdUI.Localization.Get("WS2_SendTo", "发送到");
+                    public static readonly string WS1_RecvFrom = AntdUI.Localization.Get("WS1_RecvFrom", "接收自 1.1");
+                    public static readonly string WS2_RecvFrom = AntdUI.Localization.Get("WS2_RecvFrom", "接收自");
+                    public static readonly string WSASend = AntdUI.Localization.Get("WSASend", "WSA发送");
+                    public static readonly string WSARecv = AntdUI.Localization.Get("WSARecv", "WSA接收");
+                    public static readonly string WSARecvEx = AntdUI.Localization.Get("WSARecvEx", "WSA接收");
+                    public static readonly string WSASendTo = AntdUI.Localization.Get("WSASendTo", "WSA发送到");
+                    public static readonly string WSARecvFrom = AntdUI.Localization.Get("WSARecvFrom", "WSA接收自");
                 }
 
                 public static string GetName_ByPacketType(PacketType socketType)
@@ -10319,8 +10319,8 @@ namespace WinsockPacketEditor
                 public static DataTable StatisticalSocketList_ByPacketLen()
                 {
                     DataTable dtReturn = new DataTable();
-                    dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146), typeof(int));
-                    dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_196), typeof(int));
+                    dtReturn.Columns.Add("PacketLength", typeof(int));
+                    dtReturn.Columns.Add("Number", typeof(int));
 
                     try
                     {
@@ -10361,8 +10361,8 @@ namespace WinsockPacketEditor
                 public static DataTable StatisticalSocketList_ByPacketSocket()
                 {
                     DataTable dtReturn = new DataTable();
-                    dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147), typeof(int));
-                    dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_196), typeof(int));
+                    dtReturn.Columns.Add("PacketSocket", typeof(int));
+                    dtReturn.Columns.Add("Number", typeof(int));
 
                     try
                     {
@@ -10403,8 +10403,8 @@ namespace WinsockPacketEditor
                 public static DataTable StatisticalFilterList_ByExecutionCount()
                 {
                     DataTable dtReturn = new DataTable();
-                    dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_197), typeof(string));
-                    dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_196), typeof(int));
+                    dtReturn.Columns.Add("FilterExecution", typeof(string));
+                    dtReturn.Columns.Add("Number", typeof(int));
 
                     try
                     {
@@ -11027,7 +11027,7 @@ namespace WinsockPacketEditor
                     {
                         bool IsEnable = false;
                         Guid FID = Guid.NewGuid();
-                        string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), sfi.FName);
+                        string FName = string.Format(AntdUI.Localization.Get("CopyName", "{0} - 副本"), sfi.FName);
                         bool bAppointHeader = sfi.AppointHeader;
                         string HeaderContent = sfi.HeaderContent;
                         bool bAppointSocket = sfi.AppointSocket;
@@ -11224,19 +11224,19 @@ namespace WinsockPacketEditor
                         switch (filterAction)
                         {
                             case FilterConfig.Filter.FilterAction.Replace:
-                                return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_65);
+                                return AntdUI.Localization.Get("Replace", "替换");
 
                             case FilterConfig.Filter.FilterAction.Intercept:
-                                return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_66);
+                                return AntdUI.Localization.Get("Intercept", "拦截");
 
                             case FilterConfig.Filter.FilterAction.Change:
-                                return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_173);
+                                return AntdUI.Localization.Get("Change", "换包");
 
                             case FilterConfig.Filter.FilterAction.NoModify_Display:
-                                return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_67);
+                                return AntdUI.Localization.Get("NoModify_Display", "不修改-只显示");
 
                             case FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
-                                return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_68);
+                                return AntdUI.Localization.Get("NoModify_NoDisplay", "不修改-不显示");
 
                             default:
                                 return string.Empty;
@@ -12532,13 +12532,13 @@ namespace WinsockPacketEditor
                                 if (!PacketConfig.Packet.SpeedMode)
                                 {
                                     string sFilterLog = MatchIndex != null && MatchIndex.Count > 0
-                                        ? string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_69),
+                                        ? string.Format(AntdUI.Localization.Get("DoFilterMatch", "[{0}] {1} | [{2}] 封包长度: {3} | 匹配数: {4}"),
                                             FilterConfig.Filter.GetName_ByFilterAction(sfi.FAction),
                                             sfi.FName,
                                             PacketConfig.Packet.GetName_ByPacketType(ptType),
                                             bufferSpan.Length,
                                             MatchIndex.Count)
-                                        : string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51),
+                                        : string.Format(AntdUI.Localization.Get("DoFilter", "[{0}] {1} | [{2}] 封包长度: {3}"),
                                             FilterConfig.Filter.GetName_ByFilterAction(sfi.FAction),
                                             sfi.FName,
                                             PacketConfig.Packet.GetName_ByPacketType(ptType),
@@ -13305,7 +13305,7 @@ namespace WinsockPacketEditor
                     {
                         bool IsEnable_Copy = false;
                         Guid SID_New = Guid.NewGuid();
-                        string SName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), ssi.SName);
+                        string SName_Copy = string.Format(AntdUI.Localization.Get("CopyName", "{0} - 副本"), ssi.SName);
                         bool SSystemSocket_Copy = ssi.SSystemSocket;
                         int SLoopCNT_Copy = ssi.SLoopCNT;
                         int SLoopINT_Copy = ssi.SLoopINT;
@@ -14789,7 +14789,7 @@ namespace WinsockPacketEditor
                     {
                         bool IsEnable = false;
                         Guid RID_New = Guid.NewGuid();
-                        string RName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), ri.RName);                        
+                        string RName_Copy = string.Format(AntdUI.Localization.Get("CopyName", "{0} - 副本"), ri.RName);                        
                         BindingList<InstructionInfo> RInstruction_Copy = new BindingList<InstructionInfo>(ri.RInstruction.ToList());
 
                         Robot.AddRobot(IsEnable, RID_New, RName_Copy, RInstruction_Copy);

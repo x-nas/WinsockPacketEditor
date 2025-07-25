@@ -492,17 +492,17 @@ namespace WinsockPacketEditor
             {
                 if (e.Cancelled)
                 {
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_110), this.RobotName);
+                    string sLog = string.Format(AntdUI.Localization.Get("Robot.Stop", "机器人 [{0}] 已停止"), this.RobotName);
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);                    
                 }
                 else if (e.Error != null)
                 {
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_111), this.RobotName, e.Error.Message);
+                    string sLog = string.Format(AntdUI.Localization.Get("Robot.Error", "机器人 [{0}] 发生错误: {1}"), this.RobotName, e.Error.Message);
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                 }
                 else
                 {
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_112), this.RobotName);
+                    string sLog = string.Format(AntdUI.Localization.Get("Robot.Success", "机器人 [{0}] 执行完毕"), this.RobotName);
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                 }              
             }
