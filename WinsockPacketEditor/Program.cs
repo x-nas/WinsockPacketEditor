@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
-using WPE.Lib;
-using WPE.Lib.NativeMethods;
-using WPE.ProxyMode;
-using WPE.InjectMode;
 
 namespace WinsockPacketEditor
 {

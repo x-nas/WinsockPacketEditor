@@ -5,11 +5,7 @@ VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinsockPacketEditor", "WinsockPacketEditor\WinsockPacketEditor.csproj", "{B5ED16ED-ABD5-438B-A589-E8ACC2377432}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPE.Lib", "WPE.Lib\WPE.Lib.csproj", "{6BCB0079-F5DB-4894-B089-250EF00AAA2C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPE.InjectMode", "WPE.InjectMode\WPE.InjectMode.csproj", "{3C3385A9-DC62-46D2-B648-B9ED87B8228E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPE.ProxyMode", "WPE.ProxyMode\WPE.ProxyMode.csproj", "{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPEHook", "WPEHook\WPEHook.csproj", "{AC0EC9E6-199F-4263-AAD1-7265DF905003}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +17,10 @@ Global
 		{B5ED16ED-ABD5-438B-A589-E8ACC2377432}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5ED16ED-ABD5-438B-A589-E8ACC2377432}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5ED16ED-ABD5-438B-A589-E8ACC2377432}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6BCB0079-F5DB-4894-B089-250EF00AAA2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6BCB0079-F5DB-4894-B089-250EF00AAA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6BCB0079-F5DB-4894-B089-250EF00AAA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6BCB0079-F5DB-4894-B089-250EF00AAA2C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C3385A9-DC62-46D2-B648-B9ED87B8228E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C3385A9-DC62-46D2-B648-B9ED87B8228E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C3385A9-DC62-46D2-B648-B9ED87B8228E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C3385A9-DC62-46D2-B648-B9ED87B8228E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6C63D9A-44DE-4D22-A3F3-1E91876DA998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC0EC9E6-199F-4263-AAD1-7265DF905003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC0EC9E6-199F-4263-AAD1-7265DF905003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC0EC9E6-199F-4263-AAD1-7265DF905003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC0EC9E6-199F-4263-AAD1-7265DF905003}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

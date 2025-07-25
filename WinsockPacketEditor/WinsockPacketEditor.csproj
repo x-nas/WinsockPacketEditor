@@ -48,6 +48,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -177,8 +178,193 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
+      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassObject\AccountInfo.cs" />
+    <Compile Include="ClassObject\AuthInfo.cs" />
+    <Compile Include="ClassObject\BitInfo.cs" />
+    <Compile Include="ClassObject\FilterInfo.cs" />
+    <Compile Include="ClassObject\FontLoader.cs" />
+    <Compile Include="ClassObject\InstructionInfo.cs" />
+    <Compile Include="ClassObject\InterfaceInfo.cs" />
+    <Compile Include="ClassObject\Localizer.cs" />
+    <Compile Include="ClassObject\LogInfo.cs" />
+    <Compile Include="ClassObject\MapLocal.cs" />
+    <Compile Include="ClassObject\MapRemote.cs" />
+    <Compile Include="ClassObject\PacketInfo.cs" />
+    <Compile Include="ClassObject\ProcessInfo.cs" />
+    <Compile Include="ClassObject\ProxyExecute.cs" />
+    <Compile Include="ClassObject\ProxyInfo.cs" />
+    <Compile Include="ClassObject\RobotExecute.cs" />
+    <Compile Include="ClassObject\RobotInfo.cs" />
+    <Compile Include="ClassObject\SendExecute.cs" />
+    <Compile Include="ClassObject\SendInfo.cs" />
+    <Compile Include="ClassObject\WinSockHook.cs" />
+    <Compile Include="Controls\EncryptionPassword.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\EncryptionPassword.Designer.cs">
+      <DependentUpon>EncryptionPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\HotkeyTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SystemSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SystemSetting.Designer.cs">
+      <DependentUpon>SystemSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AccountEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AccountEditForm.Designer.cs">
+      <DependentUpon>AccountEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BackUpSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BackUpSettingsForm.Designer.cs">
+      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ExpiryTimeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExpiryTimeForm.Designer.cs">
+      <DependentUpon>ExpiryTimeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ExternalProxySettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExternalProxySettingsForm.Designer.cs">
+      <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FilterEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterEditForm.Designer.cs">
+      <DependentUpon>FilterEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FilterSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterSettingsForm.Designer.cs">
+      <DependentUpon>FilterSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HookSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HookSettingsForm.Designer.cs">
+      <DependentUpon>HookSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HotKeyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HotKeyForm.Designer.cs">
+      <DependentUpon>HotKeyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LimitDevicesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LimitDevicesForm.Designer.cs">
+      <DependentUpon>LimitDevicesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LimitLinksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LimitLinksForm.Designer.cs">
+      <DependentUpon>LimitLinksForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ListSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ListSettingsForm.Designer.cs">
+      <DependentUpon>ListSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LocationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LocationForm.Designer.cs">
+      <DependentUpon>LocationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MapLocalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MapLocalForm.Designer.cs">
+      <DependentUpon>MapLocalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MapRemoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MapRemoteForm.Designer.cs">
+      <DependentUpon>MapRemoteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MapSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MapSettingsForm.Designer.cs">
+      <DependentUpon>MapSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PacketEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PacketEditForm.Designer.cs">
+      <DependentUpon>PacketEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PacketModificationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PacketModificationForm.Designer.cs">
+      <DependentUpon>PacketModificationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProxySettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProxySettingsForm.Designer.cs">
+      <DependentUpon>ProxySettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RobotEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RobotEditForm.Designer.cs">
+      <DependentUpon>RobotEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SearchPacketForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SearchPacketForm.Designer.cs">
+      <DependentUpon>SearchPacketForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SendEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SendEditForm.Designer.cs">
+      <DependentUpon>SendEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SystemSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SystemSettingsForm.Designer.cs">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IconExtractor\IconExtractor.cs" />
+    <Compile Include="IconExtractor\IconUtil.cs" />
+    <Compile Include="InjectModeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InjectModeForm.Designer.cs">
+      <DependentUpon>InjectModeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiLanguage.cs" />
+    <Compile Include="NativeMethods\Kernel32.cs" />
+    <Compile Include="NativeMethods\Mswsock.cs" />
+    <Compile Include="NativeMethods\User32.cs" />
+    <Compile Include="NativeMethods\WS2_32.cs" />
+    <Compile Include="NativeMethods\WSock32.cs" />
+    <Compile Include="Operate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -186,22 +372,113 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ProxyModeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProxyModeForm.Designer.cs">
+      <DependentUpon>ProxyModeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SelectProcessForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SelectProcessForm.Designer.cs">
       <DependentUpon>SelectProcessForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Socket_Operation.cs" />
     <Compile Include="StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StartForm.Designer.cs">
       <DependentUpon>StartForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WebAPI\CCProxy_Controller.cs" />
+    <Compile Include="WebAPI\ProxyAccount_Controller.cs" />
+    <Compile Include="WebAPI\ProxyInfo_Controller.cs" />
+    <Compile Include="WebAPI\SocketInfo_Controller.cs" />
+    <Compile Include="WebAPI\Socket_Web.cs" />
+    <Compile Include="WebAPI\SystemInfo_Controller.cs" />
+    <EmbeddedResource Include="Controls\EncryptionPassword.resx">
+      <DependentUpon>EncryptionPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SystemSetting.resx">
+      <DependentUpon>SystemSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AccountEditForm.resx">
+      <DependentUpon>AccountEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BackUpSettingsForm.resx">
+      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExpiryTimeForm.resx">
+      <DependentUpon>ExpiryTimeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExternalProxySettingsForm.resx">
+      <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FilterEditForm.resx">
+      <DependentUpon>FilterEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FilterSettingsForm.resx">
+      <DependentUpon>FilterSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HookSettingsForm.resx">
+      <DependentUpon>HookSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HotKeyForm.resx">
+      <DependentUpon>HotKeyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LimitDevicesForm.resx">
+      <DependentUpon>LimitDevicesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LimitLinksForm.resx">
+      <DependentUpon>LimitLinksForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ListSettingsForm.resx">
+      <DependentUpon>ListSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LocationForm.resx">
+      <DependentUpon>LocationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MapLocalForm.resx">
+      <DependentUpon>MapLocalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MapRemoteForm.resx">
+      <DependentUpon>MapRemoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MapSettingsForm.resx">
+      <DependentUpon>MapSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PacketEditForm.resx">
+      <DependentUpon>PacketEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PacketModificationForm.resx">
+      <DependentUpon>PacketModificationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProxySettingsForm.resx">
+      <DependentUpon>ProxySettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RobotEditForm.resx">
+      <DependentUpon>RobotEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SearchPacketForm.resx">
+      <DependentUpon>SearchPacketForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SendEditForm.resx">
+      <DependentUpon>SendEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SystemSettingsForm.resx">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InjectModeForm.resx">
+      <DependentUpon>InjectModeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProxyModeForm.resx">
+      <DependentUpon>ProxyModeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectProcessForm.resx">
       <DependentUpon>SelectProcessForm.cs</DependentUpon>
@@ -234,11 +511,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon\WPE64.ico" />
-    <None Include="Resources\openHS.png" />
-    <None Include="Resources\aboutthis.png" />
-    <None Include="Resources\Settings.png" />
-    <Content Include="Resources\http.png" />
-    <Content Include="Resources\js.png" />
+    <None Include="Resources\received.png" />
+    <None Include="Resources\sent.png" />
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -314,24 +588,6 @@
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\copy.png" />
-    <None Include="Resources\cut.png" />
-    <Content Include="Resources\enUS.png" />
-    <Content Include="Resources\help.png" />
-    <Content Include="Resources\Language.png" />
-    <Content Include="Resources\loading.gif" />
-    <None Include="Resources\paste.png" />
-    <Content Include="Resources\Request.png" />
-    <Content Include="Resources\Response.png" />
-    <Content Include="Resources\Search.png" />
-    <Content Include="Resources\searchbox_button.png" />
-    <None Include="Resources\SelectAll.png" />
-    <Content Include="Resources\Socket.png" />
-    <Content Include="Resources\unknown.png" />
-    <Content Include="Resources\zhCN.png" />
-    <None Include="Resources\Trash-can16.png" />
-    <None Include="Resources\Stop16.png" />
-    <None Include="Resources\Play16.png" />
     <Content Include="Icon\wpe.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -345,20 +601,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WPE.InjectMode\WPE.InjectMode.csproj">
-      <Project>{3c3385a9-dc62-46d2-b648-b9ed87b8228e}</Project>
-      <Name>WPE.InjectMode</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WPE.Lib\WPE.Lib.csproj">
-      <Project>{6bcb0079-f5db-4894-b089-250ef00aaa2c}</Project>
-      <Name>WPE.Lib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WPE.ProxyMode\WPE.ProxyMode.csproj">
-      <Project>{d6c63d9a-44de-4d22-a3f3-1e91876da998}</Project>
-      <Name>WPE.ProxyMode</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <FileAssociation Include=".fp">

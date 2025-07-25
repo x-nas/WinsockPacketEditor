@@ -5,8 +5,6 @@ using System.Drawing;
 using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
-using WPE.Lib;
-using WPE.Lib.Controls;
 
 namespace WinsockPacketEditor
 {
