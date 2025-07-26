@@ -9,7 +9,7 @@ namespace WinsockPacketEditor
         {
             void InitFloatButton();
 
-            void SearchPacketList(bool FromHead);
+            void SearchProxyList(bool FromHead);
 
             void RefreshAccountList();
         }

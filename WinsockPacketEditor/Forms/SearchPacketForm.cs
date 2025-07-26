@@ -25,7 +25,6 @@ namespace WinsockPacketEditor
             {
                 this.Text = AntdUI.Localization.Get("SearchPacketForm", "查找封包");
                 this.tabSearchType.TabMenuVisible = false;
-                Operate.PacketConfig.List.DoSearch = false;
 
                 if (Operate.PacketConfig.List.FindOptions.Type == FindType.Text)
                 {
@@ -41,7 +40,7 @@ namespace WinsockPacketEditor
 
                 if (Operate.PacketConfig.List.FindOptions.Hex != null && Operate.PacketConfig.List.FindOptions.Hex.Length > 0)
                 {
-                    hexFind.ByteProvider = new DynamicByteProvider(Operate.PacketConfig.List.FindOptions.Hex);
+                    this.hexFind.ByteProvider = new DynamicByteProvider(Operate.PacketConfig.List.FindOptions.Hex);
                 }
                 else
                 {
@@ -168,7 +167,6 @@ namespace WinsockPacketEditor
             }
 
             Operate.PacketConfig.List.FindOptions.IsValid = true;
-            Operate.PacketConfig.List.DoSearch = true;
 
             bool FromHead = this.rbFromHead.Checked;
             if (FromHead)
@@ -186,7 +184,7 @@ namespace WinsockPacketEditor
 
                 case Operate.SystemConfig.SystemMode.Proxy:
 
-                    ((InterfaceInfo.IProxyMode)form).SearchPacketList(FromHead);
+                    ((InterfaceInfo.IProxyMode)form).SearchProxyList(FromHead);
 
                     break;
             }

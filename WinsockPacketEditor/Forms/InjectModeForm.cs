@@ -2386,7 +2386,7 @@ namespace WinsockPacketEditor
                             Operate.PacketConfig.List.Search_Index = 0;
                         }
 
-                        e.Result = Operate.PacketConfig.List.SearchForSocketList(Operate.PacketConfig.List.Search_Index, bSearchContent);                        
+                        e.Result = Operate.PacketConfig.List.SearchForPacketList(Operate.PacketConfig.List.Search_Index, bSearchContent);                        
                     }
                 }
             }

@@ -16,6 +16,7 @@ namespace WinsockPacketEditor
     public partial class ProxyModeForm : Window, InterfaceInfo.IProxyMode
     {  
         private bool setcolor = false;
+        private bool SearchFromHead = true;
         private static Socket ProxyServer;
         private BindingList<AccountInfo> lstAccount;
         private AntdUI.FormFloatButton FloatButton = null;
@@ -1608,11 +1609,112 @@ namespace WinsockPacketEditor
 
         #region//查找封包（异步）
 
-        public void SearchPacketList(bool FromHead)
+        public void SearchProxyList(bool FromHead)
         {
-            
+            if (!this.bgwSearchProxyList.IsBusy)
+            {
+                this.SearchFromHead = FromHead;
+                this.bgwSearchProxyList.RunWorkerAsync();
+            }
         }
 
-        #endregion        
+        private void HexBox_FindNext()
+        {
+            try
+            {
+                if (Operate.PacketConfig.List.FindOptions.IsValid)
+                {
+                    long res = this.hbProxyData.Find(Operate.PacketConfig.List.FindOptions);
+
+                    if (res == -1)
+                    {
+                        Operate.ProxyConfig.List.Search_Index += 1;
+                        this.SearchProxyList(this.SearchFromHead);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwSearchProxyList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                if (Operate.ProxyConfig.List.lstProxyInfo.Count > 0)
+                {
+                    if (Operate.PacketConfig.List.FindOptions.IsValid)
+                    {
+                        byte[] bSearchContent = null;
+                        FindType fType = Operate.PacketConfig.List.FindOptions.Type;
+                        Operate.PacketConfig.Packet.EncodingFormat efFormat = new Operate.PacketConfig.Packet.EncodingFormat();
+
+                        switch (fType)
+                        {
+                            case FindType.Text:
+                                efFormat = Operate.PacketConfig.Packet.EncodingFormat.UTF7;
+                                bSearchContent = Operate.SystemConfig.StringToBytes(efFormat, Operate.PacketConfig.List.FindOptions.Text);
+                                break;
+
+                            case FindType.Hex:
+                                efFormat = Operate.PacketConfig.Packet.EncodingFormat.Hex;
+                                bSearchContent = Operate.PacketConfig.List.FindOptions.Hex;
+                                break;
+                        }
+
+                        if (this.SearchFromHead)
+                        {
+                            Operate.ProxyConfig.List.Search_Index = 0;
+                        }
+
+                        e.Result = Operate.ProxyConfig.List.SearchForProxyList(Operate.ProxyConfig.List.Search_Index, bSearchContent);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwSearchProxyList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                if (e.Error == null && !e.Cancelled && e.Result != null)
+                {
+                    if (int.TryParse(e.Result.ToString(), out int iSearchResultIndex))
+                    {
+                        if (iSearchResultIndex >= 0)
+                        {
+                            this.tProxyList.SelectedIndex = iSearchResultIndex + 1;
+                            this.tProxyList.ScrollLine(iSearchResultIndex + 1, true);
+                            this.HexBox_FindNext();
+                        }
+                        else
+                        {
+                            string NoMatch = AntdUI.Localization.Get("SearchPacketForm.NoMatch", "没有匹配的封包");
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("SearchPacketForm", "查找封包"), "\r\n" + NoMatch + "\r\n\r\n")
+                            {
+                                Icon = TType.Info,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                CancelText = null,
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+
     }
 }

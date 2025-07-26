@@ -5700,7 +5700,7 @@ namespace WinsockPacketEditor
                 public static bool AutoRoll = false;
                 public static bool AutoClear = true;
                 public static decimal AutoClear_Value = 5000;
-                public static ProxyInfo piSelect = null;
+                public static ProxyInfo piSelect = null;                
 
                 public static BindingList<ProxyExecute> lstProxyExecute = new BindingList<ProxyExecute>();
                 public static BindingList<ProxyInfo> lstProxyInfo = new BindingList<ProxyInfo>();                
@@ -5779,6 +5779,53 @@ namespace WinsockPacketEditor
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         return new List<ProxyExecute>();
                     }
+                }
+
+                #endregion
+
+                #region//搜索代理列表
+
+                public static int SearchForProxyList(int fromIndex, ReadOnlySpan<byte> searchData)
+                {
+                    int iResult = -1;
+
+                    try
+                    {
+                        if (searchData.Length == 0 || fromIndex < 0)
+                        {
+                            return -1;
+                        }
+
+                        int listCount = ProxyConfig.List.lstProxyInfo.Count;
+                        if (listCount == 0 || fromIndex >= listCount)
+                        {
+                            return -1;
+                        }
+
+                        if (fromIndex == -1)
+                        {
+                            fromIndex = 0;
+                        }
+
+                        for (int i = fromIndex; i < listCount; i++)
+                        {
+                            byte[] packetBuffer = ProxyConfig.List.lstProxyInfo[i].PacketBuffer;
+                            if (packetBuffer != null && packetBuffer.Length >= searchData.Length)
+                            {
+                                ReadOnlySpan<byte> packetSpan = packetBuffer.AsSpan();
+                                if (packetSpan.IndexOf(searchData) != -1)
+                                {
+                                    return i;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return iResult;
                 }
 
                 #endregion
@@ -10257,7 +10304,6 @@ namespace WinsockPacketEditor
 
             public static class List
             {
-                public static bool DoSearch;
                 public static bool AutoRoll = false;
                 public static bool AutoClear = true;
                 public static decimal AutoClear_Value = 5000;
@@ -10308,7 +10354,7 @@ namespace WinsockPacketEditor
 
                 #region//搜索封包列表
 
-                public static int SearchForSocketList(int fromIndex, ReadOnlySpan<byte> searchData)
+                public static int SearchForPacketList(int fromIndex, ReadOnlySpan<byte> searchData)
                 {
                     int iResult = -1;
 
