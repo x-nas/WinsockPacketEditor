@@ -3749,16 +3749,18 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (pe?.TCP_Client?.Socket == null)
+                        if (pe == null || 
+                            pe.TCP_Client == null || 
+                            pe.TCP_Client.Socket == null || 
+                            pe.TCP_Client.Buffer == null)
                         {
-                            pe?.Dispose();
                             return;
                         }
 
                         var args = new SocketAsyncEventArgs();
                         args.SetBuffer(pe.TCP_Client.Buffer, 0, pe.TCP_Client.Buffer.Length);
                         args.UserToken = pe;
-                        args.Completed += ReceiveCompleted;
+                        args.Completed += ReceiveCompleted;                     
 
                         if (!pe.TCP_Client.Socket.ReceiveAsync(args))
                         {
@@ -3768,7 +3770,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe.TCP_Client.Close();
+                        pe?.TCP_Client.Close();
                     }
                 }
 
@@ -4134,7 +4136,7 @@ namespace WinsockPacketEditor
                                                     pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
                                                     ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
-                                                    ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
+                                                    ProxyConfig.Queue.ProxyExecute_ToQueue(pe);
                                                 }
                                                 catch (SocketException)
                                                 {
@@ -4156,7 +4158,7 @@ namespace WinsockPacketEditor
                                                     pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
                                                     ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
-                                                    ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
+                                                    ProxyConfig.Queue.ProxyExecute_ToQueue(pe);
                                                 }
                                                 catch (SocketException)
                                                 {
@@ -4182,7 +4184,7 @@ namespace WinsockPacketEditor
                                             ReadOnlySpan<byte> bServerUDP_Port = BitConverter.GetBytes(((IPEndPoint)pe.UDP_Relay.ClientUDP.Client.LocalEndPoint).Port);
 
                                             ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));
-                                            ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
+                                            ProxyConfig.Queue.ProxyExecute_ToQueue(pe);
                                         }
                                         catch (SocketException)
                                         {
@@ -5589,7 +5591,7 @@ namespace WinsockPacketEditor
 
                 #region//代理入队列
 
-                public static void ProxyTCP_ToQueue(ProxyExecute spc)
+                public static void ProxyExecute_ToQueue(ProxyExecute spc)
                 {
                     qProxyExecute.Enqueue(spc);
                 }
