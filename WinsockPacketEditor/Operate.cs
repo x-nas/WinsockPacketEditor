@@ -4223,20 +4223,20 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//请求数据（TCP）       
+                #region//处理 TCP 请求数据
 
-                private static void ForwardData(ProxyExecute pe, ReadOnlySpan<byte> bData)
+                private static void ForwardData(ProxyExecute pe, Span<byte> bData)
                 {
                     try
                     {
                         if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
-                        {
-                            bool enableProxyQueue = false;
+                        {                            
+                            bool requestHandled = false;
+
                             switch (pe.DomainType)
                             {
                                 case ProxyConfig.Proxy.DomainType.Http:
-
-                                    bool requestHandled = false;
+                                    
                                     string request = Encoding.ASCII.GetString(bData.ToArray());
 
                                     if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
@@ -4310,51 +4310,22 @@ namespace WinsockPacketEditor
                                             #endregion
                                         }
                                     }
-
-                                    if (!requestHandled)
-                                    {
-                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Server.Socket, bData);
-                                    }
-
-                                    enableProxyQueue = true;
-
+                                    
                                     break;
 
                                 case ProxyConfig.Proxy.DomainType.Https:
-
-                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Server.Socket, bData);
-                                    enableProxyQueue = true;
-
-                                    break;
-
                                 case ProxyConfig.Proxy.DomainType.Socket:
-
-                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Server.Socket, bData);
-                                    enableProxyQueue = true;
-
-                                    break;
-
                                 case ProxyConfig.Proxy.DomainType.External:
 
-                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Server.Socket, bData);
-                                    enableProxyQueue = true;
+                                    requestHandled = false;
 
                                     break;
                             }
 
-                            if (enableProxyQueue)
+                            if (!requestHandled)
                             {
-                                _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
-                                    DateTime.Now,
-                                    pe.TCP_Server.Socket.Handle.ToInt32(),
-                                    ProtocolType.Tcp,
-                                    ProxyConfig.Proxy.DataType.Request,                             
-                                    pe.TCP_Client.EndPoint,
-                                    pe.TCP_Server.EndPoint,
-                                    pe.TCP_Server.Address,
-                                    pe.DomainType,
-                                    bData.ToArray());
-                            }
+                                ProxyConfig.Proxy.DoFilter_TCP(pe, bData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.TCP);
+                            }                            
                         }
                     }
                     catch (Exception ex)
@@ -4366,9 +4337,9 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
+                #endregion                
 
-                #region//响应数据（TCP）
+                #region//处理 TCP 响应数据
 
                 private static void StartServerReceive(ProxyExecute pe)
                 {
@@ -4404,45 +4375,11 @@ namespace WinsockPacketEditor
                         }
 
                         int bytesRead = args.BytesTransferred;
-                        ReadOnlySpan<byte> receivedData = pe.TCP_Server.Buffer.AsSpan(0, bytesRead);
+                        Span<byte> bData = pe.TCP_Server.Buffer.AsSpan(0, bytesRead);
 
                         if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
                         {
-                            ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, receivedData);
-
-                            bool enableProxyQueue = false;
-                            switch (pe.DomainType)
-                            {
-                                case ProxyConfig.Proxy.DomainType.Http:
-                                    enableProxyQueue = true;
-                                    break;
-
-                                case ProxyConfig.Proxy.DomainType.Https:
-                                    enableProxyQueue = true;
-                                    break;
-
-                                case ProxyConfig.Proxy.DomainType.Socket:
-                                    enableProxyQueue = true;
-                                    break;
-
-                                case ProxyConfig.Proxy.DomainType.External:
-                                    enableProxyQueue = true;
-                                    break;
-                            }
-
-                            if (enableProxyQueue)
-                            {
-                                _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
-                                    DateTime.Now,
-                                    pe.TCP_Client.Socket.Handle.ToInt32(),                                    
-                                    ProtocolType.Tcp,
-                                    ProxyConfig.Proxy.DataType.Response,
-                                    pe.TCP_Client.EndPoint,                                    
-                                    pe.TCP_Server.EndPoint,
-                                    pe.TCP_Server.Address,
-                                    pe.DomainType,
-                                    receivedData.ToArray());
-                            }
+                            ProxyConfig.Proxy.DoFilter_TCP(pe, bData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.TCP);
                         }
 
                         ProxyConfig.Proxy.StartServerReceive(pe);
@@ -4470,7 +4407,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//UDP 中继
+                #region//处理 UDP 中继数据
 
                 private static void StartUdpReceive(ProxyExecute pe)
                 {
@@ -4501,101 +4438,83 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        bool enableProxyQueue = true;
-                        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                        byte[] receivedData = ProxyConfig.Proxy.ReceiveUDPData(pe.UDP_Relay.ClientUDP, ar, ref remoteEndPoint);
-                        ReadOnlySpan<byte> bData = receivedData.AsSpan();
-                        if (!bData.IsEmpty && !remoteEndPoint.Address.Equals(IPAddress.Any) && remoteEndPoint.Port != 0)
+                        IPEndPoint epRemote = new IPEndPoint(IPAddress.Any, 0);
+
+                        byte[] bReceivedData = ProxyConfig.Proxy.ReceiveUDPData(pe.UDP_Relay.ClientUDP, ar, ref epRemote);
+                        if (bReceivedData.Length == 0 || epRemote.Address.Equals(IPAddress.Any) || epRemote.Port == 0)
                         {
-                            if (bData[0] == 0 && bData[1] == 0 && bData[2] == 0)
-                            {
-                                ProxyConfig.Proxy.AddressType addressType = (ProxyConfig.Proxy.AddressType)bData[3];
-
-                                if (addressType == ProxyConfig.Proxy.AddressType.IPv4 ||
-                                    addressType == ProxyConfig.Proxy.AddressType.IPv6 ||
-                                    addressType == ProxyConfig.Proxy.AddressType.Domain)
-                                {
-                                    pe.UDP_Relay.ClientUDP_EndPoint = remoteEndPoint;
-
-                                    ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
-                                    IPEndPoint targetEndPoint = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
-                                    if (targetEndPoint != null)
-                                    {
-                                        ReadOnlySpan<byte> bRequestData = ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
-                                        if (!bRequestData.IsEmpty)
-                                        {
-                                            pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
-
-                                            Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bRequestData.Length);
-                                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
-
-                                            ProxyConfig.Proxy.SendUDPData(pe.UDP_Relay.ClientUDP, bRequestData, targetEndPoint);
-
-                                            if (enableProxyQueue)
-                                            {
-                                                _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
-                                                    DateTime.Now,
-                                                    pe.UDP_Relay.ClientUDP.Client.Handle.ToInt32(),
-                                                    ProtocolType.Udp,
-                                                    ProxyConfig.Proxy.DataType.Request,
-                                                    pe.UDP_Relay.ClientUDP_EndPoint,
-                                                    targetEndPoint,
-                                                    string.Empty,
-                                                    DomainType.External,
-                                                    bRequestData.ToArray());
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (pe.UDP_Relay.ClientUDP_EndPoint == null)
-                                {
-                                    return;
-                                }
-
-                                ReadOnlySpan<byte> bIP = pe.UDP_Relay.ClientUDP_EndPoint.Address.GetAddressBytes();
-                                ushort port = ((ushort)pe.UDP_Relay.ClientUDP_EndPoint.Port);
-                                ReadOnlySpan<byte> bPort = new byte[2] { (byte)(port >> 8), (byte)port };
-
-                                Span<byte> bResponseData = stackalloc byte[4 + bIP.Length + bPort.Length + bData.Length];
-                                bResponseData[0] = 0x00;
-                                bResponseData[1] = 0x00;
-                                bResponseData[2] = 0x00;
-                                bResponseData[3] = (byte)ProxyConfig.Proxy.AddressType.IPv4;
-                                bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
-                                bPort.CopyTo(bResponseData.Slice(8, bPort.Length));
-                                bData.CopyTo(bResponseData.Slice(10, bData.Length));
-
-                                if (!bResponseData.IsEmpty)
-                                {
-                                    pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
-
-                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bResponseData.Length);
-                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
-
-                                    ProxyConfig.Proxy.SendUDPData(pe.UDP_Relay.ClientUDP, bResponseData, pe.UDP_Relay.ClientUDP_EndPoint);
-
-                                    if (enableProxyQueue)
-                                    {
-                                        _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
-                                            DateTime.Now,
-                                            pe.UDP_Relay.ClientUDP.Client.Handle.ToInt32(),
-                                            ProtocolType.Udp,
-                                            ProxyConfig.Proxy.DataType.Response,
-                                            pe.UDP_Relay.ClientUDP_EndPoint,
-                                            remoteEndPoint,
-                                            string.Empty,
-                                            DomainType.External,
-                                            bResponseData.ToArray());
-                                    }
-                                }
-                            }
-
-                            ProxyConfig.Proxy.ProxyUDP_CNT++;
-                            ProxyConfig.Proxy.StartUdpReceive(pe);
+                            return;
                         }
+
+                        Span<byte> bData = bReceivedData.AsSpan();
+                        if (bData[0] == 0 && bData[1] == 0 && bData[2] == 0)
+                        {
+                            #region//处理 UDP 请求数据
+
+                            ProxyConfig.Proxy.AddressType addressType = (ProxyConfig.Proxy.AddressType)bData[3];
+
+                            if (addressType == ProxyConfig.Proxy.AddressType.IPv4 ||
+                                addressType == ProxyConfig.Proxy.AddressType.IPv6 ||
+                                addressType == ProxyConfig.Proxy.AddressType.Domain)
+                            {
+                                pe.UDP_Relay.ClientUDP_EndPoint = epRemote;
+
+                                ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
+                                IPEndPoint targetEndPoint = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
+                                if (targetEndPoint != null)
+                                {
+                                    Span<byte> bRequestData = ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
+                                    if (!bRequestData.IsEmpty)
+                                    {
+                                        pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
+
+                                        Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bRequestData.Length);
+                                        Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
+
+                                        ProxyConfig.Proxy.DoFilter_UDP(pe, targetEndPoint, bRequestData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.UDP);
+                                    }
+                                }
+                            }
+
+                            #endregion
+                        }
+                        else
+                        {
+                            #region//处理 UDP 响应数据
+
+                            if (pe.UDP_Relay.ClientUDP_EndPoint == null)
+                            {
+                                return;
+                            }
+
+                            ReadOnlySpan<byte> bIP = pe.UDP_Relay.ClientUDP_EndPoint.Address.GetAddressBytes();
+                            ushort port = ((ushort)pe.UDP_Relay.ClientUDP_EndPoint.Port);
+                            ReadOnlySpan<byte> bPort = new byte[2] { (byte)(port >> 8), (byte)port };
+
+                            Span<byte> bResponseData = stackalloc byte[4 + bIP.Length + bPort.Length + bData.Length];
+                            bResponseData[0] = 0x00;
+                            bResponseData[1] = 0x00;
+                            bResponseData[2] = 0x00;
+                            bResponseData[3] = (byte)ProxyConfig.Proxy.AddressType.IPv4;
+                            bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
+                            bPort.CopyTo(bResponseData.Slice(8, bPort.Length));
+                            bData.CopyTo(bResponseData.Slice(10, bData.Length));
+
+                            if (!bResponseData.IsEmpty)
+                            {
+                                pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
+
+                                Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bResponseData.Length);
+                                Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
+
+                                ProxyConfig.Proxy.DoFilter_UDP(pe, epRemote, bResponseData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.UDP);
+                            }
+
+                            #endregion
+                        }
+
+                        ProxyConfig.Proxy.ProxyUDP_CNT++;
+                        ProxyConfig.Proxy.StartUdpReceive(pe);                        
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
@@ -4610,7 +4529,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//发送 TCP 代理数据
+                #region//发送和接收代理数据
 
                 public static int SendTCPData(Socket socket, ReadOnlySpan<byte> bData)
                 {
@@ -4631,10 +4550,6 @@ namespace WinsockPacketEditor
                     return iReturn;
                 }
 
-                #endregion
-
-                #region//发送 UDP 代理数据
-
                 public static int SendUDPData(UdpClient ClientUDP, ReadOnlySpan<byte> bData, IPEndPoint ep)
                 {
                     int iReturn = 0;
@@ -4654,10 +4569,6 @@ namespace WinsockPacketEditor
                     return iReturn;
                 }
 
-                #endregion
-
-                #region//接收 UDP 代理数据
-
                 public static byte[] ReceiveUDPData(UdpClient ClientUDP, IAsyncResult ar, ref IPEndPoint ep)
                 {
                     try
@@ -4673,6 +4584,128 @@ namespace WinsockPacketEditor
                     }
 
                     return Array.Empty<byte>();
+                }
+
+                #endregion
+
+                #region//执行滤镜 - 代理模式
+
+                public static void DoFilter_TCP(ProxyExecute pe, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
+                {
+                    try
+                    {
+                        Int32 res = 0;
+                        Socket SendSocket = null;
+                        byte[] bRawBuffer = bData.ToArray();
+                        byte[] bNewBuffer = null;
+
+                        switch (dtType)
+                        {
+                            case ProxyConfig.Proxy.DataType.Request:
+
+                                SendSocket = pe.TCP_Server.Socket;
+
+                                break;
+
+                            case ProxyConfig.Proxy.DataType.Response:
+
+                                SendSocket = pe.TCP_Client.Socket;
+
+                                break;
+                        }
+
+                        int iSocket = SendSocket.Handle.ToInt32();
+
+                        Operate.FilterConfig.Filter.FilterAction FilterAction =
+                            Operate.FilterConfig.List.DoFilterList(
+                                iSocket,
+                                bData,
+                                out bNewBuffer,
+                                ptType,
+                                new Operate.PacketConfig.Packet.SockAddr());
+
+                        if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
+                        {
+                            res = ProxyConfig.Proxy.SendTCPData(SendSocket, bNewBuffer);
+                        }
+
+                        _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            FilterAction,
+                            res,
+                            iSocket,
+                            ptType,
+                            dtType,
+                            pe.TCP_Client.EndPoint,
+                            pe.TCP_Server.EndPoint,
+                            pe.TCP_Server.Address,
+                            pe.DomainType,
+                            bRawBuffer,
+                            bNewBuffer);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                public static void DoFilter_UDP(ProxyExecute pe, IPEndPoint epRemote, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
+                {
+                    try
+                    {
+                        Int32 res = 0;
+                        byte[] bRawBuffer = bData.ToArray();
+                        byte[] bNewBuffer = null;
+
+                        IPEndPoint epSend = null;
+                        switch (dtType)
+                        {
+                            case ProxyConfig.Proxy.DataType.Request:
+
+                                epSend = epRemote;
+
+                                break;
+
+                            case ProxyConfig.Proxy.DataType.Response:
+
+                                epSend = pe.UDP_Relay.ClientUDP_EndPoint;
+
+                                break;
+                        }
+
+                        int iSocket = pe.UDP_Relay.ClientUDP.Client.Handle.ToInt32();
+
+                        Operate.FilterConfig.Filter.FilterAction FilterAction =
+                            Operate.FilterConfig.List.DoFilterList(
+                                iSocket,
+                                bData,
+                                out bNewBuffer,
+                                ptType,
+                                new Operate.PacketConfig.Packet.SockAddr());
+
+                        if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
+                        {
+                            res = ProxyConfig.Proxy.SendUDPData(pe.UDP_Relay.ClientUDP, bNewBuffer, epSend);
+                        }
+
+                        _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            FilterAction,
+                            res,
+                            iSocket,
+                            ptType,
+                            dtType,
+                            pe.UDP_Relay.ClientUDP_EndPoint,
+                            epRemote,
+                            string.Empty,
+                            DomainType.External,
+                            bRawBuffer,
+                            bNewBuffer);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
                 }
 
                 #endregion
@@ -5409,37 +5442,37 @@ namespace WinsockPacketEditor
 
                 #region//获取UDP数据包
 
-                public static ReadOnlySpan<byte> GetUDPData_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData)
+                public static Span<byte> GetUDPData_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, Span<byte> bData)
                 {
                     try
                     {
                         switch (addressType)
                         {
                             case Operate.ProxyConfig.Proxy.AddressType.IPv4:
-                                return bData.Length >= 10 ? bData.Slice(10) : ReadOnlySpan<byte>.Empty;
+                                return bData.Length >= 10 ? bData.Slice(10) : Span<byte>.Empty;
 
                             case Operate.ProxyConfig.Proxy.AddressType.Domain:
 
                                 if (bData.Length < 5)
                                 {
-                                    return ReadOnlySpan<byte>.Empty;
+                                    return Span<byte>.Empty;
                                 }
 
                                 byte domainLength = bData[4];
                                 int domainStart = 5 + domainLength + 2;
-                                return bData.Length >= domainStart ? bData.Slice(domainStart) : ReadOnlySpan<byte>.Empty;
+                                return bData.Length >= domainStart ? bData.Slice(domainStart) : Span<byte>.Empty;
 
                             case Operate.ProxyConfig.Proxy.AddressType.IPv6:
-                                return bData.Length >= 22 ? bData.Slice(22) : ReadOnlySpan<byte>.Empty;
+                                return bData.Length >= 22 ? bData.Slice(22) : Span<byte>.Empty;
 
                             default:
-                                return ReadOnlySpan<byte>.Empty;
+                                return Span<byte>.Empty;
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        return ReadOnlySpan<byte>.Empty;
+                        return Span<byte>.Empty;
                     }
                 }
 
@@ -5602,16 +5635,24 @@ namespace WinsockPacketEditor
 
                 public static Task ProxyInfo_ToQueue(
                     DateTime dtNow,
+                    Operate.FilterConfig.Filter.FilterAction filterAction,
+                    int res,
                     int PacketSocket,
-                    ProtocolType ProtocolType,
+                    Operate.PacketConfig.Packet.PacketType PacketType,
                     ProxyConfig.Proxy.DataType DataType,
                     IPEndPoint ClientIP,
                     IPEndPoint ServerIP,
                     string ServerDomain,
                     ProxyConfig.Proxy.DomainType DomainType,
-                    byte[] bData                   
-                    )
+                    byte[] bRawBuffer,
+                    byte[] bBuffer)
                 {
+                    if (filterAction == Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay)
+                        return Task.CompletedTask;
+
+                    if (filterAction != Operate.FilterConfig.Filter.FilterAction.Intercept && res <= 0)
+                        return Task.CompletedTask;
+
                     return Task.Run(() =>
                     {
                         try
@@ -5619,13 +5660,13 @@ namespace WinsockPacketEditor
                             switch (DataType)
                             {
                                 case ProxyConfig.Proxy.DataType.Request:
-                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bData.Length);
-                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bData.Length);
+                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bBuffer.Length);
+                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bBuffer.Length);
                                     break;
 
                                 case ProxyConfig.Proxy.DataType.Response:
-                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bData.Length);
-                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bData.Length);
+                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
+                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
                                     break;
                             }
 
@@ -5636,14 +5677,16 @@ namespace WinsockPacketEditor
                                 ProxyInfo pi = new ProxyInfo(
                                     dtNow,
                                     PacketSocket,
-                                    ProtocolType,
+                                    PacketType,
                                     DataType,
                                     ClientIP,
                                     ServerIP,
                                     ServerDomain,
                                     DomainType,
-                                    bData.ToArray(),
-                                    bData.Length);
+                                    bRawBuffer,
+                                    bBuffer,
+                                    bBuffer.Length,
+                                    filterAction);
 
                                 qProxyInfo.Enqueue(pi);
                             }
@@ -9201,6 +9244,8 @@ namespace WinsockPacketEditor
                     WSARecv = 10,
                     WSARecvEx = 11,
                     WSARecvFrom = 12,
+                    TCP = 13,
+                    UDP = 14,
                 }
 
                 public enum IPType

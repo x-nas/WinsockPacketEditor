@@ -180,7 +180,7 @@ namespace WinsockPacketEditor
                         return ((DateTime)value).ToString("HH:mm:ss:fffffff");
                     },
                 }.SetLocalizationTitleID("Table.ProxyList.Column."),                
-                new AntdUI.Column("ProtocolType", "类别", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -201,7 +201,12 @@ namespace WinsockPacketEditor
                     Render = (value, record, rowindex)=>
                     {
                         IPEndPoint serverIP = value as IPEndPoint;
-                        return serverIP.Address.ToString() + ":" + serverIP.Port.ToString();
+                        if(serverIP != null)
+                        {
+                            return serverIP.Address.ToString() + ":" + serverIP.Port.ToString();
+                        }
+
+                        return null;
                     },
                 }.SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),

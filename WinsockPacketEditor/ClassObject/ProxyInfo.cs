@@ -40,17 +40,17 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//协议类型
+        #region//封包类型
 
-        System.Net.Sockets.ProtocolType _ProtocolType;
+        Operate.PacketConfig.Packet.PacketType _PacketType;
 
-        public System.Net.Sockets.ProtocolType ProtocolType
+        public Operate.PacketConfig.Packet.PacketType PacketType
         {
-            get => _ProtocolType;
+            get => _PacketType;
             set
             {
-                if (_ProtocolType == value) return;
-                _ProtocolType = value;
+                if (_PacketType == value) return;
+                _PacketType = value;
                 OnPropertyChanged();
             }
         }
@@ -142,6 +142,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//原始封包数据（字节）
+
+        byte[] _RawBuffer;
+
+        public byte[] RawBuffer
+        {
+            get => _RawBuffer;
+            set
+            {
+                if (_RawBuffer == value) return;
+                _RawBuffer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//封包数据（字节）
 
         byte[] _PacketBuffer;
@@ -193,30 +210,51 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//过滤动作
+
+        Operate.FilterConfig.Filter.FilterAction _FilterAction;
+
+        public Operate.FilterConfig.Filter.FilterAction FilterAction
+        {
+            get => _FilterAction;
+            set
+            {
+                if (_FilterAction == value) return;
+                _FilterAction = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//ProxyInfo
 
         public ProxyInfo(
             DateTime ProxyTime,
             int PacketSocket,
-            System.Net.Sockets.ProtocolType ProtocolType,
+            Operate.PacketConfig.Packet.PacketType PacketType,
             Operate.ProxyConfig.Proxy.DataType DataType,        
             IPEndPoint ClientIP,        
             IPEndPoint ServerIP,
             string ServerDomain, 
             Operate.ProxyConfig.Proxy.DomainType DomainType,
+            byte[] pRawBuffer,
             byte[] pBuffer,
-            int pLen)
+            int pLen,
+            Operate.FilterConfig.Filter.FilterAction pAction)
         {          
             this._ProxyTime = ProxyTime;
             this._PacketSocket = PacketSocket;
-            this._ProtocolType = ProtocolType;
+            this._PacketType = PacketType;
             this._DataType = DataType;
             this._ClientIP = ClientIP;
             this._ServerIP = ServerIP;
             this._ServerDomain = ServerDomain;
             this._DomainType = DomainType;
+            this._RawBuffer = pRawBuffer;
             this._PacketBuffer = pBuffer;
             this._PacketLen = pLen;
+            this._FilterAction = pAction;
         }
 
         #endregion
