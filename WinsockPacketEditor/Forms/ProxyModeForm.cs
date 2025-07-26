@@ -780,7 +780,8 @@ namespace WinsockPacketEditor
         {
             try
             {
-                foreach (ProxyExecute pe in Operate.ProxyConfig.List.lstProxyExecute.ToList())
+                var proxyListCopy = Operate.ProxyConfig.List.lstProxyExecute.ToList();
+                foreach (ProxyExecute pe in proxyListCopy)
                 {
                     if (pe.TCP_Client.Socket == null)
                     {
@@ -798,10 +799,15 @@ namespace WinsockPacketEditor
                             }
 
                             Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
+                            pe.Dispose();
                         }
                         else
                         {
                             string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
+                            if (string.IsNullOrEmpty(sRootName))
+                            {
+                                return;
+                            }
 
                             TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, sRootName);
                             if (tiRoot == null)
@@ -813,8 +819,7 @@ namespace WinsockPacketEditor
                             if (tiChild != null)
                             {
                                 tiRoot.Sub.Remove(tiChild);                                
-                            }
-                            Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
+                            }                            
 
                             if (tiRoot.Sub.Count == 0)
                             {
@@ -826,6 +831,9 @@ namespace WinsockPacketEditor
                                     Operate.ProxyConfig.Account.SetOnline_ByAccountID(pe.AID, false);
                                 }
                             }
+
+                            Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
+                            pe.Dispose();
                         }
 
                         #endregion
@@ -901,7 +909,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                foreach (AuthInfo ai in Operate.ProxyConfig.Account.lstAuthInfo.ToList())
+                foreach (AuthInfo ai in Operate.ProxyConfig.Account.lstAuthInfo)
                 {
                     string ClientIP = ai.AuthIP.ToString();
                     ai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, ClientIP, this.treeClientList);

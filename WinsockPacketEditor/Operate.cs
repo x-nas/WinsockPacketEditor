@@ -566,23 +566,45 @@ namespace WinsockPacketEditor
 
             public static TreeItem FindNodeByName(AntdUI.Tree tree, string name)
             {
-                return FindNodeByName(tree.Items, name);
+                try
+                {
+                    return FindNodeByName(tree.Items, name);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+                
+                return null;
             }
 
             public static TreeItem FindNodeByName(TreeItemCollection items, string name)
             {
-                if (items == null || items.Count == 0) return null;
-
-                foreach (var item in items)
+                try
                 {
-                    if (item.Name == name || item.Text == name)
+                    if (items == null || items.Count == 0)
                     {
-                        return item;
-                    }
+                        return null;
+                    } 
 
-                    var found = FindNodeByName(item.Sub, name);
-                    if (found != null) return found;
+                    foreach (var item in items)
+                    {
+                        if (item.Name == name || item.Text == name)
+                        {
+                            return item;
+                        }
+
+                        var found = FindNodeByName(item.Sub, name);
+                        if (found != null)
+                        {
+                            return found;
+                        } 
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                
 
                 return null;
             }
@@ -4677,7 +4699,16 @@ namespace WinsockPacketEditor
 
                 public static string GetClientListName(string ClientIP, string ClientUserName)
                 {
-                    return string.Format("{0} [{1}]", ClientIP, ClientUserName);
+                    try
+                    {
+                        return string.Format("{0} [{1}]", ClientIP, ClientUserName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return string.Empty;
                 }
 
                 #endregion                
