@@ -33,6 +33,8 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//TCPClient
+
         public class TCPClient : IDisposable
         {
             private volatile bool _isDisposed;
@@ -102,6 +104,10 @@ namespace WinsockPacketEditor
             public void Dispose() => Close();
         }
 
+        #endregion
+
+        #region//TCPServer
+
         public class TCPServer : IDisposable
         {
             private volatile bool _isDisposed;
@@ -167,6 +173,10 @@ namespace WinsockPacketEditor
             public void Dispose() => Close();
         }
 
+        #endregion
+
+        #region//UDPRelay
+
         public class UDPRelay
         {
             public UdpClient ClientUDP { get; set; }
@@ -197,6 +207,8 @@ namespace WinsockPacketEditor
                 }
             }
         }
+
+        #endregion
 
         #region //IDisposable
 

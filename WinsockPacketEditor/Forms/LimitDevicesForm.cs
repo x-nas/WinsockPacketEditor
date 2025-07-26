@@ -55,6 +55,8 @@ namespace WinsockPacketEditor
                     {
                         LocalizationText = "ProxyMode.Adjust.Success"
                     });
+
+                    Operate.ProxyConfig.Account.NeedSave = true;
                 }
             }
             catch (Exception ex)

@@ -252,7 +252,7 @@ namespace WinsockPacketEditor
                 {
                     LocalizationText = "AccountEditForm.Success"
                 });
-
+                
                 this.pmForm.RefreshAccountList();
             }
             catch (Exception ex)

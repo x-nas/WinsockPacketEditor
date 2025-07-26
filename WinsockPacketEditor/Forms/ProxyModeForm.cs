@@ -14,7 +14,7 @@ using System.Windows.Forms;
 namespace WinsockPacketEditor
 {
     public partial class ProxyModeForm : Window, InterfaceInfo.IProxyMode
-    {
+    {  
         private bool setcolor = false;
         private static Socket ProxyServer;
         private BindingList<AccountInfo> lstAccount;
@@ -81,10 +81,15 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Proxy.StopSystemProxy(this);
             }
 
+            if (Operate.ProxyConfig.Account.NeedSave)
+            {
+                Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
+            }
+
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
             //Operate.SystemConfig.SaveSystemList_ToDB();            
-            Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
+            
             Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB(this.RunMode);
             Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB(this.RunMode);
             Operate.SystemConfig.StopRemoteMGT(this.RunMode);
@@ -137,6 +142,7 @@ namespace WinsockPacketEditor
 
         public void RefreshAccountList()
         {
+            Operate.ProxyConfig.Account.NeedSave = true;
             this.tAccountList.Binding(GetPageData(this.pAccountList.Current, this.pAccountList.PageSize));
         }
 
@@ -172,7 +178,7 @@ namespace WinsockPacketEditor
                     {
                         return ((DateTime)value).ToString("HH:mm:ss:fffffff");
                     },
-                }.SetLocalizationTitleID("Table.ProxyList.Column."),
+                }.SetLocalizationTitleID("Table.ProxyList.Column."),                
                 new AntdUI.Column("ProtocolType", "类别", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -180,7 +186,8 @@ namespace WinsockPacketEditor
                         return value.ToString().ToUpper();
                     },
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("ClientIP", "客户端IP")
+                new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("ClientIP", "客户端地址")
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -188,7 +195,7 @@ namespace WinsockPacketEditor
                         return clientIP.Address.ToString() + ":" + clientIP.Port.ToString();
                     },
                 }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ServerIP", "服务端IP")
+                new AntdUI.Column("ServerIP", "服务端地址")
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -662,6 +669,12 @@ namespace WinsockPacketEditor
                 this.bgwClientList.RunWorkerAsync();
             }
 
+            if (Operate.ProxyConfig.Account.NeedSave && !this.bgwAccountList.IsBusy)
+            {
+                Operate.ProxyConfig.Account.NeedSave = false;
+                this.bgwAccountList.RunWorkerAsync();                
+            }
+
             this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
             this.mProxyMode.Items[1].Badge = this.treeClientList.Items.Count().ToString();
             this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
@@ -783,6 +796,13 @@ namespace WinsockPacketEditor
                 var proxyListCopy = Operate.ProxyConfig.List.lstProxyExecute.ToList();
                 foreach (ProxyExecute pe in proxyListCopy)
                 {
+                    if (pe == null || pe.TCP_Client == null)
+                    {
+                        Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
+                        pe?.Dispose();
+                        return;
+                    }
+
                     if (pe.TCP_Client.Socket == null)
                     {
                         #region//移除关闭的客户端链接
@@ -799,7 +819,7 @@ namespace WinsockPacketEditor
                             }
 
                             Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
-                            pe.Dispose();
+                            pe?.Dispose();
                         }
                         else
                         {
@@ -833,7 +853,7 @@ namespace WinsockPacketEditor
                             }
 
                             Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
-                            pe.Dispose();
+                            pe?.Dispose();
                         }
 
                         #endregion
@@ -920,6 +940,15 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//保存账号列表（异步）
+
+        private void bgwAccountList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
         }
 
         #endregion
@@ -1584,6 +1613,6 @@ namespace WinsockPacketEditor
             
         }
 
-        #endregion
+        #endregion        
     }
 }

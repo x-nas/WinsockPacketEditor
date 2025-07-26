@@ -90,8 +90,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AntdUI, Version=2.0.13.0, Culture=neutral, PublicKeyToken=0e24e5118ea3d6af, processorArchitecture=MSIL">
-      <HintPath>..\packages\AntdUI.2.0.13\lib\net48\AntdUI.dll</HintPath>
+    <Reference Include="AntdUI, Version=2.0.14.0, Culture=neutral, PublicKeyToken=0e24e5118ea3d6af, processorArchitecture=MSIL">
+      <HintPath>..\packages\AntdUI.2.0.14\lib\net48\AntdUI.dll</HintPath>
     </Reference>
     <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>

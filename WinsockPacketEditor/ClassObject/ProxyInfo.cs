@@ -23,6 +23,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//套接字
+
+        int _PacketSocket;
+
+        public int PacketSocket
+        {
+            get => _PacketSocket;
+            set
+            {
+                if (_PacketSocket == value) return;
+                _PacketSocket = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//协议类型
 
         System.Net.Sockets.ProtocolType _ProtocolType;
@@ -55,7 +72,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
+        #endregion                
 
         #region//客户端IP地址
 
@@ -72,7 +89,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
+        #endregion        
 
         #region//服务端IP地址
 
@@ -180,9 +197,10 @@ namespace WinsockPacketEditor
 
         public ProxyInfo(
             DateTime ProxyTime,
-             System.Net.Sockets.ProtocolType ProtocolType,
-            Operate.ProxyConfig.Proxy.DataType DataType,
-            IPEndPoint ClientIP,
+            int PacketSocket,
+            System.Net.Sockets.ProtocolType ProtocolType,
+            Operate.ProxyConfig.Proxy.DataType DataType,        
+            IPEndPoint ClientIP,        
             IPEndPoint ServerIP,
             string ServerDomain, 
             Operate.ProxyConfig.Proxy.DomainType DomainType,
@@ -190,6 +208,7 @@ namespace WinsockPacketEditor
             int pLen)
         {          
             this._ProxyTime = ProxyTime;
+            this._PacketSocket = PacketSocket;
             this._ProtocolType = ProtocolType;
             this._DataType = DataType;
             this._ClientIP = ClientIP;

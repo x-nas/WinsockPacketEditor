@@ -53,6 +53,8 @@ namespace WinsockPacketEditor
                     {
                         LocalizationText = "ExpiryTimeForm.Success"
                     });
+
+                    Operate.ProxyConfig.Account.NeedSave = true;
                 }                
             }
             catch (Exception ex)

@@ -3638,6 +3638,7 @@ namespace WinsockPacketEditor
                 public static string ExternalProxy_IP = "127.0.0.1";
                 public static ushort ExternalProxy_Port = 8889;
                 public static string ExternalProxy_AppointPort = "80,8080,443,8443", ExternalProxy_UserName, ExternalProxy_PassWord;
+                public static int SocketBufferSize = 8192;
                 public static ushort ProxyPort = 1080;
                 public static int UDPCloseTime = 60;
                 public static long Total_Request = 0;
@@ -3734,7 +3735,7 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        pe = new ProxyExecute(clientSocket, clientSocket.ReceiveBufferSize);
+                        pe = new ProxyExecute(clientSocket, ProxyConfig.Proxy.SocketBufferSize);
                         ProxyConfig.Proxy.StartReceive(pe);
                     }
                     catch (Exception ex)
@@ -4343,8 +4344,9 @@ namespace WinsockPacketEditor
                             {
                                 _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
                                     DateTime.Now,
+                                    pe.TCP_Server.Socket.Handle.ToInt32(),
                                     ProtocolType.Tcp,
-                                    ProxyConfig.Proxy.DataType.Request,
+                                    ProxyConfig.Proxy.DataType.Request,                             
                                     pe.TCP_Client.EndPoint,
                                     pe.TCP_Server.EndPoint,
                                     pe.TCP_Server.Address,
@@ -4430,9 +4432,10 @@ namespace WinsockPacketEditor
                             {
                                 _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
                                     DateTime.Now,
+                                    pe.TCP_Client.Socket.Handle.ToInt32(),                                    
                                     ProtocolType.Tcp,
                                     ProxyConfig.Proxy.DataType.Response,
-                                    pe.TCP_Client.EndPoint,
+                                    pe.TCP_Client.EndPoint,                                    
                                     pe.TCP_Server.EndPoint,
                                     pe.TCP_Server.Address,
                                     pe.DomainType,
@@ -4530,6 +4533,7 @@ namespace WinsockPacketEditor
                                             {
                                                 _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
                                                     DateTime.Now,
+                                                    pe.UDP_Relay.ClientUDP.Client.Handle.ToInt32(),
                                                     ProtocolType.Udp,
                                                     ProxyConfig.Proxy.DataType.Request,
                                                     pe.UDP_Relay.ClientUDP_EndPoint,
@@ -4575,6 +4579,7 @@ namespace WinsockPacketEditor
                                     {
                                         _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
                                             DateTime.Now,
+                                            pe.UDP_Relay.ClientUDP.Client.Handle.ToInt32(),
                                             ProtocolType.Udp,
                                             ProxyConfig.Proxy.DataType.Response,
                                             pe.UDP_Relay.ClientUDP_EndPoint,
@@ -5595,6 +5600,7 @@ namespace WinsockPacketEditor
 
                 public static Task ProxyInfo_ToQueue(
                     DateTime dtNow,
+                    int PacketSocket,
                     ProtocolType ProtocolType,
                     ProxyConfig.Proxy.DataType DataType,
                     IPEndPoint ClientIP,
@@ -5627,6 +5633,7 @@ namespace WinsockPacketEditor
                             {
                                 ProxyInfo pi = new ProxyInfo(
                                     dtNow,
+                                    PacketSocket,
                                     ProtocolType,
                                     DataType,
                                     ClientIP,
@@ -5857,6 +5864,7 @@ namespace WinsockPacketEditor
 
             public static class Account
             {
+                public static bool NeedSave = false;
                 public static bool IsShow_ProxyAccount = false, IsShow_ProxyAuth = false;                
                 public static string CCProxy_HTML = string.Empty;
 
