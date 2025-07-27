@@ -12,7 +12,7 @@ namespace WinsockPacketEditor
 {
     public partial class FilterEditForm : Form
     {
-        private InjectModeForm imForm;
+        private Form form;
         private FilterInfo fiSelect;
         private DataTable dtFilterNormal = new DataTable();
         private DataTable dtFilterAdvanced_Search = new DataTable();
@@ -21,7 +21,7 @@ namespace WinsockPacketEditor
 
         #region//初始化
 
-        public FilterEditForm(InjectModeForm form, FilterInfo fi)
+        public FilterEditForm(Form form, FilterInfo fi)
         {
             InitializeComponent();            
 
@@ -35,7 +35,7 @@ namespace WinsockPacketEditor
             else
             {
                 this.fiSelect = fi;
-                this.imForm = form;
+                this.form = form;
             }  
         }        
 
@@ -44,9 +44,10 @@ namespace WinsockPacketEditor
             try
             {
                 this.Text = AntdUI.Localization.Get("FilterEditForm", "编辑滤镜");
-
+                
                 this.tabFilterEdit.TabMenuVisible = false;
                 this.tabFilterFrom.TabMenuVisible = false;
+                this.tabFilterFunction.TabMenuVisible = false;
                 this.InitTable_FilterNormal();
                 this.InitTable_FilterAdvanced_Search();
                 this.InitTable_FilterAdvanced_Modify_Head();
@@ -102,6 +103,21 @@ namespace WinsockPacketEditor
                 }
                 this.FilterModifyFromChange();
 
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Process:
+
+                        this.tabFilterFunction.SelectTab("tpInjectMode");
+
+                        break;
+
+                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                        this.tabFilterFunction.SelectTab("tpProxyMode");
+
+                        break;
+                }
+
                 this.cbFilterAction_Execute.Checked = fiSelect.IsExecute;
                 this.FilterAction_ExecuteChange();
 
@@ -152,6 +168,10 @@ namespace WinsockPacketEditor
                 this.cbFilterFunction_WSASendTo.Checked = fiSelect.FFunction.WSASendTo;
                 this.cbFilterFunction_WSARecv.Checked = fiSelect.FFunction.WSARecv;
                 this.cbFilterFunction_WSARecvFrom.Checked = fiSelect.FFunction.WSARecvFrom;
+                this.cbFilterFunction_TCP_Req.Checked = fiSelect.FFunction.TCP_Req;
+                this.cbFilterFunction_TCP_Resp.Checked = fiSelect.FFunction.TCP_Resp;
+                this.cbFilterFunction_UDP_Req.Checked = fiSelect.FFunction.UDP_Req;
+                this.cbFilterFunction_UDP_Resp.Checked = fiSelect.FFunction.UDP_Resp;
             }
             catch (Exception ex)
             {
@@ -1575,6 +1595,10 @@ namespace WinsockPacketEditor
                 FilterFunction_New.WSASendTo = this.cbFilterFunction_WSASendTo.Checked;
                 FilterFunction_New.WSARecv = this.cbFilterFunction_WSARecv.Checked;
                 FilterFunction_New.WSARecvFrom = this.cbFilterFunction_WSARecvFrom.Checked;
+                FilterFunction_New.TCP_Req = this.cbFilterFunction_TCP_Req.Checked;
+                FilterFunction_New.UDP_Req = this.cbFilterFunction_UDP_Req.Checked;
+                FilterFunction_New.TCP_Resp = this.cbFilterFunction_TCP_Resp.Checked;
+                FilterFunction_New.UDP_Resp = this.cbFilterFunction_UDP_Resp.Checked;
 
                 if (rbFilterModifyFrom_Head.Checked)
                 {
@@ -1715,10 +1739,24 @@ namespace WinsockPacketEditor
                     sProgression_New,
                     iProgressionCount_New,
                     sSearch_New,
-                    sModify_New);
+                    sModify_New);                
+
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Process:
+
+                        ((InterfaceInfo.IInjectMode)form).RefreshFilterList();
+
+                        break;
+
+                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                        ((InterfaceInfo.IProxyMode)form).RefreshFilterList();
+
+                        break;
+                }
 
                 this.Close();
-                this.imForm.RefreshFilterList();
             }
             catch (Exception ex)
             {

@@ -3,22 +3,24 @@ using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using WinsockPacketEditor;
 
 namespace WinsockPacketEditor
 {
     public partial class PacketModificationForm : Form
     {
-        private InjectModeForm imForm;
-        private readonly PacketInfo piSelect;
+        private string sRawData = string.Empty;
+        private string sModifiedData = string.Empty;
+        private Form form;
+        private PacketInfo packetInfo;
+        private ProxyInfo proxyInfo;
 
         #region//窗体事件
 
-        public PacketModificationForm(InjectModeForm form, PacketInfo pi)
+        public PacketModificationForm(Form form, PacketInfo packetInfo, ProxyInfo proxyInfo)
         {
             InitializeComponent();
 
-            if (pi == null)
+            if (packetInfo == null && proxyInfo == null)
             {
                 string Title = AntdUI.Localization.Get("InjectModeForm.EditPacket.Error", "加载封包数据出错");
                 string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
@@ -27,8 +29,9 @@ namespace WinsockPacketEditor
             }
             else
             {
-                this.piSelect = pi;
-                this.imForm = form;
+                this.packetInfo = packetInfo;
+                this.proxyInfo = proxyInfo;
+                this.form = form;
                 this.Dark_Changed();
             }
         }
@@ -39,26 +42,52 @@ namespace WinsockPacketEditor
             {
                 this.Text = AntdUI.Localization.Get("PacketModificationForm", "封包修改");
                 this.hbPacketData_Raw.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-                this.hbPacketData_New.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-                this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("System.PacketDataRaw", "原始封包数据  ( 长度 {0} )"), this.piSelect.RawBuffer.Length);
-                this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("System.PacketDataNew", "修改后封包数据  ( 长度 {0} )"), this.piSelect.PacketBuffer.Length);
+                this.hbPacketData_New.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();                
 
-                if (this.piSelect.RawBuffer.Length > 0)
+                switch (Operate.SystemConfig.StartMode)
                 {
-                    hbPacketData_Raw.ByteProvider = new DynamicByteProvider(this.piSelect.RawBuffer);
-                }
+                    case Operate.SystemConfig.SystemMode.Process:
 
-                if (this.piSelect.PacketBuffer.Length > 0)
-                {
-                    hbPacketData_New.ByteProvider = new DynamicByteProvider(this.piSelect.PacketBuffer);
-                }
+                        this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("System.PacketDataRaw", "原始封包数据  ( 长度 {0} )"), this.packetInfo.RawBuffer.Length);
+                        this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("System.PacketDataNew", "修改后封包数据  ( 长度 {0} )"), this.packetInfo.PacketBuffer.Length);
+
+                        if (this.packetInfo.RawBuffer.Length > 0)
+                        {
+                            hbPacketData_Raw.ByteProvider = new DynamicByteProvider(this.packetInfo.RawBuffer);
+                            sRawData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.RawBuffer);
+                        }
+
+                        if (this.packetInfo.PacketBuffer.Length > 0)
+                        {
+                            hbPacketData_New.ByteProvider = new DynamicByteProvider(this.packetInfo.PacketBuffer);
+                            sModifiedData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.PacketBuffer);
+                        }
+
+                        break;
+
+                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                        this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("System.PacketDataRaw", "原始封包数据  ( 长度 {0} )"), this.proxyInfo.RawBuffer.Length);
+                        this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("System.PacketDataNew", "修改后封包数据  ( 长度 {0} )"), this.proxyInfo.PacketBuffer.Length);
+
+                        if (this.proxyInfo.RawBuffer.Length > 0)
+                        {
+                            hbPacketData_Raw.ByteProvider = new DynamicByteProvider(this.proxyInfo.RawBuffer);
+                            sRawData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.RawBuffer);
+                        }
+
+                        if (this.proxyInfo.PacketBuffer.Length > 0)
+                        {
+                            hbPacketData_New.ByteProvider = new DynamicByteProvider(this.proxyInfo.PacketBuffer);
+                            sModifiedData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.PacketBuffer);
+                        }
+
+                        break;
+                }                
                 
                 this.txtModification_Result.Spin(AntdUI.Localization.Get("Loading", "正在加载..."), config =>
                 {
-                    this.txtModification_Result.Clear();
-
-                    string sRawData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.piSelect.RawBuffer);
-                    string sModifiedData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.piSelect.PacketBuffer);
+                    this.txtModification_Result.Clear();                    
 
                     if (!string.IsNullOrEmpty(sRawData) || !string.IsNullOrEmpty(sModifiedData))
                     {

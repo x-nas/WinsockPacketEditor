@@ -229,6 +229,11 @@ namespace WinsockPacketEditor
 
         #region//ProxyInfo
 
+        public ProxyInfo()
+        {
+            //
+        }
+
         public ProxyInfo(
             DateTime ProxyTime,
             int PacketSocket,

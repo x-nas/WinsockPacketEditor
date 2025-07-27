@@ -11,22 +11,25 @@ namespace WinsockPacketEditor
 {
     public partial class PacketEditForm : Form
     {
-        private InjectModeForm imForm;
-        private PacketInfo piSelect;
+        private Form form;
+        private PacketInfo packetInfo;
+        private ProxyInfo proxyInfo;
         private int Send_CNT = 0;
         private int Send_Success = 0;
         private int Send_Fail = 0;
         private int SendSocket = 0;
         private int SendCNT = 0;
         private int SendINT = 0;
+        private string ProxyFrom = string.Empty;
+        private string ProxyTo = string.Empty;
 
         #region//窗体事件
 
-        public PacketEditForm(InjectModeForm form, PacketInfo pi)
+        public PacketEditForm(Form form, PacketInfo packetInfo, ProxyInfo proxyInfo)
         {
             InitializeComponent();
 
-            if (pi == null)
+            if (packetInfo == null && proxyInfo == null)
             {
                 string Title = AntdUI.Localization.Get("PacketEditForm.LoadError", "加载封包数据出错");
                 string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
@@ -35,8 +38,9 @@ namespace WinsockPacketEditor
             }
             else
             {
-                this.piSelect = pi;
-                this.imForm = form;
+                this.packetInfo = packetInfo;
+                this.proxyInfo = proxyInfo;
+                this.form = form;
             }
         }
 
@@ -45,11 +49,36 @@ namespace WinsockPacketEditor
             this.Text = AntdUI.Localization.Get("PacketEditForm", "编辑封包");
 
             this.hbPacketEdit.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.nudPacketSocket.Value = this.piSelect.PacketSocket;
-            this.nudPacketLength.Value = this.piSelect.PacketLen;
-            this.txtPacketTo.Text = this.piSelect.PacketTo;            
 
-            DynamicByteProvider dbp = new DynamicByteProvider(this.piSelect.PacketBuffer);            
+            DynamicByteProvider dbp = null;
+
+            switch (Operate.SystemConfig.StartMode)
+            {
+                case Operate.SystemConfig.SystemMode.Process:
+
+                    this.nudPacketSocket.Value = this.packetInfo.PacketSocket;
+                    this.nudPacketLength.Value = this.packetInfo.PacketLen;
+                    this.txtPacketTo.Text = this.packetInfo.PacketTo;
+
+                    dbp = new DynamicByteProvider(this.packetInfo.PacketBuffer);
+
+                    break;
+
+                case Operate.SystemConfig.SystemMode.Proxy:
+
+                    this.nudPacketSocket.Value = this.proxyInfo.PacketSocket;
+                    this.nudPacketLength.Value = this.proxyInfo.PacketLen;
+
+                    this.ProxyFrom = this.proxyInfo.ClientIP.Address.ToString() + ":" + this.proxyInfo.ClientIP.Port.ToString();
+                    this.ProxyTo = this.proxyInfo.ServerIP.Address.ToString() + ":" + this.proxyInfo.ServerIP.Port.ToString();
+
+                    this.txtPacketTo.Text = this.ProxyTo;
+
+                    dbp = new DynamicByteProvider(this.proxyInfo.PacketBuffer);
+
+                    break;
+            }
+                        
             dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
             hbPacketEdit.ByteProvider = dbp;
 
@@ -195,7 +224,7 @@ namespace WinsockPacketEditor
         {
             if (e.Button == MouseButtons.Right)
             {
-                DynamicByteProvider dbp = hbPacketEdit.ByteProvider as DynamicByteProvider;
+                DynamicByteProvider dbp = this.hbPacketEdit.ByteProvider as DynamicByteProvider;
                 if (dbp == null || dbp.Bytes.Count == 0)
                 {
                     return;
@@ -206,17 +235,28 @@ namespace WinsockPacketEditor
                     switch (item.ID)
                     {
                         case "ToFilterList":
-
-                            bool bOK = false;
+                            
+                            byte[] bBufferToFilter = null;
                             if (this.hbPacketEdit.CanCopy())
                             {
                                 this.hbPacketEdit.CopyHex();
-                                byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
-                                bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.piSelect, bBufferCopy);
+                                bBufferToFilter = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());                                                                
                             }
                             else
                             {
-                                bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.piSelect, dbp.Bytes.ToArray());
+                                bBufferToFilter = dbp.Bytes.ToArray();
+                            }
+
+                            bool bOK = false;
+                            switch (Operate.SystemConfig.StartMode)
+                            {
+                                case Operate.SystemConfig.SystemMode.Process:
+                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.packetInfo, bBufferToFilter);
+                                    break;
+
+                                case Operate.SystemConfig.SystemMode.Proxy:
+                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(this.proxyInfo, bBufferToFilter);
+                                    break;
                             }
 
                             if (bOK)
@@ -292,21 +332,45 @@ namespace WinsockPacketEditor
                                         bBuffer = dbp.Bytes.ToArray();
                                     }
 
-                                    List<PacketInfo> piList = new List<PacketInfo>
+                                    bool bAddOK = false;
+                                    switch (Operate.SystemConfig.StartMode)
                                     {
-                                        new PacketInfo
-                                        {
-                                            PacketSocket = piSelect.PacketSocket,
-                                            PacketType = piSelect.PacketType,
-                                            PacketFrom = piSelect.PacketFrom,
-                                            PacketTo = piSelect.PacketTo,
-                                            PacketBuffer = bBuffer,
-                                            PacketLen = bBuffer.Length,
-                                            PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen),
-                                        }
-                                    };
+                                        case Operate.SystemConfig.SystemMode.Process:
 
-                                    if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                            List<PacketInfo> lstPacketInfo = new List<PacketInfo>();
+                                            PacketInfo packetInfo = new PacketInfo();
+                                            packetInfo.PacketSocket = this.packetInfo.PacketSocket;
+                                            packetInfo.PacketType = this.packetInfo.PacketType;
+                                            packetInfo.PacketFrom = this.packetInfo.PacketFrom;
+                                            packetInfo.PacketTo = this.packetInfo.PacketTo;
+                                            packetInfo.PacketBuffer = bBuffer;
+                                            packetInfo.PacketLen = bBuffer.Length;
+                                            packetInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen);
+                                            lstPacketInfo.Add(packetInfo);
+
+                                            bAddOK = Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, lstPacketInfo);
+
+                                            break;
+
+                                        case Operate.SystemConfig.SystemMode.Proxy:
+
+                                            List<ProxyInfo> lstProxyInfo = new List<ProxyInfo>();
+                                            ProxyInfo proxyInfo = new ProxyInfo();
+                                            proxyInfo.PacketSocket = this.proxyInfo.PacketSocket;
+                                            proxyInfo.PacketType = this.proxyInfo.PacketType;
+                                            proxyInfo.ClientIP = this.proxyInfo.ClientIP;
+                                            proxyInfo.ServerIP = this.proxyInfo.ServerIP;
+                                            proxyInfo.PacketBuffer = bBuffer;
+                                            proxyInfo.PacketLen = bBuffer.Length;
+                                            proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen);
+                                            lstProxyInfo.Add(proxyInfo);
+
+                                            bAddOK = Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, lstProxyInfo);
+
+                                            break;
+                                    }
+
+                                    if (bAddOK)
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
                                         {
@@ -388,7 +452,17 @@ namespace WinsockPacketEditor
                     int iSendCount = 0;
                     while (!bgwSendPacket.CancellationPending)
                     {
-                        this.DoSendPacket(this.SendSocket, this.piSelect.PacketFrom, this.piSelect.PacketTo, bBuff, iSendCount);
+                        switch (Operate.SystemConfig.StartMode)
+                        {
+                            case Operate.SystemConfig.SystemMode.Process:
+                                this.DoSendPacket(this.SendSocket, this.packetInfo.PacketFrom, this.packetInfo.PacketTo, bBuff, iSendCount, this.packetInfo.PacketType);
+                                break;
+
+                            case Operate.SystemConfig.SystemMode.Proxy:
+                                this.DoSendPacket(this.SendSocket, this.ProxyFrom, this.ProxyTo, bBuff, iSendCount, this.proxyInfo.PacketType);
+                                break;
+                        }
+                        
                         iSendCount++;
 
                         if (this.SendINT > 0)
@@ -408,7 +482,16 @@ namespace WinsockPacketEditor
                         }
                         else
                         {
-                            this.DoSendPacket(this.SendSocket, this.piSelect.PacketFrom, this.piSelect.PacketTo, bBuff, i);
+                            switch (Operate.SystemConfig.StartMode)
+                            {
+                                case Operate.SystemConfig.SystemMode.Process:
+                                    this.DoSendPacket(this.SendSocket, this.packetInfo.PacketFrom, this.packetInfo.PacketTo, bBuff, i, this.packetInfo.PacketType);
+                                    break;
+
+                                case Operate.SystemConfig.SystemMode.Proxy:
+                                    this.DoSendPacket(this.SendSocket, this.ProxyFrom, this.ProxyTo, bBuff, i, this.proxyInfo.PacketType);
+                                    break;
+                            }                            
 
                             if (this.SendINT > 0)
                             {
@@ -446,7 +529,13 @@ namespace WinsockPacketEditor
             this.lSend_Fail_CNT.Text = this.Send_Fail.ToString();
         }
 
-        private void DoSendPacket(int iSocket, string sIPFrom, string sIPTo, byte[] bSendBuff, int SendCount)
+        private void DoSendPacket(
+            int iSocket, 
+            string sIPFrom, 
+            string sIPTo, 
+            byte[] bSendBuff, 
+            int SendCount, 
+            Operate.PacketConfig.Packet.PacketType ptType)
         {
             try
             {
@@ -485,8 +574,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                bool bSendOK = Operate.PacketConfig.Packet.SendPacket(iSocket, this.piSelect.PacketType, sIPFrom, sIPTo, bSendBuff);
-
+                bool bSendOK = bSendOK = Operate.PacketConfig.Packet.SendPacket(iSocket, ptType, sIPFrom, sIPTo, bSendBuff);
                 if (bSendOK)
                 {
                     this.Send_Success++;
@@ -537,13 +625,43 @@ namespace WinsockPacketEditor
                         dbp.ApplyChanges();
                         byte[] bNewBuff = dbp.Bytes.ToArray();
 
-                        this.piSelect.PacketSocket = ((int)this.nudPacketSocket.Value);
-                        this.piSelect.PacketBuffer = bNewBuff;
-                        this.piSelect.PacketLen = bNewBuff.Length;
-                        this.piSelect.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
+                        switch (Operate.SystemConfig.StartMode)
+                        {
+                            case Operate.SystemConfig.SystemMode.Process:
+
+                                this.packetInfo.PacketSocket = ((int)this.nudPacketSocket.Value);
+                                this.packetInfo.PacketBuffer = bNewBuff;
+                                this.packetInfo.PacketLen = bNewBuff.Length;
+                                this.packetInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
+
+                                break;
+
+                            case Operate.SystemConfig.SystemMode.Proxy:
+
+                                this.proxyInfo.PacketSocket = ((int)this.nudPacketSocket.Value);
+                                this.proxyInfo.PacketBuffer = bNewBuff;
+                                this.proxyInfo.PacketLen = bNewBuff.Length;
+                                this.proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
+
+                                break;
+                        }                        
+
+                        switch (Operate.SystemConfig.StartMode)
+                        {
+                            case Operate.SystemConfig.SystemMode.Process:
+
+                                ((InterfaceInfo.IInjectMode)form).RefreshPacketData();
+
+                                break;
+
+                            case Operate.SystemConfig.SystemMode.Proxy:
+
+                                ((InterfaceInfo.IProxyMode)form).RefreshProxyData();
+
+                                break;
+                        }
 
                         this.Close();
-                        this.imForm.RefreshPacketData();
                     }
                     else
                     {

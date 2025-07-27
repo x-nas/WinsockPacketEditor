@@ -25,7 +25,6 @@ namespace WinsockPacketEditor
         private string TextB = string.Empty;       
         private readonly WinSockHook ws = new WinSockHook();
         private AntdUI.FormFloatButton FloatButton = null;
-        private readonly Operate.SystemConfig.SystemMode RunMode = Operate.SystemConfig.SystemMode.Process;
 
         #region//窗体事件
 
@@ -86,10 +85,11 @@ namespace WinsockPacketEditor
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             ws.ExitHook();
-            Operate.SystemConfig.StopRemoteMGT(this.RunMode);
+            
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();
+            Operate.SystemConfig.StopRemoteMGT();
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
@@ -1130,7 +1130,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, piList[0]))
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, piList[0], null))
                                 {
                                     Align = AntdUI.TAlignMini.Right,
                                     Mask = true,
@@ -1182,7 +1182,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketModificationForm(this, piList[0]))
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketModificationForm(this, piList[0], null))
                                 {
                                     Align = AntdUI.TAlignMini.Right,
                                     Mask = true,
@@ -1290,7 +1290,7 @@ namespace WinsockPacketEditor
 
                             if (Operate.PacketConfig.List.piSelect != null)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, Operate.PacketConfig.List.piSelect))
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, Operate.PacketConfig.List.piSelect, null))
                                 {
                                     Align = AntdUI.TAlignMini.Right,
                                     Mask = true,
@@ -3394,7 +3394,20 @@ namespace WinsockPacketEditor
                                             bool bWSASendTo = Convert.ToBoolean(int.Parse(s20));
                                             bool bWSARecvFrom = false;
 
-                                            Operate.FilterConfig.Filter.FilterFunction filterFunction = new Operate.FilterConfig.Filter.FilterFunction(bSend, bSendTo, bRecv, bRecvFrom, bWSASend, bWSASendTo, bWSARecv, bWSARecvFrom);
+                                            Operate.FilterConfig.Filter.FilterFunction filterFunction = 
+                                                new Operate.FilterConfig.Filter.FilterFunction(
+                                                    bSend, 
+                                                    bSendTo, 
+                                                    bRecv, 
+                                                    bRecvFrom, 
+                                                    bWSASend, 
+                                                    bWSASendTo, 
+                                                    bWSARecv, 
+                                                    bWSARecvFrom,
+                                                    false,
+                                                    false,
+                                                    false,
+                                                    false);
                                             string sFFunction = Operate.FilterConfig.Filter.GetFilterFunctionString(filterFunction);
 
                                             Operate.FilterConfig.Filter.FilterStartFrom FStartFrom = new Operate.FilterConfig.Filter.FilterStartFrom();

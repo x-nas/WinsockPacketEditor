@@ -350,7 +350,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this.imForm, piList[0]))
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this.imForm, piList[0], null))
                                 {
                                     Align = AntdUI.TAlignMini.Right,
                                     Mask = true,

@@ -647,16 +647,13 @@ namespace WinsockPacketEditor
                 }
             }
 
-            public static void StopRemoteMGT(Operate.SystemConfig.SystemMode FromMode)
+            public static void StopRemoteMGT()
             {
                 try
                 {
-                    if (FromMode == Operate.SystemConfig.StartMode)
+                    if (Operate.SystemConfig.WebServer != null)
                     {
-                        if (Operate.SystemConfig.WebServer != null)
-                        {
-                            Operate.SystemConfig.WebServer.Dispose();
-                        }
+                        Operate.SystemConfig.WebServer.Dispose();
                     }
                 }
                 catch (Exception ex)
@@ -4324,7 +4321,7 @@ namespace WinsockPacketEditor
 
                             if (!requestHandled)
                             {
-                                ProxyConfig.Proxy.DoFilter_TCP(pe, bData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.TCP);
+                                ProxyConfig.Proxy.DoFilter_TCP(pe, bData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.TCP_Req);
                             }                            
                         }
                     }
@@ -4349,6 +4346,11 @@ namespace WinsockPacketEditor
                         args.SetBuffer(pe.TCP_Server.Buffer, 0, pe.TCP_Server.Buffer.Length);
                         args.UserToken = pe;
                         args.Completed += ProxyConfig.Proxy.ServerReceiveCompleted;
+
+                        if (pe?.TCP_Server?.Socket == null)
+                        {
+                            return;
+                        }
 
                         if (!pe.TCP_Server.Socket.ReceiveAsync(args))
                         {
@@ -4379,7 +4381,7 @@ namespace WinsockPacketEditor
 
                         if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
                         {
-                            ProxyConfig.Proxy.DoFilter_TCP(pe, bData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.TCP);
+                            ProxyConfig.Proxy.DoFilter_TCP(pe, bData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.TCP_Resp);
                         }
 
                         ProxyConfig.Proxy.StartServerReceive(pe);
@@ -4471,7 +4473,7 @@ namespace WinsockPacketEditor
                                         Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bRequestData.Length);
                                         Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
 
-                                        ProxyConfig.Proxy.DoFilter_UDP(pe, targetEndPoint, bRequestData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.UDP);
+                                        ProxyConfig.Proxy.DoFilter_UDP(pe, targetEndPoint, bRequestData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.UDP_Req);
                                     }
                                 }
                             }
@@ -4507,7 +4509,7 @@ namespace WinsockPacketEditor
                                 Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bResponseData.Length);
                                 Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
 
-                                ProxyConfig.Proxy.DoFilter_UDP(pe, epRemote, bResponseData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.UDP);
+                                ProxyConfig.Proxy.DoFilter_UDP(pe, epRemote, bResponseData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.UDP_Resp);
                             }
 
                             #endregion
@@ -4593,28 +4595,29 @@ namespace WinsockPacketEditor
                 public static void DoFilter_TCP(ProxyExecute pe, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
                 {
                     try
-                    {
-                        Int32 res = 0;
+                    {                        
                         Socket SendSocket = null;
-                        byte[] bRawBuffer = bData.ToArray();
-                        byte[] bNewBuffer = null;
-
                         switch (dtType)
                         {
                             case ProxyConfig.Proxy.DataType.Request:
-
                                 SendSocket = pe.TCP_Server.Socket;
-
                                 break;
 
                             case ProxyConfig.Proxy.DataType.Response:
-
                                 SendSocket = pe.TCP_Client.Socket;
-
                                 break;
                         }
 
+                        if (SendSocket == null)
+                        {
+                            return;
+                        }
+
                         int iSocket = SendSocket.Handle.ToInt32();
+
+                        Int32 res = 0;
+                        byte[] bRawBuffer = bData.ToArray();
+                        byte[] bNewBuffer = null;
 
                         Operate.FilterConfig.Filter.FilterAction FilterAction =
                             Operate.FilterConfig.List.DoFilterList(
@@ -4653,27 +4656,28 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        Int32 res = 0;
-                        byte[] bRawBuffer = bData.ToArray();
-                        byte[] bNewBuffer = null;
-
                         IPEndPoint epSend = null;
                         switch (dtType)
                         {
                             case ProxyConfig.Proxy.DataType.Request:
-
                                 epSend = epRemote;
-
                                 break;
 
                             case ProxyConfig.Proxy.DataType.Response:
-
                                 epSend = pe.UDP_Relay.ClientUDP_EndPoint;
-
                                 break;
                         }
 
+                        if (epSend == null || pe?.UDP_Relay?.ClientUDP?.Client == null)
+                        {
+                            return;
+                        }
+
                         int iSocket = pe.UDP_Relay.ClientUDP.Client.Handle.ToInt32();
+
+                        Int32 res = 0;
+                        byte[] bRawBuffer = bData.ToArray();
+                        byte[] bNewBuffer = null;
 
                         Operate.FilterConfig.Filter.FilterAction FilterAction =
                             Operate.FilterConfig.List.DoFilterList(
@@ -7065,23 +7069,13 @@ namespace WinsockPacketEditor
 
                 #region//保存代理账号列表到数据库
 
-                public static void SaveAccountList_ToDB(SystemConfig.SystemMode FromMode)
+                public static void SaveAccountList_ToDB()
                 {
                     try
                     {
-                        if (SystemConfig.StartMode == FromMode)
-                        {
-                            try
-                            {
-                                DataBase.DeleteTable_ProxyAccount();
-                                DataBase.InsertTable_ProxyAccount();
-                                DataBase.DeleteTable_ProxyAccount_LoginInfo();
-                            }
-                            catch (Exception ex)
-                            {
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                            }
-                        }
+                        DataBase.DeleteTable_ProxyAccount();
+                        DataBase.InsertTable_ProxyAccount();
+                        DataBase.DeleteTable_ProxyAccount_LoginInfo();
                     }
                     catch (Exception ex)
                     {
@@ -8385,15 +8379,12 @@ namespace WinsockPacketEditor
 
                 #region//保存本地代理映射到数据库
 
-                public static void SaveMapLocal_ToDB(SystemConfig.SystemMode FromMode)
+                public static void SaveMapLocal_ToDB()
                 {
                     try
                     {
-                        if (SystemConfig.StartMode == FromMode)
-                        {
-                            DataBase.DeleteTable_ProxyMapLocal();
-                            DataBase.InsertTable_ProxyMapLocal();
-                        }
+                        DataBase.DeleteTable_ProxyMapLocal();
+                        DataBase.InsertTable_ProxyMapLocal();
                     }
                     catch (Exception ex)
                     {
@@ -8405,15 +8396,12 @@ namespace WinsockPacketEditor
 
                 #region//保存远程代理映射到数据库
 
-                public static void SaveMapRemote_ToDB(SystemConfig.SystemMode FromMode)
+                public static void SaveMapRemote_ToDB()
                 {
                     try
                     {
-                        if (SystemConfig.StartMode == FromMode)
-                        {
-                            DataBase.DeleteTable_ProxyMapRemote();
-                            DataBase.InsertTable_ProxyMapRemote();
-                        }
+                        DataBase.DeleteTable_ProxyMapRemote();
+                        DataBase.InsertTable_ProxyMapRemote();
                     }
                     catch (Exception ex)
                     {
@@ -9244,8 +9232,10 @@ namespace WinsockPacketEditor
                     WSARecv = 10,
                     WSARecvEx = 11,
                     WSARecvFrom = 12,
-                    TCP = 13,
-                    UDP = 14,
+                    TCP_Req = 13,
+                    UDP_Req = 14,
+                    TCP_Resp = 15,
+                    UDP_Resp = 16,
                 }
 
                 public enum IPType
@@ -9435,6 +9425,10 @@ namespace WinsockPacketEditor
                     public static readonly string WSARecvEx = AntdUI.Localization.Get("WSARecvEx", "WSA接收");
                     public static readonly string WSASendTo = AntdUI.Localization.Get("WSASendTo", "WSA发送到");
                     public static readonly string WSARecvFrom = AntdUI.Localization.Get("WSARecvFrom", "WSA接收自");
+                    public static readonly string TCP_Req = AntdUI.Localization.Get("TCP_Req", "TCP");
+                    public static readonly string UDP_Req = AntdUI.Localization.Get("UDP_Req", "UDP");
+                    public static readonly string TCP_Resp = AntdUI.Localization.Get("TCP_Resp", "TCP");
+                    public static readonly string UDP_Resp = AntdUI.Localization.Get("UDP_Resp", "UDP");
                 }
 
                 public static string GetName_ByPacketType(PacketType socketType)
@@ -9481,6 +9475,18 @@ namespace WinsockPacketEditor
 
                             case PacketType.WSARecvFrom:
                                 return PacketTypeNames.WSARecvFrom;
+
+                            case PacketType.TCP_Req:
+                                return PacketTypeNames.TCP_Req;
+
+                            case PacketType.UDP_Req:
+                                return PacketTypeNames.UDP_Req;
+
+                            case PacketType.TCP_Resp:
+                                return PacketTypeNames.TCP_Resp;
+
+                            case PacketType.UDP_Resp:
+                                return PacketTypeNames.UDP_Resp;
 
                             default:
                                 return string.Empty;
@@ -10077,7 +10083,13 @@ namespace WinsockPacketEditor
                             case Operate.PacketConfig.Packet.PacketType.WSASend:
                             case Operate.PacketConfig.Packet.PacketType.WSARecv:
                             case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
+                            case Operate.PacketConfig.Packet.PacketType.TCP_Req:
+                            case Operate.PacketConfig.Packet.PacketType.UDP_Req:
+                            case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
+                            case Operate.PacketConfig.Packet.PacketType.UDP_Resp:
+
                                 sIP_To = PacketConfig.Packet.GetIP_BySocket(pSocket, Operate.PacketConfig.Packet.IPType.To);
+
                                 break;
 
                             case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
@@ -10086,7 +10098,9 @@ namespace WinsockPacketEditor
                             case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
                             case Operate.PacketConfig.Packet.PacketType.WSASendTo:
                             case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
+
                                 sIP_To = PacketConfig.Packet.GetIP_BySockAddr(pAddr);
+
                                 break;
                         }
 
@@ -10848,16 +10862,32 @@ namespace WinsockPacketEditor
 
                 public struct FilterFunction
                 {
-                    public bool Send;
-                    public bool SendTo;
-                    public bool Recv;
-                    public bool RecvFrom;
-                    public bool WSASend;
-                    public bool WSASendTo;
-                    public bool WSARecv;
-                    public bool WSARecvFrom;
+                    public bool Send;// 0
+                    public bool SendTo;// 1
+                    public bool Recv;// 2
+                    public bool RecvFrom;// 3
+                    public bool WSASend;// 4
+                    public bool WSASendTo;// 5
+                    public bool WSARecv;// 6
+                    public bool WSARecvFrom;// 7
+                    public bool TCP_Req;// 8
+                    public bool UDP_Req;// 9
+                    public bool TCP_Resp;// 10
+                    public bool UDP_Resp;// 11
 
-                    public FilterFunction(bool bSend, bool bSendTo, bool bRecv, bool bRecvFrom, bool bWSASend, bool bWSASendTo, bool bWSARecv, bool bWSARecvFrom)
+                    public FilterFunction(
+                        bool bSend, 
+                        bool bSendTo, 
+                        bool bRecv, 
+                        bool bRecvFrom, 
+                        bool bWSASend, 
+                        bool bWSASendTo, 
+                        bool bWSARecv, 
+                        bool bWSARecvFrom,
+                        bool bTCP_Req,
+                        bool bUDP_Req,
+                        bool bTCP_Resp,
+                        bool bUDP_Resp)
                     {
                         Send = bSend;
                         SendTo = bSendTo;
@@ -10867,6 +10897,10 @@ namespace WinsockPacketEditor
                         WSASendTo = bWSASendTo;
                         WSARecv = bWSARecv;
                         WSARecvFrom = bWSARecvFrom;
+                        TCP_Req = bTCP_Req;
+                        UDP_Req = bUDP_Req;
+                        TCP_Resp = bTCP_Resp;
+                        UDP_Resp = bUDP_Resp;
                     }
                 }
 
@@ -10899,7 +10933,7 @@ namespace WinsockPacketEditor
                         FilterConfig.Filter.FilterExecuteType FilterExecuteType = FilterExecuteType.None;
                         Guid SID = Guid.Empty;
                         Guid RID = Guid.Empty;
-                        FilterConfig.Filter.FilterFunction FilterFunction = new FilterConfig.Filter.FilterFunction(true, true, true, true, false, false, false, false);
+                        FilterConfig.Filter.FilterFunction FilterFunction = new FilterConfig.Filter.FilterFunction(true, true, true, true, true, true, true, true, true, true, true, true);
                         FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
 
                         FilterConfig.Filter.AddFilter(false, FID, FName, false, string.Empty, false, string.Empty, false, string.Empty, false, string.Empty, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, string.Empty, string.Empty);
@@ -10910,20 +10944,20 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                public static bool AddFilter_ByPacketInfo(PacketInfo spi, byte[] bBuffer)
+                public static bool AddFilter_ByPacketInfo(PacketInfo pi, byte[] bBuffer)
                 {
                     try
                     {
-                        if (spi != null)
+                        if (pi != null)
                         {
                             if (bBuffer == null || bBuffer.Length == 0)
                             {
-                                bBuffer = spi.PacketBuffer;
+                                bBuffer = pi.PacketBuffer;
                             }
 
                             Guid FID = Guid.NewGuid();
                             string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + bBuffer.Length + "]";
-                            PacketConfig.Packet.PacketType ptType = spi.PacketType;
+                            PacketConfig.Packet.PacketType ptType = pi.PacketType;
                             FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
                             FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.FilterAction.Replace;
                             FilterConfig.Filter.FilterExecuteType FilterExecuteType = FilterExecuteType.None;
@@ -10961,6 +10995,70 @@ namespace WinsockPacketEditor
                                 string.Empty, 
                                 0, 
                                 sFSearch, 
+                                string.Empty);
+
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static bool AddFilter_ByProxyInfo(ProxyInfo pi, byte[] bBuffer)
+                {
+                    try
+                    {
+                        if (pi != null)
+                        {
+                            if (bBuffer == null || bBuffer.Length == 0)
+                            {
+                                bBuffer = pi.PacketBuffer;
+                            }
+
+                            Guid FID = Guid.NewGuid();
+                            string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + bBuffer.Length + "]";
+                            PacketConfig.Packet.PacketType ptType = pi.PacketType;
+                            FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
+                            FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.FilterAction.Replace;
+                            FilterConfig.Filter.FilterExecuteType FilterExecuteType = FilterExecuteType.None;
+                            Guid SID = Guid.Empty;
+                            Guid RID = Guid.Empty;
+                            FilterConfig.Filter.FilterFunction FilterFunction = FilterConfig.Filter.GetFilterFunction_ByPacketType(ptType);
+                            FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
+                            string sFSearch = FilterConfig.Filter.GetFilterString_ByBytes(bBuffer);
+
+                            FilterConfig.Filter.AddFilter(
+                                false,
+                                FID,
+                                sFName,
+                                false,
+                                string.Empty,
+                                false,
+                                string.Empty,
+                                false,
+                                string.Empty,
+                                false,
+                                string.Empty,
+                                FilterMode,
+                                FilterAction,
+                                false,
+                                FilterExecuteType,
+                                SID,
+                                RID,
+                                FilterFunction,
+                                FilterStartFrom,
+                                false,
+                                false,
+                                1,
+                                false,
+                                1,
+                                string.Empty,
+                                0,
+                                sFSearch,
                                 string.Empty);
 
                             return true;
@@ -11292,6 +11390,10 @@ namespace WinsockPacketEditor
                         FFunction.WSASendTo = Convert.ToBoolean(int.Parse(slFilterFunction[5]));
                         FFunction.WSARecv = Convert.ToBoolean(int.Parse(slFilterFunction[6]));
                         FFunction.WSARecvFrom = Convert.ToBoolean(int.Parse(slFilterFunction[7]));
+                        FFunction.TCP_Req = Convert.ToBoolean(int.Parse(slFilterFunction[8]));
+                        FFunction.UDP_Req = Convert.ToBoolean(int.Parse(slFilterFunction[9]));
+                        FFunction.TCP_Resp = Convert.ToBoolean(int.Parse(slFilterFunction[10]));
+                        FFunction.UDP_Resp = Convert.ToBoolean(int.Parse(slFilterFunction[11]));
                     }
                     catch (Exception ex)
                     {
@@ -11398,7 +11500,11 @@ namespace WinsockPacketEditor
                         sReturn += Convert.ToInt32(FilterFunction.WSASend) + ":";
                         sReturn += Convert.ToInt32(FilterFunction.WSASendTo) + ":";
                         sReturn += Convert.ToInt32(FilterFunction.WSARecv) + ":";
-                        sReturn += Convert.ToInt32(FilterFunction.WSARecvFrom);
+                        sReturn += Convert.ToInt32(FilterFunction.WSARecvFrom) + ":";
+                        sReturn += Convert.ToInt32(FilterFunction.TCP_Req) + ":";
+                        sReturn += Convert.ToInt32(FilterFunction.UDP_Req) + ":";
+                        sReturn += Convert.ToInt32(FilterFunction.TCP_Resp) + ":";
+                        sReturn += Convert.ToInt32(FilterFunction.UDP_Resp);
                     }
                     catch (Exception ex)
                     {
@@ -11471,6 +11577,22 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSARecvFrom:
                                 ffReturn.WSARecvFrom = true;
                                 break;
+
+                            case PacketConfig.Packet.PacketType.TCP_Req:
+                                ffReturn.TCP_Req = true;
+                                break;
+
+                            case PacketConfig.Packet.PacketType.UDP_Req:
+                                ffReturn.UDP_Req = true;
+                                break;
+
+                            case PacketConfig.Packet.PacketType.TCP_Resp:
+                                ffReturn.TCP_Resp = true;
+                                break;
+
+                            case PacketConfig.Packet.PacketType.UDP_Resp:
+                                ffReturn.UDP_Resp = true;
+                                break;
                         }
                     }
                     catch (Exception ex)
@@ -11522,30 +11644,33 @@ namespace WinsockPacketEditor
                 {
                     fixed (bool* pFlags = &ffFunction.Send)
                     {
-                        byte* indexMap = stackalloc byte[13]
+                        byte* indexMap = stackalloc byte[17]
                         {
-                        0,  // WS1_Send -> Send (offset 0)
-                        0,  // WS2_Send -> Send
-                        1,  // WS1_SendTo -> SendTo
-                        1,  // WS2_SendTo -> SendTo
-                        2,  // WS1_Recv -> Recv
-                        2,  // WS2_Recv -> Recv
-                        3,  // WS1_RecvFrom -> RecvFrom
-                        3,  // WS2_RecvFrom -> RecvFrom
-                        4,  // WSASend -> WSASend
-                        5,  // WSASendTo -> WSASendTo
-                        6,  // WSARecv -> WSARecv
-                        6,  // WSARecvEx -> WSARecv
-                        7   // WSARecvFrom -> WSARecvFrom
-                    };
+                            0,   // WS1_Send -> Send (offset 0)
+                            0,   // WS2_Send -> Send
+                            1,   // WS1_SendTo -> SendTo
+                            1,   // WS2_SendTo -> SendTo
+                            2,   // WS1_Recv -> Recv
+                            2,   // WS2_Recv -> Recv
+                            3,   // WS1_RecvFrom -> RecvFrom
+                            3,   // WS2_RecvFrom -> RecvFrom
+                            4,   // WSASend -> WSASend
+                            5,   // WSASendTo -> WSASendTo
+                            6,   // WSARecv -> WSARecv
+                            6,   // WSARecvEx -> WSARecv
+                            7,   // WSARecvFrom -> WSARecvFrom
+                            8,   // TCP_Req -> TCP_Req
+                            9,   // UDP_Req -> UDP_Req
+                            10,  // TCP_Resp -> TCP_Resp
+                            11   // UDP_Resp -> UDP_Resp
+                        };
 
                         int index = (int)ptType;
-                        if (index >= 0 && index < 13)
+                        if (index >= 0 && index < 17)
                         {
                             return pFlags[indexMap[index]];
                         }
                     }
-
                     return false;
                 }
 
@@ -12536,7 +12661,12 @@ namespace WinsockPacketEditor
 
                 #region//执行滤镜列表
 
-                public static FilterConfig.Filter.FilterAction DoFilterList(Int32 iSocket, Span<byte> bufferSpan, out byte[] bNewBuffer, PacketConfig.Packet.PacketType ptType, PacketConfig.Packet.SockAddr sAddr)
+                public static FilterConfig.Filter.FilterAction DoFilterList(
+                    Int32 iSocket, 
+                    Span<byte> bufferSpan, 
+                    out byte[] bNewBuffer, 
+                    PacketConfig.Packet.PacketType ptType, 
+                    PacketConfig.Packet.SockAddr sAddr)
                 {
                     FilterConfig.Filter.FilterAction faReturn = FilterConfig.Filter.FilterAction.None;
                     bool bBreak = false;
@@ -12661,7 +12791,24 @@ namespace WinsockPacketEditor
                                     }
                                 }
 
-                                if (!PacketConfig.Packet.SpeedMode)
+                                bool bSpeedMode = false;
+
+                                switch (Operate.SystemConfig.StartMode)
+                                {
+                                    case Operate.SystemConfig.SystemMode.Process:
+
+                                        bSpeedMode = PacketConfig.Packet.SpeedMode;
+
+                                        break;
+
+                                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                                        bSpeedMode = ProxyConfig.Proxy.SpeedMode;
+
+                                        break;
+                                }
+
+                                if (!bSpeedMode)
                                 {
                                     string sFilterLog = MatchIndex != null && MatchIndex.Count > 0
                                         ? string.Format(AntdUI.Localization.Get("DoFilterMatch", "[{0}] {1} | [{2}] 封包长度: {3} | 匹配数: {4}"),
@@ -13368,6 +13515,36 @@ namespace WinsockPacketEditor
                                     foreach (PacketInfo pi in piList)
                                     {
                                         SendConfig.Send.AddSendCollection(si.SCollection, pi.PacketSocket, pi.PacketType, pi.PacketFrom, pi.PacketTo, pi.PacketBuffer);
+                                    }
+                                }
+                            }
+
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static bool AddSendCollection_ByProxyInfo(Guid SID, List<ProxyInfo> piList)
+                {
+                    try
+                    {
+                        if (SID != null && SID != Guid.Empty && piList.Count > 0)
+                        {
+                            foreach (SendInfo si in SendConfig.List.lstSendInfo)
+                            {
+                                if (si.SID == SID)
+                                {
+                                    foreach (ProxyInfo pi in piList)
+                                    {
+                                        string ProxyFrom = pi.ClientIP.Address.ToString() + ":" + pi.ClientIP.Port.ToString();
+                                        string ProxyTo = pi.ServerIP.Address.ToString() + ":" + pi.ServerIP.Port.ToString();
+                                        SendConfig.Send.AddSendCollection(si.SCollection, pi.PacketSocket, pi.PacketType, ProxyFrom, ProxyTo, pi.PacketBuffer);
                                     }
                                 }
                             }

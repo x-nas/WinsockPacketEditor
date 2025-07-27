@@ -34,8 +34,8 @@
             AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
-            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
@@ -47,6 +47,12 @@
             AntdUI.MenuItem menuItem15 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem16 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem17 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem18 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem19 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem20 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem21 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem22 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem23 = new AntdUI.MenuItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxyModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -114,6 +120,12 @@
             this.dtpExpiryTime = new AntdUI.DatePickerRange();
             this.bSearchExpiryTime = new AntdUI.Button();
             this.pAccountList = new AntdUI.Pagination();
+            this.tpFilterList = new AntdUI.TabPage();
+            this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
+            this.tFilterList = new AntdUI.Table();
+            this.tlpFilterListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.mFilterList = new AntdUI.Menu();
+            this.bFilterList_Reset = new AntdUI.Button();
             this.tpStatistical = new AntdUI.TabPage();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
@@ -147,6 +159,9 @@
             this.tpAccountList.SuspendLayout();
             this.tlpAccountList.SuspendLayout();
             this.tlpAccountListButton.SuspendLayout();
+            this.tpFilterList.SuspendLayout();
+            this.tlpFilterList.SuspendLayout();
+            this.tlpFilterListButton.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -256,20 +271,24 @@
             menuItem3.ID = "miAccountList";
             menuItem3.LocalizationText = "ProxyModeForm.{id}";
             menuItem3.Text = "账号列表";
-            menuItem4.IconSvg = "PieChartOutlined";
-            menuItem4.ID = "miStatistical";
-            menuItem4.LocalizationText = "ProxyModeForm.{id}";
-            menuItem4.Text = "统计数据";
-            menuItem5.Badge = "";
-            menuItem5.IconSvg = "ExceptionOutlined";
-            menuItem5.ID = "miSystemLog";
+            menuItem4.IconSvg = "FilterOutlined";
+            menuItem4.ID = "miFilterList";
+            menuItem4.Text = "滤镜列表";
+            menuItem5.IconSvg = "PieChartOutlined";
+            menuItem5.ID = "miStatistical";
             menuItem5.LocalizationText = "ProxyModeForm.{id}";
-            menuItem5.Text = "系统日志";
+            menuItem5.Text = "统计数据";
+            menuItem6.Badge = "";
+            menuItem6.IconSvg = "ExceptionOutlined";
+            menuItem6.ID = "miSystemLog";
+            menuItem6.LocalizationText = "ProxyModeForm.{id}";
+            menuItem6.Text = "系统日志";
             this.mProxyMode.Items.Add(menuItem1);
             this.mProxyMode.Items.Add(menuItem2);
             this.mProxyMode.Items.Add(menuItem3);
             this.mProxyMode.Items.Add(menuItem4);
             this.mProxyMode.Items.Add(menuItem5);
+            this.mProxyMode.Items.Add(menuItem6);
             this.mProxyMode.Location = new System.Drawing.Point(3, 51);
             this.mProxyMode.Name = "mProxyMode";
             this.mProxyMode.Size = new System.Drawing.Size(164, 706);
@@ -295,15 +314,17 @@
             this.tabProxyMode.Controls.Add(this.tpProxyList);
             this.tabProxyMode.Controls.Add(this.tpClientList);
             this.tabProxyMode.Controls.Add(this.tpAccountList);
+            this.tabProxyMode.Controls.Add(this.tpFilterList);
             this.tabProxyMode.Controls.Add(this.tpStatistical);
             this.tabProxyMode.Controls.Add(this.tpSystemLog);
-            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabProxyMode.Location = new System.Drawing.Point(170, 40);
             this.tabProxyMode.Name = "tabProxyMode";
             this.tabProxyMode.Pages.Add(this.tpProxyList);
             this.tabProxyMode.Pages.Add(this.tpClientList);
             this.tabProxyMode.Pages.Add(this.tpAccountList);
+            this.tabProxyMode.Pages.Add(this.tpFilterList);
             this.tabProxyMode.Pages.Add(this.tpStatistical);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
@@ -393,31 +414,31 @@
             this.mProxyList.Dock = System.Windows.Forms.DockStyle.Right;
             this.mProxyList.Gap = 0;
             this.mProxyList.IconRatio = 1F;
-            menuItem6.IconSvg = "SearchOutlined";
-            menuItem6.ID = "miProxyListSearch";
-            menuItem7.IconSvg = "PlusOutlined";
-            menuItem8.IconSvg = "ShareAltOutlined";
-            menuItem8.ID = "miProxySettings";
-            menuItem8.Text = "代理设置";
-            menuItem9.IconSvg = "OrderedListOutlined";
-            menuItem9.ID = "miListSettings";
-            menuItem9.Text = "列表设置";
-            menuItem10.IconSvg = "BlockOutlined";
-            menuItem10.ID = "miMapSettings";
-            menuItem10.Text = "映射设置";
-            menuItem11.IconSvg = "CloudUploadOutlined";
-            menuItem11.ID = "miExternalProxySettings";
-            menuItem11.Text = "外部代理设置";
-            menuItem12.IconSvg = "SettingOutlined";
-            menuItem12.ID = "miSystemSettings";
-            menuItem12.Text = "系统设置";
-            menuItem7.Sub.Add(menuItem8);
-            menuItem7.Sub.Add(menuItem9);
-            menuItem7.Sub.Add(menuItem10);
-            menuItem7.Sub.Add(menuItem11);
-            menuItem7.Sub.Add(menuItem12);
-            this.mProxyList.Items.Add(menuItem6);
+            menuItem7.IconSvg = "SearchOutlined";
+            menuItem7.ID = "miProxyListSearch";
+            menuItem8.IconSvg = "PlusOutlined";
+            menuItem9.IconSvg = "ShareAltOutlined";
+            menuItem9.ID = "miProxySettings";
+            menuItem9.Text = "代理设置";
+            menuItem10.IconSvg = "OrderedListOutlined";
+            menuItem10.ID = "miListSettings";
+            menuItem10.Text = "列表设置";
+            menuItem11.IconSvg = "BlockOutlined";
+            menuItem11.ID = "miMapSettings";
+            menuItem11.Text = "映射设置";
+            menuItem12.IconSvg = "CloudUploadOutlined";
+            menuItem12.ID = "miExternalProxySettings";
+            menuItem12.Text = "外部代理设置";
+            menuItem13.IconSvg = "SettingOutlined";
+            menuItem13.ID = "miSystemSettings";
+            menuItem13.Text = "系统设置";
+            menuItem8.Sub.Add(menuItem9);
+            menuItem8.Sub.Add(menuItem10);
+            menuItem8.Sub.Add(menuItem11);
+            menuItem8.Sub.Add(menuItem12);
+            menuItem8.Sub.Add(menuItem13);
             this.mProxyList.Items.Add(menuItem7);
+            this.mProxyList.Items.Add(menuItem8);
             this.mProxyList.Location = new System.Drawing.Point(1011, 3);
             this.mProxyList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mProxyList.Name = "mProxyList";
@@ -766,6 +787,8 @@
             this.tProxyList.Name = "tProxyList";
             this.tProxyList.Size = new System.Drawing.Size(1118, 430);
             this.tProxyList.TabIndex = 1;
+            this.tProxyList.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyList_CellClick);
+            this.tProxyList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tProxyList_SetRowStyle);
             this.tProxyList.SelectIndexChanged += new System.EventHandler(this.tProxyList_SelectIndexChanged);
             // 
             // pPacketData
@@ -1119,24 +1142,24 @@
             this.mAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mAccountList.Gap = 0;
             this.mAccountList.IconRatio = 1F;
-            menuItem13.IconSvg = "PlusOutlined";
-            menuItem14.IconSvg = "UserAddOutlined";
-            menuItem14.ID = "miAdd";
-            menuItem14.Text = "新增账号";
-            menuItem15.IconSvg = "FolderOpenOutlined";
-            menuItem15.ID = "miImport";
-            menuItem15.Text = "导入账号列表";
-            menuItem16.IconSvg = "DeliveredProcedureOutlined";
-            menuItem16.ID = "miExport";
-            menuItem16.Text = "导出所有账号";
-            menuItem17.IconSvg = "DeleteOutlined";
-            menuItem17.ID = "miClear";
-            menuItem17.Text = "清空所有账号";
-            menuItem13.Sub.Add(menuItem14);
-            menuItem13.Sub.Add(menuItem15);
-            menuItem13.Sub.Add(menuItem16);
-            menuItem13.Sub.Add(menuItem17);
-            this.mAccountList.Items.Add(menuItem13);
+            menuItem14.IconSvg = "PlusOutlined";
+            menuItem15.IconSvg = "UserAddOutlined";
+            menuItem15.ID = "miAdd";
+            menuItem15.Text = "新增账号";
+            menuItem16.IconSvg = "FolderOpenOutlined";
+            menuItem16.ID = "miImport";
+            menuItem16.Text = "导入账号列表";
+            menuItem17.IconSvg = "DeliveredProcedureOutlined";
+            menuItem17.ID = "miExport";
+            menuItem17.Text = "导出所有账号";
+            menuItem18.IconSvg = "DeleteOutlined";
+            menuItem18.ID = "miClear";
+            menuItem18.Text = "清空所有账号";
+            menuItem14.Sub.Add(menuItem15);
+            menuItem14.Sub.Add(menuItem16);
+            menuItem14.Sub.Add(menuItem17);
+            menuItem14.Sub.Add(menuItem18);
+            this.mAccountList.Items.Add(menuItem14);
             this.mAccountList.Location = new System.Drawing.Point(1061, 2);
             this.mAccountList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mAccountList.Name = "mAccountList";
@@ -1194,6 +1217,106 @@
             this.pAccountList.TabIndex = 3;
             this.pAccountList.ValueChanged += new AntdUI.PageValueEventHandler(this.pAccountList_ValueChanged);
             this.pAccountList.ShowTotalChanged += new AntdUI.PageValueRtEventHandler(this.pAccountList_ShowTotalChanged);
+            // 
+            // tpFilterList
+            // 
+            this.tpFilterList.Controls.Add(this.tlpFilterList);
+            this.tpFilterList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpFilterList.Name = "tpFilterList";
+            this.tpFilterList.Size = new System.Drawing.Size(1124, 724);
+            this.tpFilterList.TabIndex = 9;
+            this.tpFilterList.Text = "滤镜列表";
+            // 
+            // tlpFilterList
+            // 
+            this.tlpFilterList.ColumnCount = 1;
+            this.tlpFilterList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterList.Controls.Add(this.tFilterList, 0, 1);
+            this.tlpFilterList.Controls.Add(this.tlpFilterListButton, 0, 0);
+            this.tlpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilterList.Location = new System.Drawing.Point(0, 0);
+            this.tlpFilterList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilterList.Name = "tlpFilterList";
+            this.tlpFilterList.RowCount = 2;
+            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterList.Size = new System.Drawing.Size(1124, 724);
+            this.tlpFilterList.TabIndex = 2;
+            // 
+            // tFilterList
+            // 
+            this.tFilterList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tFilterList.CellImpactHeight = false;
+            this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tFilterList.GapCell = 6;
+            this.tFilterList.Location = new System.Drawing.Point(3, 53);
+            this.tFilterList.MultipleRows = true;
+            this.tFilterList.Name = "tFilterList";
+            this.tFilterList.Size = new System.Drawing.Size(1118, 668);
+            this.tFilterList.TabIndex = 1;
+            this.tFilterList.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterList_CellClick);
+            this.tFilterList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tFilterList_CellButtonClick);
+            // 
+            // tlpFilterListButton
+            // 
+            this.tlpFilterListButton.ColumnCount = 3;
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpFilterListButton.Controls.Add(this.mFilterList, 2, 0);
+            this.tlpFilterListButton.Controls.Add(this.bFilterList_Reset, 0, 0);
+            this.tlpFilterListButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilterListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpFilterListButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilterListButton.Name = "tlpFilterListButton";
+            this.tlpFilterListButton.RowCount = 1;
+            this.tlpFilterListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterListButton.Size = new System.Drawing.Size(1124, 50);
+            this.tlpFilterListButton.TabIndex = 2;
+            // 
+            // mFilterList
+            // 
+            this.mFilterList.Dock = System.Windows.Forms.DockStyle.Right;
+            this.mFilterList.Gap = 0;
+            this.mFilterList.IconRatio = 1F;
+            menuItem19.IconSvg = "PlusOutlined";
+            menuItem20.IconSvg = "UserAddOutlined";
+            menuItem20.ID = "miAdd";
+            menuItem20.Text = "新增滤镜";
+            menuItem21.IconSvg = "FolderOpenOutlined";
+            menuItem21.ID = "miImport";
+            menuItem21.Text = "导入滤镜列表";
+            menuItem22.IconSvg = "DeliveredProcedureOutlined";
+            menuItem22.ID = "miExport";
+            menuItem22.Text = "导出所有滤镜";
+            menuItem23.IconSvg = "DeleteOutlined";
+            menuItem23.ID = "miClear";
+            menuItem23.Text = "清空所有滤镜";
+            menuItem19.Sub.Add(menuItem20);
+            menuItem19.Sub.Add(menuItem21);
+            menuItem19.Sub.Add(menuItem22);
+            menuItem19.Sub.Add(menuItem23);
+            this.mFilterList.Items.Add(menuItem19);
+            this.mFilterList.Location = new System.Drawing.Point(1061, 3);
+            this.mFilterList.Mode = AntdUI.TMenuMode.Horizontal;
+            this.mFilterList.Name = "mFilterList";
+            this.mFilterList.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.mFilterList.Size = new System.Drawing.Size(60, 44);
+            this.mFilterList.TabIndex = 5;
+            this.mFilterList.Trigger = AntdUI.Trigger.Click;
+            this.mFilterList.SelectChanged += new AntdUI.SelectEventHandler(this.mFilterList_SelectChanged);
+            // 
+            // bFilterList_Reset
+            // 
+            this.bFilterList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bFilterList_Reset.IconSvg = "UndoOutlined";
+            this.bFilterList_Reset.Location = new System.Drawing.Point(3, 3);
+            this.bFilterList_Reset.Name = "bFilterList_Reset";
+            this.bFilterList_Reset.Size = new System.Drawing.Size(124, 44);
+            this.bFilterList_Reset.TabIndex = 6;
+            this.bFilterList_Reset.Text = "重置计数";
+            this.bFilterList_Reset.Type = AntdUI.TTypeMini.Info;
+            this.bFilterList_Reset.Click += new System.EventHandler(this.bFilterList_Reset_Click);
             // 
             // tpStatistical
             // 
@@ -1305,6 +1428,9 @@
             this.tpAccountList.ResumeLayout(false);
             this.tlpAccountList.ResumeLayout(false);
             this.tlpAccountListButton.ResumeLayout(false);
+            this.tpFilterList.ResumeLayout(false);
+            this.tlpFilterList.ResumeLayout(false);
+            this.tlpFilterListButton.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -1387,6 +1513,12 @@
         private AntdUI.Button bProxyStart;
         private System.ComponentModel.BackgroundWorker bgwAccountList;
         private System.ComponentModel.BackgroundWorker bgwSearchProxyList;
+        private AntdUI.TabPage tpFilterList;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterList;
+        private AntdUI.Table tFilterList;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterListButton;
+        private AntdUI.Menu mFilterList;
+        private AntdUI.Button bFilterList_Reset;
     }
 }
 

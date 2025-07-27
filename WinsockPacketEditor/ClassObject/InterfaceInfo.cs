@@ -11,6 +11,10 @@ namespace WinsockPacketEditor
 
             void SearchProxyList(bool FromHead);
 
+            void RefreshProxyData();
+
+            void RefreshFilterList();
+
             void RefreshAccountList();
         }
 
@@ -23,6 +27,10 @@ namespace WinsockPacketEditor
             void InitFloatButton();
 
             void SearchPacketList(bool FromHead);
+
+            void RefreshPacketData();
+
+            void RefreshFilterList();
         }
 
         #endregion

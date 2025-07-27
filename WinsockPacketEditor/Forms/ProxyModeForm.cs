@@ -14,13 +14,14 @@ using System.Windows.Forms;
 namespace WinsockPacketEditor
 {
     public partial class ProxyModeForm : Window, InterfaceInfo.IProxyMode
-    {  
+    {
+        private string TextA = string.Empty;
+        private string TextB = string.Empty;
         private bool setcolor = false;
         private bool SearchFromHead = true;
         private static Socket ProxyServer;
         private BindingList<AccountInfo> lstAccount;
         private AntdUI.FormFloatButton FloatButton = null;
-        private readonly Operate.SystemConfig.SystemMode RunMode = Operate.SystemConfig.SystemMode.Proxy;
 
         #region//窗体事件
 
@@ -46,20 +47,21 @@ namespace WinsockPacketEditor
 
             this.pageHeader.Loading = true;
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
-            {                
-                //Operate.SystemConfig.InitCPUAndMemoryCounter();                
+            {
+                Operate.SystemConfig.InitCPUAndMemoryCounter();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
-                //Operate.SystemConfig.LoadSystemList_FromDB();
+                Operate.SystemConfig.LoadSystemList_FromDB();
                 Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
-                //Operate.SystemConfig.StartRemoteMGT();
+                Operate.SystemConfig.StartRemoteMGT();
 
                 this.InitProxyServerIP();
                 this.InitFloatButton();
                 this.InitTable_ProxyList();
                 this.InitTable_AccountList();
                 this.InitTable_AuthList();
+                this.InitTable_FilterList();
                 this.InitTable_LogList();
 
             }, () =>
@@ -84,16 +86,16 @@ namespace WinsockPacketEditor
 
             if (Operate.ProxyConfig.Account.NeedSave)
             {
-                Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
+                Operate.ProxyConfig.Account.SaveAccountList_ToDB();
             }
 
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
-            //Operate.SystemConfig.SaveSystemList_ToDB();            
-            
-            Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB(this.RunMode);
-            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB(this.RunMode);
-            Operate.SystemConfig.StopRemoteMGT(this.RunMode);
+            Operate.SystemConfig.SaveSystemList_ToDB();
+
+            Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
+            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
+            Operate.SystemConfig.StopRemoteMGT();
         }
 
         private void InitForm()
@@ -141,6 +143,20 @@ namespace WinsockPacketEditor
             }
         }
 
+        public void RefreshFilterList()
+        {
+            this.tFilterList.Refresh();
+        }
+
+        public void RefreshProxyData()
+        {
+            if (Operate.ProxyConfig.List.piSelect != null)
+            {
+                DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
+                hbProxyData.ByteProvider = dbp;
+            }
+        }
+
         public void RefreshAccountList()
         {
             Operate.ProxyConfig.Account.NeedSave = true;
@@ -184,7 +200,7 @@ namespace WinsockPacketEditor
                 {
                     Render = (value, record, rowindex)=>
                     {
-                        return value.ToString().ToUpper();
+                        return Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)value);
                     },
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
@@ -368,6 +384,187 @@ namespace WinsockPacketEditor
             this.tAuthList.Binding(Operate.ProxyConfig.Account.lstAuthInfo);
         }
 
+        private void InitTable_FilterList()
+        {
+            tFilterList.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
+                {
+                    Width = "80",
+                    Call = (value, record, i_row, i_col) =>
+                    {
+                        System.Threading.Thread.Sleep(500);
+                        return value;
+                    }
+                }.SetFixed().SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is FilterInfo fi)
+                        {
+                            if(fi.IsEnable)
+                            {
+                                if(fi.ExecutionCount > 0)
+                                {
+                                    return new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                }
+                                else
+                                {
+                                    return new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                }
+                            }
+                            else
+                            {
+                                return new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                            }
+                        }
+
+                        return value;
+                    },
+                }.SetLocalizationTitleID("Table.Column."),
+                new AntdUI.Column("FAction", "动作", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        switch((Operate.FilterConfig.Filter.FilterAction)value)
+                        {
+                            case Operate.FilterConfig.Filter.FilterAction.Replace:
+                                return AntdUI.Localization.Get("FilterAction.Replace", "替换");
+
+                            case Operate.FilterConfig.Filter.FilterAction.Change:
+                                return AntdUI.Localization.Get("FilterAction.Change", "换包");
+
+                            case Operate.FilterConfig.Filter.FilterAction.Intercept:
+                                return AntdUI.Localization.Get("FilterAction.Intercept", "拦截");
+
+                            case Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
+                                return AntdUI.Localization.Get("FilterAction.NoModify_NoDisplay", "不修改不显示");
+
+                            case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
+                                return AntdUI.Localization.Get("FilterAction.NoModify_Display", "不修改只显示");
+
+                            default:
+                                return value;
+                        }
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.FromArgb(22, 119, 255),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("Appoint", "指定类型")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is FilterInfo fi)
+                        {
+                            List<CellTag> ctList = new List<CellTag>();
+
+                            if(fi.AppointHeader)
+                            {
+                                ctList.Add(new AntdUI.CellTag("包头", AntdUI.TTypeMini.Success));
+                            }
+
+                            if(fi.AppointSocket)
+                            {
+                                ctList.Add(new AntdUI.CellTag("套接字", AntdUI.TTypeMini.Warn));
+                            }
+
+                            if(fi.AppointPort)
+                            {
+                                ctList.Add(new AntdUI.CellTag("端口", AntdUI.TTypeMini.Default));
+                            }
+
+                            if(fi.AppointLength)
+                            {
+                                ctList.Add(new AntdUI.CellTag("长度", AntdUI.TTypeMini.Primary));
+                            }
+
+                            if(ctList.Count > 0)
+                            {
+                                AntdUI.CellTag[] cellTags = new AntdUI.CellTag[ctList.Count];
+                                for(int i = 0; i < ctList.Count; i++)
+                                {
+                                    cellTags[i] = ctList[i];
+                                }
+
+                                return cellTags;
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+
+                        return null;
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("Progression", "递进")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is FilterInfo fi)
+                        {
+                            List<CellTag> ctList = new List<CellTag>();
+
+                            if(!string.IsNullOrEmpty(fi.ProgressionPosition))
+                            {
+                                ctList.Add(new AntdUI.CellTag("启用", AntdUI.TTypeMini.Error));
+                            }
+
+                            if(fi.IsProgressionContinuous)
+                            {
+                                ctList.Add(new AntdUI.CellTag("连续", AntdUI.TTypeMini.Success));
+                            }
+
+                            if(fi.IsProgressionCarry)
+                            {
+                                ctList.Add(new AntdUI.CellTag("进位", AntdUI.TTypeMini.Warn));
+                            }
+
+                            if(ctList.Count > 0)
+                            {
+                                AntdUI.CellTag[] cellTags = new AntdUI.CellTag[ctList.Count];
+                                for(int i = 0; i < ctList.Count; i++)
+                                {
+                                    cellTags[i] = ctList[i];
+                                }
+
+                                return cellTags;
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+
+                        return null;
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Column."),
+            };
+
+            this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tFilterList.Binding(Operate.FilterConfig.List.lstFilterInfo);
+        }
+
         private void InitTable_LogList()
         {
             tSystemLog.Columns = new AntdUI.ColumnCollection {
@@ -391,28 +588,6 @@ namespace WinsockPacketEditor
 
             this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSystemLog.DataSource = Operate.LogConfig.List.lstLogInfo;
-        }
-
-        private BindingList<AccountInfo> GetPageData(int current, int pageSize)
-        {
-            if (this.lstAccount == null)
-            {
-                this.lstAccount = Operate.ProxyConfig.Account.lstAccountInfo;
-            }
-
-            this.pAccountList.Total = this.lstAccount.Count;
-
-            var list = new BindingList<AccountInfo>();
-            int start = Math.Abs(current - 1) * pageSize;
-
-            for (int i = start; i < this.lstAccount.Count && i < start + pageSize; i++)
-            {
-                list.Add(this.lstAccount[i]);
-            }
-
-            this.InitCalendar_ExpiryTime();
-
-            return list;
         }
 
         private void InitCalendar_ExpiryTime()
@@ -450,6 +625,85 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        private BindingList<AccountInfo> GetPageData(int current, int pageSize)
+        {
+            var list = new BindingList<AccountInfo>();
+
+            try
+            {
+                if (this.lstAccount == null)
+                {
+                    this.lstAccount = Operate.ProxyConfig.Account.lstAccountInfo;
+                }
+
+                this.pAccountList.Total = this.lstAccount.Count;                
+                int start = Math.Abs(current - 1) * pageSize;
+
+                for (int i = start; i < this.lstAccount.Count && i < start + pageSize; i++)
+                {
+                    list.Add(this.lstAccount[i]);
+                }
+
+                this.InitCalendar_ExpiryTime();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+
+            return list;
+        }        
+
+        private Table.CellStyleInfo tProxyList_SetRowStyle(object sender, TableSetRowStyleEventArgs e)
+        {
+            try
+            {
+                int index = e.RowIndex - 1;
+                if (index > -1 && index < Operate.ProxyConfig.List.lstProxyInfo.Count)
+                {
+                    ProxyInfo pi = Operate.ProxyConfig.List.lstProxyInfo[index];
+                    if (pi != null)
+                    {
+                        switch (pi.FilterAction)
+                        {
+                            case Operate.FilterConfig.Filter.FilterAction.Replace:
+
+                                return new AntdUI.Table.CellStyleInfo
+                                {
+                                    ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Replace,
+                                    BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Replace,
+                                };
+
+                            case Operate.FilterConfig.Filter.FilterAction.Intercept:
+
+                                return new AntdUI.Table.CellStyleInfo
+                                {
+                                    ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept,
+                                    BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept,
+                                };
+
+                            case Operate.FilterConfig.Filter.FilterAction.Change:
+
+                                return new AntdUI.Table.CellStyleInfo
+                                {
+                                    ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Change,
+                                    BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Change,
+                                };
+
+                            default:
+                                return null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return null;
         }
 
         private void pAccountList_ValueChanged(object sender, PagePageEventArgs e)
@@ -684,7 +938,8 @@ namespace WinsockPacketEditor
             this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
             this.mProxyMode.Items[1].Badge = this.treeClientList.Items.Count().ToString();
             this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
-            this.mProxyMode.Items[4].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+            this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
+            this.mProxyMode.Items[5].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
         }
 
         #endregion
@@ -800,9 +1055,19 @@ namespace WinsockPacketEditor
             try
             {
                 var proxyListCopy = Operate.ProxyConfig.List.lstProxyExecute.ToList();
+                if (proxyListCopy == null)
+                {
+                    return;
+                }
+
                 foreach (ProxyExecute pe in proxyListCopy)
                 {
-                    if (pe == null || pe.TCP_Client == null)
+                    if (pe == null)
+                    {                        
+                        return;
+                    }
+
+                    if (pe.TCP_Client == null)
                     {
                         Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
                         pe?.Dispose();
@@ -811,7 +1076,7 @@ namespace WinsockPacketEditor
 
                     if (pe.TCP_Client.Socket == null)
                     {
-                        #region//移除关闭的客户端链接
+                        #region//移除关闭的客户端链接                    
 
                         string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
                         string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
@@ -954,7 +1219,7 @@ namespace WinsockPacketEditor
 
         private void bgwAccountList_DoWork(object sender, DoWorkEventArgs e)
         {
-            Operate.ProxyConfig.Account.SaveAccountList_ToDB(this.RunMode);
+            Operate.ProxyConfig.Account.SaveAccountList_ToDB();
         }
 
         #endregion
@@ -997,7 +1262,11 @@ namespace WinsockPacketEditor
 
                 case "miAccountList":
                     this.tabProxyMode.SelectTab("tpAccountList");
-                    break;             
+                    break;
+
+                case "miFilterList":
+                    this.tabProxyMode.SelectTab("tpFilterList");
+                    break;
 
                 case "miStatistical":
                     this.tabProxyMode.SelectTab("tpStatistical");                    
@@ -1119,6 +1388,172 @@ namespace WinsockPacketEditor
                     });
 
                     break;
+            }
+        }
+
+        #endregion
+
+        #region//代理数据 - 右键菜单
+
+        private void tProxyList_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.ProxyConfig.List.lstProxyInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(tProxyList, item =>
+                {
+                    List<ProxyInfo> piList = new List<ProxyInfo>();
+
+                    foreach (int SelectIndex in this.tProxyList.SelectedIndexs)
+                    {
+                        piList.Add(Operate.ProxyConfig.List.lstProxyInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Edit":
+
+                            if (piList.Count > 0)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, null, piList[0]))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        case "ToFilterList":
+
+                            if (piList.Count > 0)
+                            {
+                                bool bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(piList[0], null);
+                                if (bOK)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到滤镜列表成功", TType.Success)
+                                    {
+                                        LocalizationText = "ToFilterList.Success"
+                                    });
+                                }
+                                else
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到滤镜列表失败", TType.Error)
+                                    {
+                                        LocalizationText = "ToFilterList.Error"
+                                    });
+                                }
+                            }
+
+                            break;
+
+                        case "SYSSocket":
+
+                            if (piList.Count > 0)
+                            {
+                                Operate.SystemConfig.SystemSocket = piList[0].PacketSocket;
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "设置系统套接字完成", TType.Success)
+                                {
+                                    LocalizationText = "SYSSocket.Success"
+                                });
+                            }
+
+                            break;
+
+                        case "PacketModification":
+
+                            if (piList.Count > 0)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketModificationForm(this, null, piList[0]))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        case "ToExcel":
+
+                            //Operate.PacketConfig.List.SavePacketList_Dialog(this, this.tProxyList, Operate.PacketConfig.Packet.InjectProcess, piList);
+
+                            break;
+
+                        case "ToTextA":
+
+                            //if (piList.Count > 0)
+                            //{
+                            //    this.TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
+                            //    this.txtComparison_A.Text = this.TextA;
+
+                            //    AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
+                            //    {
+                            //        LocalizationText = "System.ToTextA"
+                            //    });
+                            //}
+
+                            break;
+
+                        case "ToTextB":
+
+                            //if (piList.Count > 0)
+                            //{
+                            //    this.TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
+                            //    this.txtComparison_B.Text = this.TextB;
+
+                            //    AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
+                            //    {
+                            //        LocalizationText = "System.ToTextB"
+                            //    });
+                            //}
+
+                            break;
+
+                        case "DeSelect":
+
+                            this.tProxyList.SelectedIndex = -1;
+
+                            break;
+
+                        default:
+
+                            if (piList.Count > 0)
+                            {
+                                if (Guid.TryParse(item.ID, out Guid SID))
+                                {
+                                    SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                    if (si != null && piList.Count > 0)
+                                    {
+                                        if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
+                                            {
+                                                LocalizationText = "cmsPacketList_ToSendList.Success"
+                                            });
+                                        }
+                                        else
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                            {
+                                                LocalizationText = "cmsPacketList_ToSendList.Error"
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+
+                            break;
+                    }
+                }, Operate.PacketConfig.List.GetCMS_PacketList());
             }
         }
 
@@ -1353,6 +1788,178 @@ namespace WinsockPacketEditor
 
 
 
+
+        #endregion
+
+        #region//滤镜列表 - 菜单
+
+        private void bFilterList_Reset_Click(object sender, EventArgs e)
+        {
+            Operate.FilterConfig.List.InitFilterList_Count();
+        }
+
+        private void mFilterList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mFilterList.SelectIndex(-1);
+
+            switch (miSelect.ID)
+            {
+                case "miAdd":
+
+                    Operate.FilterConfig.Filter.AddFilter_New();
+                    this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+
+                    break;
+
+                case "miImport":
+
+                    Operate.FilterConfig.List.LoadFilterList_Dialog(this);
+
+                    break;
+
+                case "miExport":
+
+                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                    {
+                        Operate.FilterConfig.List.SaveFilterList_Dialog(this, string.Empty, null);
+                    }
+
+                    break;
+
+                case "miClear":
+
+                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                    {
+                        Operate.FilterConfig.List.CleanUpFilterList_Dialog(this);
+                    }
+
+                    break;
+            }
+        }
+
+        private void tFilterList_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is FilterInfo fi)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bEdit":
+
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterEditForm(this, fi))
+                        {
+                            Align = AntdUI.TAlignMini.Right,
+                            Mask = true,
+                            MaskClosable = false,
+                            DisplayDelay = 0,
+                        });
+
+                        break;
+
+                    case "bDelete":
+
+                        List<FilterInfo> fiList = new List<FilterInfo>();
+                        fiList.Add(fi);
+                        Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, fiList);
+
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region//滤镜列表 - 右键菜单
+
+        private void tFilterList_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.FilterConfig.List.lstFilterInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tFilterList, (item) =>
+                {
+                    List<FilterInfo> fiList = new List<FilterInfo>();
+
+                    foreach (int SelectIndex in this.tFilterList.SelectedIndexs)
+                    {
+                        fiList.Add(Operate.FilterConfig.List.lstFilterInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Top":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Top, fiList);
+                            }
+
+                            break;
+
+                        case "Up":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Up, fiList);
+                            }
+
+                            break;
+
+                        case "Down":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Down, fiList);
+                            }
+
+                            break;
+
+                        case "Bottom":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, fiList);
+                            }
+
+                            break;
+
+                        case "Copy":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Copy, fiList);
+                                this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+                            }
+
+                            break;
+
+                        case "Export":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Export, fiList);
+                            }
+
+                            break;
+
+                        case "Delete":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, fiList);
+                            }
+
+                            break;
+                    }
+
+                    this.tFilterList.SelectedIndex = -1;
+                }, Operate.SystemConfig.GetCMS_List()));
+            }
+        }
 
         #endregion
 
@@ -1718,8 +2325,11 @@ namespace WinsockPacketEditor
             }
         }
 
+
+
+
         #endregion
 
-
+        
     }
 }
