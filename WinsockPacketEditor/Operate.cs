@@ -4632,6 +4632,10 @@ namespace WinsockPacketEditor
                             res = ProxyConfig.Proxy.SendTCPData(SendSocket, bNewBuffer);
                         }
 
+                        string ClientAddr = $"{pe.TCP_Client.EndPoint.Address.ToString()}:{pe.TCP_Client.EndPoint.Port.ToString()}";
+                        string ServerAddr = $"{pe.TCP_Server.EndPoint.Address.ToString()}:{pe.TCP_Server.EndPoint.Port.ToString()}";
+                        string ServerDomain = pe.TCP_Server.Address.Trim();
+
                         _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             FilterAction,
@@ -4639,9 +4643,9 @@ namespace WinsockPacketEditor
                             iSocket,
                             ptType,
                             dtType,
-                            pe.TCP_Client.EndPoint,
-                            pe.TCP_Server.EndPoint,
-                            pe.TCP_Server.Address,
+                            ClientAddr,
+                            ServerAddr,
+                            ServerDomain,
                             pe.DomainType,
                             bRawBuffer,
                             bNewBuffer);
@@ -4692,6 +4696,9 @@ namespace WinsockPacketEditor
                             res = ProxyConfig.Proxy.SendUDPData(pe.UDP_Relay.ClientUDP, bNewBuffer, epSend);
                         }
 
+                        string ClientAddr = $"{pe.UDP_Relay.ClientUDP_EndPoint.Address.ToString()}:{pe.UDP_Relay.ClientUDP_EndPoint.Port.ToString()}";
+                        string ServerAddr = $"{epRemote.Address.ToString()}:{epRemote.Port.ToString()}";
+
                         _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             FilterAction,
@@ -4699,8 +4706,8 @@ namespace WinsockPacketEditor
                             iSocket,
                             ptType,
                             dtType,
-                            pe.UDP_Relay.ClientUDP_EndPoint,
-                            epRemote,
+                            ClientAddr,
+                            ServerAddr,
                             string.Empty,
                             DomainType.External,
                             bRawBuffer,
@@ -5644,8 +5651,8 @@ namespace WinsockPacketEditor
                     int PacketSocket,
                     Operate.PacketConfig.Packet.PacketType PacketType,
                     ProxyConfig.Proxy.DataType DataType,
-                    IPEndPoint ClientIP,
-                    IPEndPoint ServerIP,
+                    string ClientAddr,
+                    string ServerAddr,
                     string ServerDomain,
                     ProxyConfig.Proxy.DomainType DomainType,
                     byte[] bRawBuffer,
@@ -5683,8 +5690,8 @@ namespace WinsockPacketEditor
                                     PacketSocket,
                                     PacketType,
                                     DataType,
-                                    ClientIP,
-                                    ServerIP,
+                                    ClientAddr,
+                                    ServerAddr,
                                     ServerDomain,
                                     DomainType,
                                     bRawBuffer,
@@ -5952,6 +5959,103 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion                
+
+                #region//保存代理列表为Excel（对话框）
+
+                public static void SaveProxyList_Dialog(Form form, AntdUI.Table tTable, string FileName, List<ProxyInfo> piList)
+                {
+                    try
+                    {
+                        if (ProxyConfig.List.lstProxyInfo.Count > 0)
+                        {
+                            int SaveCount = ProxyConfig.List.lstProxyInfo.Count;
+
+                            SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
+                            sfdSaveToExcel.Filter = AntdUI.Localization.Get("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
+                            sfdSaveToExcel.RestoreDirectory = true;
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveToExcel.FileName = FileName;
+                            }
+
+                            if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveToExcel.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    bool bOK = false;
+                                    tTable.Spin(AntdUI.Localization.Get("Exporting", "正在导出..."), config =>
+                                    {
+                                        bOK = ProxyConfig.List.SaveProxyListToExcel(FilePath, piList);
+                                    }, () =>
+                                    {
+                                        if (bOK)
+                                        {
+                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Success", "导出到Excel成功");
+                                            AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        }
+                                        else
+                                        {
+                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Error", "导出到Excel失败");
+                                            string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                            AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                private static bool SaveProxyListToExcel(string filePath, List<ProxyInfo> piList)
+                {
+                    try
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                        using (var writer = new StreamWriter(stream, Encoding.Default))
+                        {
+                            writer.WriteLine(AntdUI.Localization.Get("ToExcelTitle", "时间戳\t类别\t套接字\t客户端地址\t服务端地址\t长度\t数据\t"));
+
+                            var dataSource = piList.Count > 0 ? piList : ProxyConfig.List.lstProxyInfo.ToList();
+                            foreach (var proxy in dataSource)
+                            {
+                                try
+                                {
+                                    var lineBuilder = new StringBuilder();
+
+                                    lineBuilder.Append(proxy.ProxyTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
+                                    lineBuilder.Append(proxy.PacketType).Append('\t');
+                                    lineBuilder.Append(proxy.PacketSocket).Append('\t');
+                                    lineBuilder.Append(proxy.ClientAddr).Append('\t');
+                                    lineBuilder.Append(proxy.ServerAddr).Append('\t');
+                                    lineBuilder.Append(proxy.PacketLen).Append('\t');
+                                    lineBuilder.Append(SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, proxy.PacketBuffer)).Append('\t');
+
+                                    writer.WriteLine(lineBuilder.ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return false;
+                    }
+                }
+
+                #endregion
             }
 
             #endregion
@@ -13542,9 +13646,7 @@ namespace WinsockPacketEditor
                                 {
                                     foreach (ProxyInfo pi in piList)
                                     {
-                                        string ProxyFrom = pi.ClientIP.Address.ToString() + ":" + pi.ClientIP.Port.ToString();
-                                        string ProxyTo = pi.ServerIP.Address.ToString() + ":" + pi.ServerIP.Port.ToString();
-                                        SendConfig.Send.AddSendCollection(si.SCollection, pi.PacketSocket, pi.PacketType, ProxyFrom, ProxyTo, pi.PacketBuffer);
+                                        SendConfig.Send.AddSendCollection(si.SCollection, pi.PacketSocket, pi.PacketType, pi.ClientAddr, pi.ServerAddr, pi.PacketBuffer);
                                     }
                                 }
                             }

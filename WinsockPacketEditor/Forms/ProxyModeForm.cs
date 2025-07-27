@@ -204,27 +204,8 @@ namespace WinsockPacketEditor
                     },
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("ClientIP", "客户端地址")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        IPEndPoint clientIP = value as IPEndPoint;
-                        return clientIP.Address.ToString() + ":" + clientIP.Port.ToString();
-                    },
-                }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ServerIP", "服务端地址")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        IPEndPoint serverIP = value as IPEndPoint;
-                        if(serverIP != null)
-                        {
-                            return serverIP.Address.ToString() + ":" + serverIP.Port.ToString();
-                        }
-
-                        return null;
-                    },
-                }.SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("ClientAddr", "客户端地址").SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("ServerAddr", "服务端地址").SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };
@@ -1484,7 +1465,7 @@ namespace WinsockPacketEditor
 
                         case "ToExcel":
 
-                            //Operate.PacketConfig.List.SavePacketList_Dialog(this, this.tProxyList, Operate.PacketConfig.Packet.InjectProcess, piList);
+                            Operate.ProxyConfig.List.SaveProxyList_Dialog(this, this.tProxyList, Operate.PacketConfig.Packet.InjectProcess, piList);
 
                             break;
 

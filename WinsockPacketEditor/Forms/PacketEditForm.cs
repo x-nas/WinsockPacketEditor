@@ -20,8 +20,6 @@ namespace WinsockPacketEditor
         private int SendSocket = 0;
         private int SendCNT = 0;
         private int SendINT = 0;
-        private string ProxyFrom = string.Empty;
-        private string ProxyTo = string.Empty;
 
         #region//窗体事件
 
@@ -68,11 +66,7 @@ namespace WinsockPacketEditor
 
                     this.nudPacketSocket.Value = this.proxyInfo.PacketSocket;
                     this.nudPacketLength.Value = this.proxyInfo.PacketLen;
-
-                    this.ProxyFrom = this.proxyInfo.ClientIP.Address.ToString() + ":" + this.proxyInfo.ClientIP.Port.ToString();
-                    this.ProxyTo = this.proxyInfo.ServerIP.Address.ToString() + ":" + this.proxyInfo.ServerIP.Port.ToString();
-
-                    this.txtPacketTo.Text = this.ProxyTo;
+                    this.txtPacketTo.Text = this.proxyInfo.ServerAddr;
 
                     dbp = new DynamicByteProvider(this.proxyInfo.PacketBuffer);
 
@@ -358,8 +352,8 @@ namespace WinsockPacketEditor
                                             ProxyInfo proxyInfo = new ProxyInfo();
                                             proxyInfo.PacketSocket = this.proxyInfo.PacketSocket;
                                             proxyInfo.PacketType = this.proxyInfo.PacketType;
-                                            proxyInfo.ClientIP = this.proxyInfo.ClientIP;
-                                            proxyInfo.ServerIP = this.proxyInfo.ServerIP;
+                                            proxyInfo.ClientAddr = this.proxyInfo.ClientAddr;
+                                            proxyInfo.ServerAddr = this.proxyInfo.ServerAddr;
                                             proxyInfo.PacketBuffer = bBuffer;
                                             proxyInfo.PacketLen = bBuffer.Length;
                                             proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen);
@@ -459,7 +453,7 @@ namespace WinsockPacketEditor
                                 break;
 
                             case Operate.SystemConfig.SystemMode.Proxy:
-                                this.DoSendPacket(this.SendSocket, this.ProxyFrom, this.ProxyTo, bBuff, iSendCount, this.proxyInfo.PacketType);
+                                this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, iSendCount, this.proxyInfo.PacketType);
                                 break;
                         }
                         
@@ -489,7 +483,7 @@ namespace WinsockPacketEditor
                                     break;
 
                                 case Operate.SystemConfig.SystemMode.Proxy:
-                                    this.DoSendPacket(this.SendSocket, this.ProxyFrom, this.ProxyTo, bBuff, i, this.proxyInfo.PacketType);
+                                    this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, i, this.proxyInfo.PacketType);
                                     break;
                             }                            
 

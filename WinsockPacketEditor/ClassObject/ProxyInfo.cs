@@ -1,6 +1,5 @@
 ﻿using AntdUI;
 using System;
-using System.Net;
 
 namespace WinsockPacketEditor
 {
@@ -74,34 +73,34 @@ namespace WinsockPacketEditor
 
         #endregion                
 
-        #region//客户端IP地址
+        #region//客户端地址
 
-        IPEndPoint _ClientIP;
+        string _ClientAddr;
 
-        public IPEndPoint ClientIP
+        public string ClientAddr
         {
-            get => _ClientIP;
+            get => _ClientAddr;
             set
             {
-                if (_ClientIP == value) return;
-                _ClientIP = value;
+                if (_ClientAddr == value) return;
+                _ClientAddr = value;
                 OnPropertyChanged();
             }
         }
 
         #endregion        
 
-        #region//服务端IP地址
+        #region//服务端地址
 
-        IPEndPoint _ServerIP;
+        string _ServerAddr;
 
-        public IPEndPoint ServerIP
+        public string ServerAddr
         {
-            get => _ServerIP;
+            get => _ServerAddr;
             set
             {
-                if (_ServerIP == value) return;
-                _ServerIP = value;
+                if (_ServerAddr == value) return;
+                _ServerAddr = value;
                 OnPropertyChanged();
             }
         }
@@ -239,8 +238,8 @@ namespace WinsockPacketEditor
             int PacketSocket,
             Operate.PacketConfig.Packet.PacketType PacketType,
             Operate.ProxyConfig.Proxy.DataType DataType,        
-            IPEndPoint ClientIP,        
-            IPEndPoint ServerIP,
+            string ClientAddr,
+            string ServerAddr,
             string ServerDomain, 
             Operate.ProxyConfig.Proxy.DomainType DomainType,
             byte[] pRawBuffer,
@@ -252,8 +251,8 @@ namespace WinsockPacketEditor
             this._PacketSocket = PacketSocket;
             this._PacketType = PacketType;
             this._DataType = DataType;
-            this._ClientIP = ClientIP;
-            this._ServerIP = ServerIP;
+            this._ClientAddr = ClientAddr;
+            this._ServerAddr = ServerAddr;
             this._ServerDomain = ServerDomain;
             this._DomainType = DomainType;
             this._RawBuffer = pRawBuffer;
