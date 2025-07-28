@@ -12,14 +12,14 @@ namespace WinsockPacketEditor
 {
     public partial class RobotEditForm : Form
     {
-        private InjectModeForm imForm;
+        private Form form;
         private RobotInfo riSelect;
         private BindingList<InstructionInfo> RInstruction;
         private readonly RobotExecute re = new RobotExecute();
 
         #region//窗体事件
 
-        public RobotEditForm(InjectModeForm form, RobotInfo ri)
+        public RobotEditForm(Form form, RobotInfo ri)
         {
             InitializeComponent();
 
@@ -33,7 +33,7 @@ namespace WinsockPacketEditor
             else
             {
                 this.riSelect = ri;
-                this.imForm = form;
+                this.form = form;
             }
         }
 
@@ -769,8 +769,22 @@ namespace WinsockPacketEditor
                 return;
             }
 
+            switch (Operate.SystemConfig.StartMode)
+            {
+                case Operate.SystemConfig.SystemMode.Process:
+
+                    ((InterfaceInfo.IInjectMode)form).RefreshRobotList();
+
+                    break;
+
+                case Operate.SystemConfig.SystemMode.Proxy:
+
+                    ((InterfaceInfo.IProxyMode)form).RefreshRobotList();
+
+                    break;
+            }
+
             this.Close();
-            this.imForm.RefreshRobotList();
         }
 
         private bool SaveRobot()

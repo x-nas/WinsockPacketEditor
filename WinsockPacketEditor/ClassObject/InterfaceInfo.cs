@@ -16,6 +16,10 @@ namespace WinsockPacketEditor
             void RefreshFilterList();
 
             void RefreshAccountList();
+
+            void RefreshSendList();
+
+            void RefreshRobotList();
         }
 
         #endregion
@@ -31,6 +35,10 @@ namespace WinsockPacketEditor
             void RefreshPacketData();
 
             void RefreshFilterList();
+
+            void RefreshSendList();
+
+            void RefreshRobotList();
         }
 
         #endregion

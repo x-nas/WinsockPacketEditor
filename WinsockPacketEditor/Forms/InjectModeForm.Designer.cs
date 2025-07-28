@@ -414,42 +414,42 @@
             menuItem1.Select = true;
             menuItem1.Text = "封包数据";
             menuItem2.Badge = "";
-            menuItem2.IconSvg = "FunnelPlotFilled";
+            menuItem2.IconSvg = "FilterOutlined";
             menuItem2.ID = "miFilterList";
             menuItem2.LocalizationText = "InjectModeForm.{id}";
             menuItem2.Text = "滤镜列表";
             menuItem3.Badge = "";
-            menuItem3.IconSvg = "PlaySquareFilled";
+            menuItem3.IconSvg = "SendOutlined";
             menuItem3.ID = "miSendList";
             menuItem3.LocalizationText = "InjectModeForm.{id}";
             menuItem3.Text = "发送列表";
             menuItem4.Badge = "";
-            menuItem4.IconSvg = "RobotFilled";
+            menuItem4.IconSvg = "RobotOutlined";
             menuItem4.ID = "miRobotList";
             menuItem4.LocalizationText = "InjectModeForm.{id}";
             menuItem4.Text = "机器人列表";
-            menuItem5.IconSvg = "PieChartFilled";
+            menuItem5.IconSvg = "PieChartOutlined";
             menuItem5.ID = "miStatistical";
             menuItem5.LocalizationText = "InjectModeForm.{id}";
             menuItem5.Text = "统计数据";
-            menuItem6.IconSvg = "SnippetsFilled";
+            menuItem6.IconSvg = "DiffOutlined";
             menuItem6.ID = "miComparison";
             menuItem6.LocalizationText = "InjectModeForm.{id}";
             menuItem6.Text = "文本对比";
-            menuItem7.IconSvg = "BuildFilled";
+            menuItem7.IconSvg = "BuildOutlined";
             menuItem7.ID = "miXOR";
             menuItem7.LocalizationText = "InjectModeForm.{id}";
             menuItem7.Text = "异或计算";
-            menuItem8.IconSvg = "InteractionFilled";
+            menuItem8.IconSvg = "InteractionOutlined";
             menuItem8.ID = "miTranscoding";
             menuItem8.LocalizationText = "InjectModeForm.{id}";
             menuItem8.Text = "编码转换";
-            menuItem9.IconSvg = "SaveFilled";
+            menuItem9.IconSvg = "DeliveredProcedureOutlined";
             menuItem9.ID = "miExtraction";
             menuItem9.LocalizationText = "InjectModeForm.{id}";
             menuItem9.Text = "数据提取";
             menuItem10.Badge = "";
-            menuItem10.IconSvg = "ContainerFilled";
+            menuItem10.IconSvg = "ExceptionOutlined";
             menuItem10.ID = "miSystemLog";
             menuItem10.LocalizationText = "InjectModeForm.{id}";
             menuItem10.Text = "系统日志";
@@ -509,7 +509,7 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 1;
+            this.tabInjectMode.SelectedIndex = 3;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -594,7 +594,7 @@
             // 
             // mPacketList
             // 
-            this.mPacketList.Dock = System.Windows.Forms.DockStyle.Right;
+            this.mPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mPacketList.Gap = 0;
             this.mPacketList.IconRatio = 1F;
             menuItem11.IconSvg = "SearchOutlined";
@@ -1349,7 +1349,7 @@
             // tpFilterList
             // 
             this.tpFilterList.Controls.Add(this.tlpFilterList);
-            this.tpFilterList.Location = new System.Drawing.Point(3, 33);
+            this.tpFilterList.Location = new System.Drawing.Point(-1124, -724);
             this.tpFilterList.Name = "tpFilterList";
             this.tpFilterList.Size = new System.Drawing.Size(1124, 724);
             this.tpFilterList.TabIndex = 7;
@@ -1404,7 +1404,7 @@
             // 
             // mFilterList
             // 
-            this.mFilterList.Dock = System.Windows.Forms.DockStyle.Right;
+            this.mFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mFilterList.Gap = 0;
             this.mFilterList.IconRatio = 1F;
             menuItem19.IconSvg = "PlusOutlined";
@@ -1521,7 +1521,7 @@
             // 
             // mSendList
             // 
-            this.mSendList.Dock = System.Windows.Forms.DockStyle.Right;
+            this.mSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mSendList.Gap = 0;
             this.mSendList.IconRatio = 1F;
             menuItem24.IconSvg = "PlusOutlined";
@@ -1572,7 +1572,7 @@
             // tpRobotList
             // 
             this.tpRobotList.Controls.Add(this.tlpRobotList);
-            this.tpRobotList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
             this.tpRobotList.Name = "tpRobotList";
             this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
             this.tpRobotList.TabIndex = 9;
@@ -1630,7 +1630,7 @@
             // 
             // mRobotList
             // 
-            this.mRobotList.Dock = System.Windows.Forms.DockStyle.Right;
+            this.mRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mRobotList.Gap = 0;
             this.mRobotList.IconRatio = 1F;
             menuItem29.IconSvg = "PlusOutlined";

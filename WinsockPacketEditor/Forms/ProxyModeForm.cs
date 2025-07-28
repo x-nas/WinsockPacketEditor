@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -62,6 +63,8 @@ namespace WinsockPacketEditor
                 this.InitTable_AccountList();
                 this.InitTable_AuthList();
                 this.InitTable_FilterList();
+                this.InitTable_SendList();
+                this.InitTable_RobotList();
                 this.InitTable_LogList();
 
             }, () =>
@@ -161,6 +164,16 @@ namespace WinsockPacketEditor
         {
             Operate.ProxyConfig.Account.NeedSave = true;
             this.tAccountList.Binding(GetPageData(this.pAccountList.Current, this.pAccountList.PageSize));
+        }
+
+        public void RefreshSendList()
+        {
+            this.tSendList.Refresh();
+        }
+
+        public void RefreshRobotList()
+        {
+            this.tRobotList.Refresh();
         }
 
         #endregion
@@ -546,6 +559,196 @@ namespace WinsockPacketEditor
             this.tFilterList.Binding(Operate.FilterConfig.List.lstFilterInfo);
         }
 
+        private void InitTable_SendList()
+        {
+            tSendList.Columns = new AntdUI.ColumnCollection
+            {
+                new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
+                {
+                    Width = "80",
+                    Call = (value, record, i_row, i_col) =>
+                    {
+                        System.Threading.Thread.Sleep(500);
+                        return value;
+                    }
+                }.SetFixed().SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("SName", "发送名称").SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is SendInfo si)
+                        {
+                            AntdUI.CellBadge cellBadge = null;
+
+                            if(si.IsEnable)
+                            {
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                if(si.ExecutionCount > 0)
+                                {
+                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                }
+                            }
+                            else
+                            {
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                            }
+
+                            return cellBadge;
+                        }
+
+                        return null;
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.FromArgb(22, 119, 255),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("ExecutionSuccess", "成功次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.Green,
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("ExecutionFail", "失败次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.Red,
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("SSystemSocket", "套接字", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if((bool)value)
+                        {
+                            return new CellTag(Operate.SystemConfig.SystemSocket.ToString(), TTypeMini.Error);
+                        }
+                        else
+                        {
+                            return new CellTag(AntdUI.Localization.Get("System.SystemSocket", "自定义"), TTypeMini.Success);
+                        }
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("SLoopCNT", "循环")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is SendInfo si)
+                        {
+                            return new CellTag[]
+                            {
+                                new CellTag(si.SLoopCNT.ToString() + AntdUI.Localization.Get("System.LoopCNT", " 次"), TTypeMini.Success),
+                                new CellTag(AntdUI.Localization.Get("System.LoopINT", "间隔 ") + si.SLoopINT.ToString() + AntdUI.Localization.Get("System.Millisecond", " 毫秒"), TTypeMini.Warn)
+                            };
+                        }
+
+                        return null;
+                    },
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new Column("SNotes", "备注")
+                {
+                    LineBreak = true,
+                }.SetLocalizationTitleID("Table.SendList.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.SendList.Column."),
+            };
+
+            this.tSendList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tSendList.Binding(Operate.SendConfig.List.lstSendInfo);
+        }
+
+        private void InitTable_RobotList()
+        {
+            tRobotList.Columns = new AntdUI.ColumnCollection
+            {
+                new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
+                {
+                    Width = "80",
+                    Call = (value, record, i_row, i_col) =>
+                    {
+                        System.Threading.Thread.Sleep(500);
+                        return value;
+                    }
+                }.SetFixed().SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("RName", "机器人名称").SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is RobotInfo ri)
+                        {
+                            AntdUI.CellBadge cellBadge = null;
+
+                            if(ri.IsEnable)
+                            {
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                if(ri.ExecutionCount > 0)
+                                {
+                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                }
+                            }
+                            else
+                            {
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                            }
+
+                            return cellBadge;
+                        }
+
+                        return null;
+                    },
+                }.SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.FromArgb(22, 119, 255),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.RobotList.Column."),
+            };
+
+            this.tRobotList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tRobotList.Binding(Operate.RobotConfig.List.lstRobotInfo);
+        }
+
         private void InitTable_LogList()
         {
             tSystemLog.Columns = new AntdUI.ColumnCollection {
@@ -920,7 +1123,9 @@ namespace WinsockPacketEditor
             this.mProxyMode.Items[1].Badge = this.treeClientList.Items.Count().ToString();
             this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
             this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
-            this.mProxyMode.Items[5].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+            this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
+            this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
+            this.mProxyMode.Items[11].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
         }
 
         #endregion
@@ -1249,8 +1454,32 @@ namespace WinsockPacketEditor
                     this.tabProxyMode.SelectTab("tpFilterList");
                     break;
 
+                case "miSendList":
+                    this.tabProxyMode.SelectTab("tpSendList");
+                    break;
+
+                case "miRobotList":
+                    this.tabProxyMode.SelectTab("tpRobotList");
+                    break;
+
                 case "miStatistical":
                     this.tabProxyMode.SelectTab("tpStatistical");                    
+                    break;
+
+                case "miComparison":
+                    this.tabProxyMode.SelectTab("tpComparison");
+                    break;
+
+                case "miXOR":
+                    this.tabProxyMode.SelectTab("tpXOR");
+                    break;
+
+                case "miTranscoding":
+                    this.tabProxyMode.SelectTab("tpTranscoding");
+                    break;
+
+                case "miExtraction":
+                    this.tabProxyMode.SelectTab("tpExtraction");
                     break;
 
                 case "miSystemLog":
@@ -1944,6 +2173,390 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//发送列表 - 菜单
+
+        private void bSendList_Start_Click(object sender, EventArgs e)
+        {
+            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+            {
+                if (!this.bgwSendList.IsBusy)
+                {
+                    this.bSendList_Start.Loading = true;
+                    this.bSendList_Stop.Enabled = true;
+                    this.tSendList.Enabled = false;
+
+                    Operate.SendConfig.List.lstSendExecute.Clear();
+
+                    this.bgwSendList.RunWorkerAsync();
+                }
+            }
+        }
+
+        private void bSendList_Stop_Click(object sender, EventArgs e)
+        {
+            this.bgwSendList.CancelAsync();
+        }
+
+        private void mSendList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mSendList.SelectIndex(-1);
+
+            switch (miSelect.ID)
+            {
+                case "miAdd":
+
+                    Operate.SendConfig.Send.AddSend_New();
+                    this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
+
+                    break;
+
+                case "miImport":
+
+                    Operate.SendConfig.List.LoadSendList_Dialog(this);
+
+                    break;
+
+                case "miExport":
+
+                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        Operate.SendConfig.List.SaveSendList_Dialog(this, string.Empty, null);
+                    }
+
+                    break;
+
+                case "miClear":
+
+                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        Operate.SendConfig.List.CleanUpSendList_Dialog(this);
+                    }
+
+                    break;
+            }
+        }
+
+        private void tSendList_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is SendInfo si)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bEdit":
+
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SendEditForm(this, si))
+                        {
+                            Align = AntdUI.TAlignMini.Right,
+                            Mask = true,
+                            MaskClosable = false,
+                            DisplayDelay = 0,
+                        });
+
+                        break;
+
+                    case "bDelete":
+
+                        List<SendInfo> siList = new List<SendInfo>
+                        {
+                            si
+                        };
+
+                        Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, siList);
+
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region//发送列表 - 右键菜单
+
+        private void tSendList_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.SendConfig.List.lstSendInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendList, (item) =>
+                {
+                    List<SendInfo> siList = new List<SendInfo>();
+
+                    foreach (int SelectIndex in this.tSendList.SelectedIndexs)
+                    {
+                        siList.Add(Operate.SendConfig.List.lstSendInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Top":
+
+                            if (siList.Count > 0)
+                            {
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Top, siList);
+                            }
+
+                            break;
+
+                        case "Up":
+
+                            if (siList.Count > 0)
+                            {
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Up, siList);
+                            }
+
+                            break;
+
+                        case "Down":
+
+                            if (siList.Count > 0)
+                            {
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Down, siList);
+                            }
+
+                            break;
+
+                        case "Bottom":
+
+                            if (siList.Count > 0)
+                            {
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, siList);
+                            }
+
+                            break;
+
+                        case "Copy":
+
+                            if (siList.Count > 0)
+                            {
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Copy, siList);
+                                this.tSendList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+                            }
+
+                            break;
+
+                        case "Export":
+
+                            if (siList.Count > 0)
+                            {
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Export, siList);
+                            }
+
+                            break;
+
+                        case "Delete":
+
+                            if (siList.Count > 0)
+                            {
+                                Operate.SendConfig.List.UpdateSendList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, siList);
+                            }
+
+                            break;
+                    }
+
+                    this.tSendList.SelectedIndex = -1;
+                }, Operate.SystemConfig.GetCMS_List()));
+            }
+        }
+
+        #endregion
+
+        #region//机器人列表 - 菜单
+
+        private void bRobotList_Start_Click(object sender, EventArgs e)
+        {
+            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+            {
+                if (!this.bgwRobotList.IsBusy)
+                {
+                    this.bRobotList_Start.Loading = true;
+                    this.bRobotList_Stop.Enabled = true;
+                    this.tRobotList.Enabled = false;
+
+                    Operate.RobotConfig.List.lstRobotExecute.Clear();
+
+                    this.bgwRobotList.RunWorkerAsync();
+                }
+            }
+        }
+
+        private void bRobotList_Stop_Click(object sender, EventArgs e)
+        {
+            this.bgwRobotList.CancelAsync();
+        }
+
+        private void mRobotList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mRobotList.SelectIndex(-1);
+
+            switch (miSelect.ID)
+            {
+                case "miAdd":
+
+                    Operate.RobotConfig.Robot.AddRobot_New();
+                    this.tRobotList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
+
+                    break;
+
+                case "miImport":
+
+                    Operate.RobotConfig.List.LoadRobotList_Dialog(this);
+
+                    break;
+
+                case "miExport":
+
+                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                    {
+                        Operate.RobotConfig.List.SaveRobotList_Dialog(this, string.Empty, null);
+                    }
+
+                    break;
+
+                case "miClear":
+
+                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                    {
+                        Operate.RobotConfig.List.CleanUpRobotList_Dialog(this);
+                    }
+
+                    break;
+            }
+        }
+
+        private void tRobotList_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is RobotInfo ri)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bEdit":
+
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new RobotEditForm(this, ri))
+                        {
+                            Align = AntdUI.TAlignMini.Right,
+                            Mask = true,
+                            MaskClosable = false,
+                            DisplayDelay = 0,
+                        });
+
+                        break;
+
+                    case "bDelete":
+
+                        List<RobotInfo> riList = new List<RobotInfo>
+                        {
+                            ri,
+                        };
+
+                        Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, riList);
+
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region//机器人列表 - 右键菜单
+
+        private void tRobotList_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.RobotConfig.List.lstRobotInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRobotList, (item) =>
+                {
+                    List<RobotInfo> riList = new List<RobotInfo>();
+
+                    foreach (int SelectIndex in this.tRobotList.SelectedIndexs)
+                    {
+                        riList.Add(Operate.RobotConfig.List.lstRobotInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Top":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Top, riList);
+                            }
+
+                            break;
+
+                        case "Up":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Up, riList);
+                            }
+
+                            break;
+
+                        case "Down":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Down, riList);
+                            }
+
+                            break;
+
+                        case "Bottom":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, riList);
+                            }
+
+                            break;
+
+                        case "Copy":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Copy, riList);
+                                this.tRobotList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+                            }
+
+                            break;
+
+                        case "Export":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Export, riList);
+                            }
+
+                            break;
+
+                        case "Delete":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, riList);
+                            }
+
+                            break;
+                    }
+
+                    this.tRobotList.SelectedIndex = -1;
+                }, Operate.SystemConfig.GetCMS_List()));
+            }
+        }
+
+        #endregion
+
         #region//日志列表 - 右键菜单
 
         private void tSystemLog_CellClick(object sender, TableClickEventArgs e)
@@ -2311,6 +2924,143 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        
+        #region//执行发送列表（异步）
+
+        private void bgwSendList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                for (int index = 0; index < Operate.SendConfig.List.lstSendInfo.Count; index++)
+                {
+                    SendInfo si = Operate.SendConfig.List.lstSendInfo[index];
+                    if (si.IsEnable)
+                    {
+                        SendExecute se = Operate.SendConfig.Send.DoSend(si.SID);
+                        if (se != null)
+                        {
+                            if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
+                            {
+                                Operate.SendConfig.List.lstSendExecute.Add(se);
+                            }
+                            else
+                            {
+                                while (se.Worker.IsBusy)
+                                {
+                                    if (this.bgwSendList.CancellationPending)
+                                    {
+                                        se.StopSend();
+
+                                        e.Cancel = true;
+                                        return;
+                                    }
+
+                                    Thread.Sleep(10);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                while (Operate.SendConfig.List.lstSendExecute.Count > 0)
+                {
+                    foreach (SendExecute se in Operate.SendConfig.List.lstSendExecute.ToList())
+                    {
+                        if (this.bgwSendList.CancellationPending)
+                        {
+                            se.StopSend();
+                        }
+
+                        if (!se.Worker.IsBusy)
+                        {
+                            Operate.SendConfig.List.lstSendExecute.Remove(se);
+                        }
+                    }
+
+                    Thread.Sleep(100);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            this.bSendList_Start.Loading = false;
+            this.bSendList_Stop.Enabled = false;
+            this.tSendList.Enabled = true;
+        }
+
+        #endregion
+
+        #region//执行机器人列表（异步）
+
+        private void bgwRobotList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
+                {
+                    if (ri.IsEnable)
+                    {
+                        RobotExecute re = Operate.RobotConfig.Robot.DoRobot(ri.RID, null);
+                        if (re != null)
+                        {
+                            if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
+                            {
+                                Operate.RobotConfig.List.lstRobotExecute.Add(re);
+                            }
+                            else
+                            {
+                                while (re.Worker.IsBusy)
+                                {
+                                    if (this.bgwRobotList.CancellationPending)
+                                    {
+                                        re.StopRobot();
+
+                                        e.Cancel = true;
+                                        return;
+                                    }
+
+                                    Thread.Sleep(100);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                while (Operate.RobotConfig.List.lstRobotExecute.Count > 0)
+                {
+                    foreach (RobotExecute re in Operate.RobotConfig.List.lstRobotExecute.ToList())
+                    {
+                        if (this.bgwRobotList.CancellationPending)
+                        {
+                            re.StopRobot();
+                        }
+
+                        if (!re.Worker.IsBusy)
+                        {
+                            Operate.RobotConfig.List.lstRobotExecute.Remove(re);
+                        }
+                    }
+
+                    Thread.Sleep(100);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwRobotList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            this.bRobotList_Start.Loading = false;
+            this.bRobotList_Stop.Enabled = false;
+            this.tRobotList.Enabled = true;
+        }
+
+        #endregion
     }
 }

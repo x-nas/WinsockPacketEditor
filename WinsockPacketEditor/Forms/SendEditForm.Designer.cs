@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.SegmentedItem segmentedItem1 = new AntdUI.SegmentedItem();
-            AntdUI.SegmentedItem segmentedItem2 = new AntdUI.SegmentedItem();
-            AntdUI.SegmentedItem segmentedItem3 = new AntdUI.SegmentedItem();
+            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SendEditForm));
             this.tlpSendEdit = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
@@ -39,7 +40,7 @@
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.tlpSendCollectionInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.sSendCollection = new AntdUI.Segmented();
+            this.mSendCollection = new AntdUI.Menu();
             this.lSend_Fail_CNT = new AntdUI.Label();
             this.lSend_Success_CNT = new AntdUI.Label();
             this.lTotal_Send_CNT = new AntdUI.Label();
@@ -95,7 +96,7 @@
             this.tlpSendEdit.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendEdit.Name = "tlpSendEdit";
             this.tlpSendEdit.RowCount = 5;
-            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
@@ -200,83 +201,65 @@
             // 
             // tlpSendCollectionInfo
             // 
-            this.tlpSendCollectionInfo.ColumnCount = 9;
+            this.tlpSendCollectionInfo.ColumnCount = 10;
+            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSendCollectionInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpSendCollectionInfo.Controls.Add(this.sSendCollection, 0, 0);
-            this.tlpSendCollectionInfo.Controls.Add(this.lSend_Fail_CNT, 8, 0);
-            this.tlpSendCollectionInfo.Controls.Add(this.lSend_Success_CNT, 5, 0);
-            this.tlpSendCollectionInfo.Controls.Add(this.lTotal_Send_CNT, 2, 0);
-            this.tlpSendCollectionInfo.Controls.Add(this.label3, 6, 0);
-            this.tlpSendCollectionInfo.Controls.Add(this.label4, 3, 0);
-            this.tlpSendCollectionInfo.Controls.Add(this.lSend_Fail, 7, 0);
-            this.tlpSendCollectionInfo.Controls.Add(this.lSend_Success, 4, 0);
-            this.tlpSendCollectionInfo.Controls.Add(this.lTotal_Send, 1, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.mSendCollection, 9, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.lSend_Fail_CNT, 7, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.lSend_Success_CNT, 4, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.lTotal_Send_CNT, 1, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.label3, 5, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.label4, 2, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.lSend_Fail, 6, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.lSend_Success, 3, 0);
+            this.tlpSendCollectionInfo.Controls.Add(this.lTotal_Send, 0, 0);
             this.tlpSendCollectionInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSendCollectionInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tlpSendCollectionInfo.Location = new System.Drawing.Point(0, 0);
             this.tlpSendCollectionInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendCollectionInfo.Name = "tlpSendCollectionInfo";
-            this.tlpSendCollectionInfo.RowCount = 1;
+            this.tlpSendCollectionInfo.RowCount = 2;
+            this.tlpSendCollectionInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendCollectionInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendCollectionInfo.Size = new System.Drawing.Size(984, 40);
+            this.tlpSendCollectionInfo.Size = new System.Drawing.Size(984, 50);
             this.tlpSendCollectionInfo.TabIndex = 6;
             // 
-            // sSendCollection
+            // mSendCollection
             // 
-            this.sSendCollection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sSendCollection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.sSendCollection.IconAlign = AntdUI.TAlignMini.Left;
-            this.sSendCollection.IconRatio = 1F;
-            segmentedItem1.Badge = null;
-            segmentedItem1.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem1.BadgeBack = null;
-            segmentedItem1.BadgeMode = false;
-            segmentedItem1.BadgeOffsetX = 0;
-            segmentedItem1.BadgeOffsetY = 0;
-            segmentedItem1.BadgeSize = 0.6F;
-            segmentedItem1.BadgeSvg = null;
-            segmentedItem1.IconSvg = "FolderOpenOutlined";
-            segmentedItem1.ID = "siImport";
-            segmentedItem1.Text = "导入发送集";
-            segmentedItem2.Badge = null;
-            segmentedItem2.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem2.BadgeBack = null;
-            segmentedItem2.BadgeMode = false;
-            segmentedItem2.BadgeOffsetX = 0;
-            segmentedItem2.BadgeOffsetY = 0;
-            segmentedItem2.BadgeSize = 0.6F;
-            segmentedItem2.BadgeSvg = null;
-            segmentedItem2.IconSvg = "DeliveredProcedureOutlined";
-            segmentedItem2.ID = "siExport";
-            segmentedItem2.Text = "导出发送集";
-            segmentedItem3.Badge = null;
-            segmentedItem3.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem3.BadgeBack = null;
-            segmentedItem3.BadgeMode = false;
-            segmentedItem3.BadgeOffsetX = 0;
-            segmentedItem3.BadgeOffsetY = 0;
-            segmentedItem3.BadgeSize = 0.6F;
-            segmentedItem3.BadgeSvg = null;
-            segmentedItem3.IconSvg = "DeleteOutlined";
-            segmentedItem3.ID = "siClear";
-            segmentedItem3.Text = "清空发送集";
-            this.sSendCollection.Items.Add(segmentedItem1);
-            this.sSendCollection.Items.Add(segmentedItem2);
-            this.sSendCollection.Items.Add(segmentedItem3);
-            this.sSendCollection.Location = new System.Drawing.Point(3, 3);
-            this.sSendCollection.Name = "sSendCollection";
-            this.sSendCollection.Size = new System.Drawing.Size(748, 34);
-            this.sSendCollection.TabIndex = 16;
-            this.sSendCollection.SelectIndexChanged += new AntdUI.IntEventHandler(this.sSendCollection_SelectIndexChanged);
+            this.mSendCollection.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mSendCollection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.mSendCollection.Gap = 0;
+            this.mSendCollection.IconRatio = 1F;
+            menuItem1.IconSvg = "PlusOutlined";
+            menuItem2.IconSvg = "FolderOpenOutlined";
+            menuItem2.ID = "miImport";
+            menuItem2.Text = "导入发送集";
+            menuItem3.IconSvg = "DeliveredProcedureOutlined";
+            menuItem3.ID = "miExport";
+            menuItem3.Text = "导出所有发送集";
+            menuItem4.IconSvg = "DeleteOutlined";
+            menuItem4.ID = "miClear";
+            menuItem4.Text = "清空所有发送集";
+            menuItem1.Sub.Add(menuItem2);
+            menuItem1.Sub.Add(menuItem3);
+            menuItem1.Sub.Add(menuItem4);
+            this.mSendCollection.Items.Add(menuItem1);
+            this.mSendCollection.Location = new System.Drawing.Point(921, 3);
+            this.mSendCollection.Mode = AntdUI.TMenuMode.Horizontal;
+            this.mSendCollection.Name = "mSendCollection";
+            this.mSendCollection.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.mSendCollection.Size = new System.Drawing.Size(60, 44);
+            this.mSendCollection.TabIndex = 17;
+            this.mSendCollection.Trigger = AntdUI.Trigger.Click;
+            this.mSendCollection.SelectChanged += new AntdUI.SelectEventHandler(this.mSendCollection_SelectChanged);
             // 
             // lSend_Fail_CNT
             // 
@@ -284,9 +267,9 @@
             this.lSend_Fail_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Fail_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend_Fail_CNT.ForeColor = System.Drawing.Color.Red;
-            this.lSend_Fail_CNT.Location = new System.Drawing.Point(971, 3);
+            this.lSend_Fail_CNT.Location = new System.Drawing.Point(217, 3);
             this.lSend_Fail_CNT.Name = "lSend_Fail_CNT";
-            this.lSend_Fail_CNT.Size = new System.Drawing.Size(10, 34);
+            this.lSend_Fail_CNT.Size = new System.Drawing.Size(10, 44);
             this.lSend_Fail_CNT.TabIndex = 14;
             this.lSend_Fail_CNT.Text = "0";
             // 
@@ -296,9 +279,9 @@
             this.lSend_Success_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Success_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend_Success_CNT.ForeColor = System.Drawing.Color.Green;
-            this.lSend_Success_CNT.Location = new System.Drawing.Point(901, 3);
+            this.lSend_Success_CNT.Location = new System.Drawing.Point(147, 3);
             this.lSend_Success_CNT.Name = "lSend_Success_CNT";
-            this.lSend_Success_CNT.Size = new System.Drawing.Size(10, 34);
+            this.lSend_Success_CNT.Size = new System.Drawing.Size(10, 44);
             this.lSend_Success_CNT.TabIndex = 13;
             this.lSend_Success_CNT.Text = "0";
             // 
@@ -308,9 +291,9 @@
             this.lTotal_Send_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTotal_Send_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lTotal_Send_CNT.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
-            this.lTotal_Send_CNT.Location = new System.Drawing.Point(831, 3);
+            this.lTotal_Send_CNT.Location = new System.Drawing.Point(77, 3);
             this.lTotal_Send_CNT.Name = "lTotal_Send_CNT";
-            this.lTotal_Send_CNT.Size = new System.Drawing.Size(10, 34);
+            this.lTotal_Send_CNT.Size = new System.Drawing.Size(10, 44);
             this.lTotal_Send_CNT.TabIndex = 12;
             this.lTotal_Send_CNT.Text = "0";
             // 
@@ -320,9 +303,9 @@
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.ForeColor = System.Drawing.Color.Silver;
-            this.label3.Location = new System.Drawing.Point(917, 3);
+            this.label3.Location = new System.Drawing.Point(163, 3);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(6, 34);
+            this.label3.Size = new System.Drawing.Size(6, 44);
             this.label3.TabIndex = 9;
             this.label3.Text = "|";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -333,9 +316,9 @@
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.Location = new System.Drawing.Point(847, 3);
+            this.label4.Location = new System.Drawing.Point(93, 3);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(6, 34);
+            this.label4.Size = new System.Drawing.Size(6, 44);
             this.label4.TabIndex = 8;
             this.label4.Text = "|";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -345,9 +328,9 @@
             this.lSend_Fail.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Fail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Fail.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSend_Fail.Location = new System.Drawing.Point(929, 3);
+            this.lSend_Fail.Location = new System.Drawing.Point(175, 3);
             this.lSend_Fail.Name = "lSend_Fail";
-            this.lSend_Fail.Size = new System.Drawing.Size(36, 34);
+            this.lSend_Fail.Size = new System.Drawing.Size(36, 44);
             this.lSend_Fail.TabIndex = 7;
             this.lSend_Fail.Text = "失败:";
             // 
@@ -356,9 +339,9 @@
             this.lSend_Success.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Success.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Success.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSend_Success.Location = new System.Drawing.Point(859, 3);
+            this.lSend_Success.Location = new System.Drawing.Point(105, 3);
             this.lSend_Success.Name = "lSend_Success";
-            this.lSend_Success.Size = new System.Drawing.Size(36, 34);
+            this.lSend_Success.Size = new System.Drawing.Size(36, 44);
             this.lSend_Success.TabIndex = 6;
             this.lSend_Success.Text = "成功:";
             // 
@@ -367,9 +350,9 @@
             this.lTotal_Send.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTotal_Send.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTotal_Send.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lTotal_Send.Location = new System.Drawing.Point(757, 3);
+            this.lTotal_Send.Location = new System.Drawing.Point(3, 3);
             this.lTotal_Send.Name = "lTotal_Send";
-            this.lTotal_Send.Size = new System.Drawing.Size(68, 34);
+            this.lTotal_Send.Size = new System.Drawing.Size(68, 44);
             this.lTotal_Send.TabIndex = 5;
             this.lTotal_Send.Text = "发送总数:";
             // 
@@ -383,10 +366,10 @@
             this.tSendCollection.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tSendCollection.Gap = 8;
             this.tSendCollection.GapCell = 0;
-            this.tSendCollection.Location = new System.Drawing.Point(3, 43);
+            this.tSendCollection.Location = new System.Drawing.Point(3, 53);
             this.tSendCollection.MultipleRows = true;
             this.tSendCollection.Name = "tSendCollection";
-            this.tSendCollection.Size = new System.Drawing.Size(978, 455);
+            this.tSendCollection.Size = new System.Drawing.Size(978, 445);
             this.tSendCollection.TabIndex = 7;
             this.tSendCollection.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendCollection_CellClick);
             // 
@@ -444,7 +427,7 @@
             this.tlpLoopINT.Name = "tlpLoopINT";
             this.tlpLoopINT.RowCount = 3;
             this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpLoopINT.Size = new System.Drawing.Size(236, 90);
             this.tlpLoopINT.TabIndex = 0;
@@ -460,7 +443,7 @@
             0});
             this.nudLoopINT.Name = "nudLoopINT";
             this.nudLoopINT.SelectionStart = 3;
-            this.nudLoopINT.Size = new System.Drawing.Size(230, 34);
+            this.nudLoopINT.Size = new System.Drawing.Size(230, 40);
             this.nudLoopINT.SuffixText = "毫秒";
             this.nudLoopINT.TabIndex = 2;
             this.nudLoopINT.Text = "100";
@@ -715,6 +698,6 @@
         private AntdUI.Button bExit;
         private AntdUI.Button bStop;
         private AntdUI.Button bExecute;
-        private AntdUI.Segmented sSendCollection;
+        private AntdUI.Menu mSendCollection;
     }
 }

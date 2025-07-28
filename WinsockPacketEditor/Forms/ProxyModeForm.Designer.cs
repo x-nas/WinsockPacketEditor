@@ -35,13 +35,13 @@
             AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
-            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             AntdUI.MenuItem menuItem13 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem14 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem15 = new AntdUI.MenuItem();
@@ -53,6 +53,22 @@
             AntdUI.MenuItem menuItem21 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem22 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem23 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem24 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem25 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem26 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem27 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem28 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem29 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem30 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem31 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem32 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem33 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem34 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem35 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem36 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem37 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem38 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem39 = new AntdUI.MenuItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxyModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -135,6 +151,22 @@
             this.bgwClientList = new System.ComponentModel.BackgroundWorker();
             this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
             this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
+            this.tpSendList = new AntdUI.TabPage();
+            this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
+            this.tSendList = new AntdUI.Table();
+            this.tlpSendListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bSendList_Stop = new AntdUI.Button();
+            this.mSendList = new AntdUI.Menu();
+            this.bSendList_Start = new AntdUI.Button();
+            this.bgwSendList = new System.ComponentModel.BackgroundWorker();
+            this.tpRobotList = new AntdUI.TabPage();
+            this.tlpRobotList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpRobotListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bRobotList_Stop = new AntdUI.Button();
+            this.mRobotList = new AntdUI.Menu();
+            this.bRobotList_Start = new AntdUI.Button();
+            this.tRobotList = new AntdUI.Table();
+            this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
@@ -163,6 +195,12 @@
             this.tlpFilterList.SuspendLayout();
             this.tlpFilterListButton.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
+            this.tpSendList.SuspendLayout();
+            this.tlpSendList.SuspendLayout();
+            this.tlpSendListButton.SuspendLayout();
+            this.tpRobotList.SuspendLayout();
+            this.tlpRobotList.SuspendLayout();
+            this.tlpRobotListButton.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -274,21 +312,45 @@
             menuItem4.IconSvg = "FilterOutlined";
             menuItem4.ID = "miFilterList";
             menuItem4.Text = "滤镜列表";
-            menuItem5.IconSvg = "PieChartOutlined";
-            menuItem5.ID = "miStatistical";
-            menuItem5.LocalizationText = "ProxyModeForm.{id}";
-            menuItem5.Text = "统计数据";
-            menuItem6.Badge = "";
-            menuItem6.IconSvg = "ExceptionOutlined";
-            menuItem6.ID = "miSystemLog";
-            menuItem6.LocalizationText = "ProxyModeForm.{id}";
-            menuItem6.Text = "系统日志";
+            menuItem5.IconSvg = "SendOutlined";
+            menuItem5.ID = "miSendList";
+            menuItem5.Text = "发送列表";
+            menuItem6.IconSvg = "RobotOutlined";
+            menuItem6.ID = "miRobotList";
+            menuItem6.Text = "机器人列表";
+            menuItem7.IconSvg = "PieChartOutlined";
+            menuItem7.ID = "miStatistical";
+            menuItem7.LocalizationText = "ProxyModeForm.{id}";
+            menuItem7.Text = "统计数据";
+            menuItem8.IconSvg = "DiffOutlined";
+            menuItem8.ID = "miComparison";
+            menuItem8.Text = "文本对比";
+            menuItem9.IconSvg = "BuildOutlined";
+            menuItem9.ID = "miXOR";
+            menuItem9.Text = "异或计算";
+            menuItem10.IconSvg = "InteractionOutlined";
+            menuItem10.ID = "miTranscoding";
+            menuItem10.Text = "编码转换";
+            menuItem11.IconSvg = "DeliveredProcedureOutlined";
+            menuItem11.ID = "miExtraction";
+            menuItem11.Text = "数据提取";
+            menuItem12.Badge = "";
+            menuItem12.IconSvg = "ExceptionOutlined";
+            menuItem12.ID = "miSystemLog";
+            menuItem12.LocalizationText = "ProxyModeForm.{id}";
+            menuItem12.Text = "系统日志";
             this.mProxyMode.Items.Add(menuItem1);
             this.mProxyMode.Items.Add(menuItem2);
             this.mProxyMode.Items.Add(menuItem3);
             this.mProxyMode.Items.Add(menuItem4);
             this.mProxyMode.Items.Add(menuItem5);
             this.mProxyMode.Items.Add(menuItem6);
+            this.mProxyMode.Items.Add(menuItem7);
+            this.mProxyMode.Items.Add(menuItem8);
+            this.mProxyMode.Items.Add(menuItem9);
+            this.mProxyMode.Items.Add(menuItem10);
+            this.mProxyMode.Items.Add(menuItem11);
+            this.mProxyMode.Items.Add(menuItem12);
             this.mProxyMode.Location = new System.Drawing.Point(3, 51);
             this.mProxyMode.Name = "mProxyMode";
             this.mProxyMode.Size = new System.Drawing.Size(164, 706);
@@ -315,9 +377,11 @@
             this.tabProxyMode.Controls.Add(this.tpClientList);
             this.tabProxyMode.Controls.Add(this.tpAccountList);
             this.tabProxyMode.Controls.Add(this.tpFilterList);
+            this.tabProxyMode.Controls.Add(this.tpSendList);
+            this.tabProxyMode.Controls.Add(this.tpRobotList);
             this.tabProxyMode.Controls.Add(this.tpStatistical);
             this.tabProxyMode.Controls.Add(this.tpSystemLog);
-            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabProxyMode.Location = new System.Drawing.Point(170, 40);
             this.tabProxyMode.Name = "tabProxyMode";
@@ -325,8 +389,11 @@
             this.tabProxyMode.Pages.Add(this.tpClientList);
             this.tabProxyMode.Pages.Add(this.tpAccountList);
             this.tabProxyMode.Pages.Add(this.tpFilterList);
+            this.tabProxyMode.Pages.Add(this.tpSendList);
+            this.tabProxyMode.Pages.Add(this.tpRobotList);
             this.tabProxyMode.Pages.Add(this.tpStatistical);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
+            this.tabProxyMode.SelectedIndex = 5;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -335,7 +402,7 @@
             // tpProxyList
             // 
             this.tpProxyList.Controls.Add(this.tlpProxyList);
-            this.tpProxyList.Location = new System.Drawing.Point(3, 33);
+            this.tpProxyList.Location = new System.Drawing.Point(-1124, -724);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
             this.tpProxyList.TabIndex = 0;
@@ -411,34 +478,34 @@
             // 
             // mProxyList
             // 
-            this.mProxyList.Dock = System.Windows.Forms.DockStyle.Right;
+            this.mProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mProxyList.Gap = 0;
             this.mProxyList.IconRatio = 1F;
-            menuItem7.IconSvg = "SearchOutlined";
-            menuItem7.ID = "miProxyListSearch";
-            menuItem8.IconSvg = "PlusOutlined";
-            menuItem9.IconSvg = "ShareAltOutlined";
-            menuItem9.ID = "miProxySettings";
-            menuItem9.Text = "代理设置";
-            menuItem10.IconSvg = "OrderedListOutlined";
-            menuItem10.ID = "miListSettings";
-            menuItem10.Text = "列表设置";
-            menuItem11.IconSvg = "BlockOutlined";
-            menuItem11.ID = "miMapSettings";
-            menuItem11.Text = "映射设置";
-            menuItem12.IconSvg = "CloudUploadOutlined";
-            menuItem12.ID = "miExternalProxySettings";
-            menuItem12.Text = "外部代理设置";
-            menuItem13.IconSvg = "SettingOutlined";
-            menuItem13.ID = "miSystemSettings";
-            menuItem13.Text = "系统设置";
-            menuItem8.Sub.Add(menuItem9);
-            menuItem8.Sub.Add(menuItem10);
-            menuItem8.Sub.Add(menuItem11);
-            menuItem8.Sub.Add(menuItem12);
-            menuItem8.Sub.Add(menuItem13);
-            this.mProxyList.Items.Add(menuItem7);
-            this.mProxyList.Items.Add(menuItem8);
+            menuItem13.IconSvg = "SearchOutlined";
+            menuItem13.ID = "miProxyListSearch";
+            menuItem14.IconSvg = "PlusOutlined";
+            menuItem15.IconSvg = "ShareAltOutlined";
+            menuItem15.ID = "miProxySettings";
+            menuItem15.Text = "代理设置";
+            menuItem16.IconSvg = "OrderedListOutlined";
+            menuItem16.ID = "miListSettings";
+            menuItem16.Text = "列表设置";
+            menuItem17.IconSvg = "BlockOutlined";
+            menuItem17.ID = "miMapSettings";
+            menuItem17.Text = "映射设置";
+            menuItem18.IconSvg = "CloudUploadOutlined";
+            menuItem18.ID = "miExternalProxySettings";
+            menuItem18.Text = "外部代理设置";
+            menuItem19.IconSvg = "SettingOutlined";
+            menuItem19.ID = "miSystemSettings";
+            menuItem19.Text = "系统设置";
+            menuItem14.Sub.Add(menuItem15);
+            menuItem14.Sub.Add(menuItem16);
+            menuItem14.Sub.Add(menuItem17);
+            menuItem14.Sub.Add(menuItem18);
+            menuItem14.Sub.Add(menuItem19);
+            this.mProxyList.Items.Add(menuItem13);
+            this.mProxyList.Items.Add(menuItem14);
             this.mProxyList.Location = new System.Drawing.Point(1011, 3);
             this.mProxyList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mProxyList.Name = "mProxyList";
@@ -1142,24 +1209,24 @@
             this.mAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mAccountList.Gap = 0;
             this.mAccountList.IconRatio = 1F;
-            menuItem14.IconSvg = "PlusOutlined";
-            menuItem15.IconSvg = "UserAddOutlined";
-            menuItem15.ID = "miAdd";
-            menuItem15.Text = "新增账号";
-            menuItem16.IconSvg = "FolderOpenOutlined";
-            menuItem16.ID = "miImport";
-            menuItem16.Text = "导入账号列表";
-            menuItem17.IconSvg = "DeliveredProcedureOutlined";
-            menuItem17.ID = "miExport";
-            menuItem17.Text = "导出所有账号";
-            menuItem18.IconSvg = "DeleteOutlined";
-            menuItem18.ID = "miClear";
-            menuItem18.Text = "清空所有账号";
-            menuItem14.Sub.Add(menuItem15);
-            menuItem14.Sub.Add(menuItem16);
-            menuItem14.Sub.Add(menuItem17);
-            menuItem14.Sub.Add(menuItem18);
-            this.mAccountList.Items.Add(menuItem14);
+            menuItem20.IconSvg = "PlusOutlined";
+            menuItem21.IconSvg = "UserAddOutlined";
+            menuItem21.ID = "miAdd";
+            menuItem21.Text = "新增账号";
+            menuItem22.IconSvg = "FolderOpenOutlined";
+            menuItem22.ID = "miImport";
+            menuItem22.Text = "导入账号列表";
+            menuItem23.IconSvg = "DeliveredProcedureOutlined";
+            menuItem23.ID = "miExport";
+            menuItem23.Text = "导出所有账号";
+            menuItem24.IconSvg = "DeleteOutlined";
+            menuItem24.ID = "miClear";
+            menuItem24.Text = "清空所有账号";
+            menuItem20.Sub.Add(menuItem21);
+            menuItem20.Sub.Add(menuItem22);
+            menuItem20.Sub.Add(menuItem23);
+            menuItem20.Sub.Add(menuItem24);
+            this.mAccountList.Items.Add(menuItem20);
             this.mAccountList.Location = new System.Drawing.Point(1061, 2);
             this.mAccountList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mAccountList.Name = "mAccountList";
@@ -1276,27 +1343,27 @@
             // 
             // mFilterList
             // 
-            this.mFilterList.Dock = System.Windows.Forms.DockStyle.Right;
+            this.mFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mFilterList.Gap = 0;
             this.mFilterList.IconRatio = 1F;
-            menuItem19.IconSvg = "PlusOutlined";
-            menuItem20.IconSvg = "UserAddOutlined";
-            menuItem20.ID = "miAdd";
-            menuItem20.Text = "新增滤镜";
-            menuItem21.IconSvg = "FolderOpenOutlined";
-            menuItem21.ID = "miImport";
-            menuItem21.Text = "导入滤镜列表";
-            menuItem22.IconSvg = "DeliveredProcedureOutlined";
-            menuItem22.ID = "miExport";
-            menuItem22.Text = "导出所有滤镜";
-            menuItem23.IconSvg = "DeleteOutlined";
-            menuItem23.ID = "miClear";
-            menuItem23.Text = "清空所有滤镜";
-            menuItem19.Sub.Add(menuItem20);
-            menuItem19.Sub.Add(menuItem21);
-            menuItem19.Sub.Add(menuItem22);
-            menuItem19.Sub.Add(menuItem23);
-            this.mFilterList.Items.Add(menuItem19);
+            menuItem25.IconSvg = "PlusOutlined";
+            menuItem26.IconSvg = "UserAddOutlined";
+            menuItem26.ID = "miAdd";
+            menuItem26.Text = "新增滤镜";
+            menuItem27.IconSvg = "FolderOpenOutlined";
+            menuItem27.ID = "miImport";
+            menuItem27.Text = "导入滤镜列表";
+            menuItem28.IconSvg = "DeliveredProcedureOutlined";
+            menuItem28.ID = "miExport";
+            menuItem28.Text = "导出所有滤镜";
+            menuItem29.IconSvg = "DeleteOutlined";
+            menuItem29.ID = "miClear";
+            menuItem29.Text = "清空所有滤镜";
+            menuItem25.Sub.Add(menuItem26);
+            menuItem25.Sub.Add(menuItem27);
+            menuItem25.Sub.Add(menuItem28);
+            menuItem25.Sub.Add(menuItem29);
+            this.mFilterList.Items.Add(menuItem25);
             this.mFilterList.Location = new System.Drawing.Point(1061, 3);
             this.mFilterList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mFilterList.Name = "mFilterList";
@@ -1382,6 +1449,264 @@
             this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
             this.bgwSearchProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchProxyList_RunWorkerCompleted);
             // 
+            // tpSendList
+            // 
+            this.tpSendList.Controls.Add(this.tlpSendList);
+            this.tpSendList.Location = new System.Drawing.Point(0, 0);
+            this.tpSendList.Name = "tpSendList";
+            this.tpSendList.Size = new System.Drawing.Size(0, 0);
+            this.tpSendList.TabIndex = 10;
+            this.tpSendList.Text = "发送列表";
+            // 
+            // tlpSendList
+            // 
+            this.tlpSendList.ColumnCount = 1;
+            this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendList.Controls.Add(this.tSendList, 0, 1);
+            this.tlpSendList.Controls.Add(this.tlpSendListButton, 0, 0);
+            this.tlpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSendList.Location = new System.Drawing.Point(0, 0);
+            this.tlpSendList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSendList.Name = "tlpSendList";
+            this.tlpSendList.RowCount = 2;
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSendList.Size = new System.Drawing.Size(0, 0);
+            this.tlpSendList.TabIndex = 3;
+            // 
+            // tSendList
+            // 
+            this.tSendList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tSendList.CellImpactHeight = false;
+            this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSendList.GapCell = 6;
+            this.tSendList.Location = new System.Drawing.Point(3, 53);
+            this.tSendList.MultipleRows = true;
+            this.tSendList.Name = "tSendList";
+            this.tSendList.Size = new System.Drawing.Size(1, 1);
+            this.tSendList.TabIndex = 1;
+            this.tSendList.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellClick);
+            this.tSendList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tSendList_CellButtonClick);
+            // 
+            // tlpSendListButton
+            // 
+            this.tlpSendListButton.ColumnCount = 4;
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendListButton.Controls.Add(this.bSendList_Stop, 1, 0);
+            this.tlpSendListButton.Controls.Add(this.mSendList, 3, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_Start, 0, 0);
+            this.tlpSendListButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSendListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpSendListButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSendListButton.Name = "tlpSendListButton";
+            this.tlpSendListButton.RowCount = 1;
+            this.tlpSendListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendListButton.Size = new System.Drawing.Size(1, 50);
+            this.tlpSendListButton.TabIndex = 3;
+            // 
+            // bSendList_Stop
+            // 
+            this.bSendList_Stop.BorderWidth = 1F;
+            this.bSendList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Stop.Enabled = false;
+            this.bSendList_Stop.IconSvg = "PauseCircleOutlined";
+            this.bSendList_Stop.Location = new System.Drawing.Point(103, 3);
+            this.bSendList_Stop.Name = "bSendList_Stop";
+            this.bSendList_Stop.Size = new System.Drawing.Size(94, 44);
+            this.bSendList_Stop.TabIndex = 8;
+            this.bSendList_Stop.Text = "停止";
+            this.bSendList_Stop.Type = AntdUI.TTypeMini.Error;
+            this.bSendList_Stop.Click += new System.EventHandler(this.bSendList_Stop_Click);
+            // 
+            // mSendList
+            // 
+            this.mSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mSendList.Gap = 0;
+            this.mSendList.IconRatio = 1F;
+            menuItem30.IconSvg = "PlusOutlined";
+            menuItem31.IconSvg = "UserAddOutlined";
+            menuItem31.ID = "miAdd";
+            menuItem31.Text = "新增发送";
+            menuItem32.IconSvg = "FolderOpenOutlined";
+            menuItem32.ID = "miImport";
+            menuItem32.Text = "导入发送列表";
+            menuItem33.IconSvg = "DeliveredProcedureOutlined";
+            menuItem33.ID = "miExport";
+            menuItem33.Text = "导出所有发送";
+            menuItem34.IconSvg = "DeleteOutlined";
+            menuItem34.ID = "miClear";
+            menuItem34.Text = "清空所有发送";
+            menuItem30.Sub.Add(menuItem31);
+            menuItem30.Sub.Add(menuItem32);
+            menuItem30.Sub.Add(menuItem33);
+            menuItem30.Sub.Add(menuItem34);
+            this.mSendList.Items.Add(menuItem30);
+            this.mSendList.Location = new System.Drawing.Point(-62, 3);
+            this.mSendList.Mode = AntdUI.TMenuMode.Horizontal;
+            this.mSendList.Name = "mSendList";
+            this.mSendList.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.mSendList.Size = new System.Drawing.Size(60, 44);
+            this.mSendList.TabIndex = 6;
+            this.mSendList.Trigger = AntdUI.Trigger.Click;
+            this.mSendList.SelectChanged += new AntdUI.SelectEventHandler(this.mSendList_SelectChanged);
+            // 
+            // bSendList_Start
+            // 
+            this.bSendList_Start.BorderWidth = 1F;
+            this.bSendList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Start.IconSvg = "PlayCircleOutlined";
+            this.bSendList_Start.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bSendList_Start.LoadingWaveCount = 6;
+            this.bSendList_Start.LoadingWaveSize = 6;
+            this.bSendList_Start.LoadingWaveValue = 0.6F;
+            this.bSendList_Start.LoadingWaveVertical = true;
+            this.bSendList_Start.Location = new System.Drawing.Point(3, 3);
+            this.bSendList_Start.Name = "bSendList_Start";
+            this.bSendList_Start.Size = new System.Drawing.Size(94, 44);
+            this.bSendList_Start.TabIndex = 7;
+            this.bSendList_Start.Text = "执行";
+            this.bSendList_Start.Type = AntdUI.TTypeMini.Info;
+            this.bSendList_Start.Click += new System.EventHandler(this.bSendList_Start_Click);
+            // 
+            // bgwSendList
+            // 
+            this.bgwSendList.WorkerSupportsCancellation = true;
+            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
+            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
+            // 
+            // tpRobotList
+            // 
+            this.tpRobotList.Controls.Add(this.tlpRobotList);
+            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
+            this.tpRobotList.Name = "tpRobotList";
+            this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
+            this.tpRobotList.TabIndex = 11;
+            this.tpRobotList.Text = "机器人列表";
+            // 
+            // tlpRobotList
+            // 
+            this.tlpRobotList.ColumnCount = 1;
+            this.tlpRobotList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotList.Controls.Add(this.tlpRobotListButton, 0, 0);
+            this.tlpRobotList.Controls.Add(this.tRobotList, 0, 1);
+            this.tlpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpRobotList.Location = new System.Drawing.Point(0, 0);
+            this.tlpRobotList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpRobotList.Name = "tlpRobotList";
+            this.tlpRobotList.RowCount = 2;
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpRobotList.Size = new System.Drawing.Size(1124, 724);
+            this.tlpRobotList.TabIndex = 4;
+            // 
+            // tlpRobotListButton
+            // 
+            this.tlpRobotListButton.ColumnCount = 4;
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 1, 0);
+            this.tlpRobotListButton.Controls.Add(this.mRobotList, 3, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Start, 0, 0);
+            this.tlpRobotListButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpRobotListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpRobotListButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpRobotListButton.Name = "tlpRobotListButton";
+            this.tlpRobotListButton.RowCount = 1;
+            this.tlpRobotListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotListButton.Size = new System.Drawing.Size(1124, 50);
+            this.tlpRobotListButton.TabIndex = 4;
+            // 
+            // bRobotList_Stop
+            // 
+            this.bRobotList_Stop.BorderWidth = 1F;
+            this.bRobotList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_Stop.Enabled = false;
+            this.bRobotList_Stop.IconSvg = "PauseCircleOutlined";
+            this.bRobotList_Stop.Location = new System.Drawing.Point(103, 3);
+            this.bRobotList_Stop.Name = "bRobotList_Stop";
+            this.bRobotList_Stop.Size = new System.Drawing.Size(94, 44);
+            this.bRobotList_Stop.TabIndex = 8;
+            this.bRobotList_Stop.Text = "停止";
+            this.bRobotList_Stop.Type = AntdUI.TTypeMini.Error;
+            this.bRobotList_Stop.Click += new System.EventHandler(this.bRobotList_Stop_Click);
+            // 
+            // mRobotList
+            // 
+            this.mRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mRobotList.Gap = 0;
+            this.mRobotList.IconRatio = 1F;
+            menuItem35.IconSvg = "PlusOutlined";
+            menuItem36.IconSvg = "UserAddOutlined";
+            menuItem36.ID = "miAdd";
+            menuItem36.Text = "新增机器人";
+            menuItem37.IconSvg = "FolderOpenOutlined";
+            menuItem37.ID = "miImport";
+            menuItem37.Text = "导入机器人列表";
+            menuItem38.IconSvg = "DeliveredProcedureOutlined";
+            menuItem38.ID = "miExport";
+            menuItem38.Text = "导出所有机器人";
+            menuItem39.IconSvg = "DeleteOutlined";
+            menuItem39.ID = "miClear";
+            menuItem39.Text = "清空所有机器人";
+            menuItem35.Sub.Add(menuItem36);
+            menuItem35.Sub.Add(menuItem37);
+            menuItem35.Sub.Add(menuItem38);
+            menuItem35.Sub.Add(menuItem39);
+            this.mRobotList.Items.Add(menuItem35);
+            this.mRobotList.Location = new System.Drawing.Point(1061, 3);
+            this.mRobotList.Mode = AntdUI.TMenuMode.Horizontal;
+            this.mRobotList.Name = "mRobotList";
+            this.mRobotList.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.mRobotList.Size = new System.Drawing.Size(60, 44);
+            this.mRobotList.TabIndex = 6;
+            this.mRobotList.Trigger = AntdUI.Trigger.Click;
+            this.mRobotList.SelectChanged += new AntdUI.SelectEventHandler(this.mRobotList_SelectChanged);
+            // 
+            // bRobotList_Start
+            // 
+            this.bRobotList_Start.BorderWidth = 1F;
+            this.bRobotList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_Start.IconSvg = "PlayCircleOutlined";
+            this.bRobotList_Start.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bRobotList_Start.LoadingWaveCount = 6;
+            this.bRobotList_Start.LoadingWaveSize = 6;
+            this.bRobotList_Start.LoadingWaveValue = 0.6F;
+            this.bRobotList_Start.LoadingWaveVertical = true;
+            this.bRobotList_Start.Location = new System.Drawing.Point(3, 3);
+            this.bRobotList_Start.Name = "bRobotList_Start";
+            this.bRobotList_Start.Size = new System.Drawing.Size(94, 44);
+            this.bRobotList_Start.TabIndex = 7;
+            this.bRobotList_Start.Text = "执行";
+            this.bRobotList_Start.Type = AntdUI.TTypeMini.Info;
+            this.bRobotList_Start.Click += new System.EventHandler(this.bRobotList_Start_Click);
+            // 
+            // tRobotList
+            // 
+            this.tRobotList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tRobotList.CellImpactHeight = false;
+            this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tRobotList.GapCell = 6;
+            this.tRobotList.Location = new System.Drawing.Point(3, 53);
+            this.tRobotList.MultipleRows = true;
+            this.tRobotList.Name = "tRobotList";
+            this.tRobotList.Size = new System.Drawing.Size(1118, 668);
+            this.tRobotList.TabIndex = 1;
+            this.tRobotList.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellClick);
+            this.tRobotList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tRobotList_CellButtonClick);
+            // 
+            // bgwRobotList
+            // 
+            this.bgwRobotList.WorkerSupportsCancellation = true;
+            this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
+            this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
+            // 
             // ProxyModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -1432,6 +1757,12 @@
             this.tlpFilterList.ResumeLayout(false);
             this.tlpFilterListButton.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
+            this.tpSendList.ResumeLayout(false);
+            this.tlpSendList.ResumeLayout(false);
+            this.tlpSendListButton.ResumeLayout(false);
+            this.tpRobotList.ResumeLayout(false);
+            this.tlpRobotList.ResumeLayout(false);
+            this.tlpRobotListButton.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1519,6 +1850,22 @@
         private System.Windows.Forms.TableLayoutPanel tlpFilterListButton;
         private AntdUI.Menu mFilterList;
         private AntdUI.Button bFilterList_Reset;
+        private AntdUI.TabPage tpSendList;
+        private System.Windows.Forms.TableLayoutPanel tlpSendList;
+        private AntdUI.Table tSendList;
+        private System.Windows.Forms.TableLayoutPanel tlpSendListButton;
+        private AntdUI.Button bSendList_Stop;
+        private AntdUI.Menu mSendList;
+        private AntdUI.Button bSendList_Start;
+        private System.ComponentModel.BackgroundWorker bgwSendList;
+        private AntdUI.TabPage tpRobotList;
+        private System.Windows.Forms.TableLayoutPanel tlpRobotList;
+        private System.Windows.Forms.TableLayoutPanel tlpRobotListButton;
+        private AntdUI.Button bRobotList_Stop;
+        private AntdUI.Menu mRobotList;
+        private AntdUI.Button bRobotList_Start;
+        private AntdUI.Table tRobotList;
+        private System.ComponentModel.BackgroundWorker bgwRobotList;
     }
 }
 

@@ -11,14 +11,14 @@ namespace WinsockPacketEditor
 {
     public partial class SendEditForm : Form
     {
-        private InjectModeForm imForm;
+        private Form form;
         private SendInfo siSelect;
         private readonly SendExecute se = new SendExecute();
         private BindingList<PacketInfo> SendCollection;
 
         #region//窗体事件
 
-        public SendEditForm(InjectModeForm form, SendInfo si)
+        public SendEditForm(Form form, SendInfo si)
         {
             InitializeComponent();
 
@@ -32,7 +32,7 @@ namespace WinsockPacketEditor
             else
             {
                 this.siSelect = si;
-                this.imForm = form;
+                this.form = form;
             }
         }
 
@@ -111,29 +111,7 @@ namespace WinsockPacketEditor
             }
         }        
 
-        #endregion
-
-        #region//检查发送设置
-
-        private bool CheckSendInfo()
-        {
-            if (this.cbSystemSocket.Checked)
-            {
-                if (Operate.SystemConfig.SystemSocket <= 0)
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "系统套接字未设置", TType.Success)
-                    {
-                        LocalizationText = "SystemSocket.Error"
-                    });
-
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        #endregion
+        #endregion        
 
         #region//执行
 
@@ -252,19 +230,20 @@ namespace WinsockPacketEditor
 
         #region//发送集 - 菜单
 
-        private void sSendCollection_SelectIndexChanged(object sender, IntEventArgs e)
+        private void mSendCollection_SelectChanged(object sender, MenuSelectEventArgs e)
         {
-            switch (this.sSendCollection.SelectIndex)
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mSendCollection.SelectIndex(-1);
+
+            switch (miSelect.ID)
             {
-                //导入
-                case 0:
+                case "miImport":
 
                     Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Import, this.SendCollection.ToList());
 
                     break;
 
-                //导出
-                case 1:
+                case "miExport":
 
                     if (this.SendCollection.Count > 0)
                     {
@@ -273,8 +252,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                //清空
-                case 2:
+                case "miClear":
 
                     if (this.SendCollection.Count > 0)
                     {
@@ -283,8 +261,6 @@ namespace WinsockPacketEditor
 
                     break;
             }
-
-            this.sSendCollection.SelectIndex = -1;
         }
 
         #endregion
@@ -350,7 +326,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this.imForm, piList[0], null))
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this.form, piList[0], null))
                                 {
                                     Align = AntdUI.TAlignMini.Right,
                                     Mask = true,
@@ -436,8 +412,22 @@ namespace WinsockPacketEditor
         {
             if (this.SaveSend())
             {
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Process:
+
+                        ((InterfaceInfo.IInjectMode)form).RefreshSendList();
+
+                        break;
+
+                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                        ((InterfaceInfo.IProxyMode)form).RefreshSendList();
+
+                        break;
+                }
+
                 this.Close();
-                this.imForm.RefreshSendList();
             }
         }
 
@@ -489,6 +479,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion
+        #endregion        
     }
 }
