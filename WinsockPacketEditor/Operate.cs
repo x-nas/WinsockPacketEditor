@@ -3649,6 +3649,9 @@ namespace WinsockPacketEditor
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
                 public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
 
+                private static SemaphoreSlim _connectionLimiter = new SemaphoreSlim(100);
+                private static TimeSpan _connectionTimeout = TimeSpan.FromSeconds(30);
+
                 #region//定义结构                
 
                 public enum ProxyType
@@ -3726,19 +3729,45 @@ namespace WinsockPacketEditor
 
                 #region//接收客户端请求
 
-                public static void HandleClient(Socket clientSocket)
+                public static async Task HandleClient(Socket clientSocket)
                 {
+                    bool acquired = false;
                     ProxyExecute pe = null;
 
                     try
                     {
-                        pe = new ProxyExecute(clientSocket, ProxyConfig.Proxy.SocketBufferSize);
-                        ProxyConfig.Proxy.StartReceive(pe);
+                        acquired = await _connectionLimiter.WaitAsync(_connectionTimeout);
+
+                        if (acquired)
+                        {
+                            clientSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                            clientSocket.NoDelay = true;
+
+                            pe = new ProxyExecute(clientSocket, ProxyConfig.Proxy.SocketBufferSize);
+                            ProxyConfig.Proxy.StartReceive(pe);
+                        }
+                        else
+                        {
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "连接等待超时");
+                            clientSocket?.Close();
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, "连接操作被取消");
+                        clientSocket?.Close();
                     }
                     catch (Exception ex)
                     {
                         pe?.Dispose();
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                    finally
+                    {
+                        if (acquired)
+                        {
+                            _connectionLimiter.Release();
+                        }
                     }
                 }
 
@@ -3850,7 +3879,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//握手过程
+                #region//握手过程                
 
                 private static void Handshake(ProxyExecute pe, ReadOnlySpan<byte> bData)
                 {

@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 
 namespace WinsockPacketEditor
 {
@@ -24,11 +25,18 @@ namespace WinsockPacketEditor
 
         public ProxyExecute(Socket clientSocket, int bufferSize)
         {
-            TCP_Client = new TCPClient(clientSocket, bufferSize);
-            TCP_Server = new TCPServer(bufferSize);
-            UDP_Relay = new UDPRelay(new IPEndPoint(IPAddress.Any, 0));
+            try
+            {
+                TCP_Client = new TCPClient(clientSocket, bufferSize);
+                TCP_Server = new TCPServer(bufferSize);
+                UDP_Relay = new UDPRelay(new IPEndPoint(IPAddress.Any, 0));
 
-            ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Handshake;
+                ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Handshake;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
@@ -47,58 +55,72 @@ namespace WinsockPacketEditor
 
             public TCPClient(Socket socket, int bufferSize)
             {
-                Socket = socket;
-                EndPoint = socket?.RemoteEndPoint as IPEndPoint;
-                Buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
-                Data = Array.Empty<byte>();
+                try
+                {
+                    Socket = socket;
+                    EndPoint = socket?.RemoteEndPoint as IPEndPoint;
+                    Buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+                    Data = Array.Empty<byte>();
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                
             }
 
             public void Close()
             {
-                if (_isDisposed) return;
-
-                lock (this)
+                try
                 {
                     if (_isDisposed) return;
-                    _isDisposed = true;
 
-                    try
+                    lock (this)
                     {
-                        if (Socket != null)
-                        {
-                            var socket = Socket;
-                            Socket = null;
+                        if (_isDisposed) return;
+                        _isDisposed = true;
 
-                            try
+                        try
+                        {
+                            if (Socket != null)
                             {
-                                if (socket.Connected)
+                                var socket = Socket;
+                                Socket = null;
+
+                                try
                                 {
-                                    socket.Shutdown(SocketShutdown.Both);
+                                    if (socket.Connected)
+                                    {
+                                        socket.Shutdown(SocketShutdown.Both);
+                                    }
+                                }
+                                finally
+                                {
+                                    socket.Close();
+                                    socket.Dispose();
                                 }
                             }
-                            finally
-                            {
-                                socket.Close();
-                                socket.Dispose();
-                            }
-                        }
 
-                        var buffer = Buffer;
-                        Buffer = null;
-                        Operate.SystemConfig.ReturnBuffer(buffer);
-                    }
-                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
-                    {
-                        // 忽略预期错误
-                    }
-                    catch (Exception ex)
-                    {
-                        if (!_isDisposed)
+                            var buffer = Buffer;
+                            Buffer = null;
+                            Operate.SystemConfig.ReturnBuffer(buffer);
+                        }
+                        catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                         {
-                            Operate.DoLog(nameof(TCPClient.Close), ex.Message);
+                            // 忽略预期错误
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!_isDisposed)
+                            {
+                                Operate.DoLog(nameof(TCPClient.Close), ex.Message);
+                            }
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                
             }
 
             public void Dispose() => Close();
@@ -119,54 +141,68 @@ namespace WinsockPacketEditor
 
             public TCPServer(int bufferSize)
             {
-                Buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+                try
+                {
+                    Buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             public void Close()
             {
-                if (_isDisposed) return;
-
-                lock (this)
+                try
                 {
                     if (_isDisposed) return;
-                    _isDisposed = true;
 
-                    try
+                    lock (this)
                     {
-                        if (Socket != null)
-                        {
-                            var socket = Socket;
-                            Socket = null;
+                        if (_isDisposed) return;
+                        _isDisposed = true;
 
-                            try
+                        try
+                        {
+                            if (Socket != null)
                             {
-                                if (socket.Connected)
+                                var socket = Socket;
+                                Socket = null;
+
+                                try
                                 {
-                                    socket.Shutdown(SocketShutdown.Both);
+                                    if (socket.Connected)
+                                    {
+                                        socket.Shutdown(SocketShutdown.Both);
+                                    }
+                                }
+                                finally
+                                {
+                                    socket.Close();
+                                    socket.Dispose();
                                 }
                             }
-                            finally
+
+                            var buffer = Buffer;
+                            Buffer = null;
+                            Operate.SystemConfig.ReturnBuffer(buffer);
+                        }
+                        catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
+                        {
+                            // 忽略预期错误
+                        }
+                        catch (Exception ex)
+                        {
+                            if (!_isDisposed)
                             {
-                                socket.Close();
-                                socket.Dispose();
+                                Operate.DoLog(nameof(TCPServer.Close), ex.Message);
                             }
                         }
-
-                        var buffer = Buffer;
-                        Buffer = null;
-                        Operate.SystemConfig.ReturnBuffer(buffer);
                     }
-                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
-                    {
-                        // 忽略预期错误
-                    }
-                    catch (Exception ex)
-                    {
-                        if (!_isDisposed)
-                        {
-                            Operate.DoLog(nameof(TCPServer.Close), ex.Message);
-                        }
-                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
@@ -186,25 +222,39 @@ namespace WinsockPacketEditor
 
             public UDPRelay(IPEndPoint UDPClient)
             {
-                this.ClientUDP = new UdpClient(UDPClient);
-                this.ClientUDP_Time = DateTime.Now;
-                this.IsActive = true;
+                try
+                {
+                    this.ClientUDP = new UdpClient(UDPClient);
+                    this.ClientUDP_Time = DateTime.Now;
+                    this.IsActive = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             public void Close()
             {
-                if (!IsActive) return;
-
-                IsActive = false;
-
                 try
                 {
-                    ClientUDP?.Close();
+                    if (!IsActive) return;
+
+                    IsActive = false;
+
+                    try
+                    {
+                        ClientUDP?.Close();
+                    }
+                    finally
+                    {
+                        ClientUDP = null;
+                    }
                 }
-                finally
+                catch (Exception ex)
                 {
-                    ClientUDP = null;
-                }
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                
             }
         }
 
@@ -214,26 +264,40 @@ namespace WinsockPacketEditor
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            try
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_isDisposed) return;
-
-            lock (_closeLock)
+            try
             {
                 if (_isDisposed) return;
-                _isDisposed = true;
 
-                if (disposing)
+                lock (_closeLock)
                 {
-                    TCP_Server?.Close();
-                    TCP_Client?.Close();
-                    UDP_Relay?.Close();
+                    if (_isDisposed) return;
+                    _isDisposed = true;
+
+                    if (disposing)
+                    {
+                        TCP_Server?.Close();
+                        TCP_Client?.Close();
+                        UDP_Relay?.Close();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         ~ProxyExecute()

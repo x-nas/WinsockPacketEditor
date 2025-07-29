@@ -3542,15 +3542,6 @@ namespace WinsockPacketEditor
             }            
         }
 
-
-
-
-
-
-
-
-
-
         #endregion
     }
 }

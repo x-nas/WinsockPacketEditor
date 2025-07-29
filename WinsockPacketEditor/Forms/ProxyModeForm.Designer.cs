@@ -142,6 +142,20 @@
             this.tlpFilterListButton = new System.Windows.Forms.TableLayoutPanel();
             this.mFilterList = new AntdUI.Menu();
             this.bFilterList_Reset = new AntdUI.Button();
+            this.tpSendList = new AntdUI.TabPage();
+            this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
+            this.tSendList = new AntdUI.Table();
+            this.tlpSendListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bSendList_Stop = new AntdUI.Button();
+            this.mSendList = new AntdUI.Menu();
+            this.bSendList_Start = new AntdUI.Button();
+            this.tpRobotList = new AntdUI.TabPage();
+            this.tlpRobotList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpRobotListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bRobotList_Stop = new AntdUI.Button();
+            this.mRobotList = new AntdUI.Menu();
+            this.bRobotList_Start = new AntdUI.Button();
+            this.tRobotList = new AntdUI.Table();
             this.tpStatistical = new AntdUI.TabPage();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
@@ -151,22 +165,81 @@
             this.bgwClientList = new System.ComponentModel.BackgroundWorker();
             this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
             this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
-            this.tpSendList = new AntdUI.TabPage();
-            this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
-            this.tSendList = new AntdUI.Table();
-            this.tlpSendListButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bSendList_Stop = new AntdUI.Button();
-            this.mSendList = new AntdUI.Menu();
-            this.bSendList_Start = new AntdUI.Button();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
-            this.tpRobotList = new AntdUI.TabPage();
-            this.tlpRobotList = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpRobotListButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bRobotList_Stop = new AntdUI.Button();
-            this.mRobotList = new AntdUI.Menu();
-            this.bRobotList_Start = new AntdUI.Button();
-            this.tRobotList = new AntdUI.Table();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
+            this.tpComparison = new AntdUI.TabPage();
+            this.tpXOR = new AntdUI.TabPage();
+            this.tpTranscoding = new AntdUI.TabPage();
+            this.tpExtraction = new AntdUI.TabPage();
+            this.splitterComparison = new AntdUI.Splitter();
+            this.tlpComparisonText = new System.Windows.Forms.TableLayoutPanel();
+            this.lComparison_B = new AntdUI.Label();
+            this.txtComparison_B = new AntdUI.Input();
+            this.txtComparison_A = new AntdUI.Input();
+            this.lComparison_A = new AntdUI.Label();
+            this.tlpComparisonResult = new System.Windows.Forms.TableLayoutPanel();
+            this.txtComparison_Result = new AntdUI.Input();
+            this.tlpComparisonButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bComparison = new AntdUI.Button();
+            this.bComparison_Change = new AntdUI.Button();
+            this.bComparison_Reset = new AntdUI.Button();
+            this.bComparison_Clean = new AntdUI.Button();
+            this.nudComparison_DuplicateNum = new AntdUI.InputNumber();
+            this.ddlComparisonType = new AntdUI.Select();
+            this.tlpXOR = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketInfo_XOR_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new AntdUI.Label();
+            this.bXOR = new AntdUI.Button();
+            this.bXOR_ClearUp = new AntdUI.Button();
+            this.txtXOR = new AntdUI.Input();
+            this.pXOR_To = new AntdUI.Panel();
+            this.hbXOR_To = new Be.Windows.Forms.HexBox();
+            this.pXOR_From = new AntdUI.Panel();
+            this.hbXOR_From = new Be.Windows.Forms.HexBox();
+            this.tlpTranscoding = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpTranscoding_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.bEncoding = new AntdUI.Button();
+            this.bDecoding = new AntdUI.Button();
+            this.txtTranscoding = new AntdUI.Input();
+            this.pTranscoding_Result = new AntdUI.Panel();
+            this.tlpTranscoding_Result = new System.Windows.Forms.TableLayoutPanel();
+            this.txtANSIbase64 = new AntdUI.Input();
+            this.lANSIbase64 = new AntdUI.Label();
+            this.txtANSIUnicode = new AntdUI.Input();
+            this.lANSIUnicode = new AntdUI.Label();
+            this.txtANSIUTF32 = new AntdUI.Input();
+            this.lANSIUTF32 = new AntdUI.Label();
+            this.txtANSIUTF16 = new AntdUI.Input();
+            this.lANSIUTF16 = new AntdUI.Label();
+            this.txtANSIUTF8 = new AntdUI.Input();
+            this.lANSIUTF8 = new AntdUI.Label();
+            this.txtANSIUTF7 = new AntdUI.Input();
+            this.lANSIUTF7 = new AntdUI.Label();
+            this.txtANSIGBK = new AntdUI.Input();
+            this.lANSIGBK = new AntdUI.Label();
+            this.txtbase64 = new AntdUI.Input();
+            this.lbase64 = new AntdUI.Label();
+            this.txtUnicode = new AntdUI.Input();
+            this.lUnicode = new AntdUI.Label();
+            this.txtUTF32 = new AntdUI.Input();
+            this.lUTF32 = new AntdUI.Label();
+            this.txtUTF16 = new AntdUI.Input();
+            this.lUTF16 = new AntdUI.Label();
+            this.txtUTF8 = new AntdUI.Input();
+            this.lUTF8 = new AntdUI.Label();
+            this.txtUTF7 = new AntdUI.Input();
+            this.lUTF7 = new AntdUI.Label();
+            this.lBytes = new AntdUI.Label();
+            this.txtBytes = new AntdUI.Input();
+            this.tabPage1 = new AntdUI.TabPage();
+            this.splitterExtraction = new AntdUI.Splitter();
+            this.tlpExtractionSelectFile = new System.Windows.Forms.TableLayoutPanel();
+            this.ddlExtraction = new AntdUI.Select();
+            this.udExtraction = new AntdUI.UploadDragger();
+            this.tlpExtractionData = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpExtractionButton = new System.Windows.Forms.TableLayoutPanel();
+            this.button1 = new AntdUI.Button();
+            this.txtExtraction = new AntdUI.Input();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
@@ -194,13 +267,40 @@
             this.tpFilterList.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
             this.tlpFilterListButton.SuspendLayout();
-            this.tpSystemLog.SuspendLayout();
             this.tpSendList.SuspendLayout();
             this.tlpSendList.SuspendLayout();
             this.tlpSendListButton.SuspendLayout();
             this.tpRobotList.SuspendLayout();
             this.tlpRobotList.SuspendLayout();
             this.tlpRobotListButton.SuspendLayout();
+            this.tpSystemLog.SuspendLayout();
+            this.tpComparison.SuspendLayout();
+            this.tpXOR.SuspendLayout();
+            this.tpTranscoding.SuspendLayout();
+            this.tpExtraction.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitterComparison)).BeginInit();
+            this.splitterComparison.Panel1.SuspendLayout();
+            this.splitterComparison.Panel2.SuspendLayout();
+            this.splitterComparison.SuspendLayout();
+            this.tlpComparisonText.SuspendLayout();
+            this.tlpComparisonResult.SuspendLayout();
+            this.tlpComparisonButton.SuspendLayout();
+            this.tlpXOR.SuspendLayout();
+            this.tlpPacketInfo_XOR_Button.SuspendLayout();
+            this.pXOR_To.SuspendLayout();
+            this.pXOR_From.SuspendLayout();
+            this.tlpTranscoding.SuspendLayout();
+            this.tlpTranscoding_Button.SuspendLayout();
+            this.pTranscoding_Result.SuspendLayout();
+            this.tlpTranscoding_Result.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitterExtraction)).BeginInit();
+            this.splitterExtraction.Panel1.SuspendLayout();
+            this.splitterExtraction.Panel2.SuspendLayout();
+            this.splitterExtraction.SuspendLayout();
+            this.tlpExtractionSelectFile.SuspendLayout();
+            this.tlpExtractionData.SuspendLayout();
+            this.tlpExtractionButton.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -380,6 +480,10 @@
             this.tabProxyMode.Controls.Add(this.tpSendList);
             this.tabProxyMode.Controls.Add(this.tpRobotList);
             this.tabProxyMode.Controls.Add(this.tpStatistical);
+            this.tabProxyMode.Controls.Add(this.tpComparison);
+            this.tabProxyMode.Controls.Add(this.tpXOR);
+            this.tabProxyMode.Controls.Add(this.tpTranscoding);
+            this.tabProxyMode.Controls.Add(this.tpExtraction);
             this.tabProxyMode.Controls.Add(this.tpSystemLog);
             this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -392,8 +496,11 @@
             this.tabProxyMode.Pages.Add(this.tpSendList);
             this.tabProxyMode.Pages.Add(this.tpRobotList);
             this.tabProxyMode.Pages.Add(this.tpStatistical);
+            this.tabProxyMode.Pages.Add(this.tpComparison);
+            this.tabProxyMode.Pages.Add(this.tpXOR);
+            this.tabProxyMode.Pages.Add(this.tpTranscoding);
+            this.tabProxyMode.Pages.Add(this.tpExtraction);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.SelectedIndex = 5;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -402,7 +509,7 @@
             // tpProxyList
             // 
             this.tpProxyList.Controls.Add(this.tlpProxyList);
-            this.tpProxyList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpProxyList.Location = new System.Drawing.Point(3, 33);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
             this.tpProxyList.TabIndex = 0;
@@ -1385,70 +1492,6 @@
             this.bFilterList_Reset.Type = AntdUI.TTypeMini.Info;
             this.bFilterList_Reset.Click += new System.EventHandler(this.bFilterList_Reset_Click);
             // 
-            // tpStatistical
-            // 
-            this.tpStatistical.Location = new System.Drawing.Point(-1124, -724);
-            this.tpStatistical.Name = "tpStatistical";
-            this.tpStatistical.Size = new System.Drawing.Size(1124, 724);
-            this.tpStatistical.TabIndex = 1;
-            this.tpStatistical.Text = "统计数据";
-            // 
-            // tpSystemLog
-            // 
-            this.tpSystemLog.Controls.Add(this.tSystemLog);
-            this.tpSystemLog.Location = new System.Drawing.Point(-1124, -724);
-            this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
-            this.tpSystemLog.TabIndex = 6;
-            this.tpSystemLog.Text = "系统日志";
-            // 
-            // tSystemLog
-            // 
-            this.tSystemLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tSystemLog.CellImpactHeight = false;
-            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tSystemLog.EmptyHeader = true;
-            this.tSystemLog.Gap = 8;
-            this.tSystemLog.GapCell = 0;
-            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
-            this.tSystemLog.MultipleRows = true;
-            this.tSystemLog.Name = "tSystemLog";
-            this.tSystemLog.Size = new System.Drawing.Size(1124, 724);
-            this.tSystemLog.TabIndex = 2;
-            this.tSystemLog.Text = "table1";
-            this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
-            // 
-            // timerProxyList
-            // 
-            this.timerProxyList.Enabled = true;
-            this.timerProxyList.Interval = 10;
-            this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
-            // 
-            // bgwProxyList
-            // 
-            this.bgwProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyList_DoWork);
-            this.bgwProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProxyList_RunWorkerCompleted);
-            // 
-            // timerProxyListInfo
-            // 
-            this.timerProxyListInfo.Enabled = true;
-            this.timerProxyListInfo.Interval = 1000;
-            this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
-            // 
-            // bgwClientList
-            // 
-            this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
-            this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
-            // 
-            // bgwAccountList
-            // 
-            this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
-            // 
-            // bgwSearchProxyList
-            // 
-            this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
-            this.bgwSearchProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchProxyList_RunWorkerCompleted);
-            // 
             // tpSendList
             // 
             this.tpSendList.Controls.Add(this.tlpSendList);
@@ -1572,16 +1615,10 @@
             this.bSendList_Start.Type = AntdUI.TTypeMini.Info;
             this.bSendList_Start.Click += new System.EventHandler(this.bSendList_Start_Click);
             // 
-            // bgwSendList
-            // 
-            this.bgwSendList.WorkerSupportsCancellation = true;
-            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
-            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
-            // 
             // tpRobotList
             // 
             this.tpRobotList.Controls.Add(this.tlpRobotList);
-            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
+            this.tpRobotList.Location = new System.Drawing.Point(-1124, -724);
             this.tpRobotList.Name = "tpRobotList";
             this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
             this.tpRobotList.TabIndex = 11;
@@ -1701,11 +1738,1043 @@
             this.tRobotList.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellClick);
             this.tRobotList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tRobotList_CellButtonClick);
             // 
+            // tpStatistical
+            // 
+            this.tpStatistical.Location = new System.Drawing.Point(-1124, -724);
+            this.tpStatistical.Name = "tpStatistical";
+            this.tpStatistical.Size = new System.Drawing.Size(1124, 724);
+            this.tpStatistical.TabIndex = 1;
+            this.tpStatistical.Text = "统计数据";
+            // 
+            // tpSystemLog
+            // 
+            this.tpSystemLog.Controls.Add(this.tSystemLog);
+            this.tpSystemLog.Location = new System.Drawing.Point(-1124, -724);
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
+            this.tpSystemLog.TabIndex = 6;
+            this.tpSystemLog.Text = "系统日志";
+            // 
+            // tSystemLog
+            // 
+            this.tSystemLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tSystemLog.CellImpactHeight = false;
+            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSystemLog.EmptyHeader = true;
+            this.tSystemLog.Gap = 8;
+            this.tSystemLog.GapCell = 0;
+            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tSystemLog.MultipleRows = true;
+            this.tSystemLog.Name = "tSystemLog";
+            this.tSystemLog.Size = new System.Drawing.Size(1124, 724);
+            this.tSystemLog.TabIndex = 2;
+            this.tSystemLog.Text = "table1";
+            this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
+            // 
+            // timerProxyList
+            // 
+            this.timerProxyList.Enabled = true;
+            this.timerProxyList.Interval = 10;
+            this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
+            // 
+            // bgwProxyList
+            // 
+            this.bgwProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyList_DoWork);
+            this.bgwProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProxyList_RunWorkerCompleted);
+            // 
+            // timerProxyListInfo
+            // 
+            this.timerProxyListInfo.Enabled = true;
+            this.timerProxyListInfo.Interval = 1000;
+            this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
+            // 
+            // bgwClientList
+            // 
+            this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
+            this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
+            // 
+            // bgwAccountList
+            // 
+            this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
+            // 
+            // bgwSearchProxyList
+            // 
+            this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
+            this.bgwSearchProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchProxyList_RunWorkerCompleted);
+            // 
+            // bgwSendList
+            // 
+            this.bgwSendList.WorkerSupportsCancellation = true;
+            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
+            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
+            // 
             // bgwRobotList
             // 
             this.bgwRobotList.WorkerSupportsCancellation = true;
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
+            // 
+            // tpComparison
+            // 
+            this.tpComparison.Controls.Add(this.splitterComparison);
+            this.tpComparison.Location = new System.Drawing.Point(0, 0);
+            this.tpComparison.Name = "tpComparison";
+            this.tpComparison.Size = new System.Drawing.Size(0, 0);
+            this.tpComparison.TabIndex = 12;
+            this.tpComparison.Text = "文本对比";
+            // 
+            // tpXOR
+            // 
+            this.tpXOR.Controls.Add(this.tlpXOR);
+            this.tpXOR.Location = new System.Drawing.Point(0, 0);
+            this.tpXOR.Name = "tpXOR";
+            this.tpXOR.Size = new System.Drawing.Size(0, 0);
+            this.tpXOR.TabIndex = 13;
+            this.tpXOR.Text = "异或计算";
+            // 
+            // tpTranscoding
+            // 
+            this.tpTranscoding.Controls.Add(this.tlpTranscoding);
+            this.tpTranscoding.Location = new System.Drawing.Point(0, 0);
+            this.tpTranscoding.Name = "tpTranscoding";
+            this.tpTranscoding.Size = new System.Drawing.Size(0, 0);
+            this.tpTranscoding.TabIndex = 14;
+            this.tpTranscoding.Text = "编码转换";
+            // 
+            // tpExtraction
+            // 
+            this.tpExtraction.Controls.Add(this.tabPage1);
+            this.tpExtraction.Location = new System.Drawing.Point(0, 0);
+            this.tpExtraction.Name = "tpExtraction";
+            this.tpExtraction.Size = new System.Drawing.Size(0, 0);
+            this.tpExtraction.TabIndex = 15;
+            this.tpExtraction.Text = "数据提取";
+            // 
+            // splitterComparison
+            // 
+            this.splitterComparison.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
+            this.splitterComparison.Cursor = System.Windows.Forms.Cursors.Default;
+            this.splitterComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitterComparison.Location = new System.Drawing.Point(0, 0);
+            this.splitterComparison.Name = "splitterComparison";
+            this.splitterComparison.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitterComparison.Panel1
+            // 
+            this.splitterComparison.Panel1.Controls.Add(this.tlpComparisonText);
+            this.splitterComparison.Panel1MinSize = 0;
+            // 
+            // splitterComparison.Panel2
+            // 
+            this.splitterComparison.Panel2.Controls.Add(this.tlpComparisonResult);
+            this.splitterComparison.Panel2MinSize = 0;
+            this.splitterComparison.Size = new System.Drawing.Size(0, 0);
+            this.splitterComparison.SplitterDistance = 450;
+            this.splitterComparison.SplitterSize = 80;
+            this.splitterComparison.SplitterWidth = 10;
+            this.splitterComparison.TabIndex = 1;
+            // 
+            // tlpComparisonText
+            // 
+            this.tlpComparisonText.ColumnCount = 2;
+            this.tlpComparisonText.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonText.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonText.Controls.Add(this.lComparison_B, 1, 0);
+            this.tlpComparisonText.Controls.Add(this.txtComparison_B, 1, 1);
+            this.tlpComparisonText.Controls.Add(this.txtComparison_A, 0, 1);
+            this.tlpComparisonText.Controls.Add(this.lComparison_A, 0, 0);
+            this.tlpComparisonText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpComparisonText.Location = new System.Drawing.Point(0, 0);
+            this.tlpComparisonText.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpComparisonText.Name = "tlpComparisonText";
+            this.tlpComparisonText.RowCount = 2;
+            this.tlpComparisonText.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpComparisonText.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpComparisonText.Size = new System.Drawing.Size(1124, 450);
+            this.tlpComparisonText.TabIndex = 0;
+            // 
+            // lComparison_B
+            // 
+            this.lComparison_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lComparison_B.Location = new System.Drawing.Point(565, 3);
+            this.lComparison_B.Name = "lComparison_B";
+            this.lComparison_B.Size = new System.Drawing.Size(556, 23);
+            this.lComparison_B.TabIndex = 3;
+            this.lComparison_B.Text = "Text B";
+            this.lComparison_B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtComparison_B
+            // 
+            this.txtComparison_B.AutoScroll = true;
+            this.txtComparison_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtComparison_B.Location = new System.Drawing.Point(565, 32);
+            this.txtComparison_B.Multiline = true;
+            this.txtComparison_B.Name = "txtComparison_B";
+            this.txtComparison_B.Size = new System.Drawing.Size(556, 415);
+            this.txtComparison_B.TabIndex = 1;
+            this.txtComparison_B.TextChanged += new System.EventHandler(this.txtComparison_B_TextChanged);
+            // 
+            // txtComparison_A
+            // 
+            this.txtComparison_A.AutoScroll = true;
+            this.txtComparison_A.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtComparison_A.Location = new System.Drawing.Point(3, 32);
+            this.txtComparison_A.Multiline = true;
+            this.txtComparison_A.Name = "txtComparison_A";
+            this.txtComparison_A.Size = new System.Drawing.Size(556, 415);
+            this.txtComparison_A.TabIndex = 0;
+            this.txtComparison_A.TextChanged += new System.EventHandler(this.txtComparison_A_TextChanged);
+            // 
+            // lComparison_A
+            // 
+            this.lComparison_A.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lComparison_A.Location = new System.Drawing.Point(3, 3);
+            this.lComparison_A.Name = "lComparison_A";
+            this.lComparison_A.Size = new System.Drawing.Size(556, 23);
+            this.lComparison_A.TabIndex = 2;
+            this.lComparison_A.Text = "Text A";
+            this.lComparison_A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tlpComparisonResult
+            // 
+            this.tlpComparisonResult.ColumnCount = 1;
+            this.tlpComparisonResult.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpComparisonResult.Controls.Add(this.txtComparison_Result, 0, 1);
+            this.tlpComparisonResult.Controls.Add(this.tlpComparisonButton, 0, 0);
+            this.tlpComparisonResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpComparisonResult.Location = new System.Drawing.Point(0, 0);
+            this.tlpComparisonResult.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpComparisonResult.Name = "tlpComparisonResult";
+            this.tlpComparisonResult.RowCount = 2;
+            this.tlpComparisonResult.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpComparisonResult.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpComparisonResult.Size = new System.Drawing.Size(1124, 264);
+            this.tlpComparisonResult.TabIndex = 0;
+            // 
+            // txtComparison_Result
+            // 
+            this.txtComparison_Result.AutoScroll = true;
+            this.txtComparison_Result.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtComparison_Result.Location = new System.Drawing.Point(3, 63);
+            this.txtComparison_Result.Multiline = true;
+            this.txtComparison_Result.Name = "txtComparison_Result";
+            this.txtComparison_Result.ReadOnly = true;
+            this.txtComparison_Result.Size = new System.Drawing.Size(1118, 198);
+            this.txtComparison_Result.TabIndex = 1;
+            // 
+            // tlpComparisonButton
+            // 
+            this.tlpComparisonButton.ColumnCount = 7;
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpComparisonButton.Controls.Add(this.bComparison, 2, 1);
+            this.tlpComparisonButton.Controls.Add(this.bComparison_Change, 5, 1);
+            this.tlpComparisonButton.Controls.Add(this.bComparison_Reset, 4, 1);
+            this.tlpComparisonButton.Controls.Add(this.bComparison_Clean, 6, 1);
+            this.tlpComparisonButton.Controls.Add(this.nudComparison_DuplicateNum, 1, 1);
+            this.tlpComparisonButton.Controls.Add(this.ddlComparisonType, 0, 1);
+            this.tlpComparisonButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpComparisonButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpComparisonButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpComparisonButton.Name = "tlpComparisonButton";
+            this.tlpComparisonButton.RowCount = 3;
+            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonButton.Size = new System.Drawing.Size(1124, 60);
+            this.tlpComparisonButton.TabIndex = 2;
+            // 
+            // bComparison
+            // 
+            this.bComparison.BackExtend = "135, #6253E1, #04BEFE";
+            this.bComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bComparison.IconSvg = "ScanOutlined";
+            this.bComparison.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bComparison.LoadingWaveCount = 6;
+            this.bComparison.LoadingWaveSize = 6;
+            this.bComparison.LoadingWaveValue = 0.6F;
+            this.bComparison.LoadingWaveVertical = true;
+            this.bComparison.Location = new System.Drawing.Point(359, 7);
+            this.bComparison.Name = "bComparison";
+            this.bComparison.Size = new System.Drawing.Size(144, 46);
+            this.bComparison.TabIndex = 5;
+            this.bComparison.Text = "分析文本";
+            this.bComparison.Type = AntdUI.TTypeMini.Info;
+            this.bComparison.Click += new System.EventHandler(this.bComparison_Click);
+            // 
+            // bComparison_Change
+            // 
+            this.bComparison_Change.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bComparison_Change.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bComparison_Change.IconSvg = "SwapOutlined";
+            this.bComparison_Change.Location = new System.Drawing.Point(941, 7);
+            this.bComparison_Change.Name = "bComparison_Change";
+            this.bComparison_Change.Size = new System.Drawing.Size(87, 46);
+            this.bComparison_Change.TabIndex = 4;
+            this.bComparison_Change.Text = "交换";
+            this.bComparison_Change.Type = AntdUI.TTypeMini.Primary;
+            this.bComparison_Change.Click += new System.EventHandler(this.bComparison_Change_Click);
+            // 
+            // bComparison_Reset
+            // 
+            this.bComparison_Reset.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bComparison_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bComparison_Reset.IconSvg = "RollbackOutlined";
+            this.bComparison_Reset.Location = new System.Drawing.Point(848, 7);
+            this.bComparison_Reset.Name = "bComparison_Reset";
+            this.bComparison_Reset.Size = new System.Drawing.Size(87, 46);
+            this.bComparison_Reset.TabIndex = 3;
+            this.bComparison_Reset.Text = "还原";
+            this.bComparison_Reset.Type = AntdUI.TTypeMini.Primary;
+            this.bComparison_Reset.Click += new System.EventHandler(this.bComparison_Reset_Click);
+            // 
+            // bComparison_Clean
+            // 
+            this.bComparison_Clean.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bComparison_Clean.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bComparison_Clean.IconSvg = "ClearOutlined";
+            this.bComparison_Clean.Location = new System.Drawing.Point(1034, 7);
+            this.bComparison_Clean.Name = "bComparison_Clean";
+            this.bComparison_Clean.Size = new System.Drawing.Size(87, 46);
+            this.bComparison_Clean.TabIndex = 2;
+            this.bComparison_Clean.Text = "清空";
+            this.bComparison_Clean.Type = AntdUI.TTypeMini.Primary;
+            this.bComparison_Clean.Click += new System.EventHandler(this.bComparison_Clean_Click);
+            // 
+            // nudComparison_DuplicateNum
+            // 
+            this.nudComparison_DuplicateNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudComparison_DuplicateNum.Location = new System.Drawing.Point(203, 7);
+            this.nudComparison_DuplicateNum.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudComparison_DuplicateNum.Name = "nudComparison_DuplicateNum";
+            this.nudComparison_DuplicateNum.PrefixText = "查重位数:";
+            this.nudComparison_DuplicateNum.SelectionStart = 1;
+            this.nudComparison_DuplicateNum.Size = new System.Drawing.Size(150, 46);
+            this.nudComparison_DuplicateNum.SuffixText = "";
+            this.nudComparison_DuplicateNum.TabIndex = 6;
+            this.nudComparison_DuplicateNum.Text = "2";
+            this.nudComparison_DuplicateNum.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // ddlComparisonType
+            // 
+            this.ddlComparisonType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlComparisonType.Location = new System.Drawing.Point(3, 7);
+            this.ddlComparisonType.Name = "ddlComparisonType";
+            this.ddlComparisonType.PlaceholderText = "请选择";
+            this.ddlComparisonType.Size = new System.Drawing.Size(194, 46);
+            this.ddlComparisonType.TabIndex = 7;
+            this.ddlComparisonType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlComparisonType_SelectedIndexChanged);
+            // 
+            // tlpXOR
+            // 
+            this.tlpXOR.ColumnCount = 1;
+            this.tlpXOR.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpXOR.Controls.Add(this.tlpPacketInfo_XOR_Button, 0, 1);
+            this.tlpXOR.Controls.Add(this.pXOR_To, 0, 2);
+            this.tlpXOR.Controls.Add(this.pXOR_From, 0, 0);
+            this.tlpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpXOR.Location = new System.Drawing.Point(0, 0);
+            this.tlpXOR.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpXOR.Name = "tlpXOR";
+            this.tlpXOR.RowCount = 3;
+            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpXOR.Size = new System.Drawing.Size(0, 0);
+            this.tlpXOR.TabIndex = 1;
+            // 
+            // tlpPacketInfo_XOR_Button
+            // 
+            this.tlpPacketInfo_XOR_Button.ColumnCount = 4;
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.label1, 0, 1);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR, 2, 1);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR_ClearUp, 3, 1);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.txtXOR, 1, 1);
+            this.tlpPacketInfo_XOR_Button.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpPacketInfo_XOR_Button.Location = new System.Drawing.Point(0, -29);
+            this.tlpPacketInfo_XOR_Button.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpPacketInfo_XOR_Button.Name = "tlpPacketInfo_XOR_Button";
+            this.tlpPacketInfo_XOR_Button.RowCount = 3;
+            this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpPacketInfo_XOR_Button.Size = new System.Drawing.Size(1, 60);
+            this.tlpPacketInfo_XOR_Button.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(176, 45);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "异或值（支持循环异或）";
+            // 
+            // bXOR
+            // 
+            this.bXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bXOR.IconSvg = "BuildFilled";
+            this.bXOR.Location = new System.Drawing.Point(-236, 7);
+            this.bXOR.Name = "bXOR";
+            this.bXOR.Size = new System.Drawing.Size(114, 45);
+            this.bXOR.TabIndex = 7;
+            this.bXOR.Text = "计算";
+            this.bXOR.Type = AntdUI.TTypeMini.Primary;
+            this.bXOR.Click += new System.EventHandler(this.bXOR_Click);
+            // 
+            // bXOR_ClearUp
+            // 
+            this.bXOR_ClearUp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bXOR_ClearUp.IconSvg = "DeleteOutlined";
+            this.bXOR_ClearUp.Location = new System.Drawing.Point(-116, 7);
+            this.bXOR_ClearUp.Name = "bXOR_ClearUp";
+            this.bXOR_ClearUp.Size = new System.Drawing.Size(114, 45);
+            this.bXOR_ClearUp.TabIndex = 8;
+            this.bXOR_ClearUp.Text = "清空";
+            this.bXOR_ClearUp.Type = AntdUI.TTypeMini.Primary;
+            this.bXOR_ClearUp.Click += new System.EventHandler(this.bXOR_ClearUp_Click);
+            // 
+            // txtXOR
+            // 
+            this.txtXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtXOR.Location = new System.Drawing.Point(185, 7);
+            this.txtXOR.Name = "txtXOR";
+            this.txtXOR.PlaceholderText = "请输入十六进制带空格";
+            this.txtXOR.Size = new System.Drawing.Size(1, 45);
+            this.txtXOR.TabIndex = 9;
+            this.txtXOR.TextChanged += new System.EventHandler(this.txtXOR_TextChanged);
+            // 
+            // pXOR_To
+            // 
+            this.pXOR_To.BorderWidth = 1F;
+            this.pXOR_To.Controls.Add(this.hbXOR_To);
+            this.pXOR_To.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pXOR_To.Location = new System.Drawing.Point(3, 34);
+            this.pXOR_To.Name = "pXOR_To";
+            this.pXOR_To.Padding = new System.Windows.Forms.Padding(3);
+            this.pXOR_To.Size = new System.Drawing.Size(1, 1);
+            this.pXOR_To.TabIndex = 1;
+            this.pXOR_To.Text = "panel2";
+            // 
+            // hbXOR_To
+            // 
+            this.hbXOR_To.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            // 
+            // 
+            // 
+            this.hbXOR_To.BuiltInContextMenu.CopyMenuItemText = "复制";
+            this.hbXOR_To.BuiltInContextMenu.CutMenuItemText = "剪切";
+            this.hbXOR_To.BuiltInContextMenu.PasteMenuItemText = "粘贴";
+            this.hbXOR_To.BuiltInContextMenu.SelectAllMenuItemText = "全选";
+            this.hbXOR_To.ColumnInfoVisible = true;
+            this.hbXOR_To.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hbXOR_To.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbXOR_To.LineInfoVisible = true;
+            this.hbXOR_To.Location = new System.Drawing.Point(4, 4);
+            this.hbXOR_To.Name = "hbXOR_To";
+            this.hbXOR_To.ReadOnly = true;
+            this.hbXOR_To.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbXOR_To.Size = new System.Drawing.Size(0, 0);
+            this.hbXOR_To.TabIndex = 3;
+            this.hbXOR_To.VScrollBarVisible = true;
+            this.hbXOR_To.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbXOR_To_MouseDown);
+            // 
+            // pXOR_From
+            // 
+            this.pXOR_From.BorderWidth = 1F;
+            this.pXOR_From.Controls.Add(this.hbXOR_From);
+            this.pXOR_From.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pXOR_From.Location = new System.Drawing.Point(3, 3);
+            this.pXOR_From.Name = "pXOR_From";
+            this.pXOR_From.Padding = new System.Windows.Forms.Padding(3);
+            this.pXOR_From.Size = new System.Drawing.Size(1, 1);
+            this.pXOR_From.TabIndex = 0;
+            this.pXOR_From.Text = "panel1";
+            // 
+            // hbXOR_From
+            // 
+            this.hbXOR_From.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            // 
+            // 
+            // 
+            this.hbXOR_From.BuiltInContextMenu.CopyMenuItemText = "复制";
+            this.hbXOR_From.BuiltInContextMenu.CutMenuItemText = "剪切";
+            this.hbXOR_From.BuiltInContextMenu.PasteMenuItemText = "粘贴";
+            this.hbXOR_From.BuiltInContextMenu.SelectAllMenuItemText = "全选";
+            this.hbXOR_From.ColumnInfoVisible = true;
+            this.hbXOR_From.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hbXOR_From.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbXOR_From.LineInfoVisible = true;
+            this.hbXOR_From.Location = new System.Drawing.Point(4, 4);
+            this.hbXOR_From.Name = "hbXOR_From";
+            this.hbXOR_From.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbXOR_From.Size = new System.Drawing.Size(0, 0);
+            this.hbXOR_From.TabIndex = 2;
+            this.hbXOR_From.VScrollBarVisible = true;
+            this.hbXOR_From.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbXOR_From_MouseDown);
+            // 
+            // tlpTranscoding
+            // 
+            this.tlpTranscoding.ColumnCount = 3;
+            this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tlpTranscoding.Controls.Add(this.tlpTranscoding_Button, 1, 0);
+            this.tlpTranscoding.Controls.Add(this.txtTranscoding, 0, 0);
+            this.tlpTranscoding.Controls.Add(this.pTranscoding_Result, 2, 0);
+            this.tlpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpTranscoding.Location = new System.Drawing.Point(0, 0);
+            this.tlpTranscoding.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpTranscoding.Name = "tlpTranscoding";
+            this.tlpTranscoding.RowCount = 1;
+            this.tlpTranscoding.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTranscoding.Size = new System.Drawing.Size(0, 0);
+            this.tlpTranscoding.TabIndex = 2;
+            // 
+            // tlpTranscoding_Button
+            // 
+            this.tlpTranscoding_Button.ColumnCount = 3;
+            this.tlpTranscoding_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpTranscoding_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpTranscoding_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpTranscoding_Button.Controls.Add(this.bEncoding, 1, 1);
+            this.tlpTranscoding_Button.Controls.Add(this.bDecoding, 1, 3);
+            this.tlpTranscoding_Button.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpTranscoding_Button.Location = new System.Drawing.Point(-41, 3);
+            this.tlpTranscoding_Button.Name = "tlpTranscoding_Button";
+            this.tlpTranscoding_Button.RowCount = 5;
+            this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpTranscoding_Button.Size = new System.Drawing.Size(144, 1);
+            this.tlpTranscoding_Button.TabIndex = 2;
+            // 
+            // bEncoding
+            // 
+            this.bEncoding.BackExtend = "135, #0fd850, #3cba92";
+            this.bEncoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bEncoding.IconPosition = AntdUI.TAlignMini.Right;
+            this.bEncoding.IconSvg = "DoubleRightOutlined";
+            this.bEncoding.Location = new System.Drawing.Point(15, -77);
+            this.bEncoding.Name = "bEncoding";
+            this.bEncoding.Size = new System.Drawing.Size(114, 45);
+            this.bEncoding.TabIndex = 3;
+            this.bEncoding.Text = "编码";
+            this.bEncoding.Type = AntdUI.TTypeMini.Success;
+            this.bEncoding.Click += new System.EventHandler(this.bEncoding_Click);
+            // 
+            // bDecoding
+            // 
+            this.bDecoding.BackExtend = "135, #fa709a, #fee140";
+            this.bDecoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bDecoding.IconPosition = AntdUI.TAlignMini.Right;
+            this.bDecoding.IconSvg = "DoubleRightOutlined";
+            this.bDecoding.Location = new System.Drawing.Point(15, 34);
+            this.bDecoding.Name = "bDecoding";
+            this.bDecoding.Size = new System.Drawing.Size(114, 45);
+            this.bDecoding.TabIndex = 4;
+            this.bDecoding.Text = "解码";
+            this.bDecoding.Type = AntdUI.TTypeMini.Warn;
+            this.bDecoding.Click += new System.EventHandler(this.bDecoding_Click);
+            // 
+            // txtTranscoding
+            // 
+            this.txtTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtTranscoding.Location = new System.Drawing.Point(3, 3);
+            this.txtTranscoding.Multiline = true;
+            this.txtTranscoding.Name = "txtTranscoding";
+            this.txtTranscoding.PlaceholderText = "请输入文本";
+            this.txtTranscoding.Size = new System.Drawing.Size(1, 1);
+            this.txtTranscoding.TabIndex = 4;
+            this.txtTranscoding.TextChanged += new System.EventHandler(this.txtTranscoding_TextChanged);
+            // 
+            // pTranscoding_Result
+            // 
+            this.pTranscoding_Result.BorderWidth = 1F;
+            this.pTranscoding_Result.Controls.Add(this.tlpTranscoding_Result);
+            this.pTranscoding_Result.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pTranscoding_Result.Location = new System.Drawing.Point(112, 6);
+            this.pTranscoding_Result.Margin = new System.Windows.Forms.Padding(6);
+            this.pTranscoding_Result.Name = "pTranscoding_Result";
+            this.pTranscoding_Result.Padding = new System.Windows.Forms.Padding(3);
+            this.pTranscoding_Result.Size = new System.Drawing.Size(1, 1);
+            this.pTranscoding_Result.TabIndex = 5;
+            this.pTranscoding_Result.Text = "panel1";
+            // 
+            // tlpTranscoding_Result
+            // 
+            this.tlpTranscoding_Result.ColumnCount = 2;
+            this.tlpTranscoding_Result.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpTranscoding_Result.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTranscoding_Result.Controls.Add(this.txtANSIbase64, 1, 14);
+            this.tlpTranscoding_Result.Controls.Add(this.lANSIbase64, 0, 14);
+            this.tlpTranscoding_Result.Controls.Add(this.txtANSIUnicode, 1, 12);
+            this.tlpTranscoding_Result.Controls.Add(this.lANSIUnicode, 0, 12);
+            this.tlpTranscoding_Result.Controls.Add(this.txtANSIUTF32, 1, 10);
+            this.tlpTranscoding_Result.Controls.Add(this.lANSIUTF32, 0, 10);
+            this.tlpTranscoding_Result.Controls.Add(this.txtANSIUTF16, 1, 8);
+            this.tlpTranscoding_Result.Controls.Add(this.lANSIUTF16, 0, 8);
+            this.tlpTranscoding_Result.Controls.Add(this.txtANSIUTF8, 1, 6);
+            this.tlpTranscoding_Result.Controls.Add(this.lANSIUTF8, 0, 6);
+            this.tlpTranscoding_Result.Controls.Add(this.txtANSIUTF7, 1, 4);
+            this.tlpTranscoding_Result.Controls.Add(this.lANSIUTF7, 0, 4);
+            this.tlpTranscoding_Result.Controls.Add(this.txtANSIGBK, 1, 2);
+            this.tlpTranscoding_Result.Controls.Add(this.lANSIGBK, 0, 2);
+            this.tlpTranscoding_Result.Controls.Add(this.txtbase64, 1, 13);
+            this.tlpTranscoding_Result.Controls.Add(this.lbase64, 0, 13);
+            this.tlpTranscoding_Result.Controls.Add(this.txtUnicode, 1, 11);
+            this.tlpTranscoding_Result.Controls.Add(this.lUnicode, 0, 11);
+            this.tlpTranscoding_Result.Controls.Add(this.txtUTF32, 1, 9);
+            this.tlpTranscoding_Result.Controls.Add(this.lUTF32, 0, 9);
+            this.tlpTranscoding_Result.Controls.Add(this.txtUTF16, 1, 7);
+            this.tlpTranscoding_Result.Controls.Add(this.lUTF16, 0, 7);
+            this.tlpTranscoding_Result.Controls.Add(this.txtUTF8, 1, 5);
+            this.tlpTranscoding_Result.Controls.Add(this.lUTF8, 0, 5);
+            this.tlpTranscoding_Result.Controls.Add(this.txtUTF7, 1, 3);
+            this.tlpTranscoding_Result.Controls.Add(this.lUTF7, 0, 3);
+            this.tlpTranscoding_Result.Controls.Add(this.lBytes, 0, 1);
+            this.tlpTranscoding_Result.Controls.Add(this.txtBytes, 1, 1);
+            this.tlpTranscoding_Result.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpTranscoding_Result.Location = new System.Drawing.Point(4, 4);
+            this.tlpTranscoding_Result.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpTranscoding_Result.Name = "tlpTranscoding_Result";
+            this.tlpTranscoding_Result.RowCount = 16;
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
+            this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1F));
+            this.tlpTranscoding_Result.Size = new System.Drawing.Size(0, 0);
+            this.tlpTranscoding_Result.TabIndex = 4;
+            // 
+            // txtANSIbase64
+            // 
+            this.txtANSIbase64.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtANSIbase64.Location = new System.Drawing.Point(122, 3);
+            this.txtANSIbase64.Name = "txtANSIbase64";
+            this.txtANSIbase64.ReadOnly = true;
+            this.txtANSIbase64.Size = new System.Drawing.Size(1, 1);
+            this.txtANSIbase64.TabIndex = 113;
+            // 
+            // lANSIbase64
+            // 
+            this.lANSIbase64.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lANSIbase64.Location = new System.Drawing.Point(3, 3);
+            this.lANSIbase64.Name = "lANSIbase64";
+            this.lANSIbase64.Size = new System.Drawing.Size(113, 1);
+            this.lANSIbase64.TabIndex = 112;
+            this.lANSIbase64.Text = "ANSI-base64:";
+            this.lANSIbase64.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtANSIUnicode
+            // 
+            this.txtANSIUnicode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtANSIUnicode.Location = new System.Drawing.Point(122, 3);
+            this.txtANSIUnicode.Name = "txtANSIUnicode";
+            this.txtANSIUnicode.ReadOnly = true;
+            this.txtANSIUnicode.Size = new System.Drawing.Size(1, 1);
+            this.txtANSIUnicode.TabIndex = 109;
+            // 
+            // lANSIUnicode
+            // 
+            this.lANSIUnicode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lANSIUnicode.Location = new System.Drawing.Point(3, 3);
+            this.lANSIUnicode.Name = "lANSIUnicode";
+            this.lANSIUnicode.Size = new System.Drawing.Size(113, 1);
+            this.lANSIUnicode.TabIndex = 108;
+            this.lANSIUnicode.Text = "ANSI-Unicode:";
+            this.lANSIUnicode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtANSIUTF32
+            // 
+            this.txtANSIUTF32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtANSIUTF32.Location = new System.Drawing.Point(122, 3);
+            this.txtANSIUTF32.Name = "txtANSIUTF32";
+            this.txtANSIUTF32.ReadOnly = true;
+            this.txtANSIUTF32.Size = new System.Drawing.Size(1, 1);
+            this.txtANSIUTF32.TabIndex = 105;
+            // 
+            // lANSIUTF32
+            // 
+            this.lANSIUTF32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lANSIUTF32.Location = new System.Drawing.Point(3, 3);
+            this.lANSIUTF32.Name = "lANSIUTF32";
+            this.lANSIUTF32.Size = new System.Drawing.Size(113, 1);
+            this.lANSIUTF32.TabIndex = 104;
+            this.lANSIUTF32.Text = "ANSI-UTF32:";
+            this.lANSIUTF32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtANSIUTF16
+            // 
+            this.txtANSIUTF16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtANSIUTF16.Location = new System.Drawing.Point(122, 3);
+            this.txtANSIUTF16.Name = "txtANSIUTF16";
+            this.txtANSIUTF16.ReadOnly = true;
+            this.txtANSIUTF16.Size = new System.Drawing.Size(1, 1);
+            this.txtANSIUTF16.TabIndex = 101;
+            // 
+            // lANSIUTF16
+            // 
+            this.lANSIUTF16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lANSIUTF16.Location = new System.Drawing.Point(3, 3);
+            this.lANSIUTF16.Name = "lANSIUTF16";
+            this.lANSIUTF16.Size = new System.Drawing.Size(113, 1);
+            this.lANSIUTF16.TabIndex = 100;
+            this.lANSIUTF16.Text = "ANSI-UTF16:";
+            this.lANSIUTF16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtANSIUTF8
+            // 
+            this.txtANSIUTF8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtANSIUTF8.Location = new System.Drawing.Point(122, 3);
+            this.txtANSIUTF8.Name = "txtANSIUTF8";
+            this.txtANSIUTF8.ReadOnly = true;
+            this.txtANSIUTF8.Size = new System.Drawing.Size(1, 1);
+            this.txtANSIUTF8.TabIndex = 97;
+            // 
+            // lANSIUTF8
+            // 
+            this.lANSIUTF8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lANSIUTF8.Location = new System.Drawing.Point(3, 3);
+            this.lANSIUTF8.Name = "lANSIUTF8";
+            this.lANSIUTF8.Size = new System.Drawing.Size(113, 1);
+            this.lANSIUTF8.TabIndex = 96;
+            this.lANSIUTF8.Text = "ANSI-UTF8:";
+            this.lANSIUTF8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtANSIUTF7
+            // 
+            this.txtANSIUTF7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtANSIUTF7.Location = new System.Drawing.Point(122, 3);
+            this.txtANSIUTF7.Name = "txtANSIUTF7";
+            this.txtANSIUTF7.ReadOnly = true;
+            this.txtANSIUTF7.Size = new System.Drawing.Size(1, 1);
+            this.txtANSIUTF7.TabIndex = 93;
+            // 
+            // lANSIUTF7
+            // 
+            this.lANSIUTF7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lANSIUTF7.Location = new System.Drawing.Point(3, 3);
+            this.lANSIUTF7.Name = "lANSIUTF7";
+            this.lANSIUTF7.Size = new System.Drawing.Size(113, 1);
+            this.lANSIUTF7.TabIndex = 92;
+            this.lANSIUTF7.Text = "ANSI-UTF7:";
+            this.lANSIUTF7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtANSIGBK
+            // 
+            this.txtANSIGBK.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtANSIGBK.Location = new System.Drawing.Point(122, 3);
+            this.txtANSIGBK.Name = "txtANSIGBK";
+            this.txtANSIGBK.ReadOnly = true;
+            this.txtANSIGBK.Size = new System.Drawing.Size(1, 1);
+            this.txtANSIGBK.TabIndex = 89;
+            // 
+            // lANSIGBK
+            // 
+            this.lANSIGBK.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lANSIGBK.Location = new System.Drawing.Point(3, 3);
+            this.lANSIGBK.Name = "lANSIGBK";
+            this.lANSIGBK.Size = new System.Drawing.Size(113, 1);
+            this.lANSIGBK.TabIndex = 88;
+            this.lANSIGBK.Text = "ANSI-GBK:";
+            this.lANSIGBK.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtbase64
+            // 
+            this.txtbase64.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtbase64.Location = new System.Drawing.Point(122, 3);
+            this.txtbase64.Name = "txtbase64";
+            this.txtbase64.ReadOnly = true;
+            this.txtbase64.Size = new System.Drawing.Size(1, 1);
+            this.txtbase64.TabIndex = 85;
+            // 
+            // lbase64
+            // 
+            this.lbase64.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbase64.Location = new System.Drawing.Point(3, 3);
+            this.lbase64.Name = "lbase64";
+            this.lbase64.Size = new System.Drawing.Size(113, 1);
+            this.lbase64.TabIndex = 84;
+            this.lbase64.Text = "base64:";
+            this.lbase64.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtUnicode
+            // 
+            this.txtUnicode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtUnicode.Location = new System.Drawing.Point(122, 3);
+            this.txtUnicode.Name = "txtUnicode";
+            this.txtUnicode.ReadOnly = true;
+            this.txtUnicode.Size = new System.Drawing.Size(1, 1);
+            this.txtUnicode.TabIndex = 81;
+            // 
+            // lUnicode
+            // 
+            this.lUnicode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUnicode.Location = new System.Drawing.Point(3, 3);
+            this.lUnicode.Name = "lUnicode";
+            this.lUnicode.Size = new System.Drawing.Size(113, 1);
+            this.lUnicode.TabIndex = 80;
+            this.lUnicode.Text = "Unicode:";
+            this.lUnicode.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtUTF32
+            // 
+            this.txtUTF32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtUTF32.Location = new System.Drawing.Point(122, 3);
+            this.txtUTF32.Name = "txtUTF32";
+            this.txtUTF32.ReadOnly = true;
+            this.txtUTF32.Size = new System.Drawing.Size(1, 1);
+            this.txtUTF32.TabIndex = 77;
+            // 
+            // lUTF32
+            // 
+            this.lUTF32.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUTF32.Location = new System.Drawing.Point(3, 3);
+            this.lUTF32.Name = "lUTF32";
+            this.lUTF32.Size = new System.Drawing.Size(113, 1);
+            this.lUTF32.TabIndex = 76;
+            this.lUTF32.Text = "UTF32:";
+            this.lUTF32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtUTF16
+            // 
+            this.txtUTF16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtUTF16.Location = new System.Drawing.Point(122, 3);
+            this.txtUTF16.Name = "txtUTF16";
+            this.txtUTF16.ReadOnly = true;
+            this.txtUTF16.Size = new System.Drawing.Size(1, 1);
+            this.txtUTF16.TabIndex = 73;
+            // 
+            // lUTF16
+            // 
+            this.lUTF16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUTF16.Location = new System.Drawing.Point(3, 3);
+            this.lUTF16.Name = "lUTF16";
+            this.lUTF16.Size = new System.Drawing.Size(113, 1);
+            this.lUTF16.TabIndex = 72;
+            this.lUTF16.Text = "UTF16:";
+            this.lUTF16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtUTF8
+            // 
+            this.txtUTF8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtUTF8.Location = new System.Drawing.Point(122, 3);
+            this.txtUTF8.Name = "txtUTF8";
+            this.txtUTF8.ReadOnly = true;
+            this.txtUTF8.Size = new System.Drawing.Size(1, 1);
+            this.txtUTF8.TabIndex = 69;
+            // 
+            // lUTF8
+            // 
+            this.lUTF8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUTF8.Location = new System.Drawing.Point(3, 3);
+            this.lUTF8.Name = "lUTF8";
+            this.lUTF8.Size = new System.Drawing.Size(113, 1);
+            this.lUTF8.TabIndex = 68;
+            this.lUTF8.Text = "UTF8:";
+            this.lUTF8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtUTF7
+            // 
+            this.txtUTF7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtUTF7.Location = new System.Drawing.Point(122, 3);
+            this.txtUTF7.Name = "txtUTF7";
+            this.txtUTF7.ReadOnly = true;
+            this.txtUTF7.Size = new System.Drawing.Size(1, 1);
+            this.txtUTF7.TabIndex = 65;
+            // 
+            // lUTF7
+            // 
+            this.lUTF7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUTF7.Location = new System.Drawing.Point(3, 3);
+            this.lUTF7.Name = "lUTF7";
+            this.lUTF7.Size = new System.Drawing.Size(113, 1);
+            this.lUTF7.TabIndex = 64;
+            this.lUTF7.Text = "UTF7:";
+            this.lUTF7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lBytes
+            // 
+            this.lBytes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lBytes.Location = new System.Drawing.Point(3, 3);
+            this.lBytes.Name = "lBytes";
+            this.lBytes.Size = new System.Drawing.Size(113, 1);
+            this.lBytes.TabIndex = 60;
+            this.lBytes.Text = "Bytes:";
+            this.lBytes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtBytes
+            // 
+            this.txtBytes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBytes.Location = new System.Drawing.Point(122, 3);
+            this.txtBytes.Name = "txtBytes";
+            this.txtBytes.ReadOnly = true;
+            this.txtBytes.Size = new System.Drawing.Size(1, 1);
+            this.txtBytes.TabIndex = 61;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.splitterExtraction);
+            this.tabPage1.Location = new System.Drawing.Point(8, 8);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(1124, 724);
+            this.tabPage1.TabIndex = 6;
+            this.tabPage1.Text = "数据提取";
+            // 
+            // splitterExtraction
+            // 
+            this.splitterExtraction.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
+            this.splitterExtraction.Cursor = System.Windows.Forms.Cursors.Default;
+            this.splitterExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitterExtraction.Location = new System.Drawing.Point(0, 0);
+            this.splitterExtraction.Name = "splitterExtraction";
+            this.splitterExtraction.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitterExtraction.Panel1
+            // 
+            this.splitterExtraction.Panel1.Controls.Add(this.tlpExtractionSelectFile);
+            this.splitterExtraction.Panel1MinSize = 0;
+            // 
+            // splitterExtraction.Panel2
+            // 
+            this.splitterExtraction.Panel2.Controls.Add(this.tlpExtractionData);
+            this.splitterExtraction.Panel2MinSize = 0;
+            this.splitterExtraction.Size = new System.Drawing.Size(1124, 724);
+            this.splitterExtraction.SplitterDistance = 380;
+            this.splitterExtraction.SplitterSize = 80;
+            this.splitterExtraction.SplitterWidth = 10;
+            this.splitterExtraction.TabIndex = 0;
+            // 
+            // tlpExtractionSelectFile
+            // 
+            this.tlpExtractionSelectFile.ColumnCount = 1;
+            this.tlpExtractionSelectFile.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionSelectFile.Controls.Add(this.ddlExtraction, 0, 0);
+            this.tlpExtractionSelectFile.Controls.Add(this.udExtraction, 0, 1);
+            this.tlpExtractionSelectFile.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpExtractionSelectFile.Location = new System.Drawing.Point(0, 0);
+            this.tlpExtractionSelectFile.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpExtractionSelectFile.Name = "tlpExtractionSelectFile";
+            this.tlpExtractionSelectFile.RowCount = 2;
+            this.tlpExtractionSelectFile.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpExtractionSelectFile.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionSelectFile.Size = new System.Drawing.Size(1124, 380);
+            this.tlpExtractionSelectFile.TabIndex = 0;
+            // 
+            // ddlExtraction
+            // 
+            this.ddlExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlExtraction.List = true;
+            this.ddlExtraction.Location = new System.Drawing.Point(3, 3);
+            this.ddlExtraction.Name = "ddlExtraction";
+            this.ddlExtraction.PlaceholderText = "请选择提取类型";
+            this.ddlExtraction.Size = new System.Drawing.Size(1118, 44);
+            this.ddlExtraction.TabIndex = 2;
+            this.ddlExtraction.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlExtraction_SelectedIndexChanged);
+            // 
+            // udExtraction
+            // 
+            this.udExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.udExtraction.Location = new System.Drawing.Point(3, 53);
+            this.udExtraction.Multiselect = false;
+            this.udExtraction.Name = "udExtraction";
+            this.udExtraction.Size = new System.Drawing.Size(1118, 324);
+            this.udExtraction.TabIndex = 1;
+            this.udExtraction.Text = "单击或拖动文件到此区域进行数据提取";
+            this.udExtraction.TextDesc = "提取成功后会在下方显示数据内容，点击生成按钮可导出对应格式的数据文件.";
+            this.udExtraction.DragChanged += new AntdUI.IControl.DragEventHandler(this.udExtraction_DragChanged);
+            // 
+            // tlpExtractionData
+            // 
+            this.tlpExtractionData.ColumnCount = 1;
+            this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionData.Controls.Add(this.tlpExtractionButton, 0, 1);
+            this.tlpExtractionData.Controls.Add(this.txtExtraction, 0, 0);
+            this.tlpExtractionData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpExtractionData.Location = new System.Drawing.Point(0, 0);
+            this.tlpExtractionData.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpExtractionData.Name = "tlpExtractionData";
+            this.tlpExtractionData.RowCount = 2;
+            this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpExtractionData.Size = new System.Drawing.Size(1124, 334);
+            this.tlpExtractionData.TabIndex = 0;
+            // 
+            // tlpExtractionButton
+            // 
+            this.tlpExtractionButton.ColumnCount = 3;
+            this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpExtractionButton.Controls.Add(this.button1, 1, 1);
+            this.tlpExtractionButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpExtractionButton.Location = new System.Drawing.Point(0, 274);
+            this.tlpExtractionButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpExtractionButton.Name = "tlpExtractionButton";
+            this.tlpExtractionButton.RowCount = 3;
+            this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpExtractionButton.Size = new System.Drawing.Size(1124, 60);
+            this.tlpExtractionButton.TabIndex = 2;
+            // 
+            // button1
+            // 
+            this.button1.BackExtend = "135, #6253E1, #04BEFE";
+            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button1.IconSvg = "SaveOutlined";
+            this.button1.Location = new System.Drawing.Point(490, 8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(144, 44);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "生成文件";
+            this.button1.Type = AntdUI.TTypeMini.Primary;
+            this.button1.Click += new System.EventHandler(this.bExtraction_Click);
+            // 
+            // txtExtraction
+            // 
+            this.txtExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtExtraction.Location = new System.Drawing.Point(0, 0);
+            this.txtExtraction.Margin = new System.Windows.Forms.Padding(0);
+            this.txtExtraction.Multiline = true;
+            this.txtExtraction.Name = "txtExtraction";
+            this.txtExtraction.ReadOnly = true;
+            this.txtExtraction.Size = new System.Drawing.Size(1124, 274);
+            this.txtExtraction.TabIndex = 1;
             // 
             // ProxyModeForm
             // 
@@ -1756,13 +2825,42 @@
             this.tpFilterList.ResumeLayout(false);
             this.tlpFilterList.ResumeLayout(false);
             this.tlpFilterListButton.ResumeLayout(false);
-            this.tpSystemLog.ResumeLayout(false);
             this.tpSendList.ResumeLayout(false);
             this.tlpSendList.ResumeLayout(false);
             this.tlpSendListButton.ResumeLayout(false);
             this.tpRobotList.ResumeLayout(false);
             this.tlpRobotList.ResumeLayout(false);
             this.tlpRobotListButton.ResumeLayout(false);
+            this.tpSystemLog.ResumeLayout(false);
+            this.tpComparison.ResumeLayout(false);
+            this.tpXOR.ResumeLayout(false);
+            this.tpTranscoding.ResumeLayout(false);
+            this.tpExtraction.ResumeLayout(false);
+            this.splitterComparison.Panel1.ResumeLayout(false);
+            this.splitterComparison.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitterComparison)).EndInit();
+            this.splitterComparison.ResumeLayout(false);
+            this.tlpComparisonText.ResumeLayout(false);
+            this.tlpComparisonResult.ResumeLayout(false);
+            this.tlpComparisonButton.ResumeLayout(false);
+            this.tlpComparisonButton.PerformLayout();
+            this.tlpXOR.ResumeLayout(false);
+            this.tlpPacketInfo_XOR_Button.ResumeLayout(false);
+            this.tlpPacketInfo_XOR_Button.PerformLayout();
+            this.pXOR_To.ResumeLayout(false);
+            this.pXOR_From.ResumeLayout(false);
+            this.tlpTranscoding.ResumeLayout(false);
+            this.tlpTranscoding_Button.ResumeLayout(false);
+            this.pTranscoding_Result.ResumeLayout(false);
+            this.tlpTranscoding_Result.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.splitterExtraction.Panel1.ResumeLayout(false);
+            this.splitterExtraction.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitterExtraction)).EndInit();
+            this.splitterExtraction.ResumeLayout(false);
+            this.tlpExtractionSelectFile.ResumeLayout(false);
+            this.tlpExtractionData.ResumeLayout(false);
+            this.tlpExtractionButton.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1866,6 +2964,79 @@
         private AntdUI.Button bRobotList_Start;
         private AntdUI.Table tRobotList;
         private System.ComponentModel.BackgroundWorker bgwRobotList;
+        private AntdUI.TabPage tpComparison;
+        private AntdUI.TabPage tpXOR;
+        private AntdUI.TabPage tpTranscoding;
+        private AntdUI.TabPage tpExtraction;
+        private AntdUI.Splitter splitterComparison;
+        private System.Windows.Forms.TableLayoutPanel tlpComparisonText;
+        private AntdUI.Label lComparison_B;
+        private AntdUI.Input txtComparison_B;
+        private AntdUI.Input txtComparison_A;
+        private AntdUI.Label lComparison_A;
+        private System.Windows.Forms.TableLayoutPanel tlpComparisonResult;
+        private AntdUI.Input txtComparison_Result;
+        private System.Windows.Forms.TableLayoutPanel tlpComparisonButton;
+        private AntdUI.Button bComparison;
+        private AntdUI.Button bComparison_Change;
+        private AntdUI.Button bComparison_Reset;
+        private AntdUI.Button bComparison_Clean;
+        private AntdUI.InputNumber nudComparison_DuplicateNum;
+        private AntdUI.Select ddlComparisonType;
+        private System.Windows.Forms.TableLayoutPanel tlpXOR;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_XOR_Button;
+        private AntdUI.Label label1;
+        private AntdUI.Button bXOR;
+        private AntdUI.Button bXOR_ClearUp;
+        private AntdUI.Input txtXOR;
+        private AntdUI.Panel pXOR_To;
+        private Be.Windows.Forms.HexBox hbXOR_To;
+        private AntdUI.Panel pXOR_From;
+        private Be.Windows.Forms.HexBox hbXOR_From;
+        private System.Windows.Forms.TableLayoutPanel tlpTranscoding;
+        private System.Windows.Forms.TableLayoutPanel tlpTranscoding_Button;
+        private AntdUI.Button bEncoding;
+        private AntdUI.Button bDecoding;
+        private AntdUI.Input txtTranscoding;
+        private AntdUI.Panel pTranscoding_Result;
+        private System.Windows.Forms.TableLayoutPanel tlpTranscoding_Result;
+        private AntdUI.Input txtANSIbase64;
+        private AntdUI.Label lANSIbase64;
+        private AntdUI.Input txtANSIUnicode;
+        private AntdUI.Label lANSIUnicode;
+        private AntdUI.Input txtANSIUTF32;
+        private AntdUI.Label lANSIUTF32;
+        private AntdUI.Input txtANSIUTF16;
+        private AntdUI.Label lANSIUTF16;
+        private AntdUI.Input txtANSIUTF8;
+        private AntdUI.Label lANSIUTF8;
+        private AntdUI.Input txtANSIUTF7;
+        private AntdUI.Label lANSIUTF7;
+        private AntdUI.Input txtANSIGBK;
+        private AntdUI.Label lANSIGBK;
+        private AntdUI.Input txtbase64;
+        private AntdUI.Label lbase64;
+        private AntdUI.Input txtUnicode;
+        private AntdUI.Label lUnicode;
+        private AntdUI.Input txtUTF32;
+        private AntdUI.Label lUTF32;
+        private AntdUI.Input txtUTF16;
+        private AntdUI.Label lUTF16;
+        private AntdUI.Input txtUTF8;
+        private AntdUI.Label lUTF8;
+        private AntdUI.Input txtUTF7;
+        private AntdUI.Label lUTF7;
+        private AntdUI.Label lBytes;
+        private AntdUI.Input txtBytes;
+        private AntdUI.TabPage tabPage1;
+        private AntdUI.Splitter splitterExtraction;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionSelectFile;
+        private AntdUI.Select ddlExtraction;
+        private AntdUI.UploadDragger udExtraction;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionData;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
+        private AntdUI.Button button1;
+        private AntdUI.Input txtExtraction;
     }
 }
 

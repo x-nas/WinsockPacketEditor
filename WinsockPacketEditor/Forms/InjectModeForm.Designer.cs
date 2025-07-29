@@ -509,7 +509,6 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 3;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -518,7 +517,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1572,7 +1571,7 @@
             // tpRobotList
             // 
             this.tpRobotList.Controls.Add(this.tlpRobotList);
-            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
+            this.tpRobotList.Location = new System.Drawing.Point(-1124, -724);
             this.tpRobotList.Name = "tpRobotList";
             this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
             this.tpRobotList.TabIndex = 9;
@@ -2781,6 +2780,7 @@
             this.udExtraction.TabIndex = 1;
             this.udExtraction.Text = "单击或拖动文件到此区域进行数据提取";
             this.udExtraction.TextDesc = "提取成功后会在下方显示数据内容，点击生成按钮可导出对应格式的数据文件.";
+            this.udExtraction.DragChanged += new AntdUI.IControl.DragEventHandler(this.udExtraction_DragChanged);
             // 
             // tlpExtractionData
             // 
