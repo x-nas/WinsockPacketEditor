@@ -359,6 +359,12 @@
     <Compile Include="Forms\InjectModeForm.Designer.cs">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\WPEForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WPEForm.Designer.cs">
+      <DependentUpon>WPEForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\Mswsock.cs" />
     <Compile Include="NativeMethods\User32.cs" />
@@ -470,6 +476,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InjectModeForm.resx">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WPEForm.resx">
+      <DependentUpon>WPEForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using WinsockPacketEditor.Forms;
 
 namespace WinsockPacketEditor
 {
@@ -30,7 +31,7 @@ namespace WinsockPacketEditor
 
                 if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                 {
-                    StartForm startForm = new StartForm();
+                    WPEForm startForm = new WPEForm();
                     if (startForm.ShowDialog() == DialogResult.OK)
                     {
                         switch (Operate.SystemConfig.StartMode)

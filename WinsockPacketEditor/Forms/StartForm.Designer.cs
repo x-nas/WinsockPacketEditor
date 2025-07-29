@@ -213,6 +213,7 @@
             0});
             this.nudRemote_Port.Name = "nudRemote_Port";
             this.nudRemote_Port.PlaceholderText = "";
+            this.nudRemote_Port.SelectionStart = 2;
             this.nudRemote_Port.Size = new System.Drawing.Size(274, 40);
             this.nudRemote_Port.TabIndex = 5;
             this.nudRemote_Port.Text = "88";

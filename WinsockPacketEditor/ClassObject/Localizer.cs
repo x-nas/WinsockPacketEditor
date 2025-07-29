@@ -90,15 +90,15 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//StartForm
+                #region//WPEForm
 
-                case "StartForm":
-                    return "Start";
+                case "WPEForm.Login":
+                    return "Login";
 
-                case "StartForm.bProxy":
+                case "WPEForm.ProxyMode":
                     return "Proxy Mode";
 
-                case "StartForm.bInject":
+                case "WPEForm.InjectMode":
                     return "Inject Mode";
 
                 case "StartForm.cbIsRemote":
@@ -113,8 +113,8 @@ namespace WinsockPacketEditor
                 case "StartForm.lRemote_Port":
                     return "Port Num";
 
-                case "StartForm.lRemoteMGT":
-                    return "Remote MGT:";
+                case "WPEForm.SetRemot":
+                    return "Set Remote MGT";
 
                 case "StartForm.RemoteEmpty":
                     return "Username or Password Empty";

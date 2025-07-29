@@ -146,17 +146,10 @@ namespace WinsockPacketEditor
 
         private void btn_global_SelectedValueChanged(object sender, AntdUI.ObjectNEventArgs e)
         {
-            if (e.Value is AntdUI.SelectItem value)
+            if (e.Value is string lang)
             {
-                if (btn_global.Tag == value)
-                {
-                    return;
-                }
-                
-                btn_global.Tag = value;
                 btn_global.Loading = true;
 
-                string lang = value.Tag.ToString();
                 if (lang.StartsWith("en"))
                 {
                     AntdUI.Localization.Provider = new Localizer();
