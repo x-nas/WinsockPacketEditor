@@ -31,6 +31,7 @@ namespace WinsockPacketEditor.Forms
             this.InitStartMode();
             this.InitGlobal();
             this.InitRemote();
+            this.IsRemote_Changed();
         }
 
         private void WPEForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -104,6 +105,36 @@ namespace WinsockPacketEditor.Forms
             }            
         }
 
+        private void txtRemote_UserName_TextChanged(object sender, EventArgs e)
+        {
+            if (this.cbIsRemote.Checked)
+            {
+                if (string.IsNullOrEmpty(this.txtRemote_UserName.Text.Trim()))
+                {
+                    this.txtRemote_UserName.Status = TType.Error;
+                }
+                else
+                {
+                    this.txtRemote_UserName.Status = TType.Success;
+                }
+            }
+        }
+
+        private void txtRemote_PassWord_TextChanged(object sender, EventArgs e)
+        {
+            if (this.cbIsRemote.Checked)
+            {
+                if (string.IsNullOrEmpty(this.txtRemote_PassWord.Text.Trim()))
+                {
+                    this.txtRemote_PassWord.Status = TType.Error;
+                }
+                else
+                {
+                    this.txtRemote_PassWord.Status = TType.Success;
+                }
+            }
+        }
+
         #endregion
 
         #region//切换语言
@@ -138,6 +169,19 @@ namespace WinsockPacketEditor.Forms
             this.tabWPEForm.SelectTab("tpRemote");
         }
 
+        private void cbIsRemote_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.IsRemote_Changed();
+        }
+
+        private void IsRemote_Changed()
+        {
+            this.txtRemote_UserName.Enabled = 
+                this.txtRemote_PassWord.Enabled = 
+                this.nudRemote_Port.Enabled = 
+                this.cbIsRemote.Checked;
+        }
+
         private void bSaveRemote_Click(object sender, EventArgs e)
         {
             string Remote_UserName = this.txtRemote_UserName.Text.Trim();
@@ -148,6 +192,8 @@ namespace WinsockPacketEditor.Forms
             {  
                 if (string.IsNullOrEmpty(Remote_UserName))
                 {
+                    this.txtRemote_UserName.Status = TType.Error;
+
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "管理员账号为空", TType.Error)
                     {
                         LocalizationText = "StartForm.RemoteEmpty"
@@ -158,6 +204,8 @@ namespace WinsockPacketEditor.Forms
                 
                 if (string.IsNullOrEmpty(Remote_PassWord))
                 {
+                    this.txtRemote_PassWord.Status = TType.Error;
+
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "账号密码为空", TType.Error)
                     {
                         LocalizationText = "StartForm.RemoteEmpty"
@@ -168,6 +216,8 @@ namespace WinsockPacketEditor.Forms
                 
                 if (string.IsNullOrEmpty(RemoteURL))
                 {
+                    this.nudRemote_Port.Status = TType.Error;
+
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "管理后台地址错误", TType.Error)
                     {
                         LocalizationText = "StartForm.RemoteError"
@@ -225,6 +275,31 @@ namespace WinsockPacketEditor.Forms
             }
 
             return sReturn;
+        }
+
+        #endregion
+
+        #region//登录
+
+        private void bLogin_Click(object sender, EventArgs e)
+        {
+            if (this.ddlStartMode.SelectedIndex == 0)
+            {
+                Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Proxy;
+            }
+            else
+            {
+                SelectProcessForm selectProcessForm = new SelectProcessForm();
+                selectProcessForm.ShowDialog();
+
+                if (selectProcessForm.DialogResult == DialogResult.OK)
+                {
+                    Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Process;
+                }
+            }
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         #endregion        

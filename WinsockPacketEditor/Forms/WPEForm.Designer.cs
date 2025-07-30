@@ -76,12 +76,13 @@
             this.tabWPEForm.BackColor = System.Drawing.Color.Transparent;
             this.tabWPEForm.Controls.Add(this.tpLogin);
             this.tabWPEForm.Controls.Add(this.tpRemote);
-            this.tabWPEForm.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabWPEForm.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabWPEForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabWPEForm.Location = new System.Drawing.Point(0, 30);
             this.tabWPEForm.Name = "tabWPEForm";
             this.tabWPEForm.Pages.Add(this.tpLogin);
             this.tabWPEForm.Pages.Add(this.tpRemote);
+            this.tabWPEForm.SelectedIndex = 1;
             this.tabWPEForm.Size = new System.Drawing.Size(320, 420);
             this.tabWPEForm.Style = styleLine1;
             this.tabWPEForm.TabIndex = 5;
@@ -90,7 +91,7 @@
             // tpLogin
             // 
             this.tpLogin.Controls.Add(this.tlpWPEForm);
-            this.tpLogin.Location = new System.Drawing.Point(3, 33);
+            this.tpLogin.Location = new System.Drawing.Point(-314, -384);
             this.tpLogin.Name = "tpLogin";
             this.tpLogin.Size = new System.Drawing.Size(314, 384);
             this.tpLogin.TabIndex = 0;
@@ -108,6 +109,7 @@
             this.tlpWPEForm.Controls.Add(this.aWPEForm, 1, 3);
             this.tlpWPEForm.Controls.Add(this.ddlStartMode, 1, 4);
             this.tlpWPEForm.Controls.Add(this.bLogin, 1, 6);
+            this.tlpWPEForm.Cursor = System.Windows.Forms.Cursors.Default;
             this.tlpWPEForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpWPEForm.Location = new System.Drawing.Point(0, 0);
             this.tlpWPEForm.Margin = new System.Windows.Forms.Padding(0);
@@ -147,8 +149,10 @@
             // 
             this.lWPEForm.AutoSizeMode = AntdUI.TAutoSize.Height;
             this.lWPEForm.ColorExtend = "135, #00dbde, #fc00ff";
+            this.lWPEForm.Cursor = System.Windows.Forms.Cursors.Default;
             this.lWPEForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWPEForm.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWPEForm.HandCursor = System.Windows.Forms.Cursors.Default;
             this.lWPEForm.Location = new System.Drawing.Point(60, 23);
             this.lWPEForm.Name = "lWPEForm";
             this.lWPEForm.Size = new System.Drawing.Size(194, 32);
@@ -159,6 +163,8 @@
             // aWPEForm
             // 
             this.aWPEForm.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.aWPEForm.Cursor = System.Windows.Forms.Cursors.Default;
+            this.aWPEForm.HandCursor = System.Windows.Forms.Cursors.Default;
             this.aWPEForm.Image = ((System.Drawing.Image)(resources.GetObject("aWPEForm.Image")));
             this.aWPEForm.ImageFit = AntdUI.TFit.Fill;
             this.aWPEForm.Location = new System.Drawing.Point(102, 81);
@@ -195,11 +201,12 @@
             this.bLogin.TabIndex = 3;
             this.bLogin.Text = "登录";
             this.bLogin.Type = AntdUI.TTypeMini.Primary;
+            this.bLogin.Click += new System.EventHandler(this.bLogin_Click);
             // 
             // tpRemote
             // 
             this.tpRemote.Controls.Add(this.tlpRemote);
-            this.tpRemote.Location = new System.Drawing.Point(-314, -384);
+            this.tpRemote.Location = new System.Drawing.Point(3, 33);
             this.tpRemote.Name = "tpRemote";
             this.tpRemote.Size = new System.Drawing.Size(314, 384);
             this.tpRemote.TabIndex = 1;
@@ -218,6 +225,7 @@
             this.tlpRemote.Controls.Add(this.bSaveRemote, 1, 5);
             this.tlpRemote.Controls.Add(this.lRemote, 1, 6);
             this.tlpRemote.Controls.Add(this.cbIsRemote, 1, 4);
+            this.tlpRemote.Cursor = System.Windows.Forms.Cursors.Default;
             this.tlpRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpRemote.Location = new System.Drawing.Point(0, 0);
             this.tlpRemote.Margin = new System.Windows.Forms.Padding(0);
@@ -255,6 +263,7 @@
             this.txtRemote_PassWord.TabIndex = 1;
             this.txtRemote_PassWord.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtRemote_PassWord.UseSystemPasswordChar = true;
+            this.txtRemote_PassWord.TextChanged += new System.EventHandler(this.txtRemote_PassWord_TextChanged);
             // 
             // txtRemote_UserName
             // 
@@ -266,6 +275,7 @@
             this.txtRemote_UserName.Size = new System.Drawing.Size(244, 45);
             this.txtRemote_UserName.TabIndex = 0;
             this.txtRemote_UserName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtRemote_UserName.TextChanged += new System.EventHandler(this.txtRemote_UserName_TextChanged);
             // 
             // nudRemote_Port
             // 
@@ -322,6 +332,7 @@
             this.cbIsRemote.Size = new System.Drawing.Size(151, 39);
             this.cbIsRemote.TabIndex = 6;
             this.cbIsRemote.Text = "启用远程管理后台";
+            this.cbIsRemote.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsRemote_CheckedChanged);
             // 
             // pageHeader
             // 
