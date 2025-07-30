@@ -73,13 +73,18 @@ namespace WinsockPacketEditor
             }, () =>
             {
                 this.pageHeader.Loading = false;                
-            });
+            });            
 
             this.Dark_Changed();
             this.InitForm();
             this.InitComparison();
             this.InitExtraction();
 
+            this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
+            this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
+            this.hbProxyData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.tabProxyMode.TabMenuVisible = false;
             this.mProxyMode.SelectIndex(0, true);
         }
@@ -927,8 +932,15 @@ namespace WinsockPacketEditor
                 this.tProxyList.ColumnFore = Color.Silver;
                 this.tProxyList.ForeColor = Color.LimeGreen;
 
-                this.hbProxyData.BackColor = Color.FromArgb(30, 30, 30);
-                this.hbProxyData.ForeColor = Color.Silver;
+                this.hbProxyData.BackColor =
+                    this.hbXOR_From.BackColor =
+                    this.hbXOR_To.BackColor = 
+                    Color.FromArgb(30, 30, 30);
+
+                this.hbProxyData.ForeColor =
+                    this.hbXOR_From.ForeColor =
+                    this.hbXOR_To.ForeColor = 
+                    Color.Silver;
             }
             else
             {
@@ -938,8 +950,15 @@ namespace WinsockPacketEditor
                 this.tProxyList.ColumnFore = Color.Black;
                 this.tProxyList.ForeColor = Color.Green;
 
-                this.hbProxyData.BackColor = Color.White;
-                this.hbProxyData.ForeColor = Color.Black;
+                this.hbProxyData.BackColor =
+                    this.hbXOR_From.BackColor =
+                    this.hbXOR_To.BackColor = 
+                    Color.White;
+
+                this.hbProxyData.ForeColor =
+                    this.hbXOR_From.ForeColor =
+                    this.hbXOR_To.ForeColor = 
+                    Color.Black;
             }
         }        
 
@@ -1488,7 +1507,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//代理数据 - 菜单
+        #region//代理列表 - 菜单
 
         private void bProxyStart_Click(object sender, EventArgs e)
         {
@@ -1601,7 +1620,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//代理数据 - 右键菜单
+        #region//代理列表 - 右键菜单
 
         private void tProxyList_CellClick(object sender, TableClickEventArgs e)
         {
@@ -1698,31 +1717,31 @@ namespace WinsockPacketEditor
 
                         case "ToTextA":
 
-                            //if (piList.Count > 0)
-                            //{
-                            //    this.TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
-                            //    this.txtComparison_A.Text = this.TextA;
+                            if (piList.Count > 0)
+                            {
+                                this.TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
+                                this.txtComparison_A.Text = this.TextA;
 
-                            //    AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
-                            //    {
-                            //        LocalizationText = "System.ToTextA"
-                            //    });
-                            //}
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
+                                {
+                                    LocalizationText = "System.ToTextA"
+                                });
+                            }
 
                             break;
 
                         case "ToTextB":
 
-                            //if (piList.Count > 0)
-                            //{
-                            //    this.TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
-                            //    this.txtComparison_B.Text = this.TextB;
+                            if (piList.Count > 0)
+                            {
+                                this.TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
+                                this.txtComparison_B.Text = this.TextB;
 
-                            //    AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
-                            //    {
-                            //        LocalizationText = "System.ToTextB"
-                            //    });
-                            //}
+                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
+                                {
+                                    LocalizationText = "System.ToTextB"
+                                });
+                            }
 
                             break;
 
@@ -1762,6 +1781,193 @@ namespace WinsockPacketEditor
                             break;
                     }
                 }, Operate.PacketConfig.List.GetCMS_PacketList());
+            }
+        }
+
+        #endregion
+
+        #region//代理数据 - 右键菜单
+
+        private void hbProxyData_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                DynamicByteProvider dbp = hbProxyData.ByteProvider as DynamicByteProvider;
+                if (dbp == null || dbp.Bytes.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbProxyData, (item) =>
+                {
+                    switch (item.ID)
+                    {
+                        case "Edit":
+
+                            if (Operate.PacketConfig.List.piSelect != null)
+                            {
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, null, Operate.ProxyConfig.List.piSelect))
+                                {
+                                    Align = AntdUI.TAlignMini.Right,
+                                    Mask = true,
+                                    MaskClosable = false,
+                                    DisplayDelay = 0,
+                                });
+                            }
+
+                            break;
+
+                        case "ToFilterList":
+
+                            if (Operate.ProxyConfig.List.piSelect != null)
+                            {
+                                bool bOK = false;
+                                if (this.hbProxyData.CanCopy())
+                                {
+                                    this.hbProxyData.CopyHex();
+                                    byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(Operate.ProxyConfig.List.piSelect, bBufferCopy);
+                                }
+                                else
+                                {
+                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(Operate.ProxyConfig.List.piSelect, dbp.Bytes.ToArray());
+                                }
+
+                                if (bOK)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到滤镜列表", TType.Success)
+                                    {
+                                        LocalizationText = "ToFilterList.Success"
+                                    });
+                                }
+                                else
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到滤镜列表出错", TType.Error)
+                                    {
+                                        LocalizationText = "ToFilterList.Error"
+                                    });
+                                }
+                            }
+
+                            break;
+
+                        case "Copy_Text":
+
+                            this.hbProxyData.Copy();
+
+                            break;
+
+                        case "Copy_Hex":
+
+                            this.hbProxyData.CopyHex();
+
+                            break;
+
+                        case "ToTextA":
+
+                            if (this.hbProxyData.CanCopy())
+                            {
+                                this.hbProxyData.CopyHex();
+                                this.TextA = Clipboard.GetText();
+                            }
+                            else
+                            {
+                                this.TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
+                            }
+
+                            this.txtComparison_A.Text = this.TextA;
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
+                            {
+                                LocalizationText = "System.ToTextA"
+                            });
+
+                            break;
+
+                        case "ToTextB":
+
+                            if (this.hbProxyData.CanCopy())
+                            {
+                                this.hbProxyData.CopyHex();
+                                this.TextB = Clipboard.GetText();
+                            }
+                            else
+                            {
+                                this.TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
+                            }
+
+                            this.txtComparison_B.Text = this.TextB;
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
+                            {
+                                LocalizationText = "System.ToTextB"
+                            });
+
+                            break;
+
+                        case "SelectAll":
+
+                            this.hbProxyData.SelectAll();
+
+                            break;
+
+                        default:
+
+                            if (Operate.ProxyConfig.List.piSelect == null)
+                            {
+                                return;
+                            }
+
+                            if (Guid.TryParse(item.ID, out Guid SID))
+                            {
+                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                if (si != null)
+                                {
+                                    byte[] bBuffer = null;
+                                    if (this.hbProxyData.CanCopy())
+                                    {
+                                        this.hbProxyData.CopyHex();
+                                        bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                    }
+                                    else
+                                    {
+                                        bBuffer = dbp.Bytes.ToArray();
+                                    }
+
+                                    List<ProxyInfo> piList = new List<ProxyInfo>
+                                    {
+                                        new ProxyInfo
+                                        {
+                                            PacketSocket = Operate.ProxyConfig.List.piSelect.PacketSocket,
+                                            PacketType = Operate.ProxyConfig.List.piSelect.PacketType,
+                                            ClientAddr = Operate.ProxyConfig.List.piSelect.ClientAddr,
+                                            ServerAddr = Operate.ProxyConfig.List.piSelect.ServerAddr,
+                                            PacketBuffer = bBuffer,
+                                            PacketLen = bBuffer.Length,
+                                            PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen),
+                                        }
+                                    };
+
+                                    if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
+                                        {
+                                            LocalizationText = "cmsPacketList_ToSendList.Success"
+                                        });
+                                    }
+                                    else
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                        {
+                                            LocalizationText = "cmsPacketList_ToSendList.Error"
+                                        });
+                                    }
+                                }
+                            }
+
+                            break;
+                    }
+                }, Operate.PacketConfig.Packet.GetCMS_PacketData(this.hbProxyData)));
             }
         }
 

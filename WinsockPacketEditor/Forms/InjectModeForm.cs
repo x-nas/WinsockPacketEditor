@@ -68,18 +68,18 @@ namespace WinsockPacketEditor
                 this.pageHeader.Loading = false;
             });
 
+            this.Dark_Changed();
+            this.InitForm();
+            this.InitComparison();
+            this.InitExtraction();
+
             this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
             this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
             this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.tabInjectMode.TabMenuVisible = false;
-            this.mInjectMode.SelectIndex(0, true);
-
-            this.Dark_Changed();
-            this.InitForm();
-            this.InitComparison();
-            this.InitExtraction();
+            this.mInjectMode.SelectIndex(0, true);            
         }
 
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)

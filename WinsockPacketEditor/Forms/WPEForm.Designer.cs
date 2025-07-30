@@ -358,8 +358,7 @@
             this.pageHeader.Icon = global::WinsockPacketEditor.Properties.Resources.wpe;
             this.pageHeader.Location = new System.Drawing.Point(0, 0);
             this.pageHeader.MaximizeBox = false;
-            this.pageHeader.MinimizeBox = false;
-            this.pageHeader.Mode = AntdUI.TAMode.Light;
+            this.pageHeader.MinimizeBox = false;            
             this.pageHeader.Name = "pageHeader";
             this.pageHeader.ShowButton = true;
             this.pageHeader.Size = new System.Drawing.Size(320, 30);

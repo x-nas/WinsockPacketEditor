@@ -29,7 +29,7 @@ namespace WinsockPacketEditor
             {
                 TCP_Client = new TCPClient(clientSocket, bufferSize);
                 TCP_Server = new TCPServer(bufferSize);
-                UDP_Relay = new UDPRelay(new IPEndPoint(IPAddress.Any, 0));
+                UDP_Relay = new UDPRelay(new IPEndPoint(IPAddress.Any, TCP_Client.EndPoint.Port));
 
                 ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Handshake;
             }

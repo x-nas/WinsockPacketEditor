@@ -6028,7 +6028,7 @@ namespace WinsockPacketEditor
                                         {
                                             string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Success", "导出到Excel成功");
                                             AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                            Operate.DoLog(nameof(SaveProxyList_Dialog), Title + ": " + FilePath);
                                         }
                                         else
                                         {
@@ -10889,7 +10889,7 @@ namespace WinsockPacketEditor
                                         {
                                             string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Success", "导出到Excel成功");
                                             AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                            Operate.DoLog(nameof(SavePacketList_Dialog), Title + ": " + FilePath);
                                         }
                                         else
                                         {

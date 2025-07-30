@@ -157,20 +157,7 @@
             this.bRobotList_Start = new AntdUI.Button();
             this.tRobotList = new AntdUI.Table();
             this.tpStatistical = new AntdUI.TabPage();
-            this.tpSystemLog = new AntdUI.TabPage();
-            this.tSystemLog = new AntdUI.Table();
-            this.timerProxyList = new System.Windows.Forms.Timer(this.components);
-            this.bgwProxyList = new System.ComponentModel.BackgroundWorker();
-            this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
-            this.bgwClientList = new System.ComponentModel.BackgroundWorker();
-            this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
-            this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
-            this.bgwSendList = new System.ComponentModel.BackgroundWorker();
-            this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
             this.tpComparison = new AntdUI.TabPage();
-            this.tpXOR = new AntdUI.TabPage();
-            this.tpTranscoding = new AntdUI.TabPage();
-            this.tpExtraction = new AntdUI.TabPage();
             this.splitterComparison = new AntdUI.Splitter();
             this.tlpComparisonText = new System.Windows.Forms.TableLayoutPanel();
             this.lComparison_B = new AntdUI.Label();
@@ -186,6 +173,7 @@
             this.bComparison_Clean = new AntdUI.Button();
             this.nudComparison_DuplicateNum = new AntdUI.InputNumber();
             this.ddlComparisonType = new AntdUI.Select();
+            this.tpXOR = new AntdUI.TabPage();
             this.tlpXOR = new System.Windows.Forms.TableLayoutPanel();
             this.tlpPacketInfo_XOR_Button = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new AntdUI.Label();
@@ -196,6 +184,7 @@
             this.hbXOR_To = new Be.Windows.Forms.HexBox();
             this.pXOR_From = new AntdUI.Panel();
             this.hbXOR_From = new Be.Windows.Forms.HexBox();
+            this.tpTranscoding = new AntdUI.TabPage();
             this.tlpTranscoding = new System.Windows.Forms.TableLayoutPanel();
             this.tlpTranscoding_Button = new System.Windows.Forms.TableLayoutPanel();
             this.bEncoding = new AntdUI.Button();
@@ -231,6 +220,7 @@
             this.lUTF7 = new AntdUI.Label();
             this.lBytes = new AntdUI.Label();
             this.txtBytes = new AntdUI.Input();
+            this.tpExtraction = new AntdUI.TabPage();
             this.tabPage1 = new AntdUI.TabPage();
             this.splitterExtraction = new AntdUI.Splitter();
             this.tlpExtractionSelectFile = new System.Windows.Forms.TableLayoutPanel();
@@ -240,6 +230,16 @@
             this.tlpExtractionButton = new System.Windows.Forms.TableLayoutPanel();
             this.button1 = new AntdUI.Button();
             this.txtExtraction = new AntdUI.Input();
+            this.tpSystemLog = new AntdUI.TabPage();
+            this.tSystemLog = new AntdUI.Table();
+            this.timerProxyList = new System.Windows.Forms.Timer(this.components);
+            this.bgwProxyList = new System.ComponentModel.BackgroundWorker();
+            this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
+            this.bgwClientList = new System.ComponentModel.BackgroundWorker();
+            this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
+            this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
+            this.bgwSendList = new System.ComponentModel.BackgroundWorker();
+            this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
@@ -273,11 +273,7 @@
             this.tpRobotList.SuspendLayout();
             this.tlpRobotList.SuspendLayout();
             this.tlpRobotListButton.SuspendLayout();
-            this.tpSystemLog.SuspendLayout();
             this.tpComparison.SuspendLayout();
-            this.tpXOR.SuspendLayout();
-            this.tpTranscoding.SuspendLayout();
-            this.tpExtraction.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterComparison)).BeginInit();
             this.splitterComparison.Panel1.SuspendLayout();
             this.splitterComparison.Panel2.SuspendLayout();
@@ -285,14 +281,17 @@
             this.tlpComparisonText.SuspendLayout();
             this.tlpComparisonResult.SuspendLayout();
             this.tlpComparisonButton.SuspendLayout();
+            this.tpXOR.SuspendLayout();
             this.tlpXOR.SuspendLayout();
             this.tlpPacketInfo_XOR_Button.SuspendLayout();
             this.pXOR_To.SuspendLayout();
             this.pXOR_From.SuspendLayout();
+            this.tpTranscoding.SuspendLayout();
             this.tlpTranscoding.SuspendLayout();
             this.tlpTranscoding_Button.SuspendLayout();
             this.pTranscoding_Result.SuspendLayout();
             this.tlpTranscoding_Result.SuspendLayout();
+            this.tpExtraction.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterExtraction)).BeginInit();
             this.splitterExtraction.Panel1.SuspendLayout();
@@ -301,6 +300,7 @@
             this.tlpExtractionSelectFile.SuspendLayout();
             this.tlpExtractionData.SuspendLayout();
             this.tlpExtractionButton.SuspendLayout();
+            this.tpSystemLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -992,6 +992,7 @@
             this.hbProxyData.StringViewVisible = true;
             this.hbProxyData.TabIndex = 1;
             this.hbProxyData.VScrollBarVisible = true;
+            this.hbProxyData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbProxyData_MouseDown);
             // 
             // tlpProxyInfo
             // 
@@ -1746,74 +1747,6 @@
             this.tpStatistical.TabIndex = 1;
             this.tpStatistical.Text = "统计数据";
             // 
-            // tpSystemLog
-            // 
-            this.tpSystemLog.Controls.Add(this.tSystemLog);
-            this.tpSystemLog.Location = new System.Drawing.Point(-1124, -724);
-            this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
-            this.tpSystemLog.TabIndex = 6;
-            this.tpSystemLog.Text = "系统日志";
-            // 
-            // tSystemLog
-            // 
-            this.tSystemLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tSystemLog.CellImpactHeight = false;
-            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tSystemLog.EmptyHeader = true;
-            this.tSystemLog.Gap = 8;
-            this.tSystemLog.GapCell = 0;
-            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
-            this.tSystemLog.MultipleRows = true;
-            this.tSystemLog.Name = "tSystemLog";
-            this.tSystemLog.Size = new System.Drawing.Size(1124, 724);
-            this.tSystemLog.TabIndex = 2;
-            this.tSystemLog.Text = "table1";
-            this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
-            // 
-            // timerProxyList
-            // 
-            this.timerProxyList.Enabled = true;
-            this.timerProxyList.Interval = 10;
-            this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
-            // 
-            // bgwProxyList
-            // 
-            this.bgwProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyList_DoWork);
-            this.bgwProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProxyList_RunWorkerCompleted);
-            // 
-            // timerProxyListInfo
-            // 
-            this.timerProxyListInfo.Enabled = true;
-            this.timerProxyListInfo.Interval = 1000;
-            this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
-            // 
-            // bgwClientList
-            // 
-            this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
-            this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
-            // 
-            // bgwAccountList
-            // 
-            this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
-            // 
-            // bgwSearchProxyList
-            // 
-            this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
-            this.bgwSearchProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchProxyList_RunWorkerCompleted);
-            // 
-            // bgwSendList
-            // 
-            this.bgwSendList.WorkerSupportsCancellation = true;
-            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
-            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
-            // 
-            // bgwRobotList
-            // 
-            this.bgwRobotList.WorkerSupportsCancellation = true;
-            this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
-            this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
-            // 
             // tpComparison
             // 
             this.tpComparison.Controls.Add(this.splitterComparison);
@@ -1822,33 +1755,6 @@
             this.tpComparison.Size = new System.Drawing.Size(0, 0);
             this.tpComparison.TabIndex = 12;
             this.tpComparison.Text = "文本对比";
-            // 
-            // tpXOR
-            // 
-            this.tpXOR.Controls.Add(this.tlpXOR);
-            this.tpXOR.Location = new System.Drawing.Point(0, 0);
-            this.tpXOR.Name = "tpXOR";
-            this.tpXOR.Size = new System.Drawing.Size(0, 0);
-            this.tpXOR.TabIndex = 13;
-            this.tpXOR.Text = "异或计算";
-            // 
-            // tpTranscoding
-            // 
-            this.tpTranscoding.Controls.Add(this.tlpTranscoding);
-            this.tpTranscoding.Location = new System.Drawing.Point(0, 0);
-            this.tpTranscoding.Name = "tpTranscoding";
-            this.tpTranscoding.Size = new System.Drawing.Size(0, 0);
-            this.tpTranscoding.TabIndex = 14;
-            this.tpTranscoding.Text = "编码转换";
-            // 
-            // tpExtraction
-            // 
-            this.tpExtraction.Controls.Add(this.tabPage1);
-            this.tpExtraction.Location = new System.Drawing.Point(0, 0);
-            this.tpExtraction.Name = "tpExtraction";
-            this.tpExtraction.Size = new System.Drawing.Size(0, 0);
-            this.tpExtraction.TabIndex = 15;
-            this.tpExtraction.Text = "数据提取";
             // 
             // splitterComparison
             // 
@@ -1869,7 +1775,7 @@
             this.splitterComparison.Panel2.Controls.Add(this.tlpComparisonResult);
             this.splitterComparison.Panel2MinSize = 0;
             this.splitterComparison.Size = new System.Drawing.Size(0, 0);
-            this.splitterComparison.SplitterDistance = 450;
+            this.splitterComparison.SplitterDistance = 25;
             this.splitterComparison.SplitterSize = 80;
             this.splitterComparison.SplitterWidth = 10;
             this.splitterComparison.TabIndex = 1;
@@ -1890,15 +1796,15 @@
             this.tlpComparisonText.RowCount = 2;
             this.tlpComparisonText.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpComparisonText.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpComparisonText.Size = new System.Drawing.Size(1124, 450);
+            this.tlpComparisonText.Size = new System.Drawing.Size(0, 25);
             this.tlpComparisonText.TabIndex = 0;
             // 
             // lComparison_B
             // 
             this.lComparison_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lComparison_B.Location = new System.Drawing.Point(565, 3);
+            this.lComparison_B.Location = new System.Drawing.Point(3, 3);
             this.lComparison_B.Name = "lComparison_B";
-            this.lComparison_B.Size = new System.Drawing.Size(556, 23);
+            this.lComparison_B.Size = new System.Drawing.Size(1, 23);
             this.lComparison_B.TabIndex = 3;
             this.lComparison_B.Text = "Text B";
             this.lComparison_B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1907,10 +1813,10 @@
             // 
             this.txtComparison_B.AutoScroll = true;
             this.txtComparison_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtComparison_B.Location = new System.Drawing.Point(565, 32);
+            this.txtComparison_B.Location = new System.Drawing.Point(3, 32);
             this.txtComparison_B.Multiline = true;
             this.txtComparison_B.Name = "txtComparison_B";
-            this.txtComparison_B.Size = new System.Drawing.Size(556, 415);
+            this.txtComparison_B.Size = new System.Drawing.Size(1, 1);
             this.txtComparison_B.TabIndex = 1;
             this.txtComparison_B.TextChanged += new System.EventHandler(this.txtComparison_B_TextChanged);
             // 
@@ -1921,7 +1827,7 @@
             this.txtComparison_A.Location = new System.Drawing.Point(3, 32);
             this.txtComparison_A.Multiline = true;
             this.txtComparison_A.Name = "txtComparison_A";
-            this.txtComparison_A.Size = new System.Drawing.Size(556, 415);
+            this.txtComparison_A.Size = new System.Drawing.Size(1, 1);
             this.txtComparison_A.TabIndex = 0;
             this.txtComparison_A.TextChanged += new System.EventHandler(this.txtComparison_A_TextChanged);
             // 
@@ -1930,7 +1836,7 @@
             this.lComparison_A.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lComparison_A.Location = new System.Drawing.Point(3, 3);
             this.lComparison_A.Name = "lComparison_A";
-            this.lComparison_A.Size = new System.Drawing.Size(556, 23);
+            this.lComparison_A.Size = new System.Drawing.Size(1, 23);
             this.lComparison_A.TabIndex = 2;
             this.lComparison_A.Text = "Text A";
             this.lComparison_A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1948,7 +1854,7 @@
             this.tlpComparisonResult.RowCount = 2;
             this.tlpComparisonResult.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpComparisonResult.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpComparisonResult.Size = new System.Drawing.Size(1124, 264);
+            this.tlpComparisonResult.Size = new System.Drawing.Size(0, 19);
             this.tlpComparisonResult.TabIndex = 0;
             // 
             // txtComparison_Result
@@ -1959,7 +1865,7 @@
             this.txtComparison_Result.Multiline = true;
             this.txtComparison_Result.Name = "txtComparison_Result";
             this.txtComparison_Result.ReadOnly = true;
-            this.txtComparison_Result.Size = new System.Drawing.Size(1118, 198);
+            this.txtComparison_Result.Size = new System.Drawing.Size(1, 1);
             this.txtComparison_Result.TabIndex = 1;
             // 
             // tlpComparisonButton
@@ -1987,7 +1893,7 @@
             this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpComparisonButton.Size = new System.Drawing.Size(1124, 60);
+            this.tlpComparisonButton.Size = new System.Drawing.Size(1, 60);
             this.tlpComparisonButton.TabIndex = 2;
             // 
             // bComparison
@@ -2013,7 +1919,7 @@
             this.bComparison_Change.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bComparison_Change.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bComparison_Change.IconSvg = "SwapOutlined";
-            this.bComparison_Change.Location = new System.Drawing.Point(941, 7);
+            this.bComparison_Change.Location = new System.Drawing.Point(-182, 7);
             this.bComparison_Change.Name = "bComparison_Change";
             this.bComparison_Change.Size = new System.Drawing.Size(87, 46);
             this.bComparison_Change.TabIndex = 4;
@@ -2026,7 +1932,7 @@
             this.bComparison_Reset.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bComparison_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bComparison_Reset.IconSvg = "RollbackOutlined";
-            this.bComparison_Reset.Location = new System.Drawing.Point(848, 7);
+            this.bComparison_Reset.Location = new System.Drawing.Point(-275, 7);
             this.bComparison_Reset.Name = "bComparison_Reset";
             this.bComparison_Reset.Size = new System.Drawing.Size(87, 46);
             this.bComparison_Reset.TabIndex = 3;
@@ -2039,7 +1945,7 @@
             this.bComparison_Clean.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bComparison_Clean.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bComparison_Clean.IconSvg = "ClearOutlined";
-            this.bComparison_Clean.Location = new System.Drawing.Point(1034, 7);
+            this.bComparison_Clean.Location = new System.Drawing.Point(-89, 7);
             this.bComparison_Clean.Name = "bComparison_Clean";
             this.bComparison_Clean.Size = new System.Drawing.Size(87, 46);
             this.bComparison_Clean.TabIndex = 2;
@@ -2078,6 +1984,15 @@
             this.ddlComparisonType.Size = new System.Drawing.Size(194, 46);
             this.ddlComparisonType.TabIndex = 7;
             this.ddlComparisonType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlComparisonType_SelectedIndexChanged);
+            // 
+            // tpXOR
+            // 
+            this.tpXOR.Controls.Add(this.tlpXOR);
+            this.tpXOR.Location = new System.Drawing.Point(0, 0);
+            this.tpXOR.Name = "tpXOR";
+            this.tpXOR.Size = new System.Drawing.Size(0, 0);
+            this.tpXOR.TabIndex = 13;
+            this.tpXOR.Text = "异或计算";
             // 
             // tlpXOR
             // 
@@ -2231,6 +2146,15 @@
             this.hbXOR_From.TabIndex = 2;
             this.hbXOR_From.VScrollBarVisible = true;
             this.hbXOR_From.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbXOR_From_MouseDown);
+            // 
+            // tpTranscoding
+            // 
+            this.tpTranscoding.Controls.Add(this.tlpTranscoding);
+            this.tpTranscoding.Location = new System.Drawing.Point(0, 0);
+            this.tpTranscoding.Name = "tpTranscoding";
+            this.tpTranscoding.Size = new System.Drawing.Size(0, 0);
+            this.tpTranscoding.TabIndex = 14;
+            this.tpTranscoding.Text = "编码转换";
             // 
             // tlpTranscoding
             // 
@@ -2645,6 +2569,15 @@
             this.txtBytes.Size = new System.Drawing.Size(1, 1);
             this.txtBytes.TabIndex = 61;
             // 
+            // tpExtraction
+            // 
+            this.tpExtraction.Controls.Add(this.tabPage1);
+            this.tpExtraction.Location = new System.Drawing.Point(0, 0);
+            this.tpExtraction.Name = "tpExtraction";
+            this.tpExtraction.Size = new System.Drawing.Size(0, 0);
+            this.tpExtraction.TabIndex = 15;
+            this.tpExtraction.Text = "数据提取";
+            // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.splitterExtraction);
@@ -2776,6 +2709,74 @@
             this.txtExtraction.Size = new System.Drawing.Size(1124, 274);
             this.txtExtraction.TabIndex = 1;
             // 
+            // tpSystemLog
+            // 
+            this.tpSystemLog.Controls.Add(this.tSystemLog);
+            this.tpSystemLog.Location = new System.Drawing.Point(-1124, -724);
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
+            this.tpSystemLog.TabIndex = 6;
+            this.tpSystemLog.Text = "系统日志";
+            // 
+            // tSystemLog
+            // 
+            this.tSystemLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tSystemLog.CellImpactHeight = false;
+            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSystemLog.EmptyHeader = true;
+            this.tSystemLog.Gap = 8;
+            this.tSystemLog.GapCell = 0;
+            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tSystemLog.MultipleRows = true;
+            this.tSystemLog.Name = "tSystemLog";
+            this.tSystemLog.Size = new System.Drawing.Size(1124, 724);
+            this.tSystemLog.TabIndex = 2;
+            this.tSystemLog.Text = "table1";
+            this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
+            // 
+            // timerProxyList
+            // 
+            this.timerProxyList.Enabled = true;
+            this.timerProxyList.Interval = 10;
+            this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
+            // 
+            // bgwProxyList
+            // 
+            this.bgwProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyList_DoWork);
+            this.bgwProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProxyList_RunWorkerCompleted);
+            // 
+            // timerProxyListInfo
+            // 
+            this.timerProxyListInfo.Enabled = true;
+            this.timerProxyListInfo.Interval = 1000;
+            this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
+            // 
+            // bgwClientList
+            // 
+            this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
+            this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
+            // 
+            // bgwAccountList
+            // 
+            this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
+            // 
+            // bgwSearchProxyList
+            // 
+            this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
+            this.bgwSearchProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchProxyList_RunWorkerCompleted);
+            // 
+            // bgwSendList
+            // 
+            this.bgwSendList.WorkerSupportsCancellation = true;
+            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
+            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
+            // 
+            // bgwRobotList
+            // 
+            this.bgwRobotList.WorkerSupportsCancellation = true;
+            this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
+            this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
+            // 
             // ProxyModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -2831,11 +2832,7 @@
             this.tpRobotList.ResumeLayout(false);
             this.tlpRobotList.ResumeLayout(false);
             this.tlpRobotListButton.ResumeLayout(false);
-            this.tpSystemLog.ResumeLayout(false);
             this.tpComparison.ResumeLayout(false);
-            this.tpXOR.ResumeLayout(false);
-            this.tpTranscoding.ResumeLayout(false);
-            this.tpExtraction.ResumeLayout(false);
             this.splitterComparison.Panel1.ResumeLayout(false);
             this.splitterComparison.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitterComparison)).EndInit();
@@ -2844,15 +2841,18 @@
             this.tlpComparisonResult.ResumeLayout(false);
             this.tlpComparisonButton.ResumeLayout(false);
             this.tlpComparisonButton.PerformLayout();
+            this.tpXOR.ResumeLayout(false);
             this.tlpXOR.ResumeLayout(false);
             this.tlpPacketInfo_XOR_Button.ResumeLayout(false);
             this.tlpPacketInfo_XOR_Button.PerformLayout();
             this.pXOR_To.ResumeLayout(false);
             this.pXOR_From.ResumeLayout(false);
+            this.tpTranscoding.ResumeLayout(false);
             this.tlpTranscoding.ResumeLayout(false);
             this.tlpTranscoding_Button.ResumeLayout(false);
             this.pTranscoding_Result.ResumeLayout(false);
             this.tlpTranscoding_Result.ResumeLayout(false);
+            this.tpExtraction.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.splitterExtraction.Panel1.ResumeLayout(false);
             this.splitterExtraction.Panel2.ResumeLayout(false);
@@ -2861,6 +2861,7 @@
             this.tlpExtractionSelectFile.ResumeLayout(false);
             this.tlpExtractionData.ResumeLayout(false);
             this.tlpExtractionButton.ResumeLayout(false);
+            this.tpSystemLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
