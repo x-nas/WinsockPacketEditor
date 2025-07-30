@@ -1952,34 +1952,34 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    DataTable SystemConfig = DataBase.SelectTable_SystemConfig();
+                    DataTable dtSystemConfig = DataBase.SelectTable_SystemConfig();
 
                     AntdUI.Config.SetEmptyImageSvg(Properties.Resources.icon_empty, Properties.Resources.icon_empty_dark);
 
-                    if (SystemConfig.Rows.Count > 0)
+                    if (dtSystemConfig.Rows.Count > 0)
                     {
-                        AntdUI.Config.Animation = Convert.ToBoolean(SystemConfig.Rows[0]["SystemConfig_IsAnimation"]);
-                        AntdUI.Config.ShadowEnabled = Convert.ToBoolean(SystemConfig.Rows[0]["SystemConfig_IsShadowEnabled"]);
-                        AntdUI.Config.ShowInWindow = Convert.ToBoolean(SystemConfig.Rows[0]["SystemConfig_IsShowInWindow"]);
-                        AntdUI.Config.ScrollBarHide = Convert.ToBoolean(SystemConfig.Rows[0]["SystemConfig_IsScrollBarHide"]);
-                        AntdUI.Config.TextRenderingHighQuality = Convert.ToBoolean(SystemConfig.Rows[0]["SystemConfig_IsTextRenderingHighQuality"]);
+                        AntdUI.Config.Animation = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsAnimation"]);
+                        AntdUI.Config.ShadowEnabled = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsShadowEnabled"]);
+                        AntdUI.Config.ShowInWindow = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsShowInWindow"]);
+                        AntdUI.Config.ScrollBarHide = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsScrollBarHide"]);
+                        AntdUI.Config.TextRenderingHighQuality = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsTextRenderingHighQuality"]);
                         AntdUI.Config.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                        AntdUI.Config.IsDark = Convert.ToBoolean(SystemConfig.Rows[0]["SystemConfig_IsDark"]);
+                        AntdUI.Config.IsDark = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsDark"]);
                         AntdUI.Localization.DefaultLanguage = "zh-CN";
-                        string Lang = SystemConfig.Rows[0]["SystemConfig_DefaultLanguage"].ToString();                        
+                        string Lang = dtSystemConfig.Rows[0]["SystemConfig_DefaultLanguage"].ToString();                        
                         if (Lang.StartsWith("en"))
                         {
                             AntdUI.Localization.Provider = new Localizer();
                             AntdUI.Localization.SetLanguage(Lang);
                         }
 
-                        LastInjection = SystemConfig.Rows[0]["SystemConfig_LastInjection"].ToString();
-                        StartMode = GetSystemMode_ByString(SystemConfig.Rows[0]["SystemConfig_StartMode"].ToString());
-                        IsRemote = Convert.ToBoolean(SystemConfig.Rows[0]["SystemConfig_Remote_IsEnable"]);
-                        Remote_UserName = SystemConfig.Rows[0]["SystemConfig_Remote_UserName"].ToString();
-                        Remote_PassWord = SystemConfig.Rows[0]["SystemConfig_Remote_PassWord"].ToString();
-                        Remote_Port = ushort.Parse(SystemConfig.Rows[0]["SystemConfig_Remote_Port"].ToString());
-                        Remote_URL = SystemConfig.Rows[0]["SystemConfig_Remote_URL"].ToString();
+                        LastInjection = dtSystemConfig.Rows[0]["SystemConfig_LastInjection"].ToString();
+                        StartMode = Operate.SystemConfig.GetSystemMode_ByString(dtSystemConfig.Rows[0]["SystemConfig_StartMode"].ToString());
+                        IsRemote = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_Remote_IsEnable"]);
+                        Remote_UserName = dtSystemConfig.Rows[0]["SystemConfig_Remote_UserName"].ToString();
+                        Remote_PassWord = dtSystemConfig.Rows[0]["SystemConfig_Remote_PassWord"].ToString();
+                        Remote_Port = ushort.Parse(dtSystemConfig.Rows[0]["SystemConfig_Remote_Port"].ToString());
+                        Remote_URL = dtSystemConfig.Rows[0]["SystemConfig_Remote_URL"].ToString();
                     }
                     else
                     {
@@ -3808,6 +3808,7 @@ namespace WinsockPacketEditor
                         if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
                             pe.TCP_Client.Close();
+                            args.Dispose();
                             return;
                         }
 
@@ -3864,14 +3865,12 @@ namespace WinsockPacketEditor
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
                         pe.TCP_Client.Close();
+                        args.Dispose();
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         pe.TCP_Client.Close();
-                    }
-                    finally
-                    {
                         args.Dispose();
                     }
                 }
@@ -4401,10 +4400,19 @@ namespace WinsockPacketEditor
                         {
                             pe.TCP_Server.Close();
                             pe.TCP_Client.Close();
+                            args.Dispose();
                             return;
                         }
 
                         int bytesRead = args.BytesTransferred;
+                        if (bytesRead <= 0 || bytesRead > pe.TCP_Server.Buffer.Length)
+                        {
+                            pe.TCP_Server.Close();
+                            pe.TCP_Client.Close();
+                            args.Dispose();
+                            return;
+                        }
+
                         Span<byte> bData = pe.TCP_Server.Buffer.AsSpan(0, bytesRead);
 
                         if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
@@ -4418,6 +4426,7 @@ namespace WinsockPacketEditor
                     {
                         pe.TCP_Server.Close();
                         pe.TCP_Client.Close();
+                        args.Dispose();
                     }
                     catch (ObjectDisposedException)
                     {
@@ -4428,9 +4437,6 @@ namespace WinsockPacketEditor
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, pe.TCP_Server.Address + " - " + ex.Message);
                         pe.TCP_Server.Close();
                         pe.TCP_Client.Close();
-                    }
-                    finally
-                    {
                         args.Dispose();
                     }
                 }

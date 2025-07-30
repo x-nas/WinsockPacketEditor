@@ -52,7 +52,7 @@ namespace WinsockPacketEditor
             this.pageHeader.Loading = true;
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {
-                Operate.SystemConfig.InitCPUAndMemoryCounter();
+                Operate.SystemConfig.InitCPUAndMemoryCounter();                
                 Operate.SystemConfig.LoadProxyMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();
                 Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();

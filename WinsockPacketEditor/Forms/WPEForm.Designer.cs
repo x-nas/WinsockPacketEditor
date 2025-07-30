@@ -62,6 +62,7 @@
             // pWPEForm
             // 
             this.pWPEForm.BackExtend = "135, #E3FDF5, #FFE6FA";
+            this.pWPEForm.ColorScheme = AntdUI.TAMode.Light;
             this.pWPEForm.Controls.Add(this.tabWPEForm);
             this.pWPEForm.Controls.Add(this.pageHeader);
             this.pWPEForm.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -82,7 +83,6 @@
             this.tabWPEForm.Name = "tabWPEForm";
             this.tabWPEForm.Pages.Add(this.tpLogin);
             this.tabWPEForm.Pages.Add(this.tpRemote);
-            this.tabWPEForm.SelectedIndex = 1;
             this.tabWPEForm.Size = new System.Drawing.Size(320, 420);
             this.tabWPEForm.Style = styleLine1;
             this.tabWPEForm.TabIndex = 5;
@@ -91,7 +91,7 @@
             // tpLogin
             // 
             this.tpLogin.Controls.Add(this.tlpWPEForm);
-            this.tpLogin.Location = new System.Drawing.Point(-314, -384);
+            this.tpLogin.Location = new System.Drawing.Point(3, 33);
             this.tpLogin.Name = "tpLogin";
             this.tpLogin.Size = new System.Drawing.Size(314, 384);
             this.tpLogin.TabIndex = 0;
@@ -131,6 +131,7 @@
             // 
             this.bRemote.BackActive = System.Drawing.Color.Transparent;
             this.bRemote.BackHover = System.Drawing.Color.Transparent;
+            this.bRemote.ColorScheme = AntdUI.TAMode.Light;
             this.bRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bRemote.ForeColor = System.Drawing.Color.DodgerBlue;
@@ -149,6 +150,7 @@
             // 
             this.lWPEForm.AutoSizeMode = AntdUI.TAutoSize.Height;
             this.lWPEForm.ColorExtend = "135, #00dbde, #fc00ff";
+            this.lWPEForm.ColorScheme = AntdUI.TAMode.Light;
             this.lWPEForm.Cursor = System.Windows.Forms.Cursors.Default;
             this.lWPEForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWPEForm.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -163,6 +165,7 @@
             // aWPEForm
             // 
             this.aWPEForm.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.aWPEForm.ColorScheme = AntdUI.TAMode.Light;
             this.aWPEForm.Cursor = System.Windows.Forms.Cursors.Default;
             this.aWPEForm.HandCursor = System.Windows.Forms.Cursors.Default;
             this.aWPEForm.Image = ((System.Drawing.Image)(resources.GetObject("aWPEForm.Image")));
@@ -177,8 +180,10 @@
             // 
             this.ddlStartMode.BackColor = System.Drawing.Color.Transparent;
             this.ddlStartMode.BorderWidth = 0F;
+            this.ddlStartMode.ColorScheme = AntdUI.TAMode.Light;
             this.ddlStartMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlStartMode.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ddlStartMode.ForeColor = System.Drawing.Color.Black;
             this.ddlStartMode.List = true;
             this.ddlStartMode.Location = new System.Drawing.Point(60, 197);
             this.ddlStartMode.Name = "ddlStartMode";
@@ -191,6 +196,7 @@
             // 
             // bLogin
             // 
+            this.bLogin.ColorScheme = AntdUI.TAMode.Light;
             this.bLogin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bLogin.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bLogin.LocalizationText = "WPEForm.Login";
@@ -206,7 +212,7 @@
             // tpRemote
             // 
             this.tpRemote.Controls.Add(this.tlpRemote);
-            this.tpRemote.Location = new System.Drawing.Point(3, 33);
+            this.tpRemote.Location = new System.Drawing.Point(-314, -384);
             this.tpRemote.Name = "tpRemote";
             this.tpRemote.Size = new System.Drawing.Size(314, 384);
             this.tpRemote.TabIndex = 1;
@@ -244,6 +250,7 @@
             // aRemote
             // 
             this.aRemote.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.aRemote.ColorScheme = AntdUI.TAMode.Light;
             this.aRemote.Image = ((System.Drawing.Image)(resources.GetObject("aRemote.Image")));
             this.aRemote.ImageFit = AntdUI.TFit.Fill;
             this.aRemote.Location = new System.Drawing.Point(117, 3);
@@ -255,6 +262,7 @@
             // txtRemote_PassWord
             // 
             this.txtRemote_PassWord.AllowClear = true;
+            this.txtRemote_PassWord.ColorScheme = AntdUI.TAMode.Light;
             this.txtRemote_PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtRemote_PassWord.Location = new System.Drawing.Point(35, 140);
             this.txtRemote_PassWord.Name = "txtRemote_PassWord";
@@ -268,6 +276,7 @@
             // txtRemote_UserName
             // 
             this.txtRemote_UserName.AllowClear = true;
+            this.txtRemote_UserName.ColorScheme = AntdUI.TAMode.Light;
             this.txtRemote_UserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtRemote_UserName.Location = new System.Drawing.Point(35, 89);
             this.txtRemote_UserName.Name = "txtRemote_UserName";
@@ -279,6 +288,7 @@
             // 
             // nudRemote_Port
             // 
+            this.nudRemote_Port.ColorScheme = AntdUI.TAMode.Light;
             this.nudRemote_Port.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudRemote_Port.Location = new System.Drawing.Point(35, 191);
             this.nudRemote_Port.Name = "nudRemote_Port";
@@ -299,6 +309,7 @@
             // bSaveRemote
             // 
             this.bSaveRemote.AutoSizeMode = AntdUI.TAutoSize.Height;
+            this.bSaveRemote.ColorScheme = AntdUI.TAMode.Light;
             this.bSaveRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSaveRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bSaveRemote.Location = new System.Drawing.Point(35, 287);
@@ -312,6 +323,7 @@
             // 
             // lRemote
             // 
+            this.lRemote.ColorScheme = AntdUI.TAMode.Light;
             this.lRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lRemote.ForeColor = System.Drawing.Color.DodgerBlue;
@@ -325,6 +337,7 @@
             // cbIsRemote
             // 
             this.cbIsRemote.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbIsRemote.ColorScheme = AntdUI.TAMode.Light;
             this.cbIsRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cbIsRemote.Location = new System.Drawing.Point(35, 242);
@@ -338,6 +351,7 @@
             // 
             this.pageHeader.BackColor = System.Drawing.Color.Transparent;
             this.pageHeader.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pageHeader.ColorScheme = AntdUI.TAMode.Light;
             this.pageHeader.Controls.Add(this.btn_global);
             this.pageHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pageHeader.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -345,6 +359,7 @@
             this.pageHeader.Location = new System.Drawing.Point(0, 0);
             this.pageHeader.MaximizeBox = false;
             this.pageHeader.MinimizeBox = false;
+            this.pageHeader.Mode = AntdUI.TAMode.Light;
             this.pageHeader.Name = "pageHeader";
             this.pageHeader.ShowButton = true;
             this.pageHeader.Size = new System.Drawing.Size(320, 30);
@@ -356,6 +371,7 @@
             // 
             this.btn_global.BackActive = System.Drawing.Color.Transparent;
             this.btn_global.BackHover = System.Drawing.Color.Transparent;
+            this.btn_global.ColorScheme = AntdUI.TAMode.Light;
             this.btn_global.Dock = System.Windows.Forms.DockStyle.Right;
             this.btn_global.DropDownRadius = 6;
             this.btn_global.Ghost = true;
@@ -380,6 +396,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
+            this.Mode = AntdUI.TAMode.Light;
             this.Name = "WPEForm";
             this.Resizable = false;
             this.ShowIcon = false;
