@@ -51,6 +51,18 @@ namespace WinsockPacketEditor
             public static string WPE64_IP = "http://101.132.222.195";
             public static string WPE64_Issuse = "https://github.com/x-nas/WinsockPacketEditor/issues";
             public static string WPE64_DLL = "WPEHook.dll";
+            public static string HotKey1 = "Ctrl + Alt + F1";
+            public static string HotKey2 = "Ctrl + Alt + F2";
+            public static string HotKey3 = "Ctrl + Alt + F3";
+            public static string HotKey4 = "Ctrl + Alt + F4";
+            public static string HotKey5 = "Ctrl + Alt + F5";
+            public static string HotKey6 = "Ctrl + Alt + F6";
+            public static string HotKey7 = "Ctrl + Alt + F7";
+            public static string HotKey8 = "Ctrl + Alt + F8";
+            public static string HotKey9 = "Ctrl + Alt + F9";
+            public static string HotKey10 = "Ctrl + Alt + F10";
+            public static string HotKey11 = "Ctrl + Alt + F11";
+            public static string HotKey12 = "Ctrl + Alt + F12";
             public static SystemMode StartMode = SystemMode.None;
             public static DateTime StartTime = DateTime.Now;
             public static IntPtr MainHandle = IntPtr.Zero;
@@ -63,9 +75,7 @@ namespace WinsockPacketEditor
             public static PerformanceCounter cpuCounter;
             public static bool IsShow_FloatButton = true;
             public static bool IsShow_TextCompare = false, IsShow_TextDuplicate = false;
-            public static Execute ListExecute = Execute.Sequence;            
-
-            public static Action<Action> InvokeAction { get; set; }
+            public static Execute ListExecute = Execute.Sequence;
 
             #region//结构定义           
 
@@ -1522,7 +1532,193 @@ namespace WinsockPacketEditor
                 }
             }
 
-            #endregion            
+            #endregion
+
+            #region//注册快捷键
+
+            public static bool RegisterHotkey_FromText(int KeyID, string hkString)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(hkString))
+                    {
+                        return false;
+                    }                        
+
+                    Keys parsedKey = SystemConfig.ParseHotkeyString(hkString);
+                    if (parsedKey != Keys.None)
+                    {
+                        return SystemConfig.RegisterRecordedHotkey(KeyID, parsedKey);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
+            }
+
+            private static bool RegisterRecordedHotkey(int KeyID, Keys _currentKey)
+            {
+                try
+                {
+                    if (_currentKey != Keys.None && Operate.SystemConfig.MainHandle != IntPtr.Zero)
+                    {
+                        if (KeyID != 0)
+                        {
+                            User32.UnregisterHotKey(Operate.SystemConfig.MainHandle, KeyID);
+                        }
+
+                        uint modifiers = 0;
+                        if ((_currentKey & Keys.Control) == Keys.Control)
+                        {
+                            modifiers |= 0x0002; // MOD_CONTROL
+                        }
+
+                        if ((_currentKey & Keys.Alt) == Keys.Alt)
+                        {
+                            modifiers |= 0x0001; // MOD_ALT
+                        }
+
+                        if ((_currentKey & Keys.Shift) == Keys.Shift)
+                        {
+                            modifiers |= 0x0004; // MOD_SHIFT
+                        }
+
+                        uint vk = 0;
+
+                        if (_currentKey >= Keys.NumPad0 && _currentKey <= Keys.NumPad9)
+                        {
+                            vk = (uint)(_currentKey - Keys.NumPad0 + 0x60);
+                        }
+                        else
+                        {
+                            vk = (uint)(_currentKey & Keys.KeyCode);
+                        }
+
+                        return User32.RegisterHotKey(Operate.SystemConfig.MainHandle, KeyID, modifiers, vk);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
+            }
+
+            private static Keys ParseHotkeyString(string hotkeyString)
+            {
+                Keys result = Keys.None;
+
+                try
+                {
+                    string[] parts = hotkeyString.Split(new[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (string part in parts)
+                    {
+                        string key = part.Trim();
+
+                        if (key.Equals("Ctrl", StringComparison.OrdinalIgnoreCase))
+                        {
+                            result |= Keys.Control;
+                        }
+                        else if (key.Equals("Alt", StringComparison.OrdinalIgnoreCase))
+                        {
+                            result |= Keys.Alt;
+                        }
+                        else if (key.Equals("Shift", StringComparison.OrdinalIgnoreCase))
+                        {
+                            result |= Keys.Shift;
+                        }
+                        else
+                        {
+                            if (key.Length == 1 && char.IsDigit(key[0]))
+                            {
+                                result |= (Keys)((int)Keys.D0 + (key[0] - '0'));
+                            }
+                            else if (key.StartsWith("NumPad", StringComparison.OrdinalIgnoreCase) && int.TryParse(key.Substring(6), out int numpadNum) && numpadNum >= 0 && numpadNum <= 9)
+                            {
+                                result |= (Keys)((int)Keys.NumPad0 + numpadNum);
+                            }
+                            else if (key.StartsWith("F", StringComparison.OrdinalIgnoreCase) && int.TryParse(key.Substring(1), out int fNum) && fNum >= 1 && fNum <= 24)
+                            {
+                                result |= (Keys)((int)Keys.F1 + fNum - 1);
+                            }
+                            else if (Enum.TryParse<Keys>(key, true, out Keys keyValue))
+                            {
+                                result |= keyValue;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return result;
+            }
+
+            public static string ConvertHotkeyToString(Keys key)
+            {
+                string result = "";
+
+                try
+                {
+                    if ((key & Keys.Control) == Keys.Control)
+                    {
+                        result += "Ctrl + ";
+                    }
+
+                    if ((key & Keys.Alt) == Keys.Alt)
+                    {
+                        result += "Alt + ";
+                    }
+
+                    if ((key & Keys.Shift) == Keys.Shift)
+                    {
+                        result += "Shift + ";
+                    }
+
+                    Keys mainKey = key & Keys.KeyCode;
+
+                    if (mainKey >= Keys.D0 && mainKey <= Keys.D9)
+                    {
+                        result += ((char)('0' + (mainKey - Keys.D0))).ToString();
+                    }
+                    else if (mainKey >= Keys.NumPad0 && mainKey <= Keys.NumPad9)
+                    {
+                        result += "NumPad" + (mainKey - Keys.NumPad0);
+                    }
+                    else
+                    {
+                        result += mainKey.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return result;
+            }
+
+            public static bool IsModifierKey(Keys key)
+            {
+                return key == Keys.ControlKey ||
+                       key == Keys.LControlKey ||
+                       key == Keys.RControlKey ||
+                       key == Keys.Menu ||
+                       key == Keys.LMenu ||
+                       key == Keys.RMenu ||
+                       key == Keys.ShiftKey ||
+                       key == Keys.LShiftKey ||
+                       key == Keys.RShiftKey;
+            }
+
+            #endregion
 
             #region//文本对比
 
@@ -1918,20 +2114,38 @@ namespace WinsockPacketEditor
                 {
                     XElement xeSystemConfig =
                         new XElement("SystemConfig",
-                        new XElement("SystemConfig_IsAnimation", AntdUI.Config.Animation),
-                        new XElement("SystemConfig_IsShadowEnabled", AntdUI.Config.ShadowEnabled),
-                        new XElement("SystemConfig_IsShowInWindow", AntdUI.Config.ShowInWindow),
-                        new XElement("SystemConfig_IsScrollBarHide", AntdUI.Config.ScrollBarHide),
-                        new XElement("SystemConfig_IsTextRenderingHighQuality", AntdUI.Config.TextRenderingHighQuality),
-                        new XElement("SystemConfig_IsDark", AntdUI.Config.IsDark),
+                        new XElement("IsAnimation", AntdUI.Config.Animation),
+                        new XElement("IsShadowEnabled", AntdUI.Config.ShadowEnabled),
+                        new XElement("IsShowInWindow", AntdUI.Config.ShowInWindow),
+                        new XElement("IsScrollBarHide", AntdUI.Config.ScrollBarHide),
+                        new XElement("IsTextRenderingHighQuality", AntdUI.Config.TextRenderingHighQuality),
+                        new XElement("IsDark", AntdUI.Config.IsDark),
                         new XElement("DefaultLanguage", AntdUI.Localization.CurrentLanguage),
-                        new XElement("LastInjection", LastInjection),
-                        new XElement("StartMode", StartMode),
-                        new XElement("Remote_IsEnable", IsRemote),
-                        new XElement("Remote_UserName", Remote_UserName),
-                        new XElement("Remote_PassWord", Remote_PassWord),
-                        new XElement("Remote_Port", Remote_Port),
-                        new XElement("Remote_URL", Remote_URL)
+                        new XElement("LastInjection", SystemConfig.LastInjection),
+                        new XElement("StartMode", SystemConfig.StartMode),
+                        new XElement("Remote_IsEnable", SystemConfig.IsRemote),
+                        new XElement("Remote_UserName", SystemConfig.Remote_UserName),
+                        new XElement("Remote_PassWord", SystemConfig.Remote_PassWord),
+                        new XElement("Remote_Port", SystemConfig.Remote_Port),
+                        new XElement("Remote_URL", SystemConfig.Remote_URL),
+                        new XElement("IsShow_FloatButton", SystemConfig.IsShow_FloatButton),
+                        new XElement("ListExecute", SystemConfig.ListExecute),
+                        new XElement("FilterExecute", FilterConfig.Filter.FilterExecute),
+                        new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
+                        new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
+                        new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
+                        new XElement("HotKey1", SystemConfig.HotKey1),
+                        new XElement("HotKey2", SystemConfig.HotKey2),
+                        new XElement("HotKey3", SystemConfig.HotKey3),
+                        new XElement("HotKey4", SystemConfig.HotKey4),
+                        new XElement("HotKey5", SystemConfig.HotKey5),
+                        new XElement("HotKey6", SystemConfig.HotKey6),
+                        new XElement("HotKey7", SystemConfig.HotKey7),
+                        new XElement("HotKey8", SystemConfig.HotKey8),
+                        new XElement("HotKey9", SystemConfig.HotKey9),
+                        new XElement("HotKey10", SystemConfig.HotKey10),
+                        new XElement("HotKey11", SystemConfig.HotKey11),
+                        new XElement("HotKey12", SystemConfig.HotKey12)
                         );
 
                     return xeSystemConfig;
@@ -1952,42 +2166,65 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    DataTable dtSystemConfig = DataBase.SelectTable_SystemConfig();
-
+                    string Lang = "zh-CN";
+                    AntdUI.Localization.DefaultLanguage = Lang;
                     AntdUI.Config.SetEmptyImageSvg(Properties.Resources.icon_empty, Properties.Resources.icon_empty_dark);
 
+                    DataTable dtSystemConfig = DataBase.SelectTable_SystemConfig();
                     if (dtSystemConfig.Rows.Count > 0)
                     {
-                        AntdUI.Config.Animation = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsAnimation"]);
-                        AntdUI.Config.ShadowEnabled = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsShadowEnabled"]);
-                        AntdUI.Config.ShowInWindow = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsShowInWindow"]);
-                        AntdUI.Config.ScrollBarHide = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsScrollBarHide"]);
-                        AntdUI.Config.TextRenderingHighQuality = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsTextRenderingHighQuality"]);
+                        AntdUI.Config.Animation = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsAnimation"]);
+                        AntdUI.Config.ShadowEnabled = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsShadowEnabled"]);
+                        AntdUI.Config.ShowInWindow = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsShowInWindow"]);
+                        AntdUI.Config.ScrollBarHide = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsScrollBarHide"]);
+                        AntdUI.Config.TextRenderingHighQuality = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsTextRenderingHighQuality"]);
                         AntdUI.Config.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                        AntdUI.Config.IsDark = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_IsDark"]);
-                        AntdUI.Localization.DefaultLanguage = "zh-CN";
-                        string Lang = dtSystemConfig.Rows[0]["SystemConfig_DefaultLanguage"].ToString();                        
-                        if (Lang.StartsWith("en"))
-                        {
-                            AntdUI.Localization.Provider = new Localizer();
-                            AntdUI.Localization.SetLanguage(Lang);
-                        }
+                        AntdUI.Config.IsDark = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsDark"]);                        
+                        Lang = dtSystemConfig.Rows[0]["DefaultLanguage"].ToString();
 
-                        LastInjection = dtSystemConfig.Rows[0]["SystemConfig_LastInjection"].ToString();
-                        StartMode = Operate.SystemConfig.GetSystemMode_ByString(dtSystemConfig.Rows[0]["SystemConfig_StartMode"].ToString());
-                        IsRemote = Convert.ToBoolean(dtSystemConfig.Rows[0]["SystemConfig_Remote_IsEnable"]);
-                        Remote_UserName = dtSystemConfig.Rows[0]["SystemConfig_Remote_UserName"].ToString();
-                        Remote_PassWord = dtSystemConfig.Rows[0]["SystemConfig_Remote_PassWord"].ToString();
-                        Remote_Port = ushort.Parse(dtSystemConfig.Rows[0]["SystemConfig_Remote_Port"].ToString());
-                        Remote_URL = dtSystemConfig.Rows[0]["SystemConfig_Remote_URL"].ToString();
+                        SystemConfig.LastInjection = dtSystemConfig.Rows[0]["LastInjection"].ToString();
+                        SystemConfig.StartMode = Operate.SystemConfig.GetSystemMode_ByString(dtSystemConfig.Rows[0]["StartMode"].ToString());
+                        SystemConfig.IsRemote = Convert.ToBoolean(dtSystemConfig.Rows[0]["Remote_IsEnable"]);
+                        SystemConfig.Remote_UserName = dtSystemConfig.Rows[0]["Remote_UserName"].ToString();
+                        SystemConfig.Remote_PassWord = dtSystemConfig.Rows[0]["Remote_PassWord"].ToString();
+                        SystemConfig.Remote_Port = ushort.Parse(dtSystemConfig.Rows[0]["Remote_Port"].ToString());
+                        SystemConfig.Remote_URL = dtSystemConfig.Rows[0]["Remote_URL"].ToString();
+                        SystemConfig.IsShow_FloatButton = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsShow_FloatButton"]);
+                        SystemConfig.ListExecute = GetListExecute_ByString(dtSystemConfig.Rows[0]["ListExecute"].ToString());
+                        FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(dtSystemConfig.Rows[0]["FilterExecute"].ToString());
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(dtSystemConfig.Rows[0]["LogList_AutoRoll"]);
+                        LogConfig.List.AutoClear = Convert.ToBoolean(dtSystemConfig.Rows[0]["LogList_AutoClear"]);
+                        LogConfig.List.AutoClear_Value = Convert.ToInt32(dtSystemConfig.Rows[0]["LogList_AutoClear_Value"]);
+                        SystemConfig.HotKey1 = dtSystemConfig.Rows[0]["HotKey1"].ToString();
+                        SystemConfig.HotKey2 = dtSystemConfig.Rows[0]["HotKey2"].ToString();
+                        SystemConfig.HotKey3 = dtSystemConfig.Rows[0]["HotKey3"].ToString();
+                        SystemConfig.HotKey4 = dtSystemConfig.Rows[0]["HotKey4"].ToString();
+                        SystemConfig.HotKey5 = dtSystemConfig.Rows[0]["HotKey5"].ToString();
+                        SystemConfig.HotKey6 = dtSystemConfig.Rows[0]["HotKey6"].ToString();
+                        SystemConfig.HotKey7 = dtSystemConfig.Rows[0]["HotKey7"].ToString();
+                        SystemConfig.HotKey8 = dtSystemConfig.Rows[0]["HotKey8"].ToString();
+                        SystemConfig.HotKey9 = dtSystemConfig.Rows[0]["HotKey9"].ToString();
+                        SystemConfig.HotKey10 = dtSystemConfig.Rows[0]["HotKey10"].ToString();
+                        SystemConfig.HotKey11 = dtSystemConfig.Rows[0]["HotKey11"].ToString();
+                        SystemConfig.HotKey12 = dtSystemConfig.Rows[0]["HotKey12"].ToString();
                     }
                     else
                     {
                         AntdUI.Config.ShowInWindow = true;
                         AntdUI.Config.TextRenderingHighQuality = true;
                         AntdUI.Config.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                        AntdUI.Localization.DefaultLanguage = "zh-CN";                        
                     }
+
+                    if (Lang.StartsWith("en"))
+                    {
+                        AntdUI.Localization.Provider = new Localizer();
+                    }
+                    else
+                    {
+                        AntdUI.Localization.Provider = null;
+                    }
+
+                    AntdUI.Localization.SetLanguage(Lang);                    
                 }
                 catch (Exception ex)
                 {
@@ -1999,37 +2236,37 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    XElement xeIsAnimation = xeSystemConfig.Element("SystemConfig_IsAnimation");
+                    XElement xeIsAnimation = xeSystemConfig.Element("IsAnimation");
                     if (xeIsAnimation != null)
                     {
                         AntdUI.Config.Animation = Convert.ToBoolean(xeIsAnimation.Value);
                     }
 
-                    XElement xeIsShadowEnabled = xeSystemConfig.Element("SystemConfig_IsShadowEnabled");
+                    XElement xeIsShadowEnabled = xeSystemConfig.Element("IsShadowEnabled");
                     if (xeIsShadowEnabled != null)
                     {
                         AntdUI.Config.ShadowEnabled = Convert.ToBoolean(xeIsShadowEnabled.Value);
                     }
 
-                    XElement xeIsShowInWindow = xeSystemConfig.Element("SystemConfig_IsShowInWindow");
+                    XElement xeIsShowInWindow = xeSystemConfig.Element("IsShowInWindow");
                     if (xeIsShowInWindow != null)
                     {
                         AntdUI.Config.ShowInWindow = Convert.ToBoolean(xeIsShowInWindow.Value);
                     }
 
-                    XElement xeIsScrollBarHide = xeSystemConfig.Element("SystemConfig_IsScrollBarHide");
+                    XElement xeIsScrollBarHide = xeSystemConfig.Element("IsScrollBarHide");
                     if (xeIsScrollBarHide != null)
                     {
                         AntdUI.Config.ScrollBarHide = Convert.ToBoolean(xeIsScrollBarHide.Value);
                     }
 
-                    XElement xeIsTextRenderingHighQuality = xeSystemConfig.Element("SystemConfig_IsTextRenderingHighQuality");
+                    XElement xeIsTextRenderingHighQuality = xeSystemConfig.Element("IsTextRenderingHighQuality");
                     if (xeIsTextRenderingHighQuality != null)
                     {
                         AntdUI.Config.TextRenderingHighQuality = Convert.ToBoolean(xeIsTextRenderingHighQuality.Value);
                     }
 
-                    XElement xeIsDark = xeSystemConfig.Element("SystemConfig_IsDark");
+                    XElement xeIsDark = xeSystemConfig.Element("IsDark");
                     if (xeIsDark != null)
                     {
                         AntdUI.Config.IsDark = Convert.ToBoolean(xeIsDark.Value);
@@ -2038,54 +2275,168 @@ namespace WinsockPacketEditor
                     XElement xeDefaultLanguage = xeSystemConfig.Element("DefaultLanguage");
                     if (xeDefaultLanguage != null)
                     {
-                        AntdUI.Localization.DefaultLanguage = xeDefaultLanguage.Value;
-                        var lang = AntdUI.Localization.CurrentLanguage;
-                        if (lang.StartsWith("en"))
+                        string Lang = xeDefaultLanguage.Value;
+                        if (Lang.StartsWith("en"))
                         {
                             AntdUI.Localization.Provider = new Localizer();
                         }
+                        else
+                        {
+                            AntdUI.Localization.Provider = null;
+                        }
+
+                        AntdUI.Localization.DefaultLanguage = "zh-CN";
+                        AntdUI.Localization.SetLanguage(Lang);
                     }
 
                     XElement xeLastInjection = xeSystemConfig.Element("LastInjection");
                     if (xeLastInjection != null)
                     {
-                        LastInjection = xeLastInjection.Value;
+                        SystemConfig.LastInjection = xeLastInjection.Value;
                     }
 
                     XElement xeStartMode = xeSystemConfig.Element("StartMode");
                     if (xeStartMode != null)
                     {
-                        StartMode = GetSystemMode_ByString(xeStartMode.Value);
+                        SystemConfig.StartMode = GetSystemMode_ByString(xeStartMode.Value);
                     }
 
                     XElement xeIsRemote = xeSystemConfig.Element("Remote_IsEnable");
                     if (xeIsRemote != null)
                     {
-                        IsRemote = Convert.ToBoolean(xeIsRemote.Value);
+                        SystemConfig.IsRemote = Convert.ToBoolean(xeIsRemote.Value);
                     }
 
                     XElement xeRemote_UserName = xeSystemConfig.Element("Remote_UserName");
                     if (xeRemote_UserName != null)
                     {
-                        Remote_UserName = xeRemote_UserName.Value;
+                        SystemConfig.Remote_UserName = xeRemote_UserName.Value;
                     }
 
                     XElement xeRemote_PassWord = xeSystemConfig.Element("Remote_PassWord");
                     if (xeRemote_PassWord != null)
                     {
-                        Remote_PassWord = xeRemote_PassWord.Value;
+                        SystemConfig.Remote_PassWord = xeRemote_PassWord.Value;
                     }
 
                     XElement xeRemote_Port = xeSystemConfig.Element("Remote_Port");
                     if (xeRemote_Port != null)
                     {
-                        Remote_Port = ushort.Parse(xeRemote_Port.Value);
+                        SystemConfig.Remote_Port = ushort.Parse(xeRemote_Port.Value);
                     }
 
                     XElement xeRemote_URL = xeSystemConfig.Element("Remote_URL");
                     if (xeRemote_URL != null)
                     {
-                        Remote_URL = xeRemote_URL.Value;
+                        SystemConfig.Remote_URL = xeRemote_URL.Value;
+                    }
+
+                    XElement IsShow_FloatButton = xeSystemConfig.Element("IsShow_FloatButton");
+                    if (IsShow_FloatButton != null)
+                    {
+                        SystemConfig.IsShow_FloatButton = Convert.ToBoolean(IsShow_FloatButton.Value);
+                    }
+
+                    XElement xeListExecute = xeSystemConfig.Element("ListExecute");
+                    if (xeListExecute != null)
+                    {
+                        SystemConfig.ListExecute = GetListExecute_ByString(xeListExecute.Value);
+                    }
+
+                    XElement FilterExecute = xeSystemConfig.Element("FilterExecute");
+                    if (FilterExecute != null)
+                    {
+                        FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(FilterExecute.Value);
+                    }
+
+                    XElement LogList_AutoRoll = xeSystemConfig.Element("LogList_AutoRoll");
+                    if (LogList_AutoRoll != null)
+                    {
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
+                    }
+
+                    XElement LogList_AutoClear = xeSystemConfig.Element("LogList_AutoClear");
+                    if (LogList_AutoClear != null)
+                    {
+                        LogConfig.List.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
+                    }
+
+                    XElement LogList_AutoClear_Value = xeSystemConfig.Element("LogList_AutoClear_Value");
+                    if (LogList_AutoClear_Value != null)
+                    {
+                        LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
+                    }
+
+                    XElement HotKey1 = xeSystemConfig.Element("HotKey1");
+                    if (HotKey1 != null)
+                    {
+                        SystemConfig.HotKey1 = HotKey1.Value;
+                    }
+
+                    XElement HotKey2 = xeSystemConfig.Element("HotKey2");
+                    if (HotKey2 != null)
+                    {
+                        SystemConfig.HotKey2 = HotKey2.Value;
+                    }
+
+                    XElement HotKey3 = xeSystemConfig.Element("HotKey3");
+                    if (HotKey3 != null)
+                    {
+                        SystemConfig.HotKey3 = HotKey3.Value;
+                    }
+
+                    XElement HotKey4 = xeSystemConfig.Element("HotKey4");
+                    if (HotKey4 != null)
+                    {
+                        SystemConfig.HotKey4 = HotKey4.Value;
+                    }
+
+                    XElement HotKey5 = xeSystemConfig.Element("HotKey5");
+                    if (HotKey5 != null)
+                    {
+                        SystemConfig.HotKey5 = HotKey5.Value;
+                    }
+
+                    XElement HotKey6 = xeSystemConfig.Element("HotKey6");
+                    if (HotKey6 != null)
+                    {
+                        SystemConfig.HotKey6 = HotKey6.Value;
+                    }
+
+                    XElement HotKey7 = xeSystemConfig.Element("HotKey7");
+                    if (HotKey7 != null)
+                    {
+                        SystemConfig.HotKey7 = HotKey7.Value;
+                    }
+
+                    XElement HotKey8 = xeSystemConfig.Element("HotKey8");
+                    if (HotKey8 != null)
+                    {
+                        SystemConfig.HotKey8 = HotKey8.Value;
+                    }
+
+                    XElement HotKey9 = xeSystemConfig.Element("HotKey9");
+                    if (HotKey9 != null)
+                    {
+                        SystemConfig.HotKey9 = HotKey9.Value;
+                    }
+
+                    XElement HotKey10 = xeSystemConfig.Element("HotKey10");
+                    if (HotKey10 != null)
+                    {
+                        SystemConfig.HotKey10 = HotKey10.Value;
+                    }
+
+                    XElement HotKey11 = xeSystemConfig.Element("HotKey11");
+                    if (HotKey11 != null)
+                    {
+                        SystemConfig.HotKey11 = HotKey11.Value;
+                    }
+
+                    XElement HotKey12 = xeSystemConfig.Element("HotKey12");
+                    if (HotKey12 != null)
+                    {
+                        SystemConfig.HotKey12 = HotKey12.Value;
                     }
                 }
                 catch (Exception ex)
@@ -2134,29 +2485,11 @@ namespace WinsockPacketEditor
                         new XElement("HookWSA_Send", PacketConfig.Packet.HookWSA_Send),
                         new XElement("HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo),
                         new XElement("HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv),
-                        new XElement("HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom),
-                        new XElement("HotKey1", PacketConfig.Packet.HotKey1),
-                        new XElement("HotKey2", PacketConfig.Packet.HotKey2),
-                        new XElement("HotKey3", PacketConfig.Packet.HotKey3),
-                        new XElement("HotKey4", PacketConfig.Packet.HotKey4),
-                        new XElement("HotKey5", PacketConfig.Packet.HotKey5),
-                        new XElement("HotKey6", PacketConfig.Packet.HotKey6),
-                        new XElement("HotKey7", PacketConfig.Packet.HotKey7),
-                        new XElement("HotKey8", PacketConfig.Packet.HotKey8),
-                        new XElement("HotKey9", PacketConfig.Packet.HotKey9),
-                        new XElement("HotKey10", PacketConfig.Packet.HotKey10),
-                        new XElement("HotKey11", PacketConfig.Packet.HotKey11),
-                        new XElement("HotKey12", PacketConfig.Packet.HotKey12),
+                        new XElement("HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom),                        
                         new XElement("PacketList_AutoRoll", PacketConfig.List.AutoRoll),
                         new XElement("PacketList_AutoClear", PacketConfig.List.AutoClear),
-                        new XElement("PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value),
-                        new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
-                        new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
-                        new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
-                        new XElement("SpeedMode", PacketConfig.Packet.SpeedMode),
-                        new XElement("IsShow_FloatButton", SystemConfig.IsShow_FloatButton),
-                        new XElement("ListExecute", ListExecute),
-                        new XElement("FilterExecute", FilterConfig.Filter.FilterExecute)
+                        new XElement("PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value),                        
+                        new XElement("SpeedMode", PacketConfig.Packet.SpeedMode)                        
                         );
 
                     return xeInjectMode;
@@ -2206,28 +2539,12 @@ namespace WinsockPacketEditor
                         PacketConfig.Packet.HookWSA_SendTo = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_SendTo"]);
                         PacketConfig.Packet.HookWSA_Recv = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_Recv"]);
                         PacketConfig.Packet.HookWSA_RecvFrom = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_RecvFrom"]);
-                        PacketConfig.Packet.HotKey1 = InjectMode.Rows[0]["HotKey1"].ToString();
-                        PacketConfig.Packet.HotKey2 = InjectMode.Rows[0]["HotKey2"].ToString();
-                        PacketConfig.Packet.HotKey3 = InjectMode.Rows[0]["HotKey3"].ToString();
-                        PacketConfig.Packet.HotKey4 = InjectMode.Rows[0]["HotKey4"].ToString();
-                        PacketConfig.Packet.HotKey5 = InjectMode.Rows[0]["HotKey5"].ToString();
-                        PacketConfig.Packet.HotKey6 = InjectMode.Rows[0]["HotKey6"].ToString();
-                        PacketConfig.Packet.HotKey7 = InjectMode.Rows[0]["HotKey7"].ToString();
-                        PacketConfig.Packet.HotKey8 = InjectMode.Rows[0]["HotKey8"].ToString();
-                        PacketConfig.Packet.HotKey9 = InjectMode.Rows[0]["HotKey9"].ToString();
-                        PacketConfig.Packet.HotKey10 = InjectMode.Rows[0]["HotKey10"].ToString();
-                        PacketConfig.Packet.HotKey11 = InjectMode.Rows[0]["HotKey11"].ToString();
-                        PacketConfig.Packet.HotKey12 = InjectMode.Rows[0]["HotKey12"].ToString();
+                        
                         PacketConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoRoll"]);
                         PacketConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoClear"]);
                         PacketConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["PacketList_AutoClear_Value"]);
-                        LogConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoRoll"]);
-                        LogConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoClear"]);
-                        LogConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["LogList_AutoClear_Value"]);
-                        PacketConfig.Packet.SpeedMode = Convert.ToBoolean(InjectMode.Rows[0]["SpeedMode"]);
-                        SystemConfig.IsShow_FloatButton = Convert.ToBoolean(InjectMode.Rows[0]["IsShow_FloatButton"]);
-                        SystemConfig.ListExecute = GetListExecute_ByString(InjectMode.Rows[0]["ListExecute"].ToString());
-                        FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(InjectMode.Rows[0]["FilterExecute"].ToString());
+                        
+                        PacketConfig.Packet.SpeedMode = Convert.ToBoolean(InjectMode.Rows[0]["SpeedMode"]);                        
                     }
                 }
                 catch (Exception ex)
@@ -2388,79 +2705,7 @@ namespace WinsockPacketEditor
                     if (HookWSA_RecvFrom != null)
                     {
                         PacketConfig.Packet.HookWSA_RecvFrom = Convert.ToBoolean(HookWSA_RecvFrom.Value);
-                    }
-
-                    XElement HotKey1 = xeInjectMode.Element("HotKey1");
-                    if (HotKey1 != null)
-                    {
-                        PacketConfig.Packet.HotKey1 = HotKey1.Value;
-                    }
-
-                    XElement HotKey2 = xeInjectMode.Element("HotKey2");
-                    if (HotKey2 != null)
-                    {
-                        PacketConfig.Packet.HotKey2 = HotKey2.Value;
-                    }
-
-                    XElement HotKey3 = xeInjectMode.Element("HotKey3");
-                    if (HotKey3 != null)
-                    {
-                        PacketConfig.Packet.HotKey3 = HotKey3.Value;
-                    }
-
-                    XElement HotKey4 = xeInjectMode.Element("HotKey4");
-                    if (HotKey4 != null)
-                    {
-                        PacketConfig.Packet.HotKey4 = HotKey4.Value;
-                    }
-
-                    XElement HotKey5 = xeInjectMode.Element("HotKey5");
-                    if (HotKey5 != null)
-                    {
-                        PacketConfig.Packet.HotKey5 = HotKey5.Value;
-                    }
-
-                    XElement HotKey6 = xeInjectMode.Element("HotKey6");
-                    if (HotKey6 != null)
-                    {
-                        PacketConfig.Packet.HotKey6 = HotKey6.Value;
-                    }
-
-                    XElement HotKey7 = xeInjectMode.Element("HotKey7");
-                    if (HotKey7 != null)
-                    {
-                        PacketConfig.Packet.HotKey7 = HotKey7.Value;
-                    }
-
-                    XElement HotKey8 = xeInjectMode.Element("HotKey8");
-                    if (HotKey8 != null)
-                    {
-                        PacketConfig.Packet.HotKey8 = HotKey8.Value;
-                    }
-
-                    XElement HotKey9 = xeInjectMode.Element("HotKey9");
-                    if (HotKey9 != null)
-                    {
-                        PacketConfig.Packet.HotKey9 = HotKey9.Value;
-                    }
-
-                    XElement HotKey10 = xeInjectMode.Element("HotKey10");
-                    if (HotKey10 != null)
-                    {
-                        PacketConfig.Packet.HotKey10 = HotKey10.Value;
-                    }
-
-                    XElement HotKey11 = xeInjectMode.Element("HotKey11");
-                    if (HotKey11 != null)
-                    {
-                        PacketConfig.Packet.HotKey11 = HotKey11.Value;
-                    }
-
-                    XElement HotKey12 = xeInjectMode.Element("HotKey12");
-                    if (HotKey12 != null)
-                    {
-                        PacketConfig.Packet.HotKey12 = HotKey12.Value;
-                    }
+                    }                    
 
                     XElement xePacketList_AutoRoll = xeInjectMode.Element("PacketList_AutoRoll");
                     if (xePacketList_AutoRoll != null)
@@ -2478,49 +2723,13 @@ namespace WinsockPacketEditor
                     if (xePacketList_AutoClear_Value != null)
                     {
                         PacketConfig.List.AutoClear_Value = int.Parse(xePacketList_AutoClear_Value.Value);
-                    }
-
-                    XElement LogList_AutoRoll = xeInjectMode.Element("LogList_AutoRoll");
-                    if (LogList_AutoRoll != null)
-                    {
-                        LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
-                    }
-
-                    XElement LogList_AutoClear = xeInjectMode.Element("LogList_AutoClear");
-                    if (LogList_AutoClear != null)
-                    {
-                        LogConfig.List.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
-                    }
-
-                    XElement LogList_AutoClear_Value = xeInjectMode.Element("LogList_AutoClear_Value");
-                    if (LogList_AutoClear_Value != null)
-                    {
-                        LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
-                    }
+                    }                    
 
                     XElement SpeedMode = xeInjectMode.Element("SpeedMode");
                     if (SpeedMode != null)
                     {
                         PacketConfig.Packet.SpeedMode = Convert.ToBoolean(SpeedMode.Value);
-                    }
-
-                    XElement IsShow_FloatButton = xeInjectMode.Element("IsShow_FloatButton");
-                    if (IsShow_FloatButton != null)
-                    {
-                        Operate.SystemConfig.IsShow_FloatButton = Convert.ToBoolean(IsShow_FloatButton.Value);
-                    }
-
-                    XElement xeListExecute = xeInjectMode.Element("ListExecute");
-                    if (xeListExecute != null)
-                    {
-                        ListExecute = GetListExecute_ByString(xeListExecute.Value);
-                    }
-
-                    XElement FilterExecute = xeInjectMode.Element("FilterExecute");
-                    if (FilterExecute != null)
-                    {
-                        FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(FilterExecute.Value);
-                    }
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -2550,10 +2759,7 @@ namespace WinsockPacketEditor
                         new XElement("Enable_Auth", ProxyConfig.Proxy.Enable_Auth),                   
                         new XElement("ProxyList_AutoRoll", ProxyConfig.List.AutoRoll),
                         new XElement("ProxyList_AutoClear", ProxyConfig.List.AutoClear),
-                        new XElement("ProxyList_AutoClear_Value", ProxyConfig.List.AutoClear_Value),
-                        new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
-                        new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
-                        new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
+                        new XElement("ProxyList_AutoClear_Value", ProxyConfig.List.AutoClear_Value),                        
                         new XElement("Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal),
                         new XElement("Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote),
                         new XElement("Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy),
@@ -2595,10 +2801,7 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);                    
                         ProxyConfig.List.AutoRoll = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_AutoRoll"]);
                         ProxyConfig.List.AutoClear = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_AutoClear"]);
-                        ProxyConfig.List.AutoClear_Value = Convert.ToInt32(ProxyMode.Rows[0]["ProxyList_AutoClear_Value"]);
-                        LogConfig.List.AutoRoll = Convert.ToBoolean(ProxyMode.Rows[0]["LogList_AutoRoll"]);
-                        LogConfig.List.AutoClear = Convert.ToBoolean(ProxyMode.Rows[0]["LogList_AutoClear"]);
-                        LogConfig.List.AutoClear_Value = Convert.ToInt32(ProxyMode.Rows[0]["LogList_AutoClear_Value"]);
+                        ProxyConfig.List.AutoClear_Value = Convert.ToInt32(ProxyMode.Rows[0]["ProxyList_AutoClear_Value"]);                        
                         ProxyConfig.Mapping.Enable_MapLocal = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapLocal"]);
                         ProxyConfig.Mapping.Enable_MapRemote = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapRemote"]);
                         ProxyConfig.Proxy.Enable_ExternalProxy = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy"]);
@@ -2662,24 +2865,6 @@ namespace WinsockPacketEditor
                     if (ProxyList_AutoClear_Value != null)
                     {
                         ProxyConfig.List.AutoClear_Value = int.Parse(ProxyList_AutoClear_Value.Value);
-                    }
-
-                    XElement LogList_AutoRoll = xeProxyMode.Element("LogList_AutoRoll");
-                    if (LogList_AutoRoll != null)
-                    {
-                        LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
-                    }
-
-                    XElement LogList_AutoClear = xeProxyMode.Element("LogList_AutoClear");
-                    if (LogList_AutoClear != null)
-                    {
-                        LogConfig.List.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
-                    }
-
-                    XElement LogList_AutoClear_Value = xeProxyMode.Element("LogList_AutoClear_Value");
-                    if (LogList_AutoClear_Value != null)
-                    {
-                        LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
                     }
 
                     XElement Enable_MapLocal = xeProxyMode.Element("Enable_MapLocal");
@@ -6837,14 +7022,8 @@ namespace WinsockPacketEditor
 
                             if (pai != null)
                             {
-                                if (SystemConfig.InvokeAction != null)
-                                {
-                                    SystemConfig.InvokeAction(() =>
-                                    {
-                                        ProxyConfig.Account.lstAccountInfo.Remove(pai);
-                                        ProxyConfig.List.CloseProxyExecute_ByAID(AID);
-                                    });
-                                }
+                                ProxyConfig.Account.lstAccountInfo.Remove(pai);
+                                ProxyConfig.List.CloseProxyExecute_ByAID(AID);
 
                                 return true;
                             }
@@ -6868,13 +7047,7 @@ namespace WinsockPacketEditor
 
                             if (pai != null)
                             {
-                                if (SystemConfig.InvokeAction != null)
-                                {
-                                    SystemConfig.InvokeAction(() =>
-                                    {
-                                        ProxyConfig.Account.lstAccountInfo.Remove(pai);
-                                    });
-                                }
+                                ProxyConfig.Account.lstAccountInfo.Remove(pai);
 
                                 return true;
                             }
@@ -7066,21 +7239,11 @@ namespace WinsockPacketEditor
 
                 #region//代理账号入列表
 
-                public static void ProxyAccountToList(AccountInfo pai)
+                public static void ProxyAccountToList(AccountInfo ai)
                 {
                     try
                     {
-                        if (SystemConfig.InvokeAction != null)
-                        {
-                            SystemConfig.InvokeAction(() =>
-                            {
-                                ProxyConfig.Account.lstAccountInfo.Add(pai);
-                            });
-                        }
-                        else
-                        {
-                            ProxyConfig.Account.lstAccountInfo.Add(pai);
-                        }
+                        ProxyConfig.Account.lstAccountInfo.Add(ai);
                     }
                     catch (Exception ex)
                     {
@@ -9309,19 +9472,7 @@ namespace WinsockPacketEditor
                 public static bool HookWS2_Send = true, HookWS2_SendTo = true, HookWS2_Recv = true, HookWS2_RecvFrom = true;
                 public static bool HookWSA_Send = true, HookWSA_SendTo = true, HookWSA_Recv = true, HookWSA_RecvFrom = true;
                 public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
-                public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
-                public static string HotKey1 = "Ctrl + Alt + F1";
-                public static string HotKey2 = "Ctrl + Alt + F2";
-                public static string HotKey3 = "Ctrl + Alt + F3";
-                public static string HotKey4 = "Ctrl + Alt + F4";
-                public static string HotKey5 = "Ctrl + Alt + F5";
-                public static string HotKey6 = "Ctrl + Alt + F6";
-                public static string HotKey7 = "Ctrl + Alt + F7";
-                public static string HotKey8 = "Ctrl + Alt + F8";
-                public static string HotKey9 = "Ctrl + Alt + F9";
-                public static string HotKey10 = "Ctrl + Alt + F10";
-                public static string HotKey11 = "Ctrl + Alt + F11";
-                public static string HotKey12 = "Ctrl + Alt + F12";
+                public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;                
                 public static readonly Image SentImage = Properties.Resources.sent;
                 public static readonly Image ReceivedImage = Properties.Resources.received;
                 public static readonly Font FontUnderline = new Font(RichTextBox.DefaultFont, FontStyle.Underline);
@@ -10542,17 +10693,7 @@ namespace WinsockPacketEditor
                                 Span<byte> bufferSpan = pi.PacketBuffer.AsSpan();
                                 pi.PacketData = PacketConfig.Packet.GetPacketData_Hex(bufferSpan, PacketConfig.Packet.PacketData_MaxLen);
 
-                                if (SystemConfig.InvokeAction != null)
-                                {
-                                    SystemConfig.InvokeAction(() =>
-                                    {
-                                        PacketConfig.List.lstPacketInfo.Add(pi);
-                                    });
-                                }
-                                else
-                                {
-                                    PacketConfig.List.lstPacketInfo.Add(pi);
-                                }
+                                PacketConfig.List.lstPacketInfo.Add(pi);
                             }
                             else
                             {
@@ -12629,21 +12770,11 @@ namespace WinsockPacketEditor
 
                 #region//滤镜入列表
 
-                public static void FilterToList(FilterInfo sfi)
+                public static void FilterToList(FilterInfo fi)
                 {
                     try
                     {
-                        if (SystemConfig.InvokeAction != null)
-                        {
-                            SystemConfig.InvokeAction(() =>
-                            {
-                                FilterConfig.List.lstFilterInfo.Add(sfi);
-                            });
-                        }
-                        else
-                        {
-                            FilterConfig.List.lstFilterInfo.Add(sfi);
-                        }
+                        FilterConfig.List.lstFilterInfo.Add(fi);
                     }
                     catch (Exception ex)
                     {
@@ -14541,17 +14672,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (SystemConfig.InvokeAction != null)
-                        {
-                            SystemConfig.InvokeAction(() =>
-                            {
-                                SendConfig.List.lstSendInfo.Add(si);
-                            });
-                        }
-                        else
-                        {
-                            SendConfig.List.lstSendInfo.Add(si);
-                        }
+                        SendConfig.List.lstSendInfo.Add(si);
                     }
                     catch (Exception ex)
                     {
@@ -16064,21 +16185,11 @@ namespace WinsockPacketEditor
 
                 #region//机器人入列表
 
-                public static void RobotToList(RobotInfo sri)
+                public static void RobotToList(RobotInfo ri)
                 {
                     try
                     {
-                        if (SystemConfig.InvokeAction != null)
-                        {
-                            SystemConfig.InvokeAction(() =>
-                            {
-                                RobotConfig.List.lstRobotInfo.Add(sri);
-                            });
-                        }
-                        else
-                        {
-                            RobotConfig.List.lstRobotInfo.Add(sri);
-                        }
+                        RobotConfig.List.lstRobotInfo.Add(ri);
                     }
                     catch (Exception ex)
                     {
@@ -16625,17 +16736,7 @@ namespace WinsockPacketEditor
                 {
                     if (Queue.cqLogInfo.TryDequeue(out LogInfo li))
                     {
-                        if (SystemConfig.InvokeAction != null)
-                        {
-                            SystemConfig.InvokeAction(() =>
-                            {
-                                lstLogInfo.Add(li);
-                            });
-                        }
-                        else
-                        {
-                            lstLogInfo.Add(li);
-                        }
+                        LogConfig.List.lstLogInfo.Add(li);
                     }
                 }
 
@@ -16865,20 +16966,38 @@ namespace WinsockPacketEditor
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS SystemConfig (";
-                        sql += "SystemConfig_IsAnimation BOOLEAN DEFAULT 0,";//系统设置 - 启用动画效果
-                        sql += "SystemConfig_IsShadowEnabled BOOLEAN DEFAULT 0,";//系统设置 - 启用阴影效果
-                        sql += "SystemConfig_IsShowInWindow BOOLEAN DEFAULT 0,";//系统设置 - 启用窗口显示
-                        sql += "SystemConfig_IsScrollBarHide BOOLEAN DEFAULT 0,";//系统设置 - 启用滚动条隐藏
-                        sql += "SystemConfig_IsTextRenderingHighQuality BOOLEAN DEFAULT 0,";//系统设置 - 启用文本渲染高质量
-                        sql += "SystemConfig_IsDark BOOLEAN DEFAULT 0,";//系统设置 - 启用深色主题
-                        sql += "SystemConfig_DefaultLanguage TEXT,";//系统设置 - 默认语言
-                        sql += "SystemConfig_LastInjection TEXT,";//系统设置 - 上次注入进程名称
-                        sql += "SystemConfig_StartMode INTEGER DEFAULT 0,";//系统设置 - 启动模式
-                        sql += "SystemConfig_Remote_IsEnable BOOLEAN DEFAULT 0,";//系统设置 - 启用远程管理
-                        sql += "SystemConfig_Remote_UserName TEXT,";//系统设置 - 远程管理账号
-                        sql += "SystemConfig_Remote_PassWord TEXT,";//系统设置 - 远程管理密码
-                        sql += "SystemConfig_Remote_Port INTEGER,";//系统设置 - 远程管理端口                    
-                        sql += "SystemConfig_Remote_URL TEXT";//系统设置 - 远程管理网址
+                        sql += "IsAnimation BOOLEAN DEFAULT 0,";//系统设置 - 启用动画效果
+                        sql += "IsShadowEnabled BOOLEAN DEFAULT 0,";//系统设置 - 启用阴影效果
+                        sql += "IsShowInWindow BOOLEAN DEFAULT 0,";//系统设置 - 启用窗口显示
+                        sql += "IsScrollBarHide BOOLEAN DEFAULT 0,";//系统设置 - 启用滚动条隐藏
+                        sql += "IsTextRenderingHighQuality BOOLEAN DEFAULT 0,";//系统设置 - 启用文本渲染高质量
+                        sql += "IsDark BOOLEAN DEFAULT 0,";//系统设置 - 启用深色主题
+                        sql += "DefaultLanguage TEXT,";//系统设置 - 默认语言
+                        sql += "LastInjection TEXT,";//系统设置 - 上次注入进程名称
+                        sql += "StartMode INTEGER DEFAULT 0,";//系统设置 - 启动模式
+                        sql += "Remote_IsEnable BOOLEAN DEFAULT 0,";//系统设置 - 启用远程管理
+                        sql += "Remote_UserName TEXT,";//系统设置 - 远程管理账号
+                        sql += "Remote_PassWord TEXT,";//系统设置 - 远程管理密码
+                        sql += "Remote_Port INTEGER,";//系统设置 - 远程管理端口                    
+                        sql += "Remote_URL TEXT,";//系统设置 - 远程管理网址
+                        sql += "IsShow_FloatButton BOOLEAN DEFAULT 1,";//是否显示悬浮按钮
+                        sql += "ListExecute INTEGER DEFAULT 1,";//列表执行模式
+                        sql += "FilterExecute INTEGER DEFAULT 1,";//滤镜执行模式
+                        sql += "LogList_AutoRoll BOOLEAN DEFAULT 0,";//日志列表自动滚动
+                        sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
+                        sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
+                        sql += "HotKey1 TEXT,";//快捷键1
+                        sql += "HotKey2 TEXT,";//快捷键2
+                        sql += "HotKey3 TEXT,";//快捷键3
+                        sql += "HotKey4 TEXT,";//快捷键4
+                        sql += "HotKey5 TEXT,";//快捷键5
+                        sql += "HotKey6 TEXT,";//快捷键6
+                        sql += "HotKey7 TEXT,";//快捷键7
+                        sql += "HotKey8 TEXT,";//快捷键8
+                        sql += "HotKey9 TEXT,";//快捷键9
+                        sql += "HotKey10 TEXT,";//快捷键10
+                        sql += "HotKey11 TEXT,";//快捷键11
+                        sql += "HotKey12 TEXT";//快捷键12
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -16950,53 +17069,107 @@ namespace WinsockPacketEditor
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
                         string sql = "INSERT INTO SystemConfig (";
-                        sql += "SystemConfig_IsAnimation,";
-                        sql += "SystemConfig_IsShadowEnabled,";
-                        sql += "SystemConfig_IsShowInWindow,";
-                        sql += "SystemConfig_IsScrollBarHide,";
-                        sql += "SystemConfig_IsTextRenderingHighQuality,";
-                        sql += "SystemConfig_IsDark,";
-                        sql += "SystemConfig_DefaultLanguage,";
-                        sql += "SystemConfig_LastInjection,";
-                        sql += "SystemConfig_StartMode,";
-                        sql += "SystemConfig_Remote_IsEnable,";
-                        sql += "SystemConfig_Remote_UserName,";
-                        sql += "SystemConfig_Remote_PassWord,";
-                        sql += "SystemConfig_Remote_Port,";
-                        sql += "SystemConfig_Remote_URL";
+                        sql += "IsAnimation,";
+                        sql += "IsShadowEnabled,";
+                        sql += "IsShowInWindow,";
+                        sql += "IsScrollBarHide,";
+                        sql += "IsTextRenderingHighQuality,";
+                        sql += "IsDark,";
+                        sql += "DefaultLanguage,";
+                        sql += "LastInjection,";
+                        sql += "StartMode,";
+                        sql += "Remote_IsEnable,";
+                        sql += "Remote_UserName,";
+                        sql += "Remote_PassWord,";
+                        sql += "Remote_Port,";
+                        sql += "Remote_URL,";
+                        sql += "IsShow_FloatButton,";
+                        sql += "ListExecute,";
+                        sql += "FilterExecute,";
+                        sql += "LogList_AutoRoll,";
+                        sql += "LogList_AutoClear,";
+                        sql += "LogList_AutoClear_Value,";
+                        sql += "HotKey1,";
+                        sql += "HotKey2,";
+                        sql += "HotKey3,";
+                        sql += "HotKey4,";
+                        sql += "HotKey5,";
+                        sql += "HotKey6,";
+                        sql += "HotKey7,";
+                        sql += "HotKey8,";
+                        sql += "HotKey9,";
+                        sql += "HotKey10,";
+                        sql += "HotKey11,";
+                        sql += "HotKey12";
                         sql += ") VALUES (";
-                        sql += "@SystemConfig_IsAnimation,";
-                        sql += "@SystemConfig_IsShadowEnabled,";
-                        sql += "@SystemConfig_IsShowInWindow,";
-                        sql += "@SystemConfig_IsScrollBarHide,";
-                        sql += "@SystemConfig_IsTextRenderingHighQuality,";
-                        sql += "@SystemConfig_IsDark,";
-                        sql += "@SystemConfig_DefaultLanguage,";
-                        sql += "@SystemConfig_LastInjection,";
-                        sql += "@SystemConfig_StartMode,";
-                        sql += "@SystemConfig_Remote_IsEnable,";
-                        sql += "@SystemConfig_Remote_UserName,";
-                        sql += "@SystemConfig_Remote_PassWord,";
-                        sql += "@SystemConfig_Remote_Port,";
-                        sql += "@SystemConfig_Remote_URL";
+                        sql += "@IsAnimation,";
+                        sql += "@IsShadowEnabled,";
+                        sql += "@IsShowInWindow,";
+                        sql += "@IsScrollBarHide,";
+                        sql += "@IsTextRenderingHighQuality,";
+                        sql += "@IsDark,";
+                        sql += "@DefaultLanguage,";
+                        sql += "@LastInjection,";
+                        sql += "@StartMode,";
+                        sql += "@Remote_IsEnable,";
+                        sql += "@Remote_UserName,";
+                        sql += "@Remote_PassWord,";
+                        sql += "@Remote_Port,";
+                        sql += "@Remote_URL,";
+                        sql += "@IsShow_FloatButton,";
+                        sql += "@ListExecute,";
+                        sql += "@FilterExecute,";
+                        sql += "@LogList_AutoRoll,";
+                        sql += "@LogList_AutoClear,";
+                        sql += "@LogList_AutoClear_Value,";
+                        sql += "@HotKey1,";
+                        sql += "@HotKey2,";
+                        sql += "@HotKey3,";
+                        sql += "@HotKey4,";
+                        sql += "@HotKey5,";
+                        sql += "@HotKey6,";
+                        sql += "@HotKey7,";
+                        sql += "@HotKey8,";
+                        sql += "@HotKey9,";
+                        sql += "@HotKey10,";
+                        sql += "@HotKey11,";
+                        sql += "@HotKey12";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@SystemConfig_IsAnimation", AntdUI.Config.Animation);
-                            cmd.Parameters.AddWithValue("@SystemConfig_IsShadowEnabled", AntdUI.Config.ShadowEnabled);
-                            cmd.Parameters.AddWithValue("@SystemConfig_IsShowInWindow", AntdUI.Config.ShowInWindow);
-                            cmd.Parameters.AddWithValue("@SystemConfig_IsScrollBarHide", AntdUI.Config.ScrollBarHide);
-                            cmd.Parameters.AddWithValue("@SystemConfig_IsTextRenderingHighQuality", AntdUI.Config.TextRenderingHighQuality);
-                            cmd.Parameters.AddWithValue("@SystemConfig_IsDark", AntdUI.Config.IsDark);
-                            cmd.Parameters.AddWithValue("@SystemConfig_DefaultLanguage", AntdUI.Localization.CurrentLanguage);
-                            cmd.Parameters.AddWithValue("@SystemConfig_LastInjection", SystemConfig.LastInjection);
-                            cmd.Parameters.AddWithValue("@SystemConfig_StartMode", SystemConfig.StartMode);
-                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_IsEnable", SystemConfig.IsRemote);
-                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_UserName", SystemConfig.Remote_UserName);
-                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_PassWord", SystemConfig.Remote_PassWord);
-                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_Port", SystemConfig.Remote_Port);
-                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_URL", SystemConfig.Remote_URL);
+                            cmd.Parameters.AddWithValue("@IsAnimation", AntdUI.Config.Animation);
+                            cmd.Parameters.AddWithValue("@IsShadowEnabled", AntdUI.Config.ShadowEnabled);
+                            cmd.Parameters.AddWithValue("@IsShowInWindow", AntdUI.Config.ShowInWindow);
+                            cmd.Parameters.AddWithValue("@IsScrollBarHide", AntdUI.Config.ScrollBarHide);
+                            cmd.Parameters.AddWithValue("@IsTextRenderingHighQuality", AntdUI.Config.TextRenderingHighQuality);
+                            cmd.Parameters.AddWithValue("@IsDark", AntdUI.Config.IsDark);
+                            cmd.Parameters.AddWithValue("@DefaultLanguage", AntdUI.Localization.CurrentLanguage);
+                            cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
+                            cmd.Parameters.AddWithValue("@StartMode", SystemConfig.StartMode);
+                            cmd.Parameters.AddWithValue("@Remote_IsEnable", SystemConfig.IsRemote);
+                            cmd.Parameters.AddWithValue("@Remote_UserName", SystemConfig.Remote_UserName);
+                            cmd.Parameters.AddWithValue("@Remote_PassWord", SystemConfig.Remote_PassWord);
+                            cmd.Parameters.AddWithValue("@Remote_Port", SystemConfig.Remote_Port);
+                            cmd.Parameters.AddWithValue("@Remote_URL", SystemConfig.Remote_URL);
+                            cmd.Parameters.AddWithValue("@IsShow_FloatButton", SystemConfig.IsShow_FloatButton);
+                            cmd.Parameters.AddWithValue("@ListExecute", SystemConfig.ListExecute);
+                            cmd.Parameters.AddWithValue("@FilterExecute", FilterConfig.Filter.FilterExecute);
+                            cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
+                            cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
+                            cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@HotKey1", SystemConfig.HotKey1);
+                            cmd.Parameters.AddWithValue("@HotKey2", SystemConfig.HotKey2);
+                            cmd.Parameters.AddWithValue("@HotKey3", SystemConfig.HotKey3);
+                            cmd.Parameters.AddWithValue("@HotKey4", SystemConfig.HotKey4);
+                            cmd.Parameters.AddWithValue("@HotKey5", SystemConfig.HotKey5);
+                            cmd.Parameters.AddWithValue("@HotKey6", SystemConfig.HotKey6);
+                            cmd.Parameters.AddWithValue("@HotKey7", SystemConfig.HotKey7);
+                            cmd.Parameters.AddWithValue("@HotKey8", SystemConfig.HotKey8);
+                            cmd.Parameters.AddWithValue("@HotKey9", SystemConfig.HotKey9);
+                            cmd.Parameters.AddWithValue("@HotKey10", SystemConfig.HotKey10);
+                            cmd.Parameters.AddWithValue("@HotKey11", SystemConfig.HotKey11);
+                            cmd.Parameters.AddWithValue("@HotKey12", SystemConfig.HotKey12);
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -17069,29 +17242,11 @@ namespace WinsockPacketEditor
                         sql += "HookWSA_Send BOOLEAN DEFAULT 1,";//WSA 发送
                         sql += "HookWSA_SendTo BOOLEAN DEFAULT 1,";//WSA 发送到
                         sql += "HookWSA_Recv BOOLEAN DEFAULT 1,";//WSA 接收
-                        sql += "HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//WSA 接收自
-                        sql += "HotKey1 TEXT,";//快捷键1
-                        sql += "HotKey2 TEXT,";//快捷键2
-                        sql += "HotKey3 TEXT,";//快捷键3
-                        sql += "HotKey4 TEXT,";//快捷键4
-                        sql += "HotKey5 TEXT,";//快捷键5
-                        sql += "HotKey6 TEXT,";//快捷键6
-                        sql += "HotKey7 TEXT,";//快捷键7
-                        sql += "HotKey8 TEXT,";//快捷键8
-                        sql += "HotKey9 TEXT,";//快捷键9
-                        sql += "HotKey10 TEXT,";//快捷键10
-                        sql += "HotKey11 TEXT,";//快捷键11
-                        sql += "HotKey12 TEXT,";//快捷键12
+                        sql += "HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//WSA 接收自                        
                         sql += "PacketList_AutoRoll BOOLEAN DEFAULT 0,";//封包列表自动滚动
                         sql += "PacketList_AutoClear BOOLEAN DEFAULT 1,";//封包列表自动清理
-                        sql += "PacketList_AutoClear_Value INTEGER DEFAULT 5000,";//封包列表自动清理数值
-                        sql += "LogList_AutoRoll BOOLEAN DEFAULT 0,";//日志列表自动滚动
-                        sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
-                        sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
-                        sql += "SpeedMode BOOLEAN DEFAULT 0,";//极速模式
-                        sql += "IsShow_FloatButton BOOLEAN DEFAULT 1,";//是否显示悬浮按钮
-                        sql += "ListExecute INTEGER DEFAULT 1,";//列表执行模式
-                        sql += "FilterExecute INTEGER DEFAULT 1";//滤镜执行模式
+                        sql += "PacketList_AutoClear_Value INTEGER DEFAULT 5000,";//封包列表自动清理数值                        
+                        sql += "SpeedMode BOOLEAN DEFAULT 0";//极速模式                        
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -17187,29 +17342,11 @@ namespace WinsockPacketEditor
                         sql += "HookWSA_Send,";
                         sql += "HookWSA_SendTo,";
                         sql += "HookWSA_Recv,";
-                        sql += "HookWSA_RecvFrom,";
-                        sql += "HotKey1,";
-                        sql += "HotKey2,";
-                        sql += "HotKey3,";
-                        sql += "HotKey4,";
-                        sql += "HotKey5,";
-                        sql += "HotKey6,";
-                        sql += "HotKey7,";
-                        sql += "HotKey8,";
-                        sql += "HotKey9,";
-                        sql += "HotKey10,";
-                        sql += "HotKey11,";
-                        sql += "HotKey12,";
+                        sql += "HookWSA_RecvFrom,";                        
                         sql += "PacketList_AutoRoll,";
                         sql += "PacketList_AutoClear,";
-                        sql += "PacketList_AutoClear_Value,";
-                        sql += "LogList_AutoRoll,";
-                        sql += "LogList_AutoClear,";
-                        sql += "LogList_AutoClear_Value,";
-                        sql += "SpeedMode,";
-                        sql += "IsShow_FloatButton,";
-                        sql += "ListExecute,";
-                        sql += "FilterExecute";
+                        sql += "PacketList_AutoClear_Value,";                        
+                        sql += "SpeedMode";                        
                         sql += ") VALUES (";                     
                         sql += "@CheckNotShow,";
                         sql += "@CheckSocket,";
@@ -17235,29 +17372,11 @@ namespace WinsockPacketEditor
                         sql += "@HookWSA_Send,";
                         sql += "@HookWSA_SendTo,";
                         sql += "@HookWSA_Recv,";
-                        sql += "@HookWSA_RecvFrom,";
-                        sql += "@HotKey1,";
-                        sql += "@HotKey2,";
-                        sql += "@HotKey3,";
-                        sql += "@HotKey4,";
-                        sql += "@HotKey5,";
-                        sql += "@HotKey6,";
-                        sql += "@HotKey7,";
-                        sql += "@HotKey8,";
-                        sql += "@HotKey9,";
-                        sql += "@HotKey10,";
-                        sql += "@HotKey11,";
-                        sql += "@HotKey12,";
+                        sql += "@HookWSA_RecvFrom,";                        
                         sql += "@PacketList_AutoRoll,";
                         sql += "@PacketList_AutoClear,";
-                        sql += "@PacketList_AutoClear_Value,";
-                        sql += "@LogList_AutoRoll,";
-                        sql += "@LogList_AutoClear,";
-                        sql += "@LogList_AutoClear_Value,";
-                        sql += "@SpeedMode,";
-                        sql += "@IsShow_FloatButton,";
-                        sql += "@ListExecute,";
-                        sql += "@FilterExecute";
+                        sql += "@PacketList_AutoClear_Value,";                        
+                        sql += "@SpeedMode";                        
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -17286,29 +17405,11 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@HookWSA_Send", PacketConfig.Packet.HookWSA_Send);
                             cmd.Parameters.AddWithValue("@HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo);
                             cmd.Parameters.AddWithValue("@HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv);
-                            cmd.Parameters.AddWithValue("@HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom);
-                            cmd.Parameters.AddWithValue("@HotKey1", PacketConfig.Packet.HotKey1);
-                            cmd.Parameters.AddWithValue("@HotKey2", PacketConfig.Packet.HotKey2);
-                            cmd.Parameters.AddWithValue("@HotKey3", PacketConfig.Packet.HotKey3);
-                            cmd.Parameters.AddWithValue("@HotKey4", PacketConfig.Packet.HotKey4);
-                            cmd.Parameters.AddWithValue("@HotKey5", PacketConfig.Packet.HotKey5);
-                            cmd.Parameters.AddWithValue("@HotKey6", PacketConfig.Packet.HotKey6);
-                            cmd.Parameters.AddWithValue("@HotKey7", PacketConfig.Packet.HotKey7);
-                            cmd.Parameters.AddWithValue("@HotKey8", PacketConfig.Packet.HotKey8);
-                            cmd.Parameters.AddWithValue("@HotKey9", PacketConfig.Packet.HotKey9);
-                            cmd.Parameters.AddWithValue("@HotKey10", PacketConfig.Packet.HotKey10);
-                            cmd.Parameters.AddWithValue("@HotKey11", PacketConfig.Packet.HotKey11);
-                            cmd.Parameters.AddWithValue("@HotKey12", PacketConfig.Packet.HotKey12);
+                            cmd.Parameters.AddWithValue("@HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom);                            
                             cmd.Parameters.AddWithValue("@PacketList_AutoRoll", PacketConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@PacketList_AutoClear", PacketConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
-                            cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@SpeedMode", PacketConfig.Packet.SpeedMode);
-                            cmd.Parameters.AddWithValue("@IsShow_FloatButton", SystemConfig.IsShow_FloatButton);
-                            cmd.Parameters.AddWithValue("@ListExecute", SystemConfig.ListExecute);
-                            cmd.Parameters.AddWithValue("@FilterExecute", FilterConfig.Filter.FilterExecute);
+                            cmd.Parameters.AddWithValue("@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);                            
+                            cmd.Parameters.AddWithValue("@SpeedMode", PacketConfig.Packet.SpeedMode);                            
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -17340,10 +17441,7 @@ namespace WinsockPacketEditor
                         sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证                    
                         sql += "ProxyList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 代理列表自动滚动
                         sql += "ProxyList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 代理列表自动清理
-                        sql += "ProxyList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 代理列表自动清理数值
-                        sql += "LogList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 日志列表自动滚动
-                        sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 日志列表自动清理
-                        sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 日志列表自动清理数值                        
+                        sql += "ProxyList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 代理列表自动清理数值                        
                         sql += "Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
                         sql += "Enable_MapRemote BOOLEAN DEFAULT 0,";//代理模式 - 启用远程代理映射
                         sql += "Enable_ExternalProxy BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理
@@ -17433,9 +17531,6 @@ namespace WinsockPacketEditor
                         sql += "ProxyList_AutoRoll,";
                         sql += "ProxyList_AutoClear,";
                         sql += "ProxyList_AutoClear_Value,";
-                        sql += "LogList_AutoRoll,";
-                        sql += "LogList_AutoClear,";
-                        sql += "LogList_AutoClear_Value,";
                         sql += "Enable_MapLocal,";
                         sql += "Enable_MapRemote,";
                         sql += "Enable_ExternalProxy,";
@@ -17455,9 +17550,6 @@ namespace WinsockPacketEditor
                         sql += "@ProxyList_AutoRoll,";
                         sql += "@ProxyList_AutoClear,";
                         sql += "@ProxyList_AutoClear_Value,";
-                        sql += "@LogList_AutoRoll,";
-                        sql += "@LogList_AutoClear,";
-                        sql += "@LogList_AutoClear_Value,";
                         sql += "@Enable_MapLocal,";
                         sql += "@Enable_MapRemote,";
                         sql += "@Enable_ExternalProxy,";
@@ -17479,10 +17571,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);                        
                             cmd.Parameters.AddWithValue("@ProxyList_AutoRoll", ProxyConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@ProxyList_AutoClear", ProxyConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@ProxyList_AutoClear_Value", ProxyConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
-                            cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@ProxyList_AutoClear_Value", ProxyConfig.List.AutoClear_Value);                            
                             cmd.Parameters.AddWithValue("@Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
                             cmd.Parameters.AddWithValue("@Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote);
                             cmd.Parameters.AddWithValue("@Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy);

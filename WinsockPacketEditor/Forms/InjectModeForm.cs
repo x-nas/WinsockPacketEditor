@@ -35,19 +35,6 @@ namespace WinsockPacketEditor
 
         private void InjectModeForm_Load(object sender, EventArgs e)
         {
-            Operate.SystemConfig.MainHandle = this.Handle;
-            Operate.SystemConfig.InvokeAction = action =>
-            {
-                if (this.InvokeRequired)
-                {
-                    this.Invoke(action);
-                }
-                else
-                {
-                    action();
-                }
-            };            
-
             this.pageHeader.Loading = true;
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {  
@@ -56,7 +43,8 @@ namespace WinsockPacketEditor
                 Operate.SystemConfig.LoadSystemList_FromDB();            
                 Operate.SystemConfig.StartRemoteMGT();
 
-                this.InitFloatButton();
+                this.InitGlobal();
+                this.InitFloatButton();                
                 this.InitTable_PacketList();
                 this.InitTable_FilterList();
                 this.InitTable_SendList();
@@ -68,10 +56,13 @@ namespace WinsockPacketEditor
                 this.pageHeader.Loading = false;
             });
 
+            Operate.SystemConfig.MainHandle = this.Handle;
+
             this.Dark_Changed();
-            this.InitForm();
+            this.InitForm();            
             this.InitComparison();
             this.InitExtraction();
+            this.InitHotKeys();
 
             this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
             this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
@@ -129,24 +120,7 @@ namespace WinsockPacketEditor
             this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
 
             this.mInjectMode.Collapsed = true;
-            this.MenuCollapseChange();
-
-            btn_global.Items.AddRange(
-                new AntdUI.ISelectItem[]
-                {
-                    new AntdUI.SelectItem("中文", "zh-CN"),
-                    new AntdUI.SelectItem("English", "en-US")
-                });
-
-            var lang = AntdUI.Localization.CurrentLanguage;
-            if (lang.StartsWith("en"))
-            {
-                btn_global.SelectedValue = btn_global.Items[1];
-            }
-            else
-            {
-                btn_global.SelectedValue = btn_global.Items[0];
-            }
+            this.MenuCollapseChange();            
 
             for (int i = 0; i < this.mInjectMode.Items.Count; i++)
             {
@@ -156,9 +130,45 @@ namespace WinsockPacketEditor
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
         }
 
+        private void InitGlobal()
+        {
+            var globals = new AntdUI.SelectItem[] {
+                new AntdUI.SelectItem("中文","zh-CN"),
+                new AntdUI.SelectItem("English","en-US")
+            };
+
+            btn_global.Items.AddRange(globals);
+
+            var lang = AntdUI.Localization.CurrentLanguage;
+            if (lang.StartsWith("en"))
+            {
+                btn_global.SelectedValue = globals[1].Tag;
+            }
+            else
+            {
+                btn_global.SelectedValue = globals[0].Tag;
+            }
+        }
+
         public void InitFloatButton()
         {
             Operate.SystemConfig.InitFloatButton(this, this.FloatButton);  
+        }
+
+        private void InitHotKeys()
+        {
+            Operate.SystemConfig.RegisterHotkey_FromText(9001, Operate.SystemConfig.HotKey1);
+            Operate.SystemConfig.RegisterHotkey_FromText(9002, Operate.SystemConfig.HotKey2);
+            Operate.SystemConfig.RegisterHotkey_FromText(9003, Operate.SystemConfig.HotKey3);
+            Operate.SystemConfig.RegisterHotkey_FromText(9004, Operate.SystemConfig.HotKey4);
+            Operate.SystemConfig.RegisterHotkey_FromText(9005, Operate.SystemConfig.HotKey5);
+            Operate.SystemConfig.RegisterHotkey_FromText(9006, Operate.SystemConfig.HotKey6);
+            Operate.SystemConfig.RegisterHotkey_FromText(9007, Operate.SystemConfig.HotKey7);
+            Operate.SystemConfig.RegisterHotkey_FromText(9008, Operate.SystemConfig.HotKey8);
+            Operate.SystemConfig.RegisterHotkey_FromText(9009, Operate.SystemConfig.HotKey9);
+            Operate.SystemConfig.RegisterHotkey_FromText(9010, Operate.SystemConfig.HotKey10);
+            Operate.SystemConfig.RegisterHotkey_FromText(9011, Operate.SystemConfig.HotKey11);
+            Operate.SystemConfig.RegisterHotkey_FromText(9012, Operate.SystemConfig.HotKey12);
         }
 
         public void RefreshFilterList()
@@ -848,17 +858,10 @@ namespace WinsockPacketEditor
 
         private void btn_global_SelectedValueChanged(object sender, AntdUI.ObjectNEventArgs e)
         {
-            if (e.Value is AntdUI.SelectItem value)
+            if (e.Value is string lang)
             {
-                if (btn_global.Tag == value)
-                {
-                    return;
-                }
-
-                btn_global.Tag = value;
                 btn_global.Loading = true;
 
-                string lang = value.Tag.ToString();
                 if (lang.StartsWith("en"))
                 {
                     AntdUI.Localization.Provider = new Localizer();
@@ -870,10 +873,10 @@ namespace WinsockPacketEditor
 
                 AntdUI.Localization.SetLanguage(lang);
                 this.Text = "WPE x64 - " + AntdUI.Localization.Get("InjectModeForm", "注入模式");
-                Refresh();
 
+                Refresh();
                 btn_global.Loading = false;
-            }
+            }            
         }
 
         #endregion
