@@ -47,7 +47,7 @@ namespace WinsockPacketEditor
             };
 
             this.tLocation.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tLocation.DataSource = Operate.ProxyConfig.Account.LoadAccountLocation_FromDB(this.aiSelect.AID);
+            this.tLocation.Binding(aiSelect.AIPInfo);
         }
 
         #endregion

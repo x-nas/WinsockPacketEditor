@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Http;
+using System.ComponentModel;
 
 namespace WinsockPacketEditor
 {
@@ -59,8 +60,6 @@ namespace WinsockPacketEditor
                     return BadRequest(AntdUI.Localization.Get("UserName.Exists", "该用户名已存在"));
                 }
 
-                pai.LoginTime = DateTime.MinValue;
-
                 if (pai.ExpiryTime == null)
                 {
                     pai.ExpiryTime = DateTime.Now;
@@ -72,9 +71,7 @@ namespace WinsockPacketEditor
                     pai.IsEnable, 
                     pai.UserName, 
                     pai.Password, 
-                    pai.LoginTime, 
-                    string.Empty, 
-                    string.Empty, 
+                    new BindingList<AccountIPInfo>(),
                     pai.IsLimitLinks,
                     pai.LimitLinks,
                     pai.IsLimitDevices,

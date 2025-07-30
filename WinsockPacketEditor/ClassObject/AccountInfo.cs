@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.ComponentModel;
 
 namespace WinsockPacketEditor
 {
@@ -90,51 +91,17 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//登录时间
+        #region//登录信息
 
-        DateTime _LoginTime;
+        BindingList<AccountIPInfo> _AIPInfo;
 
-        public DateTime LoginTime
+        public BindingList<AccountIPInfo> AIPInfo
         {
-            get => _LoginTime;
+            get => _AIPInfo;
             set
             {
-                if (_LoginTime == value) return;
-                _LoginTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
-
-        #region//登录IP
-
-        string _LoginIP;
-
-        public string LoginIP
-        {
-            get => _LoginIP;
-            set
-            {
-                if (_LoginIP == value) return;
-                _LoginIP = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
-
-        #region//IP所属地
-
-        string _IPLocation;
-
-        public string IPLocation
-        {
-            get => _IPLocation;
-            set
-            {
-                if (_IPLocation == value) return;
-                _IPLocation = value;
+                if (_AIPInfo == value) return;
+                _AIPInfo = value;
                 OnPropertyChanged();
             }
         }
@@ -288,10 +255,8 @@ namespace WinsockPacketEditor
             Guid AID, 
             bool IsEnable, 
             string UserName, 
-            string PassWord, 
-            DateTime LoginTime, 
-            string LoginIP, 
-            string IPLocation, 
+            string PassWord,
+            BindingList<AccountIPInfo> AIPInfo,
             bool IsLimitLinks, 
             int LimitLinks,
             bool IsLimitDevices,
@@ -304,9 +269,7 @@ namespace WinsockPacketEditor
             this._IsEnable = IsEnable;
             this._UserName = UserName;
             this._Password = PassWord;
-            this._LoginTime = LoginTime;
-            this._LoginIP = LoginIP;
-            this._IPLocation = IPLocation;
+            this._AIPInfo = AIPInfo;         
             this._IsLimitLinks = IsLimitLinks;
             this._LimitLinks = LimitLinks;
             this._IsLimitDevices = IsLimitDevices;

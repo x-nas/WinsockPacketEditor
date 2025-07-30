@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace WinsockPacketEditor
 {
@@ -223,9 +224,7 @@ namespace WinsockPacketEditor
                         IsEnable,
                         UserName,
                         PassWord,
-                        LoginTime,
-                        string.Empty,
-                        string.Empty,
+                        new BindingList<AccountIPInfo>(),
                         IsLimitLinks,
                         LimitLinks,
                         IsLimitDevices,

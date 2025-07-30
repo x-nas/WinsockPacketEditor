@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassObject\AccountInfo.cs" />
+    <Compile Include="ClassObject\AccountIPInfo.cs" />
     <Compile Include="ClassObject\AuthInfo.cs" />
     <Compile Include="ClassObject\BitInfo.cs" />
     <Compile Include="ClassObject\FilterInfo.cs" />

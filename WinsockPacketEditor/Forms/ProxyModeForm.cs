@@ -92,18 +92,13 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Proxy.StopSystemProxy(this);
             }
 
-            if (Operate.ProxyConfig.Account.NeedSave)
-            {
-                Operate.ProxyConfig.Account.SaveAccountList_ToDB();
-            }
-
+            Operate.SystemConfig.StopRemoteMGT();
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();
-
+            Operate.ProxyConfig.Account.SaveAccountList_ToDB();
             Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
-            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
-            Operate.SystemConfig.StopRemoteMGT();
+            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();            
         }
 
         private void InitForm()
@@ -301,28 +296,7 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("LoginTime", "登录时间")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is AccountInfo ai)
-                        {
-                            if(ai.LoginTime == DateTime.MinValue)
-                            {
-                                return null;
-                            }
-                            else
-                            {
-                                return ai.LoginTime;
-                            }
-                        }
-
-                        return value;
-                    },
-                }.SetSortOrder().SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("LoginIP", "登录IP").SetLocalizationTitleID("Table.AccountList.Column."),                
-                new AntdUI.Column("IPLocation", "IP所属地").SetLocalizationTitleID("Table.AccountList.Column."),                
+                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("Table.AccountList.Column."),                
                 new AntdUI.Column("CellLinks", "操作")
                 {
                     Render = (value, record, rowindex)=>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Text;
+using System.ComponentModel;
 
 namespace WinsockPacketEditor
 {
@@ -67,8 +68,6 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                pai.LoginTime = DateTime.MinValue;
-
                 if (pai.ExpiryTime == null)
                 {
                     pai.ExpiryTime = DateTime.Now;
@@ -83,9 +82,7 @@ namespace WinsockPacketEditor
                     pai.IsEnable, 
                     pai.UserName, 
                     pai.Password, 
-                    pai.LoginTime, 
-                    string.Empty, 
-                    string.Empty, 
+                    new BindingList<AccountIPInfo>(),
                     pai.IsLimitLinks,
                     pai.LimitLinks,
                     pai.IsLimitDevices,

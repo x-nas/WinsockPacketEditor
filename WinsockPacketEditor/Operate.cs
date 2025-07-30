@@ -3225,7 +3225,6 @@ namespace WinsockPacketEditor
                         ProxyConfig.Account.LoadAccountList_FromXDocument(ProxyAccountList);
                         DataBase.DeleteTable_ProxyAccount();
                         DataBase.InsertTable_ProxyAccount();
-                        DataBase.DeleteTable_ProxyAccount_LoginInfo();
                     }
                 }
                 catch (Exception ex)
@@ -3748,19 +3747,19 @@ namespace WinsockPacketEditor
                         }
                         else
                         {
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "连接等待超时");
+                            Operate.DoLog(nameof(HandleClient), "连接等待超时");
                             clientSocket?.Close();
                         }
                     }
                     catch (OperationCanceledException)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, "连接操作被取消");
+                        Operate.DoLog(nameof(HandleClient), "连接操作被取消");
                         clientSocket?.Close();
                     }
                     catch (Exception ex)
                     {
                         pe?.Dispose();
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(HandleClient), ex.Message);
                     }
                     finally
                     {
@@ -4015,8 +4014,8 @@ namespace WinsockPacketEditor
                             if (isAllowed)
                             {
                                 ProxyConfig.Account.SetOnline_ByAccountID(AccountID, true);
-                                ProxyConfig.Account.RecordLoginIP_ByAccountID(AccountID, ClientIP);
-                                ProxyConfig.Account.AuthResult_ToList(AccountID, ClientIP, true);
+                                ProxyConfig.Account.IPInfo_ToAccount(AccountID, ClientIP);
+                                ProxyConfig.Account.AuthInfo_ToList(AccountID, ClientIP, true);
 
                                 pe.AID = AccountID;
                                 pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.Command;
@@ -6102,23 +6101,27 @@ namespace WinsockPacketEditor
 
                 #region//代理认证入列表            
 
-                public static void AuthResult_ToList(Guid AID, string AuthIP, bool AuthResult)
+                public static void AuthInfo_ToList(Guid AID, string AuthIP, bool AuthResult)
                 {
                     try
                     {
                         if (AID != null && AID != Guid.Empty)
                         {
-                            var existingItem = Operate.ProxyConfig.Account.lstAuthInfo
+                            lock (Operate.ProxyConfig.Account.lstAuthInfo)
+                            {
+                                var existingItem = Operate.ProxyConfig.Account.lstAuthInfo
                                     .FirstOrDefault(item => item.AuthIP == AuthIP && item.AID == AID);
 
-                            if (existingItem != null)
-                            {
-                                existingItem.AuthResult = AuthResult;
-                                existingItem.AuthTime = DateTime.Now;
-                            }
-                            else
-                            {
-                                Operate.ProxyConfig.Account.lstAuthInfo.Add(new AuthInfo(AID, AuthIP, AuthResult, DateTime.Now));
+                                if (existingItem != null)
+                                {
+                                    existingItem.AuthResult = AuthResult;
+                                    existingItem.AuthTime = DateTime.Now;
+                                }
+                                else
+                                {
+                                    Operate.ProxyConfig.Account.lstAuthInfo.Add(
+                                        new AuthInfo(AID, AuthIP, AuthResult, DateTime.Now));
+                                }
                             }
                         }
                     }
@@ -6451,7 +6454,6 @@ namespace WinsockPacketEditor
                             if (IsOnline)
                             {
                                 pai.IsOnLine = true;
-                                pai.LoginTime = DateTime.Now;
                             }
                             else
                             {
@@ -6580,45 +6582,41 @@ namespace WinsockPacketEditor
 
                 #region//记录代理账号的IP地址（异步）
 
-                public static async void RecordLoginIP_ByAccountID(Guid AccountID, string IPAddress)
+                public static async void IPInfo_ToAccount(Guid AccountID, string IPAddress)
                 {
                     try
                     {
                         if (AccountID != Guid.Empty && !string.IsNullOrEmpty(IPAddress))
                         {
-                            AccountInfo paiItem = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AccountID);
-
-                            if (paiItem != null)
+                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AccountID);
+                            if (ai != null)
                             {
-                                if (paiItem.LoginIP != IPAddress)
-                                {
-                                    paiItem.LoginIP = IPAddress;
+                                string IPLocation = await ProxyConfig.Proxy.GetIPLocation(IPAddress);
 
-                                    string IPLocation = await ProxyConfig.Proxy.GetIPLocation(IPAddress);
-                                    if (!string.IsNullOrEmpty(IPLocation))
+                                lock (ai.AIPInfo)
+                                {
+                                    AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
+                                    if (aii == null)
                                     {
-                                        paiItem.IPLocation = IPLocation;
+                                        aii = new AccountIPInfo(DateTime.Now, IPAddress, IPLocation);
+                                        ai.AIPInfo.Add(aii);
                                     }
-
-                                    ProxyConfig.Account.SaveProxyAccount_LoginInfo_ToDB(paiItem);
-                                }
-                                else
-                                {
-                                    if (string.IsNullOrEmpty(paiItem.IPLocation))
+                                    else
                                     {
-                                        string IPLocation = await ProxyConfig.Proxy.GetIPLocation(IPAddress);
-                                        if (!string.IsNullOrEmpty(IPLocation))
+                                        aii.LoginTime = DateTime.Now;
+
+                                        if (string.IsNullOrEmpty(aii.IPLocation))
                                         {
-                                            paiItem.IPLocation = IPLocation;
+                                            aii.IPLocation = IPLocation;
                                         }
                                     }
-                                }
+                                }                                
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(RecordLoginIP_ByAccountID), ex.Message);
+                        Operate.DoLog(nameof(IPInfo_ToAccount), ex.Message);
                     }
                 }
 
@@ -6631,9 +6629,7 @@ namespace WinsockPacketEditor
                     bool IsEnable,
                     string UserName,
                     string PassWord,
-                    DateTime LoginTime,
-                    string LoginIP,
-                    string IPLocation,
+                    BindingList<AccountIPInfo> AIPInfo,
                     bool IsLimitLinks,
                     int LimitLinks,
                     bool IsLimitDevices,
@@ -6648,14 +6644,12 @@ namespace WinsockPacketEditor
                         {
                             if (!ProxyConfig.Account.CheckProxyAccount_Exist(UserName))
                             {
-                                AccountInfo pai = new AccountInfo(
+                                AccountInfo ai = new AccountInfo(
                                     AID,
                                     IsEnable,
                                     UserName,
                                     PassWord,
-                                    LoginTime,
-                                    LoginIP,
-                                    IPLocation,
+                                    AIPInfo,
                                     IsLimitLinks,
                                     LimitLinks,
                                     IsLimitDevices,
@@ -6664,7 +6658,7 @@ namespace WinsockPacketEditor
                                     ExpiryTime,
                                     CreateTime);
 
-                                ProxyConfig.Account.ProxyAccountToList(pai);
+                                ProxyConfig.Account.ProxyAccountToList(ai);
 
                                 return true;
                             }
@@ -6676,6 +6670,23 @@ namespace WinsockPacketEditor
                     }
 
                     return false;
+                }
+
+                #endregion
+
+                #region//新增代理账号IP信息
+
+                public static void AddAccountIPInfo(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP, string IPLocation)
+                {
+                    try
+                    {
+                        AccountIPInfo aii = new AccountIPInfo(LoginTime, LoginIP, IPLocation);
+                        AIPInfo.Add(aii);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
                 }
 
                 #endregion
@@ -7159,27 +7170,11 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
+                #endregion                
 
-                #region//保存登录信息到数据库
+                #region//从数据库加载账号IP信息
 
-                public static void SaveProxyAccount_LoginInfo_ToDB(AccountInfo pai)
-                {
-                    try
-                    {
-                        DataBase.InsertOrUpdateTable_ProxyAccount_LoginInfo(pai);
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//从数据库加载账号定位信息
-
-                public static DataTable LoadAccountLocation_FromDB(Guid AID)
+                public static DataTable LoadAccountIPInfo_FromDB(Guid AID)
                 {
                     DataTable dtReturn = null;
 
@@ -7187,7 +7182,7 @@ namespace WinsockPacketEditor
                     {
                         if (AID != Guid.Empty)
                         {
-                            dtReturn = DataBase.SelectTable_ProxyAccount_LoginInfo(AID);
+                            dtReturn = DataBase.SelectTable_ProxyAccountIPInfo(AID);
                         }
                     }
                     catch (Exception ex)
@@ -7208,7 +7203,6 @@ namespace WinsockPacketEditor
                     {
                         DataBase.DeleteTable_ProxyAccount();
                         DataBase.InsertTable_ProxyAccount();
-                        DataBase.DeleteTable_ProxyAccount_LoginInfo();
                     }
                     catch (Exception ex)
                     {
@@ -7225,32 +7219,37 @@ namespace WinsockPacketEditor
                     try
                     {
                         DataTable dtProxyAccount = DataBase.SelectTable_ProxyAccount();
-
-                        foreach (DataRow dataRow in dtProxyAccount.Rows)
+                        foreach (DataRow drProxyAccount in dtProxyAccount.Rows)
                         {
-                            Guid AID = Guid.Parse(dataRow["GUID"].ToString());
-                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
-                            string UserName = dataRow["UserName"].ToString();
-                            string PassWord = dataRow["PassWord"].ToString();
-                            DateTime LoginTime = Convert.ToDateTime(dataRow["LoginTime"]);
-                            string LoginIP = dataRow["LoginIP"].ToString();
-                            string IPLocation = dataRow["IPLocation"].ToString();
-                            bool IsLimitLinks = Convert.ToBoolean(dataRow["IsLimitLinks"]);
-                            int LimitLinks = int.Parse(dataRow["LimitLinks"].ToString());
-                            bool IsLimitDevices = Convert.ToBoolean(dataRow["IsLimitDevices"]);
-                            int LimitDevices = int.Parse(dataRow["LimitDevices"].ToString());
-                            bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
-                            DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
-                            DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);
+                            Guid AID = Guid.Parse(drProxyAccount["GUID"].ToString());
+                            bool IsEnable = Convert.ToBoolean(drProxyAccount["IsEnable"]);
+                            string UserName = drProxyAccount["UserName"].ToString();
+                            string PassWord = drProxyAccount["PassWord"].ToString();                            
+                            bool IsLimitLinks = Convert.ToBoolean(drProxyAccount["IsLimitLinks"]);
+                            int LimitLinks = int.Parse(drProxyAccount["LimitLinks"].ToString());
+                            bool IsLimitDevices = Convert.ToBoolean(drProxyAccount["IsLimitDevices"]);
+                            int LimitDevices = int.Parse(drProxyAccount["LimitDevices"].ToString());
+                            bool IsExpiry = Convert.ToBoolean(drProxyAccount["IsExpiry"]);
+                            DateTime ExpiryTime = Convert.ToDateTime(drProxyAccount["ExpiryTime"]);
+                            DateTime CreateTime = Convert.ToDateTime(drProxyAccount["CreateTime"]);
+
+                            BindingList<AccountIPInfo> AIPInfo = new BindingList<AccountIPInfo>();
+                            DataTable dtAIPInfo = DataBase.SelectTable_ProxyAccountIPInfo(AID);
+                            foreach (DataRow drIPInfo in dtAIPInfo.Rows)
+                            {
+                                DateTime LoginTime = Convert.ToDateTime(drIPInfo["LoginTime"]);
+                                string LoginIP = drIPInfo["LoginIP"].ToString();
+                                string IPLocation = drIPInfo["IPLocation"].ToString();
+
+                                ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP, IPLocation);
+                            }
 
                             ProxyConfig.Account.AddProxyAccount(
                                 AID,
                                 IsEnable,
                                 UserName,
                                 PassWord,
-                                LoginTime,
-                                LoginIP,
-                                IPLocation,
+                                AIPInfo,
                                 IsLimitLinks,
                                 LimitLinks,
                                 IsLimitDevices,
@@ -7397,8 +7396,6 @@ namespace WinsockPacketEditor
                                     new XElement("AID", ai.AID.ToString().ToUpper()),
                                     new XElement("UserName", ai.UserName),
                                     new XElement("PassWord", ai.Password),
-                                    new XElement("LoginIP", ai.LoginIP),
-                                    new XElement("IPLocation", ai.IPLocation),
                                     new XElement("IsOnLine", ai.IsOnLine.ToString()),
                                     new XElement("IsLimitLinks", ai.IsLimitLinks),
                                     new XElement("LimitLinks", ai.LimitLinks),
@@ -7408,6 +7405,25 @@ namespace WinsockPacketEditor
                                     new XElement("ExpiryTime", ai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
                                     new XElement("CreateTime", ai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
                                     );
+
+                            if (ai.AIPInfo.Count > 0)
+                            {
+                                XElement xeAccountIPInfo = new XElement("AccountIPInfo");
+
+                                foreach (AccountIPInfo aii in ai.AIPInfo)
+                                {
+                                    XElement xeIPInfo =
+                                        new XElement("IPInfo",
+                                        new XElement("LoginTime", aii.LoginTime),
+                                        new XElement("LoginIP", aii.LoginIP),                                   
+                                        new XElement("IPLocation", aii.IPLocation)
+                                        );
+
+                                    xeAccountIPInfo.Add(xeIPInfo);
+                                }
+
+                                xeProxyAccount.Add(xeAccountIPInfo);
+                            }
 
                             xeProxyAccountList.Add(xeProxyAccount);
                         }
@@ -7580,25 +7596,7 @@ namespace WinsockPacketEditor
                             if (xeProxyAccount.Element("PassWord") != null)
                             {
                                 PassWord = xeProxyAccount.Element("PassWord").Value;
-                            }
-
-                            DateTime LoginTime = DateTime.MinValue;
-                            if (xeProxyAccount.Element("LoginTime") != null)
-                            {
-                                LoginTime = DateTime.Parse(xeProxyAccount.Element("LoginTime").Value);
-                            }
-
-                            string LoginIP = string.Empty;
-                            if (xeProxyAccount.Element("LoginIP") != null)
-                            {
-                                LoginIP = xeProxyAccount.Element("LoginIP").Value;
-                            }
-
-                            string IPLocation = string.Empty;
-                            if (xeProxyAccount.Element("IPLocation") != null)
-                            {
-                                IPLocation = xeProxyAccount.Element("IPLocation").Value;
-                            }
+                            }                            
 
                             bool IsOnLine = false;
                             if (xeProxyAccount.Element("IsOnLine") != null)
@@ -7648,14 +7646,40 @@ namespace WinsockPacketEditor
                                 CreateTime = DateTime.Parse(xeProxyAccount.Element("CreateTime").Value);
                             }
 
+                            BindingList<AccountIPInfo> AIPInfo = new BindingList<AccountIPInfo>();
+
+                            if (xeProxyAccount.Element("AccountIPInfo") != null)
+                            {
+                                foreach (XElement xeIPInfo in xeProxyAccount.Element("AccountIPInfo").Elements())
+                                {
+                                    DateTime LoginTime = DateTime.MinValue;
+                                    if (xeIPInfo.Element("LoginTime") != null)
+                                    {
+                                        LoginTime = DateTime.Parse(xeIPInfo.Element("LoginTime").Value);
+                                    }
+
+                                    string LoginIP = string.Empty;
+                                    if (xeIPInfo.Element("LoginIP") != null)
+                                    {
+                                        LoginIP = xeIPInfo.Element("LoginIP").Value;
+                                    }
+
+                                    string IPLocation = string.Empty;
+                                    if (xeIPInfo.Element("IPLocation") != null)
+                                    {
+                                        IPLocation = xeIPInfo.Element("IPLocation").Value;
+                                    }
+
+                                    ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP, IPLocation);
+                                }
+                            }
+
                             bool bOK = ProxyConfig.Account.AddProxyAccount(
                                 AID,
                                 IsEnable,
                                 UserName,
                                 PassWord,
-                                LoginTime,
-                                LoginIP,
-                                IPLocation,
+                                AIPInfo,
                                 IsLimitLinks,
                                 LimitLinks,
                                 IsLimitDevices,
@@ -7771,13 +7795,7 @@ namespace WinsockPacketEditor
                             {
                                 pai.CreateTime = DateTime.Now;
                             }
-
-                            if (string.IsNullOrEmpty(pai.LoginIP))
-                            {
-                                pai.LoginIP = string.Empty;
-                            }
-
-                            pai.LoginTime = DateTime.MinValue;
+                            
                             pai.IsLimitDevices = true;
                             pai.LimitDevices = 1;
 
@@ -7786,9 +7804,7 @@ namespace WinsockPacketEditor
                                 pai.IsEnable,
                                 pai.UserName,
                                 pai.Password,
-                                pai.LoginTime,
-                                pai.LoginIP,
-                                pai.IPLocation,
+                                new BindingList<AccountIPInfo>(),
                                 pai.IsLimitLinks,
                                 pai.LimitLinks,
                                 pai.IsLimitDevices,
@@ -18071,10 +18087,7 @@ namespace WinsockPacketEditor
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
                         sql += "IsEnable BOOLEAN DEFAULT 0,";
                         sql += "UserName TEXT NOT NULL UNIQUE,";
-                        sql += "PassWord TEXT NOT NULL,";
-                        sql += "LoginTime TIMESTAMP,";
-                        sql += "LoginIP TEXT,";
-                        sql += "IPLocation TEXT,";
+                        sql += "PassWord TEXT NOT NULL,";                        
                         sql += "IsLimitLinks BOOLEAN DEFAULT 0,";
                         sql += "LimitLinks INTEGER DEFAULT 1,";
                         sql += "IsLimitDevices BOOLEAN DEFAULT 0,";
@@ -18084,7 +18097,7 @@ namespace WinsockPacketEditor
                         sql += "CreateTime TIMESTAMP";
                         sql += ");";
 
-                        sql += "CREATE TABLE IF NOT EXISTS ProxyAccount_LoginInfo (";
+                        sql += "CREATE TABLE IF NOT EXISTS ProxyAccountIPInfo (";
                         sql += "GUID TEXT NOT NULL,";
                         sql += "LoginTime TIMESTAMP,";
                         sql += "LoginIP TEXT,";
@@ -18134,7 +18147,7 @@ namespace WinsockPacketEditor
                 return dtReturn;
             }
 
-            public static DataTable SelectTable_ProxyAccount_LoginInfo(Guid guid)
+            public static DataTable SelectTable_ProxyAccountIPInfo(Guid guid)
             {
                 DataTable dtReturn = new DataTable();
 
@@ -18142,7 +18155,7 @@ namespace WinsockPacketEditor
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "SELECT * FROM ProxyAccount_LoginInfo WHERE GUID = @GUID;";
+                        string sql = "SELECT * FROM ProxyAccountIPInfo WHERE GUID = @GUID;";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
@@ -18168,55 +18181,10 @@ namespace WinsockPacketEditor
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
                         string sql = "DELETE FROM ProxyAccount;";
+                        sql += "DELETE FROM ProxyAccountIPInfo;";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            public static void DeleteTable_ProxyAccount_LoginInfo()
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "DELETE FROM ProxyAccount_LoginInfo WHERE GUID NOT IN (SELECT GUID FROM ProxyAccount);";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            public static void UpdateTable_ProxyAccount_LoginInfo(Guid guid, string LoginIP)
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        string sql = "UPDATE ProxyAccount_LoginInfo SET LoginTime = @LoginTime WHERE GUID = @guid AND LoginIP = @LoginIP;";
-
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@LoginTime", DateTime.Now);
-                            cmd.Parameters.AddWithValue("@guid", guid);
-                            cmd.Parameters.AddWithValue("@LoginIP", LoginIP);
-
                             conn.Open();
                             cmd.ExecuteNonQuery();
                         }
@@ -18238,83 +18206,79 @@ namespace WinsockPacketEditor
 
                         using (SQLiteTransaction transaction = conn.BeginTransaction())
                         {
-                            string sql = "INSERT INTO ProxyAccount (" +
-                                         "GUID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsLimitDevices, LimitDevices, IsExpiry, ExpiryTime, CreateTime" +
-                                         ") VALUES (" +
-                                         "@GUID, @IsEnable, @UserName, @PassWord, @LoginTime, @LoginIP, @IPLocation, @IsLimitLinks, @LimitLinks, @IsLimitDevices, @LimitDevices, @IsExpiry, @ExpiryTime, @CreateTime" +
-                                         ");";
+                            // 1. 插入主表 ProxyAccount
+                            string sqlAccount = @"
+                                INSERT INTO ProxyAccount (
+                                    GUID, IsEnable, UserName, PassWord, 
+                                    IsLimitLinks, LimitLinks, IsLimitDevices, LimitDevices, 
+                                    IsExpiry, ExpiryTime, CreateTime
+                                ) VALUES (
+                                    @GUID, @IsEnable, @UserName, @PassWord, 
+                                    @IsLimitLinks, @LimitLinks, @IsLimitDevices, @LimitDevices, 
+                                    @IsExpiry, @ExpiryTime, @CreateTime
+                                );";
 
-                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                            // 2. 插入子表 ProxyAccountIPInfo
+                            string sqlIPInfo = @"
+                                INSERT INTO ProxyAccountIPInfo (
+                                    GUID, LoginTime, LoginIP, IPLocation
+                                ) VALUES (
+                                    @GUID, @LoginTime, @LoginIP, @IPLocation
+                                );";
+
+                            using (SQLiteCommand cmdAccount = new SQLiteCommand(sqlAccount, conn, transaction))
+                            using (SQLiteCommand cmdIPInfo = new SQLiteCommand(sqlIPInfo, conn, transaction))
                             {
-                                cmd.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
-                                cmd.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
-                                cmd.Parameters.Add(new SQLiteParameter("@UserName", DbType.String));
-                                cmd.Parameters.Add(new SQLiteParameter("@PassWord", DbType.String));
-                                cmd.Parameters.Add(new SQLiteParameter("@LoginTime", DbType.DateTime));
-                                cmd.Parameters.Add(new SQLiteParameter("@LoginIP", DbType.String));
-                                cmd.Parameters.Add(new SQLiteParameter("@IPLocation", DbType.String));
-                                cmd.Parameters.Add(new SQLiteParameter("@IsLimitLinks", DbType.Boolean));
-                                cmd.Parameters.Add(new SQLiteParameter("@LimitLinks", DbType.Int32));
-                                cmd.Parameters.Add(new SQLiteParameter("@IsLimitDevices", DbType.Boolean));
-                                cmd.Parameters.Add(new SQLiteParameter("@LimitDevices", DbType.Int32));
-                                cmd.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
-                                cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
-                                cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+                                // 设置主表参数
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@UserName", DbType.String));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@PassWord", DbType.String));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsLimitLinks", DbType.Boolean));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@LimitLinks", DbType.Int32));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsLimitDevices", DbType.Boolean));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@LimitDevices", DbType.Int32));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
+                                cmdAccount.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+
+                                // 设置子表参数
+                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@LoginTime", DbType.DateTime));
+                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@LoginIP", DbType.String));
+                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@IPLocation", DbType.String));
 
                                 foreach (AccountInfo pai in ProxyConfig.Account.lstAccountInfo)
                                 {
-                                    cmd.Parameters["@GUID"].Value = pai.AID.ToString().ToUpper();
-                                    cmd.Parameters["@IsEnable"].Value = pai.IsEnable;
-                                    cmd.Parameters["@UserName"].Value = pai.UserName;
-                                    cmd.Parameters["@PassWord"].Value = pai.Password;
-                                    cmd.Parameters["@LoginTime"].Value = pai.LoginTime;
-                                    cmd.Parameters["@LoginIP"].Value = pai.LoginIP;
-                                    cmd.Parameters["@IPLocation"].Value = pai.IPLocation;
-                                    cmd.Parameters["@IsLimitLinks"].Value = pai.IsLimitLinks;
-                                    cmd.Parameters["@LimitLinks"].Value = pai.LimitLinks;
-                                    cmd.Parameters["@IsLimitDevices"].Value = pai.IsLimitDevices;
-                                    cmd.Parameters["@LimitDevices"].Value = pai.LimitDevices;
-                                    cmd.Parameters["@IsExpiry"].Value = pai.IsExpiry;
-                                    cmd.Parameters["@ExpiryTime"].Value = pai.ExpiryTime;
-                                    cmd.Parameters["@CreateTime"].Value = pai.CreateTime;
+                                    // 插入主表数据
+                                    cmdAccount.Parameters["@GUID"].Value = pai.AID.ToString().ToUpper();
+                                    cmdAccount.Parameters["@IsEnable"].Value = pai.IsEnable;
+                                    cmdAccount.Parameters["@UserName"].Value = pai.UserName;
+                                    cmdAccount.Parameters["@PassWord"].Value = pai.Password;
+                                    cmdAccount.Parameters["@IsLimitLinks"].Value = pai.IsLimitLinks;
+                                    cmdAccount.Parameters["@LimitLinks"].Value = pai.LimitLinks;
+                                    cmdAccount.Parameters["@IsLimitDevices"].Value = pai.IsLimitDevices;
+                                    cmdAccount.Parameters["@LimitDevices"].Value = pai.LimitDevices;
+                                    cmdAccount.Parameters["@IsExpiry"].Value = pai.IsExpiry;
+                                    cmdAccount.Parameters["@ExpiryTime"].Value = pai.ExpiryTime;
+                                    cmdAccount.Parameters["@CreateTime"].Value = pai.CreateTime;
 
-                                    cmd.ExecuteNonQuery();
+                                    cmdAccount.ExecuteNonQuery();
+
+                                    // 插入子表数据（AIPInfo）
+                                    if (pai.AIPInfo != null)
+                                    {
+                                        foreach (AccountIPInfo ipInfo in pai.AIPInfo)
+                                        {
+                                            cmdIPInfo.Parameters["@GUID"].Value = pai.AID.ToString().ToUpper();
+                                            cmdIPInfo.Parameters["@LoginTime"].Value = ipInfo.LoginTime;
+                                            cmdIPInfo.Parameters["@LoginIP"].Value = ipInfo.LoginIP;
+                                            cmdIPInfo.Parameters["@IPLocation"].Value = ipInfo.IPLocation ?? (object)DBNull.Value;
+
+                                            cmdIPInfo.ExecuteNonQuery();
+                                        }
+                                    }
                                 }
-                            }
-
-                            transaction.Commit();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            public static void InsertOrUpdateTable_ProxyAccount_LoginInfo(AccountInfo pai)
-            {
-                try
-                {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
-                    {
-                        conn.Open();
-
-                        using (SQLiteTransaction transaction = conn.BeginTransaction())
-                        {
-                            string sql = "INSERT INTO ProxyAccount_LoginInfo (GUID, LoginTime, LoginIP, IPLocation)";
-                            sql += "VALUES (@GUID, @LoginTime, @LoginIP, @IPLocation)";
-                            sql += "ON CONFLICT(GUID, LoginIP)";
-                            sql += "DO UPDATE SET LoginTime = @LoginTime;";
-
-                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@GUID", pai.AID.ToString().ToUpper());
-                                cmd.Parameters.AddWithValue("@LoginTime", pai.LoginTime);
-                                cmd.Parameters.AddWithValue("@LoginIP", pai.LoginIP);
-                                cmd.Parameters.AddWithValue("@IPLocation", pai.IPLocation);
-
-                                cmd.ExecuteNonQuery();
                             }
 
                             transaction.Commit();

@@ -30,9 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocationForm));
             this.tlpLocation = new System.Windows.Forms.TableLayoutPanel();
-            this.tLocation = new AntdUI.Table();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bExit = new AntdUI.Button();
+            this.tLocation = new AntdUI.Table();
             this.tlpLocation.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.SuspendLayout();
@@ -50,18 +50,8 @@
             this.tlpLocation.RowCount = 2;
             this.tlpLocation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpLocation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpLocation.Size = new System.Drawing.Size(484, 761);
+            this.tlpLocation.Size = new System.Drawing.Size(784, 761);
             this.tlpLocation.TabIndex = 0;
-            // 
-            // tLocation
-            // 
-            this.tLocation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tLocation.EmptyHeader = true;
-            this.tLocation.Location = new System.Drawing.Point(3, 3);
-            this.tLocation.Name = "tLocation";
-            this.tLocation.Size = new System.Drawing.Size(478, 695);
-            this.tLocation.TabIndex = 0;
-            this.tLocation.Text = "table1";
             // 
             // tlpButton
             // 
@@ -80,7 +70,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(484, 60);
+            this.tlpButton.Size = new System.Drawing.Size(784, 60);
             this.tlpButton.TabIndex = 4;
             // 
             // bExit
@@ -88,7 +78,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
-            this.bExit.Location = new System.Drawing.Point(185, 7);
+            this.bExit.Location = new System.Drawing.Point(335, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -96,17 +86,27 @@
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
+            // tLocation
+            // 
+            this.tLocation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tLocation.EmptyHeader = true;
+            this.tLocation.Location = new System.Drawing.Point(3, 3);
+            this.tLocation.Name = "tLocation";
+            this.tLocation.Size = new System.Drawing.Size(778, 695);
+            this.tLocation.TabIndex = 0;
+            this.tLocation.Text = "table1";
+            // 
             // LocationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 761);
+            this.ClientSize = new System.Drawing.Size(784, 761);
             this.Controls.Add(this.tlpLocation);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "LocationForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
