@@ -485,7 +485,7 @@
             this.tabProxyMode.Controls.Add(this.tpTranscoding);
             this.tabProxyMode.Controls.Add(this.tpExtraction);
             this.tabProxyMode.Controls.Add(this.tpSystemLog);
-            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabProxyMode.Location = new System.Drawing.Point(170, 40);
             this.tabProxyMode.Name = "tabProxyMode";
@@ -501,6 +501,7 @@
             this.tabProxyMode.Pages.Add(this.tpTranscoding);
             this.tabProxyMode.Pages.Add(this.tpExtraction);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
+            this.tabProxyMode.SelectedIndex = 1;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -509,7 +510,7 @@
             // tpProxyList
             // 
             this.tpProxyList.Controls.Add(this.tlpProxyList);
-            this.tpProxyList.Location = new System.Drawing.Point(3, 33);
+            this.tpProxyList.Location = new System.Drawing.Point(-1124, -724);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
             this.tpProxyList.TabIndex = 0;
@@ -1052,7 +1053,7 @@
             // tpClientList
             // 
             this.tpClientList.Controls.Add(this.splitterClientList);
-            this.tpClientList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpClientList.Location = new System.Drawing.Point(3, 33);
             this.tpClientList.Name = "tpClientList";
             this.tpClientList.Size = new System.Drawing.Size(1124, 724);
             this.tpClientList.TabIndex = 8;

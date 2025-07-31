@@ -4222,6 +4222,11 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
+                        if (pe?.TCP_Client?.Socket == null)
+                        {
+                            return;
+                        }
+
                         pe.ProxyType = (ProxyConfig.Proxy.ProxyType)bData[0];
                         pe.CommandType = (ProxyConfig.Proxy.CommandType)bData[1];
                         pe.AddressType = (ProxyConfig.Proxy.AddressType)bData[3];

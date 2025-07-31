@@ -10,6 +10,7 @@ namespace WinsockPacketEditor
     {
         private volatile bool _isDisposed;
         private readonly object _closeLock = new object();
+        private readonly object _udpInitLock = new object();
 
         public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; set; }
         public Operate.ProxyConfig.Proxy.ProxyStep ProxyStep { get; set; }
@@ -19,7 +20,42 @@ namespace WinsockPacketEditor
         public Guid AID { get; set; }
         public TCPClient TCP_Client { get; }
         public TCPServer TCP_Server { get; }
-        public UDPRelay UDP_Relay { get; }
+        public UDPRelay UDP_Relay
+        {
+            get
+            {
+                if (_udpRelay == null || !_udpRelay.IsActive)
+                {
+                    InitializeUdpRelay();
+                }
+
+                return _udpRelay;
+            }
+        }
+
+        #region//初始化UDP
+
+        private UDPRelay _udpRelay;
+
+        private void InitializeUdpRelay()
+        {
+            lock (_udpInitLock)
+            {
+                if (_udpRelay == null || !_udpRelay.IsActive)
+                {
+                    try
+                    {
+                        _udpRelay = new UDPRelay(new IPEndPoint(Operate.ProxyConfig.Proxy.ProxyUDP_IP, 0));
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region//ProxyExecute
 
@@ -28,8 +64,7 @@ namespace WinsockPacketEditor
             try
             {
                 TCP_Client = new TCPClient(clientSocket, bufferSize);
-                TCP_Server = new TCPServer(bufferSize);
-                UDP_Relay = new UDPRelay(new IPEndPoint(IPAddress.Any, TCP_Client.EndPoint.Port));
+                TCP_Server = new TCPServer(bufferSize);                
 
                 ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Handshake;
             }
@@ -213,7 +248,7 @@ namespace WinsockPacketEditor
 
         #region//UDPRelay
 
-        public class UDPRelay
+        public class UDPRelay : IDisposable
         {
             public UdpClient ClientUDP { get; set; }
             public IPEndPoint ClientUDP_EndPoint { get; set; }
@@ -245,6 +280,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         ClientUDP?.Close();
+                        ClientUDP?.Dispose();
                     }
                     finally
                     {
@@ -256,6 +292,8 @@ namespace WinsockPacketEditor
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }                
             }
+
+            public void Dispose() => Close();
         }
 
         #endregion
@@ -290,7 +328,10 @@ namespace WinsockPacketEditor
                     {
                         TCP_Server?.Close();
                         TCP_Client?.Close();
-                        UDP_Relay?.Close();
+                        _udpRelay?.Close();
+                        TCP_Server?.Dispose();
+                        TCP_Client?.Dispose();
+                        _udpRelay?.Dispose();
                     }
                 }
             }
