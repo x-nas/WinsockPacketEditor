@@ -37,11 +37,15 @@ namespace WinsockPacketEditor
         {
             this.pageHeader.Loading = true;
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
-            {  
+            {
+                Operate.SystemConfig.StartRemoteMGT();
                 Operate.SystemConfig.InitCPUAndMemoryCounter();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
-                Operate.SystemConfig.LoadSystemList_FromDB();            
-                Operate.SystemConfig.StartRemoteMGT();
+                Operate.SystemConfig.LoadProxyMode_FromDB();
+                Operate.SystemConfig.LoadSystemList_FromDB();
+                Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
+                Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
+                Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();                
 
                 this.InitGlobal();
                 this.InitFloatButton();                
@@ -76,11 +80,15 @@ namespace WinsockPacketEditor
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             ws.ExitHook();
-            
+
+            Operate.SystemConfig.StopRemoteMGT();
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
+            Operate.SystemConfig.SaveProxyMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();
-            Operate.SystemConfig.StopRemoteMGT();
+            Operate.ProxyConfig.Account.SaveAccountList_ToDB();
+            Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
+            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)

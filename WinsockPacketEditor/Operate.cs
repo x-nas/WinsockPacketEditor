@@ -3345,8 +3345,7 @@ namespace WinsockPacketEditor
                     XElement xeSystemConfig = xdoc.Root.Element("SystemConfig");
                     if (xeSystemConfig != null)
                     {
-                        SetSystemConfig_FromXML(xeSystemConfig);
-                        SaveSystemConfig_ToDB();
+                        SetSystemConfig_FromXML(xeSystemConfig);                        
                     }
                 }
                 catch (Exception ex)
@@ -3364,8 +3363,6 @@ namespace WinsockPacketEditor
                     if (xeProxyMode != null)
                     {
                         SetProxyMode_FromXML(xeProxyMode);
-                        DataBase.DeleteTable_ProxyMode();
-                        DataBase.InsertTable_ProxyMode();
                     }
                 }
                 catch (Exception ex)
@@ -3383,8 +3380,6 @@ namespace WinsockPacketEditor
                     if (xeInjectMode != null)
                     {
                         SetInjectMode_FromXML(xeInjectMode);
-                        DataBase.DeleteTable_InjectMode();
-                        DataBase.InsertTable_InjectMode();
                     }
                 }
                 catch (Exception ex)
@@ -3407,9 +3402,8 @@ namespace WinsockPacketEditor
                         };
                         ProxyAccountList.Add(xeProxyAccountList);
 
+                        ProxyConfig.Account.AccountListClear();
                         ProxyConfig.Account.LoadAccountList_FromXDocument(ProxyAccountList);
-                        DataBase.DeleteTable_ProxyAccount();
-                        DataBase.InsertTable_ProxyAccount();
                     }
                 }
                 catch (Exception ex)
@@ -3434,8 +3428,6 @@ namespace WinsockPacketEditor
                         MapLocal.Add(xeMapLocal);
 
                         ProxyConfig.Mapping.LoadMapLocal_FromXDocument(MapLocal);
-                        DataBase.DeleteTable_ProxyMapLocal();
-                        DataBase.InsertTable_ProxyMapLocal();
                     }
 
                     //远程代理映射
@@ -3449,8 +3441,6 @@ namespace WinsockPacketEditor
                         MapRemote.Add(xeMapRemote);
 
                         ProxyConfig.Mapping.LoadMapRemote_FromXDocument(MapRemote);
-                        DataBase.DeleteTable_ProxyMapRemote();
-                        DataBase.InsertTable_ProxyMapRemote();
                     }
                 }
                 catch (Exception ex)
@@ -3473,9 +3463,8 @@ namespace WinsockPacketEditor
                         };
                         xdFilterList.Add(xeFilterList);
 
-                        FilterConfig.List.LoadFilterList_FromXDocument(xdFilterList);
-                        FilterConfig.List.SaveFilterList_ToDB();
                         FilterConfig.List.FilterListClear();
+                        FilterConfig.List.LoadFilterList_FromXDocument(xdFilterList);
                     }
                 }
                 catch (Exception ex)
@@ -3498,9 +3487,8 @@ namespace WinsockPacketEditor
                         };
                         xdSendList.Add(xeSendList);
 
-                        SendConfig.List.LoadSendList_FromXDocument(xdSendList);
-                        SendConfig.List.SaveSendList_ToDB();
                         SendConfig.List.SendListClear();
+                        SendConfig.List.LoadSendList_FromXDocument(xdSendList);
                     }
                 }
                 catch (Exception ex)
@@ -3523,9 +3511,8 @@ namespace WinsockPacketEditor
                         };
                         xdRobotList.Add(xeRobotList);
 
-                        RobotConfig.List.LoadRobotList_FromXDocument(xdRobotList);
-                        RobotConfig.List.SaveRobotList_ToDB();
                         RobotConfig.List.RobotListClear();
+                        RobotConfig.List.LoadRobotList_FromXDocument(xdRobotList);
                     }
                 }
                 catch (Exception ex)
@@ -6977,7 +6964,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//删除代理账号                
+                #region//删除代理账号（对话框）                
 
                 public static void DeleteAccount_Dialog(Form form, List<AccountInfo> aiList)
                 {
@@ -6992,7 +6979,7 @@ namespace WinsockPacketEditor
                             {
                                 if (aiList == null)
                                 {
-                                    ProxyConfig.Account.lstAccountInfo.Clear();
+                                    ProxyConfig.Account.AccountListClear();
                                 }
                                 else
                                 {
@@ -7002,9 +6989,19 @@ namespace WinsockPacketEditor
                                     }
                                 }
 
-                                if (form is InterfaceInfo.IProxyMode proxyMode)
+                                switch (Operate.SystemConfig.StartMode)
                                 {
-                                    proxyMode.RefreshAccountList();
+                                    case Operate.SystemConfig.SystemMode.Process:
+
+                                        //
+
+                                        break;
+
+                                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                                        ((InterfaceInfo.IProxyMode)form).RefreshAccountList();
+
+                                        break;
                                 }
 
                                 return true;
@@ -7064,6 +7061,18 @@ namespace WinsockPacketEditor
                     }
 
                     return false;
+                }
+
+                public static void AccountListClear()
+                {
+                    try
+                    {
+                        ProxyConfig.Account.lstAccountInfo.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
                 }
 
                 #endregion
@@ -7256,7 +7265,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
+                #endregion                
 
                 #region//调整过期时间
 

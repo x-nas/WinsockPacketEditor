@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine7 = new AntdUI.Tabs.StyleLine();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WPEForm));
             this.pWPEForm = new AntdUI.Panel();
             this.tabWPEForm = new AntdUI.Tabs();
@@ -68,6 +68,7 @@
             this.pWPEForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pWPEForm.Location = new System.Drawing.Point(0, 0);
             this.pWPEForm.Name = "pWPEForm";
+            this.pWPEForm.Radius = 0;
             this.pWPEForm.Size = new System.Drawing.Size(320, 450);
             this.pWPEForm.TabIndex = 2;
             this.pWPEForm.Text = "panel1";
@@ -84,7 +85,7 @@
             this.tabWPEForm.Pages.Add(this.tpLogin);
             this.tabWPEForm.Pages.Add(this.tpRemote);
             this.tabWPEForm.Size = new System.Drawing.Size(320, 420);
-            this.tabWPEForm.Style = styleLine1;
+            this.tabWPEForm.Style = styleLine7;
             this.tabWPEForm.TabIndex = 5;
             this.tabWPEForm.Text = "tabs1";
             // 
@@ -358,7 +359,8 @@
             this.pageHeader.Icon = global::WinsockPacketEditor.Properties.Resources.wpe;
             this.pageHeader.Location = new System.Drawing.Point(0, 0);
             this.pageHeader.MaximizeBox = false;
-            this.pageHeader.MinimizeBox = false;            
+            this.pageHeader.MinimizeBox = false;
+            this.pageHeader.Mode = AntdUI.TAMode.Light;
             this.pageHeader.Name = "pageHeader";
             this.pageHeader.ShowButton = true;
             this.pageHeader.Size = new System.Drawing.Size(320, 30);
@@ -398,7 +400,6 @@
             this.Mode = AntdUI.TAMode.Light;
             this.Name = "WPEForm";
             this.Resizable = false;
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "WPEForm";
             this.UseDwm = false;
