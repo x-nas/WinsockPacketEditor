@@ -91,20 +91,13 @@
             this.tlpPacketListInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lProxyLinks_CNT = new AntdUI.Label();
             this.lProxyLinks = new AntdUI.Label();
-            this.label15 = new AntdUI.Label();
+            this.lsplit15 = new AntdUI.Label();
             this.lProxyAccount_CNT = new AntdUI.Label();
             this.lProxyAccount = new AntdUI.Label();
-            this.label12 = new AntdUI.Label();
+            this.lsplit8 = new AntdUI.Label();
             this.lProxyQueue_CNT = new AntdUI.Label();
-            this.lProxyQueue = new AntdUI.Label();
-            this.lProxyUDP_CNT = new AntdUI.Label();
-            this.lProxyTCP_CNT = new AntdUI.Label();
             this.lProxyTotal_CNT = new AntdUI.Label();
-            this.label2 = new AntdUI.Label();
-            this.label3 = new AntdUI.Label();
-            this.label4 = new AntdUI.Label();
-            this.lProxyUDP = new AntdUI.Label();
-            this.lProxyTCP = new AntdUI.Label();
+            this.lsplit6 = new AntdUI.Label();
             this.lProxyTotal = new AntdUI.Label();
             this.tProxyList = new AntdUI.Table();
             this.pPacketData = new AntdUI.Panel();
@@ -118,7 +111,7 @@
             this.treeClientList = new AntdUI.Tree();
             this.tlpAuthInfo = new System.Windows.Forms.TableLayoutPanel();
             this.tAuthList = new AntdUI.Table();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpAuthListInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lDevicesCount_Value = new AntdUI.Label();
             this.lLinksCount_Value = new AntdUI.Label();
             this.lAuthCount_Value = new AntdUI.Label();
@@ -240,6 +233,25 @@
             this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
+            this.lProxyQueue = new AntdUI.Label();
+            this.lFilterExecute = new AntdUI.Label();
+            this.lFilterExecute_CNT = new AntdUI.Label();
+            this.lsplit7 = new AntdUI.Label();
+            this.lTCP_Req = new AntdUI.Label();
+            this.lTCP_Req_CNT = new AntdUI.Label();
+            this.lSplit18 = new AntdUI.Label();
+            this.lTCP_Resp = new AntdUI.Label();
+            this.lTCP_Resp_CNT = new AntdUI.Label();
+            this.lsplit2 = new AntdUI.Label();
+            this.lProxyDevices = new AntdUI.Label();
+            this.lProxyDevices_CNT = new AntdUI.Label();
+            this.lSplit11 = new AntdUI.Label();
+            this.label2 = new AntdUI.Label();
+            this.lUDP_Req = new AntdUI.Label();
+            this.lUDP_Req_CNT = new AntdUI.Label();
+            this.label5 = new AntdUI.Label();
+            this.lUDP_Resp = new AntdUI.Label();
+            this.lUDP_Resp_CNT = new AntdUI.Label();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
@@ -260,7 +272,7 @@
             this.splitterClientList.Panel2.SuspendLayout();
             this.splitterClientList.SuspendLayout();
             this.tlpAuthInfo.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tlpAuthListInfo.SuspendLayout();
             this.tpAccountList.SuspendLayout();
             this.tlpAccountList.SuspendLayout();
             this.tlpAccountListButton.SuspendLayout();
@@ -501,7 +513,6 @@
             this.tabProxyMode.Pages.Add(this.tpTranscoding);
             this.tabProxyMode.Pages.Add(this.tpExtraction);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.SelectedIndex = 1;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -510,7 +521,7 @@
             // tpProxyList
             // 
             this.tpProxyList.Controls.Add(this.tlpProxyList);
-            this.tpProxyList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpProxyList.Location = new System.Drawing.Point(3, 33);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
             this.tpProxyList.TabIndex = 0;
@@ -683,7 +694,19 @@
             // 
             // tlpPacketListInfo
             // 
-            this.tlpPacketListInfo.ColumnCount = 18;
+            this.tlpPacketListInfo.ColumnCount = 30;
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -702,50 +725,43 @@
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketListInfo.Controls.Add(this.lProxyLinks_CNT, 16, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyLinks, 15, 1);
-            this.tlpPacketListInfo.Controls.Add(this.label15, 14, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyAccount_CNT, 13, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyAccount, 12, 1);
-            this.tlpPacketListInfo.Controls.Add(this.label12, 11, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyQueue_CNT, 10, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyQueue, 9, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyUDP_CNT, 7, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyTCP_CNT, 4, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyTotal_CNT, 1, 1);
-            this.tlpPacketListInfo.Controls.Add(this.label2, 8, 1);
-            this.tlpPacketListInfo.Controls.Add(this.label3, 5, 1);
-            this.tlpPacketListInfo.Controls.Add(this.label4, 2, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyUDP, 6, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyTCP, 3, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lProxyTotal, 0, 1);
+            this.tlpPacketListInfo.Controls.Add(this.lUDP_Resp_CNT, 28, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lUDP_Resp, 27, 0);
+            this.tlpPacketListInfo.Controls.Add(this.label5, 26, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lUDP_Req_CNT, 25, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lUDP_Req, 24, 0);
+            this.tlpPacketListInfo.Controls.Add(this.label2, 23, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lSplit11, 17, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyDevices_CNT, 16, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyDevices, 15, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lsplit2, 14, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lTCP_Resp_CNT, 22, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lTCP_Resp, 21, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lSplit18, 20, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lTCP_Req_CNT, 19, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lTCP_Req, 18, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lsplit7, 5, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lFilterExecute_CNT, 4, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lFilterExecute, 3, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyLinks_CNT, 13, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyLinks, 12, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lsplit15, 11, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyAccount_CNT, 10, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyAccount, 9, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lsplit8, 8, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyQueue_CNT, 7, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyQueue, 6, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyTotal_CNT, 1, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lsplit6, 2, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lProxyTotal, 0, 0);
             this.tlpPacketListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpPacketListInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tlpPacketListInfo.Location = new System.Drawing.Point(0, 0);
             this.tlpPacketListInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpPacketListInfo.Name = "tlpPacketListInfo";
-            this.tlpPacketListInfo.RowCount = 3;
-            this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpPacketListInfo.RowCount = 2;
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpPacketListInfo.Size = new System.Drawing.Size(1118, 30);
             this.tlpPacketListInfo.TabIndex = 6;
             // 
@@ -754,7 +770,7 @@
             this.lProxyLinks_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyLinks_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyLinks_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyLinks_CNT.Location = new System.Drawing.Point(418, 3);
+            this.lProxyLinks_CNT.Location = new System.Drawing.Point(397, 3);
             this.lProxyLinks_CNT.Name = "lProxyLinks_CNT";
             this.lProxyLinks_CNT.Size = new System.Drawing.Size(9, 24);
             this.lProxyLinks_CNT.TabIndex = 22;
@@ -765,31 +781,31 @@
             this.lProxyLinks.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyLinks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyLinks.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyLinks.Location = new System.Drawing.Point(368, 3);
+            this.lProxyLinks.Location = new System.Drawing.Point(347, 3);
             this.lProxyLinks.Name = "lProxyLinks";
             this.lProxyLinks.Size = new System.Drawing.Size(44, 24);
             this.lProxyLinks.TabIndex = 21;
             this.lProxyLinks.Text = "链接数:";
             // 
-            // label15
+            // lsplit15
             // 
-            this.label15.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label15.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.ForeColor = System.Drawing.Color.Silver;
-            this.label15.Location = new System.Drawing.Point(357, 3);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(5, 24);
-            this.label15.TabIndex = 20;
-            this.label15.Text = "|";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lsplit15.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lsplit15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsplit15.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lsplit15.ForeColor = System.Drawing.Color.Silver;
+            this.lsplit15.Location = new System.Drawing.Point(336, 3);
+            this.lsplit15.Name = "lsplit15";
+            this.lsplit15.Size = new System.Drawing.Size(5, 24);
+            this.lsplit15.TabIndex = 20;
+            this.lsplit15.Text = "|";
+            this.lsplit15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lProxyAccount_CNT
             // 
             this.lProxyAccount_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyAccount_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyAccount_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyAccount_CNT.Location = new System.Drawing.Point(328, 3);
+            this.lProxyAccount_CNT.Location = new System.Drawing.Point(307, 3);
             this.lProxyAccount_CNT.Name = "lProxyAccount_CNT";
             this.lProxyAccount_CNT.Size = new System.Drawing.Size(23, 24);
             this.lProxyAccount_CNT.TabIndex = 19;
@@ -800,68 +816,35 @@
             this.lProxyAccount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyAccount.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyAccount.Location = new System.Drawing.Point(292, 3);
+            this.lProxyAccount.Location = new System.Drawing.Point(257, 3);
             this.lProxyAccount.Name = "lProxyAccount";
-            this.lProxyAccount.Size = new System.Drawing.Size(30, 24);
+            this.lProxyAccount.Size = new System.Drawing.Size(44, 24);
             this.lProxyAccount.TabIndex = 18;
-            this.lProxyAccount.Text = "在线:";
+            this.lProxyAccount.Text = "账号数:";
             // 
-            // label12
+            // lsplit8
             // 
-            this.label12.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label12.ForeColor = System.Drawing.Color.Silver;
-            this.label12.Location = new System.Drawing.Point(281, 3);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(5, 24);
-            this.label12.TabIndex = 17;
-            this.label12.Text = "|";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lsplit8.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lsplit8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsplit8.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lsplit8.ForeColor = System.Drawing.Color.Silver;
+            this.lsplit8.Location = new System.Drawing.Point(246, 3);
+            this.lsplit8.Name = "lsplit8";
+            this.lsplit8.Size = new System.Drawing.Size(5, 24);
+            this.lsplit8.TabIndex = 17;
+            this.lsplit8.Text = "|";
+            this.lsplit8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lProxyQueue_CNT
             // 
             this.lProxyQueue_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyQueue_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyQueue_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyQueue_CNT.Location = new System.Drawing.Point(266, 3);
+            this.lProxyQueue_CNT.Location = new System.Drawing.Point(231, 3);
             this.lProxyQueue_CNT.Name = "lProxyQueue_CNT";
             this.lProxyQueue_CNT.Size = new System.Drawing.Size(9, 24);
             this.lProxyQueue_CNT.TabIndex = 16;
             this.lProxyQueue_CNT.Text = "0";
-            // 
-            // lProxyQueue
-            // 
-            this.lProxyQueue.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lProxyQueue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lProxyQueue.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyQueue.Location = new System.Drawing.Point(216, 3);
-            this.lProxyQueue.Name = "lProxyQueue";
-            this.lProxyQueue.Size = new System.Drawing.Size(44, 24);
-            this.lProxyQueue.TabIndex = 15;
-            this.lProxyQueue.Text = "缓存区:";
-            // 
-            // lProxyUDP_CNT
-            // 
-            this.lProxyUDP_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lProxyUDP_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lProxyUDP_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyUDP_CNT.Location = new System.Drawing.Point(190, 3);
-            this.lProxyUDP_CNT.Name = "lProxyUDP_CNT";
-            this.lProxyUDP_CNT.Size = new System.Drawing.Size(9, 24);
-            this.lProxyUDP_CNT.TabIndex = 14;
-            this.lProxyUDP_CNT.Text = "0";
-            // 
-            // lProxyTCP_CNT
-            // 
-            this.lProxyTCP_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lProxyTCP_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lProxyTCP_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyTCP_CNT.Location = new System.Drawing.Point(126, 3);
-            this.lProxyTCP_CNT.Name = "lProxyTCP_CNT";
-            this.lProxyTCP_CNT.Size = new System.Drawing.Size(9, 24);
-            this.lProxyTCP_CNT.TabIndex = 13;
-            this.lProxyTCP_CNT.Text = "0";
             // 
             // lProxyTotal_CNT
             // 
@@ -874,66 +857,18 @@
             this.lProxyTotal_CNT.TabIndex = 12;
             this.lProxyTotal_CNT.Text = "0";
             // 
-            // label2
+            // lsplit6
             // 
-            this.label2.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.ForeColor = System.Drawing.Color.Silver;
-            this.label2.Location = new System.Drawing.Point(205, 3);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(5, 24);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "|";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label3
-            // 
-            this.label3.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.ForeColor = System.Drawing.Color.Silver;
-            this.label3.Location = new System.Drawing.Point(141, 3);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(5, 24);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "|";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label4
-            // 
-            this.label4.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.Location = new System.Drawing.Point(81, 3);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(5, 24);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "|";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lProxyUDP
-            // 
-            this.lProxyUDP.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lProxyUDP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lProxyUDP.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyUDP.Location = new System.Drawing.Point(152, 3);
-            this.lProxyUDP.Name = "lProxyUDP";
-            this.lProxyUDP.Size = new System.Drawing.Size(32, 24);
-            this.lProxyUDP.TabIndex = 7;
-            this.lProxyUDP.Text = "UDP:";
-            // 
-            // lProxyTCP
-            // 
-            this.lProxyTCP.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lProxyTCP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lProxyTCP.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxyTCP.Location = new System.Drawing.Point(92, 3);
-            this.lProxyTCP.Name = "lProxyTCP";
-            this.lProxyTCP.Size = new System.Drawing.Size(28, 24);
-            this.lProxyTCP.TabIndex = 6;
-            this.lProxyTCP.Text = "TCP:";
+            this.lsplit6.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lsplit6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsplit6.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lsplit6.ForeColor = System.Drawing.Color.Silver;
+            this.lsplit6.Location = new System.Drawing.Point(81, 3);
+            this.lsplit6.Name = "lsplit6";
+            this.lsplit6.Size = new System.Drawing.Size(5, 24);
+            this.lsplit6.TabIndex = 8;
+            this.lsplit6.Text = "|";
+            this.lsplit6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lProxyTotal
             // 
@@ -1053,7 +988,7 @@
             // tpClientList
             // 
             this.tpClientList.Controls.Add(this.splitterClientList);
-            this.tpClientList.Location = new System.Drawing.Point(3, 33);
+            this.tpClientList.Location = new System.Drawing.Point(-1124, -724);
             this.tpClientList.Name = "tpClientList";
             this.tpClientList.Size = new System.Drawing.Size(1124, 724);
             this.tpClientList.TabIndex = 8;
@@ -1095,7 +1030,7 @@
             this.tlpAuthInfo.ColumnCount = 1;
             this.tlpAuthInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAuthInfo.Controls.Add(this.tAuthList, 0, 1);
-            this.tlpAuthInfo.Controls.Add(this.tableLayoutPanel1, 0, 0);
+            this.tlpAuthInfo.Controls.Add(this.tlpAuthListInfo, 0, 0);
             this.tlpAuthInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpAuthInfo.Location = new System.Drawing.Point(0, 0);
             this.tlpAuthInfo.Margin = new System.Windows.Forms.Padding(0);
@@ -1117,53 +1052,45 @@
             this.tAuthList.Size = new System.Drawing.Size(734, 688);
             this.tAuthList.TabIndex = 7;
             // 
-            // tableLayoutPanel1
+            // tlpAuthListInfo
             // 
-            this.tableLayoutPanel1.ColumnCount = 9;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.lDevicesCount_Value, 7, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lLinksCount_Value, 4, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lAuthCount_Value, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label18, 5, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label19, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lDevicesCount, 6, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lLinksCount, 3, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lAuthCount, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(740, 30);
-            this.tableLayoutPanel1.TabIndex = 6;
+            this.tlpAuthListInfo.ColumnCount = 10;
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpAuthListInfo.Controls.Add(this.lDevicesCount_Value, 8, 1);
+            this.tlpAuthListInfo.Controls.Add(this.lLinksCount_Value, 5, 1);
+            this.tlpAuthListInfo.Controls.Add(this.lAuthCount_Value, 2, 1);
+            this.tlpAuthListInfo.Controls.Add(this.label18, 6, 1);
+            this.tlpAuthListInfo.Controls.Add(this.label19, 3, 1);
+            this.tlpAuthListInfo.Controls.Add(this.lDevicesCount, 7, 1);
+            this.tlpAuthListInfo.Controls.Add(this.lLinksCount, 4, 1);
+            this.tlpAuthListInfo.Controls.Add(this.lAuthCount, 1, 1);
+            this.tlpAuthListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpAuthListInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tlpAuthListInfo.Location = new System.Drawing.Point(0, 0);
+            this.tlpAuthListInfo.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpAuthListInfo.Name = "tlpAuthListInfo";
+            this.tlpAuthListInfo.RowCount = 3;
+            this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpAuthListInfo.Size = new System.Drawing.Size(740, 30);
+            this.tlpAuthListInfo.TabIndex = 6;
             // 
             // lDevicesCount_Value
             // 
             this.lDevicesCount_Value.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lDevicesCount_Value.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lDevicesCount_Value.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lDevicesCount_Value.Location = new System.Drawing.Point(244, 3);
+            this.lDevicesCount_Value.Location = new System.Drawing.Point(262, 3);
             this.lDevicesCount_Value.Name = "lDevicesCount_Value";
             this.lDevicesCount_Value.Size = new System.Drawing.Size(9, 24);
             this.lDevicesCount_Value.TabIndex = 14;
@@ -1174,7 +1101,7 @@
             this.lLinksCount_Value.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lLinksCount_Value.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lLinksCount_Value.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lLinksCount_Value.Location = new System.Drawing.Point(155, 3);
+            this.lLinksCount_Value.Location = new System.Drawing.Point(173, 3);
             this.lLinksCount_Value.Name = "lLinksCount_Value";
             this.lLinksCount_Value.Size = new System.Drawing.Size(9, 24);
             this.lLinksCount_Value.TabIndex = 13;
@@ -1185,7 +1112,7 @@
             this.lAuthCount_Value.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lAuthCount_Value.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lAuthCount_Value.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lAuthCount_Value.Location = new System.Drawing.Point(66, 3);
+            this.lAuthCount_Value.Location = new System.Drawing.Point(84, 3);
             this.lAuthCount_Value.Name = "lAuthCount_Value";
             this.lAuthCount_Value.Size = new System.Drawing.Size(9, 24);
             this.lAuthCount_Value.TabIndex = 12;
@@ -1197,7 +1124,7 @@
             this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label18.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label18.ForeColor = System.Drawing.Color.Silver;
-            this.label18.Location = new System.Drawing.Point(170, 3);
+            this.label18.Location = new System.Drawing.Point(188, 3);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(5, 24);
             this.label18.TabIndex = 9;
@@ -1210,7 +1137,7 @@
             this.label19.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label19.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label19.ForeColor = System.Drawing.Color.Silver;
-            this.label19.Location = new System.Drawing.Point(81, 3);
+            this.label19.Location = new System.Drawing.Point(99, 3);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(5, 24);
             this.label19.TabIndex = 8;
@@ -1222,7 +1149,7 @@
             this.lDevicesCount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lDevicesCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lDevicesCount.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lDevicesCount.Location = new System.Drawing.Point(181, 3);
+            this.lDevicesCount.Location = new System.Drawing.Point(199, 3);
             this.lDevicesCount.Name = "lDevicesCount";
             this.lDevicesCount.Size = new System.Drawing.Size(57, 24);
             this.lDevicesCount.TabIndex = 7;
@@ -1233,7 +1160,7 @@
             this.lLinksCount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lLinksCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lLinksCount.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lLinksCount.Location = new System.Drawing.Point(92, 3);
+            this.lLinksCount.Location = new System.Drawing.Point(110, 3);
             this.lLinksCount.Name = "lLinksCount";
             this.lLinksCount.Size = new System.Drawing.Size(57, 24);
             this.lLinksCount.TabIndex = 6;
@@ -1244,11 +1171,11 @@
             this.lAuthCount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lAuthCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lAuthCount.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lAuthCount.Location = new System.Drawing.Point(3, 3);
+            this.lAuthCount.Location = new System.Drawing.Point(8, 3);
             this.lAuthCount.Name = "lAuthCount";
-            this.lAuthCount.Size = new System.Drawing.Size(57, 24);
+            this.lAuthCount.Size = new System.Drawing.Size(70, 24);
             this.lAuthCount.TabIndex = 5;
-            this.lAuthCount.Text = "记录总数:";
+            this.lAuthCount.Text = "客户端总数:";
             // 
             // tpAccountList
             // 
@@ -2778,6 +2705,227 @@
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
+            // lProxyQueue
+            // 
+            this.lProxyQueue.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lProxyQueue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProxyQueue.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxyQueue.Location = new System.Drawing.Point(181, 3);
+            this.lProxyQueue.Name = "lProxyQueue";
+            this.lProxyQueue.Size = new System.Drawing.Size(44, 24);
+            this.lProxyQueue.TabIndex = 15;
+            this.lProxyQueue.Text = "缓存区:";
+            // 
+            // lFilterExecute
+            // 
+            this.lFilterExecute.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lFilterExecute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFilterExecute.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterExecute.Location = new System.Drawing.Point(92, 3);
+            this.lFilterExecute.Name = "lFilterExecute";
+            this.lFilterExecute.Size = new System.Drawing.Size(57, 24);
+            this.lFilterExecute.TabIndex = 23;
+            this.lFilterExecute.Text = "滤镜执行:";
+            // 
+            // lFilterExecute_CNT
+            // 
+            this.lFilterExecute_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lFilterExecute_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFilterExecute_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterExecute_CNT.Location = new System.Drawing.Point(155, 3);
+            this.lFilterExecute_CNT.Name = "lFilterExecute_CNT";
+            this.lFilterExecute_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lFilterExecute_CNT.TabIndex = 24;
+            this.lFilterExecute_CNT.Text = "0";
+            // 
+            // lsplit7
+            // 
+            this.lsplit7.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lsplit7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsplit7.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lsplit7.ForeColor = System.Drawing.Color.Silver;
+            this.lsplit7.Location = new System.Drawing.Point(170, 3);
+            this.lsplit7.Name = "lsplit7";
+            this.lsplit7.Size = new System.Drawing.Size(5, 24);
+            this.lsplit7.TabIndex = 25;
+            this.lsplit7.Text = "|";
+            this.lsplit7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lTCP_Req
+            // 
+            this.lTCP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lTCP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lTCP_Req.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTCP_Req.Location = new System.Drawing.Point(499, 3);
+            this.lTCP_Req.Name = "lTCP_Req";
+            this.lTCP_Req.Size = new System.Drawing.Size(55, 24);
+            this.lTCP_Req.TabIndex = 26;
+            this.lTCP_Req.Text = "TCP请求:";
+            // 
+            // lTCP_Req_CNT
+            // 
+            this.lTCP_Req_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lTCP_Req_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lTCP_Req_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTCP_Req_CNT.Location = new System.Drawing.Point(560, 3);
+            this.lTCP_Req_CNT.Name = "lTCP_Req_CNT";
+            this.lTCP_Req_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lTCP_Req_CNT.TabIndex = 27;
+            this.lTCP_Req_CNT.Text = "0";
+            // 
+            // lSplit18
+            // 
+            this.lSplit18.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSplit18.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSplit18.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit18.ForeColor = System.Drawing.Color.Silver;
+            this.lSplit18.Location = new System.Drawing.Point(575, 3);
+            this.lSplit18.Name = "lSplit18";
+            this.lSplit18.Size = new System.Drawing.Size(5, 24);
+            this.lSplit18.TabIndex = 28;
+            this.lSplit18.Text = "|";
+            this.lSplit18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lTCP_Resp
+            // 
+            this.lTCP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lTCP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lTCP_Resp.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTCP_Resp.Location = new System.Drawing.Point(586, 3);
+            this.lTCP_Resp.Name = "lTCP_Resp";
+            this.lTCP_Resp.Size = new System.Drawing.Size(55, 24);
+            this.lTCP_Resp.TabIndex = 29;
+            this.lTCP_Resp.Text = "TCP响应:";
+            // 
+            // lTCP_Resp_CNT
+            // 
+            this.lTCP_Resp_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lTCP_Resp_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lTCP_Resp_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTCP_Resp_CNT.Location = new System.Drawing.Point(647, 3);
+            this.lTCP_Resp_CNT.Name = "lTCP_Resp_CNT";
+            this.lTCP_Resp_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lTCP_Resp_CNT.TabIndex = 30;
+            this.lTCP_Resp_CNT.Text = "0";
+            // 
+            // lsplit2
+            // 
+            this.lsplit2.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lsplit2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lsplit2.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lsplit2.ForeColor = System.Drawing.Color.Silver;
+            this.lsplit2.Location = new System.Drawing.Point(412, 3);
+            this.lsplit2.Name = "lsplit2";
+            this.lsplit2.Size = new System.Drawing.Size(5, 24);
+            this.lsplit2.TabIndex = 32;
+            this.lsplit2.Text = "|";
+            this.lsplit2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lProxyDevices
+            // 
+            this.lProxyDevices.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lProxyDevices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProxyDevices.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxyDevices.Location = new System.Drawing.Point(423, 3);
+            this.lProxyDevices.Name = "lProxyDevices";
+            this.lProxyDevices.Size = new System.Drawing.Size(44, 24);
+            this.lProxyDevices.TabIndex = 33;
+            this.lProxyDevices.Text = "设备数:";
+            // 
+            // lProxyDevices_CNT
+            // 
+            this.lProxyDevices_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lProxyDevices_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProxyDevices_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxyDevices_CNT.Location = new System.Drawing.Point(473, 3);
+            this.lProxyDevices_CNT.Name = "lProxyDevices_CNT";
+            this.lProxyDevices_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lProxyDevices_CNT.TabIndex = 34;
+            this.lProxyDevices_CNT.Text = "0";
+            // 
+            // lSplit11
+            // 
+            this.lSplit11.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSplit11.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSplit11.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit11.ForeColor = System.Drawing.Color.Silver;
+            this.lSplit11.Location = new System.Drawing.Point(488, 3);
+            this.lSplit11.Name = "lSplit11";
+            this.lSplit11.Size = new System.Drawing.Size(5, 24);
+            this.lSplit11.TabIndex = 35;
+            this.lSplit11.Text = "|";
+            this.lSplit11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.ForeColor = System.Drawing.Color.Silver;
+            this.label2.Location = new System.Drawing.Point(662, 3);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(5, 24);
+            this.label2.TabIndex = 36;
+            this.label2.Text = "|";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lUDP_Req
+            // 
+            this.lUDP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lUDP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUDP_Req.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lUDP_Req.Location = new System.Drawing.Point(673, 3);
+            this.lUDP_Req.Name = "lUDP_Req";
+            this.lUDP_Req.Size = new System.Drawing.Size(59, 24);
+            this.lUDP_Req.TabIndex = 37;
+            this.lUDP_Req.Text = "UDP请求:";
+            // 
+            // lUDP_Req_CNT
+            // 
+            this.lUDP_Req_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lUDP_Req_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUDP_Req_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lUDP_Req_CNT.Location = new System.Drawing.Point(738, 3);
+            this.lUDP_Req_CNT.Name = "lUDP_Req_CNT";
+            this.lUDP_Req_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lUDP_Req_CNT.TabIndex = 38;
+            this.lUDP_Req_CNT.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.ForeColor = System.Drawing.Color.Silver;
+            this.label5.Location = new System.Drawing.Point(753, 3);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(5, 24);
+            this.label5.TabIndex = 39;
+            this.label5.Text = "|";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lUDP_Resp
+            // 
+            this.lUDP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lUDP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUDP_Resp.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lUDP_Resp.Location = new System.Drawing.Point(764, 3);
+            this.lUDP_Resp.Name = "lUDP_Resp";
+            this.lUDP_Resp.Size = new System.Drawing.Size(59, 24);
+            this.lUDP_Resp.TabIndex = 40;
+            this.lUDP_Resp.Text = "UDP响应:";
+            // 
+            // lUDP_Resp_CNT
+            // 
+            this.lUDP_Resp_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lUDP_Resp_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUDP_Resp_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lUDP_Resp_CNT.Location = new System.Drawing.Point(829, 3);
+            this.lUDP_Resp_CNT.Name = "lUDP_Resp_CNT";
+            this.lUDP_Resp_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lUDP_Resp_CNT.TabIndex = 41;
+            this.lUDP_Resp_CNT.Text = "0";
+            // 
             // ProxyModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -2819,8 +2967,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitterClientList)).EndInit();
             this.splitterClientList.ResumeLayout(false);
             this.tlpAuthInfo.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.tlpAuthListInfo.ResumeLayout(false);
+            this.tlpAuthListInfo.PerformLayout();
             this.tpAccountList.ResumeLayout(false);
             this.tlpAccountList.ResumeLayout(false);
             this.tlpAccountListButton.ResumeLayout(false);
@@ -2906,7 +3054,7 @@
         private AntdUI.Splitter splitterClientList;
         private AntdUI.Tree treeClientList;
         private System.Windows.Forms.TableLayoutPanel tlpAuthInfo;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tlpAuthListInfo;
         private AntdUI.Label lDevicesCount_Value;
         private AntdUI.Label lLinksCount_Value;
         private AntdUI.Label lAuthCount_Value;
@@ -2921,20 +3069,13 @@
         private System.Windows.Forms.TableLayoutPanel tlpPacketListInfo;
         private AntdUI.Label lProxyLinks_CNT;
         private AntdUI.Label lProxyLinks;
-        private AntdUI.Label label15;
+        private AntdUI.Label lsplit15;
         private AntdUI.Label lProxyAccount_CNT;
         private AntdUI.Label lProxyAccount;
-        private AntdUI.Label label12;
+        private AntdUI.Label lsplit8;
         private AntdUI.Label lProxyQueue_CNT;
-        private AntdUI.Label lProxyQueue;
-        private AntdUI.Label lProxyUDP_CNT;
-        private AntdUI.Label lProxyTCP_CNT;
         private AntdUI.Label lProxyTotal_CNT;
-        private AntdUI.Label label2;
-        private AntdUI.Label label3;
-        private AntdUI.Label label4;
-        private AntdUI.Label lProxyUDP;
-        private AntdUI.Label lProxyTCP;
+        private AntdUI.Label lsplit6;
         private AntdUI.Label lProxyTotal;
         private AntdUI.Table tProxyList;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
@@ -3039,6 +3180,25 @@
         private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
         private AntdUI.Button button1;
         private AntdUI.Input txtExtraction;
+        private AntdUI.Label lProxyQueue;
+        private AntdUI.Label lFilterExecute;
+        private AntdUI.Label lFilterExecute_CNT;
+        private AntdUI.Label lsplit7;
+        private AntdUI.Label lProxyDevices_CNT;
+        private AntdUI.Label lProxyDevices;
+        private AntdUI.Label lsplit2;
+        private AntdUI.Label lTCP_Resp_CNT;
+        private AntdUI.Label lTCP_Resp;
+        private AntdUI.Label lSplit18;
+        private AntdUI.Label lTCP_Req_CNT;
+        private AntdUI.Label lTCP_Req;
+        private AntdUI.Label lSplit11;
+        private AntdUI.Label lUDP_Resp_CNT;
+        private AntdUI.Label lUDP_Resp;
+        private AntdUI.Label label5;
+        private AntdUI.Label lUDP_Req_CNT;
+        private AntdUI.Label lUDP_Req;
+        private AntdUI.Label label2;
     }
 }
 

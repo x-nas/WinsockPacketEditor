@@ -3792,7 +3792,7 @@ namespace WinsockPacketEditor
 
             public static class Proxy
             {
-                public static ulong ProxyTotal_CNT, ProxyTCP_CNT, ProxyUDP_CNT;
+                public static ulong ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static IPAddress[] ProxyServerIP = null;
                 public static IPAddress ProxyTCP_IP = null;
@@ -4681,6 +4681,7 @@ namespace WinsockPacketEditor
                                     {
                                         pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
 
+                                        ProxyConfig.Proxy.UDP_Req_CNT++;
                                         Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bRequestData.Length);
                                         Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
 
@@ -4717,6 +4718,7 @@ namespace WinsockPacketEditor
                             {
                                 pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
 
+                                ProxyConfig.Proxy.UDP_Resp_CNT++;
                                 Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bResponseData.Length);
                                 Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
 
@@ -4725,8 +4727,7 @@ namespace WinsockPacketEditor
 
                             #endregion
                         }
-
-                        ProxyConfig.Proxy.ProxyUDP_CNT++;
+                        
                         ProxyConfig.Proxy.StartUdpReceive(pe);                        
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
@@ -5882,17 +5883,17 @@ namespace WinsockPacketEditor
                             switch (DataType)
                             {
                                 case ProxyConfig.Proxy.DataType.Request:
+                                    ProxyConfig.Proxy.TCP_Req_CNT++;
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bBuffer.Length);
                                     break;
 
                                 case ProxyConfig.Proxy.DataType.Response:
+                                    ProxyConfig.Proxy.TCP_Resp_CNT++;
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
                                     break;
-                            }
-
-                            ProxyConfig.Proxy.ProxyTCP_CNT++;
+                            }                            
 
                             if (!ProxyConfig.Proxy.SpeedMode)
                             {
@@ -5978,7 +5979,7 @@ namespace WinsockPacketEditor
                 {
                     if (ProxyConfig.Queue.qProxyExecute.TryDequeue(out ProxyExecute pe))
                     {
-                        lstProxyExecute.Add(pe);
+                        ProxyConfig.List.lstProxyExecute.Add(pe);
                     }
                 }
 

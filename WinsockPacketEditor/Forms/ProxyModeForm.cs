@@ -362,13 +362,6 @@ namespace WinsockPacketEditor
         private void InitTable_AuthList()
         {
             tAuthList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return (rowindex + 1);
-                    },
-                }.SetFixed().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AuthTime", "认证时间").SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AuthIP", "IP地址").SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AID", "账号", AntdUI.ColumnAlign.Center)
@@ -1225,14 +1218,23 @@ namespace WinsockPacketEditor
         private void bgwProxyList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.tProxyList.Refresh();
-            this.tSystemLog.Refresh();
+            this.tSystemLog.Refresh();            
 
-            this.lProxyTotal_CNT.Text = (Operate.ProxyConfig.Proxy.ProxyTCP_CNT + Operate.ProxyConfig.Proxy.ProxyUDP_CNT).ToString();
-            this.lProxyTCP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyTCP_CNT.ToString();
-            this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyUDP_CNT.ToString();
+            ulong ProxyTotal_CNT = 
+                Operate.ProxyConfig.Proxy.TCP_Req_CNT + 
+                Operate.ProxyConfig.Proxy.TCP_Resp_CNT + 
+                Operate.ProxyConfig.Proxy.UDP_Req_CNT + 
+                Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
+
+            this.lProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
+            this.lTCP_Req_CNT.Text = Operate.ProxyConfig.Proxy.TCP_Req_CNT.ToString();
+            this.lTCP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.TCP_Resp_CNT.ToString();
+            this.lUDP_Req_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Req_CNT.ToString();
+            this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
+            this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
             this.lProxyLinks_CNT.Text = Operate.ProxyConfig.List.lstProxyExecute.Count.ToString();
-
+            this.lProxyDevices_CNT.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();            
             this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
             this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
             this.lDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromAuthList().ToString();
@@ -2884,8 +2886,10 @@ namespace WinsockPacketEditor
                 }
 
                 Operate.ProxyConfig.Proxy.ProxyTotal_CNT = 0;
-                Operate.ProxyConfig.Proxy.ProxyTCP_CNT = 0;
-                Operate.ProxyConfig.Proxy.ProxyUDP_CNT = 0;
+                Operate.ProxyConfig.Proxy.TCP_Req_CNT = 0;
+                Operate.ProxyConfig.Proxy.TCP_Resp_CNT = 0;
+                Operate.ProxyConfig.Proxy.UDP_Req_CNT = 0;
+                Operate.ProxyConfig.Proxy.UDP_Resp_CNT = 0;
 
                 string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyServerIP", "代理服务器IP地址: TCP [{0}] UDP [{1}]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);
