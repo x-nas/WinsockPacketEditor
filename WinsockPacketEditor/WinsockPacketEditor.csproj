@@ -198,8 +198,9 @@
     <Compile Include="ClassObject\MapRemote.cs" />
     <Compile Include="ClassObject\PacketInfo.cs" />
     <Compile Include="ClassObject\ProcessInfo.cs" />
-    <Compile Include="ClassObject\ProxyExecute.cs" />
+    <Compile Include="ClassObject\ProxyTCP.cs" />
     <Compile Include="ClassObject\ProxyInfo.cs" />
+    <Compile Include="ClassObject\ProxyUDP.cs" />
     <Compile Include="ClassObject\RobotExecute.cs" />
     <Compile Include="ClassObject\RobotInfo.cs" />
     <Compile Include="ClassObject\SendExecute.cs" />

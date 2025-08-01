@@ -6,11 +6,10 @@ using System.Reflection;
 
 namespace WinsockPacketEditor
 {
-    public class ProxyExecute : IDisposable
+    public class ProxyTCP : IDisposable
     {
         private volatile bool _isDisposed;
         private readonly object _closeLock = new object();
-        private readonly object _udpInitLock = new object();
 
         public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; set; }
         public Operate.ProxyConfig.Proxy.ProxyStep ProxyStep { get; set; }
@@ -19,47 +18,11 @@ namespace WinsockPacketEditor
         public Operate.ProxyConfig.Proxy.AddressType AddressType { get; set; }
         public Guid AID { get; set; }
         public TCPClient TCP_Client { get; }
-        public TCPServer TCP_Server { get; }
-        public UDPRelay UDP_Relay
-        {
-            get
-            {
-                if (_udpRelay == null || !_udpRelay.IsActive)
-                {
-                    InitializeUdpRelay();
-                }
+        public TCPServer TCP_Server { get; }        
 
-                return _udpRelay;
-            }
-        }
+        #region//ProxyTCP
 
-        #region//初始化UDP
-
-        private UDPRelay _udpRelay;
-
-        private void InitializeUdpRelay()
-        {
-            lock (_udpInitLock)
-            {
-                if (_udpRelay == null || !_udpRelay.IsActive)
-                {
-                    try
-                    {
-                        _udpRelay = new UDPRelay(new IPEndPoint(Operate.ProxyConfig.Proxy.ProxyUDP_IP, 0));
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
-            }
-        }
-
-        #endregion
-
-        #region//ProxyExecute
-
-        public ProxyExecute(Socket clientSocket, int bufferSize)
+        public ProxyTCP(Socket clientSocket, int bufferSize)
         {
             try
             {
@@ -244,59 +207,7 @@ namespace WinsockPacketEditor
             public void Dispose() => Close();
         }
 
-        #endregion
-
-        #region//UDPRelay
-
-        public class UDPRelay : IDisposable
-        {
-            public UdpClient ClientUDP { get; set; }
-            public IPEndPoint ClientUDP_EndPoint { get; set; }
-            public DateTime ClientUDP_Time { get; set; }
-            public bool IsActive { get; private set; }
-
-            public UDPRelay(IPEndPoint UDPClient)
-            {
-                try
-                {
-                    this.ClientUDP = new UdpClient(UDPClient);
-                    this.ClientUDP_Time = DateTime.Now;
-                    this.IsActive = true;
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            public void Close()
-            {
-                try
-                {
-                    if (!IsActive) return;
-
-                    IsActive = false;
-
-                    try
-                    {
-                        ClientUDP?.Close();
-                        ClientUDP?.Dispose();
-                    }
-                    finally
-                    {
-                        ClientUDP = null;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }                
-            }
-
-            public void Dispose() => Close();
-        }
-
-        #endregion
+        #endregion        
 
         #region //IDisposable
 
@@ -328,10 +239,6 @@ namespace WinsockPacketEditor
                     {
                         TCP_Server?.Close();
                         TCP_Client?.Close();
-                        _udpRelay?.Close();
-                        TCP_Server?.Dispose();
-                        TCP_Client?.Dispose();
-                        _udpRelay?.Dispose();
                     }
                 }
             }
@@ -341,7 +248,7 @@ namespace WinsockPacketEditor
             }            
         }
 
-        ~ProxyExecute()
+        ~ProxyTCP()
         {
             Dispose(false);
         }

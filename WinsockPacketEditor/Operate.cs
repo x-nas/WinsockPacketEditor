@@ -3808,7 +3808,7 @@ namespace WinsockPacketEditor
                 public static string ExternalProxy_AppointPort = "80,8080,443,8443", ExternalProxy_UserName, ExternalProxy_PassWord;
                 public static int SocketBufferSize = 8192;
                 public static ushort ProxyPort = 1080;
-                public static int UDPCloseTime = 60;
+                public static int UDPCloseTime = 30;
                 public static long Total_Request = 0;
                 public static long Total_Response = 0;
                 public static int MaxChartPoint = 100;
@@ -3903,7 +3903,7 @@ namespace WinsockPacketEditor
                 public static async Task HandleClient(Socket clientSocket)
                 {
                     bool acquired = false;
-                    ProxyExecute pe = null;
+                    ProxyTCP pe = null;
 
                     try
                     {
@@ -3914,7 +3914,7 @@ namespace WinsockPacketEditor
                             clientSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                             clientSocket.NoDelay = true;
 
-                            pe = new ProxyExecute(clientSocket, ProxyConfig.Proxy.SocketBufferSize);
+                            pe = new ProxyTCP(clientSocket, ProxyConfig.Proxy.SocketBufferSize);
                             ProxyConfig.Proxy.StartReceive(pe);
                         }
                         else
@@ -3942,7 +3942,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                private static void StartReceive(ProxyExecute pe)
+                private static void StartReceive(ProxyTCP pe)
                 {
                     try
                     {
@@ -3973,14 +3973,21 @@ namespace WinsockPacketEditor
 
                 private static void ReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
-                    ProxyExecute pe = (ProxyExecute)args.UserToken;
+                    ProxyTCP pe = null;
 
                     try
                     {
                         if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            pe.TCP_Client.Close();
-                            args.Dispose();
+                            args?.Dispose();
+                            return;
+                        }
+
+                        pe = (ProxyTCP)args.UserToken;
+                        if (pe == null)
+                        {
+                            pe?.Dispose();
+                            args?.Dispose();
                             return;
                         }
 
@@ -4036,14 +4043,14 @@ namespace WinsockPacketEditor
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
-                        pe.TCP_Client.Close();
-                        args.Dispose();
+                        pe?.Dispose();
+                        args?.Dispose();
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe.TCP_Client.Close();
-                        args.Dispose();
+                        pe?.Dispose();
+                        args?.Dispose();
                     }
                 }
 
@@ -4051,7 +4058,7 @@ namespace WinsockPacketEditor
 
                 #region//握手过程                
 
-                private static void Handshake(ProxyExecute pe, ReadOnlySpan<byte> bData)
+                private static void Handshake(ProxyTCP pe, ReadOnlySpan<byte> bData)
                 {
                     try
                     {
@@ -4128,7 +4135,7 @@ namespace WinsockPacketEditor
 
                 #region//验证账号密码
 
-                private static void AuthUserName(ProxyExecute pe, ReadOnlySpan<byte> bData)
+                private static void AuthUserName(ProxyTCP pe, ReadOnlySpan<byte> bData)
                 {
                     try
                     {
@@ -4205,7 +4212,7 @@ namespace WinsockPacketEditor
 
                 #region//执行命令
 
-                private static void Command(ProxyExecute pe, ReadOnlySpan<byte> bData)
+                private static void Command(ProxyTCP pe, ReadOnlySpan<byte> bData)
                 {
                     try
                     {
@@ -4337,7 +4344,7 @@ namespace WinsockPacketEditor
                                                     pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
                                                     ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
-                                                    ProxyConfig.Queue.ProxyExecute_ToQueue(pe);
+                                                    ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
                                                 }
                                                 catch (SocketException)
                                                 {
@@ -4359,7 +4366,7 @@ namespace WinsockPacketEditor
                                                     pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
                                                     ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
-                                                    ProxyConfig.Queue.ProxyExecute_ToQueue(pe);
+                                                    ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
                                                 }
                                                 catch (SocketException)
                                                 {
@@ -4379,13 +4386,14 @@ namespace WinsockPacketEditor
 
                                         try
                                         {
-                                            ProxyConfig.Proxy.StartUdpReceive(pe);                                            
+                                            ProxyUDP pu = ProxyUDPManager.GetOrCreateUdpClient((IPEndPoint)pe.TCP_Client.Socket.RemoteEndPoint, ProxyConfig.Proxy.ProxyUDP_IP);
+                                            pu.UpdateActivity();
 
                                             ReadOnlySpan<byte> bServerUDP_IP = ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
-                                            ReadOnlySpan<byte> bServerUDP_Port = BitConverter.GetBytes(((IPEndPoint)pe.UDP_Relay.ClientUDP.Client.LocalEndPoint).Port);
+                                            ReadOnlySpan<byte> bServerUDP_Port = BitConverter.GetBytes(((IPEndPoint)pu.ClientUDP.Client.LocalEndPoint).Port);
 
                                             ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));
-                                            ProxyConfig.Queue.ProxyExecute_ToQueue(pe);
+                                            ProxyConfig.Queue.ProxyUDP_ToQueue(pu);
                                         }
                                         catch (SocketException)
                                         {
@@ -4426,7 +4434,7 @@ namespace WinsockPacketEditor
 
                 #region//处理 TCP 请求数据
 
-                private static void ForwardData(ProxyExecute pe, Span<byte> bData)
+                private static void ForwardData(ProxyTCP pe, Span<byte> bData)
                 {
                     try
                     {
@@ -4542,7 +4550,7 @@ namespace WinsockPacketEditor
 
                 #region//处理 TCP 响应数据
 
-                private static void StartServerReceive(ProxyExecute pe)
+                private static void StartServerReceive(ProxyTCP pe)
                 {
                     try
                     {
@@ -4569,24 +4577,34 @@ namespace WinsockPacketEditor
 
                 private static void ServerReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
-                    ProxyExecute pe = (ProxyExecute)args.UserToken;
+                    ProxyTCP pe = null;
 
                     try
                     {
+                        if (args == null)
+                        {
+                            return;
+                        }                        
+
                         if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            pe.TCP_Server.Close();
-                            pe.TCP_Client.Close();
-                            args.Dispose();
+                            args?.Dispose();
+                            return;
+                        }
+
+                        pe = (ProxyTCP)args.UserToken;
+                        if (pe?.TCP_Server == null)
+                        {
+                            pe?.Dispose();
+                            args?.Dispose();                            
                             return;
                         }
 
                         int bytesRead = args.BytesTransferred;
                         if (bytesRead <= 0 || bytesRead > pe.TCP_Server.Buffer.Length)
                         {
-                            pe.TCP_Server.Close();
-                            pe.TCP_Client.Close();
-                            args.Dispose();
+                            pe?.Dispose();
+                            args?.Dispose();
                             return;
                         }
 
@@ -4601,9 +4619,8 @@ namespace WinsockPacketEditor
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
-                        pe.TCP_Server.Close();
-                        pe.TCP_Client.Close();
-                        args.Dispose();
+                        pe?.Dispose();
+                        args?.Dispose();
                     }
                     catch (ObjectDisposedException)
                     {
@@ -4611,10 +4628,9 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, pe.TCP_Server.Address + " - " + ex.Message);
-                        pe.TCP_Server.Close();
-                        pe.TCP_Client.Close();
-                        args.Dispose();
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        pe?.Dispose();
+                        args?.Dispose();
                     }
                 }
 
@@ -4622,13 +4638,13 @@ namespace WinsockPacketEditor
 
                 #region//处理 UDP 中继数据
 
-                private static void StartUdpReceive(ProxyExecute pe)
+                public static void StartUdpReceive(ProxyUDP pu)
                 {
                     try
                     {
-                        if (pe.UDP_Relay.ClientUDP != null)
+                        if (pu.ClientUDP != null)
                         {
-                            pe.UDP_Relay.ClientUDP.BeginReceive(new AsyncCallback(UdpReceiveCallback), pe);
+                            pu.ClientUDP.BeginReceive(new AsyncCallback(UdpReceiveCallback), pu);
                         }
                     }
                     catch (Exception ex)
@@ -4639,12 +4655,12 @@ namespace WinsockPacketEditor
 
                 private static void UdpReceiveCallback(IAsyncResult ar)
                 {
-                    if (ar == null || !(ar.AsyncState is ProxyExecute pe))
+                    if (ar == null || !(ar.AsyncState is ProxyUDP pu))
                     {
                         return;
                     }
 
-                    if (pe.UDP_Relay.ClientUDP == null)
+                    if (pu.ClientUDP == null)
                     {
                         return;
                     }
@@ -4653,7 +4669,7 @@ namespace WinsockPacketEditor
                     {
                         IPEndPoint epRemote = new IPEndPoint(IPAddress.Any, 0);
 
-                        byte[] bReceivedData = ProxyConfig.Proxy.ReceiveUDPData(pe.UDP_Relay.ClientUDP, ar, ref epRemote);
+                        byte[] bReceivedData = ProxyConfig.Proxy.ReceiveUDPData(pu.ClientUDP, ar, ref epRemote);
                         if (bReceivedData.Length == 0 || epRemote.Address.Equals(IPAddress.Any) || epRemote.Port == 0)
                         {
                             return;
@@ -4670,7 +4686,7 @@ namespace WinsockPacketEditor
                                 addressType == ProxyConfig.Proxy.AddressType.IPv6 ||
                                 addressType == ProxyConfig.Proxy.AddressType.Domain)
                             {
-                                pe.UDP_Relay.ClientUDP_EndPoint = epRemote;
+                                pu.ClientUDP_EndPoint = epRemote;
 
                                 ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
                                 IPEndPoint targetEndPoint = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
@@ -4679,13 +4695,12 @@ namespace WinsockPacketEditor
                                     Span<byte> bRequestData = ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
                                     if (!bRequestData.IsEmpty)
                                     {
-                                        pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
-
                                         ProxyConfig.Proxy.UDP_Req_CNT++;
                                         Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bRequestData.Length);
                                         Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
 
-                                        ProxyConfig.Proxy.DoFilter_UDP(pe, targetEndPoint, bRequestData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.UDP_Req);
+                                        ProxyConfig.Proxy.DoFilter_UDP(pu, targetEndPoint, bRequestData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.UDP_Req);
+                                        pu.UpdateActivity();
                                     }
                                 }
                             }
@@ -4696,13 +4711,13 @@ namespace WinsockPacketEditor
                         {
                             #region//处理 UDP 响应数据
 
-                            if (pe.UDP_Relay.ClientUDP_EndPoint == null)
+                            if (pu.ClientUDP_EndPoint == null)
                             {
                                 return;
                             }
 
-                            ReadOnlySpan<byte> bIP = pe.UDP_Relay.ClientUDP_EndPoint.Address.GetAddressBytes();
-                            ushort port = ((ushort)pe.UDP_Relay.ClientUDP_EndPoint.Port);
+                            ReadOnlySpan<byte> bIP = pu.ClientUDP_EndPoint.Address.GetAddressBytes();
+                            ushort port = ((ushort)pu.ClientUDP_EndPoint.Port);
                             ReadOnlySpan<byte> bPort = new byte[2] { (byte)(port >> 8), (byte)port };
 
                             Span<byte> bResponseData = stackalloc byte[4 + bIP.Length + bPort.Length + bData.Length];
@@ -4716,19 +4731,18 @@ namespace WinsockPacketEditor
 
                             if (!bResponseData.IsEmpty)
                             {
-                                pe.UDP_Relay.ClientUDP_Time = DateTime.Now;
-
                                 ProxyConfig.Proxy.UDP_Resp_CNT++;
                                 Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bResponseData.Length);
                                 Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
 
-                                ProxyConfig.Proxy.DoFilter_UDP(pe, epRemote, bResponseData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.UDP_Resp);
+                                ProxyConfig.Proxy.DoFilter_UDP(pu, epRemote, bResponseData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.UDP_Resp);
+                                pu.UpdateActivity();
                             }
 
                             #endregion
                         }
                         
-                        ProxyConfig.Proxy.StartUdpReceive(pe);                        
+                        ProxyConfig.Proxy.StartUdpReceive(pu);                        
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
@@ -4737,7 +4751,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        ProxyConfig.Proxy.StartUdpReceive(pe);
+                        ProxyConfig.Proxy.StartUdpReceive(pu);
                     }
                 }
 
@@ -4804,7 +4818,7 @@ namespace WinsockPacketEditor
 
                 #region//执行滤镜 - 代理模式
 
-                public static void DoFilter_TCP(ProxyExecute pe, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
+                public static void DoFilter_TCP(ProxyTCP pe, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
                 {
                     try
                     {                        
@@ -4868,7 +4882,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                public static void DoFilter_UDP(ProxyExecute pe, IPEndPoint epRemote, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
+                public static void DoFilter_UDP(ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
                 {
                     try
                     {
@@ -4880,16 +4894,16 @@ namespace WinsockPacketEditor
                                 break;
 
                             case ProxyConfig.Proxy.DataType.Response:
-                                epSend = pe.UDP_Relay.ClientUDP_EndPoint;
+                                epSend = pu.ClientUDP_EndPoint;
                                 break;
                         }
 
-                        if (epSend == null || pe?.UDP_Relay?.ClientUDP?.Client == null)
+                        if (epSend == null || pu?.ClientUDP?.Client == null)
                         {
                             return;
                         }
 
-                        int iSocket = pe.UDP_Relay.ClientUDP.Client.Handle.ToInt32();
+                        int iSocket = pu.ClientUDP.Client.Handle.ToInt32();
 
                         Int32 res = 0;
                         byte[] bRawBuffer = bData.ToArray();
@@ -4905,10 +4919,10 @@ namespace WinsockPacketEditor
 
                         if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
                         {
-                            res = ProxyConfig.Proxy.SendUDPData(pe.UDP_Relay.ClientUDP, bNewBuffer, epSend);
+                            res = ProxyConfig.Proxy.SendUDPData(pu.ClientUDP, bNewBuffer, epSend);
                         }
 
-                        string ClientAddr = $"{pe.UDP_Relay.ClientUDP_EndPoint.Address.ToString()}:{pe.UDP_Relay.ClientUDP_EndPoint.Port.ToString()}";
+                        string ClientAddr = $"{pu.ClientUDP_EndPoint.Address.ToString()}:{pu.ClientUDP_EndPoint.Port.ToString()}";
                         string ServerAddr = $"{epRemote.Address.ToString()}:{epRemote.Port.ToString()}";
 
                         _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
@@ -4935,7 +4949,7 @@ namespace WinsockPacketEditor
 
                 #region//获取客户端的IP地址
 
-                public static string GetClientIPAddress(ProxyExecute pe)
+                public static string GetClientIPAddress(ProxyTCP pe)
                 {
                     try
                     {
@@ -5842,17 +5856,27 @@ namespace WinsockPacketEditor
 
             public static class Queue
             {
-                public static ConcurrentQueue<ProxyExecute> qProxyExecute = new ConcurrentQueue<ProxyExecute>();                
+                public static ConcurrentQueue<ProxyTCP> qProxyTCP = new ConcurrentQueue<ProxyTCP>();
+                public static ConcurrentQueue<ProxyUDP> qProxyUDP = new ConcurrentQueue<ProxyUDP>();
                 public static ConcurrentQueue<ProxyInfo> qProxyInfo = new ConcurrentQueue<ProxyInfo>();
 
-                #region//代理入队列
+                #region//TCP代理入队列
 
-                public static void ProxyExecute_ToQueue(ProxyExecute spc)
+                public static void ProxyTCP_ToQueue(ProxyTCP pt)
                 {
-                    qProxyExecute.Enqueue(spc);
+                    qProxyTCP.Enqueue(pt);
                 }
 
-                #endregion                
+                #endregion
+
+                #region//UDP代理入队列
+
+                public static void ProxyUDP_ToQueue(ProxyUDP pu)
+                {
+                    qProxyUDP.Enqueue(pu);
+                }
+
+                #endregion
 
                 #region//代理数据入队列
 
@@ -5925,20 +5949,35 @@ namespace WinsockPacketEditor
 
                 #region//清除队列数据
 
-                public static void ResetProxyExecuteQueue()
+                public static void ResetProxyTCPQueue()
                 {
                     try
                     {
-                        while (!qProxyExecute.IsEmpty)
+                        while (!qProxyTCP.IsEmpty)
                         {
-                            qProxyExecute.TryDequeue(out ProxyExecute spc);
+                            qProxyTCP.TryDequeue(out ProxyTCP pt);
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
-                }                
+                }
+
+                public static void ResetProxyUDPQueue()
+                {
+                    try
+                    {
+                        while (!qProxyUDP.IsEmpty)
+                        {
+                            qProxyUDP.TryDequeue(out ProxyUDP pu);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
 
                 public static void ResetProxyInfoQueue()
                 {
@@ -5970,16 +6009,29 @@ namespace WinsockPacketEditor
                 public static decimal AutoClear_Value = 5000;
                 public static ProxyInfo piSelect = null;                
 
-                public static BindingList<ProxyExecute> lstProxyExecute = new BindingList<ProxyExecute>();
+                public static BindingList<ProxyTCP> lstProxyTCP = new BindingList<ProxyTCP>();
+                public static BindingList<ProxyUDP> lstProxyUDP = new BindingList<ProxyUDP>();
                 public static BindingList<ProxyInfo> lstProxyInfo = new BindingList<ProxyInfo>();                
 
-                #region//代理入列表
+                #region//TCP代理入列表
 
-                public static void ProxyExecute_ToList()
+                public static void ProxyTCP_ToList()
                 {
-                    if (ProxyConfig.Queue.qProxyExecute.TryDequeue(out ProxyExecute pe))
+                    if (ProxyConfig.Queue.qProxyTCP.TryDequeue(out ProxyTCP pt))
                     {
-                        ProxyConfig.List.lstProxyExecute.Add(pe);
+                        ProxyConfig.List.lstProxyTCP.Add(pt);
+                    }
+                }
+
+                #endregion                
+
+                #region//UDP代理入列表
+
+                public static void ProxyUDP_ToList()
+                {
+                    if (ProxyConfig.Queue.qProxyUDP.TryDequeue(out ProxyUDP pu))
+                    {
+                        ProxyConfig.List.lstProxyUDP.Add(pu);
                     }
                 }
 
@@ -6007,13 +6059,13 @@ namespace WinsockPacketEditor
 
                 #region//查找代理列表
 
-                public static List<ProxyExecute> GetProxyExecute_ByAccountID(Guid AID)
+                public static List<ProxyTCP> GetProxyExecute_ByAccountID(Guid AID)
                 {
                     try
                     {
                         if (AID != null)
                         {
-                            return new List<ProxyExecute>(ProxyConfig.List.lstProxyExecute.Where(x => x.AID == AID));
+                            return new List<ProxyTCP>(ProxyConfig.List.lstProxyTCP.Where(x => x.AID == AID));
                         }
                     }
                     catch (Exception ex)
@@ -6024,16 +6076,16 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
-                public static List<ProxyExecute> GetProxyExecute_ByAIDandIP(Guid AID, string ClientIP)
+                public static List<ProxyTCP> GetProxyTCP_ByAIDandIP(Guid AID, string ClientIP)
                 {
                     try
                     {
                         if (AID == Guid.Empty || string.IsNullOrWhiteSpace(ClientIP))
                         {
-                            return new List<ProxyExecute>();
+                            return new List<ProxyTCP>();
                         }
 
-                        var proxyList = ProxyConfig.List.lstProxyExecute;
+                        var proxyList = ProxyConfig.List.lstProxyTCP;
 
                         return proxyList
                             .Where(x => x != null &&
@@ -6045,7 +6097,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        return new List<ProxyExecute>();
+                        return new List<ProxyTCP>();
                     }
                 }
 
@@ -6100,13 +6152,13 @@ namespace WinsockPacketEditor
 
                 #region//关闭代理列表中的指定账号的链接
 
-                public static void CloseProxyExecute_ByAID(Guid AID)
+                public static void CloseProxyTCP_ByAID(Guid AID)
                 {
                     try
                     {
-                        List<ProxyExecute> peList = GetProxyExecute_ByAccountID(AID);
+                        List<ProxyTCP> peList = GetProxyExecute_ByAccountID(AID);
 
-                        foreach (ProxyExecute pe in peList)
+                        foreach (ProxyTCP pe in peList)
                         {
                             pe.TCP_Client.Close();
                             pe.TCP_Server.Close();
@@ -6122,9 +6174,9 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        List<ProxyExecute> peList = GetProxyExecute_ByAIDandIP(AID, ClientIP);
+                        List<ProxyTCP> peList = GetProxyTCP_ByAIDandIP(AID, ClientIP);
 
-                        foreach (ProxyExecute pe in peList)
+                        foreach (ProxyTCP pe in peList)
                         {
                             pe.TCP_Client.Close();
                             pe.TCP_Server.Close();
@@ -6140,14 +6192,14 @@ namespace WinsockPacketEditor
 
                 #region//清除代理列表中的指定数据
 
-                public static void ClearProxyExecute(ProxyExecute pe)
+                public static void ClearProxyTCP(ProxyTCP pt)
                 {
                     try
                     {
-                        var list = ProxyConfig.List.lstProxyExecute;
-                        if (list.Contains(pe))
+                        var list = ProxyConfig.List.lstProxyTCP;
+                        if (list.Contains(pt))
                         {
-                            list.Remove(pe);
+                            list.Remove(pt);
                         }
                     }
                     catch (Exception ex)
@@ -6160,14 +6212,19 @@ namespace WinsockPacketEditor
 
                 #region//清空整个列表
 
-                public static void ResetProxyExecuteList()
+                public static void ResetProxyTCPList()
                 {
-                    lstProxyExecute.Clear();
+                    ProxyConfig.List.lstProxyTCP.Clear();
+                }
+
+                public static void ResetProxyUDPList()
+                {
+                    ProxyConfig.List.lstProxyUDP.Clear();
                 }
 
                 public static void ResetProxyInfoList()
                 {
-                    lstProxyInfo.Clear();
+                    ProxyConfig.List.lstProxyInfo.Clear();
                 }
 
                 #endregion                
@@ -7026,7 +7083,7 @@ namespace WinsockPacketEditor
                             if (pai != null)
                             {
                                 ProxyConfig.Account.lstAccountInfo.Remove(pai);
-                                ProxyConfig.List.CloseProxyExecute_ByAID(AID);
+                                ProxyConfig.List.CloseProxyTCP_ByAID(AID);
 
                                 return true;
                             }

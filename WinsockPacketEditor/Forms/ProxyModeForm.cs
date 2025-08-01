@@ -1107,9 +1107,14 @@ namespace WinsockPacketEditor
 
         private void timerProxyList_Tick(object sender, EventArgs e)
         {
-            if (Operate.ProxyConfig.Queue.qProxyExecute.Count > 0)
+            if (Operate.ProxyConfig.Queue.qProxyTCP.Count > 0)
             {
-                Operate.ProxyConfig.List.ProxyExecute_ToList();
+                Operate.ProxyConfig.List.ProxyTCP_ToList();
+            }
+
+            if (Operate.ProxyConfig.Queue.qProxyUDP.Count > 0)
+            {
+                Operate.ProxyConfig.List.ProxyUDP_ToList();
             }
 
             if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
@@ -1233,7 +1238,8 @@ namespace WinsockPacketEditor
             this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
             this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
-            this.lProxyLinks_CNT.Text = Operate.ProxyConfig.List.lstProxyExecute.Count.ToString();
+            this.lProxyTCP_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
+            this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.lstProxyUDP.Count.ToString();
             this.lProxyDevices_CNT.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();            
             this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
             this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
@@ -1271,29 +1277,25 @@ namespace WinsockPacketEditor
         {
             try
             {
-                var peList = Operate.ProxyConfig.List.lstProxyExecute.ToList();
-                if (peList == null)
+                var peList = Operate.ProxyConfig.List.lstProxyTCP.ToList();
+                if (peList == null || peList.Count == 0)
                 {
                     return;
                 }
 
-                foreach (ProxyExecute pe in peList)
+                foreach (ProxyTCP pe in peList)
                 {
                     if (pe == null)
-                    {                        
-                        return;
+                    {
+                        continue;
                     }
 
                     if (pe.TCP_Client == null)
                     {
-                        if (Operate.ProxyConfig.List.lstProxyExecute.Contains(pe))
-                        {
-                            Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
-                        }
-                        
+                        Operate.ProxyConfig.List.lstProxyTCP.Remove(pe);
                         pe?.Dispose();
-                        return;
-                    }
+                        continue;
+                    }                    
 
                     if (pe.TCP_Client.Socket == null)
                     {
@@ -1309,12 +1311,7 @@ namespace WinsockPacketEditor
                             {
                                 this.treeClientList.Items.Remove(tiChild);
                             }
-
-                            if (Operate.ProxyConfig.List.lstProxyExecute.Contains(pe))
-                            {
-                                Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
-                            }
-
+                            Operate.ProxyConfig.List.lstProxyTCP.Remove(pe);
                             pe?.Dispose();
                         }
                         else
@@ -1348,11 +1345,7 @@ namespace WinsockPacketEditor
                                 }
                             }
 
-                            if (Operate.ProxyConfig.List.lstProxyExecute.Contains(pe))
-                            {
-                                Operate.ProxyConfig.List.lstProxyExecute.Remove(pe);
-                            }
-
+                            Operate.ProxyConfig.List.lstProxyTCP.Remove(pe);
                             pe?.Dispose();
                         }
 
