@@ -8,9 +8,11 @@ namespace WinsockPacketEditor
     public class ProxyUDP
     {
         public UdpClient ClientUDP { get; private set; }
-        public IPEndPoint ClientUDP_EndPoint { get; set; }
+        public IPEndPoint ClientEndPoint { get; set; }
         public DateTime LastActivityTime { get; private set; }
         public bool IsActive { get; private set; }
+
+        #region//ProxyUDP
 
         public ProxyUDP(IPEndPoint udpClientEndpoint)
         {
@@ -19,10 +21,18 @@ namespace WinsockPacketEditor
             this.IsActive = true;
         }
 
+        #endregion
+
+        #region//更新活动时间
+
         public void UpdateActivity()
         {
             this.LastActivityTime = DateTime.Now;
         }
+
+        #endregion
+
+        #region//关闭UDP连接
 
         public void Close()
         {
@@ -47,5 +57,7 @@ namespace WinsockPacketEditor
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        #endregion
     }
 }

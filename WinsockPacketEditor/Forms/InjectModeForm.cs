@@ -2157,15 +2157,15 @@ namespace WinsockPacketEditor
                 Operate.PacketConfig.Packet.Total_SendBytes = 0;
                 Operate.PacketConfig.Packet.Total_RecvBytes = 0;
                 Operate.FilterConfig.Filter.FilterExecute_CNT = 0;
-                Operate.PacketConfig.Queue.FilterPacket_CNT = 0;
-                Operate.PacketConfig.Queue.Send_CNT = 0;
-                Operate.PacketConfig.Queue.Recv_CNT = 0;
-                Operate.PacketConfig.Queue.SendTo_CNT = 0;
-                Operate.PacketConfig.Queue.RecvFrom_CNT = 0;
-                Operate.PacketConfig.Queue.WSASend_CNT = 0;
-                Operate.PacketConfig.Queue.WSARecv_CNT = 0;
-                Operate.PacketConfig.Queue.WSASendTo_CNT = 0;
-                Operate.PacketConfig.Queue.WSARecvFrom_CNT = 0;
+                Operate.PacketConfig.Packet.FilterPacket_CNT = 0;
+                Operate.PacketConfig.Packet.Send_CNT = 0;
+                Operate.PacketConfig.Packet.Recv_CNT = 0;
+                Operate.PacketConfig.Packet.SendTo_CNT = 0;
+                Operate.PacketConfig.Packet.RecvFrom_CNT = 0;
+                Operate.PacketConfig.Packet.WSASend_CNT = 0;
+                Operate.PacketConfig.Packet.WSARecv_CNT = 0;
+                Operate.PacketConfig.Packet.WSASendTo_CNT = 0;
+                Operate.PacketConfig.Packet.WSARecvFrom_CNT = 0;
             }
             catch (Exception ex)
             {
@@ -2237,15 +2237,15 @@ namespace WinsockPacketEditor
             this.lTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
             this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             this.lQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
-            this.lFilterPacket_CNT.Text = Operate.PacketConfig.Queue.FilterPacket_CNT.ToString();
-            this.lSend_CNT.Text = Operate.PacketConfig.Queue.Send_CNT.ToString();
-            this.lRecv_CNT.Text = Operate.PacketConfig.Queue.Recv_CNT.ToString();
-            this.lSendTo_CNT.Text = Operate.PacketConfig.Queue.SendTo_CNT.ToString();
-            this.lRecvFrom_CNT.Text = Operate.PacketConfig.Queue.RecvFrom_CNT.ToString();
-            this.lWSASend_CNT.Text = Operate.PacketConfig.Queue.WSASend_CNT.ToString();
-            this.lWSARecv_CNT.Text = Operate.PacketConfig.Queue.WSARecv_CNT.ToString();
-            this.lWSASendTo_CNT.Text = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
-            this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
+            this.lFilterPacket_CNT.Text = Operate.PacketConfig.Packet.FilterPacket_CNT.ToString();
+            this.lSend_CNT.Text = Operate.PacketConfig.Packet.Send_CNT.ToString();
+            this.lRecv_CNT.Text = Operate.PacketConfig.Packet.Recv_CNT.ToString();
+            this.lSendTo_CNT.Text = Operate.PacketConfig.Packet.SendTo_CNT.ToString();
+            this.lRecvFrom_CNT.Text = Operate.PacketConfig.Packet.RecvFrom_CNT.ToString();
+            this.lWSASend_CNT.Text = Operate.PacketConfig.Packet.WSASend_CNT.ToString();
+            this.lWSARecv_CNT.Text = Operate.PacketConfig.Packet.WSARecv_CNT.ToString();
+            this.lWSASendTo_CNT.Text = Operate.PacketConfig.Packet.WSASendTo_CNT.ToString();
+            this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Packet.WSARecvFrom_CNT.ToString();
             this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
             this.mInjectMode.Items[0].Badge = Operate.PacketConfig.List.lstPacketInfo.Count.ToString();
             this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();

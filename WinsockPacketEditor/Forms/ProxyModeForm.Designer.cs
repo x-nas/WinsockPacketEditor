@@ -89,6 +89,9 @@
             this.splitterProxyList = new AntdUI.Splitter();
             this.tlpProxyList2 = new System.Windows.Forms.TableLayoutPanel();
             this.tlpPacketListInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.lSplit16 = new AntdUI.Label();
+            this.lFilterProxy_CNT = new AntdUI.Label();
+            this.lFilterProxy = new AntdUI.Label();
             this.lSplit14 = new AntdUI.Label();
             this.lProxyUDP_CNT = new AntdUI.Label();
             this.lProxyUDP = new AntdUI.Label();
@@ -233,7 +236,6 @@
             this.lBytes = new AntdUI.Label();
             this.txtBytes = new AntdUI.Input();
             this.tpExtraction = new AntdUI.TabPage();
-            this.tabPage1 = new AntdUI.TabPage();
             this.splitterExtraction = new AntdUI.Splitter();
             this.tlpExtractionSelectFile = new System.Windows.Forms.TableLayoutPanel();
             this.ddlExtraction = new AntdUI.Select();
@@ -252,9 +254,6 @@
             this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
-            this.lFilterProxy = new AntdUI.Label();
-            this.lFilterProxy_CNT = new AntdUI.Label();
-            this.lSplit16 = new AntdUI.Label();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
@@ -307,7 +306,6 @@
             this.pTranscoding_Result.SuspendLayout();
             this.tlpTranscoding_Result.SuspendLayout();
             this.tpExtraction.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterExtraction)).BeginInit();
             this.splitterExtraction.Panel1.SuspendLayout();
             this.splitterExtraction.Panel2.SuspendLayout();
@@ -500,7 +498,7 @@
             this.tabProxyMode.Controls.Add(this.tpTranscoding);
             this.tabProxyMode.Controls.Add(this.tpExtraction);
             this.tabProxyMode.Controls.Add(this.tpSystemLog);
-            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabProxyMode.Location = new System.Drawing.Point(170, 40);
             this.tabProxyMode.Name = "tabProxyMode";
@@ -773,6 +771,41 @@
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpPacketListInfo.Size = new System.Drawing.Size(1118, 30);
             this.tlpPacketListInfo.TabIndex = 6;
+            // 
+            // lSplit16
+            // 
+            this.lSplit16.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSplit16.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSplit16.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit16.ForeColor = System.Drawing.Color.Silver;
+            this.lSplit16.Location = new System.Drawing.Point(308, 3);
+            this.lSplit16.Name = "lSplit16";
+            this.lSplit16.Size = new System.Drawing.Size(5, 24);
+            this.lSplit16.TabIndex = 47;
+            this.lSplit16.Text = "|";
+            this.lSplit16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lFilterProxy_CNT
+            // 
+            this.lFilterProxy_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lFilterProxy_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFilterProxy_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterProxy_CNT.Location = new System.Drawing.Point(293, 3);
+            this.lFilterProxy_CNT.Name = "lFilterProxy_CNT";
+            this.lFilterProxy_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lFilterProxy_CNT.TabIndex = 46;
+            this.lFilterProxy_CNT.Text = "0";
+            // 
+            // lFilterProxy
+            // 
+            this.lFilterProxy.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lFilterProxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFilterProxy.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterProxy.Location = new System.Drawing.Point(257, 3);
+            this.lFilterProxy.Name = "lFilterProxy";
+            this.lFilterProxy.Size = new System.Drawing.Size(30, 24);
+            this.lFilterProxy.TabIndex = 45;
+            this.lFilterProxy.Text = "过滤:";
             // 
             // lSplit14
             // 
@@ -2729,21 +2762,12 @@
             // 
             // tpExtraction
             // 
-            this.tpExtraction.Controls.Add(this.tabPage1);
-            this.tpExtraction.Location = new System.Drawing.Point(0, 0);
+            this.tpExtraction.Controls.Add(this.splitterExtraction);
+            this.tpExtraction.Location = new System.Drawing.Point(-1124, -724);
             this.tpExtraction.Name = "tpExtraction";
-            this.tpExtraction.Size = new System.Drawing.Size(0, 0);
+            this.tpExtraction.Size = new System.Drawing.Size(1124, 724);
             this.tpExtraction.TabIndex = 15;
             this.tpExtraction.Text = "数据提取";
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.splitterExtraction);
-            this.tabPage1.Location = new System.Drawing.Point(8, 8);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(1124, 724);
-            this.tabPage1.TabIndex = 6;
-            this.tabPage1.Text = "数据提取";
             // 
             // splitterExtraction
             // 
@@ -2767,7 +2791,7 @@
             this.splitterExtraction.SplitterDistance = 380;
             this.splitterExtraction.SplitterSize = 80;
             this.splitterExtraction.SplitterWidth = 10;
-            this.splitterExtraction.TabIndex = 0;
+            this.splitterExtraction.TabIndex = 1;
             // 
             // tlpExtractionSelectFile
             // 
@@ -2935,41 +2959,6 @@
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
-            // lFilterProxy
-            // 
-            this.lFilterProxy.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lFilterProxy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lFilterProxy.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lFilterProxy.Location = new System.Drawing.Point(257, 3);
-            this.lFilterProxy.Name = "lFilterProxy";
-            this.lFilterProxy.Size = new System.Drawing.Size(30, 24);
-            this.lFilterProxy.TabIndex = 45;
-            this.lFilterProxy.Text = "过滤:";
-            // 
-            // lFilterProxy_CNT
-            // 
-            this.lFilterProxy_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lFilterProxy_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lFilterProxy_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lFilterProxy_CNT.Location = new System.Drawing.Point(293, 3);
-            this.lFilterProxy_CNT.Name = "lFilterProxy_CNT";
-            this.lFilterProxy_CNT.Size = new System.Drawing.Size(9, 24);
-            this.lFilterProxy_CNT.TabIndex = 46;
-            this.lFilterProxy_CNT.Text = "0";
-            // 
-            // lSplit16
-            // 
-            this.lSplit16.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lSplit16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit16.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSplit16.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit16.Location = new System.Drawing.Point(308, 3);
-            this.lSplit16.Name = "lSplit16";
-            this.lSplit16.Size = new System.Drawing.Size(5, 24);
-            this.lSplit16.TabIndex = 47;
-            this.lSplit16.Text = "|";
-            this.lSplit16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // ProxyModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -3046,7 +3035,6 @@
             this.pTranscoding_Result.ResumeLayout(false);
             this.tlpTranscoding_Result.ResumeLayout(false);
             this.tpExtraction.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
             this.splitterExtraction.Panel1.ResumeLayout(false);
             this.splitterExtraction.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitterExtraction)).EndInit();
@@ -3215,15 +3203,6 @@
         private AntdUI.Label lUTF7;
         private AntdUI.Label lBytes;
         private AntdUI.Input txtBytes;
-        private AntdUI.TabPage tabPage1;
-        private AntdUI.Splitter splitterExtraction;
-        private System.Windows.Forms.TableLayoutPanel tlpExtractionSelectFile;
-        private AntdUI.Select ddlExtraction;
-        private AntdUI.UploadDragger udExtraction;
-        private System.Windows.Forms.TableLayoutPanel tlpExtractionData;
-        private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
-        private AntdUI.Button bExtraction;
-        private AntdUI.Input txtExtraction;
         private AntdUI.Label lProxyQueue;
         private AntdUI.Label lFilterExecute;
         private AntdUI.Label lFilterExecute_CNT;
@@ -3246,6 +3225,14 @@
         private AntdUI.Label lSplit16;
         private AntdUI.Label lFilterProxy_CNT;
         private AntdUI.Label lFilterProxy;
+        private AntdUI.Splitter splitterExtraction;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionSelectFile;
+        private AntdUI.Select ddlExtraction;
+        private AntdUI.UploadDragger udExtraction;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionData;
+        private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
+        private AntdUI.Button bExtraction;
+        private AntdUI.Input txtExtraction;
     }
 }
 

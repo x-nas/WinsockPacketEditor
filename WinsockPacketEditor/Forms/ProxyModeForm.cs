@@ -1049,9 +1049,15 @@ namespace WinsockPacketEditor
 
         private void CleanUp_ProxyListInfo()
         {
-            this.CleanUp_ProxyList();
-            this.CleanUp_HexBox();
-            this.CleanUp_LogList();
+            Operate.ProxyConfig.Proxy.ProxyTotal_CNT = 0;
+            Operate.ProxyConfig.Proxy.TCP_Req_CNT = 0;
+            Operate.ProxyConfig.Proxy.TCP_Resp_CNT = 0;
+            Operate.ProxyConfig.Proxy.UDP_Req_CNT = 0;
+            Operate.ProxyConfig.Proxy.UDP_Resp_CNT = 0;
+            Operate.FilterConfig.Filter.FilterExecute_CNT = 0;
+            Operate.ProxyConfig.Proxy.FilterProxy_CNT = 0;
+            Operate.ProxyConfig.Proxy.Total_Request = 0;
+            Operate.ProxyConfig.Proxy.Total_Response = 0;
         }
 
         private void CleanUp_ProxyList()
@@ -1233,7 +1239,7 @@ namespace WinsockPacketEditor
             this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
             this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
-            this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Queue.FilterProxy_CNT.ToString();
+            this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
             this.lProxyTCP_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
             this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.UDPClients.Count.ToString();   
             this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
@@ -1547,8 +1553,11 @@ namespace WinsockPacketEditor
         }
 
         private void bProxyList_Clear_Click(object sender, EventArgs e)
-        {
+        {            
+            this.CleanUp_ProxyList();
             this.CleanUp_ProxyListInfo();
+            this.CleanUp_HexBox();
+            this.CleanUp_LogList();
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "已清空数据", TType.Warn)
             {
@@ -2872,12 +2881,6 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
                     Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
                 }
-
-                Operate.ProxyConfig.Proxy.ProxyTotal_CNT = 0;
-                Operate.ProxyConfig.Proxy.TCP_Req_CNT = 0;
-                Operate.ProxyConfig.Proxy.TCP_Resp_CNT = 0;
-                Operate.ProxyConfig.Proxy.UDP_Req_CNT = 0;
-                Operate.ProxyConfig.Proxy.UDP_Resp_CNT = 0;
 
                 string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyServerIP", "代理服务器IP地址: TCP [{0}] UDP [{1}]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);

@@ -3794,6 +3794,7 @@ namespace WinsockPacketEditor
             {
                 public static ulong ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
+                public static int FilterProxy_CNT = 0;
                 public static IPAddress[] ProxyServerIP = null;
                 public static IPAddress ProxyTCP_IP = null, ProxyUDP_IP = null;                
                 public static bool SpeedMode = false;
@@ -4715,13 +4716,13 @@ namespace WinsockPacketEditor
                         {
                             #region//处理 UDP 响应数据
 
-                            if (pu.ClientUDP_EndPoint == null)
+                            if (pu.ClientEndPoint == null)
                             {
                                 return;
                             }
 
-                            ReadOnlySpan<byte> bIP = pu.ClientUDP_EndPoint.Address.GetAddressBytes();
-                            ushort port = ((ushort)pu.ClientUDP_EndPoint.Port);
+                            ReadOnlySpan<byte> bIP = pu.ClientEndPoint.Address.GetAddressBytes();
+                            ushort port = ((ushort)pu.ClientEndPoint.Port);
                             ReadOnlySpan<byte> bPort = new byte[2] { (byte)(port >> 8), (byte)port };
 
                             Span<byte> bResponseData = stackalloc byte[4 + bIP.Length + bPort.Length + bData.Length];
@@ -4772,7 +4773,7 @@ namespace WinsockPacketEditor
                         return ProxyConfig.Proxy.UDPClients.GetOrAdd(clientTCPEndPoint, ep =>
                         {
                             var pu = new ProxyUDP(new IPEndPoint(proxyUdpIp, 0));
-                            pu.ClientUDP_EndPoint = clientTCPEndPoint;
+                            pu.ClientEndPoint = clientTCPEndPoint;
                             return pu;
                         });
                     }
@@ -4944,7 +4945,7 @@ namespace WinsockPacketEditor
                                 break;
 
                             case ProxyConfig.Proxy.DataType.Response:
-                                epSend = pu.ClientUDP_EndPoint;
+                                epSend = pu.ClientEndPoint;
                                 break;
                         }
 
@@ -4972,7 +4973,7 @@ namespace WinsockPacketEditor
                             res = ProxyConfig.Proxy.SendUDPData(pu.ClientUDP, bNewBuffer, epSend);
                         }
 
-                        string ClientAddr = $"{pu.ClientUDP_EndPoint.Address.ToString()}:{pu.ClientUDP_EndPoint.Port.ToString()}";
+                        string ClientAddr = $"{pu.ClientEndPoint.Address.ToString()}:{pu.ClientEndPoint.Port.ToString()}";
                         string ServerAddr = $"{epRemote.Address.ToString()}:{epRemote.Port.ToString()}";
 
                         _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
@@ -5905,8 +5906,7 @@ namespace WinsockPacketEditor
             #region//代理队列
 
             public static class Queue
-            {
-                public static int FilterProxy_CNT = 0;
+            {                
                 public static ConcurrentQueue<ProxyTCP> qProxyTCP = new ConcurrentQueue<ProxyTCP>();
                 public static ConcurrentQueue<ProxyInfo> qProxyInfo = new ConcurrentQueue<ProxyInfo>();
 
@@ -9539,6 +9539,15 @@ namespace WinsockPacketEditor
 
             public static class Packet
             {
+                public static int Send_CNT = 0;
+                public static int SendTo_CNT = 0;
+                public static int Recv_CNT = 0;
+                public static int RecvFrom_CNT = 0;
+                public static int WSASend_CNT = 0;
+                public static int WSASendTo_CNT = 0;
+                public static int WSARecv_CNT = 0;
+                public static int WSARecvFrom_CNT = 0;
+                public static int FilterPacket_CNT = 0;
                 public static int PacketData_MaxLen = 60;
                 public static long TotalPackets = 0;
                 public static long Total_SendBytes = 0;
@@ -10604,46 +10613,46 @@ namespace WinsockPacketEditor
                             {
                                 case Operate.PacketConfig.Packet.PacketType.WS1_Send:
                                 case Operate.PacketConfig.Packet.PacketType.WS2_Send:
-                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.Send_CNT);
+                                    Interlocked.Increment(ref Operate.PacketConfig.Packet.Send_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_SendBytes, packetLength);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
                                 case Operate.PacketConfig.Packet.PacketType.WS2_SendTo:
-                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.SendTo_CNT);
+                                    Interlocked.Increment(ref Operate.PacketConfig.Packet.SendTo_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_SendBytes, packetLength);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.WSASend:
-                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.WSASend_CNT);
+                                    Interlocked.Increment(ref Operate.PacketConfig.Packet.WSASend_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_SendBytes, packetLength);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.WSASendTo:
-                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.WSASendTo_CNT);
+                                    Interlocked.Increment(ref Operate.PacketConfig.Packet.WSASendTo_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_SendBytes, packetLength);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
                                 case Operate.PacketConfig.Packet.PacketType.WS2_Recv:
-                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.Recv_CNT);
+                                    Interlocked.Increment(ref Operate.PacketConfig.Packet.Recv_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.WS1_RecvFrom:
                                 case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
-                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.RecvFrom_CNT);
+                                    Interlocked.Increment(ref Operate.PacketConfig.Packet.RecvFrom_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.WSARecv:
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
-                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.WSARecv_CNT);
+                                    Interlocked.Increment(ref Operate.PacketConfig.Packet.WSARecv_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
                                     break;
 
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
-                                    Interlocked.Increment(ref Operate.PacketConfig.Queue.WSARecvFrom_CNT);
+                                    Interlocked.Increment(ref Operate.PacketConfig.Packet.WSARecvFrom_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
                                     break;
                             }
@@ -10675,16 +10684,6 @@ namespace WinsockPacketEditor
 
             public static class Queue
             {
-                public static int Send_CNT = 0;
-                public static int SendTo_CNT = 0;
-                public static int Recv_CNT = 0;
-                public static int RecvFrom_CNT = 0;
-                public static int WSASend_CNT = 0;
-                public static int WSASendTo_CNT = 0;
-                public static int WSARecv_CNT = 0;
-                public static int WSARecvFrom_CNT = 0;
-                public static int FilterPacket_CNT = 0;
-
                 public static ConcurrentQueue<PacketInfo> cqPacketInfo = new ConcurrentQueue<PacketInfo>();
 
                 #region//封包入队列            
@@ -10777,7 +10776,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                PacketConfig.Queue.FilterPacket_CNT++;
+                                PacketConfig.Packet.FilterPacket_CNT++;
                             }
                         }
                     }

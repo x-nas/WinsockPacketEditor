@@ -19,15 +19,15 @@ namespace WinsockPacketEditor
             string SocketTotal = Operate.PacketConfig.Packet.TotalPackets.ToString();
             string SocketFilter = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             string SocketCache = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
-            string SocketLeach = Operate.PacketConfig.Queue.FilterPacket_CNT.ToString();
-            string SocketSend = Operate.PacketConfig.Queue.Send_CNT.ToString();
-            string SocketRecv = Operate.PacketConfig.Queue.Recv_CNT.ToString();
-            string SocketSendTo = Operate.PacketConfig.Queue.SendTo_CNT.ToString();
-            string SocketRecvFrom = Operate.PacketConfig.Queue.RecvFrom_CNT.ToString();
-            string SocketWSASend = Operate.PacketConfig.Queue.WSASend_CNT.ToString();
-            string SocketWSARecv = Operate.PacketConfig.Queue.WSARecv_CNT.ToString();
-            string SocketWSASendTo = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
-            string SocketWSARecvFrom = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
+            string SocketLeach = Operate.PacketConfig.Packet.FilterPacket_CNT.ToString();
+            string SocketSend = Operate.PacketConfig.Packet.Send_CNT.ToString();
+            string SocketRecv = Operate.PacketConfig.Packet.Recv_CNT.ToString();
+            string SocketSendTo = Operate.PacketConfig.Packet.SendTo_CNT.ToString();
+            string SocketRecvFrom = Operate.PacketConfig.Packet.RecvFrom_CNT.ToString();
+            string SocketWSASend = Operate.PacketConfig.Packet.WSASend_CNT.ToString();
+            string SocketWSARecv = Operate.PacketConfig.Packet.WSARecv_CNT.ToString();
+            string SocketWSASendTo = Operate.PacketConfig.Packet.WSASendTo_CNT.ToString();
+            string SocketWSARecvFrom = Operate.PacketConfig.Packet.WSARecvFrom_CNT.ToString();
             string SocketBytes = Operate.PacketConfig.Packet.SpeedInfo;
 
             string[] SocketInfo = new string[15];
