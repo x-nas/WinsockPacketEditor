@@ -3949,11 +3949,9 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (pe == null || 
-                            pe.TCP_Client == null || 
-                            pe.TCP_Client.Socket == null || 
-                            pe.TCP_Client.Buffer == null)
+                        if (pe?.TCP_Client?.Socket == null)
                         {
+                            pe?.Dispose();
                             return;
                         }
 
@@ -3970,27 +3968,19 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe?.TCP_Client.Close();
+                        pe?.Dispose();
                     }
                 }
 
                 private static void ReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
-                    ProxyTCP pe = null;
+                    ProxyTCP pe = (ProxyTCP)args.UserToken;
 
                     try
                     {
                         if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            args?.Dispose();
-                            return;
-                        }
-
-                        pe = (ProxyTCP)args.UserToken;
-                        if (pe == null)
-                        {
                             pe?.Dispose();
-                            args?.Dispose();
                             return;
                         }
 
@@ -4047,13 +4037,15 @@ namespace WinsockPacketEditor
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
                         pe?.Dispose();
-                        args?.Dispose();
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         pe?.Dispose();
-                        args?.Dispose();
+                    }
+                    finally
+                    {
+                        args.Dispose();
                     }
                 }
 
@@ -4584,37 +4576,17 @@ namespace WinsockPacketEditor
 
                 private static void ServerReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
-                    ProxyTCP pe = null;
+                    ProxyTCP pe = (ProxyTCP)args.UserToken;
 
                     try
                     {
-                        if (args == null)
-                        {
-                            return;
-                        }                        
-
                         if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            args?.Dispose();
-                            return;
-                        }
-
-                        pe = (ProxyTCP)args.UserToken;
-                        if (pe?.TCP_Server == null)
-                        {
                             pe?.Dispose();
-                            args?.Dispose();                            
                             return;
                         }
 
                         int bytesRead = args.BytesTransferred;
-                        if (bytesRead <= 0 || bytesRead > pe.TCP_Server.Buffer.Length)
-                        {
-                            pe?.Dispose();
-                            args?.Dispose();
-                            return;
-                        }
-
                         Span<byte> bData = pe.TCP_Server.Buffer.AsSpan(0, bytesRead);
 
                         if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
@@ -4627,7 +4599,6 @@ namespace WinsockPacketEditor
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
                         pe?.Dispose();
-                        args?.Dispose();
                     }
                     catch (ObjectDisposedException)
                     {
@@ -4637,7 +4608,10 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         pe?.Dispose();
-                        args?.Dispose();
+                    }
+                    finally
+                    {
+                        args.Dispose();
                     }
                 }
 
