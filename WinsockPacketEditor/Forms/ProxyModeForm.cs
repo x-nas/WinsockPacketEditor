@@ -2971,7 +2971,7 @@ namespace WinsockPacketEditor
             {
                 if (e.SocketError == SocketError.Success && Operate.ProxyConfig.Proxy.IsListening && e.AcceptSocket != null)
                 {
-                    await Operate.ProxyConfig.Proxy.HandleClient(e.AcceptSocket).ConfigureAwait(false);
+                    await Operate.ProxyConfig.Proxy.HandleClient(e.AcceptSocket);
 
                     e.AcceptSocket = null;
 
