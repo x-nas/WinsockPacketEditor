@@ -3795,8 +3795,7 @@ namespace WinsockPacketEditor
                 public static ulong ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static IPAddress[] ProxyServerIP = null;
-                public static IPAddress ProxyTCP_IP = null;
-                public static IPAddress ProxyUDP_IP = null;                
+                public static IPAddress ProxyTCP_IP = null, ProxyUDP_IP = null;                
                 public static bool SpeedMode = false;
                 public static bool IsListening = false;
                 public static bool ProxyIP_Auto = true;
@@ -3816,6 +3815,9 @@ namespace WinsockPacketEditor
                 public static string ProxyOnLineInfo = string.Empty;
                 public static string ProxyBytesInfo = string.Empty;
                 public static string ProxySpeedInfo = string.Empty;
+
+                public static readonly ConcurrentDictionary<IPEndPoint, ProxyUDP> UDPClients = new ConcurrentDictionary<IPEndPoint, ProxyUDP>();
+                public static readonly TimeSpan _inactiveTimeout = TimeSpan.FromMinutes(5);
 
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
                 public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
@@ -4386,14 +4388,18 @@ namespace WinsockPacketEditor
 
                                         try
                                         {
-                                            ProxyUDP pu = ProxyUDPManager.GetOrCreateUdpClient((IPEndPoint)pe.TCP_Client.Socket.RemoteEndPoint, ProxyConfig.Proxy.ProxyUDP_IP);
+                                            ProxyUDP pu = ProxyConfig.Proxy.GetOrCreateUdpClient((IPEndPoint)pe.TCP_Client.Socket.RemoteEndPoint, ProxyConfig.Proxy.ProxyUDP_IP);
+                                            if (pu == null)
+                                            {
+                                                return;
+                                            }
                                             pu.UpdateActivity();
 
                                             ReadOnlySpan<byte> bServerUDP_IP = ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
                                             ReadOnlySpan<byte> bServerUDP_Port = BitConverter.GetBytes(((IPEndPoint)pu.ClientUDP.Client.LocalEndPoint).Port);
 
                                             ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));
-                                            ProxyConfig.Queue.ProxyUDP_ToQueue(pu);
+                                            ProxyConfig.Proxy.StartUdpReceive(pu);
                                         }
                                         catch (SocketException)
                                         {
@@ -4686,8 +4692,6 @@ namespace WinsockPacketEditor
                                 addressType == ProxyConfig.Proxy.AddressType.IPv6 ||
                                 addressType == ProxyConfig.Proxy.AddressType.Domain)
                             {
-                                pu.ClientUDP_EndPoint = epRemote;
-
                                 ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
                                 IPEndPoint targetEndPoint = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
                                 if (targetEndPoint != null)
@@ -4753,6 +4757,52 @@ namespace WinsockPacketEditor
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         ProxyConfig.Proxy.StartUdpReceive(pu);
                     }
+                }
+
+                #endregion
+
+                #region//初始化 UDPClient
+
+                public static ProxyUDP GetOrCreateUdpClient(IPEndPoint clientTCPEndPoint, IPAddress proxyUdpIp)
+                {
+                    try
+                    {
+                        ProxyConfig.Proxy.CleanupInactiveClients();
+
+                        return ProxyConfig.Proxy.UDPClients.GetOrAdd(clientTCPEndPoint, ep =>
+                        {
+                            var pu = new ProxyUDP(new IPEndPoint(proxyUdpIp, 0));
+                            pu.ClientUDP_EndPoint = clientTCPEndPoint;
+                            return pu;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return null;
+                }
+
+                private static void CleanupInactiveClients()
+                {
+                    try
+                    {
+                        foreach (var kvp in ProxyConfig.Proxy.UDPClients)
+                        {
+                            if (DateTime.Now - kvp.Value.LastActivityTime > _inactiveTimeout)
+                            {
+                                if (ProxyConfig.Proxy.UDPClients.TryRemove(kvp.Key, out var oldClient))
+                                {
+                                    oldClient.Close();
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }                    
                 }
 
                 #endregion
@@ -5856,8 +5906,8 @@ namespace WinsockPacketEditor
 
             public static class Queue
             {
+                public static int FilterProxy_CNT = 0;
                 public static ConcurrentQueue<ProxyTCP> qProxyTCP = new ConcurrentQueue<ProxyTCP>();
-                public static ConcurrentQueue<ProxyUDP> qProxyUDP = new ConcurrentQueue<ProxyUDP>();
                 public static ConcurrentQueue<ProxyInfo> qProxyInfo = new ConcurrentQueue<ProxyInfo>();
 
                 #region//TCP代理入队列
@@ -5867,16 +5917,7 @@ namespace WinsockPacketEditor
                     qProxyTCP.Enqueue(pt);
                 }
 
-                #endregion
-
-                #region//UDP代理入队列
-
-                public static void ProxyUDP_ToQueue(ProxyUDP pu)
-                {
-                    qProxyUDP.Enqueue(pu);
-                }
-
-                #endregion
+                #endregion                
 
                 #region//代理数据入队列
 
@@ -5962,22 +6003,7 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
-                }
-
-                public static void ResetProxyUDPQueue()
-                {
-                    try
-                    {
-                        while (!qProxyUDP.IsEmpty)
-                        {
-                            qProxyUDP.TryDequeue(out ProxyUDP pu);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
+                }                
 
                 public static void ResetProxyInfoQueue()
                 {
@@ -6002,7 +6028,7 @@ namespace WinsockPacketEditor
             #region//代理列表
 
             public static class List
-            {
+            {                
                 public static int Search_Index = -1;
                 public static bool AutoRoll = false;
                 public static bool AutoClear = true;
@@ -6010,7 +6036,6 @@ namespace WinsockPacketEditor
                 public static ProxyInfo piSelect = null;                
 
                 public static BindingList<ProxyTCP> lstProxyTCP = new BindingList<ProxyTCP>();
-                public static BindingList<ProxyUDP> lstProxyUDP = new BindingList<ProxyUDP>();
                 public static BindingList<ProxyInfo> lstProxyInfo = new BindingList<ProxyInfo>();                
 
                 #region//TCP代理入列表
@@ -6023,19 +6048,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion                
-
-                #region//UDP代理入列表
-
-                public static void ProxyUDP_ToList()
-                {
-                    if (ProxyConfig.Queue.qProxyUDP.TryDequeue(out ProxyUDP pu))
-                    {
-                        ProxyConfig.List.lstProxyUDP.Add(pu);
-                    }
-                }
-
-                #endregion                
+                #endregion                                
 
                 #region//代理数据入列表
 
@@ -6215,11 +6228,6 @@ namespace WinsockPacketEditor
                 public static void ResetProxyTCPList()
                 {
                     ProxyConfig.List.lstProxyTCP.Clear();
-                }
-
-                public static void ResetProxyUDPList()
-                {
-                    ProxyConfig.List.lstProxyUDP.Clear();
                 }
 
                 public static void ResetProxyInfoList()
@@ -10675,7 +10683,7 @@ namespace WinsockPacketEditor
                 public static int WSASendTo_CNT = 0;
                 public static int WSARecv_CNT = 0;
                 public static int WSARecvFrom_CNT = 0;
-                public static int FilterPacketList_CNT = 0;
+                public static int FilterPacket_CNT = 0;
 
                 public static ConcurrentQueue<PacketInfo> cqPacketInfo = new ConcurrentQueue<PacketInfo>();
 
@@ -10704,8 +10712,8 @@ namespace WinsockPacketEditor
                                 string sIPFrom = ipParts[0];
                                 string sIPTo = ipParts[1];
 
-                                PacketInfo spi = new PacketInfo(PacketTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
-                                cqPacketInfo.Enqueue(spi);
+                                PacketInfo pi = new PacketInfo(PacketTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
+                                cqPacketInfo.Enqueue(pi);
                             }
                         }
                     }
@@ -10769,7 +10777,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                PacketConfig.Queue.FilterPacketList_CNT++;
+                                PacketConfig.Queue.FilterPacket_CNT++;
                             }
                         }
                     }
@@ -11758,10 +11766,21 @@ namespace WinsockPacketEditor
                         FFunction.WSASendTo = Convert.ToBoolean(int.Parse(slFilterFunction[5]));
                         FFunction.WSARecv = Convert.ToBoolean(int.Parse(slFilterFunction[6]));
                         FFunction.WSARecvFrom = Convert.ToBoolean(int.Parse(slFilterFunction[7]));
-                        FFunction.TCP_Req = Convert.ToBoolean(int.Parse(slFilterFunction[8]));
-                        FFunction.UDP_Req = Convert.ToBoolean(int.Parse(slFilterFunction[9]));
-                        FFunction.TCP_Resp = Convert.ToBoolean(int.Parse(slFilterFunction[10]));
-                        FFunction.UDP_Resp = Convert.ToBoolean(int.Parse(slFilterFunction[11]));
+
+                        if (slFilterFunction.Length > 8)
+                        {
+                            FFunction.TCP_Req = Convert.ToBoolean(int.Parse(slFilterFunction[8]));
+                            FFunction.UDP_Req = Convert.ToBoolean(int.Parse(slFilterFunction[9]));
+                            FFunction.TCP_Resp = Convert.ToBoolean(int.Parse(slFilterFunction[10]));
+                            FFunction.UDP_Resp = Convert.ToBoolean(int.Parse(slFilterFunction[11]));
+                        }
+                        else
+                        {
+                            FFunction.TCP_Req = true;
+                            FFunction.UDP_Req = true;
+                            FFunction.TCP_Resp = true;
+                            FFunction.UDP_Resp = true;
+                        }
                     }
                     catch (Exception ex)
                     {

@@ -2157,7 +2157,7 @@ namespace WinsockPacketEditor
                 Operate.PacketConfig.Packet.Total_SendBytes = 0;
                 Operate.PacketConfig.Packet.Total_RecvBytes = 0;
                 Operate.FilterConfig.Filter.FilterExecute_CNT = 0;
-                Operate.PacketConfig.Queue.FilterPacketList_CNT = 0;
+                Operate.PacketConfig.Queue.FilterPacket_CNT = 0;
                 Operate.PacketConfig.Queue.Send_CNT = 0;
                 Operate.PacketConfig.Queue.Recv_CNT = 0;
                 Operate.PacketConfig.Queue.SendTo_CNT = 0;
@@ -2237,7 +2237,7 @@ namespace WinsockPacketEditor
             this.lTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
             this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             this.lQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
-            this.lFilterPacketList_CNT.Text = Operate.PacketConfig.Queue.FilterPacketList_CNT.ToString();
+            this.lFilterPacket_CNT.Text = Operate.PacketConfig.Queue.FilterPacket_CNT.ToString();
             this.lSend_CNT.Text = Operate.PacketConfig.Queue.Send_CNT.ToString();
             this.lRecv_CNT.Text = Operate.PacketConfig.Queue.Recv_CNT.ToString();
             this.lSendTo_CNT.Text = Operate.PacketConfig.Queue.SendTo_CNT.ToString();

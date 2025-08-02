@@ -19,7 +19,7 @@ namespace WinsockPacketEditor
             string SocketTotal = Operate.PacketConfig.Packet.TotalPackets.ToString();
             string SocketFilter = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             string SocketCache = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
-            string SocketLeach = Operate.PacketConfig.Queue.FilterPacketList_CNT.ToString();
+            string SocketLeach = Operate.PacketConfig.Queue.FilterPacket_CNT.ToString();
             string SocketSend = Operate.PacketConfig.Queue.Send_CNT.ToString();
             string SocketRecv = Operate.PacketConfig.Queue.Recv_CNT.ToString();
             string SocketSendTo = Operate.PacketConfig.Queue.SendTo_CNT.ToString();

@@ -1112,11 +1112,6 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.List.ProxyTCP_ToList();
             }
 
-            if (Operate.ProxyConfig.Queue.qProxyUDP.Count > 0)
-            {
-                Operate.ProxyConfig.List.ProxyUDP_ToList();
-            }
-
             if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
             {
                 Operate.ProxyConfig.List.ProxyInfo_ToList();
@@ -1238,9 +1233,9 @@ namespace WinsockPacketEditor
             this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
             this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
+            this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Queue.FilterProxy_CNT.ToString();
             this.lProxyTCP_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
-            this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.lstProxyUDP.Count.ToString();
-            this.lProxyDevices_CNT.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();            
+            this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.UDPClients.Count.ToString();   
             this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
             this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
             this.lDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromAuthList().ToString();

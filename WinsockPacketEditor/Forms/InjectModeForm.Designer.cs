@@ -119,8 +119,8 @@
             this.lSend_CNT = new AntdUI.Label();
             this.lSend = new AntdUI.Label();
             this.label12 = new AntdUI.Label();
-            this.lFilterPacketList_CNT = new AntdUI.Label();
-            this.lFilterPacketList = new AntdUI.Label();
+            this.lFilterPacket_CNT = new AntdUI.Label();
+            this.lFilterPacket = new AntdUI.Label();
             this.lQueue_CNT = new AntdUI.Label();
             this.lFilterExecute_CNT = new AntdUI.Label();
             this.lTotal_CNT = new AntdUI.Label();
@@ -495,7 +495,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -755,8 +755,8 @@
             this.tlpPacketListInfo.Controls.Add(this.lSend_CNT, 13, 1);
             this.tlpPacketListInfo.Controls.Add(this.lSend, 12, 1);
             this.tlpPacketListInfo.Controls.Add(this.label12, 11, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lFilterPacketList_CNT, 10, 1);
-            this.tlpPacketListInfo.Controls.Add(this.lFilterPacketList, 9, 1);
+            this.tlpPacketListInfo.Controls.Add(this.lFilterPacket_CNT, 10, 1);
+            this.tlpPacketListInfo.Controls.Add(this.lFilterPacket, 9, 1);
             this.tlpPacketListInfo.Controls.Add(this.lQueue_CNT, 7, 1);
             this.tlpPacketListInfo.Controls.Add(this.lFilterExecute_CNT, 4, 1);
             this.tlpPacketListInfo.Controls.Add(this.lTotal_CNT, 1, 1);
@@ -1058,27 +1058,27 @@
             this.label12.Text = "|";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lFilterPacketList_CNT
+            // lFilterPacket_CNT
             // 
-            this.lFilterPacketList_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lFilterPacketList_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lFilterPacketList_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lFilterPacketList_CNT.Location = new System.Drawing.Point(293, 3);
-            this.lFilterPacketList_CNT.Name = "lFilterPacketList_CNT";
-            this.lFilterPacketList_CNT.Size = new System.Drawing.Size(9, 24);
-            this.lFilterPacketList_CNT.TabIndex = 16;
-            this.lFilterPacketList_CNT.Text = "0";
+            this.lFilterPacket_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lFilterPacket_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFilterPacket_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterPacket_CNT.Location = new System.Drawing.Point(293, 3);
+            this.lFilterPacket_CNT.Name = "lFilterPacket_CNT";
+            this.lFilterPacket_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lFilterPacket_CNT.TabIndex = 16;
+            this.lFilterPacket_CNT.Text = "0";
             // 
-            // lFilterPacketList
+            // lFilterPacket
             // 
-            this.lFilterPacketList.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lFilterPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lFilterPacketList.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lFilterPacketList.Location = new System.Drawing.Point(257, 3);
-            this.lFilterPacketList.Name = "lFilterPacketList";
-            this.lFilterPacketList.Size = new System.Drawing.Size(30, 24);
-            this.lFilterPacketList.TabIndex = 15;
-            this.lFilterPacketList.Text = "过滤:";
+            this.lFilterPacket.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lFilterPacket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFilterPacket.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterPacket.Location = new System.Drawing.Point(257, 3);
+            this.lFilterPacket.Name = "lFilterPacket";
+            this.lFilterPacket.Size = new System.Drawing.Size(30, 24);
+            this.lFilterPacket.TabIndex = 15;
+            this.lFilterPacket.Text = "过滤:";
             // 
             // lQueue_CNT
             // 
@@ -3149,8 +3149,8 @@
         private AntdUI.Label lSend_CNT;
         private AntdUI.Label lSend;
         private AntdUI.Label label12;
-        private AntdUI.Label lFilterPacketList_CNT;
-        private AntdUI.Label lFilterPacketList;
+        private AntdUI.Label lFilterPacket_CNT;
+        private AntdUI.Label lFilterPacket;
         private AntdUI.Label lQueue_CNT;
         private AntdUI.Label lFilterExecute_CNT;
         private AntdUI.Label lTotal_CNT;
