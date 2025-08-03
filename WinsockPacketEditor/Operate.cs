@@ -3947,34 +3947,46 @@ namespace WinsockPacketEditor
 
                 private static void StartReceive(ProxyTCP pe)
                 {
+                    if (pe?.TCP_Client?.Socket == null)
+                    {
+                        pe?.Dispose();
+                        return;
+                    }
+
                     try
                     {
-                        if (pe?.TCP_Client?.Socket == null)
+                        // 1. 获取或初始化 SocketAsyncEventArgs
+                        var args = pe.TCP_Client.ReceiveArgs;
+                        if (pe.TCP_Client.ReceiveArgs == null)
                         {
-                            pe?.Dispose();
-                            return;
+                            args = new SocketAsyncEventArgs();
+                            args.SetBuffer(pe.TCP_Client.Buffer, 0, pe.TCP_Client.Buffer.Length);
+                            args.UserToken = pe;
+                            args.Completed += ReceiveCompleted;
+                            pe.TCP_Client.ReceiveArgs = args; // 绑定到 TCP_Client
                         }
 
-                        var args = new SocketAsyncEventArgs();
-                        args.SetBuffer(pe.TCP_Client.Buffer, 0, pe.TCP_Client.Buffer.Length);
-                        args.UserToken = pe;
-                        args.Completed += ReceiveCompleted;                     
-
+                        // 3. 开始异步接收
                         if (!pe.TCP_Client.Socket.ReceiveAsync(args))
                         {
-                            ProxyConfig.Proxy.ReceiveCompleted(pe.TCP_Client.Socket, args);
+                            // 同步完成时直接调用回调
+                            ReceiveCompleted(pe.TCP_Client.Socket, args);
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe?.Dispose();
+                        Operate.DoLog(nameof(StartReceive), ex.Message);
+                        pe?.Dispose(); // 异常时释放资源
                     }
                 }
 
                 private static void ReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
                     ProxyTCP pe = (ProxyTCP)args.UserToken;
+                    if (pe == null)
+                    {
+                        return;
+                    }
 
                     try
                     {
@@ -4042,10 +4054,6 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         pe?.Dispose();
-                    }
-                    finally
-                    {
-                        args.Dispose();
                     }
                 }
 
@@ -4551,54 +4559,66 @@ namespace WinsockPacketEditor
 
                 private static void StartServerReceive(ProxyTCP pe)
                 {
+                    if (pe?.TCP_Server?.Socket == null)
+                    {
+                        return;
+                    }
+
                     try
                     {
-                        var args = new SocketAsyncEventArgs();
-                        args.SetBuffer(pe.TCP_Server.Buffer, 0, pe.TCP_Server.Buffer.Length);
-                        args.UserToken = pe;
-                        args.Completed += ProxyConfig.Proxy.ServerReceiveCompleted;
-
-                        if (pe?.TCP_Server?.Socket == null)
+                        // 从ProxyTCP对象获取或创建SocketAsyncEventArgs
+                        var args = pe.TCP_Server.ReceiveArgs;
+                        if (args == null)
                         {
-                            return;
+                            args = new SocketAsyncEventArgs();
+                            args.SetBuffer(pe.TCP_Server.Buffer, 0, pe.TCP_Server.Buffer.Length);
+                            args.UserToken = pe;
+                            args.Completed += ServerReceiveCompleted;
+                            pe.TCP_Server.ReceiveArgs = args; // 保存引用以供重用
                         }
 
                         if (!pe.TCP_Server.Socket.ReceiveAsync(args))
                         {
-                            ProxyConfig.Proxy.ServerReceiveCompleted(pe.TCP_Server.Socket, args);
+                            // 同步完成时直接调用回调
+                            ServerReceiveCompleted(pe.TCP_Server.Socket, args);
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
+                        pe.Dispose(); // 发生异常时清理资源
+                    }                    
                 }
 
                 private static void ServerReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
                     ProxyTCP pe = (ProxyTCP)args.UserToken;
+                    if (pe == null) return;
 
                     try
                     {
                         if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            pe?.Dispose();
+                            pe.Dispose();
                             return;
                         }
 
                         int bytesRead = args.BytesTransferred;
-                        Span<byte> bData = pe.TCP_Server.Buffer.AsSpan(0, bytesRead);
+                        var bData = pe.TCP_Server.Buffer.AsSpan(0, bytesRead);
 
                         if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
                         {
-                            ProxyConfig.Proxy.DoFilter_TCP(pe, bData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.TCP_Resp);
+                            ProxyConfig.Proxy.DoFilter_TCP(pe, bData,
+                                ProxyConfig.Proxy.DataType.Response,
+                                PacketConfig.Packet.PacketType.TCP_Resp);
                         }
 
-                        ProxyConfig.Proxy.StartServerReceive(pe);
+                        // 准备下一次接收
+                        StartServerReceive(pe);
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
-                        pe?.Dispose();
+                        pe.Dispose();
                     }
                     catch (ObjectDisposedException)
                     {
@@ -4607,11 +4627,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe?.Dispose();
-                    }
-                    finally
-                    {
-                        args.Dispose();
+                        pe.Dispose();
                     }
                 }
 

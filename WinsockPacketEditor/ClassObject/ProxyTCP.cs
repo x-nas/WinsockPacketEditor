@@ -50,6 +50,7 @@ namespace WinsockPacketEditor
             public string Address { get; set; }
             public byte[] Buffer { get; private set; }
             public byte[] Data { get; set; }
+            public SocketAsyncEventArgs ReceiveArgs { get; set; }
 
             public TCPClient(Socket socket, int bufferSize)
             {
@@ -95,6 +96,7 @@ namespace WinsockPacketEditor
                                 {
                                     socket.Close();
                                     socket.Dispose();
+                                    ReceiveArgs?.Dispose();
                                 }
                             }
 
@@ -136,6 +138,7 @@ namespace WinsockPacketEditor
             public string Address { get; set; }
             public byte[] Buffer { get; private set; }
             public IPEndPoint EndPoint { get; set; }
+            public SocketAsyncEventArgs ReceiveArgs { get; set; }
 
             public TCPServer(int bufferSize)
             {
@@ -178,6 +181,7 @@ namespace WinsockPacketEditor
                                 {
                                     socket.Close();
                                     socket.Dispose();
+                                    ReceiveArgs?.Dispose();
                                 }
                             }
 
