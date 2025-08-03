@@ -1138,6 +1138,7 @@ namespace WinsockPacketEditor
 
             if (!this.bgwClientList.IsBusy)
             {
+                this.treeClientList.PauseLayout = true;
                 this.bgwClientList.RunWorkerAsync();
             }
 
@@ -1410,19 +1411,8 @@ namespace WinsockPacketEditor
                         #endregion
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
 
-        private void bgwClientList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
                 var aiList = Operate.ProxyConfig.Account.lstAuthInfo.ToList();
-
                 if (aiList == null)
                 {
                     return;
@@ -1434,6 +1424,19 @@ namespace WinsockPacketEditor
                     ai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, ClientIP, this.treeClientList);
                     ai.DevicesNumber = Operate.ProxyConfig.Account.GetDevicesNumber_ByAccountID(ai.AID);
                 }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwClientList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                this.treeClientList.PauseLayout = false;
+                this.treeClientList.Refresh();
             }
             catch (Exception ex)
             {
