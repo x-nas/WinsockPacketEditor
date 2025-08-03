@@ -232,7 +232,7 @@ namespace WinsockPacketEditor
                     {
                         if(record is ProxyInfo pi)
                         {
-                            return new AntdUI.CellImage(Operate.ProxyConfig.Proxy.GetImg_ByDataType(pi.DataType));
+                            return new AntdUI.CellImage(Operate.PacketConfig.Packet.GetImg_ByPacketType(pi.PacketType));
                         }
 
                         return value;
@@ -1599,6 +1599,30 @@ namespace WinsockPacketEditor
 
                     break;
 
+                case "miFilterSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "miHookSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HookSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
                 case "miListSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm())
@@ -1626,6 +1650,30 @@ namespace WinsockPacketEditor
                 case "miExternalProxySettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ExternalProxySettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "miHotKeySettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HotKeyForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "miBackUpSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new BackUpSettingsForm())
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,

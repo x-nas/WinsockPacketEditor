@@ -1195,6 +1195,7 @@
             this.tPacketList.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tPacketList.Gap = 8;
             this.tPacketList.GapCell = 0;
+            this.tPacketList.Gaps = new System.Drawing.Size(8, 8);
             this.tPacketList.Location = new System.Drawing.Point(0, 30);
             this.tPacketList.Margin = new System.Windows.Forms.Padding(0);
             this.tPacketList.MultipleRows = true;
@@ -1375,6 +1376,7 @@
             this.tFilterList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tFilterList.CellImpactHeight = false;
             this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tFilterList.Gap = 12;
             this.tFilterList.GapCell = 6;
             this.tFilterList.Location = new System.Drawing.Point(3, 53);
             this.tFilterList.MultipleRows = true;
@@ -1476,6 +1478,7 @@
             this.tSendList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tSendList.CellImpactHeight = false;
             this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSendList.Gap = 12;
             this.tSendList.GapCell = 6;
             this.tSendList.Location = new System.Drawing.Point(3, 53);
             this.tSendList.MultipleRows = true;
@@ -1682,6 +1685,7 @@
             this.tRobotList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tRobotList.CellImpactHeight = false;
             this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tRobotList.Gap = 12;
             this.tRobotList.GapCell = 6;
             this.tRobotList.Location = new System.Drawing.Point(3, 53);
             this.tRobotList.MultipleRows = true;
@@ -2857,6 +2861,7 @@
             this.tSystemLog.EmptyHeader = true;
             this.tSystemLog.Gap = 8;
             this.tSystemLog.GapCell = 0;
+            this.tSystemLog.Gaps = new System.Drawing.Size(8, 8);
             this.tSystemLog.Location = new System.Drawing.Point(0, 0);
             this.tSystemLog.MultipleRows = true;
             this.tSystemLog.Name = "tSystemLog";

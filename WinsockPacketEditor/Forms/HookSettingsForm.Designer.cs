@@ -28,8 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HookSettingsForm));
             this.tlpHookSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tabHookSettings = new AntdUI.Tabs();
+            this.tpInjectMode = new AntdUI.TabPage();
+            this.tpProxyMode = new AntdUI.TabPage();
+            this.tlpInjectMode = new System.Windows.Forms.TableLayoutPanel();
             this.tlpWS2 = new System.Windows.Forms.TableLayoutPanel();
             this.cbHookWSA_RecvFrom = new AntdUI.Checkbox();
             this.cbHookWSA_Recv = new AntdUI.Checkbox();
@@ -44,41 +49,105 @@
             this.cbHookWS1_Recv = new AntdUI.Checkbox();
             this.cbHookWS1_SendTo = new AntdUI.Checkbox();
             this.cbHookWS1_Send = new AntdUI.Checkbox();
+            this.dWS1 = new AntdUI.Divider();
+            this.dWS2 = new AntdUI.Divider();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.dWS1 = new AntdUI.Divider();
-            this.divider1 = new AntdUI.Divider();
+            this.tlpProxyMode = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpUDP = new System.Windows.Forms.TableLayoutPanel();
+            this.cbUDP_Resp = new AntdUI.Checkbox();
+            this.cbUDP_Req = new AntdUI.Checkbox();
+            this.tlpTCP = new System.Windows.Forms.TableLayoutPanel();
+            this.cbTCP_Resp = new AntdUI.Checkbox();
+            this.cbTCP_Req = new AntdUI.Checkbox();
+            this.dTCP = new AntdUI.Divider();
+            this.dUDP = new AntdUI.Divider();
             this.tlpHookSettings.SuspendLayout();
+            this.tabHookSettings.SuspendLayout();
+            this.tpInjectMode.SuspendLayout();
+            this.tpProxyMode.SuspendLayout();
+            this.tlpInjectMode.SuspendLayout();
             this.tlpWS2.SuspendLayout();
             this.tlpWS1.SuspendLayout();
             this.tlpButton.SuspendLayout();
+            this.tlpProxyMode.SuspendLayout();
+            this.tlpUDP.SuspendLayout();
+            this.tlpTCP.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpHookSettings
             // 
             this.tlpHookSettings.ColumnCount = 1;
             this.tlpHookSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpHookSettings.Controls.Add(this.tlpWS2, 0, 6);
-            this.tlpHookSettings.Controls.Add(this.tlpWS1, 0, 2);
-            this.tlpHookSettings.Controls.Add(this.tlpButton, 0, 7);
-            this.tlpHookSettings.Controls.Add(this.dWS1, 0, 0);
-            this.tlpHookSettings.Controls.Add(this.divider1, 0, 4);
+            this.tlpHookSettings.Controls.Add(this.tlpButton, 0, 1);
+            this.tlpHookSettings.Controls.Add(this.tabHookSettings, 0, 0);
             this.tlpHookSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpHookSettings.Location = new System.Drawing.Point(0, 0);
             this.tlpHookSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tlpHookSettings.Name = "tlpHookSettings";
-            this.tlpHookSettings.RowCount = 8;
-            this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpHookSettings.RowCount = 2;
             this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpHookSettings.Size = new System.Drawing.Size(484, 561);
             this.tlpHookSettings.TabIndex = 0;
+            // 
+            // tabHookSettings
+            // 
+            this.tabHookSettings.Controls.Add(this.tpInjectMode);
+            this.tabHookSettings.Controls.Add(this.tpProxyMode);
+            this.tabHookSettings.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabHookSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabHookSettings.Location = new System.Drawing.Point(3, 3);
+            this.tabHookSettings.Name = "tabHookSettings";
+            this.tabHookSettings.Pages.Add(this.tpInjectMode);
+            this.tabHookSettings.Pages.Add(this.tpProxyMode);
+            this.tabHookSettings.Size = new System.Drawing.Size(478, 495);
+            this.tabHookSettings.Style = styleLine1;
+            this.tabHookSettings.TabIndex = 0;
+            this.tabHookSettings.Text = "tabs1";
+            // 
+            // tpInjectMode
+            // 
+            this.tpInjectMode.Controls.Add(this.tlpInjectMode);
+            this.tpInjectMode.Location = new System.Drawing.Point(3, 33);
+            this.tpInjectMode.Name = "tpInjectMode";
+            this.tpInjectMode.Size = new System.Drawing.Size(472, 459);
+            this.tpInjectMode.TabIndex = 0;
+            this.tpInjectMode.Text = "tpInjectMode";
+            // 
+            // tpProxyMode
+            // 
+            this.tpProxyMode.Controls.Add(this.tlpProxyMode);
+            this.tpProxyMode.Location = new System.Drawing.Point(0, 0);
+            this.tpProxyMode.Name = "tpProxyMode";
+            this.tpProxyMode.Size = new System.Drawing.Size(0, 0);
+            this.tpProxyMode.TabIndex = 1;
+            this.tpProxyMode.Text = "tpProxyMode";
+            // 
+            // tlpInjectMode
+            // 
+            this.tlpInjectMode.ColumnCount = 1;
+            this.tlpInjectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpInjectMode.Controls.Add(this.tlpWS2, 0, 6);
+            this.tlpInjectMode.Controls.Add(this.tlpWS1, 0, 2);
+            this.tlpInjectMode.Controls.Add(this.dWS1, 0, 0);
+            this.tlpInjectMode.Controls.Add(this.dWS2, 0, 4);
+            this.tlpInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpInjectMode.Location = new System.Drawing.Point(0, 0);
+            this.tlpInjectMode.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpInjectMode.Name = "tlpInjectMode";
+            this.tlpInjectMode.RowCount = 7;
+            this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpInjectMode.Size = new System.Drawing.Size(472, 459);
+            this.tlpInjectMode.TabIndex = 1;
             // 
             // tlpWS2
             // 
@@ -103,13 +172,13 @@
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpWS2.Size = new System.Drawing.Size(484, 283);
+            this.tlpWS2.Size = new System.Drawing.Size(472, 241);
             this.tlpWS2.TabIndex = 7;
             // 
             // cbHookWSA_RecvFrom
             // 
             this.cbHookWSA_RecvFrom.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbHookWSA_RecvFrom.Location = new System.Drawing.Point(245, 147);
+            this.cbHookWSA_RecvFrom.Location = new System.Drawing.Point(239, 147);
             this.cbHookWSA_RecvFrom.Name = "cbHookWSA_RecvFrom";
             this.cbHookWSA_RecvFrom.Size = new System.Drawing.Size(127, 42);
             this.cbHookWSA_RecvFrom.TabIndex = 8;
@@ -127,7 +196,7 @@
             // cbHookWSA_SendTo
             // 
             this.cbHookWSA_SendTo.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbHookWSA_SendTo.Location = new System.Drawing.Point(245, 99);
+            this.cbHookWSA_SendTo.Location = new System.Drawing.Point(239, 99);
             this.cbHookWSA_SendTo.Name = "cbHookWSA_SendTo";
             this.cbHookWSA_SendTo.Size = new System.Drawing.Size(127, 42);
             this.cbHookWSA_SendTo.TabIndex = 6;
@@ -145,7 +214,7 @@
             // cbHookWS2_RecvFrom
             // 
             this.cbHookWS2_RecvFrom.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbHookWS2_RecvFrom.Location = new System.Drawing.Point(245, 51);
+            this.cbHookWS2_RecvFrom.Location = new System.Drawing.Point(239, 51);
             this.cbHookWS2_RecvFrom.Name = "cbHookWS2_RecvFrom";
             this.cbHookWS2_RecvFrom.Size = new System.Drawing.Size(90, 42);
             this.cbHookWS2_RecvFrom.TabIndex = 4;
@@ -163,7 +232,7 @@
             // cbHookWS2_SendTo
             // 
             this.cbHookWS2_SendTo.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbHookWS2_SendTo.Location = new System.Drawing.Point(245, 3);
+            this.cbHookWS2_SendTo.Location = new System.Drawing.Point(239, 3);
             this.cbHookWS2_SendTo.Name = "cbHookWS2_SendTo";
             this.cbHookWS2_SendTo.Size = new System.Drawing.Size(90, 42);
             this.cbHookWS2_SendTo.TabIndex = 2;
@@ -195,13 +264,13 @@
             this.tlpWS1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpWS1.Size = new System.Drawing.Size(484, 100);
+            this.tlpWS1.Size = new System.Drawing.Size(472, 100);
             this.tlpWS1.TabIndex = 5;
             // 
             // cbHookWS1_RecvFrom
             // 
             this.cbHookWS1_RecvFrom.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbHookWS1_RecvFrom.Location = new System.Drawing.Point(245, 51);
+            this.cbHookWS1_RecvFrom.Location = new System.Drawing.Point(239, 51);
             this.cbHookWS1_RecvFrom.Name = "cbHookWS1_RecvFrom";
             this.cbHookWS1_RecvFrom.Size = new System.Drawing.Size(118, 42);
             this.cbHookWS1_RecvFrom.TabIndex = 3;
@@ -219,7 +288,7 @@
             // cbHookWS1_SendTo
             // 
             this.cbHookWS1_SendTo.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbHookWS1_SendTo.Location = new System.Drawing.Point(245, 3);
+            this.cbHookWS1_SendTo.Location = new System.Drawing.Point(239, 3);
             this.cbHookWS1_SendTo.Name = "cbHookWS1_SendTo";
             this.cbHookWS1_SendTo.Size = new System.Drawing.Size(118, 42);
             this.cbHookWS1_SendTo.TabIndex = 1;
@@ -233,6 +302,28 @@
             this.cbHookWS1_Send.Size = new System.Drawing.Size(102, 42);
             this.cbHookWS1_Send.TabIndex = 0;
             this.cbHookWS1_Send.Text = "发送 1.1";
+            // 
+            // dWS1
+            // 
+            this.dWS1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dWS1.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dWS1.Location = new System.Drawing.Point(3, 3);
+            this.dWS1.Name = "dWS1";
+            this.dWS1.Orientation = AntdUI.TOrientation.Left;
+            this.dWS1.Size = new System.Drawing.Size(466, 23);
+            this.dWS1.TabIndex = 4;
+            this.dWS1.Text = "Winsock 1.1";
+            // 
+            // dWS2
+            // 
+            this.dWS2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dWS2.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dWS2.Location = new System.Drawing.Point(3, 172);
+            this.dWS2.Name = "dWS2";
+            this.dWS2.Orientation = AntdUI.TOrientation.Left;
+            this.dWS2.Size = new System.Drawing.Size(466, 23);
+            this.dWS2.TabIndex = 6;
+            this.dWS2.Text = "Winsock 2.0";
             // 
             // tlpButton
             // 
@@ -253,7 +344,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Size = new System.Drawing.Size(484, 60);
-            this.tlpButton.TabIndex = 3;
+            this.tlpButton.TabIndex = 4;
             // 
             // bSave
             // 
@@ -281,27 +372,125 @@
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
-            // dWS1
+            // tlpProxyMode
             // 
-            this.dWS1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dWS1.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dWS1.Location = new System.Drawing.Point(3, 3);
-            this.dWS1.Name = "dWS1";
-            this.dWS1.Orientation = AntdUI.TOrientation.Left;
-            this.dWS1.Size = new System.Drawing.Size(478, 23);
-            this.dWS1.TabIndex = 4;
-            this.dWS1.Text = "Winsock 1.1";
+            this.tlpProxyMode.ColumnCount = 1;
+            this.tlpProxyMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpProxyMode.Controls.Add(this.tlpUDP, 0, 6);
+            this.tlpProxyMode.Controls.Add(this.tlpTCP, 0, 2);
+            this.tlpProxyMode.Controls.Add(this.dTCP, 0, 0);
+            this.tlpProxyMode.Controls.Add(this.dUDP, 0, 4);
+            this.tlpProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpProxyMode.Location = new System.Drawing.Point(0, 0);
+            this.tlpProxyMode.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpProxyMode.Name = "tlpProxyMode";
+            this.tlpProxyMode.RowCount = 7;
+            this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpProxyMode.Size = new System.Drawing.Size(0, 0);
+            this.tlpProxyMode.TabIndex = 2;
             // 
-            // divider1
+            // tlpUDP
             // 
-            this.divider1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.divider1.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.divider1.Location = new System.Drawing.Point(3, 172);
-            this.divider1.Name = "divider1";
-            this.divider1.Orientation = AntdUI.TOrientation.Left;
-            this.divider1.Size = new System.Drawing.Size(478, 23);
-            this.divider1.TabIndex = 6;
-            this.divider1.Text = "Winsock 2.0";
+            this.tlpUDP.ColumnCount = 2;
+            this.tlpUDP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpUDP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpUDP.Controls.Add(this.cbUDP_Resp, 1, 0);
+            this.tlpUDP.Controls.Add(this.cbUDP_Req, 0, 0);
+            this.tlpUDP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpUDP.Location = new System.Drawing.Point(0, 218);
+            this.tlpUDP.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpUDP.Name = "tlpUDP";
+            this.tlpUDP.RowCount = 2;
+            this.tlpUDP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpUDP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpUDP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpUDP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpUDP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpUDP.Size = new System.Drawing.Size(1, 1);
+            this.tlpUDP.TabIndex = 7;
+            // 
+            // cbUDP_Resp
+            // 
+            this.cbUDP_Resp.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbUDP_Resp.Location = new System.Drawing.Point(3, 3);
+            this.cbUDP_Resp.Name = "cbUDP_Resp";
+            this.cbUDP_Resp.Size = new System.Drawing.Size(74, 42);
+            this.cbUDP_Resp.TabIndex = 2;
+            this.cbUDP_Resp.Text = "响应";
+            // 
+            // cbUDP_Req
+            // 
+            this.cbUDP_Req.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbUDP_Req.Location = new System.Drawing.Point(3, 3);
+            this.cbUDP_Req.Name = "cbUDP_Req";
+            this.cbUDP_Req.Size = new System.Drawing.Size(74, 42);
+            this.cbUDP_Req.TabIndex = 1;
+            this.cbUDP_Req.Text = "请求";
+            // 
+            // tlpTCP
+            // 
+            this.tlpTCP.ColumnCount = 2;
+            this.tlpTCP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpTCP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpTCP.Controls.Add(this.cbTCP_Resp, 1, 0);
+            this.tlpTCP.Controls.Add(this.cbTCP_Req, 0, 0);
+            this.tlpTCP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpTCP.Location = new System.Drawing.Point(0, 49);
+            this.tlpTCP.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpTCP.Name = "tlpTCP";
+            this.tlpTCP.RowCount = 2;
+            this.tlpTCP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpTCP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTCP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpTCP.Size = new System.Drawing.Size(1, 100);
+            this.tlpTCP.TabIndex = 5;
+            // 
+            // cbTCP_Resp
+            // 
+            this.cbTCP_Resp.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbTCP_Resp.Location = new System.Drawing.Point(3, 3);
+            this.cbTCP_Resp.Name = "cbTCP_Resp";
+            this.cbTCP_Resp.Size = new System.Drawing.Size(74, 42);
+            this.cbTCP_Resp.TabIndex = 1;
+            this.cbTCP_Resp.Text = "响应";
+            // 
+            // cbTCP_Req
+            // 
+            this.cbTCP_Req.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbTCP_Req.Location = new System.Drawing.Point(3, 3);
+            this.cbTCP_Req.Name = "cbTCP_Req";
+            this.cbTCP_Req.Size = new System.Drawing.Size(74, 42);
+            this.cbTCP_Req.TabIndex = 0;
+            this.cbTCP_Req.Text = "请求";
+            // 
+            // dTCP
+            // 
+            this.dTCP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dTCP.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dTCP.Location = new System.Drawing.Point(3, 3);
+            this.dTCP.Name = "dTCP";
+            this.dTCP.Orientation = AntdUI.TOrientation.Left;
+            this.dTCP.Size = new System.Drawing.Size(1, 23);
+            this.dTCP.TabIndex = 4;
+            this.dTCP.Text = "TCP 协议";
+            // 
+            // dUDP
+            // 
+            this.dUDP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dUDP.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dUDP.Location = new System.Drawing.Point(3, 172);
+            this.dUDP.Name = "dUDP";
+            this.dUDP.Orientation = AntdUI.TOrientation.Left;
+            this.dUDP.Size = new System.Drawing.Size(1, 23);
+            this.dUDP.TabIndex = 6;
+            this.dUDP.Text = "UDP 协议";
             // 
             // HookSettingsForm
             // 
@@ -319,11 +508,20 @@
             this.Text = "HookSettings";
             this.Load += new System.EventHandler(this.HookSettingsForm_Load);
             this.tlpHookSettings.ResumeLayout(false);
+            this.tabHookSettings.ResumeLayout(false);
+            this.tpInjectMode.ResumeLayout(false);
+            this.tpProxyMode.ResumeLayout(false);
+            this.tlpInjectMode.ResumeLayout(false);
             this.tlpWS2.ResumeLayout(false);
             this.tlpWS2.PerformLayout();
             this.tlpWS1.ResumeLayout(false);
             this.tlpWS1.PerformLayout();
             this.tlpButton.ResumeLayout(false);
+            this.tlpProxyMode.ResumeLayout(false);
+            this.tlpUDP.ResumeLayout(false);
+            this.tlpUDP.PerformLayout();
+            this.tlpTCP.ResumeLayout(false);
+            this.tlpTCP.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -334,12 +532,9 @@
         private System.Windows.Forms.TableLayoutPanel tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private System.Windows.Forms.TableLayoutPanel tlpWS1;
-        private AntdUI.Checkbox cbHookWS1_RecvFrom;
-        private AntdUI.Checkbox cbHookWS1_Recv;
-        private AntdUI.Checkbox cbHookWS1_SendTo;
-        private AntdUI.Checkbox cbHookWS1_Send;
-        private AntdUI.Divider dWS1;
+        private AntdUI.Tabs tabHookSettings;
+        private AntdUI.TabPage tpInjectMode;
+        private System.Windows.Forms.TableLayoutPanel tlpInjectMode;
         private System.Windows.Forms.TableLayoutPanel tlpWS2;
         private AntdUI.Checkbox cbHookWSA_RecvFrom;
         private AntdUI.Checkbox cbHookWSA_Recv;
@@ -349,6 +544,22 @@
         private AntdUI.Checkbox cbHookWS2_Recv;
         private AntdUI.Checkbox cbHookWS2_SendTo;
         private AntdUI.Checkbox cbHookWS2_Send;
-        private AntdUI.Divider divider1;
+        private System.Windows.Forms.TableLayoutPanel tlpWS1;
+        private AntdUI.Checkbox cbHookWS1_RecvFrom;
+        private AntdUI.Checkbox cbHookWS1_Recv;
+        private AntdUI.Checkbox cbHookWS1_SendTo;
+        private AntdUI.Checkbox cbHookWS1_Send;
+        private AntdUI.Divider dWS1;
+        private AntdUI.Divider dWS2;
+        private AntdUI.TabPage tpProxyMode;
+        private System.Windows.Forms.TableLayoutPanel tlpProxyMode;
+        private System.Windows.Forms.TableLayoutPanel tlpUDP;
+        private AntdUI.Checkbox cbUDP_Resp;
+        private AntdUI.Checkbox cbUDP_Req;
+        private System.Windows.Forms.TableLayoutPanel tlpTCP;
+        private AntdUI.Checkbox cbTCP_Resp;
+        private AntdUI.Checkbox cbTCP_Req;
+        private AntdUI.Divider dTCP;
+        private AntdUI.Divider dUDP;
     }
 }

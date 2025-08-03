@@ -54,23 +54,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
-
-        #region//数据类型
-
-        Operate.ProxyConfig.Proxy.DataType _DataType;
-
-        public Operate.ProxyConfig.Proxy.DataType DataType
-        {
-            get => _DataType;
-            set
-            {
-                if (_DataType == value) return;
-                _DataType = value;
-                OnPropertyChanged();
-            }
-        }
-
         #endregion                
 
         #region//客户端地址
@@ -237,7 +220,6 @@ namespace WinsockPacketEditor
             DateTime ProxyTime,
             int PacketSocket,
             Operate.PacketConfig.Packet.PacketType PacketType,
-            Operate.ProxyConfig.Proxy.DataType DataType,        
             string ClientAddr,
             string ServerAddr,
             string ServerDomain, 
@@ -250,7 +232,6 @@ namespace WinsockPacketEditor
             this._ProxyTime = ProxyTime;
             this._PacketSocket = PacketSocket;
             this._PacketType = PacketType;
-            this._DataType = DataType;
             this._ClientAddr = ClientAddr;
             this._ServerAddr = ServerAddr;
             this._ServerDomain = ServerDomain;

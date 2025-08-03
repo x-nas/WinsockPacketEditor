@@ -76,6 +76,12 @@ namespace WinsockPacketEditor
             public static bool IsShow_FloatButton = true;
             public static bool IsShow_TextCompare = false, IsShow_TextDuplicate = false;
             public static Execute ListExecute = Execute.Sequence;
+            public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
+            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+            public static readonly Image SentImage = Properties.Resources.sent;
+            public static readonly Image ReceivedImage = Properties.Resources.received;
+            public static readonly Font FontUnderline = new Font(RichTextBox.DefaultFont, FontStyle.Underline);
+            public static readonly Font FontStrikeout = new Font(RichTextBox.DefaultFont, FontStyle.Strikeout);
 
             #region//结构定义           
 
@@ -1869,12 +1875,12 @@ namespace WinsockPacketEditor
 
                     if (color == SystemConfig.col_Add)
                     {
-                        box.SelectionFont = Operate.PacketConfig.Packet.FontUnderline;
+                        box.SelectionFont = SystemConfig.FontUnderline;
                     }
 
                     if (color == SystemConfig.col_Del)
                     {
-                        box.SelectionFont = Operate.PacketConfig.Packet.FontStrikeout;
+                        box.SelectionFont = SystemConfig.FontStrikeout;
                     }
 
                     box.SelectionColor = color;
@@ -2134,6 +2140,19 @@ namespace WinsockPacketEditor
                         new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
                         new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
                         new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
+                        new XElement("CheckNotShow", SystemConfig.CheckNotShow),
+                        new XElement("CheckSocket", SystemConfig.CheckSocket),
+                        new XElement("CheckSocket_Value", SystemConfig.CheckSocket_Value),
+                        new XElement("CheckIP", SystemConfig.CheckIP),
+                        new XElement("CheckIP_Value", SystemConfig.CheckIP_Value),
+                        new XElement("CheckPort", SystemConfig.CheckPort),
+                        new XElement("CheckPort_Value", SystemConfig.CheckPort_Value),
+                        new XElement("CheckHead", SystemConfig.CheckHead),
+                        new XElement("CheckHead_Value", SystemConfig.CheckHead_Value),
+                        new XElement("CheckData", SystemConfig.CheckData),
+                        new XElement("CheckData_Value", SystemConfig.CheckData_Value),
+                        new XElement("CheckSize", SystemConfig.CheckLen),
+                        new XElement("CheckLength_Value", SystemConfig.CheckLength_Value),
                         new XElement("HotKey1", SystemConfig.HotKey1),
                         new XElement("HotKey2", SystemConfig.HotKey2),
                         new XElement("HotKey3", SystemConfig.HotKey3),
@@ -2195,6 +2214,19 @@ namespace WinsockPacketEditor
                         LogConfig.List.AutoRoll = Convert.ToBoolean(dtSystemConfig.Rows[0]["LogList_AutoRoll"]);
                         LogConfig.List.AutoClear = Convert.ToBoolean(dtSystemConfig.Rows[0]["LogList_AutoClear"]);
                         LogConfig.List.AutoClear_Value = Convert.ToInt32(dtSystemConfig.Rows[0]["LogList_AutoClear_Value"]);
+                        SystemConfig.CheckNotShow = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckNotShow"]);
+                        SystemConfig.CheckSocket = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckSocket"]);
+                        SystemConfig.CheckSocket_Value = dtSystemConfig.Rows[0]["CheckSocket_Value"].ToString();
+                        SystemConfig.CheckIP = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckIP"]);
+                        SystemConfig.CheckIP_Value = dtSystemConfig.Rows[0]["CheckIP_Value"].ToString();
+                        SystemConfig.CheckPort = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckPort"]);
+                        SystemConfig.CheckPort_Value = dtSystemConfig.Rows[0]["CheckPort_Value"].ToString();
+                        SystemConfig.CheckHead = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckHead"]);
+                        SystemConfig.CheckHead_Value = dtSystemConfig.Rows[0]["CheckHead_Value"].ToString();
+                        SystemConfig.CheckData = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckData"]);
+                        SystemConfig.CheckData_Value = dtSystemConfig.Rows[0]["CheckData_Value"].ToString();
+                        SystemConfig.CheckLen = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckSize"]);
+                        SystemConfig.CheckLength_Value = dtSystemConfig.Rows[0]["CheckLength_Value"].ToString();
                         SystemConfig.HotKey1 = dtSystemConfig.Rows[0]["HotKey1"].ToString();
                         SystemConfig.HotKey2 = dtSystemConfig.Rows[0]["HotKey2"].ToString();
                         SystemConfig.HotKey3 = dtSystemConfig.Rows[0]["HotKey3"].ToString();
@@ -2367,6 +2399,84 @@ namespace WinsockPacketEditor
                         LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
                     }
 
+                    XElement CheckNotShow = xeSystemConfig.Element("CheckNotShow");
+                    if (CheckNotShow != null)
+                    {
+                        SystemConfig.CheckNotShow = Convert.ToBoolean(CheckNotShow.Value);
+                    }
+
+                    XElement CheckSocket = xeSystemConfig.Element("CheckSocket");
+                    if (CheckSocket != null)
+                    {
+                        SystemConfig.CheckSocket = Convert.ToBoolean(CheckSocket.Value);
+                    }
+
+                    XElement CheckSocket_Value = xeSystemConfig.Element("CheckSocket_Value");
+                    if (CheckSocket_Value != null)
+                    {
+                        SystemConfig.CheckSocket_Value = CheckSocket_Value.Value;
+                    }
+
+                    XElement CheckIP = xeSystemConfig.Element("CheckIP");
+                    if (CheckIP != null)
+                    {
+                        SystemConfig.CheckIP = Convert.ToBoolean(CheckIP.Value);
+                    }
+
+                    XElement CheckIP_Value = xeSystemConfig.Element("CheckIP_Value");
+                    if (CheckIP_Value != null)
+                    {
+                        SystemConfig.CheckIP_Value = CheckIP_Value.Value;
+                    }
+
+                    XElement CheckPort = xeSystemConfig.Element("CheckPort");
+                    if (CheckPort != null)
+                    {
+                        SystemConfig.CheckPort = Convert.ToBoolean(CheckPort.Value);
+                    }
+
+                    XElement CheckPort_Value = xeSystemConfig.Element("CheckPort_Value");
+                    if (CheckPort_Value != null)
+                    {
+                        SystemConfig.CheckPort_Value = CheckPort_Value.Value;
+                    }
+
+                    XElement CheckHead = xeSystemConfig.Element("CheckHead");
+                    if (CheckHead != null)
+                    {
+                        SystemConfig.CheckHead = Convert.ToBoolean(CheckHead.Value);
+                    }
+
+                    XElement CheckHead_Value = xeSystemConfig.Element("CheckHead_Value");
+                    if (CheckHead_Value != null)
+                    {
+                        SystemConfig.CheckHead_Value = CheckHead_Value.Value;
+                    }
+
+                    XElement CheckData = xeSystemConfig.Element("CheckData");
+                    if (CheckData != null)
+                    {
+                        SystemConfig.CheckData = Convert.ToBoolean(CheckData.Value);
+                    }
+
+                    XElement CheckData_Value = xeSystemConfig.Element("CheckData_Value");
+                    if (CheckData_Value != null)
+                    {
+                        SystemConfig.CheckData_Value = CheckData_Value.Value;
+                    }
+
+                    XElement CheckSize = xeSystemConfig.Element("CheckSize");
+                    if (CheckSize != null)
+                    {
+                        SystemConfig.CheckLen = Convert.ToBoolean(CheckSize.Value);
+                    }
+
+                    XElement CheckLength_Value = xeSystemConfig.Element("CheckLength_Value");
+                    if (CheckLength_Value != null)
+                    {
+                        SystemConfig.CheckLength_Value = CheckLength_Value.Value;
+                    }
+
                     XElement HotKey1 = xeSystemConfig.Element("HotKey1");
                     if (HotKey1 != null)
                     {
@@ -2460,20 +2570,7 @@ namespace WinsockPacketEditor
                 try
                 {
                     XElement xeInjectMode =
-                        new XElement("InjectMode",
-                        new XElement("CheckNotShow", PacketConfig.Packet.CheckNotShow),
-                        new XElement("CheckSocket", PacketConfig.Packet.CheckSocket),
-                        new XElement("CheckSocket_Value", PacketConfig.Packet.CheckSocket_Value),
-                        new XElement("CheckIP", PacketConfig.Packet.CheckIP),
-                        new XElement("CheckIP_Value", PacketConfig.Packet.CheckIP_Value),
-                        new XElement("CheckPort", PacketConfig.Packet.CheckPort),
-                        new XElement("CheckPort_Value", PacketConfig.Packet.CheckPort_Value),
-                        new XElement("CheckHead", PacketConfig.Packet.CheckHead),
-                        new XElement("CheckHead_Value", PacketConfig.Packet.CheckHead_Value),
-                        new XElement("CheckData", PacketConfig.Packet.CheckData),
-                        new XElement("CheckData_Value", PacketConfig.Packet.CheckData_Value),
-                        new XElement("CheckSize", PacketConfig.Packet.CheckLen),
-                        new XElement("CheckLength_Value", PacketConfig.Packet.CheckLength_Value),
+                        new XElement("InjectMode",                        
                         new XElement("HookWS1_Send", PacketConfig.Packet.HookWS1_Send),
                         new XElement("HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo),
                         new XElement("HookWS1_Recv", PacketConfig.Packet.HookWS1_Recv),
@@ -2513,20 +2610,7 @@ namespace WinsockPacketEditor
                     DataTable InjectMode = DataBase.SelectTable_InjectMode();
 
                     if (InjectMode.Rows.Count > 0)
-                    {                        
-                        PacketConfig.Packet.CheckNotShow = Convert.ToBoolean(InjectMode.Rows[0]["CheckNotShow"]);
-                        PacketConfig.Packet.CheckSocket = Convert.ToBoolean(InjectMode.Rows[0]["CheckSocket"]);
-                        PacketConfig.Packet.CheckSocket_Value = InjectMode.Rows[0]["CheckSocket_Value"].ToString();
-                        PacketConfig.Packet.CheckIP = Convert.ToBoolean(InjectMode.Rows[0]["CheckIP"]);
-                        PacketConfig.Packet.CheckIP_Value = InjectMode.Rows[0]["CheckIP_Value"].ToString();
-                        PacketConfig.Packet.CheckPort = Convert.ToBoolean(InjectMode.Rows[0]["CheckPort"]);
-                        PacketConfig.Packet.CheckPort_Value = InjectMode.Rows[0]["CheckPort_Value"].ToString();
-                        PacketConfig.Packet.CheckHead = Convert.ToBoolean(InjectMode.Rows[0]["CheckHead"]);
-                        PacketConfig.Packet.CheckHead_Value = InjectMode.Rows[0]["CheckHead_Value"].ToString();
-                        PacketConfig.Packet.CheckData = Convert.ToBoolean(InjectMode.Rows[0]["CheckData"]);
-                        PacketConfig.Packet.CheckData_Value = InjectMode.Rows[0]["CheckData_Value"].ToString();
-                        PacketConfig.Packet.CheckLen = Convert.ToBoolean(InjectMode.Rows[0]["CheckSize"]);
-                        PacketConfig.Packet.CheckLength_Value = InjectMode.Rows[0]["CheckLength_Value"].ToString();
+                    {
                         PacketConfig.Packet.HookWS1_Send = Convert.ToBoolean(InjectMode.Rows[0]["HookWS1_Send"]);
                         PacketConfig.Packet.HookWS1_SendTo = Convert.ToBoolean(InjectMode.Rows[0]["HookWS1_SendTo"]);
                         PacketConfig.Packet.HookWS1_Recv = Convert.ToBoolean(InjectMode.Rows[0]["HookWS1_Recv"]);
@@ -2557,84 +2641,6 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    XElement CheckNotShow = xeInjectMode.Element("CheckNotShow");
-                    if (CheckNotShow != null)
-                    {
-                        PacketConfig.Packet.CheckNotShow = Convert.ToBoolean(CheckNotShow.Value);
-                    }
-
-                    XElement CheckSocket = xeInjectMode.Element("CheckSocket");
-                    if (CheckSocket != null)
-                    {
-                        PacketConfig.Packet.CheckSocket = Convert.ToBoolean(CheckSocket.Value);
-                    }
-
-                    XElement CheckSocket_Value = xeInjectMode.Element("CheckSocket_Value");
-                    if (CheckSocket_Value != null)
-                    {
-                        PacketConfig.Packet.CheckSocket_Value = CheckSocket_Value.Value;
-                    }
-
-                    XElement CheckIP = xeInjectMode.Element("CheckIP");
-                    if (CheckIP != null)
-                    {
-                        PacketConfig.Packet.CheckIP = Convert.ToBoolean(CheckIP.Value);
-                    }
-
-                    XElement CheckIP_Value = xeInjectMode.Element("CheckIP_Value");
-                    if (CheckIP_Value != null)
-                    {
-                        PacketConfig.Packet.CheckIP_Value = CheckIP_Value.Value;
-                    }
-
-                    XElement CheckPort = xeInjectMode.Element("CheckPort");
-                    if (CheckPort != null)
-                    {
-                        PacketConfig.Packet.CheckPort = Convert.ToBoolean(CheckPort.Value);
-                    }
-
-                    XElement CheckPort_Value = xeInjectMode.Element("CheckPort_Value");
-                    if (CheckPort_Value != null)
-                    {
-                        PacketConfig.Packet.CheckPort_Value = CheckPort_Value.Value;
-                    }
-
-                    XElement CheckHead = xeInjectMode.Element("CheckHead");
-                    if (CheckHead != null)
-                    {
-                        PacketConfig.Packet.CheckHead = Convert.ToBoolean(CheckHead.Value);
-                    }
-
-                    XElement CheckHead_Value = xeInjectMode.Element("CheckHead_Value");
-                    if (CheckHead_Value != null)
-                    {
-                        PacketConfig.Packet.CheckHead_Value = CheckHead_Value.Value;
-                    }
-
-                    XElement CheckData = xeInjectMode.Element("CheckData");
-                    if (CheckData != null)
-                    {
-                        PacketConfig.Packet.CheckData = Convert.ToBoolean(CheckData.Value);
-                    }
-
-                    XElement CheckData_Value = xeInjectMode.Element("CheckData_Value");
-                    if (CheckData_Value != null)
-                    {
-                        PacketConfig.Packet.CheckData_Value = CheckData_Value.Value;
-                    }
-
-                    XElement CheckSize = xeInjectMode.Element("CheckSize");
-                    if (CheckSize != null)
-                    {
-                        PacketConfig.Packet.CheckLen = Convert.ToBoolean(CheckSize.Value);
-                    }
-
-                    XElement CheckLength_Value = xeInjectMode.Element("CheckLength_Value");
-                    if (CheckLength_Value != null)
-                    {
-                        PacketConfig.Packet.CheckLength_Value = CheckLength_Value.Value;
-                    }
-
                     XElement HookWS1_Send = xeInjectMode.Element("HookWS1_Send");
                     if (HookWS1_Send != null)
                     {
@@ -3808,14 +3814,12 @@ namespace WinsockPacketEditor
                 public static string ExternalProxy_AppointPort = "80,8080,443,8443", ExternalProxy_UserName, ExternalProxy_PassWord;
                 public static int SocketBufferSize = 8192;
                 public static ushort ProxyPort = 1080;
-                public static int UDPCloseTime = 30;
                 public static long Total_Request = 0;
                 public static long Total_Response = 0;
-                public static int MaxChartPoint = 100;
-                public const long MaxNetworkSpeed = 100000;
                 public static string ProxyOnLineInfo = string.Empty;
                 public static string ProxyBytesInfo = string.Empty;
                 public static string ProxySpeedInfo = string.Empty;
+                public static bool HookTCP_Req = true, HookTCP_Resp = true, HookUDP_Req = true, HookUDP_Resp = true;
 
                 public static readonly ConcurrentDictionary<IPEndPoint, ProxyUDP> UDPClients = new ConcurrentDictionary<IPEndPoint, ProxyUDP>();
                 public static readonly TimeSpan _inactiveTimeout = TimeSpan.FromMinutes(5);
@@ -3885,18 +3889,6 @@ namespace WinsockPacketEditor
                     Success = 0,
                     Fault = 1,
                     Unsupport = 7,
-                }
-
-                public enum DataType : byte
-                {
-                    Request = 0,
-                    Response = 1,
-                }
-
-                public enum ProxySpeedType
-                {
-                    Uplink = 0,
-                    Downlink = 1,
                 }
 
                 #endregion
@@ -4436,15 +4428,15 @@ namespace WinsockPacketEditor
 
                 #region//处理 TCP 请求数据
 
-                private static void ForwardData(ProxyTCP pe, Span<byte> bData)
+                private static void ForwardData(ProxyTCP pt, Span<byte> bData)
                 {
                     try
                     {
-                        if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
+                        if (pt.CommandType == ProxyConfig.Proxy.CommandType.Connect)
                         {                            
                             bool requestHandled = false;
 
-                            switch (pe.DomainType)
+                            switch (pt.DomainType)
                             {
                                 case ProxyConfig.Proxy.DomainType.Http:
                                     
@@ -4465,7 +4457,7 @@ namespace WinsockPacketEditor
                                                 var localRule = ProxyConfig.Mapping.GetMapLocal(
                                                     ProxyConfig.Proxy.MapProtocol.Http,
                                                     hostHeader.Split(':')[0],
-                                                    pe.TCP_Server.EndPoint.Port,
+                                                    pt.TCP_Server.EndPoint.Port,
                                                     cleanPath);
 
                                                 if (localRule != null)
@@ -4482,13 +4474,13 @@ namespace WinsockPacketEditor
                                                             "Connection: close\r\n\r\n";
 
                                                         byte[] headerBytes = Encoding.UTF8.GetBytes(response);
-                                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, headerBytes);
-                                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, fileBytes);
+                                                        ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, headerBytes);
+                                                        ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, fileBytes);
                                                         requestHandled = true;
                                                     }
                                                     else
                                                     {
-                                                        ProxyConfig.Proxy.Send404Response(pe.TCP_Client.Socket);
+                                                        ProxyConfig.Proxy.Send404Response(pt.TCP_Client.Socket);
                                                         requestHandled = true;
                                                     }
                                                 }
@@ -4503,7 +4495,7 @@ namespace WinsockPacketEditor
                                                 var remoteRule = ProxyConfig.Mapping.GetMapRemote(
                                                     ProxyConfig.Proxy.MapProtocol.Http,
                                                     hostHeader.Split(':')[0],
-                                                    pe.TCP_Server.EndPoint.Port,
+                                                    pt.TCP_Server.EndPoint.Port,
                                                     cleanPath);
 
                                                 if (remoteRule != null)
@@ -4512,7 +4504,7 @@ namespace WinsockPacketEditor
                                                     byte[] remoteResponse = ProxyConfig.Mapping.GetRemoteMappedData(RemoteURL, request, headers);
                                                     if (remoteResponse != null)
                                                     {
-                                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, remoteResponse);
+                                                        ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, remoteResponse);
                                                         requestHandled = true;
                                                     }
                                                 }
@@ -4535,16 +4527,21 @@ namespace WinsockPacketEditor
 
                             if (!requestHandled)
                             {
-                                ProxyConfig.Proxy.DoFilter_TCP(pe, bData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.TCP_Req);
+                                if (ProxyConfig.Proxy.HookTCP_Req)
+                                {
+                                    ProxyConfig.Proxy.DoFilter_TCP(pt, bData, PacketConfig.Packet.PacketType.TCP_Req);
+                                }
+                                else
+                                {
+                                    ProxyConfig.Proxy.SendTCPData(pt.TCP_Server.Socket, bData);
+                                }                                    
                             }                            
                         }
                     }
                     catch (Exception ex)
                     {
-                        pe.TCP_Server.Close();
-                        pe.TCP_Client.Close();
-
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, pe.TCP_Client.Address + " - " + ex.Message);
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        pt.Dispose();
                     }
                 }
 
@@ -4552,63 +4549,68 @@ namespace WinsockPacketEditor
 
                 #region//处理 TCP 响应数据
 
-                private static void StartServerReceive(ProxyTCP pe)
+                private static void StartServerReceive(ProxyTCP pt)
                 {
-                    if (pe?.TCP_Server?.Socket == null)
+                    if (pt?.TCP_Server?.Socket == null)
                     {
                         return;
                     }
 
                     try
                     {
-                        if (pe.TCP_Server.ReceiveArgs == null)
+                        if (pt.TCP_Server.ReceiveArgs == null)
                         {
-                            pe.TCP_Server.ReceiveArgs = new SocketAsyncEventArgs();
-                            pe.TCP_Server.ReceiveArgs.SetBuffer(pe.TCP_Server.Buffer, 0, pe.TCP_Server.Buffer.Length);
-                            pe.TCP_Server.ReceiveArgs.UserToken = pe;
-                            pe.TCP_Server.ReceiveArgs.Completed += ServerReceiveCompleted;
+                            pt.TCP_Server.ReceiveArgs = new SocketAsyncEventArgs();
+                            pt.TCP_Server.ReceiveArgs.SetBuffer(pt.TCP_Server.Buffer, 0, pt.TCP_Server.Buffer.Length);
+                            pt.TCP_Server.ReceiveArgs.UserToken = pt;
+                            pt.TCP_Server.ReceiveArgs.Completed += ServerReceiveCompleted;
                         }
 
-                        if (!pe.TCP_Server.Socket.ReceiveAsync(pe.TCP_Server.ReceiveArgs))
+                        if (!pt.TCP_Server.Socket.ReceiveAsync(pt.TCP_Server.ReceiveArgs))
                         {
-                            ServerReceiveCompleted(pe.TCP_Server.Socket, pe.TCP_Server.ReceiveArgs);
+                            ServerReceiveCompleted(pt.TCP_Server.Socket, pt.TCP_Server.ReceiveArgs);
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe.Dispose();
+                        pt.Dispose();
                     }                    
                 }
 
                 private static void ServerReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
-                    ProxyTCP pe = (ProxyTCP)args.UserToken;
-                    if (pe == null) return;
+                    ProxyTCP pt = (ProxyTCP)args.UserToken;
+                    if (pt == null) return;
 
                     try
                     {
                         if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            pe.Dispose();
+                            pt.Dispose();
                             return;
                         }
 
                         int bytesRead = args.BytesTransferred;
-                        var bData = pe.TCP_Server.Buffer.AsSpan(0, bytesRead);
+                        var bData = pt.TCP_Server.Buffer.AsSpan(0, bytesRead);
 
-                        if (pe.CommandType == ProxyConfig.Proxy.CommandType.Connect)
+                        if (pt.CommandType == ProxyConfig.Proxy.CommandType.Connect)
                         {
-                            ProxyConfig.Proxy.DoFilter_TCP(pe, bData,
-                                ProxyConfig.Proxy.DataType.Response,
-                                PacketConfig.Packet.PacketType.TCP_Resp);
+                            if (ProxyConfig.Proxy.HookTCP_Resp)
+                            {
+                                ProxyConfig.Proxy.DoFilter_TCP(pt, bData, PacketConfig.Packet.PacketType.TCP_Resp);
+                            }
+                            else
+                            {
+                                ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, bData);
+                            }                            
                         }
 
-                        StartServerReceive(pe);
+                        StartServerReceive(pt);
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
-                        pe.Dispose();
+                        pt.Dispose();
                     }
                     catch (ObjectDisposedException)
                     {
@@ -4617,7 +4619,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe.Dispose();
+                        pt.Dispose();
                     }
                 }
 
@@ -4684,7 +4686,15 @@ namespace WinsockPacketEditor
                                         Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bRequestData.Length);
                                         Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
 
-                                        ProxyConfig.Proxy.DoFilter_UDP(pu, targetEndPoint, bRequestData, ProxyConfig.Proxy.DataType.Request, PacketConfig.Packet.PacketType.UDP_Req);
+                                        if (ProxyConfig.Proxy.HookUDP_Req)
+                                        {
+                                            ProxyConfig.Proxy.DoFilter_UDP(pu, targetEndPoint, bRequestData, PacketConfig.Packet.PacketType.UDP_Req);
+                                        }
+                                        else
+                                        {
+                                            ProxyConfig.Proxy.SendUDPData(pu.ClientUDP, bRequestData, targetEndPoint);
+                                        }
+                                        
                                         pu.UpdateActivity();
                                     }
                                 }
@@ -4720,7 +4730,15 @@ namespace WinsockPacketEditor
                                 Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bResponseData.Length);
                                 Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
 
-                                ProxyConfig.Proxy.DoFilter_UDP(pu, epRemote, bResponseData, ProxyConfig.Proxy.DataType.Response, PacketConfig.Packet.PacketType.UDP_Resp);
+                                if (ProxyConfig.Proxy.HookUDP_Resp)
+                                {
+                                    ProxyConfig.Proxy.DoFilter_UDP(pu, epRemote, bResponseData, PacketConfig.Packet.PacketType.UDP_Resp);
+                                }
+                                else
+                                {
+                                    ProxyConfig.Proxy.SendUDPData(pu.ClientUDP, bResponseData, pu.ClientEndPoint);
+                                }
+                                
                                 pu.UpdateActivity();
                             }
 
@@ -4849,19 +4867,19 @@ namespace WinsockPacketEditor
 
                 #region//执行滤镜 - 代理模式
 
-                public static void DoFilter_TCP(ProxyTCP pe, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
+                public static void DoFilter_TCP(ProxyTCP pt, Span<byte> bData, PacketConfig.Packet.PacketType ptType)
                 {
                     try
                     {                        
                         Socket SendSocket = null;
-                        switch (dtType)
+                        switch (ptType)
                         {
-                            case ProxyConfig.Proxy.DataType.Request:
-                                SendSocket = pe.TCP_Server.Socket;
+                            case PacketConfig.Packet.PacketType.TCP_Req:
+                                SendSocket = pt.TCP_Server.Socket;
                                 break;
 
-                            case ProxyConfig.Proxy.DataType.Response:
-                                SendSocket = pe.TCP_Client.Socket;
+                            case PacketConfig.Packet.PacketType.TCP_Resp:
+                                SendSocket = pt.TCP_Client.Socket;
                                 break;
                         }
 
@@ -4889,9 +4907,9 @@ namespace WinsockPacketEditor
                             res = ProxyConfig.Proxy.SendTCPData(SendSocket, bNewBuffer);
                         }
 
-                        string ClientAddr = $"{pe.TCP_Client.EndPoint.Address.ToString()}:{pe.TCP_Client.EndPoint.Port.ToString()}";
-                        string ServerAddr = $"{pe.TCP_Server.EndPoint.Address.ToString()}:{pe.TCP_Server.EndPoint.Port.ToString()}";
-                        string ServerDomain = pe.TCP_Server.Address.Trim();
+                        string ClientAddr = $"{pt.TCP_Client.EndPoint.Address.ToString()}:{pt.TCP_Client.EndPoint.Port.ToString()}";
+                        string ServerAddr = $"{pt.TCP_Server.EndPoint.Address.ToString()}:{pt.TCP_Server.EndPoint.Port.ToString()}";
+                        string ServerDomain = pt.TCP_Server.Address.Trim();
 
                         _ = ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
@@ -4899,11 +4917,10 @@ namespace WinsockPacketEditor
                             res,
                             iSocket,
                             ptType,
-                            dtType,
                             ClientAddr,
                             ServerAddr,
                             ServerDomain,
-                            pe.DomainType,
+                            pt.DomainType,
                             bRawBuffer,
                             bNewBuffer);
                     }
@@ -4913,18 +4930,18 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                public static void DoFilter_UDP(ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, ProxyConfig.Proxy.DataType dtType, PacketConfig.Packet.PacketType ptType)
+                public static void DoFilter_UDP(ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, PacketConfig.Packet.PacketType ptType)
                 {
                     try
                     {
                         IPEndPoint epSend = null;
-                        switch (dtType)
+                        switch (ptType)
                         {
-                            case ProxyConfig.Proxy.DataType.Request:
+                            case PacketConfig.Packet.PacketType.UDP_Req:
                                 epSend = epRemote;
                                 break;
 
-                            case ProxyConfig.Proxy.DataType.Response:
+                            case PacketConfig.Packet.PacketType.UDP_Resp:
                                 epSend = pu.ClientEndPoint;
                                 break;
                         }
@@ -4962,7 +4979,6 @@ namespace WinsockPacketEditor
                             res,
                             iSocket,
                             ptType,
-                            dtType,
                             ClientAddr,
                             ServerAddr,
                             string.Empty,
@@ -5391,34 +5407,7 @@ namespace WinsockPacketEditor
                     return packet;
                 }
 
-                #endregion
-
-                #region//获取数据类型对应的图标
-
-                public static Image GetImg_ByDataType(DataType dtType)
-                {
-                    try
-                    {
-                        switch (dtType)
-                        {
-                            case DataType.Request:                   
-                                return PacketConfig.Packet.SentImage;
-
-                            case DataType.Response:
-                                return PacketConfig.Packet.ReceivedImage;
-
-                            default:
-                                return null;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        return null;
-                    }
-                }
-
-                #endregion
+                #endregion                
 
                 #region//初始化CCProxy模板
 
@@ -5488,6 +5477,84 @@ namespace WinsockPacketEditor
                         Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
                 }
+
+                #endregion
+
+                #region//是否显示代理数据（过滤条件）
+
+                public static bool IsShowProxy_ByFilter(ProxyInfo pi)
+                {
+                    try
+                    {
+                        //套接字
+                        if (SystemConfig.CheckSocket)
+                        {
+                            bool bIsFilter = PacketConfig.Packet.IsFilter_BySocket(pi.PacketSocket);
+                            if (SystemConfig.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
+
+                        //IP地址
+                        if (SystemConfig.CheckIP)
+                        {
+                            bool bIsFilter_From = PacketConfig.Packet.IsFilter_ByIP(pi.ClientAddr);
+                            bool bIsFilter_To = PacketConfig.Packet.IsFilter_ByIP(pi.ServerAddr);
+                            if (SystemConfig.CheckNotShow == (bIsFilter_From || bIsFilter_To))
+                            {
+                                return false;
+                            }
+                        }
+
+                        //端口号
+                        if (SystemConfig.CheckPort)
+                        {
+                            bool bIsFilter_From = PacketConfig.Packet.IsFilter_ByPort(pi.ClientAddr);
+                            bool bIsFilter_To = PacketConfig.Packet.IsFilter_ByPort(pi.ServerAddr);
+                            if (SystemConfig.CheckNotShow == (bIsFilter_From || bIsFilter_To))
+                            {
+                                return false;
+                            }
+                        }
+
+                        //指定包头
+                        if (SystemConfig.CheckHead)
+                        {
+                            bool bIsFilter = PacketConfig.Packet.IsFilter_ByHead(pi.PacketBuffer);
+                            if (SystemConfig.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
+
+                        //封包内容
+                        if (SystemConfig.CheckData)
+                        {
+                            bool bIsFilter = PacketConfig.Packet.IsFilter_ByPacket(pi.PacketBuffer);
+                            if (SystemConfig.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
+
+                        //封包大小
+                        if (SystemConfig.CheckLen)
+                        {
+                            bool bIsFilter = PacketConfig.Packet.IsFilter_BySize(pi.PacketLen);
+                            if (SystemConfig.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return true;
+                }             
 
                 #endregion
 
@@ -5906,8 +5973,7 @@ namespace WinsockPacketEditor
                     Operate.FilterConfig.Filter.FilterAction filterAction,
                     int res,
                     int PacketSocket,
-                    Operate.PacketConfig.Packet.PacketType PacketType,
-                    ProxyConfig.Proxy.DataType DataType,
+                    PacketConfig.Packet.PacketType PacketType,
                     string ClientAddr,
                     string ServerAddr,
                     string ServerDomain,
@@ -5925,15 +5991,15 @@ namespace WinsockPacketEditor
                     {
                         try
                         {
-                            switch (DataType)
+                            switch (PacketType)
                             {
-                                case ProxyConfig.Proxy.DataType.Request:
+                                case PacketConfig.Packet.PacketType.TCP_Req:
                                     ProxyConfig.Proxy.TCP_Req_CNT++;
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bBuffer.Length);
                                     break;
 
-                                case ProxyConfig.Proxy.DataType.Response:
+                                case PacketConfig.Packet.PacketType.TCP_Resp:
                                     ProxyConfig.Proxy.TCP_Resp_CNT++;
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
@@ -5946,7 +6012,6 @@ namespace WinsockPacketEditor
                                     dtNow,
                                     PacketSocket,
                                     PacketType,
-                                    DataType,
                                     ClientAddr,
                                     ServerAddr,
                                     ServerDomain,
@@ -6038,8 +6103,17 @@ namespace WinsockPacketEditor
                     {
                         if (ProxyConfig.Queue.qProxyInfo.TryDequeue(out ProxyInfo pi))
                         {
-                            pi.PacketData = PacketConfig.Packet.GetPacketData_Hex(pi.PacketBuffer.AsSpan(), PacketConfig.Packet.PacketData_MaxLen);
-                            ProxyConfig.List.lstProxyInfo.Add(pi);
+                            bool bIsShow = ProxyConfig.Proxy.IsShowProxy_ByFilter(pi);
+                            if (bIsShow)
+                            {
+                                Span<byte> bufferSpan = pi.PacketBuffer.AsSpan();
+                                pi.PacketData = PacketConfig.Packet.GetPacketData_Hex(pi.PacketBuffer.AsSpan(), PacketConfig.Packet.PacketData_MaxLen);
+                                ProxyConfig.List.lstProxyInfo.Add(pi);
+                            }
+                            else
+                            {
+                                ProxyConfig.Proxy.FilterProxy_CNT++;
+                            }                            
                         }
                     }
                     catch (Exception ex)
@@ -9540,12 +9614,6 @@ namespace WinsockPacketEditor
                 public static bool HookWS1_Send = true, HookWS1_SendTo = true, HookWS1_Recv = true, HookWS1_RecvFrom = true;
                 public static bool HookWS2_Send = true, HookWS2_SendTo = true, HookWS2_Recv = true, HookWS2_RecvFrom = true;
                 public static bool HookWSA_Send = true, HookWSA_SendTo = true, HookWSA_Recv = true, HookWSA_RecvFrom = true;
-                public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
-                public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;                
-                public static readonly Image SentImage = Properties.Resources.sent;
-                public static readonly Image ReceivedImage = Properties.Resources.received;
-                public static readonly Font FontUnderline = new Font(RichTextBox.DefaultFont, FontStyle.Underline);
-                public static readonly Font FontStrikeout = new Font(RichTextBox.DefaultFont, FontStyle.Strikeout);
 
                 #region//结构定义
 
@@ -9890,7 +9958,9 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WS2_SendTo:
                             case PacketConfig.Packet.PacketType.WSASend:
                             case PacketConfig.Packet.PacketType.WSASendTo:
-                                return PacketConfig.Packet.SentImage;
+                            case PacketConfig.Packet.PacketType.TCP_Req:
+                            case PacketConfig.Packet.PacketType.UDP_Req:
+                                return SystemConfig.SentImage;
 
                             case PacketConfig.Packet.PacketType.WS1_Recv:
                             case PacketConfig.Packet.PacketType.WS2_Recv:
@@ -9899,7 +9969,9 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSARecv:
                             case PacketConfig.Packet.PacketType.WSARecvEx:
                             case PacketConfig.Packet.PacketType.WSARecvFrom:
-                                return PacketConfig.Packet.ReceivedImage;
+                            case PacketConfig.Packet.PacketType.TCP_Resp:
+                            case PacketConfig.Packet.PacketType.UDP_Resp:
+                                return SystemConfig.ReceivedImage;
 
                             default:
                                 return null;
@@ -9921,62 +9993,62 @@ namespace WinsockPacketEditor
                     try
                     {
                         //套接字
-                        if (Operate.PacketConfig.Packet.CheckSocket)
+                        if (SystemConfig.CheckSocket)
                         {
                             bool bIsFilter = IsFilter_BySocket(pi.PacketSocket);
-                            if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)
+                            if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
                             }
                         }
 
                         //IP地址
-                        if (Operate.PacketConfig.Packet.CheckIP)
+                        if (SystemConfig.CheckIP)
                         {
                             bool bIsFilter_From = IsFilter_ByIP(pi.PacketFrom);
                             bool bIsFilter_To = IsFilter_ByIP(pi.PacketTo);
-                            if (Operate.PacketConfig.Packet.CheckNotShow == (bIsFilter_From || bIsFilter_To))
+                            if (SystemConfig.CheckNotShow == (bIsFilter_From || bIsFilter_To))
                             {
                                 return false;
                             }
                         }
 
                         //端口号
-                        if (Operate.PacketConfig.Packet.CheckPort)
+                        if (SystemConfig.CheckPort)
                         {
                             bool bIsFilter_From = IsFilter_ByPort(pi.PacketFrom);
                             bool bIsFilter_To = IsFilter_ByPort(pi.PacketTo);
-                            if (Operate.PacketConfig.Packet.CheckNotShow == (bIsFilter_From || bIsFilter_To))
+                            if (SystemConfig.CheckNotShow == (bIsFilter_From || bIsFilter_To))
                             {
                                 return false;
                             }
                         }
 
                         //指定包头
-                        if (Operate.PacketConfig.Packet.CheckHead)
+                        if (SystemConfig.CheckHead)
                         {
                             bool bIsFilter = IsFilter_ByHead(pi.PacketBuffer);
-                            if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)
+                            if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
                             }
                         }
 
                         //封包内容
-                        if (Operate.PacketConfig.Packet.CheckData)
+                        if (SystemConfig.CheckData)
                         {
                             bool bIsFilter = IsFilter_ByPacket(pi.PacketBuffer);
-                            if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)
+                            if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
                             }
                         }
 
                         //封包大小
-                        if (Operate.PacketConfig.Packet.CheckLen)
+                        if (SystemConfig.CheckLen)
                         {
                             bool bIsFilter = IsFilter_BySize(pi.PacketLen);
-                            if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)
+                            if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
                             }
@@ -9992,13 +10064,13 @@ namespace WinsockPacketEditor
 
                 #region//检测套接字
 
-                private static bool IsFilter_BySocket(int iPacketSocket)
+                public static bool IsFilter_BySocket(int iPacketSocket)
                 {
                     try
                     {
-                        if (!string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckSocket_Value))
+                        if (!string.IsNullOrEmpty(SystemConfig.CheckSocket_Value))
                         {
-                            string[] sSocketArr = Operate.PacketConfig.Packet.CheckSocket_Value.Split(';');
+                            string[] sSocketArr = SystemConfig.CheckSocket_Value.Split(';');
                             HashSet<int> socketSet = new HashSet<int>();
 
                             foreach (string sSocket in sSocketArr)
@@ -10024,17 +10096,17 @@ namespace WinsockPacketEditor
 
                 #region//检测IP地址
 
-                private static bool IsFilter_ByIP(string sPacketIP)
+                public static bool IsFilter_ByIP(string sPacketIP)
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(sPacketIP) || string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckIP_Value))
+                        if (string.IsNullOrEmpty(sPacketIP) || string.IsNullOrEmpty(SystemConfig.CheckIP_Value))
                         {
                             return false;
                         }
 
                         string sIP = sPacketIP.Split(':')[0];
-                        HashSet<string> ipSet = new HashSet<string>(Operate.PacketConfig.Packet.CheckIP_Value.Split(';'));
+                        HashSet<string> ipSet = new HashSet<string>(SystemConfig.CheckIP_Value.Split(';'));
 
                         return ipSet.Contains(sIP);
                     }
@@ -10050,17 +10122,17 @@ namespace WinsockPacketEditor
 
                 #region//检测端口号
 
-                private static bool IsFilter_ByPort(string sPacketPort)
+                public static bool IsFilter_ByPort(string sPacketPort)
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(sPacketPort) || string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckPort_Value))
+                        if (string.IsNullOrEmpty(sPacketPort) || string.IsNullOrEmpty(SystemConfig.CheckPort_Value))
                         {
                             return false;
                         }
 
                         string sPort = sPacketPort.Split(':')[1];
-                        HashSet<string> portSet = new HashSet<string>(Operate.PacketConfig.Packet.CheckPort_Value.Split(';'));
+                        HashSet<string> portSet = new HashSet<string>(SystemConfig.CheckPort_Value.Split(';'));
 
                         return portSet.Contains(sPort);
                     }
@@ -10076,16 +10148,16 @@ namespace WinsockPacketEditor
 
                 #region//检测包头
 
-                private static bool IsFilter_ByHead(byte[] bBuffer)
+                public static bool IsFilter_ByHead(byte[] bBuffer)
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckHead_Value))
+                        if (string.IsNullOrEmpty(SystemConfig.CheckHead_Value))
                         {
                             return false;
                         }
 
-                        string checkHeadValue = Operate.PacketConfig.Packet.CheckHead_Value.Replace(" ", "");
+                        string checkHeadValue = SystemConfig.CheckHead_Value.Replace(" ", "");
                         string[] headValues = checkHeadValue.Split(';');
 
                         foreach (string headValue in headValues)
@@ -10126,16 +10198,16 @@ namespace WinsockPacketEditor
 
                 #region//检测封包内容
 
-                private static bool IsFilter_ByPacket(byte[] bBuffer)
+                public static bool IsFilter_ByPacket(byte[] bBuffer)
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckData_Value))
+                        if (string.IsNullOrEmpty(SystemConfig.CheckData_Value))
                         {
                             return false;
                         }
 
-                        string checkDataValue = Operate.PacketConfig.Packet.CheckData_Value.Replace(" ", "");
+                        string checkDataValue = SystemConfig.CheckData_Value.Replace(" ", "");
                         string[] checkDataArray = checkDataValue.Split(';');
 
                         string packetString = SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, bBuffer).Replace(" ", "");
@@ -10160,16 +10232,16 @@ namespace WinsockPacketEditor
 
                 #region//检测封包大小
 
-                private static bool IsFilter_BySize(int PacketLength)
+                public static bool IsFilter_BySize(int PacketLength)
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckLength_Value))
+                        if (string.IsNullOrEmpty(SystemConfig.CheckLength_Value))
                         {
                             return false;
                         }
 
-                        string[] lengthArray = Operate.PacketConfig.Packet.CheckLength_Value.Split(';');
+                        string[] lengthArray = SystemConfig.CheckLength_Value.Split(';');
 
                         foreach (string length in lengthArray)
                         {
@@ -17056,6 +17128,19 @@ namespace WinsockPacketEditor
                         sql += "LogList_AutoRoll BOOLEAN DEFAULT 0,";//日志列表自动滚动
                         sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
                         sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
+                        sql += "CheckNotShow BOOLEAN DEFAULT 1,";//过滤设置不显示
+                        sql += "CheckSocket BOOLEAN DEFAULT 0,";//过滤套接字
+                        sql += "CheckSocket_Value TEXT,";//过滤套接字内容
+                        sql += "CheckIP BOOLEAN DEFAULT 0,";//过滤IP
+                        sql += "CheckIP_Value TEXT,";//过滤IP内容
+                        sql += "CheckPort BOOLEAN DEFAULT 0,";//过滤端口
+                        sql += "CheckPort_Value TEXT,";//过滤端口内容
+                        sql += "CheckHead BOOLEAN DEFAULT 0,";//过滤包头
+                        sql += "CheckHead_Value TEXT,";//过滤包头内容
+                        sql += "CheckData BOOLEAN DEFAULT 0,";//过滤数据
+                        sql += "CheckData_Value TEXT,";//过滤数据内容
+                        sql += "CheckSize BOOLEAN DEFAULT 0,";//过滤长度
+                        sql += "CheckLength_Value TEXT,";//过滤长度内容
                         sql += "HotKey1 TEXT,";//快捷键1
                         sql += "HotKey2 TEXT,";//快捷键2
                         sql += "HotKey3 TEXT,";//快捷键3
@@ -17159,6 +17244,19 @@ namespace WinsockPacketEditor
                         sql += "LogList_AutoRoll,";
                         sql += "LogList_AutoClear,";
                         sql += "LogList_AutoClear_Value,";
+                        sql += "CheckNotShow,";
+                        sql += "CheckSocket,";
+                        sql += "CheckSocket_Value,";
+                        sql += "CheckIP,";
+                        sql += "CheckIP_Value,";
+                        sql += "CheckPort,";
+                        sql += "CheckPort_Value,";
+                        sql += "CheckHead,";
+                        sql += "CheckHead_Value,";
+                        sql += "CheckData,";
+                        sql += "CheckData_Value,";
+                        sql += "CheckSize,";
+                        sql += "CheckLength_Value,";
                         sql += "HotKey1,";
                         sql += "HotKey2,";
                         sql += "HotKey3,";
@@ -17192,6 +17290,19 @@ namespace WinsockPacketEditor
                         sql += "@LogList_AutoRoll,";
                         sql += "@LogList_AutoClear,";
                         sql += "@LogList_AutoClear_Value,";
+                        sql += "@CheckNotShow,";
+                        sql += "@CheckSocket,";
+                        sql += "@CheckSocket_Value,";
+                        sql += "@CheckIP,";
+                        sql += "@CheckIP_Value,";
+                        sql += "@CheckPort,";
+                        sql += "@CheckPort_Value,";
+                        sql += "@CheckHead,";
+                        sql += "@CheckHead_Value,";
+                        sql += "@CheckData,";
+                        sql += "@CheckData_Value,";
+                        sql += "@CheckSize,";
+                        sql += "@CheckLength_Value,";
                         sql += "@HotKey1,";
                         sql += "@HotKey2,";
                         sql += "@HotKey3,";
@@ -17228,6 +17339,19 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
                             cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@CheckNotShow", SystemConfig.CheckNotShow);
+                            cmd.Parameters.AddWithValue("@CheckSocket", SystemConfig.CheckSocket);
+                            cmd.Parameters.AddWithValue("@CheckSocket_Value", SystemConfig.CheckSocket_Value);
+                            cmd.Parameters.AddWithValue("@CheckIP", SystemConfig.CheckIP);
+                            cmd.Parameters.AddWithValue("@CheckIP_Value", SystemConfig.CheckIP_Value);
+                            cmd.Parameters.AddWithValue("@CheckPort", SystemConfig.CheckPort);
+                            cmd.Parameters.AddWithValue("@CheckPort_Value", SystemConfig.CheckPort_Value);
+                            cmd.Parameters.AddWithValue("@CheckHead", SystemConfig.CheckHead);
+                            cmd.Parameters.AddWithValue("@CheckHead_Value", SystemConfig.CheckHead_Value);
+                            cmd.Parameters.AddWithValue("@CheckData", SystemConfig.CheckData);
+                            cmd.Parameters.AddWithValue("@CheckData_Value", SystemConfig.CheckData_Value);
+                            cmd.Parameters.AddWithValue("@CheckSize", SystemConfig.CheckLen);
+                            cmd.Parameters.AddWithValue("@CheckLength_Value", SystemConfig.CheckLength_Value);
                             cmd.Parameters.AddWithValue("@HotKey1", SystemConfig.HotKey1);
                             cmd.Parameters.AddWithValue("@HotKey2", SystemConfig.HotKey2);
                             cmd.Parameters.AddWithValue("@HotKey3", SystemConfig.HotKey3);
@@ -17287,20 +17411,7 @@ namespace WinsockPacketEditor
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "CREATE TABLE IF NOT EXISTS InjectMode (";
-                        sql += "CheckNotShow BOOLEAN DEFAULT 1,";//过滤设置不显示
-                        sql += "CheckSocket BOOLEAN DEFAULT 0,";//过滤套接字
-                        sql += "CheckSocket_Value TEXT,";//过滤套接字内容
-                        sql += "CheckIP BOOLEAN DEFAULT 0,";//过滤IP
-                        sql += "CheckIP_Value TEXT,";//过滤IP内容
-                        sql += "CheckPort BOOLEAN DEFAULT 0,";//过滤端口
-                        sql += "CheckPort_Value TEXT,";//过滤端口内容
-                        sql += "CheckHead BOOLEAN DEFAULT 0,";//过滤包头
-                        sql += "CheckHead_Value TEXT,";//过滤包头内容
-                        sql += "CheckData BOOLEAN DEFAULT 0,";//过滤数据
-                        sql += "CheckData_Value TEXT,";//过滤数据内容
-                        sql += "CheckSize BOOLEAN DEFAULT 0,";//过滤长度
-                        sql += "CheckLength_Value TEXT,";//过滤长度内容
+                        string sql = "CREATE TABLE IF NOT EXISTS InjectMode (";                        
                         sql += "HookWS1_Send BOOLEAN DEFAULT 1,";//发送1.1
                         sql += "HookWS1_SendTo BOOLEAN DEFAULT 1,";//发送到1.1
                         sql += "HookWS1_Recv BOOLEAN DEFAULT 1,";//接收1.1
@@ -17387,20 +17498,7 @@ namespace WinsockPacketEditor
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "INSERT INTO InjectMode (";                   
-                        sql += "CheckNotShow,";
-                        sql += "CheckSocket,";
-                        sql += "CheckSocket_Value,";
-                        sql += "CheckIP,";
-                        sql += "CheckIP_Value,";
-                        sql += "CheckPort,";
-                        sql += "CheckPort_Value,";
-                        sql += "CheckHead,";
-                        sql += "CheckHead_Value,";
-                        sql += "CheckData,";
-                        sql += "CheckData_Value,";
-                        sql += "CheckSize,";
-                        sql += "CheckLength_Value,";
+                        string sql = "INSERT INTO InjectMode (";
                         sql += "HookWS1_Send,";
                         sql += "HookWS1_SendTo,";
                         sql += "HookWS1_Recv,";
@@ -17417,20 +17515,7 @@ namespace WinsockPacketEditor
                         sql += "PacketList_AutoClear,";
                         sql += "PacketList_AutoClear_Value,";                        
                         sql += "SpeedMode";                        
-                        sql += ") VALUES (";                     
-                        sql += "@CheckNotShow,";
-                        sql += "@CheckSocket,";
-                        sql += "@CheckSocket_Value,";
-                        sql += "@CheckIP,";
-                        sql += "@CheckIP_Value,";
-                        sql += "@CheckPort,";
-                        sql += "@CheckPort_Value,";
-                        sql += "@CheckHead,";
-                        sql += "@CheckHead_Value,";
-                        sql += "@CheckData,";
-                        sql += "@CheckData_Value,";
-                        sql += "@CheckSize,";
-                        sql += "@CheckLength_Value,";
+                        sql += ") VALUES (";
                         sql += "@HookWS1_Send,";
                         sql += "@HookWS1_SendTo,";
                         sql += "@HookWS1_Recv,";
@@ -17450,20 +17535,7 @@ namespace WinsockPacketEditor
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
-                        {                            
-                            cmd.Parameters.AddWithValue("@CheckNotShow", PacketConfig.Packet.CheckNotShow);
-                            cmd.Parameters.AddWithValue("@CheckSocket", PacketConfig.Packet.CheckSocket);
-                            cmd.Parameters.AddWithValue("@CheckSocket_Value", PacketConfig.Packet.CheckSocket_Value);
-                            cmd.Parameters.AddWithValue("@CheckIP", PacketConfig.Packet.CheckIP);
-                            cmd.Parameters.AddWithValue("@CheckIP_Value", PacketConfig.Packet.CheckIP_Value);
-                            cmd.Parameters.AddWithValue("@CheckPort", PacketConfig.Packet.CheckPort);
-                            cmd.Parameters.AddWithValue("@CheckPort_Value", PacketConfig.Packet.CheckPort_Value);
-                            cmd.Parameters.AddWithValue("@CheckHead", PacketConfig.Packet.CheckHead);
-                            cmd.Parameters.AddWithValue("@CheckHead_Value", PacketConfig.Packet.CheckHead_Value);
-                            cmd.Parameters.AddWithValue("@CheckData", PacketConfig.Packet.CheckData);
-                            cmd.Parameters.AddWithValue("@CheckData_Value", PacketConfig.Packet.CheckData_Value);
-                            cmd.Parameters.AddWithValue("@CheckSize", PacketConfig.Packet.CheckLen);
-                            cmd.Parameters.AddWithValue("@CheckLength_Value", PacketConfig.Packet.CheckLength_Value);
+                        {  
                             cmd.Parameters.AddWithValue("@HookWS1_Send", PacketConfig.Packet.HookWS1_Send);
                             cmd.Parameters.AddWithValue("@HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo);
                             cmd.Parameters.AddWithValue("@HookWS1_Recv", PacketConfig.Packet.HookWS1_Recv);

@@ -17,18 +17,18 @@ namespace WinsockPacketEditor
         {
             this.Text = AntdUI.Localization.Get("FilterSettingsForm", "过滤设置");
 
-            this.cbCheckSocket.Checked = Operate.PacketConfig.Packet.CheckSocket;
-            this.cbCheckIP.Checked = Operate.PacketConfig.Packet.CheckIP;
-            this.cbCheckPort.Checked = Operate.PacketConfig.Packet.CheckPort;
-            this.cbCheckHead.Checked = Operate.PacketConfig.Packet.CheckHead;
-            this.cbCheckData.Checked = Operate.PacketConfig.Packet.CheckData;
-            this.cbCheckLen.Checked = Operate.PacketConfig.Packet.CheckLen;
-            this.txtCheckSocket.Text = Operate.PacketConfig.Packet.CheckSocket_Value;
-            this.txtCheckLen.Text = Operate.PacketConfig.Packet.CheckLength_Value;
-            this.txtCheckIP.Text = Operate.PacketConfig.Packet.CheckIP_Value;
-            this.txtCheckPort.Text = Operate.PacketConfig.Packet.CheckPort_Value;
-            this.txtCheckHead.Text = Operate.PacketConfig.Packet.CheckHead_Value;
-            this.txtCheckData.Text = Operate.PacketConfig.Packet.CheckData_Value;
+            this.cbCheckSocket.Checked = Operate.SystemConfig.CheckSocket;
+            this.cbCheckIP.Checked = Operate.SystemConfig.CheckIP;
+            this.cbCheckPort.Checked = Operate.SystemConfig.CheckPort;
+            this.cbCheckHead.Checked = Operate.SystemConfig.CheckHead;
+            this.cbCheckData.Checked = Operate.SystemConfig.CheckData;
+            this.cbCheckLen.Checked = Operate.SystemConfig.CheckLen;
+            this.txtCheckSocket.Text = Operate.SystemConfig.CheckSocket_Value;
+            this.txtCheckLen.Text = Operate.SystemConfig.CheckLength_Value;
+            this.txtCheckIP.Text =  Operate.SystemConfig.CheckIP_Value;
+            this.txtCheckPort.Text = Operate.SystemConfig   .CheckPort_Value;
+            this.txtCheckHead.Text = Operate.SystemConfig.CheckHead_Value;
+            this.txtCheckData.Text = Operate.SystemConfig.CheckData_Value;
         }
 
         #endregion        
@@ -251,19 +251,19 @@ namespace WinsockPacketEditor
                 return;
             }
 
-            Operate.PacketConfig.Packet.CheckNotShow = !sIsShow.Checked;
-            Operate.PacketConfig.Packet.CheckSocket = cbCheckSocket.Checked;
-            Operate.PacketConfig.Packet.CheckIP = cbCheckIP.Checked;
-            Operate.PacketConfig.Packet.CheckPort = cbCheckPort.Checked;
-            Operate.PacketConfig.Packet.CheckHead = cbCheckHead.Checked;
-            Operate.PacketConfig.Packet.CheckData = cbCheckData.Checked;
-            Operate.PacketConfig.Packet.CheckLen = cbCheckLen.Checked;
-            Operate.PacketConfig.Packet.CheckSocket_Value = this.txtCheckSocket.Text.Trim();
-            Operate.PacketConfig.Packet.CheckLength_Value = this.txtCheckLen.Text.Trim();
-            Operate.PacketConfig.Packet.CheckIP_Value = this.txtCheckIP.Text.Trim();
-            Operate.PacketConfig.Packet.CheckPort_Value = this.txtCheckPort.Text.Trim();
-            Operate.PacketConfig.Packet.CheckHead_Value = this.txtCheckHead.Text.Trim();
-            Operate.PacketConfig.Packet.CheckData_Value = this.txtCheckData.Text.Trim();
+            Operate.SystemConfig.CheckNotShow = !sIsShow.Checked;
+            Operate.SystemConfig.CheckSocket = cbCheckSocket.Checked;
+            Operate.SystemConfig.CheckIP = cbCheckIP.Checked;
+            Operate.SystemConfig.CheckPort = cbCheckPort.Checked;
+            Operate.SystemConfig.CheckHead = cbCheckHead.Checked;
+            Operate.SystemConfig.CheckData = cbCheckData.Checked;
+            Operate.SystemConfig.CheckLen = cbCheckLen.Checked;
+            Operate.SystemConfig.CheckSocket_Value = this.txtCheckSocket.Text.Trim();
+            Operate.SystemConfig.CheckLength_Value = this.txtCheckLen.Text.Trim();
+            Operate.SystemConfig.CheckIP_Value = this.txtCheckIP.Text.Trim();
+            Operate.SystemConfig.CheckPort_Value = this.txtCheckPort.Text.Trim();
+            Operate.SystemConfig.CheckHead_Value = this.txtCheckHead.Text.Trim();
+            Operate.SystemConfig.CheckData_Value = this.txtCheckData.Text.Trim();
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "过滤设置保存成功", TType.Success)
             {
