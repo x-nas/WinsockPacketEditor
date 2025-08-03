@@ -3955,28 +3955,23 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        // 1. 获取或初始化 SocketAsyncEventArgs
-                        var args = pe.TCP_Client.ReceiveArgs;
                         if (pe.TCP_Client.ReceiveArgs == null)
                         {
-                            args = new SocketAsyncEventArgs();
-                            args.SetBuffer(pe.TCP_Client.Buffer, 0, pe.TCP_Client.Buffer.Length);
-                            args.UserToken = pe;
-                            args.Completed += ReceiveCompleted;
-                            pe.TCP_Client.ReceiveArgs = args; // 绑定到 TCP_Client
+                            pe.TCP_Client.ReceiveArgs = new SocketAsyncEventArgs();
+                            pe.TCP_Client.ReceiveArgs.SetBuffer(pe.TCP_Client.Buffer, 0, pe.TCP_Client.Buffer.Length);
+                            pe.TCP_Client.ReceiveArgs.UserToken = pe;
+                            pe.TCP_Client.ReceiveArgs.Completed += ReceiveCompleted;
                         }
 
-                        // 3. 开始异步接收
-                        if (!pe.TCP_Client.Socket.ReceiveAsync(args))
+                        if (!pe.TCP_Client.Socket.ReceiveAsync(pe.TCP_Client.ReceiveArgs))
                         {
-                            // 同步完成时直接调用回调
-                            ReceiveCompleted(pe.TCP_Client.Socket, args);
+                            ReceiveCompleted(pe.TCP_Client.Socket, pe.TCP_Client.ReceiveArgs);
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(StartReceive), ex.Message);
-                        pe?.Dispose(); // 异常时释放资源
+                        pe?.Dispose();
                     }
                 }
 
@@ -4566,27 +4561,23 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        // 从ProxyTCP对象获取或创建SocketAsyncEventArgs
-                        var args = pe.TCP_Server.ReceiveArgs;
-                        if (args == null)
+                        if (pe.TCP_Server.ReceiveArgs == null)
                         {
-                            args = new SocketAsyncEventArgs();
-                            args.SetBuffer(pe.TCP_Server.Buffer, 0, pe.TCP_Server.Buffer.Length);
-                            args.UserToken = pe;
-                            args.Completed += ServerReceiveCompleted;
-                            pe.TCP_Server.ReceiveArgs = args; // 保存引用以供重用
+                            pe.TCP_Server.ReceiveArgs = new SocketAsyncEventArgs();
+                            pe.TCP_Server.ReceiveArgs.SetBuffer(pe.TCP_Server.Buffer, 0, pe.TCP_Server.Buffer.Length);
+                            pe.TCP_Server.ReceiveArgs.UserToken = pe;
+                            pe.TCP_Server.ReceiveArgs.Completed += ServerReceiveCompleted;
                         }
 
-                        if (!pe.TCP_Server.Socket.ReceiveAsync(args))
+                        if (!pe.TCP_Server.Socket.ReceiveAsync(pe.TCP_Server.ReceiveArgs))
                         {
-                            // 同步完成时直接调用回调
-                            ServerReceiveCompleted(pe.TCP_Server.Socket, args);
+                            ServerReceiveCompleted(pe.TCP_Server.Socket, pe.TCP_Server.ReceiveArgs);
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe.Dispose(); // 发生异常时清理资源
+                        pe.Dispose();
                     }                    
                 }
 
@@ -4613,7 +4604,6 @@ namespace WinsockPacketEditor
                                 PacketConfig.Packet.PacketType.TCP_Resp);
                         }
 
-                        // 准备下一次接收
                         StartServerReceive(pe);
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))

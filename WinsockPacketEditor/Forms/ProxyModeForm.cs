@@ -1296,7 +1296,64 @@ namespace WinsockPacketEditor
                         Operate.ProxyConfig.List.lstProxyTCP.Remove(pe);
                         pe?.Dispose();
                         continue;
-                    }                    
+                    }
+
+                    #region//更新客户端链接
+
+                    if (pe.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
+                    {
+                        string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
+                        string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
+                        string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
+
+                        if (string.IsNullOrEmpty(sRootName))
+                        {
+                            return;
+                        }
+
+                        AntdUI.TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, sRootName);
+                        if (tiRoot == null)
+                        {
+                            tiRoot = new TreeItem(sRootName)
+                            {
+                                IconSvg = "DesktopOutlined",
+                            };
+                            this.treeClientList.Items.Add(tiRoot);
+                        }
+
+                        string sChildName = pe.TCP_Client.Address;
+                        if (string.IsNullOrEmpty(sChildName))
+                        {
+                            return;
+                        }
+
+                        AntdUI.TreeItem tiChild = Operate.SystemConfig.FindNodeByName(this.treeClientList, sChildName);
+                        if (tiChild == null)
+                        {
+                            tiChild = new TreeItem(sChildName);
+                            switch (pe.DomainType)
+                            {
+                                case Operate.ProxyConfig.Proxy.DomainType.Http:
+                                    tiChild.IconSvg = "IeOutlined";
+                                    break;
+
+                                case Operate.ProxyConfig.Proxy.DomainType.Https:
+                                    tiChild.IconSvg = "LockOutlined";
+                                    break;
+
+                                case Operate.ProxyConfig.Proxy.DomainType.Socket:
+                                    tiChild.IconSvg = "ApiOutlined";
+                                    break;
+
+                                case Operate.ProxyConfig.Proxy.DomainType.External:
+
+                                    break;
+                            }
+                            tiRoot.Sub.Add(tiChild);
+                        }
+                    }
+
+                    #endregion
 
                     if (pe.TCP_Client.Socket == null)
                     {
@@ -1348,65 +1405,6 @@ namespace WinsockPacketEditor
 
                             Operate.ProxyConfig.List.lstProxyTCP.Remove(pe);
                             pe?.Dispose();
-                        }
-
-                        #endregion
-                    }
-                    else
-                    {
-                        #region//更新客户端链接
-
-                        if (pe.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
-                        {
-                            string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
-                            string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
-                            string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
-
-                            if (string.IsNullOrEmpty(sRootName))
-                            {
-                                return;
-                            }
-
-                            AntdUI.TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, sRootName);
-                            if (tiRoot == null)
-                            {
-                                tiRoot = new TreeItem(sRootName)
-                                {
-                                    IconSvg = "DesktopOutlined",
-                                };
-                                this.treeClientList.Items.Add(tiRoot);
-                            }
-
-                            string sChildName = pe.TCP_Client.Address;
-                            if (string.IsNullOrEmpty(sChildName))
-                            {
-                                return;
-                            }
-
-                            AntdUI.TreeItem tiChild = Operate.SystemConfig.FindNodeByName(this.treeClientList, sChildName);
-                            if (tiChild == null)
-                            {
-                                tiChild = new TreeItem(sChildName);
-                                switch (pe.DomainType)
-                                {
-                                    case Operate.ProxyConfig.Proxy.DomainType.Http:
-                                        tiChild.IconSvg = "IeOutlined";
-                                        break;
-
-                                    case Operate.ProxyConfig.Proxy.DomainType.Https:
-                                        tiChild.IconSvg = "LockOutlined";
-                                        break;
-
-                                    case Operate.ProxyConfig.Proxy.DomainType.Socket:
-                                        tiChild.IconSvg = "ApiOutlined";
-                                        break;
-
-                                    case Operate.ProxyConfig.Proxy.DomainType.External:
-
-                                        break;
-                                }
-                                tiRoot.Sub.Add(tiChild);
-                            }
                         }
 
                         #endregion
