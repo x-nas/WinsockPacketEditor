@@ -1005,7 +1005,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
                 return string.Empty;
@@ -1044,7 +1044,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
                 return string.Empty;
@@ -3969,8 +3969,8 @@ namespace WinsockPacketEditor
 
                 private static void ReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
-                    ProxyTCP pe = (ProxyTCP)args.UserToken;
-                    if (pe == null)
+                    ProxyTCP pt = (ProxyTCP)args.UserToken;
+                    if (pt == null)
                     {
                         return;
                     }
@@ -3979,68 +3979,68 @@ namespace WinsockPacketEditor
                     {
                         if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            pe?.Dispose();
+                            pt.Dispose();
                             return;
                         }
 
                         if (ProxyConfig.Proxy.IsListening)
                         {
                             int bytesRead = args.BytesTransferred;
-                            ReadOnlySpan<byte> proxyBufferSpan = pe.TCP_Client.Buffer.AsSpan(0, bytesRead);
-                            Span<byte> combinedData = new byte[pe.TCP_Client.Data.Length + bytesRead].AsSpan();
+                            ReadOnlySpan<byte> proxyBufferSpan = pt.TCP_Client.Buffer.AsSpan(0, bytesRead);
+                            Span<byte> combinedData = new byte[pt.TCP_Client.Data.Length + bytesRead].AsSpan();
 
-                            if (pe.TCP_Client.Data.Length > 0)
+                            if (pt.TCP_Client.Data.Length > 0)
                             {
-                                pe.TCP_Client.Data.AsSpan().CopyTo(combinedData);
+                                pt.TCP_Client.Data.AsSpan().CopyTo(combinedData);
                             }
 
-                            int start = pe.TCP_Client.Data.Length;
+                            int start = pt.TCP_Client.Data.Length;
                             if (start < 0 || start >= combinedData.Length)
                             {
                                 return;
                             }
                             proxyBufferSpan.CopyTo(combinedData.Slice(start));                            
 
-                            bool bIsMatch = ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, pe.ProxyStep);
+                            bool bIsMatch = ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, pt.ProxyStep);
                             if (bIsMatch)
                             {
-                                switch (pe.ProxyStep)
+                                switch (pt.ProxyStep)
                                 {
                                     case ProxyConfig.Proxy.ProxyStep.Handshake:
-                                        ProxyConfig.Proxy.Handshake(pe, combinedData);
+                                        ProxyConfig.Proxy.Handshake(pt, combinedData);
                                         break;
 
                                     case ProxyConfig.Proxy.ProxyStep.AuthUserName:
-                                        ProxyConfig.Proxy.AuthUserName(pe, combinedData);
+                                        ProxyConfig.Proxy.AuthUserName(pt, combinedData);
                                         break;
 
                                     case ProxyConfig.Proxy.ProxyStep.Command:
-                                        ProxyConfig.Proxy.Command(pe, combinedData);
+                                        ProxyConfig.Proxy.Command(pt, combinedData);
                                         break;
 
                                     case ProxyConfig.Proxy.ProxyStep.ForwardData:
-                                        ProxyConfig.Proxy.ForwardData(pe, combinedData);
+                                        ProxyConfig.Proxy.ForwardData(pt, combinedData);
                                         break;
                                 }
 
-                                pe.TCP_Client.Data = Array.Empty<byte>();
+                                pt.TCP_Client.Data = Array.Empty<byte>();
                             }
                             else
                             {
-                                pe.TCP_Client.Data = combinedData.ToArray();
+                                pt.TCP_Client.Data = combinedData.ToArray();
                             }
 
-                            ProxyConfig.Proxy.StartReceive(pe);
+                            ProxyConfig.Proxy.StartReceive(pt);
                         }
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
-                        pe?.Dispose();
+                        pt?.Dispose();
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        pe?.Dispose();
+                        pt?.Dispose();
                     }
                 }
 
@@ -4675,6 +4675,8 @@ namespace WinsockPacketEditor
                                 addressType == ProxyConfig.Proxy.AddressType.IPv6 ||
                                 addressType == ProxyConfig.Proxy.AddressType.Domain)
                             {
+                                pu.ClientEndPoint = epRemote;
+
                                 ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
                                 IPEndPoint targetEndPoint = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
                                 if (targetEndPoint != null)
@@ -4771,13 +4773,12 @@ namespace WinsockPacketEditor
                         return ProxyConfig.Proxy.UDPClients.GetOrAdd(clientTCPEndPoint, ep =>
                         {
                             var pu = new ProxyUDP(new IPEndPoint(proxyUdpIp, 0));
-                            pu.ClientEndPoint = clientTCPEndPoint;
                             return pu;
                         });
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return null;
@@ -4800,7 +4801,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }                    
                 }
 
@@ -5066,7 +5067,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return bReturn;
@@ -5095,7 +5096,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return bReturn;
@@ -5234,7 +5235,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return bReturn;
@@ -5449,7 +5450,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return headers;
@@ -5474,7 +5475,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
                 }
 
@@ -5598,7 +5599,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return "application/octet-stream";
@@ -5666,7 +5667,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return null;
@@ -5715,7 +5716,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return null;
@@ -5767,7 +5768,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(nameof(ResolveAddressAsync), ex.Message);
+                        DoLog(nameof(ResolveAddressAsync), ex.Message);
                     }
 
                     return null;
@@ -5806,7 +5807,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         return Span<byte>.Empty;
                     }
                 }
@@ -5832,7 +5833,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         return Array.Empty<byte>();
                     }
                 }
@@ -5873,7 +5874,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return Operate.ProxyConfig.Proxy.DomainType.Socket;
@@ -6794,7 +6795,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
                     return iReturn;
@@ -8343,7 +8344,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, $"远程映射失败: {ex.Message}");
+                        DoLog(MethodBase.GetCurrentMethod().Name, $"远程映射失败: {ex.Message}");
 
                         // 返回500错误响应
                         string errorResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
@@ -17038,14 +17039,6 @@ namespace WinsockPacketEditor
         #region//记录日志        
 
         public static void DoLog(string sFuncName, string sLogContent)
-        {
-            Task.Run(() =>
-            {
-                LogConfig.Queue.LogToQueue(sFuncName, sLogContent);
-            });
-        }
-
-        public static void DoLog_Proxy(string sFuncName, string sLogContent)
         {
             Task.Run(() =>
             {
