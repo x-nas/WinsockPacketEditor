@@ -1,10 +1,10 @@
 ﻿using AntdUI;
 using Be.Windows.Forms;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static WinsockPacketEditor.Operate;
 
 namespace WinsockPacketEditor
 {
@@ -1258,7 +1259,7 @@ namespace WinsockPacketEditor
                 this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
                 this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
                 this.lProxyTCP_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
-                this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.UDPClients.Count.ToString();
+                this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.cdProxyUDP.Count.ToString();
                 this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
                 this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
                 this.lDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromAuthList().ToString();
@@ -1445,6 +1446,8 @@ namespace WinsockPacketEditor
                     ai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, ClientIP, this.treeClientList);
                     ai.DevicesNumber = Operate.ProxyConfig.Account.GetDevicesNumber_ByAccountID(ai.AID);
                 }
+
+                ProxyConfig.Proxy.CheckUDPTimeOut();
             }
             catch (Exception ex)
             {

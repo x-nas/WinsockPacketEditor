@@ -3820,10 +3820,7 @@ namespace WinsockPacketEditor
                 public static string ProxyBytesInfo = string.Empty;
                 public static string ProxySpeedInfo = string.Empty;
                 public static bool HookTCP_Req = true, HookTCP_Resp = true, HookUDP_Req = true, HookUDP_Resp = true;
-
-                public static readonly ConcurrentDictionary<IPEndPoint, ProxyUDP> UDPClients = new ConcurrentDictionary<IPEndPoint, ProxyUDP>();
-                public static readonly TimeSpan _inactiveTimeout = TimeSpan.FromMinutes(5);
-
+                
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
                 public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
 
@@ -4376,12 +4373,11 @@ namespace WinsockPacketEditor
 
                                         try
                                         {
-                                            ProxyUDP pu = ProxyConfig.Proxy.GetOrCreateUdpClient((IPEndPoint)pe.TCP_Client.Socket.RemoteEndPoint, ProxyConfig.Proxy.ProxyUDP_IP);
+                                            ProxyUDP pu = ProxyConfig.Proxy.CreateNewUDP();
                                             if (pu == null)
                                             {
                                                 return;
-                                            }
-                                            pu.UpdateActivity();
+                                            }                                            
 
                                             ReadOnlySpan<byte> bServerUDP_IP = ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
                                             ReadOnlySpan<byte> bServerUDP_Port = BitConverter.GetBytes(((IPEndPoint)pu.ClientUDP.Client.LocalEndPoint).Port);
@@ -4762,19 +4758,16 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//初始化 UDPClient
+                #region//创建新UDP端口
 
-                public static ProxyUDP GetOrCreateUdpClient(IPEndPoint clientTCPEndPoint, IPAddress proxyUdpIp)
+                public static ProxyUDP CreateNewUDP()
                 {
                     try
                     {
-                        ProxyConfig.Proxy.CleanupInactiveClients();
-
-                        return ProxyConfig.Proxy.UDPClients.GetOrAdd(clientTCPEndPoint, ep =>
-                        {
-                            var pu = new ProxyUDP(new IPEndPoint(proxyUdpIp, 0));
-                            return pu;
-                        });
+                        var pu = new ProxyUDP(new IPEndPoint(ProxyConfig.Proxy.ProxyUDP_IP, 0));
+                        ProxyConfig.List.cdProxyUDP.TryAdd(Guid.NewGuid(), pu);
+                        pu.UpdateActivity();
+                        return pu;
                     }
                     catch (Exception ex)
                     {
@@ -4784,18 +4777,17 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
-                private static void CleanupInactiveClients()
+                public static void CheckUDPTimeOut()
                 {
                     try
                     {
-                        foreach (var kvp in ProxyConfig.Proxy.UDPClients)
+                        var now = DateTime.Now;
+                        foreach (var pair in ProxyConfig.List.cdProxyUDP)
                         {
-                            if (DateTime.Now - kvp.Value.LastActivityTime > _inactiveTimeout)
+                            if (now - pair.Value.LastActivityTime > ProxyConfig.List.UDPTimeout)
                             {
-                                if (ProxyConfig.Proxy.UDPClients.TryRemove(kvp.Key, out var oldClient))
-                                {
-                                    oldClient.Close();
-                                }
+                                ProxyConfig.List.cdProxyUDP.TryRemove(pair.Key, out _);
+                                pair.Value.Close();
                             }
                         }
                     }
@@ -6082,6 +6074,10 @@ namespace WinsockPacketEditor
                 public static ProxyInfo piSelect = null;                
 
                 public static BindingList<ProxyTCP> lstProxyTCP = new BindingList<ProxyTCP>();
+
+                public static readonly ConcurrentDictionary<Guid, ProxyUDP> cdProxyUDP = new ConcurrentDictionary<Guid, ProxyUDP>();
+                public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(5);
+
                 public static BindingList<ProxyInfo> lstProxyInfo = new BindingList<ProxyInfo>();                
 
                 #region//TCP代理入列表
