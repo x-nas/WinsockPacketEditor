@@ -1113,48 +1113,62 @@ namespace WinsockPacketEditor
 
         private void timerProxyList_Tick(object sender, EventArgs e)
         {
-            if (Operate.ProxyConfig.Queue.qProxyTCP.Count > 0)
+            try
             {
-                Operate.ProxyConfig.List.ProxyTCP_ToList();
-            }
+                if (Operate.ProxyConfig.Queue.qProxyTCP.Count > 0)
+                {
+                    Operate.ProxyConfig.List.ProxyTCP_ToList();
+                }
 
-            if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
-            {
-                Operate.ProxyConfig.List.ProxyInfo_ToList();
-            }
+                if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
+                {
+                    Operate.ProxyConfig.List.ProxyInfo_ToList();
+                }
 
-            if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
-            {
-                Operate.LogConfig.List.LogToList();
+                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
+                {
+                    Operate.LogConfig.List.LogToList();
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void timerProxyListInfo_Tick(object sender, EventArgs e)
         {
-            if (!this.bgwProxyList.IsBusy)
+            try
             {
-                this.bgwProxyList.RunWorkerAsync();
-            }
+                if (!this.bgwProxyList.IsBusy)
+                {
+                    this.bgwProxyList.RunWorkerAsync();
+                }
 
-            if (!this.bgwClientList.IsBusy)
+                if (!this.bgwClientList.IsBusy)
+                {
+                    this.treeClientList.PauseLayout = true;
+                    this.bgwClientList.RunWorkerAsync();
+                }
+
+                if (Operate.ProxyConfig.Account.NeedSave && !this.bgwAccountList.IsBusy)
+                {
+                    Operate.ProxyConfig.Account.NeedSave = false;
+                    this.bgwAccountList.RunWorkerAsync();
+                }
+
+                this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
+                this.mProxyMode.Items[1].Badge = this.treeClientList.Items.Count().ToString();
+                this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
+                this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
+                this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
+                this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
+                this.mProxyMode.Items[11].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+            }
+            catch (Exception ex)
             {
-                this.treeClientList.PauseLayout = true;
-                this.bgwClientList.RunWorkerAsync();
-            }
-
-            if (Operate.ProxyConfig.Account.NeedSave && !this.bgwAccountList.IsBusy)
-            {
-                Operate.ProxyConfig.Account.NeedSave = false;
-                this.bgwAccountList.RunWorkerAsync();                
-            }
-
-            this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
-            this.mProxyMode.Items[1].Badge = this.treeClientList.Items.Count().ToString();
-            this.mProxyMode.Items[2].Badge = this.lstAccount.Count.ToString();
-            this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
-            this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
-            this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
-            this.mProxyMode.Items[11].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
@@ -1224,51 +1238,58 @@ namespace WinsockPacketEditor
 
         private void bgwProxyList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.tProxyList.Refresh();
-            this.tSystemLog.Refresh();            
+            try
+            {
+                this.tProxyList.Refresh();
+                this.tSystemLog.Refresh();
 
-            ulong ProxyTotal_CNT = 
-                Operate.ProxyConfig.Proxy.TCP_Req_CNT + 
-                Operate.ProxyConfig.Proxy.TCP_Resp_CNT + 
-                Operate.ProxyConfig.Proxy.UDP_Req_CNT + 
-                Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
+                ulong ProxyTotal_CNT =
+                    Operate.ProxyConfig.Proxy.TCP_Req_CNT +
+                    Operate.ProxyConfig.Proxy.TCP_Resp_CNT +
+                    Operate.ProxyConfig.Proxy.UDP_Req_CNT +
+                    Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
 
-            this.lProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
-            this.lTCP_Req_CNT.Text = Operate.ProxyConfig.Proxy.TCP_Req_CNT.ToString();
-            this.lTCP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.TCP_Resp_CNT.ToString();
-            this.lUDP_Req_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Req_CNT.ToString();
-            this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
-            this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
-            this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
-            this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
-            this.lProxyTCP_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
-            this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.UDPClients.Count.ToString();   
-            this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
-            this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
-            this.lDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromAuthList().ToString();
+                this.lProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
+                this.lTCP_Req_CNT.Text = Operate.ProxyConfig.Proxy.TCP_Req_CNT.ToString();
+                this.lTCP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.TCP_Resp_CNT.ToString();
+                this.lUDP_Req_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Req_CNT.ToString();
+                this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
+                this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
+                this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
+                this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
+                this.lProxyTCP_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
+                this.lProxyUDP_CNT.Text = Operate.ProxyConfig.Proxy.UDPClients.Count.ToString();
+                this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
+                this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
+                this.lDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromAuthList().ToString();
 
-            Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(
-                    "{0}/{1}",
-                    Operate.ProxyConfig.Account.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo),
-                    Operate.ProxyConfig.Account.lstAccountInfo.Count);
-            this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
+                Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(
+                        "{0}/{1}",
+                        Operate.ProxyConfig.Account.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo),
+                        Operate.ProxyConfig.Account.lstAccountInfo.Count);
+                this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
 
-            Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
-                AntdUI.Localization.Get("ProxyBytesInfo", "请求: {0}  响应: {1}"),
-                Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request),
-                Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
-            this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
+                Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
+                    AntdUI.Localization.Get("ProxyBytesInfo", "请求: {0}  响应: {1}"),
+                    Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request),
+                    Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
+                this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
 
-            decimal dUplink = Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;
-            Operate.ProxyConfig.Proxy.ProxySpeed_Uplink = 0;
-            decimal dDownlink = Operate.ProxyConfig.Proxy.ProxySpeed_Downlink / 1024;
-            Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
+                decimal dUplink = Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;
+                Operate.ProxyConfig.Proxy.ProxySpeed_Uplink = 0;
+                decimal dDownlink = Operate.ProxyConfig.Proxy.ProxySpeed_Downlink / 1024;
+                Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
 
-            Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
-                AntdUI.Localization.Get("ProxySpeedInfo", "上行: {0} KB/s  下行: {1} KB/s"),
-                dUplink.ToString("0.00"),
-                dDownlink.ToString("0.00"));
-            this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
+                Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
+                    AntdUI.Localization.Get("ProxySpeedInfo", "上行: {0} KB/s  下行: {1} KB/s"),
+                    dUplink.ToString("0.00"),
+                    dDownlink.ToString("0.00"));
+                this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
@@ -1450,7 +1471,14 @@ namespace WinsockPacketEditor
 
         private void bgwAccountList_DoWork(object sender, DoWorkEventArgs e)
         {
-            Operate.ProxyConfig.Account.SaveAccountList_ToDB();
+            try
+            {
+                Operate.ProxyConfig.Account.SaveAccountList_ToDB();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
