@@ -3906,7 +3906,7 @@ namespace WinsockPacketEditor
                             clientSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                             clientSocket.NoDelay = true;
 
-                            pe = new ProxyTCP(clientSocket, ProxyConfig.Proxy.SocketBufferSize);
+                            pe = new ProxyTCP(clientSocket, clientSocket.ReceiveBufferSize);
                             ProxyConfig.Proxy.StartReceive(pe);
                         }
                         else
@@ -3966,8 +3966,19 @@ namespace WinsockPacketEditor
 
                 private static void ReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
+                    if (args.UserToken == null || !(args.UserToken is ProxyTCP))
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, "args.UserToken is NULL");
+                        return;
+                    }
+
                     ProxyTCP pt = (ProxyTCP)args.UserToken;
                     if (pt == null)
+                    {
+                        return;
+                    }
+
+                    if (!ProxyConfig.Proxy.IsListening)
                     {
                         return;
                     }
@@ -3980,55 +3991,73 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        if (ProxyConfig.Proxy.IsListening)
+                        // 检查 TCP_Client 是否初始化
+                        if (pt.TCP_Client == null)
                         {
-                            int bytesRead = args.BytesTransferred;
-                            ReadOnlySpan<byte> proxyBufferSpan = pt.TCP_Client.Buffer.AsSpan(0, bytesRead);
-                            Span<byte> combinedData = new byte[pt.TCP_Client.Data.Length + bytesRead].AsSpan();
-
-                            if (pt.TCP_Client.Data.Length > 0)
-                            {
-                                pt.TCP_Client.Data.AsSpan().CopyTo(combinedData);
-                            }
-
-                            int start = pt.TCP_Client.Data.Length;
-                            if (start < 0 || start >= combinedData.Length)
-                            {
-                                return;
-                            }
-                            proxyBufferSpan.CopyTo(combinedData.Slice(start));                            
-
-                            bool bIsMatch = ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, pt.ProxyStep);
-                            if (bIsMatch)
-                            {
-                                switch (pt.ProxyStep)
-                                {
-                                    case ProxyConfig.Proxy.ProxyStep.Handshake:
-                                        ProxyConfig.Proxy.Handshake(pt, combinedData);
-                                        break;
-
-                                    case ProxyConfig.Proxy.ProxyStep.AuthUserName:
-                                        ProxyConfig.Proxy.AuthUserName(pt, combinedData);
-                                        break;
-
-                                    case ProxyConfig.Proxy.ProxyStep.Command:
-                                        ProxyConfig.Proxy.Command(pt, combinedData);
-                                        break;
-
-                                    case ProxyConfig.Proxy.ProxyStep.ForwardData:
-                                        ProxyConfig.Proxy.ForwardData(pt, combinedData);
-                                        break;
-                                }
-
-                                pt.TCP_Client.Data = Array.Empty<byte>();
-                            }
-                            else
-                            {
-                                pt.TCP_Client.Data = combinedData.ToArray();
-                            }
-
-                            ProxyConfig.Proxy.StartReceive(pt);
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Client is NULL");
+                            pt.Dispose();
+                            return;
                         }
+
+                        // 检查 Buffer 和 Data 是否初始化
+                        if (pt.TCP_Client.Buffer == null || pt.TCP_Client.Data == null)
+                        {
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Client.Buffer or Data is NULL");
+                            pt.Dispose();
+                            return;
+                        }
+
+                        int bytesRead = args.BytesTransferred;
+                        if (bytesRead > pt.TCP_Client.Buffer.Length)
+                        {
+                            bytesRead = pt.TCP_Client.Buffer.Length;
+                        }
+
+                        ReadOnlySpan<byte> proxyBufferSpan = pt.TCP_Client.Buffer.AsSpan(0, bytesRead);
+                        Span<byte> combinedData = new byte[pt.TCP_Client.Data.Length + bytesRead].AsSpan();
+
+                        if (pt.TCP_Client.Data.Length > 0)
+                        {
+                            pt.TCP_Client.Data.AsSpan().CopyTo(combinedData);
+                        }
+
+                        int start = pt.TCP_Client.Data.Length;
+                        if (start < 0 || start >= combinedData.Length)
+                        {
+                            return;
+                        }
+                        proxyBufferSpan.CopyTo(combinedData.Slice(start));
+
+                        bool bIsMatch = ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, pt.ProxyStep);
+                        if (bIsMatch)
+                        {
+                            switch (pt.ProxyStep)
+                            {
+                                case ProxyConfig.Proxy.ProxyStep.Handshake:
+                                    ProxyConfig.Proxy.Handshake(pt, combinedData);
+                                    break;
+
+                                case ProxyConfig.Proxy.ProxyStep.AuthUserName:
+                                    ProxyConfig.Proxy.AuthUserName(pt, combinedData);
+                                    break;
+
+                                case ProxyConfig.Proxy.ProxyStep.Command:
+                                    ProxyConfig.Proxy.Command(pt, combinedData);
+                                    break;
+
+                                case ProxyConfig.Proxy.ProxyStep.ForwardData:
+                                    ProxyConfig.Proxy.ForwardData(pt, combinedData);
+                                    break;
+                            }
+
+                            pt.TCP_Client.Data = Array.Empty<byte>();
+                        }
+                        else
+                        {
+                            pt.TCP_Client.Data = combinedData.ToArray();
+                        }
+
+                        ProxyConfig.Proxy.StartReceive(pt);
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
@@ -4587,7 +4616,28 @@ namespace WinsockPacketEditor
                             return;
                         }
 
+                        // 检查 TCP_Server 是否初始化
+                        if (pt.TCP_Server == null)
+                        {
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Server is NULL");
+                            pt.Dispose();
+                            return;
+                        }
+
+                        // 检查 Buffer 是否初始化
+                        if (pt.TCP_Server.Buffer == null)
+                        {
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Server.Buffer is NULL");
+                            pt.Dispose();
+                            return;
+                        }
+
                         int bytesRead = args.BytesTransferred;
+                        if (bytesRead > pt.TCP_Server.Buffer.Length)
+                        {
+                            bytesRead = pt.TCP_Server.Buffer.Length;
+                        }
+
                         var bData = pt.TCP_Server.Buffer.AsSpan(0, bytesRead);
 
                         if (pt.CommandType == ProxyConfig.Proxy.CommandType.Connect)
@@ -6084,10 +6134,17 @@ namespace WinsockPacketEditor
 
                 public static void ProxyTCP_ToList()
                 {
-                    if (ProxyConfig.Queue.qProxyTCP.TryDequeue(out ProxyTCP pt))
+                    try
                     {
-                        ProxyConfig.List.lstProxyTCP.Add(pt);
+                        if (ProxyConfig.Queue.qProxyTCP.TryDequeue(out ProxyTCP pt))
+                        {
+                            ProxyConfig.List.lstProxyTCP.Add(pt);
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }                    
                 }
 
                 #endregion                                
@@ -6397,7 +6454,8 @@ namespace WinsockPacketEditor
                 public static string CCProxy_HTML = string.Empty;
 
                 public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
-                public static BindingList<AuthInfo> lstAuthInfo = new BindingList<AuthInfo>();                
+
+                public static ConcurrentDictionary<(Guid AID, string AuthIP), AuthInfo> cdAuthInfo = new ConcurrentDictionary<(Guid, string), AuthInfo>();
 
                 #region//代理认证入列表            
 
@@ -6405,25 +6463,18 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (AID != null && AID != Guid.Empty)
-                        {
-                            lock (Operate.ProxyConfig.Account.lstAuthInfo)
-                            {
-                                var existingItem = Operate.ProxyConfig.Account.lstAuthInfo
-                                    .FirstOrDefault(item => item.AuthIP == AuthIP && item.AID == AID);
+                        if (AID == null || AID == Guid.Empty) return;
 
-                                if (existingItem != null)
-                                {
-                                    existingItem.AuthResult = AuthResult;
-                                    existingItem.AuthTime = DateTime.Now;
-                                }
-                                else
-                                {
-                                    Operate.ProxyConfig.Account.lstAuthInfo.Add(
-                                        new AuthInfo(AID, AuthIP, AuthResult, DateTime.Now));
-                                }
-                            }
-                        }
+                        var key = (AID, AuthIP);
+                        cdAuthInfo.AddOrUpdate(
+                            key,
+                            _ => new AuthInfo(AID, AuthIP, AuthResult, DateTime.Now),
+                            (_, existingItem) =>
+                            {
+                                existingItem.AuthResult = AuthResult;
+                                existingItem.AuthTime = DateTime.Now;
+                                return existingItem;
+                            });
                     }
                     catch (Exception ex)
                     {
@@ -6433,22 +6484,25 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//查找代理认证            
+                #region//查找代理认证
 
                 public static AuthInfo GetProxyAuthInfo(Guid AID, string IPAddress)
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(IPAddress))
+                        if (string.IsNullOrEmpty(IPAddress) || AID == Guid.Empty)
                         {
                             return null;
                         }
 
-                        return ProxyConfig.Account.lstAuthInfo.FirstOrDefault(p => p.AID == AID && p.AuthIP.Equals(IPAddress, StringComparison.OrdinalIgnoreCase));
+                        if (ProxyConfig.Account.cdAuthInfo.TryGetValue((AID, IPAddress), out var authInfo))
+                        {
+                            return authInfo;
+                        }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                        
                     }
 
                     return null;
@@ -6456,42 +6510,19 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//删除代理认证
-
-                public static void DeleteProxyAuthInfo_ByAID(Guid AID)
-                {
-                    try
-                    {
-                        if (AID != null)
-                        {
-                            for (int i = ProxyConfig.Account.lstAuthInfo.Count - 1; i >= 0; i--)
-                            {
-                                if (ProxyConfig.Account.lstAuthInfo[i].AID == AID)
-                                {
-                                    ProxyConfig.Account.lstAuthInfo.RemoveAt(i);
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                }
+                #region//删除代理认证                
 
                 public static void DeleteProxyAuthInfo_ByAIDAndIP(Guid AID, string IPAddress)
                 {
                     try
                     {
-                        if (!string.IsNullOrEmpty(IPAddress) && AID != null)
+                        if (string.IsNullOrEmpty(IPAddress) || AID == Guid.Empty)
                         {
-                            AuthInfo pai = ProxyConfig.Account.lstAuthInfo.FirstOrDefault(Auth => Auth.AuthIP.Equals(IPAddress, StringComparison.OrdinalIgnoreCase) && Auth.AID == AID);
-
-                            if (pai != null)
-                            {
-                                ProxyConfig.Account.lstAuthInfo.Remove(pai);
-                            }
+                            return;
                         }
+
+                        var key = (AID, IPAddress);
+                        ProxyConfig.Account.cdAuthInfo.TryRemove(key, out _);
                     }
                     catch (Exception ex)
                     {
@@ -6499,75 +6530,39 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
-
-                #region//清空代理认证列表
-
-                public static void ClearProxyAuthList()
-                {
-                    lstAuthInfo.Clear();
-                }
-
-                #endregion
+                #endregion                
 
                 #region//获取代理认证列表的信息
 
                 public static int GetLinksCount_FromAuthList()
                 {
-                    return lstAuthInfo?.Sum(proxy => proxy.LinksNumber) ?? 0;
+                    try
+                    {
+                        return ProxyConfig.Account.cdAuthInfo.Values.Sum(proxy => proxy.LinksNumber);
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return 0;
+                    }
                 }
 
                 public static int GetDevicesCount_FromAuthList()
                 {
-                    return lstAuthInfo?.GroupBy(proxy => proxy.AID).Sum(group => group.First().DevicesNumber) ?? 0;
-                }
-
-                #endregion
-
-                #region//搜索代理认证列表
-
-                public static int SearchForProxyAuthList(int fromIndex, string FindString)
-                {
-                    int iResult = -1;
-
                     try
                     {
-                        if (string.IsNullOrEmpty(FindString) || fromIndex < 0)
-                        {
-                            return -1;
-                        }
-
-                        int listCount = ProxyConfig.Account.lstAuthInfo.Count;
-                        if (listCount == 0 || fromIndex >= listCount)
-                        {
-                            return -1;
-                        }
-
-                        for (int i = fromIndex; i < listCount; i++)
-                        {
-                            string AccountUserName = GetUserName_ByAccountID(ProxyConfig.Account.lstAuthInfo[i].AID);
-                            string IPAddress = ProxyConfig.Account.lstAuthInfo[i].AuthIP;
-
-                            if (!string.IsNullOrEmpty(AccountUserName) && AccountUserName.Contains(FindString))
-                            {
-                                return i;
-                            }
-
-                            if (!string.IsNullOrEmpty(IPAddress) && IPAddress.Contains(FindString))
-                            {
-                                return i;
-                            }
-                        }
+                        return ProxyConfig.Account.cdAuthInfo.Values
+                            .GroupBy(proxy => proxy.AID)
+                            .Sum(group => group.First().DevicesNumber);
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return 0;
                     }
-
-                    return iResult;
                 }
 
-                #endregion
+                #endregion                
 
                 #region//验证远程管理的账号密码
 
@@ -6828,7 +6823,18 @@ namespace WinsockPacketEditor
 
                 public static int GetDevicesNumber_ByAccountID(Guid AID)
                 {
-                    return ProxyConfig.Account.lstAuthInfo.Count(p => p.AID == AID);
+                    try
+                    {
+                        if (AID == Guid.Empty)
+                            return 0;
+
+                        return ProxyConfig.Account.cdAuthInfo.Count(kvp => kvp.Key.AID == AID);
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return 0;
+                    }
                 }
 
                 #endregion

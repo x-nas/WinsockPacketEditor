@@ -14,7 +14,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using static WinsockPacketEditor.Operate;
 
 namespace WinsockPacketEditor
 {
@@ -391,7 +390,7 @@ namespace WinsockPacketEditor
             };
 
             this.tAuthList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tAuthList.Binding(Operate.ProxyConfig.Account.lstAuthInfo);
+            this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
         }
 
         private void InitTable_FilterList()
@@ -1241,8 +1240,9 @@ namespace WinsockPacketEditor
         {
             try
             {
+                this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
                 this.tProxyList.Refresh();
-                this.tSystemLog.Refresh();
+                this.tSystemLog.Refresh();                
 
                 ulong ProxyTotal_CNT =
                     Operate.ProxyConfig.Proxy.TCP_Req_CNT +
@@ -1260,7 +1260,7 @@ namespace WinsockPacketEditor
                 this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
                 this.lProxyTCP_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
                 this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.cdProxyUDP.Count.ToString();
-                this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.lstAuthInfo.Count.ToString();
+                this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.cdAuthInfo.Count.ToString();
                 this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
                 this.lDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromAuthList().ToString();
 
@@ -1432,22 +1432,23 @@ namespace WinsockPacketEditor
 
                         #endregion
                     }
-                }
+                }                
 
-                var aiList = Operate.ProxyConfig.Account.lstAuthInfo.ToList();
-                if (aiList == null)
+                foreach (AuthInfo ai in Operate.ProxyConfig.Account.cdAuthInfo.Values)
                 {
-                    return;
-                }
-
-                foreach (AuthInfo ai in aiList)
-                {
-                    string ClientIP = ai.AuthIP.ToString();
-                    ai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, ClientIP, this.treeClientList);
+                    string clientIP = ai.AuthIP.ToString();
+                    ai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, clientIP, this.treeClientList);
                     ai.DevicesNumber = Operate.ProxyConfig.Account.GetDevicesNumber_ByAccountID(ai.AID);
+
+                    var key = (ai.AID, ai.AuthIP);
+                    Operate.ProxyConfig.Account.cdAuthInfo.AddOrUpdate(
+                        key,
+                        ai,
+                        (_, existing) => ai
+                    );
                 }
 
-                ProxyConfig.Proxy.CheckUDPTimeOut();
+                Operate.ProxyConfig.Proxy.CheckUDPTimeOut();
             }
             catch (Exception ex)
             {
