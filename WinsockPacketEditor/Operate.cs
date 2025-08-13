@@ -3907,7 +3907,7 @@ namespace WinsockPacketEditor
                             clientSocket.NoDelay = true;
 
                             pe = new ProxyTCP(clientSocket, clientSocket.ReceiveBufferSize);
-                            ProxyConfig.Proxy.StartReceive(pe);
+                            ProxyConfig.Proxy.StartClientReceive(pe);
                         }
                         else
                         {
@@ -3934,7 +3934,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                private static void StartReceive(ProxyTCP pe)
+                private static void StartClientReceive(ProxyTCP pe)
                 {
                     if (pe?.TCP_Client?.Socket == null)
                     {
@@ -3949,22 +3949,22 @@ namespace WinsockPacketEditor
                             pe.TCP_Client.ReceiveArgs = new SocketAsyncEventArgs();
                             pe.TCP_Client.ReceiveArgs.SetBuffer(pe.TCP_Client.Buffer, 0, pe.TCP_Client.Buffer.Length);
                             pe.TCP_Client.ReceiveArgs.UserToken = pe;
-                            pe.TCP_Client.ReceiveArgs.Completed += ReceiveCompleted;
+                            pe.TCP_Client.ReceiveArgs.Completed += ClientReceiveCompleted;
                         }
 
                         if (!pe.TCP_Client.Socket.ReceiveAsync(pe.TCP_Client.ReceiveArgs))
                         {
-                            ReceiveCompleted(pe.TCP_Client.Socket, pe.TCP_Client.ReceiveArgs);
+                            ClientReceiveCompleted(pe.TCP_Client.Socket, pe.TCP_Client.ReceiveArgs);
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(StartReceive), ex.Message);
+                        Operate.DoLog(nameof(StartClientReceive), ex.Message);
                         pe?.Dispose();
                     }
                 }
 
-                private static void ReceiveCompleted(object sender, SocketAsyncEventArgs args)
+                public static void ClientReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
                     if (args.UserToken == null || !(args.UserToken is ProxyTCP))
                     {
@@ -4057,7 +4057,7 @@ namespace WinsockPacketEditor
                             pt.TCP_Client.Data = combinedData.ToArray();
                         }
 
-                        ProxyConfig.Proxy.StartReceive(pt);
+                        ProxyConfig.Proxy.StartClientReceive(pt);
                     }
                     catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
                     {
@@ -4603,7 +4603,7 @@ namespace WinsockPacketEditor
                     }                    
                 }
 
-                private static void ServerReceiveCompleted(object sender, SocketAsyncEventArgs args)
+                public static void ServerReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
                     ProxyTCP pt = (ProxyTCP)args.UserToken;
                     if (pt == null) return;
@@ -4627,7 +4627,7 @@ namespace WinsockPacketEditor
                         // 检查 Buffer 是否初始化
                         if (pt.TCP_Server.Buffer == null)
                         {
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Server.Buffer is NULL");
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, pt.TCP_Client.Socket.RemoteEndPoint.ToString() + " |" + pt.TCP_Server.Socket.RemoteEndPoint.ToString() + " - Buffer is NULL");
                             pt.Dispose();
                             return;
                         }

@@ -96,6 +96,8 @@ namespace WinsockPacketEditor
                                 {
                                     socket.Close();
                                     socket.Dispose();
+
+                                    ReceiveArgs.Completed -= Operate.ProxyConfig.Proxy.ClientReceiveCompleted;
                                     ReceiveArgs?.Dispose();
                                 }
                             }
@@ -181,6 +183,8 @@ namespace WinsockPacketEditor
                                 {
                                     socket.Close();
                                     socket.Dispose();
+
+                                    ReceiveArgs.Completed -= Operate.ProxyConfig.Proxy.ServerReceiveCompleted;
                                     ReceiveArgs?.Dispose();
                                 }
                             }
