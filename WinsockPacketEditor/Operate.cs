@@ -4627,7 +4627,7 @@ namespace WinsockPacketEditor
                         // 检查 Buffer 是否初始化
                         if (pt.TCP_Server.Buffer == null)
                         {
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, pt.TCP_Client.Socket.RemoteEndPoint.ToString() + " |" + pt.TCP_Server.Socket.RemoteEndPoint.ToString() + " - Buffer is NULL");
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Server.Buffer is NULL");
                             pt.Dispose();
                             return;
                         }

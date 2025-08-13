@@ -78,6 +78,13 @@ namespace WinsockPacketEditor
                         if (_isDisposed) return;
                         _isDisposed = true;
 
+                        if (ReceiveArgs != null)
+                        {
+                            ReceiveArgs.Completed -= Operate.ProxyConfig.Proxy.ClientReceiveCompleted;
+                            ReceiveArgs?.Dispose();
+                            ReceiveArgs = null;
+                        }
+
                         try
                         {
                             if (Socket != null)
@@ -95,10 +102,7 @@ namespace WinsockPacketEditor
                                 finally
                                 {
                                     socket.Close();
-                                    socket.Dispose();
-
-                                    ReceiveArgs.Completed -= Operate.ProxyConfig.Proxy.ClientReceiveCompleted;
-                                    ReceiveArgs?.Dispose();
+                                    socket.Dispose();                                    
                                 }
                             }
 
@@ -172,6 +176,13 @@ namespace WinsockPacketEditor
                                 var socket = Socket;
                                 Socket = null;
 
+                                if (ReceiveArgs != null)
+                                {
+                                    ReceiveArgs.Completed -= Operate.ProxyConfig.Proxy.ServerReceiveCompleted;
+                                    ReceiveArgs?.Dispose();
+                                    ReceiveArgs = null;
+                                }
+
                                 try
                                 {
                                     if (socket.Connected)
@@ -182,10 +193,7 @@ namespace WinsockPacketEditor
                                 finally
                                 {
                                     socket.Close();
-                                    socket.Dispose();
-
-                                    ReceiveArgs.Completed -= Operate.ProxyConfig.Proxy.ServerReceiveCompleted;
-                                    ReceiveArgs?.Dispose();
+                                    socket.Dispose();                                    
                                 }
                             }
 
