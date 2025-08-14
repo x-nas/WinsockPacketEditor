@@ -3820,12 +3820,18 @@ namespace WinsockPacketEditor
                 public static string ProxyBytesInfo = string.Empty;
                 public static string ProxySpeedInfo = string.Empty;
                 public static bool HookTCP_Req = true, HookTCP_Resp = true, HookUDP_Req = true, HookUDP_Resp = true;
-                
+
+                private static readonly ConcurrentStack<SocketAsyncEventArgs> ClientArgsPool = new ConcurrentStack<SocketAsyncEventArgs>();
+                private static readonly object ClientArgsLock = new object();
+
+                private static readonly ConcurrentStack<SocketAsyncEventArgs> ServerArgsPool = new ConcurrentStack<SocketAsyncEventArgs>();
+                private static readonly object ServerArgsLock = new object();
+
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
                 public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
 
                 private static SemaphoreSlim _connectionLimiter = new SemaphoreSlim(100);
-                private static TimeSpan _connectionTimeout = TimeSpan.FromSeconds(30);
+                private static TimeSpan _connectionTimeout = TimeSpan.FromSeconds(30);                
 
                 #region//定义结构                
 
@@ -3890,6 +3896,86 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//Args 对象池
+
+                public static SocketAsyncEventArgs RentClientArgs(ProxyTCP pt)
+                {
+                    if (!ClientArgsPool.TryPop(out var args))
+                    {
+                        lock (ClientArgsLock)
+                        {
+                            args = new SocketAsyncEventArgs();
+                            args.Completed += (s, e) =>
+                            {
+                                if (e.LastOperation == SocketAsyncOperation.Receive)
+                                    ClientReceiveCompleted(s, e);
+                            };
+                        }
+                    }
+
+                    ResetClientArgs(args, pt);
+                    return args;
+                }
+
+                private static void ResetClientArgs(SocketAsyncEventArgs args, ProxyTCP pt)
+                {
+                    args.UserToken = pt;
+                    args.SetBuffer(pt.TCP_Client.Buffer, 0, pt.TCP_Client.Buffer.Length);
+                    args.SocketError = SocketError.Success;
+                    args.AcceptSocket = null;
+                }
+
+                public static void ReturnClientArgs(SocketAsyncEventArgs args)
+                {
+                    if (args == null) return;
+
+                    args.UserToken = null;
+                    args.SetBuffer(null, 0, 0);
+                    args.Completed -= ClientReceiveCompleted;
+
+                    ClientArgsPool.Push(args);
+                }
+
+                public static SocketAsyncEventArgs RentServerArgs(ProxyTCP pt)
+                {
+                    if (!ServerArgsPool.TryPop(out var args))
+                    {
+                        lock (ServerArgsLock)
+                        {
+                            args = new SocketAsyncEventArgs();
+                            args.Completed += (s, e) =>
+                            {
+                                if (e.LastOperation == SocketAsyncOperation.Receive)
+                                    ServerReceiveCompleted(s, e);
+                            };
+                        }
+                    }
+
+                    ResetServerArgs(args, pt);
+                    return args;
+                }
+
+                private static void ResetServerArgs(SocketAsyncEventArgs args, ProxyTCP pt)
+                {
+                    args.UserToken = pt;
+                    args.SetBuffer(pt.TCP_Server.Buffer, 0, pt.TCP_Server.Buffer.Length);
+                    args.SocketError = SocketError.Success;
+                    args.AcceptSocket = null;
+                }
+
+                public static void ReturnServerArgs(SocketAsyncEventArgs args)
+                {
+                    if (args == null) return;
+
+                    args.UserToken = null;
+                    args.SetBuffer(null, 0, 0);
+                    args.Completed -= ServerReceiveCompleted;
+
+                    ServerArgsPool.Push(args);
+                }
+
+                #endregion
+
                 #region//接收客户端请求
 
                 public static async Task HandleClient(Socket clientSocket)
@@ -3934,68 +4020,37 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                private static void StartClientReceive(ProxyTCP pe)
+                private static void StartClientReceive(ProxyTCP pt)
                 {
-                    if (pe?.TCP_Client?.Socket == null)
+                    if (pt?.TCP_Client?.Socket == null)
                     {
-                        pe?.Dispose();
                         return;
                     }
 
                     try
                     {
-                        if (pe.TCP_Client.ReceiveArgs == null)
+                        var receiveArgs = ProxyConfig.Proxy.RentClientArgs(pt);
+                        if (!pt.TCP_Client.Socket.ReceiveAsync(receiveArgs))
                         {
-                            pe.TCP_Client.ReceiveArgs = new SocketAsyncEventArgs();
-                            pe.TCP_Client.ReceiveArgs.SetBuffer(pe.TCP_Client.Buffer, 0, pe.TCP_Client.Buffer.Length);
-                            pe.TCP_Client.ReceiveArgs.UserToken = pe;
-                            pe.TCP_Client.ReceiveArgs.Completed += ClientReceiveCompleted;
-                        }
-
-                        if (!pe.TCP_Client.Socket.ReceiveAsync(pe.TCP_Client.ReceiveArgs))
-                        {
-                            ClientReceiveCompleted(pe.TCP_Client.Socket, pe.TCP_Client.ReceiveArgs);
+                            ClientReceiveCompleted(pt.TCP_Client.Socket, receiveArgs);
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(StartClientReceive), ex.Message);
-                        pe?.Dispose();
+                        pt?.Dispose();
                     }
                 }
 
                 public static void ClientReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
-                    if (args.UserToken == null || !(args.UserToken is ProxyTCP))
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, "args.UserToken is NULL");
-                        return;
-                    }
-
-                    ProxyTCP pt = (ProxyTCP)args.UserToken;
-                    if (pt == null)
-                    {
-                        return;
-                    }
-
-                    if (!ProxyConfig.Proxy.IsListening)
-                    {
-                        return;
-                    }
+                    ProxyTCP pt = args.UserToken as ProxyTCP;
 
                     try
                     {
-                        if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
+                        if (pt == null || pt._isDisposed || args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            pt.Dispose();
-                            return;
-                        }
-
-                        // 检查 TCP_Client 是否初始化
-                        if (pt.TCP_Client == null)
-                        {
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Client is NULL");
-                            pt.Dispose();
+                            pt?.Dispose();
                             return;
                         }
 
@@ -4007,44 +4062,28 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        int bytesRead = args.BytesTransferred;
-                        if (bytesRead > pt.TCP_Client.Buffer.Length)
-                        {
-                            bytesRead = pt.TCP_Client.Buffer.Length;
-                        }
+                        // 数据处理
+                        int bytesRead = Math.Min(args.BytesTransferred, pt.TCP_Client.Buffer.Length);
+                        var proxyBufferSpan = pt.TCP_Client.Buffer.AsSpan(0, bytesRead);
 
-                        ReadOnlySpan<byte> proxyBufferSpan = pt.TCP_Client.Buffer.AsSpan(0, bytesRead);
-                        Span<byte> combinedData = new byte[pt.TCP_Client.Data.Length + bytesRead].AsSpan();
+                        // 合并数据
+                        Span<byte> combinedData = new byte[pt.TCP_Client.Data.Length + bytesRead];
+                        pt.TCP_Client.Data.AsSpan().CopyTo(combinedData);
+                        proxyBufferSpan.CopyTo(combinedData.Slice(pt.TCP_Client.Data.Length));
 
-                        if (pt.TCP_Client.Data.Length > 0)
-                        {
-                            pt.TCP_Client.Data.AsSpan().CopyTo(combinedData);
-                        }
-
-                        int start = pt.TCP_Client.Data.Length;
-                        if (start < 0 || start >= combinedData.Length)
-                        {
-                            return;
-                        }
-                        proxyBufferSpan.CopyTo(combinedData.Slice(start));
-
-                        bool bIsMatch = ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, pt.ProxyStep);
-                        if (bIsMatch)
+                        if (ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, pt.ProxyStep))
                         {
                             switch (pt.ProxyStep)
                             {
                                 case ProxyConfig.Proxy.ProxyStep.Handshake:
                                     ProxyConfig.Proxy.Handshake(pt, combinedData);
                                     break;
-
                                 case ProxyConfig.Proxy.ProxyStep.AuthUserName:
                                     ProxyConfig.Proxy.AuthUserName(pt, combinedData);
                                     break;
-
                                 case ProxyConfig.Proxy.ProxyStep.Command:
                                     ProxyConfig.Proxy.Command(pt, combinedData);
                                     break;
-
                                 case ProxyConfig.Proxy.ProxyStep.ForwardData:
                                     ProxyConfig.Proxy.ForwardData(pt, combinedData);
                                     break;
@@ -4056,17 +4095,20 @@ namespace WinsockPacketEditor
                         {
                             pt.TCP_Client.Data = combinedData.ToArray();
                         }
-
-                        ProxyConfig.Proxy.StartClientReceive(pt);
-                    }
-                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
-                    {
-                        pt?.Dispose();
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         pt?.Dispose();
+                    }
+                    finally
+                    {
+                        ProxyConfig.Proxy.ReturnClientArgs(args);
+
+                        if (pt != null && !pt._isDisposed && pt.TCP_Client?.Socket != null)
+                        {
+                            StartClientReceive(pt);
+                        }
                     }
                 }
 
@@ -4583,17 +4625,11 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        if (pt.TCP_Server.ReceiveArgs == null)
-                        {
-                            pt.TCP_Server.ReceiveArgs = new SocketAsyncEventArgs();
-                            pt.TCP_Server.ReceiveArgs.SetBuffer(pt.TCP_Server.Buffer, 0, pt.TCP_Server.Buffer.Length);
-                            pt.TCP_Server.ReceiveArgs.UserToken = pt;
-                            pt.TCP_Server.ReceiveArgs.Completed += ServerReceiveCompleted;
-                        }
+                        var receiveArgs = ProxyConfig.Proxy.RentServerArgs(pt);
 
-                        if (!pt.TCP_Server.Socket.ReceiveAsync(pt.TCP_Server.ReceiveArgs))
+                        if (!pt.TCP_Server.Socket.ReceiveAsync(receiveArgs))
                         {
-                            ServerReceiveCompleted(pt.TCP_Server.Socket, pt.TCP_Server.ReceiveArgs);
+                            ServerReceiveCompleted(pt.TCP_Server.Socket, receiveArgs);
                         }
                     }
                     catch (Exception ex)
@@ -4605,22 +4641,13 @@ namespace WinsockPacketEditor
 
                 public static void ServerReceiveCompleted(object sender, SocketAsyncEventArgs args)
                 {
-                    ProxyTCP pt = (ProxyTCP)args.UserToken;
-                    if (pt == null) return;
+                    ProxyTCP pt = args.UserToken as ProxyTCP;
 
                     try
                     {
-                        if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
+                        if (pt == null || pt._isDisposed || args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
                         {
-                            pt.Dispose();
-                            return;
-                        }
-
-                        // 检查 TCP_Server 是否初始化
-                        if (pt.TCP_Server == null)
-                        {
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Server is NULL");
-                            pt.Dispose();
+                            pt?.Dispose();
                             return;
                         }
 
@@ -4628,44 +4655,38 @@ namespace WinsockPacketEditor
                         if (pt.TCP_Server.Buffer == null)
                         {
                             Operate.DoLog(MethodBase.GetCurrentMethod().Name, "pt.TCP_Server.Buffer is NULL");
-                            pt.Dispose();
+                            pt?.Dispose();
                             return;
                         }
 
-                        int bytesRead = args.BytesTransferred;
-                        if (bytesRead > pt.TCP_Server.Buffer.Length)
-                        {
-                            bytesRead = pt.TCP_Server.Buffer.Length;
-                        }
-
-                        var bData = pt.TCP_Server.Buffer.AsSpan(0, bytesRead);
+                        int bytesRead = Math.Min(args.BytesTransferred, pt.TCP_Server.Buffer.Length);
+                        var dataSpan = pt.TCP_Server.Buffer.AsSpan(0, bytesRead);
 
                         if (pt.CommandType == ProxyConfig.Proxy.CommandType.Connect)
                         {
                             if (ProxyConfig.Proxy.HookTCP_Resp)
                             {
-                                ProxyConfig.Proxy.DoFilter_TCP(pt, bData, PacketConfig.Packet.PacketType.TCP_Resp);
+                                ProxyConfig.Proxy.DoFilter_TCP(pt, dataSpan, PacketConfig.Packet.PacketType.TCP_Resp);
                             }
                             else
                             {
-                                ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, bData);
+                                ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, dataSpan);
                             }                            
                         }
-
-                        StartServerReceive(pt);
-                    }
-                    catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
-                    {
-                        pt.Dispose();
-                    }
-                    catch (ObjectDisposedException)
-                    {
-                        // 忽略已释放的对象
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         pt.Dispose();
+                    }
+                    finally
+                    {
+                        ProxyConfig.Proxy.ReturnServerArgs(args);
+
+                        if (pt != null && !pt._isDisposed && pt.TCP_Server?.Socket != null)
+                        {
+                            StartServerReceive(pt);
+                        }
                     }
                 }
 

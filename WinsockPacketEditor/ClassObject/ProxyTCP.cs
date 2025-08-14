@@ -8,7 +8,7 @@ namespace WinsockPacketEditor
 {
     public class ProxyTCP : IDisposable
     {
-        private volatile bool _isDisposed;
+        public volatile bool _isDisposed;
         private readonly object _closeLock = new object();
 
         public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; set; }
@@ -50,7 +50,6 @@ namespace WinsockPacketEditor
             public string Address { get; set; }
             public byte[] Buffer { get; private set; }
             public byte[] Data { get; set; }
-            public SocketAsyncEventArgs ReceiveArgs { get; set; }
 
             public TCPClient(Socket socket, int bufferSize)
             {
@@ -78,13 +77,6 @@ namespace WinsockPacketEditor
                         if (_isDisposed) return;
                         _isDisposed = true;
 
-                        if (ReceiveArgs != null)
-                        {
-                            ReceiveArgs.Completed -= Operate.ProxyConfig.Proxy.ClientReceiveCompleted;
-                            ReceiveArgs?.Dispose();
-                            ReceiveArgs = null;
-                        }
-
                         try
                         {
                             if (Socket != null)
@@ -109,10 +101,6 @@ namespace WinsockPacketEditor
                             var buffer = Buffer;
                             Buffer = null;
                             Operate.SystemConfig.ReturnBuffer(buffer);
-                        }
-                        catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
-                        {
-                            // 忽略预期错误
                         }
                         catch (Exception ex)
                         {
@@ -144,7 +132,6 @@ namespace WinsockPacketEditor
             public string Address { get; set; }
             public byte[] Buffer { get; private set; }
             public IPEndPoint EndPoint { get; set; }
-            public SocketAsyncEventArgs ReceiveArgs { get; set; }
 
             public TCPServer(int bufferSize)
             {
@@ -176,13 +163,6 @@ namespace WinsockPacketEditor
                                 var socket = Socket;
                                 Socket = null;
 
-                                if (ReceiveArgs != null)
-                                {
-                                    ReceiveArgs.Completed -= Operate.ProxyConfig.Proxy.ServerReceiveCompleted;
-                                    ReceiveArgs?.Dispose();
-                                    ReceiveArgs = null;
-                                }
-
                                 try
                                 {
                                     if (socket.Connected)
@@ -200,10 +180,6 @@ namespace WinsockPacketEditor
                             var buffer = Buffer;
                             Buffer = null;
                             Operate.SystemConfig.ReturnBuffer(buffer);
-                        }
-                        catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
-                        {
-                            // 忽略预期错误
                         }
                         catch (Exception ex)
                         {
