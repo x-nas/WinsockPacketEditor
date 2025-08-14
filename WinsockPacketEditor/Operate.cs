@@ -2,7 +2,6 @@
 using Be.Windows.Forms;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -3820,6 +3819,7 @@ namespace WinsockPacketEditor
                 public static string ProxyBytesInfo = string.Empty;
                 public static string ProxySpeedInfo = string.Empty;
                 public static bool HookTCP_Req = true, HookTCP_Resp = true, HookUDP_Req = true, HookUDP_Resp = true;
+                private static IPHelper IPLib = new IPHelper();
 
                 private static readonly ConcurrentStack<SocketAsyncEventArgs> ClientArgsPool = new ConcurrentStack<SocketAsyncEventArgs>();
                 private static readonly object ClientArgsLock = new object();
@@ -5670,50 +5670,28 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//获取IP地址信息        
+                #region//获取IP地址信息
 
-                public static async Task<string> GetIPLocation(string ipAddress)
+                public static string GetIPLocation(string ipAddress)
                 {
-                    if (string.IsNullOrEmpty(ipAddress))
-                        return string.Empty;
-
-                    if (!IPAddress.TryParse(ipAddress, out _))
-                        return string.Empty;
-
                     try
                     {
-                        using (HttpClient client = new HttpClient())
+                        if (string.IsNullOrEmpty(ipAddress))
+                            return string.Empty;
+
+                        if (!IPAddress.TryParse(ipAddress, out _))
+                            return string.Empty;
+
+                        IPLocation location = IPLib.GetIpLocation(IPAddress.Parse(ipAddress));
+
+                        if (location.Country.Equals("局域网"))
                         {
-                            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
-                            string url = $"https://ip-api.com/json/{ipAddress}?lang=zh-CN";
-
-                            HttpResponseMessage response = await client.GetAsync(url);
-                            response.EnsureSuccessStatusCode();
-                            string json = await response.Content.ReadAsStringAsync();
-
-                            var data = JObject.Parse(json);
-                            if (data["status"]?.ToString() == "success")
-                            {
-                                return $"{data["country"]} {data["regionName"]} {data["city"]} {data["isp"]}";
-                            }
-                            else
-                            {
-                                string message = data["message"]?.ToString();
-                                switch (message)
-                                {
-                                    case "invalid query":
-                                    case "private range":
-                                    case "reserved range":
-                                        return string.Empty;
-                                    default:
-                                        return string.Empty;
-                                }
-                            }
+                            return location.Country;
                         }
-                    }
-                    catch (HttpRequestException)
-                    {
-                        return string.Empty;
+                        else
+                        {
+                            return location.Country + location.Zone;
+                        }                            
                     }
                     catch (Exception)
                     {
@@ -6475,7 +6453,6 @@ namespace WinsockPacketEditor
                 public static string CCProxy_HTML = string.Empty;
 
                 public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
-
                 public static ConcurrentDictionary<(Guid AID, string AuthIP), AuthInfo> cdAuthInfo = new ConcurrentDictionary<(Guid, string), AuthInfo>();
 
                 #region//代理认证入列表            
@@ -6909,7 +6886,7 @@ namespace WinsockPacketEditor
 
                 #region//记录代理账号的IP地址（异步）
 
-                public static async void IPInfo_ToAccount(Guid AccountID, string IPAddress)
+                public static void IPInfo_ToAccount(Guid AccountID, string IPAddress)
                 {
                     try
                     {
@@ -6918,32 +6895,22 @@ namespace WinsockPacketEditor
                             AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AccountID);
                             if (ai != null)
                             {
-                                string IPLocation = await ProxyConfig.Proxy.GetIPLocation(IPAddress);
-
-                                lock (ai.AIPInfo)
+                                AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
+                                if (aii == null)
                                 {
-                                    AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
-                                    if (aii == null)
-                                    {
-                                        aii = new AccountIPInfo(DateTime.Now, IPAddress, IPLocation);
-                                        ai.AIPInfo.Add(aii);
-                                    }
-                                    else
-                                    {
-                                        aii.LoginTime = DateTime.Now;
-
-                                        if (string.IsNullOrEmpty(aii.IPLocation))
-                                        {
-                                            aii.IPLocation = IPLocation;
-                                        }
-                                    }
-                                }                                
+                                    aii = new AccountIPInfo(DateTime.Now, IPAddress);
+                                    ai.AIPInfo.Add(aii);
+                                }
+                                else
+                                {
+                                    aii.LoginTime = DateTime.Now;
+                                }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IPInfo_ToAccount), ex.Message);
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
                 }
 
@@ -7003,11 +6970,11 @@ namespace WinsockPacketEditor
 
                 #region//新增代理账号IP信息
 
-                public static void AddAccountIPInfo(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP, string IPLocation)
+                public static void AddAccountIPInfo(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP)
                 {
                     try
                     {
-                        AccountIPInfo aii = new AccountIPInfo(LoginTime, LoginIP, IPLocation);
+                        AccountIPInfo aii = new AccountIPInfo(LoginTime, LoginIP);
                         AIPInfo.Add(aii);
                     }
                     catch (Exception ex)
@@ -7566,9 +7533,8 @@ namespace WinsockPacketEditor
                             {
                                 DateTime LoginTime = Convert.ToDateTime(drIPInfo["LoginTime"]);
                                 string LoginIP = drIPInfo["LoginIP"].ToString();
-                                string IPLocation = drIPInfo["IPLocation"].ToString();
 
-                                ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP, IPLocation);
+                                ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP);
                             }
 
                             ProxyConfig.Account.AddProxyAccount(
@@ -7742,8 +7708,7 @@ namespace WinsockPacketEditor
                                     XElement xeIPInfo =
                                         new XElement("IPInfo",
                                         new XElement("LoginTime", aii.LoginTime),
-                                        new XElement("LoginIP", aii.LoginIP),                                   
-                                        new XElement("IPLocation", aii.IPLocation)
+                                        new XElement("LoginIP", aii.LoginIP)
                                         );
 
                                     xeAccountIPInfo.Add(xeIPInfo);
@@ -7991,13 +7956,7 @@ namespace WinsockPacketEditor
                                         LoginIP = xeIPInfo.Element("LoginIP").Value;
                                     }
 
-                                    string IPLocation = string.Empty;
-                                    if (xeIPInfo.Element("IPLocation") != null)
-                                    {
-                                        IPLocation = xeIPInfo.Element("IPLocation").Value;
-                                    }
-
-                                    ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP, IPLocation);
+                                    ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP);
                                 }
                             }
 
@@ -18354,7 +18313,6 @@ namespace WinsockPacketEditor
                         sql += "GUID TEXT NOT NULL,";
                         sql += "LoginTime TIMESTAMP,";
                         sql += "LoginIP TEXT,";
-                        sql += "IPLocation TEXT,";
                         sql += "FOREIGN KEY (GUID) REFERENCES ProxyAccount(GUID),";
                         sql += "UNIQUE (GUID, LoginIP)";
                         sql += ");";
@@ -18474,9 +18432,9 @@ namespace WinsockPacketEditor
                             // 2. 插入子表 ProxyAccountIPInfo
                             string sqlIPInfo = @"
                                 INSERT INTO ProxyAccountIPInfo (
-                                    GUID, LoginTime, LoginIP, IPLocation
+                                    GUID, LoginTime, LoginIP
                                 ) VALUES (
-                                    @GUID, @LoginTime, @LoginIP, @IPLocation
+                                    @GUID, @LoginTime, @LoginIP
                                 );";
 
                             using (SQLiteCommand cmdAccount = new SQLiteCommand(sqlAccount, conn, transaction))
@@ -18499,7 +18457,6 @@ namespace WinsockPacketEditor
                                 cmdIPInfo.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
                                 cmdIPInfo.Parameters.Add(new SQLiteParameter("@LoginTime", DbType.DateTime));
                                 cmdIPInfo.Parameters.Add(new SQLiteParameter("@LoginIP", DbType.String));
-                                cmdIPInfo.Parameters.Add(new SQLiteParameter("@IPLocation", DbType.String));
 
                                 foreach (AccountInfo pai in ProxyConfig.Account.lstAccountInfo)
                                 {
@@ -18526,7 +18483,6 @@ namespace WinsockPacketEditor
                                             cmdIPInfo.Parameters["@GUID"].Value = pai.AID.ToString().ToUpper();
                                             cmdIPInfo.Parameters["@LoginTime"].Value = ipInfo.LoginTime;
                                             cmdIPInfo.Parameters["@LoginIP"].Value = ipInfo.LoginIP;
-                                            cmdIPInfo.Parameters["@IPLocation"].Value = ipInfo.IPLocation ?? (object)DBNull.Value;
 
                                             cmdIPInfo.ExecuteNonQuery();
                                         }

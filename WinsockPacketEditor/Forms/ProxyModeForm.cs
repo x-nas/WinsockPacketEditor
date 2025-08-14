@@ -363,7 +363,6 @@ namespace WinsockPacketEditor
         {
             tAuthList.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.Column("AuthTime", "认证时间").SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
-                new AntdUI.Column("AuthIP", "IP地址").SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AID", "账号", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -371,6 +370,19 @@ namespace WinsockPacketEditor
                         return Operate.ProxyConfig.Account.GetUserName_ByAccountID((Guid)value);
                     },
                 }.SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("AuthIP", "IP地址").SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column(string.Empty, "所属地")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is AuthInfo ai)
+                        {
+                            return Operate.ProxyConfig.Proxy.GetIPLocation(ai.AuthIP);
+                        }
+
+                        return null;
+                    },
+                }.SetLocalizationTitleID("Table.AuthList.Column."),                
                 new AntdUI.Column("LinksNumber", "链接数", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("DevicesNumber", "设备数", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AuthResult", "认证结果", AntdUI.ColumnAlign.Center)

@@ -192,6 +192,7 @@
     <Compile Include="ClassObject\FontLoader.cs" />
     <Compile Include="ClassObject\InstructionInfo.cs" />
     <Compile Include="ClassObject\InterfaceInfo.cs" />
+    <Compile Include="ClassObject\IPHelper.cs" />
     <Compile Include="ClassObject\Localizer.cs" />
     <Compile Include="ClassObject\LogInfo.cs" />
     <Compile Include="ClassObject\MapLocal.cs" />
@@ -488,6 +489,9 @@
       <DependentUpon>SelectProcessForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="IPLocation\qqwry.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="WPE64.pfx" />

@@ -37,32 +37,14 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
-
-        #region//IP所属地
-
-        string _IPLocation;
-
-        public string IPLocation
-        {
-            get => _IPLocation;
-            set
-            {
-                if (_IPLocation == value) return;
-                _IPLocation = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//AccountIPInfo
 
-        public AccountIPInfo(DateTime LoginTime, string LoginIP, string IPLocation)
+        public AccountIPInfo(DateTime LoginTime, string LoginIP)
         {
             this._LoginTime = LoginTime;
             this._LoginIP = LoginIP;
-            this._IPLocation = IPLocation;
         }
 
         #endregion
