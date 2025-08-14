@@ -5684,9 +5684,9 @@ namespace WinsockPacketEditor
 
                         IPLocation location = IPLib.GetIpLocation(IPAddress.Parse(ipAddress));
 
-                        if (location.Country.Equals("局域网"))
+                        if (location.Country.Equals("IANA"))
                         {
-                            return location.Country;
+                            return location.Zone;
                         }
                         else
                         {
