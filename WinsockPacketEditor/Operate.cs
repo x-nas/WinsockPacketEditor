@@ -529,7 +529,7 @@ namespace WinsockPacketEditor
 
                     if (IPSearch.Country.Equals("IANA"))
                     {
-                        return "局域网";
+                        return IPSearch.Area;
                     }
                     else
                     {

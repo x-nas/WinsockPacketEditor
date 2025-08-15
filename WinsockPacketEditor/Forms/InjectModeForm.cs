@@ -257,7 +257,7 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("FromLocation", "所属地").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("FromLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketTo", "远端地址")
                 {
                     Render = (value, record, rowindex)=>
@@ -274,7 +274,7 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("ToLocation", "所属地").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("ToLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };

@@ -276,7 +276,7 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ClientLocation", "所属地").SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("ClientLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("ServerAddr", "服务端地址")
                 {
                     Render = (value, record, rowindex)=>
@@ -293,7 +293,7 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ServerLocation", "所属地").SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("ServerLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };
