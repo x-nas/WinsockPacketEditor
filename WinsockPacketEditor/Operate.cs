@@ -2,6 +2,7 @@
 using Be.Windows.Forms;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
+using QQWry;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -3819,7 +3820,11 @@ namespace WinsockPacketEditor
                 public static string ProxyBytesInfo = string.Empty;
                 public static string ProxySpeedInfo = string.Empty;
                 public static bool HookTCP_Req = true, HookTCP_Resp = true, HookUDP_Req = true, HookUDP_Resp = true;
-                private static IPHelper IPLib = new IPHelper();
+                private static QQWryOptions IPLib = new QQWryOptions()
+                {
+                    DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "IPLocation", "qqwry.dat")
+                };
+                public static QQWryIpSearch ipSearch = new QQWryIpSearch(IPLib);
 
                 private static readonly ConcurrentStack<SocketAsyncEventArgs> ClientArgsPool = new ConcurrentStack<SocketAsyncEventArgs>();
                 private static readonly object ClientArgsLock = new object();
@@ -5668,36 +5673,9 @@ namespace WinsockPacketEditor
                     return "application/octet-stream";
                 }
 
-                #endregion
+                #endregion                
 
-                #region//获取IP地址信息
-
-                public static string GetIPLocation(string ipAddress)
-                {
-                    try
-                    {
-                        if (string.IsNullOrEmpty(ipAddress))
-                            return string.Empty;
-
-                        if (!IPAddress.TryParse(ipAddress, out _))
-                            return string.Empty;
-
-                        IPLocation location = IPLib.GetIpLocation(IPAddress.Parse(ipAddress));
-
-                        if (location.Country.Equals("IANA"))
-                        {
-                            return location.Zone;
-                        }
-                        else
-                        {
-                            return location.Country + location.Zone;
-                        }                            
-                    }
-                    catch (Exception)
-                    {
-                        return string.Empty;
-                    }
-                }
+                #region//获取IP地址信息                
 
                 public static IPEndPoint GetIPEndPoint_ByAddressString(string AddressString, ushort Port)
                 {
@@ -6029,7 +6007,7 @@ namespace WinsockPacketEditor
                     if (filterAction != Operate.FilterConfig.Filter.FilterAction.Intercept && res <= 0)
                         return Task.CompletedTask;
 
-                    return Task.Run(() =>
+                    return Task.Run(async () =>
                     {
                         try
                         {
@@ -6050,12 +6028,38 @@ namespace WinsockPacketEditor
 
                             if (!ProxyConfig.Proxy.SpeedMode)
                             {
+                                var ClientIP = await ProxyConfig.Proxy.ipSearch.GetIpLocationAsync(ClientAddr.Split(':')[0]);
+
+                                string ClientLocation = string.Empty;
+                                if (ClientIP.Country.Equals("IANA"))
+                                {
+                                    ClientLocation = ClientIP.Area;
+                                }
+                                else
+                                {
+                                    ClientLocation = ClientIP.Country + ClientIP.Area;
+                                }
+
+                                var ServerIP = await ProxyConfig.Proxy.ipSearch.GetIpLocationAsync(ServerAddr.Split(':')[0]);
+
+                                string ServerLocation = string.Empty;
+                                if (ServerIP.Country.Equals("IANA"))
+                                {
+                                    ServerLocation = ServerIP.Area;
+                                }
+                                else
+                                {
+                                    ServerLocation = ServerIP.Country + ServerIP.Area;
+                                }
+
                                 ProxyInfo pi = new ProxyInfo(
                                     dtNow,
                                     PacketSocket,
                                     PacketType,
                                     ClientAddr,
+                                    ClientLocation,
                                     ServerAddr,
+                                    ServerLocation,
                                     ServerDomain,
                                     DomainType,
                                     bRawBuffer,

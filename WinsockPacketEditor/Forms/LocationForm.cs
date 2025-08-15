@@ -43,18 +43,7 @@ namespace WinsockPacketEditor
             tLocation.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.Column("LoginTime", "登录时间").SetLocalizationTitleID("Table.AccountList.Column."),
                 new AntdUI.Column("LoginIP", "登录IP").SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column(string.Empty, "IP所属地")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is AccountIPInfo aii)
-                        {
-                            return Operate.ProxyConfig.Proxy.GetIPLocation(aii.LoginIP);
-                        }
-
-                        return null;
-                    },
-                }.SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("IPLocation", "IP所属地").SetLocalizationTitleID("Table.AccountList.Column."),
             };
 
             this.tLocation.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));

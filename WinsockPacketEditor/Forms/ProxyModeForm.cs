@@ -261,7 +261,9 @@ namespace WinsockPacketEditor
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("ClientAddr", "客户端地址").SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("ClientLocation", "所属地").SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("ServerAddr", "服务端地址").SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("ServerLocation", "所属地").SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };
@@ -371,18 +373,7 @@ namespace WinsockPacketEditor
                     },
                 }.SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AuthIP", "IP地址").SetLocalizationTitleID("Table.AuthList.Column."),
-                new AntdUI.Column(string.Empty, "所属地")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is AuthInfo ai)
-                        {
-                            return Operate.ProxyConfig.Proxy.GetIPLocation(ai.AuthIP);
-                        }
-
-                        return null;
-                    },
-                }.SetLocalizationTitleID("Table.AuthList.Column."),                
+                new AntdUI.Column(string.Empty, "所属地").SetLocalizationTitleID("Table.AuthList.Column."),                
                 new AntdUI.Column("LinksNumber", "链接数", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("DevicesNumber", "设备数", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AuthResult", "认证结果", AntdUI.ColumnAlign.Center)

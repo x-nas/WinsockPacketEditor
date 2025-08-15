@@ -73,6 +73,23 @@ namespace WinsockPacketEditor
 
         #endregion        
 
+        #region//客户端所属地
+
+        string _ClientLocation;
+
+        public string ClientLocation
+        {
+            get => _ClientLocation;
+            set
+            {
+                if (_ClientLocation == value) return;
+                _ClientLocation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion        
+
         #region//服务端地址
 
         string _ServerAddr;
@@ -89,6 +106,23 @@ namespace WinsockPacketEditor
         }
 
         #endregion
+
+        #region//服务端所属地
+
+        string _ServerLocation;
+
+        public string ServerLocation
+        {
+            get => _ServerLocation;
+            set
+            {
+                if (_ServerLocation == value) return;
+                _ServerLocation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion        
 
         #region//服务端域名
 
@@ -221,7 +255,9 @@ namespace WinsockPacketEditor
             int PacketSocket,
             Operate.PacketConfig.Packet.PacketType PacketType,
             string ClientAddr,
+            string ClientLocation,
             string ServerAddr,
+            string ServerLocation,
             string ServerDomain, 
             Operate.ProxyConfig.Proxy.DomainType DomainType,
             byte[] pRawBuffer,
@@ -233,7 +269,9 @@ namespace WinsockPacketEditor
             this._PacketSocket = PacketSocket;
             this._PacketType = PacketType;
             this._ClientAddr = ClientAddr;
+            this._ClientLocation = ClientLocation;
             this._ServerAddr = ServerAddr;
+            this._ServerLocation = ServerLocation;
             this._ServerDomain = ServerDomain;
             this._DomainType = DomainType;
             this._RawBuffer = pRawBuffer;
