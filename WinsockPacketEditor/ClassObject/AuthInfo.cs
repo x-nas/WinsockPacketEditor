@@ -39,6 +39,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//IP所属地
+
+        string _IPLocation;
+
+        public string IPLocation
+        {
+            get => _IPLocation;
+            set
+            {
+                if (_IPLocation == value) return;
+                _IPLocation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion        
+
         #region//链接数
 
         int _LinksNumber;
@@ -109,10 +126,11 @@ namespace WinsockPacketEditor
 
         #region//AuthInfo
 
-        public AuthInfo(Guid AID, string AuthIP, bool AuthResult, DateTime AuthTime)
+        public AuthInfo(Guid AID, string AuthIP, string IPLocation, bool AuthResult, DateTime AuthTime)
         {
             this._AID = AID;
             this._AuthIP = AuthIP;
+            this._IPLocation = IPLocation;
             this._LinksNumber = 0;
             this._DevicesNumber = 0;
             this._AuthResult = AuthResult;

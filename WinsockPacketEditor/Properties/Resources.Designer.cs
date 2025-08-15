@@ -61,6 +61,31 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
+        ///   查找类似 &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; id=&quot;flag-icons-cn&quot; viewBox=&quot;0 0 640 480&quot;&gt;
+        ///  &lt;defs&gt;
+        ///    &lt;path id=&quot;cn-a&quot; fill=&quot;#ff0&quot; d=&quot;M-.6.8 0-1 .6.8-1-.3h2z&quot;/&gt;
+        ///  &lt;/defs&gt;
+        ///  &lt;path fill=&quot;#ee1c25&quot; d=&quot;M0 0h640v480H0z&quot;/&gt;
+        ///  &lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot; transform=&quot;matrix(71.9991 0 0 72 120 120)&quot;/&gt;
+        ///  &lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot; transform=&quot;matrix(-12.33562 -20.5871 20.58684 -12.33577 240.3 48)&quot;/&gt;
+        ///  &lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot;  [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string Flag_CN {
+            get {
+                return ResourceManager.GetString("Flag_CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 &lt;svg t=&quot;1755245500207&quot; class=&quot;icon&quot; viewBox=&quot;0 0 1024 1024&quot; version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; p-id=&quot;1972&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;path d=&quot;M535.2 607.7c0 9.7 13 41.5-32 38-11.8-0.9-22.6-4.3-30.4-11.1-7.8-6.9-12.6-16.4-12.6-26.9 0-8.9 5.9-19.9 11.7-26.3 7.9-8.8 17.7-11.7 31.3-11.7 7.5 0 14.5 1.7 20.7 4.7 13.3 6.4 11.3 18.9 11.3 33.3z&quot; fill=&quot;#FF5C5C&quot; p-id=&quot;1973&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M509.8 651c-2.2 0-4.5-0.1-7-0.3-14.1-1.1-25.3-5.3-33.3-12.4-9.2-8.1-14.3-1 [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string Flag_Local {
+            get {
+                return ResourceManager.GetString("Flag_Local", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 &lt;svg viewBox=&quot;0 0 64 41&quot;&gt;&lt;g transform=&quot;translate(0 1)&quot; fill=&quot;none&quot;&gt;&lt;ellipse fill=&quot;#f5f5f5&quot; cx=&quot;32&quot; cy=&quot;33&quot; rx=&quot;32&quot; ry=&quot;7&quot;&gt;&lt;/ellipse&gt;&lt;g stroke=&quot;#d9d9d9&quot;&gt;&lt;path d=&quot;M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237 [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string icon_empty {

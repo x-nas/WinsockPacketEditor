@@ -241,8 +241,40 @@ namespace WinsockPacketEditor
                     },
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketFrom", "本机地址").SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketTo", "远端地址").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketFrom", "本机地址")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is PacketInfo pi)
+                        {
+                            return new CellText(value?.ToString() ?? string.Empty)
+                            {
+                                PrefixSvg = Operate.SystemConfig.GetFlagSVG(pi.FromLocation),
+                                IconRatio = 1.0F
+                            };
+                        }
+
+                        return value;
+                    },
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("FromLocation", "所属地").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketTo", "远端地址")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is PacketInfo pi)
+                        {
+                            return new CellText(value?.ToString() ?? string.Empty)
+                            {
+                                PrefixSvg = Operate.SystemConfig.GetFlagSVG(pi.ToLocation),
+                                IconRatio = 1.0F
+                            };
+                        }
+
+                        return value;
+                    },
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("ToLocation", "所属地").SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };

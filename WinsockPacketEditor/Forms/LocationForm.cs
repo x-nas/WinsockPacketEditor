@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AntdUI;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -42,8 +43,23 @@ namespace WinsockPacketEditor
         {
             tLocation.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.Column("LoginTime", "登录时间").SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("LoginIP", "登录IP").SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("IPLocation", "IP所属地").SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("LoginIP", "登录IP")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is AccountIPInfo aii)
+                        {
+                            return new CellText(value?.ToString() ?? string.Empty)
+                            {
+                                PrefixSvg = Operate.SystemConfig.GetFlagSVG(aii.IPLocation),
+                                IconRatio = 1.0F
+                            };
+                        }
+
+                        return value;
+                    },
+                }.SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.AccountList.Column."),
             };
 
             this.tLocation.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));

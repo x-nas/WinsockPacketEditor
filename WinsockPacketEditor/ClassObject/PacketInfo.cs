@@ -73,6 +73,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//源所属地
+
+        string _FromLocation;
+
+        public string FromLocation
+        {
+            get => _FromLocation;
+            set
+            {
+                if (_FromLocation == value) return;
+                _FromLocation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion        
+
         #region//目的地址
 
         string _PacketTo;
@@ -89,6 +106,23 @@ namespace WinsockPacketEditor
         }
 
         #endregion
+
+        #region//目的所属地
+
+        string _ToLocation;
+
+        public string ToLocation
+        {
+            get => _ToLocation;
+            set
+            {
+                if (_ToLocation == value) return;
+                _ToLocation = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion        
 
         #region//原始封包数据（字节）
 
@@ -186,8 +220,10 @@ namespace WinsockPacketEditor
             DateTime pTime, 
             int pSocket, 
             Operate.PacketConfig.Packet.PacketType pType, 
-            string pFrom, 
-            string pTo, 
+            string pFrom,
+            string pFromLocation,
+            string pTo,
+            string pToLocation,
             byte[] pRawBuffer, 
             byte[] pBuffer, 
             int pLen, 
@@ -197,7 +233,9 @@ namespace WinsockPacketEditor
             this._PacketSocket = pSocket;          
             this._PacketType = pType;
             this._PacketFrom = pFrom;
+            this._FromLocation = pFromLocation;
             this._PacketTo = pTo;
+            this._ToLocation = pToLocation;
             this._RawBuffer = pRawBuffer;
             this._PacketBuffer = pBuffer;
             this._PacketLen = pLen;

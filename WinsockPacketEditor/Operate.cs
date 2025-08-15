@@ -519,6 +519,58 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//获取IP的所属地
+
+            public static async Task<string> GetIPLocation(string IPString)
+            {
+                try
+                {
+                    var IPSearch = await ProxyConfig.Proxy.ipSearch.GetIpLocationAsync(IPString);
+
+                    if (IPSearch.Country.Equals("IANA"))
+                    {
+                        return "局域网";
+                    }
+                    else
+                    {
+                        return IPSearch.Country + IPSearch.Area;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return string.Empty;
+            }
+
+            #endregion
+
+            #region//获取IP所属地图标
+
+            public static string GetFlagSVG(string IPLocation)
+            {
+                try
+                {
+                    if (IPLocation.StartsWith("中国"))
+                    {
+                        return Properties.Resources.Flag_CN;
+                    }
+                    else if (IPLocation.StartsWith("局域网"))
+                    {
+                        return "DesktopOutlined";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return "WindowsFilled";
+            }
+
+            #endregion
+
             #region//初始化悬浮按钮
 
             public static void InitFloatButton(Form form, AntdUI.FormFloatButton FloatButton)
@@ -6028,29 +6080,8 @@ namespace WinsockPacketEditor
 
                             if (!ProxyConfig.Proxy.SpeedMode)
                             {
-                                var ClientIP = await ProxyConfig.Proxy.ipSearch.GetIpLocationAsync(ClientAddr.Split(':')[0]);
-
-                                string ClientLocation = string.Empty;
-                                if (ClientIP.Country.Equals("IANA"))
-                                {
-                                    ClientLocation = ClientIP.Area;
-                                }
-                                else
-                                {
-                                    ClientLocation = ClientIP.Country + ClientIP.Area;
-                                }
-
-                                var ServerIP = await ProxyConfig.Proxy.ipSearch.GetIpLocationAsync(ServerAddr.Split(':')[0]);
-
-                                string ServerLocation = string.Empty;
-                                if (ServerIP.Country.Equals("IANA"))
-                                {
-                                    ServerLocation = ServerIP.Area;
-                                }
-                                else
-                                {
-                                    ServerLocation = ServerIP.Country + ServerIP.Area;
-                                }
+                                string ClientLocation = await SystemConfig.GetIPLocation(ClientAddr.Split(':')[0]);
+                                string ServerLocation = await SystemConfig.GetIPLocation(ServerAddr.Split(':')[0]);
 
                                 ProxyInfo pi = new ProxyInfo(
                                     dtNow,
@@ -6461,16 +6492,18 @@ namespace WinsockPacketEditor
 
                 #region//代理认证入列表            
 
-                public static void AuthInfo_ToList(Guid AID, string AuthIP, bool AuthResult)
+                public static async void AuthInfo_ToList(Guid AID, string AuthIP, bool AuthResult)
                 {
                     try
                     {
                         if (AID == null || AID == Guid.Empty) return;
 
                         var key = (AID, AuthIP);
+                        string IPLocation = await SystemConfig.GetIPLocation(AuthIP);
+
                         cdAuthInfo.AddOrUpdate(
                             key,
-                            _ => new AuthInfo(AID, AuthIP, AuthResult, DateTime.Now),
+                            _ => new AuthInfo(AID, AuthIP, IPLocation, AuthResult, DateTime.Now),
                             (_, existingItem) =>
                             {
                                 existingItem.AuthResult = AuthResult;
@@ -6890,7 +6923,7 @@ namespace WinsockPacketEditor
 
                 #region//记录代理账号的IP地址（异步）
 
-                public static void IPInfo_ToAccount(Guid AccountID, string IPAddress)
+                public static async void IPInfo_ToAccount(Guid AccountID, string IPAddress)
                 {
                     try
                     {
@@ -6902,7 +6935,8 @@ namespace WinsockPacketEditor
                                 AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
                                 if (aii == null)
                                 {
-                                    aii = new AccountIPInfo(DateTime.Now, IPAddress);
+                                    string IPLocation = await SystemConfig.GetIPLocation(IPAddress);
+                                    aii = new AccountIPInfo(DateTime.Now, IPAddress, IPLocation);
                                     ai.AIPInfo.Add(aii);
                                 }
                                 else
@@ -6974,11 +7008,13 @@ namespace WinsockPacketEditor
 
                 #region//新增代理账号IP信息
 
-                public static void AddAccountIPInfo(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP)
+                public static async void AddAccountIPInfo(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP)
                 {
                     try
                     {
-                        AccountIPInfo aii = new AccountIPInfo(LoginTime, LoginIP);
+                        string IPLocation = await SystemConfig.GetIPLocation(LoginIP);
+
+                        AccountIPInfo aii = new AccountIPInfo(LoginTime, LoginIP, IPLocation);
                         AIPInfo.Add(aii);
                     }
                     catch (Exception ex)
@@ -10727,7 +10763,7 @@ namespace WinsockPacketEditor
 
                 #region//封包入队列            
 
-                public static void PacketToQueue(
+                public static async void PacketToQueue(
                     int iSocket,
                     byte[] bRawBuff,
                     byte[] bBuffByte,
@@ -10749,8 +10785,22 @@ namespace WinsockPacketEditor
                                 string[] ipParts = sPacketIP.Split('|');
                                 string sIPFrom = ipParts[0];
                                 string sIPTo = ipParts[1];
+                                string sFromLocation = await SystemConfig.GetIPLocation(sIPFrom.Split(':')[0]);
+                                string sToLocation = await SystemConfig.GetIPLocation(sIPTo.Split(':')[0]);
 
-                                PacketInfo pi = new PacketInfo(PacketTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
+                                PacketInfo pi = new PacketInfo(
+                                    PacketTime, 
+                                    iSocket, 
+                                    ptPacketType, 
+                                    sIPFrom, 
+                                    sFromLocation,
+                                    sIPTo, 
+                                    sToLocation,
+                                    bRawBuff, 
+                                    bBuffByte, 
+                                    bBuffByte.Length, 
+                                    pAction);
+
                                 cqPacketInfo.Enqueue(pi);
                             }
                         }
