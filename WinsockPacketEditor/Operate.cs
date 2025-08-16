@@ -816,16 +816,23 @@ namespace WinsockPacketEditor
 
             public static string GetSvgByLocation(string IPLocation)
             {
-                if (string.IsNullOrEmpty(IPLocation))
-                    return GetDefaultSvg();
-
-                foreach (var pair in CountryNameToCode)
+                try
                 {
-                    if (IPLocation.StartsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
+                    if (string.IsNullOrEmpty(IPLocation))
+                        return GetDefaultSvg();
+
+                    foreach (var pair in CountryNameToCode)
                     {
-                        return SvgCache.GetOrAdd(pair.Value, code => GetSvgByCountryCode(code));
+                        if (IPLocation.StartsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return SvgCache.GetOrAdd(pair.Value, code => GetSvgByCountryCode(code));
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                
 
                 return GetDefaultSvg();
             }
