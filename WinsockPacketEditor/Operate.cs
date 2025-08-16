@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
-using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -125,6 +124,8 @@ namespace WinsockPacketEditor
             #endregion
 
             #region//国家对应SVG字典
+
+            private static readonly ConcurrentDictionary<string, string> SvgCache = new ConcurrentDictionary<string, string>();
 
             private static readonly Dictionary<string, string> CountryNameToCode = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -822,7 +823,7 @@ namespace WinsockPacketEditor
                 {
                     if (IPLocation.StartsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
                     {
-                        return GetSvgByCountryCode(pair.Value);
+                        return SvgCache.GetOrAdd(pair.Value, code => GetSvgByCountryCode(code));
                     }
                 }
 
@@ -10249,10 +10250,19 @@ namespace WinsockPacketEditor
 
                 #region//获取封包类型对应的图标
 
+                private static readonly ConcurrentDictionary<PacketType, string> _packetImageCache = new ConcurrentDictionary<PacketType, string>();
+
                 public static string GetImg_ByPacketType(PacketType ptType)
                 {
+                    string sReturn = string.Empty;
+
                     try
                     {
+                        if (_packetImageCache.TryGetValue(ptType, out var cachedImage))
+                        {
+                            return cachedImage;
+                        }
+                        
                         switch (ptType)
                         {
                             case PacketConfig.Packet.PacketType.WS1_Send:
@@ -10263,7 +10273,8 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSASendTo:
                             case PacketConfig.Packet.PacketType.TCP_Req:
                             case PacketConfig.Packet.PacketType.UDP_Req:
-                                return Properties.Resources.Send;
+                                sReturn = Properties.Resources.Send;
+                                break;
 
                             case PacketConfig.Packet.PacketType.WS1_Recv:
                             case PacketConfig.Packet.PacketType.WS2_Recv:
@@ -10274,17 +10285,24 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSARecvFrom:
                             case PacketConfig.Packet.PacketType.TCP_Resp:
                             case PacketConfig.Packet.PacketType.UDP_Resp:
-                                return Properties.Resources.Recv;
+                                sReturn = Properties.Resources.Recv;
+                                break;
 
                             default:
-                                return null;
+                                break;
                         }
+
+                        if (string.IsNullOrEmpty(sReturn))
+                        {
+                            _packetImageCache[ptType] = sReturn;
+                        }                        
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        return null;
                     }
+
+                    return sReturn;
                 }
 
                 #endregion
