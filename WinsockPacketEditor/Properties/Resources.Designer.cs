@@ -61,14 +61,7 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找类似 &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; id=&quot;flag-icons-cn&quot; viewBox=&quot;0 0 640 480&quot;&gt;
-        ///  &lt;defs&gt;
-        ///    &lt;path id=&quot;cn-a&quot; fill=&quot;#ff0&quot; d=&quot;M-.6.8 0-1 .6.8-1-.3h2z&quot;/&gt;
-        ///  &lt;/defs&gt;
-        ///  &lt;path fill=&quot;#ee1c25&quot; d=&quot;M0 0h640v480H0z&quot;/&gt;
-        ///  &lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot; transform=&quot;matrix(71.9991 0 0 72 120 120)&quot;/&gt;
-        ///  &lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot; transform=&quot;matrix(-12.33562 -20.5871 20.58684 -12.33577 240.3 48)&quot;/&gt;
-        ///  &lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot;  [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///   查找类似 &lt;svg xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; id=&quot;flag-icons-cn&quot; viewBox=&quot;0 0 640 480&quot;&gt;&lt;defs&gt;&lt;path id=&quot;cn-a&quot; fill=&quot;#ff0&quot; d=&quot;M-.6.8 0-1 .6.8-1-.3h2z&quot;/&gt;&lt;/defs&gt;&lt;path fill=&quot;#ee1c25&quot; d=&quot;M0 0h640v480H0z&quot;/&gt;&lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot; transform=&quot;matrix(71.9991 0 0 72 120 120)&quot;/&gt;&lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot; transform=&quot;matrix(-12.33562 -20.5871 20.58684 -12.33577 240.3 48)&quot;/&gt;&lt;use xlink:href=&quot;#cn-a&quot; width=&quot;30&quot; height=&quot;20&quot; transform=&quot;matrix(-3.38573 -23.75998 23.75968 -3.38578 288 [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Flag_CN {
             get {
@@ -77,11 +70,20 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找类似 &lt;svg t=&quot;1755245500207&quot; class=&quot;icon&quot; viewBox=&quot;0 0 1024 1024&quot; version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; p-id=&quot;1972&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;path d=&quot;M535.2 607.7c0 9.7 13 41.5-32 38-11.8-0.9-22.6-4.3-30.4-11.1-7.8-6.9-12.6-16.4-12.6-26.9 0-8.9 5.9-19.9 11.7-26.3 7.9-8.8 17.7-11.7 31.3-11.7 7.5 0 14.5 1.7 20.7 4.7 13.3 6.4 11.3 18.9 11.3 33.3z&quot; fill=&quot;#FF5C5C&quot; p-id=&quot;1973&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M509.8 651c-2.2 0-4.5-0.1-7-0.3-14.1-1.1-25.3-5.3-33.3-12.4-9.2-8.1-14.3-1 [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///   查找类似 &lt;svg viewBox=&quot;0 0 1024 1024&quot;&gt;&lt;path d=&quot;M640.1 448.2m-59.1 0a59.1 59.1 0 1 0 118.2 0 59.1 59.1 0 1 0-118.2 0Z&quot; fill=&quot;#FFFFFF&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M384.1 448.2m-59.1 0a59.1 59.1 0 1 0 118.2 0 59.1 59.1 0 1 0-118.2 0Z&quot; fill=&quot;#FFFFFF&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M407.2 674.7s-17.3 81.4-79.6 58.7V801h368.7v-67.6s-56.5 22.3-79.4-58.7H407.2z&quot; fill=&quot;#515F79&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M916 679H110c-6.6 0-12-5.4-12-12V541.2c0-6.6 5.4-12 12-12h806c6.6 0 12 5.4 12 12V667c0 6.6-5.4 12-12 12z&quot; fill=&quot;#6F82A3&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M928 578.9H98V115.1c0-9 [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Flag_Local {
             get {
                 return ResourceManager.GetString("Flag_Local", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 &lt;svg viewBox=&quot;0 0 640 480&quot;&gt;&lt;!-- 条纹背景（7红+6白） --&gt;&lt;rect width=&quot;741&quot; height=&quot;390&quot; fill=&quot;#B22234&quot;/&gt;&lt;rect width=&quot;741&quot; height=&quot;30&quot; y=&quot;30&quot; fill=&quot;#FFFFFF&quot;/&gt;&lt;rect width=&quot;741&quot; height=&quot;30&quot; y=&quot;60&quot; fill=&quot;#B22234&quot;/&gt;&lt;rect width=&quot;741&quot; height=&quot;30&quot; y=&quot;90&quot; fill=&quot;#FFFFFF&quot;/&gt;&lt;rect width=&quot;741&quot; height=&quot;30&quot; y=&quot;120&quot; fill=&quot;#B22234&quot;/&gt;&lt;rect width=&quot;741&quot; height=&quot;30&quot; y=&quot;150&quot; fill=&quot;#FFFFFF&quot;/&gt;&lt;rect width=&quot;741&quot; height=&quot;30&quot; y=&quot;180&quot; fill=&quot;#B22234&quot;/&gt;&lt;rect width=&quot;741&quot; height=&quot;30&quot; y=&quot;210&quot; fill=&quot;#FFFFFF&quot;/&gt;&lt;rect width=&quot;741&quot; height=&quot;30&quot; y=&quot;240&quot; fill= [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string Flag_US {
+            get {
+                return ResourceManager.GetString("Flag_US", resourceCulture);
             }
         }
         
@@ -104,22 +106,20 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        ///   查找类似 &lt;svg viewBox=&quot;0 0 1024 1024&quot;&gt;&lt;path d=&quot;M431.81 891.72L73.74 526.85a21.53 21.53 0 0 1 0-29.7l358.07-364.87c13.41-14.09 37.14-4.6 37.14 14.85v197.29h465.71A21.54 21.54 0 0 1 956.2 366v292a21.54 21.54 0 0 1-21.54 21.54H469v197.33c0 19.45-23.78 28.94-37.19 14.85z&quot; fill=&quot;#1296db&quot;&gt;&lt;/path&gt;&lt;/svg&gt; 的本地化字符串。
         /// </summary>
-        internal static System.Drawing.Bitmap received {
+        internal static string Recv {
             get {
-                object obj = ResourceManager.GetObject("received", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Recv", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        ///   查找类似 &lt;svg viewBox=&quot;0 0 1024 1024&quot;&gt;&lt;path d=&quot;M516.63443469 832.282072l505.51128772-334.76430522-505.51128772-334.76430522 0 164.17023984-502.92215271 0 0 337.10511326 502.92215271 0z&quot; fill=&quot;#36ab60&quot;&gt;&lt;/path&gt;&lt;/svg&gt; 的本地化字符串。
         /// </summary>
-        internal static System.Drawing.Bitmap sent {
+        internal static string Send {
             get {
-                object obj = ResourceManager.GetObject("sent", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("Send", resourceCulture);
             }
         }
         

@@ -517,8 +517,6 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\received.png" />
-    <Content Include="Images\sent.png" />
     <Content Include="Images\wpe.ico" />
     <Content Include="Images\WPE64.ico" />
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">

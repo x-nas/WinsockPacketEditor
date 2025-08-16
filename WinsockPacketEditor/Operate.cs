@@ -77,9 +77,7 @@ namespace WinsockPacketEditor
             public static bool IsShow_TextCompare = false, IsShow_TextDuplicate = false;
             public static Execute ListExecute = Execute.Sequence;
             public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
-            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
-            public static readonly Image SentImage = Properties.Resources.sent;
-            public static readonly Image ReceivedImage = Properties.Resources.received;
+            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;         
             public static readonly Font FontUnderline = new Font(RichTextBox.DefaultFont, FontStyle.Underline);
             public static readonly Font FontStrikeout = new Font(RichTextBox.DefaultFont, FontStyle.Strikeout);
 
@@ -556,9 +554,9 @@ namespace WinsockPacketEditor
                     {
                         return Properties.Resources.Flag_CN;
                     }
-                    else if (IPLocation.StartsWith("局域网"))
+                    else if (IPLocation.StartsWith("美国"))
                     {
-                        return "DesktopOutlined";
+                        return Properties.Resources.Flag_Local;
                     }
                 }
                 catch (Exception ex)
@@ -566,7 +564,7 @@ namespace WinsockPacketEditor
                     DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
-                return "WindowsFilled";
+                return Properties.Resources.Flag_US;
             }
 
             #endregion
@@ -9969,7 +9967,7 @@ namespace WinsockPacketEditor
 
                 #region//获取封包类型对应的图标
 
-                public static Image GetImg_ByPacketType(PacketType ptType)
+                public static string GetImg_ByPacketType(PacketType ptType)
                 {
                     try
                     {
@@ -9983,7 +9981,7 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSASendTo:
                             case PacketConfig.Packet.PacketType.TCP_Req:
                             case PacketConfig.Packet.PacketType.UDP_Req:
-                                return SystemConfig.SentImage;
+                                return Properties.Resources.Send;
 
                             case PacketConfig.Packet.PacketType.WS1_Recv:
                             case PacketConfig.Packet.PacketType.WS2_Recv:
@@ -9994,7 +9992,7 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSARecvFrom:
                             case PacketConfig.Packet.PacketType.TCP_Resp:
                             case PacketConfig.Packet.PacketType.UDP_Resp:
-                                return SystemConfig.ReceivedImage;
+                                return Properties.Resources.Recv;
 
                             default:
                                 return null;
