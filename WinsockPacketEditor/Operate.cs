@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -552,11 +553,11 @@ namespace WinsockPacketEditor
                 {
                     if (IPLocation.StartsWith("中国"))
                     {
-                        return Properties.Resources.Flag_CN;
+                        return Encoding.UTF8.GetString(Properties.Resources.cn);
                     }
                     else if (IPLocation.StartsWith("美国"))
                     {
-                        return Properties.Resources.Flag_Local;
+                        return Encoding.UTF8.GetString(Properties.Resources.us);
                     }
                 }
                 catch (Exception ex)
@@ -564,7 +565,7 @@ namespace WinsockPacketEditor
                     DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
-                return Properties.Resources.Flag_US;
+                return Properties.Resources.Flag_Local;
             }
 
             #endregion
