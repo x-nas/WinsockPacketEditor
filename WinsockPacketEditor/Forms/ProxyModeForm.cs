@@ -268,7 +268,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                PrefixSvg = Operate.SystemConfig.GetFlagSVG(pi.ClientLocation),
+                                PrefixSvg = Operate.SystemConfig.GetSvgByLocation(pi.ClientLocation),
                                 IconRatio = 1.0F
                             };
                         }
@@ -285,7 +285,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                PrefixSvg = Operate.SystemConfig.GetFlagSVG(pi.ServerLocation),
+                                PrefixSvg = Operate.SystemConfig.GetSvgByLocation(pi.ServerLocation),
                                 IconRatio = 1.0F
                             };
                         }
@@ -410,7 +410,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                PrefixSvg = Operate.SystemConfig.GetFlagSVG(ai.IPLocation),
+                                PrefixSvg = Operate.SystemConfig.GetSvgByLocation(ai.IPLocation),
                                 IconRatio = 1.0F
                             };
                         }
