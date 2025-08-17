@@ -2189,6 +2189,11 @@ namespace WinsockPacketEditor
                 Operate.PacketConfig.Packet.Total_SendBytes = 0;
                 Operate.PacketConfig.Packet.Total_RecvBytes = 0;
                 Operate.FilterConfig.Filter.FilterExecute_CNT = 0;
+                Operate.FilterConfig.Filter.FilterReplace_CNT = 0;
+                Operate.FilterConfig.Filter.FilterChange_CNT = 0;
+                Operate.FilterConfig.Filter.FilterIntercept_CNT = 0;
+                Operate.FilterConfig.Filter.FilterDisplay_CNT = 0;
+                Operate.FilterConfig.Filter.FilterNoDisplay_CNT = 0;
                 Operate.PacketConfig.Packet.FilterPacket_CNT = 0;
                 Operate.PacketConfig.Packet.Send_CNT = 0;
                 Operate.PacketConfig.Packet.Recv_CNT = 0;

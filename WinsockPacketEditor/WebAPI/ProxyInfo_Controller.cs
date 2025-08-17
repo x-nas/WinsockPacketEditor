@@ -15,10 +15,10 @@ namespace WinsockPacketEditor
         public IHttpActionResult GetProxyInfo()
         {
             string WorkMode = Operate.SystemConfig.GetWorkModeName(Operate.ProxyConfig.Proxy.SpeedMode);
-            ulong ProxyTCP = Operate.ProxyConfig.Proxy.TCP_Req_CNT + Operate.ProxyConfig.Proxy.TCP_Resp_CNT;
-            ulong ProxyUDP = Operate.ProxyConfig.Proxy.UDP_Req_CNT + Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
+            long ProxyTCP = Operate.ProxyConfig.Proxy.TCP_Req_CNT + Operate.ProxyConfig.Proxy.TCP_Resp_CNT;
+            long ProxyUDP = Operate.ProxyConfig.Proxy.UDP_Req_CNT + Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
             string ProxyCache = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
-            ulong ProxyTotal = ProxyTCP + ProxyUDP;
+            long ProxyTotal = ProxyTCP + ProxyUDP;
             string ProxyOnLine = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
             string ProxyLinks = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
             string ProxySpeed = Operate.ProxyConfig.Proxy.ProxySpeedInfo;

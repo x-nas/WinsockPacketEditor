@@ -3,6 +3,7 @@ using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -58,6 +59,7 @@ namespace WinsockPacketEditor
                 this.InitTable_SendList();
                 this.InitTable_RobotList();
                 this.InitTable_LogList();
+                this.InitTable_StatisticalFilter();
 
             }, () =>
             {
@@ -78,6 +80,7 @@ namespace WinsockPacketEditor
             this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.tabProxyMode.TabMenuVisible = false;
+            this.tabStatistical.TabMenuVisible = false;
             this.mProxyMode.SelectIndex(0, true);
         }
 
@@ -837,6 +840,32 @@ namespace WinsockPacketEditor
             this.tSystemLog.DataSource = Operate.LogConfig.List.lstLogInfo;
         }
 
+        private void InitTable_StatisticalFilter()
+        {
+            tStatisticalFilter.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column("", "", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("LogTime", "Machine Code")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
+                    },
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("FuncName", "State", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("LogContent", "Remark").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("LogContent", "Machine Type").SetLocalizationTitleID("Table.PacketList.Column."),
+            };
+
+            this.tStatisticalFilter.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            //this.tStatisticalFilter.DataSource = Operate.LogConfig.List.lstLogInfo;
+        }
+
         private void InitCalendar_ExpiryTime()
         {
             try
@@ -1039,7 +1068,41 @@ namespace WinsockPacketEditor
                     this.hbXOR_To.ForeColor = 
                     Color.Black;
             }
-        }        
+
+            this.Statistical_DarkChanged();
+        }
+        
+        private void Statistical_DarkChanged()
+        {
+            if (Dark)
+            {
+                this.progressExecute.Back = Color.FromArgb(48, 58, 66);
+                this.progressReplace.Back = Color.FromArgb(39, 41, 83);
+                this.progressReplace.ForeColor = Color.White;
+                this.progressChange.Back = Color.FromArgb(47, 46, 80);
+                this.progressChange.ForeColor = Color.White;
+                this.progressIntercept.Back = Color.FromArgb(57, 47, 78);
+                this.progressIntercept.ForeColor = Color.White;
+                this.progressDisplay.Back = Color.FromArgb(67, 46, 76);
+                this.progressDisplay.ForeColor = Color.White;
+                this.progressNoDisplay.Back = Color.FromArgb(80, 47, 79);
+                this.progressNoDisplay.ForeColor = Color.White;
+            }
+            else
+            {
+                this.progressExecute.Back = null;
+                this.progressReplace.Back = null;
+                this.progressReplace.ForeColor = null;
+                this.progressChange.Back = null;
+                this.progressChange.ForeColor = null;
+                this.progressIntercept.Back = null;
+                this.progressIntercept.ForeColor = null;
+                this.progressDisplay.Back = null;
+                this.progressDisplay.ForeColor = null;
+                this.progressNoDisplay.Back = null;
+                this.progressNoDisplay.ForeColor = null;
+            }
+        }
 
         #endregion
 
@@ -1103,6 +1166,11 @@ namespace WinsockPacketEditor
             Operate.ProxyConfig.Proxy.UDP_Req_CNT = 0;
             Operate.ProxyConfig.Proxy.UDP_Resp_CNT = 0;
             Operate.FilterConfig.Filter.FilterExecute_CNT = 0;
+            Operate.FilterConfig.Filter.FilterReplace_CNT = 0;
+            Operate.FilterConfig.Filter.FilterChange_CNT = 0;
+            Operate.FilterConfig.Filter.FilterIntercept_CNT = 0;
+            Operate.FilterConfig.Filter.FilterDisplay_CNT = 0;
+            Operate.FilterConfig.Filter.FilterNoDisplay_CNT = 0;
             Operate.ProxyConfig.Proxy.FilterProxy_CNT = 0;
             Operate.ProxyConfig.Proxy.Total_Request = 0;
             Operate.ProxyConfig.Proxy.Total_Response = 0;
@@ -1292,7 +1360,7 @@ namespace WinsockPacketEditor
                 this.tProxyList.Refresh();
                 this.tSystemLog.Refresh();                
 
-                ulong ProxyTotal_CNT =
+                long ProxyTotal_CNT =
                     Operate.ProxyConfig.Proxy.TCP_Req_CNT +
                     Operate.ProxyConfig.Proxy.TCP_Resp_CNT +
                     Operate.ProxyConfig.Proxy.UDP_Req_CNT +
@@ -4206,5 +4274,145 @@ namespace WinsockPacketEditor
         }
 
         #endregion
+
+        #region//统计数据
+
+        private void bStatistical_Filter_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!this.bgwStatistical.IsBusy)
+                { 
+                    this.bStatistical_Filter.Loading = true;
+                    this.bgwStatistical.RunWorkerAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwStatistical_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                long ProxyTotal_CNT =
+                    Operate.ProxyConfig.Proxy.TCP_Req_CNT +
+                    Operate.ProxyConfig.Proxy.TCP_Resp_CNT +
+                    Operate.ProxyConfig.Proxy.UDP_Req_CNT +
+                    Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
+
+                long FilterExec = Operate.FilterConfig.Filter.FilterExecute_CNT;
+                long FilterReplace = Operate.FilterConfig.Filter.FilterReplace_CNT;
+                long FilterChange = Operate.FilterConfig.Filter.FilterChange_CNT;
+                long FilterIntercept = Operate.FilterConfig.Filter.FilterIntercept_CNT;
+                long FilterDisplay = Operate.FilterConfig.Filter.FilterDisplay_CNT;
+                long FilterNoDisplay = Operate.FilterConfig.Filter.FilterNoDisplay_CNT;
+
+                decimal dExecute = 0;
+                if (ProxyTotal_CNT > 0)
+                {
+                    dExecute = (decimal)FilterExec / ProxyTotal_CNT;
+                    dExecute = Math.Round(dExecute, 2);
+                }
+
+                this.progressExecute.Value = (float)dExecute;
+                this.progressExecute.Text = (dExecute * 100).ToString() + "%";
+
+                decimal dReplace = 0, dChange = 0, dIntercept = 0, dDisplay = 0, dNoDisplay = 0;
+                if (FilterExec > 0)
+                {
+                    dReplace = (decimal)FilterReplace / FilterExec;
+                    dReplace = Math.Round(dReplace, 2);
+
+                    dChange = (decimal)FilterChange / FilterExec;
+                    dChange = Math.Round(dChange, 2);
+
+                    dIntercept = (decimal)FilterIntercept / FilterExec;
+                    dIntercept = Math.Round(dIntercept, 2);
+
+                    dDisplay = (decimal)FilterDisplay / FilterExec;
+                    dDisplay = Math.Round(dDisplay, 2);
+
+                    dNoDisplay = (decimal)FilterNoDisplay / FilterExec;
+                    dNoDisplay = Math.Round(dNoDisplay, 2);
+                }
+
+                this.progressReplace.Value = (float)dReplace;
+                this.progressReplace.Text = (dReplace * 100).ToString() + "%";
+
+                this.progressChange.Value = (float)dChange;
+                this.progressChange.Text = (dChange * 100).ToString() + "%";
+
+                this.progressIntercept.Value = (float)dIntercept;
+                this.progressIntercept.Text = (dIntercept * 100).ToString() + "%";
+
+                this.progressDisplay.Value = (float)dDisplay;
+                this.progressDisplay.Text = (dDisplay * 100).ToString() + "%";
+
+                this.progressNoDisplay.Value = (float)dNoDisplay;
+                this.progressNoDisplay.Text = (dNoDisplay * 100).ToString() + "%";
+
+                DataTable dtPacketLength = Operate.PacketConfig.List.StatisticalSocketList_ByPacketLen();
+
+
+
+
+
+                Random random = new Random();
+
+                float randomFloat = (float)Math.Round(random.NextDouble(), 2);
+                this.progressExecute.Value = randomFloat;
+                this.progressExecute.Text = (randomFloat * 100).ToString() + "%";
+
+                randomFloat = (float)Math.Round(random.NextDouble(), 2);
+
+                this.progressReplace.Value = (float)randomFloat;
+                this.progressReplace.Text = (randomFloat * 100).ToString() + "%";
+
+                randomFloat = (float)Math.Round(random.NextDouble(), 2);
+
+                this.progressChange.Value = (float)randomFloat;
+                this.progressChange.Text = (randomFloat * 100).ToString() + "%";
+
+                randomFloat = (float)Math.Round(random.NextDouble(), 2);
+
+                this.progressIntercept.Value = (float)randomFloat;
+                this.progressIntercept.Text = (randomFloat * 100).ToString() + "%";
+
+                randomFloat = (float)Math.Round(random.NextDouble(), 2);
+
+                this.progressDisplay.Value = (float)randomFloat;
+                this.progressDisplay.Text = (randomFloat * 100).ToString() + "%";
+
+                randomFloat = (float)Math.Round(random.NextDouble(), 2);
+
+                this.progressNoDisplay.Value = (float)randomFloat;
+                this.progressNoDisplay.Text = (randomFloat * 100).ToString() + "%";
+
+
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwStatistical_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                this.bStatistical_Filter.Loading = false;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+
     }
 }

@@ -4138,7 +4138,7 @@ namespace WinsockPacketEditor
 
             public static class Proxy
             {
-                public static ulong ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
+                public static long ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static int FilterProxy_CNT = 0;
                 public static IPAddress[] ProxyServerIP = null;
@@ -11581,6 +11581,11 @@ namespace WinsockPacketEditor
             public static class Filter
             {
                 public static long FilterExecute_CNT = 0;
+                public static long FilterReplace_CNT = 0;
+                public static long FilterChange_CNT = 0;
+                public static long FilterIntercept_CNT = 0;
+                public static long FilterDisplay_CNT = 0;
+                public static long FilterNoDisplay_CNT = 0;
                 public static int FilterSize_MaxLen = 500;
                 public static FilterConfig.Filter.Execute FilterExecute = FilterConfig.Filter.Execute.Sequence;
                 public static readonly Color FilterActionForeColor_Replace = Color.Black;
@@ -13533,6 +13538,29 @@ namespace WinsockPacketEditor
                             {
                                 faReturn = sfi.FAction;
                                 sfi.ExecutionCount++;
+
+                                switch (sfi.FAction)
+                                {
+                                    case Filter.FilterAction.Replace:
+                                        Interlocked.Increment(ref FilterConfig.Filter.FilterReplace_CNT);
+                                        break;
+
+                                    case Filter.FilterAction.Change:
+                                        Interlocked.Increment(ref FilterConfig.Filter.FilterChange_CNT);
+                                        break;
+
+                                    case Filter.FilterAction.Intercept:
+                                        Interlocked.Increment(ref FilterConfig.Filter.FilterIntercept_CNT);
+                                        break;
+
+                                    case Filter.FilterAction.NoModify_Display:
+                                        Interlocked.Increment(ref FilterConfig.Filter.FilterDisplay_CNT);
+                                        break;
+
+                                    case Filter.FilterAction.NoModify_NoDisplay:
+                                        Interlocked.Increment(ref FilterConfig.Filter.FilterNoDisplay_CNT);
+                                        break;
+                                }
                                 Interlocked.Increment(ref FilterConfig.Filter.FilterExecute_CNT);
 
                                 if (tempBuffer != null)
