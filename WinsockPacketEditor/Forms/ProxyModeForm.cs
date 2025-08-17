@@ -3,7 +3,6 @@ using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -849,21 +848,65 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("LogTime", "Machine Code")
+                }.SetFixed().SetLocalizationTitleID("Table.StatisticalFilter.Column."),
+                new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.StatisticalFilter.Column."),
+                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
                     {
-                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
+                        if(record is FilterInfo fi)
+                        {
+                            if(fi.IsEnable)
+                            {
+                                if(fi.ExecutionCount > 0)
+                                {
+                                    return new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                }
+                                else
+                                {
+                                    return new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                }
+                            }
+                            else
+                            {
+                                return new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                            }
+                        }
+
+                        return value;
                     },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("FuncName", "State", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("LogContent", "Remark").SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("LogContent", "Machine Type").SetLocalizationTitleID("Table.PacketList.Column."),
+                }.SetLocalizationTitleID("Table.StatisticalFilter.Column."),
+                new AntdUI.Column("FAction", "动作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        switch((Operate.FilterConfig.Filter.FilterAction)value)
+                        {
+                            case Operate.FilterConfig.Filter.FilterAction.Replace:
+                                return AntdUI.Localization.Get("FilterAction.Replace", "替换");
+
+                            case Operate.FilterConfig.Filter.FilterAction.Change:
+                                return AntdUI.Localization.Get("FilterAction.Change", "换包");
+
+                            case Operate.FilterConfig.Filter.FilterAction.Intercept:
+                                return AntdUI.Localization.Get("FilterAction.Intercept", "拦截");
+
+                            case Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
+                                return AntdUI.Localization.Get("FilterAction.NoModify_NoDisplay", "不显示");
+
+                            case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
+                                return AntdUI.Localization.Get("FilterAction.NoModify_Display", "只显示");
+
+                            default:
+                                return value;
+                        }
+                    },
+                }.SetLocalizationTitleID("Table.StatisticalFilter.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.StatisticalFilter.Column."),
             };
 
             this.tStatisticalFilter.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            //this.tStatisticalFilter.DataSource = Operate.LogConfig.List.lstLogInfo;
+            this.tStatisticalFilter.Binding(Operate.FilterConfig.List.lstFilterInfo);
         }
 
         private void InitCalendar_ExpiryTime()
@@ -4325,73 +4368,26 @@ namespace WinsockPacketEditor
                 {
                     dReplace = (decimal)FilterReplace / FilterExec;
                     dReplace = Math.Round(dReplace, 2);
-
                     dChange = (decimal)FilterChange / FilterExec;
                     dChange = Math.Round(dChange, 2);
-
                     dIntercept = (decimal)FilterIntercept / FilterExec;
                     dIntercept = Math.Round(dIntercept, 2);
-
                     dDisplay = (decimal)FilterDisplay / FilterExec;
                     dDisplay = Math.Round(dDisplay, 2);
-
                     dNoDisplay = (decimal)FilterNoDisplay / FilterExec;
                     dNoDisplay = Math.Round(dNoDisplay, 2);
                 }
 
                 this.progressReplace.Value = (float)dReplace;
                 this.progressReplace.Text = (dReplace * 100).ToString() + "%";
-
                 this.progressChange.Value = (float)dChange;
                 this.progressChange.Text = (dChange * 100).ToString() + "%";
-
                 this.progressIntercept.Value = (float)dIntercept;
                 this.progressIntercept.Text = (dIntercept * 100).ToString() + "%";
-
                 this.progressDisplay.Value = (float)dDisplay;
                 this.progressDisplay.Text = (dDisplay * 100).ToString() + "%";
-
                 this.progressNoDisplay.Value = (float)dNoDisplay;
                 this.progressNoDisplay.Text = (dNoDisplay * 100).ToString() + "%";
-
-                DataTable dtPacketLength = Operate.PacketConfig.List.StatisticalSocketList_ByPacketLen();
-
-
-
-
-
-                Random random = new Random();
-
-                float randomFloat = (float)Math.Round(random.NextDouble(), 2);
-                this.progressExecute.Value = randomFloat;
-                this.progressExecute.Text = (randomFloat * 100).ToString() + "%";
-
-                randomFloat = (float)Math.Round(random.NextDouble(), 2);
-
-                this.progressReplace.Value = (float)randomFloat;
-                this.progressReplace.Text = (randomFloat * 100).ToString() + "%";
-
-                randomFloat = (float)Math.Round(random.NextDouble(), 2);
-
-                this.progressChange.Value = (float)randomFloat;
-                this.progressChange.Text = (randomFloat * 100).ToString() + "%";
-
-                randomFloat = (float)Math.Round(random.NextDouble(), 2);
-
-                this.progressIntercept.Value = (float)randomFloat;
-                this.progressIntercept.Text = (randomFloat * 100).ToString() + "%";
-
-                randomFloat = (float)Math.Round(random.NextDouble(), 2);
-
-                this.progressDisplay.Value = (float)randomFloat;
-                this.progressDisplay.Text = (randomFloat * 100).ToString() + "%";
-
-                randomFloat = (float)Math.Round(random.NextDouble(), 2);
-
-                this.progressNoDisplay.Value = (float)randomFloat;
-                this.progressNoDisplay.Text = (randomFloat * 100).ToString() + "%";
-
-
             }
             catch (Exception ex)
             {
@@ -4412,7 +4408,5 @@ namespace WinsockPacketEditor
         }
 
         #endregion
-
-
     }
 }

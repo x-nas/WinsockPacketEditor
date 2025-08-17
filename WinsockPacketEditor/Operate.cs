@@ -11313,34 +11313,7 @@ namespace WinsockPacketEditor
                     }
 
                     return dtReturn;
-                }
-
-                public static DataTable StatisticalFilterList_ByExecutionCount()
-                {
-                    DataTable dtReturn = new DataTable();
-                    dtReturn.Columns.Add("FilterExecution", typeof(string));
-                    dtReturn.Columns.Add("Number", typeof(int));
-
-                    try
-                    {
-                        foreach (FilterInfo sfi in FilterConfig.List.lstFilterInfo)
-                        {
-                            if (sfi.ExecutionCount > 0)
-                            {
-                                DataRow row = dtReturn.NewRow();
-                                row[0] = sfi.FName;
-                                row[1] = sfi.ExecutionCount;
-                                dtReturn.Rows.Add(row);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-
-                    return dtReturn;
-                }
+                }                
 
                 #endregion
 

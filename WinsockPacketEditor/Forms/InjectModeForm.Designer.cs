@@ -29,52 +29,40 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
-            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
-            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem13 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem14 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem15 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem16 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem17 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem18 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem19 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem20 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem21 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem22 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem23 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem24 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem25 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem26 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem27 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem28 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem29 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem30 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem31 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem32 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem33 = new AntdUI.MenuItem();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            AntdUI.MenuItem menuItem34 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem35 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem36 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem37 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem38 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem39 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem40 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem41 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem42 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem43 = new AntdUI.MenuItem();
+            AntdUI.Tabs.StyleLine styleLine2 = new AntdUI.Tabs.StyleLine();
+            AntdUI.MenuItem menuItem44 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem45 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem46 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem47 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem48 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem49 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem50 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem51 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem52 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem53 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem54 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem55 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem56 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem57 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem58 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem59 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem60 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem61 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem62 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem63 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem64 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem65 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem66 = new AntdUI.MenuItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InjectModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -162,18 +150,6 @@
             this.bRobotList_Start = new AntdUI.Button();
             this.tRobotList = new AntdUI.Table();
             this.tpStatistical = new AntdUI.TabPage();
-            this.tlpStatistical = new System.Windows.Forms.TableLayoutPanel();
-            this.lStatistical_PacketLength = new AntdUI.Label();
-            this.chartPacketLength = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.bStatistical = new AntdUI.Button();
-            this.tlpStatisticalCharts = new System.Windows.Forms.TableLayoutPanel();
-            this.lStatistical_RobotList = new AntdUI.Label();
-            this.lStatistical_SendList = new AntdUI.Label();
-            this.chartRobotList = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.chartSendList = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.chartFilterList = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.lStatistical_FilterList = new AntdUI.Label();
             this.tpComparison = new AntdUI.TabPage();
             this.splitterComparison = new AntdUI.Splitter();
             this.tlpComparisonText = new System.Windows.Forms.TableLayoutPanel();
@@ -254,6 +230,27 @@
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
+            this.tlpStatistical_Filter = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpStatistical_FilterButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bStatistical_Filter = new AntdUI.Button();
+            this.lStatisticalFilter_Length = new AntdUI.Label();
+            this.tlpStatistical_FilterTop = new System.Windows.Forms.TableLayoutPanel();
+            this.lStatisticalFilter_Action = new AntdUI.Label();
+            this.progressExecute = new AntdUI.Progress();
+            this.lStatisticalFilter_Execute = new AntdUI.Label();
+            this.tlpStatistical_FilterTop2 = new System.Windows.Forms.TableLayoutPanel();
+            this.progressNoDisplay = new AntdUI.Progress();
+            this.progressDisplay = new AntdUI.Progress();
+            this.progressIntercept = new AntdUI.Progress();
+            this.progressChange = new AntdUI.Progress();
+            this.lNoDisplay = new AntdUI.Label();
+            this.lDisplay = new AntdUI.Label();
+            this.lIntercept = new AntdUI.Label();
+            this.lChange = new AntdUI.Label();
+            this.progressReplace = new AntdUI.Progress();
+            this.lReplace = new AntdUI.Label();
+            this.tStatisticalFilter = new AntdUI.Table();
+            this.bgwStatistical = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -278,13 +275,6 @@
             this.tlpRobotList.SuspendLayout();
             this.tlpRobotListButton.SuspendLayout();
             this.tpStatistical.SuspendLayout();
-            this.tlpStatistical.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chartPacketLength)).BeginInit();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.tlpStatisticalCharts.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chartRobotList)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartSendList)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartFilterList)).BeginInit();
             this.tpComparison.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterComparison)).BeginInit();
             this.splitterComparison.Panel1.SuspendLayout();
@@ -312,6 +302,10 @@
             this.tlpExtractionData.SuspendLayout();
             this.tlpExtractionButton.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
+            this.tlpStatistical_Filter.SuspendLayout();
+            this.tlpStatistical_FilterButton.SuspendLayout();
+            this.tlpStatistical_FilterTop.SuspendLayout();
+            this.tlpStatistical_FilterTop2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -407,62 +401,62 @@
             // mInjectMode
             // 
             this.mInjectMode.Dock = System.Windows.Forms.DockStyle.Left;
-            menuItem1.Badge = "";
-            menuItem1.IconSvg = "ProjectFilled";
-            menuItem1.ID = "miPacketList";
-            menuItem1.LocalizationText = "InjectModeForm.{id}";
-            menuItem1.Select = true;
-            menuItem1.Text = "封包数据";
-            menuItem2.Badge = "";
-            menuItem2.IconSvg = "FilterOutlined";
-            menuItem2.ID = "miFilterList";
-            menuItem2.LocalizationText = "InjectModeForm.{id}";
-            menuItem2.Text = "滤镜列表";
-            menuItem3.Badge = "";
-            menuItem3.IconSvg = "SendOutlined";
-            menuItem3.ID = "miSendList";
-            menuItem3.LocalizationText = "InjectModeForm.{id}";
-            menuItem3.Text = "发送列表";
-            menuItem4.Badge = "";
-            menuItem4.IconSvg = "RobotOutlined";
-            menuItem4.ID = "miRobotList";
-            menuItem4.LocalizationText = "InjectModeForm.{id}";
-            menuItem4.Text = "机器人列表";
-            menuItem5.IconSvg = "PieChartOutlined";
-            menuItem5.ID = "miStatistical";
-            menuItem5.LocalizationText = "InjectModeForm.{id}";
-            menuItem5.Text = "统计数据";
-            menuItem6.IconSvg = "DiffOutlined";
-            menuItem6.ID = "miComparison";
-            menuItem6.LocalizationText = "InjectModeForm.{id}";
-            menuItem6.Text = "文本对比";
-            menuItem7.IconSvg = "BuildOutlined";
-            menuItem7.ID = "miXOR";
-            menuItem7.LocalizationText = "InjectModeForm.{id}";
-            menuItem7.Text = "异或计算";
-            menuItem8.IconSvg = "InteractionOutlined";
-            menuItem8.ID = "miTranscoding";
-            menuItem8.LocalizationText = "InjectModeForm.{id}";
-            menuItem8.Text = "编码转换";
-            menuItem9.IconSvg = "DeliveredProcedureOutlined";
-            menuItem9.ID = "miExtraction";
-            menuItem9.LocalizationText = "InjectModeForm.{id}";
-            menuItem9.Text = "数据提取";
-            menuItem10.Badge = "";
-            menuItem10.IconSvg = "ExceptionOutlined";
-            menuItem10.ID = "miSystemLog";
-            menuItem10.LocalizationText = "InjectModeForm.{id}";
-            menuItem10.Text = "系统日志";
-            this.mInjectMode.Items.Add(menuItem1);
-            this.mInjectMode.Items.Add(menuItem2);
-            this.mInjectMode.Items.Add(menuItem3);
-            this.mInjectMode.Items.Add(menuItem4);
-            this.mInjectMode.Items.Add(menuItem5);
-            this.mInjectMode.Items.Add(menuItem6);
-            this.mInjectMode.Items.Add(menuItem7);
-            this.mInjectMode.Items.Add(menuItem8);
-            this.mInjectMode.Items.Add(menuItem9);
-            this.mInjectMode.Items.Add(menuItem10);
+            menuItem34.Badge = "";
+            menuItem34.IconSvg = "ProjectFilled";
+            menuItem34.ID = "miPacketList";
+            menuItem34.LocalizationText = "InjectModeForm.{id}";
+            menuItem34.Select = true;
+            menuItem34.Text = "封包数据";
+            menuItem35.Badge = "";
+            menuItem35.IconSvg = "FilterOutlined";
+            menuItem35.ID = "miFilterList";
+            menuItem35.LocalizationText = "InjectModeForm.{id}";
+            menuItem35.Text = "滤镜列表";
+            menuItem36.Badge = "";
+            menuItem36.IconSvg = "SendOutlined";
+            menuItem36.ID = "miSendList";
+            menuItem36.LocalizationText = "InjectModeForm.{id}";
+            menuItem36.Text = "发送列表";
+            menuItem37.Badge = "";
+            menuItem37.IconSvg = "RobotOutlined";
+            menuItem37.ID = "miRobotList";
+            menuItem37.LocalizationText = "InjectModeForm.{id}";
+            menuItem37.Text = "机器人列表";
+            menuItem38.IconSvg = "PieChartOutlined";
+            menuItem38.ID = "miStatistical";
+            menuItem38.LocalizationText = "InjectModeForm.{id}";
+            menuItem38.Text = "统计数据";
+            menuItem39.IconSvg = "DiffOutlined";
+            menuItem39.ID = "miComparison";
+            menuItem39.LocalizationText = "InjectModeForm.{id}";
+            menuItem39.Text = "文本对比";
+            menuItem40.IconSvg = "BuildOutlined";
+            menuItem40.ID = "miXOR";
+            menuItem40.LocalizationText = "InjectModeForm.{id}";
+            menuItem40.Text = "异或计算";
+            menuItem41.IconSvg = "InteractionOutlined";
+            menuItem41.ID = "miTranscoding";
+            menuItem41.LocalizationText = "InjectModeForm.{id}";
+            menuItem41.Text = "编码转换";
+            menuItem42.IconSvg = "DeliveredProcedureOutlined";
+            menuItem42.ID = "miExtraction";
+            menuItem42.LocalizationText = "InjectModeForm.{id}";
+            menuItem42.Text = "数据提取";
+            menuItem43.Badge = "";
+            menuItem43.IconSvg = "ExceptionOutlined";
+            menuItem43.ID = "miSystemLog";
+            menuItem43.LocalizationText = "InjectModeForm.{id}";
+            menuItem43.Text = "系统日志";
+            this.mInjectMode.Items.Add(menuItem34);
+            this.mInjectMode.Items.Add(menuItem35);
+            this.mInjectMode.Items.Add(menuItem36);
+            this.mInjectMode.Items.Add(menuItem37);
+            this.mInjectMode.Items.Add(menuItem38);
+            this.mInjectMode.Items.Add(menuItem39);
+            this.mInjectMode.Items.Add(menuItem40);
+            this.mInjectMode.Items.Add(menuItem41);
+            this.mInjectMode.Items.Add(menuItem42);
+            this.mInjectMode.Items.Add(menuItem43);
             this.mInjectMode.Location = new System.Drawing.Point(3, 51);
             this.mInjectMode.Name = "mInjectMode";
             this.mInjectMode.Size = new System.Drawing.Size(164, 706);
@@ -495,7 +489,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -509,15 +503,16 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
+            this.tabInjectMode.SelectedIndex = 4;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
-            this.tabInjectMode.Style = styleLine1;
+            this.tabInjectMode.Style = styleLine2;
             this.tabInjectMode.TabIndex = 10;
             this.tabInjectMode.Text = "tabs1";
             // 
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
+            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -596,35 +591,35 @@
             this.mPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mPacketList.Gap = 0;
             this.mPacketList.IconRatio = 1F;
-            menuItem11.IconSvg = "SearchOutlined";
-            menuItem11.ID = "miPacketListSearch";
-            menuItem12.IconSvg = "PlusOutlined";
-            menuItem13.IconSvg = "FilterOutlined";
-            menuItem13.ID = "miFilterSettings";
-            menuItem13.Text = "过滤设置";
-            menuItem14.IconSvg = "AimOutlined";
-            menuItem14.ID = "miHookSettings";
-            menuItem14.Text = "拦截设置";
-            menuItem15.IconSvg = "OrderedListOutlined";
-            menuItem15.ID = "miListSettings";
-            menuItem15.Text = "列表设置";
-            menuItem16.IconSvg = "GoldOutlined";
-            menuItem16.ID = "miHotKeySettings";
-            menuItem16.Text = "快捷键设置";
-            menuItem17.IconSvg = "DeliveredProcedureOutlined";
-            menuItem17.ID = "miBackUpSettings";
-            menuItem17.Text = "备份设置";
-            menuItem18.IconSvg = "SettingOutlined";
-            menuItem18.ID = "miSystemSettings";
-            menuItem18.Text = "系统设置";
-            menuItem12.Sub.Add(menuItem13);
-            menuItem12.Sub.Add(menuItem14);
-            menuItem12.Sub.Add(menuItem15);
-            menuItem12.Sub.Add(menuItem16);
-            menuItem12.Sub.Add(menuItem17);
-            menuItem12.Sub.Add(menuItem18);
-            this.mPacketList.Items.Add(menuItem11);
-            this.mPacketList.Items.Add(menuItem12);
+            menuItem44.IconSvg = "SearchOutlined";
+            menuItem44.ID = "miPacketListSearch";
+            menuItem45.IconSvg = "PlusOutlined";
+            menuItem46.IconSvg = "FilterOutlined";
+            menuItem46.ID = "miFilterSettings";
+            menuItem46.Text = "过滤设置";
+            menuItem47.IconSvg = "AimOutlined";
+            menuItem47.ID = "miHookSettings";
+            menuItem47.Text = "拦截设置";
+            menuItem48.IconSvg = "OrderedListOutlined";
+            menuItem48.ID = "miListSettings";
+            menuItem48.Text = "列表设置";
+            menuItem49.IconSvg = "GoldOutlined";
+            menuItem49.ID = "miHotKeySettings";
+            menuItem49.Text = "快捷键设置";
+            menuItem50.IconSvg = "DeliveredProcedureOutlined";
+            menuItem50.ID = "miBackUpSettings";
+            menuItem50.Text = "备份设置";
+            menuItem51.IconSvg = "SettingOutlined";
+            menuItem51.ID = "miSystemSettings";
+            menuItem51.Text = "系统设置";
+            menuItem45.Sub.Add(menuItem46);
+            menuItem45.Sub.Add(menuItem47);
+            menuItem45.Sub.Add(menuItem48);
+            menuItem45.Sub.Add(menuItem49);
+            menuItem45.Sub.Add(menuItem50);
+            menuItem45.Sub.Add(menuItem51);
+            this.mPacketList.Items.Add(menuItem44);
+            this.mPacketList.Items.Add(menuItem45);
             this.mPacketList.Location = new System.Drawing.Point(1011, 3);
             this.mPacketList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mPacketList.Name = "mPacketList";
@@ -1408,24 +1403,24 @@
             this.mFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mFilterList.Gap = 0;
             this.mFilterList.IconRatio = 1F;
-            menuItem19.IconSvg = "PlusOutlined";
-            menuItem20.IconSvg = "UserAddOutlined";
-            menuItem20.ID = "miAdd";
-            menuItem20.Text = "新增滤镜";
-            menuItem21.IconSvg = "FolderOpenOutlined";
-            menuItem21.ID = "miImport";
-            menuItem21.Text = "导入滤镜列表";
-            menuItem22.IconSvg = "DeliveredProcedureOutlined";
-            menuItem22.ID = "miExport";
-            menuItem22.Text = "导出所有滤镜";
-            menuItem23.IconSvg = "DeleteOutlined";
-            menuItem23.ID = "miClear";
-            menuItem23.Text = "清空所有滤镜";
-            menuItem19.Sub.Add(menuItem20);
-            menuItem19.Sub.Add(menuItem21);
-            menuItem19.Sub.Add(menuItem22);
-            menuItem19.Sub.Add(menuItem23);
-            this.mFilterList.Items.Add(menuItem19);
+            menuItem52.IconSvg = "PlusOutlined";
+            menuItem53.IconSvg = "UserAddOutlined";
+            menuItem53.ID = "miAdd";
+            menuItem53.Text = "新增滤镜";
+            menuItem54.IconSvg = "FolderOpenOutlined";
+            menuItem54.ID = "miImport";
+            menuItem54.Text = "导入滤镜列表";
+            menuItem55.IconSvg = "DeliveredProcedureOutlined";
+            menuItem55.ID = "miExport";
+            menuItem55.Text = "导出所有滤镜";
+            menuItem56.IconSvg = "DeleteOutlined";
+            menuItem56.ID = "miClear";
+            menuItem56.Text = "清空所有滤镜";
+            menuItem52.Sub.Add(menuItem53);
+            menuItem52.Sub.Add(menuItem54);
+            menuItem52.Sub.Add(menuItem55);
+            menuItem52.Sub.Add(menuItem56);
+            this.mFilterList.Items.Add(menuItem52);
             this.mFilterList.Location = new System.Drawing.Point(1061, 3);
             this.mFilterList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mFilterList.Name = "mFilterList";
@@ -1526,24 +1521,24 @@
             this.mSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mSendList.Gap = 0;
             this.mSendList.IconRatio = 1F;
-            menuItem24.IconSvg = "PlusOutlined";
-            menuItem25.IconSvg = "UserAddOutlined";
-            menuItem25.ID = "miAdd";
-            menuItem25.Text = "新增发送";
-            menuItem26.IconSvg = "FolderOpenOutlined";
-            menuItem26.ID = "miImport";
-            menuItem26.Text = "导入发送列表";
-            menuItem27.IconSvg = "DeliveredProcedureOutlined";
-            menuItem27.ID = "miExport";
-            menuItem27.Text = "导出所有发送";
-            menuItem28.IconSvg = "DeleteOutlined";
-            menuItem28.ID = "miClear";
-            menuItem28.Text = "清空所有发送";
-            menuItem24.Sub.Add(menuItem25);
-            menuItem24.Sub.Add(menuItem26);
-            menuItem24.Sub.Add(menuItem27);
-            menuItem24.Sub.Add(menuItem28);
-            this.mSendList.Items.Add(menuItem24);
+            menuItem57.IconSvg = "PlusOutlined";
+            menuItem58.IconSvg = "UserAddOutlined";
+            menuItem58.ID = "miAdd";
+            menuItem58.Text = "新增发送";
+            menuItem59.IconSvg = "FolderOpenOutlined";
+            menuItem59.ID = "miImport";
+            menuItem59.Text = "导入发送列表";
+            menuItem60.IconSvg = "DeliveredProcedureOutlined";
+            menuItem60.ID = "miExport";
+            menuItem60.Text = "导出所有发送";
+            menuItem61.IconSvg = "DeleteOutlined";
+            menuItem61.ID = "miClear";
+            menuItem61.Text = "清空所有发送";
+            menuItem57.Sub.Add(menuItem58);
+            menuItem57.Sub.Add(menuItem59);
+            menuItem57.Sub.Add(menuItem60);
+            menuItem57.Sub.Add(menuItem61);
+            this.mSendList.Items.Add(menuItem57);
             this.mSendList.Location = new System.Drawing.Point(1061, 3);
             this.mSendList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mSendList.Name = "mSendList";
@@ -1635,24 +1630,24 @@
             this.mRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mRobotList.Gap = 0;
             this.mRobotList.IconRatio = 1F;
-            menuItem29.IconSvg = "PlusOutlined";
-            menuItem30.IconSvg = "UserAddOutlined";
-            menuItem30.ID = "miAdd";
-            menuItem30.Text = "新增机器人";
-            menuItem31.IconSvg = "FolderOpenOutlined";
-            menuItem31.ID = "miImport";
-            menuItem31.Text = "导入机器人列表";
-            menuItem32.IconSvg = "DeliveredProcedureOutlined";
-            menuItem32.ID = "miExport";
-            menuItem32.Text = "导出所有机器人";
-            menuItem33.IconSvg = "DeleteOutlined";
-            menuItem33.ID = "miClear";
-            menuItem33.Text = "清空所有机器人";
-            menuItem29.Sub.Add(menuItem30);
-            menuItem29.Sub.Add(menuItem31);
-            menuItem29.Sub.Add(menuItem32);
-            menuItem29.Sub.Add(menuItem33);
-            this.mRobotList.Items.Add(menuItem29);
+            menuItem62.IconSvg = "PlusOutlined";
+            menuItem63.IconSvg = "UserAddOutlined";
+            menuItem63.ID = "miAdd";
+            menuItem63.Text = "新增机器人";
+            menuItem64.IconSvg = "FolderOpenOutlined";
+            menuItem64.ID = "miImport";
+            menuItem64.Text = "导入机器人列表";
+            menuItem65.IconSvg = "DeliveredProcedureOutlined";
+            menuItem65.ID = "miExport";
+            menuItem65.Text = "导出所有机器人";
+            menuItem66.IconSvg = "DeleteOutlined";
+            menuItem66.ID = "miClear";
+            menuItem66.Text = "清空所有机器人";
+            menuItem62.Sub.Add(menuItem63);
+            menuItem62.Sub.Add(menuItem64);
+            menuItem62.Sub.Add(menuItem65);
+            menuItem62.Sub.Add(menuItem66);
+            this.mRobotList.Items.Add(menuItem62);
             this.mRobotList.Location = new System.Drawing.Point(1061, 3);
             this.mRobotList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mRobotList.Name = "mRobotList";
@@ -1697,200 +1692,12 @@
             // 
             // tpStatistical
             // 
-            this.tpStatistical.Controls.Add(this.tlpStatistical);
-            this.tpStatistical.Location = new System.Drawing.Point(-1124, -724);
+            this.tpStatistical.Controls.Add(this.tlpStatistical_Filter);
+            this.tpStatistical.Location = new System.Drawing.Point(3, 33);
             this.tpStatistical.Name = "tpStatistical";
             this.tpStatistical.Size = new System.Drawing.Size(1124, 724);
             this.tpStatistical.TabIndex = 1;
             this.tpStatistical.Text = "统计数据";
-            // 
-            // tlpStatistical
-            // 
-            this.tlpStatistical.ColumnCount = 1;
-            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatistical.Controls.Add(this.lStatistical_PacketLength, 0, 1);
-            this.tlpStatistical.Controls.Add(this.chartPacketLength, 0, 2);
-            this.tlpStatistical.Controls.Add(this.tableLayoutPanel1, 0, 3);
-            this.tlpStatistical.Controls.Add(this.tlpStatisticalCharts, 0, 0);
-            this.tlpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatistical.Location = new System.Drawing.Point(0, 0);
-            this.tlpStatistical.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpStatistical.Name = "tlpStatistical";
-            this.tlpStatistical.RowCount = 4;
-            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpStatistical.Size = new System.Drawing.Size(1124, 724);
-            this.tlpStatistical.TabIndex = 0;
-            // 
-            // lStatistical_PacketLength
-            // 
-            this.lStatistical_PacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatistical_PacketLength.Location = new System.Drawing.Point(3, 320);
-            this.lStatistical_PacketLength.Name = "lStatistical_PacketLength";
-            this.lStatistical_PacketLength.Size = new System.Drawing.Size(1118, 23);
-            this.lStatistical_PacketLength.TabIndex = 5;
-            this.lStatistical_PacketLength.Text = "封包长度统计数据";
-            this.lStatistical_PacketLength.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // chartPacketLength
-            // 
-            chartArea1.Name = "ChartArea1";
-            this.chartPacketLength.ChartAreas.Add(chartArea1);
-            this.chartPacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Enabled = false;
-            legend1.Name = "Legend1";
-            this.chartPacketLength.Legends.Add(legend1);
-            this.chartPacketLength.Location = new System.Drawing.Point(3, 349);
-            this.chartPacketLength.Name = "chartPacketLength";
-            this.chartPacketLength.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Excel;
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartPacketLength.Series.Add(series1);
-            this.chartPacketLength.Size = new System.Drawing.Size(1118, 311);
-            this.chartPacketLength.TabIndex = 4;
-            this.chartPacketLength.Text = "chart1";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.bStatistical, 1, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 663);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1124, 61);
-            this.tableLayoutPanel1.TabIndex = 3;
-            // 
-            // bStatistical
-            // 
-            this.bStatistical.BackExtend = "135, #6253E1, #04BEFE";
-            this.bStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bStatistical.IconSvg = "RedoOutlined";
-            this.bStatistical.Location = new System.Drawing.Point(490, 8);
-            this.bStatistical.Name = "bStatistical";
-            this.bStatistical.Size = new System.Drawing.Size(144, 44);
-            this.bStatistical.TabIndex = 1;
-            this.bStatistical.Text = "刷新数据";
-            this.bStatistical.Type = AntdUI.TTypeMini.Primary;
-            this.bStatistical.Click += new System.EventHandler(this.bStatistical_Click);
-            // 
-            // tlpStatisticalCharts
-            // 
-            this.tlpStatisticalCharts.ColumnCount = 3;
-            this.tlpStatisticalCharts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpStatisticalCharts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpStatisticalCharts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpStatisticalCharts.Controls.Add(this.lStatistical_RobotList, 2, 0);
-            this.tlpStatisticalCharts.Controls.Add(this.lStatistical_SendList, 1, 0);
-            this.tlpStatisticalCharts.Controls.Add(this.chartRobotList, 2, 1);
-            this.tlpStatisticalCharts.Controls.Add(this.chartSendList, 1, 1);
-            this.tlpStatisticalCharts.Controls.Add(this.chartFilterList, 0, 1);
-            this.tlpStatisticalCharts.Controls.Add(this.lStatistical_FilterList, 0, 0);
-            this.tlpStatisticalCharts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatisticalCharts.Location = new System.Drawing.Point(0, 0);
-            this.tlpStatisticalCharts.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpStatisticalCharts.Name = "tlpStatisticalCharts";
-            this.tlpStatisticalCharts.RowCount = 2;
-            this.tlpStatisticalCharts.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpStatisticalCharts.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatisticalCharts.Size = new System.Drawing.Size(1124, 317);
-            this.tlpStatisticalCharts.TabIndex = 0;
-            // 
-            // lStatistical_RobotList
-            // 
-            this.lStatistical_RobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatistical_RobotList.Location = new System.Drawing.Point(751, 3);
-            this.lStatistical_RobotList.Name = "lStatistical_RobotList";
-            this.lStatistical_RobotList.Size = new System.Drawing.Size(370, 23);
-            this.lStatistical_RobotList.TabIndex = 5;
-            this.lStatistical_RobotList.Text = "机器人执行情况";
-            this.lStatistical_RobotList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lStatistical_SendList
-            // 
-            this.lStatistical_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatistical_SendList.Location = new System.Drawing.Point(377, 3);
-            this.lStatistical_SendList.Name = "lStatistical_SendList";
-            this.lStatistical_SendList.Size = new System.Drawing.Size(368, 23);
-            this.lStatistical_SendList.TabIndex = 4;
-            this.lStatistical_SendList.Text = "发送执行情况";
-            this.lStatistical_SendList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // chartRobotList
-            // 
-            chartArea2.Name = "ChartArea1";
-            this.chartRobotList.ChartAreas.Add(chartArea2);
-            this.chartRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Name = "Legend1";
-            this.chartRobotList.Legends.Add(legend2);
-            this.chartRobotList.Location = new System.Drawing.Point(751, 32);
-            this.chartRobotList.Name = "chartRobotList";
-            this.chartRobotList.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chartRobotList.Series.Add(series2);
-            this.chartRobotList.Size = new System.Drawing.Size(370, 282);
-            this.chartRobotList.TabIndex = 2;
-            this.chartRobotList.Text = "chart1";
-            // 
-            // chartSendList
-            // 
-            chartArea3.Name = "ChartArea1";
-            this.chartSendList.ChartAreas.Add(chartArea3);
-            this.chartSendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Name = "Legend1";
-            this.chartSendList.Legends.Add(legend3);
-            this.chartSendList.Location = new System.Drawing.Point(377, 32);
-            this.chartSendList.Name = "chartSendList";
-            this.chartSendList.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Fire;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.chartSendList.Series.Add(series3);
-            this.chartSendList.Size = new System.Drawing.Size(368, 282);
-            this.chartSendList.TabIndex = 1;
-            this.chartSendList.Text = "chart1";
-            // 
-            // chartFilterList
-            // 
-            chartArea4.Name = "ChartArea1";
-            this.chartFilterList.ChartAreas.Add(chartArea4);
-            this.chartFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend4.Name = "Legend1";
-            this.chartFilterList.Legends.Add(legend4);
-            this.chartFilterList.Location = new System.Drawing.Point(3, 32);
-            this.chartFilterList.Name = "chartFilterList";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            this.chartFilterList.Series.Add(series4);
-            this.chartFilterList.Size = new System.Drawing.Size(368, 282);
-            this.chartFilterList.TabIndex = 0;
-            this.chartFilterList.Text = "chart1";
-            // 
-            // lStatistical_FilterList
-            // 
-            this.lStatistical_FilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatistical_FilterList.Location = new System.Drawing.Point(3, 3);
-            this.lStatistical_FilterList.Name = "lStatistical_FilterList";
-            this.lStatistical_FilterList.Size = new System.Drawing.Size(368, 23);
-            this.lStatistical_FilterList.TabIndex = 3;
-            this.lStatistical_FilterList.Text = "滤镜执行情况";
-            this.lStatistical_FilterList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tpComparison
             // 
@@ -2904,6 +2711,299 @@
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
+            // tlpStatistical_Filter
+            // 
+            this.tlpStatistical_Filter.ColumnCount = 3;
+            this.tlpStatistical_Filter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpStatistical_Filter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatistical_Filter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpStatistical_Filter.Controls.Add(this.tlpStatistical_FilterButton, 1, 4);
+            this.tlpStatistical_Filter.Controls.Add(this.lStatisticalFilter_Length, 1, 2);
+            this.tlpStatistical_Filter.Controls.Add(this.tlpStatistical_FilterTop, 1, 0);
+            this.tlpStatistical_Filter.Controls.Add(this.tStatisticalFilter, 1, 3);
+            this.tlpStatistical_Filter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStatistical_Filter.Location = new System.Drawing.Point(0, 0);
+            this.tlpStatistical_Filter.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStatistical_Filter.Name = "tlpStatistical_Filter";
+            this.tlpStatistical_Filter.RowCount = 5;
+            this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+            this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpStatistical_Filter.Size = new System.Drawing.Size(1124, 724);
+            this.tlpStatistical_Filter.TabIndex = 1;
+            // 
+            // tlpStatistical_FilterButton
+            // 
+            this.tlpStatistical_FilterButton.ColumnCount = 3;
+            this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatistical_FilterButton.Controls.Add(this.bStatistical_Filter, 1, 1);
+            this.tlpStatistical_FilterButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStatistical_FilterButton.Location = new System.Drawing.Point(30, 664);
+            this.tlpStatistical_FilterButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStatistical_FilterButton.Name = "tlpStatistical_FilterButton";
+            this.tlpStatistical_FilterButton.RowCount = 3;
+            this.tlpStatistical_FilterButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatistical_FilterButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpStatistical_FilterButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatistical_FilterButton.Size = new System.Drawing.Size(1064, 60);
+            this.tlpStatistical_FilterButton.TabIndex = 4;
+            // 
+            // bStatistical_Filter
+            // 
+            this.bStatistical_Filter.BackExtend = "135, #6253E1, #04BEFE";
+            this.bStatistical_Filter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bStatistical_Filter.IconSvg = "SyncOutlined";
+            this.bStatistical_Filter.Location = new System.Drawing.Point(460, 8);
+            this.bStatistical_Filter.Name = "bStatistical_Filter";
+            this.bStatistical_Filter.Size = new System.Drawing.Size(144, 44);
+            this.bStatistical_Filter.TabIndex = 1;
+            this.bStatistical_Filter.Text = "刷新数据";
+            this.bStatistical_Filter.Type = AntdUI.TTypeMini.Primary;
+            this.bStatistical_Filter.Click += new System.EventHandler(this.bStatistical_Filter_Click);
+            // 
+            // lStatisticalFilter_Length
+            // 
+            this.lStatisticalFilter_Length.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lStatisticalFilter_Length.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatisticalFilter_Length.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Length.Location = new System.Drawing.Point(33, 353);
+            this.lStatisticalFilter_Length.Name = "lStatisticalFilter_Length";
+            this.lStatisticalFilter_Length.Size = new System.Drawing.Size(86, 29);
+            this.lStatisticalFilter_Length.TabIndex = 3;
+            this.lStatisticalFilter_Length.Text = "明细数据";
+            // 
+            // tlpStatistical_FilterTop
+            // 
+            this.tlpStatistical_FilterTop.ColumnCount = 2;
+            this.tlpStatistical_FilterTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tlpStatistical_FilterTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tlpStatistical_FilterTop.Controls.Add(this.lStatisticalFilter_Action, 1, 0);
+            this.tlpStatistical_FilterTop.Controls.Add(this.progressExecute, 0, 1);
+            this.tlpStatistical_FilterTop.Controls.Add(this.lStatisticalFilter_Execute, 0, 0);
+            this.tlpStatistical_FilterTop.Controls.Add(this.tlpStatistical_FilterTop2, 1, 1);
+            this.tlpStatistical_FilterTop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStatistical_FilterTop.Location = new System.Drawing.Point(30, 0);
+            this.tlpStatistical_FilterTop.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStatistical_FilterTop.Name = "tlpStatistical_FilterTop";
+            this.tlpStatistical_FilterTop.RowCount = 2;
+            this.tlpStatistical_FilterTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpStatistical_FilterTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatistical_FilterTop.Size = new System.Drawing.Size(1064, 300);
+            this.tlpStatistical_FilterTop.TabIndex = 1;
+            // 
+            // lStatisticalFilter_Action
+            // 
+            this.lStatisticalFilter_Action.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lStatisticalFilter_Action.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatisticalFilter_Action.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Action.Location = new System.Drawing.Point(428, 3);
+            this.lStatisticalFilter_Action.Name = "lStatisticalFilter_Action";
+            this.lStatisticalFilter_Action.Size = new System.Drawing.Size(86, 29);
+            this.lStatisticalFilter_Action.TabIndex = 2;
+            this.lStatisticalFilter_Action.Text = "滤镜动作";
+            // 
+            // progressExecute
+            // 
+            this.progressExecute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressExecute.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(189)))), ((int)(((byte)(233)))));
+            this.progressExecute.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.progressExecute.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(189)))), ((int)(((byte)(233)))));
+            this.progressExecute.Location = new System.Drawing.Point(3, 38);
+            this.progressExecute.Name = "progressExecute";
+            this.progressExecute.Radius = 30;
+            this.progressExecute.Shape = AntdUI.TShapeProgress.Circle;
+            this.progressExecute.Size = new System.Drawing.Size(419, 259);
+            this.progressExecute.TabIndex = 0;
+            this.progressExecute.Text = "75%";
+            this.progressExecute.UseSystemText = true;
+            this.progressExecute.Value = 0.75F;
+            // 
+            // lStatisticalFilter_Execute
+            // 
+            this.lStatisticalFilter_Execute.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lStatisticalFilter_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lStatisticalFilter_Execute.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Execute.Location = new System.Drawing.Point(3, 3);
+            this.lStatisticalFilter_Execute.Name = "lStatisticalFilter_Execute";
+            this.lStatisticalFilter_Execute.Size = new System.Drawing.Size(86, 29);
+            this.lStatisticalFilter_Execute.TabIndex = 1;
+            this.lStatisticalFilter_Execute.Text = "滤镜执行";
+            // 
+            // tlpStatistical_FilterTop2
+            // 
+            this.tlpStatistical_FilterTop2.ColumnCount = 3;
+            this.tlpStatistical_FilterTop2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpStatistical_FilterTop2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpStatistical_FilterTop2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatistical_FilterTop2.Controls.Add(this.progressNoDisplay, 2, 4);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.progressDisplay, 2, 3);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.progressIntercept, 2, 2);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.progressChange, 2, 1);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.lNoDisplay, 1, 4);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.lDisplay, 1, 3);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.lIntercept, 1, 2);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.lChange, 1, 1);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.progressReplace, 2, 0);
+            this.tlpStatistical_FilterTop2.Controls.Add(this.lReplace, 1, 0);
+            this.tlpStatistical_FilterTop2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStatistical_FilterTop2.Location = new System.Drawing.Point(425, 35);
+            this.tlpStatistical_FilterTop2.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStatistical_FilterTop2.Name = "tlpStatistical_FilterTop2";
+            this.tlpStatistical_FilterTop2.RowCount = 5;
+            this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpStatistical_FilterTop2.Size = new System.Drawing.Size(639, 265);
+            this.tlpStatistical_FilterTop2.TabIndex = 3;
+            // 
+            // progressNoDisplay
+            // 
+            this.progressNoDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressNoDisplay.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(108)))), ((int)(((byte)(230)))));
+            this.progressNoDisplay.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.progressNoDisplay.Location = new System.Drawing.Point(116, 215);
+            this.progressNoDisplay.Name = "progressNoDisplay";
+            this.progressNoDisplay.Size = new System.Drawing.Size(520, 47);
+            this.progressNoDisplay.TabIndex = 13;
+            this.progressNoDisplay.Text = "50%";
+            this.progressNoDisplay.UseSystemText = true;
+            this.progressNoDisplay.UseTextCenter = true;
+            this.progressNoDisplay.Value = 0.5F;
+            this.progressNoDisplay.ValueRatio = 1F;
+            // 
+            // progressDisplay
+            // 
+            this.progressDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressDisplay.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(108)))), ((int)(((byte)(238)))));
+            this.progressDisplay.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.progressDisplay.Location = new System.Drawing.Point(116, 162);
+            this.progressDisplay.Name = "progressDisplay";
+            this.progressDisplay.Size = new System.Drawing.Size(520, 47);
+            this.progressDisplay.TabIndex = 12;
+            this.progressDisplay.Text = "60%";
+            this.progressDisplay.UseSystemText = true;
+            this.progressDisplay.UseTextCenter = true;
+            this.progressDisplay.Value = 0.6F;
+            this.progressDisplay.ValueRatio = 1F;
+            // 
+            // progressIntercept
+            // 
+            this.progressIntercept.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressIntercept.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(108)))), ((int)(((byte)(233)))));
+            this.progressIntercept.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.progressIntercept.Location = new System.Drawing.Point(116, 109);
+            this.progressIntercept.Name = "progressIntercept";
+            this.progressIntercept.Size = new System.Drawing.Size(520, 47);
+            this.progressIntercept.TabIndex = 11;
+            this.progressIntercept.Text = "70%";
+            this.progressIntercept.UseSystemText = true;
+            this.progressIntercept.UseTextCenter = true;
+            this.progressIntercept.Value = 0.7F;
+            this.progressIntercept.ValueRatio = 1F;
+            // 
+            // progressChange
+            // 
+            this.progressChange.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressChange.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(114)))), ((int)(((byte)(228)))));
+            this.progressChange.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.progressChange.Location = new System.Drawing.Point(116, 56);
+            this.progressChange.Name = "progressChange";
+            this.progressChange.Size = new System.Drawing.Size(520, 47);
+            this.progressChange.TabIndex = 10;
+            this.progressChange.Text = "80%";
+            this.progressChange.UseSystemText = true;
+            this.progressChange.UseTextCenter = true;
+            this.progressChange.Value = 0.8F;
+            this.progressChange.ValueRatio = 1F;
+            // 
+            // lNoDisplay
+            // 
+            this.lNoDisplay.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lNoDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lNoDisplay.Location = new System.Drawing.Point(53, 215);
+            this.lNoDisplay.Name = "lNoDisplay";
+            this.lNoDisplay.Size = new System.Drawing.Size(57, 47);
+            this.lNoDisplay.TabIndex = 9;
+            this.lNoDisplay.Text = "不显示 :";
+            // 
+            // lDisplay
+            // 
+            this.lDisplay.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lDisplay.Location = new System.Drawing.Point(53, 162);
+            this.lDisplay.Name = "lDisplay";
+            this.lDisplay.Size = new System.Drawing.Size(57, 47);
+            this.lDisplay.TabIndex = 8;
+            this.lDisplay.Text = "只显示 :";
+            // 
+            // lIntercept
+            // 
+            this.lIntercept.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lIntercept.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lIntercept.Location = new System.Drawing.Point(53, 109);
+            this.lIntercept.Name = "lIntercept";
+            this.lIntercept.Size = new System.Drawing.Size(41, 47);
+            this.lIntercept.TabIndex = 7;
+            this.lIntercept.Text = "拦截 :";
+            // 
+            // lChange
+            // 
+            this.lChange.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lChange.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lChange.Location = new System.Drawing.Point(53, 56);
+            this.lChange.Name = "lChange";
+            this.lChange.Size = new System.Drawing.Size(41, 47);
+            this.lChange.TabIndex = 6;
+            this.lChange.Text = "换包 :";
+            // 
+            // progressReplace
+            // 
+            this.progressReplace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressReplace.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(74)))), ((int)(((byte)(74)))), ((int)(((byte)(255)))));
+            this.progressReplace.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.progressReplace.Location = new System.Drawing.Point(116, 3);
+            this.progressReplace.Name = "progressReplace";
+            this.progressReplace.Size = new System.Drawing.Size(520, 47);
+            this.progressReplace.TabIndex = 0;
+            this.progressReplace.Text = "90%";
+            this.progressReplace.UseSystemText = true;
+            this.progressReplace.UseTextCenter = true;
+            this.progressReplace.Value = 0.9F;
+            this.progressReplace.ValueRatio = 1F;
+            // 
+            // lReplace
+            // 
+            this.lReplace.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lReplace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lReplace.Location = new System.Drawing.Point(53, 3);
+            this.lReplace.Name = "lReplace";
+            this.lReplace.Size = new System.Drawing.Size(41, 47);
+            this.lReplace.TabIndex = 5;
+            this.lReplace.Text = "替换 :";
+            // 
+            // tStatisticalFilter
+            // 
+            this.tStatisticalFilter.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tStatisticalFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tStatisticalFilter.EmptyHeader = true;
+            this.tStatisticalFilter.Gap = 12;
+            this.tStatisticalFilter.Location = new System.Drawing.Point(33, 388);
+            this.tStatisticalFilter.Name = "tStatisticalFilter";
+            this.tStatisticalFilter.Size = new System.Drawing.Size(1058, 273);
+            this.tStatisticalFilter.TabIndex = 2;
+            this.tStatisticalFilter.Text = "table1";
+            // 
+            // bgwStatistical
+            // 
+            this.bgwStatistical.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwStatistical_DoWork);
+            this.bgwStatistical.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwStatistical_RunWorkerCompleted);
+            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -2949,13 +3049,6 @@
             this.tlpRobotList.ResumeLayout(false);
             this.tlpRobotListButton.ResumeLayout(false);
             this.tpStatistical.ResumeLayout(false);
-            this.tlpStatistical.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chartPacketLength)).EndInit();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tlpStatisticalCharts.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chartRobotList)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartSendList)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartFilterList)).EndInit();
             this.tpComparison.ResumeLayout(false);
             this.splitterComparison.Panel1.ResumeLayout(false);
             this.splitterComparison.Panel2.ResumeLayout(false);
@@ -2985,6 +3078,13 @@
             this.tlpExtractionData.ResumeLayout(false);
             this.tlpExtractionButton.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
+            this.tlpStatistical_Filter.ResumeLayout(false);
+            this.tlpStatistical_Filter.PerformLayout();
+            this.tlpStatistical_FilterButton.ResumeLayout(false);
+            this.tlpStatistical_FilterTop.ResumeLayout(false);
+            this.tlpStatistical_FilterTop.PerformLayout();
+            this.tlpStatistical_FilterTop2.ResumeLayout(false);
+            this.tlpStatistical_FilterTop2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3032,7 +3132,6 @@
         private System.Windows.Forms.TableLayoutPanel tlpRobotList;
         private AntdUI.Table tRobotList;
         private System.ComponentModel.BackgroundWorker bgwRobotList;
-        private System.Windows.Forms.TableLayoutPanel tlpStatistical;
         private AntdUI.Splitter splitterComparison;
         private System.Windows.Forms.TableLayoutPanel tlpComparisonText;
         private AntdUI.Label lComparison_B;
@@ -3101,17 +3200,6 @@
         private AntdUI.UploadDragger udExtraction;
         private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
         private AntdUI.Button button1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private AntdUI.Button bStatistical;
-        private System.Windows.Forms.TableLayoutPanel tlpStatisticalCharts;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartRobotList;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartSendList;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartFilterList;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartPacketLength;
-        private AntdUI.Label lStatistical_PacketLength;
-        private AntdUI.Label lStatistical_RobotList;
-        private AntdUI.Label lStatistical_SendList;
-        private AntdUI.Label lStatistical_FilterList;
         private System.Windows.Forms.TableLayoutPanel tlpSendListButton;
         private AntdUI.Menu mSendList;
         private AntdUI.Button bSendList_Stop;
@@ -3168,5 +3256,26 @@
         private AntdUI.Table tPacketList;
         private AntdUI.Panel pPacketData;
         private Be.Windows.Forms.HexBox hbPacketData;
+        private System.Windows.Forms.TableLayoutPanel tlpStatistical_Filter;
+        private System.Windows.Forms.TableLayoutPanel tlpStatistical_FilterButton;
+        private AntdUI.Button bStatistical_Filter;
+        private AntdUI.Label lStatisticalFilter_Length;
+        private System.Windows.Forms.TableLayoutPanel tlpStatistical_FilterTop;
+        private AntdUI.Label lStatisticalFilter_Action;
+        private AntdUI.Progress progressExecute;
+        private AntdUI.Label lStatisticalFilter_Execute;
+        private System.Windows.Forms.TableLayoutPanel tlpStatistical_FilterTop2;
+        private AntdUI.Progress progressNoDisplay;
+        private AntdUI.Progress progressDisplay;
+        private AntdUI.Progress progressIntercept;
+        private AntdUI.Progress progressChange;
+        private AntdUI.Label lNoDisplay;
+        private AntdUI.Label lDisplay;
+        private AntdUI.Label lIntercept;
+        private AntdUI.Label lChange;
+        private AntdUI.Progress progressReplace;
+        private AntdUI.Label lReplace;
+        private AntdUI.Table tStatisticalFilter;
+        private System.ComponentModel.BackgroundWorker bgwStatistical;
     }
 }

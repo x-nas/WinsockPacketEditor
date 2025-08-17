@@ -2051,7 +2051,7 @@
             this.tlpStatistical_Filter.Name = "tlpStatistical_Filter";
             this.tlpStatistical_Filter.RowCount = 5;
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300F));
-            this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
@@ -2060,13 +2060,14 @@
             // 
             // lStatisticalFilter_Length
             // 
+            this.lStatisticalFilter_Length.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lStatisticalFilter_Length.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatisticalFilter_Length.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lStatisticalFilter_Length.Location = new System.Drawing.Point(33, 323);
+            this.lStatisticalFilter_Length.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Length.Location = new System.Drawing.Point(33, 353);
             this.lStatisticalFilter_Length.Name = "lStatisticalFilter_Length";
-            this.lStatisticalFilter_Length.Size = new System.Drawing.Size(1046, 44);
+            this.lStatisticalFilter_Length.Size = new System.Drawing.Size(86, 29);
             this.lStatisticalFilter_Length.TabIndex = 3;
-            this.lStatisticalFilter_Length.Text = "封包长度";
+            this.lStatisticalFilter_Length.Text = "明细数据";
             // 
             // tlpStatistical_FilterTop
             // 
@@ -2089,11 +2090,12 @@
             // 
             // lStatisticalFilter_Action
             // 
+            this.lStatisticalFilter_Action.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lStatisticalFilter_Action.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatisticalFilter_Action.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Action.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lStatisticalFilter_Action.Location = new System.Drawing.Point(423, 3);
             this.lStatisticalFilter_Action.Name = "lStatisticalFilter_Action";
-            this.lStatisticalFilter_Action.Size = new System.Drawing.Size(626, 44);
+            this.lStatisticalFilter_Action.Size = new System.Drawing.Size(86, 29);
             this.lStatisticalFilter_Action.TabIndex = 2;
             this.lStatisticalFilter_Action.Text = "滤镜动作";
             // 
@@ -2103,11 +2105,11 @@
             this.progressExecute.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(189)))), ((int)(((byte)(233)))));
             this.progressExecute.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.progressExecute.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(189)))), ((int)(((byte)(233)))));
-            this.progressExecute.Location = new System.Drawing.Point(3, 53);
+            this.progressExecute.Location = new System.Drawing.Point(3, 38);
             this.progressExecute.Name = "progressExecute";
             this.progressExecute.Radius = 30;
             this.progressExecute.Shape = AntdUI.TShapeProgress.Circle;
-            this.progressExecute.Size = new System.Drawing.Size(414, 244);
+            this.progressExecute.Size = new System.Drawing.Size(414, 259);
             this.progressExecute.TabIndex = 0;
             this.progressExecute.Text = "75%";
             this.progressExecute.UseSystemText = true;
@@ -2115,11 +2117,12 @@
             // 
             // lStatisticalFilter_Execute
             // 
+            this.lStatisticalFilter_Execute.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lStatisticalFilter_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lStatisticalFilter_Execute.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Execute.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lStatisticalFilter_Execute.Location = new System.Drawing.Point(3, 3);
             this.lStatisticalFilter_Execute.Name = "lStatisticalFilter_Execute";
-            this.lStatisticalFilter_Execute.Size = new System.Drawing.Size(414, 44);
+            this.lStatisticalFilter_Execute.Size = new System.Drawing.Size(86, 29);
             this.lStatisticalFilter_Execute.TabIndex = 1;
             this.lStatisticalFilter_Execute.Text = "滤镜执行";
             // 
@@ -2140,7 +2143,7 @@
             this.tlpStatistical_FilterTop2.Controls.Add(this.progressReplace, 2, 0);
             this.tlpStatistical_FilterTop2.Controls.Add(this.lReplace, 1, 0);
             this.tlpStatistical_FilterTop2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatistical_FilterTop2.Location = new System.Drawing.Point(420, 50);
+            this.tlpStatistical_FilterTop2.Location = new System.Drawing.Point(420, 35);
             this.tlpStatistical_FilterTop2.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatistical_FilterTop2.Name = "tlpStatistical_FilterTop2";
             this.tlpStatistical_FilterTop2.RowCount = 5;
@@ -2149,7 +2152,7 @@
             this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tlpStatistical_FilterTop2.Size = new System.Drawing.Size(632, 250);
+            this.tlpStatistical_FilterTop2.Size = new System.Drawing.Size(632, 265);
             this.tlpStatistical_FilterTop2.TabIndex = 3;
             // 
             // progressNoDisplay
@@ -2157,9 +2160,9 @@
             this.progressNoDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressNoDisplay.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(108)))), ((int)(((byte)(230)))));
             this.progressNoDisplay.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.progressNoDisplay.Location = new System.Drawing.Point(116, 203);
+            this.progressNoDisplay.Location = new System.Drawing.Point(116, 215);
             this.progressNoDisplay.Name = "progressNoDisplay";
-            this.progressNoDisplay.Size = new System.Drawing.Size(513, 44);
+            this.progressNoDisplay.Size = new System.Drawing.Size(513, 47);
             this.progressNoDisplay.TabIndex = 13;
             this.progressNoDisplay.Text = "50%";
             this.progressNoDisplay.UseSystemText = true;
@@ -2172,9 +2175,9 @@
             this.progressDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressDisplay.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(108)))), ((int)(((byte)(238)))));
             this.progressDisplay.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.progressDisplay.Location = new System.Drawing.Point(116, 153);
+            this.progressDisplay.Location = new System.Drawing.Point(116, 162);
             this.progressDisplay.Name = "progressDisplay";
-            this.progressDisplay.Size = new System.Drawing.Size(513, 44);
+            this.progressDisplay.Size = new System.Drawing.Size(513, 47);
             this.progressDisplay.TabIndex = 12;
             this.progressDisplay.Text = "60%";
             this.progressDisplay.UseSystemText = true;
@@ -2187,9 +2190,9 @@
             this.progressIntercept.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressIntercept.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(108)))), ((int)(((byte)(233)))));
             this.progressIntercept.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.progressIntercept.Location = new System.Drawing.Point(116, 103);
+            this.progressIntercept.Location = new System.Drawing.Point(116, 109);
             this.progressIntercept.Name = "progressIntercept";
-            this.progressIntercept.Size = new System.Drawing.Size(513, 44);
+            this.progressIntercept.Size = new System.Drawing.Size(513, 47);
             this.progressIntercept.TabIndex = 11;
             this.progressIntercept.Text = "70%";
             this.progressIntercept.UseSystemText = true;
@@ -2202,9 +2205,9 @@
             this.progressChange.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressChange.Fill = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(114)))), ((int)(((byte)(228)))));
             this.progressChange.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.progressChange.Location = new System.Drawing.Point(116, 53);
+            this.progressChange.Location = new System.Drawing.Point(116, 56);
             this.progressChange.Name = "progressChange";
-            this.progressChange.Size = new System.Drawing.Size(513, 44);
+            this.progressChange.Size = new System.Drawing.Size(513, 47);
             this.progressChange.TabIndex = 10;
             this.progressChange.Text = "80%";
             this.progressChange.UseSystemText = true;
@@ -2216,9 +2219,9 @@
             // 
             this.lNoDisplay.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lNoDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lNoDisplay.Location = new System.Drawing.Point(53, 203);
+            this.lNoDisplay.Location = new System.Drawing.Point(53, 215);
             this.lNoDisplay.Name = "lNoDisplay";
-            this.lNoDisplay.Size = new System.Drawing.Size(57, 44);
+            this.lNoDisplay.Size = new System.Drawing.Size(57, 47);
             this.lNoDisplay.TabIndex = 9;
             this.lNoDisplay.Text = "不显示 :";
             // 
@@ -2226,9 +2229,9 @@
             // 
             this.lDisplay.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lDisplay.Location = new System.Drawing.Point(53, 153);
+            this.lDisplay.Location = new System.Drawing.Point(53, 162);
             this.lDisplay.Name = "lDisplay";
-            this.lDisplay.Size = new System.Drawing.Size(57, 44);
+            this.lDisplay.Size = new System.Drawing.Size(57, 47);
             this.lDisplay.TabIndex = 8;
             this.lDisplay.Text = "只显示 :";
             // 
@@ -2236,9 +2239,9 @@
             // 
             this.lIntercept.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lIntercept.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lIntercept.Location = new System.Drawing.Point(53, 103);
+            this.lIntercept.Location = new System.Drawing.Point(53, 109);
             this.lIntercept.Name = "lIntercept";
-            this.lIntercept.Size = new System.Drawing.Size(41, 44);
+            this.lIntercept.Size = new System.Drawing.Size(41, 47);
             this.lIntercept.TabIndex = 7;
             this.lIntercept.Text = "拦截 :";
             // 
@@ -2246,9 +2249,9 @@
             // 
             this.lChange.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lChange.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lChange.Location = new System.Drawing.Point(53, 53);
+            this.lChange.Location = new System.Drawing.Point(53, 56);
             this.lChange.Name = "lChange";
-            this.lChange.Size = new System.Drawing.Size(41, 44);
+            this.lChange.Size = new System.Drawing.Size(41, 47);
             this.lChange.TabIndex = 6;
             this.lChange.Text = "换包 :";
             // 
@@ -2259,7 +2262,7 @@
             this.progressReplace.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.progressReplace.Location = new System.Drawing.Point(116, 3);
             this.progressReplace.Name = "progressReplace";
-            this.progressReplace.Size = new System.Drawing.Size(513, 44);
+            this.progressReplace.Size = new System.Drawing.Size(513, 47);
             this.progressReplace.TabIndex = 0;
             this.progressReplace.Text = "90%";
             this.progressReplace.UseSystemText = true;
@@ -2273,18 +2276,19 @@
             this.lReplace.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lReplace.Location = new System.Drawing.Point(53, 3);
             this.lReplace.Name = "lReplace";
-            this.lReplace.Size = new System.Drawing.Size(41, 44);
+            this.lReplace.Size = new System.Drawing.Size(41, 47);
             this.lReplace.TabIndex = 5;
             this.lReplace.Text = "替换 :";
             // 
             // tStatisticalFilter
             // 
+            this.tStatisticalFilter.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tStatisticalFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tStatisticalFilter.EmptyHeader = true;
             this.tStatisticalFilter.Gap = 12;
-            this.tStatisticalFilter.Location = new System.Drawing.Point(33, 373);
+            this.tStatisticalFilter.Location = new System.Drawing.Point(33, 388);
             this.tStatisticalFilter.Name = "tStatisticalFilter";
-            this.tStatisticalFilter.Size = new System.Drawing.Size(1046, 246);
+            this.tStatisticalFilter.Size = new System.Drawing.Size(1046, 231);
             this.tStatisticalFilter.TabIndex = 2;
             this.tStatisticalFilter.Text = "table1";
             // 
@@ -3406,7 +3410,9 @@
             this.tabStatistical.ResumeLayout(false);
             this.tpFilter.ResumeLayout(false);
             this.tlpStatistical_Filter.ResumeLayout(false);
+            this.tlpStatistical_Filter.PerformLayout();
             this.tlpStatistical_FilterTop.ResumeLayout(false);
+            this.tlpStatistical_FilterTop.PerformLayout();
             this.tlpStatistical_FilterTop2.ResumeLayout(false);
             this.tlpStatistical_FilterTop2.PerformLayout();
             this.tpComparison.ResumeLayout(false);
