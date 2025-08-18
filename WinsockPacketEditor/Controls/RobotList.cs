@@ -1,0 +1,365 @@
+﻿using AntdUI;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Windows.Forms;
+
+namespace WinsockPacketEditor
+{
+    public partial class RobotList : UserControl
+    {
+        private Form form;
+
+        #region//窗体事件
+
+        public RobotList(Form _form)
+        {
+            InitializeComponent();
+            this.form = _form;
+        }
+
+        private void RobotList_Load(object sender, EventArgs e)
+        {
+            this.InitTable_RobotList();
+        }
+
+        private void InitTable_RobotList()
+        {
+            tRobotList.Columns = new AntdUI.ColumnCollection
+            {
+                new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
+                {
+                    Width = "80",
+                    Call = (value, record, i_row, i_col) =>
+                    {
+                        System.Threading.Thread.Sleep(500);
+                        return value;
+                    }
+                }.SetFixed().SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("RName", "机器人名称").SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is RobotInfo ri)
+                        {
+                            AntdUI.CellBadge cellBadge = null;
+
+                            if(ri.IsEnable)
+                            {
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                if(ri.ExecutionCount > 0)
+                                {
+                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                }
+                            }
+                            else
+                            {
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                            }
+
+                            return cellBadge;
+                        }
+
+                        return null;
+                    },
+                }.SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellText(value.ToString())
+                        {
+                            Fore = Color.FromArgb(22, 119, 255),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.RobotList.Column."),
+            };
+
+            this.tRobotList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tRobotList.Binding(Operate.RobotConfig.List.lstRobotInfo);
+        }
+
+        public void RefreshRobotList()
+        {
+            this.tRobotList.Refresh();
+        }
+
+        #endregion
+
+        #region//机器人列表 - 菜单
+
+        private void bRobotList_Start_Click(object sender, EventArgs e)
+        {
+            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+            {
+                if (!this.bgwRobotList.IsBusy)
+                {
+                    this.bRobotList_Start.Loading = true;
+                    this.bRobotList_Stop.Enabled = true;
+                    this.tRobotList.Enabled = false;
+
+                    Operate.RobotConfig.List.lstRobotExecute.Clear();
+
+                    this.bgwRobotList.RunWorkerAsync();
+                }
+            }
+        }
+
+        private void bRobotList_Stop_Click(object sender, EventArgs e)
+        {
+            this.bgwRobotList.CancelAsync();
+        }
+
+        private void mRobotList_SelectChanged(object sender, MenuSelectEventArgs e)
+        {
+            AntdUI.MenuItem miSelect = e.Value;
+            this.mRobotList.SelectIndex(-1);
+
+            switch (miSelect.ID)
+            {
+                case "miAdd":
+
+                    Operate.RobotConfig.Robot.AddRobot_New();
+                    this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
+
+                    break;
+
+                case "miImport":
+
+                    Operate.RobotConfig.List.LoadRobotList_Dialog(this.form);
+
+                    break;
+
+                case "miExport":
+
+                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                    {
+                        Operate.RobotConfig.List.SaveRobotList_Dialog(this.form, string.Empty, null);
+                    }
+
+                    break;
+
+                case "miClear":
+
+                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                    {
+                        Operate.RobotConfig.List.CleanUpRobotList_Dialog(this.form);
+                    }
+
+                    break;
+            }
+        }
+
+        private void tRobotList_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is RobotInfo ri)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bEdit":
+
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new RobotEditForm(this.form, ri))
+                        {
+                            Align = AntdUI.TAlignMini.Right,
+                            Mask = true,
+                            MaskClosable = false,
+                            DisplayDelay = 0,
+                        });
+
+                        break;
+
+                    case "bDelete":
+
+                        List<RobotInfo> riList = new List<RobotInfo>
+                        {
+                            ri,
+                        };
+
+                        Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, riList);
+
+                        break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region//机器人列表 - 右键菜单
+
+        private void tRobotList_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.RobotConfig.List.lstRobotInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRobotList, (item) =>
+                {
+                    List<RobotInfo> riList = new List<RobotInfo>();
+
+                    foreach (int SelectIndex in this.tRobotList.SelectedIndexs)
+                    {
+                        riList.Add(Operate.RobotConfig.List.lstRobotInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Top":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, riList);
+                            }
+
+                            break;
+
+                        case "Up":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, riList);
+                            }
+
+                            break;
+
+                        case "Down":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, riList);
+                            }
+
+                            break;
+
+                        case "Bottom":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, riList);
+                            }
+
+                            break;
+
+                        case "Copy":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, riList);
+                                this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
+                            }
+
+                            break;
+
+                        case "Export":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, riList);
+                            }
+
+                            break;
+
+                        case "Delete":
+
+                            if (riList.Count > 0)
+                            {
+                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, riList);
+                            }
+
+                            break;
+                    }
+
+                    this.tRobotList.SelectedIndex = -1;
+                }, Operate.SystemConfig.GetCMS_List()));
+            }
+        }
+
+        #endregion
+
+        #region//执行机器人列表（异步）
+
+        private void bgwRobotList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
+                {
+                    if (ri.IsEnable)
+                    {
+                        RobotExecute re = Operate.RobotConfig.Robot.DoRobot(ri.RID, null);
+                        if (re != null)
+                        {
+                            if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
+                            {
+                                Operate.RobotConfig.List.lstRobotExecute.Add(re);
+                            }
+                            else
+                            {
+                                while (re.Worker.IsBusy)
+                                {
+                                    if (this.bgwRobotList.CancellationPending)
+                                    {
+                                        re.StopRobot();
+
+                                        e.Cancel = true;
+                                        return;
+                                    }
+
+                                    Thread.Sleep(100);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                while (Operate.RobotConfig.List.lstRobotExecute.Count > 0)
+                {
+                    foreach (RobotExecute re in Operate.RobotConfig.List.lstRobotExecute.ToList())
+                    {
+                        if (this.bgwRobotList.CancellationPending)
+                        {
+                            re.StopRobot();
+                        }
+
+                        if (!re.Worker.IsBusy)
+                        {
+                            Operate.RobotConfig.List.lstRobotExecute.Remove(re);
+                        }
+                    }
+
+                    Thread.Sleep(100);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwRobotList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            this.bRobotList_Start.Loading = false;
+            this.bRobotList_Stop.Enabled = false;
+            this.tRobotList.Enabled = true;
+        }
+
+        #endregion
+    }
+}

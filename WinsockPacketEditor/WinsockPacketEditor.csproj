@@ -215,8 +215,26 @@
     <Compile Include="Controls\EncryptionPassword.Designer.cs">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FilterList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FilterList.Designer.cs">
+      <DependentUpon>FilterList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HotkeyTextBox.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\RobotList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RobotList.Designer.cs">
+      <DependentUpon>RobotList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SendList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SendList.Designer.cs">
+      <DependentUpon>SendList.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SystemSetting.cs">
       <SubType>UserControl</SubType>
@@ -403,6 +421,15 @@
     <Compile Include="WebAPI\SystemInfo_Controller.cs" />
     <EmbeddedResource Include="Controls\EncryptionPassword.resx">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FilterList.resx">
+      <DependentUpon>FilterList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RobotList.resx">
+      <DependentUpon>RobotList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SendList.resx">
+      <DependentUpon>SendList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SystemSetting.resx">
       <DependentUpon>SystemSetting.cs</DependentUpon>
