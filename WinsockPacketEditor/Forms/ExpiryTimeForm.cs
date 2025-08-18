@@ -56,14 +56,10 @@ namespace WinsockPacketEditor
                         LocalizationText = "ExpiryTimeForm.Success"
                     });
 
-                    switch (Operate.SystemConfig.StartMode)
+                    if (this.form is InterfaceInfo.IProxyMode proxyForm)
                     {
-                        case Operate.SystemConfig.SystemMode.Proxy:
-
-                            Operate.ProxyConfig.Account.NeedSave = true;
-                            ((InterfaceInfo.IProxyMode)form).RefreshAccountList();
-
-                            break;
+                        Operate.ProxyConfig.Account.NeedSave = true;
+                        proxyForm.RefreshAccountList();
                     }
                 }                
             }
