@@ -8,13 +8,15 @@ namespace WinsockPacketEditor
 {
     public partial class ExpiryTimeForm : Form
     {
+        private Form form;
         private List<AccountInfo> aiList;
 
         #region//窗体事件
 
-        public ExpiryTimeForm(ProxyModeForm form, List<AccountInfo> aiList)
+        public ExpiryTimeForm(Form _form, List<AccountInfo> aiList)
         {
             InitializeComponent();
+            this.form = _form;
             this.aiList = aiList;
         }
 
@@ -54,7 +56,15 @@ namespace WinsockPacketEditor
                         LocalizationText = "ExpiryTimeForm.Success"
                     });
 
-                    Operate.ProxyConfig.Account.NeedSave = true;
+                    switch (Operate.SystemConfig.StartMode)
+                    {
+                        case Operate.SystemConfig.SystemMode.Proxy:
+
+                            Operate.ProxyConfig.Account.NeedSave = true;
+                            ((InterfaceInfo.IProxyMode)form).RefreshAccountList();
+
+                            break;
+                    }
                 }                
             }
             catch (Exception ex)

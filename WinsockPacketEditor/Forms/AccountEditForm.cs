@@ -9,15 +9,15 @@ namespace WinsockPacketEditor
     public partial class AccountEditForm : Form
     {
         private AccountInfo aiSelect;
-        private ProxyModeForm pmForm;
+        private Form form;
 
         #region//窗体事件
 
-        public AccountEditForm(ProxyModeForm form, AccountInfo ai)
+        public AccountEditForm(Form _form, AccountInfo ai)
         {
             InitializeComponent();
             this.aiSelect = ai;
-            this.pmForm = form;
+            this.form = _form;
         }
 
         private void AccountEditForm_Load(object sender, EventArgs e)
@@ -251,8 +251,16 @@ namespace WinsockPacketEditor
                 {
                     LocalizationText = "AccountEditForm.Success"
                 });
-                
-                this.pmForm.RefreshAccountList();
+
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                        Operate.ProxyConfig.Account.NeedSave = true;
+                        ((InterfaceInfo.IProxyMode)form).RefreshAccountList();
+
+                        break;
+                }
             }
             catch (Exception ex)
             {

@@ -11,7 +11,7 @@ namespace WinsockPacketEditor
 
         #region//窗体事件
 
-        public LocationForm(ProxyModeForm form, AccountInfo ai)
+        public LocationForm(Form form, AccountInfo ai)
         {
             InitializeComponent();
 

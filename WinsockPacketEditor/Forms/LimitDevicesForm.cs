@@ -8,13 +8,15 @@ namespace WinsockPacketEditor
 {
     public partial class LimitDevicesForm : Form
     {
+        private Form form;
         private List<AccountInfo> aiList;
 
         #region//窗体事件
 
-        public LimitDevicesForm(ProxyModeForm form, List<AccountInfo> aiList)
+        public LimitDevicesForm(Form _form, List<AccountInfo> aiList)
         {
             InitializeComponent();
+            this.form = _form;
             this.aiList = aiList;
         }
 
@@ -56,7 +58,15 @@ namespace WinsockPacketEditor
                         LocalizationText = "ProxyMode.Adjust.Success"
                     });
 
-                    Operate.ProxyConfig.Account.NeedSave = true;
+                    switch (Operate.SystemConfig.StartMode)
+                    {
+                        case Operate.SystemConfig.SystemMode.Proxy:
+
+                            Operate.ProxyConfig.Account.NeedSave = true;
+                            ((InterfaceInfo.IProxyMode)form).RefreshAccountList();
+
+                            break;
+                    }
                 }
             }
             catch (Exception ex)

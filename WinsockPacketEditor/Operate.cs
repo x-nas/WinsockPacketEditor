@@ -7430,14 +7430,9 @@ namespace WinsockPacketEditor
 
                                 switch (Operate.SystemConfig.StartMode)
                                 {
-                                    case Operate.SystemConfig.SystemMode.Process:
-
-                                        //
-
-                                        break;
-
                                     case Operate.SystemConfig.SystemMode.Proxy:
 
+                                        Operate.ProxyConfig.Account.NeedSave = true;
                                         ((InterfaceInfo.IProxyMode)form).RefreshAccountList();
 
                                         break;
@@ -8085,9 +8080,14 @@ namespace WinsockPacketEditor
                                     }
                                 }, () =>
                                 {
-                                    if (form is InterfaceInfo.IProxyMode proxyMode)
+                                    switch (Operate.SystemConfig.StartMode)
                                     {
-                                        proxyMode.RefreshAccountList();
+                                        case Operate.SystemConfig.SystemMode.Proxy:
+
+                                            Operate.ProxyConfig.Account.NeedSave = true;
+                                            ((InterfaceInfo.IProxyMode)form).RefreshAccountList();
+
+                                            break;
                                     }
                                 });                                
                             }

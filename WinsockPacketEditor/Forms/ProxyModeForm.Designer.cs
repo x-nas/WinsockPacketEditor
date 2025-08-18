@@ -53,11 +53,6 @@
             AntdUI.MenuItem menuItem21 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem22 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem23 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem24 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem25 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem26 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem27 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem28 = new AntdUI.MenuItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxyModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -132,14 +127,6 @@
             this.lLinksCount = new AntdUI.Label();
             this.lAuthCount = new AntdUI.Label();
             this.tpAccountList = new AntdUI.TabPage();
-            this.tlpAccountList = new System.Windows.Forms.TableLayoutPanel();
-            this.tAccountList = new AntdUI.Table();
-            this.tlpAccountListButton = new System.Windows.Forms.TableLayoutPanel();
-            this.mAccountList = new AntdUI.Menu();
-            this.txtSearchUserName = new AntdUI.Input();
-            this.dtpExpiryTime = new AntdUI.DatePickerRange();
-            this.bSearchExpiryTime = new AntdUI.Button();
-            this.pAccountList = new AntdUI.Pagination();
             this.tpFilterList = new AntdUI.TabPage();
             this.tpSendList = new AntdUI.TabPage();
             this.tpRobotList = new AntdUI.TabPage();
@@ -153,7 +140,6 @@
             this.bgwProxyList = new System.ComponentModel.BackgroundWorker();
             this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwClientList = new System.ComponentModel.BackgroundWorker();
-            this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
             this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
@@ -176,9 +162,6 @@
             this.splitterClientList.SuspendLayout();
             this.tlpAuthInfo.SuspendLayout();
             this.tlpAuthListInfo.SuspendLayout();
-            this.tpAccountList.SuspendLayout();
-            this.tlpAccountList.SuspendLayout();
-            this.tlpAccountListButton.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -363,7 +346,7 @@
             this.tabProxyMode.Controls.Add(this.tpTranscoding);
             this.tabProxyMode.Controls.Add(this.tpExtraction);
             this.tabProxyMode.Controls.Add(this.tpSystemLog);
-            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabProxyMode.Location = new System.Drawing.Point(170, 40);
             this.tabProxyMode.Name = "tabProxyMode";
@@ -379,7 +362,7 @@
             this.tabProxyMode.Pages.Add(this.tpTranscoding);
             this.tabProxyMode.Pages.Add(this.tpExtraction);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.SelectedIndex = 11;
+            this.tabProxyMode.SelectedIndex = 2;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -1326,148 +1309,11 @@
             // 
             // tpAccountList
             // 
-            this.tpAccountList.Controls.Add(this.tlpAccountList);
-            this.tpAccountList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpAccountList.Location = new System.Drawing.Point(3, 33);
             this.tpAccountList.Name = "tpAccountList";
             this.tpAccountList.Size = new System.Drawing.Size(1124, 724);
             this.tpAccountList.TabIndex = 7;
             this.tpAccountList.Text = "账号列表";
-            // 
-            // tlpAccountList
-            // 
-            this.tlpAccountList.ColumnCount = 1;
-            this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAccountList.Controls.Add(this.tAccountList, 0, 1);
-            this.tlpAccountList.Controls.Add(this.tlpAccountListButton, 0, 0);
-            this.tlpAccountList.Controls.Add(this.pAccountList, 0, 2);
-            this.tlpAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpAccountList.Location = new System.Drawing.Point(0, 0);
-            this.tlpAccountList.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpAccountList.Name = "tlpAccountList";
-            this.tlpAccountList.RowCount = 3;
-            this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpAccountList.Size = new System.Drawing.Size(1124, 724);
-            this.tlpAccountList.TabIndex = 1;
-            // 
-            // tAccountList
-            // 
-            this.tAccountList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tAccountList.CellImpactHeight = false;
-            this.tAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tAccountList.Gap = 12;
-            this.tAccountList.GapCell = 6;
-            this.tAccountList.Location = new System.Drawing.Point(3, 53);
-            this.tAccountList.Name = "tAccountList";
-            this.tAccountList.Size = new System.Drawing.Size(1118, 622);
-            this.tAccountList.TabIndex = 1;
-            this.tAccountList.CellClick += new AntdUI.Table.ClickEventHandler(this.tAccountList_CellClick);
-            this.tAccountList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tAccountList_CellButtonClick);
-            // 
-            // tlpAccountListButton
-            // 
-            this.tlpAccountListButton.ColumnCount = 5;
-            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500F));
-            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
-            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpAccountListButton.Controls.Add(this.mAccountList, 4, 1);
-            this.tlpAccountListButton.Controls.Add(this.txtSearchUserName, 3, 1);
-            this.tlpAccountListButton.Controls.Add(this.dtpExpiryTime, 0, 1);
-            this.tlpAccountListButton.Controls.Add(this.bSearchExpiryTime, 1, 1);
-            this.tlpAccountListButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpAccountListButton.Location = new System.Drawing.Point(0, 0);
-            this.tlpAccountListButton.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpAccountListButton.Name = "tlpAccountListButton";
-            this.tlpAccountListButton.RowCount = 2;
-            this.tlpAccountListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAccountListButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpAccountListButton.Size = new System.Drawing.Size(1124, 50);
-            this.tlpAccountListButton.TabIndex = 2;
-            // 
-            // mAccountList
-            // 
-            this.mAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mAccountList.Gap = 0;
-            this.mAccountList.IconRatio = 1F;
-            menuItem24.IconSvg = "PlusOutlined";
-            menuItem25.IconSvg = "UserAddOutlined";
-            menuItem25.ID = "miAdd";
-            menuItem25.Text = "新增账号";
-            menuItem26.IconSvg = "FolderOpenOutlined";
-            menuItem26.ID = "miImport";
-            menuItem26.Text = "导入账号列表";
-            menuItem27.IconSvg = "DeliveredProcedureOutlined";
-            menuItem27.ID = "miExport";
-            menuItem27.Text = "导出所有账号";
-            menuItem28.IconSvg = "DeleteOutlined";
-            menuItem28.ID = "miClear";
-            menuItem28.Text = "清空所有账号";
-            menuItem24.Sub.Add(menuItem25);
-            menuItem24.Sub.Add(menuItem26);
-            menuItem24.Sub.Add(menuItem27);
-            menuItem24.Sub.Add(menuItem28);
-            this.mAccountList.Items.Add(menuItem24);
-            this.mAccountList.Location = new System.Drawing.Point(1061, 2);
-            this.mAccountList.Mode = AntdUI.TMenuMode.Horizontal;
-            this.mAccountList.Name = "mAccountList";
-            this.mAccountList.Size = new System.Drawing.Size(60, 45);
-            this.mAccountList.TabIndex = 3;
-            this.mAccountList.Trigger = AntdUI.Trigger.Click;
-            this.mAccountList.SelectChanged += new AntdUI.SelectEventHandler(this.mAccountList_SelectChanged);
-            // 
-            // txtSearchUserName
-            // 
-            this.txtSearchUserName.AllowClear = true;
-            this.txtSearchUserName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSearchUserName.Location = new System.Drawing.Point(811, 2);
-            this.txtSearchUserName.Name = "txtSearchUserName";
-            this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
-            this.txtSearchUserName.PrefixSvg = "SearchOutlined";
-            this.txtSearchUserName.Size = new System.Drawing.Size(244, 45);
-            this.txtSearchUserName.TabIndex = 4;
-            this.txtSearchUserName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearchUserName_KeyPress);
-            // 
-            // dtpExpiryTime
-            // 
-            this.dtpExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dtpExpiryTime.Format = "yyyy-MM-dd HH:mm:ss";
-            this.dtpExpiryTime.LocalizationPlaceholderEnd = "DatePicker.PlaceholderE";
-            this.dtpExpiryTime.LocalizationPlaceholderStart = "DatePicker.PlaceholderS";
-            this.dtpExpiryTime.Location = new System.Drawing.Point(3, 2);
-            this.dtpExpiryTime.Name = "dtpExpiryTime";
-            this.dtpExpiryTime.PlaceholderEnd = "过期结束时间";
-            this.dtpExpiryTime.PlaceholderStart = "过期开始时间";
-            this.dtpExpiryTime.Size = new System.Drawing.Size(494, 45);
-            this.dtpExpiryTime.TabIndex = 5;
-            this.dtpExpiryTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // bSearchExpiryTime
-            // 
-            this.bSearchExpiryTime.BorderWidth = 1F;
-            this.bSearchExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSearchExpiryTime.Location = new System.Drawing.Point(503, 2);
-            this.bSearchExpiryTime.Name = "bSearchExpiryTime";
-            this.bSearchExpiryTime.Size = new System.Drawing.Size(94, 45);
-            this.bSearchExpiryTime.TabIndex = 7;
-            this.bSearchExpiryTime.Text = "查询";
-            this.bSearchExpiryTime.Click += new System.EventHandler(this.bSearchExpiryTime_Click);
-            // 
-            // pAccountList
-            // 
-            this.pAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pAccountList.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.pAccountList.Location = new System.Drawing.Point(3, 681);
-            this.pAccountList.Name = "pAccountList";
-            this.pAccountList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.pAccountList.ShowSizeChanger = true;
-            this.pAccountList.Size = new System.Drawing.Size(1118, 40);
-            this.pAccountList.TabIndex = 3;
-            this.pAccountList.ValueChanged += new AntdUI.PageValueEventHandler(this.pAccountList_ValueChanged);
-            this.pAccountList.ShowTotalChanged += new AntdUI.PageValueRtEventHandler(this.pAccountList_ShowTotalChanged);
             // 
             // tpFilterList
             // 
@@ -1535,7 +1381,7 @@
             // 
             // tpSystemLog
             // 
-            this.tpSystemLog.Location = new System.Drawing.Point(3, 33);
+            this.tpSystemLog.Location = new System.Drawing.Point(-1124, -724);
             this.tpSystemLog.Name = "tpSystemLog";
             this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
             this.tpSystemLog.TabIndex = 6;
@@ -1562,10 +1408,6 @@
             // 
             this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
             this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
-            // 
-            // bgwAccountList
-            // 
-            this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
             // 
             // bgwSearchProxyList
             // 
@@ -1615,9 +1457,6 @@
             this.tlpAuthInfo.ResumeLayout(false);
             this.tlpAuthListInfo.ResumeLayout(false);
             this.tlpAuthListInfo.PerformLayout();
-            this.tpAccountList.ResumeLayout(false);
-            this.tlpAccountList.ResumeLayout(false);
-            this.tlpAccountListButton.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1640,17 +1479,9 @@
         private AntdUI.Label lSplit1;
         private AntdUI.Label lProxySpeed;
         private AntdUI.TabPage tpAccountList;
-        private System.Windows.Forms.TableLayoutPanel tlpAccountList;
-        private AntdUI.Table tAccountList;
         private AntdUI.TabPage tpStatistical;
         private AntdUI.TabPage tpSystemLog;
         private AntdUI.TabPage tpClientList;
-        private System.Windows.Forms.TableLayoutPanel tlpAccountListButton;
-        private AntdUI.Menu mAccountList;
-        private AntdUI.Pagination pAccountList;
-        private AntdUI.Input txtSearchUserName;
-        private AntdUI.DatePickerRange dtpExpiryTime;
-        private AntdUI.Button bSearchExpiryTime;
         private System.Windows.Forms.Timer timerProxyList;
         private System.ComponentModel.BackgroundWorker bgwProxyList;
         private System.Windows.Forms.Timer timerProxyListInfo;
@@ -1689,7 +1520,6 @@
         private AntdUI.Button bProxyStop;
         private AntdUI.Menu mProxyList;
         private AntdUI.Button bProxyStart;
-        private System.ComponentModel.BackgroundWorker bgwAccountList;
         private System.ComponentModel.BackgroundWorker bgwSearchProxyList;
         private AntdUI.TabPage tpFilterList;
         private AntdUI.TabPage tpSendList;
