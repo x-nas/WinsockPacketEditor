@@ -6438,7 +6438,17 @@ namespace WinsockPacketEditor
             #region//代理列表
 
             public static class List
-            {                
+            {
+                public static bool IsShow_ID = true;
+                public static bool IsShow_ProxyTime = true;
+                public static bool IsShow_PacketType = true;
+                public static bool IsShow_PacketSocket = true;
+                public static bool IsShow_ClientAddr = true;
+                public static bool IsShow_ClientLocation = true;
+                public static bool IsShow_ServerAddr = true;
+                public static bool IsShow_ServerLocation = true;
+                public static bool IsShow_PacketLen = true;
+                public static bool IsShow_PacketData = true;
                 public static int Search_Index = -1;
                 public static bool AutoRoll = false;
                 public static bool AutoClear = true;
@@ -11136,6 +11146,16 @@ namespace WinsockPacketEditor
 
             public static class List
             {
+                public static bool IsShow_ID = true;
+                public static bool IsShow_ProxyTime = true;
+                public static bool IsShow_PacketType = true;
+                public static bool IsShow_PacketSocket = true;
+                public static bool IsShow_ClientAddr = true;
+                public static bool IsShow_ClientLocation = true;
+                public static bool IsShow_ServerAddr = true;
+                public static bool IsShow_ServerLocation = true;
+                public static bool IsShow_PacketLen = true;
+                public static bool IsShow_PacketData = true;
                 public static bool AutoRoll = false;
                 public static bool AutoClear = true;
                 public static decimal AutoClear_Value = 5000;

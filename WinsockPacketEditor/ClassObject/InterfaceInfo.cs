@@ -7,6 +7,8 @@ namespace WinsockPacketEditor
 
         public interface IProxyMode
         {
+            void SetColumnVisible_ProxyList();
+
             void InitFloatButton();
 
             void SearchProxyList(bool FromHead);
@@ -28,6 +30,8 @@ namespace WinsockPacketEditor
 
         public interface IInjectMode
         {
+            void SetColumnVisible_ProxyList();
+
             void InitFloatButton();
 
             void SearchPacketList(bool FromHead);

@@ -338,7 +338,29 @@ namespace WinsockPacketEditor
 
             this.tProxyList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tProxyList.DataSource = Operate.ProxyConfig.List.lstProxyInfo;
-        }        
+        }
+
+        public void SetColumnVisible_ProxyList()
+        {
+            try
+            {
+                this.tProxyList.Columns[1].Visible = Operate.ProxyConfig.List.IsShow_ID;
+                this.tProxyList.Columns[2].Visible = Operate.ProxyConfig.List.IsShow_ProxyTime;
+                this.tProxyList.Columns[3].Visible = Operate.ProxyConfig.List.IsShow_PacketType;
+                this.tProxyList.Columns[4].Visible = Operate.ProxyConfig.List.IsShow_PacketSocket;
+                this.tProxyList.Columns[5].Visible = Operate.ProxyConfig.List.IsShow_ClientAddr;
+                this.tProxyList.Columns[6].Visible = Operate.ProxyConfig.List.IsShow_ClientLocation;
+                this.tProxyList.Columns[7].Visible = Operate.ProxyConfig.List.IsShow_ServerAddr;
+                this.tProxyList.Columns[8].Visible = Operate.ProxyConfig.List.IsShow_ServerLocation;
+                this.tProxyList.Columns[9].Visible = Operate.ProxyConfig.List.IsShow_PacketLen;
+                this.tProxyList.Columns[10].Visible = Operate.ProxyConfig.List.IsShow_PacketData;
+
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private Table.CellStyleInfo tProxyList_SetRowStyle(object sender, TableSetRowStyleEventArgs e)
         {
@@ -910,7 +932,7 @@ namespace WinsockPacketEditor
 
                 case "miListSettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,

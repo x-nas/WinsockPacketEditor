@@ -313,6 +313,28 @@ namespace WinsockPacketEditor
             this.tPacketList.DataSource = Operate.PacketConfig.List.lstPacketInfo;
         }
 
+        public void SetColumnVisible_ProxyList()
+        {
+            try
+            {
+                this.tPacketList.Columns[1].Visible = Operate.PacketConfig.List.IsShow_ID;
+                this.tPacketList.Columns[2].Visible = Operate.PacketConfig.List.IsShow_ProxyTime;
+                this.tPacketList.Columns[3].Visible = Operate.PacketConfig.List.IsShow_PacketType;
+                this.tPacketList.Columns[4].Visible = Operate.PacketConfig.List.IsShow_PacketSocket;
+                this.tPacketList.Columns[5].Visible = Operate.PacketConfig.List.IsShow_ClientAddr;
+                this.tPacketList.Columns[6].Visible = Operate.PacketConfig.List.IsShow_ClientLocation;
+                this.tPacketList.Columns[7].Visible = Operate.PacketConfig.List.IsShow_ServerAddr;
+                this.tPacketList.Columns[8].Visible = Operate.PacketConfig.List.IsShow_ServerLocation;
+                this.tPacketList.Columns[9].Visible = Operate.PacketConfig.List.IsShow_PacketLen;
+                this.tPacketList.Columns[10].Visible = Operate.PacketConfig.List.IsShow_PacketData;
+
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private Table.CellStyleInfo tPacketList_SetRowStyle(object sender, TableSetRowStyleEventArgs e)
         {
             try
@@ -634,7 +656,7 @@ namespace WinsockPacketEditor
 
                 case "miListSettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
