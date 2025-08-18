@@ -209,11 +209,23 @@
     <Compile Include="ClassObject\SendExecute.cs" />
     <Compile Include="ClassObject\SendInfo.cs" />
     <Compile Include="ClassObject\WinSockHook.cs" />
+    <Compile Include="Controls\ComparisonText.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ComparisonText.Designer.cs">
+      <DependentUpon>ComparisonText.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EncryptionPassword.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\EncryptionPassword.Designer.cs">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExtractionData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ExtractionData.Designer.cs">
+      <DependentUpon>ExtractionData.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\FilterList.cs">
       <SubType>UserControl</SubType>
@@ -223,6 +235,12 @@
     </Compile>
     <Compile Include="Controls\HotkeyTextBox.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\LogList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LogList.Designer.cs">
+      <DependentUpon>LogList.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\RobotList.cs">
       <SubType>UserControl</SubType>
@@ -236,11 +254,29 @@
     <Compile Include="Controls\SendList.Designer.cs">
       <DependentUpon>SendList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StatisticalData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\StatisticalData.Designer.cs">
+      <DependentUpon>StatisticalData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SystemSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\SystemSetting.Designer.cs">
       <DependentUpon>SystemSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Transcoding.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Transcoding.Designer.cs">
+      <DependentUpon>Transcoding.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\XORCalculation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\XORCalculation.Designer.cs">
+      <DependentUpon>XORCalculation.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\AccountEditForm.cs">
       <SubType>Form</SubType>
@@ -419,11 +455,20 @@
     <Compile Include="WebAPI\SocketInfo_Controller.cs" />
     <Compile Include="WebAPI\Socket_Web.cs" />
     <Compile Include="WebAPI\SystemInfo_Controller.cs" />
+    <EmbeddedResource Include="Controls\ComparisonText.resx">
+      <DependentUpon>ComparisonText.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\EncryptionPassword.resx">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ExtractionData.resx">
+      <DependentUpon>ExtractionData.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\FilterList.resx">
       <DependentUpon>FilterList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LogList.resx">
+      <DependentUpon>LogList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\RobotList.resx">
       <DependentUpon>RobotList.cs</DependentUpon>
@@ -431,8 +476,17 @@
     <EmbeddedResource Include="Controls\SendList.resx">
       <DependentUpon>SendList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\StatisticalData.resx">
+      <DependentUpon>StatisticalData.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SystemSetting.resx">
       <DependentUpon>SystemSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Transcoding.resx">
+      <DependentUpon>Transcoding.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\XORCalculation.resx">
+      <DependentUpon>XORCalculation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AccountEditForm.resx">
       <DependentUpon>AccountEditForm.cs</DependentUpon>

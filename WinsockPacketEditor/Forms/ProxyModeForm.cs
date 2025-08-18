@@ -4,22 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace WinsockPacketEditor
 {
     public partial class ProxyModeForm : Window, InterfaceInfo.IProxyMode
-    {
-        private string TextA = string.Empty;
-        private string TextB = string.Empty;
+    {        
         private bool setcolor = false;
         private bool SearchFromHead = true;
         private static Socket ProxyServer;
@@ -28,6 +23,12 @@ namespace WinsockPacketEditor
         private FilterList cFilterList = null;
         private SendList cSendList = null;
         private RobotList cRobotList = null;
+        private LogList cLogList = null;
+        private StatisticalData cStatisticalData = null;
+        private ComparisonText cComparisonText = null;
+        private XORCalculation cXORCalculation = null;
+        private Transcoding cTranscoding = null;
+        private ExtractionData cExtractionData = null;        
 
         #region//窗体事件
 
@@ -56,8 +57,6 @@ namespace WinsockPacketEditor
                 this.InitTable_ProxyList();
                 this.InitTable_AccountList();
                 this.InitTable_AuthList();
-                this.InitTable_LogList();
-                this.InitTable_StatisticalFilter();
 
             }, () =>
             {
@@ -69,17 +68,10 @@ namespace WinsockPacketEditor
             this.Dark_Changed();
             this.InitForm();
             this.InitControls();
-            this.InitComparison();
-            this.InitExtraction();
             this.InitHotKeys();
 
-            this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
-            this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
             this.hbProxyData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.hbXOR_From.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.hbXOR_To.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.tabProxyMode.TabMenuVisible = false;
-            this.tabStatistical.TabMenuVisible = false;
+            this.tabProxyMode.TabMenuVisible = false;            
             this.mProxyMode.SelectIndex(0, true);
         }
 
@@ -140,6 +132,30 @@ namespace WinsockPacketEditor
             cRobotList = new RobotList(this);
             cRobotList.Dock = DockStyle.Fill;
             this.tpRobotList.Controls.Add(cRobotList);
+
+            cLogList = new LogList(this);
+            cLogList.Dock = DockStyle.Fill;
+            this.tpSystemLog.Controls.Add(cLogList);
+
+            cStatisticalData = new StatisticalData();
+            cStatisticalData.Dock = DockStyle.Fill;
+            this.tpStatistical.Controls.Add(cStatisticalData);
+
+            cComparisonText = new ComparisonText();
+            cComparisonText.Dock = DockStyle.Fill;
+            this.tpComparison.Controls.Add(cComparisonText);
+
+            cXORCalculation = new XORCalculation(this);
+            cXORCalculation.Dock = DockStyle.Fill;
+            this.tpXOR.Controls.Add(cXORCalculation);
+
+            cTranscoding = new Transcoding();
+            cTranscoding.Dock = DockStyle.Fill;
+            this.tpTranscoding.Controls.Add(cTranscoding);
+
+            cExtractionData = new ExtractionData(this);
+            cExtractionData.Dock = DockStyle.Fill;
+            this.tpExtraction.Controls.Add(cExtractionData);
         }
 
         private void InitForm()
@@ -456,102 +472,7 @@ namespace WinsockPacketEditor
 
             this.tAuthList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
-        }                        
-
-        private void InitTable_LogList()
-        {
-            tSystemLog.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return (rowindex + 1);
-                    },
-                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("LogTime", "时间戳")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
-                    },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("FuncName", "模块", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.PacketList.Column."),
-            };
-
-            this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tSystemLog.DataSource = Operate.LogConfig.List.lstLogInfo;
-        }
-
-        private void InitTable_StatisticalFilter()
-        {
-            tStatisticalFilter.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("", "", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return (rowindex + 1);
-                    },
-                }.SetFixed().SetLocalizationTitleID("Table.StatisticalFilter.Column."),
-                new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.StatisticalFilter.Column."),
-                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is FilterInfo fi)
-                        {
-                            if(fi.IsEnable)
-                            {
-                                if(fi.ExecutionCount > 0)
-                                {
-                                    return new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
-                                }
-                                else
-                                {
-                                    return new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
-                                }
-                            }
-                            else
-                            {
-                                return new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
-                            }
-                        }
-
-                        return value;
-                    },
-                }.SetLocalizationTitleID("Table.StatisticalFilter.Column."),
-                new AntdUI.Column("FAction", "动作")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        switch((Operate.FilterConfig.Filter.FilterAction)value)
-                        {
-                            case Operate.FilterConfig.Filter.FilterAction.Replace:
-                                return AntdUI.Localization.Get("FilterAction.Replace", "替换");
-
-                            case Operate.FilterConfig.Filter.FilterAction.Change:
-                                return AntdUI.Localization.Get("FilterAction.Change", "换包");
-
-                            case Operate.FilterConfig.Filter.FilterAction.Intercept:
-                                return AntdUI.Localization.Get("FilterAction.Intercept", "拦截");
-
-                            case Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
-                                return AntdUI.Localization.Get("FilterAction.NoModify_NoDisplay", "不显示");
-
-                            case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
-                                return AntdUI.Localization.Get("FilterAction.NoModify_Display", "只显示");
-
-                            default:
-                                return value;
-                        }
-                    },
-                }.SetLocalizationTitleID("Table.StatisticalFilter.Column."),
-                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.StatisticalFilter.Column."),
-            };
-
-            this.tStatisticalFilter.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tStatisticalFilter.Binding(Operate.FilterConfig.List.lstFilterInfo);
-        }
+        }                                
 
         private void InitCalendar_ExpiryTime()
         {
@@ -727,15 +648,8 @@ namespace WinsockPacketEditor
                 this.tProxyList.ColumnFore = Color.Silver;
                 this.tProxyList.ForeColor = Color.LimeGreen;
 
-                this.hbProxyData.BackColor =
-                    this.hbXOR_From.BackColor =
-                    this.hbXOR_To.BackColor = 
-                    Color.FromArgb(30, 30, 30);
-
-                this.hbProxyData.ForeColor =
-                    this.hbXOR_From.ForeColor =
-                    this.hbXOR_To.ForeColor = 
-                    Color.Silver;
+                this.hbProxyData.BackColor = Color.FromArgb(30, 30, 30);
+                this.hbProxyData.ForeColor = Color.Silver;
             }
             else
             {
@@ -745,50 +659,12 @@ namespace WinsockPacketEditor
                 this.tProxyList.ColumnFore = Color.Black;
                 this.tProxyList.ForeColor = Color.Green;
 
-                this.hbProxyData.BackColor =
-                    this.hbXOR_From.BackColor =
-                    this.hbXOR_To.BackColor = 
-                    Color.White;
-
-                this.hbProxyData.ForeColor =
-                    this.hbXOR_From.ForeColor =
-                    this.hbXOR_To.ForeColor = 
-                    Color.Black;
+                this.hbProxyData.BackColor = Color.White;
+                this.hbProxyData.ForeColor = Color.Black;
             }
 
-            this.Statistical_DarkChanged();
-        }
-        
-        private void Statistical_DarkChanged()
-        {
-            if (Dark)
-            {
-                this.progressExecute.Back = Color.FromArgb(48, 58, 66);
-                this.progressReplace.Back = Color.FromArgb(39, 41, 83);
-                this.progressReplace.ForeColor = Color.White;
-                this.progressChange.Back = Color.FromArgb(47, 46, 80);
-                this.progressChange.ForeColor = Color.White;
-                this.progressIntercept.Back = Color.FromArgb(57, 47, 78);
-                this.progressIntercept.ForeColor = Color.White;
-                this.progressDisplay.Back = Color.FromArgb(67, 46, 76);
-                this.progressDisplay.ForeColor = Color.White;
-                this.progressNoDisplay.Back = Color.FromArgb(80, 47, 79);
-                this.progressNoDisplay.ForeColor = Color.White;
-            }
-            else
-            {
-                this.progressExecute.Back = null;
-                this.progressReplace.Back = null;
-                this.progressReplace.ForeColor = null;
-                this.progressChange.Back = null;
-                this.progressChange.ForeColor = null;
-                this.progressIntercept.Back = null;
-                this.progressIntercept.ForeColor = null;
-                this.progressDisplay.Back = null;
-                this.progressDisplay.ForeColor = null;
-                this.progressNoDisplay.Back = null;
-                this.progressNoDisplay.ForeColor = null;
-            }
+            this.cStatisticalData?.Dark_Changed();
+            this.cXORCalculation?.Dark_Changed();
         }
 
         #endregion
@@ -895,20 +771,7 @@ namespace WinsockPacketEditor
 
                 hbProxyData.ByteProvider = null;
             }
-        }
-
-        private void CleanUp_LogList()
-        {
-            try
-            {
-                Operate.LogConfig.Queue.ClearLogQueue();
-                Operate.LogConfig.List.ClearLogList();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         #endregion
 
@@ -1022,14 +885,14 @@ namespace WinsockPacketEditor
 
                 if (Operate.LogConfig.List.AutoRoll)
                 {
-                    tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
+                    this.cLogList.ScrollToBottom();
                 }
 
                 if (Operate.LogConfig.List.AutoClear)
                 {
                     if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
                     {
-                        this.CleanUp_LogList();
+                        this.cLogList.CleanUp_LogList();
                     }
                 }
             }
@@ -1045,7 +908,7 @@ namespace WinsockPacketEditor
             {
                 this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
                 this.tProxyList.Refresh();
-                this.tSystemLog.Refresh();                
+                this.cLogList.RefreshLogList();
 
                 long ProxyTotal_CNT =
                     Operate.ProxyConfig.Proxy.TCP_Req_CNT +
@@ -1393,7 +1256,7 @@ namespace WinsockPacketEditor
             this.CleanUp_ProxyList();
             this.CleanUp_ProxyListInfo();
             this.CleanUp_HexBox();
-            this.CleanUp_LogList();
+            this.cLogList.CleanUp_LogList();
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "已清空数据", TType.Warn)
             {
@@ -1633,9 +1496,8 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                this.TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
-                                this.txtComparison_A.Text = this.TextA;
-
+                                this.cComparisonText.SetTextA(Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer));
+                          
                                 AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
                                 {
                                     LocalizationText = "System.ToTextA"
@@ -1648,8 +1510,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                this.TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
-                                this.txtComparison_B.Text = this.TextB;
+                                this.cComparisonText.SetTextB(Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer));
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
                                 {
@@ -1779,17 +1640,18 @@ namespace WinsockPacketEditor
 
                         case "ToTextA":
 
+                            string StringA = string.Empty;
                             if (this.hbProxyData.CanCopy())
                             {
                                 this.hbProxyData.CopyHex();
-                                this.TextA = Clipboard.GetText();
+                                StringA = Clipboard.GetText();
                             }
                             else
                             {
-                                this.TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
+                                StringA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
                             }
 
-                            this.txtComparison_A.Text = this.TextA;
+                            this.cComparisonText.SetTextA(StringA);
 
                             AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
                             {
@@ -1800,17 +1662,18 @@ namespace WinsockPacketEditor
 
                         case "ToTextB":
 
+                            string StringB = string.Empty;
                             if (this.hbProxyData.CanCopy())
                             {
                                 this.hbProxyData.CopyHex();
-                                this.TextB = Clipboard.GetText();
+                                StringB = Clipboard.GetText();
                             }
                             else
                             {
-                                this.TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
+                                StringB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
                             }
 
-                            this.txtComparison_B.Text = this.TextB;
+                            this.cComparisonText.SetTextB(StringB);
 
                             AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
                             {
@@ -2117,84 +1980,7 @@ namespace WinsockPacketEditor
 
 
 
-        #endregion
-
-        #region//日志列表 - 右键菜单
-
-        private void tSystemLog_CellClick(object sender, TableClickEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                if (Operate.LogConfig.List.lstLogInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(tSystemLog, item =>
-                {
-                    List<LogInfo> liList = new List<LogInfo>();
-
-                    foreach (int SelectIndex in this.tSystemLog.SelectedIndexs)
-                    {
-                        liList.Add(Operate.LogConfig.List.lstLogInfo[SelectIndex - 1]);
-                    }
-
-                    switch (item.ID)
-                    {
-                        case "Copy":
-
-                            if (liList.Count > 0)
-                            {
-                                string LogString = string.Empty;
-                                foreach (LogInfo li in liList)
-                                {
-                                    LogString += li.LogTime.ToString() + ": " + li.FuncName + " - " + li.LogContent + "\r\n";
-                                }
-
-                                Clipboard.SetText(LogString);
-
-                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已复制到剪贴板", TType.Success)
-                                {
-                                    LocalizationText = "System.CopyLog"
-                                });
-                            }
-
-                            break;
-
-                        case "ToExcel":
-
-                            Operate.LogConfig.List.SaveLogList_Dialog(this, this.tSystemLog, Operate.PacketConfig.Packet.InjectProcess, liList);
-
-                            break;
-
-                        case "ClearUp":
-
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("InjectModeForm.miLogList", "日志列表"), "\r\n确定删除所有数据吗\r\n\r\n")
-                            {
-                                Icon = TType.Warn,
-                                Keyboard = false,
-                                MaskClosable = false,
-                                OnOk = config =>
-                                {
-                                    this.CleanUp_LogList();
-
-                                    return true;
-                                }
-                            });
-
-                            break;
-
-                        case "DeSelect":
-
-                            this.tSystemLog.SelectedIndex = -1;
-
-                            break;
-                    }
-                }, Operate.LogConfig.List.GetCMS_LogList());
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//开始代理
 
@@ -2475,887 +2261,6 @@ namespace WinsockPacketEditor
 
 
 
-        #endregion        
-
-        #region//文本对比
-
-        #region//初始化
-
-        private void InitComparison()
-        {
-            this.ddlComparisonType.Items.Clear();
-
-            this.ddlComparisonType.Items.AddRange(new AntdUI.SelectItem[]
-            {
-                    new AntdUI.SelectItem("文本比较")
-                    {
-                        LocalizationText = "",
-                    },
-                    new AntdUI.SelectItem("文本查重")
-                    {
-                        LocalizationText = "",
-                    },
-            });
-
-            this.ddlComparisonType.SelectedIndex = 0;
-            this.ComparisonType_Changed();
-
-            this.Comparison_A_Changed();
-            this.Comparison_B_Changed();
-        }
-
-        private void txtComparison_A_TextChanged(object sender, EventArgs e)
-        {
-            this.Comparison_A_Changed();
-        }
-
-        private void Comparison_A_Changed()
-        {
-            string StringA = this.txtComparison_A.Text.Trim();
-            if (string.IsNullOrEmpty(StringA))
-            {
-                this.txtComparison_A.Status = TType.Error;
-            }
-            else
-            {
-                this.txtComparison_A.Status = TType.Success;
-            }
-
-            this.lComparison_A.Text = string.Format(AntdUI.Localization.Get("System.TextA", "文本 A  ( 长度 {0} )"), StringA.Length);
-        }
-
-        private void txtComparison_B_TextChanged(object sender, EventArgs e)
-        {
-            this.Comparison_B_Changed();
-        }
-
-        private void Comparison_B_Changed()
-        {
-            string StringB = this.txtComparison_B.Text.Trim();
-            if (string.IsNullOrEmpty(StringB))
-            {
-                this.txtComparison_B.Status = TType.Error;
-            }
-            else
-            {
-                this.txtComparison_B.Status = TType.Success;
-            }
-
-            this.lComparison_B.Text = string.Format(AntdUI.Localization.Get("System.TextB", "文本 B  ( 长度 {0} )"), StringB.Length);
-        }
-
-        private void ddlComparisonType_SelectedIndexChanged(object sender, IntEventArgs e)
-        {
-            this.ComparisonType_Changed();
-        }
-
-        private void ComparisonType_Changed()
-        {
-            if (this.ddlComparisonType.SelectedIndex == 0)
-            {
-                this.nudComparison_DuplicateNum.Enabled = false;
-            }
-            else if (this.ddlComparisonType.SelectedIndex == 1)
-            {
-                this.nudComparison_DuplicateNum.Enabled = true;
-            }
-        }
-
-        #endregion
-
-        #region//分析文本
-
-        private void bComparison_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.bComparison.Loading = true;
-                this.txtComparison_Result.Spin(AntdUI.Localization.Get("Loading", "正在加载..."), config =>
-                {
-                    this.txtComparison_Result.Clear();
-
-                    if (this.ddlComparisonType.SelectedIndex == 0)
-                    {
-                        string StringA = this.txtComparison_A.Text.Trim();
-                        string StringB = this.txtComparison_B.Text.Trim();
-
-                        if (!string.IsNullOrEmpty(StringA) || !string.IsNullOrEmpty(StringB))
-                        {
-                            string rtfString = Operate.SystemConfig.CompareData(this.Font, StringA, StringB);
-                            var styles = Operate.SystemConfig.ConvertRtfToTextStyles(rtfString);
-
-                            using (var rtb = new RichTextBox())
-                            {
-                                rtb.Rtf = rtfString;
-                                this.txtComparison_Result.Text = rtb.Text;
-                            }
-
-                            foreach (var style in styles)
-                            {
-                                if (style.Fore == Color.Red || style.Fore == Color.Green)
-                                {
-                                    this.txtComparison_Result.SetStyle(style.Start, style.Length, this.Font, style.Fore, null);
-                                }
-                                else
-                                {
-                                    this.txtComparison_Result.SetStyle(style.Start, style.Length, this.Font, null, null);
-                                }
-                            }
-                        }
-                    }
-                    else if (this.ddlComparisonType.SelectedIndex == 1)
-                    {
-                        this.TextA = this.txtComparison_A.Text.Trim();
-                        this.TextB = this.txtComparison_B.Text.Trim();
-                        int minBytes = (int)nudComparison_DuplicateNum.Value;
-                        var results = Operate.SystemConfig.ComparePackets(this.TextA, this.TextB, minBytes);
-
-                        this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
-                        this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
-                    }
-                }, () =>
-                {
-                    this.bComparison.Loading = false;
-                });
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//还原
-
-        private void bComparison_Reset_Click(object sender, EventArgs e)
-        {
-            this.txtComparison_A.Text = this.TextA;
-            this.txtComparison_B.Text = this.TextB;
-        }
-
-        #endregion
-
-        #region//交换
-
-        private void bComparison_Change_Click(object sender, EventArgs e)
-        {
-            string sTextA = this.txtComparison_A.Text.Trim();
-            string sTextB = this.txtComparison_B.Text.Trim();
-
-            this.txtComparison_A.Text = sTextB;
-            this.txtComparison_B.Text = sTextA;
-        }
-
-        #endregion
-
-        #region//清空
-
-        private void bComparison_Clean_Click(object sender, EventArgs e)
-        {
-            this.txtComparison_A.Clear();
-            this.txtComparison_B.Clear();
-            this.txtComparison_Result.Clear();
-        }
-
-
-        #endregion
-
-        #endregion
-
-        #region//异或计算
-
-        private void txtXOR_TextChanged(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(this.txtXOR.Text.Trim()))
-            {
-                this.txtXOR.Status = TType.Error;
-            }
-            else
-            {
-                this.txtXOR.Status = TType.Success;
-            }
-        }
-
-        private void bXOR_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DynamicByteProvider dbpXOR_From = this.hbXOR_From.ByteProvider as DynamicByteProvider;
-                if (dbpXOR_From == null)
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "异或值为空", TType.Error)
-                    {
-                        LocalizationText = "XOR.Empty"
-                    });
-
-                    return;
-                }
-
-                byte[] blXOR_From = dbpXOR_From.Bytes.ToArray();
-                if (blXOR_From.Length == 0)
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "异或值为空", TType.Error)
-                    {
-                        LocalizationText = "XOR.Empty"
-                    });
-
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(this.txtXOR.Text.Trim()))
-                {
-                    this.txtXOR.Status = TType.Error;
-
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "异或值为空", TType.Error)
-                    {
-                        LocalizationText = "XOR.Empty"
-                    });
-
-                    return;
-                }
-
-                if (!Operate.SystemConfig.IsHexString(this.txtXOR.Text.Trim()))
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "异或值不是十六进制", TType.Error)
-                    {
-                        LocalizationText = "XOR.Error"
-                    });
-
-                    return;
-                }
-
-                string[] slXOR_Value = this.txtXOR.Text.Trim().Split(' ');
-                byte[] blXOR_To = new byte[blXOR_From.Length];
-                int j = 0;
-
-                foreach (byte bXOR_From in blXOR_From)
-                {
-                    if (j == slXOR_Value.Length)
-                    {
-                        j = 0;
-                    }
-
-                    if (!Byte.TryParse(slXOR_Value[j], System.Globalization.NumberStyles.HexNumber, null, out byte bXOR_Value))
-                    {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "异或值不是十六进制", TType.Error)
-                        {
-                            LocalizationText = "XOR.Error"
-                        });
-
-                        return;
-                    }
-
-                    blXOR_To[j] = (byte)(bXOR_From ^ bXOR_Value);
-                    j++;
-                }
-
-                DynamicByteProvider dbpXOR_To = new DynamicByteProvider(blXOR_To);
-                this.hbXOR_To.ByteProvider = dbpXOR_To;
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bXOR_ClearUp_Click(object sender, EventArgs e)
-        {
-            this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
-            this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
-            this.txtXOR.Clear();
-        }
-
-        private void hbXOR_From_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbXOR_From, (item) =>
-                {
-                    DynamicByteProvider dbp = hbXOR_From.ByteProvider as DynamicByteProvider;
-
-                    switch (item.ID)
-                    {
-                        case "Cut":
-
-                            this.hbXOR_From.Cut();
-
-                            break;
-
-                        case "Copy":
-
-                            this.hbXOR_From.Copy();
-
-                            break;
-
-                        case "Paste":
-
-                            this.hbXOR_From.Paste();
-
-                            break;
-
-                        case "SelectAll":
-
-                            this.hbXOR_From.SelectAll();
-
-                            break;
-                    }
-                }, Operate.SystemConfig.GetCMS_XOR(this.hbXOR_From)));
-            }
-        }
-
-        private void hbXOR_To_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbXOR_To, (item) =>
-                {
-                    DynamicByteProvider dbp = hbXOR_To.ByteProvider as DynamicByteProvider;
-
-                    switch (item.ID)
-                    {
-                        case "Cut":
-
-                            this.hbXOR_To.Cut();
-
-                            break;
-
-                        case "Copy":
-
-                            this.hbXOR_To.Copy();
-
-                            break;
-
-                        case "Paste":
-
-                            this.hbXOR_To.Paste();
-
-                            break;
-
-                        case "SelectAll":
-
-                            this.hbXOR_To.SelectAll();
-
-                            break;
-                    }
-                }, Operate.SystemConfig.GetCMS_XOR(this.hbXOR_To)));
-            }
-        }
-
-        #endregion
-
-        #region//编码转换
-
-        private void bEncoding_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string sEncodingText = this.txtTranscoding.Text.Trim();
-
-                this.txtBytes.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sEncodingText));
-                this.txtANSIGBK.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.GBK, sEncodingText));
-
-                this.txtUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
-                this.txtANSIUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
-
-                this.txtUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
-                this.txtANSIUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
-
-                this.txtUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
-                this.txtANSIUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
-
-                this.txtUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
-                this.txtANSIUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
-
-                this.txtUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
-                this.txtANSIUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
-
-                string sBase64 = Operate.SystemConfig.Base64_Encoding(sEncodingText);
-                this.txtbase64.Text = sBase64;
-                this.txtANSIbase64.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sBase64));
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bDecoding_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string sDecodingText = this.txtTranscoding.Text;
-
-                this.txtBytes.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIGBK.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.GBK, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
-
-                this.txtUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUTF7.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
-
-                this.txtUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUTF8.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
-
-                this.txtUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUTF16.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
-
-                this.txtUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUTF32.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
-
-                this.txtUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                this.txtANSIUnicode.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
-
-                this.txtbase64.Text = Operate.SystemConfig.Base64_Decoding(sDecodingText);
-                this.txtANSIbase64.Text = Operate.SystemConfig.Base64_Decoding(Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText)));
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void txtTranscoding_TextChanged(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(this.txtTranscoding.Text.Trim()))
-            {
-                this.txtTranscoding.Status = TType.Error;
-            }
-            else
-            {
-                this.txtTranscoding.Status = TType.Success;
-            }
-        }
-
-        #endregion
-
-        #region//数据提取
-
-        private void InitExtraction()
-        {
-            this.ddlExtraction.Items.Clear();
-            this.ddlExtraction.Items.AddRange(new AntdUI.SelectItem[]
-            {
-                    new AntdUI.SelectItem("[ Charles XML 会话文件（.chlsx）] 提取 [ 十六进制数据 ]")
-                    {
-                        LocalizationText = "",
-                    },
-                    new AntdUI.SelectItem("[ FILT过滤器文件（.filt）] 提取 [ WPE64 滤镜文件（.sp）]")
-                    {
-                        LocalizationText = "",
-                    },
-            });
-
-            this.ddlExtraction.SelectedIndex = 0;
-            this.Extraction_Changed();
-            this.udExtraction.UseAdmin();
-        }
-
-        private void ddlExtraction_SelectedIndexChanged(object sender, IntEventArgs e)
-        {
-            this.Extraction_Changed();
-        }
-
-        private void Extraction_Changed()
-        {
-            if (this.ddlExtraction.SelectedIndex == 0)
-            {
-                this.udExtraction.Filter = AntdUI.Localization.Get("System.Charles", "Charles 会话文件") + "（*.chlsx）|*.chlsx";
-            }
-            else if (this.ddlExtraction.SelectedIndex == 1)
-            {
-                this.udExtraction.Filter = AntdUI.Localization.Get("System.FILT", "FILT 过滤器文件") + "（*.filt）|*.filt";
-            }
-        }
-
-        private void udExtraction_DragChanged(object sender, StringsEventArgs e)
-        {
-            try
-            {
-                string FilePath = e.Value[0];
-
-                if (!string.IsNullOrEmpty(FilePath))
-                {
-                    if (File.Exists(FilePath))
-                    {
-                        switch (this.ddlExtraction.SelectedIndex)
-                        {
-                            case 0:
-
-                                #region//Charles XML 会话文件
-
-                                try
-                                {
-                                    XDocument xdoc_Charles = new XDocument();
-                                    xdoc_Charles = XDocument.Load(FilePath);
-
-                                    XElement xeRoot_Charles = xdoc_Charles.Descendants("response").FirstOrDefault();
-
-                                    if (xeRoot_Charles != null)
-                                    {
-                                        if (xeRoot_Charles.Element("body") != null)
-                                        {
-                                            string sBody = xeRoot_Charles.Element("body").Value;
-
-                                            byte[] bBody = Convert.FromBase64String(sBody);
-                                            this.txtExtraction.Text = BitConverter.ToString(bBody).Replace("-", " ");
-                                        }
-                                    }
-                                }
-                                catch
-                                {
-                                    //                            
-                                }
-
-                                #endregion
-
-                                break;
-
-                            case 1:
-
-                                #region//FILT 过滤器文件
-
-                                string[] lines = File.ReadAllLines(FilePath, Encoding.Default);
-
-                                XDocument xdoc_Filt = new XDocument
-                                {
-                                    Declaration = new XDeclaration("1.0", "utf-8", "yes")
-                                };
-
-                                XElement xeRoot_Filt = new XElement("FilterList");
-                                xdoc_Filt.Add(xeRoot_Filt);
-
-                                foreach (string line in lines)
-                                {
-                                    if (line.IndexOf("￥") >= 0)
-                                    {
-                                        string[] slFilter = line.Split('￥');
-
-                                        if (slFilter.Length == 35)
-                                        {
-                                            string s0 = slFilter[0].ToString();//是否指定长度 bool （真，假）
-                                            string s1 = slFilter[1].ToString();//指定长度 int
-                                            string s2 = slFilter[2].ToString();//是否指定套接字 bool （真，假）
-                                            string s3 = slFilter[3].ToString();//套接字 int
-                                            string s4 = slFilter[4].ToString();//是否指定包头 bool （真，假）
-                                            string s5 = slFilter[5].ToString();//包头 string (十六进制不带空格)
-                                            string s6 = slFilter[6].ToString();//未知 bool （真，假）
-                                            string s7 = slFilter[7].ToString();//未知 int 0
-                                            string s8 = slFilter[8].ToString();//未知 int 0
-                                            string s9 = slFilter[9].ToString();//是否替换 bool （真，假）
-                                            string s10 = slFilter[10].ToString();//是否拦截 bool （真，假）
-                                            string s11 = slFilter[11].ToString();//是否不可视 bool （真，假）
-                                            string s12 = slFilter[12].ToString();//步长 int
-                                            string s13 = slFilter[13].ToString();//过滤器名称 string
-                                            string s14 = slFilter[14].ToString();//发送 bool （1，0）
-                                            string s15 = slFilter[15].ToString();//接收 bool （1，0）
-                                            string s16 = slFilter[16].ToString();//发送到 bool （1，0）
-                                            string s17 = slFilter[17].ToString();//接收自 bool （1，0）
-                                            string s18 = slFilter[18].ToString();//WSA发送 bool （1，0）
-                                            string s19 = slFilter[19].ToString();//WSA接收 bool （1，0）
-                                            string s20 = slFilter[20].ToString();//WSA发送到 bool （1，0）
-                                            string s21 = slFilter[21].ToString();//未知 -1
-                                            string s22 = slFilter[22].ToString();//普通模式 bool （真，假）
-                                            string s23 = slFilter[23].ToString();//高级模式 bool （真，假）
-                                            string s24 = slFilter[24].ToString();//数据包开头 bool （真，假）
-                                            string s25 = slFilter[25].ToString();//自发式连锁位 bool （真，假）
-                                            string s26 = slFilter[26].ToString();//普通-搜索 string （列Index（支持负数）$十六进制数值不带空格$数据个数$）
-                                            string s27 = slFilter[27].ToString();//普通-修改 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
-                                            string s28 = slFilter[28].ToString();//高级-搜索 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
-                                            string s29 = slFilter[29].ToString();//高级-修改 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
-                                            string s30 = slFilter[30].ToString();//递进 bool （真，假）
-                                            string s31 = slFilter[31].ToString();//普通-修改-递进 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
-                                            string s32 = slFilter[32].ToString();//高级-修改-递进 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
-                                            string s33 = slFilter[33].ToString();//未知 1
-
-                                            string sIsEnable = bool.FalseString;
-                                            string sFID = Guid.NewGuid().ToString();
-                                            string sFName = s13;
-                                            string sIsExecute = bool.FalseString;
-                                            string sRID = Guid.Empty.ToString();
-                                            string sFAppointHeader = Operate.SystemConfig.GetBoolFromChineseString(s4).ToString();
-                                            string sFHeaderContent = s5;
-                                            string sFAppointSocket = Operate.SystemConfig.GetBoolFromChineseString(s2).ToString();
-                                            string sFSocketContent = s3;
-                                            string sFAppointLength = Operate.SystemConfig.GetBoolFromChineseString(s0).ToString();
-                                            string sFLengthContent = s1;
-
-                                            Operate.FilterConfig.Filter.FilterMode FMode = new Operate.FilterConfig.Filter.FilterMode();
-                                            if (Operate.SystemConfig.GetBoolFromChineseString(s22) == true)
-                                            {
-                                                FMode = Operate.FilterConfig.Filter.FilterMode.Normal;
-                                            }
-                                            else if (Operate.SystemConfig.GetBoolFromChineseString(s23) == true)
-                                            {
-                                                FMode = Operate.FilterConfig.Filter.FilterMode.Advanced;
-                                            }
-                                            string sFMode = ((int)FMode).ToString();
-
-                                            Operate.FilterConfig.Filter.FilterAction FAction = new Operate.FilterConfig.Filter.FilterAction();
-                                            if (Operate.SystemConfig.GetBoolFromChineseString(s9) == true)
-                                            {
-                                                FAction = Operate.FilterConfig.Filter.FilterAction.Replace;
-                                            }
-                                            else if (Operate.SystemConfig.GetBoolFromChineseString(s10) == true)
-                                            {
-                                                FAction = Operate.FilterConfig.Filter.FilterAction.Intercept;
-                                            }
-                                            else if (Operate.SystemConfig.GetBoolFromChineseString(s11) == true)
-                                            {
-                                                FAction = Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay;
-                                            }
-                                            else
-                                            {
-                                                FAction = Operate.FilterConfig.Filter.FilterAction.NoModify_Display;
-                                            }
-                                            string sFAction = ((int)FAction).ToString();
-
-                                            bool bSend = Convert.ToBoolean(int.Parse(s14));
-                                            bool bRecv = Convert.ToBoolean(int.Parse(s15));
-                                            bool bSendTo = Convert.ToBoolean(int.Parse(s16));
-                                            bool bRecvFrom = Convert.ToBoolean(int.Parse(s17));
-                                            bool bWSASend = Convert.ToBoolean(int.Parse(s18));
-                                            bool bWSARecv = Convert.ToBoolean(int.Parse(s19));
-                                            bool bWSASendTo = Convert.ToBoolean(int.Parse(s20));
-                                            bool bWSARecvFrom = false;
-
-                                            Operate.FilterConfig.Filter.FilterFunction filterFunction =
-                                                new Operate.FilterConfig.Filter.FilterFunction(
-                                                    bSend,
-                                                    bSendTo,
-                                                    bRecv,
-                                                    bRecvFrom,
-                                                    bWSASend,
-                                                    bWSASendTo,
-                                                    bWSARecv,
-                                                    bWSARecvFrom,
-                                                    false,
-                                                    false,
-                                                    false,
-                                                    false);
-                                            string sFFunction = Operate.FilterConfig.Filter.GetFilterFunctionString(filterFunction);
-
-                                            Operate.FilterConfig.Filter.FilterStartFrom FStartFrom = new Operate.FilterConfig.Filter.FilterStartFrom();
-                                            if (Operate.SystemConfig.GetBoolFromChineseString(s24) == true)
-                                            {
-                                                FStartFrom = Operate.FilterConfig.Filter.FilterStartFrom.Head;
-                                            }
-                                            else if (Operate.SystemConfig.GetBoolFromChineseString(s25) == true)
-                                            {
-                                                FStartFrom = Operate.FilterConfig.Filter.FilterStartFrom.Position;
-                                            }
-                                            string sFStartFrom = ((int)FStartFrom).ToString();
-
-                                            string sFProgressionStep = s12;
-                                            string sFProgressionPosition = string.Empty;
-
-                                            string sFSearch = string.Empty;
-                                            string sFModify = string.Empty;
-                                            if (FMode == Operate.FilterConfig.Filter.FilterMode.Normal)
-                                            {
-                                                sFProgressionPosition = Operate.SystemConfig.ConvertFILTString(s31, false);
-                                                sFSearch = Operate.SystemConfig.ConvertFILTString(s26, false);
-                                                sFModify = Operate.SystemConfig.ConvertFILTString(s27, false);
-                                            }
-                                            else if (FMode == Operate.FilterConfig.Filter.FilterMode.Advanced)
-                                            {
-                                                sFProgressionPosition = Operate.SystemConfig.ConvertFILTString(s32, false);
-                                                sFSearch = Operate.SystemConfig.ConvertFILTString(s28, false);
-
-                                                if (FStartFrom == Operate.FilterConfig.Filter.FilterStartFrom.Position)
-                                                {
-                                                    sFModify = Operate.SystemConfig.ConvertFILTString(s29, true);
-                                                }
-                                                else
-                                                {
-                                                    sFModify = Operate.SystemConfig.ConvertFILTString(s29, false);
-                                                }
-                                            }
-
-                                            XElement xeFilter =
-                                                new XElement("Filter",
-                                                new XElement("IsEnable", sIsEnable),
-                                                new XElement("ID", sFID),
-                                                new XElement("Name", sFName),
-                                                new XElement("AppointHeader", sFAppointHeader),
-                                                new XElement("HeaderContent", sFHeaderContent),
-                                                new XElement("AppointSocket", sFAppointSocket),
-                                                new XElement("SocketContent", sFSocketContent),
-                                                new XElement("AppointLength", sFAppointLength),
-                                                new XElement("LengthContent", sFLengthContent),
-                                                new XElement("Mode", sFMode),
-                                                new XElement("Action", sFAction),
-                                                new XElement("IsExecute", sIsExecute),
-                                                new XElement("RobotID", sRID),
-                                                new XElement("Function", sFFunction),
-                                                new XElement("StartFrom", sFStartFrom),
-                                                new XElement("ProgressionStep", sFProgressionStep),
-                                                new XElement("ProgressionPosition", sFProgressionPosition),
-                                                new XElement("Search", sFSearch),
-                                                new XElement("Modify", sFModify)
-                                                );
-
-                                            xeRoot_Filt.Add(xeFilter);
-                                        }
-
-                                    }
-                                }
-
-                                this.txtExtraction.Text = xdoc_Filt.Declaration.ToString() + "\r\n" + xdoc_Filt.ToString();
-
-                                #endregion
-
-                                break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bExtraction_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string sFileContent = this.txtExtraction.Text.Trim();
-                if (string.IsNullOrEmpty(sFileContent))
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "提取数据为空", TType.Error)
-                    {
-                        LocalizationText = "System.Extraction.Empty"
-                    });
-
-                    return;
-                }
-
-                SaveFileDialog sfdExtraction = new SaveFileDialog();
-
-                switch (this.ddlExtraction.SelectedIndex)
-                {
-                    case 0:
-
-                        sfdExtraction.Filter = "TXT（*.txt）|*.txt";
-
-                        break;
-
-                    case 1:
-
-                        sfdExtraction.Filter = AntdUI.Localization.Get("FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
-
-                        break;
-                }
-
-                if (sfdExtraction.ShowDialog() == DialogResult.OK)
-                {
-                    string FilePath = sfdExtraction.FileName;
-                    if (!string.IsNullOrEmpty(FilePath))
-                    {
-                        File.WriteAllText(FilePath, sFileContent);
-
-                        string Title = AntdUI.Localization.Get("System.Extraction.Success", "数据提取成功");
-                        AntdUI.Notification.success(this, Title, FilePath, AntdUI.TAlignFrom.TR);
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//统计数据
-
-        private void bStatistical_Filter_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!this.bgwStatistical.IsBusy)
-                { 
-                    this.bStatistical_Filter.Loading = true;
-                    this.bgwStatistical.RunWorkerAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwStatistical_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                long ProxyTotal_CNT =
-                    Operate.ProxyConfig.Proxy.TCP_Req_CNT +
-                    Operate.ProxyConfig.Proxy.TCP_Resp_CNT +
-                    Operate.ProxyConfig.Proxy.UDP_Req_CNT +
-                    Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
-
-                long FilterExec = Operate.FilterConfig.Filter.FilterExecute_CNT;
-                long FilterReplace = Operate.FilterConfig.Filter.FilterReplace_CNT;
-                long FilterChange = Operate.FilterConfig.Filter.FilterChange_CNT;
-                long FilterIntercept = Operate.FilterConfig.Filter.FilterIntercept_CNT;
-                long FilterDisplay = Operate.FilterConfig.Filter.FilterDisplay_CNT;
-                long FilterNoDisplay = Operate.FilterConfig.Filter.FilterNoDisplay_CNT;
-
-                decimal dExecute = 0;
-                if (ProxyTotal_CNT > 0)
-                {
-                    dExecute = (decimal)FilterExec / ProxyTotal_CNT;
-                    dExecute = Math.Round(dExecute, 2);
-                }
-
-                this.progressExecute.Value = (float)dExecute;
-                this.progressExecute.Text = (dExecute * 100).ToString() + "%";
-
-                decimal dReplace = 0, dChange = 0, dIntercept = 0, dDisplay = 0, dNoDisplay = 0;
-                if (FilterExec > 0)
-                {
-                    dReplace = (decimal)FilterReplace / FilterExec;
-                    dReplace = Math.Round(dReplace, 2);
-                    dChange = (decimal)FilterChange / FilterExec;
-                    dChange = Math.Round(dChange, 2);
-                    dIntercept = (decimal)FilterIntercept / FilterExec;
-                    dIntercept = Math.Round(dIntercept, 2);
-                    dDisplay = (decimal)FilterDisplay / FilterExec;
-                    dDisplay = Math.Round(dDisplay, 2);
-                    dNoDisplay = (decimal)FilterNoDisplay / FilterExec;
-                    dNoDisplay = Math.Round(dNoDisplay, 2);
-                }
-
-                this.progressReplace.Value = (float)dReplace;
-                this.progressReplace.Text = (dReplace * 100).ToString() + "%";
-                this.progressChange.Value = (float)dChange;
-                this.progressChange.Text = (dChange * 100).ToString() + "%";
-                this.progressIntercept.Value = (float)dIntercept;
-                this.progressIntercept.Text = (dIntercept * 100).ToString() + "%";
-                this.progressDisplay.Value = (float)dDisplay;
-                this.progressDisplay.Text = (dDisplay * 100).ToString() + "%";
-                this.progressNoDisplay.Value = (float)dNoDisplay;
-                this.progressNoDisplay.Text = (dNoDisplay * 100).ToString() + "%";
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwStatistical_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                this.bStatistical_Filter.Loading = false;
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion                                        
     }
 }
