@@ -215,6 +215,12 @@
     <Compile Include="Controls\AccountList.Designer.cs">
       <DependentUpon>AccountList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ClientList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ClientList.Designer.cs">
+      <DependentUpon>ClientList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ComparisonText.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -463,6 +469,9 @@
     <Compile Include="WebAPI\SystemInfo_Controller.cs" />
     <EmbeddedResource Include="Controls\AccountList.resx">
       <DependentUpon>AccountList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ClientList.resx">
+      <DependentUpon>ClientList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ComparisonText.resx">
       <DependentUpon>ComparisonText.cs</DependentUpon>

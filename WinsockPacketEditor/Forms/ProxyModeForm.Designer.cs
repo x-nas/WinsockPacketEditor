@@ -29,30 +29,30 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
-            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
-            AntdUI.MenuItem menuItem13 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem14 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem15 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem16 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem17 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem18 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem19 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem20 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem21 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem22 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem23 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem24 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem25 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem26 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem27 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem28 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem29 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem30 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem31 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem32 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem33 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem34 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem35 = new AntdUI.MenuItem();
+            AntdUI.Tabs.StyleLine styleLine2 = new AntdUI.Tabs.StyleLine();
+            AntdUI.MenuItem menuItem36 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem37 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem38 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem39 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem40 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem41 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem42 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem43 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem44 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem45 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem46 = new AntdUI.MenuItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxyModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -113,19 +113,6 @@
             this.lSplit1 = new AntdUI.Label();
             this.lProxySpeed = new AntdUI.Label();
             this.tpClientList = new AntdUI.TabPage();
-            this.splitterClientList = new AntdUI.Splitter();
-            this.treeClientList = new AntdUI.Tree();
-            this.tlpAuthInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.tAuthList = new AntdUI.Table();
-            this.tlpAuthListInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.lDevicesCount_Value = new AntdUI.Label();
-            this.lLinksCount_Value = new AntdUI.Label();
-            this.lAuthCount_Value = new AntdUI.Label();
-            this.lSplit13 = new AntdUI.Label();
-            this.lSplit3 = new AntdUI.Label();
-            this.lDevicesCount = new AntdUI.Label();
-            this.lLinksCount = new AntdUI.Label();
-            this.lAuthCount = new AntdUI.Label();
             this.tpAccountList = new AntdUI.TabPage();
             this.tpFilterList = new AntdUI.TabPage();
             this.tpSendList = new AntdUI.TabPage();
@@ -139,7 +126,6 @@
             this.timerProxyList = new System.Windows.Forms.Timer(this.components);
             this.bgwProxyList = new System.ComponentModel.BackgroundWorker();
             this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
-            this.bgwClientList = new System.ComponentModel.BackgroundWorker();
             this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
@@ -155,13 +141,6 @@
             this.tlpPacketListInfo.SuspendLayout();
             this.pPacketData.SuspendLayout();
             this.tlpProxyInfo.SuspendLayout();
-            this.tpClientList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitterClientList)).BeginInit();
-            this.splitterClientList.Panel1.SuspendLayout();
-            this.splitterClientList.Panel2.SuspendLayout();
-            this.splitterClientList.SuspendLayout();
-            this.tlpAuthInfo.SuspendLayout();
-            this.tlpAuthListInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -256,62 +235,62 @@
             // mProxyMode
             // 
             this.mProxyMode.Dock = System.Windows.Forms.DockStyle.Left;
-            menuItem1.Badge = "";
-            menuItem1.IconSvg = "ProjectFilled";
-            menuItem1.ID = "miProxyList";
-            menuItem1.LocalizationText = "ProxyModeForm.{id}";
-            menuItem1.Select = true;
-            menuItem1.Text = "代理数据";
-            menuItem2.IconSvg = "DesktopOutlined";
-            menuItem2.ID = "miClientList";
-            menuItem2.LocalizationText = "ProxyModeForm.{id}";
-            menuItem2.Text = "客户端列表";
-            menuItem3.IconSvg = "TeamOutlined";
-            menuItem3.ID = "miAccountList";
-            menuItem3.LocalizationText = "ProxyModeForm.{id}";
-            menuItem3.Text = "账号列表";
-            menuItem4.IconSvg = "FilterOutlined";
-            menuItem4.ID = "miFilterList";
-            menuItem4.Text = "滤镜列表";
-            menuItem5.IconSvg = "SendOutlined";
-            menuItem5.ID = "miSendList";
-            menuItem5.Text = "发送列表";
-            menuItem6.IconSvg = "RobotOutlined";
-            menuItem6.ID = "miRobotList";
-            menuItem6.Text = "机器人列表";
-            menuItem7.IconSvg = "PieChartOutlined";
-            menuItem7.ID = "miStatistical";
-            menuItem7.LocalizationText = "ProxyModeForm.{id}";
-            menuItem7.Text = "统计数据";
-            menuItem8.IconSvg = "DiffOutlined";
-            menuItem8.ID = "miComparison";
-            menuItem8.Text = "文本对比";
-            menuItem9.IconSvg = "BuildOutlined";
-            menuItem9.ID = "miXOR";
-            menuItem9.Text = "异或计算";
-            menuItem10.IconSvg = "InteractionOutlined";
-            menuItem10.ID = "miTranscoding";
-            menuItem10.Text = "编码转换";
-            menuItem11.IconSvg = "DeliveredProcedureOutlined";
-            menuItem11.ID = "miExtraction";
-            menuItem11.Text = "数据提取";
-            menuItem12.Badge = "";
-            menuItem12.IconSvg = "ExceptionOutlined";
-            menuItem12.ID = "miSystemLog";
-            menuItem12.LocalizationText = "ProxyModeForm.{id}";
-            menuItem12.Text = "系统日志";
-            this.mProxyMode.Items.Add(menuItem1);
-            this.mProxyMode.Items.Add(menuItem2);
-            this.mProxyMode.Items.Add(menuItem3);
-            this.mProxyMode.Items.Add(menuItem4);
-            this.mProxyMode.Items.Add(menuItem5);
-            this.mProxyMode.Items.Add(menuItem6);
-            this.mProxyMode.Items.Add(menuItem7);
-            this.mProxyMode.Items.Add(menuItem8);
-            this.mProxyMode.Items.Add(menuItem9);
-            this.mProxyMode.Items.Add(menuItem10);
-            this.mProxyMode.Items.Add(menuItem11);
-            this.mProxyMode.Items.Add(menuItem12);
+            menuItem24.Badge = "";
+            menuItem24.IconSvg = "ProjectFilled";
+            menuItem24.ID = "miProxyList";
+            menuItem24.LocalizationText = "ProxyModeForm.{id}";
+            menuItem24.Select = true;
+            menuItem24.Text = "代理数据";
+            menuItem25.IconSvg = "DesktopOutlined";
+            menuItem25.ID = "miClientList";
+            menuItem25.LocalizationText = "ProxyModeForm.{id}";
+            menuItem25.Text = "客户端列表";
+            menuItem26.IconSvg = "TeamOutlined";
+            menuItem26.ID = "miAccountList";
+            menuItem26.LocalizationText = "ProxyModeForm.{id}";
+            menuItem26.Text = "账号列表";
+            menuItem27.IconSvg = "FilterOutlined";
+            menuItem27.ID = "miFilterList";
+            menuItem27.Text = "滤镜列表";
+            menuItem28.IconSvg = "SendOutlined";
+            menuItem28.ID = "miSendList";
+            menuItem28.Text = "发送列表";
+            menuItem29.IconSvg = "RobotOutlined";
+            menuItem29.ID = "miRobotList";
+            menuItem29.Text = "机器人列表";
+            menuItem30.IconSvg = "PieChartOutlined";
+            menuItem30.ID = "miStatistical";
+            menuItem30.LocalizationText = "ProxyModeForm.{id}";
+            menuItem30.Text = "统计数据";
+            menuItem31.IconSvg = "DiffOutlined";
+            menuItem31.ID = "miComparison";
+            menuItem31.Text = "文本对比";
+            menuItem32.IconSvg = "BuildOutlined";
+            menuItem32.ID = "miXOR";
+            menuItem32.Text = "异或计算";
+            menuItem33.IconSvg = "InteractionOutlined";
+            menuItem33.ID = "miTranscoding";
+            menuItem33.Text = "编码转换";
+            menuItem34.IconSvg = "DeliveredProcedureOutlined";
+            menuItem34.ID = "miExtraction";
+            menuItem34.Text = "数据提取";
+            menuItem35.Badge = "";
+            menuItem35.IconSvg = "ExceptionOutlined";
+            menuItem35.ID = "miSystemLog";
+            menuItem35.LocalizationText = "ProxyModeForm.{id}";
+            menuItem35.Text = "系统日志";
+            this.mProxyMode.Items.Add(menuItem24);
+            this.mProxyMode.Items.Add(menuItem25);
+            this.mProxyMode.Items.Add(menuItem26);
+            this.mProxyMode.Items.Add(menuItem27);
+            this.mProxyMode.Items.Add(menuItem28);
+            this.mProxyMode.Items.Add(menuItem29);
+            this.mProxyMode.Items.Add(menuItem30);
+            this.mProxyMode.Items.Add(menuItem31);
+            this.mProxyMode.Items.Add(menuItem32);
+            this.mProxyMode.Items.Add(menuItem33);
+            this.mProxyMode.Items.Add(menuItem34);
+            this.mProxyMode.Items.Add(menuItem35);
             this.mProxyMode.Location = new System.Drawing.Point(3, 51);
             this.mProxyMode.Name = "mProxyMode";
             this.mProxyMode.Size = new System.Drawing.Size(164, 706);
@@ -362,9 +341,9 @@
             this.tabProxyMode.Pages.Add(this.tpTranscoding);
             this.tabProxyMode.Pages.Add(this.tpExtraction);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.SelectedIndex = 2;
+            this.tabProxyMode.SelectedIndex = 1;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
-            this.tabProxyMode.Style = styleLine1;
+            this.tabProxyMode.Style = styleLine2;
             this.tabProxyMode.TabIndex = 11;
             this.tabProxyMode.Text = "tabs1";
             // 
@@ -450,47 +429,47 @@
             this.mProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mProxyList.Gap = 0;
             this.mProxyList.IconRatio = 1F;
-            menuItem13.IconSvg = "SearchOutlined";
-            menuItem13.ID = "miProxyListSearch";
-            menuItem14.IconSvg = "PlusOutlined";
-            menuItem15.IconSvg = "ShareAltOutlined";
-            menuItem15.ID = "miProxySettings";
-            menuItem15.Text = "代理设置";
-            menuItem16.IconSvg = "FilterOutlined";
-            menuItem16.ID = "miFilterSettings";
-            menuItem16.Text = "过滤设置";
-            menuItem17.IconSvg = "AimOutlined";
-            menuItem17.ID = "miHookSettings";
-            menuItem17.Text = "拦截设置";
-            menuItem18.IconSvg = "OrderedListOutlined";
-            menuItem18.ID = "miListSettings";
-            menuItem18.Text = "列表设置";
-            menuItem19.IconSvg = "BlockOutlined";
-            menuItem19.ID = "miMapSettings";
-            menuItem19.Text = "映射设置";
-            menuItem20.IconSvg = "CloudUploadOutlined";
-            menuItem20.ID = "miExternalProxySettings";
-            menuItem20.Text = "外部代理设置";
-            menuItem21.IconSvg = "GoldOutlined";
-            menuItem21.ID = "miHotKeySettings";
-            menuItem21.Text = "快捷键设置";
-            menuItem22.IconSvg = "DeliveredProcedureOutlined";
-            menuItem22.ID = "miBackUpSettings";
-            menuItem22.Text = "备份设置";
-            menuItem23.IconSvg = "SettingOutlined";
-            menuItem23.ID = "miSystemSettings";
-            menuItem23.Text = "系统设置";
-            menuItem14.Sub.Add(menuItem15);
-            menuItem14.Sub.Add(menuItem16);
-            menuItem14.Sub.Add(menuItem17);
-            menuItem14.Sub.Add(menuItem18);
-            menuItem14.Sub.Add(menuItem19);
-            menuItem14.Sub.Add(menuItem20);
-            menuItem14.Sub.Add(menuItem21);
-            menuItem14.Sub.Add(menuItem22);
-            menuItem14.Sub.Add(menuItem23);
-            this.mProxyList.Items.Add(menuItem13);
-            this.mProxyList.Items.Add(menuItem14);
+            menuItem36.IconSvg = "SearchOutlined";
+            menuItem36.ID = "miProxyListSearch";
+            menuItem37.IconSvg = "PlusOutlined";
+            menuItem38.IconSvg = "ShareAltOutlined";
+            menuItem38.ID = "miProxySettings";
+            menuItem38.Text = "代理设置";
+            menuItem39.IconSvg = "FilterOutlined";
+            menuItem39.ID = "miFilterSettings";
+            menuItem39.Text = "过滤设置";
+            menuItem40.IconSvg = "AimOutlined";
+            menuItem40.ID = "miHookSettings";
+            menuItem40.Text = "拦截设置";
+            menuItem41.IconSvg = "OrderedListOutlined";
+            menuItem41.ID = "miListSettings";
+            menuItem41.Text = "列表设置";
+            menuItem42.IconSvg = "BlockOutlined";
+            menuItem42.ID = "miMapSettings";
+            menuItem42.Text = "映射设置";
+            menuItem43.IconSvg = "CloudUploadOutlined";
+            menuItem43.ID = "miExternalProxySettings";
+            menuItem43.Text = "外部代理设置";
+            menuItem44.IconSvg = "GoldOutlined";
+            menuItem44.ID = "miHotKeySettings";
+            menuItem44.Text = "快捷键设置";
+            menuItem45.IconSvg = "DeliveredProcedureOutlined";
+            menuItem45.ID = "miBackUpSettings";
+            menuItem45.Text = "备份设置";
+            menuItem46.IconSvg = "SettingOutlined";
+            menuItem46.ID = "miSystemSettings";
+            menuItem46.Text = "系统设置";
+            menuItem37.Sub.Add(menuItem38);
+            menuItem37.Sub.Add(menuItem39);
+            menuItem37.Sub.Add(menuItem40);
+            menuItem37.Sub.Add(menuItem41);
+            menuItem37.Sub.Add(menuItem42);
+            menuItem37.Sub.Add(menuItem43);
+            menuItem37.Sub.Add(menuItem44);
+            menuItem37.Sub.Add(menuItem45);
+            menuItem37.Sub.Add(menuItem46);
+            this.mProxyList.Items.Add(menuItem36);
+            this.mProxyList.Items.Add(menuItem37);
             this.mProxyList.Location = new System.Drawing.Point(1011, 3);
             this.mProxyList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mProxyList.Name = "mProxyList";
@@ -1116,200 +1095,15 @@
             // 
             // tpClientList
             // 
-            this.tpClientList.Controls.Add(this.splitterClientList);
-            this.tpClientList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpClientList.Location = new System.Drawing.Point(3, 33);
             this.tpClientList.Name = "tpClientList";
             this.tpClientList.Size = new System.Drawing.Size(1124, 724);
             this.tpClientList.TabIndex = 8;
             this.tpClientList.Text = "客户端列表";
             // 
-            // splitterClientList
-            // 
-            this.splitterClientList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
-            this.splitterClientList.Cursor = System.Windows.Forms.Cursors.Default;
-            this.splitterClientList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterClientList.Location = new System.Drawing.Point(0, 0);
-            this.splitterClientList.Name = "splitterClientList";
-            // 
-            // splitterClientList.Panel1
-            // 
-            this.splitterClientList.Panel1.Controls.Add(this.treeClientList);
-            this.splitterClientList.Panel1MinSize = 0;
-            // 
-            // splitterClientList.Panel2
-            // 
-            this.splitterClientList.Panel2.Controls.Add(this.tlpAuthInfo);
-            this.splitterClientList.Panel2MinSize = 0;
-            this.splitterClientList.Size = new System.Drawing.Size(1124, 724);
-            this.splitterClientList.SplitterDistance = 280;
-            this.splitterClientList.SplitterSize = 80;
-            this.splitterClientList.SplitterWidth = 10;
-            this.splitterClientList.TabIndex = 0;
-            // 
-            // treeClientList
-            // 
-            this.treeClientList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeClientList.Location = new System.Drawing.Point(0, 0);
-            this.treeClientList.Name = "treeClientList";
-            this.treeClientList.Size = new System.Drawing.Size(280, 724);
-            this.treeClientList.TabIndex = 0;
-            // 
-            // tlpAuthInfo
-            // 
-            this.tlpAuthInfo.ColumnCount = 1;
-            this.tlpAuthInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAuthInfo.Controls.Add(this.tAuthList, 0, 1);
-            this.tlpAuthInfo.Controls.Add(this.tlpAuthListInfo, 0, 0);
-            this.tlpAuthInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpAuthInfo.Location = new System.Drawing.Point(0, 0);
-            this.tlpAuthInfo.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpAuthInfo.Name = "tlpAuthInfo";
-            this.tlpAuthInfo.RowCount = 2;
-            this.tlpAuthInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpAuthInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAuthInfo.Size = new System.Drawing.Size(834, 724);
-            this.tlpAuthInfo.TabIndex = 0;
-            // 
-            // tAuthList
-            // 
-            this.tAuthList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tAuthList.CellImpactHeight = false;
-            this.tAuthList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tAuthList.Gap = 12;
-            this.tAuthList.GapCell = 6;
-            this.tAuthList.Location = new System.Drawing.Point(3, 33);
-            this.tAuthList.Name = "tAuthList";
-            this.tAuthList.Size = new System.Drawing.Size(828, 688);
-            this.tAuthList.TabIndex = 7;
-            // 
-            // tlpAuthListInfo
-            // 
-            this.tlpAuthListInfo.ColumnCount = 10;
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAuthListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAuthListInfo.Controls.Add(this.lDevicesCount_Value, 8, 1);
-            this.tlpAuthListInfo.Controls.Add(this.lLinksCount_Value, 5, 1);
-            this.tlpAuthListInfo.Controls.Add(this.lAuthCount_Value, 2, 1);
-            this.tlpAuthListInfo.Controls.Add(this.lSplit13, 6, 1);
-            this.tlpAuthListInfo.Controls.Add(this.lSplit3, 3, 1);
-            this.tlpAuthListInfo.Controls.Add(this.lDevicesCount, 7, 1);
-            this.tlpAuthListInfo.Controls.Add(this.lLinksCount, 4, 1);
-            this.tlpAuthListInfo.Controls.Add(this.lAuthCount, 1, 1);
-            this.tlpAuthListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpAuthListInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tlpAuthListInfo.Location = new System.Drawing.Point(0, 0);
-            this.tlpAuthListInfo.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpAuthListInfo.Name = "tlpAuthListInfo";
-            this.tlpAuthListInfo.RowCount = 3;
-            this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpAuthListInfo.Size = new System.Drawing.Size(834, 30);
-            this.tlpAuthListInfo.TabIndex = 6;
-            // 
-            // lDevicesCount_Value
-            // 
-            this.lDevicesCount_Value.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lDevicesCount_Value.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lDevicesCount_Value.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lDevicesCount_Value.Location = new System.Drawing.Point(262, 3);
-            this.lDevicesCount_Value.Name = "lDevicesCount_Value";
-            this.lDevicesCount_Value.Size = new System.Drawing.Size(9, 24);
-            this.lDevicesCount_Value.TabIndex = 14;
-            this.lDevicesCount_Value.Text = "0";
-            // 
-            // lLinksCount_Value
-            // 
-            this.lLinksCount_Value.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lLinksCount_Value.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lLinksCount_Value.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lLinksCount_Value.Location = new System.Drawing.Point(173, 3);
-            this.lLinksCount_Value.Name = "lLinksCount_Value";
-            this.lLinksCount_Value.Size = new System.Drawing.Size(9, 24);
-            this.lLinksCount_Value.TabIndex = 13;
-            this.lLinksCount_Value.Text = "0";
-            // 
-            // lAuthCount_Value
-            // 
-            this.lAuthCount_Value.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lAuthCount_Value.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lAuthCount_Value.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lAuthCount_Value.Location = new System.Drawing.Point(84, 3);
-            this.lAuthCount_Value.Name = "lAuthCount_Value";
-            this.lAuthCount_Value.Size = new System.Drawing.Size(9, 24);
-            this.lAuthCount_Value.TabIndex = 12;
-            this.lAuthCount_Value.Text = "0";
-            // 
-            // lSplit13
-            // 
-            this.lSplit13.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lSplit13.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit13.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSplit13.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit13.Location = new System.Drawing.Point(188, 3);
-            this.lSplit13.Name = "lSplit13";
-            this.lSplit13.Size = new System.Drawing.Size(5, 24);
-            this.lSplit13.TabIndex = 9;
-            this.lSplit13.Text = "|";
-            this.lSplit13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lSplit3
-            // 
-            this.lSplit3.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lSplit3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit3.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSplit3.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit3.Location = new System.Drawing.Point(99, 3);
-            this.lSplit3.Name = "lSplit3";
-            this.lSplit3.Size = new System.Drawing.Size(5, 24);
-            this.lSplit3.TabIndex = 8;
-            this.lSplit3.Text = "|";
-            this.lSplit3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lDevicesCount
-            // 
-            this.lDevicesCount.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lDevicesCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lDevicesCount.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lDevicesCount.Location = new System.Drawing.Point(199, 3);
-            this.lDevicesCount.Name = "lDevicesCount";
-            this.lDevicesCount.Size = new System.Drawing.Size(57, 24);
-            this.lDevicesCount.TabIndex = 7;
-            this.lDevicesCount.Text = "设备总数:";
-            // 
-            // lLinksCount
-            // 
-            this.lLinksCount.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lLinksCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lLinksCount.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lLinksCount.Location = new System.Drawing.Point(110, 3);
-            this.lLinksCount.Name = "lLinksCount";
-            this.lLinksCount.Size = new System.Drawing.Size(57, 24);
-            this.lLinksCount.TabIndex = 6;
-            this.lLinksCount.Text = "链接总数:";
-            // 
-            // lAuthCount
-            // 
-            this.lAuthCount.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lAuthCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lAuthCount.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lAuthCount.Location = new System.Drawing.Point(8, 3);
-            this.lAuthCount.Name = "lAuthCount";
-            this.lAuthCount.Size = new System.Drawing.Size(70, 24);
-            this.lAuthCount.TabIndex = 5;
-            this.lAuthCount.Text = "客户端总数:";
-            // 
             // tpAccountList
             // 
-            this.tpAccountList.Location = new System.Drawing.Point(3, 33);
+            this.tpAccountList.Location = new System.Drawing.Point(-1124, -724);
             this.tpAccountList.Name = "tpAccountList";
             this.tpAccountList.Size = new System.Drawing.Size(1124, 724);
             this.tpAccountList.TabIndex = 7;
@@ -1404,11 +1198,6 @@
             this.timerProxyListInfo.Interval = 1000;
             this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
             // 
-            // bgwClientList
-            // 
-            this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
-            this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
-            // 
             // bgwSearchProxyList
             // 
             this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
@@ -1449,14 +1238,6 @@
             this.pPacketData.ResumeLayout(false);
             this.tlpProxyInfo.ResumeLayout(false);
             this.tlpProxyInfo.PerformLayout();
-            this.tpClientList.ResumeLayout(false);
-            this.splitterClientList.Panel1.ResumeLayout(false);
-            this.splitterClientList.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitterClientList)).EndInit();
-            this.splitterClientList.ResumeLayout(false);
-            this.tlpAuthInfo.ResumeLayout(false);
-            this.tlpAuthListInfo.ResumeLayout(false);
-            this.tlpAuthListInfo.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1488,20 +1269,6 @@
         private AntdUI.Splitter splitterProxyList;
         private AntdUI.Panel pPacketData;
         private Be.Windows.Forms.HexBox hbProxyData;
-        private AntdUI.Splitter splitterClientList;
-        private AntdUI.Tree treeClientList;
-        private System.Windows.Forms.TableLayoutPanel tlpAuthInfo;
-        private System.Windows.Forms.TableLayoutPanel tlpAuthListInfo;
-        private AntdUI.Label lDevicesCount_Value;
-        private AntdUI.Label lLinksCount_Value;
-        private AntdUI.Label lAuthCount_Value;
-        private AntdUI.Label lSplit13;
-        private AntdUI.Label lSplit3;
-        private AntdUI.Label lDevicesCount;
-        private AntdUI.Label lLinksCount;
-        private AntdUI.Label lAuthCount;
-        private AntdUI.Table tAuthList;
-        private System.ComponentModel.BackgroundWorker bgwClientList;
         private System.Windows.Forms.TableLayoutPanel tlpProxyList2;
         private System.Windows.Forms.TableLayoutPanel tlpPacketListInfo;
         private AntdUI.Label lProxyTCP_CNT;
