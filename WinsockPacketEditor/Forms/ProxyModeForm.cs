@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -687,7 +686,7 @@ namespace WinsockPacketEditor
         private void bgwProxyList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             try
-            {                
+            {
                 this.tProxyList.Refresh();
                 this.cClientList.RefreshAuthList();
                 this.cAccountList.RefreshAccountList();
