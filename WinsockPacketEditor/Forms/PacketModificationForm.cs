@@ -1,4 +1,5 @@
-﻿using Be.Windows.Forms;
+﻿using AntdUI;
+using DiffPlex.DiffBuilder.Model;
 using System;
 using System.Drawing;
 using System.Reflection;
@@ -8,32 +9,26 @@ namespace WinsockPacketEditor
 {
     public partial class PacketModificationForm : Form
     {
-        private string sRawData = string.Empty;
-        private string sModifiedData = string.Empty;
         private Form form;
-        private PacketInfo packetInfo;
-        private ProxyInfo proxyInfo;
+        private PacketInfo packetInfo = null;
+        private ProxyInfo proxyInfo = null;
 
         #region//窗体事件
 
-        public PacketModificationForm(Form form, PacketInfo packetInfo, ProxyInfo proxyInfo)
+        public PacketModificationForm(Form form, PacketInfo packetInfo)
         {
             InitializeComponent();
 
-            if (packetInfo == null && proxyInfo == null)
-            {
-                string Title = AntdUI.Localization.Get("InjectModeForm.EditPacket.Error", "加载封包数据出错");
-                string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
-                AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                this.Close();
-            }
-            else
-            {
-                this.packetInfo = packetInfo;
-                this.proxyInfo = proxyInfo;
-                this.form = form;
-                this.Dark_Changed();
-            }
+            this.packetInfo = packetInfo;
+            this.form = form;
+        }
+
+        public PacketModificationForm(Form form, ProxyInfo proxyInfo)
+        {
+            InitializeComponent();
+
+            this.proxyInfo = proxyInfo;
+            this.form = form;
         }
 
         private void PacketModificationForm_Load(object sender, EventArgs e)
@@ -41,8 +36,7 @@ namespace WinsockPacketEditor
             try
             {
                 this.Text = AntdUI.Localization.Get("PacketModificationForm", "封包修改");
-                this.hbPacketData_Raw.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-                this.hbPacketData_New.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();                
+                this.InitTable_Comparison();
 
                 switch (Operate.SystemConfig.StartMode)
                 {
@@ -53,14 +47,12 @@ namespace WinsockPacketEditor
 
                         if (this.packetInfo.RawBuffer.Length > 0)
                         {
-                            hbPacketData_Raw.ByteProvider = new DynamicByteProvider(this.packetInfo.RawBuffer);
-                            sRawData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.RawBuffer);
+                            this.txtPacketData_Raw.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.RawBuffer);
                         }
 
                         if (this.packetInfo.PacketBuffer.Length > 0)
                         {
-                            hbPacketData_New.ByteProvider = new DynamicByteProvider(this.packetInfo.PacketBuffer);
-                            sModifiedData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.PacketBuffer);
+                            this.txtPacketData_New.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.PacketBuffer);
                         }
 
                         break;
@@ -72,50 +64,18 @@ namespace WinsockPacketEditor
 
                         if (this.proxyInfo.RawBuffer.Length > 0)
                         {
-                            hbPacketData_Raw.ByteProvider = new DynamicByteProvider(this.proxyInfo.RawBuffer);
-                            sRawData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.RawBuffer);
+                            this.txtPacketData_Raw.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.RawBuffer);
                         }
 
                         if (this.proxyInfo.PacketBuffer.Length > 0)
                         {
-                            hbPacketData_New.ByteProvider = new DynamicByteProvider(this.proxyInfo.PacketBuffer);
-                            sModifiedData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.PacketBuffer);
+                            this.txtPacketData_New.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.PacketBuffer);
                         }
 
                         break;
-                }                
-                
-                this.txtModification_Result.Spin(AntdUI.Localization.Get("Loading", "正在加载..."), config =>
-                {
-                    this.txtModification_Result.Clear();                    
+                }
 
-                    if (!string.IsNullOrEmpty(sRawData) || !string.IsNullOrEmpty(sModifiedData))
-                    {
-                        string rtfString = Operate.SystemConfig.CompareData(this.Font, sRawData, sModifiedData);
-                        var styles = Operate.SystemConfig.ConvertRtfToTextStyles(rtfString);
-
-                        using (var rtb = new RichTextBox())
-                        {
-                            rtb.Rtf = rtfString;
-                            this.txtModification_Result.Text = rtb.Text;
-                        }
-
-                        foreach (var style in styles)
-                        {
-                            if (style.Fore == Color.Red || style.Fore == Color.Green)
-                            {
-                                this.txtModification_Result.SetStyle(style.Start, style.Length, this.Font, style.Fore, null);
-                            }
-                            else
-                            {
-                                this.txtModification_Result.SetStyle(style.Start, style.Length, this.Font, null, null);
-                            }
-                        }
-                    }
-                }, () =>
-                {
-                    this.bExit.Enabled = true;
-                });
+                this.tPacketModification.DataSource = Operate.SystemConfig.CompareText(this.txtPacketData_Raw, this.txtPacketData_New);
             }
             catch (Exception ex)
             {
@@ -123,22 +83,41 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void Dark_Changed()
+        private void InitTable_Comparison()
         {
-            if (AntdUI.Config.IsDark)
+            tPacketModification.Columns = new AntdUI.ColumnCollection
             {
-                this.hbPacketData_Raw.BackColor = Color.FromArgb(30, 30, 30);
-                this.hbPacketData_Raw.ForeColor = Color.Silver;
-                this.hbPacketData_New.BackColor = Color.FromArgb(30, 30, 30);
-                this.hbPacketData_New.ForeColor = Color.Silver;
-            }
-            else
-            {
-                this.hbPacketData_Raw.BackColor = Color.White;
-                this.hbPacketData_Raw.ForeColor = Color.Black;
-                this.hbPacketData_New.BackColor = Color.White;
-                this.hbPacketData_New.ForeColor = Color.Black;
-            }
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("Position", "位置", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("ValueA", "原值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("ValueB", "新值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("ChangeType", "变更类型", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is Operate.SystemConfig.DifferenceItem di)
+                        {
+                            switch (di.ChangeType)
+                            {
+                                case ChangeType.Inserted: return new CellTag("新增", TTypeMini.Success);
+                                case ChangeType.Deleted: return new CellTag("删除", TTypeMini.Error);
+                                case ChangeType.Modified: return new CellTag("修改", TTypeMini.Warn);
+                                default: return new CellTag("相同", TTypeMini.Info);
+                            }
+                        }
+
+                        return value;
+                    },
+                }.SetLocalizationTitleID("Table.ComparisonText.Column."),
+            };
+
+            this.tPacketModification.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
         }
 
         #endregion

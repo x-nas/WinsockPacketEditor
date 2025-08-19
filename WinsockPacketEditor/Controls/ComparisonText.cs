@@ -1,9 +1,7 @@
 ﻿using AntdUI;
 using DiffPlex.DiffBuilder.Model;
 using System;
-using System.ComponentModel;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -11,16 +9,7 @@ namespace WinsockPacketEditor
     public partial class ComparisonText : UserControl
     {
         public string TextA = string.Empty;
-        public string TextB = string.Empty;
-        private BindingList<DifferenceItem> lstComparison = new BindingList<DifferenceItem>();
-
-        public class DifferenceItem
-        {
-            public int Position { get; set; }
-            public string ValueA { get; set; }
-            public string ValueB { get; set; }
-            public ChangeType ChangeType { get; set; }
-        }
+        public string TextB = string.Empty;        
 
         #region//窗体事件
 
@@ -53,7 +42,7 @@ namespace WinsockPacketEditor
                 {
                     Render = (value, record, rowindex)=>
                     {
-                        if(record is DifferenceItem di)
+                        if(record is Operate.SystemConfig.DifferenceItem di)
                         {
                             switch (di.ChangeType)
                             {
@@ -170,10 +159,11 @@ namespace WinsockPacketEditor
 
         private void bComparison_Click(object sender, EventArgs e)
         {
+            this.ResetStyles();
+
             if (this.ddlComparisonType.SelectedIndex == 0)
             {
-                this.lstComparison = HighlightCharacterDifferences(this.txtComparison_A, this.txtComparison_B);
-                this.tComparison.DataSource = this.lstComparison;
+                this.tComparison.DataSource = Operate.SystemConfig.CompareText(this.txtComparison_A, this.txtComparison_B);
             }
             else
             {
@@ -185,75 +175,7 @@ namespace WinsockPacketEditor
                 this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
                 this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
             }
-        }
-
-        private BindingList<DifferenceItem> HighlightCharacterDifferences(AntdUI.Input box1, AntdUI.Input box2)
-        {
-            var differences = new BindingList<DifferenceItem>();
-
-            try
-            {
-                ResetStyles();
-
-                string text1 = box1.Text;
-                string text2 = box2.Text;
-                int maxLength = Math.Max(text1.Length, text2.Length);
-
-                for (int i = 0; i < maxLength; i++)
-                {
-                    ChangeType changeType = GetCharDiffType(text1, text2, i);
-
-                    // 记录差异项
-                    if (changeType != ChangeType.Unchanged)
-                    {
-                        differences.Add(new DifferenceItem
-                        {
-                            Position = i + 1,
-                            ValueA = i < text1.Length ? text1[i].ToString() : "NULL",
-                            ValueB = i < text2.Length ? text2[i].ToString() : "NULL",
-                            ChangeType = changeType
-                        });
-                    }
-
-                    // 处理第一个文本框(input2) - 原始文本
-                    if (i < text1.Length)
-                    {
-                        if (changeType == ChangeType.Deleted || changeType == ChangeType.Modified)
-                        {
-                            box1.SetStyle(i, 1,
-                                        font: null,
-                                        fore: Color.White,
-                                        back: Color.FromArgb(220, 80, 80)); // 红色背景表示删除/修改
-                        }
-                    }
-
-                    // 处理第二个文本框(input3) - 新文本
-                    if (i < text2.Length)
-                    {
-                        if (changeType == ChangeType.Inserted || changeType == ChangeType.Modified)
-                        {
-                            box2.SetStyle(i, 1,
-                                        font: null,
-                                        fore: Color.White,
-                                        back: Color.FromArgb(80, 180, 80)); // 绿色背景表示新增/修改
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return differences;
         }        
-
-        private static ChangeType GetCharDiffType(string str1, string str2, int position)
-        {
-            if (position >= str1.Length) return ChangeType.Inserted;
-            if (position >= str2.Length) return ChangeType.Deleted;
-            return str1[position] == str2[position] ? ChangeType.Unchanged : ChangeType.Modified;
-        }
 
         private void ResetStyles()
         {
