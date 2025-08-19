@@ -35,7 +35,6 @@
             this.txtComparison_A = new AntdUI.Input();
             this.lComparison_A = new AntdUI.Label();
             this.tlpComparisonResult = new System.Windows.Forms.TableLayoutPanel();
-            this.txtComparison_Result = new AntdUI.Input();
             this.tlpComparisonButton = new System.Windows.Forms.TableLayoutPanel();
             this.bComparison = new AntdUI.Button();
             this.bComparison_Change = new AntdUI.Button();
@@ -141,7 +140,6 @@
             // 
             this.tlpComparisonResult.ColumnCount = 1;
             this.tlpComparisonResult.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpComparisonResult.Controls.Add(this.txtComparison_Result, 0, 1);
             this.tlpComparisonResult.Controls.Add(this.tlpComparisonButton, 0, 0);
             this.tlpComparisonResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpComparisonResult.Location = new System.Drawing.Point(0, 0);
@@ -152,17 +150,6 @@
             this.tlpComparisonResult.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpComparisonResult.Size = new System.Drawing.Size(800, 420);
             this.tlpComparisonResult.TabIndex = 0;
-            // 
-            // txtComparison_Result
-            // 
-            this.txtComparison_Result.AutoScroll = true;
-            this.txtComparison_Result.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtComparison_Result.Location = new System.Drawing.Point(3, 63);
-            this.txtComparison_Result.Multiline = true;
-            this.txtComparison_Result.Name = "txtComparison_Result";
-            this.txtComparison_Result.ReadOnly = true;
-            this.txtComparison_Result.Size = new System.Drawing.Size(794, 354);
-            this.txtComparison_Result.TabIndex = 1;
             // 
             // tlpComparisonButton
             // 
@@ -313,7 +300,6 @@
         private AntdUI.Input txtComparison_A;
         private AntdUI.Label lComparison_A;
         private System.Windows.Forms.TableLayoutPanel tlpComparisonResult;
-        private AntdUI.Input txtComparison_Result;
         private System.Windows.Forms.TableLayoutPanel tlpComparisonButton;
         private AntdUI.Button bComparison;
         private AntdUI.Button bComparison_Change;

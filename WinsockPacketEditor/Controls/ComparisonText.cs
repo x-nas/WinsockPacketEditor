@@ -1,4 +1,5 @@
 ﻿using AntdUI;
+using DiffPlex.DiffBuilder.Model;
 using System;
 using System.Drawing;
 using System.Reflection;
@@ -121,61 +122,75 @@ namespace WinsockPacketEditor
 
         private void bComparison_Click(object sender, EventArgs e)
         {
+            if (this.ddlComparisonType.SelectedIndex == 0)
+            {
+                HighlightCharacterDifferences(this.txtComparison_A, this.txtComparison_B);
+            }
+            else
+            {
+                // 文本查重
+            }
+        }
+
+        private void HighlightCharacterDifferences(AntdUI.Input box1, AntdUI.Input box2)
+        {
             try
             {
-                this.bComparison.Loading = true;
-                this.txtComparison_Result.Spin(AntdUI.Localization.Get("Loading", "正在加载..."), config =>
+                ResetStyles();
+
+                string text1 = box1.Text;
+                string text2 = box2.Text;
+
+                int maxLength = Math.Max(text1.Length, text2.Length);
+                text1 = text1.PadRight(maxLength, ' ');
+                text2 = text2.PadRight(maxLength, ' ');
+
+                for (int i = 0; i < maxLength; i++)
                 {
-                    this.txtComparison_Result.Clear();
+                    ChangeType changeType = GetCharDiffType(text1, text2, i);
 
-                    if (this.ddlComparisonType.SelectedIndex == 0)
+                    // 处理第一个文本框(input2) - 原始文本
+                    if (i < text1.Length)
                     {
-                        string StringA = this.txtComparison_A.Text.Trim();
-                        string StringB = this.txtComparison_B.Text.Trim();
-
-                        if (!string.IsNullOrEmpty(StringA) || !string.IsNullOrEmpty(StringB))
+                        if (changeType == ChangeType.Deleted || changeType == ChangeType.Modified)
                         {
-                            string rtfString = Operate.SystemConfig.CompareData(this.Font, StringA, StringB);
-                            var styles = Operate.SystemConfig.ConvertRtfToTextStyles(rtfString);
-
-                            using (var rtb = new RichTextBox())
-                            {
-                                rtb.Rtf = rtfString;
-                                this.txtComparison_Result.Text = rtb.Text;
-                            }
-
-                            foreach (var style in styles)
-                            {
-                                if (style.Fore == Color.Red || style.Fore == Color.Green)
-                                {
-                                    this.txtComparison_Result.SetStyle(style.Start, style.Length, this.Font, style.Fore, null);
-                                }
-                                else
-                                {
-                                    this.txtComparison_Result.SetStyle(style.Start, style.Length, this.Font, null, null);
-                                }
-                            }
+                            box1.SetStyle(i, 1,
+                                        font: null,
+                                        fore: Color.White,
+                                        back: Color.FromArgb(220, 80, 80)); // 红色背景表示删除/修改
                         }
                     }
-                    else if (this.ddlComparisonType.SelectedIndex == 1)
-                    {
-                        this.TextA = this.txtComparison_A.Text.Trim();
-                        this.TextB = this.txtComparison_B.Text.Trim();
-                        int minBytes = (int)nudComparison_DuplicateNum.Value;
-                        var results = Operate.SystemConfig.ComparePackets(this.TextA, this.TextB, minBytes);
 
-                        this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
-                        this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
+                    // 处理第二个文本框(input3) - 新文本
+                    if (i < text2.Length)
+                    {
+                        if (changeType == ChangeType.Inserted || changeType == ChangeType.Modified)
+                        {
+                            box2.SetStyle(i, 1,
+                                        font: null,
+                                        fore: Color.White,
+                                        back: Color.FromArgb(80, 180, 80)); // 绿色背景表示新增/修改
+                        }
                     }
-                }, () =>
-                {
-                    this.bComparison.Loading = false;
-                });
+                }
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            }            
+        }
+
+        private static ChangeType GetCharDiffType(string str1, string str2, int position)
+        {
+            if (position >= str1.Length) return ChangeType.Inserted;
+            if (position >= str2.Length) return ChangeType.Deleted;
+            return str1[position] == str2[position] ? ChangeType.Unchanged : ChangeType.Modified;
+        }
+
+        private void ResetStyles()
+        {
+            this.txtComparison_A.ClearStyle();
+            this.txtComparison_B.ClearStyle();
         }
 
         #endregion
@@ -184,6 +199,8 @@ namespace WinsockPacketEditor
 
         private void bComparison_Reset_Click(object sender, EventArgs e)
         {
+            ResetStyles();
+
             this.txtComparison_A.Text = this.TextA;
             this.txtComparison_B.Text = this.TextB;
         }
@@ -194,6 +211,8 @@ namespace WinsockPacketEditor
 
         private void bComparison_Change_Click(object sender, EventArgs e)
         {
+            ResetStyles();
+
             string sTextA = this.txtComparison_A.Text.Trim();
             string sTextB = this.txtComparison_B.Text.Trim();
 
@@ -207,9 +226,10 @@ namespace WinsockPacketEditor
 
         private void bComparison_Clean_Click(object sender, EventArgs e)
         {
+            ResetStyles();
+
             this.txtComparison_A.Clear();
             this.txtComparison_B.Clear();
-            this.txtComparison_Result.Clear();
         }
 
         #endregion        
