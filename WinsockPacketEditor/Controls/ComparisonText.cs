@@ -84,7 +84,7 @@ namespace WinsockPacketEditor
                     {
                         if (value is List<int> intList)
                         {
-                            return string.Join(",", intList);
+                            return string.Join(", ", intList);
                         }
                         return value;
                     }
@@ -95,7 +95,7 @@ namespace WinsockPacketEditor
                     {
                         if (value is List<int> intList)
                         {
-                            return string.Join(",", intList);
+                            return string.Join(", ", intList);
                         }
                         return value;
                     }
