@@ -22,11 +22,8 @@ namespace WinsockPacketEditor
 
         private void ComparisonText_Load(object sender, EventArgs e)
         {
-            this.tabComparisonText.TabMenuVisible = false;
-
             this.InitTable_Comparison();
             this.InitTable_Duplicate();
-            this.InitComparisonType();
         }
 
         private void InitTable_Comparison()
@@ -106,180 +103,104 @@ namespace WinsockPacketEditor
             };
 
             this.tDuplicate.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-        }
-
-        private void InitComparisonType()
-        {
-            this.ddlComparisonType.Items.Clear();
-
-            this.ddlComparisonType.Items.AddRange(new AntdUI.SelectItem[]
-            {
-                    new AntdUI.SelectItem("文本比较")
-                    {
-                        LocalizationText = "",
-                    },
-                    new AntdUI.SelectItem("文本查重")
-                    {
-                        LocalizationText = "",
-                    },
-            });
-
-            this.ddlComparisonType.SelectedIndex = 0;
-            this.ComparisonType_Changed();
-
-            this.Comparison_A_Changed();
-            this.Comparison_B_Changed();
-        }
-
-        private void txtComparison_A_TextChanged(object sender, EventArgs e)
-        {
-            this.Comparison_A_Changed();
-        }
-
-        private void Comparison_A_Changed()
-        {
-            string StringA = this.txtComparison_A.Text.Trim();
-            if (string.IsNullOrEmpty(StringA))
-            {
-                this.txtComparison_A.Status = TType.Error;
-            }
-            else
-            {
-                this.txtComparison_A.Status = TType.Success;
-            }
-
-            this.lComparison_A.Text = string.Format(AntdUI.Localization.Get("System.TextA", "文本 A  ( 长度 {0} )"), StringA.Length);
-        }
-
-        private void txtComparison_B_TextChanged(object sender, EventArgs e)
-        {
-            this.Comparison_B_Changed();
-        }
-
-        private void Comparison_B_Changed()
-        {
-            string StringB = this.txtComparison_B.Text.Trim();
-            if (string.IsNullOrEmpty(StringB))
-            {
-                this.txtComparison_B.Status = TType.Error;
-            }
-            else
-            {
-                this.txtComparison_B.Status = TType.Success;
-            }
-
-            this.lComparison_B.Text = string.Format(AntdUI.Localization.Get("System.TextB", "文本 B  ( 长度 {0} )"), StringB.Length);
-        }
-
-        private void ddlComparisonType_SelectedIndexChanged(object sender, IntEventArgs e)
-        {
-            this.ComparisonType_Changed();
-        }
-
-        private void ComparisonType_Changed()
-        {
-            if (this.ddlComparisonType.SelectedIndex == 0)
-            {
-                this.tabComparisonText.SelectTab(0);
-                this.nudComparison_DuplicateNum.Enabled = false;
-            }
-            else if (this.ddlComparisonType.SelectedIndex == 1)
-            {
-                this.tabComparisonText.SelectTab(1);
-                this.nudComparison_DuplicateNum.Enabled = true;
-            }
-        }
+        }                
 
         public void SetTextA(string StringA)
         { 
             this.TextA = StringA;
             this.txtComparison_A.Text = this.TextA;
+            this.txtDuplicate_A.Text = this.TextA;
         }
 
         public void SetTextB(string StringB)
         {
             this.TextB = StringB;
             this.txtComparison_B.Text = this.TextB;
+            this.txtDuplicate_B.Text = this.TextB;
+        }
+
+        private void txtComparison_A_TextChanged(object sender, EventArgs e)
+        {
+            this.lComparison_A.Text = string.Format(AntdUI.Localization.Get("System.TextA", "文本 A  ( 长度 {0} )"), this.txtComparison_A.Text.Length);
+        }
+
+        private void txtComparison_B_TextChanged(object sender, EventArgs e)
+        {
+            this.lComparison_B.Text = string.Format(AntdUI.Localization.Get("System.TextB", "文本 B  ( 长度 {0} )"), this.txtComparison_B.Text.Length);
+        }
+
+        private void txtDuplicate_A_TextChanged(object sender, EventArgs e)
+        {
+            this.lDuplicate_A.Text = string.Format(AntdUI.Localization.Get("System.TextA", "文本 A  ( 长度 {0} )"), this.txtDuplicate_A.Text.Length);
+        }
+
+        private void txtDuplicate_B_TextChanged(object sender, EventArgs e)
+        {
+            this.lDuplicate_B.Text = string.Format(AntdUI.Localization.Get("System.TextB", "文本 B  ( 长度 {0} )"), this.txtDuplicate_B.Text.Length);
         }
 
         #endregion
 
-        #region //分析文本
+        #region //文本比较
 
         private void bComparison_Click(object sender, EventArgs e)
         {
             try
             {
-                this.ResetStyles();
+                this.txtComparison_A.ClearStyle();
+                this.txtComparison_B.ClearStyle();
 
-                if (this.ddlComparisonType.SelectedIndex == 0)
-                {
-                    this.tComparison.DataSource = Operate.SystemConfig.CompareText(this.txtComparison_A, this.txtComparison_B);
-                }
-                else
-                {
-                    this.TextA = this.txtComparison_A.Text.Trim();
-                    this.TextB = this.txtComparison_B.Text.Trim();
-                    int minBytes = (int)nudComparison_DuplicateNum.Value;
-                    var results = Operate.SystemConfig.ComparePackets(this.TextA, this.TextB, minBytes);
-
-                    this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
-                    this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
-
-                    this.tDuplicate.DataSource = results.Duplicates;
-                }
+                this.tComparison.DataSource = Operate.SystemConfig.CompareText(this.txtComparison_A, this.txtComparison_B);
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
-        }        
+        }
 
-        private void ResetStyles()
+        #endregion
+
+        #region//文本查重
+
+        private void bDuplicate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string StringA = this.txtDuplicate_A.Text.Trim();
+                string StringB = this.txtDuplicate_B.Text.Trim();
+                int minBytes = (int)nudDuplicate.Value;
+                var results = Operate.SystemConfig.ComparePackets(StringA, StringB, minBytes);
+
+                this.txtDuplicate_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
+                this.txtDuplicate_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
+                this.tDuplicate.DataSource = results.Duplicates;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        #endregion
+
+        #region//清除
+
+        private void bComparison_Clear_Click(object sender, EventArgs e)
         {
             this.txtComparison_A.ClearStyle();
             this.txtComparison_B.ClearStyle();
-        }        
-
-        #endregion
-
-        #region//还原
-
-        private void bComparison_Reset_Click(object sender, EventArgs e)
-        {
-            ResetStyles();
-
-            this.txtComparison_A.Text = this.TextA;
-            this.txtComparison_B.Text = this.TextB;
-        }
-
-        #endregion
-
-        #region//交换
-
-        private void bComparison_Change_Click(object sender, EventArgs e)
-        {
-            ResetStyles();
-
-            string sTextA = this.txtComparison_A.Text.Trim();
-            string sTextB = this.txtComparison_B.Text.Trim();
-
-            this.txtComparison_A.Text = sTextB;
-            this.txtComparison_B.Text = sTextA;
-        }
-
-        #endregion
-
-        #region//清空
-
-        private void bComparison_Clean_Click(object sender, EventArgs e)
-        {
-            ResetStyles();
-
             this.txtComparison_A.Clear();
             this.txtComparison_B.Clear();
         }
 
-        #endregion        
+        private void bDuplicate_Clear_Click(object sender, EventArgs e)
+        {
+            this.txtDuplicate_A.ClearStyle();
+            this.txtDuplicate_B.ClearStyle();
+            this.txtDuplicate_A.Clear();
+            this.txtDuplicate_B.Clear();
+        }
+
+        #endregion
     }
 }
