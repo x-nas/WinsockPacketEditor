@@ -1,7 +1,9 @@
 ﻿using AntdUI;
 using DiffPlex.DiffBuilder.Model;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -20,8 +22,11 @@ namespace WinsockPacketEditor
 
         private void ComparisonText_Load(object sender, EventArgs e)
         {
+            this.tabComparisonText.TabMenuVisible = false;
+
             this.InitTable_Comparison();
-            this.InitComparison();
+            this.InitTable_Duplicate();
+            this.InitComparisonType();
         }
 
         private void InitTable_Comparison()
@@ -61,7 +66,49 @@ namespace WinsockPacketEditor
             this.tComparison.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
         }
 
-        private void InitComparison()
+        private void InitTable_Duplicate()
+        {
+            tDuplicate.Columns = new AntdUI.ColumnCollection
+            {
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("Sequence", "重复值").SetWidth("500").SetLineBreak(true).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("Length", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("CountInA", "A次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),                
+                new AntdUI.Column("CountInB", "B次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("PositionsInA", "A位置", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowIndex) =>
+                    {
+                        if (value is List<int> intList)
+                        {
+                            return string.Join(",", intList);
+                        }
+                        return value;
+                    }
+                }.SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("PositionsInB", "B位置", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowIndex) =>
+                    {
+                        if (value is List<int> intList)
+                        {
+                            return string.Join(",", intList);
+                        }
+                        return value;
+                    }
+                }.SetLocalizationTitleID("Table.ComparisonText.Column."),
+            };
+
+            this.tDuplicate.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+        }
+
+        private void InitComparisonType()
         {
             this.ddlComparisonType.Items.Clear();
 
@@ -133,10 +180,12 @@ namespace WinsockPacketEditor
         {
             if (this.ddlComparisonType.SelectedIndex == 0)
             {
+                this.tabComparisonText.SelectTab(0);
                 this.nudComparison_DuplicateNum.Enabled = false;
             }
             else if (this.ddlComparisonType.SelectedIndex == 1)
             {
+                this.tabComparisonText.SelectTab(1);
                 this.nudComparison_DuplicateNum.Enabled = true;
             }
         }
@@ -159,22 +208,31 @@ namespace WinsockPacketEditor
 
         private void bComparison_Click(object sender, EventArgs e)
         {
-            this.ResetStyles();
-
-            if (this.ddlComparisonType.SelectedIndex == 0)
+            try
             {
-                this.tComparison.DataSource = Operate.SystemConfig.CompareText(this.txtComparison_A, this.txtComparison_B);
-            }
-            else
-            {
-                this.TextA = this.txtComparison_A.Text.Trim();
-                this.TextB = this.txtComparison_B.Text.Trim();
-                int minBytes = (int)nudComparison_DuplicateNum.Value;
-                var results = Operate.SystemConfig.ComparePackets(this.TextA, this.TextB, minBytes);
+                this.ResetStyles();
 
-                this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
-                this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
+                if (this.ddlComparisonType.SelectedIndex == 0)
+                {
+                    this.tComparison.DataSource = Operate.SystemConfig.CompareText(this.txtComparison_A, this.txtComparison_B);
+                }
+                else
+                {
+                    this.TextA = this.txtComparison_A.Text.Trim();
+                    this.TextB = this.txtComparison_B.Text.Trim();
+                    int minBytes = (int)nudComparison_DuplicateNum.Value;
+                    var results = Operate.SystemConfig.ComparePackets(this.TextA, this.TextB, minBytes);
+
+                    this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
+                    this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
+
+                    this.tDuplicate.DataSource = results.Duplicates;
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }        
 
         private void ResetStyles()

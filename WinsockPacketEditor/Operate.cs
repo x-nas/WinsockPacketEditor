@@ -2144,50 +2144,175 @@ namespace WinsockPacketEditor
                 return str1[position] == str2[position] ? ChangeType.Unchanged : ChangeType.Modified;
             }
 
-            #endregion
+            #endregion            
 
-            #region//文本查重
+            #region //文本查重
 
-            public static (string TextA, string TextB) ComparePackets(string stringA, string stringB, int minBytes)
+            public class DuplicateInfo
             {
-                stringA = CleanAndNormalizeHex(stringA);
-                stringB = CleanAndNormalizeHex(stringB);
+                public string Sequence { get; set; }       // 重复的字节序列
+                public int Length { get; set; }           // 序列长度(字节数)
+                public int CountInA { get; set; }         // 在A中出现的次数
+                public int CountInB { get; set; }         // 在B中出现的次数
+                public List<int> PositionsInA { get; set; } // 在A中的位置列表(字节偏移)
+                public List<int> PositionsInB { get; set; } // 在B中的位置列表(字节偏移)
+            }
 
-                List<string> bytes1 = SplitIntoBytes(stringA);
-                List<string> bytes2 = SplitIntoBytes(stringB);
-
-                var commonSequences = FindCommonSequences(bytes1, bytes2, minBytes);
-
-                char[] result1 = new char[stringA.Length];
-                char[] result2 = new char[stringB.Length];
-
-                for (int i = 0; i < result1.Length; i++) result1[i] = '_';
-                for (int i = 0; i < result2.Length; i++) result2[i] = '_';
-
-                foreach (var seq in commonSequences)
+            public static (string TextA, string TextB, List<DuplicateInfo> Duplicates) ComparePackets(string stringA, string stringB, int minBytes)
+            {
+                try
                 {
-                    for (int i = 0; i < seq.Length; i++)
-                    {
-                        int pos = seq.Pos1 * 2 + i * 2;
-                        if (pos + 1 < result1.Length)
-                        {
-                            result1[pos] = stringA[pos];
-                            result1[pos + 1] = stringA[pos + 1];
-                        }
-                    }
+                    stringA = CleanAndNormalizeHex(stringA);
+                    stringB = CleanAndNormalizeHex(stringB);
 
-                    for (int i = 0; i < seq.Length; i++)
+                    List<string> bytes1 = SplitIntoBytes(stringA);
+                    List<string> bytes2 = SplitIntoBytes(stringB);
+
+                    var commonSequences = FindCommonSequences(bytes1, bytes2, minBytes);
+                    var duplicates = AnalyzeContinuousDuplicates(bytes1, bytes2, minBytes);
+
+                    if (duplicates != null)
                     {
-                        int pos = seq.Pos2 * 2 + i * 2;
-                        if (pos + 1 < result2.Length)
+                        char[] result1 = new char[stringA.Length];
+                        char[] result2 = new char[stringB.Length];
+
+                        for (int i = 0; i < result1.Length; i++) result1[i] = '_';
+                        for (int i = 0; i < result2.Length; i++) result2[i] = '_';
+
+                        foreach (var seq in commonSequences)
                         {
-                            result2[pos] = stringB[pos];
-                            result2[pos + 1] = stringB[pos + 1];
+                            for (int i = 0; i < seq.Length; i++)
+                            {
+                                int pos = seq.Pos1 * 2 + i * 2;
+                                if (pos + 1 < result1.Length)
+                                {
+                                    result1[pos] = stringA[pos];
+                                    result1[pos + 1] = stringA[pos + 1];
+                                }
+                            }
+
+                            for (int i = 0; i < seq.Length; i++)
+                            {
+                                int pos = seq.Pos2 * 2 + i * 2;
+                                if (pos + 1 < result2.Length)
+                                {
+                                    result2[pos] = stringB[pos];
+                                    result2[pos + 1] = stringB[pos + 1];
+                                }
+                            }
                         }
-                    }
+
+                        return (new string(result1), new string(result2), duplicates);
+                    }                    
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
-                return (new string(result1), new string(result2));
+                return (string.Empty, string.Empty, new List<DuplicateInfo>());
+            }
+
+            public static List<DuplicateInfo> AnalyzeContinuousDuplicates(List<string> bytes1, List<string> bytes2, int minLength)
+            {
+                try
+                {
+                    var duplicates = new List<DuplicateInfo>();
+                    var processedPositionsA = new HashSet<int>();
+                    var processedPositionsB = new HashSet<int>();
+
+                    // 查找所有连续的重复序列
+                    for (int i = 0; i <= bytes1.Count - minLength; i++)
+                    {
+                        if (processedPositionsA.Contains(i)) continue;
+
+                        for (int j = 0; j <= bytes2.Count - minLength; j++)
+                        {
+                            if (processedPositionsB.Contains(j)) continue;
+
+                            // 查找从当前位置开始的最长连续匹配
+                            int matchLen = 0;
+                            while (i + matchLen < bytes1.Count &&
+                                   j + matchLen < bytes2.Count &&
+                                   bytes1[i + matchLen] == bytes2[j + matchLen])
+                            {
+                                matchLen++;
+                            }
+
+                            // 如果匹配长度满足要求
+                            if (matchLen >= minLength)
+                            {
+                                var sequence = GetSequenceString(bytes1, i, matchLen);
+
+                                // 记录在A中的所有连续出现位置
+                                var positionsInA = new List<int>();
+                                for (int k = i; k <= bytes1.Count - matchLen; k++)
+                                {
+                                    if (CompareSequences(bytes1, k, bytes2, j, matchLen))
+                                    {
+                                        positionsInA.Add(k);
+                                        processedPositionsA.Add(k); // 标记已处理
+                                    }
+                                }
+
+                                // 记录在B中的所有连续出现位置
+                                var positionsInB = new List<int>();
+                                for (int k = j; k <= bytes2.Count - matchLen; k++)
+                                {
+                                    if (CompareSequences(bytes2, k, bytes1, i, matchLen))
+                                    {
+                                        positionsInB.Add(k);
+                                        processedPositionsB.Add(k); // 标记已处理
+                                    }
+                                }
+
+                                if (positionsInA.Count > 0 && positionsInB.Count > 0)
+                                {
+                                    duplicates.Add(new DuplicateInfo
+                                    {
+                                        Sequence = sequence,
+                                        Length = matchLen,
+                                        CountInA = positionsInA.Count,
+                                        CountInB = positionsInB.Count,
+                                        PositionsInA = positionsInA,
+                                        PositionsInB = positionsInB
+                                    });
+                                }
+
+                                // 跳过已匹配的部分
+                                i += matchLen - 1;
+                                j += matchLen - 1;
+                                break;
+                            }
+                        }
+                    }
+
+                    return duplicates.OrderByDescending(d => d.Length).ToList();
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            private static string GetSequenceString(List<string> bytes, int start, int length)
+            {
+                return string.Join(" ", bytes.Skip(start).Take(length));
+            }
+
+            private static bool CompareSequences(List<string> source, int sourceStart, List<string> target, int targetStart, int length)
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    if (sourceStart + i >= source.Count || targetStart + i >= target.Count)
+                        return false;
+
+                    if (source[sourceStart + i] != target[targetStart + i])
+                        return false;
+                }
+                return true;
             }
 
             public static string FormatHex(string hex)
