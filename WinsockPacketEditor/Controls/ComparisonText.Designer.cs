@@ -263,6 +263,7 @@
             // ddlComparisonType
             // 
             this.ddlComparisonType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlComparisonType.List = true;
             this.ddlComparisonType.Location = new System.Drawing.Point(3, 7);
             this.ddlComparisonType.Name = "ddlComparisonType";
             this.ddlComparisonType.PlaceholderText = "请选择";

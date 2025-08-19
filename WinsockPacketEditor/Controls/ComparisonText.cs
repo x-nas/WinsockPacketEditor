@@ -177,7 +177,13 @@ namespace WinsockPacketEditor
             }
             else
             {
-                // 文本查重
+                this.TextA = this.txtComparison_A.Text.Trim();
+                this.TextB = this.txtComparison_B.Text.Trim();
+                int minBytes = (int)nudComparison_DuplicateNum.Value;
+                var results = Operate.SystemConfig.ComparePackets(this.TextA, this.TextB, minBytes);
+
+                this.txtComparison_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
+                this.txtComparison_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
             }
         }
 
