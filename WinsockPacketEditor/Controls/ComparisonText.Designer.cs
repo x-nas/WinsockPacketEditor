@@ -42,6 +42,7 @@
             this.bComparison_Clean = new AntdUI.Button();
             this.nudComparison_DuplicateNum = new AntdUI.InputNumber();
             this.ddlComparisonType = new AntdUI.Select();
+            this.tComparison = new AntdUI.Table();
             ((System.ComponentModel.ISupportInitialize)(this.splitterComparison)).BeginInit();
             this.splitterComparison.Panel1.SuspendLayout();
             this.splitterComparison.Panel2.SuspendLayout();
@@ -141,6 +142,7 @@
             this.tlpComparisonResult.ColumnCount = 1;
             this.tlpComparisonResult.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpComparisonResult.Controls.Add(this.tlpComparisonButton, 0, 0);
+            this.tlpComparisonResult.Controls.Add(this.tComparison, 0, 1);
             this.tlpComparisonResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpComparisonResult.Location = new System.Drawing.Point(0, 0);
             this.tlpComparisonResult.Margin = new System.Windows.Forms.Padding(0);
@@ -268,6 +270,16 @@
             this.ddlComparisonType.TabIndex = 7;
             this.ddlComparisonType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlComparisonType_SelectedIndexChanged);
             // 
+            // tComparison
+            // 
+            this.tComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tComparison.Gap = 12;
+            this.tComparison.Location = new System.Drawing.Point(3, 63);
+            this.tComparison.Name = "tComparison";
+            this.tComparison.Size = new System.Drawing.Size(794, 354);
+            this.tComparison.TabIndex = 3;
+            this.tComparison.Text = "table1";
+            // 
             // ComparisonText
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -307,5 +319,6 @@
         private AntdUI.Button bComparison_Clean;
         private AntdUI.InputNumber nudComparison_DuplicateNum;
         private AntdUI.Select ddlComparisonType;
+        private AntdUI.Table tComparison;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AntdUI;
 using DiffPlex.DiffBuilder.Model;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -11,6 +12,15 @@ namespace WinsockPacketEditor
     {
         public string TextA = string.Empty;
         public string TextB = string.Empty;
+        private BindingList<DifferenceItem> lstComparison = new BindingList<DifferenceItem>();
+
+        public class DifferenceItem
+        {
+            public int Position { get; set; }
+            public string ValueA { get; set; }
+            public string ValueB { get; set; }
+            public ChangeType ChangeType { get; set; }
+        }
 
         #region//窗体事件
 
@@ -21,8 +31,46 @@ namespace WinsockPacketEditor
 
         private void ComparisonText_Load(object sender, EventArgs e)
         {
+            this.InitTable_Comparison();
             this.InitComparison();
-        }        
+        }
+
+        private void InitTable_Comparison()
+        {
+            tComparison.Columns = new AntdUI.ColumnCollection
+            {
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("Position", "位置", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("ValueA", "A值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("ValueB", "B值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("ChangeType", "变更类型", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is DifferenceItem di)
+                        {
+                            switch (di.ChangeType)
+                            {
+                                case ChangeType.Inserted: return new CellTag("新增", TTypeMini.Success);
+                                case ChangeType.Deleted: return new CellTag("删除", TTypeMini.Error);
+                                case ChangeType.Modified: return new CellTag("修改", TTypeMini.Warn);
+                                default: return new CellTag("相同", TTypeMini.Info);
+                            }
+                        }
+
+                        return value;
+                    },
+                }.SetLocalizationTitleID("Table.ComparisonText.Column."),
+            };
+
+            this.tComparison.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+        }
 
         private void InitComparison()
         {
@@ -118,13 +166,14 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//分析文本
+        #region //分析文本
 
         private void bComparison_Click(object sender, EventArgs e)
         {
             if (this.ddlComparisonType.SelectedIndex == 0)
             {
-                HighlightCharacterDifferences(this.txtComparison_A, this.txtComparison_B);
+                this.lstComparison = HighlightCharacterDifferences(this.txtComparison_A, this.txtComparison_B);
+                this.tComparison.DataSource = this.lstComparison;
             }
             else
             {
@@ -132,22 +181,33 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void HighlightCharacterDifferences(AntdUI.Input box1, AntdUI.Input box2)
+        private BindingList<DifferenceItem> HighlightCharacterDifferences(AntdUI.Input box1, AntdUI.Input box2)
         {
+            var differences = new BindingList<DifferenceItem>();
+
             try
             {
                 ResetStyles();
 
                 string text1 = box1.Text;
                 string text2 = box2.Text;
-
                 int maxLength = Math.Max(text1.Length, text2.Length);
-                text1 = text1.PadRight(maxLength, ' ');
-                text2 = text2.PadRight(maxLength, ' ');
 
                 for (int i = 0; i < maxLength; i++)
                 {
                     ChangeType changeType = GetCharDiffType(text1, text2, i);
+
+                    // 记录差异项
+                    if (changeType != ChangeType.Unchanged)
+                    {
+                        differences.Add(new DifferenceItem
+                        {
+                            Position = i + 1,
+                            ValueA = i < text1.Length ? text1[i].ToString() : "NULL",
+                            ValueB = i < text2.Length ? text2[i].ToString() : "NULL",
+                            ChangeType = changeType
+                        });
+                    }
 
                     // 处理第一个文本框(input2) - 原始文本
                     if (i < text1.Length)
@@ -177,8 +237,10 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
+            }
+
+            return differences;
+        }        
 
         private static ChangeType GetCharDiffType(string str1, string str2, int position)
         {
@@ -191,7 +253,7 @@ namespace WinsockPacketEditor
         {
             this.txtComparison_A.ClearStyle();
             this.txtComparison_B.ClearStyle();
-        }
+        }        
 
         #endregion
 
