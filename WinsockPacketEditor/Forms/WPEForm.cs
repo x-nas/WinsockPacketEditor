@@ -196,7 +196,7 @@ namespace WinsockPacketEditor.Forms
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "管理员账号为空", TType.Error)
                     {
-                        LocalizationText = "StartForm.RemoteEmpty"
+                        LocalizationText = "WPEForm.UserName.Empty"
                     });
 
                     return;
@@ -208,7 +208,7 @@ namespace WinsockPacketEditor.Forms
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "账号密码为空", TType.Error)
                     {
-                        LocalizationText = "StartForm.RemoteEmpty"
+                        LocalizationText = "WPEForm.PassWord.Empty"
                     });
 
                     return;
@@ -220,7 +220,7 @@ namespace WinsockPacketEditor.Forms
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "管理后台地址错误", TType.Error)
                     {
-                        LocalizationText = "StartForm.RemoteError"
+                        LocalizationText = "WPEForm.RemoteError"
                     });
 
                     return;
@@ -228,14 +228,14 @@ namespace WinsockPacketEditor.Forms
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "远程管理已启用", TType.Success)
                 {
-                    LocalizationText = "StartForm.RemoteEnable"
+                    LocalizationText = "WPEForm.RemoteEnable"
                 });
             }
             else
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "远程管理已关闭", TType.Error)
                 {
-                    LocalizationText = "StartForm.RemoteDisable"
+                    LocalizationText = "WPEForm.RemoteDisable"
                 });                
             }
 
@@ -283,6 +283,8 @@ namespace WinsockPacketEditor.Forms
 
         private void bLogin_Click(object sender, EventArgs e)
         {
+            Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.None;
+
             if (this.ddlStartMode.SelectedIndex == 0)
             {
                 Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Proxy;
@@ -298,8 +300,11 @@ namespace WinsockPacketEditor.Forms
                 }
             }
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            if (Operate.SystemConfig.StartMode != Operate.SystemConfig.SystemMode.None)
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }            
         }
 
         #endregion        

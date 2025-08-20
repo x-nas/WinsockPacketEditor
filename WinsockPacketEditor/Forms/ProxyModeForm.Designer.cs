@@ -251,12 +251,15 @@
             menuItem3.Text = "账号列表";
             menuItem4.IconSvg = "FilterOutlined";
             menuItem4.ID = "miFilterList";
+            menuItem4.LocalizationText = "ProxyModeForm.{id}";
             menuItem4.Text = "滤镜列表";
             menuItem5.IconSvg = "SendOutlined";
             menuItem5.ID = "miSendList";
+            menuItem5.LocalizationText = "ProxyModeForm.{id}";
             menuItem5.Text = "发送列表";
             menuItem6.IconSvg = "RobotOutlined";
             menuItem6.ID = "miRobotList";
+            menuItem6.LocalizationText = "ProxyModeForm.{id}";
             menuItem6.Text = "机器人列表";
             menuItem7.IconSvg = "PieChartOutlined";
             menuItem7.ID = "miStatistical";
@@ -264,15 +267,19 @@
             menuItem7.Text = "统计数据";
             menuItem8.IconSvg = "DiffOutlined";
             menuItem8.ID = "miComparison";
+            menuItem8.LocalizationText = "ProxyModeForm.{id}";
             menuItem8.Text = "文本对比";
             menuItem9.IconSvg = "BuildOutlined";
             menuItem9.ID = "miXOR";
+            menuItem9.LocalizationText = "ProxyModeForm.{id}";
             menuItem9.Text = "异或计算";
             menuItem10.IconSvg = "InteractionOutlined";
             menuItem10.ID = "miTranscoding";
+            menuItem10.LocalizationText = "ProxyModeForm.{id}";
             menuItem10.Text = "编码转换";
             menuItem11.IconSvg = "DeliveredProcedureOutlined";
             menuItem11.ID = "miExtraction";
+            menuItem11.LocalizationText = "ProxyModeForm.{id}";
             menuItem11.Text = "数据提取";
             menuItem12.Badge = "";
             menuItem12.IconSvg = "ExceptionOutlined";
@@ -341,7 +348,6 @@
             this.tabProxyMode.Pages.Add(this.tpTranscoding);
             this.tabProxyMode.Pages.Add(this.tpExtraction);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.SelectedIndex = 1;
             this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
@@ -350,7 +356,7 @@
             // tpProxyList
             // 
             this.tpProxyList.Controls.Add(this.tlpProxyList);
-            this.tpProxyList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpProxyList.Location = new System.Drawing.Point(3, 33);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
             this.tpProxyList.TabIndex = 0;
@@ -402,6 +408,7 @@
             this.bProxyList_Clear.BorderWidth = 1F;
             this.bProxyList_Clear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bProxyList_Clear.IconSvg = "DeleteOutlined";
+            this.bProxyList_Clear.LocalizationText = "Clear";
             this.bProxyList_Clear.Location = new System.Drawing.Point(203, 3);
             this.bProxyList_Clear.Name = "bProxyList_Clear";
             this.bProxyList_Clear.Size = new System.Drawing.Size(94, 44);
@@ -416,6 +423,7 @@
             this.bProxyStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bProxyStop.Enabled = false;
             this.bProxyStop.IconSvg = "PauseCircleOutlined";
+            this.bProxyStop.LocalizationText = "Stop";
             this.bProxyStop.Location = new System.Drawing.Point(103, 3);
             this.bProxyStop.Name = "bProxyStop";
             this.bProxyStop.Size = new System.Drawing.Size(94, 44);
@@ -434,30 +442,39 @@
             menuItem14.IconSvg = "PlusOutlined";
             menuItem15.IconSvg = "ShareAltOutlined";
             menuItem15.ID = "miProxySettings";
+            menuItem15.LocalizationText = "ProxyModeForm.{id}";
             menuItem15.Text = "代理设置";
             menuItem16.IconSvg = "FilterOutlined";
             menuItem16.ID = "miFilterSettings";
+            menuItem16.LocalizationText = "ProxyModeForm.{id}";
             menuItem16.Text = "过滤设置";
             menuItem17.IconSvg = "AimOutlined";
             menuItem17.ID = "miHookSettings";
+            menuItem17.LocalizationText = "ProxyModeForm.{id}";
             menuItem17.Text = "拦截设置";
             menuItem18.IconSvg = "OrderedListOutlined";
             menuItem18.ID = "miListSettings";
+            menuItem18.LocalizationText = "ProxyModeForm.{id}";
             menuItem18.Text = "列表设置";
             menuItem19.IconSvg = "BlockOutlined";
             menuItem19.ID = "miMapSettings";
+            menuItem19.LocalizationText = "ProxyModeForm.{id}";
             menuItem19.Text = "映射设置";
             menuItem20.IconSvg = "CloudUploadOutlined";
             menuItem20.ID = "miExternalProxySettings";
+            menuItem20.LocalizationText = "ProxyModeForm.{id}";
             menuItem20.Text = "外部代理设置";
             menuItem21.IconSvg = "GoldOutlined";
             menuItem21.ID = "miHotKeySettings";
+            menuItem21.LocalizationText = "ProxyModeForm.{id}";
             menuItem21.Text = "快捷键设置";
             menuItem22.IconSvg = "DeliveredProcedureOutlined";
             menuItem22.ID = "miBackUpSettings";
+            menuItem22.LocalizationText = "ProxyModeForm.{id}";
             menuItem22.Text = "备份设置";
             menuItem23.IconSvg = "SettingOutlined";
             menuItem23.ID = "miSystemSettings";
+            menuItem23.LocalizationText = "ProxyModeForm.{id}";
             menuItem23.Text = "系统设置";
             menuItem14.Sub.Add(menuItem15);
             menuItem14.Sub.Add(menuItem16);
@@ -489,6 +506,7 @@
             this.bProxyStart.LoadingWaveSize = 6;
             this.bProxyStart.LoadingWaveValue = 0.6F;
             this.bProxyStart.LoadingWaveVertical = true;
+            this.bProxyStart.LocalizationText = "Start";
             this.bProxyStart.Location = new System.Drawing.Point(3, 3);
             this.bProxyStart.Name = "bProxyStart";
             this.bProxyStart.Size = new System.Drawing.Size(94, 44);
@@ -645,6 +663,7 @@
             this.lFilterProxy.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lFilterProxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lFilterProxy.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterProxy.LocalizationText = "ProxyModeForm.Filter";
             this.lFilterProxy.Location = new System.Drawing.Point(257, 3);
             this.lFilterProxy.Name = "lFilterProxy";
             this.lFilterProxy.Size = new System.Drawing.Size(30, 24);
@@ -680,6 +699,7 @@
             this.lProxyUDP.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyUDP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyUDP.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxyUDP.LocalizationText = "ProxyModeForm.UDPLink";
             this.lProxyUDP.Location = new System.Drawing.Point(509, 3);
             this.lProxyUDP.Name = "lProxyUDP";
             this.lProxyUDP.Size = new System.Drawing.Size(72, 24);
@@ -702,6 +722,7 @@
             this.lUDP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lUDP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lUDP_Resp.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lUDP_Resp.LocalizationText = "ProxyModeForm.UDPResp";
             this.lUDP_Resp.Location = new System.Drawing.Point(878, 3);
             this.lUDP_Resp.Name = "lUDP_Resp";
             this.lUDP_Resp.Size = new System.Drawing.Size(59, 24);
@@ -737,6 +758,7 @@
             this.lUDP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lUDP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lUDP_Req.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lUDP_Req.LocalizationText = "ProxyModeForm.UDPReq";
             this.lUDP_Req.Location = new System.Drawing.Point(787, 3);
             this.lUDP_Req.Name = "lUDP_Req";
             this.lUDP_Req.Size = new System.Drawing.Size(59, 24);
@@ -785,6 +807,7 @@
             this.lTCP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTCP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTCP_Resp.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTCP_Resp.LocalizationText = "ProxyModeForm.TCPResp";
             this.lTCP_Resp.Location = new System.Drawing.Point(700, 3);
             this.lTCP_Resp.Name = "lTCP_Resp";
             this.lTCP_Resp.Size = new System.Drawing.Size(55, 24);
@@ -820,6 +843,7 @@
             this.lTCP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTCP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTCP_Req.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTCP_Req.LocalizationText = "ProxyModeForm.TCPReq";
             this.lTCP_Req.Location = new System.Drawing.Point(613, 3);
             this.lTCP_Req.Name = "lTCP_Req";
             this.lTCP_Req.Size = new System.Drawing.Size(55, 24);
@@ -855,6 +879,7 @@
             this.lFilterExecute.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lFilterExecute.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lFilterExecute.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterExecute.LocalizationText = "ProxyModeForm.ExecuteFilter";
             this.lFilterExecute.Location = new System.Drawing.Point(92, 3);
             this.lFilterExecute.Name = "lFilterExecute";
             this.lFilterExecute.Size = new System.Drawing.Size(57, 24);
@@ -877,6 +902,7 @@
             this.lProxyTCP.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyTCP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyTCP.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxyTCP.LocalizationText = "ProxyModeForm.TCPLink";
             this.lProxyTCP.Location = new System.Drawing.Point(409, 3);
             this.lProxyTCP.Name = "lProxyTCP";
             this.lProxyTCP.Size = new System.Drawing.Size(68, 24);
@@ -912,6 +938,7 @@
             this.lProxyAccount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyAccount.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxyAccount.LocalizationText = "ProxyModeForm.Account";
             this.lProxyAccount.Location = new System.Drawing.Point(319, 3);
             this.lProxyAccount.Name = "lProxyAccount";
             this.lProxyAccount.Size = new System.Drawing.Size(44, 24);
@@ -947,6 +974,7 @@
             this.lProxyQueue.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyQueue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyQueue.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxyQueue.LocalizationText = "ProxyModeForm.Buffer";
             this.lProxyQueue.Location = new System.Drawing.Point(181, 3);
             this.lProxyQueue.Name = "lProxyQueue";
             this.lProxyQueue.Size = new System.Drawing.Size(44, 24);
@@ -982,6 +1010,7 @@
             this.lProxyTotal.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProxyTotal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProxyTotal.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxyTotal.LocalizationText = "ProxyModeForm.TotalProxy";
             this.lProxyTotal.Location = new System.Drawing.Point(3, 3);
             this.lProxyTotal.Name = "lProxyTotal";
             this.lProxyTotal.Size = new System.Drawing.Size(57, 24);
@@ -1095,7 +1124,7 @@
             // 
             // tpClientList
             // 
-            this.tpClientList.Location = new System.Drawing.Point(3, 33);
+            this.tpClientList.Location = new System.Drawing.Point(-1124, -724);
             this.tpClientList.Name = "tpClientList";
             this.tpClientList.Size = new System.Drawing.Size(1124, 724);
             this.tpClientList.TabIndex = 8;

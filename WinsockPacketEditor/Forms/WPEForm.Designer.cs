@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.Tabs.StyleLine styleLine7 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WPEForm));
             this.pWPEForm = new AntdUI.Panel();
             this.tabWPEForm = new AntdUI.Tabs();
@@ -85,7 +85,7 @@
             this.tabWPEForm.Pages.Add(this.tpLogin);
             this.tabWPEForm.Pages.Add(this.tpRemote);
             this.tabWPEForm.Size = new System.Drawing.Size(320, 420);
-            this.tabWPEForm.Style = styleLine7;
+            this.tabWPEForm.Style = styleLine1;
             this.tabWPEForm.TabIndex = 5;
             this.tabWPEForm.Text = "tabs1";
             // 
@@ -137,7 +137,7 @@
             this.bRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bRemote.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bRemote.Ghost = true;
-            this.bRemote.LocalizationText = "WPEForm.SetRemot";
+            this.bRemote.LocalizationText = "WPEForm.SetRemote";
             this.bRemote.Location = new System.Drawing.Point(60, 327);
             this.bRemote.Name = "bRemote";
             this.bRemote.Size = new System.Drawing.Size(194, 54);
@@ -265,6 +265,7 @@
             this.txtRemote_PassWord.AllowClear = true;
             this.txtRemote_PassWord.ColorScheme = AntdUI.TAMode.Light;
             this.txtRemote_PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtRemote_PassWord.LocalizationPlaceholderText = "WPEForm.PassWord";
             this.txtRemote_PassWord.Location = new System.Drawing.Point(35, 140);
             this.txtRemote_PassWord.Name = "txtRemote_PassWord";
             this.txtRemote_PassWord.PlaceholderText = "请输入密码";
@@ -279,6 +280,7 @@
             this.txtRemote_UserName.AllowClear = true;
             this.txtRemote_UserName.ColorScheme = AntdUI.TAMode.Light;
             this.txtRemote_UserName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtRemote_UserName.LocalizationPlaceholderText = "WPEForm.UserName";
             this.txtRemote_UserName.Location = new System.Drawing.Point(35, 89);
             this.txtRemote_UserName.Name = "txtRemote_UserName";
             this.txtRemote_UserName.PlaceholderText = "请输入管理员账号";
@@ -313,6 +315,7 @@
             this.bSaveRemote.ColorScheme = AntdUI.TAMode.Light;
             this.bSaveRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSaveRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bSaveRemote.LocalizationText = "OK";
             this.bSaveRemote.Location = new System.Drawing.Point(35, 287);
             this.bSaveRemote.Name = "bSaveRemote";
             this.bSaveRemote.Radius = 8;
@@ -341,6 +344,7 @@
             this.cbIsRemote.ColorScheme = AntdUI.TAMode.Light;
             this.cbIsRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cbIsRemote.LocalizationText = "WPEForm.EnableMGT";
             this.cbIsRemote.Location = new System.Drawing.Point(35, 242);
             this.cbIsRemote.Name = "cbIsRemote";
             this.cbIsRemote.Size = new System.Drawing.Size(151, 39);

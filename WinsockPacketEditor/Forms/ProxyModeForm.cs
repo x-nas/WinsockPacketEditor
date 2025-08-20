@@ -282,7 +282,7 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.ProxyList.Column."),
+                }.SetFixed().SetLocalizationTitleID("Table.ProxyList.Column.ID"),
                 new AntdUI.Column("ProxyTime", "时间戳", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -296,8 +296,8 @@ namespace WinsockPacketEditor
                     {
                         return Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)value);
                     },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
+                }.SetLocalizationTitleID("Table.ProxyList.Column."),
+                new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("ClientAddr", "客户端地址")
                 {
                     Render = (value, record, rowindex)=>
@@ -314,7 +314,7 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ClientLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("ClientLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("ServerDomain", "服务端地址")
                 {
                     Render = (value, record, rowindex)=>
@@ -331,9 +331,9 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ServerLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("ServerLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.ProxyList.Column."),
             };
 
             this.tProxyList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -748,7 +748,7 @@ namespace WinsockPacketEditor
                 this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
 
                 Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
-                    AntdUI.Localization.Get("ProxyBytesInfo", "请求: {0}  响应: {1}"),
+                    AntdUI.Localization.Get("ProxyModeForm.ProxyBytesInfo", "请求: {0}  响应: {1}"),
                     Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request),
                     Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
                 this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
@@ -759,7 +759,7 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
 
                 Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
-                    AntdUI.Localization.Get("ProxySpeedInfo", "上行: {0} KB/s  下行: {1} KB/s"),
+                    AntdUI.Localization.Get("ProxyModeForm.ProxySpeedInfo", "上行: {0} KB/s  下行: {1} KB/s"),
                     dUplink.ToString("0.00"),
                     dDownlink.ToString("0.00"));
                 this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;

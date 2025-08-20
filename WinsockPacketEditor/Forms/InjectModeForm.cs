@@ -255,7 +255,7 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
+                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column.ID"),
                 new AntdUI.Column("PacketTime", "时间戳", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>

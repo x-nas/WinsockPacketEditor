@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.Tabs.StyleCard styleCard1 = new AntdUI.Tabs.StyleCard();
+            AntdUI.Tabs.StyleCard styleCard4 = new AntdUI.Tabs.StyleCard();
             this.splitterClientList = new AntdUI.Splitter();
             this.treeClientList = new AntdUI.Tree();
             this.tlpAuthInfo = new System.Windows.Forms.TableLayoutPanel();
@@ -41,12 +41,12 @@
             this.lDevicesCount = new AntdUI.Label();
             this.lLinksCount = new AntdUI.Label();
             this.lAuthCount = new AntdUI.Label();
-            this.bgwClientList = new System.ComponentModel.BackgroundWorker();
             this.tabClientList = new AntdUI.Tabs();
             this.tpAuthList = new AntdUI.TabPage();
-            this.tpProxyLog = new AntdUI.TabPage();
             this.tAuthList = new AntdUI.Table();
+            this.tpProxyLog = new AntdUI.TabPage();
             this.tProxyLog = new AntdUI.Table();
+            this.bgwClientList = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitterClientList)).BeginInit();
             this.splitterClientList.Panel1.SuspendLayout();
             this.splitterClientList.Panel2.SuspendLayout();
@@ -202,6 +202,7 @@
             this.lDevicesCount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lDevicesCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lDevicesCount.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lDevicesCount.LocalizationText = "ClientList.TotalDevices";
             this.lDevicesCount.Location = new System.Drawing.Point(228, 3);
             this.lDevicesCount.Name = "lDevicesCount";
             this.lDevicesCount.Size = new System.Drawing.Size(68, 24);
@@ -213,6 +214,7 @@
             this.lLinksCount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lLinksCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lLinksCount.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lLinksCount.LocalizationText = "ClientList.TotalLinks";
             this.lLinksCount.Location = new System.Drawing.Point(126, 3);
             this.lLinksCount.Name = "lLinksCount";
             this.lLinksCount.Size = new System.Drawing.Size(68, 24);
@@ -224,51 +226,38 @@
             this.lAuthCount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lAuthCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lAuthCount.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lAuthCount.LocalizationText = "ClientList.TotalClients";
             this.lAuthCount.Location = new System.Drawing.Point(8, 3);
             this.lAuthCount.Name = "lAuthCount";
             this.lAuthCount.Size = new System.Drawing.Size(84, 24);
             this.lAuthCount.TabIndex = 5;
             this.lAuthCount.Text = "客户端总数:";
             // 
-            // bgwClientList
-            // 
-            this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
-            this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
-            // 
             // tabClientList
             // 
             this.tabClientList.Controls.Add(this.tpAuthList);
             this.tabClientList.Controls.Add(this.tpProxyLog);
-            this.tabClientList.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabClientList.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabClientList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabClientList.Gap = 20;
             this.tabClientList.Location = new System.Drawing.Point(3, 33);
             this.tabClientList.Name = "tabClientList";
             this.tabClientList.Pages.Add(this.tpAuthList);
             this.tabClientList.Pages.Add(this.tpProxyLog);
-            this.tabClientList.SelectedIndex = 1;
             this.tabClientList.Size = new System.Drawing.Size(887, 764);
-            this.tabClientList.Style = styleCard1;
+            this.tabClientList.Style = styleCard4;
             this.tabClientList.TabIndex = 7;
             this.tabClientList.Type = AntdUI.TabType.Card;
             // 
             // tpAuthList
             // 
             this.tpAuthList.Controls.Add(this.tAuthList);
-            this.tpAuthList.Location = new System.Drawing.Point(0, 0);
+            this.tpAuthList.LocalizationText = "ClientList.{id}";
+            this.tpAuthList.Location = new System.Drawing.Point(3, 45);
             this.tpAuthList.Name = "tpAuthList";
-            this.tpAuthList.Size = new System.Drawing.Size(0, 0);
+            this.tpAuthList.Size = new System.Drawing.Size(881, 716);
             this.tpAuthList.TabIndex = 0;
             this.tpAuthList.Text = "认证记录";
-            // 
-            // tpProxyLog
-            // 
-            this.tpProxyLog.Controls.Add(this.tProxyLog);
-            this.tpProxyLog.Location = new System.Drawing.Point(3, 45);
-            this.tpProxyLog.Name = "tpProxyLog";
-            this.tpProxyLog.Size = new System.Drawing.Size(881, 716);
-            this.tpProxyLog.TabIndex = 1;
-            this.tpProxyLog.Text = "代理日志";
             // 
             // tAuthList
             // 
@@ -279,8 +268,18 @@
             this.tAuthList.GapCell = 6;
             this.tAuthList.Location = new System.Drawing.Point(0, 0);
             this.tAuthList.Name = "tAuthList";
-            this.tAuthList.Size = new System.Drawing.Size(0, 0);
+            this.tAuthList.Size = new System.Drawing.Size(881, 716);
             this.tAuthList.TabIndex = 8;
+            // 
+            // tpProxyLog
+            // 
+            this.tpProxyLog.Controls.Add(this.tProxyLog);
+            this.tpProxyLog.LocalizationText = "ClientList.{id}";
+            this.tpProxyLog.Location = new System.Drawing.Point(-881, -716);
+            this.tpProxyLog.Name = "tpProxyLog";
+            this.tpProxyLog.Size = new System.Drawing.Size(881, 716);
+            this.tpProxyLog.TabIndex = 1;
+            this.tpProxyLog.Text = "代理日志";
             // 
             // tProxyLog
             // 
@@ -293,6 +292,11 @@
             this.tProxyLog.Name = "tProxyLog";
             this.tProxyLog.Size = new System.Drawing.Size(881, 716);
             this.tProxyLog.TabIndex = 9;
+            // 
+            // bgwClientList
+            // 
+            this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
+            this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
             // 
             // ClientList
             // 

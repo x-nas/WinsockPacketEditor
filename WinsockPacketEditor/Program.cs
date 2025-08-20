@@ -34,24 +34,13 @@ namespace WinsockPacketEditor
                     WPEForm startForm = new WPEForm();
                     if (startForm.ShowDialog() == DialogResult.OK)
                     {
-                        switch (Operate.SystemConfig.StartMode)
-                        { 
-                            case Operate.SystemConfig.SystemMode.Proxy:
+                        if (Operate.SystemConfig.StartMode == Operate.SystemConfig.SystemMode.Proxy)
+                        {
+                            ThreadPool.SetMinThreads(100, 100);
+                            ThreadPool.SetMaxThreads(Environment.ProcessorCount * 2, 1000);
 
-                                ThreadPool.SetMinThreads(100, 100);
-                                ThreadPool.SetMaxThreads(Environment.ProcessorCount * 2, 1000);
-
-                                //InjectModeForm imForm = new InjectModeForm();
-                                //imForm.Show();
-
-                                Application.Run(new ProxyModeForm());
-
-                                break;
-
-                            case Operate.SystemConfig.SystemMode.Process:
-
-                                break;
-                        }                        
+                            Application.Run(new ProxyModeForm());
+                        }
                     }
                 }
                 else

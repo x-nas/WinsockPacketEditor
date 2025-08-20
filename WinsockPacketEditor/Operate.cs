@@ -862,19 +862,22 @@ namespace WinsockPacketEditor
                 {
                     if (FloatButton == null)
                     {
-                        FloatButton = AntdUI.FloatButton.open(new AntdUI.FloatButton.Config(form,
+                        FloatButton = AntdUI.FloatButton.open(
+                            new AntdUI.FloatButton.Config(form,
                             new AntdUI.FloatButton.ConfigBtn[]
                             {
-                            new AntdUI.FloatButton.ConfigBtn("GitHub", "QuestionOutlined", true)
-                    {
-                        Tooltip = "问题反馈",
-                        Type= AntdUI.TTypeMini.Success
-                    },
-                            new AntdUI.FloatButton.ConfigBtn("WebSite", "HomeOutlined", true)
-                    {
-                        Tooltip = "访问官网",
-                        Type= AntdUI.TTypeMini.Default
-                    }
+                                new AntdUI.FloatButton.ConfigBtn("GitHub", "QuestionOutlined", true)
+                                {
+                                    Tooltip = "问题反馈",
+                                    LocalizationTooltip = "Feedback",
+                                    Type= AntdUI.TTypeMini.Success
+                                },
+                                new AntdUI.FloatButton.ConfigBtn("WebSite", "HomeOutlined", true)
+                                {
+                                    Tooltip = "访问官网",
+                                    LocalizationTooltip = "OfficialWebsite",
+                                    Type= AntdUI.TTypeMini.Default
+                                }
                             }, btn =>
                             {
                                 btn.Loading = true;

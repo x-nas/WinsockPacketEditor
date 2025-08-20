@@ -18,6 +18,15 @@ namespace WinsockPacketEditor
                 case "OK":
                     return "OK";
 
+                case "Start":
+                    return "Start";
+
+                case "Stop":
+                    return "Stop";
+
+                case "Clear":
+                    return "Clear";
+
                 case "Now":
                     return "Now";
 
@@ -53,6 +62,36 @@ namespace WinsockPacketEditor
 
                 case "TextRenderingHighQuality":
                     return "TextRendering HighQuality";
+
+                case "Send":
+                    return "Send:";
+
+                case "Recv":
+                    return "Recv:";
+
+                case "SendTo":
+                    return "SendTo:";
+
+                case "RecvFrom":
+                    return "RecvFrom:";
+
+                case "WSASend":
+                    return "WSASend:";
+
+                case "WSARecv":
+                    return "WSARecv:";
+
+                case "WSASendTo":
+                    return "WSASendTo:";
+
+                case "WSARecvFrom":
+                    return "WSARecvFrom:";
+
+                case "Feedback":
+                    return "Questions and Feedback";
+
+                case "OfficialWebsite":
+                    return "Official Website";
 
                 #endregion
 
@@ -101,28 +140,31 @@ namespace WinsockPacketEditor
                 case "WPEForm.InjectMode":
                     return "Inject Mode";
 
-                case "StartForm.cbIsRemote":
-                    return "Enable Remote MGT";
-
-                case "StartForm.lRemote_UserName":
-                    return "Username";
-
-                case "StartForm.lRemote_PassWord":
-                    return "Password";
-
-                case "StartForm.lRemote_Port":
-                    return "Port Num";
-
-                case "WPEForm.SetRemot":
+                case "WPEForm.SetRemote":
                     return "Set Remote MGT";
 
-                case "StartForm.RemoteEmpty":
-                    return "Username or Password Empty";
+                case "WPEForm.UserName":
+                    return "Please enter username";
 
-                case "StartForm.RemoteEnable":
+                case "WPEForm.PassWord":
+                    return "Please enter password";
+
+                case "WPEForm.EnableMGT":
+                    return "Enable Remote MGT";
+
+                case "WPEForm.UserName.Empty":
+                    return "Username Empty";
+
+                case "WPEForm.PassWord.Empty":
+                    return "Password Empty";
+
+                case "WPEForm.RemoteError":
+                    return "Remote URL Error";
+
+                case "WPEForm.RemoteEnable":
                     return "Remote MGT Enabled";
 
-                case "StartForm.RemoteDisable":
+                case "WPEForm.RemoteDisable":
                     return "Remote MGT Disabled";
 
                 #endregion
@@ -184,8 +226,14 @@ namespace WinsockPacketEditor
                 case "InjectModeForm.miFilterList":
                     return "Filter List";
 
+                case "InjectModeForm.miSendList":
+                    return "Send List";
+
+                case "InjectModeForm.miRobotList":
+                    return "Robot List";
+
                 case "InjectModeForm.miStatistical":
-                    return "Statistical";
+                    return "Statistical Data";
 
                 case "InjectModeForm.miComparison":
                     return "Text Comparison";
@@ -202,11 +250,259 @@ namespace WinsockPacketEditor
                 case "InjectModeForm.miSystemLog":
                     return "System Log";
 
-                case "InjectModeForm.FilterSettings.Success":
-                    return "Filter settings saved successfully";
+                case "InjectModeForm.TotalPackets":
+                    return "Total Packets:";
+
+                case "InjectModeForm.ExecuteFilter":
+                    return "Execute Filter:";
+
+                case "InjectModeForm.Buffer":
+                    return "Buffer:";
+
+                case "InjectModeForm.Filter":
+                    return "Filter:";
+
+                case "Table.PacketList.Column.ID":
+                    return "ID";
+
+                case "Table.PacketList.Column.PacketTime":
+                    return "Time";
+
+                case "Table.PacketList.Column.PacketType":
+                    return "Type";
+
+                case "Table.PacketList.Column.PacketSocket":
+                    return "Socket";
+
+                case "Table.PacketList.Column.PacketFrom":
+                    return "From";
+
+                case "Table.PacketList.Column.FromLocation":
+                    return "Location";
+
+                case "Table.PacketList.Column.PacketTo":
+                    return "To";
+
+                case "Table.PacketList.Column.ToLocation":
+                    return "Location";
+
+                case "Table.PacketList.Column.PacketLen":
+                    return "Length";
+
+                case "Table.PacketList.Column.PacketData":
+                    return "Data";
+
+                case "InjectModeForm.miFilterSettings":
+                    return "Filter Settings";
+
+                case "InjectModeForm.miHookSettings":
+                    return "Hook Settings";
+
+                case "InjectModeForm.miListSettings":
+                    return "List Settings";
+
+                case "InjectModeForm.miHotKeySettings":
+                    return "HotKey Settings";
+
+                case "InjectModeForm.miBackUpSettings":
+                    return "BackUp Settings";
+
+                case "InjectModeForm.miSystemSettings":
+                    return "System Settings";
 
                 case "InjectModeForm.SpeedInfo":
                     return "Sent: {0} Received: {1}";
+
+                #endregion
+
+                #region//ProxyModeForm
+
+                case "ProxyModeForm":
+                    return "Proxy Mode";
+
+                case "ProxyModeForm.miProxyList":
+                    return "Proxy List";
+
+                case "ProxyModeForm.miClientList":
+                    return "Client List";
+
+                case "ProxyModeForm.miAccountList":
+                    return "Account List";
+
+                case "ProxyModeForm.miFilterList":
+                    return "Filter List";
+
+                case "ProxyModeForm.miSendList":
+                    return "Send List";
+
+                case "ProxyModeForm.miRobotList":
+                    return "Robot List";
+
+                case "ProxyModeForm.miStatistical":
+                    return "Statistical Data";
+
+                case "ProxyModeForm.miComparison":
+                    return "Text Comparison";
+
+                case "ProxyModeForm.miXOR":
+                    return "XOR Calculation";
+
+                case "ProxyModeForm.miTranscoding":
+                    return "Transcoding";
+
+                case "ProxyModeForm.miExtraction":
+                    return "Data Extraction";
+
+                case "ProxyModeForm.miSystemLog":
+                    return "System Log";
+
+                case "ProxyModeForm.TotalProxy":
+                    return "Total Proxy:";
+
+                case "ProxyModeForm.ExecuteFilter":
+                    return "Execute Filter:";
+
+                case "ProxyModeForm.Buffer":
+                    return "Buffer:";
+
+                case "ProxyModeForm.Filter":
+                    return "Filter:";
+
+                case "ProxyModeForm.Account":
+                    return "Account:";
+
+                case "ProxyModeForm.TCPLink":
+                    return "TCP Link:";
+
+                case "ProxyModeForm.UDPLink":
+                    return "UDP Link:";
+
+                case "ProxyModeForm.TCPReq":
+                    return "TCP Req:";
+
+                case "ProxyModeForm.TCPResp":
+                    return "TCP Resp:";
+
+                case "ProxyModeForm.UDPReq":
+                    return "UDP Req:";
+
+                case "ProxyModeForm.UDPResp":
+                    return "UDP Resp:";
+
+                case "ProxyModeForm.miProxySettings":
+                    return "Proxy Settings";
+
+                case "ProxyModeForm.miFilterSettings":
+                    return "Filter Settings";
+
+                case "ProxyModeForm.miHookSettings":
+                    return "Hook Settings";
+
+                case "ProxyModeForm.miListSettings":
+                    return "List Settings";
+
+                case "ProxyModeForm.miMapSettings":
+                    return "Map Settings";
+
+                case "ProxyModeForm.miExternalProxySettings":
+                    return "EXTProxy Settings";
+
+                case "ProxyModeForm.miHotKeySettings":
+                    return "HotKey Settings";
+
+                case "ProxyModeForm.miBackUpSettings":
+                    return "BackUp Settings";
+
+                case "ProxyModeForm.miSystemSettings":
+                    return "System Settings";
+
+                case "Table.ProxyList.Column.ID":
+                    return "ID";
+
+                case "Table.ProxyList.Column.ProxyTime":
+                    return "Time";
+
+                case "Table.ProxyList.Column.PacketType":
+                    return "Type";
+
+                case "Table.ProxyList.Column.PacketSocket":
+                    return "Socket";
+
+                case "Table.ProxyList.Column.ClientAddr":
+                    return "Client Addr";
+
+                case "Table.ProxyList.Column.ClientLocation":
+                    return "Location";
+
+                case "Table.ProxyList.Column.ServerDomain":
+                    return "Server Addr";
+
+                case "Table.ProxyList.Column.ServerLocation":
+                    return "Location";
+
+                case "Table.ProxyList.Column.PacketLen":
+                    return "Length";
+
+                case "Table.ProxyList.Column.PacketData":
+                    return "Data";
+
+                case "ProxyModeForm.ProxyBytesInfo":
+                    return "Request: {0}  Response: {1}";
+
+                case "ProxyModeForm.ProxySpeedInfo":
+                    return "UpLink: {0} KB/s  DownLink: {1} KB/s";
+
+                #endregion
+
+                #region//ClientList
+
+                case "ClientList.TotalClients":
+                    return "Total Clients:";
+
+                case "ClientList.TotalLinks":
+                    return "Total Links:";
+
+                case "ClientList.TotalDevices":
+                    return "Total Devices:";
+
+                case "ClientList.tpAuthList":
+                    return "Auth List";
+
+                case "ClientList.tpProxyLog":
+                    return "Proxy Log";
+
+                case "Table.AuthList.Column.AuthTime":
+                    return "Time";
+
+                case "Table.AuthList.Column.AID":
+                    return "Account";
+
+                case "Table.AuthList.Column.AuthIP":
+                    return "IP Addr";
+
+                case "Table.AuthList.Column.IPLocation":
+                    return "Location";
+
+                case "Table.AuthList.Column.LinksNumber":
+                    return "Links";
+
+                case "Table.AuthList.Column.DevicesNumber":
+                    return "Devices";
+
+                case "Table.AuthList.Column.AuthResult":
+                    return "Auth Result";
+
+                case "Table.ProxyLog.Column.LoginIP":
+                    return "IP Addr";
+
+                case "Table.ProxyLog.Column.LogTime":
+                    return "Time";
+
+                case "Table.ProxyLog.Column.UserName":
+                    return "Account";
+
+                case "Table.ProxyLog.Column.LogContent":
+                    return "Content";
 
                 #endregion
 

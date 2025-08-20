@@ -19,6 +19,8 @@ namespace WinsockPacketEditor
 
         private void ClientList_Load(object sender, EventArgs e)
         {
+            this.tabClientList.SelectTab(0);
+
             this.InitTable_AuthList();
             this.InitTable_ProxyLog();
         }

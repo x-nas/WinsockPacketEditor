@@ -87,22 +87,7 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            switch (Operate.SystemConfig.StartMode)
-            {
-                case Operate.SystemConfig.SystemMode.Process:
-
-                    Operate.PacketConfig.Packet.SpeedMode = this.cbSpeedMode.Checked;
-                    ((InterfaceInfo.IInjectMode)form).InitFloatButton();
-
-                    break;
-
-                case Operate.SystemConfig.SystemMode.Proxy:
-
-                    Operate.ProxyConfig.Proxy.SpeedMode = this.cbSpeedMode.Checked;
-                    ((InterfaceInfo.IProxyMode)form).InitFloatButton();
-
-                    break;
-            }
+            Operate.SystemConfig.IsShow_FloatButton = this.switchFloatButton.Checked;
 
             if (this.rbListExecute_Together.Checked)
             {
@@ -121,8 +106,23 @@ namespace WinsockPacketEditor
             {
                 Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Sequence;
             }
+            
+            switch (Operate.SystemConfig.StartMode)
+            {
+                case Operate.SystemConfig.SystemMode.Process:
 
-            Operate.SystemConfig.IsShow_FloatButton = this.switchFloatButton.Checked;
+                    Operate.PacketConfig.Packet.SpeedMode = this.cbSpeedMode.Checked;
+                    ((InterfaceInfo.IInjectMode)form).InitFloatButton();
+
+                    break;
+
+                case Operate.SystemConfig.SystemMode.Proxy:
+
+                    Operate.ProxyConfig.Proxy.SpeedMode = this.cbSpeedMode.Checked;
+                    ((InterfaceInfo.IProxyMode)form).InitFloatButton();
+
+                    break;
+            }
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "系统设置保存成功", TType.Success)
             {

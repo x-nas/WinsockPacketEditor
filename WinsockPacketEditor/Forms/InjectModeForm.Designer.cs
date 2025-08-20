@@ -398,6 +398,7 @@
             this.bPacketList_Clear.BorderWidth = 1F;
             this.bPacketList_Clear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bPacketList_Clear.IconSvg = "DeleteOutlined";
+            this.bPacketList_Clear.LocalizationText = "Clear";
             this.bPacketList_Clear.Location = new System.Drawing.Point(203, 3);
             this.bPacketList_Clear.Name = "bPacketList_Clear";
             this.bPacketList_Clear.Size = new System.Drawing.Size(94, 44);
@@ -412,6 +413,7 @@
             this.bHookStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHookStop.Enabled = false;
             this.bHookStop.IconSvg = "PauseCircleOutlined";
+            this.bHookStop.LocalizationText = "Stop";
             this.bHookStop.Location = new System.Drawing.Point(103, 3);
             this.bHookStop.Name = "bHookStop";
             this.bHookStop.Size = new System.Drawing.Size(94, 44);
@@ -430,21 +432,27 @@
             menuItem12.IconSvg = "PlusOutlined";
             menuItem13.IconSvg = "FilterOutlined";
             menuItem13.ID = "miFilterSettings";
+            menuItem13.LocalizationText = "InjectModeForm.{id}";
             menuItem13.Text = "过滤设置";
             menuItem14.IconSvg = "AimOutlined";
             menuItem14.ID = "miHookSettings";
+            menuItem14.LocalizationText = "InjectModeForm.{id}";
             menuItem14.Text = "拦截设置";
             menuItem15.IconSvg = "OrderedListOutlined";
             menuItem15.ID = "miListSettings";
+            menuItem15.LocalizationText = "InjectModeForm.{id}";
             menuItem15.Text = "列表设置";
             menuItem16.IconSvg = "GoldOutlined";
             menuItem16.ID = "miHotKeySettings";
+            menuItem16.LocalizationText = "InjectModeForm.{id}";
             menuItem16.Text = "快捷键设置";
             menuItem17.IconSvg = "DeliveredProcedureOutlined";
             menuItem17.ID = "miBackUpSettings";
+            menuItem17.LocalizationText = "InjectModeForm.{id}";
             menuItem17.Text = "备份设置";
             menuItem18.IconSvg = "SettingOutlined";
             menuItem18.ID = "miSystemSettings";
+            menuItem18.LocalizationText = "InjectModeForm.{id}";
             menuItem18.Text = "系统设置";
             menuItem12.Sub.Add(menuItem13);
             menuItem12.Sub.Add(menuItem14);
@@ -473,6 +481,7 @@
             this.bHookStart.LoadingWaveSize = 6;
             this.bHookStart.LoadingWaveValue = 0.6F;
             this.bHookStart.LoadingWaveVertical = true;
+            this.bHookStart.LocalizationText = "Start";
             this.bHookStart.Location = new System.Drawing.Point(3, 3);
             this.bHookStart.Name = "bHookStart";
             this.bHookStart.Size = new System.Drawing.Size(94, 44);
@@ -623,6 +632,7 @@
             this.lWSARecvFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSARecvFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWSARecvFrom.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSARecvFrom.LocalizationText = "WSARecvFrom";
             this.lWSARecvFrom.Location = new System.Drawing.Point(887, 3);
             this.lWSARecvFrom.Name = "lWSARecvFrom";
             this.lWSARecvFrom.Size = new System.Drawing.Size(74, 24);
@@ -658,6 +668,7 @@
             this.lWSASendTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSASendTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWSASendTo.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSASendTo.LocalizationText = "WSASendTo";
             this.lWSASendTo.Location = new System.Drawing.Point(781, 3);
             this.lWSASendTo.Name = "lWSASendTo";
             this.lWSASendTo.Size = new System.Drawing.Size(74, 24);
@@ -693,6 +704,7 @@
             this.lWSARecv.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSARecv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWSARecv.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSARecv.LocalizationText = "WSARecv";
             this.lWSARecv.Location = new System.Drawing.Point(688, 3);
             this.lWSARecv.Name = "lWSARecv";
             this.lWSARecv.Size = new System.Drawing.Size(61, 24);
@@ -728,6 +740,7 @@
             this.lWSASend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSASend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWSASend.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSASend.LocalizationText = "WSASend";
             this.lWSASend.Location = new System.Drawing.Point(595, 3);
             this.lWSASend.Name = "lWSASend";
             this.lWSASend.Size = new System.Drawing.Size(61, 24);
@@ -763,6 +776,7 @@
             this.lRecvFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRecvFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lRecvFrom.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRecvFrom.LocalizationText = "RecvFrom";
             this.lRecvFrom.Location = new System.Drawing.Point(519, 3);
             this.lRecvFrom.Name = "lRecvFrom";
             this.lRecvFrom.Size = new System.Drawing.Size(44, 24);
@@ -798,6 +812,7 @@
             this.lSendTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSendTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSendTo.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSendTo.LocalizationText = "SendTo";
             this.lSendTo.Location = new System.Drawing.Point(443, 3);
             this.lSendTo.Name = "lSendTo";
             this.lSendTo.Size = new System.Drawing.Size(44, 24);
@@ -833,6 +848,7 @@
             this.lRecv.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRecv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lRecv.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRecv.LocalizationText = "Recv";
             this.lRecv.Location = new System.Drawing.Point(381, 3);
             this.lRecv.Name = "lRecv";
             this.lRecv.Size = new System.Drawing.Size(30, 24);
@@ -868,6 +884,7 @@
             this.lSend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSend.LocalizationText = "Send";
             this.lSend.Location = new System.Drawing.Point(319, 3);
             this.lSend.Name = "lSend";
             this.lSend.Size = new System.Drawing.Size(30, 24);
@@ -903,6 +920,7 @@
             this.lFilterPacket.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lFilterPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lFilterPacket.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterPacket.LocalizationText = "InjectModeForm.Filter";
             this.lFilterPacket.Location = new System.Drawing.Point(257, 3);
             this.lFilterPacket.Name = "lFilterPacket";
             this.lFilterPacket.Size = new System.Drawing.Size(30, 24);
@@ -986,6 +1004,7 @@
             this.lQueue.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lQueue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lQueue.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lQueue.LocalizationText = "InjectModeForm.Buffer";
             this.lQueue.Location = new System.Drawing.Point(181, 3);
             this.lQueue.Name = "lQueue";
             this.lQueue.Size = new System.Drawing.Size(44, 24);
@@ -997,6 +1016,7 @@
             this.lFilterExecute.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lFilterExecute.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lFilterExecute.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterExecute.LocalizationText = "InjectModeForm.ExecuteFilter";
             this.lFilterExecute.Location = new System.Drawing.Point(92, 3);
             this.lFilterExecute.Name = "lFilterExecute";
             this.lFilterExecute.Size = new System.Drawing.Size(57, 24);
@@ -1008,6 +1028,7 @@
             this.lTotal.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTotal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTotal.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTotal.LocalizationText = "InjectModeForm.TotalPackets";
             this.lTotal.Location = new System.Drawing.Point(3, 3);
             this.lTotal.Name = "lTotal";
             this.lTotal.Size = new System.Drawing.Size(57, 24);
