@@ -41,8 +41,6 @@ namespace WinsockPacketEditor
         public static class SystemConfig
         {
             public static int PID = -1;
-            public static Color col_Del = Color.Red;
-            public static Color col_Add = Color.Green;
             public static string PNAME = string.Empty;
             public static string PATH = string.Empty;
             public static string WebSite_Tutorials_CN = "https://www.wpe64.com/tutorials.html";
@@ -68,19 +66,15 @@ namespace WinsockPacketEditor
             public static DateTime StartTime = DateTime.Now;
             public static IntPtr MainHandle = IntPtr.Zero;
             public static int SystemSocket = 0;
-            public static bool ShowDebug = false;
             public static bool IsRemote = false;
             public static string Remote_URL, Remote_UserName, Remote_PassWord;
             public static ushort Remote_Port = 88;
             public static IDisposable WebServer;
             public static PerformanceCounter cpuCounter;
             public static bool IsShow_FloatButton = true;
-            public static bool IsShow_TextCompare = false, IsShow_TextDuplicate = false;
             public static Execute ListExecute = Execute.Sequence;
             public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
-            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;         
-            public static readonly Font FontUnderline = new Font(RichTextBox.DefaultFont, FontStyle.Underline);
-            public static readonly Font FontStrikeout = new Font(RichTextBox.DefaultFont, FontStyle.Strikeout);
+            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
 
             #region//结构定义           
 
@@ -124,7 +118,7 @@ namespace WinsockPacketEditor
 
             #endregion
 
-            #region//国家对应SVG字典
+            #region//国家SVG字典
 
             private static readonly ConcurrentDictionary<string, string> SvgCache = new ConcurrentDictionary<string, string>();
 
@@ -4604,20 +4598,20 @@ namespace WinsockPacketEditor
 
                 #region//执行命令
 
-                private static void Command(ProxyTCP pe, ReadOnlySpan<byte> bData)
+                private static void Command(ProxyTCP pt, ReadOnlySpan<byte> bData)
                 {
                     try
                     {
-                        if (pe?.TCP_Client?.Socket == null)
+                        if (pt?.TCP_Client?.Socket == null)
                         {
                             return;
                         }
 
-                        pe.ProxyType = (ProxyConfig.Proxy.ProxyType)bData[0];
-                        pe.CommandType = (ProxyConfig.Proxy.CommandType)bData[1];
-                        pe.AddressType = (ProxyConfig.Proxy.AddressType)bData[3];
+                        pt.ProxyType = (ProxyConfig.Proxy.ProxyType)bData[0];
+                        pt.CommandType = (ProxyConfig.Proxy.CommandType)bData[1];
+                        pt.AddressType = (ProxyConfig.Proxy.AddressType)bData[3];
 
-                        if (pe.ProxyType == ProxyConfig.Proxy.ProxyType.Socket5)
+                        if (pt.ProxyType == ProxyConfig.Proxy.ProxyType.Socket5)
                         {
                             try
                             {
@@ -4625,28 +4619,28 @@ namespace WinsockPacketEditor
                                 ReadOnlySpan<byte> bServerTCP_IP = ProxyConfig.Proxy.ProxyTCP_IP.GetAddressBytes();
                                 ReadOnlySpan<byte> bServerTCP_Port = BitConverter.GetBytes(ProxyConfig.Proxy.ProxyPort);
 
-                                IPEndPoint epServer = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(pe.AddressType, bADDRESS, out string AddressString);
+                                IPEndPoint epServer = ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(pt.AddressType, bADDRESS, out string AddressString);
                                 if (epServer == null)
                                 {
-                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                    ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                     return;
                                 }
 
-                                pe.TCP_Server.Socket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                                pe.TCP_Server.EndPoint = epServer;
+                                pt.TCP_Server.Socket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                pt.TCP_Server.EndPoint = epServer;
                                 ushort uPort = ((ushort)epServer.Port);
 
-                                pe.DomainType = ProxyConfig.Proxy.GetDomainType_ByPort(uPort);
-                                pe.TCP_Server.Address = ProxyConfig.Proxy.GetServerAddress(pe.DomainType, AddressString, uPort);
-                                pe.TCP_Client.Address = ProxyConfig.Proxy.GetClientAddress(pe.TCP_Client.Socket, AddressString, uPort);
+                                pt.DomainType = ProxyConfig.Proxy.GetDomainType_ByPort(uPort);
+                                pt.TCP_Server.Address = ProxyConfig.Proxy.GetServerAddress(pt.DomainType, AddressString, uPort);
+                                pt.TCP_Client.Address = ProxyConfig.Proxy.GetClientAddress(pt.TCP_Client.Socket, AddressString, uPort);
 
-                                switch (pe.CommandType)
+                                switch (pt.CommandType)
                                 {
                                     case ProxyConfig.Proxy.CommandType.Connect:
 
                                         #region//代理 TCP
 
-                                        switch (pe.DomainType)
+                                        switch (pt.DomainType)
                                         {
                                             case ProxyConfig.Proxy.DomainType.External:
 
@@ -4655,19 +4649,19 @@ namespace WinsockPacketEditor
                                                     IPEndPoint ExternalProxyEP = ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(ProxyConfig.Proxy.ExternalProxy_IP, ProxyConfig.Proxy.ExternalProxy_Port);
                                                     if (ExternalProxyEP == null)
                                                     {
-                                                        pe.TCP_Server.Close();
-                                                        pe.TCP_Client.Close();
+                                                        pt.TCP_Server.Close();
+                                                        pt.TCP_Client.Close();
                                                         return;
                                                     }
 
-                                                    var connectResult = pe.TCP_Server.Socket.BeginConnect(ExternalProxyEP, null, null);
+                                                    var connectResult = pt.TCP_Server.Socket.BeginConnect(ExternalProxyEP, null, null);
                                                     if (!connectResult.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
                                                     {
-                                                        pe.TCP_Server.Close();
-                                                        pe.TCP_Client.Close();
+                                                        pt.TCP_Server.Close();
+                                                        pt.TCP_Client.Close();
                                                         return;
                                                     }
-                                                    pe.TCP_Server.Socket.EndConnect(connectResult);
+                                                    pt.TCP_Server.Socket.EndConnect(connectResult);
 
                                                     byte[] handshakeRequest = null;
                                                     if (ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
@@ -4678,10 +4672,10 @@ namespace WinsockPacketEditor
                                                     {
                                                         handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
                                                     }
-                                                    pe.TCP_Server.Socket.Send(handshakeRequest);
+                                                    pt.TCP_Server.Socket.Send(handshakeRequest);
 
                                                     byte[] handshakeResponse = new byte[2];
-                                                    pe.TCP_Server.Socket.Receive(handshakeResponse);
+                                                    pt.TCP_Server.Socket.Receive(handshakeResponse);
 
                                                     if (handshakeResponse[0] != 0x05)
                                                     {
@@ -4705,10 +4699,10 @@ namespace WinsockPacketEditor
                                                             {
                                                                 return;
                                                             }
-                                                            pe.TCP_Server.Socket.Send(AuthRequest);
+                                                            pt.TCP_Server.Socket.Send(AuthRequest);
 
                                                             byte[] AuthResponse = new byte[2];
-                                                            pe.TCP_Server.Socket.Receive(AuthResponse);
+                                                            pt.TCP_Server.Socket.Receive(AuthResponse);
 
                                                             if (AuthResponse[1] != 0x00)
                                                             {
@@ -4721,28 +4715,28 @@ namespace WinsockPacketEditor
                                                             return;
                                                     }
 
-                                                    pe.TCP_Server.Socket.Send(bData.ToArray());
+                                                    pt.TCP_Server.Socket.Send(bData.ToArray());
 
                                                     byte[] connectResponse = new byte[10];
-                                                    pe.TCP_Server.Socket.Receive(connectResponse);
+                                                    pt.TCP_Server.Socket.Receive(connectResponse);
 
                                                     if (connectResponse[1] != 0x00)
                                                     {
-                                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                        ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                                         return;
                                                     }
 
-                                                    ProxyConfig.Proxy.StartServerReceive(pe);
-                                                    pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
-                                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                    ProxyConfig.Proxy.StartServerReceive(pt);
+                                                    pt.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
+                                                    ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
-                                                    ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
+                                                    ProxyConfig.Queue.ProxyTCP_ToQueue(pt);
                                                 }
                                                 catch (SocketException)
                                                 {
-                                                    pe.TCP_Server.Close();
-                                                    pe.TCP_Client.Close();
-                                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    pt.TCP_Server.Close();
+                                                    pt.TCP_Client.Close();
+                                                    ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                                 }
 
                                                 break;
@@ -4753,20 +4747,22 @@ namespace WinsockPacketEditor
 
                                                 try
                                                 {
-                                                    pe.TCP_Server.Socket.Connect(pe.TCP_Server.EndPoint);
-                                                    ProxyConfig.Proxy.StartServerReceive(pe);
-                                                    pe.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
-                                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                    pt.TCP_Server.Socket.Connect(pt.TCP_Server.EndPoint);
+                                                    ProxyConfig.Proxy.StartServerReceive(pt);
+                                                    pt.ProxyStep = ProxyConfig.Proxy.ProxyStep.ForwardData;
+                                                    ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
-                                                    ProxyConfig.Queue.ProxyTCP_ToQueue(pe);
+                                                    ProxyConfig.Queue.ProxyTCP_ToQueue(pt);
                                                 }
                                                 catch (SocketException)
                                                 {
-                                                    ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                                 }
 
                                                 break;
                                         }
+
+                                        DoProxyLog(pt);
 
                                         #endregion
 
@@ -4787,12 +4783,12 @@ namespace WinsockPacketEditor
                                             ReadOnlySpan<byte> bServerUDP_IP = ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
                                             ReadOnlySpan<byte> bServerUDP_Port = BitConverter.GetBytes(((IPEndPoint)pu.ClientUDP.Client.LocalEndPoint).Port);
 
-                                            ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));
+                                            ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));
                                             ProxyConfig.Proxy.StartUdpReceive(pu);
                                         }
                                         catch (SocketException)
                                         {
-                                            ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                            ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                         }
 
                                         #endregion
@@ -4803,9 +4799,9 @@ namespace WinsockPacketEditor
 
                                         #region//不支持的命令
 
-                                        ProxyConfig.Proxy.SendTCPData(pe.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Unsupport, bServerTCP_IP, bServerTCP_Port));
+                                        ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, ProxyConfig.Proxy.GetProxyReturnData(ProxyConfig.Proxy.CommandResponse.Unsupport, bServerTCP_IP, bServerTCP_Port));
 
-                                        string sLog = string.Format(AntdUI.Localization.Get("Command.Unsupported", "{0} - 不支持的命令: {1}"), pe.TCP_Client.Socket.RemoteEndPoint, pe.CommandType);
+                                        string sLog = string.Format(AntdUI.Localization.Get("Command.Unsupported", "{0} - 不支持的命令: {1}"), pt.TCP_Client.Socket.RemoteEndPoint, pt.CommandType);
                                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
 
                                         #endregion
@@ -4815,7 +4811,7 @@ namespace WinsockPacketEditor
                             }
                             catch (SocketException ex)
                             {
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, pe.TCP_Server.Address + " - " + ex.Message);
+                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, pt.TCP_Server.Address + " - " + ex.Message);
                             }
                         }
                     }
@@ -6234,38 +6230,21 @@ namespace WinsockPacketEditor
 
                 public static string GetServerAddress(Operate.ProxyConfig.Proxy.DomainType dtType, string AddressString, ushort port)
                 {
-                    if (string.IsNullOrEmpty(AddressString))
-                    {
-                        return string.Empty;
-                    }
-
                     try
                     {
-                        string protocol = string.Empty;
-
-                        switch (dtType)
+                        if (string.IsNullOrEmpty(AddressString))
                         {
-                            case Operate.ProxyConfig.Proxy.DomainType.Socket:
-                                protocol = "socket://";
-                                break;
-                            case Operate.ProxyConfig.Proxy.DomainType.Http:
-                                protocol = "http://";
-                                break;
-                            case Operate.ProxyConfig.Proxy.DomainType.Https:
-                                protocol = "https://";
-                                break;
-                            case Operate.ProxyConfig.Proxy.DomainType.External:
-                                protocol = "SOCKS5://";
-                                break;
+                            return string.Empty;
                         }
 
-                        return string.Format("{0}{1}: {2}", protocol, AddressString, port);
+                        return string.Format("{0}: {1}", AddressString, port);
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        return string.Empty;
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                        
                     }
+
+                    return string.Empty;
                 }
 
                 #endregion
@@ -17177,18 +17156,27 @@ namespace WinsockPacketEditor
 
         public static class LogConfig
         {
+            public const string ProxyLogString = "CONNECT {0} outgoing via {1} SOCKS5";
+
             #region//日志队列
 
             public static class Queue
             {
                 public static ConcurrentQueue<LogInfo> cqLogInfo = new ConcurrentQueue<LogInfo>();
+                public static ConcurrentQueue<ProxyLogInfo> cqProxyLogInfo = new ConcurrentQueue<ProxyLogInfo>();
 
                 #region//日志入队列
 
-                public static void LogToQueue(string sFuncName, string sLogContent)
+                public static async ValueTask LogToQueueAsync(string FuncName, string LogContent)
                 {
-                    LogInfo li = new LogInfo(sFuncName, sLogContent);
-                    cqLogInfo.Enqueue(li);
+                    LogInfo li = new LogInfo(FuncName, LogContent);
+                    await Task.Run(() => cqLogInfo.Enqueue(li));
+                }
+
+                public static async ValueTask ProxyLogToQueueAsync(string UserName, string LoginIP, string LogContent)
+                {
+                    ProxyLogInfo pli = new ProxyLogInfo(UserName, LoginIP, LogContent);
+                    await Task.Run(() => cqProxyLogInfo.Enqueue(pli));
                 }
 
                 #endregion
@@ -17200,6 +17188,14 @@ namespace WinsockPacketEditor
                     while (!cqLogInfo.IsEmpty)
                     {
                         cqLogInfo.TryDequeue(out LogInfo li);
+                    }
+                }
+
+                public static void ClearProxyLogQueue()
+                {
+                    while (!cqProxyLogInfo.IsEmpty)
+                    {
+                        cqProxyLogInfo.TryDequeue(out ProxyLogInfo pli);
                     }
                 }
 
@@ -17215,6 +17211,7 @@ namespace WinsockPacketEditor
                 public static bool AutoRoll = false, AutoClear = true;
                 public static decimal AutoClear_Value = 5000;
                 public static BindingList<LogInfo> lstLogInfo = new BindingList<LogInfo>();
+                public static List<ProxyLogInfo> lstProxyLogInfo = new List<ProxyLogInfo>();
 
                 #region//日志入列表
 
@@ -17226,6 +17223,14 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                public static void ProxyLogToList()
+                {
+                    if (Queue.cqProxyLogInfo.TryDequeue(out ProxyLogInfo pli))
+                    {
+                        LogConfig.List.lstProxyLogInfo.Add(pli);
+                    }
+                }
+
                 #endregion
 
                 #region//清除日志列表
@@ -17233,6 +17238,11 @@ namespace WinsockPacketEditor
                 public static void ClearLogList()
                 {
                     lstLogInfo.Clear();
+                }
+
+                public static void ClearProxyLogList()
+                {
+                    lstProxyLogInfo.Clear();
                 }
 
                 #endregion
@@ -17381,12 +17391,18 @@ namespace WinsockPacketEditor
 
         #region//记录日志        
 
-        public static void DoLog(string sFuncName, string sLogContent)
+        public static async void DoLog(string sFuncName, string sLogContent)
         {
-            Task.Run(() =>
-            {
-                LogConfig.Queue.LogToQueue(sFuncName, sLogContent);
-            });
+            await LogConfig.Queue.LogToQueueAsync(sFuncName, sLogContent);
+        }
+
+        public static async void DoProxyLog(ProxyTCP pt)
+        {
+            string UserName = ProxyConfig.Account.GetUserName_ByAccountID(pt.AID);
+            string LoginIP = pt.TCP_Client.EndPoint.Address.ToString();
+            string LogContent = string.Format(LogConfig.ProxyLogString, pt.TCP_Server.Address, ProxyConfig.Proxy.ProxyTCP_IP);
+
+            await LogConfig.Queue.ProxyLogToQueueAsync(UserName, LoginIP, LogContent);
         }
 
         #endregion

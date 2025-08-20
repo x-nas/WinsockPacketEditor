@@ -20,6 +20,7 @@ namespace WinsockPacketEditor
         private void ClientList_Load(object sender, EventArgs e)
         {
             this.InitTable_AuthList();
+            this.InitTable_ProxyLog();
         }
 
         private void InitTable_AuthList()
@@ -72,9 +73,39 @@ namespace WinsockPacketEditor
             this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
         }
 
-        public void RefreshAuthList()
+        private void InitTable_ProxyLog()
+        {
+            tProxyLog.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column("LogTime", "时间戳")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((DateTime)value).ToString("HH:mm:ss");
+                    },
+                }.SetLocalizationTitleID("Table.ProxyLog.Column."),
+                new AntdUI.Column("UserName", "账号", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyLog.Column."),
+                new AntdUI.Column("LoginIP", "IP地址")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new CellText(value?.ToString() ?? string.Empty)
+                        {
+                            PrefixSvg = Operate.SystemConfig.GetSvgByLocation(value.ToString()),
+                            IconRatio = 1.0F
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.ProxyLog.Column."),
+                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.ProxyLog.Column."),
+            };
+
+            this.tProxyLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tProxyLog.DataSource = Operate.LogConfig.List.lstProxyLogInfo;
+        }
+
+        public void RefreshClientList()
         {
             this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
+            this.tProxyLog.Refresh();
 
             this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.cdAuthInfo.Count.ToString();
             this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
@@ -84,6 +115,11 @@ namespace WinsockPacketEditor
         public int GetClientNumber()
         {
             return this.treeClientList.Items.Count();
+        }
+
+        public void CleanUp_ProxyLogList()
+        {
+            Operate.LogConfig.List.ClearProxyLogList();
         }
 
         #endregion

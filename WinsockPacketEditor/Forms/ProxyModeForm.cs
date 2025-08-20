@@ -595,7 +595,7 @@ namespace WinsockPacketEditor
             {
                 if (Operate.ProxyConfig.Queue.qProxyTCP.Count > 0)
                 {
-                    Operate.ProxyConfig.List.ProxyTCP_ToList();
+                    Operate.ProxyConfig.List.ProxyTCP_ToList();                    
                 }
 
                 if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
@@ -606,6 +606,11 @@ namespace WinsockPacketEditor
                 if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
                 {
                     Operate.LogConfig.List.LogToList();
+                }
+
+                if (Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0)
+                {
+                    Operate.LogConfig.List.ProxyLogToList();
                 }
             }
             catch (Exception ex)
@@ -697,6 +702,11 @@ namespace WinsockPacketEditor
                     {
                         this.cLogList.CleanUp_LogList();
                     }
+
+                    if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                    {
+                        this.cClientList.CleanUp_ProxyLogList();
+                    }
                 }
             }
             catch (Exception ex)
@@ -710,7 +720,7 @@ namespace WinsockPacketEditor
             try
             {
                 this.tProxyList.Refresh();
-                this.cClientList.RefreshAuthList();
+                this.cClientList.RefreshClientList();
                 this.cAccountList.RefreshAccountList();
                 this.cLogList.RefreshLogList();
 

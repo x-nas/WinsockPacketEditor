@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            AntdUI.Tabs.StyleCard styleCard1 = new AntdUI.Tabs.StyleCard();
             this.splitterClientList = new AntdUI.Splitter();
             this.treeClientList = new AntdUI.Tree();
             this.tlpAuthInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.tAuthList = new AntdUI.Table();
             this.tlpAuthListInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lDevicesCount_Value = new AntdUI.Label();
             this.lLinksCount_Value = new AntdUI.Label();
@@ -42,12 +42,20 @@
             this.lLinksCount = new AntdUI.Label();
             this.lAuthCount = new AntdUI.Label();
             this.bgwClientList = new System.ComponentModel.BackgroundWorker();
+            this.tabClientList = new AntdUI.Tabs();
+            this.tpAuthList = new AntdUI.TabPage();
+            this.tpProxyLog = new AntdUI.TabPage();
+            this.tAuthList = new AntdUI.Table();
+            this.tProxyLog = new AntdUI.Table();
             ((System.ComponentModel.ISupportInitialize)(this.splitterClientList)).BeginInit();
             this.splitterClientList.Panel1.SuspendLayout();
             this.splitterClientList.Panel2.SuspendLayout();
             this.splitterClientList.SuspendLayout();
             this.tlpAuthInfo.SuspendLayout();
             this.tlpAuthListInfo.SuspendLayout();
+            this.tabClientList.SuspendLayout();
+            this.tpAuthList.SuspendLayout();
+            this.tpProxyLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitterClientList
@@ -68,7 +76,7 @@
             this.splitterClientList.Panel2.Controls.Add(this.tlpAuthInfo);
             this.splitterClientList.Panel2MinSize = 0;
             this.splitterClientList.Size = new System.Drawing.Size(1200, 800);
-            this.splitterClientList.SplitterDistance = 298;
+            this.splitterClientList.SplitterDistance = 297;
             this.splitterClientList.SplitterSize = 80;
             this.splitterClientList.SplitterWidth = 10;
             this.splitterClientList.TabIndex = 1;
@@ -78,15 +86,15 @@
             this.treeClientList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeClientList.Location = new System.Drawing.Point(0, 0);
             this.treeClientList.Name = "treeClientList";
-            this.treeClientList.Size = new System.Drawing.Size(298, 800);
+            this.treeClientList.Size = new System.Drawing.Size(297, 800);
             this.treeClientList.TabIndex = 0;
             // 
             // tlpAuthInfo
             // 
             this.tlpAuthInfo.ColumnCount = 1;
             this.tlpAuthInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAuthInfo.Controls.Add(this.tAuthList, 0, 1);
             this.tlpAuthInfo.Controls.Add(this.tlpAuthListInfo, 0, 0);
+            this.tlpAuthInfo.Controls.Add(this.tabClientList, 0, 1);
             this.tlpAuthInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpAuthInfo.Location = new System.Drawing.Point(0, 0);
             this.tlpAuthInfo.Margin = new System.Windows.Forms.Padding(0);
@@ -94,20 +102,8 @@
             this.tlpAuthInfo.RowCount = 2;
             this.tlpAuthInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAuthInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAuthInfo.Size = new System.Drawing.Size(892, 800);
+            this.tlpAuthInfo.Size = new System.Drawing.Size(893, 800);
             this.tlpAuthInfo.TabIndex = 0;
-            // 
-            // tAuthList
-            // 
-            this.tAuthList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tAuthList.CellImpactHeight = false;
-            this.tAuthList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tAuthList.Gap = 12;
-            this.tAuthList.GapCell = 6;
-            this.tAuthList.Location = new System.Drawing.Point(3, 33);
-            this.tAuthList.Name = "tAuthList";
-            this.tAuthList.Size = new System.Drawing.Size(886, 764);
-            this.tAuthList.TabIndex = 7;
             // 
             // tlpAuthListInfo
             // 
@@ -139,7 +135,7 @@
             this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpAuthListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpAuthListInfo.Size = new System.Drawing.Size(892, 30);
+            this.tlpAuthListInfo.Size = new System.Drawing.Size(893, 30);
             this.tlpAuthListInfo.TabIndex = 6;
             // 
             // lDevicesCount_Value
@@ -239,6 +235,65 @@
             this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
             this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
             // 
+            // tabClientList
+            // 
+            this.tabClientList.Controls.Add(this.tpAuthList);
+            this.tabClientList.Controls.Add(this.tpProxyLog);
+            this.tabClientList.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabClientList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabClientList.Gap = 20;
+            this.tabClientList.Location = new System.Drawing.Point(3, 33);
+            this.tabClientList.Name = "tabClientList";
+            this.tabClientList.Pages.Add(this.tpAuthList);
+            this.tabClientList.Pages.Add(this.tpProxyLog);
+            this.tabClientList.SelectedIndex = 1;
+            this.tabClientList.Size = new System.Drawing.Size(887, 764);
+            this.tabClientList.Style = styleCard1;
+            this.tabClientList.TabIndex = 7;
+            this.tabClientList.Type = AntdUI.TabType.Card;
+            // 
+            // tpAuthList
+            // 
+            this.tpAuthList.Controls.Add(this.tAuthList);
+            this.tpAuthList.Location = new System.Drawing.Point(0, 0);
+            this.tpAuthList.Name = "tpAuthList";
+            this.tpAuthList.Size = new System.Drawing.Size(0, 0);
+            this.tpAuthList.TabIndex = 0;
+            this.tpAuthList.Text = "认证记录";
+            // 
+            // tpProxyLog
+            // 
+            this.tpProxyLog.Controls.Add(this.tProxyLog);
+            this.tpProxyLog.Location = new System.Drawing.Point(3, 45);
+            this.tpProxyLog.Name = "tpProxyLog";
+            this.tpProxyLog.Size = new System.Drawing.Size(881, 716);
+            this.tpProxyLog.TabIndex = 1;
+            this.tpProxyLog.Text = "代理日志";
+            // 
+            // tAuthList
+            // 
+            this.tAuthList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tAuthList.CellImpactHeight = false;
+            this.tAuthList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tAuthList.Gap = 12;
+            this.tAuthList.GapCell = 6;
+            this.tAuthList.Location = new System.Drawing.Point(0, 0);
+            this.tAuthList.Name = "tAuthList";
+            this.tAuthList.Size = new System.Drawing.Size(0, 0);
+            this.tAuthList.TabIndex = 8;
+            // 
+            // tProxyLog
+            // 
+            this.tProxyLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tProxyLog.CellImpactHeight = false;
+            this.tProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tProxyLog.Gap = 12;
+            this.tProxyLog.GapCell = 6;
+            this.tProxyLog.Location = new System.Drawing.Point(0, 0);
+            this.tProxyLog.Name = "tProxyLog";
+            this.tProxyLog.Size = new System.Drawing.Size(881, 716);
+            this.tProxyLog.TabIndex = 9;
+            // 
             // ClientList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -257,6 +312,9 @@
             this.tlpAuthInfo.ResumeLayout(false);
             this.tlpAuthListInfo.ResumeLayout(false);
             this.tlpAuthListInfo.PerformLayout();
+            this.tabClientList.ResumeLayout(false);
+            this.tpAuthList.ResumeLayout(false);
+            this.tpProxyLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -266,7 +324,6 @@
         private AntdUI.Splitter splitterClientList;
         private AntdUI.Tree treeClientList;
         private System.Windows.Forms.TableLayoutPanel tlpAuthInfo;
-        private AntdUI.Table tAuthList;
         private System.Windows.Forms.TableLayoutPanel tlpAuthListInfo;
         private AntdUI.Label lDevicesCount_Value;
         private AntdUI.Label lLinksCount_Value;
@@ -277,5 +334,10 @@
         private AntdUI.Label lLinksCount;
         private AntdUI.Label lAuthCount;
         private System.ComponentModel.BackgroundWorker bgwClientList;
+        private AntdUI.Tabs tabClientList;
+        private AntdUI.TabPage tpAuthList;
+        private AntdUI.Table tAuthList;
+        private AntdUI.TabPage tpProxyLog;
+        private AntdUI.Table tProxyLog;
     }
 }

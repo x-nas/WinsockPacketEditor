@@ -204,6 +204,7 @@
     <Compile Include="ClassObject\MapRemote.cs" />
     <Compile Include="ClassObject\PacketInfo.cs" />
     <Compile Include="ClassObject\ProcessInfo.cs" />
+    <Compile Include="ClassObject\ProxyLogInfo.cs" />
     <Compile Include="ClassObject\ProxyTCP.cs" />
     <Compile Include="ClassObject\ProxyInfo.cs" />
     <Compile Include="ClassObject\ProxyUDP.cs" />
