@@ -5375,7 +5375,7 @@ namespace WinsockPacketEditor
                             ptType,
                             ClientAddr,
                             ServerAddr,
-                            string.Empty,
+                            ServerAddr,
                             DomainType.External,
                             bRawBuffer,
                             bNewBuffer);
@@ -6237,7 +6237,7 @@ namespace WinsockPacketEditor
                             return string.Empty;
                         }
 
-                        return string.Format("{0}: {1}", AddressString, port);
+                        return string.Format("{0}:{1}", AddressString, port);
                     }
                     catch (Exception ex)
                     {
@@ -6262,7 +6262,7 @@ namespace WinsockPacketEditor
                     {
                         if (clientSocket?.RemoteEndPoint is IPEndPoint remoteEndPoint)
                         {
-                            return $"{AddressString}: {port} [{remoteEndPoint.Port}]";
+                            return $"{AddressString}:{port} [{remoteEndPoint.Port}]";
                         }
                     }
                     catch (Exception ex)

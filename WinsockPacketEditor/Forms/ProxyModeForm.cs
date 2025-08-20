@@ -315,7 +315,7 @@ namespace WinsockPacketEditor
                     },
                 }.SetLocalizationTitleID("Table.ProxyList.Column."),
                 new AntdUI.Column("ClientLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.AuthList.Column."),
-                new AntdUI.Column("ServerAddr", "服务端地址")
+                new AntdUI.Column("ServerDomain", "服务端地址")
                 {
                     Render = (value, record, rowindex)=>
                     {
