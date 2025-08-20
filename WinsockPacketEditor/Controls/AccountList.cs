@@ -204,7 +204,7 @@ namespace WinsockPacketEditor
         private void mAccountList_SelectChanged(object sender, MenuSelectEventArgs e)
         {
             AntdUI.MenuItem miSelect = e.Value;
-            this.mAccountList.SelectIndex(-1);
+            this.mAccountList.USelect();
 
             switch (miSelect.ID)
             {

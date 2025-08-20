@@ -128,7 +128,7 @@ namespace WinsockPacketEditor
         private void mRobotList_SelectChanged(object sender, MenuSelectEventArgs e)
         {
             AntdUI.MenuItem miSelect = e.Value;
-            this.mRobotList.SelectIndex(-1);
+            this.mRobotList.USelect();
 
             switch (miSelect.ID)
             {

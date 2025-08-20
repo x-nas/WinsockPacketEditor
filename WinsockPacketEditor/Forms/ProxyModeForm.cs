@@ -886,7 +886,7 @@ namespace WinsockPacketEditor
         private void mProxyList_SelectChanged(object sender, MenuSelectEventArgs e)
         {
             AntdUI.MenuItem miSelect = e.Value;
-            this.mProxyList.SelectIndex(-1);
+            this.mProxyList.USelect();
 
             switch (miSelect.ID)
             {

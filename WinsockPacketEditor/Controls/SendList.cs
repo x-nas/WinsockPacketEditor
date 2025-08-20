@@ -182,7 +182,7 @@ namespace WinsockPacketEditor
         private void mSendList_SelectChanged(object sender, MenuSelectEventArgs e)
         {
             AntdUI.MenuItem miSelect = e.Value;
-            this.mSendList.SelectIndex(-1);
+            this.mSendList.USelect();
 
             switch (miSelect.ID)
             {
