@@ -52,7 +52,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//获取封包日志
+        #region//获取系统日志
 
         [HttpGet]
         [Route("GetSocketLogList")]
@@ -60,6 +60,18 @@ namespace WinsockPacketEditor
         public IEnumerable<LogInfo> GetSocketLogList()
         {
             return Operate.LogConfig.List.lstLogInfo;
+        }
+
+        #endregion
+
+        #region//获取代理日志
+
+        [HttpGet]
+        [Route("GetProxyLogList")]
+
+        public IEnumerable<ProxyLogInfo> GetProxyLogList()
+        {
+            return Operate.LogConfig.List.lstProxyLogInfo;
         }
 
         #endregion
