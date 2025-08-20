@@ -78,7 +78,7 @@ namespace WinsockPacketEditor
             if (Operate.ProxyConfig.Proxy.Enable_SystemProxy)
             {
                 Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
-                Operate.ProxyConfig.Proxy.StopSystemProxy(this);
+                Operate.ProxyConfig.Proxy.DisableSystemProxy(this);
             }
 
             Operate.SystemConfig.StopRemoteMGT();

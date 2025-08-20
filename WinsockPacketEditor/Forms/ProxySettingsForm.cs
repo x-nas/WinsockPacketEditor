@@ -48,6 +48,7 @@ namespace WinsockPacketEditor
                 this.cbEnable_SOCKS5.Checked = Operate.ProxyConfig.Proxy.Enable_SOCKS5;
                 this.nudSOCKS5Port.Value = Operate.ProxyConfig.Proxy.ProxyPort;
                 this.cbEnable_Auth.Checked = Operate.ProxyConfig.Proxy.Enable_Auth;
+                this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
 
                 this.ProxyIP_Appoint_Changed();
                 this.EnableSOCKS5_Changed();
@@ -117,12 +118,12 @@ namespace WinsockPacketEditor
                 if (this.switchSystemProxy.Checked)
                 {
                     Operate.ProxyConfig.Proxy.Enable_SystemProxy = true;
-                    Operate.ProxyConfig.Proxy.StartSystemProxy(this);
+                    Operate.ProxyConfig.Proxy.EnableSystemProxy(this);
                 }
                 else
                 {
                     Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
-                    Operate.ProxyConfig.Proxy.StopSystemProxy(this);
+                    Operate.ProxyConfig.Proxy.DisableSystemProxy(this);
                 }
             }
             catch (Exception ex)

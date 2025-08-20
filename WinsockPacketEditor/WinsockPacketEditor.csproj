@@ -443,6 +443,7 @@
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\Mswsock.cs" />
     <Compile Include="NativeMethods\User32.cs" />
+    <Compile Include="NativeMethods\Wininet.cs" />
     <Compile Include="NativeMethods\WS2_32.cs" />
     <Compile Include="NativeMethods\WSock32.cs" />
     <Compile Include="Operate.cs" />

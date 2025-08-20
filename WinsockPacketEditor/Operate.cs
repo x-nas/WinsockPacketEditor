@@ -5429,70 +5429,76 @@ namespace WinsockPacketEditor
                     return string.Empty;
                 }
 
-                #endregion                
+                #endregion
 
                 #region//设置系统代理
 
-                public static bool StartSystemProxy(Form form)
+                public static bool EnableSystemProxy(Form form)
                 {
-                    bool bReturn = false;
-
                     try
                     {
-                        RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+                        string proxyServer = string.Format("socks5://127.0.0.1:{0}", ProxyConfig.Proxy.ProxyPort);
 
-                        if (key != null)
+                        using (RegistryKey registry = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings", true))
                         {
-                            string sProxyServer = string.Format("socks5://127.0.0.1:{0}", Operate.ProxyConfig.Proxy.ProxyPort);
+                            if (registry == null)
+                                return false;
 
-                            key.SetValue("ProxyEnable", 1, RegistryValueKind.DWord);
-                            key.SetValue("ProxyServer", sProxyServer, RegistryValueKind.String);
-                            key.SetValue("ProxyOverride", string.Empty, RegistryValueKind.String);
-                            key.Close();
+                            // 设置代理服务器
+                            registry.SetValue("ProxyServer", proxyServer);
 
-                            bReturn = true;
+                            // 启用代理
+                            registry.SetValue("ProxyEnable", 1);                            
+
+                            NotifySystemProxyChanged();
 
                             AntdUI.Message.open(new AntdUI.Message.Config(form, "已启用系统代理", TType.Success)
                             {
                                 LocalizationText = "SystemProxy.Start"
-                            });                            
+                            });
+
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return false;
                     }
-
-                    return bReturn;
                 }
 
-                public static bool StopSystemProxy(Form form)
+                public static bool DisableSystemProxy(Form form)
                 {
-                    bool bReturn = false;
-
                     try
                     {
-                        RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
-
-                        if (key != null)
+                        using (RegistryKey registry = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Internet Settings", true))
                         {
-                            key.SetValue("ProxyEnable", 0, RegistryValueKind.DWord);
-                            key.Close();
+                            if (registry == null)
+                                return false;
 
-                            bReturn = true;
+                            // 禁用代理
+                            registry.SetValue("ProxyEnable", 0);
+                            NotifySystemProxyChanged();
 
                             AntdUI.Message.open(new AntdUI.Message.Config(form, "已关闭系统代理", TType.Success)
                             {
                                 LocalizationText = "SystemProxy.Stop"
-                            });                            
+                            });
+
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return false;
                     }
+                }
 
-                    return bReturn;
+                private static void NotifySystemProxyChanged()
+                {
+                    Wininet.InternetSetOption(IntPtr.Zero, Wininet.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
+                    Wininet.InternetSetOption(IntPtr.Zero, Wininet.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
                 }
 
                 #endregion
