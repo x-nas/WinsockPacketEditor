@@ -17282,7 +17282,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "Copy",
                         IconSvg = "CopyOutlined",
-                        LocalizationText = "InjectModeForm.CopyLog",
+                        LocalizationText = "LogList.CopyLog",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -17291,7 +17291,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "ToExcel",
                         IconSvg = "FileExcelOutlined",
-                        LocalizationText = "InjectModeForm.ToExcel",
+                        LocalizationText = "LogList.ToExcel",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -17300,14 +17300,14 @@ namespace WinsockPacketEditor
                     {
                         ID = "ClearUp",
                         IconSvg = "DeleteOutlined",
-                        LocalizationText = "InjectModeForm.ClearUp",
+                        LocalizationText = "LogList.ClearUp",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItem("取消选择")
                     {
                         ID = "DeSelect",
                         IconSvg = "DeleteRowOutlined",
-                        LocalizationText = "InjectModeForm.DeSelect",
+                        LocalizationText = "LogList.DeSelect",
                     });
 
                     return menuItems.ToArray();
@@ -17347,14 +17347,14 @@ namespace WinsockPacketEditor
                                     {
                                         if (bOK)
                                         {
-                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Success", "导出到Excel成功");
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到 Excel 成功");
                                             AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                             Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                         }
                                         else
                                         {
-                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Error", "导出到Excel失败");
-                                            string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到 Excel 失败");
+                                            string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                             AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                         }
                                     });
@@ -17375,7 +17375,7 @@ namespace WinsockPacketEditor
                         using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                         using (var writer = new StreamWriter(stream, Encoding.Default))
                         {
-                            writer.WriteLine(AntdUI.Localization.Get("ToExcelTitle", "记录时间\t模块\t日志内容\t"));
+                            writer.WriteLine(AntdUI.Localization.Get("ExcelColumn.Log", "记录时间\t模块\t日志内容\t"));
 
                             var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstLogInfo.ToList();
                             foreach (var log in dataSource)

@@ -33,16 +33,16 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
+                }.SetFixed().SetLocalizationTitleID("Table.LogList.Column.ID"),
                 new AntdUI.Column("LogTime", "时间戳")
                 {
                     Render = (value, record, rowindex)=>
                     {
                         return ((DateTime)value).ToString("HH:mm:ss:fffffff");
                     },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("FuncName", "模块", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.PacketList.Column."),
+                }.SetLocalizationTitleID("Table.LogList.Column."),
+                new AntdUI.Column("FuncName", "模块", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.LogList.Column."),
+                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.LogList.Column."),
             };
 
             this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -110,7 +110,7 @@ namespace WinsockPacketEditor
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
                                 {
-                                    LocalizationText = "System.CopyLog"
+                                    LocalizationText = "CopyToClipboard"
                                 });
                             }
 
@@ -124,11 +124,11 @@ namespace WinsockPacketEditor
 
                         case "ClearUp":
 
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("InjectModeForm.miLogList", "日志列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LogList.LogList", "日志列表"), AntdUI.Localization.Get("SureToDelete", "\r\n确定删除所有数据吗\r\n\r\n"))
                             {
                                 Icon = TType.Warn,
                                 Keyboard = false,
-                                MaskClosable = false,
+                                MaskClosable = false,                                
                                 OnOk = config =>
                                 {
                                     this.CleanUp_LogList();

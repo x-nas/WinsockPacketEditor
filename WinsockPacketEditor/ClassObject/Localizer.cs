@@ -230,15 +230,36 @@ namespace WinsockPacketEditor
                 case "HexWithSpaces":
                     return "Please enter Hex with spaces";
 
+                case "SureToDelete":
+                    return "Are you sure to delete all data?";
+
+                case "ExcelFile":
+                    return "Excel File";
+
+                case "Exporting":
+                    return "Exporting...";
+
                 #endregion
 
                 #region//Operate
 
+                case "ExportToExcel.Success":
+                    return "Export To Excel Success";
+
+                case "ExportToExcel.Error":
+                    return "Export To Excel Error";
+
+                case "CheckSystemLog":
+                    return "Please Check System Log";
+
+                case "CopyToClipboard":
+                    return "Copy to clipboard";
+
                 case "SaveToExcel":
                     return "Save to Excel file";
 
-                case "ExcelColumn":
-                    return "Log Time\tModule Name\tLog content\t";
+                case "ExcelColumn.Log":
+                    return "Log Time\tModule\tContent\t";
 
                 case "SystemBackupFile":
                     return "System backup file";
@@ -985,7 +1006,36 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//LogList
 
+                case "LogList.LogList":
+                    return "Log List";
+
+                case "Table.LogList.Column.ID":
+                    return "ID";
+
+                case "Table.LogList.Column.LogTime":
+                    return "Time";
+
+                case "Table.LogList.Column.FuncName":
+                    return "Module";
+
+                case "Table.LogList.Column.LogContent":
+                    return "Content";
+
+                case "LogList.CopyLog":
+                    return "Copy Log";
+
+                case "LogList.ToExcel":
+                    return "Save To Excel";
+
+                case "LogList.ClearUp":
+                    return "Clear Log";
+
+                case "LogList.DeSelect":
+                    return "DeSelect";
+
+                #endregion
 
                 #region//FilterSettingsForm
 
