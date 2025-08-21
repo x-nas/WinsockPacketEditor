@@ -1,4 +1,6 @@
 ﻿
+using AntdUI;
+
 namespace WinsockPacketEditor
 {
     public class Localizer : AntdUI.ILocalization
@@ -48,6 +50,66 @@ namespace WinsockPacketEditor
                 case "Page":
                     return "Page";
 
+                case "Top":
+                    return "Top";
+
+                case "Up":
+                    return "Up";
+
+                case "Down":
+                    return "Down";
+
+                case "Bottom":
+                    return "Bottom";
+
+                case "Copy":
+                    return "Copy";
+
+                case "Export":
+                    return "Export";
+
+                case "Delete":
+                    return "Delete";
+
+                case "Enable":
+                    return "Enable";
+
+                case "Disable":
+                    return "Disable";
+
+                case "Replace":
+                    return "Replace";
+
+                case "Change":
+                    return "Change";
+
+                case "Intercept":
+                    return "Intercept";
+
+                case "NoModifyNoDisplay":
+                    return "NoModify NoDisplay";
+
+                case "NoModifyDisplay":
+                    return "NoModify Display";
+
+                case "Head":
+                    return "Head";
+
+                case "Socket":
+                    return "Socket";
+
+                case "Port":
+                    return "Port";
+
+                case "Length":
+                    return "Length";
+
+                case "Continuous":
+                    return "Continuous";
+
+                case "Carry":
+                    return "Carry";
+
                 case "Now":
                     return "Now";
 
@@ -62,6 +124,9 @@ namespace WinsockPacketEditor
 
                 case "Loading":
                     return "LOADING...";
+
+                case "Working":
+                    return "Working";
 
                 case "Input.LetterOrNum":
                     return "Input letters or numbers";
@@ -587,6 +652,49 @@ namespace WinsockPacketEditor
                     return "Expiry Time";
 
                 case "Table.AccountList.Column.CellLinks":
+                    return "Operation";
+
+                #endregion
+
+                #region//FilterList
+
+                case "FilterList.ResetCount":
+                    return "Reset Count";
+
+                case "FilterList.miAdd":
+                    return "Add Filter";
+
+                case "FilterList.miImport":
+                    return "Import Filter";
+
+                case "FilterList.miExport":
+                    return "Export Filter";
+
+                case "FilterList.miClear":
+                    return "Clear Filter";
+
+                case "Table.FilterList.Column.IsEnable":
+                    return "Enable";
+
+                case "Table.FilterList.Column.FName":
+                    return "Filter Name";
+
+                case "Table.FilterList.Column.Status":
+                    return "Status";
+
+                case "Table.FilterList.Column.FAction":
+                    return "Action";
+
+                case "Table.FilterList.Column.ExecutionCount":
+                    return "Execution Count";
+
+                case "Table.FilterList.Column.Appoint":
+                    return "Appoint";
+
+                case "Table.FilterList.Column.Progression":
+                    return "Progression";
+
+                case "Table.FilterList.Column.CellLinks":
                     return "Operation";
 
                 #endregion

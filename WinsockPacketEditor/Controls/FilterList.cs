@@ -46,22 +46,22 @@ namespace WinsockPacketEditor
                             {
                                 if(fi.ExecutionCount > 0)
                                 {
-                                    return new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                    return new AntdUI.CellBadge(AntdUI.TState.Processing, AntdUI.Localization.Get("Working", "处理中"));
                                 }
                                 else
                                 {
-                                    return new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                    return new AntdUI.CellBadge(AntdUI.TState.Success, AntdUI.Localization.Get("Enable", "启用"));
                                 }
                             }
                             else
                             {
-                                return new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                                return new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "停止"));
                             }
                         }
 
                         return value;
                     },
-                }.SetLocalizationTitleID("Table.Column."),
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
                 new AntdUI.Column("FAction", "动作", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -69,19 +69,19 @@ namespace WinsockPacketEditor
                         switch((Operate.FilterConfig.Filter.FilterAction)value)
                         {
                             case Operate.FilterConfig.Filter.FilterAction.Replace:
-                                return AntdUI.Localization.Get("FilterAction.Replace", "替换");
+                                return AntdUI.Localization.Get("Replace", "替换");
 
                             case Operate.FilterConfig.Filter.FilterAction.Change:
-                                return AntdUI.Localization.Get("FilterAction.Change", "换包");
+                                return AntdUI.Localization.Get("Change", "换包");
 
                             case Operate.FilterConfig.Filter.FilterAction.Intercept:
-                                return AntdUI.Localization.Get("FilterAction.Intercept", "拦截");
+                                return AntdUI.Localization.Get("Intercept", "拦截");
 
                             case Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
-                                return AntdUI.Localization.Get("FilterAction.NoModify_NoDisplay", "不修改不显示");
+                                return AntdUI.Localization.Get("NoModifyNoDisplay", "不修改不显示");
 
                             case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
-                                return AntdUI.Localization.Get("FilterAction.NoModify_Display", "不修改只显示");
+                                return AntdUI.Localization.Get("NoModifyDisplay", "不修改只显示");
 
                             default:
                                 return value;
@@ -108,22 +108,22 @@ namespace WinsockPacketEditor
 
                             if(fi.AppointHeader)
                             {
-                                ctList.Add(new AntdUI.CellTag("包头", AntdUI.TTypeMini.Success));
+                                ctList.Add(new AntdUI.CellTag(AntdUI.Localization.Get("Head", "包头") , AntdUI.TTypeMini.Success));
                             }
 
                             if(fi.AppointSocket)
                             {
-                                ctList.Add(new AntdUI.CellTag("套接字", AntdUI.TTypeMini.Warn));
+                                ctList.Add(new AntdUI.CellTag(AntdUI.Localization.Get("Socket", "套接字"), AntdUI.TTypeMini.Warn));
                             }
 
                             if(fi.AppointPort)
                             {
-                                ctList.Add(new AntdUI.CellTag("端口", AntdUI.TTypeMini.Default));
+                                ctList.Add(new AntdUI.CellTag(AntdUI.Localization.Get("Port", "端口"), AntdUI.TTypeMini.Default));
                             }
 
                             if(fi.AppointLength)
                             {
-                                ctList.Add(new AntdUI.CellTag("长度", AntdUI.TTypeMini.Primary));
+                                ctList.Add(new AntdUI.CellTag(AntdUI.Localization.Get("Length", "长度"), AntdUI.TTypeMini.Primary));
                             }
 
                             if(ctList.Count > 0)
@@ -155,17 +155,17 @@ namespace WinsockPacketEditor
 
                             if(!string.IsNullOrEmpty(fi.ProgressionPosition))
                             {
-                                ctList.Add(new AntdUI.CellTag("启用", AntdUI.TTypeMini.Error));
+                                ctList.Add(new AntdUI.CellTag(AntdUI.Localization.Get("Enable", "启用"), AntdUI.TTypeMini.Error));
                             }
 
                             if(fi.IsProgressionContinuous)
                             {
-                                ctList.Add(new AntdUI.CellTag("连续", AntdUI.TTypeMini.Success));
+                                ctList.Add(new AntdUI.CellTag(AntdUI.Localization.Get("Continuous", "连续"), AntdUI.TTypeMini.Success));
                             }
 
                             if(fi.IsProgressionCarry)
                             {
-                                ctList.Add(new AntdUI.CellTag("进位", AntdUI.TTypeMini.Warn));
+                                ctList.Add(new AntdUI.CellTag(AntdUI.Localization.Get("Carry", "进位"), AntdUI.TTypeMini.Warn));
                             }
 
                             if(ctList.Count > 0)
@@ -197,7 +197,7 @@ namespace WinsockPacketEditor
                             new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
-                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Column."),
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.FilterList.Column."),
             };
 
             this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));

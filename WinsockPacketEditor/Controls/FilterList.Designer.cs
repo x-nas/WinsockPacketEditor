@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem13 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem14 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem15 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
             this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
             this.tFilterList = new AntdUI.Table();
             this.tlpFilterListButton = new System.Windows.Forms.TableLayoutPanel();
@@ -76,7 +76,7 @@
             // tlpFilterListButton
             // 
             this.tlpFilterListButton.ColumnCount = 3;
-            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterListButton.Controls.Add(this.mFilterList, 2, 0);
@@ -95,24 +95,28 @@
             this.mFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mFilterList.Gap = 0;
             this.mFilterList.IconRatio = 1F;
-            menuItem11.IconSvg = "PlusOutlined";
-            menuItem12.IconSvg = "UserAddOutlined";
-            menuItem12.ID = "miAdd";
-            menuItem12.Text = "新增滤镜";
-            menuItem13.IconSvg = "FolderOpenOutlined";
-            menuItem13.ID = "miImport";
-            menuItem13.Text = "导入滤镜列表";
-            menuItem14.IconSvg = "DeliveredProcedureOutlined";
-            menuItem14.ID = "miExport";
-            menuItem14.Text = "导出所有滤镜";
-            menuItem15.IconSvg = "DeleteOutlined";
-            menuItem15.ID = "miClear";
-            menuItem15.Text = "清空所有滤镜";
-            menuItem11.Sub.Add(menuItem12);
-            menuItem11.Sub.Add(menuItem13);
-            menuItem11.Sub.Add(menuItem14);
-            menuItem11.Sub.Add(menuItem15);
-            this.mFilterList.Items.Add(menuItem11);
+            menuItem1.IconSvg = "PlusOutlined";
+            menuItem2.IconSvg = "UserAddOutlined";
+            menuItem2.ID = "miAdd";
+            menuItem2.LocalizationText = "FilterList.{id}";
+            menuItem2.Text = "新增滤镜";
+            menuItem3.IconSvg = "FolderOpenOutlined";
+            menuItem3.ID = "miImport";
+            menuItem3.LocalizationText = "FilterList.{id}";
+            menuItem3.Text = "导入滤镜列表";
+            menuItem4.IconSvg = "DeliveredProcedureOutlined";
+            menuItem4.ID = "miExport";
+            menuItem4.LocalizationText = "FilterList.{id}";
+            menuItem4.Text = "导出所有滤镜";
+            menuItem5.IconSvg = "DeleteOutlined";
+            menuItem5.ID = "miClear";
+            menuItem5.LocalizationText = "FilterList.{id}";
+            menuItem5.Text = "清空所有滤镜";
+            menuItem1.Sub.Add(menuItem2);
+            menuItem1.Sub.Add(menuItem3);
+            menuItem1.Sub.Add(menuItem4);
+            menuItem1.Sub.Add(menuItem5);
+            this.mFilterList.Items.Add(menuItem1);
             this.mFilterList.Location = new System.Drawing.Point(737, 3);
             this.mFilterList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mFilterList.Name = "mFilterList";
@@ -126,9 +130,10 @@
             // 
             this.bFilterList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bFilterList_Reset.IconSvg = "UndoOutlined";
+            this.bFilterList_Reset.LocalizationText = "FilterList.ResetCount";
             this.bFilterList_Reset.Location = new System.Drawing.Point(3, 3);
             this.bFilterList_Reset.Name = "bFilterList_Reset";
-            this.bFilterList_Reset.Size = new System.Drawing.Size(124, 44);
+            this.bFilterList_Reset.Size = new System.Drawing.Size(144, 44);
             this.bFilterList_Reset.TabIndex = 6;
             this.bFilterList_Reset.Text = "重置计数";
             this.bFilterList_Reset.Type = AntdUI.TTypeMini.Info;
