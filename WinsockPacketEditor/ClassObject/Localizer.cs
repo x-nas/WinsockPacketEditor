@@ -1,6 +1,5 @@
 ﻿
 using AntdUI;
-using System.Security.AccessControl;
 
 namespace WinsockPacketEditor
 {
@@ -85,13 +84,16 @@ namespace WinsockPacketEditor
                     return "Change";
 
                 case "Intercept":
-                    return "Intercept";
+                    return "Intercept";           
 
                 case "NoModifyNoDisplay":
                     return "NoModify NoDisplay";
 
                 case "NoModifyDisplay":
                     return "NoModify Display";
+
+                case "Refresh":
+                    return "Refresh";
 
                 case "Head":
                     return "Head";
@@ -113,6 +115,18 @@ namespace WinsockPacketEditor
 
                 case "Execute":
                     return "Execute";
+
+                case "Inserted":
+                    return "Inserted";
+
+                case "Deleted":
+                    return "Deleted";
+
+                case "Modified":
+                    return "Modified";
+
+                case "Same":
+                    return "Same";
 
                 case "Now":
                     return "Now";
@@ -144,11 +158,29 @@ namespace WinsockPacketEditor
                 case "Millisecond":
                     return "ms";
 
+                case "Check":
+                    return "Check";
+
+                case "XOR":
+                    return "XOR";
+
                 case "Input.LetterOrNum":
                     return "Input letters or numbers";
 
                 case "Setting":
                     return "Setting";
+
+                case "Cut":
+                    return "Cut";
+
+                case "Paste":
+                    return "Paste";
+
+                case "SelectAll":
+                    return "Select All";
+
+                case "Extraction":
+                    return "Extraction";
 
                 case "AnimationEnabled":
                     return "Animation Enabled";
@@ -194,6 +226,9 @@ namespace WinsockPacketEditor
 
                 case "OfficialWebsite":
                     return "Official Website";
+
+                case "HexWithSpaces":
+                    return "Please enter Hex with spaces";
 
                 #endregion
 
@@ -674,6 +709,9 @@ namespace WinsockPacketEditor
 
                 #region//FilterList
 
+                case "FilterList.NewFilter":
+                    return "Filter {0}";
+
                 case "FilterList.ResetCount":
                     return "Reset Count";
 
@@ -716,6 +754,9 @@ namespace WinsockPacketEditor
                 #endregion
 
                 #region//SendList
+
+                case "SendList.NewSend":
+                    return "Send {0}";
 
                 case "SendList.miAdd":
                     return "Add Send";
@@ -763,6 +804,9 @@ namespace WinsockPacketEditor
 
                 #region//RobotList
 
+                case "RobotList.NewRobot":
+                    return "Robot {0}";
+
                 case "RobotList.miAdd":
                     return "Add Robot";
 
@@ -791,6 +835,157 @@ namespace WinsockPacketEditor
                     return "Operation";
 
                 #endregion
+
+                #region//StatisticalData
+
+                case "StatisticalData.FilterExecution":
+                    return "Filter Execution";
+
+                case "StatisticalData.FilterAction":
+                    return "Filter Action";
+
+                case "StatisticalData.Details":
+                    return "Details";
+
+                case "StatisticalData.Replace":
+                    return "Replace :";
+
+                case "StatisticalData.Change":
+                    return "Change :";
+
+                case "StatisticalData.Intercept":
+                    return "Intercept :";
+
+                case "StatisticalData.NoDisplay":
+                    return "NoDisplay :";
+
+                case "StatisticalData.Display":
+                    return "Display :";                
+
+                case "Table.StatisticalData.Column.FName":
+                    return "Filter Name";
+
+                case "Table.StatisticalData.Column.Status":
+                    return "Status";
+
+                case "Table.StatisticalData.Column.FAction":
+                    return "Action";
+
+                case "Table.StatisticalData.Column.ExecutionCount":
+                    return "Execution";
+
+                #endregion
+
+                #region//ComparisonText
+
+                case "ComparisonText.tpComparison":
+                    return "Text Comparison";
+
+                case "ComparisonText.tpDuplicate":
+                    return "Text Duplicate";
+
+                case "ComparisonText.TextA":
+                    return "Text A  ( Length {0} )";
+
+                case "ComparisonText.TextB":
+                    return "Text B  ( Length {0} )";
+
+                case "ComparisonText.DuplicateCNT":
+                    return "Duplicate CNT:";
+
+                case "Table.Comparison.Column.ID":
+                    return "ID";
+
+                case "Table.Comparison.Column.Position":
+                    return "Position";
+
+                case "Table.Comparison.Column.ValueA":
+                    return "Value A";
+
+                case "Table.Comparison.Column.ValueB":
+                    return "Value B";
+
+                case "Table.Comparison.Column.ChangeType":
+                    return "Type";
+
+                case "Table.Duplicate.Column.ID":
+                    return "ID";
+
+                case "Table.Duplicate.Column.Sequence":
+                    return "Duplicate Value";
+
+                case "Table.Duplicate.Column.Length":
+                    return "Length";
+
+                case "Table.Duplicate.Column.CountInA":
+                    return "Count in A";
+
+                case "Table.Duplicate.Column.CountInB":
+                    return "Count in B";
+
+                case "Table.Duplicate.Column.PositionsInA":
+                    return "Position in A";
+
+                case "Table.Duplicate.Column.PositionsInB":
+                    return "Position in B";
+
+                #endregion
+
+                #region//XORCalculation
+
+                case "XORCalculation.XORValue":
+                    return "XOR Value ( Supporting Cyclic )";
+
+                case "XORCalculation.XOREmpty":
+                    return "XOR Value Empty";
+
+                case "XORCalculation.XORError":
+                    return "XOR Value is not HEX";
+
+                #endregion
+
+                #region//Transcoding
+
+                case "Transcoding.EnterText":
+                    return "Please enter text";
+
+                case "Transcoding.Encode":
+                    return "Encode";
+
+                case "Transcoding.Decode":
+                    return "Decode";
+
+                #endregion
+
+                #region//ExtractionData
+
+                case "ExtractionData.ExtractionType":
+                    return "Please select the extraction type";
+
+                case "ExtractionData.DragFiles":
+                    return "Click or drag files to this area for data extraction";
+
+                case "ExtractionData.ExtractionFile":
+                    return "After extraction, Click the Extraction button to export the corresponding format of the data file";
+
+                case "ExtractionData.Chlsx":
+                    return "[ Charles XML session file（.chlsx）] Extraction [ HEX Data ]";
+
+                case "ExtractionData.Filt":
+                    return "[ FILT Filter file（.filt）] Extraction [ WPE64 Filter file（.sp）]";
+
+                case "ExtractionData.Empty":
+                    return "Extract data is empty";
+
+                case "ExtractionData.Successful":
+                    return "Data extraction successful";
+
+                case "ExtractionData.FilterListFile":
+                    return "Filter List File";
+
+                #endregion
+
+
 
                 #region//FilterSettingsForm
 

@@ -144,6 +144,7 @@
             this.bStatistical_Filter.BackExtend = "135, #6253E1, #04BEFE";
             this.bStatistical_Filter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bStatistical_Filter.IconSvg = "SyncOutlined";
+            this.bStatistical_Filter.LocalizationText = "Refresh";
             this.bStatistical_Filter.Location = new System.Drawing.Point(292, 8);
             this.bStatistical_Filter.Name = "bStatistical_Filter";
             this.bStatistical_Filter.Size = new System.Drawing.Size(144, 44);
@@ -157,6 +158,7 @@
             this.lStatisticalFilter_Length.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lStatisticalFilter_Length.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lStatisticalFilter_Length.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Length.LocalizationText = "StatisticalData.Details";
             this.lStatisticalFilter_Length.Location = new System.Drawing.Point(33, 353);
             this.lStatisticalFilter_Length.Name = "lStatisticalFilter_Length";
             this.lStatisticalFilter_Length.Size = new System.Drawing.Size(86, 29);
@@ -187,6 +189,7 @@
             this.lStatisticalFilter_Action.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lStatisticalFilter_Action.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lStatisticalFilter_Action.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Action.LocalizationText = "StatisticalData.FilterAction";
             this.lStatisticalFilter_Action.Location = new System.Drawing.Point(294, 3);
             this.lStatisticalFilter_Action.Name = "lStatisticalFilter_Action";
             this.lStatisticalFilter_Action.Size = new System.Drawing.Size(86, 29);
@@ -214,6 +217,7 @@
             this.lStatisticalFilter_Execute.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lStatisticalFilter_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lStatisticalFilter_Execute.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lStatisticalFilter_Execute.LocalizationText = "StatisticalData.FilterExecution";
             this.lStatisticalFilter_Execute.Location = new System.Drawing.Point(3, 3);
             this.lStatisticalFilter_Execute.Name = "lStatisticalFilter_Execute";
             this.lStatisticalFilter_Execute.Size = new System.Drawing.Size(86, 29);
@@ -313,6 +317,7 @@
             // 
             this.lNoDisplay.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lNoDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lNoDisplay.LocalizationText = "StatisticalData.NoDisplay";
             this.lNoDisplay.Location = new System.Drawing.Point(53, 215);
             this.lNoDisplay.Name = "lNoDisplay";
             this.lNoDisplay.Size = new System.Drawing.Size(57, 47);
@@ -323,6 +328,7 @@
             // 
             this.lDisplay.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lDisplay.LocalizationText = "StatisticalData.Display";
             this.lDisplay.Location = new System.Drawing.Point(53, 162);
             this.lDisplay.Name = "lDisplay";
             this.lDisplay.Size = new System.Drawing.Size(57, 47);
@@ -333,6 +339,7 @@
             // 
             this.lIntercept.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lIntercept.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lIntercept.LocalizationText = "StatisticalData.Intercept";
             this.lIntercept.Location = new System.Drawing.Point(53, 109);
             this.lIntercept.Name = "lIntercept";
             this.lIntercept.Size = new System.Drawing.Size(41, 47);
@@ -343,6 +350,7 @@
             // 
             this.lChange.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lChange.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lChange.LocalizationText = "StatisticalData.Change";
             this.lChange.Location = new System.Drawing.Point(53, 56);
             this.lChange.Name = "lChange";
             this.lChange.Size = new System.Drawing.Size(41, 47);
@@ -368,6 +376,7 @@
             // 
             this.lReplace.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lReplace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lReplace.LocalizationText = "StatisticalData.Replace";
             this.lReplace.Location = new System.Drawing.Point(53, 3);
             this.lReplace.Name = "lReplace";
             this.lReplace.Size = new System.Drawing.Size(41, 47);

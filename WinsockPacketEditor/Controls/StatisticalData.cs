@@ -31,8 +31,8 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.StatisticalFilter.Column."),
-                new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.StatisticalFilter.Column."),
+                }.SetFixed(),
+                new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.StatisticalData.Column."),
                 new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -43,22 +43,22 @@ namespace WinsockPacketEditor
                             {
                                 if(fi.ExecutionCount > 0)
                                 {
-                                    return new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                    return new AntdUI.CellBadge(AntdUI.TState.Processing, AntdUI.Localization.Get("Working", "处理中"));
                                 }
                                 else
                                 {
-                                    return new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                    return new AntdUI.CellBadge(AntdUI.TState.Success, AntdUI.Localization.Get("Enable", "启用"));
                                 }
                             }
                             else
                             {
-                                return new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                                return new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "停止"));
                             }
                         }
 
                         return value;
                     },
-                }.SetLocalizationTitleID("Table.StatisticalFilter.Column."),
+                }.SetLocalizationTitleID("Table.StatisticalData.Column."),
                 new AntdUI.Column("FAction", "动作")
                 {
                     Render = (value, record, rowindex)=>
@@ -66,26 +66,26 @@ namespace WinsockPacketEditor
                         switch((Operate.FilterConfig.Filter.FilterAction)value)
                         {
                             case Operate.FilterConfig.Filter.FilterAction.Replace:
-                                return AntdUI.Localization.Get("FilterAction.Replace", "替换");
+                                return AntdUI.Localization.Get("Replace", "替换");
 
                             case Operate.FilterConfig.Filter.FilterAction.Change:
-                                return AntdUI.Localization.Get("FilterAction.Change", "换包");
+                                return AntdUI.Localization.Get("Change", "换包");
 
                             case Operate.FilterConfig.Filter.FilterAction.Intercept:
-                                return AntdUI.Localization.Get("FilterAction.Intercept", "拦截");
+                                return AntdUI.Localization.Get("Intercept", "拦截");
 
                             case Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
-                                return AntdUI.Localization.Get("FilterAction.NoModify_NoDisplay", "不显示");
+                                return AntdUI.Localization.Get("NoModifyNoDisplay", "不显示");
 
                             case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
-                                return AntdUI.Localization.Get("FilterAction.NoModify_Display", "只显示");
+                                return AntdUI.Localization.Get("NoModifyDisplay", "只显示");
 
                             default:
                                 return value;
                         }
                     },
-                }.SetLocalizationTitleID("Table.StatisticalFilter.Column."),
-                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.StatisticalFilter.Column."),
+                }.SetLocalizationTitleID("Table.StatisticalData.Column."),
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.StatisticalData.Column."),
             };
 
             this.tStatisticalFilter.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));

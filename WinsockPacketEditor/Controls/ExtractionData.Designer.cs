@@ -89,6 +89,7 @@
             // 
             this.ddlExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlExtraction.List = true;
+            this.ddlExtraction.LocalizationPlaceholderText = "ExtractionData.ExtractionType";
             this.ddlExtraction.Location = new System.Drawing.Point(3, 3);
             this.ddlExtraction.Name = "ddlExtraction";
             this.ddlExtraction.PlaceholderText = "请选择提取类型";
@@ -99,13 +100,14 @@
             // udExtraction
             // 
             this.udExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.udExtraction.LocalizationText = "ExtractionData.DragFiles";
             this.udExtraction.Location = new System.Drawing.Point(3, 53);
             this.udExtraction.Multiselect = false;
             this.udExtraction.Name = "udExtraction";
             this.udExtraction.Size = new System.Drawing.Size(794, 363);
             this.udExtraction.TabIndex = 1;
             this.udExtraction.Text = "单击或拖动文件到此区域进行数据提取";
-            this.udExtraction.TextDesc = "提取成功后会在下方显示数据内容，点击生成按钮可导出对应格式的数据文件.";
+            this.udExtraction.TextDesc = "";
             this.udExtraction.DragChanged += new AntdUI.IControl.DragEventHandler(this.udExtraction_DragChanged);
             // 
             // tlpExtractionData
@@ -148,6 +150,7 @@
             this.bExtraction.BackExtend = "135, #6253E1, #04BEFE";
             this.bExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExtraction.IconSvg = "SaveOutlined";
+            this.bExtraction.LocalizationText = "Extraction";
             this.bExtraction.Location = new System.Drawing.Point(328, 8);
             this.bExtraction.Name = "bExtraction";
             this.bExtraction.Size = new System.Drawing.Size(144, 44);

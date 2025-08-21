@@ -22,6 +22,13 @@ namespace WinsockPacketEditor
 
         private void ComparisonText_Load(object sender, EventArgs e)
         {
+            this.tabComparisonText.SelectTab(0);
+
+            this.lComparison_A.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextA", "文本 A  ( 长度 {0} )"), this.txtComparison_A.Text.Length);
+            this.lComparison_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtComparison_B.Text.Length);
+            this.lDuplicate_A.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextA", "文本 A  ( 长度 {0} )"), this.txtDuplicate_A.Text.Length);
+            this.lDuplicate_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtDuplicate_B.Text.Length);
+
             this.InitTable_Comparison();
             this.InitTable_Duplicate();
         }
@@ -36,10 +43,10 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.ComparisonText.Column."),
-                new AntdUI.Column("Position", "位置", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
-                new AntdUI.Column("ValueA", "A值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
-                new AntdUI.Column("ValueB", "B值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
+                }.SetFixed().SetLocalizationTitleID("Table.Comparison.Column.ID"),
+                new AntdUI.Column("Position", "位置", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Comparison.Column."),
+                new AntdUI.Column("ValueA", "A 值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Comparison.Column."),
+                new AntdUI.Column("ValueB", "B 值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Comparison.Column."),
                 new AntdUI.Column("ChangeType", "变更类型", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -48,16 +55,16 @@ namespace WinsockPacketEditor
                         {
                             switch (di.ChangeType)
                             {
-                                case ChangeType.Inserted: return new CellTag("新增", TTypeMini.Success);
-                                case ChangeType.Deleted: return new CellTag("删除", TTypeMini.Error);
-                                case ChangeType.Modified: return new CellTag("修改", TTypeMini.Warn);
-                                default: return new CellTag("相同", TTypeMini.Info);
+                                case ChangeType.Inserted: return new CellTag(AntdUI.Localization.Get("Inserted", "新增"), TTypeMini.Success);
+                                case ChangeType.Deleted: return new CellTag(AntdUI.Localization.Get("Deleted", "删除"), TTypeMini.Error);
+                                case ChangeType.Modified: return new CellTag(AntdUI.Localization.Get("Modified", "修改"), TTypeMini.Warn);
+                                default: return new CellTag(AntdUI.Localization.Get("Same", "相同"), TTypeMini.Info);
                             }
                         }
 
                         return value;
                     },
-                }.SetLocalizationTitleID("Table.ComparisonText.Column."),
+                }.SetLocalizationTitleID("Table.Comparison.Column."),
             };
 
             this.tComparison.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -73,12 +80,12 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.ComparisonText.Column."),
-                new AntdUI.Column("Sequence", "重复值").SetWidth("500").SetLineBreak(true).SetLocalizationTitleID("Table.ComparisonText.Column."),
-                new AntdUI.Column("Length", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
-                new AntdUI.Column("CountInA", "A次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),                
-                new AntdUI.Column("CountInB", "B次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
-                new AntdUI.Column("PositionsInA", "A位置", AntdUI.ColumnAlign.Center)
+                }.SetFixed().SetLocalizationTitleID("Table.Duplicate.Column.ID"),
+                new AntdUI.Column("Sequence", "重复值").SetWidth("500").SetLineBreak(true).SetLocalizationTitleID("Table.Duplicate.Column."),
+                new AntdUI.Column("Length", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Duplicate.Column."),
+                new AntdUI.Column("CountInA", "A 次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Duplicate.Column."),                
+                new AntdUI.Column("CountInB", "B 次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Duplicate.Column."),
+                new AntdUI.Column("PositionsInA", "A 位置", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowIndex) =>
                     {
@@ -88,8 +95,8 @@ namespace WinsockPacketEditor
                         }
                         return value;
                     }
-                }.SetLocalizationTitleID("Table.ComparisonText.Column."),
-                new AntdUI.Column("PositionsInB", "B位置", AntdUI.ColumnAlign.Center)
+                }.SetLocalizationTitleID("Table.Duplicate.Column."),
+                new AntdUI.Column("PositionsInB", "B 位置", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowIndex) =>
                     {
@@ -99,7 +106,7 @@ namespace WinsockPacketEditor
                         }
                         return value;
                     }
-                }.SetLocalizationTitleID("Table.ComparisonText.Column."),
+                }.SetLocalizationTitleID("Table.Duplicate.Column."),
             };
 
             this.tDuplicate.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -121,22 +128,22 @@ namespace WinsockPacketEditor
 
         private void txtComparison_A_TextChanged(object sender, EventArgs e)
         {
-            this.lComparison_A.Text = string.Format(AntdUI.Localization.Get("System.TextA", "文本 A  ( 长度 {0} )"), this.txtComparison_A.Text.Length);
+            this.lComparison_A.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextA", "文本 A  ( 长度 {0} )"), this.txtComparison_A.Text.Length);
         }
 
         private void txtComparison_B_TextChanged(object sender, EventArgs e)
         {
-            this.lComparison_B.Text = string.Format(AntdUI.Localization.Get("System.TextB", "文本 B  ( 长度 {0} )"), this.txtComparison_B.Text.Length);
+            this.lComparison_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtComparison_B.Text.Length);
         }
 
         private void txtDuplicate_A_TextChanged(object sender, EventArgs e)
         {
-            this.lDuplicate_A.Text = string.Format(AntdUI.Localization.Get("System.TextA", "文本 A  ( 长度 {0} )"), this.txtDuplicate_A.Text.Length);
+            this.lDuplicate_A.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextA", "文本 A  ( 长度 {0} )"), this.txtDuplicate_A.Text.Length);
         }
 
         private void txtDuplicate_B_TextChanged(object sender, EventArgs e)
         {
-            this.lDuplicate_B.Text = string.Format(AntdUI.Localization.Get("System.TextB", "文本 B  ( 长度 {0} )"), this.txtDuplicate_B.Text.Length);
+            this.lDuplicate_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtDuplicate_B.Text.Length);
         }
 
         #endregion

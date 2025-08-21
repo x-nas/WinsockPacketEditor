@@ -23,6 +23,7 @@ namespace WinsockPacketEditor
 
         private void ExtractionData_Load(object sender, EventArgs e)
         {
+            this.udExtraction.TextDesc = AntdUI.Localization.Get("ExtractionData.ExtractionFile", "提取成功后会在下方显示数据内容，点击生成按钮可导出对应格式的数据文件.");
             this.InitExtraction();
         }
 
@@ -33,11 +34,11 @@ namespace WinsockPacketEditor
             {
                     new AntdUI.SelectItem("[ Charles XML 会话文件（.chlsx）] 提取 [ 十六进制数据 ]")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "ExtractionData.Chlsx",
                     },
                     new AntdUI.SelectItem("[ FILT过滤器文件（.filt）] 提取 [ WPE64 滤镜文件（.sp）]")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "ExtractionData.Filt",
                     },
             });
 
@@ -59,11 +60,11 @@ namespace WinsockPacketEditor
         {
             if (this.ddlExtraction.SelectedIndex == 0)
             {
-                this.udExtraction.Filter = AntdUI.Localization.Get("System.Charles", "Charles 会话文件") + "（*.chlsx）|*.chlsx";
+                this.udExtraction.Filter = "Charles（*.chlsx）|*.chlsx";
             }
             else if (this.ddlExtraction.SelectedIndex == 1)
             {
-                this.udExtraction.Filter = AntdUI.Localization.Get("System.FILT", "FILT 过滤器文件") + "（*.filt）|*.filt";
+                this.udExtraction.Filter = "FILT（*.filt）|*.filt";
             }
         }
 
@@ -324,7 +325,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "提取数据为空", TType.Error)
                     {
-                        LocalizationText = "System.Extraction.Empty"
+                        LocalizationText = "ExtractionData.Empty"
                     });
 
                     return;
@@ -342,7 +343,7 @@ namespace WinsockPacketEditor
 
                     case 1:
 
-                        sfdExtraction.Filter = AntdUI.Localization.Get("FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
+                        sfdExtraction.Filter = AntdUI.Localization.Get("ExtractionData.FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
 
                         break;
                 }
@@ -354,7 +355,7 @@ namespace WinsockPacketEditor
                     {
                         File.WriteAllText(FilePath, sFileContent);
 
-                        string Title = AntdUI.Localization.Get("System.Extraction.Success", "数据提取成功");
+                        string Title = AntdUI.Localization.Get("ExtractionData.Successful", "数据提取成功");
                         AntdUI.Notification.success(this.form, Title, FilePath, AntdUI.TAlignFrom.TR);
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                     }

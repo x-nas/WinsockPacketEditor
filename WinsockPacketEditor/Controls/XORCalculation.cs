@@ -78,7 +78,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "异或值为空", TType.Error)
                     {
-                        LocalizationText = "XOR.Empty"
+                        LocalizationText = "XORCalculation.XOREmpty"
                     });
 
                     return;
@@ -89,7 +89,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "异或值为空", TType.Error)
                     {
-                        LocalizationText = "XOR.Empty"
+                        LocalizationText = "XORCalculation.XOREmpty"
                     });
 
                     return;
@@ -101,7 +101,7 @@ namespace WinsockPacketEditor
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "异或值为空", TType.Error)
                     {
-                        LocalizationText = "XOR.Empty"
+                        LocalizationText = "XORCalculation.XOREmpty"
                     });
 
                     return;
@@ -111,7 +111,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "异或值不是十六进制", TType.Error)
                     {
-                        LocalizationText = "XOR.Error"
+                        LocalizationText = "XORCalculation.XORError"
                     });
 
                     return;
@@ -132,7 +132,7 @@ namespace WinsockPacketEditor
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(this.form, "异或值不是十六进制", TType.Error)
                         {
-                            LocalizationText = "XOR.Error"
+                            LocalizationText = "XORCalculation.XORError"
                         });
 
                         return;

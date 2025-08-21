@@ -113,6 +113,7 @@
             this.bEncoding.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bEncoding.IconPosition = AntdUI.TAlignMini.Right;
             this.bEncoding.IconSvg = "DoubleRightOutlined";
+            this.bEncoding.LocalizationText = "Transcoding.Encode";
             this.bEncoding.Location = new System.Drawing.Point(15, 319);
             this.bEncoding.Name = "bEncoding";
             this.bEncoding.Size = new System.Drawing.Size(114, 45);
@@ -127,6 +128,7 @@
             this.bDecoding.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bDecoding.IconPosition = AntdUI.TAlignMini.Right;
             this.bDecoding.IconSvg = "DoubleRightOutlined";
+            this.bDecoding.LocalizationText = "Transcoding.Decode";
             this.bDecoding.Location = new System.Drawing.Point(15, 430);
             this.bDecoding.Name = "bDecoding";
             this.bDecoding.Size = new System.Drawing.Size(114, 45);
@@ -138,6 +140,7 @@
             // txtTranscoding
             // 
             this.txtTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtTranscoding.LocalizationPlaceholderText = "Transcoding.EnterText";
             this.txtTranscoding.Location = new System.Drawing.Point(3, 3);
             this.txtTranscoding.Multiline = true;
             this.txtTranscoding.Name = "txtTranscoding";

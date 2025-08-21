@@ -668,26 +668,29 @@ namespace WinsockPacketEditor
             public static AntdUI.IContextMenuStripItem[] GetCMS_XOR(HexBox hbPacketData)
             {
                 List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
-                
+
                 menuItems.Add(new AntdUI.ContextMenuStripItem("剪切")
                 {
                     Enabled = hbPacketData.CanCut(),
                     ID = "Cut",
                     IconSvg = "ScissorOutlined",
+                    LocalizationText = "Cut",
                 });
 
                 menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
                 {
                     Enabled = hbPacketData.CanCopy(),
                     ID = "Copy",
-                    IconSvg = "CopyOutlined",                    
+                    IconSvg = "CopyOutlined",
+                    LocalizationText = "Copy",
                 });
 
                 menuItems.Add(new AntdUI.ContextMenuStripItem("粘贴")
                 {
                     Enabled = hbPacketData.CanPaste(),
                     ID = "Paste",
-                    IconSvg = "SnippetsOutlined",                    
+                    IconSvg = "SnippetsOutlined",
+                    LocalizationText = "Paste",
                 });
 
                 menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -696,6 +699,7 @@ namespace WinsockPacketEditor
                 {
                     ID = "SelectAll",
                     IconSvg = "ProfileOutlined",
+                    LocalizationText = "SelectAll",
                 });
 
                 return menuItems.ToArray();
@@ -11674,7 +11678,7 @@ namespace WinsockPacketEditor
                     {
                         Guid FID = Guid.NewGuid();
                         int FNum = FilterConfig.List.lstFilterInfo.Count + 1;
-                        string FName = string.Format(AntdUI.Localization.Get("NewFilterName", "滤镜 {0}"), FNum.ToString());
+                        string FName = string.Format(AntdUI.Localization.Get("FilterList.NewFilter", "滤镜 {0}"), FNum.ToString());
 
                         FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
                         FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.FilterAction.Replace;
@@ -14239,7 +14243,7 @@ namespace WinsockPacketEditor
                         bool IsEnable = false;
                         Guid SID = Guid.NewGuid();
                         int SNum = SendConfig.List.lstSendInfo.Count + 1;
-                        string SName = string.Format(AntdUI.Localization.Get("NewSendName", "发送 {0}"), SNum.ToString());
+                        string SName = string.Format(AntdUI.Localization.Get("SendList.NewSend", "发送 {0}"), SNum.ToString());
                         bool SSystemSocket = false;
                         int SLoopCNT = 1;
                         int SLoopINT = 1000;
@@ -15801,7 +15805,7 @@ namespace WinsockPacketEditor
                         bool IsEnable = false;
                         Guid RID = Guid.NewGuid();
                         int RNum = RobotConfig.List.lstRobotInfo.Count + 1;
-                        string RName = string.Format(AntdUI.Localization.Get("System.RobotName", "机器人 {0}"), RNum.ToString());
+                        string RName = string.Format(AntdUI.Localization.Get("RobotList.NewRobot", "机器人 {0}"), RNum.ToString());
                         BindingList<InstructionInfo> RInstruction = new BindingList<InstructionInfo>();
 
                         AddRobot(IsEnable, RID, RName, RInstruction);
