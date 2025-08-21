@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -37,7 +38,7 @@ namespace WinsockPacketEditor
                     {
                         return ((this.pAccountList.Current - 1) * this.pAccountList.PageSize + rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.AccountList.Column."),
+                }.SetFixed().SetLocalizationTitleID("Table.AccountList.Column.ID"),
                 new AntdUI.Column("UserName", "用户名").SetSortOrder().SetLocalizationTitleID("Table.AccountList.Column."),
                 new AntdUI.Column("IsOnLine", "状态", AntdUI.ColumnAlign.Center)
                 {
@@ -47,11 +48,11 @@ namespace WinsockPacketEditor
                         {
                             if(ai.IsOnLine)
                             {
-                                return new AntdUI.CellBadge(AntdUI.TState.Success, "在线");
+                                return new AntdUI.CellBadge(AntdUI.TState.Success, AntdUI.Localization.Get("Online", "在线"));
                             }
                             else
                             {
-                                return new AntdUI.CellBadge(AntdUI.TState.Error, "离线");
+                                return new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Offline", "离线"));
                             }
                         }
 
@@ -189,7 +190,14 @@ namespace WinsockPacketEditor
 
         private string pAccountList_ShowTotalChanged(object sender, PagePageEventArgs e)
         {
-            return $"{e.PageSize} / {e.Total}条 {e.PageTotal}页";
+            var sb = new StringBuilder();
+            sb.Append(e.PageSize);
+            sb.Append(" / ");
+            sb.Append(e.Total);
+            sb.Append(AntdUI.Localization.Get("Piece", "条") + " ");
+            sb.Append(e.PageTotal);
+            sb.Append(AntdUI.Localization.Get("Page", "页"));
+            return sb.ToString();
         }
 
         public void RefreshAccountList()

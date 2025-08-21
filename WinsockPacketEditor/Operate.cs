@@ -7157,24 +7157,28 @@ namespace WinsockPacketEditor
                                         
                     menuItems.Add(new AntdUI.ContextMenuStripItem("批量调整")
                     {
-                        ID = "Adjust",
+                        ID = "Adjust",                        
                         IconSvg = "UnorderedListOutlined",
+                        LocalizationText = "AccountList.BatchAdjustment",
                         Sub = new AntdUI.IContextMenuStripItem[]
                         {
                             new AntdUI.ContextMenuStripItem("过期时间")
                             {
                                 ID = "ExpiryTime",
                                 IconSvg = "FieldTimeOutlined",
+                                LocalizationText = "AccountList.ExpiryTime",
                             },
                             new AntdUI.ContextMenuStripItem("链接数")
                             {
                                 ID = "LimitLinks",
                                 IconSvg = "ForkOutlined",
+                                LocalizationText = "AccountList.LimitLinks",
                             },
                             new AntdUI.ContextMenuStripItem("设备数")
                             {
                                 ID = "LimitDevices",
                                 IconSvg = "TabletOutlined",
+                                LocalizationText = "AccountList.LimitDevices",
                             },
                         },
                     });                    
@@ -7183,12 +7187,14 @@ namespace WinsockPacketEditor
                     {
                         ID = "Export",
                         IconSvg = "DeliveredProcedureOutlined",
+                        LocalizationText = "AccountList.Export",
                     });
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
                     menuItems.Add(new AntdUI.ContextMenuStripItem("批量删除")
                     {
                         ID = "Delete",
                         IconSvg = "DeleteOutlined",
+                        LocalizationText = "AccountList.Delete",
                     });
 
                     return menuItems.ToArray();

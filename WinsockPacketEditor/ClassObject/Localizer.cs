@@ -27,6 +27,27 @@ namespace WinsockPacketEditor
                 case "Clear":
                     return "Clear";
 
+                case "Search":
+                    return "Search";
+
+                case "Reset":
+                    return "Reset";
+
+                case "Online":
+                    return "Online";
+
+                case "Offline":
+                    return "Offline";
+
+                case "Unlimited":
+                    return "Unlimited";
+
+                case "Piece":
+                    return "Piece";
+
+                case "Page":
+                    return "Page";
+
                 case "Now":
                     return "Now";
 
@@ -503,6 +524,70 @@ namespace WinsockPacketEditor
 
                 case "Table.ProxyLog.Column.LogContent":
                     return "Content";
+
+                #endregion
+
+                #region//AccountList
+
+                case "DatePicker.PlaceholderS":
+                    return "Expiration Time Start";
+
+                case "DatePicker.PlaceholderE":
+                    return "Expiration Time End";
+
+                case "AccountList.SearchAccount":
+                    return "Please enter Account";
+
+                case "AccountList.miAdd":
+                    return "Add Account";
+
+                case "AccountList.miImport":
+                    return "Import Account";
+
+                case "AccountList.miExport":
+                    return "Export Account";
+
+                case "AccountList.miClear":
+                    return "Clear Account";
+
+                case "AccountList.BatchAdjustment":
+                    return "Batch Adjustment";
+
+                case "AccountList.ExpiryTime":
+                    return "Expiry Time";
+
+                case "AccountList.LimitLinks":
+                    return "Links";
+
+                case "AccountList.LimitDevices":
+                    return "Devices";
+
+                case "AccountList.Export":
+                    return "Batch Export";
+
+                case "AccountList.Delete":
+                    return "Batch Delete";
+
+                case "Table.AccountList.Column.ID":
+                    return "ID";
+
+                case "Table.AccountList.Column.UserName":
+                    return "Account";
+
+                case "Table.AccountList.Column.IsOnLine":
+                    return "Status";
+
+                case "Table.AccountList.Column.LimitLinks":
+                    return "Links";
+
+                case "Table.AccountList.Column.LimitDevices":
+                    return "Devices";
+
+                case "Table.AccountList.Column.ExpiryTime":
+                    return "Expiry Time";
+
+                case "Table.AccountList.Column.CellLinks":
+                    return "Operation";
 
                 #endregion
 

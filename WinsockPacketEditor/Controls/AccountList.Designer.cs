@@ -28,21 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
             this.tlpAccountList = new System.Windows.Forms.TableLayoutPanel();
             this.tAccountList = new AntdUI.Table();
             this.tlpAccountListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bReset = new AntdUI.Button();
             this.mAccountList = new AntdUI.Menu();
             this.txtSearchUserName = new AntdUI.Input();
             this.dtpExpiryTime = new AntdUI.DatePickerRange();
             this.bSearchExpiryTime = new AntdUI.Button();
             this.pAccountList = new AntdUI.Pagination();
             this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
-            this.bReset = new AntdUI.Button();
             this.tlpAccountList.SuspendLayout();
             this.tlpAccountListButton.SuspendLayout();
             this.SuspendLayout();
@@ -103,29 +103,46 @@
             this.tlpAccountListButton.Size = new System.Drawing.Size(1200, 50);
             this.tlpAccountListButton.TabIndex = 2;
             // 
+            // bReset
+            // 
+            this.bReset.BorderWidth = 1F;
+            this.bReset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bReset.LocalizationText = "Reset";
+            this.bReset.Location = new System.Drawing.Point(603, 2);
+            this.bReset.Name = "bReset";
+            this.bReset.Size = new System.Drawing.Size(94, 45);
+            this.bReset.TabIndex = 8;
+            this.bReset.Text = "重置";
+            this.bReset.Type = AntdUI.TTypeMini.Warn;
+            this.bReset.Click += new System.EventHandler(this.bReset_Click);
+            // 
             // mAccountList
             // 
             this.mAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mAccountList.Gap = 0;
             this.mAccountList.IconRatio = 1F;
-            menuItem1.IconSvg = "PlusOutlined";
-            menuItem2.IconSvg = "UserAddOutlined";
-            menuItem2.ID = "miAdd";
-            menuItem2.Text = "新增账号";
-            menuItem3.IconSvg = "FolderOpenOutlined";
-            menuItem3.ID = "miImport";
-            menuItem3.Text = "导入账号列表";
-            menuItem4.IconSvg = "DeliveredProcedureOutlined";
-            menuItem4.ID = "miExport";
-            menuItem4.Text = "导出所有账号";
-            menuItem5.IconSvg = "DeleteOutlined";
-            menuItem5.ID = "miClear";
-            menuItem5.Text = "清空所有账号";
-            menuItem1.Sub.Add(menuItem2);
-            menuItem1.Sub.Add(menuItem3);
-            menuItem1.Sub.Add(menuItem4);
-            menuItem1.Sub.Add(menuItem5);
-            this.mAccountList.Items.Add(menuItem1);
+            menuItem6.IconSvg = "PlusOutlined";
+            menuItem7.IconSvg = "UserAddOutlined";
+            menuItem7.ID = "miAdd";
+            menuItem7.LocalizationText = "AccountList.{id}";
+            menuItem7.Text = "新增账号";
+            menuItem8.IconSvg = "FolderOpenOutlined";
+            menuItem8.ID = "miImport";
+            menuItem8.LocalizationText = "AccountList.{id}";
+            menuItem8.Text = "导入账号列表";
+            menuItem9.IconSvg = "DeliveredProcedureOutlined";
+            menuItem9.ID = "miExport";
+            menuItem9.LocalizationText = "AccountList.{id}";
+            menuItem9.Text = "导出所有账号";
+            menuItem10.IconSvg = "DeleteOutlined";
+            menuItem10.ID = "miClear";
+            menuItem10.LocalizationText = "AccountList.{id}";
+            menuItem10.Text = "清空所有账号";
+            menuItem6.Sub.Add(menuItem7);
+            menuItem6.Sub.Add(menuItem8);
+            menuItem6.Sub.Add(menuItem9);
+            menuItem6.Sub.Add(menuItem10);
+            this.mAccountList.Items.Add(menuItem6);
             this.mAccountList.Location = new System.Drawing.Point(1137, 2);
             this.mAccountList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mAccountList.Name = "mAccountList";
@@ -138,6 +155,8 @@
             // 
             this.txtSearchUserName.AllowClear = true;
             this.txtSearchUserName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearchUserName.LocalizationPlaceholderText = "AccountList.SearchAccount";
+            this.txtSearchUserName.LocalizationText = "";
             this.txtSearchUserName.Location = new System.Drawing.Point(887, 2);
             this.txtSearchUserName.Name = "txtSearchUserName";
             this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
@@ -164,6 +183,7 @@
             // 
             this.bSearchExpiryTime.BorderWidth = 1F;
             this.bSearchExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSearchExpiryTime.LocalizationText = "Search";
             this.bSearchExpiryTime.Location = new System.Drawing.Point(503, 2);
             this.bSearchExpiryTime.Name = "bSearchExpiryTime";
             this.bSearchExpiryTime.Size = new System.Drawing.Size(94, 45);
@@ -188,18 +208,6 @@
             // bgwAccountList
             // 
             this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
-            // 
-            // bReset
-            // 
-            this.bReset.BorderWidth = 1F;
-            this.bReset.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bReset.Location = new System.Drawing.Point(603, 2);
-            this.bReset.Name = "bReset";
-            this.bReset.Size = new System.Drawing.Size(94, 45);
-            this.bReset.TabIndex = 8;
-            this.bReset.Text = "重置";
-            this.bReset.Type = AntdUI.TTypeMini.Warn;
-            this.bReset.Click += new System.EventHandler(this.bReset_Click);
             // 
             // AccountList
             // 
