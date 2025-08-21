@@ -64,7 +64,6 @@
             this.tFilterList.CellImpactHeight = false;
             this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterList.Gap = 12;
-            this.tFilterList.GapCell = 6;
             this.tFilterList.Location = new System.Drawing.Point(3, 53);
             this.tFilterList.MultipleRows = true;
             this.tFilterList.Name = "tFilterList";
@@ -93,7 +92,7 @@
             // mFilterList
             // 
             this.mFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mFilterList.Gap = 0;
+            this.mFilterList.Gap = 5;
             this.mFilterList.IconRatio = 1F;
             menuItem1.IconSvg = "PlusOutlined";
             menuItem2.IconSvg = "UserAddOutlined";
@@ -117,11 +116,11 @@
             menuItem1.Sub.Add(menuItem4);
             menuItem1.Sub.Add(menuItem5);
             this.mFilterList.Items.Add(menuItem1);
-            this.mFilterList.Location = new System.Drawing.Point(737, 3);
+            this.mFilterList.Location = new System.Drawing.Point(747, 3);
             this.mFilterList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mFilterList.Name = "mFilterList";
             this.mFilterList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mFilterList.Size = new System.Drawing.Size(60, 44);
+            this.mFilterList.Size = new System.Drawing.Size(50, 44);
             this.mFilterList.TabIndex = 5;
             this.mFilterList.Trigger = AntdUI.Trigger.Click;
             this.mFilterList.SelectChanged += new AntdUI.SelectEventHandler(this.mFilterList_SelectChanged);

@@ -40,7 +40,7 @@ namespace WinsockPacketEditor
                     }
                 }.SetFixed().SetLocalizationTitleID("Table.SendList.Column."),
                 new AntdUI.Column("SName", "发送名称").SetLocalizationTitleID("Table.SendList.Column."),
-                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("Status", "状态")
                 {
                     Render = (value, record, rowindex)=>
                     {

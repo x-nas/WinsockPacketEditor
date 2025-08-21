@@ -36,7 +36,7 @@ namespace WinsockPacketEditor
                     }
                 }.SetFixed().SetLocalizationTitleID("Table.FilterList.Column."),
                 new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("Status", "状态")
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -62,7 +62,7 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("FAction", "动作", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("FAction", "动作")
                 {
                     Render = (value, record, rowindex)=>
                     {

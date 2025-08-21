@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
             this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
             this.tSendList = new AntdUI.Table();
             this.tlpSendListButton = new System.Windows.Forms.TableLayoutPanel();
@@ -67,7 +67,6 @@
             this.tSendList.CellImpactHeight = false;
             this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tSendList.Gap = 12;
-            this.tSendList.GapCell = 6;
             this.tSendList.Location = new System.Drawing.Point(3, 53);
             this.tSendList.MultipleRows = true;
             this.tSendList.Name = "tSendList";
@@ -113,35 +112,35 @@
             // mSendList
             // 
             this.mSendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mSendList.Gap = 0;
+            this.mSendList.Gap = 5;
             this.mSendList.IconRatio = 1F;
-            menuItem6.IconSvg = "PlusOutlined";
-            menuItem7.IconSvg = "UserAddOutlined";
-            menuItem7.ID = "miAdd";
-            menuItem7.LocalizationText = "SendList.{id}";
-            menuItem7.Text = "新增发送";
-            menuItem8.IconSvg = "FolderOpenOutlined";
-            menuItem8.ID = "miImport";
-            menuItem8.LocalizationText = "SendList.{id}";
-            menuItem8.Text = "导入发送列表";
-            menuItem9.IconSvg = "DeliveredProcedureOutlined";
-            menuItem9.ID = "miExport";
-            menuItem9.LocalizationText = "SendList.{id}";
-            menuItem9.Text = "导出所有发送";
-            menuItem10.IconSvg = "DeleteOutlined";
-            menuItem10.ID = "miClear";
-            menuItem10.LocalizationText = "SendList.{id}";
-            menuItem10.Text = "清空所有发送";
-            menuItem6.Sub.Add(menuItem7);
-            menuItem6.Sub.Add(menuItem8);
-            menuItem6.Sub.Add(menuItem9);
-            menuItem6.Sub.Add(menuItem10);
-            this.mSendList.Items.Add(menuItem6);
-            this.mSendList.Location = new System.Drawing.Point(737, 3);
+            menuItem1.IconSvg = "PlusOutlined";
+            menuItem2.IconSvg = "UserAddOutlined";
+            menuItem2.ID = "miAdd";
+            menuItem2.LocalizationText = "SendList.{id}";
+            menuItem2.Text = "新增发送";
+            menuItem3.IconSvg = "FolderOpenOutlined";
+            menuItem3.ID = "miImport";
+            menuItem3.LocalizationText = "SendList.{id}";
+            menuItem3.Text = "导入发送列表";
+            menuItem4.IconSvg = "DeliveredProcedureOutlined";
+            menuItem4.ID = "miExport";
+            menuItem4.LocalizationText = "SendList.{id}";
+            menuItem4.Text = "导出所有发送";
+            menuItem5.IconSvg = "DeleteOutlined";
+            menuItem5.ID = "miClear";
+            menuItem5.LocalizationText = "SendList.{id}";
+            menuItem5.Text = "清空所有发送";
+            menuItem1.Sub.Add(menuItem2);
+            menuItem1.Sub.Add(menuItem3);
+            menuItem1.Sub.Add(menuItem4);
+            menuItem1.Sub.Add(menuItem5);
+            this.mSendList.Items.Add(menuItem1);
+            this.mSendList.Location = new System.Drawing.Point(747, 3);
             this.mSendList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mSendList.Name = "mSendList";
             this.mSendList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mSendList.Size = new System.Drawing.Size(60, 44);
+            this.mSendList.Size = new System.Drawing.Size(50, 44);
             this.mSendList.TabIndex = 6;
             this.mSendList.Trigger = AntdUI.Trigger.Click;
             this.mSendList.SelectChanged += new AntdUI.SelectEventHandler(this.mSendList_SelectChanged);

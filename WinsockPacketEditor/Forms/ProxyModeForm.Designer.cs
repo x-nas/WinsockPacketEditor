@@ -235,6 +235,7 @@
             // mProxyMode
             // 
             this.mProxyMode.Dock = System.Windows.Forms.DockStyle.Left;
+            this.mProxyMode.Gap = 15;
             menuItem1.Badge = "";
             menuItem1.IconSvg = "ProjectFilled";
             menuItem1.ID = "miProxyList";
@@ -356,6 +357,7 @@
             // tpProxyList
             // 
             this.tpProxyList.Controls.Add(this.tlpProxyList);
+            this.tpProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpProxyList.Location = new System.Drawing.Point(3, 33);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
@@ -377,7 +379,6 @@
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpProxyList.Size = new System.Drawing.Size(1124, 724);
             this.tlpProxyList.TabIndex = 10;
             // 
@@ -435,7 +436,7 @@
             // mProxyList
             // 
             this.mProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mProxyList.Gap = 0;
+            this.mProxyList.Gap = 5;
             this.mProxyList.IconRatio = 1F;
             menuItem13.IconSvg = "SearchOutlined";
             menuItem13.ID = "miProxyListSearch";
@@ -487,11 +488,11 @@
             menuItem14.Sub.Add(menuItem23);
             this.mProxyList.Items.Add(menuItem13);
             this.mProxyList.Items.Add(menuItem14);
-            this.mProxyList.Location = new System.Drawing.Point(1011, 3);
+            this.mProxyList.Location = new System.Drawing.Point(1021, 3);
             this.mProxyList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mProxyList.Name = "mProxyList";
             this.mProxyList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mProxyList.Size = new System.Drawing.Size(110, 44);
+            this.mProxyList.Size = new System.Drawing.Size(100, 44);
             this.mProxyList.TabIndex = 6;
             this.mProxyList.Trigger = AntdUI.Trigger.Click;
             this.mProxyList.SelectChanged += new AntdUI.SelectEventHandler(this.mProxyList_SelectChanged);
@@ -1124,7 +1125,8 @@
             // 
             // tpClientList
             // 
-            this.tpClientList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpClientList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpClientList.Location = new System.Drawing.Point(3, 33);
             this.tpClientList.Name = "tpClientList";
             this.tpClientList.Size = new System.Drawing.Size(1124, 724);
             this.tpClientList.TabIndex = 8;
@@ -1132,7 +1134,8 @@
             // 
             // tpAccountList
             // 
-            this.tpAccountList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpAccountList.Location = new System.Drawing.Point(3, 33);
             this.tpAccountList.Name = "tpAccountList";
             this.tpAccountList.Size = new System.Drawing.Size(1124, 724);
             this.tpAccountList.TabIndex = 7;
@@ -1140,7 +1143,8 @@
             // 
             // tpFilterList
             // 
-            this.tpFilterList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpFilterList.Location = new System.Drawing.Point(3, 33);
             this.tpFilterList.Name = "tpFilterList";
             this.tpFilterList.Size = new System.Drawing.Size(1124, 724);
             this.tpFilterList.TabIndex = 9;
@@ -1148,7 +1152,8 @@
             // 
             // tpSendList
             // 
-            this.tpSendList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSendList.Location = new System.Drawing.Point(3, 33);
             this.tpSendList.Name = "tpSendList";
             this.tpSendList.Size = new System.Drawing.Size(1124, 724);
             this.tpSendList.TabIndex = 10;
@@ -1156,7 +1161,8 @@
             // 
             // tpRobotList
             // 
-            this.tpRobotList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
             this.tpRobotList.Name = "tpRobotList";
             this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
             this.tpRobotList.TabIndex = 11;
@@ -1164,7 +1170,8 @@
             // 
             // tpStatistical
             // 
-            this.tpStatistical.Location = new System.Drawing.Point(-1124, -724);
+            this.tpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpStatistical.Location = new System.Drawing.Point(3, 33);
             this.tpStatistical.Name = "tpStatistical";
             this.tpStatistical.Size = new System.Drawing.Size(1124, 724);
             this.tpStatistical.TabIndex = 1;
@@ -1172,7 +1179,8 @@
             // 
             // tpComparison
             // 
-            this.tpComparison.Location = new System.Drawing.Point(-1124, -724);
+            this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpComparison.Location = new System.Drawing.Point(3, 33);
             this.tpComparison.Name = "tpComparison";
             this.tpComparison.Size = new System.Drawing.Size(1124, 724);
             this.tpComparison.TabIndex = 12;
@@ -1180,7 +1188,8 @@
             // 
             // tpXOR
             // 
-            this.tpXOR.Location = new System.Drawing.Point(-1124, -724);
+            this.tpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpXOR.Location = new System.Drawing.Point(3, 33);
             this.tpXOR.Name = "tpXOR";
             this.tpXOR.Size = new System.Drawing.Size(1124, 724);
             this.tpXOR.TabIndex = 13;
@@ -1188,15 +1197,17 @@
             // 
             // tpTranscoding
             // 
-            this.tpTranscoding.Location = new System.Drawing.Point(0, 0);
+            this.tpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpTranscoding.Location = new System.Drawing.Point(3, 33);
             this.tpTranscoding.Name = "tpTranscoding";
-            this.tpTranscoding.Size = new System.Drawing.Size(0, 0);
+            this.tpTranscoding.Size = new System.Drawing.Size(1124, 724);
             this.tpTranscoding.TabIndex = 14;
             this.tpTranscoding.Text = "编码转换";
             // 
             // tpExtraction
             // 
-            this.tpExtraction.Location = new System.Drawing.Point(-1124, -724);
+            this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpExtraction.Location = new System.Drawing.Point(3, 33);
             this.tpExtraction.Name = "tpExtraction";
             this.tpExtraction.Size = new System.Drawing.Size(1124, 724);
             this.tpExtraction.TabIndex = 15;
@@ -1204,7 +1215,8 @@
             // 
             // tpSystemLog
             // 
-            this.tpSystemLog.Location = new System.Drawing.Point(-1124, -724);
+            this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSystemLog.Location = new System.Drawing.Point(3, 33);
             this.tpSystemLog.Name = "tpSystemLog";
             this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
             this.tpSystemLog.TabIndex = 6;

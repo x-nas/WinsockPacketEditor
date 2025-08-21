@@ -98,7 +98,7 @@
             // mRobotList
             // 
             this.mRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mRobotList.Gap = 0;
+            this.mRobotList.Gap = 5;
             this.mRobotList.IconRatio = 1F;
             menuItem1.IconSvg = "PlusOutlined";
             menuItem2.IconSvg = "UserAddOutlined";
@@ -122,11 +122,11 @@
             menuItem1.Sub.Add(menuItem4);
             menuItem1.Sub.Add(menuItem5);
             this.mRobotList.Items.Add(menuItem1);
-            this.mRobotList.Location = new System.Drawing.Point(737, 3);
+            this.mRobotList.Location = new System.Drawing.Point(747, 3);
             this.mRobotList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mRobotList.Name = "mRobotList";
             this.mRobotList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mRobotList.Size = new System.Drawing.Size(60, 44);
+            this.mRobotList.Size = new System.Drawing.Size(50, 44);
             this.mRobotList.TabIndex = 6;
             this.mRobotList.Trigger = AntdUI.Trigger.Click;
             this.mRobotList.SelectChanged += new AntdUI.SelectEventHandler(this.mRobotList_SelectChanged);
@@ -156,7 +156,6 @@
             this.tRobotList.CellImpactHeight = false;
             this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tRobotList.Gap = 12;
-            this.tRobotList.GapCell = 6;
             this.tRobotList.Location = new System.Drawing.Point(3, 53);
             this.tRobotList.MultipleRows = true;
             this.tRobotList.Name = "tRobotList";

@@ -587,13 +587,13 @@ namespace WinsockPacketEditor
                     return "Socket";
 
                 case "Table.ProxyList.Column.ClientAddr":
-                    return "Client Addr";
+                    return "Client Address";
 
                 case "Table.ProxyList.Column.ClientLocation":
                     return "Location";
 
                 case "Table.ProxyList.Column.ServerDomain":
-                    return "Server Addr";
+                    return "Server Address";
 
                 case "Table.ProxyList.Column.ServerLocation":
                     return "Location";
