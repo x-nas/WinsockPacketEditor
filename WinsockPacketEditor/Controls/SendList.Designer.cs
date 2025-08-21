@@ -79,8 +79,8 @@
             // tlpSendListButton
             // 
             this.tlpSendListButton.ColumnCount = 4;
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSendListButton.Controls.Add(this.bSendList_Stop, 1, 0);
@@ -101,9 +101,10 @@
             this.bSendList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSendList_Stop.Enabled = false;
             this.bSendList_Stop.IconSvg = "PauseCircleOutlined";
-            this.bSendList_Stop.Location = new System.Drawing.Point(103, 3);
+            this.bSendList_Stop.LocalizationText = "Stop";
+            this.bSendList_Stop.Location = new System.Drawing.Point(123, 3);
             this.bSendList_Stop.Name = "bSendList_Stop";
-            this.bSendList_Stop.Size = new System.Drawing.Size(94, 44);
+            this.bSendList_Stop.Size = new System.Drawing.Size(114, 44);
             this.bSendList_Stop.TabIndex = 8;
             this.bSendList_Stop.Text = "停止";
             this.bSendList_Stop.Type = AntdUI.TTypeMini.Error;
@@ -117,15 +118,19 @@
             menuItem6.IconSvg = "PlusOutlined";
             menuItem7.IconSvg = "UserAddOutlined";
             menuItem7.ID = "miAdd";
+            menuItem7.LocalizationText = "SendList.{id}";
             menuItem7.Text = "新增发送";
             menuItem8.IconSvg = "FolderOpenOutlined";
             menuItem8.ID = "miImport";
+            menuItem8.LocalizationText = "SendList.{id}";
             menuItem8.Text = "导入发送列表";
             menuItem9.IconSvg = "DeliveredProcedureOutlined";
             menuItem9.ID = "miExport";
+            menuItem9.LocalizationText = "SendList.{id}";
             menuItem9.Text = "导出所有发送";
             menuItem10.IconSvg = "DeleteOutlined";
             menuItem10.ID = "miClear";
+            menuItem10.LocalizationText = "SendList.{id}";
             menuItem10.Text = "清空所有发送";
             menuItem6.Sub.Add(menuItem7);
             menuItem6.Sub.Add(menuItem8);
@@ -151,9 +156,10 @@
             this.bSendList_Start.LoadingWaveSize = 6;
             this.bSendList_Start.LoadingWaveValue = 0.6F;
             this.bSendList_Start.LoadingWaveVertical = true;
+            this.bSendList_Start.LocalizationText = "Execute";
             this.bSendList_Start.Location = new System.Drawing.Point(3, 3);
             this.bSendList_Start.Name = "bSendList_Start";
-            this.bSendList_Start.Size = new System.Drawing.Size(94, 44);
+            this.bSendList_Start.Size = new System.Drawing.Size(114, 44);
             this.bSendList_Start.TabIndex = 7;
             this.bSendList_Start.Text = "执行";
             this.bSendList_Start.Type = AntdUI.TTypeMini.Info;

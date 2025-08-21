@@ -50,15 +50,15 @@ namespace WinsockPacketEditor
 
                             if(si.IsEnable)
                             {
-                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, AntdUI.Localization.Get("Enable", "启用"));
                                 if(si.ExecutionCount > 0)
                                 {
-                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, AntdUI.Localization.Get("Working", "处理中"));
                                 }
                             }
                             else
                             {
-                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "停止"));
                             }
 
                             return cellBadge;
@@ -107,7 +107,7 @@ namespace WinsockPacketEditor
                         }
                         else
                         {
-                            return new CellTag(AntdUI.Localization.Get("System.SystemSocket", "自定义"), TTypeMini.Success);
+                            return new CellTag(AntdUI.Localization.Get("Customize", "自定义"), TTypeMini.Success);
                         }
                     },
                 }.SetLocalizationTitleID("Table.SendList.Column."),
@@ -119,8 +119,8 @@ namespace WinsockPacketEditor
                         {
                             return new CellTag[]
                             {
-                                new CellTag(si.SLoopCNT.ToString() + AntdUI.Localization.Get("System.LoopCNT", " 次"), TTypeMini.Success),
-                                new CellTag(AntdUI.Localization.Get("System.LoopINT", "间隔 ") + si.SLoopINT.ToString() + AntdUI.Localization.Get("System.Millisecond", " 毫秒"), TTypeMini.Warn)
+                                new CellTag(si.SLoopCNT.ToString() + " " + AntdUI.Localization.Get("Count", "次"), TTypeMini.Success),
+                                new CellTag(AntdUI.Localization.Get("Interval", "间隔") + " " + si.SLoopINT.ToString() + " " + AntdUI.Localization.Get("Millisecond", "毫秒"), TTypeMini.Warn)
                             };
                         }
 

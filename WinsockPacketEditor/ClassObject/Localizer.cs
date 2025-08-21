@@ -1,5 +1,6 @@
 ﻿
 using AntdUI;
+using System.Security.AccessControl;
 
 namespace WinsockPacketEditor
 {
@@ -110,6 +111,9 @@ namespace WinsockPacketEditor
                 case "Carry":
                     return "Carry";
 
+                case "Execute":
+                    return "Execute";
+
                 case "Now":
                     return "Now";
 
@@ -127,6 +131,18 @@ namespace WinsockPacketEditor
 
                 case "Working":
                     return "Working";
+
+                case "Customize":
+                    return "Customize";
+
+                case "Count":
+                    return "Count";
+
+                case "Interval":
+                    return "Interval";
+
+                case "Millisecond":
+                    return "ms";
 
                 case "Input.LetterOrNum":
                     return "Input letters or numbers";
@@ -686,7 +702,7 @@ namespace WinsockPacketEditor
                     return "Action";
 
                 case "Table.FilterList.Column.ExecutionCount":
-                    return "Execution Count";
+                    return "Execution";
 
                 case "Table.FilterList.Column.Appoint":
                     return "Appoint";
@@ -695,6 +711,83 @@ namespace WinsockPacketEditor
                     return "Progression";
 
                 case "Table.FilterList.Column.CellLinks":
+                    return "Operation";
+
+                #endregion
+
+                #region//SendList
+
+                case "SendList.miAdd":
+                    return "Add Send";
+
+                case "SendList.miImport":
+                    return "Import Send";
+
+                case "SendList.miExport":
+                    return "Export Send";
+
+                case "SendList.miClear":
+                    return "Clear Send";
+
+                case "Table.SendList.Column.IsEnable":
+                    return "Enable";
+
+                case "Table.SendList.Column.SName":
+                    return "Send Name";
+
+                case "Table.SendList.Column.Status":
+                    return "Status";
+
+                case "Table.SendList.Column.ExecutionCount":
+                    return "Execution";
+
+                case "Table.SendList.Column.ExecutionSuccess":
+                    return "Success";
+
+                case "Table.SendList.Column.ExecutionFail":
+                    return "Fail";
+
+                case "Table.SendList.Column.SSystemSocket":
+                    return "System Socket";
+
+                case "Table.SendList.Column.SLoopCNT":
+                    return "Loop Count";
+
+                case "Table.SendList.Column.SNotes":
+                    return "Notes";
+
+                case "Table.SendList.Column.CellLinks":
+                    return "Operation";
+
+                #endregion
+
+                #region//RobotList
+
+                case "RobotList.miAdd":
+                    return "Add Robot";
+
+                case "RobotList.miImport":
+                    return "Import Robot";
+
+                case "RobotList.miExport":
+                    return "Export Robot";
+
+                case "RobotList.miClear":
+                    return "Clear Robot";
+
+                case "Table.RobotList.Column.IsEnable":
+                    return "Enable";
+
+                case "Table.RobotList.Column.RName":
+                    return "Robot Name";
+
+                case "Table.RobotList.Column.Status":
+                    return "Status";
+
+                case "Table.RobotList.Column.ExecutionCount":
+                    return "Execution";
+
+                case "Table.RobotList.Column.CellLinks":
                     return "Operation";
 
                 #endregion

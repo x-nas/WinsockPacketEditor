@@ -64,8 +64,8 @@
             // tlpRobotListButton
             // 
             this.tlpRobotListButton.ColumnCount = 4;
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 1, 0);
@@ -86,9 +86,10 @@
             this.bRobotList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRobotList_Stop.Enabled = false;
             this.bRobotList_Stop.IconSvg = "PauseCircleOutlined";
-            this.bRobotList_Stop.Location = new System.Drawing.Point(103, 3);
+            this.bRobotList_Stop.LocalizationText = "Stop";
+            this.bRobotList_Stop.Location = new System.Drawing.Point(123, 3);
             this.bRobotList_Stop.Name = "bRobotList_Stop";
-            this.bRobotList_Stop.Size = new System.Drawing.Size(94, 44);
+            this.bRobotList_Stop.Size = new System.Drawing.Size(114, 44);
             this.bRobotList_Stop.TabIndex = 8;
             this.bRobotList_Stop.Text = "停止";
             this.bRobotList_Stop.Type = AntdUI.TTypeMini.Error;
@@ -102,15 +103,19 @@
             menuItem1.IconSvg = "PlusOutlined";
             menuItem2.IconSvg = "UserAddOutlined";
             menuItem2.ID = "miAdd";
+            menuItem2.LocalizationText = "RobotList.{id}";
             menuItem2.Text = "新增机器人";
             menuItem3.IconSvg = "FolderOpenOutlined";
             menuItem3.ID = "miImport";
+            menuItem3.LocalizationText = "RobotList.{id}";
             menuItem3.Text = "导入机器人列表";
             menuItem4.IconSvg = "DeliveredProcedureOutlined";
             menuItem4.ID = "miExport";
+            menuItem4.LocalizationText = "RobotList.{id}";
             menuItem4.Text = "导出所有机器人";
             menuItem5.IconSvg = "DeleteOutlined";
             menuItem5.ID = "miClear";
+            menuItem5.LocalizationText = "RobotList.{id}";
             menuItem5.Text = "清空所有机器人";
             menuItem1.Sub.Add(menuItem2);
             menuItem1.Sub.Add(menuItem3);
@@ -136,9 +141,10 @@
             this.bRobotList_Start.LoadingWaveSize = 6;
             this.bRobotList_Start.LoadingWaveValue = 0.6F;
             this.bRobotList_Start.LoadingWaveVertical = true;
+            this.bRobotList_Start.LocalizationText = "Execute";
             this.bRobotList_Start.Location = new System.Drawing.Point(3, 3);
             this.bRobotList_Start.Name = "bRobotList_Start";
-            this.bRobotList_Start.Size = new System.Drawing.Size(94, 44);
+            this.bRobotList_Start.Size = new System.Drawing.Size(114, 44);
             this.bRobotList_Start.TabIndex = 7;
             this.bRobotList_Start.Text = "执行";
             this.bRobotList_Start.Type = AntdUI.TTypeMini.Info;

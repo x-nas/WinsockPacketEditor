@@ -50,15 +50,15 @@ namespace WinsockPacketEditor
 
                             if(ri.IsEnable)
                             {
-                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, AntdUI.Localization.Get("Enable", "启用"));
                                 if(ri.ExecutionCount > 0)
                                 {
-                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "处理中");
+                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, AntdUI.Localization.Get("Working", "处理中"));
                                 }
                             }
                             else
                             {
-                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "停止"));
                             }
 
                             return cellBadge;
