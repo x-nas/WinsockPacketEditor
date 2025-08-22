@@ -130,7 +130,7 @@ namespace WinsockPacketEditor
                 this.txtFind.Status = TType.Error;
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "查找内容为空", TType.Error)
                 {
-                    LocalizationText = "SearchPacketForm.Error"
+                    LocalizationText = "SearchPacketForm.Empty"
                 });
 
                 return;
@@ -142,7 +142,7 @@ namespace WinsockPacketEditor
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "查找内容为空", TType.Error)
                 {
-                    LocalizationText = "SearchPacketForm.Error"
+                    LocalizationText = "SearchPacketForm.Empty"
                 });
 
                 return;

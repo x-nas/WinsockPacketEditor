@@ -346,6 +346,9 @@ namespace WinsockPacketEditor
                 case "Password.Incorrect":
                     return "Incorrect password";
 
+                case "Input.Text":
+                    return "Please input Text";
+
                 #endregion
 
                 #region//WPEForm
@@ -1551,6 +1554,24 @@ namespace WinsockPacketEditor
 
                 case "SearchPacketForm":
                     return "Search Packet";
+
+                case "SearchPacketForm.FindText":
+                    return "Find Text";
+
+                case "SearchPacketForm.FindHex":
+                    return "Find Hex";
+
+                case "SearchPacketForm.FindNext":
+                    return "Find Next";
+
+                case "SearchPacketForm.FromScratch":
+                    return "From Scratch";
+
+                case "SearchPacketForm.SeekDown":
+                    return "Seek Down";
+
+                case "SearchPacketForm.Empty":
+                    return "Search content Empty";
 
                 case "SearchPacketForm.NoMatch":
                     return "No Match Found";

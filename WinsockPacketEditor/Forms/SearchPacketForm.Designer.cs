@@ -98,6 +98,7 @@
             // tpString
             // 
             this.tpString.Controls.Add(this.txtFind);
+            this.tpString.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpString.Location = new System.Drawing.Point(3, 33);
             this.tpString.Name = "tpString";
             this.tpString.Size = new System.Drawing.Size(472, 119);
@@ -107,6 +108,7 @@
             // txtFind
             // 
             this.txtFind.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtFind.LocalizationPlaceholderText = "Input.Text";
             this.txtFind.Location = new System.Drawing.Point(0, 0);
             this.txtFind.Multiline = true;
             this.txtFind.Name = "txtFind";
@@ -118,10 +120,11 @@
             // tpHex
             // 
             this.tpHex.Controls.Add(this.pHex);
-            this.tpHex.Location = new System.Drawing.Point(-972, -35);
+            this.tpHex.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpHex.Location = new System.Drawing.Point(3, 33);
             this.tpHex.Name = "tpHex";
             this.tpHex.Padding = new System.Windows.Forms.Padding(3);
-            this.tpHex.Size = new System.Drawing.Size(972, 35);
+            this.tpHex.Size = new System.Drawing.Size(472, 119);
             this.tpHex.TabIndex = 1;
             this.tpHex.Text = "Hex";
             // 
@@ -133,7 +136,7 @@
             this.pHex.Location = new System.Drawing.Point(3, 3);
             this.pHex.Name = "pHex";
             this.pHex.Padding = new System.Windows.Forms.Padding(3);
-            this.pHex.Size = new System.Drawing.Size(966, 29);
+            this.pHex.Size = new System.Drawing.Size(466, 113);
             this.pHex.TabIndex = 0;
             // 
             // hexFind
@@ -146,7 +149,7 @@
             this.hexFind.Name = "hexFind";
             this.hexFind.Padding = new System.Windows.Forms.Padding(3);
             this.hexFind.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hexFind.Size = new System.Drawing.Size(958, 21);
+            this.hexFind.Size = new System.Drawing.Size(458, 105);
             this.hexFind.TabIndex = 1;
             // 
             // pSearchType
@@ -187,6 +190,7 @@
             this.rbString.Checked = true;
             this.rbString.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbString.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbString.LocalizationText = "SearchPacketForm.FindText";
             this.rbString.Location = new System.Drawing.Point(3, 30);
             this.rbString.Name = "rbString";
             this.rbString.Size = new System.Drawing.Size(95, 39);
@@ -199,6 +203,7 @@
             this.rbHex.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbHex.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbHex.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbHex.LocalizationText = "SearchPacketForm.FindHex";
             this.rbHex.Location = new System.Drawing.Point(3, 75);
             this.rbHex.Name = "rbHex";
             this.rbHex.Size = new System.Drawing.Size(123, 35);
@@ -228,6 +233,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(3, 83);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(144, 75);
@@ -242,6 +248,7 @@
             this.bSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSearch.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bSearch.IconSvg = "SearchOutlined";
+            this.bSearch.LocalizationText = "SearchPacketForm.FindNext";
             this.bSearch.Location = new System.Drawing.Point(3, 3);
             this.bSearch.Name = "bSearch";
             this.bSearch.Size = new System.Drawing.Size(144, 74);
@@ -286,6 +293,7 @@
             this.rbFromIndex.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbFromIndex.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFromIndex.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbFromIndex.LocalizationText = "SearchPacketForm.SeekDown";
             this.rbFromIndex.Location = new System.Drawing.Point(3, 73);
             this.rbFromIndex.Name = "rbFromIndex";
             this.rbFromIndex.Size = new System.Drawing.Size(95, 35);
@@ -298,6 +306,7 @@
             this.rbFromHead.Checked = true;
             this.rbFromHead.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFromHead.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbFromHead.LocalizationText = "SearchPacketForm.FromScratch";
             this.rbFromHead.Location = new System.Drawing.Point(3, 32);
             this.rbFromHead.Name = "rbFromHead";
             this.rbFromHead.Size = new System.Drawing.Size(95, 35);
