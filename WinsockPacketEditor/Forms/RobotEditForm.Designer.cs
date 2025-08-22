@@ -320,6 +320,7 @@
             this.cRobotINST.ContentPadding = new System.Drawing.Size(8, 8);
             this.cRobotINST.Cursor = System.Windows.Forms.Cursors.Hand;
             this.cRobotINST.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cRobotINST.FontExpand = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold);
             this.cRobotINST.Gap = 3;
             this.cRobotINST.Items.Add(this.ciPacketINST);
             this.cRobotINST.Items.Add(this.ciControlINST);
@@ -335,9 +336,8 @@
             // ciPacketINST
             // 
             this.ciPacketINST.Controls.Add(this.tlpPacketINST);
-            this.ciPacketINST.Expand = true;
             this.ciPacketINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ciPacketINST.Location = new System.Drawing.Point(11, 57);
+            this.ciPacketINST.Location = new System.Drawing.Point(-464, -430);
             this.ciPacketINST.Name = "ciPacketINST";
             this.ciPacketINST.Size = new System.Drawing.Size(464, 430);
             this.ciPacketINST.TabIndex = 0;
@@ -454,6 +454,7 @@
             this.bInsert_SYSSocket.Size = new System.Drawing.Size(42, 42);
             this.bInsert_SYSSocket.TabIndex = 1;
             this.bInsert_SYSSocket.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_SYSSocket.Click += new System.EventHandler(this.bInsert_SYSSocket_Click);
             // 
             // rbSelectPacket
             // 
@@ -485,7 +486,6 @@
             0,
             0});
             this.nudSelectSocket.Name = "nudSelectSocket";
-            this.nudSelectSocket.SelectionStart = 1;
             this.nudSelectSocket.Size = new System.Drawing.Size(346, 39);
             this.nudSelectSocket.TabIndex = 8;
             this.nudSelectSocket.Text = "0";
@@ -556,6 +556,7 @@
             this.bInsert_PacketList.Size = new System.Drawing.Size(42, 42);
             this.bInsert_PacketList.TabIndex = 1;
             this.bInsert_PacketList.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_PacketList.Click += new System.EventHandler(this.bInsert_PacketList_Click);
             // 
             // lPacketList
             // 
@@ -655,6 +656,7 @@
             this.bInsert_SendList.Size = new System.Drawing.Size(42, 42);
             this.bInsert_SendList.TabIndex = 1;
             this.bInsert_SendList.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_SendList.Click += new System.EventHandler(this.bInsert_SendList_Click);
             // 
             // ciControlINST
             // 
@@ -752,7 +754,6 @@
             0,
             0});
             this.nudLoop.Name = "nudLoop";
-            this.nudLoop.SelectionStart = 1;
             this.nudLoop.Size = new System.Drawing.Size(282, 42);
             this.nudLoop.SuffixText = "次";
             this.nudLoop.TabIndex = 10;
@@ -776,6 +777,7 @@
             this.bInsert_LoopStart.TabIndex = 2;
             this.bInsert_LoopStart.Text = "开始";
             this.bInsert_LoopStart.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_LoopStart.Click += new System.EventHandler(this.bInsert_LoopStart_Click);
             // 
             // bInsert_LoopEnd
             // 
@@ -789,6 +791,7 @@
             this.bInsert_LoopEnd.TabIndex = 1;
             this.bInsert_LoopEnd.Text = "结束";
             this.bInsert_LoopEnd.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_LoopEnd.Click += new System.EventHandler(this.bInsert_LoopEnd_Click);
             // 
             // pDelay
             // 
@@ -853,7 +856,6 @@
             0,
             0});
             this.nudnudDelayRandom_To.Name = "nudnudDelayRandom_To";
-            this.nudnudDelayRandom_To.SelectionStart = 3;
             this.nudnudDelayRandom_To.Size = new System.Drawing.Size(161, 39);
             this.nudnudDelayRandom_To.SuffixText = "毫秒";
             this.nudnudDelayRandom_To.TabIndex = 11;
@@ -875,7 +877,6 @@
             0,
             0});
             this.nudDelayFix.Name = "nudDelayFix";
-            this.nudDelayFix.SelectionStart = 3;
             this.nudDelayFix.Size = new System.Drawing.Size(161, 42);
             this.nudDelayFix.SuffixText = "毫秒";
             this.nudDelayFix.TabIndex = 9;
@@ -907,6 +908,7 @@
             this.bInsert_Delay.Size = new System.Drawing.Size(42, 42);
             this.bInsert_Delay.TabIndex = 1;
             this.bInsert_Delay.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_Delay.Click += new System.EventHandler(this.bInsert_Delay_Click);
             // 
             // rbDelayFix
             // 
@@ -929,7 +931,6 @@
             0,
             0});
             this.nudnudDelayRandom_From.Name = "nudnudDelayRandom_From";
-            this.nudnudDelayRandom_From.SelectionStart = 1;
             this.nudnudDelayRandom_From.Size = new System.Drawing.Size(161, 39);
             this.nudnudDelayRandom_From.SuffixText = "-";
             this.nudnudDelayRandom_From.TabIndex = 8;
@@ -1042,6 +1043,7 @@
             this.bInsert_Text.Size = new System.Drawing.Size(42, 42);
             this.bInsert_Text.TabIndex = 1;
             this.bInsert_Text.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_Text.Click += new System.EventHandler(this.bInsert_Text_Click);
             // 
             // txtText
             // 
@@ -1119,6 +1121,7 @@
             this.bInsert_KeyCombination.Size = new System.Drawing.Size(42, 42);
             this.bInsert_KeyCombination.TabIndex = 1;
             this.bInsert_KeyCombination.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_KeyCombination.Click += new System.EventHandler(this.bInsert_KeyCombination_Click);
             // 
             // txtKeyCombination
             // 
@@ -1193,6 +1196,7 @@
             this.bInsert_KeyBoard.Size = new System.Drawing.Size(42, 42);
             this.bInsert_KeyBoard.TabIndex = 1;
             this.bInsert_KeyBoard.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_KeyBoard.Click += new System.EventHandler(this.bInsert_KeyBoard_Click);
             // 
             // lkey
             // 
@@ -1247,8 +1251,9 @@
             // ciMouseINST
             // 
             this.ciMouseINST.Controls.Add(this.tlpMouseINST);
+            this.ciMouseINST.Expand = true;
             this.ciMouseINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ciMouseINST.Location = new System.Drawing.Point(-464, -430);
+            this.ciMouseINST.Location = new System.Drawing.Point(11, 204);
             this.ciMouseINST.Name = "ciMouseINST";
             this.ciMouseINST.Size = new System.Drawing.Size(464, 430);
             this.ciMouseINST.TabIndex = 3;
@@ -1347,7 +1352,6 @@
             0,
             0});
             this.nudMouseMove_X.Name = "nudMouseMove_X";
-            this.nudMouseMove_X.SelectionStart = 1;
             this.nudMouseMove_X.Size = new System.Drawing.Size(316, 39);
             this.nudMouseMove_X.SuffixText = "值";
             this.nudMouseMove_X.TabIndex = 19;
@@ -1394,6 +1398,7 @@
             this.bInsert_MouseMove.Size = new System.Drawing.Size(42, 42);
             this.bInsert_MouseMove.TabIndex = 1;
             this.bInsert_MouseMove.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_MouseMove.Click += new System.EventHandler(this.bInsert_MouseMove_Click);
             // 
             // nudMouseMove_Y
             // 
@@ -1405,7 +1410,6 @@
             0,
             0});
             this.nudMouseMove_Y.Name = "nudMouseMove_Y";
-            this.nudMouseMove_Y.SelectionStart = 1;
             this.nudMouseMove_Y.Size = new System.Drawing.Size(316, 39);
             this.nudMouseMove_Y.SuffixText = "值";
             this.nudMouseMove_Y.TabIndex = 16;
@@ -1525,6 +1529,7 @@
             this.bInsert_MouseWheel.Size = new System.Drawing.Size(42, 42);
             this.bInsert_MouseWheel.TabIndex = 1;
             this.bInsert_MouseWheel.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_MouseWheel.Click += new System.EventHandler(this.bInsert_MouseWheel_Click);
             // 
             // nudWheelDistance
             // 
@@ -1536,7 +1541,6 @@
             0,
             0});
             this.nudWheelDistance.Name = "nudWheelDistance";
-            this.nudWheelDistance.SelectionStart = 2;
             this.nudWheelDistance.Size = new System.Drawing.Size(319, 39);
             this.nudWheelDistance.SuffixText = "像素";
             this.nudWheelDistance.TabIndex = 16;
@@ -1606,6 +1610,7 @@
             this.bInsert_MouseKey.Size = new System.Drawing.Size(42, 42);
             this.bInsert_MouseKey.TabIndex = 1;
             this.bInsert_MouseKey.Type = AntdUI.TTypeMini.Primary;
+            this.bInsert_MouseKey.Click += new System.EventHandler(this.bInsert_MouseKey_Click);
             // 
             // lMouseKey
             // 
@@ -1659,6 +1664,7 @@
             this.tRobotInstruction.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tRobotInstruction.Gap = 8;
             this.tRobotInstruction.GapCell = 0;
+            this.tRobotInstruction.Gaps = new System.Drawing.Size(8, 8);
             this.tRobotInstruction.Location = new System.Drawing.Point(4, 4);
             this.tRobotInstruction.Name = "tRobotInstruction";
             this.tRobotInstruction.Size = new System.Drawing.Size(478, 637);

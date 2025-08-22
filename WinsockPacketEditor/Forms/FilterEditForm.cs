@@ -378,7 +378,7 @@ namespace WinsockPacketEditor
 
                     this.cbbFilterAction_Execute.Items.Clear();
                     this.cbbFilterAction_Execute.Items.AddRange(selectItems);
-                    this.cbbFilterAction_Execute.SelectedValue = Operate.RobotConfig.Robot.GeRobot_ByGuid(fiSelect.RID);
+                    this.cbbFilterAction_Execute.SelectedValue = Operate.RobotConfig.Robot.GetRobot_ByGuid(fiSelect.RID);
                 }
             }
             catch (Exception ex)

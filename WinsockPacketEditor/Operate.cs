@@ -8199,7 +8199,11 @@ namespace WinsockPacketEditor
                                 IsEnable = bool.Parse(xeProxyAccount.Element("IsEnable").Value);
                             }
 
-                            Guid AID = Guid.NewGuid();
+                            Guid AID = Guid.Empty;
+                            if (xeProxyAccount.Element("ID") == null || !Guid.TryParse(xeProxyAccount.Element("ID").Value, out AID) || ProxyConfig.Account.GetProxyAccount_ByAccountID(AID) != null)
+                            {
+                                AID = Guid.NewGuid();
+                            }
 
                             string UserName = string.Empty;
                             if (xeProxyAccount.Element("UserName") != null)
@@ -12077,6 +12081,33 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//获取滤镜
+
+                public static FilterInfo GetFilter_ByGuid(Guid FID)
+                {
+                    try
+                    {
+                        if (FID != null && FID != Guid.Empty)
+                        {
+                            foreach (FilterInfo fi in FilterConfig.List.lstFilterInfo)
+                            {
+                                if (fi.FID == FID)
+                                {
+                                    return fi;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
                 #region//获取滤镜选项
 
                 public static FilterConfig.Filter.FilterMode GetFilterMode_ByString(string FilterMode)
@@ -14026,7 +14057,11 @@ namespace WinsockPacketEditor
                                 bIsEnable = bool.Parse(xeFilter.Element("IsEnable").Value);
                             }
 
-                            Guid gFID = Guid.NewGuid();
+                            Guid FID = Guid.Empty;
+                            if (xeFilter.Element("ID") == null || !Guid.TryParse(xeFilter.Element("ID").Value, out FID) || FilterConfig.Filter.GetFilter_ByGuid(FID) != null)
+                            {
+                                FID = Guid.NewGuid();
+                            }
 
                             string sFName = string.Empty;
                             if (xeFilter.Element("Name") != null)
@@ -14106,24 +14141,16 @@ namespace WinsockPacketEditor
                                 FilterExecuteType = FilterConfig.Filter.GetFilterExecuteType_ByString(xeFilter.Element("ExecuteType").Value);
                             }
 
-                            Guid gSID = Guid.Empty;
+                            Guid SID = Guid.Empty;
                             if (xeFilter.Element("SendID") != null)
                             {
-                                gSID = Guid.Parse(xeFilter.Element("SendID").Value);
-                            }
-                            else
-                            {
-                                gSID = Guid.Empty;
+                                Guid.TryParse(xeFilter.Element("SendID").Value, out SID);
                             }
 
-                            Guid gRID = Guid.Empty;
+                            Guid RID = Guid.Empty;
                             if (xeFilter.Element("RobotID") != null)
                             {
-                                gRID = Guid.Parse(xeFilter.Element("RobotID").Value);
-                            }
-                            else
-                            {
-                                gRID = Guid.Empty;
+                                Guid.TryParse(xeFilter.Element("RobotID").Value, out RID);
                             }
 
                             FilterConfig.Filter.FilterFunction FilterFunction = new FilterConfig.Filter.FilterFunction();
@@ -14186,7 +14213,7 @@ namespace WinsockPacketEditor
 
                             FilterConfig.Filter.AddFilter(
                                 bIsEnable,
-                                gFID,
+                                FID,
                                 sFName,
                                 bAppointHeader,
                                 sFHeaderContent,
@@ -14200,8 +14227,8 @@ namespace WinsockPacketEditor
                                 FilterAction,
                                 bIsExecute,
                                 FilterExecuteType,
-                                gSID,
-                                gRID,
+                                SID,
+                                RID,
                                 FilterFunction,
                                 FilterStartFrom,
                                 IsProgressionDone,
@@ -15661,7 +15688,11 @@ namespace WinsockPacketEditor
                                 IsEnable = bool.Parse(xeSend.Element("IsEnable").Value);
                             }
 
-                            Guid SID = Guid.NewGuid();
+                            Guid SID = Guid.Empty;
+                            if (xeSend.Element("ID") == null || !Guid.TryParse(xeSend.Element("ID").Value, out SID) || SendConfig.Send.GetSend_ByGuid(SID) != null)
+                            {
+                                SID = Guid.NewGuid();
+                            }
 
                             string SName = string.Empty;
                             if (xeSend.Element("Name") != null)
@@ -15913,7 +15944,7 @@ namespace WinsockPacketEditor
 
                 #region//获取机器人
 
-                public static RobotInfo GeRobot_ByGuid(Guid RID)
+                public static RobotInfo GetRobot_ByGuid(Guid RID)
                 {
                     try
                     {
@@ -17144,7 +17175,11 @@ namespace WinsockPacketEditor
                                 IsEnable = bool.Parse(xeRobot.Element("IsEnable").Value);
                             }
 
-                            Guid RID = Guid.NewGuid();
+                            Guid RID = Guid.Empty;
+                            if (xeRobot.Element("ID") == null || !Guid.TryParse(xeRobot.Element("ID").Value, out RID) || RobotConfig.Robot.GetRobot_ByGuid(RID) != null)
+                            {
+                                RID = Guid.NewGuid();
+                            }
 
                             string RName = string.Empty;
                             if (xeRobot.Element("Name") != null)
