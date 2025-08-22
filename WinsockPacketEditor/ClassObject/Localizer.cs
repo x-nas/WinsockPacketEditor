@@ -1,7 +1,4 @@
 ﻿
-using AntdUI;
-using System.Windows.Forms;
-
 namespace WinsockPacketEditor
 {
     public class Localizer : AntdUI.ILocalization
@@ -266,6 +263,15 @@ namespace WinsockPacketEditor
 
                 case "Response":
                     return "Response";
+
+                case "Protocol":
+                    return "Protocol";
+
+                case "Host":
+                    return "Host";
+
+                case "Path":
+                    return "Path";
 
                 #endregion
 
@@ -1190,10 +1196,138 @@ namespace WinsockPacketEditor
                 case "ListSettingsForm":
                     return "List Settings";
 
+                case "ListSettingsForm.PacketList":
+                    return "Packet List";
+
+                case "ListSettingsForm.LogList":
+                    return "Log List";
+
+                case "ListSettingsForm.TitleSetting":
+                    return "Title Setting";
+
+                case "ListSettingsForm.AutoRoll":
+                    return "Auto Roll";
+
+                case "ListSettingsForm.AutoClear":
+                    return "Auto Clear";
+
                 case "ListSettingsForm.Success":
                     return "List Settings Success";
 
                 #endregion
+
+                #region//MapSettingsForm
+
+                case "MapSettingsForm":
+                    return "Map Settings";
+
+                case "MapSettingsForm.MapLocal":
+                    return "Map Local";
+
+                case "MapSettingsForm.MapRemote":
+                    return "Map Remote";
+
+                case "MapSettingsForm.MapLocal.miAdd":
+                    return "Add Map Local";
+
+                case "MapSettingsForm.MapLocal.miImport":
+                    return "Import Map Local";
+
+                case "MapSettingsForm.MapLocal.miExport":
+                    return "Export Map Local";
+
+                case "MapSettingsForm.MapLocal.miClear":
+                    return "Clear Map Local";
+
+                case "MapSettingsForm.MapRemote.miAdd":
+                    return "Add Map Remote";
+
+                case "MapSettingsForm.MapRemote.miImport":
+                    return "Import Map Remote";
+
+                case "MapSettingsForm.MapRemote.miExport":
+                    return "Export Map Remote";
+
+                case "MapSettingsForm.MapRemote.miClear":
+                    return "Clear Map Remote";
+
+                case "Table.MapLocal.Column.RemotePath":
+                    return "Remote";
+
+                case "Table.MapLocal.Column.LocalPath":
+                    return "Local";
+
+                case "Table.MapLocal.Column.CellLinks":
+                    return "Operation";
+
+                case "Table.MapRemote.Column.HostFrom":
+                    return "From";
+
+                case "Table.MapRemote.Column.HostTo":
+                    return "To";
+
+                case "Table.MapRemote.Column.CellLinks":
+                    return "Operation";
+
+                case "MapSettingsForm.Success":
+                    return "Map settings successfully";
+
+                #endregion
+
+                #region//MapLocalForm
+
+                case "MapLocalForm":
+                    return "Map Local";
+
+                case "MapLocalForm.Remote":
+                    return "Remote";
+
+                case "MapLocalForm.InputPath":
+                    return "Please input remote path";
+
+                case "MapLocalForm.Local":
+                    return "Local";
+
+                case "MapLocalForm.SelectLocal":
+                    return "Please select a local file";
+
+                case "MapLocalForm.DragFiles":
+                    return "Click or drag files to this area";
+
+                case "MapLocalForm.DragFilesText":
+                    return "Please upload the local file and do not upload unsupported file";
+
+                case "MapLocalForm.Empty":
+                    return "Map Local Empty";
+
+                case "MapLocalForm.Success":
+                    return "Map Local Success";
+
+                #endregion
+
+                #region//MapRemoteForm
+
+                case "MapRemoteForm":
+                    return "Map Remote";
+
+                case "MapRemoteForm.MapFrom":
+                    return "Map From";
+
+                case "MapRemoteForm.MapTo":
+                    return "Map To";
+
+                case "MapRemoteForm.InputPath":
+                    return "Please input path";
+
+                case "MapRemoteForm.Empty":
+                    return "Map Remote Empty";
+
+                case "MapRemoteForm.Success":
+                    return "Map Remote Success";
+
+                #endregion
+
+
 
                 #region//BackUpSettingsForm
 

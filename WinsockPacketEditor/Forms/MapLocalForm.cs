@@ -21,6 +21,7 @@ namespace WinsockPacketEditor
         private void MapLocalForm_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("MapLocalForm", "本地映射设置");
+            this.udLocalPath.TextDesc = AntdUI.Localization.Get("MapLocalForm.DragFilesText", "请上传远端映射的本地文件，切勿上传不支持的文件类型");
 
             this.ddlProtocolType.SelectedIndex = 0;
             this.udLocalPath.Filter = "All Files (*.*)|*.*";

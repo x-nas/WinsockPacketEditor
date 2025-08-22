@@ -115,6 +115,7 @@
             // 
             this.lPathTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPathTo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPathTo.LocalizationText = "Path";
             this.lPathTo.Location = new System.Drawing.Point(6, 159);
             this.lPathTo.Name = "lPathTo";
             this.lPathTo.Size = new System.Drawing.Size(32, 45);
@@ -125,6 +126,7 @@
             // 
             this.lPortTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPortTo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPortTo.LocalizationText = "Port";
             this.lPortTo.Location = new System.Drawing.Point(6, 108);
             this.lPortTo.Name = "lPortTo";
             this.lPortTo.Size = new System.Drawing.Size(32, 45);
@@ -135,6 +137,7 @@
             // 
             this.lHostTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHostTo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lHostTo.LocalizationText = "Host";
             this.lHostTo.Location = new System.Drawing.Point(6, 57);
             this.lHostTo.Name = "lHostTo";
             this.lHostTo.Size = new System.Drawing.Size(64, 45);
@@ -145,6 +148,7 @@
             // 
             this.lProtocolTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProtocolTo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProtocolTo.LocalizationText = "Protocol";
             this.lProtocolTo.Location = new System.Drawing.Point(6, 6);
             this.lProtocolTo.Name = "lProtocolTo";
             this.lProtocolTo.Size = new System.Drawing.Size(32, 45);
@@ -158,6 +162,8 @@
             "http",
             "https"});
             this.ddlProtocolTo.List = true;
+            this.ddlProtocolTo.LocalizationPlaceholderText = "PleaseSelect";
+            this.ddlProtocolTo.LocalizationSuffixText = "";
             this.ddlProtocolTo.Location = new System.Drawing.Point(76, 6);
             this.ddlProtocolTo.Name = "ddlProtocolTo";
             this.ddlProtocolTo.PlaceholderText = "请选择";
@@ -185,7 +191,7 @@
             0,
             0});
             this.nudPortTo.Name = "nudPortTo";
-            this.nudPortTo.SelectionStart = 2;
+            this.nudPortTo.SelectionStart = 1;
             this.nudPortTo.Size = new System.Drawing.Size(402, 45);
             this.nudPortTo.TabIndex = 15;
             this.nudPortTo.Text = "80";
@@ -198,6 +204,7 @@
             // txtPathTo
             // 
             this.txtPathTo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPathTo.LocalizationPlaceholderText = "MapRemoteForm.InputPath";
             this.txtPathTo.Location = new System.Drawing.Point(76, 159);
             this.txtPathTo.Name = "txtPathTo";
             this.txtPathTo.PlaceholderText = "请填写映射路径";
@@ -230,6 +237,7 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -243,6 +251,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -255,6 +264,7 @@
             // 
             this.dMapTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dMapTo.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dMapTo.LocalizationText = "MapRemoteForm.MapTo";
             this.dMapTo.Location = new System.Drawing.Point(3, 282);
             this.dMapTo.Name = "dMapTo";
             this.dMapTo.Orientation = AntdUI.TOrientation.Left;
@@ -296,6 +306,7 @@
             // 
             this.lPathFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPathFrom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPathFrom.LocalizationText = "Path";
             this.lPathFrom.Location = new System.Drawing.Point(6, 159);
             this.lPathFrom.Name = "lPathFrom";
             this.lPathFrom.Size = new System.Drawing.Size(32, 45);
@@ -306,6 +317,7 @@
             // 
             this.lPortFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPortFrom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPortFrom.LocalizationText = "Port";
             this.lPortFrom.Location = new System.Drawing.Point(6, 108);
             this.lPortFrom.Name = "lPortFrom";
             this.lPortFrom.Size = new System.Drawing.Size(32, 45);
@@ -316,6 +328,7 @@
             // 
             this.lHostFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHostFrom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lHostFrom.LocalizationText = "Host";
             this.lHostFrom.Location = new System.Drawing.Point(6, 57);
             this.lHostFrom.Name = "lHostFrom";
             this.lHostFrom.Size = new System.Drawing.Size(64, 45);
@@ -326,6 +339,7 @@
             // 
             this.lProtocolFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProtocolFrom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProtocolFrom.LocalizationText = "Protocol";
             this.lProtocolFrom.Location = new System.Drawing.Point(6, 6);
             this.lProtocolFrom.Name = "lProtocolFrom";
             this.lProtocolFrom.Size = new System.Drawing.Size(32, 45);
@@ -338,6 +352,8 @@
             this.ddlProtocolFrom.Items.AddRange(new object[] {
             "http"});
             this.ddlProtocolFrom.List = true;
+            this.ddlProtocolFrom.LocalizationPlaceholderText = "PleaseSelect";
+            this.ddlProtocolFrom.LocalizationText = "";
             this.ddlProtocolFrom.Location = new System.Drawing.Point(76, 6);
             this.ddlProtocolFrom.Name = "ddlProtocolFrom";
             this.ddlProtocolFrom.PlaceholderText = "请选择";
@@ -364,7 +380,7 @@
             0,
             0});
             this.nudPortFrom.Name = "nudPortFrom";
-            this.nudPortFrom.SelectionStart = 2;
+            this.nudPortFrom.SelectionStart = 1;
             this.nudPortFrom.Size = new System.Drawing.Size(402, 45);
             this.nudPortFrom.TabIndex = 15;
             this.nudPortFrom.Text = "80";
@@ -377,6 +393,7 @@
             // txtPathFrom
             // 
             this.txtPathFrom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPathFrom.LocalizationPlaceholderText = "MapRemoteForm.InputPath";
             this.txtPathFrom.Location = new System.Drawing.Point(76, 159);
             this.txtPathFrom.Name = "txtPathFrom";
             this.txtPathFrom.PlaceholderText = "请填写请求路径";
@@ -387,6 +404,7 @@
             // 
             this.dMapFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dMapFrom.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dMapFrom.LocalizationText = "MapRemoteForm.MapFrom";
             this.dMapFrom.Location = new System.Drawing.Point(3, 3);
             this.dMapFrom.Name = "dMapFrom";
             this.dMapFrom.Orientation = AntdUI.TOrientation.Left;

@@ -100,6 +100,7 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -113,6 +114,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -125,6 +127,7 @@
             // 
             this.dLocal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dLocal.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLocal.LocalizationText = "MapLocalForm.Local";
             this.dLocal.Location = new System.Drawing.Point(3, 282);
             this.dLocal.Name = "dLocal";
             this.dLocal.Orientation = AntdUI.TOrientation.Left;
@@ -166,6 +169,7 @@
             // 
             this.lRemotePath.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRemotePath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lRemotePath.LocalizationText = "Path";
             this.lRemotePath.Location = new System.Drawing.Point(6, 159);
             this.lRemotePath.Name = "lRemotePath";
             this.lRemotePath.Size = new System.Drawing.Size(32, 45);
@@ -176,6 +180,7 @@
             // 
             this.lPort.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPort.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPort.LocalizationText = "Port";
             this.lPort.Location = new System.Drawing.Point(6, 108);
             this.lPort.Name = "lPort";
             this.lPort.Size = new System.Drawing.Size(32, 45);
@@ -186,6 +191,7 @@
             // 
             this.lHost.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lHost.LocalizationText = "Host";
             this.lHost.Location = new System.Drawing.Point(6, 57);
             this.lHost.Name = "lHost";
             this.lHost.Size = new System.Drawing.Size(64, 45);
@@ -196,6 +202,7 @@
             // 
             this.lProtocolType.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProtocolType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProtocolType.LocalizationText = "Protocol";
             this.lProtocolType.Location = new System.Drawing.Point(6, 6);
             this.lProtocolType.Name = "lProtocolType";
             this.lProtocolType.Size = new System.Drawing.Size(32, 45);
@@ -208,6 +215,7 @@
             this.ddlProtocolType.Items.AddRange(new object[] {
             "http"});
             this.ddlProtocolType.List = true;
+            this.ddlProtocolType.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlProtocolType.Location = new System.Drawing.Point(76, 6);
             this.ddlProtocolType.Name = "ddlProtocolType";
             this.ddlProtocolType.PlaceholderText = "请选择";
@@ -234,7 +242,7 @@
             0,
             0});
             this.nudPort.Name = "nudPort";
-            this.nudPort.SelectionStart = 2;
+            this.nudPort.SelectionStart = 1;
             this.nudPort.Size = new System.Drawing.Size(402, 45);
             this.nudPort.TabIndex = 15;
             this.nudPort.Text = "80";
@@ -247,6 +255,7 @@
             // txtRemotePath
             // 
             this.txtRemotePath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtRemotePath.LocalizationPlaceholderText = "MapLocalForm.InputPath";
             this.txtRemotePath.Location = new System.Drawing.Point(76, 159);
             this.txtRemotePath.Name = "txtRemotePath";
             this.txtRemotePath.PlaceholderText = "请填写远端路径";
@@ -257,6 +266,7 @@
             // 
             this.dRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dRemote.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dRemote.LocalizationText = "MapLocalForm.Remote";
             this.dRemote.Location = new System.Drawing.Point(3, 3);
             this.dRemote.Name = "dRemote";
             this.dRemote.Orientation = AntdUI.TOrientation.Left;
@@ -268,18 +278,20 @@
             // 
             this.udLocalPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.udLocalPath.Filter = "";
+            this.udLocalPath.LocalizationText = "MapLocalForm.DragFiles";
             this.udLocalPath.Location = new System.Drawing.Point(3, 362);
             this.udLocalPath.Multiselect = false;
             this.udLocalPath.Name = "udLocalPath";
             this.udLocalPath.Size = new System.Drawing.Size(478, 336);
             this.udLocalPath.TabIndex = 6;
             this.udLocalPath.Text = "点击或拖拽文件到此区域";
-            this.udLocalPath.TextDesc = "请上传远端映射的本地文件，切勿上传不支持的文件类型";
+            this.udLocalPath.TextDesc = "";
             this.udLocalPath.DragChanged += new AntdUI.IControl.DragEventHandler(this.udLocalPath_DragChanged);
             // 
             // txtLocalPath
             // 
             this.txtLocalPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtLocalPath.LocalizationPlaceholderText = "MapLocalForm.SelectLocal";
             this.txtLocalPath.Location = new System.Drawing.Point(3, 311);
             this.txtLocalPath.Name = "txtLocalPath";
             this.txtLocalPath.PlaceholderText = "请选择本地文件";

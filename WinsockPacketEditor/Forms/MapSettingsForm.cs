@@ -80,7 +80,7 @@ namespace WinsockPacketEditor
 
                         return value;
                     },
-                }.SetLocalizationTitleID("Table.MapLocal.Column."),
+                }.SetLocalizationTitleID("Table.MapRemote.Column."),
                 new AntdUI.Column("HostTo", "映射地址")
                 {
                     Render = (value, record, rowindex)=>
@@ -92,7 +92,7 @@ namespace WinsockPacketEditor
 
                         return value;
                     },
-                }.SetLocalizationTitleID("Table.MapLocal.Column."),
+                }.SetLocalizationTitleID("Table.MapRemote.Column."),
                 new AntdUI.Column("CellLinks", "操作")
                 {
                     Render = (value, record, rowindex)=>
@@ -103,7 +103,7 @@ namespace WinsockPacketEditor
                             new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
-                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.MapLocal.Column."),
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.MapRemote.Column."),
             };
 
             this.tMapRemote.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));

@@ -31,6 +31,7 @@
             AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListSettingsForm));
             this.tlpListSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.dColumn = new AntdUI.Divider();
             this.tlpLogList = new System.Windows.Forms.TableLayoutPanel();
             this.txtLogList_AutoClear = new AntdUI.InputNumber();
             this.cbLogList_AutoClear = new AntdUI.Checkbox();
@@ -44,21 +45,8 @@
             this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
             this.cbPacketList_AutoClear = new AntdUI.Checkbox();
             this.txtPacketList_AutoClear = new AntdUI.InputNumber();
-            this.dColumn = new AntdUI.Divider();
             this.tabListSettings = new AntdUI.Tabs();
             this.tpInject = new AntdUI.TabPage();
-            this.tpProxy = new AntdUI.TabPage();
-            this.tlpProxy = new System.Windows.Forms.TableLayoutPanel();
-            this.cbIsShow_PacketSocket_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_PacketType_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_ProxyTime_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_ID_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_ClientAddr_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_ClientLocation_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_ServerAddr_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_ServerLocation_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_PacketLen_Proxy = new AntdUI.Checkbox();
-            this.cbIsShow_PacketData_Proxy = new AntdUI.Checkbox();
             this.tlpInject = new System.Windows.Forms.TableLayoutPanel();
             this.cbIsShow_PacketData_Inject = new AntdUI.Checkbox();
             this.cbIsShow_PacketLen_Inject = new AntdUI.Checkbox();
@@ -70,15 +58,27 @@
             this.cbIsShow_PacketType_Inject = new AntdUI.Checkbox();
             this.cbIsShow_ProxyTime_Inject = new AntdUI.Checkbox();
             this.cbIsShow_ID_Inject = new AntdUI.Checkbox();
+            this.tpProxy = new AntdUI.TabPage();
+            this.tlpProxy = new System.Windows.Forms.TableLayoutPanel();
+            this.cbIsShow_PacketData_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_PacketLen_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_ServerLocation_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_ServerAddr_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_ClientLocation_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_ClientAddr_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_PacketSocket_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_PacketType_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_ProxyTime_Proxy = new AntdUI.Checkbox();
+            this.cbIsShow_ID_Proxy = new AntdUI.Checkbox();
             this.tlpListSettings.SuspendLayout();
             this.tlpLogList.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpProxyList.SuspendLayout();
             this.tabListSettings.SuspendLayout();
             this.tpInject.SuspendLayout();
+            this.tlpInject.SuspendLayout();
             this.tpProxy.SuspendLayout();
             this.tlpProxy.SuspendLayout();
-            this.tlpInject.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpListSettings
@@ -110,6 +110,18 @@
             this.tlpListSettings.Size = new System.Drawing.Size(484, 761);
             this.tlpListSettings.TabIndex = 1;
             // 
+            // dColumn
+            // 
+            this.dColumn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dColumn.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dColumn.LocalizationText = "ListSettingsForm.TitleSetting";
+            this.dColumn.Location = new System.Drawing.Point(3, 341);
+            this.dColumn.Name = "dColumn";
+            this.dColumn.Orientation = AntdUI.TOrientation.Left;
+            this.dColumn.Size = new System.Drawing.Size(478, 23);
+            this.dColumn.TabIndex = 7;
+            this.dColumn.Text = "标题设置";
+            // 
             // tlpLogList
             // 
             this.tlpLogList.ColumnCount = 2;
@@ -139,7 +151,7 @@
             0,
             0});
             this.txtLogList_AutoClear.Name = "txtLogList_AutoClear";
-            this.txtLogList_AutoClear.SelectionStart = 4;
+            this.txtLogList_AutoClear.SelectionStart = 1;
             this.txtLogList_AutoClear.Size = new System.Drawing.Size(366, 42);
             this.txtLogList_AutoClear.TabIndex = 4;
             this.txtLogList_AutoClear.Text = "5000";
@@ -153,6 +165,7 @@
             // 
             this.cbLogList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbLogList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbLogList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
             this.cbLogList_AutoClear.Location = new System.Drawing.Point(3, 51);
             this.cbLogList_AutoClear.Name = "cbLogList_AutoClear";
             this.cbLogList_AutoClear.Size = new System.Drawing.Size(106, 42);
@@ -164,6 +177,7 @@
             // 
             this.cbLogList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbLogList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbLogList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
             this.cbLogList_AutoRoll.Location = new System.Drawing.Point(3, 3);
             this.cbLogList_AutoRoll.Name = "cbLogList_AutoRoll";
             this.cbLogList_AutoRoll.Size = new System.Drawing.Size(106, 42);
@@ -196,6 +210,7 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -209,6 +224,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -221,6 +237,7 @@
             // 
             this.dPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dPacketList.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dPacketList.LocalizationText = "ListSettingsForm.PacketList";
             this.dPacketList.Location = new System.Drawing.Point(3, 3);
             this.dPacketList.Name = "dPacketList";
             this.dPacketList.Orientation = AntdUI.TOrientation.Left;
@@ -232,6 +249,7 @@
             // 
             this.dLogList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dLogList.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLogList.LocalizationText = "ListSettingsForm.LogList";
             this.dLogList.Location = new System.Drawing.Point(3, 172);
             this.dLogList.Name = "dLogList";
             this.dLogList.Orientation = AntdUI.TOrientation.Left;
@@ -262,6 +280,7 @@
             // 
             this.cbPacketList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbPacketList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbPacketList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
             this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(3, 3);
             this.cbPacketList_AutoRoll.Name = "cbPacketList_AutoRoll";
             this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(106, 42);
@@ -272,6 +291,7 @@
             // 
             this.cbPacketList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbPacketList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
             this.cbPacketList_AutoClear.Location = new System.Drawing.Point(3, 51);
             this.cbPacketList_AutoClear.Name = "cbPacketList_AutoClear";
             this.cbPacketList_AutoClear.Size = new System.Drawing.Size(106, 42);
@@ -289,7 +309,7 @@
             0,
             0});
             this.txtPacketList_AutoClear.Name = "txtPacketList_AutoClear";
-            this.txtPacketList_AutoClear.SelectionStart = 4;
+            this.txtPacketList_AutoClear.SelectionStart = 1;
             this.txtPacketList_AutoClear.Size = new System.Drawing.Size(366, 42);
             this.txtPacketList_AutoClear.TabIndex = 2;
             this.txtPacketList_AutoClear.Text = "5000";
@@ -299,28 +319,16 @@
             0,
             0});
             // 
-            // dColumn
-            // 
-            this.dColumn.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dColumn.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dColumn.Location = new System.Drawing.Point(3, 341);
-            this.dColumn.Name = "dColumn";
-            this.dColumn.Orientation = AntdUI.TOrientation.Left;
-            this.dColumn.Size = new System.Drawing.Size(478, 23);
-            this.dColumn.TabIndex = 7;
-            this.dColumn.Text = "标题设置";
-            // 
             // tabListSettings
             // 
             this.tabListSettings.Controls.Add(this.tpInject);
             this.tabListSettings.Controls.Add(this.tpProxy);
-            this.tabListSettings.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabListSettings.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabListSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabListSettings.Location = new System.Drawing.Point(3, 390);
             this.tabListSettings.Name = "tabListSettings";
             this.tabListSettings.Pages.Add(this.tpInject);
             this.tabListSettings.Pages.Add(this.tpProxy);
-            this.tabListSettings.SelectedIndex = 1;
             this.tabListSettings.Size = new System.Drawing.Size(478, 308);
             this.tabListSettings.Style = styleLine1;
             this.tabListSettings.TabIndex = 8;
@@ -329,15 +337,166 @@
             // tpInject
             // 
             this.tpInject.Controls.Add(this.tlpInject);
-            this.tpInject.Location = new System.Drawing.Point(0, 0);
+            this.tpInject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpInject.Location = new System.Drawing.Point(3, 33);
             this.tpInject.Name = "tpInject";
-            this.tpInject.Size = new System.Drawing.Size(0, 0);
+            this.tpInject.Size = new System.Drawing.Size(472, 272);
             this.tpInject.TabIndex = 0;
             this.tpInject.Text = "tpInject";
+            // 
+            // tlpInject
+            // 
+            this.tlpInject.ColumnCount = 2;
+            this.tlpInject.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpInject.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpInject.Controls.Add(this.cbIsShow_PacketData_Inject, 1, 4);
+            this.tlpInject.Controls.Add(this.cbIsShow_PacketLen_Inject, 0, 4);
+            this.tlpInject.Controls.Add(this.cbIsShow_ServerLocation_Inject, 1, 3);
+            this.tlpInject.Controls.Add(this.cbIsShow_ServerAddr_Inject, 0, 3);
+            this.tlpInject.Controls.Add(this.cbIsShow_ClientLocation_Inject, 1, 2);
+            this.tlpInject.Controls.Add(this.cbIsShow_ClientAddr_Inject, 0, 2);
+            this.tlpInject.Controls.Add(this.cbIsShow_PacketSocket_Inject, 1, 1);
+            this.tlpInject.Controls.Add(this.cbIsShow_PacketType_Inject, 0, 1);
+            this.tlpInject.Controls.Add(this.cbIsShow_ProxyTime_Inject, 1, 0);
+            this.tlpInject.Controls.Add(this.cbIsShow_ID_Inject, 0, 0);
+            this.tlpInject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpInject.Location = new System.Drawing.Point(0, 0);
+            this.tlpInject.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpInject.Name = "tlpInject";
+            this.tlpInject.RowCount = 6;
+            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpInject.Size = new System.Drawing.Size(472, 272);
+            this.tlpInject.TabIndex = 2;
+            // 
+            // cbIsShow_PacketData_Inject
+            // 
+            this.cbIsShow_PacketData_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_PacketData_Inject.Checked = true;
+            this.cbIsShow_PacketData_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_PacketData_Inject.LocalizationText = "Table.PacketList.Column.PacketData";
+            this.cbIsShow_PacketData_Inject.Location = new System.Drawing.Point(239, 195);
+            this.cbIsShow_PacketData_Inject.Name = "cbIsShow_PacketData_Inject";
+            this.cbIsShow_PacketData_Inject.Size = new System.Drawing.Size(74, 42);
+            this.cbIsShow_PacketData_Inject.TabIndex = 10;
+            this.cbIsShow_PacketData_Inject.Text = "数据";
+            // 
+            // cbIsShow_PacketLen_Inject
+            // 
+            this.cbIsShow_PacketLen_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_PacketLen_Inject.Checked = true;
+            this.cbIsShow_PacketLen_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_PacketLen_Inject.LocalizationText = "Table.PacketList.Column.PacketLen";
+            this.cbIsShow_PacketLen_Inject.Location = new System.Drawing.Point(3, 195);
+            this.cbIsShow_PacketLen_Inject.Name = "cbIsShow_PacketLen_Inject";
+            this.cbIsShow_PacketLen_Inject.Size = new System.Drawing.Size(74, 42);
+            this.cbIsShow_PacketLen_Inject.TabIndex = 9;
+            this.cbIsShow_PacketLen_Inject.Text = "长度";
+            // 
+            // cbIsShow_ServerLocation_Inject
+            // 
+            this.cbIsShow_ServerLocation_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ServerLocation_Inject.Checked = true;
+            this.cbIsShow_ServerLocation_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ServerLocation_Inject.LocalizationText = "Table.PacketList.Column.ToLocation";
+            this.cbIsShow_ServerLocation_Inject.Location = new System.Drawing.Point(239, 147);
+            this.cbIsShow_ServerLocation_Inject.Name = "cbIsShow_ServerLocation_Inject";
+            this.cbIsShow_ServerLocation_Inject.Size = new System.Drawing.Size(122, 42);
+            this.cbIsShow_ServerLocation_Inject.TabIndex = 8;
+            this.cbIsShow_ServerLocation_Inject.Text = "远端所属地";
+            // 
+            // cbIsShow_ServerAddr_Inject
+            // 
+            this.cbIsShow_ServerAddr_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ServerAddr_Inject.Checked = true;
+            this.cbIsShow_ServerAddr_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ServerAddr_Inject.LocalizationText = "Table.PacketList.Column.PacketTo";
+            this.cbIsShow_ServerAddr_Inject.Location = new System.Drawing.Point(3, 147);
+            this.cbIsShow_ServerAddr_Inject.Name = "cbIsShow_ServerAddr_Inject";
+            this.cbIsShow_ServerAddr_Inject.Size = new System.Drawing.Size(106, 42);
+            this.cbIsShow_ServerAddr_Inject.TabIndex = 7;
+            this.cbIsShow_ServerAddr_Inject.Text = "远端地址";
+            // 
+            // cbIsShow_ClientLocation_Inject
+            // 
+            this.cbIsShow_ClientLocation_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ClientLocation_Inject.Checked = true;
+            this.cbIsShow_ClientLocation_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ClientLocation_Inject.LocalizationText = "Table.PacketList.Column.FromLocation";
+            this.cbIsShow_ClientLocation_Inject.Location = new System.Drawing.Point(239, 99);
+            this.cbIsShow_ClientLocation_Inject.Name = "cbIsShow_ClientLocation_Inject";
+            this.cbIsShow_ClientLocation_Inject.Size = new System.Drawing.Size(122, 42);
+            this.cbIsShow_ClientLocation_Inject.TabIndex = 6;
+            this.cbIsShow_ClientLocation_Inject.Text = "本机所属地";
+            // 
+            // cbIsShow_ClientAddr_Inject
+            // 
+            this.cbIsShow_ClientAddr_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ClientAddr_Inject.Checked = true;
+            this.cbIsShow_ClientAddr_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ClientAddr_Inject.LocalizationText = "Table.PacketList.Column.PacketFrom";
+            this.cbIsShow_ClientAddr_Inject.Location = new System.Drawing.Point(3, 99);
+            this.cbIsShow_ClientAddr_Inject.Name = "cbIsShow_ClientAddr_Inject";
+            this.cbIsShow_ClientAddr_Inject.Size = new System.Drawing.Size(106, 42);
+            this.cbIsShow_ClientAddr_Inject.TabIndex = 5;
+            this.cbIsShow_ClientAddr_Inject.Text = "本机地址";
+            // 
+            // cbIsShow_PacketSocket_Inject
+            // 
+            this.cbIsShow_PacketSocket_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_PacketSocket_Inject.Checked = true;
+            this.cbIsShow_PacketSocket_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_PacketSocket_Inject.LocalizationText = "Table.PacketList.Column.PacketSocket";
+            this.cbIsShow_PacketSocket_Inject.Location = new System.Drawing.Point(239, 51);
+            this.cbIsShow_PacketSocket_Inject.Name = "cbIsShow_PacketSocket_Inject";
+            this.cbIsShow_PacketSocket_Inject.Size = new System.Drawing.Size(90, 42);
+            this.cbIsShow_PacketSocket_Inject.TabIndex = 4;
+            this.cbIsShow_PacketSocket_Inject.Text = "套接字";
+            // 
+            // cbIsShow_PacketType_Inject
+            // 
+            this.cbIsShow_PacketType_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_PacketType_Inject.Checked = true;
+            this.cbIsShow_PacketType_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_PacketType_Inject.LocalizationText = "Table.PacketList.Column.PacketType";
+            this.cbIsShow_PacketType_Inject.Location = new System.Drawing.Point(3, 51);
+            this.cbIsShow_PacketType_Inject.Name = "cbIsShow_PacketType_Inject";
+            this.cbIsShow_PacketType_Inject.Size = new System.Drawing.Size(74, 42);
+            this.cbIsShow_PacketType_Inject.TabIndex = 3;
+            this.cbIsShow_PacketType_Inject.Text = "类别";
+            // 
+            // cbIsShow_ProxyTime_Inject
+            // 
+            this.cbIsShow_ProxyTime_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ProxyTime_Inject.Checked = true;
+            this.cbIsShow_ProxyTime_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ProxyTime_Inject.LocalizationText = "Table.PacketList.Column.PacketTime";
+            this.cbIsShow_ProxyTime_Inject.Location = new System.Drawing.Point(239, 3);
+            this.cbIsShow_ProxyTime_Inject.Name = "cbIsShow_ProxyTime_Inject";
+            this.cbIsShow_ProxyTime_Inject.Size = new System.Drawing.Size(90, 42);
+            this.cbIsShow_ProxyTime_Inject.TabIndex = 2;
+            this.cbIsShow_ProxyTime_Inject.Text = "时间戳";
+            // 
+            // cbIsShow_ID_Inject
+            // 
+            this.cbIsShow_ID_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ID_Inject.Checked = true;
+            this.cbIsShow_ID_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ID_Inject.LocalizationText = "Table.PacketList.Column.ID";
+            this.cbIsShow_ID_Inject.Location = new System.Drawing.Point(3, 3);
+            this.cbIsShow_ID_Inject.Name = "cbIsShow_ID_Inject";
+            this.cbIsShow_ID_Inject.Size = new System.Drawing.Size(74, 42);
+            this.cbIsShow_ID_Inject.TabIndex = 1;
+            this.cbIsShow_ID_Inject.Text = "序号";
             // 
             // tpProxy
             // 
             this.tpProxy.Controls.Add(this.tlpProxy);
+            this.tpProxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpProxy.Location = new System.Drawing.Point(3, 33);
             this.tpProxy.Name = "tpProxy";
             this.tpProxy.Size = new System.Drawing.Size(472, 272);
@@ -373,11 +532,84 @@
             this.tlpProxy.Size = new System.Drawing.Size(472, 272);
             this.tlpProxy.TabIndex = 1;
             // 
+            // cbIsShow_PacketData_Proxy
+            // 
+            this.cbIsShow_PacketData_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_PacketData_Proxy.Checked = true;
+            this.cbIsShow_PacketData_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_PacketData_Proxy.LocalizationText = "Table.ProxyList.Column.PacketData";
+            this.cbIsShow_PacketData_Proxy.Location = new System.Drawing.Point(239, 195);
+            this.cbIsShow_PacketData_Proxy.Name = "cbIsShow_PacketData_Proxy";
+            this.cbIsShow_PacketData_Proxy.Size = new System.Drawing.Size(74, 42);
+            this.cbIsShow_PacketData_Proxy.TabIndex = 10;
+            this.cbIsShow_PacketData_Proxy.Text = "数据";
+            // 
+            // cbIsShow_PacketLen_Proxy
+            // 
+            this.cbIsShow_PacketLen_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_PacketLen_Proxy.Checked = true;
+            this.cbIsShow_PacketLen_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_PacketLen_Proxy.LocalizationText = "Table.ProxyList.Column.PacketLen";
+            this.cbIsShow_PacketLen_Proxy.Location = new System.Drawing.Point(3, 195);
+            this.cbIsShow_PacketLen_Proxy.Name = "cbIsShow_PacketLen_Proxy";
+            this.cbIsShow_PacketLen_Proxy.Size = new System.Drawing.Size(74, 42);
+            this.cbIsShow_PacketLen_Proxy.TabIndex = 9;
+            this.cbIsShow_PacketLen_Proxy.Text = "长度";
+            // 
+            // cbIsShow_ServerLocation_Proxy
+            // 
+            this.cbIsShow_ServerLocation_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ServerLocation_Proxy.Checked = true;
+            this.cbIsShow_ServerLocation_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ServerLocation_Proxy.LocalizationText = "Table.ProxyList.Column.ServerLocation";
+            this.cbIsShow_ServerLocation_Proxy.Location = new System.Drawing.Point(239, 147);
+            this.cbIsShow_ServerLocation_Proxy.Name = "cbIsShow_ServerLocation_Proxy";
+            this.cbIsShow_ServerLocation_Proxy.Size = new System.Drawing.Size(138, 42);
+            this.cbIsShow_ServerLocation_Proxy.TabIndex = 8;
+            this.cbIsShow_ServerLocation_Proxy.Text = "服务端所属地";
+            // 
+            // cbIsShow_ServerAddr_Proxy
+            // 
+            this.cbIsShow_ServerAddr_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ServerAddr_Proxy.Checked = true;
+            this.cbIsShow_ServerAddr_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ServerAddr_Proxy.LocalizationText = "Table.ProxyList.Column.ServerDomain";
+            this.cbIsShow_ServerAddr_Proxy.Location = new System.Drawing.Point(3, 147);
+            this.cbIsShow_ServerAddr_Proxy.Name = "cbIsShow_ServerAddr_Proxy";
+            this.cbIsShow_ServerAddr_Proxy.Size = new System.Drawing.Size(122, 42);
+            this.cbIsShow_ServerAddr_Proxy.TabIndex = 7;
+            this.cbIsShow_ServerAddr_Proxy.Text = "服务端地址";
+            // 
+            // cbIsShow_ClientLocation_Proxy
+            // 
+            this.cbIsShow_ClientLocation_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ClientLocation_Proxy.Checked = true;
+            this.cbIsShow_ClientLocation_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ClientLocation_Proxy.LocalizationText = "Table.ProxyList.Column.ClientLocation";
+            this.cbIsShow_ClientLocation_Proxy.Location = new System.Drawing.Point(239, 99);
+            this.cbIsShow_ClientLocation_Proxy.Name = "cbIsShow_ClientLocation_Proxy";
+            this.cbIsShow_ClientLocation_Proxy.Size = new System.Drawing.Size(138, 42);
+            this.cbIsShow_ClientLocation_Proxy.TabIndex = 6;
+            this.cbIsShow_ClientLocation_Proxy.Text = "客户端所属地";
+            // 
+            // cbIsShow_ClientAddr_Proxy
+            // 
+            this.cbIsShow_ClientAddr_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsShow_ClientAddr_Proxy.Checked = true;
+            this.cbIsShow_ClientAddr_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ClientAddr_Proxy.LocalizationText = "Table.ProxyList.Column.ClientAddr";
+            this.cbIsShow_ClientAddr_Proxy.Location = new System.Drawing.Point(3, 99);
+            this.cbIsShow_ClientAddr_Proxy.Name = "cbIsShow_ClientAddr_Proxy";
+            this.cbIsShow_ClientAddr_Proxy.Size = new System.Drawing.Size(122, 42);
+            this.cbIsShow_ClientAddr_Proxy.TabIndex = 5;
+            this.cbIsShow_ClientAddr_Proxy.Text = "客户端地址";
+            // 
             // cbIsShow_PacketSocket_Proxy
             // 
             this.cbIsShow_PacketSocket_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsShow_PacketSocket_Proxy.Checked = true;
             this.cbIsShow_PacketSocket_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_PacketSocket_Proxy.LocalizationText = "Table.ProxyList.Column.PacketSocket";
             this.cbIsShow_PacketSocket_Proxy.Location = new System.Drawing.Point(239, 51);
             this.cbIsShow_PacketSocket_Proxy.Name = "cbIsShow_PacketSocket_Proxy";
             this.cbIsShow_PacketSocket_Proxy.Size = new System.Drawing.Size(90, 42);
@@ -389,6 +621,7 @@
             this.cbIsShow_PacketType_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsShow_PacketType_Proxy.Checked = true;
             this.cbIsShow_PacketType_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_PacketType_Proxy.LocalizationText = "Table.ProxyList.Column.PacketType";
             this.cbIsShow_PacketType_Proxy.Location = new System.Drawing.Point(3, 51);
             this.cbIsShow_PacketType_Proxy.Name = "cbIsShow_PacketType_Proxy";
             this.cbIsShow_PacketType_Proxy.Size = new System.Drawing.Size(74, 42);
@@ -400,6 +633,7 @@
             this.cbIsShow_ProxyTime_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsShow_ProxyTime_Proxy.Checked = true;
             this.cbIsShow_ProxyTime_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ProxyTime_Proxy.LocalizationText = "Table.ProxyList.Column.ProxyTime";
             this.cbIsShow_ProxyTime_Proxy.Location = new System.Drawing.Point(239, 3);
             this.cbIsShow_ProxyTime_Proxy.Name = "cbIsShow_ProxyTime_Proxy";
             this.cbIsShow_ProxyTime_Proxy.Size = new System.Drawing.Size(90, 42);
@@ -411,216 +645,12 @@
             this.cbIsShow_ID_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsShow_ID_Proxy.Checked = true;
             this.cbIsShow_ID_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsShow_ID_Proxy.LocalizationText = "Table.ProxyList.Column.ID";
             this.cbIsShow_ID_Proxy.Location = new System.Drawing.Point(3, 3);
             this.cbIsShow_ID_Proxy.Name = "cbIsShow_ID_Proxy";
             this.cbIsShow_ID_Proxy.Size = new System.Drawing.Size(74, 42);
             this.cbIsShow_ID_Proxy.TabIndex = 1;
             this.cbIsShow_ID_Proxy.Text = "序号";
-            // 
-            // cbIsShow_ClientAddr_Proxy
-            // 
-            this.cbIsShow_ClientAddr_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ClientAddr_Proxy.Checked = true;
-            this.cbIsShow_ClientAddr_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ClientAddr_Proxy.Location = new System.Drawing.Point(3, 99);
-            this.cbIsShow_ClientAddr_Proxy.Name = "cbIsShow_ClientAddr_Proxy";
-            this.cbIsShow_ClientAddr_Proxy.Size = new System.Drawing.Size(122, 42);
-            this.cbIsShow_ClientAddr_Proxy.TabIndex = 5;
-            this.cbIsShow_ClientAddr_Proxy.Text = "客户端地址";
-            // 
-            // cbIsShow_ClientLocation_Proxy
-            // 
-            this.cbIsShow_ClientLocation_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ClientLocation_Proxy.Checked = true;
-            this.cbIsShow_ClientLocation_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ClientLocation_Proxy.Location = new System.Drawing.Point(239, 99);
-            this.cbIsShow_ClientLocation_Proxy.Name = "cbIsShow_ClientLocation_Proxy";
-            this.cbIsShow_ClientLocation_Proxy.Size = new System.Drawing.Size(138, 42);
-            this.cbIsShow_ClientLocation_Proxy.TabIndex = 6;
-            this.cbIsShow_ClientLocation_Proxy.Text = "客户端所属地";
-            // 
-            // cbIsShow_ServerAddr_Proxy
-            // 
-            this.cbIsShow_ServerAddr_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ServerAddr_Proxy.Checked = true;
-            this.cbIsShow_ServerAddr_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ServerAddr_Proxy.Location = new System.Drawing.Point(3, 147);
-            this.cbIsShow_ServerAddr_Proxy.Name = "cbIsShow_ServerAddr_Proxy";
-            this.cbIsShow_ServerAddr_Proxy.Size = new System.Drawing.Size(122, 42);
-            this.cbIsShow_ServerAddr_Proxy.TabIndex = 7;
-            this.cbIsShow_ServerAddr_Proxy.Text = "服务端地址";
-            // 
-            // cbIsShow_ServerLocation_Proxy
-            // 
-            this.cbIsShow_ServerLocation_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ServerLocation_Proxy.Checked = true;
-            this.cbIsShow_ServerLocation_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ServerLocation_Proxy.Location = new System.Drawing.Point(239, 147);
-            this.cbIsShow_ServerLocation_Proxy.Name = "cbIsShow_ServerLocation_Proxy";
-            this.cbIsShow_ServerLocation_Proxy.Size = new System.Drawing.Size(138, 42);
-            this.cbIsShow_ServerLocation_Proxy.TabIndex = 8;
-            this.cbIsShow_ServerLocation_Proxy.Text = "服务端所属地";
-            // 
-            // cbIsShow_PacketLen_Proxy
-            // 
-            this.cbIsShow_PacketLen_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_PacketLen_Proxy.Checked = true;
-            this.cbIsShow_PacketLen_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_PacketLen_Proxy.Location = new System.Drawing.Point(3, 195);
-            this.cbIsShow_PacketLen_Proxy.Name = "cbIsShow_PacketLen_Proxy";
-            this.cbIsShow_PacketLen_Proxy.Size = new System.Drawing.Size(74, 42);
-            this.cbIsShow_PacketLen_Proxy.TabIndex = 9;
-            this.cbIsShow_PacketLen_Proxy.Text = "长度";
-            // 
-            // cbIsShow_PacketData_Proxy
-            // 
-            this.cbIsShow_PacketData_Proxy.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_PacketData_Proxy.Checked = true;
-            this.cbIsShow_PacketData_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_PacketData_Proxy.Location = new System.Drawing.Point(239, 195);
-            this.cbIsShow_PacketData_Proxy.Name = "cbIsShow_PacketData_Proxy";
-            this.cbIsShow_PacketData_Proxy.Size = new System.Drawing.Size(74, 42);
-            this.cbIsShow_PacketData_Proxy.TabIndex = 10;
-            this.cbIsShow_PacketData_Proxy.Text = "数据";
-            // 
-            // tlpInject
-            // 
-            this.tlpInject.ColumnCount = 2;
-            this.tlpInject.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpInject.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpInject.Controls.Add(this.cbIsShow_PacketData_Inject, 1, 4);
-            this.tlpInject.Controls.Add(this.cbIsShow_PacketLen_Inject, 0, 4);
-            this.tlpInject.Controls.Add(this.cbIsShow_ServerLocation_Inject, 1, 3);
-            this.tlpInject.Controls.Add(this.cbIsShow_ServerAddr_Inject, 0, 3);
-            this.tlpInject.Controls.Add(this.cbIsShow_ClientLocation_Inject, 1, 2);
-            this.tlpInject.Controls.Add(this.cbIsShow_ClientAddr_Inject, 0, 2);
-            this.tlpInject.Controls.Add(this.cbIsShow_PacketSocket_Inject, 1, 1);
-            this.tlpInject.Controls.Add(this.cbIsShow_PacketType_Inject, 0, 1);
-            this.tlpInject.Controls.Add(this.cbIsShow_ProxyTime_Inject, 1, 0);
-            this.tlpInject.Controls.Add(this.cbIsShow_ID_Inject, 0, 0);
-            this.tlpInject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpInject.Location = new System.Drawing.Point(0, 0);
-            this.tlpInject.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpInject.Name = "tlpInject";
-            this.tlpInject.RowCount = 6;
-            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpInject.Size = new System.Drawing.Size(0, 0);
-            this.tlpInject.TabIndex = 2;
-            // 
-            // cbIsShow_PacketData_Inject
-            // 
-            this.cbIsShow_PacketData_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_PacketData_Inject.Checked = true;
-            this.cbIsShow_PacketData_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_PacketData_Inject.Location = new System.Drawing.Point(3, 195);
-            this.cbIsShow_PacketData_Inject.Name = "cbIsShow_PacketData_Inject";
-            this.cbIsShow_PacketData_Inject.Size = new System.Drawing.Size(74, 42);
-            this.cbIsShow_PacketData_Inject.TabIndex = 10;
-            this.cbIsShow_PacketData_Inject.Text = "数据";
-            // 
-            // cbIsShow_PacketLen_Inject
-            // 
-            this.cbIsShow_PacketLen_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_PacketLen_Inject.Checked = true;
-            this.cbIsShow_PacketLen_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_PacketLen_Inject.Location = new System.Drawing.Point(3, 195);
-            this.cbIsShow_PacketLen_Inject.Name = "cbIsShow_PacketLen_Inject";
-            this.cbIsShow_PacketLen_Inject.Size = new System.Drawing.Size(74, 42);
-            this.cbIsShow_PacketLen_Inject.TabIndex = 9;
-            this.cbIsShow_PacketLen_Inject.Text = "长度";
-            // 
-            // cbIsShow_ServerLocation_Inject
-            // 
-            this.cbIsShow_ServerLocation_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ServerLocation_Inject.Checked = true;
-            this.cbIsShow_ServerLocation_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ServerLocation_Inject.Location = new System.Drawing.Point(3, 147);
-            this.cbIsShow_ServerLocation_Inject.Name = "cbIsShow_ServerLocation_Inject";
-            this.cbIsShow_ServerLocation_Inject.Size = new System.Drawing.Size(122, 42);
-            this.cbIsShow_ServerLocation_Inject.TabIndex = 8;
-            this.cbIsShow_ServerLocation_Inject.Text = "远端所属地";
-            // 
-            // cbIsShow_ServerAddr_Inject
-            // 
-            this.cbIsShow_ServerAddr_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ServerAddr_Inject.Checked = true;
-            this.cbIsShow_ServerAddr_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ServerAddr_Inject.Location = new System.Drawing.Point(3, 147);
-            this.cbIsShow_ServerAddr_Inject.Name = "cbIsShow_ServerAddr_Inject";
-            this.cbIsShow_ServerAddr_Inject.Size = new System.Drawing.Size(106, 42);
-            this.cbIsShow_ServerAddr_Inject.TabIndex = 7;
-            this.cbIsShow_ServerAddr_Inject.Text = "远端地址";
-            // 
-            // cbIsShow_ClientLocation_Inject
-            // 
-            this.cbIsShow_ClientLocation_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ClientLocation_Inject.Checked = true;
-            this.cbIsShow_ClientLocation_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ClientLocation_Inject.Location = new System.Drawing.Point(3, 99);
-            this.cbIsShow_ClientLocation_Inject.Name = "cbIsShow_ClientLocation_Inject";
-            this.cbIsShow_ClientLocation_Inject.Size = new System.Drawing.Size(122, 42);
-            this.cbIsShow_ClientLocation_Inject.TabIndex = 6;
-            this.cbIsShow_ClientLocation_Inject.Text = "本机所属地";
-            // 
-            // cbIsShow_ClientAddr_Inject
-            // 
-            this.cbIsShow_ClientAddr_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ClientAddr_Inject.Checked = true;
-            this.cbIsShow_ClientAddr_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ClientAddr_Inject.Location = new System.Drawing.Point(3, 99);
-            this.cbIsShow_ClientAddr_Inject.Name = "cbIsShow_ClientAddr_Inject";
-            this.cbIsShow_ClientAddr_Inject.Size = new System.Drawing.Size(106, 42);
-            this.cbIsShow_ClientAddr_Inject.TabIndex = 5;
-            this.cbIsShow_ClientAddr_Inject.Text = "本机地址";
-            // 
-            // cbIsShow_PacketSocket_Inject
-            // 
-            this.cbIsShow_PacketSocket_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_PacketSocket_Inject.Checked = true;
-            this.cbIsShow_PacketSocket_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_PacketSocket_Inject.Location = new System.Drawing.Point(3, 51);
-            this.cbIsShow_PacketSocket_Inject.Name = "cbIsShow_PacketSocket_Inject";
-            this.cbIsShow_PacketSocket_Inject.Size = new System.Drawing.Size(90, 42);
-            this.cbIsShow_PacketSocket_Inject.TabIndex = 4;
-            this.cbIsShow_PacketSocket_Inject.Text = "套接字";
-            // 
-            // cbIsShow_PacketType_Inject
-            // 
-            this.cbIsShow_PacketType_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_PacketType_Inject.Checked = true;
-            this.cbIsShow_PacketType_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_PacketType_Inject.Location = new System.Drawing.Point(3, 51);
-            this.cbIsShow_PacketType_Inject.Name = "cbIsShow_PacketType_Inject";
-            this.cbIsShow_PacketType_Inject.Size = new System.Drawing.Size(74, 42);
-            this.cbIsShow_PacketType_Inject.TabIndex = 3;
-            this.cbIsShow_PacketType_Inject.Text = "类别";
-            // 
-            // cbIsShow_ProxyTime_Inject
-            // 
-            this.cbIsShow_ProxyTime_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ProxyTime_Inject.Checked = true;
-            this.cbIsShow_ProxyTime_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ProxyTime_Inject.Location = new System.Drawing.Point(3, 3);
-            this.cbIsShow_ProxyTime_Inject.Name = "cbIsShow_ProxyTime_Inject";
-            this.cbIsShow_ProxyTime_Inject.Size = new System.Drawing.Size(90, 42);
-            this.cbIsShow_ProxyTime_Inject.TabIndex = 2;
-            this.cbIsShow_ProxyTime_Inject.Text = "时间戳";
-            // 
-            // cbIsShow_ID_Inject
-            // 
-            this.cbIsShow_ID_Inject.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbIsShow_ID_Inject.Checked = true;
-            this.cbIsShow_ID_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsShow_ID_Inject.Location = new System.Drawing.Point(3, 3);
-            this.cbIsShow_ID_Inject.Name = "cbIsShow_ID_Inject";
-            this.cbIsShow_ID_Inject.Size = new System.Drawing.Size(74, 42);
-            this.cbIsShow_ID_Inject.TabIndex = 1;
-            this.cbIsShow_ID_Inject.Text = "序号";
             // 
             // ListSettingsForm
             // 
@@ -646,11 +676,11 @@
             this.tlpProxyList.PerformLayout();
             this.tabListSettings.ResumeLayout(false);
             this.tpInject.ResumeLayout(false);
+            this.tlpInject.ResumeLayout(false);
+            this.tlpInject.PerformLayout();
             this.tpProxy.ResumeLayout(false);
             this.tlpProxy.ResumeLayout(false);
             this.tlpProxy.PerformLayout();
-            this.tlpInject.ResumeLayout(false);
-            this.tlpInject.PerformLayout();
             this.ResumeLayout(false);
 
         }

@@ -8960,28 +8960,31 @@ namespace WinsockPacketEditor
                 {
                     List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
 
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+⬆")
                     {
                         ID = "Top",
                         IconSvg = "VerticalAlignTopOutlined",
-                        LocalizationText = "InjectModeForm.cmsFilterList.Top",
+                        LocalizationText = "Top",
                     });
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+⬆")
                     {
                         ID = "Up",
                         IconSvg = "ArrowUpOutlined",
+                        LocalizationText = "Up",
                     });
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+⬇")
                     {
                         ID = "Down",
                         IconSvg = "ArrowDownOutlined",
+                        LocalizationText = "Down",
                     });
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+⬇")
                     {
                         ID = "Bottom",
                         IconSvg = "VerticalAlignBottomOutlined",
+                        LocalizationText = "Bottom",
                     });                    
 
                     return menuItems.ToArray();
