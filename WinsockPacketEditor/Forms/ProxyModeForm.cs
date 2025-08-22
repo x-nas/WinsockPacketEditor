@@ -966,7 +966,7 @@ namespace WinsockPacketEditor
 
                 case "miExternalProxySettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ExternalProxySettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new EXTProxySettingsForm())
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,

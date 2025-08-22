@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class ExternalProxySettingsForm : Form
+    public partial class EXTProxySettingsForm : Form
     {
         #region//窗体事件
 
-        public ExternalProxySettingsForm()
+        public EXTProxySettingsForm()
         {
             InitializeComponent();
         }
@@ -150,7 +150,7 @@ namespace WinsockPacketEditor
 
                         AntdUI.Message.open(new AntdUI.Message.Config(this, "外部代理地址为空", TType.Error)
                         {
-                            LocalizationText = "ExternalProxySettingsForm.ServerAddress.Empty"
+                            LocalizationText = "EXTProxySettingsForm.ProxyIP.Empty"
                         });                        
 
                         return false;
@@ -161,7 +161,7 @@ namespace WinsockPacketEditor
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(this, "外部代理地址错误", TType.Error)
                         {
-                            LocalizationText = "ExternalProxySettingsForm.ServerAddress.Error"
+                            LocalizationText = "EXTProxySettingsForm.ProxyIP.Error"
                         });
 
                         return false;
@@ -177,7 +177,7 @@ namespace WinsockPacketEditor
 
                             AntdUI.Message.open(new AntdUI.Message.Config(this, "指定端口为空", TType.Error)
                             {
-                                LocalizationText = "ExternalProxySettingsForm.AppointPort.Empty"
+                                LocalizationText = "EXTProxySettingsForm.SpecifyPort.Empty"
                             });
 
                             return false;
@@ -242,7 +242,7 @@ namespace WinsockPacketEditor
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "外部代理服务器连接成功", TType.Success)
                 {
-                    LocalizationText = "ExternalProxySettingsForm.Success"
+                    LocalizationText = "EXTProxySettingsForm.Connection"
                 });
             }
 

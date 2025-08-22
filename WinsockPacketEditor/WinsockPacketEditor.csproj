@@ -312,11 +312,11 @@
     <Compile Include="Forms\ExpiryTimeForm.Designer.cs">
       <DependentUpon>ExpiryTimeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ExternalProxySettingsForm.cs">
+    <Compile Include="Forms\EXTProxySettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ExternalProxySettingsForm.Designer.cs">
-      <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
+    <Compile Include="Forms\EXTProxySettingsForm.Designer.cs">
+      <DependentUpon>EXTProxySettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FilterEditForm.cs">
       <SubType>Form</SubType>
@@ -520,8 +520,8 @@
     <EmbeddedResource Include="Forms\ExpiryTimeForm.resx">
       <DependentUpon>ExpiryTimeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ExternalProxySettingsForm.resx">
-      <DependentUpon>ExternalProxySettingsForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\EXTProxySettingsForm.resx">
+      <DependentUpon>EXTProxySettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FilterEditForm.resx">
       <DependentUpon>FilterEditForm.cs</DependentUpon>

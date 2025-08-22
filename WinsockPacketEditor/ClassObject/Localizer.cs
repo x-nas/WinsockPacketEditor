@@ -273,6 +273,9 @@ namespace WinsockPacketEditor
                 case "Path":
                     return "Path";
 
+                case "Detection":
+                    return "Detection";                
+
                 #endregion
 
                 #region//Operate
@@ -1324,6 +1327,119 @@ namespace WinsockPacketEditor
 
                 case "MapRemoteForm.Success":
                     return "Map Remote Success";
+
+                #endregion
+
+                #region//EXTProxySettingsForm
+
+                case "EXTProxySettingsForm":
+                    return "EXTProxy Settings";
+
+                case "EXTProxySettingsForm.EXTProxy":
+                    return "External SOCKS proxy";
+
+                case "EXTProxySettingsForm.InputIP":
+                    return "Please enter IP or Domain";
+
+                case "EXTProxySettingsForm.SpecifyPort":
+                    return "Specify Port";
+
+                case "EXTProxySettingsForm.Port":
+                    return "Port:";
+
+                case "EXTProxySettingsForm.RequireAuth":
+                    return "Require Authentication";
+
+                case "EXTProxySettingsForm.Username":
+                    return "Username:";
+
+                case "EXTProxySettingsForm.Password":
+                    return "Password:";
+
+                case "EXTProxySettingsForm.InputUsername":
+                    return "Input Username";
+
+                case "EXTProxySettingsForm.InputPassword":
+                    return "Input Password";
+
+                case "EXTProxySettingsForm.PortExample":
+                    return "For example 80,443";
+
+                case "EXTProxySettingsForm.ProxyIP.Empty":
+                    return "EXTProxy address Empty";
+
+                case "EXTProxySettingsForm.ProxyIP.Error":
+                    return "EXTProxy address Error";
+
+                case "EXTProxySettingsForm.SpecifyPort.Empty":
+                    return "Specify Port Empty";
+
+                case "EXTProxySettingsForm.UserName.Empty":
+                    return "Username Empty";
+
+                case "EXTProxySettingsForm.PassWord.Empty":
+                    return "Password Empty";
+
+                case "EXTProxySettingsForm.Connection":
+                    return "EXTProxy connection successful";
+
+                case "EXTProxySettingsForm.Success":
+                    return "EXTProxy settings saved successfully";
+
+                #endregion
+
+                #region//HotKeyForm
+
+                case "HotKeyForm":
+                    return "HotKey Settings";
+
+                case "HotKeyForm.Apply":
+                    return "HotKeys - Apply to Send and Robot List";
+
+                case "HotKeyForm.Key1":
+                    return "HotKey 1";
+
+                case "HotKeyForm.Key2":
+                    return "HotKey 2";
+
+                case "HotKeyForm.Key3":
+                    return "HotKey 3";
+
+                case "HotKeyForm.Key4":
+                    return "HotKey 4";
+
+                case "HotKeyForm.Key5":
+                    return "HotKey 5";
+
+                case "HotKeyForm.Key6":
+                    return "HotKey 6";
+
+                case "HotKeyForm.Key7":
+                    return "HotKey 7";
+
+                case "HotKeyForm.Key8":
+                    return "HotKey 8";
+
+                case "HotKeyForm.Key9":
+                    return "HotKey 9";
+
+                case "HotKeyForm.Key10":
+                    return "HotKey 10";
+
+                case "HotKeyForm.Key11":
+                    return "HotKey 11";
+
+                case "HotKeyForm.Key12":
+                    return "HotKey 12";
+
+                case "HotKeyForm.Success":
+                    return "HotKey set successfully";
+
+                case "HotKeyForm.Error":
+                    return "HotKey set failed";
+
+                case "HotKeyForm.InputHotKey":
+                    return "Please enter the HotKey";
 
                 #endregion
 
