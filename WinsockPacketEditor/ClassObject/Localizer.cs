@@ -261,6 +261,12 @@ namespace WinsockPacketEditor
                 case "PacketContent":
                     return "Packet Content";
 
+                case "Request":
+                    return "Request";
+
+                case "Response":
+                    return "Response";
+
                 #endregion
 
                 #region//Operate
@@ -1132,8 +1138,50 @@ namespace WinsockPacketEditor
                 case "HookSettingsForm":
                     return "Hook Settings";
 
+                case "HookSettingsForm.Send1":
+                    return "Send 1.1";
+
+                case "HookSettingsForm.Recv1":
+                    return "Recv 1.1";
+
+                case "HookSettingsForm.SendTo1":
+                    return "SendTo 1.1";
+
+                case "HookSettingsForm.RecvFrom1":
+                    return "RecvFrom 1.1";
+
+                case "HookSettingsForm.Send":
+                    return "Send";
+
+                case "HookSettingsForm.SendTo":
+                    return "SendTo";
+
+                case "HookSettingsForm.Recv":
+                    return "Recv";
+
+                case "HookSettingsForm.RecvFrom":
+                    return "RecvFrom";
+
+                case "HookSettingsForm.WSASend":
+                    return "WSASend";
+
+                case "HookSettingsForm.WSASendTo":
+                    return "WSASendTo";
+
+                case "HookSettingsForm.WSARecv":
+                    return "WSARecv";
+
+                case "HookSettingsForm.WSARecvFrom":
+                    return "WSARecvFrom";
+
+                case "HookSettingsForm.TCP":
+                    return "TCP Protocol";
+
+                case "HookSettingsForm.UDP":
+                    return "UDP Protocol";
+
                 case "HookSettingsForm.Success":
-                    return "Hook Settings Success";
+                    return "Hook settings successfully";
 
                 #endregion
 
