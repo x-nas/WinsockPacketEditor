@@ -37,7 +37,7 @@ namespace WinsockPacketEditor
                 }
 
                 this.ddlAuthType.Items.Clear();
-                this.ddlAuthType.Items.Add(AntdUI.Localization.Get("ProxyAuthType", "用户名 / 密码"));
+                this.ddlAuthType.Items.Add(AntdUI.Localization.Get("ProxySettingsForm.UNPW", "用户名 / 密码"));
 
                 if (this.ddlAuthType.Items.Count > 0)
                 {

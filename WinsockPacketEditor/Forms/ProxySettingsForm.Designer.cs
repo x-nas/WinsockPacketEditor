@@ -114,6 +114,7 @@
             this.cbEnable_Auth.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbEnable_Auth.Checked = true;
             this.cbEnable_Auth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbEnable_Auth.LocalizationText = "ProxySettingsForm.EnableAuth";
             this.cbEnable_Auth.Location = new System.Drawing.Point(3, 3);
             this.cbEnable_Auth.Name = "cbEnable_Auth";
             this.cbEnable_Auth.Size = new System.Drawing.Size(138, 42);
@@ -125,6 +126,7 @@
             // 
             this.ddlAuthType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlAuthType.List = true;
+            this.ddlAuthType.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlAuthType.Location = new System.Drawing.Point(147, 3);
             this.ddlAuthType.Name = "ddlAuthType";
             this.ddlAuthType.PlaceholderText = "请选择";
@@ -135,6 +137,7 @@
             // 
             this.dProxyAuth.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dProxyAuth.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dProxyAuth.LocalizationText = "ProxySettingsForm.ProxyAuth";
             this.dProxyAuth.Location = new System.Drawing.Point(3, 341);
             this.dProxyAuth.Name = "dProxyAuth";
             this.dProxyAuth.Orientation = AntdUI.TOrientation.Left;
@@ -146,6 +149,7 @@
             // 
             this.dSystemProxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dSystemProxy.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSystemProxy.LocalizationText = "ProxySettingsForm.SystemProxy";
             this.dSystemProxy.Location = new System.Drawing.Point(3, 510);
             this.dSystemProxy.Name = "dSystemProxy";
             this.dSystemProxy.Orientation = AntdUI.TOrientation.Left;
@@ -185,6 +189,7 @@
             // nudSOCKS5Port
             // 
             this.nudSOCKS5Port.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudSOCKS5Port.LocalizationPrefixText = "ProxySettingsForm.Port";
             this.nudSOCKS5Port.Location = new System.Drawing.Point(118, 3);
             this.nudSOCKS5Port.Minimum = new decimal(new int[] {
             1,
@@ -193,7 +198,7 @@
             0});
             this.nudSOCKS5Port.Name = "nudSOCKS5Port";
             this.nudSOCKS5Port.PrefixText = "端口:";
-            this.nudSOCKS5Port.SelectionStart = 4;
+            this.nudSOCKS5Port.SelectionStart = 1;
             this.nudSOCKS5Port.Size = new System.Drawing.Size(363, 42);
             this.nudSOCKS5Port.TabIndex = 1;
             this.nudSOCKS5Port.Text = "1080";
@@ -229,6 +234,7 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -242,6 +248,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -254,6 +261,7 @@
             // 
             this.dProxyServerIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dProxyServerIP.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dProxyServerIP.LocalizationText = "ProxySettingsForm.ProxyServerIP";
             this.dProxyServerIP.Location = new System.Drawing.Point(3, 3);
             this.dProxyServerIP.Name = "dProxyServerIP";
             this.dProxyServerIP.Orientation = AntdUI.TOrientation.Left;
@@ -265,6 +273,7 @@
             // 
             this.dProxyType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dProxyType.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dProxyType.LocalizationText = "ProxySettingsForm.ProxyType";
             this.dProxyType.Location = new System.Drawing.Point(3, 172);
             this.dProxyType.Name = "dProxyType";
             this.dProxyType.Orientation = AntdUI.TOrientation.Left;
@@ -294,6 +303,7 @@
             this.cbProxyIP_Auto.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbProxyIP_Auto.Checked = true;
             this.cbProxyIP_Auto.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbProxyIP_Auto.LocalizationText = "ProxySettingsForm.ProxyIPAuto";
             this.cbProxyIP_Auto.Location = new System.Drawing.Point(3, 3);
             this.cbProxyIP_Auto.Name = "cbProxyIP_Auto";
             this.cbProxyIP_Auto.Size = new System.Drawing.Size(106, 42);
@@ -305,6 +315,7 @@
             // 
             this.ddlProxyIP_Appoint.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlProxyIP_Appoint.List = true;
+            this.ddlProxyIP_Appoint.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlProxyIP_Appoint.Location = new System.Drawing.Point(115, 3);
             this.ddlProxyIP_Appoint.Name = "ddlProxyIP_Appoint";
             this.ddlProxyIP_Appoint.PlaceholderText = "请选择";

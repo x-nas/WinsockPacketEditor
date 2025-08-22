@@ -1,5 +1,6 @@
 ﻿
 using AntdUI;
+using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
@@ -238,6 +239,14 @@ namespace WinsockPacketEditor
 
                 case "Exporting":
                     return "Exporting...";
+
+                case "PleaseSelect":
+                    return "Please select";
+
+                case "Save":
+                    return "Save";
+
+
 
                 #endregion
 
@@ -1034,6 +1043,49 @@ namespace WinsockPacketEditor
 
                 case "LogList.DeSelect":
                     return "DeSelect";
+
+                #endregion
+
+                #region//ProxySettingsForm
+
+                case "ProxySettingsForm":
+                    return "Proxy Settings";
+
+                case "ProxySettingsForm.Port":
+                    return "Port:";
+
+                case "ProxySettingsForm.ProxyServerIP":
+                    return "Proxy Server IP";
+
+                case "ProxySettingsForm.ProxyType":
+                    return "Proxy Type";
+
+                case "ProxySettingsForm.ProxyAuth":
+                    return "Proxy Authentication";
+
+                case "ProxySettingsForm.SystemProxy":
+                    return "System Proxy";
+
+                case "ProxySettingsForm.ProxyIPAuto":
+                    return "Auto Detection";
+
+                case "ProxySettingsForm.EnableAuth":
+                    return "Enable";
+
+                case "ProxySettingsForm.UNPW":
+                    return "Username / Password";
+
+                case "ProxySettingsForm.SystemProxy.Start":
+                    return "System Proxy Enable";
+
+                case "ProxySettingsForm.SystemProxy.Stop":
+                    return "System Proxy Disable";
+
+                case "ProxySettingsForm.ProxyType.Error":
+                    return "Proxy Type Error";
+
+                case "ProxySettingsForm.Success":
+                    return "Proxy settings saved successfully";
 
                 #endregion
 
