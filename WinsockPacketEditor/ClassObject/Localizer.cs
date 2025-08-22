@@ -246,7 +246,20 @@ namespace WinsockPacketEditor
                 case "Save":
                     return "Save";
 
+                case "Yes":
+                    return "Yes";
 
+                case "No":
+                    return "No";
+
+                case "IPAddress":
+                    return "IP Address";
+
+                case "PacketHead":
+                    return "Packet Head";
+
+                case "PacketContent":
+                    return "Packet Content";
 
                 #endregion
 
@@ -293,6 +306,12 @@ namespace WinsockPacketEditor
 
                 case "FilterListFile":
                     return "Filter List File";
+
+                case "SemicolonDelimiter":
+                    return "Support ; delimiter";                
+
+                case "HEXSemicolonDelimiter":
+                    return "Hex with spaces, Support ; delimiter";
 
                 #endregion
 
@@ -1093,6 +1112,12 @@ namespace WinsockPacketEditor
 
                 case "FilterSettingsForm":
                     return "Filter Settings";
+
+                case "FilterSettingsForm.IsShow":
+                    return "Show or Not";
+
+                case "FilterSettingsForm.Length":
+                    return "For example: 0-99;100";
 
                 case "FilterSettingsForm.FilterEmpty":
                     return "Filter Settings Empty";

@@ -58,6 +58,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -92,6 +93,7 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -104,6 +106,7 @@
             // 
             this.txtCheckData.AllowClear = true;
             this.txtCheckData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCheckData.LocalizationPlaceholderText = "HEXSemicolonDelimiter";
             this.txtCheckData.Location = new System.Drawing.Point(115, 301);
             this.txtCheckData.Name = "txtCheckData";
             this.txtCheckData.PlaceholderText = "十六进制带空格，支持 ; 分隔符";
@@ -115,6 +118,7 @@
             // 
             this.cbCheckData.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbCheckData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbCheckData.LocalizationText = "PacketContent";
             this.cbCheckData.Location = new System.Drawing.Point(3, 301);
             this.cbCheckData.Name = "cbCheckData";
             this.cbCheckData.Size = new System.Drawing.Size(106, 42);
@@ -126,6 +130,7 @@
             // 
             this.txtCheckHead.AllowClear = true;
             this.txtCheckHead.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCheckHead.LocalizationPlaceholderText = "HEXSemicolonDelimiter";
             this.txtCheckHead.Location = new System.Drawing.Point(115, 253);
             this.txtCheckHead.Name = "txtCheckHead";
             this.txtCheckHead.PlaceholderText = "十六进制带空格，支持 ; 分隔符";
@@ -137,6 +142,7 @@
             // 
             this.cbCheckHead.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbCheckHead.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbCheckHead.LocalizationText = "PacketHead";
             this.cbCheckHead.Location = new System.Drawing.Point(3, 253);
             this.cbCheckHead.Name = "cbCheckHead";
             this.cbCheckHead.Size = new System.Drawing.Size(106, 42);
@@ -148,6 +154,7 @@
             // 
             this.txtCheckPort.AllowClear = true;
             this.txtCheckPort.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCheckPort.LocalizationPlaceholderText = "SemicolonDelimiter";
             this.txtCheckPort.Location = new System.Drawing.Point(115, 205);
             this.txtCheckPort.Name = "txtCheckPort";
             this.txtCheckPort.PlaceholderText = "支持 ; 分隔符";
@@ -159,6 +166,7 @@
             // 
             this.cbCheckPort.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbCheckPort.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbCheckPort.LocalizationText = "Port";
             this.cbCheckPort.Location = new System.Drawing.Point(3, 205);
             this.cbCheckPort.Name = "cbCheckPort";
             this.cbCheckPort.Size = new System.Drawing.Size(90, 42);
@@ -170,6 +178,7 @@
             // 
             this.txtCheckIP.AllowClear = true;
             this.txtCheckIP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCheckIP.LocalizationPlaceholderText = "SemicolonDelimiter";
             this.txtCheckIP.Location = new System.Drawing.Point(115, 157);
             this.txtCheckIP.Name = "txtCheckIP";
             this.txtCheckIP.PlaceholderText = "支持 ; 分隔符";
@@ -181,6 +190,7 @@
             // 
             this.cbCheckIP.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbCheckIP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbCheckIP.LocalizationText = "IPAddress";
             this.cbCheckIP.Location = new System.Drawing.Point(3, 157);
             this.cbCheckIP.Name = "cbCheckIP";
             this.cbCheckIP.Size = new System.Drawing.Size(89, 42);
@@ -192,6 +202,7 @@
             // 
             this.txtCheckLen.AllowClear = true;
             this.txtCheckLen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCheckLen.LocalizationPlaceholderText = "FilterSettingsForm.Length";
             this.txtCheckLen.Location = new System.Drawing.Point(115, 109);
             this.txtCheckLen.Name = "txtCheckLen";
             this.txtCheckLen.PlaceholderText = "例如：0-99;100";
@@ -203,6 +214,7 @@
             // 
             this.cbCheckLen.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbCheckLen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbCheckLen.LocalizationText = "Length";
             this.cbCheckLen.Location = new System.Drawing.Point(3, 109);
             this.cbCheckLen.Name = "cbCheckLen";
             this.cbCheckLen.Size = new System.Drawing.Size(74, 42);
@@ -214,6 +226,7 @@
             // 
             this.cbCheckSocket.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbCheckSocket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbCheckSocket.LocalizationText = "Socket";
             this.cbCheckSocket.Location = new System.Drawing.Point(3, 61);
             this.cbCheckSocket.Name = "cbCheckSocket";
             this.cbCheckSocket.Size = new System.Drawing.Size(90, 42);
@@ -225,6 +238,7 @@
             // 
             this.txtCheckSocket.AllowClear = true;
             this.txtCheckSocket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCheckSocket.LocalizationPlaceholderText = "SemicolonDelimiter";
             this.txtCheckSocket.Location = new System.Drawing.Point(115, 61);
             this.txtCheckSocket.Name = "txtCheckSocket";
             this.txtCheckSocket.PlaceholderText = "支持 ; 分隔符";
@@ -288,6 +302,7 @@
             // 
             this.lIsShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lIsShow.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lIsShow.LocalizationText = "FilterSettingsForm.IsShow";
             this.lIsShow.Location = new System.Drawing.Point(3, 3);
             this.lIsShow.Name = "lIsShow";
             this.lIsShow.Size = new System.Drawing.Size(106, 32);
@@ -299,9 +314,11 @@
             // 
             this.sIsShow.Checked = true;
             this.sIsShow.CheckedText = "是";
+            this.sIsShow.LocalizationCheckedText = "Yes";
+            this.sIsShow.LocalizationUnCheckedText = "No";
             this.sIsShow.Location = new System.Drawing.Point(115, 3);
             this.sIsShow.Name = "sIsShow";
-            this.sIsShow.Size = new System.Drawing.Size(60, 32);
+            this.sIsShow.Size = new System.Drawing.Size(70, 32);
             this.sIsShow.TabIndex = 14;
             this.sIsShow.UnCheckedText = "否";
             // 
