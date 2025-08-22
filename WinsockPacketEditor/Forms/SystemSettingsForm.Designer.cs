@@ -99,6 +99,7 @@
             // 
             this.dFloatButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dFloatButton.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dFloatButton.LocalizationText = "SystemSettingsForm.FloatingButton";
             this.dFloatButton.Location = new System.Drawing.Point(3, 100);
             this.dFloatButton.Name = "dFloatButton";
             this.dFloatButton.Orientation = AntdUI.TOrientation.Left;
@@ -138,6 +139,7 @@
             this.lFAColor_Other.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lFAColor_Other.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lFAColor_Other.ForeColor = System.Drawing.Color.LimeGreen;
+            this.lFAColor_Other.LocalizationText = "Other";
             this.lFAColor_Other.Location = new System.Drawing.Point(365, 18);
             this.lFAColor_Other.Name = "lFAColor_Other";
             this.lFAColor_Other.Size = new System.Drawing.Size(84, 39);
@@ -150,6 +152,7 @@
             this.lFAColor_Change.BackColor = System.Drawing.Color.DodgerBlue;
             this.lFAColor_Change.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lFAColor_Change.ForeColor = System.Drawing.Color.Black;
+            this.lFAColor_Change.LocalizationText = "Change";
             this.lFAColor_Change.Location = new System.Drawing.Point(255, 18);
             this.lFAColor_Change.Name = "lFAColor_Change";
             this.lFAColor_Change.Size = new System.Drawing.Size(84, 39);
@@ -162,6 +165,7 @@
             this.lFAColor_Intercept.BackColor = System.Drawing.Color.DarkRed;
             this.lFAColor_Intercept.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lFAColor_Intercept.ForeColor = System.Drawing.Color.White;
+            this.lFAColor_Intercept.LocalizationText = "Intercept";
             this.lFAColor_Intercept.Location = new System.Drawing.Point(145, 18);
             this.lFAColor_Intercept.Name = "lFAColor_Intercept";
             this.lFAColor_Intercept.Size = new System.Drawing.Size(84, 39);
@@ -174,6 +178,7 @@
             this.lFAColor_Replace.BackColor = System.Drawing.Color.Goldenrod;
             this.lFAColor_Replace.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lFAColor_Replace.ForeColor = System.Drawing.Color.Black;
+            this.lFAColor_Replace.LocalizationText = "Replace";
             this.lFAColor_Replace.Location = new System.Drawing.Point(35, 18);
             this.lFAColor_Replace.Name = "lFAColor_Replace";
             this.lFAColor_Replace.Size = new System.Drawing.Size(84, 39);
@@ -203,6 +208,7 @@
             this.rbFilterSet_Sequence.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbFilterSet_Sequence.Checked = true;
             this.rbFilterSet_Sequence.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbFilterSet_Sequence.LocalizationText = "SystemSettingsForm.Order";
             this.rbFilterSet_Sequence.Location = new System.Drawing.Point(245, 3);
             this.rbFilterSet_Sequence.Name = "rbFilterSet_Sequence";
             this.rbFilterSet_Sequence.Size = new System.Drawing.Size(122, 42);
@@ -213,6 +219,7 @@
             // 
             this.rbFilterSet_Priority.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbFilterSet_Priority.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbFilterSet_Priority.LocalizationText = "SystemSettingsForm.Priority";
             this.rbFilterSet_Priority.Location = new System.Drawing.Point(3, 3);
             this.rbFilterSet_Priority.Name = "rbFilterSet_Priority";
             this.rbFilterSet_Priority.Size = new System.Drawing.Size(106, 42);
@@ -245,6 +252,7 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -258,6 +266,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -270,6 +279,7 @@
             // 
             this.cbSpeedMode.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbSpeedMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbSpeedMode.LocalizationText = "SystemSettingsForm.SpeedMode";
             this.cbSpeedMode.Location = new System.Drawing.Point(3, 32);
             this.cbSpeedMode.Name = "cbSpeedMode";
             this.cbSpeedMode.Size = new System.Drawing.Size(106, 42);
@@ -280,6 +290,7 @@
             // 
             this.dWorkMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dWorkMode.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dWorkMode.LocalizationText = "SystemSettingsForm.WorkMode";
             this.dWorkMode.Location = new System.Drawing.Point(3, 3);
             this.dWorkMode.Name = "dWorkMode";
             this.dWorkMode.Orientation = AntdUI.TOrientation.Left;
@@ -291,6 +302,7 @@
             // 
             this.dListExecute.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dListExecute.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dListExecute.LocalizationText = "SystemSettingsForm.ListMode";
             this.dListExecute.Location = new System.Drawing.Point(3, 199);
             this.dListExecute.Name = "dListExecute";
             this.dListExecute.Orientation = AntdUI.TOrientation.Left;
@@ -302,6 +314,7 @@
             // 
             this.dFilterSet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dFilterSet.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dFilterSet.LocalizationText = "SystemSettingsForm.FilterMode";
             this.dFilterSet.Location = new System.Drawing.Point(3, 298);
             this.dFilterSet.Name = "dFilterSet";
             this.dFilterSet.Orientation = AntdUI.TOrientation.Left;
@@ -313,6 +326,7 @@
             // 
             this.dFilterActionColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dFilterActionColor.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dFilterActionColor.LocalizationText = "SystemSettingsForm.FilterAction";
             this.dFilterActionColor.Location = new System.Drawing.Point(3, 397);
             this.dFilterActionColor.Name = "dFilterActionColor";
             this.dFilterActionColor.Orientation = AntdUI.TOrientation.Left;
@@ -342,6 +356,7 @@
             this.rbListExecute_Sequence.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbListExecute_Sequence.Checked = true;
             this.rbListExecute_Sequence.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbListExecute_Sequence.LocalizationText = "SystemSettingsForm.Order";
             this.rbListExecute_Sequence.Location = new System.Drawing.Point(245, 3);
             this.rbListExecute_Sequence.Name = "rbListExecute_Sequence";
             this.rbListExecute_Sequence.Size = new System.Drawing.Size(122, 42);
@@ -352,6 +367,7 @@
             // 
             this.rbListExecute_Together.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbListExecute_Together.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbListExecute_Together.LocalizationText = "SystemSettingsForm.Simultaneously";
             this.rbListExecute_Together.Location = new System.Drawing.Point(3, 3);
             this.rbListExecute_Together.Name = "rbListExecute_Together";
             this.rbListExecute_Together.Size = new System.Drawing.Size(106, 42);

@@ -99,6 +99,7 @@
             // 
             this.dListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dListInfo.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dListInfo.LocalizationText = "BackUpSettingsForm.ListData";
             this.dListInfo.Location = new System.Drawing.Point(3, 406);
             this.dListInfo.Name = "dListInfo";
             this.dListInfo.Orientation = AntdUI.TOrientation.Left;
@@ -130,6 +131,7 @@
             this.cbBackUp_RobotList.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbBackUp_RobotList.Checked = true;
             this.cbBackUp_RobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_RobotList.LocalizationText = "RobotList";
             this.cbBackUp_RobotList.Location = new System.Drawing.Point(3, 51);
             this.cbBackUp_RobotList.Name = "cbBackUp_RobotList";
             this.cbBackUp_RobotList.Size = new System.Drawing.Size(122, 42);
@@ -141,6 +143,7 @@
             this.cbBackUp_SendList.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbBackUp_SendList.Checked = true;
             this.cbBackUp_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_SendList.LocalizationText = "SendList";
             this.cbBackUp_SendList.Location = new System.Drawing.Point(245, 3);
             this.cbBackUp_SendList.Name = "cbBackUp_SendList";
             this.cbBackUp_SendList.Size = new System.Drawing.Size(106, 42);
@@ -152,6 +155,7 @@
             this.cbBackUp_FilterList.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbBackUp_FilterList.Checked = true;
             this.cbBackUp_FilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_FilterList.LocalizationText = "FilterList";
             this.cbBackUp_FilterList.Location = new System.Drawing.Point(3, 3);
             this.cbBackUp_FilterList.Name = "cbBackUp_FilterList";
             this.cbBackUp_FilterList.Size = new System.Drawing.Size(106, 42);
@@ -163,6 +167,7 @@
             this.cbBackUp_InjectSet.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbBackUp_InjectSet.Checked = true;
             this.cbBackUp_InjectSet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_InjectSet.LocalizationText = "BackUpSettingsForm.InjectMode.Configuration";
             this.cbBackUp_InjectSet.Location = new System.Drawing.Point(3, 338);
             this.cbBackUp_InjectSet.Name = "cbBackUp_InjectSet";
             this.cbBackUp_InjectSet.Size = new System.Drawing.Size(138, 42);
@@ -195,6 +200,7 @@
             this.bImport.BackExtend = "135, #6253E1, #04BEFE";
             this.bImport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bImport.IconSvg = "ImportOutlined";
+            this.bImport.LocalizationText = "Import";
             this.bImport.Location = new System.Drawing.Point(85, 7);
             this.bImport.Name = "bImport";
             this.bImport.Size = new System.Drawing.Size(144, 46);
@@ -208,6 +214,7 @@
             this.bExport.BackExtend = "135, #6253E1, #04BEFE";
             this.bExport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExport.IconSvg = "ExportOutlined";
+            this.bExport.LocalizationText = "Export";
             this.bExport.Location = new System.Drawing.Point(255, 7);
             this.bExport.Name = "bExport";
             this.bExport.Size = new System.Drawing.Size(144, 46);
@@ -241,6 +248,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(185, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -253,6 +261,7 @@
             // 
             this.dSystemConfig.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dSystemConfig.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSystemConfig.LocalizationText = "BackUpSettingsForm.SystemConfig";
             this.dSystemConfig.Location = new System.Drawing.Point(3, 3);
             this.dSystemConfig.Name = "dSystemConfig";
             this.dSystemConfig.Orientation = AntdUI.TOrientation.Left;
@@ -287,6 +296,7 @@
             this.cbBackUp_ProxyAccount.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbBackUp_ProxyAccount.Checked = true;
             this.cbBackUp_ProxyAccount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_ProxyAccount.LocalizationText = "BackUpSettingsForm.ProxyAccount";
             this.cbBackUp_ProxyAccount.Location = new System.Drawing.Point(245, 3);
             this.cbBackUp_ProxyAccount.Name = "cbBackUp_ProxyAccount";
             this.cbBackUp_ProxyAccount.Size = new System.Drawing.Size(106, 42);
@@ -298,6 +308,7 @@
             this.cbBackUp_ProxyMapping.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbBackUp_ProxyMapping.Checked = true;
             this.cbBackUp_ProxyMapping.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_ProxyMapping.LocalizationText = "BackUpSettingsForm.ProxyMapping";
             this.cbBackUp_ProxyMapping.Location = new System.Drawing.Point(3, 51);
             this.cbBackUp_ProxyMapping.Name = "cbBackUp_ProxyMapping";
             this.cbBackUp_ProxyMapping.Size = new System.Drawing.Size(106, 42);
@@ -309,6 +320,7 @@
             this.cbBackUp_ProxySet.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbBackUp_ProxySet.Checked = true;
             this.cbBackUp_ProxySet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_ProxySet.LocalizationText = "BackUpSettingsForm.ProxyMode.Configuration";
             this.cbBackUp_ProxySet.Location = new System.Drawing.Point(3, 3);
             this.cbBackUp_ProxySet.Name = "cbBackUp_ProxySet";
             this.cbBackUp_ProxySet.Size = new System.Drawing.Size(138, 42);
@@ -319,6 +331,7 @@
             // 
             this.dProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dProxyMode.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dProxyMode.LocalizationText = "BackUpSettingsForm.ProxyMode";
             this.dProxyMode.Location = new System.Drawing.Point(3, 120);
             this.dProxyMode.Name = "dProxyMode";
             this.dProxyMode.Orientation = AntdUI.TOrientation.Left;
@@ -330,6 +343,7 @@
             // 
             this.dInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dInjectMode.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dInjectMode.LocalizationText = "BackUpSettingsForm.InjectMode";
             this.dInjectMode.Location = new System.Drawing.Point(3, 289);
             this.dInjectMode.Name = "dInjectMode";
             this.dInjectMode.Orientation = AntdUI.TOrientation.Left;
@@ -341,6 +355,7 @@
             // 
             this.cbBackUp_SystemConfig.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbBackUp_SystemConfig.Checked = true;
+            this.cbBackUp_SystemConfig.LocalizationText = "BackUpSettingsForm.SystemOperation";
             this.cbBackUp_SystemConfig.Location = new System.Drawing.Point(3, 52);
             this.cbBackUp_SystemConfig.Name = "cbBackUp_SystemConfig";
             this.cbBackUp_SystemConfig.Size = new System.Drawing.Size(138, 42);

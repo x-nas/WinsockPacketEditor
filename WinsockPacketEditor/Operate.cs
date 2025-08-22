@@ -3336,7 +3336,7 @@ namespace WinsockPacketEditor
                 try
                 {
                     SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                    sfdSaveFile.Filter = AntdUI.Localization.Get("SystemBackupFile", "系统备份文件") + "（*.sb）|*.sb";
+                    sfdSaveFile.Filter = "WPE x64（*.sb）|*.sb";
 
                     if (!string.IsNullOrEmpty(FileName))
                     {
@@ -3354,7 +3354,7 @@ namespace WinsockPacketEditor
 
                             using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
                             {
-                                string Title = AntdUI.Localization.Get("ExportSystemBackUp", "导出系统备份");
+                                string Title = AntdUI.Localization.Get("BackUpSettingsForm.Export", "导出系统备份");
                                 AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
                                 {
                                     Keyboard = false,
@@ -3368,7 +3368,7 @@ namespace WinsockPacketEditor
 
                                             AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
                                             {
-                                                LocalizationText = "ExportList.Error"
+                                                LocalizationText = "Password.Empty"
                                             });
 
                                             return false;
@@ -3397,14 +3397,14 @@ namespace WinsockPacketEditor
 
                             if (bOK)
                             {
-                                string Title = AntdUI.Localization.Get("InjectModeForm.ExportSystemBackUp.Success", "导出系统备份成功");
+                                string Title = AntdUI.Localization.Get("BackUpSettingsForm.Export.Success", "导出系统备份成功");
                                 AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                             }
                             else
                             {
-                                string Title = AntdUI.Localization.Get("InjectModeForm.ExportSystemBackUp.Error", "导出系统备份失败");
-                                string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                string Title = AntdUI.Localization.Get("BackUpSettingsForm.Export.Fail", "导出系统备份失败");
+                                string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                 AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                             }
                         }
@@ -3564,7 +3564,7 @@ namespace WinsockPacketEditor
                 try
                 {
                     OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                    ofdLoadFile.Filter = AntdUI.Localization.Get("WPEBackUpFile", "WPE x64 备份文件") + "（*.sb）|*.sb";
+                    ofdLoadFile.Filter = "WPE x64（*.sb）|*.sb";
                     ofdLoadFile.RestoreDirectory = true;
 
                     if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -3574,7 +3574,7 @@ namespace WinsockPacketEditor
                         {
                             if (ImportSystemBackUp(form, FilePath, true))
                             {
-                                string Title = AntdUI.Localization.Get("InjectModeForm.ImportSystemBackUp.Success", "导入系统备份成功");
+                                string Title = AntdUI.Localization.Get("BackUpSettingsForm.Import.Success", "导入系统备份成功");
                                 AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                             }
@@ -3602,7 +3602,7 @@ namespace WinsockPacketEditor
                             {
                                 using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import))
                                 {
-                                    string Title = AntdUI.Localization.Get("ImportSystemBackUp", "导入系统备份");
+                                    string Title = AntdUI.Localization.Get("BackUpSettingsForm.Import", "导入系统备份");
                                     AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
                                     {
                                         Keyboard = false,
@@ -3616,7 +3616,7 @@ namespace WinsockPacketEditor
 
                                                 AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
                                                 {
-                                                    LocalizationText = "ImportList.Error"
+                                                    LocalizationText = "Password.Empty"
                                                 });
 
                                                 return false;
@@ -3638,7 +3638,7 @@ namespace WinsockPacketEditor
 
                         if (xdoc == null)
                         {
-                            string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
+                            string sError = AntdUI.Localization.Get("Password.Incorrect", "密码错误");
                             if (LoadFromUser)
                             {
                                 AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));

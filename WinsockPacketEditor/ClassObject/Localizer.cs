@@ -63,6 +63,9 @@ namespace WinsockPacketEditor
                 case "Copy":
                     return "Copy";
 
+                case "Import":
+                    return "Import";
+
                 case "Export":
                     return "Export";
 
@@ -82,7 +85,10 @@ namespace WinsockPacketEditor
                     return "Change";
 
                 case "Intercept":
-                    return "Intercept";           
+                    return "Intercept";
+
+                case "Other":
+                    return "Other";
 
                 case "NoModifyNoDisplay":
                     return "NoModify NoDisplay";
@@ -274,7 +280,16 @@ namespace WinsockPacketEditor
                     return "Path";
 
                 case "Detection":
-                    return "Detection";                
+                    return "Detection";
+
+                case "FilterList":
+                    return "Filter List";
+
+                case "SendList":
+                    return "Send List";
+
+                case "RobotList":
+                    return "Robot List";
 
                 #endregion
 
@@ -312,10 +327,7 @@ namespace WinsockPacketEditor
 
                 case "PasswordEncryption":
                     return "Please enter the password. This password will require verification when importing the list file.\r\n If you do not need to set a password, please click the[Cancel] button!";
-
-                case "WPEBackUpFile":
-                    return "WPE x64 BackUp File";
-
+                                
                 case "AESKeyError":
                     return "Failed to load: Password incorrect";
 
@@ -327,6 +339,12 @@ namespace WinsockPacketEditor
 
                 case "HEXSemicolonDelimiter":
                     return "Hex with spaces, Support ; delimiter";
+
+                case "Password.Empty":
+                    return "Password cannot be empty";
+
+                case "Password.Incorrect":
+                    return "Incorrect password";
 
                 #endregion
 
@@ -1443,12 +1461,52 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-
-
                 #region//BackUpSettingsForm
 
                 case "BackUpSettingsForm":
                     return "BackUp Settings";
+
+                case "BackUpSettingsForm.SystemConfig":
+                    return "System Config";
+
+                case "BackUpSettingsForm.ProxyMode":
+                    return "Proxy Mode";
+
+                case "BackUpSettingsForm.InjectMode":
+                    return "Inject Mode";
+
+                case "BackUpSettingsForm.ListData":
+                    return "List Data";
+
+                case "BackUpSettingsForm.SystemOperation":
+                    return "System operation configuration";
+
+                case "BackUpSettingsForm.ProxyMode.Configuration":
+                    return "Proxy mode configuration";
+
+                case "BackUpSettingsForm.ProxyAccount":
+                    return "Proxy Account";
+
+                case "BackUpSettingsForm.ProxyMapping":
+                    return "Proxy Mapping";
+
+                case "BackUpSettingsForm.InjectMode.Configuration":
+                    return "Inject Mode Configuration";
+
+                case "BackUpSettingsForm.Import":
+                    return "Import system backup";
+
+                case "BackUpSettingsForm.Import.Success":
+                    return "Successfully imported system backup";
+
+                case "BackUpSettingsForm.Export":
+                    return "Export system backup";
+
+                case "BackUpSettingsForm.Export.Success":
+                    return "Successfully exported system backup";
+
+                case "BackUpSettingsForm.Export.Fail":
+                    return "Export system backup failed";
 
                 #endregion
 
@@ -1456,6 +1514,36 @@ namespace WinsockPacketEditor
 
                 case "SystemSettingsForm":
                     return "System Settings";
+
+                case "SystemSettingsForm.WorkMode":
+                    return "Working Mode";
+
+                case "SystemSettingsForm.FloatingButton":
+                    return "Floating Button";
+
+                case "SystemSettingsForm.ListMode":
+                    return "List execution mode";
+
+                case "SystemSettingsForm.FilterMode":
+                    return "Filter execution mode";
+
+                case "SystemSettingsForm.FilterAction":
+                    return "Filter Action";
+
+                case "SystemSettingsForm.SpeedMode":
+                    return "Speed Mode";
+
+                case "SystemSettingsForm.Simultaneously":
+                    return "Execute Simultaneously";
+
+                case "SystemSettingsForm.Order":
+                    return "Execute in order";
+
+                case "SystemSettingsForm.Priority":
+                    return "Execute by priority";
+
+                case "SystemSettingsForm.Success":
+                    return "System settings saved successfully";
 
                 #endregion
 
