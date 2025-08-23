@@ -64,7 +64,7 @@
             this.tlpExpiryTime.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tlpExpiryTime.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpExpiryTime.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpExpiryTime.Size = new System.Drawing.Size(334, 761);
+            this.tlpExpiryTime.Size = new System.Drawing.Size(484, 761);
             this.tlpExpiryTime.TabIndex = 1;
             // 
             // tlpButton
@@ -85,7 +85,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(334, 60);
+            this.tlpButton.Size = new System.Drawing.Size(484, 60);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -93,7 +93,8 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
-            this.bSave.Location = new System.Drawing.Point(40, 7);
+            this.bSave.LocalizationText = "Save";
+            this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
@@ -106,7 +107,8 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
-            this.bExit.Location = new System.Drawing.Point(180, 7);
+            this.bExit.LocalizationText = "Cancel";
+            this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -117,9 +119,8 @@
             // tlpAddTime
             // 
             this.tlpAddTime.ColumnCount = 2;
-            this.tlpAddTime.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpAddTime.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAddTime.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpAddTime.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpAddTime.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpAddTime.Controls.Add(this.rbFromNow, 1, 0);
             this.tlpAddTime.Controls.Add(this.rbFromExpiryTime, 0, 0);
             this.tlpAddTime.Controls.Add(this.nudAddTime, 0, 1);
@@ -132,13 +133,14 @@
             this.tlpAddTime.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAddTime.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAddTime.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAddTime.Size = new System.Drawing.Size(334, 300);
+            this.tlpAddTime.Size = new System.Drawing.Size(484, 300);
             this.tlpAddTime.TabIndex = 0;
             // 
             // rbFromNow
             // 
             this.rbFromNow.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.rbFromNow.Location = new System.Drawing.Point(159, 3);
+            this.rbFromNow.LocalizationText = "ExpiryTimeForm.FromNow";
+            this.rbFromNow.Location = new System.Drawing.Point(245, 3);
             this.rbFromNow.Name = "rbFromNow";
             this.rbFromNow.Size = new System.Drawing.Size(138, 42);
             this.rbFromNow.TabIndex = 5;
@@ -148,6 +150,7 @@
             // 
             this.rbFromExpiryTime.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbFromExpiryTime.Checked = true;
+            this.rbFromExpiryTime.LocalizationText = "ExpiryTimeForm.FromExpiryTime";
             this.rbFromExpiryTime.Location = new System.Drawing.Point(3, 3);
             this.rbFromExpiryTime.Name = "rbFromExpiryTime";
             this.rbFromExpiryTime.Size = new System.Drawing.Size(138, 42);
@@ -157,6 +160,7 @@
             // nudAddTime
             // 
             this.nudAddTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudAddTime.LocalizationPrefixText = "Add";
             this.nudAddTime.Location = new System.Drawing.Point(3, 51);
             this.nudAddTime.Minimum = new decimal(new int[] {
             1,
@@ -167,7 +171,7 @@
             this.nudAddTime.PrefixSvg = "";
             this.nudAddTime.PrefixText = "添加:";
             this.nudAddTime.SelectionStart = 1;
-            this.nudAddTime.Size = new System.Drawing.Size(150, 45);
+            this.nudAddTime.Size = new System.Drawing.Size(236, 45);
             this.nudAddTime.SuffixSvg = "FieldTimeOutlined";
             this.nudAddTime.TabIndex = 6;
             this.nudAddTime.Text = "1";
@@ -186,31 +190,33 @@
             this.tlpTimeType.Controls.Add(this.rbAddHour, 0, 0);
             this.tlpTimeType.Controls.Add(this.rbAddDay, 1, 0);
             this.tlpTimeType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpTimeType.Location = new System.Drawing.Point(156, 48);
+            this.tlpTimeType.Location = new System.Drawing.Point(242, 48);
             this.tlpTimeType.Margin = new System.Windows.Forms.Padding(0);
             this.tlpTimeType.Name = "tlpTimeType";
             this.tlpTimeType.RowCount = 1;
             this.tlpTimeType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTimeType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tlpTimeType.Size = new System.Drawing.Size(178, 51);
+            this.tlpTimeType.Size = new System.Drawing.Size(242, 51);
             this.tlpTimeType.TabIndex = 7;
             // 
             // rbAddHour
             // 
             this.rbAddHour.Checked = true;
             this.rbAddHour.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbAddHour.LocalizationText = "Hour";
             this.rbAddHour.Location = new System.Drawing.Point(3, 3);
             this.rbAddHour.Name = "rbAddHour";
-            this.rbAddHour.Size = new System.Drawing.Size(83, 45);
+            this.rbAddHour.Size = new System.Drawing.Size(115, 45);
             this.rbAddHour.TabIndex = 0;
             this.rbAddHour.Text = "小时";
             // 
             // rbAddDay
             // 
             this.rbAddDay.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rbAddDay.Location = new System.Drawing.Point(92, 3);
+            this.rbAddDay.LocalizationText = "Day";
+            this.rbAddDay.Location = new System.Drawing.Point(124, 3);
             this.rbAddDay.Name = "rbAddDay";
-            this.rbAddDay.Size = new System.Drawing.Size(83, 45);
+            this.rbAddDay.Size = new System.Drawing.Size(115, 45);
             this.rbAddDay.TabIndex = 1;
             this.rbAddDay.Text = "天";
             // 
@@ -220,15 +226,16 @@
             this.lAccountCNT.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lAccountCNT.Location = new System.Drawing.Point(3, 3);
             this.lAccountCNT.Name = "lAccountCNT";
-            this.lAccountCNT.Size = new System.Drawing.Size(328, 44);
+            this.lAccountCNT.Size = new System.Drawing.Size(478, 44);
             this.lAccountCNT.TabIndex = 18;
             this.lAccountCNT.Text = "0";
+            this.lAccountCNT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ExpiryTimeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 761);
+            this.ClientSize = new System.Drawing.Size(484, 761);
             this.Controls.Add(this.tlpExpiryTime);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));

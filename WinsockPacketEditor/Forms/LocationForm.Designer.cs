@@ -78,6 +78,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(335, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -90,6 +91,7 @@
             // 
             this.tLocation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tLocation.EmptyHeader = true;
+            this.tLocation.Gap = 12;
             this.tLocation.Location = new System.Drawing.Point(3, 3);
             this.tLocation.Name = "tLocation";
             this.tLocation.Size = new System.Drawing.Size(778, 695);

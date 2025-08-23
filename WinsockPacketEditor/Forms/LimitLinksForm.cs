@@ -23,7 +23,7 @@ namespace WinsockPacketEditor
         private void LimitLinksForm_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("LimitLinksForm", "调整链接数");
-            this.lAccountCNT.Text = string.Format(AntdUI.Localization.Get("ProxyMode.AccountCNT", "批量调整 ( {0} ) 个账号"), this.aiList.Count);
+            this.lAccountCNT.Text = string.Format(AntdUI.Localization.Get("BatchAccounts", "批量调整 ( {0} ) 个账号"), this.aiList.Count);
 
             this.IsLimitLinks_Changed();
         }
@@ -55,7 +55,7 @@ namespace WinsockPacketEditor
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "批量调整完成", TType.Success)
                     {
-                        LocalizationText = "ProxyMode.Adjust.Success"
+                        LocalizationText = "BatchSuccess"
                     });
 
                     if (this.form is InterfaceInfo.IProxyMode proxyForm)

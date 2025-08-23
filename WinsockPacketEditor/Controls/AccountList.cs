@@ -194,7 +194,7 @@ namespace WinsockPacketEditor
             sb.Append(e.PageSize);
             sb.Append(" / ");
             sb.Append(e.Total);
-            sb.Append(AntdUI.Localization.Get("Piece", "条") + " ");
+            sb.Append(AntdUI.Localization.Get("Per", "条") + " ");
             sb.Append(e.PageTotal);
             sb.Append(AntdUI.Localization.Get("Page", "页"));
             return sb.ToString();

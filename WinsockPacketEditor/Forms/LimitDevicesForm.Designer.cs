@@ -59,7 +59,7 @@
             this.tlpLimitDevices.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tlpLimitDevices.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpLimitDevices.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpLimitDevices.Size = new System.Drawing.Size(334, 761);
+            this.tlpLimitDevices.Size = new System.Drawing.Size(484, 761);
             this.tlpLimitDevices.TabIndex = 3;
             // 
             // tlpButton
@@ -80,7 +80,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(334, 60);
+            this.tlpButton.Size = new System.Drawing.Size(484, 60);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -88,7 +88,8 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
-            this.bSave.Location = new System.Drawing.Point(40, 7);
+            this.bSave.LocalizationText = "Save";
+            this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
@@ -101,7 +102,8 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
-            this.bExit.Location = new System.Drawing.Point(180, 7);
+            this.bExit.LocalizationText = "Cancel";
+            this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -124,13 +126,14 @@
             this.tlpSet.RowCount = 2;
             this.tlpSet.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSet.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSet.Size = new System.Drawing.Size(334, 300);
+            this.tlpSet.Size = new System.Drawing.Size(484, 300);
             this.tlpSet.TabIndex = 0;
             // 
             // cbIsLimitDevices
             // 
             this.cbIsLimitDevices.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsLimitDevices.LocalizationText = "LimitDevicesForm.LimitDevices";
             this.cbIsLimitDevices.Location = new System.Drawing.Point(3, 3);
             this.cbIsLimitDevices.Name = "cbIsLimitDevices";
             this.cbIsLimitDevices.Size = new System.Drawing.Size(122, 42);
@@ -150,7 +153,7 @@
             this.nudLimitDevices.Name = "nudLimitDevices";
             this.nudLimitDevices.PrefixSvg = "";
             this.nudLimitDevices.SelectionStart = 1;
-            this.nudLimitDevices.Size = new System.Drawing.Size(200, 45);
+            this.nudLimitDevices.Size = new System.Drawing.Size(350, 45);
             this.nudLimitDevices.SuffixSvg = "TabletOutlined";
             this.nudLimitDevices.TabIndex = 7;
             this.nudLimitDevices.Text = "1";
@@ -167,15 +170,16 @@
             this.lAccountCNT.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lAccountCNT.Location = new System.Drawing.Point(3, 3);
             this.lAccountCNT.Name = "lAccountCNT";
-            this.lAccountCNT.Size = new System.Drawing.Size(328, 44);
+            this.lAccountCNT.Size = new System.Drawing.Size(478, 44);
             this.lAccountCNT.TabIndex = 18;
             this.lAccountCNT.Text = "0";
+            this.lAccountCNT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // LimitDevicesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 761);
+            this.ClientSize = new System.Drawing.Size(484, 761);
             this.Controls.Add(this.tlpLimitDevices);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));

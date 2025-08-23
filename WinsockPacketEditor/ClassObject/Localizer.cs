@@ -42,8 +42,8 @@ namespace WinsockPacketEditor
                 case "Unlimited":
                     return "Unlimited";
 
-                case "Piece":
-                    return "Piece";
+                case "Per":
+                    return "Per";
 
                 case "Page":
                     return "Page";
@@ -235,7 +235,7 @@ namespace WinsockPacketEditor
                     return "Please enter Hex with spaces";
 
                 case "SureToDelete":
-                    return "Are you sure to delete all data?";
+                    return "Are you sure to delete the data?";
 
                 case "ExcelFile":
                     return "Excel File";
@@ -290,6 +290,24 @@ namespace WinsockPacketEditor
 
                 case "RobotList":
                     return "Robot List";
+
+                case "Username":
+                    return "Username";
+
+                case "Password":
+                    return "Password";
+
+                case "AccountList":
+                    return "Account List";
+
+                case "Add":
+                    return "Add:";
+
+                case "Hour":
+                    return "Hour";
+
+                case "Day":
+                    return "Day";
 
                 #endregion
 
@@ -348,6 +366,12 @@ namespace WinsockPacketEditor
 
                 case "Input.Text":
                     return "Please input Text";
+
+                case "BatchAccounts":
+                    return "Batch adjustment ( {0} ) Accounts";
+
+                case "BatchSuccess":
+                    return "Batch adjustment successful";
 
                 #endregion
 
@@ -1577,6 +1601,84 @@ namespace WinsockPacketEditor
                     return "No Match Found";
 
                 #endregion
+
+                #region//AccountEditForm
+
+                case "AccountEditForm":
+                    return "Account Edit";
+
+                case "AccountEditForm.LimitLinks":
+                    return "Limit Links";
+
+                case "AccountEditForm.LimitDevices":
+                    return "Limit Devices";
+
+                case "AccountEditForm.ExpireTime":
+                    return "Expire Time";
+
+                case "AccountEditForm.UserName.Empty":
+                    return "Username Empty";
+
+                case "AccountEditForm.Password.Empty":
+                    return "Password Empty";
+
+                case "AccountEditForm.UserName.Error":
+                    return "Username already exists";
+
+                case "AccountEditForm.Success":
+                    return "Account saved successfully";
+
+                #endregion
+
+                #region//LocationForm
+
+                case "LocationForm":
+                    return "IP Location";
+
+                case "Table.Location.Column.LoginTime":
+                    return "Time";
+
+                case "Table.Location.Column.LoginIP":
+                    return "Login IP";
+
+                case "Table.Location.Column.IPLocation":
+                    return "Location";
+
+                #endregion
+
+                #region//ExpiryTimeForm
+
+                case "ExpiryTimeForm":
+                    return "Expiry Time";
+
+                case "ExpiryTimeForm.FromExpiryTime":
+                    return "Based on the Expiry Time";
+
+                case "ExpiryTimeForm.FromNow":
+                    return "Based on the Current Time";
+
+                #endregion
+
+                #region//LimitLinksForm
+
+                case "LimitLinksForm":
+                    return "Limit Links";
+
+                case "LimitLinksForm.LimitLinks":
+                    return "Limit Links";
+
+                #endregion
+
+                #region//LimitDevicesForm
+
+                case "LimitDevicesForm":
+                    return "Limit Devices";
+
+                case "LimitDevicesForm.LimitDevices":
+                    return "Limit Devices";
+
+                #endregion
+
 
                 default:
                     return null;

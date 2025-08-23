@@ -22,7 +22,7 @@ namespace WinsockPacketEditor
 
         private void AccountEditForm_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("SystemSettingsForm", "系统设置");
+            this.Text = AntdUI.Localization.Get("AccountEditForm", "账号编辑");
 
             if (this.aiSelect == null)
             {

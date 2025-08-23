@@ -7412,7 +7412,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miAccountList", "账号列表"), "\r\n确定删除数据吗\r\n\r\n")
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountList", "账号列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                         {
                             Icon = TType.Warn,
                             Keyboard = false,
@@ -11983,7 +11983,7 @@ namespace WinsockPacketEditor
                     {
                         if (fiList.Count > 0)
                         {
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miFilterList", "滤镜列表"), "\r\n确定删除选中的数据吗\r\n\r\n")
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miFilterList", "滤镜列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                             {
                                 Icon = TType.Warn,
                                 Keyboard = false,
@@ -14443,7 +14443,7 @@ namespace WinsockPacketEditor
                     {
                         if (siList.Count > 0)
                         {
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "发送列表"), "\r\n确定删除选中的数据吗\r\n\r\n")
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "发送列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                             {
                                 Icon = TType.Warn,
                                 Keyboard = false,
@@ -15909,7 +15909,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//删除机器人
+                #region//删除机器人（对话框）
 
                 public static void DeleteRobot_Dialog(Form form, List<RobotInfo> riList)
                 {
@@ -15917,7 +15917,7 @@ namespace WinsockPacketEditor
                     {
                         if (riList.Count > 0)
                         {
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotList", "机器人列表"), "\r\n确定删除选中的数据吗\r\n\r\n")
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotList", "机器人列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                             {
                                 Icon = TType.Warn,
                                 Keyboard = false,

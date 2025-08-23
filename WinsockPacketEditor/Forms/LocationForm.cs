@@ -14,24 +14,12 @@ namespace WinsockPacketEditor
         public LocationForm(Form form, AccountInfo ai)
         {
             InitializeComponent();
-
-            if (ai == null)
-            {
-                string Title = AntdUI.Localization.Get("LocationForm.Error", "加载账号数据出错");
-                string Content = AntdUI.Localization.Get("System.CheckSystemLog", "请检查系统日志");
-                AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                this.Close();
-            }
-            else
-            {
-                this.aiSelect = ai;
-            }
+            this.aiSelect = ai;
         }
 
         private void LocationForm_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("LocationForm", "登录情况");
-
             this.InitTable_Location();
         }
 
@@ -42,7 +30,7 @@ namespace WinsockPacketEditor
         private void InitTable_Location()
         {
             tLocation.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("LoginTime", "登录时间").SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("LoginTime", "登录时间").SetLocalizationTitleID("Table.Location.Column."),
                 new AntdUI.Column("LoginIP", "登录IP")
                 {
                     Render = (value, record, rowindex)=>
@@ -58,8 +46,8 @@ namespace WinsockPacketEditor
 
                         return value;
                     },
-                }.SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.AccountList.Column."),
+                }.SetLocalizationTitleID("Table.Location.Column."),
+                new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.Location.Column."),
             };
 
             this.tLocation.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));

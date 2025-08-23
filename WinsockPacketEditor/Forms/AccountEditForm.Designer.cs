@@ -94,6 +94,7 @@
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(115, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -107,6 +108,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(255, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -149,6 +151,7 @@
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.LocalizationText = "Username";
             this.label1.Location = new System.Drawing.Point(31, 3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(122, 45);
@@ -159,6 +162,7 @@
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.LocalizationText = "Password";
             this.label2.Location = new System.Drawing.Point(31, 54);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 45);
@@ -188,6 +192,7 @@
             // 
             this.cbIsLimitLinks.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsLimitLinks.LocalizationText = "AccountEditForm.LimitLinks";
             this.cbIsLimitLinks.Location = new System.Drawing.Point(31, 105);
             this.cbIsLimitLinks.Name = "cbIsLimitLinks";
             this.cbIsLimitLinks.Size = new System.Drawing.Size(122, 42);
@@ -199,6 +204,7 @@
             // 
             this.cbIsLimitDevices.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsLimitDevices.LocalizationText = "AccountEditForm.LimitDevices";
             this.cbIsLimitDevices.Location = new System.Drawing.Point(31, 156);
             this.cbIsLimitDevices.Name = "cbIsLimitDevices";
             this.cbIsLimitDevices.Size = new System.Drawing.Size(122, 42);
@@ -210,6 +216,7 @@
             // 
             this.cbIsExpiry.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsExpiry.LocalizationText = "AccountEditForm.ExpireTime";
             this.cbIsExpiry.Location = new System.Drawing.Point(31, 207);
             this.cbIsExpiry.Name = "cbIsExpiry";
             this.cbIsExpiry.Size = new System.Drawing.Size(106, 42);
@@ -271,6 +278,7 @@
             // 
             this.cbIsEnable.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbIsEnable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsEnable.LocalizationText = "Enable";
             this.cbIsEnable.Location = new System.Drawing.Point(3, 3);
             this.cbIsEnable.Name = "cbIsEnable";
             this.cbIsEnable.Size = new System.Drawing.Size(74, 42);

@@ -22,9 +22,9 @@ namespace WinsockPacketEditor
 
         private void ExpiryTimeForm_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("ExpiryTimeForm", "调整过期时间");
+            this.Text = AntdUI.Localization.Get("ExpiryTimeForm", "过期时间");
 
-            this.lAccountCNT.Text = string.Format(AntdUI.Localization.Get("ProxyMode.ExpiryTime", "批量调整 ( {0} ) 个账号"), this.aiList.Count);
+            this.lAccountCNT.Text = string.Format(AntdUI.Localization.Get("BatchAccounts", "批量调整 ( {0} ) 个账号"), this.aiList.Count);
         }
 
         #endregion
@@ -53,7 +53,7 @@ namespace WinsockPacketEditor
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "批量调整完成", TType.Success)
                     {
-                        LocalizationText = "ExpiryTimeForm.Success"
+                        LocalizationText = "BatchSuccess"
                     });
 
                     if (this.form is InterfaceInfo.IProxyMode proxyForm)
