@@ -90,6 +90,9 @@ namespace WinsockPacketEditor
                 case "Other":
                     return "Other";
 
+                case "Execute":
+                    return "Execute";
+
                 case "NoModifyNoDisplay":
                     return "NoModify NoDisplay";
 
@@ -116,9 +119,6 @@ namespace WinsockPacketEditor
 
                 case "Carry":
                     return "Carry";
-
-                case "Execute":
-                    return "Execute";
 
                 case "Inserted":
                     return "Inserted";
@@ -180,6 +180,9 @@ namespace WinsockPacketEditor
                 case "Paste":
                     return "Paste";
 
+                case "Edit":
+                    return "Edit";
+
                 case "SelectAll":
                     return "Select All";
 
@@ -202,28 +205,40 @@ namespace WinsockPacketEditor
                     return "TextRendering HighQuality";
 
                 case "Send":
-                    return "Send:";
+                    return "Send";
 
                 case "Recv":
-                    return "Recv:";
+                    return "Recv";
 
                 case "SendTo":
-                    return "SendTo:";
+                    return "SendTo";
 
                 case "RecvFrom":
-                    return "RecvFrom:";
+                    return "RecvFrom";
 
                 case "WSASend":
-                    return "WSASend:";
+                    return "WSASend";
 
                 case "WSARecv":
-                    return "WSARecv:";
+                    return "WSARecv";
 
                 case "WSASendTo":
-                    return "WSASendTo:";
+                    return "WSASendTo";
 
                 case "WSARecvFrom":
-                    return "WSARecvFrom:";
+                    return "WSARecvFrom";
+
+                case "TCPReq":
+                    return "TCP Req";
+
+                case "TCPResp":
+                    return "TCP Resp";
+
+                case "UDPReq":
+                    return "UDP Req";
+
+                case "UDPResp":
+                    return "UDP Resp";
 
                 case "Feedback":
                     return "Questions and Feedback";
@@ -308,6 +323,21 @@ namespace WinsockPacketEditor
 
                 case "Day":
                     return "Day";
+
+                case "Normal":
+                    return "Normal";
+
+                case "Advanced":
+                    return "Advanced";
+
+                case "InvalidHex":
+                    return "Please enter a valid HEX";
+
+                case "Paste.Success":
+                    return "Pasting Completed";
+
+                case "Times":
+                    return "Times";
 
                 #endregion
 
@@ -1676,6 +1706,146 @@ namespace WinsockPacketEditor
 
                 case "LimitDevicesForm.LimitDevices":
                     return "Limit Devices";
+
+                #endregion
+
+                #region//FilterEditForm
+
+                case "FilterEditForm":
+                    return "Filter Edit";
+
+                case "FilterEditForm.FilterAction":
+                    return "Action";
+
+                case "FilterEditForm.FilterName":
+                    return "Filter Name";
+
+                case "FilterEditForm.FilterName.Empty":
+                    return "Filter Name Empty";
+
+                case "FilterEditForm.AdvancedAppoint":
+                    return "Advanced Appoint";
+
+                case "FilterEditForm.Function":
+                    return "Function";
+
+                case "FilterEditForm.Appoint":
+                    return "Appoint";
+
+                case "FilterEditForm.StartFrom":
+                    return "Start Modify From";
+
+                case "FilterEditForm.Mode":
+                    return "Mode";
+
+                case "FilterEditForm.Progression":
+                    return "Progression";
+
+                case "FilterEditForm.AppointHead":
+                    return "Appoint Head";
+
+                case "FilterEditForm.AppointHead.Error":
+                    return "Appoint Head Error";
+
+                case "FilterEditForm.AppointSocket.Error":
+                    return "Appoint Socket Error";
+
+                case "FilterEditForm.AppointPort.Error":
+                    return "Appoint Port Error";
+
+                case "FilterEditForm.AppointLength.Error":
+                    return "Appoint Length Error";
+
+                case "FilterEditForm.Change.Error":
+                    return "Change Error";
+
+                case "FilterEditForm.StartFrom.Packet":
+                    return "Beginning of the packet";
+
+                case "FilterEditForm.StartFrom.Position":
+                    return "Position of the chain";
+
+                case "FilterEditForm.StartFrom.Progression.Continuous":
+                    return "Continuous";
+
+                case "FilterEditForm.StartFrom.Progression.Carry":
+                    return "Carry";
+
+                case "FilterEditForm.StartFrom.Progression.Step":
+                    return "Step";
+
+                case "FilterEditForm.StartFrom.Progression.Digits":
+                    return "Digit";
+
+                case "FilterEditForm.NoModifyNoDisplay":
+                    return "NoDisplay";
+
+                case "FilterEditForm.NoModifyDisplay":
+                    return "Display";
+
+                case "FilterEditForm.LoadComplete":
+                    return "Loading Complete";
+
+                case "FilterEditForm.Error":
+                    return "Filter save error";
+
+                case "FilterEditForm.Appoint.Example":
+                    return "For example 80-89;100";
+
+                case "FilterEditForm.Appoint.Progression.Enable":
+                    return "Enable Progression";
+
+                case "FilterEditForm.Appoint.Progression.Disable":
+                    return "Disable Progression";
+
+                #endregion
+
+                #region//SendEditForm
+
+                case "SendEditForm":
+                    return "Send Edit";
+
+                case "SendEditForm.TotalSend":
+                    return "Total Send:";
+
+                case "SendEditForm.Success":
+                    return "Success:";
+
+                case "SendEditForm.Failure":
+                    return "Failure:";
+
+                case "SendEditForm.LoopCount":
+                    return "Loop Count";
+
+                case "SendEditForm.SendInterval":
+                    return "Send Interval";
+
+                case "SendEditForm.UseSSocket":
+                    return "Use System Socket";
+
+                case "SendEditForm.miImport":
+                    return "Import Packet";
+
+                case "SendEditForm.miExport":
+                    return "Export Packet";
+
+                case "SendEditForm.miClear":
+                    return "Clear Packet";
+
+                case "SendEditForm.SystemSocket.Error":
+                    return "System Socket Error";
+
+                case "SendEditForm.Send.Stop":
+                    return "Send has stopped";
+
+                case "SendEditForm.Send.Error":
+                    return "Send error occurred:";
+
+                case "SendEditForm.Send.Success":
+                    return "Send Completed";
+
+                case "SendEditForm.SendName.Empty":
+                    return "Send Name Empty";
 
                 #endregion
 

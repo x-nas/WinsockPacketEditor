@@ -142,6 +142,7 @@
             this.bStop.LoadingWaveSize = 6;
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
+            this.bStop.LocalizationText = "Stop";
             this.bStop.Location = new System.Drawing.Point(365, 7);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(114, 46);
@@ -160,6 +161,7 @@
             this.bExecute.LoadingWaveSize = 6;
             this.bExecute.LoadingWaveValue = 0.6F;
             this.bExecute.LoadingWaveVertical = true;
+            this.bExecute.LocalizationText = "Execute";
             this.bExecute.Location = new System.Drawing.Point(225, 7);
             this.bExecute.Name = "bExecute";
             this.bExecute.Size = new System.Drawing.Size(114, 46);
@@ -178,6 +180,7 @@
             this.bSave.LoadingWaveSize = 6;
             this.bSave.LoadingWaveValue = 0.6F;
             this.bSave.LoadingWaveVertical = true;
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(505, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -191,6 +194,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(645, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -236,27 +240,30 @@
             // 
             this.mSendCollection.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mSendCollection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.mSendCollection.Gap = 0;
+            this.mSendCollection.Gap = 5;
             this.mSendCollection.IconRatio = 1F;
             menuItem1.IconSvg = "PlusOutlined";
             menuItem2.IconSvg = "FolderOpenOutlined";
             menuItem2.ID = "miImport";
+            menuItem2.LocalizationText = "SendEditForm.{id}";
             menuItem2.Text = "导入发送集";
             menuItem3.IconSvg = "DeliveredProcedureOutlined";
             menuItem3.ID = "miExport";
+            menuItem3.LocalizationText = "SendEditForm.{id}";
             menuItem3.Text = "导出所有发送集";
             menuItem4.IconSvg = "DeleteOutlined";
             menuItem4.ID = "miClear";
+            menuItem4.LocalizationText = "SendEditForm.{id}";
             menuItem4.Text = "清空所有发送集";
             menuItem1.Sub.Add(menuItem2);
             menuItem1.Sub.Add(menuItem3);
             menuItem1.Sub.Add(menuItem4);
             this.mSendCollection.Items.Add(menuItem1);
-            this.mSendCollection.Location = new System.Drawing.Point(921, 3);
+            this.mSendCollection.Location = new System.Drawing.Point(931, 3);
             this.mSendCollection.Mode = AntdUI.TMenuMode.Horizontal;
             this.mSendCollection.Name = "mSendCollection";
             this.mSendCollection.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mSendCollection.Size = new System.Drawing.Size(60, 44);
+            this.mSendCollection.Size = new System.Drawing.Size(50, 44);
             this.mSendCollection.TabIndex = 17;
             this.mSendCollection.Trigger = AntdUI.Trigger.Click;
             this.mSendCollection.SelectChanged += new AntdUI.SelectEventHandler(this.mSendCollection_SelectChanged);
@@ -328,6 +335,7 @@
             this.lSend_Fail.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Fail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Fail.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSend_Fail.LocalizationText = "SendEditForm.Failure";
             this.lSend_Fail.Location = new System.Drawing.Point(175, 3);
             this.lSend_Fail.Name = "lSend_Fail";
             this.lSend_Fail.Size = new System.Drawing.Size(36, 44);
@@ -339,6 +347,7 @@
             this.lSend_Success.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Success.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Success.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSend_Success.LocalizationText = "SendEditForm.Success";
             this.lSend_Success.Location = new System.Drawing.Point(105, 3);
             this.lSend_Success.Name = "lSend_Success";
             this.lSend_Success.Size = new System.Drawing.Size(36, 44);
@@ -350,6 +359,7 @@
             this.lTotal_Send.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTotal_Send.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTotal_Send.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTotal_Send.LocalizationText = "SendEditForm.TotalSend";
             this.lTotal_Send.Location = new System.Drawing.Point(3, 3);
             this.lTotal_Send.Name = "lTotal_Send";
             this.lTotal_Send.Size = new System.Drawing.Size(68, 44);
@@ -366,6 +376,7 @@
             this.tSendCollection.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tSendCollection.Gap = 8;
             this.tSendCollection.GapCell = 0;
+            this.tSendCollection.Gaps = new System.Drawing.Size(8, 8);
             this.tSendCollection.Location = new System.Drawing.Point(3, 53);
             this.tSendCollection.MultipleRows = true;
             this.tSendCollection.Name = "tSendCollection";
@@ -435,6 +446,7 @@
             // nudLoopINT
             // 
             this.nudLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudLoopINT.LocalizationSuffixText = "Millisecond";
             this.nudLoopINT.Location = new System.Drawing.Point(3, 39);
             this.nudLoopINT.Minimum = new decimal(new int[] {
             0,
@@ -442,7 +454,6 @@
             0,
             0});
             this.nudLoopINT.Name = "nudLoopINT";
-            this.nudLoopINT.SelectionStart = 3;
             this.nudLoopINT.Size = new System.Drawing.Size(230, 40);
             this.nudLoopINT.SuffixText = "毫秒";
             this.nudLoopINT.TabIndex = 2;
@@ -458,6 +469,7 @@
             // 
             this.dLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dLoopINT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLoopINT.LocalizationText = "SendEditForm.SendInterval";
             this.dLoopINT.Location = new System.Drawing.Point(3, 3);
             this.dLoopINT.Name = "dLoopINT";
             this.dLoopINT.Orientation = AntdUI.TOrientation.Left;
@@ -498,6 +510,7 @@
             // 
             this.dLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dLoopCNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLoopCNT.LocalizationText = "SendEditForm.LoopCount";
             this.dLoopCNT.Location = new System.Drawing.Point(3, 3);
             this.dLoopCNT.Name = "dLoopCNT";
             this.dLoopCNT.Orientation = AntdUI.TOrientation.Left;
@@ -508,6 +521,7 @@
             // nudLoopCNT
             // 
             this.nudLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudLoopCNT.LocalizationSuffixText = "Times";
             this.nudLoopCNT.Location = new System.Drawing.Point(3, 39);
             this.nudLoopCNT.Minimum = new decimal(new int[] {
             1,
@@ -560,6 +574,7 @@
             // 
             this.dSendSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dSendSocket.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSendSocket.LocalizationText = "Socket";
             this.dSendSocket.Location = new System.Drawing.Point(3, 3);
             this.dSendSocket.Name = "dSendSocket";
             this.dSendSocket.Orientation = AntdUI.TOrientation.Left;
@@ -571,6 +586,7 @@
             // 
             this.cbSystemSocket.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbSystemSocket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbSystemSocket.LocalizationText = "SendEditForm.UseSSocket";
             this.cbSystemSocket.Location = new System.Drawing.Point(3, 39);
             this.cbSystemSocket.Name = "cbSystemSocket";
             this.cbSystemSocket.Size = new System.Drawing.Size(154, 42);
@@ -610,6 +626,7 @@
             // 
             this.dSendName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dSendName.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSendName.LocalizationText = "Table.SendList.Column.SName";
             this.dSendName.Location = new System.Drawing.Point(3, 3);
             this.dSendName.Name = "dSendName";
             this.dSendName.Orientation = AntdUI.TOrientation.Left;
@@ -620,9 +637,10 @@
             // txtSendName
             // 
             this.txtSendName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSendName.LocalizationPlaceholderText = "Input.Text";
             this.txtSendName.Location = new System.Drawing.Point(3, 39);
             this.txtSendName.Name = "txtSendName";
-            this.txtSendName.PlaceholderText = "请输入字符和数字";
+            this.txtSendName.PlaceholderText = "请输入字符";
             this.txtSendName.Size = new System.Drawing.Size(230, 40);
             this.txtSendName.TabIndex = 1;
             this.txtSendName.TextChanged += new System.EventHandler(this.txtSendName_TextChanged);

@@ -21,24 +21,13 @@ namespace WinsockPacketEditor
         public SendEditForm(Form form, SendInfo si)
         {
             InitializeComponent();
-
-            if (si == null)
-            {
-                string Title = AntdUI.Localization.Get("InjectModeForm.EditSend.Error", "加载发送数据出错");
-                string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
-                AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                this.Close();
-            }
-            else
-            {
-                this.siSelect = si;
-                this.form = form;
-            }
+            this.siSelect = si;
+            this.form = form;
         }
 
         private void SendEditForm_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("SendEditForm", "编辑发送");
+            this.Text = AntdUI.Localization.Get("SendEditForm", "发送编辑");
 
             this.txtSendName.Text = this.siSelect.SName;            
             this.cbSystemSocket.Checked = this.siSelect.SSystemSocket;
@@ -69,7 +58,7 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),                
+                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column.ID"),                
                 new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -130,7 +119,7 @@ namespace WinsockPacketEditor
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(this, "系统套接字未设置", TType.Error)
                         {
-                            LocalizationText = "System.SystemSocket.Error"
+                            LocalizationText = "SendEditForm.SystemSocket.Error"
                         });
 
                         return;
@@ -184,21 +173,21 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "发送已停止", TType.Warn)
                     {
-                        LocalizationText = "System.Send.Warn",
+                        LocalizationText = "SendEditForm.Send.Stop",
                     });
                 }
                 else if (e.Error != null)
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "发生错误: " + e.Error.Message, TType.Error)
                     {
-                        LocalizationText = "System.Send.Error" + e.Error.Message
+                        LocalizationText = "SendEditForm.Send.Error" + e.Error.Message
                     });
                 }
                 else
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "发送执行完毕", TType.Success)
                     {
-                        LocalizationText = "System.Send.Success"
+                        LocalizationText = "SendEditForm.Send.Success"
                     });
                 }
 
@@ -361,44 +350,50 @@ namespace WinsockPacketEditor
                 },
                 new AntdUI.IContextMenuStripItem[]
                 {
-                    new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                    new AntdUI.ContextMenuStripItem("置顶", "Ctrl+⬆")
                 {
                     ID = "cmsTop",
                     IconSvg = "VerticalAlignTopOutlined",
-                    LocalizationText = "System.cms.Top",
+                    LocalizationText = "Top",
                 },
                     new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                    new AntdUI.ContextMenuStripItem("向上移动", "Alt+⬆")
                 {
                     ID = "cmsUp",
                     IconSvg = "ArrowUpOutlined",
+                    LocalizationText = "Up",
                 },
-                    new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                    new AntdUI.ContextMenuStripItem("向下移动", "Alt+⬇")
                 {
                     ID = "cmsDown",
                     IconSvg = "ArrowDownOutlined",
+                    LocalizationText = "Down",
                 },
                     new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                    new AntdUI.ContextMenuStripItem("置底", "Ctrl+⬇")
                 {
                     ID = "cmsBottom",
                     IconSvg = "VerticalAlignBottomOutlined",
+                    LocalizationText = "Bottom",
                 },
                     new AntdUI.ContextMenuStripItemDivider(),
                     new AntdUI.ContextMenuStripItem("编辑")
                 {
                     ID = "cmsEdit",
                     IconSvg = "EditOutlined",
+                    LocalizationText = "Edit",
                 },
                     new AntdUI.ContextMenuStripItem("复制")
                 {
                     ID = "cmsCopy",
                     IconSvg = "CopyOutlined",
+                    LocalizationText = "Copy",
                 },
                     new AntdUI.ContextMenuStripItem("删除")
                 {
                     ID = "cmsDelete",
                     IconSvg = "CloseOutlined",
+                    LocalizationText = "Delete",
                 },                    
                 }));
             }
@@ -439,7 +434,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "发送名称为空", TType.Error)
                     {
-                        LocalizationText = "SendEditForm.SendName.Error"
+                        LocalizationText = "SendEditForm.SendName.Empty"
                     });
 
                     return false;

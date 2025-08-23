@@ -23,27 +23,16 @@ namespace WinsockPacketEditor
 
         public FilterEditForm(Form form, FilterInfo fi)
         {
-            InitializeComponent();            
-
-            if (fi == null)
-            {
-                string Title = AntdUI.Localization.Get("InjectModeForm.EditFilter.Error", "加载滤镜数据出错");
-                string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
-                AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                this.Close();
-            }
-            else
-            {
-                this.fiSelect = fi;
-                this.form = form;
-            }  
+            InitializeComponent();
+            this.fiSelect = fi;
+            this.form = form;
         }        
 
         private void FilterEditForm_Load(object sender, EventArgs e)
         {
             try
             {
-                this.Text = AntdUI.Localization.Get("FilterEditForm", "编辑滤镜");
+                this.Text = AntdUI.Localization.Get("FilterEditForm", "滤镜编辑");
                 
                 this.tabFilterEdit.TabMenuVisible = false;
                 this.tabFilterFrom.TabMenuVisible = false;
@@ -321,6 +310,7 @@ namespace WinsockPacketEditor
                 this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
                 {
                     Online = 1,
+                    LocalizationText = "SendList",
                 });
             }
             else
@@ -328,6 +318,7 @@ namespace WinsockPacketEditor
                 this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
                 {
                     Enable = false,
+                    LocalizationText = "SendList",
                 });
             }
 
@@ -338,6 +329,7 @@ namespace WinsockPacketEditor
                 this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
                 {
                     Online = 1,
+                    LocalizationText = "RobotList",
                 });
             }
             else
@@ -345,6 +337,7 @@ namespace WinsockPacketEditor
                 this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
                 {
                     Enable = false,
+                    LocalizationText = "RobotList",
                 });
             }
         }
@@ -734,7 +727,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜名称为空", TType.Error)
                     {
-                        LocalizationText = "FilterEditForm.FilterName.Error"
+                        LocalizationText = "FilterEditForm.FilterName.Empty"
                     });
 
                     return false;
@@ -747,7 +740,7 @@ namespace WinsockPacketEditor
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(this, "指定包头数据错误", TType.Error)
                         {
-                            LocalizationText = "FilterEditForm.AppointHeader.Error"
+                            LocalizationText = "FilterEditForm.AppointHead.Error"
                         });
 
                         return false;
@@ -758,7 +751,7 @@ namespace WinsockPacketEditor
                         {
                             AntdUI.Message.open(new AntdUI.Message.Config(this, "指定包头数据错误", TType.Error)
                             {
-                                LocalizationText = "FilterEditForm.AppointHeader.Error"
+                                LocalizationText = "FilterEditForm.AppointHead.Error"
                             });
 
                             return false;
@@ -1099,37 +1092,42 @@ namespace WinsockPacketEditor
                 menulist = new AntdUI.IContextMenuStripItem[]
                 {
                     new AntdUI.ContextMenuStripItem("启用递进")
-                {
-                    ID = "cmsFilterEdit_Progression_Enable",
-                    IconSvg = "CheckSquareFilled",
-                    LocalizationText = "InjectModeForm.cmsFilterList.Top",
-                },
+                    {
+                        ID = "cmsFilterEdit_Progression_Enable",
+                        IconSvg = "CheckSquareFilled",
+                        LocalizationText = "FilterEditForm.Appoint.Progression.Enable",
+                    },
                     new AntdUI.ContextMenuStripItem("取消递进")
-                {
-                    ID = "cmsFilterEdit_Progression_Disable",
-                    IconSvg = "CloseSquareOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Progression_Disable",
+                        IconSvg = "CloseSquareOutlined",
+                        LocalizationText = "FilterEditForm.Appoint.Progression.Disable",
+                    },
                     new AntdUI.ContextMenuStripItemDivider(),
                     new AntdUI.ContextMenuStripItem("复制", "Ctrl+C")
-                {
-                ID = "cmsFilterEdit_Copy",
-                    IconSvg = "CopyOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Copy",
+                        IconSvg = "CopyOutlined",
+                        LocalizationText = "Copy",
+                    },
                     new AntdUI.ContextMenuStripItem("剪切", "Ctrl+X")
-                {
-                    ID = "cmsFilterEdit_Cut",
-                    IconSvg = "ScissorOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Cut",
+                        IconSvg = "ScissorOutlined",
+                        LocalizationText = "Cut",
+                    },
                     new AntdUI.ContextMenuStripItem("粘贴", "Ctrl+V")
-                {
-                    ID = "cmsFilterEdit_Paste",
-                    IconSvg = "SnippetsOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Paste",
+                        IconSvg = "SnippetsOutlined",
+                        LocalizationText = "Paste",
+                    },
                     new AntdUI.ContextMenuStripItem("删除")
-                {
-                    ID = "cmsFilterEdit_Delete",
-                    IconSvg = "DeleteOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Delete",
+                        IconSvg = "DeleteOutlined",
+                        LocalizationText = "Delete",
+                    },
                 };
             }
             else
@@ -1137,25 +1135,29 @@ namespace WinsockPacketEditor
                 menulist = new AntdUI.IContextMenuStripItem[]
                 {
                     new AntdUI.ContextMenuStripItem("复制", "Ctrl+C")
-                {
-                ID = "cmsFilterEdit_Copy",
-                    IconSvg = "CopyOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Copy",
+                        IconSvg = "CopyOutlined",
+                        LocalizationText = "Copy",
+                    },
                     new AntdUI.ContextMenuStripItem("剪切", "Ctrl+X")
-                {
-                    ID = "cmsFilterEdit_Cut",
-                    IconSvg = "ScissorOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Cut",
+                        IconSvg = "ScissorOutlined",
+                        LocalizationText = "Cut",
+                    },
                     new AntdUI.ContextMenuStripItem("粘贴", "Ctrl+V")
-                {
-                    ID = "cmsFilterEdit_Paste",
-                    IconSvg = "SnippetsOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Paste",
+                        IconSvg = "SnippetsOutlined",
+                        LocalizationText = "Paste",
+                    },
                     new AntdUI.ContextMenuStripItem("删除")
-                {
-                    ID = "cmsFilterEdit_Delete",
-                    IconSvg = "DeleteOutlined",
-                },
+                    {
+                        ID = "cmsFilterEdit_Delete",
+                        IconSvg = "DeleteOutlined",
+                        LocalizationText = "Delete",
+                    },
                 };
             }
 
@@ -1352,7 +1354,7 @@ namespace WinsockPacketEditor
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(this, "数据粘贴完毕", TType.Success)
                         {
-                            LocalizationText = "FilterEditForm.Paste.Success"
+                            LocalizationText = "Paste.Success"
                         });
                     }
 
@@ -1459,7 +1461,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜数据加载完毕", TType.Success)
                     {
-                        LocalizationText = "FilterEditForm.Load.Success"
+                        LocalizationText = "FilterEditForm.LoadComplete"
                     });
                 });                
             }
@@ -1764,7 +1766,7 @@ namespace WinsockPacketEditor
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜保存出错", TType.Error)
                 {
-                    LocalizationText = "FilterEditForm.Save.Error"
+                    LocalizationText = "FilterEditForm.Error"
                 });
             }
         }
