@@ -22,24 +22,13 @@ namespace WinsockPacketEditor
         public RobotEditForm(Form form, RobotInfo ri)
         {
             InitializeComponent();
-
-            if (ri == null)
-            {
-                string Title = AntdUI.Localization.Get("InjectModeForm.EditRobot.Error", "加载机器人数据出错");
-                string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
-                AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                this.Close();
-            }
-            else
-            {
-                this.riSelect = ri;
-                this.form = form;
-            }
+            this.riSelect = ri;
+            this.form = form;
         }
 
         private void RobotEditForm_Load(object sender, System.EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("RobotEditForm", "编辑机器人");
+            this.Text = AntdUI.Localization.Get("RobotEditForm", "机器人编辑");
             this.ciPacketINST.Expand = true;
 
             this.txtKeyCombination.BackColor = null;
@@ -125,15 +114,15 @@ namespace WinsockPacketEditor
                 {
                     new AntdUI.SelectItem("按键")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.KeyBoardINST.KeyPress",
                     },
                     new AntdUI.SelectItem("按下")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.KeyBoardINST.KeyDown",
                     },
                     new AntdUI.SelectItem("弹起")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.KeyBoardINST.KeyUp",
                     },
                 });
                 this.ddlKeyType.SelectedIndex = 0;
@@ -143,35 +132,35 @@ namespace WinsockPacketEditor
                 {
                     new AntdUI.SelectItem("左键单击")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.INST.LeftClick",
                     },
                     new AntdUI.SelectItem("右键单击")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.INST.RightClick",
                     },
                     new AntdUI.SelectItem("左键双击")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.INST.LeftDBClick",
                     },
                     new AntdUI.SelectItem("右键双击")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.INST.RightDBClick",
                     },
                     new AntdUI.SelectItem("左键按下")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.INST.LeftDown",
                     },
                     new AntdUI.SelectItem("左键弹起")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.INST.LeftUp",
                     },
                     new AntdUI.SelectItem("右键按下")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.INST.RightDown",
                     },
                     new AntdUI.SelectItem("右键弹起")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "RobotEditForm.INST.RightUp",
                     },
                 });
                 this.ddlMouseKey.SelectedIndex = 0;
@@ -181,11 +170,11 @@ namespace WinsockPacketEditor
                 {
                     new AntdUI.SelectItem("向上")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "Up",
                     },
                     new AntdUI.SelectItem("向下")
                     {
-                        LocalizationText = "",
+                        LocalizationText = "Down",
                     },
                 });
                 this.ddlMouseWheel.SelectedIndex = 0;
@@ -710,21 +699,21 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "机器人已停止", TType.Warn)
                     {
-                        LocalizationText = "System.Robot.Warn",
+                        LocalizationText = "RobotEditForm.Robot.Stop",
                     });
                 }
                 else if (e.Error != null)
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "发生错误: " + e.Error.Message, TType.Error)
                     {
-                        LocalizationText = "System.Robot.Error" + e.Error.Message
+                        LocalizationText = "RobotEditForm.Robot.Error" + e.Error.Message,
                     });
                 }
                 else
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "机器人执行完毕", TType.Success)
                     {
-                        LocalizationText = "System.Robot.Success"
+                        LocalizationText = "RobotEditForm.Robot.Success",
                     });
                 }
 
@@ -795,7 +784,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "机器人名称为空", TType.Error)
                     {
-                        LocalizationText = "RobotEditForm.RobotName.Error"
+                        LocalizationText = "RobotEditForm.RName.Empty"
                     });
 
                     return false;

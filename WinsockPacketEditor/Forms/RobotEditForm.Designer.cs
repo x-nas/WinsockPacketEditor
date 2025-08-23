@@ -239,6 +239,7 @@
             this.bStop.LoadingWaveSize = 6;
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
+            this.bStop.LocalizationText = "Stop";
             this.bStop.Location = new System.Drawing.Point(365, 7);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(114, 46);
@@ -257,6 +258,7 @@
             this.bExecute.LoadingWaveSize = 6;
             this.bExecute.LoadingWaveValue = 0.6F;
             this.bExecute.LoadingWaveVertical = true;
+            this.bExecute.LocalizationText = "Execute";
             this.bExecute.Location = new System.Drawing.Point(225, 7);
             this.bExecute.Name = "bExecute";
             this.bExecute.Size = new System.Drawing.Size(114, 46);
@@ -275,6 +277,7 @@
             this.bSave.LoadingWaveSize = 6;
             this.bSave.LoadingWaveValue = 0.6F;
             this.bSave.LoadingWaveVertical = true;
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(505, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -288,6 +291,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(645, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -336,8 +340,10 @@
             // ciPacketINST
             // 
             this.ciPacketINST.Controls.Add(this.tlpPacketINST);
+            this.ciPacketINST.Expand = true;
             this.ciPacketINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ciPacketINST.Location = new System.Drawing.Point(-464, -430);
+            this.ciPacketINST.LocalizationText = "RobotEditForm.{id}";
+            this.ciPacketINST.Location = new System.Drawing.Point(11, 57);
             this.ciPacketINST.Name = "ciPacketINST";
             this.ciPacketINST.Size = new System.Drawing.Size(464, 430);
             this.ciPacketINST.TabIndex = 0;
@@ -418,6 +424,7 @@
             // lSelectFilter
             // 
             this.lSelectFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSelectFilter.LocalizationText = "RobotEditForm.PacketINST.SetSSocket.Filter";
             this.lSelectFilter.Location = new System.Drawing.Point(57, 51);
             this.lSelectFilter.Name = "lSelectFilter";
             this.lSelectFilter.Size = new System.Drawing.Size(346, 39);
@@ -470,6 +477,7 @@
             // lSelectPacket
             // 
             this.lSelectPacket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSelectPacket.LocalizationText = "RobotEditForm.PacketINST.SetSSocket.Select";
             this.lSelectPacket.Location = new System.Drawing.Point(57, 3);
             this.lSelectPacket.Name = "lSelectPacket";
             this.lSelectPacket.Size = new System.Drawing.Size(346, 42);
@@ -494,6 +502,7 @@
             // 
             this.dSYSSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dSYSSocket.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSYSSocket.LocalizationText = "RobotEditForm.PacketINST.SetSSocket";
             this.dSYSSocket.Location = new System.Drawing.Point(3, 3);
             this.dSYSSocket.Name = "dSYSSocket";
             this.dSYSSocket.Orientation = AntdUI.TOrientation.Left;
@@ -562,6 +571,7 @@
             // 
             this.lPacketList.AutoEllipsis = true;
             this.lPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPacketList.LocalizationText = "RobotEditForm.PacketINST.PacketList.Select";
             this.lPacketList.Location = new System.Drawing.Point(3, 3);
             this.lPacketList.Name = "lPacketList";
             this.lPacketList.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
@@ -573,6 +583,7 @@
             // 
             this.dPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dPacketList.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dPacketList.LocalizationText = "RobotEditForm.PacketINST.PacketList";
             this.dPacketList.Location = new System.Drawing.Point(3, 3);
             this.dPacketList.Name = "dPacketList";
             this.dPacketList.Orientation = AntdUI.TOrientation.Left;
@@ -613,6 +624,7 @@
             // 
             this.dSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dSendList.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSendList.LocalizationText = "RobotEditForm.PacketINST.SendList";
             this.dSendList.Location = new System.Drawing.Point(3, 3);
             this.dSendList.Name = "dSendList";
             this.dSendList.Orientation = AntdUI.TOrientation.Left;
@@ -640,6 +652,7 @@
             // 
             this.ddlSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlSendList.List = true;
+            this.ddlSendList.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlSendList.Location = new System.Drawing.Point(3, 3);
             this.ddlSendList.Name = "ddlSendList";
             this.ddlSendList.PlaceholderText = "请选择";
@@ -662,6 +675,7 @@
             // 
             this.ciControlINST.Controls.Add(this.tlpControlINST);
             this.ciControlINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ciControlINST.LocalizationText = "RobotEditForm.{id}";
             this.ciControlINST.Location = new System.Drawing.Point(-464, -430);
             this.ciControlINST.Name = "ciControlINST";
             this.ciControlINST.Size = new System.Drawing.Size(464, 430);
@@ -718,6 +732,7 @@
             // 
             this.dLoop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dLoop.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLoop.LocalizationText = "RobotEditForm.ControlINST.Loop";
             this.dLoop.Location = new System.Drawing.Point(3, 3);
             this.dLoop.Name = "dLoop";
             this.dLoop.Orientation = AntdUI.TOrientation.Left;
@@ -747,6 +762,7 @@
             // nudLoop
             // 
             this.nudLoop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudLoop.LocalizationSuffixText = "Times";
             this.nudLoop.Location = new System.Drawing.Point(3, 3);
             this.nudLoop.Minimum = new decimal(new int[] {
             0,
@@ -771,6 +787,7 @@
             this.bInsert_LoopStart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_LoopStart.IconPosition = AntdUI.TAlignMini.Right;
             this.bInsert_LoopStart.IconSvg = "ArrowRightOutlined";
+            this.bInsert_LoopStart.LocalizationText = "Begin";
             this.bInsert_LoopStart.Location = new System.Drawing.Point(291, 3);
             this.bInsert_LoopStart.Name = "bInsert_LoopStart";
             this.bInsert_LoopStart.Size = new System.Drawing.Size(77, 42);
@@ -785,6 +802,7 @@
             this.bInsert_LoopEnd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_LoopEnd.IconPosition = AntdUI.TAlignMini.Right;
             this.bInsert_LoopEnd.IconSvg = "ArrowRightOutlined";
+            this.bInsert_LoopEnd.LocalizationText = "End";
             this.bInsert_LoopEnd.Location = new System.Drawing.Point(374, 3);
             this.bInsert_LoopEnd.Name = "bInsert_LoopEnd";
             this.bInsert_LoopEnd.Size = new System.Drawing.Size(77, 42);
@@ -849,6 +867,7 @@
             // nudnudDelayRandom_To
             // 
             this.nudnudDelayRandom_To.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudnudDelayRandom_To.LocalizationSuffixText = "Millisecond";
             this.nudnudDelayRandom_To.Location = new System.Drawing.Point(241, 51);
             this.nudnudDelayRandom_To.Minimum = new decimal(new int[] {
             0,
@@ -870,6 +889,7 @@
             // nudDelayFix
             // 
             this.nudDelayFix.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudDelayFix.LocalizationSuffixText = "Millisecond";
             this.nudDelayFix.Location = new System.Drawing.Point(74, 3);
             this.nudDelayFix.Minimum = new decimal(new int[] {
             0,
@@ -892,6 +912,7 @@
             // 
             this.rbDelayRandom.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbDelayRandom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbDelayRandom.LocalizationText = "RobotEditForm.ControlINST.Delay.Random";
             this.rbDelayRandom.Location = new System.Drawing.Point(3, 51);
             this.rbDelayRandom.Name = "rbDelayRandom";
             this.rbDelayRandom.Size = new System.Drawing.Size(65, 38);
@@ -915,6 +936,7 @@
             this.rbDelayFix.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbDelayFix.Checked = true;
             this.rbDelayFix.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbDelayFix.LocalizationText = "RobotEditForm.ControlINST.Delay.Fixed";
             this.rbDelayFix.Location = new System.Drawing.Point(3, 3);
             this.rbDelayFix.Name = "rbDelayFix";
             this.rbDelayFix.Size = new System.Drawing.Size(65, 38);
@@ -924,6 +946,7 @@
             // nudnudDelayRandom_From
             // 
             this.nudnudDelayRandom_From.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudnudDelayRandom_From.LocalizationSuffixText = "";
             this.nudnudDelayRandom_From.Location = new System.Drawing.Point(74, 51);
             this.nudnudDelayRandom_From.Minimum = new decimal(new int[] {
             0,
@@ -941,6 +964,7 @@
             // 
             this.dDelay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dDelay.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dDelay.LocalizationText = "RobotEditForm.ControlINST.Delay";
             this.dDelay.Location = new System.Drawing.Point(3, 3);
             this.dDelay.Name = "dDelay";
             this.dDelay.Orientation = AntdUI.TOrientation.Left;
@@ -952,6 +976,7 @@
             // 
             this.ciKeyBoardINST.Controls.Add(this.tlpKeyboardINST);
             this.ciKeyBoardINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ciKeyBoardINST.LocalizationText = "RobotEditForm.{id}";
             this.ciKeyBoardINST.Location = new System.Drawing.Point(-464, -430);
             this.ciKeyBoardINST.Name = "ciKeyBoardINST";
             this.ciKeyBoardINST.Size = new System.Drawing.Size(464, 430);
@@ -1009,6 +1034,7 @@
             // 
             this.dText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dText.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dText.LocalizationText = "RobotEditForm.KeyBoardINST.Text";
             this.dText.Location = new System.Drawing.Point(3, 3);
             this.dText.Name = "dText";
             this.dText.Orientation = AntdUI.TOrientation.Left;
@@ -1048,6 +1074,7 @@
             // txtText
             // 
             this.txtText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtText.LocalizationPlaceholderText = "Input.Text";
             this.txtText.Location = new System.Drawing.Point(3, 3);
             this.txtText.Name = "txtText";
             this.txtText.PlaceholderText = "请输入文本";
@@ -1087,6 +1114,7 @@
             // 
             this.dKeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dKeyCombination.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dKeyCombination.LocalizationText = "RobotEditForm.KeyBoardINST.CombinationKey";
             this.dKeyCombination.Location = new System.Drawing.Point(3, 3);
             this.dKeyCombination.Name = "dKeyCombination";
             this.dKeyCombination.Orientation = AntdUI.TOrientation.Left;
@@ -1128,6 +1156,7 @@
             this.txtKeyCombination.BackColor = System.Drawing.SystemColors.Window;
             this.txtKeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtKeyCombination.ForeColor = System.Drawing.Color.Black;
+            this.txtKeyCombination.LocalizationPlaceholderText = "PressCombinationkey";
             this.txtKeyCombination.Location = new System.Drawing.Point(3, 3);
             this.txtKeyCombination.Name = "txtKeyCombination";
             this.txtKeyCombination.PlaceholderText = "请组合按键";
@@ -1201,6 +1230,7 @@
             // lkey
             // 
             this.lkey.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lkey.LocalizationText = "RobotEditForm.KeyBoardINST.Key";
             this.lkey.Location = new System.Drawing.Point(3, 3);
             this.lkey.Name = "lkey";
             this.lkey.Size = new System.Drawing.Size(75, 42);
@@ -1211,6 +1241,7 @@
             // lKeyType
             // 
             this.lKeyType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lKeyType.LocalizationText = "RobotEditForm.KeyBoardINST.Key.Type";
             this.lKeyType.Location = new System.Drawing.Point(3, 51);
             this.lKeyType.Name = "lKeyType";
             this.lKeyType.Size = new System.Drawing.Size(75, 39);
@@ -1221,6 +1252,7 @@
             // txtKey
             // 
             this.txtKey.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtKey.LocalizationPlaceholderText = "Presskey";
             this.txtKey.Location = new System.Drawing.Point(84, 3);
             this.txtKey.Name = "txtKey";
             this.txtKey.PlaceholderText = "请按键";
@@ -1231,6 +1263,7 @@
             // 
             this.ddlKeyType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlKeyType.List = true;
+            this.ddlKeyType.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlKeyType.Location = new System.Drawing.Point(84, 51);
             this.ddlKeyType.Name = "ddlKeyType";
             this.ddlKeyType.PlaceholderText = "请选择";
@@ -1241,6 +1274,7 @@
             // 
             this.dkey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dkey.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dkey.LocalizationText = "RobotEditForm.KeyBoardINST.Key";
             this.dkey.Location = new System.Drawing.Point(3, 3);
             this.dkey.Name = "dkey";
             this.dkey.Orientation = AntdUI.TOrientation.Left;
@@ -1251,9 +1285,9 @@
             // ciMouseINST
             // 
             this.ciMouseINST.Controls.Add(this.tlpMouseINST);
-            this.ciMouseINST.Expand = true;
             this.ciMouseINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ciMouseINST.Location = new System.Drawing.Point(11, 204);
+            this.ciMouseINST.LocalizationText = "RobotEditForm.{id}";
+            this.ciMouseINST.Location = new System.Drawing.Point(-464, -430);
             this.ciMouseINST.Name = "ciMouseINST";
             this.ciMouseINST.Size = new System.Drawing.Size(464, 430);
             this.ciMouseINST.TabIndex = 3;
@@ -1345,6 +1379,7 @@
             // nudMouseMove_X
             // 
             this.nudMouseMove_X.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudMouseMove_X.LocalizationSuffixText = "Pixel";
             this.nudMouseMove_X.Location = new System.Drawing.Point(87, 51);
             this.nudMouseMove_X.Minimum = new decimal(new int[] {
             0,
@@ -1353,7 +1388,7 @@
             0});
             this.nudMouseMove_X.Name = "nudMouseMove_X";
             this.nudMouseMove_X.Size = new System.Drawing.Size(316, 39);
-            this.nudMouseMove_X.SuffixText = "值";
+            this.nudMouseMove_X.SuffixText = "像素";
             this.nudMouseMove_X.TabIndex = 19;
             this.nudMouseMove_X.Text = "0";
             this.nudMouseMove_X.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1362,6 +1397,7 @@
             // 
             this.rbMoveBy.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbMoveBy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbMoveBy.LocalizationText = "MoveBy";
             this.rbMoveBy.Location = new System.Drawing.Point(87, 3);
             this.rbMoveBy.Name = "rbMoveBy";
             this.rbMoveBy.Size = new System.Drawing.Size(92, 38);
@@ -1371,6 +1407,7 @@
             // lMouseMove_Y
             // 
             this.lMouseMove_Y.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lMouseMove_Y.LocalizationText = "Y-coordinate";
             this.lMouseMove_Y.Location = new System.Drawing.Point(3, 96);
             this.lMouseMove_Y.Name = "lMouseMove_Y";
             this.lMouseMove_Y.Size = new System.Drawing.Size(78, 39);
@@ -1381,6 +1418,7 @@
             // lMouseMove_X
             // 
             this.lMouseMove_X.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lMouseMove_X.LocalizationText = "X-coordinate";
             this.lMouseMove_X.Location = new System.Drawing.Point(3, 51);
             this.lMouseMove_X.Name = "lMouseMove_X";
             this.lMouseMove_X.Size = new System.Drawing.Size(78, 39);
@@ -1403,6 +1441,7 @@
             // nudMouseMove_Y
             // 
             this.nudMouseMove_Y.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudMouseMove_Y.LocalizationSuffixText = "Pixel";
             this.nudMouseMove_Y.Location = new System.Drawing.Point(87, 96);
             this.nudMouseMove_Y.Minimum = new decimal(new int[] {
             0,
@@ -1411,7 +1450,7 @@
             0});
             this.nudMouseMove_Y.Name = "nudMouseMove_Y";
             this.nudMouseMove_Y.Size = new System.Drawing.Size(316, 39);
-            this.nudMouseMove_Y.SuffixText = "值";
+            this.nudMouseMove_Y.SuffixText = "像素";
             this.nudMouseMove_Y.TabIndex = 16;
             this.nudMouseMove_Y.Text = "0";
             this.nudMouseMove_Y.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1421,6 +1460,7 @@
             this.rbMoveTo.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbMoveTo.Checked = true;
             this.rbMoveTo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbMoveTo.LocalizationText = "MoveTo";
             this.rbMoveTo.Location = new System.Drawing.Point(3, 3);
             this.rbMoveTo.Name = "rbMoveTo";
             this.rbMoveTo.Size = new System.Drawing.Size(78, 38);
@@ -1460,6 +1500,7 @@
             // 
             this.dMouseWheel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dMouseWheel.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dMouseWheel.LocalizationText = "RobotEditForm.MouseINST.Wheel";
             this.dMouseWheel.Location = new System.Drawing.Point(3, 3);
             this.dMouseWheel.Name = "dMouseWheel";
             this.dMouseWheel.Orientation = AntdUI.TOrientation.Left;
@@ -1492,6 +1533,7 @@
             // lWheelDistance
             // 
             this.lWheelDistance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lWheelDistance.LocalizationText = "RobotEditForm.MouseINST.Wheel.Distance";
             this.lWheelDistance.Location = new System.Drawing.Point(3, 51);
             this.lWheelDistance.Name = "lWheelDistance";
             this.lWheelDistance.Size = new System.Drawing.Size(75, 39);
@@ -1503,6 +1545,7 @@
             // 
             this.ddlMouseWheel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlMouseWheel.List = true;
+            this.ddlMouseWheel.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlMouseWheel.Location = new System.Drawing.Point(84, 3);
             this.ddlMouseWheel.Name = "ddlMouseWheel";
             this.ddlMouseWheel.PlaceholderText = "请选择";
@@ -1512,6 +1555,7 @@
             // lMouseWheel
             // 
             this.lMouseWheel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lMouseWheel.LocalizationText = "RobotEditForm.MouseINST.Wheel.Scroll";
             this.lMouseWheel.Location = new System.Drawing.Point(3, 3);
             this.lMouseWheel.Name = "lMouseWheel";
             this.lMouseWheel.Size = new System.Drawing.Size(75, 42);
@@ -1534,6 +1578,7 @@
             // nudWheelDistance
             // 
             this.nudWheelDistance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudWheelDistance.LocalizationSuffixText = "Pixel";
             this.nudWheelDistance.Location = new System.Drawing.Point(84, 51);
             this.nudWheelDistance.Minimum = new decimal(new int[] {
             0,
@@ -1615,6 +1660,7 @@
             // lMouseKey
             // 
             this.lMouseKey.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lMouseKey.LocalizationText = "RobotEditForm.MouseINST.Key";
             this.lMouseKey.Location = new System.Drawing.Point(3, 3);
             this.lMouseKey.Name = "lMouseKey";
             this.lMouseKey.Size = new System.Drawing.Size(75, 42);
@@ -1626,6 +1672,7 @@
             // 
             this.ddlMouseKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlMouseKey.List = true;
+            this.ddlMouseKey.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlMouseKey.Location = new System.Drawing.Point(84, 3);
             this.ddlMouseKey.Name = "ddlMouseKey";
             this.ddlMouseKey.PlaceholderText = "请选择";
@@ -1636,6 +1683,7 @@
             // 
             this.dMouseKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dMouseKey.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dMouseKey.LocalizationText = "RobotEditForm.MouseINST.Key";
             this.dMouseKey.Location = new System.Drawing.Point(3, 3);
             this.dMouseKey.Name = "dMouseKey";
             this.dMouseKey.Orientation = AntdUI.TOrientation.Left;
@@ -1676,6 +1724,7 @@
             // 
             this.txtINSTLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtINSTLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
+            this.txtINSTLog.LocalizationPrefixText = "RobotEditForm.Record";
             this.txtINSTLog.Location = new System.Drawing.Point(495, 654);
             this.txtINSTLog.Name = "txtINSTLog";
             this.txtINSTLog.PlaceholderText = "";
@@ -1688,10 +1737,12 @@
             // txtRobotName
             // 
             this.txtRobotName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtRobotName.LocalizationPlaceholderText = "Input.Text";
+            this.txtRobotName.LocalizationPrefixText = "RobotEditForm.RName";
             this.txtRobotName.Location = new System.Drawing.Point(3, 654);
             this.txtRobotName.Name = "txtRobotName";
-            this.txtRobotName.PlaceholderText = "请输入名称";
-            this.txtRobotName.PrefixText = "名称:";
+            this.txtRobotName.PlaceholderText = "请输入字符";
+            this.txtRobotName.PrefixText = "机器人名称:";
             this.txtRobotName.Size = new System.Drawing.Size(486, 44);
             this.txtRobotName.TabIndex = 6;
             this.txtRobotName.TextChanged += new System.EventHandler(this.txtRobotName_TextChanged);

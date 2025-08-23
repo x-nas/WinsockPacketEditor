@@ -15980,35 +15980,35 @@ namespace WinsockPacketEditor
                         switch (instructionType)
                         {
                             case Robot.InstructionType.SendSendList:
-                                sReturn = AntdUI.Localization.Get("System.Send", "发送");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Send", "发送");
                                 break;
 
                             case Robot.InstructionType.SendPacketList:
-                                sReturn = AntdUI.Localization.Get("System.Send", "发送");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Send", "发送");
                                 break;
 
                             case Robot.InstructionType.SetSystemSocket:
-                                sReturn = AntdUI.Localization.Get("System.Set", "设置");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Set", "设置");
                                 break;
 
                             case Robot.InstructionType.Delay:
-                                sReturn = AntdUI.Localization.Get("System.Delay", "延迟");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Delay", "延迟");
                                 break;
 
                             case Robot.InstructionType.LoopStart:
-                                sReturn = AntdUI.Localization.Get("System.LoopStart", "循环开始");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.LoopBegin", "循环开始");
                                 break;
 
                             case Robot.InstructionType.LoopEnd:
-                                sReturn = AntdUI.Localization.Get("System.LoopEnd", "循环结束");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.LoopEnd", "循环结束");
                                 break;
 
                             case Robot.InstructionType.KeyBoard:
-                                sReturn = AntdUI.Localization.Get("System.KeyBoard", "键盘");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.KeyBoard", "键盘");
                                 break;
 
                             case Robot.InstructionType.Mouse:
-                                sReturn = AntdUI.Localization.Get("System.Mouse", "鼠标");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Mouse", "鼠标");
                                 break;
                         }
                     }
@@ -16092,14 +16092,14 @@ namespace WinsockPacketEditor
                                     Guid SID = Guid.Parse(sContent);
                                     string SName = SendConfig.Send.GetSendName_ByGuid(SID);
 
-                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.SendList", "发送列表 - [{0}]"), SName);
+                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.Send.SendList", "发送列表 - [{0}]"), SName);
                                 }
 
                                 break;
 
                             case Robot.InstructionType.SendPacketList:
 
-                                sReturn = AntdUI.Localization.Get("RobotEditForm.PacketList", "[封包列表] 选中的封包");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.PacketList.Select", "[封包列表] 选中的封包");
 
                                 break;
 
@@ -16107,16 +16107,16 @@ namespace WinsockPacketEditor
 
                                 if (sContent.Equals("PacketConfig.List"))
                                 {
-                                    sReturn = AntdUI.Localization.Get("RobotEditForm.SelectPacket", "系统套接字 = 选中封包的套接字");
+                                    sReturn = AntdUI.Localization.Get("RRobotEditForm.INST.Socket.SelectPacket", "系统套接字 = 选中封包的套接字");
                                 }
                                 else if (sContent.Equals("FilterSocket"))
                                 {
-                                    sReturn = AntdUI.Localization.Get("RobotEditForm.SelectFilter", "系统套接字 = 调用滤镜的套接字");
+                                    sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Socket.CallFilter", "系统套接字 = 调用滤镜的套接字");
                                 }
                                 else if (sContent.Contains("Customize") && sContent.Contains("|"))
                                 {
                                     string sSocket = sContent.Split('|')[1];
-                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.SelectSocket", "系统套接字 = {0}"), sSocket);
+                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.Socket.Customize", "系统套接字 = {0}"), sSocket);
                                 }
 
                                 break;
@@ -16125,7 +16125,7 @@ namespace WinsockPacketEditor
 
                                 if (!string.IsNullOrEmpty(sContent))
                                 {
-                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.Millisecond", "{0} 毫秒"), sContent);
+                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.Socket.Millisecond", "{0} 毫秒"), sContent);
                                 }
 
                                 break;
@@ -16134,14 +16134,14 @@ namespace WinsockPacketEditor
 
                                 if (!string.IsNullOrEmpty(sContent))
                                 {
-                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.LoopStart", "循环 {0} 次"), sContent);
+                                    sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.Loop.Begin", "循环 {0} 次"), sContent);
                                 }
 
                                 break;
 
                             case Robot.InstructionType.LoopEnd:
 
-                                sReturn = AntdUI.Localization.Get("RobotEditForm.LoopEnd", "循环结束");
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Loop.End", "循环结束");
 
                                 break;
 
@@ -16155,23 +16155,23 @@ namespace WinsockPacketEditor
                                     switch (kbType)
                                     {
                                         case Robot.KeyBoardType.Press:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyPress", "按键 {0}"), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.KeyPress", "按键 {0}"), KeyCode);
                                             break;
 
                                         case Robot.KeyBoardType.Down:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyDown", "按下 {0}"), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.KeyDown", "按下 {0}"), KeyCode);
                                             break;
 
                                         case Robot.KeyBoardType.Up:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyUp", "弹起 {0}"), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.KeyUp", "弹起 {0}"), KeyCode);
                                             break;
 
                                         case Robot.KeyBoardType.Combine:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyCombine", "组合按键 {0}"), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.KeyCombine", "组合按键 {0}"), KeyCode);
                                             break;
 
                                         case Robot.KeyBoardType.Text:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.KeyText", "文本 {0}"), KeyCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.KeyText", "输入文本 {0}"), KeyCode);
                                             break;
                                     }
                                 }
@@ -16188,51 +16188,51 @@ namespace WinsockPacketEditor
                                     switch (mType)
                                     {
                                         case Robot.MouseType.LeftClick:
-                                            sReturn = AntdUI.Localization.Get("RobotEditForm.LeftClick", "左键单击");
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.INST.LeftClick", "左键单击");
                                             break;
 
                                         case Robot.MouseType.RightClick:
-                                            sReturn = AntdUI.Localization.Get("RobotEditForm.RightClick", "右键单击");
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.INST.RightClick", "右键单击");
                                             break;
 
                                         case Robot.MouseType.LeftDBClick:
-                                            sReturn = AntdUI.Localization.Get("RobotEditForm.LeftDBClick", "左键双击");
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.INST.LeftDBClick", "左键双击");
                                             break;
 
                                         case Robot.MouseType.RightDBClick:
-                                            sReturn = AntdUI.Localization.Get("RobotEditForm.RightDBClick", "右键双击");
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.INST.RightDBClick", "右键双击");
                                             break;
 
                                         case Robot.MouseType.LeftDown:
-                                            sReturn = AntdUI.Localization.Get("RobotEditForm.LeftDown", "左键按下");
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.INST.LeftDown", "左键按下");
                                             break;
 
                                         case Robot.MouseType.LeftUp:
-                                            sReturn = AntdUI.Localization.Get("RobotEditForm.LeftUp", "左键弹起");
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.INST.LeftUp", "左键弹起");
                                             break;
 
                                         case Robot.MouseType.RightDown:
-                                            sReturn = AntdUI.Localization.Get("RobotEditForm.RightDown", "右键按下");
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.INST.RightDown", "右键按下");
                                             break;
 
                                         case Robot.MouseType.RightUp:
-                                            sReturn = AntdUI.Localization.Get("RobotEditForm.RightUp", "右键弹起");
+                                            sReturn = AntdUI.Localization.Get("RobotEditForm.INST.RightUp", "右键弹起");
                                             break;
 
                                         case Robot.MouseType.WheelUp:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.WheelUp", "向上滚动 {0}"), MouseCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.WheelUp", "向上滚动 {0}"), MouseCode);
                                             break;
 
                                         case Robot.MouseType.WheelDown:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.WheelDown", "向下滚动 {0}"), MouseCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.WheelDown", "向下滚动 {0}"), MouseCode);
                                             break;
 
                                         case Robot.MouseType.MoveTo:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.MoveTo", "移动到 ( {0} )"), MouseCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.MoveTo", "移动到 ( {0} )"), MouseCode);
                                             break;
 
                                         case Robot.MouseType.MoveBy:
-                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.MoveBy", "相对移动 ( {0} )"), MouseCode);
+                                            sReturn = string.Format(AntdUI.Localization.Get("RobotEditForm.INST.MoveBy", "相对移动 ( {0} )"), MouseCode);
                                             break;
                                     }
                                 }
@@ -16336,40 +16336,45 @@ namespace WinsockPacketEditor
                 {
                     List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
 
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+⬆")
                     {
                         ID = "Top",
                         IconSvg = "VerticalAlignTopOutlined",
-                        LocalizationText = "InjectModeForm.cmsFilterList.Top",
+                        LocalizationText = "Top",
                     });
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+⬆")
                     {
                         ID = "Up",
                         IconSvg = "ArrowUpOutlined",
+                        LocalizationText = "Up",
                     });
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+⬇")
                     {
                         ID = "Down",
                         IconSvg = "ArrowDownOutlined",
+                        LocalizationText = "Down",
                     });
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+⬇")
                     {
                         ID = "Bottom",
                         IconSvg = "VerticalAlignBottomOutlined",
+                        LocalizationText = "Bottom",
                     });
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
                     menuItems.Add(new AntdUI.ContextMenuStripItem("删除")
                     {
                         ID = "Delete",
                         IconSvg = "CloseOutlined",
+                        LocalizationText = "Delete",
                     });
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
                     menuItems.Add(new AntdUI.ContextMenuStripItem("清空所有指令")
                     {
                         ID = "ClearUp",
                         IconSvg = "DeleteOutlined",
+                        LocalizationText = "Clear",
                     });
 
                     return menuItems.ToArray();

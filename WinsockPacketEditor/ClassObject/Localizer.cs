@@ -261,6 +261,12 @@ namespace WinsockPacketEditor
                 case "PleaseSelect":
                     return "Please select";
 
+                case "Presskey":
+                    return "Please Press key";
+
+                case "PressCombinationkey":
+                    return "Please press the combination key";
+
                 case "Save":
                     return "Save";
 
@@ -338,6 +344,27 @@ namespace WinsockPacketEditor
 
                 case "Times":
                     return "Times";
+
+                case "Begin":
+                    return "Begin";
+
+                case "End":
+                    return "End";
+
+                case "Pixel":
+                    return "Pixel";
+
+                case "MoveTo":
+                    return "Move To";
+
+                case "MoveBy":
+                    return "Move By";
+
+                case "X-coordinate":
+                    return "X-coordinate";
+
+                case "Y-coordinate":
+                    return "Y-coordinate";
 
                 #endregion
 
@@ -1849,6 +1876,204 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//RobotEditForm
+
+                case "RobotEditForm":
+                    return "Robot Edit";
+
+                case "RobotEditForm.ciPacketINST":
+                    return "Packet Instruction";
+
+                case "RobotEditForm.ciControlINST":
+                    return "Control Instruction";
+
+                case "RobotEditForm.ciKeyBoardINST":
+                    return "KeyBoard Instruction";
+
+                case "RobotEditForm.ciMouseINST":
+                    return "Mouse Instruction";
+
+                case "RobotEditForm.RName":
+                    return "Robot Name:";
+
+                case "RobotEditForm.Record":
+                    return "Record:";
+
+                case "RobotEditForm.PacketINST.SendList":
+                    return "Send - Send List";
+
+                case "RobotEditForm.PacketINST.PacketList":
+                    return "Send - Packet List";
+
+                case "RobotEditForm.PacketINST.PacketList.Select":
+                    return "Selected packet in the Packet List";
+
+                case "RobotEditForm.PacketINST.SetSSocket":
+                    return "Set - System Socket";
+
+                case "RobotEditForm.PacketINST.SetSSocket.Select":
+                    return "Socket of the selected packet";
+
+                case "RobotEditForm.PacketINST.SetSSocket.Filter":
+                    return "Socket for calling filter";
+
+                case "RobotEditForm.ControlINST.Delay":
+                    return "Delay";
+
+                case "RobotEditForm.ControlINST.Delay.Fixed":
+                    return "Fixed";
+
+                case "RobotEditForm.ControlINST.Delay.Random":
+                    return "Random";
+
+                case "RobotEditForm.ControlINST.Loop":
+                    return "Loop";
+
+                case "RobotEditForm.KeyBoardINST.Key":
+                    return "Key";
+
+                case "RobotEditForm.KeyBoardINST.KeyPress":
+                    return "Key Press";
+
+                case "RobotEditForm.KeyBoardINST.KeyDown":
+                    return "Key Down";
+
+                case "RobotEditForm.KeyBoardINST.KeyUp":
+                    return "Key Up";
+
+                case "RobotEditForm.KeyBoardINST.Key.Type":
+                    return "Type";
+
+                case "RobotEditForm.KeyBoardINST.CombinationKey":
+                    return "Combination Key";
+
+                case "RobotEditForm.KeyBoardINST.Text":
+                    return "Text";
+
+                case "RobotEditForm.MouseINST.Key":
+                    return "Key";
+
+                case "RobotEditForm.MouseINST.Wheel":
+                    return "Wheel";
+
+                case "RobotEditForm.MouseINST.Wheel.Scroll":
+                    return "Scroll";
+
+                case "RobotEditForm.MouseINST.Wheel.Distance":
+                    return "Distance";
+
+                case "RobotEditForm.INST":
+                    return "Inst {0}";
+
+                case "RobotEditForm.INST.Send":
+                    return "Send";
+
+                case "RobotEditForm.INST.Set":
+                    return "Set";
+
+                case "RobotEditForm.INST.Delay":
+                    return "Delay";
+
+                case "RobotEditForm.INST.LoopBegin":
+                    return "Loop Begin";
+
+                case "RobotEditForm.INST.LoopEnd":
+                    return "Loop End";
+
+                case "RobotEditForm.INST.KeyBoard":
+                    return "KeyBoard";
+
+                case "RobotEditForm.INST.Mouse":
+                    return "Mouse";
+
+                case "RobotEditForm.INST.Send.SendList":
+                    return "Send List - [{0}]";
+
+                case "RobotEditForm.INST.PacketList.Select":
+                    return "[Packet List] Selected packet";
+
+                case "RobotEditForm.INST.Socket.SelectPacket":
+                    return "System Socket = Selected packet socket";
+
+                case "RobotEditForm.INST.Socket.CallFilter":
+                    return "System Socket = Socket for calling filter";
+
+                case "RobotEditForm.INST.Socket.Customize":
+                    return "System Socket = {0}";
+
+                case "RobotEditForm.INST.Socket.Millisecond":
+                    return "{0} ms";
+
+                case "RobotEditForm.INST.Loop.Begin":
+                    return "Loop {0} Times";
+
+                case "RobotEditForm.INST.Loop.End":
+                    return "Loop End";
+
+                case "RobotEditForm.INST.KeyPress":
+                    return "Key Press {0}";
+
+                case "RobotEditForm.INST.KeyDown":
+                    return "Key Down {0}";
+
+                case "RobotEditForm.INST.KeyUp":
+                    return "Key Up {0}";
+
+                case "RobotEditForm.INST.KeyCombine":
+                    return "key Combination {0}";
+
+                case "RobotEditForm.INST.KeyText":
+                    return "Input Text {0}";
+
+                case "RobotEditForm.INST.LeftClick":
+                    return "Left Click";
+
+                case "RobotEditForm.INST.RightClick":
+                    return "Right Click";
+
+                case "RobotEditForm.INST.LeftDBClick":
+                    return "Left DBClick";
+
+                case "RobotEditForm.INST.RightDBClick":
+                    return "Right DBClick";
+
+                case "RobotEditForm.INST.LeftDown":
+                    return "Left Down";
+
+                case "RobotEditForm.INST.LeftUp":
+                    return "Left Up";
+
+                case "RobotEditForm.INST.RightDown":
+                    return "Right Down";
+
+                case "RobotEditForm.INST.RightUp":
+                    return "Right Up";
+
+                case "RobotEditForm.INST.WheelUp":
+                    return "Wheel Up {0}";
+
+                case "RobotEditForm.INST.WheelDown":
+                    return "Wheel Down {0}";
+
+                case "RobotEditForm.INST.MoveTo":
+                    return "Move To ( {0} )";
+
+                case "RobotEditForm.INST.MoveBy":
+                    return "Move By ( {0} )";
+
+                case "RobotEditForm.Robot.Stop":
+                    return "Robot has stopped";
+
+                case "RobotEditForm.Robot.Error":
+                    return "Robot error occurred:";
+
+                case "RobotEditForm.Robot.Success":
+                    return "Robot Completed";
+
+                case "RobotEditForm.RName.Empty":
+                    return "Robot Name Empty";
+
+                #endregion
 
                 default:
                     return null;
