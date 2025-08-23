@@ -1084,7 +1084,7 @@ namespace WinsockPacketEditor
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(this, "设置系统套接字完成", TType.Success)
                                 {
-                                    LocalizationText = "SYSSocket.Success"
+                                    LocalizationText = "SSocket.Success"
                                 });
                             }
 
@@ -1119,7 +1119,7 @@ namespace WinsockPacketEditor
                           
                                 AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
                                 {
-                                    LocalizationText = "System.ToTextA"
+                                    LocalizationText = "ToTextA"
                                 });
                             }
 
@@ -1133,7 +1133,7 @@ namespace WinsockPacketEditor
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
                                 {
-                                    LocalizationText = "System.ToTextB"
+                                    LocalizationText = "ToTextB"
                                 });
                             }
 
@@ -1158,14 +1158,14 @@ namespace WinsockPacketEditor
                                         {
                                             AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
                                             {
-                                                LocalizationText = "cmsPacketList_ToSendList.Success"
+                                                LocalizationText = "ToSendList.Success"
                                             });
                                         }
                                         else
                                         {
                                             AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
                                             {
-                                                LocalizationText = "cmsPacketList_ToSendList.Error"
+                                                LocalizationText = "ToSendList.Error"
                                             });
                                         }
                                     }
@@ -1274,7 +1274,7 @@ namespace WinsockPacketEditor
 
                             AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本A", TType.Success)
                             {
-                                LocalizationText = "System.ToTextA"
+                                LocalizationText = "ToTextA"
                             });
 
                             break;
@@ -1296,7 +1296,7 @@ namespace WinsockPacketEditor
 
                             AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到文本B", TType.Success)
                             {
-                                LocalizationText = "System.ToTextB"
+                                LocalizationText = "ToTextB"
                             });
 
                             break;
@@ -1348,14 +1348,14 @@ namespace WinsockPacketEditor
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
                                         {
-                                            LocalizationText = "cmsPacketList_ToSendList.Success"
+                                            LocalizationText = "ToSendList.Success"
                                         });
                                     }
                                     else
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
                                         {
-                                            LocalizationText = "cmsPacketList_ToSendList.Error"
+                                            LocalizationText = "ToSendList.Error"
                                         });
                                     }
                                 }
@@ -1383,17 +1383,17 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
                 }
 
-                string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyServerIP", "代理服务器IP地址: TCP [{0}] UDP [{1}]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
+                string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址: TCP [{0}] UDP [{1}]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);
 
                 if (Operate.ProxyConfig.Proxy.Enable_Auth)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyServer.Auth", "已启用代理服务身份认证"));
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用代理服务身份认证"));
                 }
 
                 if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyServer.ExternalProxy", "已启用外部 SOCKS5 代理"));
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyModeForm.ProxyServer.EXTProxy", "已启用外部 SOCKS5 代理"));
                 }
 
                 if (ProxyServer == null)
@@ -1644,9 +1644,6 @@ namespace WinsockPacketEditor
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-
-
-
 
         #endregion                                        
     }

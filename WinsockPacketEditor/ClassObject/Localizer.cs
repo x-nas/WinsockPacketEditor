@@ -12,6 +12,9 @@ namespace WinsockPacketEditor
                 case "ID":
                     return "en-US";
 
+                case "Target":
+                    return "Target: {0}";
+
                 case "Cancel":
                     return "Cancel";
 
@@ -62,6 +65,12 @@ namespace WinsockPacketEditor
 
                 case "Copy":
                     return "Copy";
+
+                case "CopyText":
+                    return "Copy Text";
+
+                case "CopyHex":
+                    return "Copy Hex";
 
                 case "Import":
                     return "Import";
@@ -370,8 +379,47 @@ namespace WinsockPacketEditor
 
                 #region//Operate
 
+                case "DeSelect":
+                    return "DeSelect";
+
+                case "PacketModification":
+                    return "View Packet Modification";
+
+                case "SetSSocket":
+                    return "Set System Socket";
+
+                case "ToSendList":
+                    return "Add to Send List";
+
+                case "ToFilterList":
+                    return "Add to Filter List";
+
+                case "ToSendList.Success":
+                    return "Added to ";
+
+                case "ToSendList.Error":
+                    return "Error Adding";
+
+                case "ToTextA":
+                    return "Added to Text A";
+
+                case "ToTextB":
+                    return "Added to Text B";
+
+                case "SSocket.Success":
+                    return "Successfully set System Socket";
+
+                case "ToFilterList.Success":
+                    return "Added to Filter List successfully";
+
+                case "ToFilterList.Error":
+                    return "Failed to add to Filter List";
+
                 case "ExportToExcel.Success":
                     return "Export To Excel Success";
+
+                case "ClearedData":
+                    return "Cleared Data";
 
                 case "ExportToExcel.Error":
                     return "Export To Excel Error";
@@ -523,6 +571,12 @@ namespace WinsockPacketEditor
                 case "InjectModeForm":
                     return "Inject Mode";
 
+                case "InjectModeForm.StartHook":
+                    return "Start Hook";
+
+                case "InjectModeForm.StopHook":
+                    return "Stop Hook";
+
                 case "InjectModeForm.miPacketList":
                     return "Packet List";
 
@@ -616,12 +670,51 @@ namespace WinsockPacketEditor
                 case "InjectModeForm.SpeedInfo":
                     return "Sent: {0} Received: {1}";
 
+                case "InjectModeForm.Send":
+                    return "Send:";
+
+                case "InjectModeForm.Recv":
+                    return "Recv:";
+
+                case "InjectModeForm.SendTo":
+                    return "SendTo:";
+
+                case "InjectModeForm.RecvFrom":
+                    return "RecvFrom:";
+
+                case "InjectModeForm.WSASend":
+                    return "WSASend:";
+
+                case "InjectModeForm.WSARecv":
+                    return "WSARecv:";
+
+                case "InjectModeForm.WSASendTo":
+                    return "WSASendTo:";
+
+                case "InjectModeForm.WSARecvFrom":
+                    return "WSARecvFrom:";
+
                 #endregion
 
                 #region//ProxyModeForm
 
                 case "ProxyModeForm":
                     return "Proxy Mode";
+
+                case "ProxyModeForm.StartProxy":
+                    return "Start SOCKS5 Proxy";
+
+                case "ProxyModeForm.StopProxy":
+                    return "Stop SOCKS5 Proxy";
+
+                case "ProxyModeForm.ProxyServerIP":
+                    return "Proxy Server IP: TCP [{0}] UDP [{1}]";
+
+                case "ProxyModeForm.ProxyServer.Auth":
+                    return "Proxy service authentication enabled";
+
+                case "ProxyModeForm.ProxyServer.EXTProxy":
+                    return "External SOCKS5 proxy enabled";
 
                 case "ProxyModeForm.miProxyList":
                     return "Proxy List";
@@ -1787,7 +1880,7 @@ namespace WinsockPacketEditor
                     return "Change Error";
 
                 case "FilterEditForm.StartFrom.Packet":
-                    return "Beginning of the packet";
+                    return "Begin of the packet";
 
                 case "FilterEditForm.StartFrom.Position":
                     return "Position of the chain";

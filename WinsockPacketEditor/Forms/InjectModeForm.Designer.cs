@@ -346,6 +346,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
+            this.tpPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpPacketList.Location = new System.Drawing.Point(3, 33);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
@@ -425,7 +426,7 @@
             // mPacketList
             // 
             this.mPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mPacketList.Gap = 0;
+            this.mPacketList.Gap = 5;
             this.mPacketList.IconRatio = 1F;
             menuItem11.IconSvg = "SearchOutlined";
             menuItem11.ID = "miPacketListSearch";
@@ -462,11 +463,11 @@
             menuItem12.Sub.Add(menuItem18);
             this.mPacketList.Items.Add(menuItem11);
             this.mPacketList.Items.Add(menuItem12);
-            this.mPacketList.Location = new System.Drawing.Point(1011, 3);
+            this.mPacketList.Location = new System.Drawing.Point(1021, 3);
             this.mPacketList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mPacketList.Name = "mPacketList";
             this.mPacketList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mPacketList.Size = new System.Drawing.Size(110, 44);
+            this.mPacketList.Size = new System.Drawing.Size(100, 44);
             this.mPacketList.TabIndex = 6;
             this.mPacketList.Trigger = AntdUI.Trigger.Click;
             this.mPacketList.SelectChanged += new AntdUI.SelectEventHandler(this.mPacketList_SelectChanged);
@@ -632,7 +633,7 @@
             this.lWSARecvFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSARecvFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWSARecvFrom.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWSARecvFrom.LocalizationText = "WSARecvFrom";
+            this.lWSARecvFrom.LocalizationText = "InjectModeForm.WSARecvFrom";
             this.lWSARecvFrom.Location = new System.Drawing.Point(887, 3);
             this.lWSARecvFrom.Name = "lWSARecvFrom";
             this.lWSARecvFrom.Size = new System.Drawing.Size(74, 24);
@@ -668,7 +669,7 @@
             this.lWSASendTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSASendTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWSASendTo.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWSASendTo.LocalizationText = "WSASendTo";
+            this.lWSASendTo.LocalizationText = "InjectModeForm.WSASendTo";
             this.lWSASendTo.Location = new System.Drawing.Point(781, 3);
             this.lWSASendTo.Name = "lWSASendTo";
             this.lWSASendTo.Size = new System.Drawing.Size(74, 24);
@@ -704,7 +705,7 @@
             this.lWSARecv.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSARecv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWSARecv.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWSARecv.LocalizationText = "WSARecv";
+            this.lWSARecv.LocalizationText = "InjectModeForm.WSARecv";
             this.lWSARecv.Location = new System.Drawing.Point(688, 3);
             this.lWSARecv.Name = "lWSARecv";
             this.lWSARecv.Size = new System.Drawing.Size(61, 24);
@@ -740,7 +741,7 @@
             this.lWSASend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSASend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWSASend.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWSASend.LocalizationText = "WSASend";
+            this.lWSASend.LocalizationText = "InjectModeForm.WSASend";
             this.lWSASend.Location = new System.Drawing.Point(595, 3);
             this.lWSASend.Name = "lWSASend";
             this.lWSASend.Size = new System.Drawing.Size(61, 24);
@@ -776,7 +777,7 @@
             this.lRecvFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRecvFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lRecvFrom.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRecvFrom.LocalizationText = "RecvFrom";
+            this.lRecvFrom.LocalizationText = "InjectModeForm.RecvFrom";
             this.lRecvFrom.Location = new System.Drawing.Point(519, 3);
             this.lRecvFrom.Name = "lRecvFrom";
             this.lRecvFrom.Size = new System.Drawing.Size(44, 24);
@@ -812,7 +813,7 @@
             this.lSendTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSendTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSendTo.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSendTo.LocalizationText = "SendTo";
+            this.lSendTo.LocalizationText = "InjectModeForm.SendTo";
             this.lSendTo.Location = new System.Drawing.Point(443, 3);
             this.lSendTo.Name = "lSendTo";
             this.lSendTo.Size = new System.Drawing.Size(44, 24);
@@ -848,7 +849,7 @@
             this.lRecv.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRecv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lRecv.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRecv.LocalizationText = "Recv";
+            this.lRecv.LocalizationText = "InjectModeForm.Recv";
             this.lRecv.Location = new System.Drawing.Point(381, 3);
             this.lRecv.Name = "lRecv";
             this.lRecv.Size = new System.Drawing.Size(30, 24);
@@ -884,7 +885,7 @@
             this.lSend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSend.LocalizationText = "Send";
+            this.lSend.LocalizationText = "InjectModeForm.Send";
             this.lSend.Location = new System.Drawing.Point(319, 3);
             this.lSend.Name = "lSend";
             this.lSend.Size = new System.Drawing.Size(30, 24);
@@ -1198,7 +1199,8 @@
             // 
             // tpFilterList
             // 
-            this.tpFilterList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpFilterList.Location = new System.Drawing.Point(3, 33);
             this.tpFilterList.Name = "tpFilterList";
             this.tpFilterList.Size = new System.Drawing.Size(1124, 724);
             this.tpFilterList.TabIndex = 7;
@@ -1206,7 +1208,8 @@
             // 
             // tpSendList
             // 
-            this.tpSendList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSendList.Location = new System.Drawing.Point(3, 33);
             this.tpSendList.Name = "tpSendList";
             this.tpSendList.Size = new System.Drawing.Size(1124, 724);
             this.tpSendList.TabIndex = 8;
@@ -1214,7 +1217,8 @@
             // 
             // tpRobotList
             // 
-            this.tpRobotList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
             this.tpRobotList.Name = "tpRobotList";
             this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
             this.tpRobotList.TabIndex = 9;
@@ -1222,7 +1226,8 @@
             // 
             // tpStatistical
             // 
-            this.tpStatistical.Location = new System.Drawing.Point(-1124, -724);
+            this.tpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpStatistical.Location = new System.Drawing.Point(3, 33);
             this.tpStatistical.Name = "tpStatistical";
             this.tpStatistical.Size = new System.Drawing.Size(1124, 724);
             this.tpStatistical.TabIndex = 1;
@@ -1230,7 +1235,8 @@
             // 
             // tpComparison
             // 
-            this.tpComparison.Location = new System.Drawing.Point(-1124, -724);
+            this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpComparison.Location = new System.Drawing.Point(3, 33);
             this.tpComparison.Name = "tpComparison";
             this.tpComparison.Size = new System.Drawing.Size(1124, 724);
             this.tpComparison.TabIndex = 2;
@@ -1238,7 +1244,8 @@
             // 
             // tpXOR
             // 
-            this.tpXOR.Location = new System.Drawing.Point(-1124, -724);
+            this.tpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpXOR.Location = new System.Drawing.Point(3, 33);
             this.tpXOR.Name = "tpXOR";
             this.tpXOR.Size = new System.Drawing.Size(1124, 724);
             this.tpXOR.TabIndex = 3;
@@ -1246,7 +1253,8 @@
             // 
             // tpTranscoding
             // 
-            this.tpTranscoding.Location = new System.Drawing.Point(-1124, -724);
+            this.tpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpTranscoding.Location = new System.Drawing.Point(3, 33);
             this.tpTranscoding.Name = "tpTranscoding";
             this.tpTranscoding.Size = new System.Drawing.Size(1124, 724);
             this.tpTranscoding.TabIndex = 4;
@@ -1254,7 +1262,8 @@
             // 
             // tpExtraction
             // 
-            this.tpExtraction.Location = new System.Drawing.Point(-1124, -724);
+            this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpExtraction.Location = new System.Drawing.Point(3, 33);
             this.tpExtraction.Name = "tpExtraction";
             this.tpExtraction.Size = new System.Drawing.Size(1124, 724);
             this.tpExtraction.TabIndex = 5;
@@ -1262,7 +1271,8 @@
             // 
             // tpSystemLog
             // 
-            this.tpSystemLog.Location = new System.Drawing.Point(-1124, -724);
+            this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSystemLog.Location = new System.Drawing.Point(3, 33);
             this.tpSystemLog.Name = "tpSystemLog";
             this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
             this.tpSystemLog.TabIndex = 6;

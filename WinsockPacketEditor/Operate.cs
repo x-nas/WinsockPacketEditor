@@ -4012,7 +4012,7 @@ namespace WinsockPacketEditor
                 {
                     Process pProcess = Process.GetCurrentProcess();
                     PacketConfig.Packet.InjectProcess = string.Format("{0} [{1}]", pProcess.ProcessName, pProcess.Id);
-                    sReturn = string.Format(AntdUI.Localization.Get("System.InjectProcess", "目标进程: {0}"), Operate.PacketConfig.Packet.InjectProcess);
+                    sReturn = string.Format(AntdUI.Localization.Get("Target", "目标进程: {0}"), Operate.PacketConfig.Packet.InjectProcess);
                 }
                 catch (Exception ex)
                 {
@@ -10655,7 +10655,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "Edit",
                         IconSvg = "EditOutlined",
-                        LocalizationText = "InjectModeForm.Edit",
+                        LocalizationText = "Edit",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -10666,7 +10666,7 @@ namespace WinsockPacketEditor
                         {
                             ID = "ToSendList",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "InjectModeForm.ToSendList",
+                            LocalizationText = "ToSendList",
                             Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
                         });
                     }
@@ -10677,7 +10677,7 @@ namespace WinsockPacketEditor
                             Enabled = false,
                             ID = "ToSendList",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "InjectModeForm.ToSendList",
+                            LocalizationText = "ToSendList",
                         });
                     }
 
@@ -10685,7 +10685,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "ToFilterList",
                         IconSvg = "FunnelPlotOutlined",
-                        LocalizationText = "InjectModeForm.ToFilterList",
+                        LocalizationText = "ToFilterList",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -10695,6 +10695,7 @@ namespace WinsockPacketEditor
                         Enabled = hbPacketData.CanCopy(),
                         ID = "Copy",
                         IconSvg = "CopyOutlined",
+                        LocalizationText = "Copy",
                         Sub = new AntdUI.IContextMenuStripItem[]
                         {
                             new AntdUI.ContextMenuStripItem("复制文本")
@@ -10702,12 +10703,14 @@ namespace WinsockPacketEditor
                                 Enabled = hbPacketData.CanCopy(),
                                 ID = "Copy_Text",
                                 IconSvg = "CopyOutlined",
+                                LocalizationText = "CopyText",
                             },
                             new AntdUI.ContextMenuStripItem("复制十六进制")
                             {
                                 Enabled = hbPacketData.CanCopy(),
                                 ID = "Copy_Hex",
                                 IconSvg = "CopyOutlined",
+                                LocalizationText = "CopyHex",
                             },
                         },
                     });
@@ -10718,14 +10721,14 @@ namespace WinsockPacketEditor
                     {
                         ID = "ToTextA",
                         IconSvg = "FontColorsOutlined",
-                        LocalizationText = "InjectModeForm.ToTextA",
+                        LocalizationText = "ToTextA",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItem("添加到文本B")
                     {
                         ID = "ToTextB",
                         IconSvg = "BoldOutlined",
-                        LocalizationText = "InjectModeForm.ToTextB",
+                        LocalizationText = "ToTextB",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -10734,6 +10737,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "SelectAll",
                         IconSvg = "ProfileOutlined",
+                        LocalizationText = "SelectAll",
                     });
 
                     return menuItems.ToArray();
@@ -11339,7 +11343,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "Edit",
                         IconSvg = "EditOutlined",
-                        LocalizationText = "InjectModeForm.Edit",
+                        LocalizationText = "Edit",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -11350,7 +11354,7 @@ namespace WinsockPacketEditor
                         {
                             ID = "ToSendList",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "InjectModeForm.ToSendList",
+                            LocalizationText = "ToSendList",
                             Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
                         });
                     }
@@ -11361,7 +11365,7 @@ namespace WinsockPacketEditor
                             Enabled = false,
                             ID = "ToSendList",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "InjectModeForm.ToSendList",                            
+                            LocalizationText = "ToSendList",                            
                         });
                     }
 
@@ -11369,7 +11373,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "ToFilterList",
                         IconSvg = "FunnelPlotOutlined",
-                        LocalizationText = "InjectModeForm.ToFilterList",
+                        LocalizationText = "ToFilterList",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -11378,7 +11382,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "SYSSocket",
                         IconSvg = "CheckSquareOutlined",
-                        LocalizationText = "InjectModeForm.SYSSocket",
+                        LocalizationText = "SetSSocket",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -11387,7 +11391,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "PacketModification",
                         IconSvg = "FormOutlined",
-                        LocalizationText = "InjectModeForm.PacketModification",
+                        LocalizationText = "PacketModification",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -11396,7 +11400,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "ToExcel",
                         IconSvg = "FileExcelOutlined",
-                        LocalizationText = "InjectModeForm.ToExcel",
+                        LocalizationText = "SaveToExcel",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -11405,14 +11409,14 @@ namespace WinsockPacketEditor
                     {
                         ID = "ToTextA",
                         IconSvg = "FontColorsOutlined",
-                        LocalizationText = "InjectModeForm.ToTextA",
+                        LocalizationText = "ToTextA",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItem("添加到文本B")
                     {
                         ID = "ToTextB",
                         IconSvg = "BoldOutlined",
-                        LocalizationText = "InjectModeForm.ToTextB",
+                        LocalizationText = "ToTextB",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -11421,7 +11425,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "DeSelect",
                         IconSvg = "DeleteRowOutlined",
-                        LocalizationText = "InjectModeForm.ToTextA",
+                        LocalizationText = "DeSelect",
                     });
 
                     return menuItems.ToArray();
