@@ -57,10 +57,11 @@
             // txtEncryption
             // 
             this.txtEncryption.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtEncryption.LocalizationPlaceholderText = "Input.Password";
             this.txtEncryption.Location = new System.Drawing.Point(5, 135);
             this.txtEncryption.Margin = new System.Windows.Forms.Padding(5);
             this.txtEncryption.Name = "txtEncryption";
-            this.txtEncryption.PlaceholderText = "请输入字符或数字";
+            this.txtEncryption.PlaceholderText = "请输入密码";
             this.txtEncryption.Size = new System.Drawing.Size(490, 40);
             this.txtEncryption.TabIndex = 1;
             this.txtEncryption.TextChanged += new System.EventHandler(this.txtEncryption_TextChanged);

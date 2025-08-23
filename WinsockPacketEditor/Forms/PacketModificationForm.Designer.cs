@@ -89,6 +89,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(435, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -153,6 +154,7 @@
             // lPacketData_New
             // 
             this.lPacketData_New.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPacketData_New.LocalizationText = "PacketModificationForm.Modified";
             this.lPacketData_New.Location = new System.Drawing.Point(492, 3);
             this.lPacketData_New.Name = "lPacketData_New";
             this.lPacketData_New.Size = new System.Drawing.Size(483, 40);
@@ -163,6 +165,7 @@
             // lPacketData_Raw
             // 
             this.lPacketData_Raw.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPacketData_Raw.LocalizationText = "PacketModificationForm.Raw";
             this.lPacketData_Raw.Location = new System.Drawing.Point(3, 3);
             this.lPacketData_Raw.Name = "lPacketData_Raw";
             this.lPacketData_Raw.Size = new System.Drawing.Size(483, 40);

@@ -239,6 +239,7 @@
             this.lSend_Fail.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Fail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Fail.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSend_Fail.LocalizationText = "SendEditForm.Failure";
             this.lSend_Fail.Location = new System.Drawing.Point(175, 3);
             this.lSend_Fail.Name = "lSend_Fail";
             this.lSend_Fail.Size = new System.Drawing.Size(36, 39);
@@ -250,6 +251,7 @@
             this.lSend_Success.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Success.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Success.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSend_Success.LocalizationText = "SendEditForm.Success";
             this.lSend_Success.Location = new System.Drawing.Point(105, 3);
             this.lSend_Success.Name = "lSend_Success";
             this.lSend_Success.Size = new System.Drawing.Size(36, 39);
@@ -261,6 +263,7 @@
             this.lTotal_Send.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTotal_Send.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTotal_Send.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTotal_Send.LocalizationText = "SendEditForm.TotalSend";
             this.lTotal_Send.Location = new System.Drawing.Point(3, 3);
             this.lTotal_Send.Name = "lTotal_Send";
             this.lTotal_Send.Size = new System.Drawing.Size(68, 39);
@@ -305,6 +308,7 @@
             this.bStop.LoadingWaveSize = 6;
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
+            this.bStop.LocalizationText = "Stop";
             this.bStop.Location = new System.Drawing.Point(365, 7);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(114, 46);
@@ -323,6 +327,7 @@
             this.bSend.LoadingWaveSize = 6;
             this.bSend.LoadingWaveValue = 0.6F;
             this.bSend.LoadingWaveVertical = true;
+            this.bSend.LocalizationText = "Send";
             this.bSend.Location = new System.Drawing.Point(225, 7);
             this.bSend.Name = "bSend";
             this.bSend.Size = new System.Drawing.Size(114, 46);
@@ -341,6 +346,7 @@
             this.bSave.LoadingWaveSize = 6;
             this.bSave.LoadingWaveValue = 0.6F;
             this.bSave.LoadingWaveVertical = true;
+            this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(505, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
@@ -354,6 +360,7 @@
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(645, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
@@ -434,6 +441,7 @@
             // nudProgressionCarry
             // 
             this.nudProgressionCarry.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudProgressionCarry.LocalizationSuffixText = "FilterEditForm.StartFrom.Progression.Digits";
             this.nudProgressionCarry.Location = new System.Drawing.Point(118, 102);
             this.nudProgressionCarry.Minimum = new decimal(new int[] {
             1,
@@ -456,6 +464,7 @@
             // cbProgressionCarry
             // 
             this.cbProgressionCarry.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbProgressionCarry.LocalizationText = "FilterEditForm.StartFrom.Progression.Carry";
             this.cbProgressionCarry.Location = new System.Drawing.Point(6, 102);
             this.cbProgressionCarry.Name = "cbProgressionCarry";
             this.cbProgressionCarry.Size = new System.Drawing.Size(106, 42);
@@ -466,6 +475,7 @@
             // cbProgressionPosition
             // 
             this.cbProgressionPosition.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbProgressionPosition.LocalizationText = "Enable";
             this.cbProgressionPosition.Location = new System.Drawing.Point(6, 6);
             this.cbProgressionPosition.Name = "cbProgressionPosition";
             this.cbProgressionPosition.Size = new System.Drawing.Size(106, 42);
@@ -476,6 +486,7 @@
             // nudProgressionPosition
             // 
             this.nudProgressionPosition.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudProgressionPosition.LocalizationSuffixText = "Position";
             this.nudProgressionPosition.Location = new System.Drawing.Point(118, 6);
             this.nudProgressionPosition.Minimum = new decimal(new int[] {
             0,
@@ -484,7 +495,6 @@
             0});
             this.nudProgressionPosition.Name = "nudProgressionPosition";
             this.nudProgressionPosition.ReadOnly = true;
-            this.nudProgressionPosition.SelectionStart = 1;
             this.nudProgressionPosition.Size = new System.Drawing.Size(202, 42);
             this.nudProgressionPosition.SuffixText = "位置";
             this.nudProgressionPosition.TabIndex = 42;
@@ -499,6 +509,7 @@
             // nudProgressionStep
             // 
             this.nudProgressionStep.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudProgressionStep.LocalizationSuffixText = "FilterEditForm.StartFrom.Progression.Step";
             this.nudProgressionStep.Location = new System.Drawing.Point(118, 54);
             this.nudProgressionStep.Maximum = new decimal(new int[] {
             255,
@@ -511,7 +522,6 @@
             0,
             -2147483648});
             this.nudProgressionStep.Name = "nudProgressionStep";
-            this.nudProgressionStep.SelectionStart = 1;
             this.nudProgressionStep.Size = new System.Drawing.Size(202, 42);
             this.nudProgressionStep.SuffixText = "步长";
             this.nudProgressionStep.TabIndex = 43;
@@ -527,6 +537,7 @@
             // 
             this.dProgression.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dProgression.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dProgression.LocalizationText = "FilterEditForm.Progression";
             this.dProgression.Location = new System.Drawing.Point(3, 3);
             this.dProgression.Name = "dProgression";
             this.dProgression.Orientation = AntdUI.TOrientation.Left;
@@ -588,6 +599,7 @@
             // 
             this.rbSendType_Continuously.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbSendType_Continuously.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbSendType_Continuously.LocalizationText = "PacketEditForm.Send.Continuously";
             this.rbSendType_Continuously.Location = new System.Drawing.Point(6, 54);
             this.rbSendType_Continuously.Name = "rbSendType_Continuously";
             this.rbSendType_Continuously.Size = new System.Drawing.Size(106, 42);
@@ -597,6 +609,7 @@
             // nudSendType_Times
             // 
             this.nudSendType_Times.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudSendType_Times.LocalizationSuffixText = "Times";
             this.nudSendType_Times.Location = new System.Drawing.Point(118, 6);
             this.nudSendType_Times.Minimum = new decimal(new int[] {
             1,
@@ -619,6 +632,7 @@
             // nudSendType_Interval
             // 
             this.nudSendType_Interval.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudSendType_Interval.LocalizationSuffixText = "Millisecond";
             this.nudSendType_Interval.Location = new System.Drawing.Point(118, 54);
             this.nudSendType_Interval.Minimum = new decimal(new int[] {
             0,
@@ -626,7 +640,6 @@
             0,
             0});
             this.nudSendType_Interval.Name = "nudSendType_Interval";
-            this.nudSendType_Interval.SelectionStart = 3;
             this.nudSendType_Interval.Size = new System.Drawing.Size(190, 42);
             this.nudSendType_Interval.SuffixText = "毫秒";
             this.nudSendType_Interval.TabIndex = 43;
@@ -643,6 +656,7 @@
             this.rbSendType_Times.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbSendType_Times.Checked = true;
             this.rbSendType_Times.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbSendType_Times.LocalizationText = "PacketEditForm.Send.ByTime";
             this.rbSendType_Times.Location = new System.Drawing.Point(6, 6);
             this.rbSendType_Times.Name = "rbSendType_Times";
             this.rbSendType_Times.Size = new System.Drawing.Size(106, 42);
@@ -654,6 +668,7 @@
             // 
             this.dPacketSend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dPacketSend.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dPacketSend.LocalizationText = "Send";
             this.dPacketSend.Location = new System.Drawing.Point(3, 3);
             this.dPacketSend.Name = "dPacketSend";
             this.dPacketSend.Orientation = AntdUI.TOrientation.Left;
@@ -724,7 +739,6 @@
             0});
             this.nudPacketLength.Name = "nudPacketLength";
             this.nudPacketLength.ReadOnly = true;
-            this.nudPacketLength.SelectionStart = 1;
             this.nudPacketLength.Size = new System.Drawing.Size(216, 39);
             this.nudPacketLength.TabIndex = 48;
             this.nudPacketLength.Text = "1";
@@ -739,6 +753,7 @@
             // 
             this.lPacketLength.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPacketLength.LocalizationText = "Length";
             this.lPacketLength.Location = new System.Drawing.Point(6, 96);
             this.lPacketLength.Name = "lPacketLength";
             this.lPacketLength.Size = new System.Drawing.Size(32, 39);
@@ -749,6 +764,7 @@
             // 
             this.lPacketTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPacketTo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPacketTo.LocalizationText = "PacketEditForm.ToAddr";
             this.lPacketTo.Location = new System.Drawing.Point(6, 51);
             this.lPacketTo.Name = "lPacketTo";
             this.lPacketTo.Size = new System.Drawing.Size(64, 39);
@@ -780,6 +796,7 @@
             // 
             this.lPacketSocket.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPacketSocket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPacketSocket.LocalizationText = "PacketEditForm.UseSocket";
             this.lPacketSocket.Location = new System.Drawing.Point(6, 6);
             this.lPacketSocket.Name = "lPacketSocket";
             this.lPacketSocket.Size = new System.Drawing.Size(80, 39);
@@ -800,6 +817,7 @@
             // 
             this.dPacketSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dPacketSocket.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dPacketSocket.LocalizationText = "Socket";
             this.dPacketSocket.Location = new System.Drawing.Point(3, 3);
             this.dPacketSocket.Name = "dPacketSocket";
             this.dPacketSocket.Orientation = AntdUI.TOrientation.Left;

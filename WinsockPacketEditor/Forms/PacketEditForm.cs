@@ -26,25 +26,14 @@ namespace WinsockPacketEditor
         public PacketEditForm(Form form, PacketInfo packetInfo, ProxyInfo proxyInfo)
         {
             InitializeComponent();
-
-            if (packetInfo == null && proxyInfo == null)
-            {
-                string Title = AntdUI.Localization.Get("PacketEditForm.LoadError", "加载封包数据出错");
-                string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
-                AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                this.Close();
-            }
-            else
-            {
-                this.packetInfo = packetInfo;
-                this.proxyInfo = proxyInfo;
-                this.form = form;
-            }
+            this.packetInfo = packetInfo;
+            this.proxyInfo = proxyInfo;
+            this.form = form;
         }
 
         private void PacketEditForm_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("PacketEditForm", "编辑封包");
+            this.Text = AntdUI.Localization.Get("PacketEditForm", "封包编辑");
 
             this.hbPacketEdit.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
 
@@ -159,7 +148,7 @@ namespace WinsockPacketEditor
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "套接字设置错误", TType.Error)
                 {
-                    LocalizationText = "PacketEditForm.SocketError"
+                    LocalizationText = "PacketEditForm.Socket.Error"
                 });
 
                 return false;
@@ -169,7 +158,7 @@ namespace WinsockPacketEditor
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "封包数据为空", TType.Error)
                 {
-                    LocalizationText = "PacketEditForm.Empty"
+                    LocalizationText = "PacketEditForm.Packet.Empty"
                 });
 
                 return false;
@@ -181,7 +170,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this, "递进位置错误", TType.Error)
                     {
-                        LocalizationText = "PacketEditForm.Progression.Error"
+                        LocalizationText = "PacketEditForm.Position.Error"
                     });
 
                     return false;
@@ -368,14 +357,14 @@ namespace WinsockPacketEditor
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
                                         {
-                                            LocalizationText = "cmsPacketList_ToSendList.Success"
+                                            LocalizationText = "ToSendList.Success"
                                         });
                                     }
                                     else
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
                                         {
-                                            LocalizationText = "cmsPacketList_ToSendList.Error"
+                                            LocalizationText = "ToSendList.Error"
                                         });
                                     }
                                 }
@@ -661,7 +650,7 @@ namespace WinsockPacketEditor
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(this, "封包数据为空", TType.Error)
                         {
-                            LocalizationText = "PacketEditForm.Save.Empty"
+                            LocalizationText = "PacketEditForm.Packet.Empty",
                         });
                     }
                 }
@@ -672,7 +661,7 @@ namespace WinsockPacketEditor
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "封包保存出错", TType.Error)
                 {
-                    LocalizationText = "PacketEditForm.Save.Error"
+                    LocalizationText = "PacketEditForm.Save.Error",
                 });
             }
         }

@@ -174,6 +174,9 @@ namespace WinsockPacketEditor
                 case "Check":
                     return "Check";
 
+                case "Position":
+                    return "Position";
+
                 case "XOR":
                     return "XOR";
 
@@ -188,6 +191,12 @@ namespace WinsockPacketEditor
 
                 case "Paste":
                     return "Paste";
+
+                case "PasteText":
+                    return "Paste Text";
+
+                case "PasteHex":
+                    return "Paste Hex";
 
                 case "Edit":
                     return "Edit";
@@ -471,6 +480,9 @@ namespace WinsockPacketEditor
 
                 case "Input.Text":
                     return "Please input Text";
+
+                case "Input.Password":
+                    return "Please input Password";
 
                 case "BatchAccounts":
                     return "Batch adjustment ( {0} ) Accounts";
@@ -1829,6 +1841,65 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//PacketEditForm
+
+                case "PacketEditForm":
+                    return "Packet Edit";
+
+                case "PacketEditForm.UseSocket":
+                    return "Use Socket";
+
+                case "PacketEditForm.ToAddr":
+                    return "To Addr";
+
+                case "PacketEditForm.Send.ByTime":
+                    return "By Time";
+
+                case "PacketEditForm.Send.Continuously":
+                    return "Continuously";
+
+                case "PacketEditForm.Socket.Error":
+                    return "Socket Error";
+
+                case "PacketEditForm.Packet.Empty":
+                    return "Packet data Empty";
+
+                case "PacketEditForm.Position.Error":
+                    return "Progressive position Error";
+
+                case "PacketEditForm.Save.Error":
+                    return "Packet data saving Error";
+
+                #endregion
+
+                #region//PacketModificationForm
+
+                case "PacketModificationForm":
+                    return "Packet Modification";
+
+                case "PacketModificationForm.Raw":
+                    return "Packet raw data ( Length {0} )";
+
+                case "PacketModificationForm.Modified":
+                    return "Modified packet data ( Length {0} )";
+
+                case "PacketModificationForm.ChangeType":
+                    return "Change Type";
+
+                case "Table.ComparisonText.Column.ID":
+                    return "ID";
+
+                case "Table.ComparisonText.Column.Position":
+                    return "Position";
+
+                case "Table.ComparisonText.Column.ValueA":
+                    return "Value A";
+
+                case "Table.ComparisonText.Column.ValueB":
+                    return "Value B";
+
+                #endregion
+
                 #region//FilterEditForm
 
                 case "FilterEditForm":
@@ -2165,6 +2236,13 @@ namespace WinsockPacketEditor
 
                 case "RobotEditForm.RName.Empty":
                     return "Robot Name Empty";
+
+                #endregion
+
+                #region//EncryptionPassword
+
+                case "EncryptionPassword.Info":
+                    return "Please input password! If you don't need to input password, simply click the [ Cancel ] button!";             
 
                 #endregion
 

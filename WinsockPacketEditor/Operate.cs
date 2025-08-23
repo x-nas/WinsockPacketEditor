@@ -10168,23 +10168,23 @@ namespace WinsockPacketEditor
 
                 private static class PacketTypeNames
                 {
-                    public static readonly string WS1_Send = AntdUI.Localization.Get("WS1_Send", "发送 1.1");
-                    public static readonly string WS2_Send = AntdUI.Localization.Get("WS2_Send", "发送");
-                    public static readonly string WS1_Recv = AntdUI.Localization.Get("WS1_Recv", "接收 1.1");
-                    public static readonly string WS2_Recv = AntdUI.Localization.Get("WS2_Recv", "接收");
-                    public static readonly string WS1_SendTo = AntdUI.Localization.Get("WS1_SendTo", "发送到 1.1");
-                    public static readonly string WS2_SendTo = AntdUI.Localization.Get("WS2_SendTo", "发送到");
-                    public static readonly string WS1_RecvFrom = AntdUI.Localization.Get("WS1_RecvFrom", "接收自 1.1");
-                    public static readonly string WS2_RecvFrom = AntdUI.Localization.Get("WS2_RecvFrom", "接收自");
-                    public static readonly string WSASend = AntdUI.Localization.Get("WSASend", "WSA发送");
-                    public static readonly string WSARecv = AntdUI.Localization.Get("WSARecv", "WSA接收");
-                    public static readonly string WSARecvEx = AntdUI.Localization.Get("WSARecvEx", "WSA接收");
-                    public static readonly string WSASendTo = AntdUI.Localization.Get("WSASendTo", "WSA发送到");
-                    public static readonly string WSARecvFrom = AntdUI.Localization.Get("WSARecvFrom", "WSA接收自");
-                    public static readonly string TCP_Req = AntdUI.Localization.Get("TCP_Req", "TCP");
-                    public static readonly string UDP_Req = AntdUI.Localization.Get("UDP_Req", "UDP");
-                    public static readonly string TCP_Resp = AntdUI.Localization.Get("TCP_Resp", "TCP");
-                    public static readonly string UDP_Resp = AntdUI.Localization.Get("UDP_Resp", "UDP");
+                    public static readonly string WS1_Send = AntdUI.Localization.Get("HookSettingsForm.Send1", "发送 1.1");
+                    public static readonly string WS2_Send = AntdUI.Localization.Get("HookSettingsForm.Send", "发送");
+                    public static readonly string WS1_Recv = AntdUI.Localization.Get("HookSettingsForm.Recv1", "接收 1.1");
+                    public static readonly string WS2_Recv = AntdUI.Localization.Get("HookSettingsForm.Recv", "接收");
+                    public static readonly string WS1_SendTo = AntdUI.Localization.Get("HookSettingsForm.SendTo1", "发送到 1.1");
+                    public static readonly string WS2_SendTo = AntdUI.Localization.Get("HookSettingsForm.SendTo", "发送到");
+                    public static readonly string WS1_RecvFrom = AntdUI.Localization.Get("HookSettingsForm.RecvFrom1", "接收自 1.1");
+                    public static readonly string WS2_RecvFrom = AntdUI.Localization.Get("HookSettingsForm.RecvFrom", "接收自");
+                    public static readonly string WSASend = AntdUI.Localization.Get("HookSettingsForm.WSASend", "WSA发送");
+                    public static readonly string WSARecv = AntdUI.Localization.Get("HookSettingsForm.WSARecv", "WSA接收");
+                    public static readonly string WSARecvEx = AntdUI.Localization.Get("HookSettingsForm.WSARecv", "WSA接收");
+                    public static readonly string WSASendTo = AntdUI.Localization.Get("HookSettingsForm.WSASendTo", "WSA发送到");
+                    public static readonly string WSARecvFrom = AntdUI.Localization.Get("HookSettingsForm.WSARecvFrom", "WSA接收自");
+                    public static readonly string TCP_Req = AntdUI.Localization.Get("", "TCP");
+                    public static readonly string UDP_Req = AntdUI.Localization.Get("", "UDP");
+                    public static readonly string TCP_Resp = AntdUI.Localization.Get("", "TCP");
+                    public static readonly string UDP_Resp = AntdUI.Localization.Get("", "UDP");
                 }
 
                 public static string GetName_ByPacketType(PacketType socketType)
@@ -10757,7 +10757,7 @@ namespace WinsockPacketEditor
                         {
                             ID = "ToSendList",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "InjectModeForm.cmsToSendList",
+                            LocalizationText = "ToSendList",
                             Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
                         });
                     }
@@ -10768,7 +10768,7 @@ namespace WinsockPacketEditor
                             Enabled = false,
                             ID = "ToSendList",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "InjectModeForm.cmsToSendList",
+                            LocalizationText = "ToSendList",
                         });
                     }
 
@@ -10776,6 +10776,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "ToFilterList",
                         IconSvg = "FunnelPlotOutlined",
+                        LocalizationText = "ToFilterList",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -10785,6 +10786,7 @@ namespace WinsockPacketEditor
                         Enabled = hbPacketData.CanCut(),
                         ID = "Cut",
                         IconSvg = "ScissorOutlined",
+                        LocalizationText = "Cut",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
@@ -10792,6 +10794,7 @@ namespace WinsockPacketEditor
                         Enabled = hbPacketData.CanCopy(),
                         ID = "Copy",
                         IconSvg = "CopyOutlined",
+                        LocalizationText = "Copy",
                         Sub = new AntdUI.IContextMenuStripItem[]
                         {
                             new AntdUI.ContextMenuStripItem("复制文本")
@@ -10799,12 +10802,14 @@ namespace WinsockPacketEditor
                                 Enabled = hbPacketData.CanCopy(),
                                 ID = "Copy_Text",
                                 IconSvg = "CopyOutlined",
+                                LocalizationText = "CopyText",
                             },
                             new AntdUI.ContextMenuStripItem("复制十六进制")
                             {
                                 Enabled = hbPacketData.CanCopy(),
                                 ID = "Copy_Hex",
                                 IconSvg = "CopyOutlined",
+                                LocalizationText = "CopyHex",
                             },
                         },
                     });
@@ -10814,6 +10819,7 @@ namespace WinsockPacketEditor
                         Enabled = hbPacketData.CanPaste(),
                         ID = "Paste",
                         IconSvg = "SnippetsOutlined",
+                        LocalizationText = "Paste",
                         Sub = new AntdUI.IContextMenuStripItem[]
                         {
                             new AntdUI.ContextMenuStripItem("粘贴文本")
@@ -10821,12 +10827,14 @@ namespace WinsockPacketEditor
                                 Enabled = hbPacketData.CanPaste(),
                                 ID = "Paste_Text",
                                 IconSvg = "SnippetsOutlined",
+                                LocalizationText = "PasteText",
                             },
                             new AntdUI.ContextMenuStripItem("粘贴十六进制")
                             {
                                 Enabled = hbPacketData.CanPasteHex(),
                                 ID = "Paste_Hex",
                                 IconSvg = "SnippetsOutlined",
+                                LocalizationText = "PasteHex",
                             },
                         },
                     });
@@ -10837,6 +10845,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "SelectAll",
                         IconSvg = "ProfileOutlined",
+                        LocalizationText = "SelectAll",
                     });
 
                     return menuItems.ToArray();

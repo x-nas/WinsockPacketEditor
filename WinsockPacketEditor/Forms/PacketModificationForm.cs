@@ -42,8 +42,8 @@ namespace WinsockPacketEditor
                 {
                     case Operate.SystemConfig.SystemMode.Process:
 
-                        this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("System.PacketDataRaw", "原始封包数据  ( 长度 {0} )"), this.packetInfo.RawBuffer.Length);
-                        this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("System.PacketDataNew", "修改后封包数据  ( 长度 {0} )"), this.packetInfo.PacketBuffer.Length);
+                        this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("PacketModificationForm.Raw", "原始封包数据  ( 长度 {0} )"), this.packetInfo.RawBuffer.Length);
+                        this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("PacketModificationForm.Modified", "修改后封包数据  ( 长度 {0} )"), this.packetInfo.PacketBuffer.Length);
 
                         if (this.packetInfo.RawBuffer.Length > 0)
                         {
@@ -59,8 +59,8 @@ namespace WinsockPacketEditor
 
                     case Operate.SystemConfig.SystemMode.Proxy:
 
-                        this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("System.PacketDataRaw", "原始封包数据  ( 长度 {0} )"), this.proxyInfo.RawBuffer.Length);
-                        this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("System.PacketDataNew", "修改后封包数据  ( 长度 {0} )"), this.proxyInfo.PacketBuffer.Length);
+                        this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("PacketModificationForm.Raw", "原始封包数据  ( 长度 {0} )"), this.proxyInfo.RawBuffer.Length);
+                        this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("PacketModificationForm.Modified", "修改后封包数据  ( 长度 {0} )"), this.proxyInfo.PacketBuffer.Length);
 
                         if (this.proxyInfo.RawBuffer.Length > 0)
                         {
@@ -93,7 +93,7 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.ComparisonText.Column."),
+                }.SetFixed().SetLocalizationTitleID("Table.ComparisonText.Column.ID"),
                 new AntdUI.Column("Position", "位置", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
                 new AntdUI.Column("ValueA", "原值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
                 new AntdUI.Column("ValueB", "新值", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ComparisonText.Column."),
@@ -105,10 +105,10 @@ namespace WinsockPacketEditor
                         {
                             switch (di.ChangeType)
                             {
-                                case ChangeType.Inserted: return new CellTag("新增", TTypeMini.Success);
-                                case ChangeType.Deleted: return new CellTag("删除", TTypeMini.Error);
-                                case ChangeType.Modified: return new CellTag("修改", TTypeMini.Warn);
-                                default: return new CellTag("相同", TTypeMini.Info);
+                                case ChangeType.Inserted: return new CellTag(AntdUI.Localization.Get("Inserted", "新增"), TTypeMini.Success);
+                                case ChangeType.Deleted: return new CellTag(AntdUI.Localization.Get("Deleted", "删除"), TTypeMini.Error);
+                                case ChangeType.Modified: return new CellTag(AntdUI.Localization.Get("Modified", "修改"), TTypeMini.Warn);
+                                default: return new CellTag(AntdUI.Localization.Get("Same", "相同"), TTypeMini.Info);
                             }
                         }
 
