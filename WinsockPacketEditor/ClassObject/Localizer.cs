@@ -404,7 +404,7 @@ namespace WinsockPacketEditor
                     return "Add to Filter List";
 
                 case "ToSendList.Success":
-                    return "Added to ";
+                    return "Added to: {0}";
 
                 case "ToSendList.Error":
                     return "Error Adding";
@@ -489,6 +489,12 @@ namespace WinsockPacketEditor
 
                 case "BatchSuccess":
                     return "Batch adjustment successful";
+
+                case "MGT.Enabled":
+                    return "Remote MGT Enabled: {0}";
+
+                case "MGT.Error":
+                    return "Remote MGT startup failed: Please use administrator to start {0}";
 
                 #endregion
 

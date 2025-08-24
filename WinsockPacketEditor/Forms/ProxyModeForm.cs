@@ -1156,10 +1156,8 @@ namespace WinsockPacketEditor
                                     {
                                         if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
                                         {
-                                            AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
-                                            {
-                                                LocalizationText = "ToSendList.Success"
-                                            });
+                                            string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到: {0}"), item.Text);
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this, sText, TType.Success));
                                         }
                                         else
                                         {
@@ -1346,10 +1344,8 @@ namespace WinsockPacketEditor
 
                                     if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
                                     {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
-                                        {
-                                            LocalizationText = "ToSendList.Success"
-                                        });
+                                        string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到: {0}"), item.Text);
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this, sText, TType.Success));
                                     }
                                     else
                                     {
