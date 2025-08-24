@@ -6696,14 +6696,14 @@ namespace WinsockPacketEditor
                                     {
                                         if (bOK)
                                         {
-                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Success", "导出到Excel成功");
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到Excel成功");
                                             AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                             Operate.DoLog(nameof(SaveProxyList_Dialog), Title + ": " + FilePath);
                                         }
                                         else
                                         {
-                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Error", "导出到Excel失败");
-                                            string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到Excel失败");
+                                            string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                             AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                         }
                                     });
@@ -6724,7 +6724,7 @@ namespace WinsockPacketEditor
                         using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                         using (var writer = new StreamWriter(stream, Encoding.Default))
                         {
-                            writer.WriteLine(AntdUI.Localization.Get("ToExcelTitle", "时间戳\t类别\t套接字\t客户端地址\t服务端地址\t长度\t数据\t"));
+                            writer.WriteLine(AntdUI.Localization.Get("ExcelColumn.Proxy", "时间戳\t类别\t套接字\t客户端地址\t服务端地址\t长度\t数据\t"));
 
                             var dataSource = piList.Count > 0 ? piList : ProxyConfig.List.lstProxyInfo.ToList();
                             foreach (var proxy in dataSource)
@@ -8157,7 +8157,7 @@ namespace WinsockPacketEditor
 
                                     if (xdoc == null)
                                     {
-                                        string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
+                                        string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
                                         if (LoadFromUser)
                                         {
                                             AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
@@ -9628,7 +9628,7 @@ namespace WinsockPacketEditor
 
                             if (xdoc == null)
                             {
-                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
                                     AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
@@ -9787,7 +9787,7 @@ namespace WinsockPacketEditor
 
                             if (xdoc == null)
                             {
-                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
                                     AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
@@ -11499,14 +11499,14 @@ namespace WinsockPacketEditor
                                     {
                                         if (bOK)
                                         {
-                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Success", "导出到Excel成功");
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到Excel成功");
                                             AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                             Operate.DoLog(nameof(SavePacketList_Dialog), Title + ": " + FilePath);
                                         }
                                         else
                                         {
-                                            string Title = AntdUI.Localization.Get("InjectModeForm.ExportToExcel.Error", "导出到Excel失败");
-                                            string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到Excel失败");
+                                            string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                             AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                         }
                                     });                                    
@@ -11527,7 +11527,7 @@ namespace WinsockPacketEditor
                         using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                         using (var writer = new StreamWriter(stream, Encoding.Default))
                         {
-                            writer.WriteLine(AntdUI.Localization.Get("ToExcelTitle", "时间戳\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t"));
+                            writer.WriteLine(AntdUI.Localization.Get("ExcelColumn.Packet", "时间戳\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t"));
 
                             var dataSource = piList.Count > 0 ? piList : PacketConfig.List.lstPacketInfo.ToList();
                             foreach (var packet in dataSource)
@@ -12277,10 +12277,10 @@ namespace WinsockPacketEditor
                                 return AntdUI.Localization.Get("Change", "换包");
 
                             case FilterConfig.Filter.FilterAction.NoModify_Display:
-                                return AntdUI.Localization.Get("NoModify_Display", "不修改-只显示");
+                                return AntdUI.Localization.Get("NoModifyDisplay", "不修改-只显示");
 
                             case FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
-                                return AntdUI.Localization.Get("NoModify_NoDisplay", "不修改-不显示");
+                                return AntdUI.Localization.Get("NoModifyNoDisplay", "不修改-不显示");
 
                             default:
                                 return string.Empty;
@@ -13837,14 +13837,14 @@ namespace WinsockPacketEditor
 
                                     if (SaveFilterList(FilePath, fiList, DoEncrypt, Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportFilterList.Success", "导出滤镜列表成功");
+                                        string Title = AntdUI.Localization.Get("ExportFilterList.Success", "导出滤镜列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportFilterList.Error", "导出滤镜列表失败");
-                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        string Title = AntdUI.Localization.Get("ExportFilterList.Error", "导出滤镜列表失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
                                 }
@@ -13968,7 +13968,7 @@ namespace WinsockPacketEditor
                             {
                                 if (LoadFilterList(form, FilePath, true))
                                 {
-                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportFilterList.Success", "导入滤镜列表成功");
+                                    string Title = AntdUI.Localization.Get("ImportFilterList.Success", "导入滤镜列表成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                 }
@@ -14032,7 +14032,7 @@ namespace WinsockPacketEditor
 
                             if (xdoc == null)
                             {
-                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
 
                                 if (LoadFromUser)
                                 {
@@ -15046,7 +15046,7 @@ namespace WinsockPacketEditor
 
                             if (xdoc == null)
                             {
-                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
                                     AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
@@ -15664,7 +15664,7 @@ namespace WinsockPacketEditor
 
                             if (xdoc == null)
                             {
-                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
                                     AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
@@ -17156,7 +17156,7 @@ namespace WinsockPacketEditor
 
                             if (xdoc == null)
                             {
-                                string sError = AntdUI.Localization.Get("System.Import.Error", "导入失败: 密码错误");
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
                                 if (LoadFromUser)
                                 {
                                     AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));

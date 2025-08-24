@@ -445,6 +445,12 @@ namespace WinsockPacketEditor
                 case "ExcelColumn.Log":
                     return "Log Time\tModule\tContent\t";
 
+                case "ExcelColumn.Proxy":
+                    return "Time\tType\tSocket\tClient Addr\tServer Addr\tLength\tData\t";
+
+                case "ExcelColumn.Packet":
+                    return "Time\tType\tSocket\tFrom\tTo\tLength\tData\t";
+
                 case "SystemBackupFile":
                     return "System backup file";
 
@@ -495,6 +501,75 @@ namespace WinsockPacketEditor
 
                 case "MGT.Error":
                     return "Remote MGT startup failed: Please use administrator to start {0}";
+
+                case "ProcessInfo":
+                    return "{0} Handle: {1}";
+
+                case "SOCKS.Unsupported":
+                    return "Unsupported SOCKS protocol: {0}";
+
+                case "Command.Unsupported":
+                    return "{0} - Unsupported command: {1}";
+
+                case "ExportList.Error":
+                    return "Export List Error";
+
+                case "ImportList.Error":
+                    return "Import List Error";
+
+                case "ExportProxyAccountList":
+                    return "Export Proxy Account List";
+
+                case "ImportProxyAccountList":
+                    return "Import Proxy Account List";
+
+                case "ImportAccount.Error":
+                    return "Import account failed! Username: {0}";
+
+                case "ProxyAccountListFile":
+                    return "Proxy Account List File";
+
+                case "MapLocalFile":
+                    return "Map Local File";
+
+                case "MapRemoteFile":
+                    return "Map Remote File";
+
+                case "ExportMapLocal":
+                    return "Export Map Local";
+
+                case "ExportMapRemote":
+                    return "Export Map Remote";
+
+                case "ImportMapLocal":
+                    return "Import Map Local";
+
+                case "ImportMapRemote":
+                    return "Import Map Remote";
+
+                case "CopyName":
+                    return "{0} - Copy";
+
+                case "DoFilter":
+                    return "[{0}] {1} | [{2}] Packet Length: {3}";
+
+                case "DoFilterMatch":
+                    return "[{0}] {1} | [{2}] Packet Length: {3} | Match: {4}";
+
+                case "ImportFilterList":
+                    return "Import Filter List";
+
+                case "ImportFilterList.Success":
+                    return "Successfully Imported Filter List";
+
+                case "ExportFilterList":
+                    return "Export Filter List";
+
+                case "ExportFilterList.Success":
+                    return "Successfully Exported Filter List";
+
+                case "ExportFilterList.Error":
+                    return "Export Filter List Failed";
 
                 #endregion
 
@@ -587,7 +662,7 @@ namespace WinsockPacketEditor
                 #region//InjectModeForm
 
                 case "InjectModeForm":
-                    return "Inject Mode";
+                    return "Inject Mode";                
 
                 case "InjectModeForm.StartHook":
                     return "Start Hook";
