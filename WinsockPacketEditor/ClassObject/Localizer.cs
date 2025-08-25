@@ -327,6 +327,9 @@ namespace WinsockPacketEditor
                 case "SendList":
                     return "Send List";
 
+                case "SendCollection":
+                    return "Send Collection";
+
                 case "RobotList":
                     return "Robot List";
 
@@ -570,6 +573,36 @@ namespace WinsockPacketEditor
 
                 case "ExportFilterList.Error":
                     return "Export Filter List Failed";
+
+                case "ImportSendCollection":
+                    return "Import Send Collection";
+
+                case "ExportSendCollection":
+                    return "Export Send Collection";
+
+                case "ExportSendCollection.Success":
+                    return "Successfully Exported Send Collection";
+
+                case "ExportSendCollection.Error":
+                    return "Export Send Collection Failed";
+
+                case "SendListFile":
+                    return "Send List File";
+
+                case "ImportSendList":
+                    return "Import Send List";
+
+                case "Export Send List":
+                    return "Export Send List";
+
+                case "ExportSendList.Success":
+                    return "Successfully Exported Send List";
+
+                case "ExportSendList.Error":
+                    return "Export Send List Failed";
+
+                case "ImportSendList.Success":
+                    return "Successfully Imported Send List";
 
                 #endregion
 
@@ -1151,6 +1184,9 @@ namespace WinsockPacketEditor
 
                 case "Table.SendList.Column.CellLinks":
                     return "Operation";
+
+                case "SendList.SendCollectionFile":
+                    return "Send Collection File";
 
                 #endregion
 

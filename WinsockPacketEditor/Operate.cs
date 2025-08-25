@@ -6675,7 +6675,7 @@ namespace WinsockPacketEditor
                             int SaveCount = ProxyConfig.List.lstProxyInfo.Count;
 
                             SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
-                            sfdSaveToExcel.Filter = AntdUI.Localization.Get("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
+                            sfdSaveToExcel.Filter = AntdUI.Localization.Get("ExcelFile", "Excel 文件") + "Excel (*.xls)|*.xls";
                             sfdSaveToExcel.RestoreDirectory = true;
 
                             if (!string.IsNullOrEmpty(FileName))
@@ -8733,7 +8733,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miAccountList", "本地映射"), "\r\n确定删除数据吗\r\n\r\n")
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "本地映射"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                         {
                             Icon = TType.Warn,
                             Keyboard = false,
@@ -8763,7 +8763,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miAccountList", "远程映射"), "\r\n确定删除数据吗\r\n\r\n")
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapRemote", "远程映射"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                         {
                             Icon = TType.Warn,
                             Keyboard = false,
@@ -8791,7 +8791,7 @@ namespace WinsockPacketEditor
 
                 public static void CleanUpMapLocal_Dialog(Form form)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "本地映射"), "\r\n确定删除所有数据吗\r\n\r\n")
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "本地映射"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                     {
                         Icon = TType.Warn,
                         Keyboard = false,
@@ -8822,7 +8822,7 @@ namespace WinsockPacketEditor
 
                 public static void CleanUpMapRemote_Dialog(Form form)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "远程映射"), "\r\n确定删除所有数据吗\r\n\r\n")
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapRemote", "远程映射"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                     {
                         Icon = TType.Warn,
                         Keyboard = false,
@@ -13322,7 +13322,7 @@ namespace WinsockPacketEditor
 
                 public static void CleanUpFilterList_Dialog(Form form)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miFilterList", "滤镜列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miFilterList", "滤镜列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                     {
                         Icon = TType.Warn,                   
                         Keyboard = false,
@@ -14802,7 +14802,7 @@ namespace WinsockPacketEditor
 
                                 if (SendCollection.Count > 0)
                                 {
-                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendCollection", "发送集列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("SendCollection", "发送集列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                                     {
                                         Icon = TType.Warn,
                                         Keyboard = false,
@@ -14835,7 +14835,7 @@ namespace WinsockPacketEditor
                         if (SendCollection.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = AntdUI.Localization.Get("SendCollectionFile", "发送集文件") + "（*.sc）|*.sc";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("SendList.SendCollectionFile", "发送集文件") + "（*.sc）|*.sc";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -14883,14 +14883,14 @@ namespace WinsockPacketEditor
 
                                     if (SaveSendCollection(FilePath, SendCollection, DoEncrypt, Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendCollection.Success", "导出发送集成功");
+                                        string Title = AntdUI.Localization.Get("ExportSendCollection.Success", "导出发送集成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendCollection.Error", "导出发送集失败");
-                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        string Title = AntdUI.Localization.Get("ExportSendCollection.Error", "导出发送集失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
                                 }
@@ -14972,7 +14972,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                        ofdLoadFile.Filter = AntdUI.Localization.Get("SendCollectionFile", "发送集文件") + "（*.sc）|*.sc";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("SendList.SendCollectionFile", "发送集文件") + "（*.sc）|*.sc";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -15327,7 +15327,7 @@ namespace WinsockPacketEditor
 
                 public static void CleanUpSendList_Dialog(Form form)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "发送列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendList", "发送列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                     {
                         Icon = TType.Warn,
                         Keyboard = false,
@@ -16120,7 +16120,7 @@ namespace WinsockPacketEditor
 
                                 if (sContent.Equals("PacketConfig.List"))
                                 {
-                                    sReturn = AntdUI.Localization.Get("RRobotEditForm.INST.Socket.SelectPacket", "系统套接字 = 选中封包的套接字");
+                                    sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Socket.SelectPacket", "系统套接字 = 选中封包的套接字");
                                 }
                                 else if (sContent.Equals("FilterSocket"))
                                 {
@@ -16468,7 +16468,7 @@ namespace WinsockPacketEditor
 
                                 if (RInstruction.Count > 0)
                                 {
-                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotInstruction", "指令集列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotInstruction", "指令集列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                                     {
                                         Icon = TType.Warn,
                                         Keyboard = false,
@@ -16745,7 +16745,7 @@ namespace WinsockPacketEditor
 
                 public static void CleanUpRobotList_Dialog(Form form)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotList", "机器人列表"), "\r\n确定删除所有数据吗\r\n\r\n")
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miRobotList", "机器人列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                     {
                         Icon = TType.Warn,
                         Keyboard = false,
