@@ -299,24 +299,25 @@
             this.mProxyMode.Items.Add(menuItem10);
             this.mProxyMode.Items.Add(menuItem11);
             this.mProxyMode.Items.Add(menuItem12);
-            this.mProxyMode.Location = new System.Drawing.Point(3, 51);
+            this.mProxyMode.Location = new System.Drawing.Point(3, 47);
             this.mProxyMode.Name = "mProxyMode";
-            this.mProxyMode.Size = new System.Drawing.Size(164, 706);
+            this.mProxyMode.Size = new System.Drawing.Size(164, 710);
             this.mProxyMode.TabIndex = 5;
             this.mProxyMode.SelectChanged += new AntdUI.SelectEventHandler(this.mProxyMode_SelectChanged);
             // 
             // bMenuCollapse
             // 
-            this.bMenuCollapse.BorderWidth = 1F;
-            this.bMenuCollapse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bMenuCollapse.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bMenuCollapse.Dock = System.Windows.Forms.DockStyle.Left;
             this.bMenuCollapse.Ghost = true;
             this.bMenuCollapse.IconRatio = 1F;
             this.bMenuCollapse.IconSvg = "MenuFoldOutlined";
             this.bMenuCollapse.Location = new System.Drawing.Point(1, 1);
             this.bMenuCollapse.Margin = new System.Windows.Forms.Padding(1);
             this.bMenuCollapse.Name = "bMenuCollapse";
-            this.bMenuCollapse.Size = new System.Drawing.Size(168, 46);
+            this.bMenuCollapse.Size = new System.Drawing.Size(42, 42);
             this.bMenuCollapse.TabIndex = 6;
+            this.bMenuCollapse.WaveSize = 0;
             this.bMenuCollapse.Click += new System.EventHandler(this.bMenuCollapse_Click);
             // 
             // tabProxyMode
@@ -333,7 +334,7 @@
             this.tabProxyMode.Controls.Add(this.tpTranscoding);
             this.tabProxyMode.Controls.Add(this.tpExtraction);
             this.tabProxyMode.Controls.Add(this.tpSystemLog);
-            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabProxyMode.Location = new System.Drawing.Point(170, 40);
             this.tabProxyMode.Name = "tabProxyMode";
@@ -1265,6 +1266,7 @@
             this.Load += new System.EventHandler(this.ProxyModeForm_Load);
             this.pageHeader.ResumeLayout(false);
             this.tlpMenu.ResumeLayout(false);
+            this.tlpMenu.PerformLayout();
             this.tabProxyMode.ResumeLayout(false);
             this.tpProxyList.ResumeLayout(false);
             this.tlpProxyList.ResumeLayout(false);

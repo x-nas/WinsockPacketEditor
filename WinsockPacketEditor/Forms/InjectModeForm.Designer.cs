@@ -292,24 +292,25 @@
             this.mInjectMode.Items.Add(menuItem8);
             this.mInjectMode.Items.Add(menuItem9);
             this.mInjectMode.Items.Add(menuItem10);
-            this.mInjectMode.Location = new System.Drawing.Point(3, 51);
+            this.mInjectMode.Location = new System.Drawing.Point(3, 47);
             this.mInjectMode.Name = "mInjectMode";
-            this.mInjectMode.Size = new System.Drawing.Size(164, 706);
+            this.mInjectMode.Size = new System.Drawing.Size(164, 710);
             this.mInjectMode.TabIndex = 5;
             this.mInjectMode.SelectChanged += new AntdUI.SelectEventHandler(this.mInjectMode_SelectChanged);
             // 
             // bMenuCollapse
             // 
-            this.bMenuCollapse.BorderWidth = 1F;
-            this.bMenuCollapse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bMenuCollapse.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bMenuCollapse.Dock = System.Windows.Forms.DockStyle.Left;
             this.bMenuCollapse.Ghost = true;
             this.bMenuCollapse.IconRatio = 1F;
             this.bMenuCollapse.IconSvg = "MenuFoldOutlined";
             this.bMenuCollapse.Location = new System.Drawing.Point(1, 1);
             this.bMenuCollapse.Margin = new System.Windows.Forms.Padding(1);
             this.bMenuCollapse.Name = "bMenuCollapse";
-            this.bMenuCollapse.Size = new System.Drawing.Size(168, 46);
+            this.bMenuCollapse.Size = new System.Drawing.Size(42, 42);
             this.bMenuCollapse.TabIndex = 6;
+            this.bMenuCollapse.WaveSize = 0;
             this.bMenuCollapse.Click += new System.EventHandler(this.bMenuCollapse_Click);
             // 
             // tabInjectMode
@@ -1321,6 +1322,7 @@
             this.Load += new System.EventHandler(this.InjectModeForm_Load);
             this.pageHeader.ResumeLayout(false);
             this.tlpMenu.ResumeLayout(false);
+            this.tlpMenu.PerformLayout();
             this.tabInjectMode.ResumeLayout(false);
             this.tpPacketList.ResumeLayout(false);
             this.tlpPacketList.ResumeLayout(false);
