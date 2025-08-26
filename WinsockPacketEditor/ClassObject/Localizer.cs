@@ -592,7 +592,7 @@ namespace WinsockPacketEditor
                 case "ImportSendList":
                     return "Import Send List";
 
-                case "Export Send List":
+                case "ExportSendList":
                     return "Export Send List";
 
                 case "ExportSendList.Success":
@@ -603,6 +603,24 @@ namespace WinsockPacketEditor
 
                 case "ImportSendList.Success":
                     return "Successfully Imported Send List";
+
+                case "RobotListFile":
+                    return "Robot List File";
+
+                case "ImportRobotList":
+                    return "Import Robot List";
+
+                case "ExportRobotList":
+                    return "Export Robot List";
+
+                case "ExportRobotList.Success":
+                    return "Successfully Exported Robot List";
+
+                case "ExportRobotList.Error":
+                    return "Export Robot List Failed";
+
+                case "ImportRobotList.Success":
+                    return "Successfully Imported Robot List";
 
                 #endregion
 
@@ -714,6 +732,9 @@ namespace WinsockPacketEditor
 
                 case "InjectModeForm.miRobotList":
                     return "Robot List";
+
+                case "InjectModeForm.miRobotInstruction":
+                    return "Robot Instruction";
 
                 case "InjectModeForm.miStatistical":
                     return "Statistical Data";
@@ -2173,6 +2194,12 @@ namespace WinsockPacketEditor
 
                 case "RobotEditForm.ciMouseINST":
                     return "Mouse Instruction";
+
+                case "RobotEditForm.SendList.Error":
+                    return "Send List Error";
+
+                case "RobotEditForm.LoopINST.Error":
+                    return "Loop Instruction Error";
 
                 case "RobotEditForm.RName":
                     return "Robot Name:";

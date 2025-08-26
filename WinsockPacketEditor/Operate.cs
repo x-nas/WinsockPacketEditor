@@ -16966,14 +16966,14 @@ namespace WinsockPacketEditor
 
                                     if (SaveRobotList(FilePath, riList, DoEncrypt, Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportRobotList.Success", "导出机器人列表成功");
+                                        string Title = AntdUI.Localization.Get("ExportRobotList.Success", "导出机器人列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportRobotList.Error", "导出机器人列表失败");
-                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        string Title = AntdUI.Localization.Get("ExportRobotList.Error", "导出机器人列表失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
                                 }
@@ -17338,7 +17338,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "Copy",
                         IconSvg = "CopyOutlined",
-                        LocalizationText = "LogList.CopyLog",
+                        LocalizationText = "Copy",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -17347,7 +17347,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "ToExcel",
                         IconSvg = "FileExcelOutlined",
-                        LocalizationText = "LogList.ToExcel",
+                        LocalizationText = "SaveToExcel",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -17356,14 +17356,14 @@ namespace WinsockPacketEditor
                     {
                         ID = "ClearUp",
                         IconSvg = "DeleteOutlined",
-                        LocalizationText = "LogList.ClearUp",
+                        LocalizationText = "Clear",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItem("取消选择")
                     {
                         ID = "DeSelect",
                         IconSvg = "DeleteRowOutlined",
-                        LocalizationText = "LogList.DeSelect",
+                        LocalizationText = "DeSelect",
                     });
 
                     return menuItems.ToArray();
