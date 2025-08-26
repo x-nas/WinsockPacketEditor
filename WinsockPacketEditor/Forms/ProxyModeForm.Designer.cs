@@ -158,7 +158,7 @@
             this.pageHeader.Name = "pageHeader";
             this.pageHeader.ShowButton = true;
             this.pageHeader.ShowIcon = true;
-            this.pageHeader.Size = new System.Drawing.Size(1300, 40);
+            this.pageHeader.Size = new System.Drawing.Size(1450, 40);
             this.pageHeader.SubText = "2.0.0.0";
             this.pageHeader.TabIndex = 7;
             this.pageHeader.Text = "WPE x64";
@@ -166,7 +166,7 @@
             // colorTheme
             // 
             this.colorTheme.Dock = System.Windows.Forms.DockStyle.Right;
-            this.colorTheme.Location = new System.Drawing.Point(918, 0);
+            this.colorTheme.Location = new System.Drawing.Point(1068, 0);
             this.colorTheme.Name = "colorTheme";
             this.colorTheme.Padding = new System.Windows.Forms.Padding(5);
             this.colorTheme.Size = new System.Drawing.Size(40, 40);
@@ -179,7 +179,7 @@
             this.btn_mode.Dock = System.Windows.Forms.DockStyle.Right;
             this.btn_mode.Ghost = true;
             this.btn_mode.IconSvg = "SunOutlined";
-            this.btn_mode.Location = new System.Drawing.Point(958, 0);
+            this.btn_mode.Location = new System.Drawing.Point(1108, 0);
             this.btn_mode.Name = "btn_mode";
             this.btn_mode.Radius = 0;
             this.btn_mode.Size = new System.Drawing.Size(50, 40);
@@ -194,7 +194,7 @@
             this.btn_global.DropDownRadius = 6;
             this.btn_global.Ghost = true;
             this.btn_global.IconSvg = "GlobalOutlined";
-            this.btn_global.Location = new System.Drawing.Point(1008, 0);
+            this.btn_global.Location = new System.Drawing.Point(1158, 0);
             this.btn_global.Name = "btn_global";
             this.btn_global.Placement = AntdUI.TAlignFrom.BR;
             this.btn_global.Radius = 0;
@@ -208,7 +208,7 @@
             this.btn_setting.Dock = System.Windows.Forms.DockStyle.Right;
             this.btn_setting.Ghost = true;
             this.btn_setting.IconSvg = "SettingOutlined";
-            this.btn_setting.Location = new System.Drawing.Point(1058, 0);
+            this.btn_setting.Location = new System.Drawing.Point(1208, 0);
             this.btn_setting.Name = "btn_setting";
             this.btn_setting.Radius = 0;
             this.btn_setting.Size = new System.Drawing.Size(50, 40);
@@ -229,13 +229,14 @@
             this.tlpMenu.RowCount = 2;
             this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMenu.Size = new System.Drawing.Size(170, 760);
+            this.tlpMenu.Size = new System.Drawing.Size(170, 762);
             this.tlpMenu.TabIndex = 8;
             // 
             // mProxyMode
             // 
             this.mProxyMode.Dock = System.Windows.Forms.DockStyle.Left;
             this.mProxyMode.Gap = 15;
+            this.mProxyMode.IconRatio = 1F;
             menuItem1.Badge = "";
             menuItem1.IconSvg = "ProjectFilled";
             menuItem1.ID = "miProxyList";
@@ -301,7 +302,7 @@
             this.mProxyMode.Items.Add(menuItem12);
             this.mProxyMode.Location = new System.Drawing.Point(3, 47);
             this.mProxyMode.Name = "mProxyMode";
-            this.mProxyMode.Size = new System.Drawing.Size(164, 710);
+            this.mProxyMode.Size = new System.Drawing.Size(164, 712);
             this.mProxyMode.TabIndex = 5;
             this.mProxyMode.SelectChanged += new AntdUI.SelectEventHandler(this.mProxyMode_SelectChanged);
             // 
@@ -350,7 +351,7 @@
             this.tabProxyMode.Pages.Add(this.tpTranscoding);
             this.tabProxyMode.Pages.Add(this.tpExtraction);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.Size = new System.Drawing.Size(1130, 760);
+            this.tabProxyMode.Size = new System.Drawing.Size(1280, 762);
             this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
             this.tabProxyMode.Text = "tabs1";
@@ -361,7 +362,7 @@
             this.tpProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpProxyList.Location = new System.Drawing.Point(3, 33);
             this.tpProxyList.Name = "tpProxyList";
-            this.tpProxyList.Size = new System.Drawing.Size(1124, 724);
+            this.tpProxyList.Size = new System.Drawing.Size(1274, 726);
             this.tpProxyList.TabIndex = 0;
             this.tpProxyList.Text = "代理数据";
             // 
@@ -380,7 +381,7 @@
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpProxyList.Size = new System.Drawing.Size(1124, 724);
+            this.tlpProxyList.Size = new System.Drawing.Size(1274, 726);
             this.tlpProxyList.TabIndex = 10;
             // 
             // tlpProxyList_Button
@@ -402,7 +403,7 @@
             this.tlpProxyList_Button.Name = "tlpProxyList_Button";
             this.tlpProxyList_Button.RowCount = 1;
             this.tlpProxyList_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyList_Button.Size = new System.Drawing.Size(1124, 50);
+            this.tlpProxyList_Button.Size = new System.Drawing.Size(1274, 50);
             this.tlpProxyList_Button.TabIndex = 7;
             // 
             // bProxyList_Clear
@@ -489,7 +490,7 @@
             menuItem14.Sub.Add(menuItem23);
             this.mProxyList.Items.Add(menuItem13);
             this.mProxyList.Items.Add(menuItem14);
-            this.mProxyList.Location = new System.Drawing.Point(1021, 3);
+            this.mProxyList.Location = new System.Drawing.Point(1171, 3);
             this.mProxyList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mProxyList.Name = "mProxyList";
             this.mProxyList.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -535,8 +536,8 @@
             // 
             this.splitterProxyList.Panel2.Controls.Add(this.pPacketData);
             this.splitterProxyList.Panel2MinSize = 0;
-            this.splitterProxyList.Size = new System.Drawing.Size(1118, 638);
-            this.splitterProxyList.SplitterDistance = 460;
+            this.splitterProxyList.Size = new System.Drawing.Size(1268, 640);
+            this.splitterProxyList.SplitterDistance = 461;
             this.splitterProxyList.SplitterSize = 80;
             this.splitterProxyList.SplitterWidth = 10;
             this.splitterProxyList.TabIndex = 6;
@@ -554,7 +555,7 @@
             this.tlpProxyList2.RowCount = 2;
             this.tlpProxyList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyList2.Size = new System.Drawing.Size(1118, 460);
+            this.tlpProxyList2.Size = new System.Drawing.Size(1268, 461);
             this.tlpProxyList2.TabIndex = 0;
             // 
             // tlpPacketListInfo
@@ -633,7 +634,7 @@
             this.tlpPacketListInfo.RowCount = 2;
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketListInfo.Size = new System.Drawing.Size(1118, 30);
+            this.tlpPacketListInfo.Size = new System.Drawing.Size(1268, 30);
             this.tlpPacketListInfo.TabIndex = 6;
             // 
             // lSplit16
@@ -1034,7 +1035,7 @@
             this.tProxyList.Margin = new System.Windows.Forms.Padding(0);
             this.tProxyList.MultipleRows = true;
             this.tProxyList.Name = "tProxyList";
-            this.tProxyList.Size = new System.Drawing.Size(1118, 430);
+            this.tProxyList.Size = new System.Drawing.Size(1268, 431);
             this.tProxyList.TabIndex = 1;
             this.tProxyList.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyList_CellClick);
             this.tProxyList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tProxyList_SetRowStyle);
@@ -1049,7 +1050,7 @@
             this.pPacketData.Name = "pPacketData";
             this.pPacketData.Padding = new System.Windows.Forms.Padding(6);
             this.pPacketData.Radius = 0;
-            this.pPacketData.Size = new System.Drawing.Size(1118, 168);
+            this.pPacketData.Size = new System.Drawing.Size(1268, 169);
             this.pPacketData.TabIndex = 0;
             // 
             // hbProxyData
@@ -1063,7 +1064,7 @@
             this.hbProxyData.Name = "hbProxyData";
             this.hbProxyData.ReadOnly = true;
             this.hbProxyData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbProxyData.Size = new System.Drawing.Size(1104, 154);
+            this.hbProxyData.Size = new System.Drawing.Size(1254, 155);
             this.hbProxyData.StringViewVisible = true;
             this.hbProxyData.TabIndex = 1;
             this.hbProxyData.VScrollBarVisible = true;
@@ -1081,12 +1082,12 @@
             this.tlpProxyInfo.Controls.Add(this.lProxySpeed, 0, 0);
             this.tlpProxyInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpProxyInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tlpProxyInfo.Location = new System.Drawing.Point(0, 694);
+            this.tlpProxyInfo.Location = new System.Drawing.Point(0, 696);
             this.tlpProxyInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpProxyInfo.Name = "tlpProxyInfo";
             this.tlpProxyInfo.RowCount = 1;
             this.tlpProxyInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyInfo.Size = new System.Drawing.Size(1124, 30);
+            this.tlpProxyInfo.Size = new System.Drawing.Size(1274, 30);
             this.tlpProxyInfo.TabIndex = 4;
             // 
             // lTotalBytes
@@ -1129,7 +1130,7 @@
             this.tpClientList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpClientList.Location = new System.Drawing.Point(3, 33);
             this.tpClientList.Name = "tpClientList";
-            this.tpClientList.Size = new System.Drawing.Size(1124, 724);
+            this.tpClientList.Size = new System.Drawing.Size(1274, 726);
             this.tpClientList.TabIndex = 8;
             this.tpClientList.Text = "客户端列表";
             // 
@@ -1138,7 +1139,7 @@
             this.tpAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpAccountList.Location = new System.Drawing.Point(3, 33);
             this.tpAccountList.Name = "tpAccountList";
-            this.tpAccountList.Size = new System.Drawing.Size(1124, 724);
+            this.tpAccountList.Size = new System.Drawing.Size(1274, 726);
             this.tpAccountList.TabIndex = 7;
             this.tpAccountList.Text = "账号列表";
             // 
@@ -1147,7 +1148,7 @@
             this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpFilterList.Location = new System.Drawing.Point(3, 33);
             this.tpFilterList.Name = "tpFilterList";
-            this.tpFilterList.Size = new System.Drawing.Size(1124, 724);
+            this.tpFilterList.Size = new System.Drawing.Size(1274, 726);
             this.tpFilterList.TabIndex = 9;
             this.tpFilterList.Text = "滤镜列表";
             // 
@@ -1156,7 +1157,7 @@
             this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpSendList.Location = new System.Drawing.Point(3, 33);
             this.tpSendList.Name = "tpSendList";
-            this.tpSendList.Size = new System.Drawing.Size(1124, 724);
+            this.tpSendList.Size = new System.Drawing.Size(1274, 726);
             this.tpSendList.TabIndex = 10;
             this.tpSendList.Text = "发送列表";
             // 
@@ -1165,7 +1166,7 @@
             this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpRobotList.Location = new System.Drawing.Point(3, 33);
             this.tpRobotList.Name = "tpRobotList";
-            this.tpRobotList.Size = new System.Drawing.Size(1124, 724);
+            this.tpRobotList.Size = new System.Drawing.Size(1274, 726);
             this.tpRobotList.TabIndex = 11;
             this.tpRobotList.Text = "机器人列表";
             // 
@@ -1174,7 +1175,7 @@
             this.tpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpStatistical.Location = new System.Drawing.Point(3, 33);
             this.tpStatistical.Name = "tpStatistical";
-            this.tpStatistical.Size = new System.Drawing.Size(1124, 724);
+            this.tpStatistical.Size = new System.Drawing.Size(1274, 726);
             this.tpStatistical.TabIndex = 1;
             this.tpStatistical.Text = "统计数据";
             // 
@@ -1183,7 +1184,7 @@
             this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpComparison.Location = new System.Drawing.Point(3, 33);
             this.tpComparison.Name = "tpComparison";
-            this.tpComparison.Size = new System.Drawing.Size(1124, 724);
+            this.tpComparison.Size = new System.Drawing.Size(1274, 726);
             this.tpComparison.TabIndex = 12;
             this.tpComparison.Text = "文本对比";
             // 
@@ -1192,7 +1193,7 @@
             this.tpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpXOR.Location = new System.Drawing.Point(3, 33);
             this.tpXOR.Name = "tpXOR";
-            this.tpXOR.Size = new System.Drawing.Size(1124, 724);
+            this.tpXOR.Size = new System.Drawing.Size(1274, 726);
             this.tpXOR.TabIndex = 13;
             this.tpXOR.Text = "异或计算";
             // 
@@ -1201,7 +1202,7 @@
             this.tpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpTranscoding.Location = new System.Drawing.Point(3, 33);
             this.tpTranscoding.Name = "tpTranscoding";
-            this.tpTranscoding.Size = new System.Drawing.Size(1124, 724);
+            this.tpTranscoding.Size = new System.Drawing.Size(1274, 726);
             this.tpTranscoding.TabIndex = 14;
             this.tpTranscoding.Text = "编码转换";
             // 
@@ -1210,7 +1211,7 @@
             this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpExtraction.Location = new System.Drawing.Point(3, 33);
             this.tpExtraction.Name = "tpExtraction";
-            this.tpExtraction.Size = new System.Drawing.Size(1124, 724);
+            this.tpExtraction.Size = new System.Drawing.Size(1274, 726);
             this.tpExtraction.TabIndex = 15;
             this.tpExtraction.Text = "数据提取";
             // 
@@ -1219,7 +1220,7 @@
             this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpSystemLog.Location = new System.Drawing.Point(3, 33);
             this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(1124, 724);
+            this.tpSystemLog.Size = new System.Drawing.Size(1274, 726);
             this.tpSystemLog.TabIndex = 6;
             this.tpSystemLog.Text = "系统日志";
             // 
@@ -1250,7 +1251,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1300, 800);
+            this.ClientSize = new System.Drawing.Size(1450, 802);
             this.Controls.Add(this.tabProxyMode);
             this.Controls.Add(this.tlpMenu);
             this.Controls.Add(this.pageHeader);
