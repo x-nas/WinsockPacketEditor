@@ -621,7 +621,12 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\ab.png" />
+    <Content Include="Images\HomeBG.png" />
+    <Content Include="Images\InjectMode.png" />
+    <Content Include="Images\ProxyMode.png" />
     <Content Include="Images\wpe.ico" />
+    <Content Include="Images\wpe.png" />
     <Content Include="Images\WPE64.ico" />
     <None Include="Resources\ad.svg" />
     <None Include="Resources\ae.svg" />
