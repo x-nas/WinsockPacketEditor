@@ -129,8 +129,8 @@
             this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34F));
             this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
-            this.tlpSelectMode.Controls.Add(this.pInjectMode, 4, 0);
-            this.tlpSelectMode.Controls.Add(this.pProxyMode, 2, 0);
+            this.tlpSelectMode.Controls.Add(this.pInjectMode, 2, 0);
+            this.tlpSelectMode.Controls.Add(this.pProxyMode, 4, 0);
             this.tlpSelectMode.Controls.Add(this.pRemoteMGT, 0, 0);
             this.tlpSelectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSelectMode.Location = new System.Drawing.Point(30, 240);
@@ -149,9 +149,9 @@
             this.pInjectMode.Controls.Add(this.InjectMode);
             this.pInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.pInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pInjectMode.Location = new System.Drawing.Point(772, 3);
+            this.pInjectMode.Location = new System.Drawing.Point(382, 3);
             this.pInjectMode.Name = "pInjectMode";
-            this.pInjectMode.Size = new System.Drawing.Size(365, 114);
+            this.pInjectMode.Size = new System.Drawing.Size(374, 114);
             this.pInjectMode.TabIndex = 2;
             this.pInjectMode.Text = "panel1";
             this.pInjectMode.Click += new System.EventHandler(this.pInjectMode_Click);
@@ -161,20 +161,23 @@
             // lInject2
             // 
             this.lInject2.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lInject2.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lInject2.ForeColor = System.Drawing.Color.Gray;
-            this.lInject2.Location = new System.Drawing.Point(117, 62);
+            this.lInject2.LocalizationText = "StartForm.InjectMode.Description";
+            this.lInject2.Location = new System.Drawing.Point(113, 58);
             this.lInject2.Name = "lInject2";
-            this.lInject2.Size = new System.Drawing.Size(208, 22);
+            this.lInject2.Size = new System.Drawing.Size(191, 20);
             this.lInject2.TabIndex = 2;
             this.lInject2.Text = "以注入进程的方式来拦截封包";
             // 
             // lInject1
             // 
             this.lInject1.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lInject1.Font = new System.Drawing.Font("微软雅黑", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lInject1.Location = new System.Drawing.Point(117, 31);
+            this.lInject1.Font = new System.Drawing.Font("微软雅黑", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lInject1.LocalizationText = "StartForm.InjectMode";
+            this.lInject1.Location = new System.Drawing.Point(113, 34);
             this.lInject1.Name = "lInject1";
-            this.lInject1.Size = new System.Drawing.Size(75, 25);
+            this.lInject1.Size = new System.Drawing.Size(70, 23);
             this.lInject1.TabIndex = 1;
             this.lInject1.Text = "注入模式";
             // 
@@ -196,9 +199,9 @@
             this.pProxyMode.Controls.Add(this.aProxyMode);
             this.pProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.pProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pProxyMode.Location = new System.Drawing.Point(382, 3);
+            this.pProxyMode.Location = new System.Drawing.Point(772, 3);
             this.pProxyMode.Name = "pProxyMode";
-            this.pProxyMode.Size = new System.Drawing.Size(374, 114);
+            this.pProxyMode.Size = new System.Drawing.Size(365, 114);
             this.pProxyMode.TabIndex = 1;
             this.pProxyMode.Text = "panel1";
             this.pProxyMode.Click += new System.EventHandler(this.pProxyMode_Click);
@@ -208,20 +211,23 @@
             // lProxy2
             // 
             this.lProxy2.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lProxy2.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lProxy2.ForeColor = System.Drawing.Color.Gray;
-            this.lProxy2.Location = new System.Drawing.Point(117, 62);
+            this.lProxy2.LocalizationText = "StartForm.ProxyMode.Description";
+            this.lProxy2.Location = new System.Drawing.Point(115, 58);
             this.lProxy2.Name = "lProxy2";
-            this.lProxy2.Size = new System.Drawing.Size(224, 22);
+            this.lProxy2.Size = new System.Drawing.Size(206, 20);
             this.lProxy2.TabIndex = 2;
             this.lProxy2.Text = "以代理服务端的方式来拦截封包";
             // 
             // lProxy1
             // 
             this.lProxy1.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lProxy1.Font = new System.Drawing.Font("微软雅黑", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProxy1.Location = new System.Drawing.Point(117, 31);
+            this.lProxy1.Font = new System.Drawing.Font("微软雅黑", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxy1.LocalizationText = "StartForm.ProxyMode";
+            this.lProxy1.Location = new System.Drawing.Point(115, 34);
             this.lProxy1.Name = "lProxy1";
-            this.lProxy1.Size = new System.Drawing.Size(75, 25);
+            this.lProxy1.Size = new System.Drawing.Size(70, 23);
             this.lProxy1.TabIndex = 1;
             this.lProxy1.Text = "代理模式";
             // 
@@ -254,20 +260,23 @@
             // lRemote2
             // 
             this.lRemote2.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lRemote2.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lRemote2.ForeColor = System.Drawing.Color.Gray;
-            this.lRemote2.Location = new System.Drawing.Point(117, 62);
+            this.lRemote2.LocalizationText = "StartForm.RemoteMGT.Description";
+            this.lRemote2.Location = new System.Drawing.Point(115, 58);
             this.lRemote2.Name = "lRemote2";
-            this.lRemote2.Size = new System.Drawing.Size(224, 22);
+            this.lRemote2.Size = new System.Drawing.Size(206, 20);
             this.lRemote2.TabIndex = 2;
             this.lRemote2.Text = "配置远程管理后台的账号和端口";
             // 
             // lRemote1
             // 
             this.lRemote1.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lRemote1.Font = new System.Drawing.Font("微软雅黑", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRemote1.Location = new System.Drawing.Point(117, 31);
+            this.lRemote1.Font = new System.Drawing.Font("微软雅黑", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRemote1.LocalizationText = "StartForm.RemoteMGT";
+            this.lRemote1.Location = new System.Drawing.Point(115, 34);
             this.lRemote1.Name = "lRemote1";
-            this.lRemote1.Size = new System.Drawing.Size(75, 25);
+            this.lRemote1.Size = new System.Drawing.Size(70, 23);
             this.lRemote1.TabIndex = 1;
             this.lRemote1.Text = "远程管理";
             // 
@@ -370,6 +379,7 @@
             // 
             this.lMore.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.lMore.Font = new System.Drawing.Font("微软雅黑", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lMore.LocalizationText = "StartForm.LearnMore";
             this.lMore.Location = new System.Drawing.Point(33, 383);
             this.lMore.Name = "lMore";
             this.lMore.Size = new System.Drawing.Size(75, 25);
@@ -409,6 +419,7 @@
             this.bQA.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bQA.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bQA.Ghost = true;
+            this.bQA.LocalizationText = "StartForm.QA";
             this.bQA.Location = new System.Drawing.Point(1, 139);
             this.bQA.Margin = new System.Windows.Forms.Padding(1);
             this.bQA.Name = "bQA";
@@ -460,12 +471,13 @@
             this.bTutorials.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bTutorials.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bTutorials.Ghost = true;
+            this.bTutorials.LocalizationText = "StartForm.Tutorials";
             this.bTutorials.Location = new System.Drawing.Point(1, 43);
             this.bTutorials.Margin = new System.Windows.Forms.Padding(1);
             this.bTutorials.Name = "bTutorials";
             this.bTutorials.Size = new System.Drawing.Size(116, 30);
             this.bTutorials.TabIndex = 2;
-            this.bTutorials.Text = "软件使用手册";
+            this.bTutorials.Text = "软件使用教程";
             this.bTutorials.WaveSize = 0;
             this.bTutorials.Click += new System.EventHandler(this.bTutorials_Click);
             // 
@@ -477,6 +489,7 @@
             this.bWPEWebSite.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bWPEWebSite.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bWPEWebSite.Ghost = true;
+            this.bWPEWebSite.LocalizationText = "StartForm.OfficialWebsite";
             this.bWPEWebSite.Location = new System.Drawing.Point(1, 11);
             this.bWPEWebSite.Margin = new System.Windows.Forms.Padding(1);
             this.bWPEWebSite.Name = "bWPEWebSite";

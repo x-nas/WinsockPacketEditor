@@ -624,42 +624,68 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//WPEForm
+                #region//StartForm
 
-                case "WPEForm.Login":
-                    return "Login";
+                case "StartForm":
+                    return "Home";
 
-                case "WPEForm.ProxyMode":
+                case "StartForm.ProxyMode":
                     return "Proxy Mode";
 
-                case "WPEForm.InjectMode":
+                case "StartForm.InjectMode":
                     return "Inject Mode";
 
-                case "WPEForm.SetRemote":
-                    return "Set Remote MGT";
+                case "StartForm.RemoteMGT":
+                    return "Remote MGT";
 
-                case "WPEForm.UserName":
+                case "StartForm.ProxyMode.Description":
+                    return "Intercept packets by Proxy Server";
+
+                case "StartForm.InjectMode.Description":
+                    return "Intercept packets by Inject Process";
+
+                case "StartForm.RemoteMGT.Description":
+                    return "Configure Remote Management";
+
+                case "StartForm.LearnMore":
+                    return "Learn more";
+
+                case "StartForm.Tutorials":
+                    return "Tutorials";
+
+                case "StartForm.OfficialWebsite":
+                    return "Official Website";
+
+                case "StartForm.QA":
+                    return "Questions & Feedback";
+
+
+
+
+
+
+                case "StartForm.UserName":
                     return "Please enter username";
 
-                case "WPEForm.PassWord":
+                case "StartForm.PassWord":
                     return "Please enter password";
 
-                case "WPEForm.EnableMGT":
+                case "StartForm.EnableMGT":
                     return "Enable Remote MGT";
 
-                case "WPEForm.UserName.Empty":
+                case "StartForm.UserName.Empty":
                     return "Username Empty";
 
-                case "WPEForm.PassWord.Empty":
+                case "StartForm.PassWord.Empty":
                     return "Password Empty";
 
-                case "WPEForm.RemoteError":
+                case "StartForm.RemoteError":
                     return "Remote URL Error";
 
-                case "WPEForm.RemoteEnable":
+                case "StartForm.RemoteEnable":
                     return "Remote MGT Enabled";
 
-                case "WPEForm.RemoteDisable":
+                case "StartForm.RemoteDisable":
                     return "Remote MGT Disabled";
 
                 #endregion
