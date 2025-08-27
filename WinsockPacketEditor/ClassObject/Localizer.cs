@@ -659,33 +659,29 @@ namespace WinsockPacketEditor
                 case "StartForm.QA":
                     return "Questions & Feedback";
 
+                #endregion
 
+                #region//RemoteMGTSetting
 
-
-
-
-                case "StartForm.UserName":
+                case "RemoteMGTSetting.UserName":
                     return "Please enter username";
 
-                case "StartForm.PassWord":
+                case "RemoteMGTSetting.PassWord":
                     return "Please enter password";
 
-                case "StartForm.EnableMGT":
+                case "RemoteMGTSetting.EnableMGT":
                     return "Enable Remote MGT";
 
-                case "StartForm.UserName.Empty":
+                case "RemoteMGTSetting.UserName.Empty":
                     return "Username Empty";
 
-                case "StartForm.PassWord.Empty":
+                case "RemoteMGTSetting.PassWord.Empty":
                     return "Password Empty";
 
-                case "StartForm.RemoteError":
-                    return "Remote URL Error";
-
-                case "StartForm.RemoteEnable":
+                case "RemoteMGTSetting.RemoteEnable":
                     return "Remote MGT Enabled";
 
-                case "StartForm.RemoteDisable":
+                case "RemoteMGTSetting.RemoteDisable":
                     return "Remote MGT Disabled";
 
                 #endregion

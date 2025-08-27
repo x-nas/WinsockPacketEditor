@@ -113,7 +113,7 @@ namespace WinsockPacketEditor
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "管理员账号为空", TType.Error)
                     {
-                        LocalizationText = "WPEForm.UserName.Empty"
+                        LocalizationText = "RemoteMGTSetting.UserName.Empty"
                     });
 
                     return;
@@ -129,7 +129,7 @@ namespace WinsockPacketEditor
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "账号密码为空", TType.Error)
                     {
-                        LocalizationText = "WPEForm.PassWord.Empty"
+                        LocalizationText = "RemoteMGTSetting.PassWord.Empty"
                     });
 
                     return;
@@ -141,14 +141,14 @@ namespace WinsockPacketEditor
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "远程管理已启用", TType.Success)
                 {
-                    LocalizationText = "WPEForm.RemoteEnable"
+                    LocalizationText = "RemoteMGTSetting.RemoteEnable"
                 });
             }
             else
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "远程管理已关闭", TType.Error)
                 {
-                    LocalizationText = "WPEForm.RemoteDisable"
+                    LocalizationText = "RemoteMGTSetting.RemoteDisable"
                 });
             }
 

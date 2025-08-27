@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.tlpRemoteMGT = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bSave = new AntdUI.Button();
+            this.bExit = new AntdUI.Button();
             this.lRemote = new AntdUI.Label();
             this.cbIsRemote = new AntdUI.Checkbox();
             this.txtRemote_UserName = new AntdUI.Input();
             this.txtRemote_PassWord = new AntdUI.Input();
             this.nudRemote_Port = new AntdUI.InputNumber();
             this.ddlRemoteIP = new AntdUI.Select();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bSave = new AntdUI.Button();
-            this.bExit = new AntdUI.Button();
             this.tlpRemoteMGT.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.SuspendLayout();
@@ -67,83 +67,6 @@
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpRemoteMGT.Size = new System.Drawing.Size(280, 350);
             this.tlpRemoteMGT.TabIndex = 0;
-            // 
-            // lRemote
-            // 
-            this.lRemote.ColorScheme = AntdUI.TAMode.Light;
-            this.lRemote.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRemote.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRemote.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lRemote.Location = new System.Drawing.Point(3, 255);
-            this.lRemote.Name = "lRemote";
-            this.lRemote.Size = new System.Drawing.Size(274, 32);
-            this.lRemote.TabIndex = 6;
-            this.lRemote.Text = "lRemote";
-            this.lRemote.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // cbIsRemote
-            // 
-            this.cbIsRemote.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbIsRemote.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbIsRemote.LocalizationText = "WPEForm.EnableMGT";
-            this.cbIsRemote.Location = new System.Drawing.Point(3, 3);
-            this.cbIsRemote.Name = "cbIsRemote";
-            this.cbIsRemote.Size = new System.Drawing.Size(138, 42);
-            this.cbIsRemote.TabIndex = 0;
-            this.cbIsRemote.Text = "启用远程管理";
-            this.cbIsRemote.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsRemote_CheckedChanged);
-            // 
-            // txtRemote_UserName
-            // 
-            this.txtRemote_UserName.AllowClear = true;
-            this.txtRemote_UserName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtRemote_UserName.LocalizationPlaceholderText = "WPEForm.UserName";
-            this.txtRemote_UserName.Location = new System.Drawing.Point(3, 102);
-            this.txtRemote_UserName.Name = "txtRemote_UserName";
-            this.txtRemote_UserName.PlaceholderText = "请输入管理员账号";
-            this.txtRemote_UserName.Size = new System.Drawing.Size(274, 45);
-            this.txtRemote_UserName.TabIndex = 1;
-            this.txtRemote_UserName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // txtRemote_PassWord
-            // 
-            this.txtRemote_PassWord.AllowClear = true;
-            this.txtRemote_PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtRemote_PassWord.LocalizationPlaceholderText = "WPEForm.PassWord";
-            this.txtRemote_PassWord.Location = new System.Drawing.Point(3, 153);
-            this.txtRemote_PassWord.Name = "txtRemote_PassWord";
-            this.txtRemote_PassWord.PlaceholderText = "请输入密码";
-            this.txtRemote_PassWord.Size = new System.Drawing.Size(274, 45);
-            this.txtRemote_PassWord.TabIndex = 2;
-            this.txtRemote_PassWord.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtRemote_PassWord.UseSystemPasswordChar = true;
-            // 
-            // nudRemote_Port
-            // 
-            this.nudRemote_Port.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudRemote_Port.Location = new System.Drawing.Point(3, 204);
-            this.nudRemote_Port.Name = "nudRemote_Port";
-            this.nudRemote_Port.Size = new System.Drawing.Size(274, 45);
-            this.nudRemote_Port.TabIndex = 3;
-            this.nudRemote_Port.Text = "88";
-            this.nudRemote_Port.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.nudRemote_Port.Value = new decimal(new int[] {
-            88,
-            0,
-            0,
-            0});
-            this.nudRemote_Port.ValueChanged += new AntdUI.DecimalEventHandler(this.nudRemote_Port_ValueChanged);
-            // 
-            // ddlRemoteIP
-            // 
-            this.ddlRemoteIP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ddlRemoteIP.List = true;
-            this.ddlRemoteIP.Location = new System.Drawing.Point(3, 51);
-            this.ddlRemoteIP.Name = "ddlRemoteIP";
-            this.ddlRemoteIP.Size = new System.Drawing.Size(274, 45);
-            this.ddlRemoteIP.TabIndex = 7;
-            this.ddlRemoteIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ddlRemoteIP.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlRemoteIP_SelectedIndexChanged);
             // 
             // tlpButton
             // 
@@ -193,6 +116,83 @@
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
+            // 
+            // lRemote
+            // 
+            this.lRemote.ColorScheme = AntdUI.TAMode.Light;
+            this.lRemote.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lRemote.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRemote.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.lRemote.Location = new System.Drawing.Point(3, 255);
+            this.lRemote.Name = "lRemote";
+            this.lRemote.Size = new System.Drawing.Size(274, 32);
+            this.lRemote.TabIndex = 6;
+            this.lRemote.Text = "lRemote";
+            this.lRemote.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cbIsRemote
+            // 
+            this.cbIsRemote.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbIsRemote.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbIsRemote.LocalizationText = "RemoteMGTSetting.EnableMGT";
+            this.cbIsRemote.Location = new System.Drawing.Point(3, 3);
+            this.cbIsRemote.Name = "cbIsRemote";
+            this.cbIsRemote.Size = new System.Drawing.Size(138, 42);
+            this.cbIsRemote.TabIndex = 0;
+            this.cbIsRemote.Text = "启用远程管理";
+            this.cbIsRemote.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsRemote_CheckedChanged);
+            // 
+            // txtRemote_UserName
+            // 
+            this.txtRemote_UserName.AllowClear = true;
+            this.txtRemote_UserName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtRemote_UserName.LocalizationPlaceholderText = "RemoteMGTSetting.UserName";
+            this.txtRemote_UserName.Location = new System.Drawing.Point(3, 102);
+            this.txtRemote_UserName.Name = "txtRemote_UserName";
+            this.txtRemote_UserName.PlaceholderText = "请输入管理员账号";
+            this.txtRemote_UserName.Size = new System.Drawing.Size(274, 45);
+            this.txtRemote_UserName.TabIndex = 1;
+            this.txtRemote_UserName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // txtRemote_PassWord
+            // 
+            this.txtRemote_PassWord.AllowClear = true;
+            this.txtRemote_PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtRemote_PassWord.LocalizationPlaceholderText = "RemoteMGTSetting.PassWord";
+            this.txtRemote_PassWord.Location = new System.Drawing.Point(3, 153);
+            this.txtRemote_PassWord.Name = "txtRemote_PassWord";
+            this.txtRemote_PassWord.PlaceholderText = "请输入密码";
+            this.txtRemote_PassWord.Size = new System.Drawing.Size(274, 45);
+            this.txtRemote_PassWord.TabIndex = 2;
+            this.txtRemote_PassWord.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtRemote_PassWord.UseSystemPasswordChar = true;
+            // 
+            // nudRemote_Port
+            // 
+            this.nudRemote_Port.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudRemote_Port.Location = new System.Drawing.Point(3, 204);
+            this.nudRemote_Port.Name = "nudRemote_Port";
+            this.nudRemote_Port.Size = new System.Drawing.Size(274, 45);
+            this.nudRemote_Port.TabIndex = 3;
+            this.nudRemote_Port.Text = "88";
+            this.nudRemote_Port.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudRemote_Port.Value = new decimal(new int[] {
+            88,
+            0,
+            0,
+            0});
+            this.nudRemote_Port.ValueChanged += new AntdUI.DecimalEventHandler(this.nudRemote_Port_ValueChanged);
+            // 
+            // ddlRemoteIP
+            // 
+            this.ddlRemoteIP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlRemoteIP.List = true;
+            this.ddlRemoteIP.Location = new System.Drawing.Point(3, 51);
+            this.ddlRemoteIP.Name = "ddlRemoteIP";
+            this.ddlRemoteIP.Size = new System.Drawing.Size(274, 45);
+            this.ddlRemoteIP.TabIndex = 7;
+            this.ddlRemoteIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ddlRemoteIP.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlRemoteIP_SelectedIndexChanged);
             // 
             // RemoteMGTSetting
             // 
