@@ -22,6 +22,11 @@ namespace WinsockPacketEditor
             try
             {
                 this.Text = AntdUI.Localization.Get("ProxySettingsForm", "代理设置");
+                this.cbProxyIP_Auto.Checked = Operate.ProxyConfig.Proxy.ProxyIP_Auto;
+                this.cbEnable_SOCKS5.Checked = Operate.ProxyConfig.Proxy.Enable_SOCKS5;
+                this.nudSOCKS5Port.Value = Operate.ProxyConfig.Proxy.ProxyPort;
+                this.cbEnable_Auth.Checked = Operate.ProxyConfig.Proxy.Enable_Auth;
+                this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
 
                 if (Operate.ProxyConfig.Proxy.ProxyServerIP == null)
                 {
@@ -31,7 +36,12 @@ namespace WinsockPacketEditor
                 this.ddlProxyIP_Appoint.Items.Clear();
                 this.ddlProxyIP_Appoint.Items.AddRange(Operate.ProxyConfig.Proxy.ProxyServerIP.Select(ip => new SelectItem(ip.ToString(), ip)).ToArray());
 
-                if (this.ddlProxyIP_Appoint.Items.Count > 0)
+                if (IPAddress.TryParse(Operate.ProxyConfig.Proxy.ProxyIP, out IPAddress ipRemoteIP))
+                {
+                    this.ddlProxyIP_Appoint.SelectedValue = ipRemoteIP;
+                }
+
+                if (this.ddlProxyIP_Appoint.SelectedValue == null)
                 {
                     this.ddlProxyIP_Appoint.SelectedIndex = 0;
                 }
@@ -42,13 +52,7 @@ namespace WinsockPacketEditor
                 if (this.ddlAuthType.Items.Count > 0)
                 {
                     this.ddlAuthType.SelectedIndex = 0;
-                }
-
-                this.cbProxyIP_Auto.Checked = Operate.ProxyConfig.Proxy.ProxyIP_Auto;
-                this.cbEnable_SOCKS5.Checked = Operate.ProxyConfig.Proxy.Enable_SOCKS5;
-                this.nudSOCKS5Port.Value = Operate.ProxyConfig.Proxy.ProxyPort;
-                this.cbEnable_Auth.Checked = Operate.ProxyConfig.Proxy.Enable_Auth;
-                this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
+                }                
 
                 this.ProxyIP_Appoint_Changed();
                 this.EnableSOCKS5_Changed();
@@ -138,36 +142,33 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            if (!this.cbEnable_SOCKS5.Checked)
+            try
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "代理类型未设置", TType.Error)
+                if (!this.cbEnable_SOCKS5.Checked)
                 {
-                    LocalizationText = "ProxySettingsForm.ProxyType.Error"
+                    AntdUI.Message.open(new AntdUI.Message.Config(this, "代理类型未设置", TType.Error)
+                    {
+                        LocalizationText = "ProxySettingsForm.ProxyType.Error"
+                    });
+
+                    return;
+                }
+
+                Operate.ProxyConfig.Proxy.ProxyIP_Auto = this.cbProxyIP_Auto.Checked;
+                Operate.ProxyConfig.Proxy.Enable_SOCKS5 = this.cbEnable_SOCKS5.Checked;
+                Operate.ProxyConfig.Proxy.ProxyIP = this.ddlProxyIP_Appoint.SelectedValue.ToString();
+                Operate.ProxyConfig.Proxy.ProxyPort = ((ushort)this.nudSOCKS5Port.Value);
+                Operate.ProxyConfig.Proxy.Enable_Auth = this.cbEnable_Auth.Checked;
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "代理设置保存成功", TType.Success)
+                {
+                    LocalizationText = "ProxySettingsForm.Success"
                 });
-
-                return;
             }
-
-            Operate.ProxyConfig.Proxy.ProxyIP_Auto = this.cbProxyIP_Auto.Checked;
-            Operate.ProxyConfig.Proxy.Enable_SOCKS5 = this.cbEnable_SOCKS5.Checked;
-            Operate.ProxyConfig.Proxy.ProxyPort = ((ushort)this.nudSOCKS5Port.Value);
-            Operate.ProxyConfig.Proxy.Enable_Auth = this.cbEnable_Auth.Checked;
-
-            if (Operate.ProxyConfig.Proxy.ProxyIP_Auto)
+            catch (Exception ex)
             {
-                Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
-                Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
-            }
-            else
-            {
-                Operate.ProxyConfig.Proxy.ProxyTCP_IP = (IPAddress)(this.ddlProxyIP_Appoint.SelectedValue);
-                Operate.ProxyConfig.Proxy.ProxyUDP_IP = (IPAddress)(this.ddlProxyIP_Appoint.SelectedValue);
-            }
-
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "代理设置保存成功", TType.Success)
-            {
-                LocalizationText = "ProxySettingsForm.Success"
-            });
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion

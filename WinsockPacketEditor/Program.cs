@@ -31,8 +31,8 @@ namespace WinsockPacketEditor
 
                 if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                 {
-                    WPEForm startForm = new WPEForm();
-                    if (startForm.ShowDialog() == DialogResult.OK)
+                    StartForm sfForm = new StartForm();
+                    if (sfForm.ShowDialog() == DialogResult.OK)
                     {
                         if (Operate.SystemConfig.StartMode == Operate.SystemConfig.SystemMode.Proxy)
                         {

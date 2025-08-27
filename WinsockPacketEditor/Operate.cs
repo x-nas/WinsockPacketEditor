@@ -67,7 +67,7 @@ namespace WinsockPacketEditor
             public static IntPtr MainHandle = IntPtr.Zero;
             public static int SystemSocket = 0;
             public static bool IsRemote = false;
-            public static string Remote_URL, Remote_UserName, Remote_PassWord;
+            public static string Remote_IP, Remote_UserName, Remote_PassWord;
             public static ushort Remote_Port = 88;
             public static IDisposable WebServer;
             public static PerformanceCounter cpuCounter;
@@ -598,10 +598,87 @@ namespace WinsockPacketEditor
             {
                 return NetworkInterface.GetAllNetworkInterfaces()
                     .Where(nic => nic.OperationalStatus == OperationalStatus.Up)
-                    .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
-                    .Where(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)
-                    .Select(addr => addr.Address)
+                    .Select(nic => new
+                    {
+                        Interface = nic,
+                        IPAddresses = nic.GetIPProperties().UnicastAddresses
+                            .Where(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)
+                            .Select(addr => addr.Address)
+                            .ToArray(),
+                        Priority = GetInterfacePriority(nic)
+                    })
+                    .Where(item => item.IPAddresses.Length > 0)
+                    .OrderBy(item => item.Priority) // 优先级数字越小，排序越靠前
+                    .ThenBy(item => item.Interface.Name) // 次要排序：按接口名称
+                    .SelectMany(item => item.IPAddresses)
                     .ToArray();
+            }
+
+            private static int GetInterfacePriority(NetworkInterface nic)
+            {
+                // 先检查是否为虚拟网卡
+                if (IsVirtualNetworkAdapter(nic))
+                {
+                    return 90; // 虚拟网卡优先级较低
+                }
+
+                switch (nic.NetworkInterfaceType)
+                {
+                    case NetworkInterfaceType.Ethernet:
+                    case NetworkInterfaceType.GigabitEthernet:
+                    case NetworkInterfaceType.FastEthernetFx:
+                    case NetworkInterfaceType.FastEthernetT:
+                        return 0; // 物理有线网卡最高优先级
+
+                    case NetworkInterfaceType.Wireless80211:
+                        return 1; // 物理无线网卡
+
+                    case NetworkInterfaceType.Wman:
+                    case NetworkInterfaceType.Wwanpp:
+                    case NetworkInterfaceType.Wwanpp2:
+                        return 2; // 移动网络
+
+                    case NetworkInterfaceType.Tunnel:
+                        return 95;
+
+                    case NetworkInterfaceType.Loopback:
+                        return 100;
+
+                    case NetworkInterfaceType.Ppp:
+                    case NetworkInterfaceType.Slip:
+                        return 97;
+
+                    case NetworkInterfaceType.Unknown:
+                        return 80;
+
+                    default:
+                        return 50;
+                }
+            }
+
+            private static bool IsVirtualNetworkAdapter(NetworkInterface nic)
+            {
+                string description = nic.Description.ToLower();
+
+                string[] virtualKeywords = new[]
+                {
+                    "vmware",
+                    "virtual",
+                    "hyper-v",
+                    "virtualbox",
+                    "vbox",
+                    "v Ethernet",
+                    "vEthernet",
+                    "tap-",
+                    "tun-",
+                    "wireguard",
+                    "zerotier",
+                    "tailscale",
+                    "docker",
+                    "wintun"
+                };
+
+                return virtualKeywords.Any(keyword => description.Contains(keyword));
             }
 
             #endregion
@@ -983,22 +1060,23 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.SystemConfig.IsRemote)
                     {
-                        if (!string.IsNullOrEmpty(Operate.SystemConfig.Remote_URL) &&
+                        if (!string.IsNullOrEmpty(Operate.SystemConfig.Remote_IP) &&
                             !string.IsNullOrEmpty(Operate.SystemConfig.Remote_UserName) &&
                             !string.IsNullOrEmpty(Operate.SystemConfig.Remote_PassWord))
                         {
                             string sLog = string.Empty;
+                            string Remote_URL = SystemConfig.GetRemoteMGT_URL(Operate.SystemConfig.Remote_IP, Operate.SystemConfig.Remote_Port.ToString());
 
                             try
                             {
-                                Operate.SystemConfig.WebServer = WebApp.Start<Socket_Web>(Operate.SystemConfig.Remote_URL);
+                                Operate.SystemConfig.WebServer = WebApp.Start<Socket_Web>(Remote_URL);
                                 ProxyConfig.Proxy.InitCCProxy_HTML();
 
-                                sLog = string.Format(AntdUI.Localization.Get("MGT.Enabled", "远程管理已启用：{0}"), Operate.SystemConfig.Remote_URL);
+                                sLog = string.Format(AntdUI.Localization.Get("MGT.Enabled", "远程管理已启用：{0}"), Remote_URL);
                             }
                             catch
                             {
-                                sLog = string.Format(AntdUI.Localization.Get("MGT.Error", "远程管理启动失败: 请使用管理员权限启动 {0}"), Process.GetCurrentProcess().ProcessName);
+                                sLog = string.Format(AntdUI.Localization.Get("MGT.Error", "远程管理启动失败: 请尝试使用管理员权限启动 {0}"), Process.GetCurrentProcess().ProcessName);
                             }
 
                             Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
@@ -1024,6 +1102,27 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+            }
+
+            #endregion
+
+            #region//获取远程管理地址
+
+            public static string GetRemoteMGT_URL(string RemoteIP, string RemotePort)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(RemoteIP) && !string.IsNullOrEmpty(RemotePort))
+                    {
+                        return string.Format("http://{0}:{1}", RemoteIP, RemotePort);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return string.Empty;
             }
 
             #endregion
@@ -2469,7 +2568,7 @@ namespace WinsockPacketEditor
                         new XElement("Remote_UserName", SystemConfig.Remote_UserName),
                         new XElement("Remote_PassWord", SystemConfig.Remote_PassWord),
                         new XElement("Remote_Port", SystemConfig.Remote_Port),
-                        new XElement("Remote_URL", SystemConfig.Remote_URL),
+                        new XElement("Remote_IP", SystemConfig.Remote_IP),
                         new XElement("IsShow_FloatButton", SystemConfig.IsShow_FloatButton),
                         new XElement("ListExecute", SystemConfig.ListExecute),
                         new XElement("FilterExecute", FilterConfig.Filter.FilterExecute),
@@ -2543,7 +2642,7 @@ namespace WinsockPacketEditor
                         SystemConfig.Remote_UserName = dtSystemConfig.Rows[0]["Remote_UserName"].ToString();
                         SystemConfig.Remote_PassWord = dtSystemConfig.Rows[0]["Remote_PassWord"].ToString();
                         SystemConfig.Remote_Port = ushort.Parse(dtSystemConfig.Rows[0]["Remote_Port"].ToString());
-                        SystemConfig.Remote_URL = dtSystemConfig.Rows[0]["Remote_URL"].ToString();
+                        SystemConfig.Remote_IP = dtSystemConfig.Rows[0]["Remote_IP"].ToString();
                         SystemConfig.IsShow_FloatButton = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsShow_FloatButton"]);
                         SystemConfig.ListExecute = GetListExecute_ByString(dtSystemConfig.Rows[0]["ListExecute"].ToString());
                         FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(dtSystemConfig.Rows[0]["FilterExecute"].ToString());
@@ -2693,10 +2792,10 @@ namespace WinsockPacketEditor
                         SystemConfig.Remote_Port = ushort.Parse(xeRemote_Port.Value);
                     }
 
-                    XElement xeRemote_URL = xeSystemConfig.Element("Remote_URL");
-                    if (xeRemote_URL != null)
+                    XElement xeRemote_IP = xeSystemConfig.Element("Remote_IP");
+                    if (xeRemote_IP != null)
                     {
-                        SystemConfig.Remote_URL = xeRemote_URL.Value;
+                        SystemConfig.Remote_IP = xeRemote_IP.Value;
                     }
 
                     XElement IsShow_FloatButton = xeSystemConfig.Element("IsShow_FloatButton");
@@ -3097,6 +3196,7 @@ namespace WinsockPacketEditor
                         new XElement("ProxyMode",
                         new XElement("ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto),
                         new XElement("Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5),
+                        new XElement("ProxyIP", ProxyConfig.Proxy.ProxyIP),
                         new XElement("ProxyPort", ProxyConfig.Proxy.ProxyPort),
                         new XElement("Enable_Auth", ProxyConfig.Proxy.Enable_Auth),                   
                         new XElement("ProxyList_AutoRoll", ProxyConfig.List.AutoRoll),
@@ -3139,6 +3239,7 @@ namespace WinsockPacketEditor
                     {
                         ProxyConfig.Proxy.ProxyIP_Auto = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyIP_Auto"]);
                         ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(ProxyMode.Rows[0]["EnableSOCKS5"]);
+                        ProxyConfig.Proxy.ProxyIP = ProxyMode.Rows[0]["ProxyIP"].ToString();
                         ProxyConfig.Proxy.ProxyPort = ushort.Parse(ProxyMode.Rows[0]["ProxyPort"].ToString());
                         ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);                    
                         ProxyConfig.List.AutoRoll = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyList_AutoRoll"]);
@@ -3177,6 +3278,12 @@ namespace WinsockPacketEditor
                     if (Enable_SOCKS5 != null)
                     {
                         ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(Enable_SOCKS5.Value);
+                    }
+
+                    XElement ProxyIP = xeProxyMode.Element("ProxyIP");
+                    if (ProxyIP != null)
+                    {
+                        ProxyConfig.Proxy.ProxyIP = ProxyIP.Value;
                     }
 
                     XElement ProxyPort = xeProxyMode.Element("ProxyPort");
@@ -4149,6 +4256,7 @@ namespace WinsockPacketEditor
                 public static ushort ExternalProxy_Port = 8889;
                 public static string ExternalProxy_AppointPort = "80,8080,443,8443", ExternalProxy_UserName, ExternalProxy_PassWord;
                 public static int SocketBufferSize = 8192;
+                public static string ProxyIP = string.Empty;
                 public static ushort ProxyPort = 1080;
                 public static long Total_Request = 0;
                 public static long Total_Response = 0;
@@ -17554,7 +17662,7 @@ namespace WinsockPacketEditor
                         sql += "Remote_UserName TEXT,";//系统设置 - 远程管理账号
                         sql += "Remote_PassWord TEXT,";//系统设置 - 远程管理密码
                         sql += "Remote_Port INTEGER,";//系统设置 - 远程管理端口                    
-                        sql += "Remote_URL TEXT,";//系统设置 - 远程管理网址
+                        sql += "Remote_IP TEXT,";//系统设置 - 远程管理IP
                         sql += "IsShow_FloatButton BOOLEAN DEFAULT 1,";//是否显示悬浮按钮
                         sql += "ListExecute INTEGER DEFAULT 1,";//列表执行模式
                         sql += "FilterExecute INTEGER DEFAULT 1,";//滤镜执行模式
@@ -17670,7 +17778,7 @@ namespace WinsockPacketEditor
                         sql += "Remote_UserName,";
                         sql += "Remote_PassWord,";
                         sql += "Remote_Port,";
-                        sql += "Remote_URL,";
+                        sql += "Remote_IP,";
                         sql += "IsShow_FloatButton,";
                         sql += "ListExecute,";
                         sql += "FilterExecute,";
@@ -17716,7 +17824,7 @@ namespace WinsockPacketEditor
                         sql += "@Remote_UserName,";
                         sql += "@Remote_PassWord,";
                         sql += "@Remote_Port,";
-                        sql += "@Remote_URL,";
+                        sql += "@Remote_IP,";
                         sql += "@IsShow_FloatButton,";
                         sql += "@ListExecute,";
                         sql += "@FilterExecute,";
@@ -17765,7 +17873,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@Remote_UserName", SystemConfig.Remote_UserName);
                             cmd.Parameters.AddWithValue("@Remote_PassWord", SystemConfig.Remote_PassWord);
                             cmd.Parameters.AddWithValue("@Remote_Port", SystemConfig.Remote_Port);
-                            cmd.Parameters.AddWithValue("@Remote_URL", SystemConfig.Remote_URL);
+                            cmd.Parameters.AddWithValue("@Remote_IP", SystemConfig.Remote_IP);
                             cmd.Parameters.AddWithValue("@IsShow_FloatButton", SystemConfig.IsShow_FloatButton);
                             cmd.Parameters.AddWithValue("@ListExecute", SystemConfig.ListExecute);
                             cmd.Parameters.AddWithValue("@FilterExecute", FilterConfig.Filter.FilterExecute);
@@ -18010,8 +18118,9 @@ namespace WinsockPacketEditor
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS ProxyMode (";
-                        sql += "ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP
+                        sql += "ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP                        
                         sql += "EnableSOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
+                        sql += "ProxyIP TEXT,";//代理模式 - 代理IP
                         sql += "ProxyPort INTEGER DEFAULT 1080,";//代理模式 - 代理端口
                         sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证                    
                         sql += "ProxyList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 代理列表自动滚动
@@ -18101,6 +18210,7 @@ namespace WinsockPacketEditor
                         string sql = "INSERT INTO ProxyMode (";
                         sql += "ProxyIP_Auto,";
                         sql += "EnableSOCKS5,";
+                        sql += "ProxyIP,";
                         sql += "ProxyPort,";
                         sql += "EnableAuth,";                  
                         sql += "ProxyList_AutoRoll,";
@@ -18120,6 +18230,7 @@ namespace WinsockPacketEditor
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
                         sql += "@EnableSOCKS5,";
+                        sql += "@ProxyIP,";
                         sql += "@ProxyPort,";
                         sql += "@EnableAuth,";                 
                         sql += "@ProxyList_AutoRoll,";
@@ -18142,6 +18253,7 @@ namespace WinsockPacketEditor
                         {
                             cmd.Parameters.AddWithValue("@ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto);
                             cmd.Parameters.AddWithValue("@EnableSOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
+                            cmd.Parameters.AddWithValue("@ProxyIP", ProxyConfig.Proxy.ProxyIP);
                             cmd.Parameters.AddWithValue("@ProxyPort", ProxyConfig.Proxy.ProxyPort);
                             cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);                        
                             cmd.Parameters.AddWithValue("@ProxyList_AutoRoll", ProxyConfig.List.AutoRoll);

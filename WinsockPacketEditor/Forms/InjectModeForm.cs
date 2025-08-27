@@ -502,8 +502,6 @@ namespace WinsockPacketEditor
             }
         }
 
-
-
         #endregion
 
         #region//主菜单

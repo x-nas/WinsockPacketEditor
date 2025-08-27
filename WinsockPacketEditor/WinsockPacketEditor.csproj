@@ -258,6 +258,12 @@
     <Compile Include="Controls\LogList.Designer.cs">
       <DependentUpon>LogList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RemoteMGTSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RemoteMGTSetting.Designer.cs">
+      <DependentUpon>RemoteMGTSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RobotList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -420,6 +426,12 @@
     <Compile Include="Forms\SendEditForm.Designer.cs">
       <DependentUpon>SendEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\StartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StartForm.Designer.cs">
+      <DependentUpon>StartForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SystemSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -433,12 +445,6 @@
     </Compile>
     <Compile Include="Forms\InjectModeForm.Designer.cs">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\WPEForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\WPEForm.Designer.cs">
-      <DependentUpon>WPEForm.cs</DependentUpon>
     </Compile>
     <Compile Include="NativeMethods\Kernel32.cs" />
     <Compile Include="NativeMethods\Mswsock.cs" />
@@ -492,6 +498,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\LogList.resx">
       <DependentUpon>LogList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RemoteMGTSetting.resx">
+      <DependentUpon>RemoteMGTSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\RobotList.resx">
       <DependentUpon>RobotList.cs</DependentUpon>
@@ -574,14 +583,14 @@
     <EmbeddedResource Include="Forms\SendEditForm.resx">
       <DependentUpon>SendEditForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StartForm.resx">
+      <DependentUpon>StartForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SystemSettingsForm.resx">
       <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InjectModeForm.resx">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\WPEForm.resx">
-      <DependentUpon>WPEForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1371,12 +1371,25 @@ namespace WinsockPacketEditor
         {
             try
             {
-                Operate.ProxyConfig.Proxy.IsListening = true;
+                Operate.ProxyConfig.Proxy.IsListening = true;             
 
-                if (Operate.ProxyConfig.Proxy.ProxyTCP_IP == null || Operate.ProxyConfig.Proxy.ProxyUDP_IP == null)
+                if (Operate.ProxyConfig.Proxy.ProxyIP_Auto)
                 {
                     Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
                     Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
+                }
+                else
+                {
+                    if (IPAddress.TryParse(Operate.ProxyConfig.Proxy.ProxyIP, out IPAddress proxyIP))
+                    {
+                        Operate.ProxyConfig.Proxy.ProxyTCP_IP = proxyIP;
+                        Operate.ProxyConfig.Proxy.ProxyUDP_IP = proxyIP;
+                    }
+                    else
+                    {
+                        Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
+                        Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
+                    }
                 }
 
                 string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址: TCP [{0}] UDP [{1}]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);

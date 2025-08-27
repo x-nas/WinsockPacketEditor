@@ -503,7 +503,7 @@ namespace WinsockPacketEditor
                     return "Remote MGT Enabled: {0}";
 
                 case "MGT.Error":
-                    return "Remote MGT startup failed: Please use administrator to start {0}";
+                    return "Remote MGT startup failed: Please try use administrator to start {0}";
 
                 case "ProcessInfo":
                     return "{0} Handle: {1}";
