@@ -391,6 +391,7 @@
             this.tlpMore.ColumnCount = 2;
             this.tlpMore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpMore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpMore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMore.Controls.Add(this.bQA, 0, 5);
             this.tlpMore.Controls.Add(this.bGitee, 0, 4);
             this.tlpMore.Controls.Add(this.bGitHub, 0, 3);

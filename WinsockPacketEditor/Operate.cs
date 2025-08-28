@@ -4037,9 +4037,9 @@ namespace WinsockPacketEditor
                         return GetBestIcon(splitIcons);
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    //
                 }
 
                 try
@@ -4060,9 +4060,8 @@ namespace WinsockPacketEditor
                 {
                     return process.MainModule.FileName.Replace(".ni.dll", ".dll");
                 }
-                catch (Exception ex)
+                catch
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     return null;
                 }
             }
@@ -4097,18 +4096,14 @@ namespace WinsockPacketEditor
 
             public static string GetProcessPath(Process process)
             {
-                string sReturn = string.Empty;
-
                 try
                 {
-                    sReturn = process.MainModule.FileName;
+                    return process.MainModule.FileName;
                 }
-                catch (Exception ex)
+                catch
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    return string.Empty;
                 }
-
-                return sReturn;
             }
 
             #endregion
