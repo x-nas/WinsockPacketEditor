@@ -46,18 +46,20 @@
             // 
             // tlpSendList
             // 
-            this.tlpSendList.ColumnCount = 1;
+            this.tlpSendList.ColumnCount = 3;
+            this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendList.Controls.Add(this.tSendList, 0, 1);
-            this.tlpSendList.Controls.Add(this.tlpSendListButton, 0, 0);
+            this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpSendList.Controls.Add(this.tSendList, 1, 2);
+            this.tlpSendList.Controls.Add(this.tlpSendListButton, 1, 1);
             this.tlpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSendList.Location = new System.Drawing.Point(0, 0);
             this.tlpSendList.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendList.Name = "tlpSendList";
-            this.tlpSendList.RowCount = 2;
+            this.tlpSendList.RowCount = 3;
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSendList.Size = new System.Drawing.Size(800, 800);
             this.tlpSendList.TabIndex = 4;
             // 
@@ -67,10 +69,10 @@
             this.tSendList.CellImpactHeight = false;
             this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tSendList.Gap = 12;
-            this.tSendList.Location = new System.Drawing.Point(3, 53);
+            this.tSendList.Location = new System.Drawing.Point(33, 73);
             this.tSendList.MultipleRows = true;
             this.tSendList.Name = "tSendList";
-            this.tSendList.Size = new System.Drawing.Size(794, 744);
+            this.tSendList.Size = new System.Drawing.Size(734, 724);
             this.tSendList.TabIndex = 1;
             this.tSendList.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellClick);
             this.tSendList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tSendList_CellButtonClick);
@@ -86,12 +88,12 @@
             this.tlpSendListButton.Controls.Add(this.mSendList, 3, 0);
             this.tlpSendListButton.Controls.Add(this.bSendList_Start, 0, 0);
             this.tlpSendListButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSendListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpSendListButton.Location = new System.Drawing.Point(30, 20);
             this.tlpSendListButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendListButton.Name = "tlpSendListButton";
             this.tlpSendListButton.RowCount = 1;
             this.tlpSendListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendListButton.Size = new System.Drawing.Size(800, 50);
+            this.tlpSendListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpSendListButton.TabIndex = 3;
             // 
             // bSendList_Stop
@@ -136,7 +138,7 @@
             menuItem1.Sub.Add(menuItem4);
             menuItem1.Sub.Add(menuItem5);
             this.mSendList.Items.Add(menuItem1);
-            this.mSendList.Location = new System.Drawing.Point(747, 3);
+            this.mSendList.Location = new System.Drawing.Point(687, 3);
             this.mSendList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mSendList.Name = "mSendList";
             this.mSendList.RightToLeft = System.Windows.Forms.RightToLeft.No;

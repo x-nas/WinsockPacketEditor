@@ -442,7 +442,7 @@ namespace WinsockPacketEditor
             }
             else
             {
-                BackColor = Color.White;
+                BackColor = Color.FromArgb(250, 250, 250);
                 ForeColor = Color.Black;
 
                 this.tabInjectMode.BackColor = Color.White;

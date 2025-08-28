@@ -64,16 +64,18 @@
             // 
             // tlpStatistical
             // 
-            this.tlpStatistical.ColumnCount = 1;
+            this.tlpStatistical.ColumnCount = 3;
+            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatistical.Controls.Add(this.tabStatistical, 0, 0);
+            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpStatistical.Controls.Add(this.tabStatistical, 1, 1);
             this.tlpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatistical.Location = new System.Drawing.Point(0, 0);
             this.tlpStatistical.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatistical.Name = "tlpStatistical";
-            this.tlpStatistical.RowCount = 1;
+            this.tlpStatistical.RowCount = 2;
+            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 724F));
             this.tlpStatistical.Size = new System.Drawing.Size(800, 800);
             this.tlpStatistical.TabIndex = 1;
             // 
@@ -82,32 +84,33 @@
             this.tabStatistical.Controls.Add(this.tpFilter);
             this.tabStatistical.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabStatistical.Location = new System.Drawing.Point(3, 3);
+            this.tabStatistical.Location = new System.Drawing.Point(33, 23);
             this.tabStatistical.Name = "tabStatistical";
             this.tabStatistical.Pages.Add(this.tpFilter);
-            this.tabStatistical.Size = new System.Drawing.Size(794, 794);
+            this.tabStatistical.Size = new System.Drawing.Size(734, 774);
             this.tabStatistical.Style = styleLine1;
             this.tabStatistical.TabIndex = 0;
             // 
             // tpFilter
             // 
             this.tpFilter.Controls.Add(this.tlpStatistical_Filter);
+            this.tpFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpFilter.Location = new System.Drawing.Point(3, 33);
             this.tpFilter.Name = "tpFilter";
-            this.tpFilter.Size = new System.Drawing.Size(788, 758);
+            this.tpFilter.Size = new System.Drawing.Size(728, 738);
             this.tpFilter.TabIndex = 0;
             this.tpFilter.Text = "tpFilter";
             // 
             // tlpStatistical_Filter
             // 
-            this.tlpStatistical_Filter.ColumnCount = 3;
-            this.tlpStatistical_Filter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpStatistical_Filter.ColumnCount = 1;
             this.tlpStatistical_Filter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatistical_Filter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpStatistical_Filter.Controls.Add(this.tlpStatistical_FilterButton, 1, 4);
-            this.tlpStatistical_Filter.Controls.Add(this.lStatisticalFilter_Length, 1, 2);
-            this.tlpStatistical_Filter.Controls.Add(this.tlpStatistical_FilterTop, 1, 0);
-            this.tlpStatistical_Filter.Controls.Add(this.tStatisticalFilter, 1, 3);
+            this.tlpStatistical_Filter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatistical_Filter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatistical_Filter.Controls.Add(this.tlpStatistical_FilterButton, 0, 4);
+            this.tlpStatistical_Filter.Controls.Add(this.lStatisticalFilter_Length, 0, 2);
+            this.tlpStatistical_Filter.Controls.Add(this.tlpStatistical_FilterTop, 0, 0);
+            this.tlpStatistical_Filter.Controls.Add(this.tStatisticalFilter, 0, 3);
             this.tlpStatistical_Filter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatistical_Filter.Location = new System.Drawing.Point(0, 0);
             this.tlpStatistical_Filter.Margin = new System.Windows.Forms.Padding(0);
@@ -118,7 +121,7 @@
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpStatistical_Filter.Size = new System.Drawing.Size(788, 758);
+            this.tlpStatistical_Filter.Size = new System.Drawing.Size(728, 738);
             this.tlpStatistical_Filter.TabIndex = 0;
             // 
             // tlpStatistical_FilterButton
@@ -129,7 +132,7 @@
             this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpStatistical_FilterButton.Controls.Add(this.bStatistical_Filter, 1, 1);
             this.tlpStatistical_FilterButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatistical_FilterButton.Location = new System.Drawing.Point(30, 698);
+            this.tlpStatistical_FilterButton.Location = new System.Drawing.Point(0, 678);
             this.tlpStatistical_FilterButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatistical_FilterButton.Name = "tlpStatistical_FilterButton";
             this.tlpStatistical_FilterButton.RowCount = 3;
@@ -159,7 +162,7 @@
             this.lStatisticalFilter_Length.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lStatisticalFilter_Length.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lStatisticalFilter_Length.LocalizationText = "StatisticalData.Details";
-            this.lStatisticalFilter_Length.Location = new System.Drawing.Point(33, 353);
+            this.lStatisticalFilter_Length.Location = new System.Drawing.Point(3, 353);
             this.lStatisticalFilter_Length.Name = "lStatisticalFilter_Length";
             this.lStatisticalFilter_Length.Size = new System.Drawing.Size(86, 29);
             this.lStatisticalFilter_Length.TabIndex = 3;
@@ -175,7 +178,7 @@
             this.tlpStatistical_FilterTop.Controls.Add(this.lStatisticalFilter_Execute, 0, 0);
             this.tlpStatistical_FilterTop.Controls.Add(this.tlpStatistical_FilterTop2, 1, 1);
             this.tlpStatistical_FilterTop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatistical_FilterTop.Location = new System.Drawing.Point(30, 0);
+            this.tlpStatistical_FilterTop.Location = new System.Drawing.Point(0, 0);
             this.tlpStatistical_FilterTop.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatistical_FilterTop.Name = "tlpStatistical_FilterTop";
             this.tlpStatistical_FilterTop.RowCount = 2;
@@ -389,9 +392,9 @@
             this.tStatisticalFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tStatisticalFilter.EmptyHeader = true;
             this.tStatisticalFilter.Gap = 12;
-            this.tStatisticalFilter.Location = new System.Drawing.Point(33, 388);
+            this.tStatisticalFilter.Location = new System.Drawing.Point(3, 388);
             this.tStatisticalFilter.Name = "tStatisticalFilter";
-            this.tStatisticalFilter.Size = new System.Drawing.Size(722, 307);
+            this.tStatisticalFilter.Size = new System.Drawing.Size(722, 287);
             this.tStatisticalFilter.TabIndex = 2;
             this.tStatisticalFilter.Text = "table1";
             // 

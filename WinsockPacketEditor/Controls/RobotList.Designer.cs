@@ -46,18 +46,20 @@
             // 
             // tlpRobotList
             // 
-            this.tlpRobotList.ColumnCount = 1;
+            this.tlpRobotList.ColumnCount = 3;
+            this.tlpRobotList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpRobotList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRobotList.Controls.Add(this.tlpRobotListButton, 0, 0);
-            this.tlpRobotList.Controls.Add(this.tRobotList, 0, 1);
+            this.tlpRobotList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpRobotList.Controls.Add(this.tlpRobotListButton, 1, 1);
+            this.tlpRobotList.Controls.Add(this.tRobotList, 1, 2);
             this.tlpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpRobotList.Location = new System.Drawing.Point(0, 0);
             this.tlpRobotList.Margin = new System.Windows.Forms.Padding(0);
             this.tlpRobotList.Name = "tlpRobotList";
-            this.tlpRobotList.RowCount = 2;
+            this.tlpRobotList.RowCount = 3;
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpRobotList.Size = new System.Drawing.Size(800, 800);
             this.tlpRobotList.TabIndex = 5;
             // 
@@ -72,12 +74,12 @@
             this.tlpRobotListButton.Controls.Add(this.mRobotList, 3, 0);
             this.tlpRobotListButton.Controls.Add(this.bRobotList_Start, 0, 0);
             this.tlpRobotListButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpRobotListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpRobotListButton.Location = new System.Drawing.Point(30, 20);
             this.tlpRobotListButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpRobotListButton.Name = "tlpRobotListButton";
             this.tlpRobotListButton.RowCount = 1;
             this.tlpRobotListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRobotListButton.Size = new System.Drawing.Size(800, 50);
+            this.tlpRobotListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpRobotListButton.TabIndex = 4;
             // 
             // bRobotList_Stop
@@ -122,7 +124,7 @@
             menuItem1.Sub.Add(menuItem4);
             menuItem1.Sub.Add(menuItem5);
             this.mRobotList.Items.Add(menuItem1);
-            this.mRobotList.Location = new System.Drawing.Point(747, 3);
+            this.mRobotList.Location = new System.Drawing.Point(687, 3);
             this.mRobotList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mRobotList.Name = "mRobotList";
             this.mRobotList.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -156,10 +158,10 @@
             this.tRobotList.CellImpactHeight = false;
             this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tRobotList.Gap = 12;
-            this.tRobotList.Location = new System.Drawing.Point(3, 53);
+            this.tRobotList.Location = new System.Drawing.Point(33, 73);
             this.tRobotList.MultipleRows = true;
             this.tRobotList.Name = "tRobotList";
-            this.tRobotList.Size = new System.Drawing.Size(794, 744);
+            this.tRobotList.Size = new System.Drawing.Size(734, 724);
             this.tRobotList.TabIndex = 1;
             this.tRobotList.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellClick);
             this.tRobotList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tRobotList_CellButtonClick);

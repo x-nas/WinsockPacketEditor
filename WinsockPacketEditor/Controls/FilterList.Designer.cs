@@ -44,15 +44,18 @@
             // 
             // tlpFilterList
             // 
-            this.tlpFilterList.ColumnCount = 1;
+            this.tlpFilterList.ColumnCount = 3;
+            this.tlpFilterList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpFilterList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterList.Controls.Add(this.tFilterList, 0, 1);
-            this.tlpFilterList.Controls.Add(this.tlpFilterListButton, 0, 0);
+            this.tlpFilterList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpFilterList.Controls.Add(this.tFilterList, 1, 2);
+            this.tlpFilterList.Controls.Add(this.tlpFilterListButton, 1, 1);
             this.tlpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFilterList.Location = new System.Drawing.Point(0, 0);
             this.tlpFilterList.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFilterList.Name = "tlpFilterList";
-            this.tlpFilterList.RowCount = 2;
+            this.tlpFilterList.RowCount = 3;
+            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilterList.Size = new System.Drawing.Size(800, 800);
@@ -64,10 +67,10 @@
             this.tFilterList.CellImpactHeight = false;
             this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterList.Gap = 12;
-            this.tFilterList.Location = new System.Drawing.Point(3, 53);
+            this.tFilterList.Location = new System.Drawing.Point(33, 73);
             this.tFilterList.MultipleRows = true;
             this.tFilterList.Name = "tFilterList";
-            this.tFilterList.Size = new System.Drawing.Size(794, 744);
+            this.tFilterList.Size = new System.Drawing.Size(734, 724);
             this.tFilterList.TabIndex = 1;
             this.tFilterList.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterList_CellClick);
             this.tFilterList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tFilterList_CellButtonClick);
@@ -81,12 +84,12 @@
             this.tlpFilterListButton.Controls.Add(this.mFilterList, 2, 0);
             this.tlpFilterListButton.Controls.Add(this.bFilterList_Reset, 0, 0);
             this.tlpFilterListButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpFilterListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpFilterListButton.Location = new System.Drawing.Point(30, 20);
             this.tlpFilterListButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFilterListButton.Name = "tlpFilterListButton";
             this.tlpFilterListButton.RowCount = 1;
             this.tlpFilterListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterListButton.Size = new System.Drawing.Size(800, 50);
+            this.tlpFilterListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpFilterListButton.TabIndex = 2;
             // 
             // mFilterList
@@ -116,7 +119,7 @@
             menuItem1.Sub.Add(menuItem4);
             menuItem1.Sub.Add(menuItem5);
             this.mFilterList.Items.Add(menuItem1);
-            this.mFilterList.Location = new System.Drawing.Point(747, 3);
+            this.mFilterList.Location = new System.Drawing.Point(687, 3);
             this.mFilterList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mFilterList.Name = "mFilterList";
             this.mFilterList.RightToLeft = System.Windows.Forms.RightToLeft.No;
