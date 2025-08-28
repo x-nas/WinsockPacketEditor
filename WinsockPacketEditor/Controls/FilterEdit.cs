@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class FilterEditForm : Form
+    public partial class FilterEdit : UserControl
     {
         private Form form;
         private FilterInfo fiSelect;
@@ -19,28 +19,26 @@ namespace WinsockPacketEditor
         private DataTable dtFilterAdvanced_Modify_Head = new DataTable();
         private DataTable dtFilterAdvanced_Modify_Position = new DataTable();
 
-        #region//初始化
+        #region//窗体事件
 
-        public FilterEditForm(Form form, FilterInfo fi)
+        public FilterEdit(Form form, FilterInfo fi)
         {
             InitializeComponent();
             this.fiSelect = fi;
             this.form = form;
-        }        
+        }
 
-        private void FilterEditForm_Load(object sender, EventArgs e)
+        private void FilterEdit_Load(object sender, EventArgs e)
         {
             try
             {
-                this.Text = AntdUI.Localization.Get("FilterEditForm", "滤镜编辑");
-                
                 this.tabFilterEdit.TabMenuVisible = false;
                 this.tabFilterFrom.TabMenuVisible = false;
                 this.tabFilterFunction.TabMenuVisible = false;
                 this.InitTable_FilterNormal();
                 this.InitTable_FilterAdvanced_Search();
                 this.InitTable_FilterAdvanced_Modify_Head();
-                this.InitTable_FilterAdvanced_Modify_Position();            
+                this.InitTable_FilterAdvanced_Modify_Position();
                 this.InitProgressionPosition();
                 this.InitFilterExecuteType();
                 this.ShowFilterData();
@@ -277,7 +275,7 @@ namespace WinsockPacketEditor
             int iSize = Operate.FilterConfig.Filter.FilterSize_MaxLen;
             for (int i = -iSize; i < iSize; i++)
             {
-                string Title = i.ToString("D3");                
+                string Title = i.ToString("D3");
 
                 AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
                 columns.Add(column);
@@ -299,10 +297,10 @@ namespace WinsockPacketEditor
             dtFilterAdvanced_Modify_Position.Rows.Add(dr);
             tFilterAdvanced_Modify_Position.DataSource = dtFilterAdvanced_Modify_Position;
             tFilterAdvanced_Modify_Position.ScrollBar.ValueX = iSize * 50;
-        }        
-        
+        }
+
         private void InitFilterExecuteType()
-        { 
+        {
             this.cbbFilterAction_ExecuteType.Items.Clear();
 
             if (Operate.SendConfig.List.lstSendInfo.Count > 0)
@@ -322,7 +320,7 @@ namespace WinsockPacketEditor
                 });
             }
 
-            this.cbbFilterAction_ExecuteType.Items.Add(new DividerSelectItem());            
+            this.cbbFilterAction_ExecuteType.Items.Add(new DividerSelectItem());
 
             if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
             {
@@ -351,7 +349,7 @@ namespace WinsockPacketEditor
                     var selectItems = Operate.SendConfig.List.lstSendInfo.Select(info => new SelectItem(info.SName, info)).ToArray();
 
                     this.cbbFilterAction_Execute.Items.Clear();
-                    this.cbbFilterAction_Execute.Items.AddRange(selectItems);                    
+                    this.cbbFilterAction_Execute.Items.AddRange(selectItems);
                     this.cbbFilterAction_Execute.SelectedValue = Operate.SendConfig.Send.GetSend_ByGuid(fiSelect.SID);
                 }
             }
@@ -398,7 +396,7 @@ namespace WinsockPacketEditor
                                 {
                                     case Operate.FilterConfig.Filter.FilterMode.Normal:
 
-                                        ((CellText)this.dtFilterNormal.Rows[1][iIndex]).Back = Color.DarkRed;                  
+                                        ((CellText)this.dtFilterNormal.Rows[1][iIndex]).Back = Color.DarkRed;
 
                                         break;
 
@@ -433,36 +431,43 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
+        #endregion
 
         #region//验证并处理十六进制字符输入
 
         public void VerifyHexChar(InputVerifyCharEventArgs verifyArgs)
         {
-            char c = verifyArgs.Char;
-            if (c == '\b')
+            try
             {
-                verifyArgs.Result = true;
-                return;
-            }
+                char c = verifyArgs.Char;
+                if (c == '\b')
+                {
+                    verifyArgs.Result = true;
+                    return;
+                }
 
-            if (char.IsDigit(c))
-            {
-                verifyArgs.Result = true;
+                if (char.IsDigit(c))
+                {
+                    verifyArgs.Result = true;
+                }
+                else if (c >= 'A' && c <= 'F')
+                {
+                    verifyArgs.Result = true;
+                }
+                else if (c >= 'a' && c <= 'f')
+                {
+                    verifyArgs.ReplaceText = c.ToString().ToUpper();
+                    verifyArgs.Result = true;
+                }
+                else
+                {
+                    verifyArgs.Result = false;
+                }
             }
-            else if (c >= 'A' && c <= 'F')
+            catch (Exception ex)
             {
-                verifyArgs.Result = true;
-            }
-            else if (c >= 'a' && c <= 'f')
-            {
-                verifyArgs.ReplaceText = c.ToString().ToUpper();
-                verifyArgs.Result = true;
-            }
-            else
-            {
-                verifyArgs.Result = false;
-            }
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         public bool ValidateHexValueAndShowMessage(string ValidateHex)
@@ -880,7 +885,7 @@ namespace WinsockPacketEditor
                                     });
 
                                     return false;
-                                }                                
+                                }
                             }
                         }
                     }
@@ -1081,7 +1086,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//右键菜单
+        #region//滤镜 - 右键菜单
 
         private void InitCMS(AntdUI.Table tFilterEdit, DataTable dtFilterEdit, int RowIndex, int ColumnIndex)
         {
@@ -1206,7 +1211,7 @@ namespace WinsockPacketEditor
                     case "cmsFilterEdit_Paste":
 
                         string sClipboardText = Clipboard.GetText().Trim();
-                        this.PastePacketData(tFilterEdit, dtFilterEdit, RowIndex - 1, ColumnIndex, sClipboardText);                        
+                        this.PastePacketData(tFilterEdit, dtFilterEdit, RowIndex - 1, ColumnIndex, sClipboardText);
 
                         break;
 
@@ -1223,7 +1228,7 @@ namespace WinsockPacketEditor
         {
             if (e.Button == MouseButtons.Right)
             {
-                InitCMS(tFilterNormal, dtFilterNormal, e.RowIndex, e.ColumnIndex);                
+                InitCMS(tFilterNormal, dtFilterNormal, e.RowIndex, e.ColumnIndex);
             }
         }
 
@@ -1241,7 +1246,7 @@ namespace WinsockPacketEditor
             {
                 InitCMS(tFilterAdvanced_Modify_Head, dtFilterAdvanced_Modify_Head, e.RowIndex, e.ColumnIndex);
             }
-        }        
+        }
 
         private void tFilterAdvanced_Modify_Position_CellClick(object sender, TableClickEventArgs e)
         {
@@ -1311,7 +1316,7 @@ namespace WinsockPacketEditor
                 {
                     string sClipboardText = Clipboard.GetText().Trim();
                     this.PastePacketData(tFilterAdvanced_Modify_Position, dtFilterAdvanced_Modify_Position, RIndex - 1, CIndex, sClipboardText);
-                }                    
+                }
             }
         }
 
@@ -1350,7 +1355,7 @@ namespace WinsockPacketEditor
                     }
                 }, () =>
                 {
-                    if (bOK) 
+                    if (bOK)
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(this.form, "数据粘贴完毕", TType.Success)
                         {
@@ -1460,7 +1465,7 @@ namespace WinsockPacketEditor
                 }, () =>
                 {
                     //
-                });                
+                });
             }
             catch (Exception ex)
             {
@@ -1699,7 +1704,7 @@ namespace WinsockPacketEditor
                                                 sbModify.Append(iIndex).Append("|").Append(sValue).Append(",");
                                             }
                                         }
-                                    }                                    
+                                    }
                                 }
 
                                 break;
@@ -1738,7 +1743,7 @@ namespace WinsockPacketEditor
                     sProgression_New,
                     iProgressionCount_New,
                     sSearch_New,
-                    sModify_New);                
+                    sModify_New);
 
                 switch (Operate.SystemConfig.StartMode)
                 {

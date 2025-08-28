@@ -243,6 +243,12 @@
     <Compile Include="Controls\ExtractionData.Designer.cs">
       <DependentUpon>ExtractionData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FilterEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FilterEdit.Designer.cs">
+      <DependentUpon>FilterEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FilterList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -329,12 +335,6 @@
     </Compile>
     <Compile Include="Forms\EXTProxySettingsForm.Designer.cs">
       <DependentUpon>EXTProxySettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FilterEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FilterEditForm.Designer.cs">
-      <DependentUpon>FilterEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FilterSettingsForm.cs">
       <SubType>Form</SubType>
@@ -493,6 +493,9 @@
     <EmbeddedResource Include="Controls\ExtractionData.resx">
       <DependentUpon>ExtractionData.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FilterEdit.resx">
+      <DependentUpon>FilterEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\FilterList.resx">
       <DependentUpon>FilterList.cs</DependentUpon>
     </EmbeddedResource>
@@ -534,9 +537,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EXTProxySettingsForm.resx">
       <DependentUpon>EXTProxySettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FilterEditForm.resx">
-      <DependentUpon>FilterEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FilterSettingsForm.resx">
       <DependentUpon>FilterSettingsForm.cs</DependentUpon>

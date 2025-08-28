@@ -281,12 +281,12 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new FilterEditForm(this.form, fi))
+                        var FilterEdit = new FilterEdit(this.form, fi);
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("FilterEditForm", "滤镜编辑"), FilterEdit)
                         {
-                            Align = AntdUI.TAlignMini.Right,
-                            Mask = true,
+                            Keyboard = false,
                             MaskClosable = false,
-                            DisplayDelay = 0,
+                            BtnHeight = 0,
                         });
 
                         break;
