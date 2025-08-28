@@ -258,6 +258,12 @@
     <Compile Include="Controls\LogList.Designer.cs">
       <DependentUpon>LogList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ProcessList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProcessList.Designer.cs">
+      <DependentUpon>ProcessList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RemoteMGTSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -498,6 +504,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\LogList.resx">
       <DependentUpon>LogList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProcessList.resx">
+      <DependentUpon>ProcessList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\RemoteMGTSetting.resx">
       <DependentUpon>RemoteMGTSetting.cs</DependentUpon>

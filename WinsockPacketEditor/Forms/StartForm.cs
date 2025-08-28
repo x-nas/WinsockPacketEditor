@@ -167,13 +167,13 @@ namespace WinsockPacketEditor.Forms
 
         private void pInjectMode_Click(object sender, EventArgs e)
         {
-            SelectProcessForm selectProcessForm = new SelectProcessForm();
-            selectProcessForm.ShowDialog();
-
-            if (selectProcessForm.DialogResult == DialogResult.OK)
+            var ProcessList = new ProcessList(this);
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("ProcessList", "进程列表"), ProcessList)
             {
-                Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Process;
-            }
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
 
             this.SelectedStartMode();
         }

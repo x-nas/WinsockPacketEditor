@@ -686,10 +686,10 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//SelectProcessForm
+                #region//ProcessList
 
-                case "SelectProcessForm":
-                    return "Select Process";
+                case "ProcessList":
+                    return "Process List";
 
                 case "Table.ProcessList.Column.ICO":
                     return "";
@@ -703,31 +703,31 @@ namespace WinsockPacketEditor
                 case "Table.ProcessList.Column.ProcessPath":
                     return "Path";
 
-                case "SelectProcessForm.txtSelectProcess":
+                case "ProcessList.txtSelectProcess":
                     return "Please select a process or program";
 
-                case "SelectProcessForm.txtSearchProcess":
+                case "ProcessList.txtSearchProcess":
                     return "Filter process list";
 
-                case "SelectProcessForm.bCreate":
+                case "ProcessList.bCreate":
                     return "Program";
 
-                case "SelectProcessForm.bRefresh":
+                case "ProcessList.bRefresh":
                     return "Refresh";
 
-                case "SelectProcessForm.bInject":
+                case "ProcessList.bInject":
                     return "Inject";
 
-                case "SelectProcessForm.InjectError":
+                case "ProcessList.InjectError":
                     return "Injection Failed";
 
-                case "SelectProcessForm.SearchOnWebSite":
+                case "ProcessList.SearchOnWebSite":
                     return "Search On WPE64.com";
 
-                case "SelectProcessForm.SelectProgram":
+                case "ProcessList.SelectProgram":
                     return "Please select the program to inject";
 
-                case "SelectProcessForm.ProgramFilter":
+                case "ProcessList.ProgramFilter":
                     return "Executable Files (*.exe)|*.exe|All Files (*.*)|*.*";
 
                 #endregion
@@ -1017,7 +1017,7 @@ namespace WinsockPacketEditor
                 case "ProxyModeForm.ProxySpeedInfo":
                     return "UpLink: {0} KB/s  DownLink: {1} KB/s";
 
-                #endregion
+                #endregion                
 
                 #region//ClientList
 
