@@ -54,10 +54,12 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tSystemLog.ColumnBack = Color.FromArgb(35, 35, 35);
+                this.tSystemLog.BackColor = Operate.SystemConfig.Color_40;
+                this.tSystemLog.ColumnBack = Operate.SystemConfig.Color_40;
             }
             else
             {
+                this.tSystemLog.BackColor = Color.White;
                 this.tSystemLog.ColumnBack = null;
             }
         }

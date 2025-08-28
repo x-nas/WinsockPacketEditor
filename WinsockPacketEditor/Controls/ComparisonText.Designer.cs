@@ -31,6 +31,18 @@
             AntdUI.Tabs.StyleCard styleCard1 = new AntdUI.Tabs.StyleCard();
             this.tlpComparisonForm = new System.Windows.Forms.TableLayoutPanel();
             this.tabComparisonText = new AntdUI.Tabs();
+            this.tpComparison = new AntdUI.TabPage();
+            this.splitterComparison = new AntdUI.Splitter();
+            this.tlpComparisonText = new System.Windows.Forms.TableLayoutPanel();
+            this.lComparison_B = new AntdUI.Label();
+            this.txtComparison_B = new AntdUI.Input();
+            this.txtComparison_A = new AntdUI.Input();
+            this.lComparison_A = new AntdUI.Label();
+            this.tlpComparison = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpComparisonButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bComparison = new AntdUI.Button();
+            this.bComparison_Clear = new AntdUI.Button();
+            this.tComparison = new AntdUI.Table();
             this.tpDuplicate = new AntdUI.TabPage();
             this.splitterDuplicate = new AntdUI.Splitter();
             this.tlpDuplicateText = new System.Windows.Forms.TableLayoutPanel();
@@ -44,28 +56,8 @@
             this.bDuplicate = new AntdUI.Button();
             this.nudDuplicate = new AntdUI.InputNumber();
             this.tDuplicate = new AntdUI.Table();
-            this.tpComparison = new AntdUI.TabPage();
-            this.splitterComparison = new AntdUI.Splitter();
-            this.tlpComparisonText = new System.Windows.Forms.TableLayoutPanel();
-            this.lComparison_B = new AntdUI.Label();
-            this.txtComparison_B = new AntdUI.Input();
-            this.txtComparison_A = new AntdUI.Input();
-            this.lComparison_A = new AntdUI.Label();
-            this.tlpComparison = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpComparisonButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bComparison = new AntdUI.Button();
-            this.bComparison_Clear = new AntdUI.Button();
-            this.tComparison = new AntdUI.Table();
             this.tlpComparisonForm.SuspendLayout();
             this.tabComparisonText.SuspendLayout();
-            this.tpDuplicate.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitterDuplicate)).BeginInit();
-            this.splitterDuplicate.Panel1.SuspendLayout();
-            this.splitterDuplicate.Panel2.SuspendLayout();
-            this.splitterDuplicate.SuspendLayout();
-            this.tlpDuplicateText.SuspendLayout();
-            this.tlpDuplicate.SuspendLayout();
-            this.tlpDuplicateButton.SuspendLayout();
             this.tpComparison.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterComparison)).BeginInit();
             this.splitterComparison.Panel1.SuspendLayout();
@@ -74,6 +66,14 @@
             this.tlpComparisonText.SuspendLayout();
             this.tlpComparison.SuspendLayout();
             this.tlpComparisonButton.SuspendLayout();
+            this.tpDuplicate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitterDuplicate)).BeginInit();
+            this.splitterDuplicate.Panel1.SuspendLayout();
+            this.splitterDuplicate.Panel2.SuspendLayout();
+            this.splitterDuplicate.SuspendLayout();
+            this.tlpDuplicateText.SuspendLayout();
+            this.tlpDuplicate.SuspendLayout();
+            this.tlpDuplicateButton.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpComparisonForm
@@ -95,8 +95,8 @@
             // 
             // tabComparisonText
             // 
-            this.tabComparisonText.Controls.Add(this.tpComparison);
             this.tabComparisonText.Controls.Add(this.tpDuplicate);
+            this.tabComparisonText.Controls.Add(this.tpComparison);
             this.tabComparisonText.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabComparisonText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabComparisonText.Gap = 20;
@@ -104,10 +104,190 @@
             this.tabComparisonText.Name = "tabComparisonText";
             this.tabComparisonText.Pages.Add(this.tpComparison);
             this.tabComparisonText.Pages.Add(this.tpDuplicate);
+            this.tabComparisonText.SelectedIndex = 1;
             this.tabComparisonText.Size = new System.Drawing.Size(734, 774);
             this.tabComparisonText.Style = styleCard1;
             this.tabComparisonText.TabIndex = 1;
             this.tabComparisonText.Type = AntdUI.TabType.Card;
+            // 
+            // tpComparison
+            // 
+            this.tpComparison.Controls.Add(this.splitterComparison);
+            this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpComparison.LocalizationText = "ComparisonText.{id}";
+            this.tpComparison.Location = new System.Drawing.Point(3, 45);
+            this.tpComparison.Name = "tpComparison";
+            this.tpComparison.Size = new System.Drawing.Size(728, 726);
+            this.tpComparison.TabIndex = 0;
+            this.tpComparison.Text = "文本比较";
+            // 
+            // splitterComparison
+            // 
+            this.splitterComparison.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
+            this.splitterComparison.Cursor = System.Windows.Forms.Cursors.Default;
+            this.splitterComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitterComparison.Location = new System.Drawing.Point(0, 0);
+            this.splitterComparison.Name = "splitterComparison";
+            this.splitterComparison.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitterComparison.Panel1
+            // 
+            this.splitterComparison.Panel1.Controls.Add(this.tlpComparisonText);
+            this.splitterComparison.Panel1MinSize = 0;
+            // 
+            // splitterComparison.Panel2
+            // 
+            this.splitterComparison.Panel2.Controls.Add(this.tlpComparison);
+            this.splitterComparison.Panel2MinSize = 0;
+            this.splitterComparison.Size = new System.Drawing.Size(728, 726);
+            this.splitterComparison.SplitterDistance = 386;
+            this.splitterComparison.SplitterSize = 80;
+            this.splitterComparison.SplitterWidth = 10;
+            this.splitterComparison.TabIndex = 3;
+            // 
+            // tlpComparisonText
+            // 
+            this.tlpComparisonText.ColumnCount = 2;
+            this.tlpComparisonText.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonText.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonText.Controls.Add(this.lComparison_B, 1, 0);
+            this.tlpComparisonText.Controls.Add(this.txtComparison_B, 1, 1);
+            this.tlpComparisonText.Controls.Add(this.txtComparison_A, 0, 1);
+            this.tlpComparisonText.Controls.Add(this.lComparison_A, 0, 0);
+            this.tlpComparisonText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpComparisonText.Location = new System.Drawing.Point(0, 0);
+            this.tlpComparisonText.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpComparisonText.Name = "tlpComparisonText";
+            this.tlpComparisonText.RowCount = 2;
+            this.tlpComparisonText.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpComparisonText.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpComparisonText.Size = new System.Drawing.Size(728, 386);
+            this.tlpComparisonText.TabIndex = 0;
+            // 
+            // lComparison_B
+            // 
+            this.lComparison_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lComparison_B.LocalizationText = "";
+            this.lComparison_B.Location = new System.Drawing.Point(367, 3);
+            this.lComparison_B.Name = "lComparison_B";
+            this.lComparison_B.Size = new System.Drawing.Size(358, 23);
+            this.lComparison_B.TabIndex = 3;
+            this.lComparison_B.Text = "文本 B";
+            this.lComparison_B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtComparison_B
+            // 
+            this.txtComparison_B.AutoScroll = true;
+            this.txtComparison_B.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtComparison_B.Location = new System.Drawing.Point(364, 29);
+            this.txtComparison_B.Margin = new System.Windows.Forms.Padding(0);
+            this.txtComparison_B.Multiline = true;
+            this.txtComparison_B.Name = "txtComparison_B";
+            this.txtComparison_B.Size = new System.Drawing.Size(364, 357);
+            this.txtComparison_B.TabIndex = 1;
+            this.txtComparison_B.TextChanged += new System.EventHandler(this.txtComparison_B_TextChanged);
+            // 
+            // txtComparison_A
+            // 
+            this.txtComparison_A.AutoScroll = true;
+            this.txtComparison_A.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtComparison_A.Location = new System.Drawing.Point(0, 29);
+            this.txtComparison_A.Margin = new System.Windows.Forms.Padding(0);
+            this.txtComparison_A.Multiline = true;
+            this.txtComparison_A.Name = "txtComparison_A";
+            this.txtComparison_A.Size = new System.Drawing.Size(364, 357);
+            this.txtComparison_A.TabIndex = 0;
+            this.txtComparison_A.TextChanged += new System.EventHandler(this.txtComparison_A_TextChanged);
+            // 
+            // lComparison_A
+            // 
+            this.lComparison_A.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lComparison_A.LocalizationText = "";
+            this.lComparison_A.Location = new System.Drawing.Point(3, 3);
+            this.lComparison_A.Name = "lComparison_A";
+            this.lComparison_A.Size = new System.Drawing.Size(358, 23);
+            this.lComparison_A.TabIndex = 2;
+            this.lComparison_A.Text = "文本 A";
+            this.lComparison_A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tlpComparison
+            // 
+            this.tlpComparison.ColumnCount = 1;
+            this.tlpComparison.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpComparison.Controls.Add(this.tlpComparisonButton, 0, 1);
+            this.tlpComparison.Controls.Add(this.tComparison, 0, 0);
+            this.tlpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpComparison.Location = new System.Drawing.Point(0, 0);
+            this.tlpComparison.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpComparison.Name = "tlpComparison";
+            this.tlpComparison.RowCount = 2;
+            this.tlpComparison.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpComparison.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpComparison.Size = new System.Drawing.Size(728, 330);
+            this.tlpComparison.TabIndex = 0;
+            // 
+            // tlpComparisonButton
+            // 
+            this.tlpComparisonButton.ColumnCount = 4;
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonButton.Controls.Add(this.bComparison, 1, 1);
+            this.tlpComparisonButton.Controls.Add(this.bComparison_Clear, 2, 1);
+            this.tlpComparisonButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpComparisonButton.Location = new System.Drawing.Point(0, 270);
+            this.tlpComparisonButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpComparisonButton.Name = "tlpComparisonButton";
+            this.tlpComparisonButton.RowCount = 3;
+            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpComparisonButton.Size = new System.Drawing.Size(728, 60);
+            this.tlpComparisonButton.TabIndex = 6;
+            // 
+            // bComparison
+            // 
+            this.bComparison.BackExtend = "135, #6253E1, #04BEFE";
+            this.bComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bComparison.IconSvg = "ScanOutlined";
+            this.bComparison.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bComparison.LoadingWaveCount = 6;
+            this.bComparison.LoadingWaveSize = 6;
+            this.bComparison.LoadingWaveValue = 0.6F;
+            this.bComparison.LoadingWaveVertical = true;
+            this.bComparison.LocalizationText = "Check";
+            this.bComparison.Location = new System.Drawing.Point(232, 7);
+            this.bComparison.Name = "bComparison";
+            this.bComparison.Size = new System.Drawing.Size(144, 46);
+            this.bComparison.TabIndex = 5;
+            this.bComparison.Text = "文本比较";
+            this.bComparison.Type = AntdUI.TTypeMini.Info;
+            this.bComparison.Click += new System.EventHandler(this.bComparison_Click);
+            // 
+            // bComparison_Clear
+            // 
+            this.bComparison_Clear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bComparison_Clear.IconSvg = "DeleteOutlined";
+            this.bComparison_Clear.LocalizationText = "Clear";
+            this.bComparison_Clear.Location = new System.Drawing.Point(382, 7);
+            this.bComparison_Clear.Name = "bComparison_Clear";
+            this.bComparison_Clear.Size = new System.Drawing.Size(114, 46);
+            this.bComparison_Clear.TabIndex = 6;
+            this.bComparison_Clear.Text = "清空";
+            this.bComparison_Clear.Type = AntdUI.TTypeMini.Warn;
+            this.bComparison_Clear.Click += new System.EventHandler(this.bComparison_Clear_Click);
+            // 
+            // tComparison
+            // 
+            this.tComparison.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tComparison.Gap = 12;
+            this.tComparison.Location = new System.Drawing.Point(3, 3);
+            this.tComparison.Name = "tComparison";
+            this.tComparison.Size = new System.Drawing.Size(722, 264);
+            this.tComparison.TabIndex = 5;
+            this.tComparison.Text = "table1";
             // 
             // tpDuplicate
             // 
@@ -178,10 +358,11 @@
             // 
             this.txtDuplicate_B.AutoScroll = true;
             this.txtDuplicate_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDuplicate_B.Location = new System.Drawing.Point(367, 32);
+            this.txtDuplicate_B.Location = new System.Drawing.Point(364, 29);
+            this.txtDuplicate_B.Margin = new System.Windows.Forms.Padding(0);
             this.txtDuplicate_B.Multiline = true;
             this.txtDuplicate_B.Name = "txtDuplicate_B";
-            this.txtDuplicate_B.Size = new System.Drawing.Size(358, 351);
+            this.txtDuplicate_B.Size = new System.Drawing.Size(364, 357);
             this.txtDuplicate_B.TabIndex = 1;
             this.txtDuplicate_B.TextChanged += new System.EventHandler(this.txtDuplicate_B_TextChanged);
             // 
@@ -189,10 +370,11 @@
             // 
             this.txtDuplicate_A.AutoScroll = true;
             this.txtDuplicate_A.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtDuplicate_A.Location = new System.Drawing.Point(3, 32);
+            this.txtDuplicate_A.Location = new System.Drawing.Point(0, 29);
+            this.txtDuplicate_A.Margin = new System.Windows.Forms.Padding(0);
             this.txtDuplicate_A.Multiline = true;
             this.txtDuplicate_A.Name = "txtDuplicate_A";
-            this.txtDuplicate_A.Size = new System.Drawing.Size(358, 351);
+            this.txtDuplicate_A.Size = new System.Drawing.Size(364, 357);
             this.txtDuplicate_A.TabIndex = 0;
             this.txtDuplicate_A.TextChanged += new System.EventHandler(this.txtDuplicate_A_TextChanged);
             // 
@@ -310,183 +492,6 @@
             this.tDuplicate.TabIndex = 6;
             this.tDuplicate.Text = "table1";
             // 
-            // tpComparison
-            // 
-            this.tpComparison.Controls.Add(this.splitterComparison);
-            this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpComparison.LocalizationText = "ComparisonText.{id}";
-            this.tpComparison.Location = new System.Drawing.Point(3, 45);
-            this.tpComparison.Name = "tpComparison";
-            this.tpComparison.Size = new System.Drawing.Size(728, 726);
-            this.tpComparison.TabIndex = 0;
-            this.tpComparison.Text = "文本比较";
-            // 
-            // splitterComparison
-            // 
-            this.splitterComparison.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
-            this.splitterComparison.Cursor = System.Windows.Forms.Cursors.Default;
-            this.splitterComparison.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterComparison.Location = new System.Drawing.Point(0, 0);
-            this.splitterComparison.Name = "splitterComparison";
-            this.splitterComparison.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitterComparison.Panel1
-            // 
-            this.splitterComparison.Panel1.Controls.Add(this.tlpComparisonText);
-            this.splitterComparison.Panel1MinSize = 0;
-            // 
-            // splitterComparison.Panel2
-            // 
-            this.splitterComparison.Panel2.Controls.Add(this.tlpComparison);
-            this.splitterComparison.Panel2MinSize = 0;
-            this.splitterComparison.Size = new System.Drawing.Size(728, 726);
-            this.splitterComparison.SplitterDistance = 386;
-            this.splitterComparison.SplitterSize = 80;
-            this.splitterComparison.SplitterWidth = 10;
-            this.splitterComparison.TabIndex = 3;
-            // 
-            // tlpComparisonText
-            // 
-            this.tlpComparisonText.ColumnCount = 2;
-            this.tlpComparisonText.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpComparisonText.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpComparisonText.Controls.Add(this.lComparison_B, 1, 0);
-            this.tlpComparisonText.Controls.Add(this.txtComparison_B, 1, 1);
-            this.tlpComparisonText.Controls.Add(this.txtComparison_A, 0, 1);
-            this.tlpComparisonText.Controls.Add(this.lComparison_A, 0, 0);
-            this.tlpComparisonText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpComparisonText.Location = new System.Drawing.Point(0, 0);
-            this.tlpComparisonText.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpComparisonText.Name = "tlpComparisonText";
-            this.tlpComparisonText.RowCount = 2;
-            this.tlpComparisonText.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpComparisonText.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpComparisonText.Size = new System.Drawing.Size(728, 386);
-            this.tlpComparisonText.TabIndex = 0;
-            // 
-            // lComparison_B
-            // 
-            this.lComparison_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lComparison_B.LocalizationText = "";
-            this.lComparison_B.Location = new System.Drawing.Point(367, 3);
-            this.lComparison_B.Name = "lComparison_B";
-            this.lComparison_B.Size = new System.Drawing.Size(358, 23);
-            this.lComparison_B.TabIndex = 3;
-            this.lComparison_B.Text = "文本 B";
-            this.lComparison_B.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // txtComparison_B
-            // 
-            this.txtComparison_B.AutoScroll = true;
-            this.txtComparison_B.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtComparison_B.Location = new System.Drawing.Point(367, 32);
-            this.txtComparison_B.Multiline = true;
-            this.txtComparison_B.Name = "txtComparison_B";
-            this.txtComparison_B.Size = new System.Drawing.Size(358, 351);
-            this.txtComparison_B.TabIndex = 1;
-            this.txtComparison_B.TextChanged += new System.EventHandler(this.txtComparison_B_TextChanged);
-            // 
-            // txtComparison_A
-            // 
-            this.txtComparison_A.AutoScroll = true;
-            this.txtComparison_A.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtComparison_A.Location = new System.Drawing.Point(3, 32);
-            this.txtComparison_A.Multiline = true;
-            this.txtComparison_A.Name = "txtComparison_A";
-            this.txtComparison_A.Size = new System.Drawing.Size(358, 351);
-            this.txtComparison_A.TabIndex = 0;
-            this.txtComparison_A.TextChanged += new System.EventHandler(this.txtComparison_A_TextChanged);
-            // 
-            // lComparison_A
-            // 
-            this.lComparison_A.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lComparison_A.LocalizationText = "";
-            this.lComparison_A.Location = new System.Drawing.Point(3, 3);
-            this.lComparison_A.Name = "lComparison_A";
-            this.lComparison_A.Size = new System.Drawing.Size(358, 23);
-            this.lComparison_A.TabIndex = 2;
-            this.lComparison_A.Text = "文本 A";
-            this.lComparison_A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tlpComparison
-            // 
-            this.tlpComparison.ColumnCount = 1;
-            this.tlpComparison.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpComparison.Controls.Add(this.tlpComparisonButton, 0, 1);
-            this.tlpComparison.Controls.Add(this.tComparison, 0, 0);
-            this.tlpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpComparison.Location = new System.Drawing.Point(0, 0);
-            this.tlpComparison.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpComparison.Name = "tlpComparison";
-            this.tlpComparison.RowCount = 2;
-            this.tlpComparison.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpComparison.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpComparison.Size = new System.Drawing.Size(728, 330);
-            this.tlpComparison.TabIndex = 0;
-            // 
-            // tlpComparisonButton
-            // 
-            this.tlpComparisonButton.ColumnCount = 4;
-            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpComparisonButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpComparisonButton.Controls.Add(this.bComparison, 1, 1);
-            this.tlpComparisonButton.Controls.Add(this.bComparison_Clear, 2, 1);
-            this.tlpComparisonButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpComparisonButton.Location = new System.Drawing.Point(0, 270);
-            this.tlpComparisonButton.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpComparisonButton.Name = "tlpComparisonButton";
-            this.tlpComparisonButton.RowCount = 3;
-            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpComparisonButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpComparisonButton.Size = new System.Drawing.Size(728, 60);
-            this.tlpComparisonButton.TabIndex = 6;
-            // 
-            // bComparison
-            // 
-            this.bComparison.BackExtend = "135, #6253E1, #04BEFE";
-            this.bComparison.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bComparison.IconSvg = "ScanOutlined";
-            this.bComparison.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
-            this.bComparison.LoadingWaveCount = 6;
-            this.bComparison.LoadingWaveSize = 6;
-            this.bComparison.LoadingWaveValue = 0.6F;
-            this.bComparison.LoadingWaveVertical = true;
-            this.bComparison.LocalizationText = "Check";
-            this.bComparison.Location = new System.Drawing.Point(232, 7);
-            this.bComparison.Name = "bComparison";
-            this.bComparison.Size = new System.Drawing.Size(144, 46);
-            this.bComparison.TabIndex = 5;
-            this.bComparison.Text = "文本比较";
-            this.bComparison.Type = AntdUI.TTypeMini.Info;
-            this.bComparison.Click += new System.EventHandler(this.bComparison_Click);
-            // 
-            // bComparison_Clear
-            // 
-            this.bComparison_Clear.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bComparison_Clear.IconSvg = "DeleteOutlined";
-            this.bComparison_Clear.LocalizationText = "Clear";
-            this.bComparison_Clear.Location = new System.Drawing.Point(382, 7);
-            this.bComparison_Clear.Name = "bComparison_Clear";
-            this.bComparison_Clear.Size = new System.Drawing.Size(114, 46);
-            this.bComparison_Clear.TabIndex = 6;
-            this.bComparison_Clear.Text = "清空";
-            this.bComparison_Clear.Type = AntdUI.TTypeMini.Warn;
-            this.bComparison_Clear.Click += new System.EventHandler(this.bComparison_Clear_Click);
-            // 
-            // tComparison
-            // 
-            this.tComparison.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tComparison.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tComparison.Gap = 12;
-            this.tComparison.Location = new System.Drawing.Point(3, 3);
-            this.tComparison.Name = "tComparison";
-            this.tComparison.Size = new System.Drawing.Size(722, 264);
-            this.tComparison.TabIndex = 5;
-            this.tComparison.Text = "table1";
-            // 
             // ComparisonText
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -500,14 +505,6 @@
             this.Load += new System.EventHandler(this.ComparisonText_Load);
             this.tlpComparisonForm.ResumeLayout(false);
             this.tabComparisonText.ResumeLayout(false);
-            this.tpDuplicate.ResumeLayout(false);
-            this.splitterDuplicate.Panel1.ResumeLayout(false);
-            this.splitterDuplicate.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitterDuplicate)).EndInit();
-            this.splitterDuplicate.ResumeLayout(false);
-            this.tlpDuplicateText.ResumeLayout(false);
-            this.tlpDuplicate.ResumeLayout(false);
-            this.tlpDuplicateButton.ResumeLayout(false);
             this.tpComparison.ResumeLayout(false);
             this.splitterComparison.Panel1.ResumeLayout(false);
             this.splitterComparison.Panel2.ResumeLayout(false);
@@ -516,6 +513,14 @@
             this.tlpComparisonText.ResumeLayout(false);
             this.tlpComparison.ResumeLayout(false);
             this.tlpComparisonButton.ResumeLayout(false);
+            this.tpDuplicate.ResumeLayout(false);
+            this.splitterDuplicate.Panel1.ResumeLayout(false);
+            this.splitterDuplicate.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitterDuplicate)).EndInit();
+            this.splitterDuplicate.ResumeLayout(false);
+            this.tlpDuplicateText.ResumeLayout(false);
+            this.tlpDuplicate.ResumeLayout(false);
+            this.tlpDuplicateButton.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

@@ -209,10 +209,12 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tFilterList.ColumnBack = Color.FromArgb(35, 35, 35);
+                this.tFilterList.BackColor = Operate.SystemConfig.Color_40;
+                this.tFilterList.ColumnBack = Operate.SystemConfig.Color_40;
             }
             else
             {
+                this.tFilterList.BackColor = Color.White;
                 this.tFilterList.ColumnBack = null;
             }
         }

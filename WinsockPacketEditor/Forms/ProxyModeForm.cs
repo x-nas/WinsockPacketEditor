@@ -167,10 +167,9 @@ namespace WinsockPacketEditor
         private void InitForm()
         {
             this.Text = "WPE x64 - " + AntdUI.Localization.Get("ProxyModeForm", "代理模式");
-            this.pageHeader.Text = "Winsock Packet Editor";
             this.pageHeader.SubText = Operate.SystemConfig.AssemblyVersion;
 
-            this.mProxyMode.Collapsed = true;
+            this.mProxyMode.Collapsed = false;
             this.MenuCollapseChange();            
 
             for (int i = 0; i < this.mProxyMode.Items.Count; i++)
@@ -454,31 +453,33 @@ namespace WinsockPacketEditor
 
             if (Dark)
             {
-                BackColor = Color.FromArgb(30, 30, 30);
+                BackColor = Operate.SystemConfig.Color_30;
                 ForeColor = Color.White;
 
-                this.tabProxyMode.BackColor = Color.FromArgb(35, 35, 35);
-                this.tProxyList.ColumnBack = Color.FromArgb(35, 35, 35);
-                this.pPacketData.Back = Color.FromArgb(35, 35, 35);
+                this.tabProxyMode.BackColor = Operate.SystemConfig.Color_35;
 
+                this.tProxyList.BackColor = Operate.SystemConfig.Color_40;
+                this.tProxyList.ColumnBack = Operate.SystemConfig.Color_40;
                 this.tProxyList.ColumnFore = Color.Silver;
-                this.tProxyList.ForeColor = Color.LimeGreen;
+                this.tProxyList.ForeColor = Color.Lime;
 
-                this.hbProxyData.BackColor = Color.FromArgb(35, 35, 35);
+                this.pPacketData.Back = Operate.SystemConfig.Color_40;
+                this.hbProxyData.BackColor = Operate.SystemConfig.Color_40;
                 this.hbProxyData.ForeColor = Color.Silver;
             }
             else
             {
-                BackColor = Color.FromArgb(250, 250, 250);
+                BackColor = Operate.SystemConfig.Color_250;
                 ForeColor = Color.Black;
 
                 this.tabProxyMode.BackColor = Color.White;
-                this.tProxyList.ColumnBack = Color.White;
-                this.pPacketData.Back = Color.White;
 
+                this.tProxyList.BackColor = Color.White;
+                this.tProxyList.ColumnBack = Color.White;
                 this.tProxyList.ColumnFore = Color.Black;
                 this.tProxyList.ForeColor = Color.Green;
 
+                this.pPacketData.Back = Color.White;
                 this.hbProxyData.BackColor = Color.White;
                 this.hbProxyData.ForeColor = Color.Black;
             }
@@ -802,12 +803,10 @@ namespace WinsockPacketEditor
             if (this.mProxyMode.Collapsed)
             {
                 this.mProxyMode.Width = this.tlpMenu.Width = this.mProxyMode.CollapseWidth;
-                this.bMenuCollapse.IconSvg = "MenuUnfoldOutlined";
             }
             else
             {
                 this.mProxyMode.Width = this.tlpMenu.Width = this.mProxyMode.CollapsedWidth;
-                this.bMenuCollapse.IconSvg = "MenuFoldOutlined";
             }
         }
 

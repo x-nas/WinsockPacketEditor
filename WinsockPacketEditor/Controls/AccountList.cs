@@ -205,10 +205,12 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tAccountList.ColumnBack = Color.FromArgb(35, 35, 35);
+                this.tAccountList.BackColor = Operate.SystemConfig.Color_40;
+                this.tAccountList.ColumnBack = Operate.SystemConfig.Color_40;
             }
             else
             {
+                this.tAccountList.BackColor = Color.White;
                 this.tAccountList.ColumnBack = null;
             }
         }

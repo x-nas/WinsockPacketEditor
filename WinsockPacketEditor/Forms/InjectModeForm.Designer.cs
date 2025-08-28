@@ -114,15 +114,15 @@
             this.lWinsockInfo = new AntdUI.Label();
             this.lModuleName = new AntdUI.Label();
             this.lProcessName = new AntdUI.Label();
-            this.tpSystemLog = new AntdUI.TabPage();
-            this.tpExtraction = new AntdUI.TabPage();
-            this.tpTranscoding = new AntdUI.TabPage();
-            this.tpXOR = new AntdUI.TabPage();
-            this.tpComparison = new AntdUI.TabPage();
-            this.tpStatistical = new AntdUI.TabPage();
-            this.tpRobotList = new AntdUI.TabPage();
-            this.tpSendList = new AntdUI.TabPage();
             this.tpFilterList = new AntdUI.TabPage();
+            this.tpSendList = new AntdUI.TabPage();
+            this.tpRobotList = new AntdUI.TabPage();
+            this.tpStatistical = new AntdUI.TabPage();
+            this.tpComparison = new AntdUI.TabPage();
+            this.tpXOR = new AntdUI.TabPage();
+            this.tpTranscoding = new AntdUI.TabPage();
+            this.tpExtraction = new AntdUI.TabPage();
+            this.tpSystemLog = new AntdUI.TabPage();
             this.timerPacketList = new System.Windows.Forms.Timer(this.components);
             this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
@@ -235,7 +235,7 @@
             // mInjectMode
             // 
             this.mInjectMode.Dock = System.Windows.Forms.DockStyle.Left;
-            this.mInjectMode.Gap = 15;
+            this.mInjectMode.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.mInjectMode.IconRatio = 1F;
             menuItem1.Badge = "";
             menuItem1.IconSvg = "ProjectFilled";
@@ -295,6 +295,7 @@
             this.mInjectMode.Items.Add(menuItem10);
             this.mInjectMode.Location = new System.Drawing.Point(3, 47);
             this.mInjectMode.Name = "mInjectMode";
+            this.mInjectMode.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.mInjectMode.Size = new System.Drawing.Size(164, 712);
             this.mInjectMode.TabIndex = 5;
             this.mInjectMode.SelectChanged += new AntdUI.SelectEventHandler(this.mInjectMode_SelectChanged);
@@ -304,8 +305,7 @@
             this.bMenuCollapse.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bMenuCollapse.Dock = System.Windows.Forms.DockStyle.Left;
             this.bMenuCollapse.Ghost = true;
-            this.bMenuCollapse.IconRatio = 1F;
-            this.bMenuCollapse.IconSvg = "MenuFoldOutlined";
+            this.bMenuCollapse.IconSvg = "MenuOutlined";
             this.bMenuCollapse.Location = new System.Drawing.Point(1, 1);
             this.bMenuCollapse.Margin = new System.Windows.Forms.Padding(1);
             this.bMenuCollapse.Name = "bMenuCollapse";
@@ -1201,68 +1201,14 @@
             this.lProcessName.TabIndex = 5;
             this.lProcessName.Text = "ProcessName";
             // 
-            // tpSystemLog
+            // tpFilterList
             // 
-            this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpSystemLog.Location = new System.Drawing.Point(3, 33);
-            this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(1274, 726);
-            this.tpSystemLog.TabIndex = 6;
-            this.tpSystemLog.Text = "系统日志";
-            // 
-            // tpExtraction
-            // 
-            this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpExtraction.Location = new System.Drawing.Point(3, 33);
-            this.tpExtraction.Name = "tpExtraction";
-            this.tpExtraction.Size = new System.Drawing.Size(1274, 726);
-            this.tpExtraction.TabIndex = 5;
-            this.tpExtraction.Text = "数据提取";
-            // 
-            // tpTranscoding
-            // 
-            this.tpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpTranscoding.Location = new System.Drawing.Point(3, 33);
-            this.tpTranscoding.Name = "tpTranscoding";
-            this.tpTranscoding.Size = new System.Drawing.Size(1274, 726);
-            this.tpTranscoding.TabIndex = 4;
-            this.tpTranscoding.Text = "编码转换";
-            // 
-            // tpXOR
-            // 
-            this.tpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpXOR.Location = new System.Drawing.Point(3, 33);
-            this.tpXOR.Name = "tpXOR";
-            this.tpXOR.Size = new System.Drawing.Size(1274, 726);
-            this.tpXOR.TabIndex = 3;
-            this.tpXOR.Text = "异或计算";
-            // 
-            // tpComparison
-            // 
-            this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpComparison.Location = new System.Drawing.Point(3, 33);
-            this.tpComparison.Name = "tpComparison";
-            this.tpComparison.Size = new System.Drawing.Size(1274, 726);
-            this.tpComparison.TabIndex = 2;
-            this.tpComparison.Text = "文本对比";
-            // 
-            // tpStatistical
-            // 
-            this.tpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpStatistical.Location = new System.Drawing.Point(3, 33);
-            this.tpStatistical.Name = "tpStatistical";
-            this.tpStatistical.Size = new System.Drawing.Size(1274, 726);
-            this.tpStatistical.TabIndex = 1;
-            this.tpStatistical.Text = "统计数据";
-            // 
-            // tpRobotList
-            // 
-            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
-            this.tpRobotList.Name = "tpRobotList";
-            this.tpRobotList.Size = new System.Drawing.Size(1274, 726);
-            this.tpRobotList.TabIndex = 9;
-            this.tpRobotList.Text = "机器人列表";
+            this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpFilterList.Location = new System.Drawing.Point(3, 33);
+            this.tpFilterList.Name = "tpFilterList";
+            this.tpFilterList.Size = new System.Drawing.Size(1274, 726);
+            this.tpFilterList.TabIndex = 7;
+            this.tpFilterList.Text = "滤镜列表";
             // 
             // tpSendList
             // 
@@ -1273,14 +1219,68 @@
             this.tpSendList.TabIndex = 8;
             this.tpSendList.Text = "发送列表";
             // 
-            // tpFilterList
+            // tpRobotList
             // 
-            this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpFilterList.Location = new System.Drawing.Point(3, 33);
-            this.tpFilterList.Name = "tpFilterList";
-            this.tpFilterList.Size = new System.Drawing.Size(1274, 726);
-            this.tpFilterList.TabIndex = 7;
-            this.tpFilterList.Text = "滤镜列表";
+            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpRobotList.Location = new System.Drawing.Point(3, 33);
+            this.tpRobotList.Name = "tpRobotList";
+            this.tpRobotList.Size = new System.Drawing.Size(1274, 726);
+            this.tpRobotList.TabIndex = 9;
+            this.tpRobotList.Text = "机器人列表";
+            // 
+            // tpStatistical
+            // 
+            this.tpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpStatistical.Location = new System.Drawing.Point(3, 33);
+            this.tpStatistical.Name = "tpStatistical";
+            this.tpStatistical.Size = new System.Drawing.Size(1274, 726);
+            this.tpStatistical.TabIndex = 1;
+            this.tpStatistical.Text = "统计数据";
+            // 
+            // tpComparison
+            // 
+            this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpComparison.Location = new System.Drawing.Point(3, 33);
+            this.tpComparison.Name = "tpComparison";
+            this.tpComparison.Size = new System.Drawing.Size(1274, 726);
+            this.tpComparison.TabIndex = 2;
+            this.tpComparison.Text = "文本对比";
+            // 
+            // tpXOR
+            // 
+            this.tpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpXOR.Location = new System.Drawing.Point(3, 33);
+            this.tpXOR.Name = "tpXOR";
+            this.tpXOR.Size = new System.Drawing.Size(1274, 726);
+            this.tpXOR.TabIndex = 3;
+            this.tpXOR.Text = "异或计算";
+            // 
+            // tpTranscoding
+            // 
+            this.tpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpTranscoding.Location = new System.Drawing.Point(3, 33);
+            this.tpTranscoding.Name = "tpTranscoding";
+            this.tpTranscoding.Size = new System.Drawing.Size(1274, 726);
+            this.tpTranscoding.TabIndex = 4;
+            this.tpTranscoding.Text = "编码转换";
+            // 
+            // tpExtraction
+            // 
+            this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpExtraction.Location = new System.Drawing.Point(3, 33);
+            this.tpExtraction.Name = "tpExtraction";
+            this.tpExtraction.Size = new System.Drawing.Size(1274, 726);
+            this.tpExtraction.TabIndex = 5;
+            this.tpExtraction.Text = "数据提取";
+            // 
+            // tpSystemLog
+            // 
+            this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSystemLog.Location = new System.Drawing.Point(3, 33);
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.Size = new System.Drawing.Size(1274, 726);
+            this.tpSystemLog.TabIndex = 6;
+            this.tpSystemLog.Text = "系统日志";
             // 
             // timerPacketList
             // 

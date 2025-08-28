@@ -33,9 +33,11 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.hbXOR_From.BackColor =
+                this.pXOR_From.Back =
+                    this.pXOR_To.Back =
+                    this.hbXOR_From.BackColor =
                     this.hbXOR_To.BackColor =
-                    Color.FromArgb(30, 30, 30);
+                    Operate.SystemConfig.Color_40;
 
                 this.hbXOR_From.ForeColor =
                     this.hbXOR_To.ForeColor =
@@ -43,7 +45,9 @@ namespace WinsockPacketEditor
             }
             else
             {
-                this.hbXOR_From.BackColor =
+                this.pXOR_From.Back =
+                    this.pXOR_To.Back =
+                    this.hbXOR_From.BackColor =
                     this.hbXOR_To.BackColor =
                     Color.White;
 

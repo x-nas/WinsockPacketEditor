@@ -120,8 +120,14 @@ namespace WinsockPacketEditor
                 this.txtComparison_A.BackColor = 
                     this.txtComparison_B.BackColor = 
                     this.txtDuplicate_A.BackColor = 
-                    this.txtDuplicate_B.BackColor = 
-                    Color.FromArgb(35, 35, 35);
+                    this.txtDuplicate_B.BackColor =
+                    Operate.SystemConfig.Color_40;
+
+                this.tComparison.BackColor = Operate.SystemConfig.Color_40;
+                this.tComparison.ColumnBack = Operate.SystemConfig.Color_40;
+
+                this.tDuplicate.BackColor = Operate.SystemConfig.Color_40;
+                this.tDuplicate.ColumnBack = Operate.SystemConfig.Color_40;
             }
             else
             {
@@ -129,6 +135,12 @@ namespace WinsockPacketEditor
                     this.txtComparison_B.BackColor =
                     this.txtDuplicate_A.BackColor =
                     this.txtDuplicate_B.BackColor = null;
+
+                this.tComparison.BackColor = Color.White;
+                this.tComparison.ColumnBack = null;
+
+                this.tDuplicate.BackColor = Color.White;
+                this.tDuplicate.ColumnBack = null;
             }
         }
 

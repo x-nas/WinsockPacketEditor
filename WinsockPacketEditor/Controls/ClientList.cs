@@ -109,12 +109,22 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tAuthList.ColumnBack = 
-                    this.tProxyLog.ColumnBack = 
-                    Color.FromArgb(35, 35, 35);
+                this.treeClientList.BackColor = Operate.SystemConfig.Color_40;
+
+                this.tAuthList.BackColor = Operate.SystemConfig.Color_40;
+                this.tAuthList.ColumnBack = Operate.SystemConfig.Color_40;
+
+                this.tProxyLog.BackColor = Operate.SystemConfig.Color_40;
+                this.tProxyLog.ColumnBack = Operate.SystemConfig.Color_40;
+
             }
             else
             {
+                this.treeClientList.BackColor = Color.White;
+
+                this.tAuthList.BackColor = Color.White;
+                this.tProxyLog.BackColor = Color.White;
+
                 this.tAuthList.ColumnBack = 
                     this.tProxyLog.ColumnBack = null;
             }

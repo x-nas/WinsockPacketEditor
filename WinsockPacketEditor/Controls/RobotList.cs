@@ -99,10 +99,12 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tRobotList.ColumnBack = Color.FromArgb(35, 35, 35);
+                this.tRobotList.BackColor = Operate.SystemConfig.Color_40;
+                this.tRobotList.ColumnBack = Operate.SystemConfig.Color_40;
             }
             else
             {
+                this.tRobotList.BackColor = Color.White;
                 this.tRobotList.ColumnBack = null;
             }
         }

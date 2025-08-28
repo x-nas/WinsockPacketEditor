@@ -75,6 +75,10 @@ namespace WinsockPacketEditor
             public static Execute ListExecute = Execute.Sequence;
             public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
             public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+            public static Color Color_30 = Color.FromArgb(30, 30, 30);
+            public static Color Color_35 = Color.FromArgb(35, 35, 35);
+            public static Color Color_40 = Color.FromArgb(40, 40, 40);
+            public static Color Color_250 = Color.FromArgb(250, 250, 250);
 
             #region//结构定义           
 

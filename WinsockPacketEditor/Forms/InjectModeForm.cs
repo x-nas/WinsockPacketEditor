@@ -147,7 +147,6 @@ namespace WinsockPacketEditor
         private void InitForm()
         {
             this.Text = "WPE x64 - " + AntdUI.Localization.Get("InjectModeForm", "注入模式");
-            this.pageHeader.Text = "Winsock Packet Editor";
             this.pageHeader.SubText = Operate.SystemConfig.AssemblyVersion;
             this.lProcessName.Text = Operate.ProcessConfig.GetInjectProcessName();
             this.lModuleName.Text = Operate.ProcessConfig.GetInjectModuleName();
@@ -427,31 +426,33 @@ namespace WinsockPacketEditor
 
             if (Dark)
             {
-                BackColor = Color.FromArgb(30, 30, 30);
+                BackColor = Operate.SystemConfig.Color_30;
                 ForeColor = Color.White;
 
-                this.tabInjectMode.BackColor = Color.FromArgb(35, 35, 35);
-                this.tPacketList.ColumnBack = Color.FromArgb(35, 35, 35);
-                this.pPacketData.Back = Color.FromArgb(35, 35, 35);
+                this.tabInjectMode.BackColor = Operate.SystemConfig.Color_35;
 
+                
+                this.tPacketList.BackColor = Operate.SystemConfig.Color_40;
+                this.tPacketList.ColumnBack = Operate.SystemConfig.Color_40;
                 this.tPacketList.ColumnFore = Color.Silver;
-                this.tPacketList.ForeColor = Color.LimeGreen;
+                this.tPacketList.ForeColor = Color.Lime;
 
-                this.hbPacketData.BackColor = Color.FromArgb(35, 35, 35);
+                this.pPacketData.Back = Operate.SystemConfig.Color_40;
+                this.hbPacketData.BackColor = Operate.SystemConfig.Color_40;
                 this.hbPacketData.ForeColor = Color.Silver;
             }
             else
             {
-                BackColor = Color.FromArgb(250, 250, 250);
+                BackColor = Operate.SystemConfig.Color_250;
                 ForeColor = Color.Black;
 
                 this.tabInjectMode.BackColor = Color.White;
-                this.tPacketList.ColumnBack = Color.White;
-                this.pPacketData.Back = Color.White;
 
+                this.tPacketList.ColumnBack = Color.White;
                 this.tPacketList.ColumnFore = Color.Black;
                 this.tPacketList.ForeColor = Color.Green;
 
+                this.pPacketData.Back = Color.White;
                 this.hbPacketData.BackColor = Color.White;
                 this.hbPacketData.ForeColor = Color.Black;
             }
@@ -532,12 +533,10 @@ namespace WinsockPacketEditor
             if (this.mInjectMode.Collapsed)
             {
                 this.mInjectMode.Width = this.tlpMenu.Width = this.mInjectMode.CollapseWidth;
-                this.bMenuCollapse.IconSvg = "MenuUnfoldOutlined";
             }
             else
             {
                 this.mInjectMode.Width = this.tlpMenu.Width = this.mInjectMode.CollapsedWidth;
-                this.bMenuCollapse.IconSvg = "MenuFoldOutlined";
             }
         }
 

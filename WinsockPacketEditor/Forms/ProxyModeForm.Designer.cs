@@ -234,7 +234,7 @@
             // mProxyMode
             // 
             this.mProxyMode.Dock = System.Windows.Forms.DockStyle.Left;
-            this.mProxyMode.Gap = 15;
+            this.mProxyMode.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.mProxyMode.IconRatio = 1F;
             menuItem1.Badge = "";
             menuItem1.IconSvg = "ProjectFilled";
@@ -301,6 +301,7 @@
             this.mProxyMode.Items.Add(menuItem12);
             this.mProxyMode.Location = new System.Drawing.Point(3, 47);
             this.mProxyMode.Name = "mProxyMode";
+            this.mProxyMode.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.mProxyMode.Size = new System.Drawing.Size(164, 712);
             this.mProxyMode.TabIndex = 5;
             this.mProxyMode.SelectChanged += new AntdUI.SelectEventHandler(this.mProxyMode_SelectChanged);
@@ -310,8 +311,7 @@
             this.bMenuCollapse.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bMenuCollapse.Dock = System.Windows.Forms.DockStyle.Left;
             this.bMenuCollapse.Ghost = true;
-            this.bMenuCollapse.IconRatio = 1F;
-            this.bMenuCollapse.IconSvg = "MenuFoldOutlined";
+            this.bMenuCollapse.IconSvg = "MenuOutlined";
             this.bMenuCollapse.Location = new System.Drawing.Point(1, 1);
             this.bMenuCollapse.Margin = new System.Windows.Forms.Padding(1);
             this.bMenuCollapse.Name = "bMenuCollapse";
@@ -324,11 +324,11 @@
             // 
             this.tabProxyMode.Controls.Add(this.tpProxyList);
             this.tabProxyMode.Controls.Add(this.tpClientList);
-            this.tabProxyMode.Controls.Add(this.tpStatistical);
             this.tabProxyMode.Controls.Add(this.tpAccountList);
             this.tabProxyMode.Controls.Add(this.tpFilterList);
             this.tabProxyMode.Controls.Add(this.tpSendList);
             this.tabProxyMode.Controls.Add(this.tpRobotList);
+            this.tabProxyMode.Controls.Add(this.tpStatistical);
             this.tabProxyMode.Controls.Add(this.tpComparison);
             this.tabProxyMode.Controls.Add(this.tpXOR);
             this.tabProxyMode.Controls.Add(this.tpTranscoding);
