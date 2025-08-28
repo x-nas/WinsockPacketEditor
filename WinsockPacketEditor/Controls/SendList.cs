@@ -242,12 +242,12 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new SendEditForm(this.form, si))
+                        var SendEdit = new SendEdit(this.form, si);
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("SendEditForm", "发送编辑"), SendEdit)
                         {
-                            Align = AntdUI.TAlignMini.Right,
-                            Mask = true,
+                            Keyboard = false,
                             MaskClosable = false,
-                            DisplayDelay = 0,
+                            BtnHeight = 0,
                         });
 
                         break;

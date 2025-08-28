@@ -1,16 +1,16 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class SendEditForm
+    partial class SendEdit
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// 必需的设计器变量。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// 清理所有正在使用的资源。
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,19 +20,18 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region 组件设计器生成的代码
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// 设计器支持所需的方法 - 不要修改
+        /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SendEditForm));
+            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
             this.tlpSendEdit = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bStop = new AntdUI.Button();
@@ -101,8 +100,8 @@
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpSendEdit.Size = new System.Drawing.Size(984, 761);
-            this.tlpSendEdit.TabIndex = 0;
+            this.tlpSendEdit.Size = new System.Drawing.Size(1000, 700);
+            this.tlpSendEdit.TabIndex = 1;
             // 
             // tlpButton
             // 
@@ -121,14 +120,14 @@
             this.tlpButton.Controls.Add(this.bSave, 5, 1);
             this.tlpButton.Controls.Add(this.bExit, 7, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 701);
+            this.tlpButton.Location = new System.Drawing.Point(0, 640);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(984, 60);
+            this.tlpButton.Size = new System.Drawing.Size(1000, 60);
             this.tlpButton.TabIndex = 10;
             // 
             // bStop
@@ -143,7 +142,7 @@
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
             this.bStop.LocalizationText = "Stop";
-            this.bStop.Location = new System.Drawing.Point(365, 7);
+            this.bStop.Location = new System.Drawing.Point(373, 7);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(114, 46);
             this.bStop.TabIndex = 3;
@@ -162,7 +161,7 @@
             this.bExecute.LoadingWaveValue = 0.6F;
             this.bExecute.LoadingWaveVertical = true;
             this.bExecute.LocalizationText = "Execute";
-            this.bExecute.Location = new System.Drawing.Point(225, 7);
+            this.bExecute.Location = new System.Drawing.Point(233, 7);
             this.bExecute.Name = "bExecute";
             this.bExecute.Size = new System.Drawing.Size(114, 46);
             this.bExecute.TabIndex = 2;
@@ -181,7 +180,7 @@
             this.bSave.LoadingWaveValue = 0.6F;
             this.bSave.LoadingWaveVertical = true;
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(505, 7);
+            this.bSave.Location = new System.Drawing.Point(513, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
@@ -195,7 +194,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(645, 7);
+            this.bExit.Location = new System.Drawing.Point(653, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -233,7 +232,7 @@
             this.tlpSendCollectionInfo.RowCount = 2;
             this.tlpSendCollectionInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendCollectionInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendCollectionInfo.Size = new System.Drawing.Size(984, 50);
+            this.tlpSendCollectionInfo.Size = new System.Drawing.Size(1000, 50);
             this.tlpSendCollectionInfo.TabIndex = 6;
             // 
             // mSendCollection
@@ -242,24 +241,24 @@
             this.mSendCollection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.mSendCollection.Gap = 5;
             this.mSendCollection.IconRatio = 1F;
-            menuItem1.IconSvg = "PlusOutlined";
-            menuItem2.IconSvg = "FolderOpenOutlined";
-            menuItem2.ID = "miImport";
-            menuItem2.LocalizationText = "SendEditForm.{id}";
-            menuItem2.Text = "导入发送集";
-            menuItem3.IconSvg = "DeliveredProcedureOutlined";
-            menuItem3.ID = "miExport";
-            menuItem3.LocalizationText = "SendEditForm.{id}";
-            menuItem3.Text = "导出所有发送集";
-            menuItem4.IconSvg = "DeleteOutlined";
-            menuItem4.ID = "miClear";
-            menuItem4.LocalizationText = "SendEditForm.{id}";
-            menuItem4.Text = "清空所有发送集";
-            menuItem1.Sub.Add(menuItem2);
-            menuItem1.Sub.Add(menuItem3);
-            menuItem1.Sub.Add(menuItem4);
-            this.mSendCollection.Items.Add(menuItem1);
-            this.mSendCollection.Location = new System.Drawing.Point(931, 3);
+            menuItem9.IconSvg = "PlusOutlined";
+            menuItem10.IconSvg = "FolderOpenOutlined";
+            menuItem10.ID = "miImport";
+            menuItem10.LocalizationText = "SendEditForm.{id}";
+            menuItem10.Text = "导入发送集";
+            menuItem11.IconSvg = "DeliveredProcedureOutlined";
+            menuItem11.ID = "miExport";
+            menuItem11.LocalizationText = "SendEditForm.{id}";
+            menuItem11.Text = "导出所有发送集";
+            menuItem12.IconSvg = "DeleteOutlined";
+            menuItem12.ID = "miClear";
+            menuItem12.LocalizationText = "SendEditForm.{id}";
+            menuItem12.Text = "清空所有发送集";
+            menuItem9.Sub.Add(menuItem10);
+            menuItem9.Sub.Add(menuItem11);
+            menuItem9.Sub.Add(menuItem12);
+            this.mSendCollection.Items.Add(menuItem9);
+            this.mSendCollection.Location = new System.Drawing.Point(947, 3);
             this.mSendCollection.Mode = AntdUI.TMenuMode.Horizontal;
             this.mSendCollection.Name = "mSendCollection";
             this.mSendCollection.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -380,18 +379,18 @@
             this.tSendCollection.Location = new System.Drawing.Point(3, 53);
             this.tSendCollection.MultipleRows = true;
             this.tSendCollection.Name = "tSendCollection";
-            this.tSendCollection.Size = new System.Drawing.Size(978, 445);
+            this.tSendCollection.Size = new System.Drawing.Size(994, 384);
             this.tSendCollection.TabIndex = 7;
             this.tSendCollection.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendCollection_CellClick);
             // 
             // txtNotes
             // 
             this.txtNotes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNotes.Location = new System.Drawing.Point(3, 604);
+            this.txtNotes.Location = new System.Drawing.Point(3, 543);
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.PlaceholderText = "备注信息";
-            this.txtNotes.Size = new System.Drawing.Size(978, 94);
+            this.txtNotes.Size = new System.Drawing.Size(994, 94);
             this.txtNotes.TabIndex = 8;
             // 
             // tlpSendCollectionSettings
@@ -406,12 +405,12 @@
             this.tlpSendCollectionSettings.Controls.Add(this.pSendSocket, 1, 0);
             this.tlpSendCollectionSettings.Controls.Add(this.pSendName, 0, 0);
             this.tlpSendCollectionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSendCollectionSettings.Location = new System.Drawing.Point(0, 501);
+            this.tlpSendCollectionSettings.Location = new System.Drawing.Point(0, 440);
             this.tlpSendCollectionSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendCollectionSettings.Name = "tlpSendCollectionSettings";
             this.tlpSendCollectionSettings.RowCount = 1;
             this.tlpSendCollectionSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendCollectionSettings.Size = new System.Drawing.Size(984, 100);
+            this.tlpSendCollectionSettings.Size = new System.Drawing.Size(1000, 100);
             this.tlpSendCollectionSettings.TabIndex = 9;
             // 
             // pLoopINT
@@ -419,10 +418,10 @@
             this.pLoopINT.BorderWidth = 2F;
             this.pLoopINT.Controls.Add(this.tlpLoopINT);
             this.pLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pLoopINT.Location = new System.Drawing.Point(741, 3);
+            this.pLoopINT.Location = new System.Drawing.Point(753, 3);
             this.pLoopINT.Name = "pLoopINT";
             this.pLoopINT.Radius = 10;
-            this.pLoopINT.Size = new System.Drawing.Size(240, 94);
+            this.pLoopINT.Size = new System.Drawing.Size(244, 94);
             this.pLoopINT.TabIndex = 13;
             // 
             // tlpLoopINT
@@ -440,7 +439,7 @@
             this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoopINT.Size = new System.Drawing.Size(236, 90);
+            this.tlpLoopINT.Size = new System.Drawing.Size(240, 90);
             this.tlpLoopINT.TabIndex = 0;
             // 
             // nudLoopINT
@@ -454,7 +453,7 @@
             0,
             0});
             this.nudLoopINT.Name = "nudLoopINT";
-            this.nudLoopINT.Size = new System.Drawing.Size(230, 40);
+            this.nudLoopINT.Size = new System.Drawing.Size(234, 40);
             this.nudLoopINT.SuffixText = "毫秒";
             this.nudLoopINT.TabIndex = 2;
             this.nudLoopINT.Text = "100";
@@ -473,7 +472,7 @@
             this.dLoopINT.Location = new System.Drawing.Point(3, 3);
             this.dLoopINT.Name = "dLoopINT";
             this.dLoopINT.Orientation = AntdUI.TOrientation.Left;
-            this.dLoopINT.Size = new System.Drawing.Size(230, 30);
+            this.dLoopINT.Size = new System.Drawing.Size(234, 30);
             this.dLoopINT.TabIndex = 0;
             this.dLoopINT.Text = "发送间隔";
             // 
@@ -482,10 +481,10 @@
             this.pLoopCNT.BorderWidth = 2F;
             this.pLoopCNT.Controls.Add(this.tlpLoopCNT);
             this.pLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pLoopCNT.Location = new System.Drawing.Point(495, 3);
+            this.pLoopCNT.Location = new System.Drawing.Point(503, 3);
             this.pLoopCNT.Name = "pLoopCNT";
             this.pLoopCNT.Radius = 10;
-            this.pLoopCNT.Size = new System.Drawing.Size(240, 94);
+            this.pLoopCNT.Size = new System.Drawing.Size(244, 94);
             this.pLoopCNT.TabIndex = 12;
             // 
             // tlpLoopCNT
@@ -503,7 +502,7 @@
             this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoopCNT.Size = new System.Drawing.Size(236, 90);
+            this.tlpLoopCNT.Size = new System.Drawing.Size(240, 90);
             this.tlpLoopCNT.TabIndex = 0;
             // 
             // dLoopCNT
@@ -514,7 +513,7 @@
             this.dLoopCNT.Location = new System.Drawing.Point(3, 3);
             this.dLoopCNT.Name = "dLoopCNT";
             this.dLoopCNT.Orientation = AntdUI.TOrientation.Left;
-            this.dLoopCNT.Size = new System.Drawing.Size(230, 30);
+            this.dLoopCNT.Size = new System.Drawing.Size(234, 30);
             this.dLoopCNT.TabIndex = 0;
             this.dLoopCNT.Text = "循环次数";
             // 
@@ -530,7 +529,7 @@
             0});
             this.nudLoopCNT.Name = "nudLoopCNT";
             this.nudLoopCNT.SelectionStart = 1;
-            this.nudLoopCNT.Size = new System.Drawing.Size(230, 40);
+            this.nudLoopCNT.Size = new System.Drawing.Size(234, 40);
             this.nudLoopCNT.SuffixText = "次";
             this.nudLoopCNT.TabIndex = 1;
             this.nudLoopCNT.Text = "1";
@@ -546,10 +545,10 @@
             this.pSendSocket.BorderWidth = 2F;
             this.pSendSocket.Controls.Add(this.tlpSendSocket);
             this.pSendSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pSendSocket.Location = new System.Drawing.Point(249, 3);
+            this.pSendSocket.Location = new System.Drawing.Point(253, 3);
             this.pSendSocket.Name = "pSendSocket";
             this.pSendSocket.Radius = 10;
-            this.pSendSocket.Size = new System.Drawing.Size(240, 94);
+            this.pSendSocket.Size = new System.Drawing.Size(244, 94);
             this.pSendSocket.TabIndex = 11;
             // 
             // tlpSendSocket
@@ -567,7 +566,7 @@
             this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendSocket.Size = new System.Drawing.Size(236, 90);
+            this.tlpSendSocket.Size = new System.Drawing.Size(240, 90);
             this.tlpSendSocket.TabIndex = 0;
             // 
             // dSendSocket
@@ -578,7 +577,7 @@
             this.dSendSocket.Location = new System.Drawing.Point(3, 3);
             this.dSendSocket.Name = "dSendSocket";
             this.dSendSocket.Orientation = AntdUI.TOrientation.Left;
-            this.dSendSocket.Size = new System.Drawing.Size(230, 30);
+            this.dSendSocket.Size = new System.Drawing.Size(234, 30);
             this.dSendSocket.TabIndex = 0;
             this.dSendSocket.Text = "套接字";
             // 
@@ -601,7 +600,7 @@
             this.pSendName.Location = new System.Drawing.Point(3, 3);
             this.pSendName.Name = "pSendName";
             this.pSendName.Radius = 10;
-            this.pSendName.Size = new System.Drawing.Size(240, 94);
+            this.pSendName.Size = new System.Drawing.Size(244, 94);
             this.pSendName.TabIndex = 10;
             // 
             // tlpSendName
@@ -619,7 +618,7 @@
             this.tlpSendName.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendName.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendName.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendName.Size = new System.Drawing.Size(236, 90);
+            this.tlpSendName.Size = new System.Drawing.Size(240, 90);
             this.tlpSendName.TabIndex = 0;
             // 
             // dSendName
@@ -630,7 +629,7 @@
             this.dSendName.Location = new System.Drawing.Point(3, 3);
             this.dSendName.Name = "dSendName";
             this.dSendName.Orientation = AntdUI.TOrientation.Left;
-            this.dSendName.Size = new System.Drawing.Size(230, 30);
+            this.dSendName.Size = new System.Drawing.Size(234, 30);
             this.dSendName.TabIndex = 0;
             this.dSendName.Text = "发送名称";
             // 
@@ -641,27 +640,21 @@
             this.txtSendName.Location = new System.Drawing.Point(3, 39);
             this.txtSendName.Name = "txtSendName";
             this.txtSendName.PlaceholderText = "请输入字符";
-            this.txtSendName.Size = new System.Drawing.Size(230, 40);
+            this.txtSendName.Size = new System.Drawing.Size(234, 40);
             this.txtSendName.TabIndex = 1;
             this.txtSendName.TextChanged += new System.EventHandler(this.txtSendName_TextChanged);
             // 
-            // SendEditForm
+            // SendEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 761);
             this.Controls.Add(this.tlpSendEdit);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
-            this.Name = "SendEditForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SendEditForm";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SendEditForm_FormClosing);
-            this.Load += new System.EventHandler(this.SendEditForm_Load);
+            this.Name = "SendEdit";
+            this.Size = new System.Drawing.Size(1000, 700);
+            this.Load += new System.EventHandler(this.SendEdit_Load);
             this.tlpSendEdit.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
             this.tlpSendCollectionInfo.ResumeLayout(false);
@@ -683,7 +676,13 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpSendEdit;
+        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private AntdUI.Button bStop;
+        private AntdUI.Button bExecute;
+        private AntdUI.Button bSave;
+        private AntdUI.Button bExit;
         private System.Windows.Forms.TableLayoutPanel tlpSendCollectionInfo;
+        private AntdUI.Menu mSendCollection;
         private AntdUI.Label lSend_Fail_CNT;
         private AntdUI.Label lSend_Success_CNT;
         private AntdUI.Label lTotal_Send_CNT;
@@ -695,12 +694,9 @@
         private AntdUI.Table tSendCollection;
         private AntdUI.Input txtNotes;
         private System.Windows.Forms.TableLayoutPanel tlpSendCollectionSettings;
-        private AntdUI.Panel pSendName;
-        private System.Windows.Forms.TableLayoutPanel tlpSendName;
-        private AntdUI.Divider dSendName;
-        private AntdUI.Input txtSendName;
         private AntdUI.Panel pLoopINT;
         private System.Windows.Forms.TableLayoutPanel tlpLoopINT;
+        private AntdUI.InputNumber nudLoopINT;
         private AntdUI.Divider dLoopINT;
         private AntdUI.Panel pLoopCNT;
         private System.Windows.Forms.TableLayoutPanel tlpLoopCNT;
@@ -710,12 +706,9 @@
         private System.Windows.Forms.TableLayoutPanel tlpSendSocket;
         private AntdUI.Divider dSendSocket;
         private AntdUI.Checkbox cbSystemSocket;
-        private AntdUI.InputNumber nudLoopINT;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
-        private AntdUI.Button bSave;
-        private AntdUI.Button bExit;
-        private AntdUI.Button bStop;
-        private AntdUI.Button bExecute;
-        private AntdUI.Menu mSendCollection;
+        private AntdUI.Panel pSendName;
+        private System.Windows.Forms.TableLayoutPanel tlpSendName;
+        private AntdUI.Divider dSendName;
+        private AntdUI.Input txtSendName;
     }
 }

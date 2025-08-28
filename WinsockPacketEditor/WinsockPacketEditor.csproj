@@ -282,6 +282,12 @@
     <Compile Include="Controls\RobotList.Designer.cs">
       <DependentUpon>RobotList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SendEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SendEdit.Designer.cs">
+      <DependentUpon>SendEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SendList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -426,12 +432,6 @@
     <Compile Include="Forms\SearchPacketForm.Designer.cs">
       <DependentUpon>SearchPacketForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SendEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SendEditForm.Designer.cs">
-      <DependentUpon>SendEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -511,6 +511,9 @@
     <EmbeddedResource Include="Controls\RobotList.resx">
       <DependentUpon>RobotList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SendEdit.resx">
+      <DependentUpon>SendEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SendList.resx">
       <DependentUpon>SendList.cs</DependentUpon>
     </EmbeddedResource>
@@ -582,9 +585,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SearchPacketForm.resx">
       <DependentUpon>SearchPacketForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SendEditForm.resx">
-      <DependentUpon>SendEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>

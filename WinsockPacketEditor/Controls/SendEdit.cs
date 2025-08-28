@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class SendEditForm : Form
+    public partial class SendEdit : UserControl
     {
         private Form form;
         private SendInfo siSelect;
@@ -18,18 +18,16 @@ namespace WinsockPacketEditor
 
         #region//窗体事件
 
-        public SendEditForm(Form form, SendInfo si)
+        public SendEdit(Form form, SendInfo si)
         {
             InitializeComponent();
             this.siSelect = si;
             this.form = form;
         }
 
-        private void SendEditForm_Load(object sender, EventArgs e)
+        private void SendEdit_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("SendEditForm", "发送编辑");
-
-            this.txtSendName.Text = this.siSelect.SName;            
+            this.txtSendName.Text = this.siSelect.SName;
             this.cbSystemSocket.Checked = this.siSelect.SSystemSocket;
             this.nudLoopCNT.Value = this.siSelect.SLoopCNT;
             this.nudLoopINT.Value = this.siSelect.SLoopINT;
@@ -41,12 +39,7 @@ namespace WinsockPacketEditor
             this.se.Worker.RunWorkerCompleted -= this.Worker_RunWorkerCompleted;
             this.se.Worker.RunWorkerCompleted += this.Worker_RunWorkerCompleted;
 
-            this.InitTable_SendCollection();            
-        }
-
-        private void SendEditForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.se.StopSend();
+            this.InitTable_SendCollection();
         }
 
         private void InitTable_SendCollection()
@@ -58,7 +51,7 @@ namespace WinsockPacketEditor
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column.ID"),                
+                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column.ID"),
                 new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -98,53 +91,6 @@ namespace WinsockPacketEditor
             {
                 this.txtSendName.Status = TType.Success;
             }
-        }        
-
-        #endregion        
-
-        #region//执行
-
-        private void bExecute_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (this.SendCollection.Count == 0)
-                {
-                    return;
-                }
-
-                if (this.cbSystemSocket.Checked)
-                {
-                    if (Operate.SystemConfig.SystemSocket <= 0)
-                    {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统套接字未设置", TType.Error)
-                        {
-                            LocalizationText = "SendEditForm.SystemSocket.Error"
-                        });
-
-                        return;
-                    }
-                }
-
-                if (!this.SaveSend())
-                {
-                    return;
-                }
-
-                if (!this.se.Worker.IsBusy)
-                {
-                    this.bExecute.Loading = true;
-                    this.bStop.Enabled = true;
-                    this.tlpSendCollectionSettings.Enabled = false;
-                    this.tSendCollection.Enabled = false;
-
-                    se.StartSend(siSelect);
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
         }
 
         #endregion
@@ -154,7 +100,7 @@ namespace WinsockPacketEditor
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             int iIndex = e.ProgressPercentage;
-            
+
             this.tSendCollection.SelectedIndex = iIndex + 1;
             this.tSendCollection.ScrollLine(iIndex + 1, true);
 
@@ -166,7 +112,7 @@ namespace WinsockPacketEditor
         private void Worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             try
-            {                
+            {
                 string sSendName = this.txtSendName.Text.Trim();
 
                 if (e.Cancelled)
@@ -204,15 +150,6 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
-
-        #endregion
-
-        #region//停止
-
-        private void bStop_Click(object sender, EventArgs e)
-        {
-            this.se.StopSend();
         }
 
         #endregion
@@ -228,7 +165,7 @@ namespace WinsockPacketEditor
             {
                 case "miImport":
 
-                    Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Import, this.SendCollection.ToList());
+                    Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Import, this.SendCollection.ToList());
 
                     break;
 
@@ -236,7 +173,7 @@ namespace WinsockPacketEditor
 
                     if (this.SendCollection.Count > 0)
                     {
-                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Export, this.SendCollection.ToList());
+                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Export, this.SendCollection.ToList());
                     }
 
                     break;
@@ -245,7 +182,7 @@ namespace WinsockPacketEditor
 
                     if (this.SendCollection.Count > 0)
                     {
-                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, this.SendCollection.ToList());
+                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, this.SendCollection.ToList());
                     }
 
                     break;
@@ -315,7 +252,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this.form, piList[0], null))
+                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new PacketEditForm(this.form, piList[0], null))
                                 {
                                     Align = AntdUI.TAlignMini.Right,
                                     Mask = true,
@@ -343,7 +280,7 @@ namespace WinsockPacketEditor
                                 Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
                             }
 
-                            break;                        
+                            break;
                     }
 
                     this.tSendCollection.SelectedIndex = -1;
@@ -394,9 +331,65 @@ namespace WinsockPacketEditor
                     ID = "cmsDelete",
                     IconSvg = "CloseOutlined",
                     LocalizationText = "Delete",
-                },                    
+                },
                 }));
             }
+        }
+
+        #endregion
+
+        #region//执行
+
+        private void bExecute_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.SendCollection.Count == 0)
+                {
+                    return;
+                }
+
+                if (this.cbSystemSocket.Checked)
+                {
+                    if (Operate.SystemConfig.SystemSocket <= 0)
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统套接字未设置", TType.Error)
+                        {
+                            LocalizationText = "SendEditForm.SystemSocket.Error"
+                        });
+
+                        return;
+                    }
+                }
+
+                if (!this.SaveSend())
+                {
+                    return;
+                }
+
+                if (!this.se.Worker.IsBusy)
+                {
+                    this.bExecute.Loading = true;
+                    this.bStop.Enabled = true;
+                    this.tlpSendCollectionSettings.Enabled = false;
+                    this.tSendCollection.Enabled = false;
+
+                    se.StartSend(siSelect);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//停止
+
+        private void bStop_Click(object sender, EventArgs e)
+        {
+            this.se.StopSend();
         }
 
         #endregion
@@ -429,7 +422,8 @@ namespace WinsockPacketEditor
                         LocalizationText = "SendEditForm.Success"
                     });
 
-                    this.Close();
+                    this.se.StopSend();
+                    this.Dispose();
                 }
             }
             catch (Exception ex)
@@ -440,7 +434,7 @@ namespace WinsockPacketEditor
                 {
                     LocalizationText = "SendEditForm.Error"
                 });
-            }            
+            }
         }
 
         private bool SaveSend()
@@ -488,6 +482,7 @@ namespace WinsockPacketEditor
 
         private void bExit_Click(object sender, EventArgs e)
         {
+            this.se.StopSend();
             this.Dispose();
         }
 
