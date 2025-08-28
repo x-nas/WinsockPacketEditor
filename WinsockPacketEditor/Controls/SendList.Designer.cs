@@ -116,6 +116,7 @@
             this.mSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mSendList.Gap = 5;
             this.mSendList.IconRatio = 1F;
+            this.mSendList.itemMargin = 0;
             menuItem1.IconSvg = "PlusOutlined";
             menuItem2.IconSvg = "UserAddOutlined";
             menuItem2.ID = "miAdd";
@@ -138,11 +139,11 @@
             menuItem1.Sub.Add(menuItem4);
             menuItem1.Sub.Add(menuItem5);
             this.mSendList.Items.Add(menuItem1);
-            this.mSendList.Location = new System.Drawing.Point(687, 3);
+            this.mSendList.Location = new System.Drawing.Point(693, 3);
             this.mSendList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mSendList.Name = "mSendList";
             this.mSendList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mSendList.Size = new System.Drawing.Size(50, 44);
+            this.mSendList.Size = new System.Drawing.Size(44, 44);
             this.mSendList.TabIndex = 6;
             this.mSendList.Trigger = AntdUI.Trigger.Click;
             this.mSendList.SelectChanged += new AntdUI.SelectEventHandler(this.mSendList_SelectChanged);

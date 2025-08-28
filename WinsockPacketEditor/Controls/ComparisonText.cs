@@ -24,14 +24,10 @@ namespace WinsockPacketEditor
         {
             this.tabComparisonText.SelectTab(0);
 
-            this.lComparison_A.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextA", "文本 A  ( 长度 {0} )"), this.txtComparison_A.Text.Length);
-            this.lComparison_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtComparison_B.Text.Length);
-            this.lDuplicate_A.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextA", "文本 A  ( 长度 {0} )"), this.txtDuplicate_A.Text.Length);
-            this.lDuplicate_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtDuplicate_B.Text.Length);
-
             this.InitTable_Comparison();
             this.InitTable_Duplicate();
             this.Dark_Changed();
+            this.SetTextInfo();
         }
 
         private void InitTable_Comparison()
@@ -111,6 +107,14 @@ namespace WinsockPacketEditor
             };
 
             this.tDuplicate.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+        }
+
+        public void SetTextInfo()
+        {
+            this.lComparison_A.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextA", "文本 A  ( 长度 {0} )"), this.txtComparison_A.Text.Length);
+            this.lComparison_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtComparison_B.Text.Length);
+            this.lDuplicate_A.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextA", "文本 A  ( 长度 {0} )"), this.txtDuplicate_A.Text.Length);
+            this.lDuplicate_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtDuplicate_B.Text.Length);
         }
 
         public void Dark_Changed()

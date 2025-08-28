@@ -23,10 +23,10 @@ namespace WinsockPacketEditor
         }
 
         private void ExtractionData_Load(object sender, EventArgs e)
-        {
-            this.udExtraction.TextDesc = AntdUI.Localization.Get("ExtractionData.ExtractionFile", "提取成功后会在下方显示数据内容，点击生成按钮可导出对应格式的数据文件.");
+        {            
             this.InitExtraction();
             this.Dark_Changed();
+            this.SetExtractionInfo();
         }
 
         private void InitExtraction()
@@ -47,6 +47,11 @@ namespace WinsockPacketEditor
             this.ddlExtraction.SelectedIndex = 0;
             this.Extraction_Changed();
             this.udExtraction.UseAdmin();
+        }
+
+        public void SetExtractionInfo()
+        {
+            this.udExtraction.TextDesc = AntdUI.Localization.Get("ExtractionData.ExtractionFile", "提取成功后会在下方显示数据内容，点击生成按钮可导出对应格式的数据文件.");
         }
 
         public void Dark_Changed()

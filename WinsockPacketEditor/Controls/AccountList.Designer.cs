@@ -123,6 +123,7 @@
             this.mAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mAccountList.Gap = 5;
             this.mAccountList.IconRatio = 1F;
+            this.mAccountList.itemMargin = 0;
             menuItem1.IconSvg = "PlusOutlined";
             menuItem2.IconSvg = "UserAddOutlined";
             menuItem2.ID = "miAdd";
@@ -145,10 +146,10 @@
             menuItem1.Sub.Add(menuItem4);
             menuItem1.Sub.Add(menuItem5);
             this.mAccountList.Items.Add(menuItem1);
-            this.mAccountList.Location = new System.Drawing.Point(1087, 2);
+            this.mAccountList.Location = new System.Drawing.Point(1092, 2);
             this.mAccountList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mAccountList.Name = "mAccountList";
-            this.mAccountList.Size = new System.Drawing.Size(50, 45);
+            this.mAccountList.Size = new System.Drawing.Size(45, 45);
             this.mAccountList.TabIndex = 3;
             this.mAccountList.Trigger = AntdUI.Trigger.Click;
             this.mAccountList.SelectChanged += new AntdUI.SelectEventHandler(this.mAccountList_SelectChanged);
@@ -159,7 +160,7 @@
             this.txtSearchUserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchUserName.LocalizationPlaceholderText = "AccountList.SearchAccount";
             this.txtSearchUserName.LocalizationText = "";
-            this.txtSearchUserName.Location = new System.Drawing.Point(837, 2);
+            this.txtSearchUserName.Location = new System.Drawing.Point(842, 2);
             this.txtSearchUserName.Name = "txtSearchUserName";
             this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
             this.txtSearchUserName.PrefixSvg = "SearchOutlined";
