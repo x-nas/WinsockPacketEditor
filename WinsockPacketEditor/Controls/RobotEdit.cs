@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class RobotEditForm : Form
+    public partial class RobotEdit : UserControl
     {
         private Form form;
         private RobotInfo riSelect;
@@ -19,16 +19,15 @@ namespace WinsockPacketEditor
 
         #region//窗体事件
 
-        public RobotEditForm(Form form, RobotInfo ri)
+        public RobotEdit(Form form, RobotInfo ri)
         {
             InitializeComponent();
             this.riSelect = ri;
             this.form = form;
         }
 
-        private void RobotEditForm_Load(object sender, System.EventArgs e)
+        private void RobotEdit_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("RobotEditForm", "机器人编辑");
             this.ciPacketINST.Expand = true;
 
             this.txtKeyCombination.BackColor = null;
@@ -45,12 +44,7 @@ namespace WinsockPacketEditor
             this.InitTable_RobotINST();
             this.InitDDL();
             this.DelayFix_Changed();
-            this.DelayRandom_Changed();           
-        }
-
-        private void RobotEditForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.re.StopRobot();
+            this.DelayRandom_Changed();
         }
 
         private void InitTable_RobotINST()
@@ -63,12 +57,12 @@ namespace WinsockPacketEditor
                         string sINST = string.Format(AntdUI.Localization.Get("RobotEditForm.INST", "指令 {0}"), rowindex + 1);
                         return new AntdUI.CellText(sINST)
                         {
-                            Fore = Color.FromArgb(22, 119, 255),                            
+                            Fore = Color.FromArgb(22, 119, 255),
                         };
                     },
                 }.SetFixed().SetLocalizationTitleID("Table.RobotINST.Column."),
                 new AntdUI.Column("InstType", "Type", AntdUI.ColumnAlign.Center)
-                {  
+                {
                     Render = (value, record, rowindex)=>
                     {
                         var typeName = Operate.RobotConfig.Robot.GetName_ByInstructionType((Operate.RobotConfig.Robot.InstructionType)value);
@@ -89,7 +83,7 @@ namespace WinsockPacketEditor
 
                         return null;
                     },
-                }.SetLocalizationTitleID("Table.RobotINST.Column."),                
+                }.SetLocalizationTitleID("Table.RobotINST.Column."),
             };
 
             this.tRobotInstruction.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -197,7 +191,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
+        #endregion
 
         #region//添加指令
 
@@ -205,7 +199,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                InstructionInfo ii = new InstructionInfo(instructionType, sContent);             
+                InstructionInfo ii = new InstructionInfo(instructionType, sContent);
 
                 if (this.tRobotInstruction.SelectedIndex != -1)
                 {
@@ -298,7 +292,7 @@ namespace WinsockPacketEditor
         }
 
         private void DelayFix_Changed()
-        { 
+        {
             this.nudDelayFix.Enabled = this.rbDelayFix.Checked;
         }
 
@@ -309,8 +303,8 @@ namespace WinsockPacketEditor
 
         private void DelayRandom_Changed()
         {
-            this.nudnudDelayRandom_From.Enabled = 
-                this.nudnudDelayRandom_To.Enabled = 
+            this.nudnudDelayRandom_From.Enabled =
+                this.nudnudDelayRandom_To.Enabled =
                 this.rbDelayRandom.Checked;
         }
 
@@ -339,9 +333,6 @@ namespace WinsockPacketEditor
             }
         }
 
-
-
-
         #endregion
 
         #region//封包指令 - 循环
@@ -356,7 +347,6 @@ namespace WinsockPacketEditor
         {
             this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.LoopEnd, string.Empty);
         }
-
 
         #endregion
 
@@ -434,7 +424,6 @@ namespace WinsockPacketEditor
             }
         }
 
-
         #endregion
 
         #region//键盘指令 - 文本
@@ -457,7 +446,6 @@ namespace WinsockPacketEditor
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-
 
         #endregion
 
@@ -513,7 +501,6 @@ namespace WinsockPacketEditor
             }
         }
 
-
         #endregion
 
         #region//鼠标指令 - 滚轮
@@ -542,7 +529,6 @@ namespace WinsockPacketEditor
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-
 
         #endregion
 
@@ -649,7 +635,7 @@ namespace WinsockPacketEditor
                     this.tRobotInstruction.SelectedIndex = -1;
                 }, Operate.RobotConfig.Robot.GetCMS_RobotInstruction()));
             }
-        }        
+        }
 
         #endregion
 
@@ -780,7 +766,8 @@ namespace WinsockPacketEditor
                     LocalizationText = "RobotEditForm.Success"
                 });
 
-                this.Close();
+                this.re.StopRobot();
+                this.Dispose();
             }
             catch (Exception ex)
             {
@@ -790,7 +777,7 @@ namespace WinsockPacketEditor
                 {
                     LocalizationText = "RobotEditForm.Error"
                 });
-            }            
+            }
         }
 
         private bool SaveRobot()
@@ -838,6 +825,7 @@ namespace WinsockPacketEditor
 
         private void bExit_Click(object sender, System.EventArgs e)
         {
+            this.re.StopRobot();
             this.Dispose();
         }
 

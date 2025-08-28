@@ -276,6 +276,12 @@
     <Compile Include="Controls\RemoteMGTSetting.Designer.cs">
       <DependentUpon>RemoteMGTSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RobotEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RobotEdit.Designer.cs">
+      <DependentUpon>RobotEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RobotList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -420,12 +426,6 @@
     <Compile Include="Forms\ProxySettingsForm.Designer.cs">
       <DependentUpon>ProxySettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RobotEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RobotEditForm.Designer.cs">
-      <DependentUpon>RobotEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\SearchPacketForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -508,6 +508,9 @@
     <EmbeddedResource Include="Controls\RemoteMGTSetting.resx">
       <DependentUpon>RemoteMGTSetting.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RobotEdit.resx">
+      <DependentUpon>RobotEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\RobotList.resx">
       <DependentUpon>RobotList.cs</DependentUpon>
     </EmbeddedResource>
@@ -579,9 +582,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProxySettingsForm.resx">
       <DependentUpon>ProxySettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RobotEditForm.resx">
-      <DependentUpon>RobotEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SearchPacketForm.resx">
       <DependentUpon>SearchPacketForm.cs</DependentUpon>

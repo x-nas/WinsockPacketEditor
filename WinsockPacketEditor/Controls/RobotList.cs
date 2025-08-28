@@ -188,12 +188,12 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new RobotEditForm(this.form, ri))
+                        var RobotEdit = new RobotEdit(this.form, ri);
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("RobotEditForm", "机器人编辑"), RobotEdit)
                         {
-                            Align = AntdUI.TAlignMini.Right,
-                            Mask = true,
+                            Keyboard = false,
                             MaskClosable = false,
-                            DisplayDelay = 0,
+                            BtnHeight = 0,
                         });
 
                         break;

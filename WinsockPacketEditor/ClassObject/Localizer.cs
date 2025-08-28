@@ -381,12 +381,6 @@ namespace WinsockPacketEditor
                 case "MoveBy":
                     return "Move By";
 
-                case "X-coordinate":
-                    return "X-coordinate";
-
-                case "Y-coordinate":
-                    return "Y-coordinate";
-
                 #endregion
 
                 #region//Operate
@@ -2272,7 +2266,7 @@ namespace WinsockPacketEditor
                     return "Loop";
 
                 case "RobotEditForm.KeyBoardINST.Key":
-                    return "Key";
+                    return "Key :";
 
                 case "RobotEditForm.KeyBoardINST.KeyPress":
                     return "Key Press";
@@ -2284,7 +2278,7 @@ namespace WinsockPacketEditor
                     return "Key Up";
 
                 case "RobotEditForm.KeyBoardINST.Key.Type":
-                    return "Type";
+                    return "Type :";
 
                 case "RobotEditForm.KeyBoardINST.CombinationKey":
                     return "Combination Key";
@@ -2293,16 +2287,16 @@ namespace WinsockPacketEditor
                     return "Text";
 
                 case "RobotEditForm.MouseINST.Key":
-                    return "Key";
+                    return "Key :";
 
                 case "RobotEditForm.MouseINST.Wheel":
                     return "Wheel";
 
                 case "RobotEditForm.MouseINST.Wheel.Scroll":
-                    return "Scroll";
+                    return "Scroll :";
 
                 case "RobotEditForm.MouseINST.Wheel.Distance":
-                    return "Distance";
+                    return "Distance :";
 
                 case "RobotEditForm.INST":
                     return "Inst {0}";
