@@ -29,6 +29,7 @@ namespace WinsockPacketEditor
         {
             this.InitTableColumns();
             this.InitLastInjection();
+            this.Dark_Changed();
             this.ShowProcessList();
         }
 
@@ -49,6 +50,20 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("ProcessID", "进程编号").SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
                 new AntdUI.Column("ProcessPath", "路径").SetLocalizationTitleID("Table.ProcessList.Column."),
             };
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.tProcessList.BackColor = Operate.SystemConfig.Color_40;
+                this.tProcessList.ColumnBack = Operate.SystemConfig.Color_40;
+            }
+            else
+            {
+                this.tProcessList.BackColor = Color.White;
+                this.tProcessList.ColumnBack = null;
+            }
         }
 
         #endregion

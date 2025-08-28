@@ -153,7 +153,7 @@ namespace WinsockPacketEditor
             this.lWinsockInfo.Text = Operate.ProcessConfig.GetInjectWinsockInfo();            
             this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
 
-            this.mInjectMode.Collapsed = true;
+            this.mInjectMode.Collapsed = false;
             this.MenuCollapseChange();            
 
             for (int i = 0; i < this.mInjectMode.Items.Count; i++)
