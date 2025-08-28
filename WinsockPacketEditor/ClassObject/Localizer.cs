@@ -777,16 +777,16 @@ namespace WinsockPacketEditor
                     return "System Log";
 
                 case "InjectModeForm.TotalPackets":
-                    return "Total Packets:";
+                    return "Total Packets :";
 
                 case "InjectModeForm.ExecuteFilter":
-                    return "Execute Filter:";
+                    return "Execute Filter :";
 
                 case "InjectModeForm.Buffer":
-                    return "Buffer:";
+                    return "Buffer :";
 
                 case "InjectModeForm.Filter":
-                    return "Filter:";
+                    return "Filter :";
 
                 case "Table.PacketList.Column.ID":
                     return "ID";
@@ -837,31 +837,31 @@ namespace WinsockPacketEditor
                     return "System Settings";
 
                 case "InjectModeForm.SpeedInfo":
-                    return "Sent: {0} Received: {1}";
+                    return "Sent : {0} Received : {1}";
 
                 case "InjectModeForm.Send":
-                    return "Send:";
+                    return "Send :";
 
                 case "InjectModeForm.Recv":
-                    return "Recv:";
+                    return "Recv :";
 
                 case "InjectModeForm.SendTo":
-                    return "SendTo:";
+                    return "SendTo :";
 
                 case "InjectModeForm.RecvFrom":
-                    return "RecvFrom:";
+                    return "RecvFrom :";
 
                 case "InjectModeForm.WSASend":
-                    return "WSASend:";
+                    return "WSASend :";
 
                 case "InjectModeForm.WSARecv":
-                    return "WSARecv:";
+                    return "WSARecv :";
 
                 case "InjectModeForm.WSASendTo":
-                    return "WSASendTo:";
+                    return "WSASendTo :";
 
                 case "InjectModeForm.WSARecvFrom":
-                    return "WSARecvFrom:";
+                    return "WSARecvFrom :";
 
                 #endregion
 
@@ -922,37 +922,37 @@ namespace WinsockPacketEditor
                     return "System Log";
 
                 case "ProxyModeForm.TotalProxy":
-                    return "Total Proxy:";
+                    return "Total Proxy :";
 
                 case "ProxyModeForm.ExecuteFilter":
-                    return "Execute Filter:";
+                    return "Execute Filter :";
 
                 case "ProxyModeForm.Buffer":
-                    return "Buffer:";
+                    return "Buffer :";
 
                 case "ProxyModeForm.Filter":
-                    return "Filter:";
+                    return "Filter :";
 
                 case "ProxyModeForm.Account":
-                    return "Account:";
+                    return "Account :";
 
                 case "ProxyModeForm.TCPLink":
-                    return "TCP Link:";
+                    return "TCP Link :";
 
                 case "ProxyModeForm.UDPLink":
-                    return "UDP Link:";
+                    return "UDP Link :";
 
                 case "ProxyModeForm.TCPReq":
-                    return "TCP Req:";
+                    return "TCP Req :";
 
                 case "ProxyModeForm.TCPResp":
-                    return "TCP Resp:";
+                    return "TCP Resp :";
 
                 case "ProxyModeForm.UDPReq":
-                    return "UDP Req:";
+                    return "UDP Req :";
 
                 case "ProxyModeForm.UDPResp":
-                    return "UDP Resp:";
+                    return "UDP Resp :";
 
                 case "ProxyModeForm.miProxySettings":
                     return "Proxy Settings";
@@ -1012,10 +1012,10 @@ namespace WinsockPacketEditor
                     return "Data";
 
                 case "ProxyModeForm.ProxyBytesInfo":
-                    return "Request: {0}  Response: {1}";
+                    return "Request : {0}  Response : {1}";
 
                 case "ProxyModeForm.ProxySpeedInfo":
-                    return "UpLink: {0} KB/s  DownLink: {1} KB/s";
+                    return "UpLink : {0} KB/s  DownLink : {1} KB/s";
 
                 #endregion                
 
@@ -1764,40 +1764,40 @@ namespace WinsockPacketEditor
                     return "HotKeys - Apply to Send and Robot List";
 
                 case "HotKeyForm.Key1":
-                    return "HotKey 1";
+                    return "HotKey 1 :";
 
                 case "HotKeyForm.Key2":
-                    return "HotKey 2";
+                    return "HotKey 2 :";
 
                 case "HotKeyForm.Key3":
-                    return "HotKey 3";
+                    return "HotKey 3 :";
 
                 case "HotKeyForm.Key4":
-                    return "HotKey 4";
+                    return "HotKey 4 :";
 
                 case "HotKeyForm.Key5":
-                    return "HotKey 5";
+                    return "HotKey 5 :";
 
                 case "HotKeyForm.Key6":
-                    return "HotKey 6";
+                    return "HotKey 6 :";
 
                 case "HotKeyForm.Key7":
-                    return "HotKey 7";
+                    return "HotKey 7 :";
 
                 case "HotKeyForm.Key8":
-                    return "HotKey 8";
+                    return "HotKey 8 :";
 
                 case "HotKeyForm.Key9":
-                    return "HotKey 9";
+                    return "HotKey 9 :";
 
                 case "HotKeyForm.Key10":
-                    return "HotKey 10";
+                    return "HotKey 10 :";
 
                 case "HotKeyForm.Key11":
-                    return "HotKey 11";
+                    return "HotKey 11 :";
 
                 case "HotKeyForm.Key12":
-                    return "HotKey 12";
+                    return "HotKey 12 :";
 
                 case "HotKeyForm.Success":
                     return "HotKey set successfully";
