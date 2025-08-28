@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -12,6 +13,19 @@ namespace WinsockPacketEditor
         public Transcoding()
         {
             InitializeComponent();
+            this.Dark_Changed();
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.txtTranscoding.BackColor = Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.txtTranscoding.BackColor = null;
+            }
         }
 
         #endregion

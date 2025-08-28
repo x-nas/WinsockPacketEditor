@@ -24,6 +24,7 @@ namespace WinsockPacketEditor
         private void RobotList_Load(object sender, EventArgs e)
         {
             this.InitTable_RobotList();
+            this.Dark_Changed();
         }
 
         private void InitTable_RobotList()
@@ -92,6 +93,18 @@ namespace WinsockPacketEditor
 
             this.tRobotList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tRobotList.Binding(Operate.RobotConfig.List.lstRobotInfo);
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.tRobotList.ColumnBack = Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.tRobotList.ColumnBack = null;
+            }
         }
 
         public void RefreshRobotList()

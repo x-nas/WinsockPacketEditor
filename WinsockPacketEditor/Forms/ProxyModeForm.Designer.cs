@@ -151,7 +151,6 @@
             this.pageHeader.Controls.Add(this.btn_global);
             this.pageHeader.Controls.Add(this.btn_setting);
             this.pageHeader.DividerMargin = 3;
-            this.pageHeader.DividerShow = true;
             this.pageHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pageHeader.FullBox = true;
             this.pageHeader.Location = new System.Drawing.Point(0, 0);
@@ -1250,13 +1249,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1450, 802);
             this.Controls.Add(this.tabProxyMode);
             this.Controls.Add(this.tlpMenu);
             this.Controls.Add(this.pageHeader);
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ForeColor = System.Drawing.Color.Black;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.MinimumSize = new System.Drawing.Size(660, 400);

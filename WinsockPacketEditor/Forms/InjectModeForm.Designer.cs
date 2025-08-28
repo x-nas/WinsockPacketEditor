@@ -151,7 +151,6 @@
             this.pageHeader.Controls.Add(this.btn_global);
             this.pageHeader.Controls.Add(this.btn_setting);
             this.pageHeader.DividerMargin = 3;
-            this.pageHeader.DividerShow = true;
             this.pageHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pageHeader.FullBox = true;
             this.pageHeader.Icon = global::WinsockPacketEditor.Properties.Resources.wpe;

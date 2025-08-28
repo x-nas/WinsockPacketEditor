@@ -107,6 +107,7 @@ namespace WinsockPacketEditor
                 this.progressDisplay.ForeColor = Color.White;
                 this.progressNoDisplay.Back = Color.FromArgb(80, 47, 79);
                 this.progressNoDisplay.ForeColor = Color.White;
+                this.tStatisticalFilter.ColumnBack = Color.FromArgb(35, 35, 35);
             }
             else
             {
@@ -121,6 +122,7 @@ namespace WinsockPacketEditor
                 this.progressDisplay.ForeColor = null;
                 this.progressNoDisplay.Back = null;
                 this.progressNoDisplay.ForeColor = null;
+                this.tStatisticalFilter.ColumnBack = null;
             }
         }
 

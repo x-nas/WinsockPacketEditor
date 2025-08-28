@@ -17,7 +17,7 @@ namespace WinsockPacketEditor
 
         public ComparisonText()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void ComparisonText_Load(object sender, EventArgs e)
@@ -31,6 +31,7 @@ namespace WinsockPacketEditor
 
             this.InitTable_Comparison();
             this.InitTable_Duplicate();
+            this.Dark_Changed();
         }
 
         private void InitTable_Comparison()
@@ -110,7 +111,26 @@ namespace WinsockPacketEditor
             };
 
             this.tDuplicate.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-        }                
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.txtComparison_A.BackColor = 
+                    this.txtComparison_B.BackColor = 
+                    this.txtDuplicate_A.BackColor = 
+                    this.txtDuplicate_B.BackColor = 
+                    Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.txtComparison_A.BackColor =
+                    this.txtComparison_B.BackColor =
+                    this.txtDuplicate_A.BackColor =
+                    this.txtDuplicate_B.BackColor = null;
+            }
+        }
 
         public void SetTextA(string StringA)
         { 

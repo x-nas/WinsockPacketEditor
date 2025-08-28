@@ -22,6 +22,7 @@ namespace WinsockPacketEditor
         private void LogList_Load(object sender, EventArgs e)
         {
             this.InitTable_LogList();
+            this.Dark_Changed();
         }
 
         private void InitTable_LogList()
@@ -47,7 +48,19 @@ namespace WinsockPacketEditor
 
             this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSystemLog.DataSource = Operate.LogConfig.List.lstLogInfo;
-        }        
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.tSystemLog.ColumnBack = Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.tSystemLog.ColumnBack = null;
+            }
+        }
 
         public void RefreshLogList()
         {

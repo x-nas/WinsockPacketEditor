@@ -457,16 +457,24 @@ namespace WinsockPacketEditor
                 BackColor = Color.FromArgb(30, 30, 30);
                 ForeColor = Color.White;
 
+                this.tabProxyMode.BackColor = Color.FromArgb(35, 35, 35);
+                this.tProxyList.ColumnBack = Color.FromArgb(35, 35, 35);
+                this.pPacketData.Back = Color.FromArgb(35, 35, 35);
+
                 this.tProxyList.ColumnFore = Color.Silver;
                 this.tProxyList.ForeColor = Color.LimeGreen;
 
-                this.hbProxyData.BackColor = Color.FromArgb(30, 30, 30);
+                this.hbProxyData.BackColor = Color.FromArgb(35, 35, 35);
                 this.hbProxyData.ForeColor = Color.Silver;
             }
             else
             {
-                BackColor = Color.White;
+                BackColor = Color.FromArgb(250, 250, 250);
                 ForeColor = Color.Black;
+
+                this.tabProxyMode.BackColor = Color.White;
+                this.tProxyList.ColumnBack = Color.White;
+                this.pPacketData.Back = Color.White;
 
                 this.tProxyList.ColumnFore = Color.Black;
                 this.tProxyList.ForeColor = Color.Green;
@@ -475,8 +483,17 @@ namespace WinsockPacketEditor
                 this.hbProxyData.ForeColor = Color.Black;
             }
 
+            this.cAccountList?.Dark_Changed();
+            this.cClientList?.Dark_Changed();
+            this.cFilterList?.Dark_Changed();
+            this.cSendList?.Dark_Changed();
+            this.cRobotList?.Dark_Changed();
             this.cStatisticalData?.Dark_Changed();
+            this.cComparisonText?.Dark_Changed();
             this.cXORCalculation?.Dark_Changed();
+            this.cTranscoding?.Dark_Changed();
+            this.cExtractionData?.Dark_Changed();
+            this.cLogList?.Dark_Changed();
         }
 
         #endregion

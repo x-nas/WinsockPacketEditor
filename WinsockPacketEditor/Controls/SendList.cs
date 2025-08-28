@@ -24,6 +24,7 @@ namespace WinsockPacketEditor
         private void SendList_Load(object sender, EventArgs e)
         {
             this.InitTable_SendList();
+            this.Dark_Changed();
         }
 
         private void InitTable_SendList()
@@ -146,6 +147,18 @@ namespace WinsockPacketEditor
 
             this.tSendList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSendList.Binding(Operate.SendConfig.List.lstSendInfo);
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.tSendList.ColumnBack = Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.tSendList.ColumnBack = null;
+            }
         }
 
         public void RefreshSendList()

@@ -84,7 +84,7 @@
             this.pageHeader.Name = "pageHeader";
             this.pageHeader.ShowButton = true;
             this.pageHeader.ShowIcon = true;
-            this.pageHeader.Size = new System.Drawing.Size(1200, 52);
+            this.pageHeader.Size = new System.Drawing.Size(1200, 40);
             this.pageHeader.SubText = "";
             this.pageHeader.TabIndex = 5;
             this.pageHeader.Text = "WPE x64";
@@ -97,7 +97,7 @@
             this.btn_mode.Location = new System.Drawing.Point(1060, 0);
             this.btn_mode.Name = "btn_mode";
             this.btn_mode.Radius = 0;
-            this.btn_mode.Size = new System.Drawing.Size(50, 52);
+            this.btn_mode.Size = new System.Drawing.Size(50, 40);
             this.btn_mode.TabIndex = 13;
             this.btn_mode.ToggleIconSvg = "MoonOutlined";
             this.btn_mode.WaveSize = 0;
@@ -116,7 +116,7 @@
             this.btn_global.Name = "btn_global";
             this.btn_global.Placement = AntdUI.TAlignFrom.BR;
             this.btn_global.Radius = 0;
-            this.btn_global.Size = new System.Drawing.Size(50, 52);
+            this.btn_global.Size = new System.Drawing.Size(50, 40);
             this.btn_global.TabIndex = 11;
             this.btn_global.WaveSize = 0;
             this.btn_global.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.btn_global_SelectedValueChanged);
@@ -361,7 +361,7 @@
             this.tlpStartForm.Controls.Add(this.lMore, 1, 5);
             this.tlpStartForm.Controls.Add(this.tlpMore, 1, 6);
             this.tlpStartForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStartForm.Location = new System.Drawing.Point(0, 52);
+            this.tlpStartForm.Location = new System.Drawing.Point(0, 40);
             this.tlpStartForm.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStartForm.Name = "tlpStartForm";
             this.tlpStartForm.RowCount = 7;
@@ -372,7 +372,7 @@
             this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStartForm.Size = new System.Drawing.Size(1200, 698);
+            this.tlpStartForm.Size = new System.Drawing.Size(1200, 710);
             this.tlpStartForm.TabIndex = 6;
             // 
             // lMore
@@ -408,7 +408,7 @@
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMore.Size = new System.Drawing.Size(1140, 287);
+            this.tlpMore.Size = new System.Drawing.Size(1140, 299);
             this.tlpMore.TabIndex = 3;
             // 
             // bQA

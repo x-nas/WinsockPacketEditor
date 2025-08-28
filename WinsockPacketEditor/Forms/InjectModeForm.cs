@@ -430,16 +430,24 @@ namespace WinsockPacketEditor
                 BackColor = Color.FromArgb(30, 30, 30);
                 ForeColor = Color.White;
 
+                this.tabInjectMode.BackColor = Color.FromArgb(35, 35, 35);
+                this.tPacketList.ColumnBack = Color.FromArgb(35, 35, 35);
+                this.pPacketData.Back = Color.FromArgb(35, 35, 35);
+
                 this.tPacketList.ColumnFore = Color.Silver;
                 this.tPacketList.ForeColor = Color.LimeGreen;
 
-                this.hbPacketData.BackColor = Color.FromArgb(30, 30, 30);
+                this.hbPacketData.BackColor = Color.FromArgb(35, 35, 35);
                 this.hbPacketData.ForeColor = Color.Silver;
             }
             else
             {
                 BackColor = Color.White;
                 ForeColor = Color.Black;
+
+                this.tabInjectMode.BackColor = Color.White;
+                this.tPacketList.ColumnBack = Color.White;
+                this.pPacketData.Back = Color.White;
 
                 this.tPacketList.ColumnFore = Color.Black;
                 this.tPacketList.ForeColor = Color.Green;
@@ -448,8 +456,15 @@ namespace WinsockPacketEditor
                 this.hbPacketData.ForeColor = Color.Black;
             }
 
+            this.cFilterList?.Dark_Changed();
+            this.cSendList?.Dark_Changed();
+            this.cRobotList?.Dark_Changed();
             this.cStatisticalData?.Dark_Changed();
+            this.cComparisonText?.Dark_Changed();
             this.cXORCalculation?.Dark_Changed();
+            this.cTranscoding?.Dark_Changed();
+            this.cExtractionData?.Dark_Changed();
+            this.cLogList?.Dark_Changed();
         }        
 
         #endregion

@@ -21,6 +21,7 @@ namespace WinsockPacketEditor
         private void FilterList_Load(object sender, EventArgs e)
         {
             this.InitTable_FilterList();
+            this.Dark_Changed();
         }
 
         private void InitTable_FilterList()
@@ -202,6 +203,18 @@ namespace WinsockPacketEditor
 
             this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tFilterList.Binding(Operate.FilterConfig.List.lstFilterInfo);
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.tFilterList.ColumnBack = Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.tFilterList.ColumnBack = null;
+            }
         }
 
         public void RefreshFilterList()

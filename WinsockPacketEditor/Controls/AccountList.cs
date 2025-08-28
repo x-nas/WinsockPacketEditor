@@ -26,6 +26,7 @@ namespace WinsockPacketEditor
         private void AccountList_Load(object sender, EventArgs e)
         {
             this.InitTable_AccountList();
+            this.Dark_Changed();
         }
 
         private void InitTable_AccountList()
@@ -198,6 +199,18 @@ namespace WinsockPacketEditor
             sb.Append(e.PageTotal);
             sb.Append(AntdUI.Localization.Get("Page", "页"));
             return sb.ToString();
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.tAccountList.ColumnBack = Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.tAccountList.ColumnBack = null;
+            }
         }
 
         public void RefreshAccountList()

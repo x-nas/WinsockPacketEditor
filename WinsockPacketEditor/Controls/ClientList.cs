@@ -23,6 +23,7 @@ namespace WinsockPacketEditor
 
             this.InitTable_AuthList();
             this.InitTable_ProxyLog();
+            this.Dark_Changed();
         }
 
         private void InitTable_AuthList()
@@ -102,6 +103,21 @@ namespace WinsockPacketEditor
 
             this.tProxyLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tProxyLog.DataSource = Operate.LogConfig.List.lstProxyLogInfo;
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.tAuthList.ColumnBack = 
+                    this.tProxyLog.ColumnBack = 
+                    Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.tAuthList.ColumnBack = 
+                    this.tProxyLog.ColumnBack = null;
+            }
         }
 
         public void RefreshClientList()

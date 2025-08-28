@@ -1,11 +1,12 @@
 ﻿using AntdUI;
 using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using System.IO;
 
 namespace WinsockPacketEditor
 {
@@ -25,6 +26,7 @@ namespace WinsockPacketEditor
         {
             this.udExtraction.TextDesc = AntdUI.Localization.Get("ExtractionData.ExtractionFile", "提取成功后会在下方显示数据内容，点击生成按钮可导出对应格式的数据文件.");
             this.InitExtraction();
+            this.Dark_Changed();
         }
 
         private void InitExtraction()
@@ -45,6 +47,18 @@ namespace WinsockPacketEditor
             this.ddlExtraction.SelectedIndex = 0;
             this.Extraction_Changed();
             this.udExtraction.UseAdmin();
+        }
+
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.txtExtraction.BackColor = Color.FromArgb(35, 35, 35);
+            }
+            else
+            {
+                this.txtExtraction.BackColor = null;
+            }
         }
 
         #endregion
