@@ -467,12 +467,6 @@
     <Compile Include="Forms\ProxyModeForm.Designer.cs">
       <DependentUpon>ProxyModeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SelectProcessForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SelectProcessForm.Designer.cs">
-      <DependentUpon>SelectProcessForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -608,9 +602,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProxyModeForm.resx">
       <DependentUpon>ProxyModeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SelectProcessForm.resx">
-      <DependentUpon>SelectProcessForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="IPLocation\qqwry.dat">
