@@ -7,11 +7,14 @@ namespace WinsockPacketEditor
 {
     public partial class EXTProxySettingsForm : Form
     {
+        private Form form;
+
         #region//窗体事件
 
-        public EXTProxySettingsForm()
+        public EXTProxySettingsForm(Form form)
         {
             InitializeComponent();
+            this.form = form;
         }
 
         private void ExternalProxySettingsForm_Load(object sender, EventArgs e)
@@ -148,7 +151,7 @@ namespace WinsockPacketEditor
                     {
                         this.txtExternalProxy_IP.Status = TType.Error;
 
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "外部代理地址为空", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "外部代理地址为空", TType.Error)
                         {
                             LocalizationText = "EXTProxySettingsForm.ProxyIP.Empty"
                         });                        
@@ -159,7 +162,7 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Proxy.AddressType atExternalProxy = Operate.ProxyConfig.Proxy.GetAddressType_ByString(ExternalProxyIP);
                     if (atExternalProxy != Operate.ProxyConfig.Proxy.AddressType.IPv4 && atExternalProxy != Operate.ProxyConfig.Proxy.AddressType.Domain)
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "外部代理地址错误", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "外部代理地址错误", TType.Error)
                         {
                             LocalizationText = "EXTProxySettingsForm.ProxyIP.Error"
                         });
@@ -175,7 +178,7 @@ namespace WinsockPacketEditor
                         {
                             this.txtExternalProxy_AppointPort.Status = TType.Error;
 
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定端口为空", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定端口为空", TType.Error)
                             {
                                 LocalizationText = "EXTProxySettingsForm.SpecifyPort.Empty"
                             });
@@ -192,7 +195,7 @@ namespace WinsockPacketEditor
                         {
                             this.txtExternalProxy_UserName.Status = TType.Error;
 
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "认证账号为空", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "认证账号为空", TType.Error)
                             {
                                 LocalizationText = "ExternalProxySettingsForm.UserName.Empty"
                             });
@@ -205,7 +208,7 @@ namespace WinsockPacketEditor
                         {
                             this.txtExternalProxy_PassWord.Status = TType.Error;
 
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "认证密码为空", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "认证密码为空", TType.Error)
                             {
                                 LocalizationText = "ExternalProxySettingsForm.PassWord.Empty"
                             });
@@ -236,11 +239,11 @@ namespace WinsockPacketEditor
             }
 
             this.bExternalProxy_Detection.Loading = true;
-            bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(this);
+            bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(this.form);
 
             if (Result)
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "外部代理服务器连接成功", TType.Success)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "外部代理服务器连接成功", TType.Success)
                 {
                     LocalizationText = "EXTProxySettingsForm.Connection"
                 });
@@ -269,10 +272,12 @@ namespace WinsockPacketEditor
             Operate.ProxyConfig.Proxy.ExternalProxy_UserName = this.txtExternalProxy_UserName.Text.Trim();
             Operate.ProxyConfig.Proxy.ExternalProxy_PassWord = this.txtExternalProxy_PassWord.Text.Trim();
 
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "外部代理设置保存成功", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "外部代理设置保存成功", TType.Success)
             {
                 LocalizationText = "ExternalProxySettingsForm.Success"
             });
+
+            this.Dispose();
         }
 
         #endregion

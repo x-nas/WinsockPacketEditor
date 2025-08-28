@@ -922,7 +922,7 @@ namespace WinsockPacketEditor
 
                 case "miProxySettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ProxySettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ProxySettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -934,7 +934,7 @@ namespace WinsockPacketEditor
 
                 case "miFilterSettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterSettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterSettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -946,7 +946,7 @@ namespace WinsockPacketEditor
 
                 case "miHookSettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HookSettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HookSettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -970,7 +970,7 @@ namespace WinsockPacketEditor
 
                 case "miMapSettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapSettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapSettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -982,7 +982,7 @@ namespace WinsockPacketEditor
 
                 case "miExternalProxySettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new EXTProxySettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new EXTProxySettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -994,7 +994,7 @@ namespace WinsockPacketEditor
 
                 case "miHotKeySettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HotKeyForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HotKeyForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -1006,7 +1006,7 @@ namespace WinsockPacketEditor
 
                 case "miBackUpSettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new BackUpSettingsForm())
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new BackUpSettingsForm(this))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,

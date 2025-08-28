@@ -469,7 +469,7 @@ namespace WinsockPacketEditor
         {
             if (!System.Text.RegularExpressions.Regex.IsMatch(ValidateHex, "^[0-9A-F]{2}$"))
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "请输入有效的十六进制数值", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请输入有效的十六进制数值", TType.Error)
                 {
                     LocalizationText = "InvalidHex"
                 });
@@ -725,7 +725,7 @@ namespace WinsockPacketEditor
                 //滤镜名称
                 if (string.IsNullOrEmpty(this.txtFilterName.Text.Trim()))
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜名称为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "滤镜名称为空", TType.Error)
                     {
                         LocalizationText = "FilterEditForm.FilterName.Empty"
                     });
@@ -738,7 +738,7 @@ namespace WinsockPacketEditor
                 {
                     if (string.IsNullOrEmpty(this.txtFilter_HeaderContent.Text.Trim()))
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "指定包头数据错误", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定包头数据错误", TType.Error)
                         {
                             LocalizationText = "FilterEditForm.AppointHead.Error"
                         });
@@ -749,7 +749,7 @@ namespace WinsockPacketEditor
                     {
                         if (!Operate.SystemConfig.IsHexString(this.txtFilter_HeaderContent.Text.Trim()))
                         {
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定包头数据错误", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定包头数据错误", TType.Error)
                             {
                                 LocalizationText = "FilterEditForm.AppointHead.Error"
                             });
@@ -764,7 +764,7 @@ namespace WinsockPacketEditor
                 {
                     if (string.IsNullOrEmpty(this.txtFilter_SocketContent.Text.Trim()))
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "指定套接字错误", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定套接字错误", TType.Error)
                         {
                             LocalizationText = "FilterEditForm.AppointSocket.Error"
                         });
@@ -775,7 +775,7 @@ namespace WinsockPacketEditor
                     {
                         if (!Regex.IsMatch(this.txtFilter_SocketContent.Text.Trim(), @"^(\d+)(;\d+)*$"))
                         {
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定套接字错误", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定套接字错误", TType.Error)
                             {
                                 LocalizationText = "FilterEditForm.AppointSocket.Error"
                             });
@@ -790,7 +790,7 @@ namespace WinsockPacketEditor
                 {
                     if (string.IsNullOrEmpty(this.txtFilter_PortContent.Text.Trim()))
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "指定端口错误", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定端口错误", TType.Error)
                         {
                             LocalizationText = "FilterEditForm.AppointPort.Error"
                         });
@@ -801,7 +801,7 @@ namespace WinsockPacketEditor
                     {
                         if (!Regex.IsMatch(this.txtFilter_PortContent.Text.Trim(), @"^(\d+[-;])*\d+$"))
                         {
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定端口错误", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定端口错误", TType.Error)
                             {
                                 LocalizationText = "FilterEditForm.AppointPort.Error"
                             });
@@ -816,7 +816,7 @@ namespace WinsockPacketEditor
                 {
                     if (string.IsNullOrEmpty(this.txtFilter_LengthContent.Text.Trim()))
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "指定长度错误", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定长度错误", TType.Error)
                         {
                             LocalizationText = "FilterEditForm.AppointLength.Error"
                         });
@@ -827,7 +827,7 @@ namespace WinsockPacketEditor
                     {
                         if (!Regex.IsMatch(this.txtFilter_LengthContent.Text.Trim(), @"^(\d+[-;])*\d+$"))
                         {
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定长度错误", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "指定长度错误", TType.Error)
                             {
                                 LocalizationText = "FilterEditForm.AppointLength.Error"
                             });
@@ -859,7 +859,7 @@ namespace WinsockPacketEditor
 
                         if (iMaxIndex == 0)
                         {
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "换包数据错误", TType.Error)
                             {
                                 LocalizationText = "FilterEditForm.Change.Error"
                             });
@@ -874,7 +874,7 @@ namespace WinsockPacketEditor
                                 string sCheckValue = ((CellText)dtFilterNormal.Rows[1][i]).Text.Trim();
                                 if (string.IsNullOrEmpty(sCheckValue))
                                 {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "换包数据错误", TType.Error)
                                     {
                                         LocalizationText = "FilterEditForm.Change.Error"
                                     });
@@ -902,7 +902,7 @@ namespace WinsockPacketEditor
 
                         if (iMaxIndex == 0)
                         {
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "换包数据错误", TType.Error)
                             {
                                 LocalizationText = "FilterEditForm.Change.Error"
                             });
@@ -917,7 +917,7 @@ namespace WinsockPacketEditor
                                 string sCheckValue = ((CellText)dtFilterAdvanced_Modify_Head.Rows[0][i]).Text.Trim();
                                 if (string.IsNullOrEmpty(sCheckValue))
                                 {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "换包数据错误", TType.Error)
                                     {
                                         LocalizationText = "FilterEditForm.Change.Error"
                                     });
@@ -947,7 +947,7 @@ namespace WinsockPacketEditor
 
                         if (iMaxIndex == iStartIndex)
                         {
-                            AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "换包数据错误", TType.Error)
                             {
                                 LocalizationText = "FilterEditForm.Change.Error"
                             });
@@ -962,7 +962,7 @@ namespace WinsockPacketEditor
                                 string sCheckValue = ((CellText)dtFilterAdvanced_Modify_Position.Rows[0][i]).Text.Trim();
                                 if (string.IsNullOrEmpty(sCheckValue))
                                 {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "换包数据错误", TType.Error)
                                     {
                                         LocalizationText = "FilterEditForm.Change.Error"
                                     });
@@ -1343,7 +1343,7 @@ namespace WinsockPacketEditor
                     }
                     else
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "请输入有效的十六进制数值", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请输入有效的十六进制数值", TType.Error)
                         {
                             LocalizationText = "InvalidHex"
                         });
@@ -1352,7 +1352,7 @@ namespace WinsockPacketEditor
                 {
                     if (bOK) 
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "数据粘贴完毕", TType.Success)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "数据粘贴完毕", TType.Success)
                         {
                             LocalizationText = "Paste.Success"
                         });
@@ -1459,10 +1459,7 @@ namespace WinsockPacketEditor
 
                 }, () =>
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜数据加载完毕", TType.Success)
-                    {
-                        LocalizationText = "FilterEditForm.LoadComplete"
-                    });
+                    //
                 });                
             }
             catch (Exception ex)
@@ -1758,13 +1755,18 @@ namespace WinsockPacketEditor
                         break;
                 }
 
-                this.Close();
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "滤镜保存成功", TType.Success)
+                {
+                    LocalizationText = "FilterEditForm.Success"
+                });
+
+                this.Dispose();
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜保存出错", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "滤镜保存失败", TType.Error)
                 {
                     LocalizationText = "FilterEditForm.Error"
                 });

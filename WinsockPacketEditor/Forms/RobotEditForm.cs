@@ -598,7 +598,7 @@ namespace WinsockPacketEditor
 
                             if (iiList.Count > 0)
                             {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this, Operate.SystemConfig.ListAction.Top, this.RInstruction, iiList);
+                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, this.RInstruction, iiList);
                             }
 
                             break;
@@ -607,7 +607,7 @@ namespace WinsockPacketEditor
 
                             if (iiList.Count > 0)
                             {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this, Operate.SystemConfig.ListAction.Up, this.RInstruction, iiList);
+                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, this.RInstruction, iiList);
                             }
 
                             break;
@@ -616,7 +616,7 @@ namespace WinsockPacketEditor
 
                             if (iiList.Count > 0)
                             {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this, Operate.SystemConfig.ListAction.Down, this.RInstruction, iiList);
+                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, this.RInstruction, iiList);
                             }
 
                             break;
@@ -625,7 +625,7 @@ namespace WinsockPacketEditor
 
                             if (iiList.Count > 0)
                             {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, this.RInstruction, iiList);
+                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, this.RInstruction, iiList);
                             }
 
                             break;
@@ -634,14 +634,14 @@ namespace WinsockPacketEditor
 
                             if (iiList.Count > 0)
                             {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this, Operate.SystemConfig.ListAction.Delete, this.RInstruction, iiList);
+                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, this.RInstruction, iiList);
                             }
 
                             break;
 
                         case "ClearUp":
 
-                            Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this, Operate.SystemConfig.ListAction.CleanUp, this.RInstruction, iiList);
+                            Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, this.RInstruction, iiList);
 
                             break;
                     }
@@ -697,21 +697,21 @@ namespace WinsockPacketEditor
             {
                 if (e.Cancelled)
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "机器人已停止", TType.Warn)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人已停止", TType.Warn)
                     {
                         LocalizationText = "RobotEditForm.Robot.Stop",
                     });
                 }
                 else if (e.Error != null)
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "发生错误: " + e.Error.Message, TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发生错误: " + e.Error.Message, TType.Error)
                     {
                         LocalizationText = "RobotEditForm.Robot.Error" + e.Error.Message,
                     });
                 }
                 else
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "机器人执行完毕", TType.Success)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人执行完毕", TType.Success)
                     {
                         LocalizationText = "RobotEditForm.Robot.Success",
                     });
@@ -753,27 +753,44 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            if (!this.SaveRobot())
+            try
             {
-                return;
-            }
+                if (!this.SaveRobot())
+                {
+                    return;
+                }
 
-            switch (Operate.SystemConfig.StartMode)
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Process:
+
+                        ((InterfaceInfo.IInjectMode)form).RefreshRobotList();
+
+                        break;
+
+                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                        ((InterfaceInfo.IProxyMode)form).RefreshRobotList();
+
+                        break;
+                }
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人保存成功", TType.Success)
+                {
+                    LocalizationText = "RobotEditForm.Success"
+                });
+
+                this.Close();
+            }
+            catch (Exception ex)
             {
-                case Operate.SystemConfig.SystemMode.Process:
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
 
-                    ((InterfaceInfo.IInjectMode)form).RefreshRobotList();
-
-                    break;
-
-                case Operate.SystemConfig.SystemMode.Proxy:
-
-                    ((InterfaceInfo.IProxyMode)form).RefreshRobotList();
-
-                    break;
-            }
-
-            this.Close();
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人保存失败", TType.Error)
+                {
+                    LocalizationText = "RobotEditForm.Error"
+                });
+            }            
         }
 
         private bool SaveRobot()
@@ -782,7 +799,7 @@ namespace WinsockPacketEditor
             {
                 if (string.IsNullOrEmpty(this.txtRobotName.Text.Trim()))
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "机器人名称为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人名称为空", TType.Error)
                     {
                         LocalizationText = "RobotEditForm.RName.Empty"
                     });
@@ -792,7 +809,7 @@ namespace WinsockPacketEditor
 
                 if (this.RInstruction.Count > 0)
                 {
-                    int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(this, this.RInstruction);
+                    int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(this.form, this.RInstruction);
                     if (iReturn > -1 && iReturn < tRobotInstruction.ToDataTable().Rows.Count)
                     {
                         this.tRobotInstruction.SelectedIndex = iReturn + 1;

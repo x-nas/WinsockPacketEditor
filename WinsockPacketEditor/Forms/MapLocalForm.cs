@@ -8,14 +8,16 @@ namespace WinsockPacketEditor
 {
     public partial class MapLocalForm : Form
     {
+        private Form form;
         private MapLocal mlSelect;
 
         #region//窗体事件
 
-        public MapLocalForm(MapLocal ml)
+        public MapLocalForm(Form form, MapLocal ml)
         {
             InitializeComponent();
             this.mlSelect = ml;
+            this.form = form;
         }
 
         private void MapLocalForm_Load(object sender, EventArgs e)
@@ -95,7 +97,7 @@ namespace WinsockPacketEditor
                 if (string.IsNullOrEmpty(Host_New))
                 {
                     this.txtHost.Status = TType.Error;
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "映射数据为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "映射数据为空", TType.Error)
                     {
                         LocalizationText = "MapLocalForm.Empty"
                     });
@@ -107,7 +109,7 @@ namespace WinsockPacketEditor
                 if (string.IsNullOrEmpty(LocalPath_New))
                 {
                     this.txtLocalPath.Status = TType.Error;
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "映射数据为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "映射数据为空", TType.Error)
                     {
                         LocalizationText = "MapLocalForm.Empty"
                     });
@@ -137,10 +139,12 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Mapping.UpdateMapLocal(this.mlSelect, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
                 }
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "本地映射保存成功", TType.Success)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "本地映射保存成功", TType.Success)
                 {
                     LocalizationText = "MapLocalForm.Success"
                 });
+
+                this.Dispose();
             }
             catch (Exception ex)
             {

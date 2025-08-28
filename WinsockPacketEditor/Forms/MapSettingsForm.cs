@@ -7,11 +7,14 @@ namespace WinsockPacketEditor
 {
     public partial class MapSettingsForm : Form
     {
+        private Form form;
+
         #region//窗体事件
 
-        public MapSettingsForm()
+        public MapSettingsForm(Form form)
         {
             InitializeComponent();
+            this.form = form;
         }
 
         private void MapSettingsForm_Load(object sender, EventArgs e)
@@ -151,7 +154,7 @@ namespace WinsockPacketEditor
             {
                 case "miAdd":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapLocalForm(null))
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapLocalForm(this.form, null))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = false,
@@ -195,7 +198,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapLocalForm(ml))
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapLocalForm(this.form, ml))
                         {
                             Align = AntdUI.TAlignMini.Right,
                             Mask = true,
@@ -277,7 +280,7 @@ namespace WinsockPacketEditor
             {
                 case "miAdd":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapRemoteForm(null))
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapRemoteForm(this.form, null))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = false,
@@ -321,7 +324,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapRemoteForm(mr))
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapRemoteForm(this.form, mr))
                         {
                             Align = AntdUI.TAlignMini.Right,
                             Mask = true,
@@ -399,10 +402,12 @@ namespace WinsockPacketEditor
             Operate.ProxyConfig.Mapping.Enable_MapLocal = this.cbEnable_MapLocal.Checked;
             Operate.ProxyConfig.Mapping.Enable_MapRemote = this.cbEnable_MapRemote.Checked;
 
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "映射设置保存成功", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "映射设置保存成功", TType.Success)
             {
                 LocalizationText = "MapSettingsForm.Success"
             });
+
+            this.Dispose();
         }
 
         #endregion

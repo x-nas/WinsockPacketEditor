@@ -53,7 +53,7 @@ namespace WinsockPacketEditor
 
                     Operate.ProxyConfig.Account.AdjustLimitLinks(this.aiList, IsLimitLinks, LimitLinks);
 
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "批量调整完成", TType.Success)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "批量调整完成", TType.Success)
                     {
                         LocalizationText = "BatchSuccess"
                     });
@@ -63,6 +63,8 @@ namespace WinsockPacketEditor
                         Operate.ProxyConfig.Account.NeedSave = true;
                         proxyForm.RefreshAccountList();
                     }
+
+                    this.Dispose();
                 }
             }
             catch (Exception ex)

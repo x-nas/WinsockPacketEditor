@@ -146,7 +146,7 @@ namespace WinsockPacketEditor
         {
             if ((int)this.nudPacketSocket.Value == 0)
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "套接字设置错误", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "套接字设置错误", TType.Error)
                 {
                     LocalizationText = "PacketEditForm.Socket.Error"
                 });
@@ -156,7 +156,7 @@ namespace WinsockPacketEditor
 
             if (hbPacketEdit.ByteProvider.Length == 0)
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "封包数据为空", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包数据为空", TType.Error)
                 {
                     LocalizationText = "PacketEditForm.Packet.Empty"
                 });
@@ -168,7 +168,7 @@ namespace WinsockPacketEditor
             {
                 if ((int)this.nudProgressionPosition.Value >= hbPacketEdit.ByteProvider.Length)
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "递进位置错误", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "递进位置错误", TType.Error)
                     {
                         LocalizationText = "PacketEditForm.Position.Error"
                     });
@@ -244,14 +244,14 @@ namespace WinsockPacketEditor
 
                             if (bOK)
                             {
-                                AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到滤镜列表", TType.Success)
+                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到滤镜列表", TType.Success)
                                 {
                                     LocalizationText = "ToFilterList.Success"
                                 });
                             }
                             else
                             {
-                                AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到滤镜列表出错", TType.Error)
+                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表出错", TType.Error)
                                 {
                                     LocalizationText = "ToFilterList.Error"
                                 });
@@ -356,11 +356,11 @@ namespace WinsockPacketEditor
                                     if (bAddOK)
                                     {
                                         string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到: {0}"), item.Text);
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this, sText, TType.Success));                                     
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));                                     
                                     }
                                     else
                                     {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
                                         {
                                             LocalizationText = "ToSendList.Error",
                                         });
@@ -642,11 +642,16 @@ namespace WinsockPacketEditor
                                 break;
                         }
 
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包保存成功", TType.Error)
+                        {
+                            LocalizationText = "PacketEditForm.Success",
+                        });
+
                         this.Close();
                     }
                     else
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "封包数据为空", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包数据为空", TType.Error)
                         {
                             LocalizationText = "PacketEditForm.Packet.Empty",
                         });
@@ -657,9 +662,9 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "封包保存出错", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包保存失败", TType.Error)
                 {
-                    LocalizationText = "PacketEditForm.Save.Error",
+                    LocalizationText = "PacketEditForm.Error",
                 });
             }
         }

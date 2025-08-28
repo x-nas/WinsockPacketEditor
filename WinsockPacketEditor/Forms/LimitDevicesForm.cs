@@ -13,10 +13,10 @@ namespace WinsockPacketEditor
 
         #region//窗体事件
 
-        public LimitDevicesForm(Form _form, List<AccountInfo> aiList)
+        public LimitDevicesForm(Form form, List<AccountInfo> aiList)
         {
             InitializeComponent();
-            this.form = _form;
+            this.form = form;
             this.aiList = aiList;
         }
 
@@ -53,7 +53,7 @@ namespace WinsockPacketEditor
 
                     Operate.ProxyConfig.Account.AdjustLimitDevices(this.aiList, IsLimitDevices, LimitDevices);
 
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "批量调整完成", TType.Success)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "批量调整完成", TType.Success)
                     {
                         LocalizationText = "BatchSuccess"
                     });
@@ -63,6 +63,8 @@ namespace WinsockPacketEditor
                         Operate.ProxyConfig.Account.NeedSave = true;
                         proxyForm.RefreshAccountList();
                     }
+
+                    this.Dispose();
                 }
             }
             catch (Exception ex)

@@ -6,11 +6,14 @@ namespace WinsockPacketEditor
 {
     public partial class HookSettingsForm : Form
     {
+        private Form form;
+
         #region//窗体事件
 
-        public HookSettingsForm()
+        public HookSettingsForm(Form form)
         {
             InitializeComponent();
+            this.form = form;
         }
 
         private void HookSettingsForm_Load(object sender, EventArgs e)
@@ -74,10 +77,12 @@ namespace WinsockPacketEditor
             Operate.ProxyConfig.Proxy.HookUDP_Req = this.cbUDP_Req.Checked;
             Operate.ProxyConfig.Proxy.HookUDP_Resp = this.cbUDP_Resp.Checked;
 
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "拦截设置保存成功", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "拦截设置保存成功", TType.Success)
             {
                 LocalizationText = "HookSettingsForm.Success"
             });
+
+            this.Dispose();
         }
 
         #endregion

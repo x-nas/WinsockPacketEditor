@@ -6,11 +6,14 @@ namespace WinsockPacketEditor
 {
     public partial class FilterSettingsForm : Form
     {
+        private Form form;
+
         #region//窗体事件
 
-        public FilterSettingsForm()
+        public FilterSettingsForm(Form form)
         {
             InitializeComponent();
+            this.form = form;
         }
 
         private void FilterSettingsForm_Load(object sender, EventArgs e)
@@ -242,7 +245,7 @@ namespace WinsockPacketEditor
                 this.cbCheckHead.Checked && string.IsNullOrEmpty(this.txtCheckHead.Text.Trim()) ||
                 this.cbCheckData.Checked && string.IsNullOrEmpty(this.txtCheckData.Text.Trim()))
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "过滤设置为空", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "过滤设置为空", TType.Error)
                 {
                     LocalizationText = "FilterSettingsForm.FilterEmpty"
                 });
@@ -264,10 +267,12 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.CheckHead_Value = this.txtCheckHead.Text.Trim();
             Operate.SystemConfig.CheckData_Value = this.txtCheckData.Text.Trim();
 
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "过滤设置保存成功", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "过滤设置保存成功", TType.Success)
             {
                 LocalizationText = "FilterSettingsForm.Success"
             });
+
+            this.Dispose();
         }
 
         #endregion

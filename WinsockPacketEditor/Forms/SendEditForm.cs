@@ -117,7 +117,7 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.SystemConfig.SystemSocket <= 0)
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "系统套接字未设置", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统套接字未设置", TType.Error)
                         {
                             LocalizationText = "SendEditForm.SystemSocket.Error"
                         });
@@ -171,21 +171,21 @@ namespace WinsockPacketEditor
 
                 if (e.Cancelled)
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "发送已停止", TType.Warn)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送已停止", TType.Warn)
                     {
                         LocalizationText = "SendEditForm.Send.Stop",
                     });
                 }
                 else if (e.Error != null)
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "发生错误: " + e.Error.Message, TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发生错误: " + e.Error.Message, TType.Error)
                     {
                         LocalizationText = "SendEditForm.Send.Error" + e.Error.Message
                     });
                 }
                 else
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "发送执行完毕", TType.Success)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送执行完毕", TType.Success)
                     {
                         LocalizationText = "SendEditForm.Send.Success"
                     });
@@ -279,7 +279,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Top, piList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Top, piList);
                             }
 
                             break;
@@ -288,7 +288,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Up, piList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Up, piList);
                             }
 
                             break;
@@ -297,7 +297,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Down, piList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Down, piList);
                             }
 
                             break;
@@ -306,7 +306,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Bottom, piList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Bottom, piList);
                             }
 
                             break;
@@ -330,7 +330,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Copy, piList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Copy, piList);
                                 this.tSendCollection.ScrollBar.ValueY = tSendCollection.ScrollBar.MaxY;
                             }
 
@@ -340,7 +340,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
                             }
 
                             break;                        
@@ -405,25 +405,42 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            if (this.SaveSend())
+            try
             {
-                switch (Operate.SystemConfig.StartMode)
+                if (this.SaveSend())
                 {
-                    case Operate.SystemConfig.SystemMode.Process:
+                    switch (Operate.SystemConfig.StartMode)
+                    {
+                        case Operate.SystemConfig.SystemMode.Process:
 
-                        ((InterfaceInfo.IInjectMode)form).RefreshSendList();
+                            ((InterfaceInfo.IInjectMode)form).RefreshSendList();
 
-                        break;
+                            break;
 
-                    case Operate.SystemConfig.SystemMode.Proxy:
+                        case Operate.SystemConfig.SystemMode.Proxy:
 
-                        ((InterfaceInfo.IProxyMode)form).RefreshSendList();
+                            ((InterfaceInfo.IProxyMode)form).RefreshSendList();
 
-                        break;
+                            break;
+                    }
+
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送保存成功", TType.Success)
+                    {
+                        LocalizationText = "SendEditForm.Success"
+                    });
+
+                    this.Close();
                 }
-
-                this.Close();
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送保存失败", TType.Error)
+                {
+                    LocalizationText = "SendEditForm.Error"
+                });
+            }            
         }
 
         private bool SaveSend()
@@ -432,7 +449,7 @@ namespace WinsockPacketEditor
             {
                 if (string.IsNullOrEmpty(this.txtSendName.Text.Trim()))
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "发送名称为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送名称为空", TType.Error)
                     {
                         LocalizationText = "SendEditForm.SendName.Empty"
                     });

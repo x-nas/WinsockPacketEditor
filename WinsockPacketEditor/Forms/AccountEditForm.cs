@@ -166,7 +166,7 @@ namespace WinsockPacketEditor
                 {
                     this.txtUserName.Status = TType.Error;
 
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "用户名为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "用户名为空", TType.Error)
                     {
                         LocalizationText = "AccountEditForm.UserName.Empty"
                     });
@@ -178,7 +178,7 @@ namespace WinsockPacketEditor
                 {
                     this.txtPassword.Status = TType.Error;
 
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "密码为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "密码为空", TType.Error)
                     {
                         LocalizationText = "AccountEditForm.Password.Empty"
                     });
@@ -211,7 +211,7 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.ProxyConfig.Account.CheckProxyAccount_Exist(UserName))
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this, "用户名已存在", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "用户名已存在", TType.Error)
                         {
                             LocalizationText = "AccountEditForm.UserName.Error"
                         });
@@ -247,7 +247,7 @@ namespace WinsockPacketEditor
                         ExpiryTime);
                 }
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "账号信息保存成功", TType.Success)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "账号信息保存成功", TType.Success)
                 {
                     LocalizationText = "AccountEditForm.Success"
                 });
@@ -257,6 +257,8 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Account.NeedSave = true;
                     proxyForm.RefreshAccountList();
                 }
+
+                this.Dispose();
             }
             catch (Exception ex)
             {

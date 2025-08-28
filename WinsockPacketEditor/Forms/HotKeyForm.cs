@@ -6,11 +6,14 @@ namespace WinsockPacketEditor
 {
     public partial class HotKeyForm : Form
     {
+        private Form form;
+
         #region//窗体事件
 
-        public HotKeyForm()
+        public HotKeyForm(Form form)
         {
             InitializeComponent();
+            this.form = form;
         }
 
         private void HotKeyForm_Load(object sender, EventArgs e)
@@ -73,7 +76,7 @@ namespace WinsockPacketEditor
 
         private void HotKeySuccess()
         {
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "快捷键设置成功", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "快捷键设置成功", TType.Success)
             {
                 LocalizationText = "HotKeyForm.Success"
             });
@@ -81,7 +84,7 @@ namespace WinsockPacketEditor
 
         private void HotKeyError()
         {
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "快捷键设置失败", TType.Error)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "快捷键设置失败", TType.Error)
             {
                 LocalizationText = "HotKeyForm.Error"
             });

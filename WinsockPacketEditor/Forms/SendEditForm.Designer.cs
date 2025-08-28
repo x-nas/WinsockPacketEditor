@@ -274,7 +274,7 @@
             this.lSend_Fail_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Fail_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend_Fail_CNT.ForeColor = System.Drawing.Color.Red;
-            this.lSend_Fail_CNT.Location = new System.Drawing.Point(217, 3);
+            this.lSend_Fail_CNT.Location = new System.Drawing.Point(232, 3);
             this.lSend_Fail_CNT.Name = "lSend_Fail_CNT";
             this.lSend_Fail_CNT.Size = new System.Drawing.Size(10, 44);
             this.lSend_Fail_CNT.TabIndex = 14;
@@ -286,7 +286,7 @@
             this.lSend_Success_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Success_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend_Success_CNT.ForeColor = System.Drawing.Color.Green;
-            this.lSend_Success_CNT.Location = new System.Drawing.Point(147, 3);
+            this.lSend_Success_CNT.Location = new System.Drawing.Point(157, 3);
             this.lSend_Success_CNT.Name = "lSend_Success_CNT";
             this.lSend_Success_CNT.Size = new System.Drawing.Size(10, 44);
             this.lSend_Success_CNT.TabIndex = 13;
@@ -298,7 +298,7 @@
             this.lTotal_Send_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lTotal_Send_CNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lTotal_Send_CNT.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
-            this.lTotal_Send_CNT.Location = new System.Drawing.Point(77, 3);
+            this.lTotal_Send_CNT.Location = new System.Drawing.Point(82, 3);
             this.lTotal_Send_CNT.Name = "lTotal_Send_CNT";
             this.lTotal_Send_CNT.Size = new System.Drawing.Size(10, 44);
             this.lTotal_Send_CNT.TabIndex = 12;
@@ -310,7 +310,7 @@
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.ForeColor = System.Drawing.Color.Silver;
-            this.label3.Location = new System.Drawing.Point(163, 3);
+            this.label3.Location = new System.Drawing.Point(173, 3);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(6, 44);
             this.label3.TabIndex = 9;
@@ -323,7 +323,7 @@
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.Location = new System.Drawing.Point(93, 3);
+            this.label4.Location = new System.Drawing.Point(98, 3);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(6, 44);
             this.label4.TabIndex = 8;
@@ -335,24 +335,24 @@
             this.lSend_Fail.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Fail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Fail.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSend_Fail.LocalizationText = "SendEditForm.Failure";
-            this.lSend_Fail.Location = new System.Drawing.Point(175, 3);
+            this.lSend_Fail.LocalizationText = "SendEditForm.SendFailure";
+            this.lSend_Fail.Location = new System.Drawing.Point(185, 3);
             this.lSend_Fail.Name = "lSend_Fail";
-            this.lSend_Fail.Size = new System.Drawing.Size(36, 44);
+            this.lSend_Fail.Size = new System.Drawing.Size(41, 44);
             this.lSend_Fail.TabIndex = 7;
-            this.lSend_Fail.Text = "失败:";
+            this.lSend_Fail.Text = "失败 :";
             // 
             // lSend_Success
             // 
             this.lSend_Success.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_Success.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSend_Success.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSend_Success.LocalizationText = "SendEditForm.Success";
-            this.lSend_Success.Location = new System.Drawing.Point(105, 3);
+            this.lSend_Success.LocalizationText = "SendEditForm.SendSuccess";
+            this.lSend_Success.Location = new System.Drawing.Point(110, 3);
             this.lSend_Success.Name = "lSend_Success";
-            this.lSend_Success.Size = new System.Drawing.Size(36, 44);
+            this.lSend_Success.Size = new System.Drawing.Size(41, 44);
             this.lSend_Success.TabIndex = 6;
-            this.lSend_Success.Text = "成功:";
+            this.lSend_Success.Text = "成功 :";
             // 
             // lTotal_Send
             // 
@@ -362,9 +362,9 @@
             this.lTotal_Send.LocalizationText = "SendEditForm.TotalSend";
             this.lTotal_Send.Location = new System.Drawing.Point(3, 3);
             this.lTotal_Send.Name = "lTotal_Send";
-            this.lTotal_Send.Size = new System.Drawing.Size(68, 44);
+            this.lTotal_Send.Size = new System.Drawing.Size(73, 44);
             this.lTotal_Send.TabIndex = 5;
-            this.lTotal_Send.Text = "发送总数:";
+            this.lTotal_Send.Text = "发送总数 :";
             // 
             // tSendCollection
             // 

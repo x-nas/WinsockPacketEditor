@@ -128,7 +128,7 @@ namespace WinsockPacketEditor
                 Operate.PacketConfig.List.FindOptions.IsValid = false;
 
                 this.txtFind.Status = TType.Error;
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "查找内容为空", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "查找内容为空", TType.Error)
                 {
                     LocalizationText = "SearchPacketForm.Empty"
                 });
@@ -140,7 +140,7 @@ namespace WinsockPacketEditor
             {
                 Operate.PacketConfig.List.FindOptions.IsValid = false;
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "查找内容为空", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "查找内容为空", TType.Error)
                 {
                     LocalizationText = "SearchPacketForm.Empty"
                 });
@@ -196,7 +196,7 @@ namespace WinsockPacketEditor
 
         private void bExit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Dispose();
         }
 
         #endregion

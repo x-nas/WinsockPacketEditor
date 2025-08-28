@@ -5600,7 +5600,7 @@ namespace WinsockPacketEditor
                             registry.SetValue("ProxyEnable", 0);
                             NotifySystemProxyChanged();
 
-                            AntdUI.Message.open(new AntdUI.Message.Config(form, "系统代理已关闭", TType.Success)
+                            AntdUI.Message.open(new AntdUI.Message.Config(form, "系统代理已关闭", TType.Error)
                             {
                                 LocalizationText = "ProxySettingsForm.SystemProxy.Stop"
                             });

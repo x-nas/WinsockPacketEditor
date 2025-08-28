@@ -10,11 +10,14 @@ namespace WinsockPacketEditor
 {
     public partial class ProxySettingsForm : Form
     {
+        private Form form;
+
         #region//窗体事件
 
-        public ProxySettingsForm()
+        public ProxySettingsForm(Form form)
         {
             InitializeComponent();
+            this.form = form;
         }
 
         private void ProxySettingsForm_Load(object sender, EventArgs e)
@@ -122,12 +125,12 @@ namespace WinsockPacketEditor
                 if (this.switchSystemProxy.Checked)
                 {
                     Operate.ProxyConfig.Proxy.Enable_SystemProxy = true;
-                    Operate.ProxyConfig.Proxy.EnableSystemProxy(this);
+                    Operate.ProxyConfig.Proxy.EnableSystemProxy(this.form);
                 }
                 else
                 {
                     Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
-                    Operate.ProxyConfig.Proxy.DisableSystemProxy(this);
+                    Operate.ProxyConfig.Proxy.DisableSystemProxy(this.form);
                 }
             }
             catch (Exception ex)
@@ -146,7 +149,7 @@ namespace WinsockPacketEditor
             {
                 if (!this.cbEnable_SOCKS5.Checked)
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "代理类型未设置", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理类型未设置", TType.Error)
                     {
                         LocalizationText = "ProxySettingsForm.ProxyType.Error"
                     });
@@ -160,10 +163,12 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Proxy.ProxyPort = ((ushort)this.nudSOCKS5Port.Value);
                 Operate.ProxyConfig.Proxy.Enable_Auth = this.cbEnable_Auth.Checked;
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "代理设置保存成功", TType.Success)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理设置保存成功", TType.Success)
                 {
                     LocalizationText = "ProxySettingsForm.Success"
                 });
+
+                this.Dispose();
             }
             catch (Exception ex)
             {

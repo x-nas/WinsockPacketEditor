@@ -124,10 +124,12 @@ namespace WinsockPacketEditor
                     break;
             }
 
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "系统设置保存成功", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统设置保存成功", TType.Success)
             {
                 LocalizationText = "SystemSettingsForm.Success"
             });
+
+            this.Dispose();
         }
 
         #endregion

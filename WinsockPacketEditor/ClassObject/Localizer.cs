@@ -2027,8 +2027,11 @@ namespace WinsockPacketEditor
                 case "PacketEditForm.Position.Error":
                     return "Progressive position Error";
 
-                case "PacketEditForm.Save.Error":
-                    return "Packet data saving Error";
+                case "PacketEditForm.Success":
+                    return "Packet saved successfully";
+
+                case "PacketEditForm.Error":
+                    return "Packet save failed";
 
                 #endregion
 
@@ -2137,8 +2140,11 @@ namespace WinsockPacketEditor
                 case "FilterEditForm.LoadComplete":
                     return "Loading Complete";
 
+                case "FilterEditForm.Success":
+                    return "Filter saved successfully";
+
                 case "FilterEditForm.Error":
-                    return "Filter save error";
+                    return "Filter save failed";
 
                 case "FilterEditForm.Appoint.Example":
                     return "For example 80-89;100";
@@ -2157,13 +2163,13 @@ namespace WinsockPacketEditor
                     return "Send Edit";
 
                 case "SendEditForm.TotalSend":
-                    return "Total Send:";
+                    return "Total Send :";
 
-                case "SendEditForm.Success":
-                    return "Success:";
+                case "SendEditForm.SendSuccess":
+                    return "Success :";
 
-                case "SendEditForm.Failure":
-                    return "Failure:";
+                case "SendEditForm.SendFailure":
+                    return "Failure :";
 
                 case "SendEditForm.LoopCount":
                     return "Loop Count";
@@ -2197,6 +2203,12 @@ namespace WinsockPacketEditor
 
                 case "SendEditForm.SendName.Empty":
                     return "Send Name Empty";
+
+                case "SendEditForm.Success":
+                    return "Send saved successfully";
+
+                case "SendEditForm.Error":
+                    return "Send save failed";
 
                 #endregion
 
@@ -2402,6 +2414,12 @@ namespace WinsockPacketEditor
 
                 case "RobotEditForm.RName.Empty":
                     return "Robot Name Empty";
+
+                case "RobotEditForm.Success":
+                    return "Robot saved successfully";
+
+                case "RobotEditForm.Error":
+                    return "Robot save failed";
 
                 #endregion
 

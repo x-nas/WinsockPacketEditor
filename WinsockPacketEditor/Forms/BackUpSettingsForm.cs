@@ -6,11 +6,14 @@ namespace WinsockPacketEditor
 {
     public partial class BackUpSettingsForm : Form
     {
+        private Form form;
+
         #region//窗体事件
 
-        public BackUpSettingsForm()
+        public BackUpSettingsForm(Form form)
         {
             InitializeComponent();
+            this.form = form;
         }
 
         private void BackUpSettingsForm_Load(object sender, EventArgs e)
@@ -33,7 +36,7 @@ namespace WinsockPacketEditor
 
         private void bImport_Click(object sender, EventArgs e)
         {
-            Operate.SystemConfig.ImportSystemBackUp_Dialog(this);
+            Operate.SystemConfig.ImportSystemBackUp_Dialog(this.form);
         }
 
         #endregion

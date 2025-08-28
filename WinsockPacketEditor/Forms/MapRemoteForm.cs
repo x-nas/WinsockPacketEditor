@@ -7,14 +7,16 @@ namespace WinsockPacketEditor
 {
     public partial class MapRemoteForm : Form
     {
+        private Form form;
         private MapRemote mrSelect;
 
         #region//窗体事件
 
-        public MapRemoteForm(MapRemote mr)
+        public MapRemoteForm(Form form, MapRemote mr)
         {
             InitializeComponent();
             this.mrSelect = mr;
+            this.form = form;
         }
 
         private void MapRemoteForm_Load(object sender, EventArgs e)
@@ -113,7 +115,7 @@ namespace WinsockPacketEditor
                 if (string.IsNullOrEmpty(HostFrom_New))
                 {
                     this.txtHostFrom.Status = TType.Error;
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "映射数据为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "映射数据为空", TType.Error)
                     {
                         LocalizationText = "MapRemoteForm.Empty"
                     });
@@ -125,7 +127,7 @@ namespace WinsockPacketEditor
                 if (string.IsNullOrEmpty(HostTo_New))
                 {
                     this.txtHostTo.Status = TType.Error;
-                    AntdUI.Message.open(new AntdUI.Message.Config(this, "映射数据为空", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "映射数据为空", TType.Error)
                     {
                         LocalizationText = "MapRemoteForm.Empty"
                     });
@@ -185,10 +187,12 @@ namespace WinsockPacketEditor
                         PathTo_New);
                 }
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "远程映射保存成功", TType.Success)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "远程映射保存成功", TType.Success)
                 {
                     LocalizationText = "MapRemoteForm.Success"
                 });
+
+                this.Dispose();
             }
             catch (Exception ex)
             {

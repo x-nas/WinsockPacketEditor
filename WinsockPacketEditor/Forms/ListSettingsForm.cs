@@ -152,10 +152,12 @@ namespace WinsockPacketEditor
             Operate.LogConfig.List.AutoClear = this.cbLogList_AutoClear.Checked;
             Operate.LogConfig.List.AutoClear_Value = this.txtLogList_AutoClear.Value;        
 
-            AntdUI.Message.open(new AntdUI.Message.Config(this, "列表设置保存成功", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "列表设置保存成功", TType.Success)
             {
                 LocalizationText = "ListSettingsForm.Success"
             });
+
+            this.Dispose();
         }
 
         #endregion
