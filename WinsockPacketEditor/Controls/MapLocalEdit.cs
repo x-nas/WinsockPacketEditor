@@ -6,42 +6,48 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class MapLocalForm : Form
+    public partial class MapLocalEdit : UserControl
     {
         private Form form;
         private MapLocal mlSelect;
 
         #region//窗体事件
 
-        public MapLocalForm(Form form, MapLocal ml)
+        public MapLocalEdit(Form form, MapLocal ml)
         {
             InitializeComponent();
             this.mlSelect = ml;
             this.form = form;
         }
 
-        private void MapLocalForm_Load(object sender, EventArgs e)
+        private void MapLocalEdit_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("MapLocalForm", "本地映射设置");
-            this.udLocalPath.TextDesc = AntdUI.Localization.Get("MapLocalForm.DragFilesText", "请上传远端映射的本地文件，切勿上传不支持的文件类型");
-
-            this.ddlProtocolType.SelectedIndex = 0;
-            this.udLocalPath.Filter = "All Files (*.*)|*.*";
-            this.udLocalPath.HandDragFolder = true;
-            this.udLocalPath.UseAdmin();
-
-            if (this.mlSelect != null)
+            try
             {
-                if (this.mlSelect.ProtocolType == Operate.ProxyConfig.Proxy.MapProtocol.Http)
-                {
-                    this.ddlProtocolType.SelectedIndex = 0;
-                }
+                this.udLocalPath.TextDesc = AntdUI.Localization.Get("MapLocalForm.DragFilesText", "请上传远端映射的本地文件，切勿上传不支持的文件类型");
 
-                this.txtHost.Text = this.mlSelect.Host;
-                this.nudPort.Value = this.mlSelect.Port;
-                this.txtRemotePath.Text = this.mlSelect.RemotePath;
-                this.txtLocalPath.Text = this.mlSelect.LocalPath;
+                this.ddlProtocolType.SelectedIndex = 0;
+                this.udLocalPath.Filter = "All Files (*.*)|*.*";
+                this.udLocalPath.HandDragFolder = true;
+                this.udLocalPath.UseAdmin();
+
+                if (this.mlSelect != null)
+                {
+                    if (this.mlSelect.ProtocolType == Operate.ProxyConfig.Proxy.MapProtocol.Http)
+                    {
+                        this.ddlProtocolType.SelectedIndex = 0;
+                    }
+
+                    this.txtHost.Text = this.mlSelect.Host;
+                    this.nudPort.Value = this.mlSelect.Port;
+                    this.txtRemotePath.Text = this.mlSelect.RemotePath;
+                    this.txtLocalPath.Text = this.mlSelect.LocalPath;
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void txtHost_TextChanged(object sender, EventArgs e)
@@ -126,7 +132,7 @@ namespace WinsockPacketEditor
                 {
                     ProtocolType_New = Operate.ProxyConfig.Proxy.MapProtocol.Http;
                 }
-                
+
                 int port_New = ((int)this.nudPort.Value);
                 string RemotePath_New = this.txtRemotePath.Text.Trim();
 
@@ -158,7 +164,7 @@ namespace WinsockPacketEditor
 
         private void bExit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Dispose();
         }
 
         #endregion        

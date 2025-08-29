@@ -294,6 +294,18 @@
     <Compile Include="Controls\LogList.Designer.cs">
       <DependentUpon>LogList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MapLocalEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MapLocalEdit.Designer.cs">
+      <DependentUpon>MapLocalEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapRemoteEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MapRemoteEdit.Designer.cs">
+      <DependentUpon>MapRemoteEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PacketEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -402,18 +414,6 @@
     <Compile Include="Forms\ListSettingsForm.Designer.cs">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MapLocalForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MapLocalForm.Designer.cs">
-      <DependentUpon>MapLocalForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MapRemoteForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MapRemoteForm.Designer.cs">
-      <DependentUpon>MapRemoteForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\MapSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -517,6 +517,12 @@
     <EmbeddedResource Include="Controls\LogList.resx">
       <DependentUpon>LogList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MapLocalEdit.resx">
+      <DependentUpon>MapLocalEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MapRemoteEdit.resx">
+      <DependentUpon>MapRemoteEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\PacketEdit.resx">
       <DependentUpon>PacketEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -570,12 +576,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ListSettingsForm.resx">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MapLocalForm.resx">
-      <DependentUpon>MapLocalForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MapRemoteForm.resx">
-      <DependentUpon>MapRemoteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MapSettingsForm.resx">
       <DependentUpon>MapSettingsForm.cs</DependentUpon>

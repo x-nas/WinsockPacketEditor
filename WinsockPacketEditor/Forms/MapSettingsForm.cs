@@ -154,19 +154,19 @@ namespace WinsockPacketEditor
             {
                 case "miAdd":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapLocalForm(this.form, null))
+                    var MapLocalEdit = new MapLocalEdit(this.form, null);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapLocalForm", "本地映射编辑"), MapLocalEdit)
                     {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = false,
+                        Keyboard = false,
                         MaskClosable = false,
-                        DisplayDelay = 0,
+                        BtnHeight = 0,
                     });
 
                     break;
 
                 case "miImport":
 
-                    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Import, null);
+                    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
 
                     break;
 
@@ -174,7 +174,7 @@ namespace WinsockPacketEditor
 
                     if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
                     {
-                        Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Export, null);
+                        Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
                     }
 
                     break;
@@ -183,7 +183,7 @@ namespace WinsockPacketEditor
 
                     if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
                     {
-                        Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.CleanUp, null);
+                        Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
                     }
 
                     break;
@@ -198,19 +198,19 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapLocalForm(this.form, ml))
+                        var MapLocalEdit = new MapLocalEdit(this.form, ml);
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapLocalForm", "本地映射编辑"), MapLocalEdit)
                         {
-                            Align = AntdUI.TAlignMini.Right,
-                            Mask = true,
+                            Keyboard = false,
                             MaskClosable = false,
-                            DisplayDelay = 0,
+                            BtnHeight = 0,
                         });
 
                         break;
 
                     case "bDelete":
 
-                        Operate.ProxyConfig.Mapping.DeleteMapLocal_Dialog(this, ml);
+                        Operate.ProxyConfig.Mapping.DeleteMapLocal_Dialog(this.form, ml);
 
                         break;
                 }
@@ -238,25 +238,25 @@ namespace WinsockPacketEditor
                         {
                             case "Top":
 
-                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Top, ml);
+                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, ml);
 
                                 break;
 
                             case "Up":
 
-                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Up, ml);
+                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, ml);
 
                                 break;
 
                             case "Down":
 
-                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Down, ml);
+                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, ml);
 
                                 break;
 
                             case "Bottom":
 
-                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, ml);
+                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, ml);
 
                                 break;
                         }
@@ -280,19 +280,19 @@ namespace WinsockPacketEditor
             {
                 case "miAdd":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapRemoteForm(this.form, null))
+                    var MapRemoteEdit = new MapRemoteEdit(this.form, null);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapRemoteForm", "远程映射编辑"), MapRemoteEdit)
                     {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = false,
+                        Keyboard = false,
                         MaskClosable = false,
-                        DisplayDelay = 0,
+                        BtnHeight = 0,
                     });
 
                     break;
 
                 case "miImport":
 
-                    Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Import, null);
+                    Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
 
                     break;
 
@@ -300,7 +300,7 @@ namespace WinsockPacketEditor
 
                     if (Operate.ProxyConfig.Mapping.lstMapRemote.Count > 0)
                     {
-                        Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Export, null);
+                        Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
                     }
 
                     break;
@@ -309,7 +309,7 @@ namespace WinsockPacketEditor
 
                     if (Operate.ProxyConfig.Mapping.lstMapRemote.Count > 0)
                     {
-                        Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.CleanUp, null);
+                        Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
                     }
 
                     break;
@@ -324,19 +324,19 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new MapRemoteForm(this.form, mr))
+                        var MapRemoteEdit = new MapRemoteEdit(this.form, mr);
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapRemoteForm", "远程映射编辑"), MapRemoteEdit)
                         {
-                            Align = AntdUI.TAlignMini.Right,
-                            Mask = true,
+                            Keyboard = false,
                             MaskClosable = false,
-                            DisplayDelay = 0,
+                            BtnHeight = 0,
                         });
 
                         break;
 
                     case "bDelete":
 
-                        Operate.ProxyConfig.Mapping.DeleteMapRemote_Dialog(this, mr);
+                        Operate.ProxyConfig.Mapping.DeleteMapRemote_Dialog(this.form, mr);
 
                         break;
                 }
@@ -364,25 +364,25 @@ namespace WinsockPacketEditor
                         {
                             case "Top":
 
-                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Top, mr);
+                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, mr);
 
                                 break;
 
                             case "Up":
 
-                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Up, mr);
+                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, mr);
 
                                 break;
 
                             case "Down":
 
-                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Down, mr);
+                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, mr);
 
                                 break;
 
                             case "Bottom":
 
-                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, mr);
+                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, mr);
 
                                 break;
                         }

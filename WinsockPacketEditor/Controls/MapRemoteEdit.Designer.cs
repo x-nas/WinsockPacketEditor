@@ -1,16 +1,16 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class MapRemoteForm
+    partial class MapRemoteEdit
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// 必需的设计器变量。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// 清理所有正在使用的资源。
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,15 +20,14 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region 组件设计器生成的代码
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// 设计器支持所需的方法 - 不要修改
+        /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapRemoteForm));
             this.tlpMapRemote = new System.Windows.Forms.TableLayoutPanel();
             this.tlpMapTo = new System.Windows.Forms.TableLayoutPanel();
             this.lPathTo = new AntdUI.Label();
@@ -78,8 +77,8 @@
             this.tlpMapRemote.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMapRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMapRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpMapRemote.Size = new System.Drawing.Size(484, 761);
-            this.tlpMapRemote.TabIndex = 2;
+            this.tlpMapRemote.Size = new System.Drawing.Size(500, 700);
+            this.tlpMapRemote.TabIndex = 3;
             // 
             // tlpMapTo
             // 
@@ -108,7 +107,7 @@
             this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMapTo.Size = new System.Drawing.Size(484, 250);
+            this.tlpMapTo.Size = new System.Drawing.Size(500, 250);
             this.tlpMapTo.TabIndex = 18;
             // 
             // lPathTo
@@ -167,7 +166,7 @@
             this.ddlProtocolTo.Location = new System.Drawing.Point(76, 6);
             this.ddlProtocolTo.Name = "ddlProtocolTo";
             this.ddlProtocolTo.PlaceholderText = "请选择";
-            this.ddlProtocolTo.Size = new System.Drawing.Size(402, 45);
+            this.ddlProtocolTo.Size = new System.Drawing.Size(418, 45);
             this.ddlProtocolTo.TabIndex = 11;
             this.ddlProtocolTo.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlProtocolTo_SelectedIndexChanged);
             // 
@@ -177,7 +176,7 @@
             this.txtHostTo.Location = new System.Drawing.Point(76, 57);
             this.txtHostTo.Name = "txtHostTo";
             this.txtHostTo.PrefixText = "http://";
-            this.txtHostTo.Size = new System.Drawing.Size(402, 45);
+            this.txtHostTo.Size = new System.Drawing.Size(418, 45);
             this.txtHostTo.TabIndex = 13;
             this.txtHostTo.TextChanged += new System.EventHandler(this.txtHostTo_TextChanged);
             // 
@@ -192,7 +191,7 @@
             0});
             this.nudPortTo.Name = "nudPortTo";
             this.nudPortTo.SelectionStart = 1;
-            this.nudPortTo.Size = new System.Drawing.Size(402, 45);
+            this.nudPortTo.Size = new System.Drawing.Size(418, 45);
             this.nudPortTo.TabIndex = 15;
             this.nudPortTo.Text = "80";
             this.nudPortTo.Value = new decimal(new int[] {
@@ -208,7 +207,7 @@
             this.txtPathTo.Location = new System.Drawing.Point(76, 159);
             this.txtPathTo.Name = "txtPathTo";
             this.txtPathTo.PlaceholderText = "请填写映射路径";
-            this.txtPathTo.Size = new System.Drawing.Size(402, 45);
+            this.txtPathTo.Size = new System.Drawing.Size(418, 45);
             this.txtPathTo.TabIndex = 17;
             // 
             // tlpButton
@@ -222,14 +221,14 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 701);
+            this.tlpButton.Location = new System.Drawing.Point(0, 640);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(484, 60);
+            this.tlpButton.Size = new System.Drawing.Size(500, 60);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -238,7 +237,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(115, 7);
+            this.bSave.Location = new System.Drawing.Point(123, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
@@ -252,7 +251,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(255, 7);
+            this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -268,7 +267,7 @@
             this.dMapTo.Location = new System.Drawing.Point(3, 282);
             this.dMapTo.Name = "dMapTo";
             this.dMapTo.Orientation = AntdUI.TOrientation.Left;
-            this.dMapTo.Size = new System.Drawing.Size(478, 23);
+            this.dMapTo.Size = new System.Drawing.Size(494, 23);
             this.dMapTo.TabIndex = 5;
             this.dMapTo.Text = "映射地址";
             // 
@@ -299,7 +298,7 @@
             this.tlpMapFrom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMapFrom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMapFrom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMapFrom.Size = new System.Drawing.Size(484, 250);
+            this.tlpMapFrom.Size = new System.Drawing.Size(500, 250);
             this.tlpMapFrom.TabIndex = 4;
             // 
             // lPathFrom
@@ -357,7 +356,7 @@
             this.ddlProtocolFrom.Location = new System.Drawing.Point(76, 6);
             this.ddlProtocolFrom.Name = "ddlProtocolFrom";
             this.ddlProtocolFrom.PlaceholderText = "请选择";
-            this.ddlProtocolFrom.Size = new System.Drawing.Size(402, 45);
+            this.ddlProtocolFrom.Size = new System.Drawing.Size(418, 45);
             this.ddlProtocolFrom.TabIndex = 11;
             // 
             // txtHostFrom
@@ -366,7 +365,7 @@
             this.txtHostFrom.Location = new System.Drawing.Point(76, 57);
             this.txtHostFrom.Name = "txtHostFrom";
             this.txtHostFrom.PrefixText = "http://";
-            this.txtHostFrom.Size = new System.Drawing.Size(402, 45);
+            this.txtHostFrom.Size = new System.Drawing.Size(418, 45);
             this.txtHostFrom.TabIndex = 13;
             this.txtHostFrom.TextChanged += new System.EventHandler(this.txtHostFrom_TextChanged);
             // 
@@ -381,7 +380,7 @@
             0});
             this.nudPortFrom.Name = "nudPortFrom";
             this.nudPortFrom.SelectionStart = 1;
-            this.nudPortFrom.Size = new System.Drawing.Size(402, 45);
+            this.nudPortFrom.Size = new System.Drawing.Size(418, 45);
             this.nudPortFrom.TabIndex = 15;
             this.nudPortFrom.Text = "80";
             this.nudPortFrom.Value = new decimal(new int[] {
@@ -397,7 +396,7 @@
             this.txtPathFrom.Location = new System.Drawing.Point(76, 159);
             this.txtPathFrom.Name = "txtPathFrom";
             this.txtPathFrom.PlaceholderText = "请填写请求路径";
-            this.txtPathFrom.Size = new System.Drawing.Size(402, 45);
+            this.txtPathFrom.Size = new System.Drawing.Size(418, 45);
             this.txtPathFrom.TabIndex = 17;
             // 
             // dMapFrom
@@ -408,26 +407,21 @@
             this.dMapFrom.Location = new System.Drawing.Point(3, 3);
             this.dMapFrom.Name = "dMapFrom";
             this.dMapFrom.Orientation = AntdUI.TOrientation.Left;
-            this.dMapFrom.Size = new System.Drawing.Size(478, 23);
+            this.dMapFrom.Size = new System.Drawing.Size(494, 23);
             this.dMapFrom.TabIndex = 3;
             this.dMapFrom.Text = "请求地址";
             // 
-            // MapRemoteForm
+            // MapRemoteEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 761);
             this.Controls.Add(this.tlpMapRemote);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
-            this.Name = "MapRemoteForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "MapRemoteForm";
-            this.Load += new System.EventHandler(this.MapRemoteForm_Load);
+            this.Name = "MapRemoteEdit";
+            this.Size = new System.Drawing.Size(500, 700);
+            this.Load += new System.EventHandler(this.MapRemoteEdit_Load);
             this.tlpMapRemote.ResumeLayout(false);
             this.tlpMapTo.ResumeLayout(false);
             this.tlpMapTo.PerformLayout();
@@ -441,6 +435,15 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpMapRemote;
+        private System.Windows.Forms.TableLayoutPanel tlpMapTo;
+        private AntdUI.Label lPathTo;
+        private AntdUI.Label lPortTo;
+        private AntdUI.Label lHostTo;
+        private AntdUI.Label lProtocolTo;
+        private AntdUI.Select ddlProtocolTo;
+        private AntdUI.Input txtHostTo;
+        private AntdUI.InputNumber nudPortTo;
+        private AntdUI.Input txtPathTo;
         private System.Windows.Forms.TableLayoutPanel tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
@@ -455,14 +458,5 @@
         private AntdUI.InputNumber nudPortFrom;
         private AntdUI.Input txtPathFrom;
         private AntdUI.Divider dMapFrom;
-        private System.Windows.Forms.TableLayoutPanel tlpMapTo;
-        private AntdUI.Label lPathTo;
-        private AntdUI.Label lPortTo;
-        private AntdUI.Label lHostTo;
-        private AntdUI.Label lProtocolTo;
-        private AntdUI.Select ddlProtocolTo;
-        private AntdUI.Input txtHostTo;
-        private AntdUI.InputNumber nudPortTo;
-        private AntdUI.Input txtPathTo;
     }
 }

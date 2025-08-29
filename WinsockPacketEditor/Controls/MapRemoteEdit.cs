@@ -5,53 +5,58 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class MapRemoteForm : Form
+    public partial class MapRemoteEdit : UserControl
     {
         private Form form;
         private MapRemote mrSelect;
 
         #region//窗体事件
 
-        public MapRemoteForm(Form form, MapRemote mr)
+        public MapRemoteEdit(Form form, MapRemote mr)
         {
             InitializeComponent();
             this.mrSelect = mr;
             this.form = form;
         }
 
-        private void MapRemoteForm_Load(object sender, EventArgs e)
+        private void MapRemoteEdit_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("MapRemoteForm", "远程映射设置");
-
-            this.ddlProtocolFrom.SelectedIndex = 0;
-            this.ddlProtocolTo.SelectedIndex = 0;
-
-            if (this.mrSelect != null)
+            try
             {
-                if (this.mrSelect.ProtocolTypeFrom == Operate.ProxyConfig.Proxy.MapProtocol.Http)
+                this.ddlProtocolFrom.SelectedIndex = 0;
+                this.ddlProtocolTo.SelectedIndex = 0;
+
+                if (this.mrSelect != null)
                 {
-                    this.ddlProtocolFrom.SelectedIndex = 0;
+                    if (this.mrSelect.ProtocolTypeFrom == Operate.ProxyConfig.Proxy.MapProtocol.Http)
+                    {
+                        this.ddlProtocolFrom.SelectedIndex = 0;
+                    }
+
+                    this.txtHostFrom.Text = this.mrSelect.HostFrom;
+                    this.nudPortFrom.Value = this.mrSelect.PortFrom;
+                    this.txtPathFrom.Text = this.mrSelect.PathFrom;
+
+                    if (this.mrSelect.ProtocolTypeTo == Operate.ProxyConfig.Proxy.MapProtocol.Http)
+                    {
+                        this.ddlProtocolTo.SelectedIndex = 0;
+                    }
+                    else if (this.mrSelect.ProtocolTypeTo == Operate.ProxyConfig.Proxy.MapProtocol.Https)
+                    {
+                        this.ddlProtocolTo.SelectedIndex = 1;
+                    }
+
+                    this.txtHostTo.Text = this.mrSelect.HostTo;
+                    this.nudPortTo.Value = this.mrSelect.PortTo;
+                    this.txtPathTo.Text = this.mrSelect.PathTo;
                 }
 
-                this.txtHostFrom.Text = this.mrSelect.HostFrom;
-                this.nudPortFrom.Value = this.mrSelect.PortFrom;
-                this.txtPathFrom.Text = this.mrSelect.PathFrom;
-
-                if (this.mrSelect.ProtocolTypeTo == Operate.ProxyConfig.Proxy.MapProtocol.Http)
-                {
-                    this.ddlProtocolTo.SelectedIndex = 0;
-                }
-                else if (this.mrSelect.ProtocolTypeTo == Operate.ProxyConfig.Proxy.MapProtocol.Https)
-                {
-                    this.ddlProtocolTo.SelectedIndex = 1;
-                }
-
-                this.txtHostTo.Text = this.mrSelect.HostTo;
-                this.nudPortTo.Value = this.mrSelect.PortTo;
-                this.txtPathTo.Text = this.mrSelect.PathTo;
+                this.ProtocolTo_Changed();
             }
-
-            this.ProtocolTo_Changed();
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         private void txtHostFrom_TextChanged(object sender, EventArgs e)
@@ -154,7 +159,7 @@ namespace WinsockPacketEditor
                 {
                     ProtocolTo_New = Operate.ProxyConfig.Proxy.MapProtocol.Https;
                 }
-                
+
                 int PortFrom_New = ((int)this.nudPortFrom.Value);
                 int PortTo_New = ((int)this.nudPortTo.Value);
                 string PathFrom_New = this.txtPathFrom.Text.Trim();
