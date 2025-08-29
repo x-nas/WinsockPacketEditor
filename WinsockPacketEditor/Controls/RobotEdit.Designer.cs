@@ -93,7 +93,6 @@
             this.dKeyCombination = new AntdUI.Divider();
             this.tlpKeyCombination2 = new System.Windows.Forms.TableLayoutPanel();
             this.bInsert_KeyCombination = new AntdUI.Button();
-            this.txtKeyCombination = new WinsockPacketEditor.HotkeyTextBox();
             this.pKeyBoard = new AntdUI.Panel();
             this.tlpKey = new System.Windows.Forms.TableLayoutPanel();
             this.tlpKey2 = new System.Windows.Forms.TableLayoutPanel();
@@ -134,6 +133,7 @@
             this.tRobotInstruction = new AntdUI.Table();
             this.txtINSTLog = new AntdUI.Input();
             this.txtRobotName = new AntdUI.Input();
+            this.txtKeyCombination = new WinsockPacketEditor.HotkeyTextBox();
             this.tlpRobotEdit.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpRobotINST.SuspendLayout();
@@ -338,9 +338,10 @@
             // ciPacketINST
             // 
             this.ciPacketINST.Controls.Add(this.tlpPacketINST);
+            this.ciPacketINST.Expand = true;
             this.ciPacketINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ciPacketINST.LocalizationText = "RobotEditForm.{id}";
-            this.ciPacketINST.Location = new System.Drawing.Point(-472, -369);
+            this.ciPacketINST.Location = new System.Drawing.Point(11, 57);
             this.ciPacketINST.Name = "ciPacketINST";
             this.ciPacketINST.Size = new System.Drawing.Size(472, 369);
             this.ciPacketINST.TabIndex = 0;
@@ -1151,20 +1152,6 @@
             this.bInsert_KeyCombination.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_KeyCombination.Click += new System.EventHandler(this.bInsert_KeyCombination_Click);
             // 
-            // txtKeyCombination
-            // 
-            this.txtKeyCombination.BackColor = System.Drawing.SystemColors.Window;
-            this.txtKeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtKeyCombination.ForeColor = System.Drawing.Color.Black;
-            this.txtKeyCombination.LocalizationPlaceholderText = "PressCombinationkey";
-            this.txtKeyCombination.Location = new System.Drawing.Point(3, 3);
-            this.txtKeyCombination.Name = "txtKeyCombination";
-            this.txtKeyCombination.PlaceholderText = "请组合按键";
-            this.txtKeyCombination.ReadOnly = true;
-            this.txtKeyCombination.Size = new System.Drawing.Size(408, 42);
-            this.txtKeyCombination.TabIndex = 2;
-            this.txtKeyCombination.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // pKeyBoard
             // 
             this.pKeyBoard.BorderWidth = 2F;
@@ -1294,9 +1281,9 @@
             this.ciMouseINST.Controls.Add(this.tlpMouseINST);
             this.ciMouseINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ciMouseINST.LocalizationText = "RobotEditForm.{id}";
-            this.ciMouseINST.Location = new System.Drawing.Point(-472, -401);
+            this.ciMouseINST.Location = new System.Drawing.Point(-472, -369);
             this.ciMouseINST.Name = "ciMouseINST";
-            this.ciMouseINST.Size = new System.Drawing.Size(472, 401);
+            this.ciMouseINST.Size = new System.Drawing.Size(472, 369);
             this.ciMouseINST.TabIndex = 3;
             this.ciMouseINST.Text = "鼠标指令";
             // 
@@ -1315,7 +1302,7 @@
             this.tlpMouseINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tlpMouseINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 140F));
             this.tlpMouseINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMouseINST.Size = new System.Drawing.Size(472, 401);
+            this.tlpMouseINST.Size = new System.Drawing.Size(472, 369);
             this.tlpMouseINST.TabIndex = 2;
             // 
             // pMouseMove
@@ -1326,7 +1313,7 @@
             this.pMouseMove.Location = new System.Drawing.Point(3, 233);
             this.pMouseMove.Name = "pMouseMove";
             this.pMouseMove.Radius = 10;
-            this.pMouseMove.Size = new System.Drawing.Size(466, 165);
+            this.pMouseMove.Size = new System.Drawing.Size(466, 133);
             this.pMouseMove.TabIndex = 16;
             // 
             // tlpMouseMove
@@ -1344,7 +1331,7 @@
             this.tlpMouseMove.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMouseMove.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMouseMove.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMouseMove.Size = new System.Drawing.Size(462, 161);
+            this.tlpMouseMove.Size = new System.Drawing.Size(462, 129);
             this.tlpMouseMove.TabIndex = 0;
             // 
             // divider8
@@ -1703,7 +1690,7 @@
             this.tRobotInstruction.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tRobotInstruction.CellImpactHeight = false;
             this.tRobotInstruction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tRobotInstruction.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tRobotInstruction.Font = new System.Drawing.Font("微软雅黑", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tRobotInstruction.Gap = 8;
             this.tRobotInstruction.GapCell = 0;
             this.tRobotInstruction.Gaps = new System.Drawing.Size(8, 8);
@@ -1740,6 +1727,20 @@
             this.txtRobotName.Size = new System.Drawing.Size(494, 44);
             this.txtRobotName.TabIndex = 6;
             this.txtRobotName.TextChanged += new System.EventHandler(this.txtRobotName_TextChanged);
+            // 
+            // txtKeyCombination
+            // 
+            this.txtKeyCombination.BackColor = System.Drawing.SystemColors.Window;
+            this.txtKeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtKeyCombination.ForeColor = System.Drawing.Color.Black;
+            this.txtKeyCombination.LocalizationPlaceholderText = "PressCombinationkey";
+            this.txtKeyCombination.Location = new System.Drawing.Point(3, 3);
+            this.txtKeyCombination.Name = "txtKeyCombination";
+            this.txtKeyCombination.PlaceholderText = "请组合按键";
+            this.txtKeyCombination.ReadOnly = true;
+            this.txtKeyCombination.Size = new System.Drawing.Size(408, 42);
+            this.txtKeyCombination.TabIndex = 2;
+            this.txtKeyCombination.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // RobotEdit
             // 

@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
             this.se.Worker.RunWorkerCompleted += this.Worker_RunWorkerCompleted;
 
             this.InitTable_SendCollection();
+            this.Dark_Changed();
         }
 
         private void InitTable_SendCollection()
@@ -90,6 +91,29 @@ namespace WinsockPacketEditor
             else
             {
                 this.txtSendName.Status = TType.Success;
+            }
+        }
+
+        private void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.pSendName.Back = 
+                    this.pSendSocket.Back = 
+                    this.pLoopCNT.Back = 
+                    this.pLoopINT.Back =
+                    this.txtNotes.BackColor =
+                    this.tSendCollection.ColumnBack =
+                    Operate.SystemConfig.Color_35;
+            }
+            else
+            {
+                this.pSendName.Back =
+                    this.pSendSocket.Back =
+                    this.pLoopCNT.Back =
+                    this.pLoopINT.Back =
+                    this.txtNotes.BackColor =
+                    this.tSendCollection.ColumnBack = null;
             }
         }
 

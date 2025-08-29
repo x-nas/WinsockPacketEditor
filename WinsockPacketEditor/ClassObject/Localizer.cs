@@ -2183,6 +2183,9 @@ namespace WinsockPacketEditor
                 case "SendEditForm.UseSSocket":
                     return "Use System Socket";
 
+                case "SendEditForm.Remarks":
+                    return "Remarks";
+
                 case "SendEditForm.miImport":
                     return "Import Packet";
 

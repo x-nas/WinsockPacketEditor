@@ -42,6 +42,7 @@ namespace WinsockPacketEditor
                 this.InitProgressionPosition();
                 this.InitFilterExecuteType();
                 this.ShowFilterData();
+                this.Dark_Changed();
 
                 switch (fiSelect.FMode)
                 {
@@ -428,6 +429,33 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.pFilterAction.Back = 
+                    this.pFilterName.Back = 
+                    this.pFilterAppoint_Advance.Back = 
+                    this.pFilterFunction.Back = 
+                    this.pFilterAppoint.Back = 
+                    this.pFilterModifyFrom.Back = 
+                    this.pFilterMode.Back = 
+                    this.pFilterProgression.Back = 
+                    Operate.SystemConfig.Color_35;
+            }
+            else
+            {
+                this.pFilterAction.Back =
+                    this.pFilterName.Back =
+                    this.pFilterAppoint_Advance.Back =
+                    this.pFilterFunction.Back =
+                    this.pFilterAppoint.Back =
+                    this.pFilterModifyFrom.Back =
+                    this.pFilterMode.Back =
+                    this.pFilterProgression.Back = null;
             }
         }
 

@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
             this.tlpSendEdit = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bStop = new AntdUI.Button();
@@ -241,23 +241,23 @@
             this.mSendCollection.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.mSendCollection.Gap = 5;
             this.mSendCollection.IconRatio = 1F;
-            menuItem9.IconSvg = "PlusOutlined";
-            menuItem10.IconSvg = "FolderOpenOutlined";
-            menuItem10.ID = "miImport";
-            menuItem10.LocalizationText = "SendEditForm.{id}";
-            menuItem10.Text = "导入发送集";
-            menuItem11.IconSvg = "DeliveredProcedureOutlined";
-            menuItem11.ID = "miExport";
-            menuItem11.LocalizationText = "SendEditForm.{id}";
-            menuItem11.Text = "导出所有发送集";
-            menuItem12.IconSvg = "DeleteOutlined";
-            menuItem12.ID = "miClear";
-            menuItem12.LocalizationText = "SendEditForm.{id}";
-            menuItem12.Text = "清空所有发送集";
-            menuItem9.Sub.Add(menuItem10);
-            menuItem9.Sub.Add(menuItem11);
-            menuItem9.Sub.Add(menuItem12);
-            this.mSendCollection.Items.Add(menuItem9);
+            menuItem5.IconSvg = "PlusOutlined";
+            menuItem6.IconSvg = "FolderOpenOutlined";
+            menuItem6.ID = "miImport";
+            menuItem6.LocalizationText = "SendEditForm.{id}";
+            menuItem6.Text = "导入发送集";
+            menuItem7.IconSvg = "DeliveredProcedureOutlined";
+            menuItem7.ID = "miExport";
+            menuItem7.LocalizationText = "SendEditForm.{id}";
+            menuItem7.Text = "导出所有发送集";
+            menuItem8.IconSvg = "DeleteOutlined";
+            menuItem8.ID = "miClear";
+            menuItem8.LocalizationText = "SendEditForm.{id}";
+            menuItem8.Text = "清空所有发送集";
+            menuItem5.Sub.Add(menuItem6);
+            menuItem5.Sub.Add(menuItem7);
+            menuItem5.Sub.Add(menuItem8);
+            this.mSendCollection.Items.Add(menuItem5);
             this.mSendCollection.Location = new System.Drawing.Point(947, 3);
             this.mSendCollection.Mode = AntdUI.TMenuMode.Horizontal;
             this.mSendCollection.Name = "mSendCollection";
@@ -386,6 +386,7 @@
             // txtNotes
             // 
             this.txtNotes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtNotes.LocalizationPlaceholderText = "SendEditForm.Remarks";
             this.txtNotes.Location = new System.Drawing.Point(3, 543);
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";

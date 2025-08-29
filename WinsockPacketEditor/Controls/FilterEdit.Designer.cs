@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.Tabs.StyleLine styleLine7 = new AntdUI.Tabs.StyleLine();
-            AntdUI.Tabs.StyleLine styleLine8 = new AntdUI.Tabs.StyleLine();
-            AntdUI.Tabs.StyleLine styleLine9 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine2 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine3 = new AntdUI.Tabs.StyleLine();
             this.tlpFilterEdit = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new AntdUI.Button();
@@ -72,12 +72,6 @@
             this.tlpFilterFunction = new System.Windows.Forms.TableLayoutPanel();
             this.dFilterFunction = new AntdUI.Divider();
             this.tabFilterFunction = new AntdUI.Tabs();
-            this.tpProxyMode = new AntdUI.TabPage();
-            this.tlpFilterFunction_ProxyMode = new System.Windows.Forms.TableLayoutPanel();
-            this.cbFilterFunction_TCP_Req = new AntdUI.Checkbox();
-            this.cbFilterFunction_UDP_Resp = new AntdUI.Checkbox();
-            this.cbFilterFunction_UDP_Req = new AntdUI.Checkbox();
-            this.cbFilterFunction_TCP_Resp = new AntdUI.Checkbox();
             this.tpInjectMode = new AntdUI.TabPage();
             this.tlpFilterFunction_InjectMode = new System.Windows.Forms.TableLayoutPanel();
             this.cbFilterFunction_Send = new AntdUI.Checkbox();
@@ -88,6 +82,12 @@
             this.cbFilterFunction_WSASendTo = new AntdUI.Checkbox();
             this.cbFilterFunction_SendTo = new AntdUI.Checkbox();
             this.cbFilterFunction_WSASend = new AntdUI.Checkbox();
+            this.tpProxyMode = new AntdUI.TabPage();
+            this.tlpFilterFunction_ProxyMode = new System.Windows.Forms.TableLayoutPanel();
+            this.cbFilterFunction_TCP_Req = new AntdUI.Checkbox();
+            this.cbFilterFunction_UDP_Resp = new AntdUI.Checkbox();
+            this.cbFilterFunction_UDP_Req = new AntdUI.Checkbox();
+            this.cbFilterFunction_TCP_Resp = new AntdUI.Checkbox();
             this.pFilterAction = new AntdUI.Panel();
             this.tlpFilterAction = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilterAction2 = new System.Windows.Forms.TableLayoutPanel();
@@ -142,10 +142,10 @@
             this.pFilterFunction.SuspendLayout();
             this.tlpFilterFunction.SuspendLayout();
             this.tabFilterFunction.SuspendLayout();
-            this.tpProxyMode.SuspendLayout();
-            this.tlpFilterFunction_ProxyMode.SuspendLayout();
             this.tpInjectMode.SuspendLayout();
             this.tlpFilterFunction_InjectMode.SuspendLayout();
+            this.tpProxyMode.SuspendLayout();
+            this.tlpFilterFunction_ProxyMode.SuspendLayout();
             this.pFilterAction.SuspendLayout();
             this.tlpFilterAction.SuspendLayout();
             this.tlpFilterAction2.SuspendLayout();
@@ -247,7 +247,7 @@
             this.tabFilterEdit.Pages.Add(this.tpAdvance);
             this.tabFilterEdit.SelectedIndex = 1;
             this.tabFilterEdit.Size = new System.Drawing.Size(994, 250);
-            this.tabFilterEdit.Style = styleLine7;
+            this.tabFilterEdit.Style = styleLine2;
             this.tabFilterEdit.TabIndex = 0;
             // 
             // tpAdvance
@@ -312,7 +312,7 @@
             this.tabFilterFrom.Pages.Add(this.tpFromPosition);
             this.tabFilterFrom.SelectedIndex = 1;
             this.tabFilterFrom.Size = new System.Drawing.Size(982, 101);
-            this.tabFilterFrom.Style = styleLine8;
+            this.tabFilterFrom.Style = styleLine1;
             this.tabFilterFrom.TabIndex = 2;
             this.tabFilterFrom.Text = "tabs1";
             // 
@@ -781,87 +781,9 @@
             this.tabFilterFunction.Pages.Add(this.tpInjectMode);
             this.tabFilterFunction.Pages.Add(this.tpProxyMode);
             this.tabFilterFunction.Size = new System.Drawing.Size(284, 159);
-            this.tabFilterFunction.Style = styleLine9;
+            this.tabFilterFunction.Style = styleLine3;
             this.tabFilterFunction.TabIndex = 1;
             this.tabFilterFunction.Text = "tabs1";
-            // 
-            // tpProxyMode
-            // 
-            this.tpProxyMode.Controls.Add(this.tlpFilterFunction_ProxyMode);
-            this.tpProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpProxyMode.Location = new System.Drawing.Point(3, 30);
-            this.tpProxyMode.Name = "tpProxyMode";
-            this.tpProxyMode.Size = new System.Drawing.Size(278, 126);
-            this.tpProxyMode.TabIndex = 0;
-            this.tpProxyMode.Text = "代理模式";
-            // 
-            // tlpFilterFunction_ProxyMode
-            // 
-            this.tlpFilterFunction_ProxyMode.ColumnCount = 3;
-            this.tlpFilterFunction_ProxyMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpFilterFunction_ProxyMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterFunction_ProxyMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpFilterFunction_ProxyMode.Controls.Add(this.cbFilterFunction_TCP_Req, 0, 0);
-            this.tlpFilterFunction_ProxyMode.Controls.Add(this.cbFilterFunction_UDP_Resp, 2, 1);
-            this.tlpFilterFunction_ProxyMode.Controls.Add(this.cbFilterFunction_UDP_Req, 2, 0);
-            this.tlpFilterFunction_ProxyMode.Controls.Add(this.cbFilterFunction_TCP_Resp, 0, 1);
-            this.tlpFilterFunction_ProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpFilterFunction_ProxyMode.Location = new System.Drawing.Point(0, 0);
-            this.tlpFilterFunction_ProxyMode.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpFilterFunction_ProxyMode.Name = "tlpFilterFunction_ProxyMode";
-            this.tlpFilterFunction_ProxyMode.Padding = new System.Windows.Forms.Padding(3);
-            this.tlpFilterFunction_ProxyMode.RowCount = 3;
-            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpFilterFunction_ProxyMode.Size = new System.Drawing.Size(278, 126);
-            this.tlpFilterFunction_ProxyMode.TabIndex = 4;
-            // 
-            // cbFilterFunction_TCP_Req
-            // 
-            this.cbFilterFunction_TCP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbFilterFunction_TCP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbFilterFunction_TCP_Req.LocalizationText = "TCPReq";
-            this.cbFilterFunction_TCP_Req.Location = new System.Drawing.Point(6, 6);
-            this.cbFilterFunction_TCP_Req.Name = "cbFilterFunction_TCP_Req";
-            this.cbFilterFunction_TCP_Req.Size = new System.Drawing.Size(93, 34);
-            this.cbFilterFunction_TCP_Req.TabIndex = 51;
-            this.cbFilterFunction_TCP_Req.Text = "TCP请求";
-            // 
-            // cbFilterFunction_UDP_Resp
-            // 
-            this.cbFilterFunction_UDP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbFilterFunction_UDP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbFilterFunction_UDP_Resp.LocalizationText = "UDPResp";
-            this.cbFilterFunction_UDP_Resp.Location = new System.Drawing.Point(175, 46);
-            this.cbFilterFunction_UDP_Resp.Name = "cbFilterFunction_UDP_Resp";
-            this.cbFilterFunction_UDP_Resp.Size = new System.Drawing.Size(97, 34);
-            this.cbFilterFunction_UDP_Resp.TabIndex = 44;
-            this.cbFilterFunction_UDP_Resp.Text = "UDP响应";
-            // 
-            // cbFilterFunction_UDP_Req
-            // 
-            this.cbFilterFunction_UDP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbFilterFunction_UDP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbFilterFunction_UDP_Req.LocalizationText = "UDPReq";
-            this.cbFilterFunction_UDP_Req.Location = new System.Drawing.Point(175, 6);
-            this.cbFilterFunction_UDP_Req.Name = "cbFilterFunction_UDP_Req";
-            this.cbFilterFunction_UDP_Req.Size = new System.Drawing.Size(97, 34);
-            this.cbFilterFunction_UDP_Req.TabIndex = 42;
-            this.cbFilterFunction_UDP_Req.Text = "UDP请求";
-            // 
-            // cbFilterFunction_TCP_Resp
-            // 
-            this.cbFilterFunction_TCP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbFilterFunction_TCP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbFilterFunction_TCP_Resp.LocalizationText = "TCPResp";
-            this.cbFilterFunction_TCP_Resp.Location = new System.Drawing.Point(6, 46);
-            this.cbFilterFunction_TCP_Resp.Name = "cbFilterFunction_TCP_Resp";
-            this.cbFilterFunction_TCP_Resp.Size = new System.Drawing.Size(93, 34);
-            this.cbFilterFunction_TCP_Resp.TabIndex = 41;
-            this.cbFilterFunction_TCP_Resp.Text = "TCP响应";
             // 
             // tpInjectMode
             // 
@@ -996,6 +918,84 @@
             this.cbFilterFunction_WSASend.Size = new System.Drawing.Size(100, 34);
             this.cbFilterFunction_WSASend.TabIndex = 41;
             this.cbFilterFunction_WSASend.Text = "WSA发送";
+            // 
+            // tpProxyMode
+            // 
+            this.tpProxyMode.Controls.Add(this.tlpFilterFunction_ProxyMode);
+            this.tpProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpProxyMode.Location = new System.Drawing.Point(3, 30);
+            this.tpProxyMode.Name = "tpProxyMode";
+            this.tpProxyMode.Size = new System.Drawing.Size(278, 126);
+            this.tpProxyMode.TabIndex = 0;
+            this.tpProxyMode.Text = "代理模式";
+            // 
+            // tlpFilterFunction_ProxyMode
+            // 
+            this.tlpFilterFunction_ProxyMode.ColumnCount = 3;
+            this.tlpFilterFunction_ProxyMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpFilterFunction_ProxyMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterFunction_ProxyMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpFilterFunction_ProxyMode.Controls.Add(this.cbFilterFunction_TCP_Req, 0, 0);
+            this.tlpFilterFunction_ProxyMode.Controls.Add(this.cbFilterFunction_UDP_Resp, 2, 1);
+            this.tlpFilterFunction_ProxyMode.Controls.Add(this.cbFilterFunction_UDP_Req, 2, 0);
+            this.tlpFilterFunction_ProxyMode.Controls.Add(this.cbFilterFunction_TCP_Resp, 0, 1);
+            this.tlpFilterFunction_ProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilterFunction_ProxyMode.Location = new System.Drawing.Point(0, 0);
+            this.tlpFilterFunction_ProxyMode.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilterFunction_ProxyMode.Name = "tlpFilterFunction_ProxyMode";
+            this.tlpFilterFunction_ProxyMode.Padding = new System.Windows.Forms.Padding(3);
+            this.tlpFilterFunction_ProxyMode.RowCount = 3;
+            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpFilterFunction_ProxyMode.Size = new System.Drawing.Size(278, 126);
+            this.tlpFilterFunction_ProxyMode.TabIndex = 4;
+            // 
+            // cbFilterFunction_TCP_Req
+            // 
+            this.cbFilterFunction_TCP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbFilterFunction_TCP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbFilterFunction_TCP_Req.LocalizationText = "TCPReq";
+            this.cbFilterFunction_TCP_Req.Location = new System.Drawing.Point(6, 6);
+            this.cbFilterFunction_TCP_Req.Name = "cbFilterFunction_TCP_Req";
+            this.cbFilterFunction_TCP_Req.Size = new System.Drawing.Size(93, 34);
+            this.cbFilterFunction_TCP_Req.TabIndex = 51;
+            this.cbFilterFunction_TCP_Req.Text = "TCP请求";
+            // 
+            // cbFilterFunction_UDP_Resp
+            // 
+            this.cbFilterFunction_UDP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbFilterFunction_UDP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbFilterFunction_UDP_Resp.LocalizationText = "UDPResp";
+            this.cbFilterFunction_UDP_Resp.Location = new System.Drawing.Point(175, 46);
+            this.cbFilterFunction_UDP_Resp.Name = "cbFilterFunction_UDP_Resp";
+            this.cbFilterFunction_UDP_Resp.Size = new System.Drawing.Size(97, 34);
+            this.cbFilterFunction_UDP_Resp.TabIndex = 44;
+            this.cbFilterFunction_UDP_Resp.Text = "UDP响应";
+            // 
+            // cbFilterFunction_UDP_Req
+            // 
+            this.cbFilterFunction_UDP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbFilterFunction_UDP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbFilterFunction_UDP_Req.LocalizationText = "UDPReq";
+            this.cbFilterFunction_UDP_Req.Location = new System.Drawing.Point(175, 6);
+            this.cbFilterFunction_UDP_Req.Name = "cbFilterFunction_UDP_Req";
+            this.cbFilterFunction_UDP_Req.Size = new System.Drawing.Size(97, 34);
+            this.cbFilterFunction_UDP_Req.TabIndex = 42;
+            this.cbFilterFunction_UDP_Req.Text = "UDP请求";
+            // 
+            // cbFilterFunction_TCP_Resp
+            // 
+            this.cbFilterFunction_TCP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbFilterFunction_TCP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbFilterFunction_TCP_Resp.LocalizationText = "TCPResp";
+            this.cbFilterFunction_TCP_Resp.Location = new System.Drawing.Point(6, 46);
+            this.cbFilterFunction_TCP_Resp.Name = "cbFilterFunction_TCP_Resp";
+            this.cbFilterFunction_TCP_Resp.Size = new System.Drawing.Size(93, 34);
+            this.cbFilterFunction_TCP_Resp.TabIndex = 41;
+            this.cbFilterFunction_TCP_Resp.Text = "TCP响应";
             // 
             // pFilterAction
             // 
@@ -1486,12 +1486,12 @@
             this.pFilterFunction.ResumeLayout(false);
             this.tlpFilterFunction.ResumeLayout(false);
             this.tabFilterFunction.ResumeLayout(false);
-            this.tpProxyMode.ResumeLayout(false);
-            this.tlpFilterFunction_ProxyMode.ResumeLayout(false);
-            this.tlpFilterFunction_ProxyMode.PerformLayout();
             this.tpInjectMode.ResumeLayout(false);
             this.tlpFilterFunction_InjectMode.ResumeLayout(false);
             this.tlpFilterFunction_InjectMode.PerformLayout();
+            this.tpProxyMode.ResumeLayout(false);
+            this.tlpFilterFunction_ProxyMode.ResumeLayout(false);
+            this.tlpFilterFunction_ProxyMode.PerformLayout();
             this.pFilterAction.ResumeLayout(false);
             this.tlpFilterAction.ResumeLayout(false);
             this.tlpFilterAction2.ResumeLayout(false);

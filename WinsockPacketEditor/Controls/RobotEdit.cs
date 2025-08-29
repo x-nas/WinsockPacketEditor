@@ -45,12 +45,13 @@ namespace WinsockPacketEditor
             this.InitDDL();
             this.DelayFix_Changed();
             this.DelayRandom_Changed();
+            this.Dark_Changed();
         }
 
         private void InitTable_RobotINST()
         {
             tRobotInstruction.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("", "Inst", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("", "Inst")
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -61,7 +62,7 @@ namespace WinsockPacketEditor
                         };
                     },
                 }.SetFixed().SetLocalizationTitleID("Table.RobotINST.Column."),
-                new AntdUI.Column("InstType", "Type", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("InstType", "Type")
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -188,6 +189,39 @@ namespace WinsockPacketEditor
             else
             {
                 this.txtRobotName.Status = AntdUI.TType.Success;
+            }
+        }
+
+        private void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.pSendList.Back =
+                    this.pPacketList.Back =
+                    this.pSYSSocket.Back =
+                    this.pDelay.Back =
+                    this.pLoop.Back =
+                    this.pKeyBoard.Back =
+                    this.pKeyCombination.Back = 
+                    this.pText.Back =
+                    this.pMouseKey.Back =
+                    this.pMouseWheel.Back =
+                    this.pMouseMove.Back =
+                    Operate.SystemConfig.Color_35;
+            }
+            else
+            {
+                this.pSendList.Back =
+                    this.pPacketList.Back =
+                    this.pSYSSocket.Back =
+                    this.pDelay.Back =
+                    this.pLoop.Back =
+                    this.pKeyBoard.Back =
+                    this.pKeyCombination.Back =
+                    this.pText.Back =
+                    this.pMouseKey.Back =
+                    this.pMouseWheel.Back =
+                    this.pMouseMove.Back = null;
             }
         }
 
