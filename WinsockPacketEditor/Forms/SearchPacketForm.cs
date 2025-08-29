@@ -61,11 +61,13 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.hexFind.BackColor = Color.FromArgb(30, 30, 30);
+                this.txtFind.BackColor = Operate.SystemConfig.Color_30;
+                this.hexFind.BackColor = Operate.SystemConfig.Color_30;
                 this.hexFind.ForeColor = Color.Silver;
             }
             else
             {
+                this.txtFind.BackColor = null;
                 this.hexFind.BackColor = Color.White;
                 this.hexFind.ForeColor = Color.Black;
             }
