@@ -1112,12 +1112,12 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketModificationForm(this, piList[0]))
+                                var PacketModification = new PacketModification(this, piList[0]);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("PacketModificationForm", "封包数据对比"), PacketModification)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 

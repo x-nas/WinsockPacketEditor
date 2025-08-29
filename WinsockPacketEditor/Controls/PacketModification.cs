@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class PacketModificationForm : Form
+    public partial class PacketModification : UserControl
     {
         private Form form;
         private PacketInfo packetInfo = null;
@@ -15,35 +15,27 @@ namespace WinsockPacketEditor
 
         #region//窗体事件
 
-        public PacketModificationForm(Form form, PacketInfo packetInfo)
+        public PacketModification(Form form, PacketInfo packetInfo)
         {
             InitializeComponent();
-
             this.packetInfo = packetInfo;
             this.form = form;
         }
 
-        public PacketModificationForm(Form form, ProxyInfo proxyInfo)
+        public PacketModification(Form form, ProxyInfo proxyInfo)
         {
             InitializeComponent();
-
             this.proxyInfo = proxyInfo;
             this.form = form;
         }
 
-        private void PacketModificationForm_Load(object sender, EventArgs e)
+        private void PacketModification_Load(object sender, EventArgs e)
         {
             try
             {
-                this.Text = AntdUI.Localization.Get("PacketModificationForm", "封包修改");
-                this.InitTable_Comparison();
-
                 switch (Operate.SystemConfig.StartMode)
                 {
-                    case Operate.SystemConfig.SystemMode.Process:
-
-                        this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("PacketModificationForm.Raw", "原始封包数据  ( 长度 {0} )"), this.packetInfo.RawBuffer.Length);
-                        this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("PacketModificationForm.Modified", "修改后封包数据  ( 长度 {0} )"), this.packetInfo.PacketBuffer.Length);
+                    case Operate.SystemConfig.SystemMode.Process:                        
 
                         if (this.packetInfo.RawBuffer.Length > 0)
                         {
@@ -57,10 +49,7 @@ namespace WinsockPacketEditor
 
                         break;
 
-                    case Operate.SystemConfig.SystemMode.Proxy:
-
-                        this.lPacketData_Raw.Text = string.Format(AntdUI.Localization.Get("PacketModificationForm.Raw", "原始封包数据  ( 长度 {0} )"), this.proxyInfo.RawBuffer.Length);
-                        this.lPacketData_New.Text = string.Format(AntdUI.Localization.Get("PacketModificationForm.Modified", "修改后封包数据  ( 长度 {0} )"), this.proxyInfo.PacketBuffer.Length);
+                    case Operate.SystemConfig.SystemMode.Proxy:                        
 
                         if (this.proxyInfo.RawBuffer.Length > 0)
                         {
@@ -74,6 +63,10 @@ namespace WinsockPacketEditor
 
                         break;
                 }
+
+                this.InitTable_Comparison();
+                this.Dark_Changed();
+                this.SetPacketInfo();
 
                 this.tPacketModification.DataSource = Operate.SystemConfig.CompareText(this.txtPacketData_Raw, this.txtPacketData_New);
             }
@@ -118,6 +111,45 @@ namespace WinsockPacketEditor
             };
 
             this.tPacketModification.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+        }
+
+        private void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.txtPacketData_Raw.BackColor = 
+                    this.txtPacketData_New.BackColor = 
+                    Operate.SystemConfig.Color_30;
+                
+            }
+            else
+            {
+                this.txtPacketData_Raw.BackColor =
+                    this.txtPacketData_New.BackColor = null;
+            }
+        }
+
+        private void SetPacketInfo()
+        {
+            string RawInfo = AntdUI.Localization.Get("PacketModificationForm.Raw", "原始封包数据 ( 长度 {0} )");
+            string ModifiedInfo = AntdUI.Localization.Get("PacketModificationForm.Modified", "修改后封包数据 ( 长度 {0} )");
+
+            switch (Operate.SystemConfig.StartMode)
+            {
+                case Operate.SystemConfig.SystemMode.Process:
+
+                    this.lPacketData_Raw.Text = string.Format(RawInfo, this.packetInfo.RawBuffer.Length);
+                    this.lPacketData_New.Text = string.Format(ModifiedInfo, this.packetInfo.PacketBuffer.Length);
+
+                    break;
+
+                case Operate.SystemConfig.SystemMode.Proxy:
+
+                    this.lPacketData_Raw.Text = string.Format(RawInfo, this.proxyInfo.RawBuffer.Length);
+                    this.lPacketData_New.Text = string.Format(ModifiedInfo, this.proxyInfo.PacketBuffer.Length);
+
+                    break;
+            }
         }
 
         #endregion

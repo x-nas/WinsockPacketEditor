@@ -1310,10 +1310,10 @@ namespace WinsockPacketEditor
                     return "Text Duplicate";
 
                 case "ComparisonText.TextA":
-                    return "Text A  ( Length {0} )";
+                    return "Text A ( Length {0} )";
 
                 case "ComparisonText.TextB":
-                    return "Text B  ( Length {0} )";
+                    return "Text B ( Length {0} )";
 
                 case "ComparisonText.DuplicateCNT":
                     return "Duplicate CNT:";
@@ -2044,12 +2044,12 @@ namespace WinsockPacketEditor
                     return "Packet Modification";
 
                 case "PacketModificationForm.Raw":
-                    return "Packet raw data ( Length {0} )";
+                    return "Packet Raw Data ( Length {0} )";
 
                 case "PacketModificationForm.Modified":
-                    return "Modified packet data ( Length {0} )";
+                    return "Packet Modified Data ( Length {0} )";
 
-                case "PacketModificationForm.ChangeType":
+                case "Table.ComparisonText.Column.ChangeType":
                     return "Change Type";
 
                 case "Table.ComparisonText.Column.ID":
