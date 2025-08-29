@@ -1,16 +1,16 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class LocationForm
+    partial class AccountLocation
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// 必需的设计器变量。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// 清理所有正在使用的资源。
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,15 +20,14 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region 组件设计器生成的代码
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// 设计器支持所需的方法 - 不要修改
+        /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocationForm));
             this.tlpLocation = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bExit = new AntdUI.Button();
@@ -50,8 +49,8 @@
             this.tlpLocation.RowCount = 2;
             this.tlpLocation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpLocation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpLocation.Size = new System.Drawing.Size(784, 761);
-            this.tlpLocation.TabIndex = 0;
+            this.tlpLocation.Size = new System.Drawing.Size(1000, 700);
+            this.tlpLocation.TabIndex = 1;
             // 
             // tlpButton
             // 
@@ -63,14 +62,14 @@
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 701);
+            this.tlpButton.Location = new System.Drawing.Point(0, 640);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(784, 60);
+            this.tlpButton.Size = new System.Drawing.Size(1000, 60);
             this.tlpButton.TabIndex = 4;
             // 
             // bExit
@@ -79,7 +78,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(335, 7);
+            this.bExit.Location = new System.Drawing.Point(443, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -94,26 +93,21 @@
             this.tLocation.Gap = 12;
             this.tLocation.Location = new System.Drawing.Point(3, 3);
             this.tLocation.Name = "tLocation";
-            this.tLocation.Size = new System.Drawing.Size(778, 695);
+            this.tLocation.Size = new System.Drawing.Size(994, 634);
             this.tLocation.TabIndex = 0;
             this.tLocation.Text = "table1";
             // 
-            // LocationForm
+            // AccountLocation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 761);
             this.Controls.Add(this.tlpLocation);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
-            this.Name = "LocationForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "LocationForm";
-            this.Load += new System.EventHandler(this.LocationForm_Load);
+            this.Name = "AccountLocation";
+            this.Size = new System.Drawing.Size(1000, 700);
+            this.Load += new System.EventHandler(this.AccountLocation_Load);
             this.tlpLocation.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -123,8 +117,8 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpLocation;
-        private AntdUI.Table tLocation;
         private System.Windows.Forms.TableLayoutPanel tlpButton;
         private AntdUI.Button bExit;
+        private AntdUI.Table tLocation;
     }
 }

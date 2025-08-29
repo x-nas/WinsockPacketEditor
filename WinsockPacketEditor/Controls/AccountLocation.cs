@@ -1,25 +1,32 @@
 ﻿using AntdUI;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class LocationForm : Form
+    public partial class AccountLocation : UserControl
     {
+        private Form form;
         private AccountInfo aiSelect;
 
         #region//窗体事件
 
-        public LocationForm(Form form, AccountInfo ai)
+        public AccountLocation(Form form, AccountInfo ai)
         {
             InitializeComponent();
             this.aiSelect = ai;
+            this.form = form;
         }
 
-        private void LocationForm_Load(object sender, EventArgs e)
+        private void AccountLocation_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("LocationForm", "登录情况");
             this.InitTable_Location();
         }
 

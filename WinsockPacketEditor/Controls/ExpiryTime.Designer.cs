@@ -1,16 +1,16 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class ExpiryTimeForm
+    partial class ExpiryTime
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// 必需的设计器变量。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// 清理所有正在使用的资源。
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,15 +20,14 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region 组件设计器生成的代码
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// 设计器支持所需的方法 - 不要修改
+        /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExpiryTimeForm));
             this.tlpExpiryTime = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new AntdUI.Button();
@@ -64,8 +63,8 @@
             this.tlpExpiryTime.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tlpExpiryTime.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpExpiryTime.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpExpiryTime.Size = new System.Drawing.Size(484, 761);
-            this.tlpExpiryTime.TabIndex = 1;
+            this.tlpExpiryTime.Size = new System.Drawing.Size(500, 700);
+            this.tlpExpiryTime.TabIndex = 2;
             // 
             // tlpButton
             // 
@@ -78,14 +77,14 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 701);
+            this.tlpButton.Location = new System.Drawing.Point(0, 640);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(484, 60);
+            this.tlpButton.Size = new System.Drawing.Size(500, 60);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -94,7 +93,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(115, 7);
+            this.bSave.Location = new System.Drawing.Point(123, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
@@ -108,7 +107,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(255, 7);
+            this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -133,14 +132,15 @@
             this.tlpAddTime.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAddTime.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAddTime.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAddTime.Size = new System.Drawing.Size(484, 300);
+            this.tlpAddTime.Size = new System.Drawing.Size(500, 300);
             this.tlpAddTime.TabIndex = 0;
             // 
             // rbFromNow
             // 
-            this.rbFromNow.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.rbFromNow.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.rbFromNow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFromNow.LocalizationText = "ExpiryTimeForm.FromNow";
-            this.rbFromNow.Location = new System.Drawing.Point(245, 3);
+            this.rbFromNow.Location = new System.Drawing.Point(253, 3);
             this.rbFromNow.Name = "rbFromNow";
             this.rbFromNow.Size = new System.Drawing.Size(138, 42);
             this.rbFromNow.TabIndex = 5;
@@ -148,8 +148,9 @@
             // 
             // rbFromExpiryTime
             // 
-            this.rbFromExpiryTime.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.rbFromExpiryTime.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbFromExpiryTime.Checked = true;
+            this.rbFromExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFromExpiryTime.LocalizationText = "ExpiryTimeForm.FromExpiryTime";
             this.rbFromExpiryTime.Location = new System.Drawing.Point(3, 3);
             this.rbFromExpiryTime.Name = "rbFromExpiryTime";
@@ -171,7 +172,7 @@
             this.nudAddTime.PrefixSvg = "";
             this.nudAddTime.PrefixText = "添加:";
             this.nudAddTime.SelectionStart = 1;
-            this.nudAddTime.Size = new System.Drawing.Size(236, 45);
+            this.nudAddTime.Size = new System.Drawing.Size(244, 45);
             this.nudAddTime.SuffixSvg = "FieldTimeOutlined";
             this.nudAddTime.TabIndex = 6;
             this.nudAddTime.Text = "1";
@@ -190,33 +191,35 @@
             this.tlpTimeType.Controls.Add(this.rbAddHour, 0, 0);
             this.tlpTimeType.Controls.Add(this.rbAddDay, 1, 0);
             this.tlpTimeType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpTimeType.Location = new System.Drawing.Point(242, 48);
+            this.tlpTimeType.Location = new System.Drawing.Point(250, 48);
             this.tlpTimeType.Margin = new System.Windows.Forms.Padding(0);
             this.tlpTimeType.Name = "tlpTimeType";
             this.tlpTimeType.RowCount = 1;
             this.tlpTimeType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTimeType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tlpTimeType.Size = new System.Drawing.Size(242, 51);
+            this.tlpTimeType.Size = new System.Drawing.Size(250, 51);
             this.tlpTimeType.TabIndex = 7;
             // 
             // rbAddHour
             // 
+            this.rbAddHour.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbAddHour.Checked = true;
             this.rbAddHour.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbAddHour.LocalizationText = "Hour";
             this.rbAddHour.Location = new System.Drawing.Point(3, 3);
             this.rbAddHour.Name = "rbAddHour";
-            this.rbAddHour.Size = new System.Drawing.Size(115, 45);
+            this.rbAddHour.Size = new System.Drawing.Size(74, 45);
             this.rbAddHour.TabIndex = 0;
             this.rbAddHour.Text = "小时";
             // 
             // rbAddDay
             // 
+            this.rbAddDay.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbAddDay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbAddDay.LocalizationText = "Day";
-            this.rbAddDay.Location = new System.Drawing.Point(124, 3);
+            this.rbAddDay.Location = new System.Drawing.Point(128, 3);
             this.rbAddDay.Name = "rbAddDay";
-            this.rbAddDay.Size = new System.Drawing.Size(115, 45);
+            this.rbAddDay.Size = new System.Drawing.Size(58, 45);
             this.rbAddDay.TabIndex = 1;
             this.rbAddDay.Text = "天";
             // 
@@ -226,32 +229,28 @@
             this.lAccountCNT.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lAccountCNT.Location = new System.Drawing.Point(3, 3);
             this.lAccountCNT.Name = "lAccountCNT";
-            this.lAccountCNT.Size = new System.Drawing.Size(478, 44);
+            this.lAccountCNT.Size = new System.Drawing.Size(494, 44);
             this.lAccountCNT.TabIndex = 18;
             this.lAccountCNT.Text = "0";
             this.lAccountCNT.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // ExpiryTimeForm
+            // ExpiryTime
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 761);
             this.Controls.Add(this.tlpExpiryTime);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
-            this.Name = "ExpiryTimeForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ExpiryTimeForm";
-            this.Load += new System.EventHandler(this.ExpiryTimeForm_Load);
+            this.Name = "ExpiryTime";
+            this.Size = new System.Drawing.Size(500, 700);
+            this.Load += new System.EventHandler(this.ExpiryTime_Load);
             this.tlpExpiryTime.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
             this.tlpAddTime.ResumeLayout(false);
             this.tlpAddTime.PerformLayout();
             this.tlpTimeType.ResumeLayout(false);
+            this.tlpTimeType.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -259,16 +258,16 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpExpiryTime;
-        private System.Windows.Forms.TableLayoutPanel tlpAddTime;
         private System.Windows.Forms.TableLayoutPanel tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
+        private System.Windows.Forms.TableLayoutPanel tlpAddTime;
         private AntdUI.Radio rbFromNow;
         private AntdUI.Radio rbFromExpiryTime;
-        private AntdUI.Label lAccountCNT;
         private AntdUI.InputNumber nudAddTime;
         private System.Windows.Forms.TableLayoutPanel tlpTimeType;
         private AntdUI.Radio rbAddHour;
         private AntdUI.Radio rbAddDay;
+        private AntdUI.Label lAccountCNT;
     }
 }

@@ -6,36 +6,23 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class LimitLinksForm : Form
+    public partial class ExpiryTime : UserControl
     {
         private Form form;
         private List<AccountInfo> aiList;
 
         #region//窗体事件
 
-        public LimitLinksForm(Form _form, List<AccountInfo> aiList)
+        public ExpiryTime(Form form, List<AccountInfo> aiList)
         {
             InitializeComponent();
-            this.form = _form;
+            this.form = form;
             this.aiList = aiList;
         }
 
-        private void LimitLinksForm_Load(object sender, EventArgs e)
+        private void ExpiryTime_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("LimitLinksForm", "调整链接数");
             this.lAccountCNT.Text = string.Format(AntdUI.Localization.Get("BatchAccounts", "批量调整 ( {0} ) 个账号"), this.aiList.Count);
-
-            this.IsLimitLinks_Changed();
-        }
-
-        private void cbIsLimitLinks_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
-        {
-            this.IsLimitLinks_Changed();
-        }
-
-        private void IsLimitLinks_Changed()
-        {
-            this.nudLimitLinks.Enabled = this.cbIsLimitLinks.Checked;
         }
 
         #endregion
@@ -48,10 +35,19 @@ namespace WinsockPacketEditor
             {
                 if (this.aiList.Count > 0)
                 {
-                    bool IsLimitLinks = this.cbIsLimitLinks.Checked;
-                    int LimitLinks = ((int)this.nudLimitLinks.Value);
+                    int AddHours = ((int)this.nudAddTime.Value);
+                    if (this.rbAddDay.Checked)
+                    {
+                        AddHours = AddHours * 24;
+                    }
 
-                    Operate.ProxyConfig.Account.AdjustLimitLinks(this.aiList, IsLimitLinks, LimitLinks);
+                    int AddType = 0;
+                    if (this.rbFromNow.Checked)
+                    {
+                        AddType = 1;
+                    }
+
+                    Operate.ProxyConfig.Account.AdjustExpiryTime(this.aiList, AddType, AddHours);
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "批量调整完成", TType.Success)
                     {

@@ -1923,14 +1923,20 @@ namespace WinsockPacketEditor
                 case "AccountEditForm":
                     return "Account Edit";
 
+                case "AccountEditForm.Username":
+                    return "Username :";
+
+                case "AccountEditForm.Password":
+                    return "Password :";
+
                 case "AccountEditForm.LimitLinks":
-                    return "Limit Links";
+                    return "Limit Links :";
 
                 case "AccountEditForm.LimitDevices":
-                    return "Limit Devices";
+                    return "Limit Devices :";
 
                 case "AccountEditForm.ExpireTime":
-                    return "Expire Time";
+                    return "Expire Time :";
 
                 case "AccountEditForm.UserName.Empty":
                     return "Username Empty";
@@ -1981,7 +1987,7 @@ namespace WinsockPacketEditor
                     return "Limit Links";
 
                 case "LimitLinksForm.LimitLinks":
-                    return "Limit Links";
+                    return "Limit Links :";
 
                 #endregion
 
@@ -1991,7 +1997,7 @@ namespace WinsockPacketEditor
                     return "Limit Devices";
 
                 case "LimitDevicesForm.LimitDevices":
-                    return "Limit Devices";
+                    return "Limit Devices :";
 
                 #endregion
 

@@ -1,16 +1,16 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class AccountEditForm
+    partial class AccountEdit
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// 必需的设计器变量。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// 清理所有正在使用的资源。
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,22 +20,21 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region 组件设计器生成的代码
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// 设计器支持所需的方法 - 不要修改
+        /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AccountEditForm));
             this.tlpProxyAccount = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.tlpAccountInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new AntdUI.Label();
-            this.label2 = new AntdUI.Label();
+            this.lUserName = new AntdUI.Label();
+            this.lPassword = new AntdUI.Label();
             this.txtUserName = new AntdUI.Input();
             this.txtPassword = new AntdUI.Input();
             this.cbIsLimitLinks = new AntdUI.Checkbox();
@@ -65,8 +64,8 @@
             this.tlpProxyAccount.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyAccount.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyAccount.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpProxyAccount.Size = new System.Drawing.Size(484, 761);
-            this.tlpProxyAccount.TabIndex = 1;
+            this.tlpProxyAccount.Size = new System.Drawing.Size(500, 700);
+            this.tlpProxyAccount.TabIndex = 2;
             // 
             // tlpButton
             // 
@@ -79,14 +78,14 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 701);
+            this.tlpButton.Location = new System.Drawing.Point(0, 640);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(484, 60);
+            this.tlpButton.Size = new System.Drawing.Size(500, 60);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -95,7 +94,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(115, 7);
+            this.bSave.Location = new System.Drawing.Point(123, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
@@ -109,7 +108,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(255, 7);
+            this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -124,8 +123,8 @@
             this.tlpAccountInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpAccountInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tlpAccountInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpAccountInfo.Controls.Add(this.label1, 1, 0);
-            this.tlpAccountInfo.Controls.Add(this.label2, 1, 1);
+            this.tlpAccountInfo.Controls.Add(this.lUserName, 1, 0);
+            this.tlpAccountInfo.Controls.Add(this.lPassword, 1, 1);
             this.tlpAccountInfo.Controls.Add(this.txtUserName, 2, 0);
             this.tlpAccountInfo.Controls.Add(this.txtPassword, 2, 1);
             this.tlpAccountInfo.Controls.Add(this.cbIsLimitLinks, 1, 2);
@@ -145,35 +144,35 @@
             this.tlpAccountInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAccountInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAccountInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAccountInfo.Size = new System.Drawing.Size(484, 653);
+            this.tlpAccountInfo.Size = new System.Drawing.Size(500, 592);
             this.tlpAccountInfo.TabIndex = 1;
             // 
-            // label1
+            // lUserName
             // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.LocalizationText = "Username";
-            this.label1.Location = new System.Drawing.Point(31, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(122, 45);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "用户名";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lUserName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lUserName.LocalizationText = "AccountEditForm.Username";
+            this.lUserName.Location = new System.Drawing.Point(34, 3);
+            this.lUserName.Name = "lUserName";
+            this.lUserName.Size = new System.Drawing.Size(131, 45);
+            this.lUserName.TabIndex = 10;
+            this.lUserName.Text = "用户名 :";
+            this.lUserName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label2
+            // lPassword
             // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.LocalizationText = "Password";
-            this.label2.Location = new System.Drawing.Point(31, 54);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(122, 45);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "密码";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lPassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPassword.LocalizationText = "AccountEditForm.Password";
+            this.lPassword.Location = new System.Drawing.Point(34, 54);
+            this.lPassword.Name = "lPassword";
+            this.lPassword.Size = new System.Drawing.Size(131, 45);
+            this.lPassword.TabIndex = 11;
+            this.lPassword.Text = "密码 :";
+            this.lPassword.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtUserName
             // 
             this.txtUserName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtUserName.Location = new System.Drawing.Point(159, 3);
+            this.txtUserName.Location = new System.Drawing.Point(171, 3);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(294, 45);
             this.txtUserName.TabIndex = 12;
@@ -182,7 +181,7 @@
             // txtPassword
             // 
             this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPassword.Location = new System.Drawing.Point(159, 54);
+            this.txtPassword.Location = new System.Drawing.Point(171, 54);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(294, 45);
             this.txtPassword.TabIndex = 13;
@@ -190,44 +189,44 @@
             // 
             // cbIsLimitLinks
             // 
-            this.cbIsLimitLinks.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsLimitLinks.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbIsLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsLimitLinks.LocalizationText = "AccountEditForm.LimitLinks";
-            this.cbIsLimitLinks.Location = new System.Drawing.Point(31, 105);
+            this.cbIsLimitLinks.Location = new System.Drawing.Point(34, 105);
             this.cbIsLimitLinks.Name = "cbIsLimitLinks";
-            this.cbIsLimitLinks.Size = new System.Drawing.Size(122, 42);
+            this.cbIsLimitLinks.Size = new System.Drawing.Size(131, 45);
             this.cbIsLimitLinks.TabIndex = 14;
-            this.cbIsLimitLinks.Text = "限制链接数";
+            this.cbIsLimitLinks.Text = "限制链接数 :";
             this.cbIsLimitLinks.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsLimitLinks_CheckedChanged);
             // 
             // cbIsLimitDevices
             // 
-            this.cbIsLimitDevices.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsLimitDevices.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbIsLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsLimitDevices.LocalizationText = "AccountEditForm.LimitDevices";
-            this.cbIsLimitDevices.Location = new System.Drawing.Point(31, 156);
+            this.cbIsLimitDevices.Location = new System.Drawing.Point(34, 156);
             this.cbIsLimitDevices.Name = "cbIsLimitDevices";
-            this.cbIsLimitDevices.Size = new System.Drawing.Size(122, 42);
+            this.cbIsLimitDevices.Size = new System.Drawing.Size(131, 45);
             this.cbIsLimitDevices.TabIndex = 15;
-            this.cbIsLimitDevices.Text = "限制设备数";
+            this.cbIsLimitDevices.Text = "限制设备数 :";
             this.cbIsLimitDevices.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsLimitDevices_CheckedChanged);
             // 
             // cbIsExpiry
             // 
-            this.cbIsExpiry.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbIsExpiry.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbIsExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsExpiry.LocalizationText = "AccountEditForm.ExpireTime";
-            this.cbIsExpiry.Location = new System.Drawing.Point(31, 207);
+            this.cbIsExpiry.Location = new System.Drawing.Point(34, 207);
             this.cbIsExpiry.Name = "cbIsExpiry";
-            this.cbIsExpiry.Size = new System.Drawing.Size(106, 42);
+            this.cbIsExpiry.Size = new System.Drawing.Size(115, 42);
             this.cbIsExpiry.TabIndex = 16;
-            this.cbIsExpiry.Text = "过期时间";
+            this.cbIsExpiry.Text = "过期时间 :";
             this.cbIsExpiry.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsExpiry_CheckedChanged);
             // 
             // nudLimitLinks
             // 
             this.nudLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLimitLinks.Location = new System.Drawing.Point(159, 105);
+            this.nudLimitLinks.Location = new System.Drawing.Point(171, 105);
             this.nudLimitLinks.Minimum = new decimal(new int[] {
             1,
             0,
@@ -247,7 +246,7 @@
             // nudLimitDevices
             // 
             this.nudLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLimitDevices.Location = new System.Drawing.Point(159, 156);
+            this.nudLimitDevices.Location = new System.Drawing.Point(171, 156);
             this.nudLimitDevices.Minimum = new decimal(new int[] {
             1,
             0,
@@ -268,7 +267,7 @@
             // 
             this.dtpExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dtpExpiryTime.Format = "yyyy-MM-dd HH:mm:ss";
-            this.dtpExpiryTime.Location = new System.Drawing.Point(159, 207);
+            this.dtpExpiryTime.Location = new System.Drawing.Point(171, 207);
             this.dtpExpiryTime.MaxDate = new System.DateTime(8888, 12, 31, 0, 0, 0, 0);
             this.dtpExpiryTime.Name = "dtpExpiryTime";
             this.dtpExpiryTime.Size = new System.Drawing.Size(294, 42);
@@ -286,22 +285,17 @@
             this.cbIsEnable.Text = "启用";
             this.cbIsEnable.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsEnable_CheckedChanged);
             // 
-            // AccountEditForm
+            // AccountEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 761);
             this.Controls.Add(this.tlpProxyAccount);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
-            this.Name = "AccountEditForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "AccountEditForm";
-            this.Load += new System.EventHandler(this.AccountEditForm_Load);
+            this.Name = "AccountEdit";
+            this.Size = new System.Drawing.Size(500, 700);
+            this.Load += new System.EventHandler(this.AccountEdit_Load);
             this.tlpProxyAccount.ResumeLayout(false);
             this.tlpProxyAccount.PerformLayout();
             this.tlpButton.ResumeLayout(false);
@@ -314,20 +308,20 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpProxyAccount;
-        private System.Windows.Forms.TableLayoutPanel tlpAccountInfo;
         private System.Windows.Forms.TableLayoutPanel tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private AntdUI.Label label1;
-        private AntdUI.Label label2;
+        private System.Windows.Forms.TableLayoutPanel tlpAccountInfo;
+        private AntdUI.Label lUserName;
+        private AntdUI.Label lPassword;
         private AntdUI.Input txtUserName;
         private AntdUI.Input txtPassword;
         private AntdUI.Checkbox cbIsLimitLinks;
-        private AntdUI.Checkbox cbIsEnable;
         private AntdUI.Checkbox cbIsLimitDevices;
         private AntdUI.Checkbox cbIsExpiry;
         private AntdUI.InputNumber nudLimitLinks;
         private AntdUI.InputNumber nudLimitDevices;
         private AntdUI.DatePicker dtpExpiryTime;
+        private AntdUI.Checkbox cbIsEnable;
     }
 }

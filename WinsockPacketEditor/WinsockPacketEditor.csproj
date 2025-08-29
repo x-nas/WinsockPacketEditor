@@ -213,11 +213,23 @@
     <Compile Include="ClassObject\SendExecute.cs" />
     <Compile Include="ClassObject\SendInfo.cs" />
     <Compile Include="ClassObject\WinSockHook.cs" />
+    <Compile Include="Controls\AccountEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AccountEdit.Designer.cs">
+      <DependentUpon>AccountEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AccountList.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\AccountList.Designer.cs">
       <DependentUpon>AccountList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AccountLocation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AccountLocation.Designer.cs">
+      <DependentUpon>AccountLocation.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ClientList.cs">
       <SubType>UserControl</SubType>
@@ -236,6 +248,12 @@
     </Compile>
     <Compile Include="Controls\EncryptionPassword.Designer.cs">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExpiryTime.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ExpiryTime.Designer.cs">
+      <DependentUpon>ExpiryTime.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ExtractionData.cs">
       <SubType>UserControl</SubType>
@@ -257,6 +275,18 @@
     </Compile>
     <Compile Include="Controls\HotkeyTextBox.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\LimitDevices.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LimitDevices.Designer.cs">
+      <DependentUpon>LimitDevices.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LimitLinks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LimitLinks.Designer.cs">
+      <DependentUpon>LimitLinks.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\LogList.cs">
       <SubType>UserControl</SubType>
@@ -324,23 +354,11 @@
     <Compile Include="Controls\XORCalculation.Designer.cs">
       <DependentUpon>XORCalculation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AccountEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AccountEditForm.Designer.cs">
-      <DependentUpon>AccountEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\BackUpSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\BackUpSettingsForm.Designer.cs">
       <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ExpiryTimeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ExpiryTimeForm.Designer.cs">
-      <DependentUpon>ExpiryTimeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\EXTProxySettingsForm.cs">
       <SubType>Form</SubType>
@@ -366,29 +384,11 @@
     <Compile Include="Forms\HotKeyForm.Designer.cs">
       <DependentUpon>HotKeyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\LimitDevicesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\LimitDevicesForm.Designer.cs">
-      <DependentUpon>LimitDevicesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\LimitLinksForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\LimitLinksForm.Designer.cs">
-      <DependentUpon>LimitLinksForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ListSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ListSettingsForm.Designer.cs">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\LocationForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\LocationForm.Designer.cs">
-      <DependentUpon>LocationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MapLocalForm.cs">
       <SubType>Form</SubType>
@@ -478,8 +478,14 @@
     <Compile Include="WebAPI\SocketInfo_Controller.cs" />
     <Compile Include="WebAPI\Socket_Web.cs" />
     <Compile Include="WebAPI\SystemInfo_Controller.cs" />
+    <EmbeddedResource Include="Controls\AccountEdit.resx">
+      <DependentUpon>AccountEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\AccountList.resx">
       <DependentUpon>AccountList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AccountLocation.resx">
+      <DependentUpon>AccountLocation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ClientList.resx">
       <DependentUpon>ClientList.cs</DependentUpon>
@@ -490,6 +496,9 @@
     <EmbeddedResource Include="Controls\EncryptionPassword.resx">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ExpiryTime.resx">
+      <DependentUpon>ExpiryTime.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ExtractionData.resx">
       <DependentUpon>ExtractionData.cs</DependentUpon>
     </EmbeddedResource>
@@ -498,6 +507,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FilterList.resx">
       <DependentUpon>FilterList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LimitDevices.resx">
+      <DependentUpon>LimitDevices.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LimitLinks.resx">
+      <DependentUpon>LimitLinks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\LogList.resx">
       <DependentUpon>LogList.cs</DependentUpon>
@@ -532,14 +547,8 @@
     <EmbeddedResource Include="Controls\XORCalculation.resx">
       <DependentUpon>XORCalculation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AccountEditForm.resx">
-      <DependentUpon>AccountEditForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BackUpSettingsForm.resx">
       <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ExpiryTimeForm.resx">
-      <DependentUpon>ExpiryTimeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EXTProxySettingsForm.resx">
       <DependentUpon>EXTProxySettingsForm.cs</DependentUpon>
@@ -553,17 +562,8 @@
     <EmbeddedResource Include="Forms\HotKeyForm.resx">
       <DependentUpon>HotKeyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LimitDevicesForm.resx">
-      <DependentUpon>LimitDevicesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LimitLinksForm.resx">
-      <DependentUpon>LimitLinksForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ListSettingsForm.resx">
       <DependentUpon>ListSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LocationForm.resx">
-      <DependentUpon>LocationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MapLocalForm.resx">
       <DependentUpon>MapLocalForm.cs</DependentUpon>

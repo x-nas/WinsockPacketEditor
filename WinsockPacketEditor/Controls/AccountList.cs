@@ -233,12 +233,12 @@ namespace WinsockPacketEditor
             {
                 case "miAdd":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new AccountEditForm(this.form, null))
+                    var AccountEdit = new AccountEdit(this.form, null);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
                     {
-                        Align = AntdUI.TAlignMini.Right,
-                        Mask = true,
+                        Keyboard = false,
                         MaskClosable = false,
-                        DisplayDelay = 0,
+                        BtnHeight = 0,
                     });
 
                     break;
@@ -277,24 +277,24 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new AccountEditForm(this.form, ai))
+                        var AccountEdit = new AccountEdit(this.form, ai);
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
                         {
-                            Align = AntdUI.TAlignMini.Right,
-                            Mask = true,
+                            Keyboard = false,
                             MaskClosable = false,
-                            DisplayDelay = 0,
+                            BtnHeight = 0,
                         });
 
                         break;
 
                     case "bLocation":
 
-                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new LocationForm(this.form, ai))
+                        var AccountLocation = new AccountLocation(this.form, ai);
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LocationForm", "账号登录情况"), AccountLocation)
                         {
-                            Align = AntdUI.TAlignMini.Right,
-                            Mask = true,
+                            Keyboard = false,
                             MaskClosable = false,
-                            DisplayDelay = 0,
+                            BtnHeight = 0,
                         });
 
                         break;
@@ -343,12 +343,12 @@ namespace WinsockPacketEditor
 
                             if (aiList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new ExpiryTimeForm(this.form, aiList))
+                                var ExpiryTime = new ExpiryTime(this.form, aiList);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("ExpiryTimeForm", "过期时间调整"), ExpiryTime)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 
@@ -358,12 +358,12 @@ namespace WinsockPacketEditor
 
                             if (aiList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new LimitLinksForm(this.form, aiList))
+                                var LimitLinks = new LimitLinks(this.form, aiList);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LimitLinksForm", "链接数调整"), LimitLinks)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 
@@ -373,12 +373,12 @@ namespace WinsockPacketEditor
 
                             if (aiList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new LimitDevicesForm(this.form, aiList))
+                                var LimitDevices = new LimitDevices(this.form, aiList);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LimitDevicesForm", "设备数调整"), LimitDevices)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 

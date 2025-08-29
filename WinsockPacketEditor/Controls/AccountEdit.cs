@@ -1,38 +1,36 @@
 ﻿using AntdUI;
 using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
-using System.ComponentModel;
 
 namespace WinsockPacketEditor
 {
-    public partial class AccountEditForm : Form
+    public partial class AccountEdit : UserControl
     {
         private AccountInfo aiSelect;
         private Form form;
 
         #region//窗体事件
 
-        public AccountEditForm(Form _form, AccountInfo ai)
+        public AccountEdit(Form form, AccountInfo ai)
         {
             InitializeComponent();
             this.aiSelect = ai;
-            this.form = _form;
+            this.form = form;
         }
 
-        private void AccountEditForm_Load(object sender, EventArgs e)
+        private void AccountEdit_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("AccountEditForm", "账号编辑");
-
             if (this.aiSelect == null)
             {
                 this.cbIsEnable.Checked = true;
                 this.txtUserName.Enabled = true;
-                this.dtpExpiryTime.Value = DateTime.Now;                
+                this.dtpExpiryTime.Value = DateTime.Now;
             }
             else
             {
-                this.cbIsEnable.Checked = aiSelect.IsEnable;                
+                this.cbIsEnable.Checked = aiSelect.IsEnable;
                 this.txtUserName.Text = aiSelect.UserName;
                 this.txtUserName.Enabled = false;
                 this.txtPassword.Text = Operate.SystemConfig.PassWord_Decrypt(aiSelect.Password);
@@ -58,7 +56,7 @@ namespace WinsockPacketEditor
                 else
                 {
                     this.dtpExpiryTime.Value = aiSelect.ExpiryTime;
-                }                                    
+                }
             }
 
             this.IsEnable_Changed();
@@ -79,7 +77,7 @@ namespace WinsockPacketEditor
                 {
                     this.txtUserName.Status = TType.Success;
                 }
-            }            
+            }
         }
 
         private void txtPassword_TextChanged(object sender, EventArgs e)
@@ -94,7 +92,7 @@ namespace WinsockPacketEditor
                 {
                     this.txtPassword.Status = TType.Success;
                 }
-            }            
+            }
         }
 
         #endregion
@@ -263,7 +261,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
         }
 
         #endregion

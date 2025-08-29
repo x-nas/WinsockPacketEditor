@@ -6,25 +6,35 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class ExpiryTimeForm : Form
+    public partial class LimitLinks : UserControl
     {
         private Form form;
         private List<AccountInfo> aiList;
 
         #region//窗体事件
 
-        public ExpiryTimeForm(Form form, List<AccountInfo> aiList)
+        public LimitLinks(Form form, List<AccountInfo> aiList)
         {
             InitializeComponent();
             this.form = form;
             this.aiList = aiList;
         }
 
-        private void ExpiryTimeForm_Load(object sender, EventArgs e)
+        private void LimitLinks_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("ExpiryTimeForm", "过期时间");
-
             this.lAccountCNT.Text = string.Format(AntdUI.Localization.Get("BatchAccounts", "批量调整 ( {0} ) 个账号"), this.aiList.Count);
+
+            this.IsLimitLinks_Changed();
+        }
+
+        private void cbIsLimitLinks_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
+        {
+            this.IsLimitLinks_Changed();
+        }
+
+        private void IsLimitLinks_Changed()
+        {
+            this.nudLimitLinks.Enabled = this.cbIsLimitLinks.Checked;
         }
 
         #endregion
@@ -37,19 +47,10 @@ namespace WinsockPacketEditor
             {
                 if (this.aiList.Count > 0)
                 {
-                    int AddHours = ((int)this.nudAddTime.Value);
-                    if (this.rbAddDay.Checked)
-                    {
-                        AddHours = AddHours * 24;
-                    }
+                    bool IsLimitLinks = this.cbIsLimitLinks.Checked;
+                    int LimitLinks = ((int)this.nudLimitLinks.Value);
 
-                    int AddType = 0;
-                    if (this.rbFromNow.Checked)
-                    {
-                        AddType = 1;
-                    }
-
-                    Operate.ProxyConfig.Account.AdjustExpiryTime(this.aiList, AddType, AddHours);
+                    Operate.ProxyConfig.Account.AdjustLimitLinks(this.aiList, IsLimitLinks, LimitLinks);
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "批量调整完成", TType.Success)
                     {
@@ -63,7 +64,7 @@ namespace WinsockPacketEditor
                     }
 
                     this.Dispose();
-                }                
+                }
             }
             catch (Exception ex)
             {
