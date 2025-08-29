@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class PacketEditForm : Form
+    public partial class PacketEdit : UserControl
     {
         private Form form;
-        private PacketInfo packetInfo;
-        private ProxyInfo proxyInfo;
+        private PacketInfo packetInfo = null;
+        private ProxyInfo proxyInfo = null;
         private int Send_CNT = 0;
         private int Send_Success = 0;
         private int Send_Fail = 0;
@@ -23,75 +23,90 @@ namespace WinsockPacketEditor
 
         #region//窗体事件
 
-        public PacketEditForm(Form form, PacketInfo packetInfo, ProxyInfo proxyInfo)
+        public PacketEdit(Form form, PacketInfo packetInfo)
         {
             InitializeComponent();
             this.packetInfo = packetInfo;
+            this.form = form;
+        }
+
+        public PacketEdit(Form form, ProxyInfo proxyInfo)
+        {
+            InitializeComponent();
             this.proxyInfo = proxyInfo;
             this.form = form;
         }
 
-        private void PacketEditForm_Load(object sender, EventArgs e)
+        private void PacketEdit_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("PacketEditForm", "封包编辑");
-
-            this.hbPacketEdit.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-
-            DynamicByteProvider dbp = null;
-
-            switch (Operate.SystemConfig.StartMode)
+            try
             {
-                case Operate.SystemConfig.SystemMode.Process:
+                this.hbPacketEdit.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
 
-                    this.nudPacketSocket.Value = this.packetInfo.PacketSocket;
-                    this.nudPacketLength.Value = this.packetInfo.PacketLen;
-                    this.txtPacketTo.Text = this.packetInfo.PacketTo;
+                DynamicByteProvider dbp = null;
 
-                    dbp = new DynamicByteProvider(this.packetInfo.PacketBuffer);
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Process:
 
-                    break;
+                        this.nudPacketSocket.Value = this.packetInfo.PacketSocket;
+                        this.nudPacketLength.Value = this.packetInfo.PacketLen;
+                        this.txtPacketTo.Text = this.packetInfo.PacketTo;
 
-                case Operate.SystemConfig.SystemMode.Proxy:
+                        dbp = new DynamicByteProvider(this.packetInfo.PacketBuffer);
 
-                    this.nudPacketSocket.Value = this.proxyInfo.PacketSocket;
-                    this.nudPacketLength.Value = this.proxyInfo.PacketLen;
-                    this.txtPacketTo.Text = this.proxyInfo.ServerAddr;
+                        break;
 
-                    dbp = new DynamicByteProvider(this.proxyInfo.PacketBuffer);
+                    case Operate.SystemConfig.SystemMode.Proxy:
 
-                    break;
+                        this.nudPacketSocket.Value = this.proxyInfo.PacketSocket;
+                        this.nudPacketLength.Value = this.proxyInfo.PacketLen;
+                        this.txtPacketTo.Text = this.proxyInfo.ServerAddr;
+
+                        dbp = new DynamicByteProvider(this.proxyInfo.PacketBuffer);
+
+                        break;
+                }
+
+                dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
+                hbPacketEdit.ByteProvider = dbp;
+
+                DefaultByteCharConverter defConverter = new DefaultByteCharConverter();
+                EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();
+
+                this.ProgressionPosition_Change();
+                this.Dark_Changed();
             }
-                        
-            dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
-            hbPacketEdit.ByteProvider = dbp;
-
-            DefaultByteCharConverter defConverter = new DefaultByteCharConverter();
-            EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();         
-            
-            this.ProgressionPosition_Change();
-            this.Dark_Changed();
-        }
-
-        private void PacketEditForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.StopSend();
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         private void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
             {
-                this.hbPacketEdit.BackColor = Color.FromArgb(30, 30, 30);
+                this.hbPacketEdit.BackColor = Operate.SystemConfig.Color_30;
                 this.hbPacketEdit.ForeColor = Color.Silver;
+
+                this.pPacketSocket.Back = 
+                    this.pPacketSend.Back = 
+                    this.pProgression.Back = 
+                    Operate.SystemConfig.Color_30;
             }
             else
             {
                 this.hbPacketEdit.BackColor = Color.White;
                 this.hbPacketEdit.ForeColor = Color.Black;
+
+                this.pPacketSocket.Back =
+                    this.pPacketSend.Back =
+                    this.pProgression.Back = null;                    
             }
         }
 
-        #endregion        
+        #endregion
 
         #region//发送类型
 
@@ -187,7 +202,7 @@ namespace WinsockPacketEditor
         private void ByteProvider_LengthChanged(object sender, EventArgs e)
         {
             this.HexBox_UpdatePacketLen();
-        }        
+        }
 
         private void HexBox_UpdatePacketLen()
         {
@@ -218,12 +233,12 @@ namespace WinsockPacketEditor
                     switch (item.ID)
                     {
                         case "ToFilterList":
-                            
+
                             byte[] bBufferToFilter = null;
                             if (this.hbPacketEdit.CanCopy())
                             {
                                 this.hbPacketEdit.CopyHex();
-                                bBufferToFilter = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());                                                                
+                                bBufferToFilter = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
                             }
                             else
                             {
@@ -356,7 +371,7 @@ namespace WinsockPacketEditor
                                     if (bAddOK)
                                     {
                                         string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到: {0}"), item.Text);
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));                                     
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
                                     }
                                     else
                                     {
@@ -443,7 +458,7 @@ namespace WinsockPacketEditor
                                 this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, iSendCount, this.proxyInfo.PacketType);
                                 break;
                         }
-                        
+
                         iSendCount++;
 
                         if (this.SendINT > 0)
@@ -472,11 +487,11 @@ namespace WinsockPacketEditor
                                 case Operate.SystemConfig.SystemMode.Proxy:
                                     this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, i, this.proxyInfo.PacketType);
                                     break;
-                            }                            
+                            }
 
                             if (this.SendINT > 0)
                             {
-                                bgwSendPacket.ReportProgress(i); 
+                                bgwSendPacket.ReportProgress(i);
                                 Thread.Sleep(this.SendINT);
                             }
                         }
@@ -511,11 +526,11 @@ namespace WinsockPacketEditor
         }
 
         private void DoSendPacket(
-            int iSocket, 
-            string sIPFrom, 
-            string sIPTo, 
-            byte[] bSendBuff, 
-            int SendCount, 
+            int iSocket,
+            string sIPFrom,
+            string sIPTo,
+            byte[] bSendBuff,
+            int SendCount,
             Operate.PacketConfig.Packet.PacketType ptType)
         {
             try
@@ -625,7 +640,7 @@ namespace WinsockPacketEditor
                                 this.proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
 
                                 break;
-                        }                        
+                        }
 
                         switch (Operate.SystemConfig.StartMode)
                         {
@@ -647,7 +662,8 @@ namespace WinsockPacketEditor
                             LocalizationText = "PacketEditForm.Success",
                         });
 
-                        this.Close();
+                        this.StopSend();
+                        this.Dispose();
                     }
                     else
                     {
@@ -675,6 +691,7 @@ namespace WinsockPacketEditor
 
         private void bExit_Click(object sender, EventArgs e)
         {
+            this.StopSend();
             this.Dispose();
         }
 

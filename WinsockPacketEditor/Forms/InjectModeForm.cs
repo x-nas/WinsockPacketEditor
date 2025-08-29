@@ -430,7 +430,6 @@ namespace WinsockPacketEditor
                 ForeColor = Color.White;
 
                 this.tabInjectMode.BackColor = Operate.SystemConfig.Color_35;
-
                 
                 this.tPacketList.BackColor = Operate.SystemConfig.Color_40;
                 this.tPacketList.ColumnBack = Operate.SystemConfig.Color_40;
@@ -448,6 +447,7 @@ namespace WinsockPacketEditor
 
                 this.tabInjectMode.BackColor = Color.White;
 
+                this.tPacketList.BackColor = Color.White;
                 this.tPacketList.ColumnBack = Color.White;
                 this.tPacketList.ColumnFore = Color.Black;
                 this.tPacketList.ForeColor = Color.Green;
@@ -746,12 +746,12 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, piList[0], null))
+                                var PacketEdit = new PacketEdit(this, piList[0]);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 
@@ -904,12 +904,12 @@ namespace WinsockPacketEditor
 
                             if (Operate.PacketConfig.List.piSelect != null)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, Operate.PacketConfig.List.piSelect, null))
+                                var PacketEdit = new PacketEdit(this, Operate.PacketConfig.List.piSelect);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 

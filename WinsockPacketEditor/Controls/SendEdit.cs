@@ -252,12 +252,12 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new PacketEditForm(this.form, piList[0], null))
+                                var PacketEdit = new PacketEdit(this.form, piList[0]);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 

@@ -2007,10 +2007,13 @@ namespace WinsockPacketEditor
                     return "Packet Edit";
 
                 case "PacketEditForm.UseSocket":
-                    return "Use Socket";
+                    return "Use Socket :";
 
                 case "PacketEditForm.ToAddr":
-                    return "To Addr";
+                    return "To Addr :";
+
+                case "PacketEditForm.Length":
+                    return "Length :";
 
                 case "PacketEditForm.Send.ByTime":
                     return "By Time";

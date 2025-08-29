@@ -294,6 +294,12 @@
     <Compile Include="Controls\LogList.Designer.cs">
       <DependentUpon>LogList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PacketEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PacketEdit.Designer.cs">
+      <DependentUpon>PacketEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ProcessList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -408,12 +414,6 @@
     <Compile Include="Forms\MapSettingsForm.Designer.cs">
       <DependentUpon>MapSettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PacketEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PacketEditForm.Designer.cs">
-      <DependentUpon>PacketEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\PacketModificationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -517,6 +517,9 @@
     <EmbeddedResource Include="Controls\LogList.resx">
       <DependentUpon>LogList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PacketEdit.resx">
+      <DependentUpon>PacketEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProcessList.resx">
       <DependentUpon>ProcessList.cs</DependentUpon>
     </EmbeddedResource>
@@ -573,9 +576,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MapSettingsForm.resx">
       <DependentUpon>MapSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PacketEditForm.resx">
-      <DependentUpon>PacketEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PacketModificationForm.resx">
       <DependentUpon>PacketModificationForm.cs</DependentUpon>

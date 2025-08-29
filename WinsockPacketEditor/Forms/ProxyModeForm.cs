@@ -1060,12 +1060,12 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, null, piList[0]))
+                                var PacketEdit = new PacketEdit(this, piList[0]);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 
@@ -1216,12 +1216,12 @@ namespace WinsockPacketEditor
 
                             if (Operate.PacketConfig.List.piSelect != null)
                             {
-                                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new PacketEditForm(this, null, Operate.ProxyConfig.List.piSelect))
+                                var PacketEdit = new PacketEdit(this, Operate.ProxyConfig.List.piSelect);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
                                 {
-                                    Align = AntdUI.TAlignMini.Right,
-                                    Mask = true,
+                                    Keyboard = false,
                                     MaskClosable = false,
-                                    DisplayDelay = 0,
+                                    BtnHeight = 0,
                                 });
                             }
 
