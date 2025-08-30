@@ -36,7 +36,7 @@ namespace WinsockPacketEditor
 
         public interface IInjectMode
         {
-            void SetColumnVisible_ProxyList();
+            void SetColumnVisible_PacketList();
 
             void InitFloatButton();
 
@@ -49,6 +49,12 @@ namespace WinsockPacketEditor
             void RefreshSendList();
 
             void RefreshRobotList();
+
+            void CleanUp_LogList();
+
+            void SetTextA(string TextA);
+
+            void SetTextB(string TextB);
         }
 
         #endregion

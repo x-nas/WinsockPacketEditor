@@ -123,7 +123,7 @@ namespace WinsockPacketEditor
                     Operate.PacketConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Inject.Checked;
                     Operate.PacketConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Inject.Checked;
 
-                    ((InterfaceInfo.IInjectMode)form).SetColumnVisible_ProxyList();
+                    ((InterfaceInfo.IInjectMode)form).SetColumnVisible_PacketList();
 
                     break;
 

@@ -313,6 +313,12 @@
     <Compile Include="Controls\PacketEdit.Designer.cs">
       <DependentUpon>PacketEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PacketList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PacketList.Designer.cs">
+      <DependentUpon>PacketList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PacketModification.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -532,6 +538,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PacketEdit.resx">
       <DependentUpon>PacketEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PacketList.resx">
+      <DependentUpon>PacketList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PacketModification.resx">
       <DependentUpon>PacketModification.cs</DependentUpon>
