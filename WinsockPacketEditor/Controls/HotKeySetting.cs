@@ -4,19 +4,19 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class HotKeyForm : Form
+    public partial class HotKeySetting : UserControl
     {
         private Form form;
 
         #region//窗体事件
 
-        public HotKeyForm(Form form)
+        public HotKeySetting(Form form)
         {
             InitializeComponent();
             this.form = form;
         }
 
-        private void HotKeyForm_Load(object sender, EventArgs e)
+        private void HotKeySetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("HotKeyForm", "快捷键设置");
 
@@ -61,16 +61,7 @@ namespace WinsockPacketEditor
             this.bExit.Select();
         }
 
-        #endregion
-
-        #region//退出
-
-        private void bExit_Click(object sender, EventArgs e)
-        {
-            this.Dispose();
-        }
-
-        #endregion
+        #endregion        
 
         #region//快捷键设置
 
@@ -268,6 +259,15 @@ namespace WinsockPacketEditor
                 this.txtHotKey12.Status = TType.Error;
                 this.HotKeyError();
             }
+        }
+
+        #endregion
+
+        #region//退出
+
+        private void bExit_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
         }
 
         #endregion

@@ -292,6 +292,12 @@
     <Compile Include="Controls\HookSetting.Designer.cs">
       <DependentUpon>HookSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HotKeySetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\HotKeySetting.Designer.cs">
+      <DependentUpon>HotKeySetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HotkeyTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -439,12 +445,6 @@
     <Compile Include="Forms\FilterSettingsForm.Designer.cs">
       <DependentUpon>FilterSettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\HotKeyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\HotKeyForm.Designer.cs">
-      <DependentUpon>HotKeyForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ProxySettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -530,6 +530,9 @@
     <EmbeddedResource Include="Controls\HookSetting.resx">
       <DependentUpon>HookSetting.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\HotKeySetting.resx">
+      <DependentUpon>HotKeySetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\LimitDevices.resx">
       <DependentUpon>LimitDevices.cs</DependentUpon>
     </EmbeddedResource>
@@ -601,9 +604,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FilterSettingsForm.resx">
       <DependentUpon>FilterSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HotKeyForm.resx">
-      <DependentUpon>HotKeyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProxySettingsForm.resx">
       <DependentUpon>ProxySettingsForm.cs</DependentUpon>

@@ -352,7 +352,7 @@ namespace WinsockPacketEditor
 
                 case "miHotKeySettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new HotKeyForm(this.form))
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new HotKeySetting(this.form))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
