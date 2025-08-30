@@ -4882,7 +4882,10 @@ namespace WinsockPacketEditor
                                                 break;
                                         }
 
-                                        DoProxyLog(pt);
+                                        if (!ProxyConfig.Proxy.SpeedMode)
+                                        {
+                                            DoProxyLog(pt);
+                                        }                                        
 
                                         #endregion
 
@@ -10275,23 +10278,23 @@ namespace WinsockPacketEditor
 
                 private static class PacketTypeNames
                 {
-                    public static readonly string WS1_Send = AntdUI.Localization.Get("HookSettingsForm.Send1", "发送 1.1");
-                    public static readonly string WS2_Send = AntdUI.Localization.Get("HookSettingsForm.Send", "发送");
-                    public static readonly string WS1_Recv = AntdUI.Localization.Get("HookSettingsForm.Recv1", "接收 1.1");
-                    public static readonly string WS2_Recv = AntdUI.Localization.Get("HookSettingsForm.Recv", "接收");
-                    public static readonly string WS1_SendTo = AntdUI.Localization.Get("HookSettingsForm.SendTo1", "发送到 1.1");
-                    public static readonly string WS2_SendTo = AntdUI.Localization.Get("HookSettingsForm.SendTo", "发送到");
-                    public static readonly string WS1_RecvFrom = AntdUI.Localization.Get("HookSettingsForm.RecvFrom1", "接收自 1.1");
-                    public static readonly string WS2_RecvFrom = AntdUI.Localization.Get("HookSettingsForm.RecvFrom", "接收自");
-                    public static readonly string WSASend = AntdUI.Localization.Get("HookSettingsForm.WSASend", "WSA发送");
-                    public static readonly string WSARecv = AntdUI.Localization.Get("HookSettingsForm.WSARecv", "WSA接收");
-                    public static readonly string WSARecvEx = AntdUI.Localization.Get("HookSettingsForm.WSARecv", "WSA接收");
-                    public static readonly string WSASendTo = AntdUI.Localization.Get("HookSettingsForm.WSASendTo", "WSA发送到");
-                    public static readonly string WSARecvFrom = AntdUI.Localization.Get("HookSettingsForm.WSARecvFrom", "WSA接收自");
-                    public static readonly string TCP_Req = AntdUI.Localization.Get("", "TCP");
-                    public static readonly string UDP_Req = AntdUI.Localization.Get("", "UDP");
-                    public static readonly string TCP_Resp = AntdUI.Localization.Get("", "TCP");
-                    public static readonly string UDP_Resp = AntdUI.Localization.Get("", "UDP");
+                    public static string WS1_Send => AntdUI.Localization.Get("HookSettingsForm.Send1", "发送 1.1");
+                    public static string WS2_Send => AntdUI.Localization.Get("HookSettingsForm.Send", "发送");
+                    public static string WS1_Recv => AntdUI.Localization.Get("HookSettingsForm.Recv1", "接收 1.1");
+                    public static string WS2_Recv => AntdUI.Localization.Get("HookSettingsForm.Recv", "接收");
+                    public static string WS1_SendTo => AntdUI.Localization.Get("HookSettingsForm.SendTo1", "发送到 1.1");
+                    public static string WS2_SendTo => AntdUI.Localization.Get("HookSettingsForm.SendTo", "发送到");
+                    public static string WS1_RecvFrom => AntdUI.Localization.Get("HookSettingsForm.RecvFrom1", "接收自 1.1");
+                    public static string WS2_RecvFrom => AntdUI.Localization.Get("HookSettingsForm.RecvFrom", "接收自");
+                    public static string WSASend => AntdUI.Localization.Get("HookSettingsForm.WSASend", "WSA发送");
+                    public static string WSARecv => AntdUI.Localization.Get("HookSettingsForm.WSARecv", "WSA接收");
+                    public static string WSARecvEx => AntdUI.Localization.Get("HookSettingsForm.WSARecv", "WSA接收");
+                    public static string WSASendTo => AntdUI.Localization.Get("HookSettingsForm.WSASendTo", "WSA发送到");
+                    public static string WSARecvFrom => AntdUI.Localization.Get("HookSettingsForm.WSARecvFrom", "WSA接收自");
+                    public static string TCP_Req => AntdUI.Localization.Get("", "TCP");
+                    public static string UDP_Req => AntdUI.Localization.Get("", "UDP");
+                    public static string TCP_Resp => AntdUI.Localization.Get("", "TCP");
+                    public static string UDP_Resp => AntdUI.Localization.Get("", "UDP");
                 }
 
                 public static string GetName_ByPacketType(PacketType socketType)
@@ -13740,20 +13743,14 @@ namespace WinsockPacketEditor
 
                                 if (!bSpeedMode)
                                 {
-                                    string sFilterLog = MatchIndex != null && MatchIndex.Count > 0
-                                        ? string.Format(AntdUI.Localization.Get("DoFilterMatch", "[{0}] {1} | [{2}] 封包长度: {3} | 匹配数: {4}"),
-                                            FilterConfig.Filter.GetName_ByFilterAction(sfi.FAction),
-                                            sfi.FName,
-                                            PacketConfig.Packet.GetName_ByPacketType(ptType),
-                                            bufferSpan.Length,
-                                            MatchIndex.Count)
-                                        : string.Format(AntdUI.Localization.Get("DoFilter", "[{0}] {1} | [{2}] 封包长度: {3}"),
-                                            FilterConfig.Filter.GetName_ByFilterAction(sfi.FAction),
-                                            sfi.FName,
-                                            PacketConfig.Packet.GetName_ByPacketType(ptType),
-                                            bufferSpan.Length);
-
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sFilterLog);
+                                    if (MatchIndex != null && MatchIndex.Count > 0)
+                                    {
+                                        DoFilterLog(sfi.FName, sfi.FAction, MatchIndex.Count, ptType, bufferSpan.Length);
+                                    }
+                                    else
+                                    {
+                                        DoFilterLog(sfi.FName, sfi.FAction, 1, ptType, bufferSpan.Length);
+                                    }  
                                 }
 
                                 if (FilterConfig.Filter.FilterExecute == FilterConfig.Filter.Execute.Priority)
@@ -17351,6 +17348,7 @@ namespace WinsockPacketEditor
             public static class Queue
             {
                 public static ConcurrentQueue<LogInfo> cqLogInfo = new ConcurrentQueue<LogInfo>();
+                public static ConcurrentQueue<FilterLogInfo> cqFilterLogInfo = new ConcurrentQueue<FilterLogInfo>();
                 public static ConcurrentQueue<ProxyLogInfo> cqProxyLogInfo = new ConcurrentQueue<ProxyLogInfo>();
 
                 #region//日志入队列
@@ -17359,6 +17357,17 @@ namespace WinsockPacketEditor
                 {
                     LogInfo li = new LogInfo(FuncName, LogContent);
                     await Task.Run(() => cqLogInfo.Enqueue(li));
+                }
+
+                public static async ValueTask FilterLogToQueueAsync(
+                    string FName, 
+                    Operate.FilterConfig.Filter.FilterAction FAction,
+                    int MatchNum,
+                    Operate.PacketConfig.Packet.PacketType pType, 
+                    int PacketLen)
+                {
+                    FilterLogInfo fli = new FilterLogInfo(FName, FAction, MatchNum, pType, PacketLen);
+                    await Task.Run(() => cqFilterLogInfo.Enqueue(fli));
                 }
 
                 public static async ValueTask ProxyLogToQueueAsync(string UserName, string LoginIP, string LogContent)
@@ -17376,6 +17385,14 @@ namespace WinsockPacketEditor
                     while (!cqLogInfo.IsEmpty)
                     {
                         cqLogInfo.TryDequeue(out LogInfo li);
+                    }
+                }
+
+                public static void ClearFilterLogQueue()
+                {
+                    while (!cqFilterLogInfo.IsEmpty)
+                    {
+                        cqFilterLogInfo.TryDequeue(out FilterLogInfo fli);
                     }
                 }
 
@@ -17398,7 +17415,8 @@ namespace WinsockPacketEditor
             {
                 public static bool AutoRoll = false, AutoClear = true;
                 public static decimal AutoClear_Value = 5000;
-                public static BindingList<LogInfo> lstLogInfo = new BindingList<LogInfo>();
+                public static List<LogInfo> lstLogInfo = new List<LogInfo>();
+                public static List<FilterLogInfo> lstFilterLogInfo = new List<FilterLogInfo>();
                 public static List<ProxyLogInfo> lstProxyLogInfo = new List<ProxyLogInfo>();
 
                 #region//日志入列表
@@ -17408,6 +17426,14 @@ namespace WinsockPacketEditor
                     if (Queue.cqLogInfo.TryDequeue(out LogInfo li))
                     {
                         LogConfig.List.lstLogInfo.Add(li);
+                    }
+                }
+
+                public static void FilterLogToList()
+                {
+                    if (Queue.cqFilterLogInfo.TryDequeue(out FilterLogInfo fli))
+                    {
+                        LogConfig.List.lstFilterLogInfo.Add(fli);
                     }
                 }
 
@@ -17426,6 +17452,11 @@ namespace WinsockPacketEditor
                 public static void ClearLogList()
                 {
                     lstLogInfo.Clear();
+                }
+
+                public static void ClearFilterLogList()
+                {
+                    lstFilterLogInfo.Clear();
                 }
 
                 public static void ClearProxyLogList()
@@ -17582,6 +17613,16 @@ namespace WinsockPacketEditor
         public static async void DoLog(string sFuncName, string sLogContent)
         {
             await LogConfig.Queue.LogToQueueAsync(sFuncName, sLogContent);
+        }
+
+        public static async void DoFilterLog(
+            string FName,
+            Operate.FilterConfig.Filter.FilterAction FAction,
+            int MatchNum,
+            Operate.PacketConfig.Packet.PacketType pType,
+            int PacketLen)
+        {
+            await LogConfig.Queue.FilterLogToQueueAsync(FName, FAction, MatchNum, pType, PacketLen);
         }
 
         public static async void DoProxyLog(ProxyTCP pt)

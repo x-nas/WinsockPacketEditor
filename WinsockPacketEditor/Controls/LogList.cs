@@ -21,7 +21,11 @@ namespace WinsockPacketEditor
 
         private void LogList_Load(object sender, EventArgs e)
         {
+            this.tabLogList.SelectTab(0);
+
             this.InitTable_LogList();
+            this.InitTable_FilterLogList();
+            this.InitTable_ProxyLog();
             this.Dark_Changed();
         }
 
@@ -39,7 +43,7 @@ namespace WinsockPacketEditor
                 {
                     Render = (value, record, rowindex)=>
                     {
-                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
+                        return ((DateTime)value).ToString("HH:mm:ss");
                     },
                 }.SetLocalizationTitleID("Table.LogList.Column."),
                 new AntdUI.Column("FuncName", "模块", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.LogList.Column."),
@@ -50,23 +54,132 @@ namespace WinsockPacketEditor
             this.tSystemLog.DataSource = Operate.LogConfig.List.lstLogInfo;
         }
 
+        private void InitTable_FilterLogList()
+        {
+            tFilterLog.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.LogList.Column.ID"),
+                new AntdUI.Column("LogTime", "时间戳")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
+                    },
+                }.SetLocalizationTitleID("Table.LogList.Column."),
+                new AntdUI.Column("FName", "滤镜名称", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("FAction", "动作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        switch((Operate.FilterConfig.Filter.FilterAction)value)
+                        {
+                            case Operate.FilterConfig.Filter.FilterAction.Replace:
+                                return AntdUI.Localization.Get("Replace", "替换");
+
+                            case Operate.FilterConfig.Filter.FilterAction.Change:
+                                return AntdUI.Localization.Get("Change", "换包");
+
+                            case Operate.FilterConfig.Filter.FilterAction.Intercept:
+                                return AntdUI.Localization.Get("Intercept", "拦截");
+
+                            case Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
+                                return AntdUI.Localization.Get("NoModifyNoDisplay", "不修改不显示");
+
+                            case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
+                                return AntdUI.Localization.Get("NoModifyDisplay", "不修改只显示");
+
+                            default:
+                                return value;
+                        }
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("MatchNum", "匹配数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.FilterLogList.Column."),
+                new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)value);
+                    },
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
+            };
+
+            this.tFilterLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tFilterLog.DataSource = Operate.LogConfig.List.lstFilterLogInfo;
+        }
+
+        private void InitTable_ProxyLog()
+        {
+            tProxyLog.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.ProxyLog.Column.ID"),
+                new AntdUI.Column("LogTime", "时间戳")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((DateTime)value).ToString("HH:mm:ss");
+                    },
+                }.SetLocalizationTitleID("Table.ProxyLog.Column."),
+                new AntdUI.Column("UserName", "账号", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyLog.Column."),
+                new AntdUI.Column("LoginIP", "IP地址")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new CellText(value?.ToString() ?? string.Empty)
+                        {
+                            PrefixSvg = Operate.SystemConfig.GetSvgByLocation(value.ToString()),
+                            IconRatio = 1.0F
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.ProxyLog.Column."),
+                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.ProxyLog.Column."),
+            };
+
+            this.tProxyLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tProxyLog.DataSource = Operate.LogConfig.List.lstProxyLogInfo;
+        }
+
         public void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
             {
                 this.tSystemLog.BackColor = Operate.SystemConfig.Color_40;
                 this.tSystemLog.ColumnBack = Operate.SystemConfig.Color_40;
+
+                this.tFilterLog.BackColor = Operate.SystemConfig.Color_40;
+                this.tFilterLog.ColumnBack = Operate.SystemConfig.Color_40;
+
+                this.tProxyLog.BackColor = Operate.SystemConfig.Color_40;
+                this.tProxyLog.ColumnBack = Operate.SystemConfig.Color_40;
             }
             else
             {
                 this.tSystemLog.BackColor = Color.White;
                 this.tSystemLog.ColumnBack = null;
+
+                this.tFilterLog.BackColor = Color.White;
+                this.tFilterLog.ColumnBack = null;
+
+                this.tProxyLog.BackColor = Color.White;
+                this.tProxyLog.ColumnBack = null;
             }
         }
 
         public void RefreshLogList()
         {
             this.tSystemLog.Refresh();
+            this.tFilterLog.Refresh();
+            this.tProxyLog.Refresh();
         }
 
         public void ScrollToBottom()
@@ -85,6 +198,16 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        public void CleanUp_FilterLogList()
+        {
+            Operate.LogConfig.List.ClearFilterLogList();
+        }
+
+        public void CleanUp_ProxyLogList()
+        {
+            Operate.LogConfig.List.ClearProxyLogList();
         }
 
         #endregion

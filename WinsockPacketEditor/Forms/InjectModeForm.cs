@@ -1196,6 +1196,11 @@ namespace WinsockPacketEditor
             {
                 Operate.LogConfig.List.LogToList();
             }
+
+            if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
+            {
+                Operate.LogConfig.List.FilterLogToList();
+            }
         }        
 
         private void timerPacketListInfo_Tick(object sender, EventArgs e)

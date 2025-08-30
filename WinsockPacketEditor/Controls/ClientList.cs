@@ -19,17 +19,20 @@ namespace WinsockPacketEditor
 
         private void ClientList_Load(object sender, EventArgs e)
         {
-            this.tabClientList.SelectTab(0);
-
-            this.InitTable_AuthList();
-            this.InitTable_ProxyLog();
+            this.InitTable_AuthList();            
             this.Dark_Changed();
         }
 
         private void InitTable_AuthList()
         {
             tAuthList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("AuthTime", "认证时间").SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("AuthTime", "认证时间")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((DateTime)value).ToString("HH:mm:ss");
+                    },
+                }.SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AID", "账号", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -74,36 +77,7 @@ namespace WinsockPacketEditor
 
             this.tAuthList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
-        }
-
-        private void InitTable_ProxyLog()
-        {
-            tProxyLog.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("LogTime", "时间戳")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return ((DateTime)value).ToString("HH:mm:ss");
-                    },
-                }.SetLocalizationTitleID("Table.ProxyLog.Column."),
-                new AntdUI.Column("UserName", "账号", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyLog.Column."),
-                new AntdUI.Column("LoginIP", "IP地址")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return new CellText(value?.ToString() ?? string.Empty)
-                        {
-                            PrefixSvg = Operate.SystemConfig.GetSvgByLocation(value.ToString()),
-                            IconRatio = 1.0F
-                        };
-                    },
-                }.SetLocalizationTitleID("Table.ProxyLog.Column."),
-                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.ProxyLog.Column."),
-            };
-
-            this.tProxyLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tProxyLog.DataSource = Operate.LogConfig.List.lstProxyLogInfo;
-        }
+        }        
 
         public void Dark_Changed()
         {
@@ -113,42 +87,25 @@ namespace WinsockPacketEditor
 
                 this.tAuthList.BackColor = Operate.SystemConfig.Color_40;
                 this.tAuthList.ColumnBack = Operate.SystemConfig.Color_40;
-
-                this.tProxyLog.BackColor = Operate.SystemConfig.Color_40;
-                this.tProxyLog.ColumnBack = Operate.SystemConfig.Color_40;
-
             }
             else
             {
                 this.treeClientList.BackColor = Color.White;
 
                 this.tAuthList.BackColor = Color.White;
-                this.tProxyLog.BackColor = Color.White;
-
-                this.tAuthList.ColumnBack = 
-                    this.tProxyLog.ColumnBack = null;
+                this.tAuthList.ColumnBack = null;                    
             }
         }
 
         public void RefreshClientList()
         {
             this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
-            this.tProxyLog.Refresh();
-
-            this.lAuthCount_Value.Text = Operate.ProxyConfig.Account.cdAuthInfo.Count.ToString();
-            this.lLinksCount_Value.Text = Operate.ProxyConfig.Account.GetLinksCount_FromAuthList().ToString();
-            this.lDevicesCount_Value.Text = Operate.ProxyConfig.Account.GetDevicesCount_FromAuthList().ToString();
         }
 
         public int GetClientNumber()
         {
             return this.treeClientList.Items.Count();
-        }
-
-        public void CleanUp_ProxyLogList()
-        {
-            Operate.LogConfig.List.ClearProxyLogList();
-        }
+        }        
 
         #endregion
 

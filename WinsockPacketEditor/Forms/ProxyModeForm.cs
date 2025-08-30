@@ -628,6 +628,11 @@ namespace WinsockPacketEditor
                     Operate.LogConfig.List.LogToList();
                 }
 
+                if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
+                {
+                    Operate.LogConfig.List.FilterLogToList();
+                }
+
                 if (Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0)
                 {
                     Operate.LogConfig.List.ProxyLogToList();
@@ -723,9 +728,14 @@ namespace WinsockPacketEditor
                         this.cLogList.CleanUp_LogList();
                     }
 
+                    if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                    {
+                        this.cLogList.CleanUp_FilterLogList();
+                    }
+
                     if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
                     {
-                        this.cClientList.CleanUp_ProxyLogList();
+                        this.cLogList.CleanUp_ProxyLogList();
                     }
                 }
             }

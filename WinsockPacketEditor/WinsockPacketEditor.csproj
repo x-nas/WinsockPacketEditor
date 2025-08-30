@@ -195,6 +195,7 @@
     <Compile Include="ClassObject\AuthInfo.cs" />
     <Compile Include="ClassObject\BitInfo.cs" />
     <Compile Include="ClassObject\FilterInfo.cs" />
+    <Compile Include="ClassObject\FilterLogInfo.cs" />
     <Compile Include="ClassObject\FontLoader.cs" />
     <Compile Include="ClassObject\InstructionInfo.cs" />
     <Compile Include="ClassObject\InterfaceInfo.cs" />

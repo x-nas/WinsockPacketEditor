@@ -1037,7 +1037,7 @@ namespace WinsockPacketEditor
                     return "Account";
 
                 case "Table.AuthList.Column.AuthIP":
-                    return "IP Addr";
+                    return "IP Address";
 
                 case "Table.AuthList.Column.IPLocation":
                     return "Location";
@@ -1049,19 +1049,7 @@ namespace WinsockPacketEditor
                     return "Devices";
 
                 case "Table.AuthList.Column.AuthResult":
-                    return "Auth Result";
-
-                case "Table.ProxyLog.Column.LoginIP":
-                    return "IP Addr";
-
-                case "Table.ProxyLog.Column.LogTime":
-                    return "Time";
-
-                case "Table.ProxyLog.Column.UserName":
-                    return "Account";
-
-                case "Table.ProxyLog.Column.LogContent":
-                    return "Content";
+                    return "Auth Result";                
 
                 #endregion
 
@@ -1415,6 +1403,15 @@ namespace WinsockPacketEditor
                 case "LogList.LogList":
                     return "Log List";
 
+                case "LogList.LogList.tpSystemLog":
+                    return "System Log";
+
+                case "LogList.LogList.tpFilterLog":
+                    return "Filter Log";
+
+                case "LogList.LogList.tpProxyLog":
+                    return "Proxy Log";
+
                 case "Table.LogList.Column.ID":
                     return "ID";
 
@@ -1426,6 +1423,24 @@ namespace WinsockPacketEditor
 
                 case "Table.LogList.Column.LogContent":
                     return "Content";
+
+                case "Table.ProxyLog.Column.ID":
+                    return "ID";
+
+                case "Table.ProxyLog.Column.LoginIP":
+                    return "IP Address";
+
+                case "Table.ProxyLog.Column.LogTime":
+                    return "Time";
+
+                case "Table.ProxyLog.Column.UserName":
+                    return "Account";
+
+                case "Table.ProxyLog.Column.LogContent":
+                    return "Content";
+
+                case "Table.FilterLogList.Column.MatchNum":
+                    return "Match";
 
                 case "LogList.CopyLog":
                     return "Copy Log";
