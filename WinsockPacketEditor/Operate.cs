@@ -17630,7 +17630,8 @@ namespace WinsockPacketEditor
         {
             string UserName = ProxyConfig.Account.GetUserName_ByAccountID(pt.AID);
             string LoginIP = pt.TCP_Client.EndPoint.Address.ToString();
-            string LogContent = string.Format(LogConfig.ProxyLogString, pt.TCP_Server.Address, ProxyConfig.Proxy.ProxyTCP_IP);
+            string ViaIP = ((IPEndPoint)pt.TCP_Server.Socket.LocalEndPoint).ToString();
+            string LogContent = string.Format(LogConfig.ProxyLogString, pt.TCP_Server.Address, ViaIP);
 
             await LogConfig.Queue.ProxyLogToQueueAsync(UserName, LoginIP, LogContent);
         }
