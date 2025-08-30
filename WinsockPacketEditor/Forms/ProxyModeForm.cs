@@ -603,45 +603,54 @@ namespace WinsockPacketEditor
 
                 hbProxyData.ByteProvider = null;
             }
-        }        
+        }
 
         #endregion
 
         #region//计时器
 
-        private void timerProxyList_Tick(object sender, EventArgs e)
+        private async void timerProxyList_Tick(object sender, EventArgs e)
         {
             try
             {
-                if (Operate.ProxyConfig.Queue.qProxyTCP.Count > 0)
-                {
-                    Operate.ProxyConfig.List.ProxyTCP_ToList();                    
-                }
+                this.timerProxyList.Stop();
 
-                if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
+                await Task.Run(() =>
                 {
-                    Operate.ProxyConfig.List.ProxyInfo_ToList();
-                }
+                    if (Operate.ProxyConfig.Queue.qProxyTCP.Count > 0)
+                    {
+                        Operate.ProxyConfig.List.ProxyTCP_ToList();
+                    }
 
-                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.LogToList();
-                }
+                    if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
+                    {
+                        Operate.ProxyConfig.List.ProxyInfo_ToList();
+                    }
 
-                if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.FilterLogToList();
-                }
+                    if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
+                    {
+                        Operate.LogConfig.List.LogToList();
+                    }
 
-                if (Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.ProxyLogToList();
-                }
+                    if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
+                    {
+                        Operate.LogConfig.List.FilterLogToList();
+                    }
+
+                    if (Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0)
+                    {
+                        Operate.LogConfig.List.ProxyLogToList();
+                    }
+                });
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
+            finally
+            {
+                this.timerProxyList.Start();
+            }
         }
 
         private void timerProxyListInfo_Tick(object sender, EventArgs e)

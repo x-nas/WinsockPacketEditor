@@ -4118,7 +4118,7 @@ namespace WinsockPacketEditor
                 {
                     Process pProcess = Process.GetCurrentProcess();
                     PacketConfig.Packet.InjectProcess = string.Format("{0} [{1}]", pProcess.ProcessName, pProcess.Id);
-                    sReturn = string.Format(AntdUI.Localization.Get("Target", "目标进程: {0}"), Operate.PacketConfig.Packet.InjectProcess);
+                    sReturn = PacketConfig.Packet.InjectProcess;
                 }
                 catch (Exception ex)
                 {

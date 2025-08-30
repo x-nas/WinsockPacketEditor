@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -1185,23 +1186,39 @@ namespace WinsockPacketEditor
 
         #region//计时器
 
-        private void timerPacketList_Tick(object sender, EventArgs e)
+        private async void timerPacketList_Tick(object sender, EventArgs e)
         {
-            if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
+            try
             {
-                Operate.PacketConfig.List.PacketToList();
-            }
+                this.timerPacketList.Stop();
 
-            if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
-            {
-                Operate.LogConfig.List.LogToList();
-            }
+                await Task.Run(() =>
+                {
+                    if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
+                    {
+                        Operate.PacketConfig.List.PacketToList();
+                    }
 
-            if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
-            {
-                Operate.LogConfig.List.FilterLogToList();
+                    if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
+                    {
+                        Operate.LogConfig.List.LogToList();
+                    }
+
+                    if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
+                    {
+                        Operate.LogConfig.List.FilterLogToList();
+                    }
+                });
             }
-        }        
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            finally
+            {
+                this.timerPacketList.Start();
+            }
+        }
 
         private void timerPacketListInfo_Tick(object sender, EventArgs e)
         {
