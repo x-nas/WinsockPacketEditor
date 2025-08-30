@@ -812,8 +812,8 @@ namespace WinsockPacketEditor
                 case "Table.PacketList.Column.PacketData":
                     return "Data";
 
-                case "InjectModeForm.miFilterSettings":
-                    return "Filter Settings";
+                case "InjectModeForm.miLeachSettings":
+                    return "Leach Settings";
 
                 case "InjectModeForm.miHookSettings":
                     return "Hook Settings";
@@ -951,8 +951,8 @@ namespace WinsockPacketEditor
                 case "ProxyModeForm.miProxySettings":
                     return "Proxy Settings";
 
-                case "ProxyModeForm.miFilterSettings":
-                    return "Filter Settings";
+                case "ProxyModeForm.miLeachSettings":
+                    return "Leach Settings";
 
                 case "ProxyModeForm.miHookSettings":
                     return "Hook Settings";
@@ -1499,21 +1499,21 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//FilterSettingsForm
+                #region//LeachSetting
 
-                case "FilterSettingsForm":
-                    return "Filter Settings";
+                case "LeachSetting":
+                    return "Leach Setting";
 
-                case "FilterSettingsForm.IsShow":
+                case "LeachSetting.IsShow":
                     return "Show or Not";
 
-                case "FilterSettingsForm.Length":
+                case "LeachSetting.Length":
                     return "For example: 0-99;100";
 
-                case "FilterSettingsForm.FilterEmpty":
-                    return "Filter Settings Empty";
+                case "LeachSetting.Empty":
+                    return "Leach Settings Empty";
 
-                case "FilterSettingsForm.Success":
+                case "LeachSetting.Success":
                     return "Filter Settings Success";
 
                 #endregion

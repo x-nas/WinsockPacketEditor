@@ -8,19 +8,19 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class ProxySettingsForm : Form
+    public partial class ProxySetting : UserControl
     {
         private Form form;
 
         #region//窗体事件
 
-        public ProxySettingsForm(Form form)
+        public ProxySetting(Form form)
         {
             InitializeComponent();
             this.form = form;
         }
 
-        private void ProxySettingsForm_Load(object sender, EventArgs e)
+        private void ProxySetting_Load(object sender, EventArgs e)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace WinsockPacketEditor
                 if (this.ddlAuthType.Items.Count > 0)
                 {
                     this.ddlAuthType.SelectedIndex = 0;
-                }                
+                }
 
                 this.ProxyIP_Appoint_Changed();
                 this.EnableSOCKS5_Changed();
@@ -173,7 +173,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
         }
 
         #endregion
@@ -185,6 +185,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion        
+        #endregion
     }
 }

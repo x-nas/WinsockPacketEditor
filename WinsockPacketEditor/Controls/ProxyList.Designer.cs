@@ -186,7 +186,7 @@
             menuItem3.LocalizationText = "ProxyModeForm.{id}";
             menuItem3.Text = "代理设置";
             menuItem4.IconSvg = "FilterOutlined";
-            menuItem4.ID = "miFilterSettings";
+            menuItem4.ID = "miLeachSettings";
             menuItem4.LocalizationText = "ProxyModeForm.{id}";
             menuItem4.Text = "过滤设置";
             menuItem5.IconSvg = "AimOutlined";

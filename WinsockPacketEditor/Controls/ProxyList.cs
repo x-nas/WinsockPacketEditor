@@ -280,7 +280,7 @@ namespace WinsockPacketEditor
 
                 case "miProxySettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new ProxySettingsForm(this.form))
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new ProxySetting(this.form))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -290,9 +290,9 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miFilterSettings":
+                case "miLeachSettings":
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new FilterSettingsForm(this.form))
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new LeachSetting(this.form))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,

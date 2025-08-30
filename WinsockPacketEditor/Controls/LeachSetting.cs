@@ -1,24 +1,24 @@
-﻿using System;
+﻿using AntdUI;
+using System;
 using System.Windows.Forms;
-using AntdUI;
 
 namespace WinsockPacketEditor
 {
-    public partial class FilterSettingsForm : Form
+    public partial class LeachSetting : UserControl
     {
         private Form form;
 
         #region//窗体事件
 
-        public FilterSettingsForm(Form form)
+        public LeachSetting(Form form)
         {
             InitializeComponent();
             this.form = form;
         }
 
-        private void FilterSettingsForm_Load(object sender, EventArgs e)
+        private void LeachSetting_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("FilterSettingsForm", "过滤设置");
+            this.Text = AntdUI.Localization.Get("LeachSetting", "过滤设置");
 
             this.cbCheckSocket.Checked = Operate.SystemConfig.CheckSocket;
             this.cbCheckIP.Checked = Operate.SystemConfig.CheckIP;
@@ -28,8 +28,8 @@ namespace WinsockPacketEditor
             this.cbCheckLen.Checked = Operate.SystemConfig.CheckLen;
             this.txtCheckSocket.Text = Operate.SystemConfig.CheckSocket_Value;
             this.txtCheckLen.Text = Operate.SystemConfig.CheckLength_Value;
-            this.txtCheckIP.Text =  Operate.SystemConfig.CheckIP_Value;
-            this.txtCheckPort.Text = Operate.SystemConfig   .CheckPort_Value;
+            this.txtCheckIP.Text = Operate.SystemConfig.CheckIP_Value;
+            this.txtCheckPort.Text = Operate.SystemConfig.CheckPort_Value;
             this.txtCheckHead.Text = Operate.SystemConfig.CheckHead_Value;
             this.txtCheckData.Text = Operate.SystemConfig.CheckData_Value;
         }
@@ -39,7 +39,7 @@ namespace WinsockPacketEditor
         #region//套接字
 
         private void cbCheckSocket_CheckedChanged(object sender, BoolEventArgs e)
-        {            
+        {
             this.CheckSocket_Changed();
         }
 
@@ -107,7 +107,7 @@ namespace WinsockPacketEditor
         private void cbCheckIP_CheckedChanged(object sender, BoolEventArgs e)
         {
             this.CheckIP_Changed();
-        }        
+        }
 
         private void txtCheckIP_TextChanged(object sender, EventArgs e)
         {
@@ -238,7 +238,7 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            if (this.cbCheckSocket.Checked && string.IsNullOrEmpty(this.txtCheckSocket.Text.Trim()) || 
+            if (this.cbCheckSocket.Checked && string.IsNullOrEmpty(this.txtCheckSocket.Text.Trim()) ||
                 this.cbCheckLen.Checked && string.IsNullOrEmpty(this.txtCheckLen.Text.Trim()) ||
                 this.cbCheckIP.Checked && string.IsNullOrEmpty(this.txtCheckIP.Text.Trim()) ||
                 this.cbCheckPort.Checked && string.IsNullOrEmpty(this.txtCheckPort.Text.Trim()) ||
@@ -247,7 +247,7 @@ namespace WinsockPacketEditor
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "过滤设置为空", TType.Error)
                 {
-                    LocalizationText = "FilterSettingsForm.FilterEmpty"
+                    LocalizationText = "LeachSetting.Empty"
                 });
 
                 return;
@@ -269,7 +269,7 @@ namespace WinsockPacketEditor
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "过滤设置保存成功", TType.Success)
             {
-                LocalizationText = "FilterSettingsForm.Success"
+                LocalizationText = "LeachSetting.Success"
             });
 
             this.Dispose();

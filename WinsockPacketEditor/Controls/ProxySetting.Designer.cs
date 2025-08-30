@@ -1,16 +1,16 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class ProxySettingsForm
+    partial class ProxySetting
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// 必需的设计器变量。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// 清理所有正在使用的资源。
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,15 +20,14 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region 组件设计器生成的代码
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// 设计器支持所需的方法 - 不要修改
+        /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxySettingsForm));
             this.tlpProxySettings = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.cbEnable_Auth = new AntdUI.Checkbox();
@@ -89,8 +88,8 @@
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpProxySettings.Size = new System.Drawing.Size(484, 761);
-            this.tlpProxySettings.TabIndex = 1;
+            this.tlpProxySettings.Size = new System.Drawing.Size(500, 700);
+            this.tlpProxySettings.TabIndex = 2;
             // 
             // tableLayoutPanel1
             // 
@@ -106,7 +105,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(484, 100);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(500, 100);
             this.tableLayoutPanel1.TabIndex = 12;
             // 
             // cbEnable_Auth
@@ -130,7 +129,7 @@
             this.ddlAuthType.Location = new System.Drawing.Point(147, 3);
             this.ddlAuthType.Name = "ddlAuthType";
             this.ddlAuthType.PlaceholderText = "请选择";
-            this.ddlAuthType.Size = new System.Drawing.Size(334, 42);
+            this.ddlAuthType.Size = new System.Drawing.Size(350, 42);
             this.ddlAuthType.TabIndex = 1;
             // 
             // dProxyAuth
@@ -141,7 +140,7 @@
             this.dProxyAuth.Location = new System.Drawing.Point(3, 341);
             this.dProxyAuth.Name = "dProxyAuth";
             this.dProxyAuth.Orientation = AntdUI.TOrientation.Left;
-            this.dProxyAuth.Size = new System.Drawing.Size(478, 23);
+            this.dProxyAuth.Size = new System.Drawing.Size(494, 23);
             this.dProxyAuth.TabIndex = 11;
             this.dProxyAuth.Text = "代理认证";
             // 
@@ -153,7 +152,7 @@
             this.dSystemProxy.Location = new System.Drawing.Point(3, 510);
             this.dSystemProxy.Name = "dSystemProxy";
             this.dSystemProxy.Orientation = AntdUI.TOrientation.Left;
-            this.dSystemProxy.Size = new System.Drawing.Size(478, 23);
+            this.dSystemProxy.Size = new System.Drawing.Size(494, 23);
             this.dSystemProxy.TabIndex = 9;
             this.dSystemProxy.Text = "系统代理";
             // 
@@ -171,7 +170,7 @@
             this.tlpProxyType.RowCount = 2;
             this.tlpProxyType.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyType.Size = new System.Drawing.Size(484, 100);
+            this.tlpProxyType.Size = new System.Drawing.Size(500, 100);
             this.tlpProxyType.TabIndex = 8;
             // 
             // cbEnable_SOCKS5
@@ -199,7 +198,7 @@
             this.nudSOCKS5Port.Name = "nudSOCKS5Port";
             this.nudSOCKS5Port.PrefixText = "端口:";
             this.nudSOCKS5Port.SelectionStart = 1;
-            this.nudSOCKS5Port.Size = new System.Drawing.Size(363, 42);
+            this.nudSOCKS5Port.Size = new System.Drawing.Size(379, 42);
             this.nudSOCKS5Port.TabIndex = 1;
             this.nudSOCKS5Port.Text = "1080";
             this.nudSOCKS5Port.Value = new decimal(new int[] {
@@ -219,14 +218,14 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 701);
+            this.tlpButton.Location = new System.Drawing.Point(0, 640);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(484, 60);
+            this.tlpButton.Size = new System.Drawing.Size(500, 60);
             this.tlpButton.TabIndex = 3;
             // 
             // bSave
@@ -235,7 +234,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(115, 7);
+            this.bSave.Location = new System.Drawing.Point(123, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
@@ -249,7 +248,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(255, 7);
+            this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -265,7 +264,7 @@
             this.dProxyServerIP.Location = new System.Drawing.Point(3, 3);
             this.dProxyServerIP.Name = "dProxyServerIP";
             this.dProxyServerIP.Orientation = AntdUI.TOrientation.Left;
-            this.dProxyServerIP.Size = new System.Drawing.Size(478, 23);
+            this.dProxyServerIP.Size = new System.Drawing.Size(494, 23);
             this.dProxyServerIP.TabIndex = 4;
             this.dProxyServerIP.Text = "代理服务IP地址";
             // 
@@ -277,7 +276,7 @@
             this.dProxyType.Location = new System.Drawing.Point(3, 172);
             this.dProxyType.Name = "dProxyType";
             this.dProxyType.Orientation = AntdUI.TOrientation.Left;
-            this.dProxyType.Size = new System.Drawing.Size(478, 23);
+            this.dProxyType.Size = new System.Drawing.Size(494, 23);
             this.dProxyType.TabIndex = 6;
             this.dProxyType.Text = "代理类型";
             // 
@@ -295,7 +294,7 @@
             this.tlpProxyServerIP.RowCount = 2;
             this.tlpProxyServerIP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyServerIP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyServerIP.Size = new System.Drawing.Size(484, 100);
+            this.tlpProxyServerIP.Size = new System.Drawing.Size(500, 100);
             this.tlpProxyServerIP.TabIndex = 7;
             // 
             // cbProxyIP_Auto
@@ -319,7 +318,7 @@
             this.ddlProxyIP_Appoint.Location = new System.Drawing.Point(115, 3);
             this.ddlProxyIP_Appoint.Name = "ddlProxyIP_Appoint";
             this.ddlProxyIP_Appoint.PlaceholderText = "请选择";
-            this.ddlProxyIP_Appoint.Size = new System.Drawing.Size(366, 42);
+            this.ddlProxyIP_Appoint.Size = new System.Drawing.Size(382, 42);
             this.ddlProxyIP_Appoint.TabIndex = 1;
             // 
             // switchSystemProxy
@@ -332,22 +331,17 @@
             this.switchSystemProxy.TabIndex = 10;
             this.switchSystemProxy.CheckedChanged += new AntdUI.BoolEventHandler(this.switchSystemProxy_CheckedChanged);
             // 
-            // ProxySettingsForm
+            // ProxySetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 761);
             this.Controls.Add(this.tlpProxySettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
-            this.Name = "ProxySettingsForm";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ProxySettingsForm";
-            this.Load += new System.EventHandler(this.ProxySettingsForm_Load);
+            this.Name = "ProxySetting";
+            this.Size = new System.Drawing.Size(500, 700);
+            this.Load += new System.EventHandler(this.ProxySetting_Load);
             this.tlpProxySettings.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -363,6 +357,14 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpProxySettings;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private AntdUI.Checkbox cbEnable_Auth;
+        private AntdUI.Select ddlAuthType;
+        private AntdUI.Divider dProxyAuth;
+        private AntdUI.Divider dSystemProxy;
+        private System.Windows.Forms.TableLayoutPanel tlpProxyType;
+        private AntdUI.Checkbox cbEnable_SOCKS5;
+        private AntdUI.InputNumber nudSOCKS5Port;
         private System.Windows.Forms.TableLayoutPanel tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
@@ -371,14 +373,6 @@
         private System.Windows.Forms.TableLayoutPanel tlpProxyServerIP;
         private AntdUI.Checkbox cbProxyIP_Auto;
         private AntdUI.Select ddlProxyIP_Appoint;
-        private System.Windows.Forms.TableLayoutPanel tlpProxyType;
-        private AntdUI.Checkbox cbEnable_SOCKS5;
-        private AntdUI.InputNumber nudSOCKS5Port;
-        private AntdUI.Divider dSystemProxy;
         private AntdUI.Switch switchSystemProxy;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private AntdUI.Checkbox cbEnable_Auth;
-        private AntdUI.Select ddlAuthType;
-        private AntdUI.Divider dProxyAuth;
     }
 }
