@@ -245,7 +245,7 @@ namespace WinsockPacketEditor
             Operate.LogConfig.List.ClearProxyLogList();
         }
 
-        public void CleanUp_LogAll()
+        public void CleanUp_LogList()
         {
             this.CleanUp_SystemLog();
             this.CleanUp_FilterLog();

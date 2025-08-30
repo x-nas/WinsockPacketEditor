@@ -22,6 +22,12 @@ namespace WinsockPacketEditor
             void RefreshSendList();
 
             void RefreshRobotList();
+
+            void CleanUp_LogList();
+
+            void SetTextA(string TextA);
+
+            void SetTextB(string TextB);
         }
 
         #endregion

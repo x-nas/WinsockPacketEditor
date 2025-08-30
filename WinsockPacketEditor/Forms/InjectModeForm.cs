@@ -616,7 +616,7 @@ namespace WinsockPacketEditor
             this.CleanUp_PacketListInfo();
             this.CleanUp_PacketList();
             this.CleanUp_HexBox();
-            this.cLogList.CleanUp_LogAll();
+            this.cLogList.CleanUp_LogList();
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "已清空数据", TType.Warn)
             {

@@ -4240,6 +4240,7 @@ namespace WinsockPacketEditor
 
             public static class Proxy
             {
+                public static Socket ProxyServer;
                 public static long ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static int FilterProxy_CNT = 0;

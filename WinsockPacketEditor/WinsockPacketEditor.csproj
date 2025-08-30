@@ -325,6 +325,12 @@
     <Compile Include="Controls\ProcessList.Designer.cs">
       <DependentUpon>ProcessList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ProxyList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProxyList.Designer.cs">
+      <DependentUpon>ProxyList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RemoteMGTSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -532,6 +538,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProcessList.resx">
       <DependentUpon>ProcessList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProxyList.resx">
+      <DependentUpon>ProxyList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\RemoteMGTSetting.resx">
       <DependentUpon>RemoteMGTSetting.cs</DependentUpon>
