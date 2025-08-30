@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -187,27 +186,29 @@ namespace WinsockPacketEditor
             tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
         }
 
-        public void CleanUp_LogList()
+        public void CleanUp_SystemLog()
         {
-            try
-            {
-                Operate.LogConfig.Queue.ClearLogQueue();
-                Operate.LogConfig.List.ClearLogList();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            Operate.LogConfig.Queue.ClearLogQueue();
+            Operate.LogConfig.List.ClearLogList();
         }
 
-        public void CleanUp_FilterLogList()
+        public void CleanUp_FilterLog()
         {
+            Operate.LogConfig.Queue.ClearFilterLogQueue();
             Operate.LogConfig.List.ClearFilterLogList();
         }
 
-        public void CleanUp_ProxyLogList()
+        public void CleanUp_ProxyLog()
         {
+            Operate.LogConfig.Queue.ClearProxyLogQueue();
             Operate.LogConfig.List.ClearProxyLogList();
+        }
+
+        public void CleanUp_LogAll()
+        {
+            this.CleanUp_SystemLog();
+            this.CleanUp_FilterLog();
+            this.CleanUp_ProxyLog();
         }
 
         #endregion
@@ -269,7 +270,7 @@ namespace WinsockPacketEditor
                                 MaskClosable = false,                                
                                 OnOk = config =>
                                 {
-                                    this.CleanUp_LogList();
+                                    this.CleanUp_SystemLog();
 
                                     return true;
                                 }

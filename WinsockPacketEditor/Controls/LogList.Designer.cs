@@ -32,11 +32,11 @@
             this.tlpLogList = new System.Windows.Forms.TableLayoutPanel();
             this.tabLogList = new AntdUI.Tabs();
             this.tpSystemLog = new AntdUI.TabPage();
-            this.tpFilterLog = new AntdUI.TabPage();
-            this.tpProxyLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
-            this.tProxyLog = new AntdUI.Table();
+            this.tpFilterLog = new AntdUI.TabPage();
             this.tFilterLog = new AntdUI.Table();
+            this.tpProxyLog = new AntdUI.TabPage();
+            this.tProxyLog = new AntdUI.Table();
             this.tlpLogList.SuspendLayout();
             this.tabLogList.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
@@ -84,59 +84,36 @@
             this.tpSystemLog.Controls.Add(this.tSystemLog);
             this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpSystemLog.LocalizationText = "LogList.LogList.{id}";
-            this.tpSystemLog.Location = new System.Drawing.Point(3, 45);
+            this.tpSystemLog.Location = new System.Drawing.Point(0, 45);
             this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(728, 726);
+            this.tpSystemLog.Size = new System.Drawing.Size(734, 729);
             this.tpSystemLog.TabIndex = 0;
             this.tpSystemLog.Text = "系统日志";
-            // 
-            // tpFilterLog
-            // 
-            this.tpFilterLog.Controls.Add(this.tFilterLog);
-            this.tpFilterLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpFilterLog.LocalizationText = "LogList.LogList.{id}";
-            this.tpFilterLog.Location = new System.Drawing.Point(3, 45);
-            this.tpFilterLog.Name = "tpFilterLog";
-            this.tpFilterLog.Size = new System.Drawing.Size(728, 726);
-            this.tpFilterLog.TabIndex = 1;
-            this.tpFilterLog.Text = "滤镜日志";
-            // 
-            // tpProxyLog
-            // 
-            this.tpProxyLog.Controls.Add(this.tProxyLog);
-            this.tpProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpProxyLog.LocalizationText = "LogList.LogList.{id}";
-            this.tpProxyLog.Location = new System.Drawing.Point(3, 45);
-            this.tpProxyLog.Name = "tpProxyLog";
-            this.tpProxyLog.Size = new System.Drawing.Size(728, 726);
-            this.tpProxyLog.TabIndex = 2;
-            this.tpProxyLog.Text = "代理日志";
             // 
             // tSystemLog
             // 
             this.tSystemLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tSystemLog.CellImpactHeight = false;
             this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tSystemLog.EmptyHeader = true;
             this.tSystemLog.Gap = 12;
             this.tSystemLog.Location = new System.Drawing.Point(0, 0);
             this.tSystemLog.MultipleRows = true;
             this.tSystemLog.Name = "tSystemLog";
-            this.tSystemLog.Size = new System.Drawing.Size(728, 726);
+            this.tSystemLog.Size = new System.Drawing.Size(734, 729);
             this.tSystemLog.TabIndex = 5;
             this.tSystemLog.Text = "table1";
             this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
             // 
-            // tProxyLog
+            // tpFilterLog
             // 
-            this.tProxyLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tProxyLog.CellImpactHeight = false;
-            this.tProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tProxyLog.Gap = 12;
-            this.tProxyLog.Location = new System.Drawing.Point(0, 0);
-            this.tProxyLog.Name = "tProxyLog";
-            this.tProxyLog.Size = new System.Drawing.Size(728, 726);
-            this.tProxyLog.TabIndex = 10;
+            this.tpFilterLog.Controls.Add(this.tFilterLog);
+            this.tpFilterLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpFilterLog.LocalizationText = "LogList.LogList.{id}";
+            this.tpFilterLog.Location = new System.Drawing.Point(0, 45);
+            this.tpFilterLog.Name = "tpFilterLog";
+            this.tpFilterLog.Size = new System.Drawing.Size(734, 729);
+            this.tpFilterLog.TabIndex = 1;
+            this.tpFilterLog.Text = "滤镜日志";
             // 
             // tFilterLog
             // 
@@ -146,8 +123,30 @@
             this.tFilterLog.Gap = 12;
             this.tFilterLog.Location = new System.Drawing.Point(0, 0);
             this.tFilterLog.Name = "tFilterLog";
-            this.tFilterLog.Size = new System.Drawing.Size(728, 726);
+            this.tFilterLog.Size = new System.Drawing.Size(734, 729);
             this.tFilterLog.TabIndex = 11;
+            // 
+            // tpProxyLog
+            // 
+            this.tpProxyLog.Controls.Add(this.tProxyLog);
+            this.tpProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpProxyLog.LocalizationText = "LogList.LogList.{id}";
+            this.tpProxyLog.Location = new System.Drawing.Point(0, 45);
+            this.tpProxyLog.Name = "tpProxyLog";
+            this.tpProxyLog.Size = new System.Drawing.Size(734, 729);
+            this.tpProxyLog.TabIndex = 2;
+            this.tpProxyLog.Text = "代理日志";
+            // 
+            // tProxyLog
+            // 
+            this.tProxyLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tProxyLog.CellImpactHeight = false;
+            this.tProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tProxyLog.Gap = 12;
+            this.tProxyLog.Location = new System.Drawing.Point(0, 0);
+            this.tProxyLog.Name = "tProxyLog";
+            this.tProxyLog.Size = new System.Drawing.Size(734, 729);
+            this.tProxyLog.TabIndex = 10;
             // 
             // LogList
             // 

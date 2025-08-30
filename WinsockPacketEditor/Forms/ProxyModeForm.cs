@@ -725,17 +725,17 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
                     {
-                        this.cLogList.CleanUp_LogList();
+                        this.cLogList.CleanUp_SystemLog();
                     }
 
                     if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
                     {
-                        this.cLogList.CleanUp_FilterLogList();
+                        this.cLogList.CleanUp_FilterLog();
                     }
 
                     if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
                     {
-                        this.cLogList.CleanUp_ProxyLogList();
+                        this.cLogList.CleanUp_ProxyLog();
                     }
                 }
             }
@@ -903,7 +903,7 @@ namespace WinsockPacketEditor
             this.CleanUp_ProxyList();
             this.CleanUp_ProxyListInfo();
             this.CleanUp_HexBox();
-            this.cLogList.CleanUp_LogList();
+            this.cLogList.CleanUp_LogAll();
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "已清空数据", TType.Warn)
             {
