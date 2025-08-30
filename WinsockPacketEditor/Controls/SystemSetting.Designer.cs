@@ -28,180 +28,408 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label2 = new AntdUI.Label();
-            this.tlpSetting = new System.Windows.Forms.TableLayoutPanel();
-            this.switch5 = new AntdUI.Switch();
-            this.label5 = new AntdUI.Label();
-            this.switch4 = new AntdUI.Switch();
-            this.label4 = new AntdUI.Label();
-            this.switch3 = new AntdUI.Switch();
-            this.label3 = new AntdUI.Label();
-            this.switch2 = new AntdUI.Switch();
-            this.label1 = new AntdUI.Label();
-            this.switch1 = new AntdUI.Switch();
-            this.tlpSetting.SuspendLayout();
+            this.tlpSystemSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.dFloatButton = new AntdUI.Divider();
+            this.tlpFilterActionColor = new System.Windows.Forms.TableLayoutPanel();
+            this.lFAColor_Other = new AntdUI.Label();
+            this.lFAColor_Change = new AntdUI.Label();
+            this.lFAColor_Intercept = new AntdUI.Label();
+            this.lFAColor_Replace = new AntdUI.Label();
+            this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
+            this.rbFilterSet_Sequence = new AntdUI.Radio();
+            this.rbFilterSet_Priority = new AntdUI.Radio();
+            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bSave = new AntdUI.Button();
+            this.bExit = new AntdUI.Button();
+            this.cbSpeedMode = new AntdUI.Checkbox();
+            this.dWorkMode = new AntdUI.Divider();
+            this.dListExecute = new AntdUI.Divider();
+            this.dFilterSet = new AntdUI.Divider();
+            this.dFilterActionColor = new AntdUI.Divider();
+            this.tlpListExecute = new System.Windows.Forms.TableLayoutPanel();
+            this.rbListExecute_Sequence = new AntdUI.Radio();
+            this.rbListExecute_Together = new AntdUI.Radio();
+            this.switchFloatButton = new AntdUI.Switch();
+            this.tlpSystemSettings.SuspendLayout();
+            this.tlpFilterActionColor.SuspendLayout();
+            this.tlpFilterSet.SuspendLayout();
+            this.tlpButton.SuspendLayout();
+            this.tlpListExecute.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label2
+            // tlpSystemSettings
             // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.LocalizationText = "ShadowEnabled";
-            this.label2.Location = new System.Drawing.Point(4, 60);
-            this.label2.Margin = new System.Windows.Forms.Padding(4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(182, 48);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "阴影使能";
+            this.tlpSystemSettings.AutoSize = true;
+            this.tlpSystemSettings.ColumnCount = 1;
+            this.tlpSystemSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSystemSettings.Controls.Add(this.dFloatButton, 0, 3);
+            this.tlpSystemSettings.Controls.Add(this.tlpFilterActionColor, 0, 11);
+            this.tlpSystemSettings.Controls.Add(this.tlpFilterSet, 0, 9);
+            this.tlpSystemSettings.Controls.Add(this.tlpButton, 0, 12);
+            this.tlpSystemSettings.Controls.Add(this.cbSpeedMode, 0, 1);
+            this.tlpSystemSettings.Controls.Add(this.dWorkMode, 0, 0);
+            this.tlpSystemSettings.Controls.Add(this.dListExecute, 0, 6);
+            this.tlpSystemSettings.Controls.Add(this.dFilterSet, 0, 8);
+            this.tlpSystemSettings.Controls.Add(this.dFilterActionColor, 0, 10);
+            this.tlpSystemSettings.Controls.Add(this.tlpListExecute, 0, 7);
+            this.tlpSystemSettings.Controls.Add(this.switchFloatButton, 0, 4);
+            this.tlpSystemSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSystemSettings.Location = new System.Drawing.Point(0, 0);
+            this.tlpSystemSettings.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSystemSettings.Name = "tlpSystemSettings";
+            this.tlpSystemSettings.RowCount = 13;
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpSystemSettings.Size = new System.Drawing.Size(500, 700);
+            this.tlpSystemSettings.TabIndex = 1;
             // 
-            // tlpSetting
+            // dFloatButton
             // 
-            this.tlpSetting.ColumnCount = 2;
-            this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpSetting.Controls.Add(this.switch5, 1, 4);
-            this.tlpSetting.Controls.Add(this.label5, 0, 4);
-            this.tlpSetting.Controls.Add(this.switch4, 1, 3);
-            this.tlpSetting.Controls.Add(this.label4, 0, 3);
-            this.tlpSetting.Controls.Add(this.switch3, 1, 2);
-            this.tlpSetting.Controls.Add(this.label3, 0, 2);
-            this.tlpSetting.Controls.Add(this.switch2, 1, 1);
-            this.tlpSetting.Controls.Add(this.label2, 0, 1);
-            this.tlpSetting.Controls.Add(this.label1, 0, 0);
-            this.tlpSetting.Controls.Add(this.switch1, 1, 0);
-            this.tlpSetting.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSetting.Location = new System.Drawing.Point(0, 0);
-            this.tlpSetting.Margin = new System.Windows.Forms.Padding(4);
-            this.tlpSetting.Name = "tlpSetting";
-            this.tlpSetting.RowCount = 6;
-            this.tlpSetting.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpSetting.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpSetting.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpSetting.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpSetting.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSetting.Size = new System.Drawing.Size(250, 300);
-            this.tlpSetting.TabIndex = 1;
+            this.dFloatButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dFloatButton.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dFloatButton.LocalizationText = "SystemSettingsForm.FloatingButton";
+            this.dFloatButton.Location = new System.Drawing.Point(3, 100);
+            this.dFloatButton.Name = "dFloatButton";
+            this.dFloatButton.Orientation = AntdUI.TOrientation.Left;
+            this.dFloatButton.Size = new System.Drawing.Size(494, 23);
+            this.dFloatButton.TabIndex = 19;
+            this.dFloatButton.Text = "悬浮按钮";
             // 
-            // switch5
+            // tlpFilterActionColor
             // 
-            this.switch5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch5.Location = new System.Drawing.Point(195, 237);
-            this.switch5.Margin = new System.Windows.Forms.Padding(4);
-            this.switch5.Name = "switch5";
-            this.switch5.Size = new System.Drawing.Size(50, 30);
-            this.switch5.TabIndex = 9;
-            this.switch5.Text = "switch5";
+            this.tlpFilterActionColor.ColumnCount = 9;
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFilterActionColor.Controls.Add(this.lFAColor_Other, 7, 1);
+            this.tlpFilterActionColor.Controls.Add(this.lFAColor_Change, 5, 1);
+            this.tlpFilterActionColor.Controls.Add(this.lFAColor_Intercept, 3, 1);
+            this.tlpFilterActionColor.Controls.Add(this.lFAColor_Replace, 1, 1);
+            this.tlpFilterActionColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilterActionColor.Location = new System.Drawing.Point(0, 423);
+            this.tlpFilterActionColor.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilterActionColor.Name = "tlpFilterActionColor";
+            this.tlpFilterActionColor.RowCount = 3;
+            this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterActionColor.Size = new System.Drawing.Size(500, 217);
+            this.tlpFilterActionColor.TabIndex = 18;
             // 
-            // label5
+            // lFAColor_Other
             // 
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.LocalizationText = "TextRenderingHighQuality";
-            this.label5.Location = new System.Drawing.Point(4, 228);
-            this.label5.Margin = new System.Windows.Forms.Padding(4);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(182, 48);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "文本高质量呈现";
+            this.lFAColor_Other.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.lFAColor_Other.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFAColor_Other.ForeColor = System.Drawing.Color.LimeGreen;
+            this.lFAColor_Other.LocalizationText = "Other";
+            this.lFAColor_Other.Location = new System.Drawing.Point(373, 18);
+            this.lFAColor_Other.Name = "lFAColor_Other";
+            this.lFAColor_Other.Size = new System.Drawing.Size(84, 39);
+            this.lFAColor_Other.TabIndex = 4;
+            this.lFAColor_Other.Text = "其它";
+            this.lFAColor_Other.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // switch4
+            // lFAColor_Change
             // 
-            this.switch4.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch4.Location = new System.Drawing.Point(195, 181);
-            this.switch4.Margin = new System.Windows.Forms.Padding(4);
-            this.switch4.Name = "switch4";
-            this.switch4.Size = new System.Drawing.Size(50, 30);
-            this.switch4.TabIndex = 7;
-            this.switch4.Text = "switch4";
+            this.lFAColor_Change.BackColor = System.Drawing.Color.DodgerBlue;
+            this.lFAColor_Change.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFAColor_Change.ForeColor = System.Drawing.Color.Black;
+            this.lFAColor_Change.LocalizationText = "Change";
+            this.lFAColor_Change.Location = new System.Drawing.Point(263, 18);
+            this.lFAColor_Change.Name = "lFAColor_Change";
+            this.lFAColor_Change.Size = new System.Drawing.Size(84, 39);
+            this.lFAColor_Change.TabIndex = 3;
+            this.lFAColor_Change.Text = "换包";
+            this.lFAColor_Change.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label4
+            // lFAColor_Intercept
             // 
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.LocalizationText = "ScrollBarHidden";
-            this.label4.Location = new System.Drawing.Point(4, 172);
-            this.label4.Margin = new System.Windows.Forms.Padding(4);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(182, 48);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "滚动条隐藏样式";
+            this.lFAColor_Intercept.BackColor = System.Drawing.Color.DarkRed;
+            this.lFAColor_Intercept.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFAColor_Intercept.ForeColor = System.Drawing.Color.White;
+            this.lFAColor_Intercept.LocalizationText = "Intercept";
+            this.lFAColor_Intercept.Location = new System.Drawing.Point(153, 18);
+            this.lFAColor_Intercept.Name = "lFAColor_Intercept";
+            this.lFAColor_Intercept.Size = new System.Drawing.Size(84, 39);
+            this.lFAColor_Intercept.TabIndex = 2;
+            this.lFAColor_Intercept.Text = "拦截";
+            this.lFAColor_Intercept.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // switch3
+            // lFAColor_Replace
             // 
-            this.switch3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch3.Location = new System.Drawing.Point(195, 125);
-            this.switch3.Margin = new System.Windows.Forms.Padding(4);
-            this.switch3.Name = "switch3";
-            this.switch3.Size = new System.Drawing.Size(50, 30);
-            this.switch3.TabIndex = 5;
-            this.switch3.Text = "switch3";
+            this.lFAColor_Replace.BackColor = System.Drawing.Color.Goldenrod;
+            this.lFAColor_Replace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lFAColor_Replace.ForeColor = System.Drawing.Color.Black;
+            this.lFAColor_Replace.LocalizationText = "Replace";
+            this.lFAColor_Replace.Location = new System.Drawing.Point(43, 18);
+            this.lFAColor_Replace.Name = "lFAColor_Replace";
+            this.lFAColor_Replace.Size = new System.Drawing.Size(84, 39);
+            this.lFAColor_Replace.TabIndex = 0;
+            this.lFAColor_Replace.Text = "替换";
+            this.lFAColor_Replace.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label3
+            // tlpFilterSet
             // 
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.LocalizationText = "PopupWindow";
-            this.label3.Location = new System.Drawing.Point(4, 116);
-            this.label3.Margin = new System.Windows.Forms.Padding(4);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(182, 48);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "弹出在窗口";
+            this.tlpFilterSet.ColumnCount = 2;
+            this.tlpFilterSet.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFilterSet.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFilterSet.Controls.Add(this.rbFilterSet_Sequence, 1, 0);
+            this.tlpFilterSet.Controls.Add(this.rbFilterSet_Priority, 0, 0);
+            this.tlpFilterSet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilterSet.Location = new System.Drawing.Point(0, 324);
+            this.tlpFilterSet.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilterSet.Name = "tlpFilterSet";
+            this.tlpFilterSet.RowCount = 2;
+            this.tlpFilterSet.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpFilterSet.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterSet.Size = new System.Drawing.Size(500, 70);
+            this.tlpFilterSet.TabIndex = 17;
             // 
-            // switch2
+            // rbFilterSet_Sequence
             // 
-            this.switch2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch2.Location = new System.Drawing.Point(195, 69);
-            this.switch2.Margin = new System.Windows.Forms.Padding(4);
-            this.switch2.Name = "switch2";
-            this.switch2.Size = new System.Drawing.Size(50, 30);
-            this.switch2.TabIndex = 3;
-            this.switch2.Text = "switch2";
+            this.rbFilterSet_Sequence.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.rbFilterSet_Sequence.Checked = true;
+            this.rbFilterSet_Sequence.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbFilterSet_Sequence.LocalizationText = "SystemSettingsForm.Order";
+            this.rbFilterSet_Sequence.Location = new System.Drawing.Point(253, 3);
+            this.rbFilterSet_Sequence.Name = "rbFilterSet_Sequence";
+            this.rbFilterSet_Sequence.Size = new System.Drawing.Size(122, 42);
+            this.rbFilterSet_Sequence.TabIndex = 2;
+            this.rbFilterSet_Sequence.Text = "按顺序执行";
             // 
-            // label1
+            // rbFilterSet_Priority
             // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.LocalizationText = "AnimationEnabled";
-            this.label1.Location = new System.Drawing.Point(4, 4);
-            this.label1.Margin = new System.Windows.Forms.Padding(4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(182, 48);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "动画使能";
+            this.rbFilterSet_Priority.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.rbFilterSet_Priority.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbFilterSet_Priority.LocalizationText = "SystemSettingsForm.Priority";
+            this.rbFilterSet_Priority.Location = new System.Drawing.Point(3, 3);
+            this.rbFilterSet_Priority.Name = "rbFilterSet_Priority";
+            this.rbFilterSet_Priority.Size = new System.Drawing.Size(106, 42);
+            this.rbFilterSet_Priority.TabIndex = 1;
+            this.rbFilterSet_Priority.Text = "优先原则";
             // 
-            // switch1
+            // tlpButton
             // 
-            this.switch1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch1.Location = new System.Drawing.Point(195, 13);
-            this.switch1.Margin = new System.Windows.Forms.Padding(4);
-            this.switch1.Name = "switch1";
-            this.switch1.Size = new System.Drawing.Size(50, 30);
-            this.switch1.TabIndex = 1;
-            this.switch1.Text = "switch1";
+            this.tlpButton.ColumnCount = 5;
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.Controls.Add(this.bSave, 1, 1);
+            this.tlpButton.Controls.Add(this.bExit, 3, 1);
+            this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpButton.Location = new System.Drawing.Point(0, 640);
+            this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpButton.Name = "tlpButton";
+            this.tlpButton.RowCount = 3;
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.Size = new System.Drawing.Size(500, 60);
+            this.tlpButton.TabIndex = 16;
+            // 
+            // bSave
+            // 
+            this.bSave.BackExtend = "135, #6253E1, #04BEFE";
+            this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LocalizationText = "Save";
+            this.bSave.Location = new System.Drawing.Point(123, 7);
+            this.bSave.Name = "bSave";
+            this.bSave.Size = new System.Drawing.Size(114, 46);
+            this.bSave.TabIndex = 0;
+            this.bSave.Text = "保存";
+            this.bSave.Type = AntdUI.TTypeMini.Primary;
+            this.bSave.Click += new System.EventHandler(this.bSave_Click);
+            // 
+            // bExit
+            // 
+            this.bExit.BackExtend = "135, #6253E1, #04BEFE";
+            this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.LocalizationText = "Cancel";
+            this.bExit.Location = new System.Drawing.Point(263, 7);
+            this.bExit.Name = "bExit";
+            this.bExit.Size = new System.Drawing.Size(114, 46);
+            this.bExit.TabIndex = 1;
+            this.bExit.Text = "退出";
+            this.bExit.Type = AntdUI.TTypeMini.Primary;
+            this.bExit.Click += new System.EventHandler(this.bExit_Click);
+            // 
+            // cbSpeedMode
+            // 
+            this.cbSpeedMode.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbSpeedMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbSpeedMode.LocalizationText = "SystemSettingsForm.SpeedMode";
+            this.cbSpeedMode.Location = new System.Drawing.Point(3, 32);
+            this.cbSpeedMode.Name = "cbSpeedMode";
+            this.cbSpeedMode.Size = new System.Drawing.Size(106, 42);
+            this.cbSpeedMode.TabIndex = 6;
+            this.cbSpeedMode.Text = "极速模式";
+            // 
+            // dWorkMode
+            // 
+            this.dWorkMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dWorkMode.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dWorkMode.LocalizationText = "SystemSettingsForm.WorkMode";
+            this.dWorkMode.Location = new System.Drawing.Point(3, 3);
+            this.dWorkMode.Name = "dWorkMode";
+            this.dWorkMode.Orientation = AntdUI.TOrientation.Left;
+            this.dWorkMode.Size = new System.Drawing.Size(494, 23);
+            this.dWorkMode.TabIndex = 1;
+            this.dWorkMode.Text = "工作模式";
+            // 
+            // dListExecute
+            // 
+            this.dListExecute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dListExecute.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dListExecute.LocalizationText = "SystemSettingsForm.ListMode";
+            this.dListExecute.Location = new System.Drawing.Point(3, 199);
+            this.dListExecute.Name = "dListExecute";
+            this.dListExecute.Orientation = AntdUI.TOrientation.Left;
+            this.dListExecute.Size = new System.Drawing.Size(494, 23);
+            this.dListExecute.TabIndex = 2;
+            this.dListExecute.Text = "列表执行模式";
+            // 
+            // dFilterSet
+            // 
+            this.dFilterSet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dFilterSet.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dFilterSet.LocalizationText = "SystemSettingsForm.FilterMode";
+            this.dFilterSet.Location = new System.Drawing.Point(3, 298);
+            this.dFilterSet.Name = "dFilterSet";
+            this.dFilterSet.Orientation = AntdUI.TOrientation.Left;
+            this.dFilterSet.Size = new System.Drawing.Size(494, 23);
+            this.dFilterSet.TabIndex = 3;
+            this.dFilterSet.Text = "滤镜执行模式";
+            // 
+            // dFilterActionColor
+            // 
+            this.dFilterActionColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dFilterActionColor.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dFilterActionColor.LocalizationText = "SystemSettingsForm.FilterAction";
+            this.dFilterActionColor.Location = new System.Drawing.Point(3, 397);
+            this.dFilterActionColor.Name = "dFilterActionColor";
+            this.dFilterActionColor.Orientation = AntdUI.TOrientation.Left;
+            this.dFilterActionColor.Size = new System.Drawing.Size(494, 23);
+            this.dFilterActionColor.TabIndex = 4;
+            this.dFilterActionColor.Text = "滤镜动作";
+            // 
+            // tlpListExecute
+            // 
+            this.tlpListExecute.ColumnCount = 2;
+            this.tlpListExecute.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpListExecute.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpListExecute.Controls.Add(this.rbListExecute_Sequence, 1, 0);
+            this.tlpListExecute.Controls.Add(this.rbListExecute_Together, 0, 0);
+            this.tlpListExecute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpListExecute.Location = new System.Drawing.Point(0, 225);
+            this.tlpListExecute.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpListExecute.Name = "tlpListExecute";
+            this.tlpListExecute.RowCount = 2;
+            this.tlpListExecute.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpListExecute.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpListExecute.Size = new System.Drawing.Size(500, 70);
+            this.tlpListExecute.TabIndex = 15;
+            // 
+            // rbListExecute_Sequence
+            // 
+            this.rbListExecute_Sequence.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.rbListExecute_Sequence.Checked = true;
+            this.rbListExecute_Sequence.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbListExecute_Sequence.LocalizationText = "SystemSettingsForm.Order";
+            this.rbListExecute_Sequence.Location = new System.Drawing.Point(253, 3);
+            this.rbListExecute_Sequence.Name = "rbListExecute_Sequence";
+            this.rbListExecute_Sequence.Size = new System.Drawing.Size(122, 42);
+            this.rbListExecute_Sequence.TabIndex = 2;
+            this.rbListExecute_Sequence.Text = "按顺序执行";
+            // 
+            // rbListExecute_Together
+            // 
+            this.rbListExecute_Together.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.rbListExecute_Together.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbListExecute_Together.LocalizationText = "SystemSettingsForm.Simultaneously";
+            this.rbListExecute_Together.Location = new System.Drawing.Point(3, 3);
+            this.rbListExecute_Together.Name = "rbListExecute_Together";
+            this.rbListExecute_Together.Size = new System.Drawing.Size(106, 42);
+            this.rbListExecute_Together.TabIndex = 1;
+            this.rbListExecute_Together.Text = "同时执行";
+            // 
+            // switchFloatButton
+            // 
+            this.switchFloatButton.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.switchFloatButton.Location = new System.Drawing.Point(6, 136);
+            this.switchFloatButton.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
+            this.switchFloatButton.Name = "switchFloatButton";
+            this.switchFloatButton.Size = new System.Drawing.Size(50, 30);
+            this.switchFloatButton.TabIndex = 20;
+            this.switchFloatButton.Text = "switch1";
             // 
             // SystemSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tlpSetting);
+            this.Controls.Add(this.tlpSystemSettings);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "SystemSetting";
-            this.Size = new System.Drawing.Size(250, 300);
-            this.tlpSetting.ResumeLayout(false);
+            this.Size = new System.Drawing.Size(500, 700);
+            this.Load += new System.EventHandler(this.SystemSetting_Load);
+            this.tlpSystemSettings.ResumeLayout(false);
+            this.tlpSystemSettings.PerformLayout();
+            this.tlpFilterActionColor.ResumeLayout(false);
+            this.tlpFilterSet.ResumeLayout(false);
+            this.tlpFilterSet.PerformLayout();
+            this.tlpButton.ResumeLayout(false);
+            this.tlpListExecute.ResumeLayout(false);
+            this.tlpListExecute.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private AntdUI.Label label2;
-        private System.Windows.Forms.TableLayoutPanel tlpSetting;
-        private AntdUI.Switch switch5;
-        private AntdUI.Label label5;
-        private AntdUI.Switch switch4;
-        private AntdUI.Label label4;
-        private AntdUI.Switch switch3;
-        private AntdUI.Label label3;
-        private AntdUI.Switch switch2;
-        private AntdUI.Label label1;
-        private AntdUI.Switch switch1;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemSettings;
+        private AntdUI.Divider dFloatButton;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterActionColor;
+        private AntdUI.Label lFAColor_Other;
+        private AntdUI.Label lFAColor_Change;
+        private AntdUI.Label lFAColor_Intercept;
+        private AntdUI.Label lFAColor_Replace;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
+        private AntdUI.Radio rbFilterSet_Sequence;
+        private AntdUI.Radio rbFilterSet_Priority;
+        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private AntdUI.Button bSave;
+        private AntdUI.Button bExit;
+        private AntdUI.Checkbox cbSpeedMode;
+        private AntdUI.Divider dWorkMode;
+        private AntdUI.Divider dListExecute;
+        private AntdUI.Divider dFilterSet;
+        private AntdUI.Divider dFilterActionColor;
+        private System.Windows.Forms.TableLayoutPanel tlpListExecute;
+        private AntdUI.Radio rbListExecute_Sequence;
+        private AntdUI.Radio rbListExecute_Together;
+        private AntdUI.Switch switchFloatButton;
     }
 }

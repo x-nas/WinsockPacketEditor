@@ -4,19 +4,19 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class HookSettingsForm : Form
+    public partial class HookSetting : UserControl
     {
         private Form form;
 
         #region//窗体事件
 
-        public HookSettingsForm(Form form)
+        public HookSetting(Form form)
         {
             InitializeComponent();
             this.form = form;
         }
 
-        private void HookSettingsForm_Load(object sender, EventArgs e)
+        private void HookSetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("HookSettingsForm", "拦截设置");
             this.tabHookSettings.TabMenuVisible = false;
@@ -24,15 +24,11 @@ namespace WinsockPacketEditor
             switch (Operate.SystemConfig.StartMode)
             {
                 case Operate.SystemConfig.SystemMode.Process:
-
                     this.tabHookSettings.SelectTab("tpInjectMode");
-
                     break;
 
                 case Operate.SystemConfig.SystemMode.Proxy:
-
                     this.tabHookSettings.SelectTab("tpProxyMode");
-
                     break;
             }
 

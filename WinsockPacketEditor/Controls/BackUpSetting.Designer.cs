@@ -1,16 +1,16 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class BackUpSettingsForm
+    partial class BackUpSetting
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// 必需的设计器变量。
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// 清理所有正在使用的资源。
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,15 +20,14 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region 组件设计器生成的代码
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// 设计器支持所需的方法 - 不要修改
+        /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BackUpSettingsForm));
             this.tlpBackUpSettings = new System.Windows.Forms.TableLayoutPanel();
             this.dListInfo = new AntdUI.Divider();
             this.tlpListInfo = new System.Windows.Forms.TableLayoutPanel();
@@ -92,8 +91,8 @@
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpBackUpSettings.Size = new System.Drawing.Size(484, 761);
-            this.tlpBackUpSettings.TabIndex = 0;
+            this.tlpBackUpSettings.Size = new System.Drawing.Size(500, 700);
+            this.tlpBackUpSettings.TabIndex = 1;
             // 
             // dListInfo
             // 
@@ -103,7 +102,7 @@
             this.dListInfo.Location = new System.Drawing.Point(3, 406);
             this.dListInfo.Name = "dListInfo";
             this.dListInfo.Orientation = AntdUI.TOrientation.Left;
-            this.dListInfo.Size = new System.Drawing.Size(478, 23);
+            this.dListInfo.Size = new System.Drawing.Size(494, 23);
             this.dListInfo.TabIndex = 13;
             this.dListInfo.Text = "列表数据";
             // 
@@ -123,7 +122,7 @@
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpListInfo.Size = new System.Drawing.Size(484, 189);
+            this.tlpListInfo.Size = new System.Drawing.Size(500, 128);
             this.tlpListInfo.TabIndex = 12;
             // 
             // cbBackUp_RobotList
@@ -144,7 +143,7 @@
             this.cbBackUp_SendList.Checked = true;
             this.cbBackUp_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_SendList.LocalizationText = "SendList";
-            this.cbBackUp_SendList.Location = new System.Drawing.Point(245, 3);
+            this.cbBackUp_SendList.Location = new System.Drawing.Point(253, 3);
             this.cbBackUp_SendList.Name = "cbBackUp_SendList";
             this.cbBackUp_SendList.Size = new System.Drawing.Size(106, 42);
             this.cbBackUp_SendList.TabIndex = 3;
@@ -185,14 +184,14 @@
             this.tlpButton2.Controls.Add(this.bImport, 1, 1);
             this.tlpButton2.Controls.Add(this.bExport, 3, 1);
             this.tlpButton2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton2.Location = new System.Drawing.Point(0, 641);
+            this.tlpButton2.Location = new System.Drawing.Point(0, 580);
             this.tlpButton2.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton2.Name = "tlpButton2";
             this.tlpButton2.RowCount = 3;
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton2.Size = new System.Drawing.Size(484, 60);
+            this.tlpButton2.Size = new System.Drawing.Size(500, 60);
             this.tlpButton2.TabIndex = 6;
             // 
             // bImport
@@ -201,7 +200,7 @@
             this.bImport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bImport.IconSvg = "ImportOutlined";
             this.bImport.LocalizationText = "Import";
-            this.bImport.Location = new System.Drawing.Point(85, 7);
+            this.bImport.Location = new System.Drawing.Point(93, 7);
             this.bImport.Name = "bImport";
             this.bImport.Size = new System.Drawing.Size(144, 46);
             this.bImport.TabIndex = 0;
@@ -215,7 +214,7 @@
             this.bExport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExport.IconSvg = "ExportOutlined";
             this.bExport.LocalizationText = "Export";
-            this.bExport.Location = new System.Drawing.Point(255, 7);
+            this.bExport.Location = new System.Drawing.Point(263, 7);
             this.bExport.Name = "bExport";
             this.bExport.Size = new System.Drawing.Size(144, 46);
             this.bExport.TabIndex = 1;
@@ -233,14 +232,14 @@
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 701);
+            this.tlpButton.Location = new System.Drawing.Point(0, 640);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(484, 60);
+            this.tlpButton.Size = new System.Drawing.Size(500, 60);
             this.tlpButton.TabIndex = 5;
             // 
             // bExit
@@ -249,7 +248,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(185, 7);
+            this.bExit.Location = new System.Drawing.Point(193, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -265,7 +264,7 @@
             this.dSystemConfig.Location = new System.Drawing.Point(3, 3);
             this.dSystemConfig.Name = "dSystemConfig";
             this.dSystemConfig.Orientation = AntdUI.TOrientation.Left;
-            this.dSystemConfig.Size = new System.Drawing.Size(478, 23);
+            this.dSystemConfig.Size = new System.Drawing.Size(494, 23);
             this.dSystemConfig.TabIndex = 0;
             this.dSystemConfig.Text = "系统运行";
             // 
@@ -288,7 +287,7 @@
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBackUpContent.Size = new System.Drawing.Size(484, 100);
+            this.tlpBackUpContent.Size = new System.Drawing.Size(500, 100);
             this.tlpBackUpContent.TabIndex = 1;
             // 
             // cbBackUp_ProxyAccount
@@ -297,7 +296,7 @@
             this.cbBackUp_ProxyAccount.Checked = true;
             this.cbBackUp_ProxyAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxyAccount.LocalizationText = "BackUpSettingsForm.ProxyAccount";
-            this.cbBackUp_ProxyAccount.Location = new System.Drawing.Point(245, 3);
+            this.cbBackUp_ProxyAccount.Location = new System.Drawing.Point(253, 3);
             this.cbBackUp_ProxyAccount.Name = "cbBackUp_ProxyAccount";
             this.cbBackUp_ProxyAccount.Size = new System.Drawing.Size(106, 42);
             this.cbBackUp_ProxyAccount.TabIndex = 4;
@@ -335,7 +334,7 @@
             this.dProxyMode.Location = new System.Drawing.Point(3, 120);
             this.dProxyMode.Name = "dProxyMode";
             this.dProxyMode.Orientation = AntdUI.TOrientation.Left;
-            this.dProxyMode.Size = new System.Drawing.Size(478, 23);
+            this.dProxyMode.Size = new System.Drawing.Size(494, 23);
             this.dProxyMode.TabIndex = 7;
             this.dProxyMode.Text = "代理模式";
             // 
@@ -347,7 +346,7 @@
             this.dInjectMode.Location = new System.Drawing.Point(3, 289);
             this.dInjectMode.Name = "dInjectMode";
             this.dInjectMode.Orientation = AntdUI.TOrientation.Left;
-            this.dInjectMode.Size = new System.Drawing.Size(478, 23);
+            this.dInjectMode.Size = new System.Drawing.Size(494, 23);
             this.dInjectMode.TabIndex = 8;
             this.dInjectMode.Text = "注入模式";
             // 
@@ -362,21 +361,17 @@
             this.cbBackUp_SystemConfig.TabIndex = 9;
             this.cbBackUp_SystemConfig.Text = "系统运行配置";
             // 
-            // BackUpSettingsForm
+            // BackUpSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 761);
             this.Controls.Add(this.tlpBackUpSettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5);
-            this.Name = "BackUpSettingsForm";
-            this.ShowInTaskbar = false;
-            this.Text = "BackUpSettingsForm";
-            this.Load += new System.EventHandler(this.BackUpSettingsForm_Load);
+            this.Name = "BackUpSetting";
+            this.Size = new System.Drawing.Size(500, 700);
+            this.Load += new System.EventHandler(this.BackUpSetting_Load);
             this.tlpBackUpSettings.ResumeLayout(false);
             this.tlpBackUpSettings.PerformLayout();
             this.tlpListInfo.ResumeLayout(false);
@@ -392,24 +387,24 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpBackUpSettings;
-        private AntdUI.Divider dSystemConfig;
-        private System.Windows.Forms.TableLayoutPanel tlpBackUpContent;
-        private AntdUI.Checkbox cbBackUp_ProxyMapping;
-        private AntdUI.Checkbox cbBackUp_ProxySet;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
-        private System.Windows.Forms.TableLayoutPanel tlpButton2;
-        private AntdUI.Button bImport;
-        private AntdUI.Button bExport;
-        private AntdUI.Button bExit;
-        private AntdUI.Divider dProxyMode;
-        private AntdUI.Divider dInjectMode;
-        private AntdUI.Checkbox cbBackUp_SystemConfig;
-        private AntdUI.Checkbox cbBackUp_ProxyAccount;
         private AntdUI.Divider dListInfo;
         private System.Windows.Forms.TableLayoutPanel tlpListInfo;
         private AntdUI.Checkbox cbBackUp_RobotList;
         private AntdUI.Checkbox cbBackUp_SendList;
         private AntdUI.Checkbox cbBackUp_FilterList;
         private AntdUI.Checkbox cbBackUp_InjectSet;
+        private System.Windows.Forms.TableLayoutPanel tlpButton2;
+        private AntdUI.Button bImport;
+        private AntdUI.Button bExport;
+        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private AntdUI.Button bExit;
+        private AntdUI.Divider dSystemConfig;
+        private System.Windows.Forms.TableLayoutPanel tlpBackUpContent;
+        private AntdUI.Checkbox cbBackUp_ProxyAccount;
+        private AntdUI.Checkbox cbBackUp_ProxyMapping;
+        private AntdUI.Checkbox cbBackUp_ProxySet;
+        private AntdUI.Divider dProxyMode;
+        private AntdUI.Divider dInjectMode;
+        private AntdUI.Checkbox cbBackUp_SystemConfig;
     }
 }

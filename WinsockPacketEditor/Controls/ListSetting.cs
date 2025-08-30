@@ -4,19 +4,19 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class ListSettingsForm : Form
+    public partial class ListSetting : UserControl
     {
         private Form form;
 
         #region//窗体事件
 
-        public ListSettingsForm(Form _form)
+        public ListSetting(Form form)
         {
             InitializeComponent();
-            this.form = _form;
+            this.form = form;
         }
 
-        private void ListSettingsForm_Load(object sender, EventArgs e)
+        private void ListSetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("ListSettingsForm", "列表设置");
 
@@ -61,11 +61,11 @@ namespace WinsockPacketEditor
 
                     break;
             }
-            
+
             this.tabListSettings.TabMenuVisible = false;
             this.cbLogList_AutoRoll.Checked = Operate.LogConfig.List.AutoRoll;
             this.cbLogList_AutoClear.Checked = Operate.LogConfig.List.AutoClear;
-            this.txtLogList_AutoClear.Value = Operate.LogConfig.List.AutoClear_Value;         
+            this.txtLogList_AutoClear.Value = Operate.LogConfig.List.AutoClear_Value;
 
             this.PacketList_AutoClear_Changed();
             this.LogList_AutoClear_Changed();
@@ -147,10 +147,10 @@ namespace WinsockPacketEditor
 
                     break;
             }
-            
+
             Operate.LogConfig.List.AutoRoll = this.cbLogList_AutoRoll.Checked;
             Operate.LogConfig.List.AutoClear = this.cbLogList_AutoClear.Checked;
-            Operate.LogConfig.List.AutoClear_Value = this.txtLogList_AutoClear.Value;        
+            Operate.LogConfig.List.AutoClear_Value = this.txtLogList_AutoClear.Value;
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "列表设置保存成功", TType.Success)
             {

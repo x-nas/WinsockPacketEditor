@@ -341,11 +341,11 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//系统设置
+        #region//显示设置
 
         private void btn_setting_Click(object sender, EventArgs e)
         {
-            var setting = new SystemSetting();
+            var setting = new DisplaySetting();
             if (AntdUI.Modal.open(this, AntdUI.Localization.Get("Setting", "设置"), setting) == DialogResult.OK)
             {
                 AntdUI.Config.Animation = setting.Animation;

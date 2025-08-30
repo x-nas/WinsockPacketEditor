@@ -4,33 +4,24 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class BackUpSettingsForm : Form
+    public partial class BackUpSetting : UserControl
     {
         private Form form;
 
         #region//窗体事件
 
-        public BackUpSettingsForm(Form form)
+        public BackUpSetting(Form form)
         {
             InitializeComponent();
             this.form = form;
         }
 
-        private void BackUpSettingsForm_Load(object sender, EventArgs e)
+        private void BackUpSetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("BackUpSettingsForm", "备份设置");
         }
 
-        #endregion
-
-        #region//退出
-
-        private void bExit_Click(object sender, EventArgs e)
-        {
-            this.Dispose();
-        }
-
-        #endregion
+        #endregion        
 
         #region//导入备份
 
@@ -58,7 +49,7 @@ namespace WinsockPacketEditor
                 bool RobotList = this.cbBackUp_RobotList.Checked;
 
                 Operate.SystemConfig.ExportSystemBackUp_Dialog(
-                    this,
+                    this.form,
                     FileName,
                     SystemConfig,
                     ProxySet,
@@ -73,6 +64,15 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//退出
+
+        private void bExit_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
         }
 
         #endregion

@@ -7,19 +7,19 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class SearchPacketForm : Form
+    public partial class SearchPacket : UserControl
     {
         private Form form;
 
         #region//窗体初始化
 
-        public SearchPacketForm(Form form)
-        {  
+        public SearchPacket(Form form)
+        {
             InitializeComponent();
-            this.form = form;            
+            this.form = form;
         }
 
-        private void SearchPacketForm_Load(object sender, EventArgs e)
+        private void SearchPacket_Load(object sender, EventArgs e)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace WinsockPacketEditor
         private void rbString_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
         {
             this.FindTypeChanged();
-        }        
+        }
 
         private void FindTypeChanged()
         {

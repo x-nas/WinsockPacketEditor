@@ -5,19 +5,19 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class MapSettingsForm : Form
+    public partial class MapSetting : UserControl
     {
         private Form form;
 
         #region//窗体事件
 
-        public MapSettingsForm(Form form)
+        public MapSetting(Form form)
         {
             InitializeComponent();
             this.form = form;
         }
 
-        private void MapSettingsForm_Load(object sender, EventArgs e)
+        private void MapSetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("MapSettingsForm", "映射设置");
 
@@ -37,7 +37,7 @@ namespace WinsockPacketEditor
         private void InitTable_MapLocal()
         {
             tMapLocal.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.ColumnCheck("IsEnable").SetFixed(),                
+                new AntdUI.ColumnCheck("IsEnable").SetFixed(),
                 new AntdUI.Column("RemotePath", "远程地址")
                 {
                     Render = (value, record, rowindex)=>
@@ -57,14 +57,14 @@ namespace WinsockPacketEditor
                     {
                         return new AntdUI.CellLink[]
                         {
-                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),                            
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
                             new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.MapLocal.Column."),
             };
 
-            this.tMapLocal.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));            
+            this.tMapLocal.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tMapLocal.Binding(Operate.ProxyConfig.Mapping.lstMapLocal);
         }
 
@@ -263,7 +263,7 @@ namespace WinsockPacketEditor
 
                         this.tMapLocal.SelectedIndex = -1;
                     }, Operate.ProxyConfig.Mapping.GetCMS_Mapping()));
-                }                
+                }
             }
         }
 

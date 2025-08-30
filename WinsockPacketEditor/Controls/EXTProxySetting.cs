@@ -5,19 +5,19 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class EXTProxySettingsForm : Form
+    public partial class EXTProxySetting : UserControl
     {
         private Form form;
 
         #region//窗体事件
 
-        public EXTProxySettingsForm(Form form)
+        public EXTProxySetting(Form form)
         {
             InitializeComponent();
             this.form = form;
         }
 
-        private void ExternalProxySettingsForm_Load(object sender, EventArgs e)
+        private void EXTProxySetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("ExternalProxySettingsForm", "外部代理设置");
 
@@ -100,8 +100,8 @@ namespace WinsockPacketEditor
 
         private void ExternalProxy_EnableAuth_Changed()
         {
-            this.txtExternalProxy_UserName.Enabled = 
-                this.txtExternalProxy_PassWord.Enabled = 
+            this.txtExternalProxy_UserName.Enabled =
+                this.txtExternalProxy_PassWord.Enabled =
                 this.cbExternalProxy_EnableAuth.Checked;
         }
 
@@ -154,7 +154,7 @@ namespace WinsockPacketEditor
                         AntdUI.Message.open(new AntdUI.Message.Config(this.form, "外部代理地址为空", TType.Error)
                         {
                             LocalizationText = "EXTProxySettingsForm.ProxyIP.Empty"
-                        });                        
+                        });
 
                         return false;
                     }

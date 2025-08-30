@@ -232,6 +232,12 @@
     <Compile Include="Controls\AccountLocation.Designer.cs">
       <DependentUpon>AccountLocation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BackUpSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BackUpSetting.Designer.cs">
+      <DependentUpon>BackUpSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ClientList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -256,6 +262,12 @@
     <Compile Include="Controls\ExpiryTime.Designer.cs">
       <DependentUpon>ExpiryTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EXTProxySetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\EXTProxySetting.Designer.cs">
+      <DependentUpon>EXTProxySetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ExtractionData.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -274,6 +286,12 @@
     <Compile Include="Controls\FilterList.Designer.cs">
       <DependentUpon>FilterList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HookSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\HookSetting.Designer.cs">
+      <DependentUpon>HookSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HotkeyTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -288,6 +306,12 @@
     </Compile>
     <Compile Include="Controls\LimitLinks.Designer.cs">
       <DependentUpon>LimitLinks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ListSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ListSetting.Designer.cs">
+      <DependentUpon>ListSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\LogList.cs">
       <SubType>UserControl</SubType>
@@ -306,6 +330,12 @@
     </Compile>
     <Compile Include="Controls\MapRemoteEdit.Designer.cs">
       <DependentUpon>MapRemoteEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MapSetting.Designer.cs">
+      <DependentUpon>MapSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PacketEdit.cs">
       <SubType>UserControl</SubType>
@@ -355,6 +385,12 @@
     <Compile Include="Controls\RobotList.Designer.cs">
       <DependentUpon>RobotList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SearchPacket.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SearchPacket.Designer.cs">
+      <DependentUpon>SearchPacket.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SendEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -372,6 +408,12 @@
     </Compile>
     <Compile Include="Controls\StatisticalData.Designer.cs">
       <DependentUpon>StatisticalData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DisplaySetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DisplaySetting.Designer.cs">
+      <DependentUpon>DisplaySetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SystemSetting.cs">
       <SubType>UserControl</SubType>
@@ -391,29 +433,11 @@
     <Compile Include="Controls\XORCalculation.Designer.cs">
       <DependentUpon>XORCalculation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BackUpSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BackUpSettingsForm.Designer.cs">
-      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\EXTProxySettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\EXTProxySettingsForm.Designer.cs">
-      <DependentUpon>EXTProxySettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FilterSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FilterSettingsForm.Designer.cs">
       <DependentUpon>FilterSettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\HookSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\HookSettingsForm.Designer.cs">
-      <DependentUpon>HookSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\HotKeyForm.cs">
       <SubType>Form</SubType>
@@ -421,41 +445,17 @@
     <Compile Include="Forms\HotKeyForm.Designer.cs">
       <DependentUpon>HotKeyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ListSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ListSettingsForm.Designer.cs">
-      <DependentUpon>ListSettingsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\MapSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MapSettingsForm.Designer.cs">
-      <DependentUpon>MapSettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ProxySettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ProxySettingsForm.Designer.cs">
       <DependentUpon>ProxySettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SearchPacketForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SearchPacketForm.Designer.cs">
-      <DependentUpon>SearchPacketForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\StartForm.Designer.cs">
       <DependentUpon>StartForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SystemSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SystemSettingsForm.Designer.cs">
-      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ClassObject\IconExtractor.cs" />
     <Compile Include="ClassObject\IconUtil.cs" />
@@ -500,6 +500,9 @@
     <EmbeddedResource Include="Controls\AccountLocation.resx">
       <DependentUpon>AccountLocation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BackUpSetting.resx">
+      <DependentUpon>BackUpSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ClientList.resx">
       <DependentUpon>ClientList.cs</DependentUpon>
     </EmbeddedResource>
@@ -512,6 +515,9 @@
     <EmbeddedResource Include="Controls\ExpiryTime.resx">
       <DependentUpon>ExpiryTime.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\EXTProxySetting.resx">
+      <DependentUpon>EXTProxySetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ExtractionData.resx">
       <DependentUpon>ExtractionData.cs</DependentUpon>
     </EmbeddedResource>
@@ -521,11 +527,17 @@
     <EmbeddedResource Include="Controls\FilterList.resx">
       <DependentUpon>FilterList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\HookSetting.resx">
+      <DependentUpon>HookSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\LimitDevices.resx">
       <DependentUpon>LimitDevices.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\LimitLinks.resx">
       <DependentUpon>LimitLinks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ListSetting.resx">
+      <DependentUpon>ListSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\LogList.resx">
       <DependentUpon>LogList.cs</DependentUpon>
@@ -535,6 +547,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\MapRemoteEdit.resx">
       <DependentUpon>MapRemoteEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\MapSetting.resx">
+      <DependentUpon>MapSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PacketEdit.resx">
       <DependentUpon>PacketEdit.cs</DependentUpon>
@@ -560,6 +575,9 @@
     <EmbeddedResource Include="Controls\RobotList.resx">
       <DependentUpon>RobotList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SearchPacket.resx">
+      <DependentUpon>SearchPacket.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\SendEdit.resx">
       <DependentUpon>SendEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -568,6 +586,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\StatisticalData.resx">
       <DependentUpon>StatisticalData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DisplaySetting.resx">
+      <DependentUpon>DisplaySetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SystemSetting.resx">
       <DependentUpon>SystemSetting.cs</DependentUpon>
@@ -578,38 +599,17 @@
     <EmbeddedResource Include="Controls\XORCalculation.resx">
       <DependentUpon>XORCalculation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BackUpSettingsForm.resx">
-      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\EXTProxySettingsForm.resx">
-      <DependentUpon>EXTProxySettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FilterSettingsForm.resx">
       <DependentUpon>FilterSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HookSettingsForm.resx">
-      <DependentUpon>HookSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HotKeyForm.resx">
       <DependentUpon>HotKeyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ListSettingsForm.resx">
-      <DependentUpon>ListSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MapSettingsForm.resx">
-      <DependentUpon>MapSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProxySettingsForm.resx">
       <DependentUpon>ProxySettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SearchPacketForm.resx">
-      <DependentUpon>SearchPacketForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SystemSettingsForm.resx">
-      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InjectModeForm.resx">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
