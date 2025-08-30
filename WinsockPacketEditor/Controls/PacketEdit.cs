@@ -657,7 +657,7 @@ namespace WinsockPacketEditor
                                 break;
                         }
 
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包保存成功", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包保存成功", TType.Success)
                         {
                             LocalizationText = "PacketEditForm.Success",
                         });

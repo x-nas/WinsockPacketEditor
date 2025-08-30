@@ -653,30 +653,32 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void timerProxyListInfo_Tick(object sender, EventArgs e)
+        private async void timerProxyListInfo_Tick(object sender, EventArgs e)
         {
             try
             {
-                if (!this.bgwProxyList.IsBusy)
+                this.timerProxyListInfo.Stop();
+
+                await Task.Run(() =>
                 {
-                    this.bgwProxyList.RunWorkerAsync();
-                }
+                    this.RefreshProxyList();
+                    this.cClientList?.RefreshClientList();
+                    this.cClientList?.RefreshAuthList();
+                    this.cAccountList.RefreshAccountList();
+                    this.cLogList?.RefreshLogList();
 
-                this.cClientList?.ShowClientList();
-                this.cAccountList?.SaveAccountList();
-
-                this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
-                this.mProxyMode.Items[1].Badge = this.cClientList.GetClientNumber().ToString();
-                this.mProxyMode.Items[2].Badge = this.cAccountList.lstAccount.Count.ToString();
-                this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
-                this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
-                this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
-                this.mProxyMode.Items[11].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+                    this.cAccountList?.SaveAccountList();
+                    this.ShowProxyInfo();
+                });
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
+            finally
+            {
+                this.timerProxyListInfo.Start();
+            }
         }
 
         #endregion
@@ -705,63 +707,49 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示代理列表（异步）
+        #region//显示代理列表
 
-        private void bgwProxyList_DoWork(object sender, DoWorkEventArgs e)
+        private void RefreshProxyList()
         {
-            try
+            if (tProxyList.InvokeRequired)
             {
-                if (Operate.ProxyConfig.List.AutoRoll)
-                {
-                    tProxyList.ScrollBar.ValueY = tProxyList.ScrollBar.MaxY;
-                }
-
-                if (Operate.ProxyConfig.List.AutoClear)
-                {
-                    if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.ProxyConfig.List.AutoClear_Value)
-                    {
-                        this.CleanUp_ProxyList();
-                        this.CleanUp_HexBox();
-                    }
-                }
-
-                if (Operate.LogConfig.List.AutoRoll)
-                {
-                    this.cLogList.ScrollToBottom();
-                }
-
-                if (Operate.LogConfig.List.AutoClear)
-                {
-                    if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                    {
-                        this.cLogList.CleanUp_SystemLog();
-                    }
-
-                    if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                    {
-                        this.cLogList.CleanUp_FilterLog();
-                    }
-
-                    if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                    {
-                        this.cLogList.CleanUp_ProxyLog();
-                    }
-                }
+                tProxyList.BeginInvoke(new Action(() => this.tProxyList.Refresh()));
             }
-            catch (Exception ex)
+            else
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                this.tProxyList.Refresh();
+            }
+
+            if (Operate.ProxyConfig.List.AutoRoll)
+            {
+                tProxyList.ScrollBar.ValueY = tProxyList.ScrollBar.MaxY;
+            }
+
+            if (Operate.ProxyConfig.List.AutoClear)
+            {
+                if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.ProxyConfig.List.AutoClear_Value)
+                {
+                    this.CleanUp_ProxyList();
+                    this.CleanUp_HexBox();
+                }
             }
         }
 
-        private void bgwProxyList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        #endregion
+
+        #region//显示代理信息
+
+        private void ShowProxyInfo()
         {
             try
             {
-                this.tProxyList.Refresh();
-                this.cClientList.RefreshClientList();
-                this.cAccountList.RefreshAccountList();
-                this.cLogList.RefreshLogList();
+                this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
+                this.mProxyMode.Items[1].Badge = this.cClientList.GetClientNumber().ToString();
+                this.mProxyMode.Items[2].Badge = this.cAccountList.lstAccount.Count.ToString();
+                this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
+                this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
+                this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
+                this.mProxyMode.Items[11].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();                
 
                 long ProxyTotal_CNT =
                     Operate.ProxyConfig.Proxy.TCP_Req_CNT +
@@ -778,7 +766,7 @@ namespace WinsockPacketEditor
                 this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
                 this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
                 this.lProxyTCP_CNT.Text = Operate.ProxyConfig.List.lstProxyTCP.Count.ToString();
-                this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.cdProxyUDP.Count.ToString();                
+                this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.cdProxyUDP.Count.ToString();
 
                 Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(
                         "{0}/{1}",
@@ -806,7 +794,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
         }
 
         #endregion        

@@ -1,6 +1,5 @@
 ﻿using AntdUI;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -95,12 +94,7 @@ namespace WinsockPacketEditor
                 this.tAuthList.BackColor = Color.White;
                 this.tAuthList.ColumnBack = null;                    
             }
-        }
-
-        public void RefreshClientList()
-        {
-            this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
-        }
+        }        
 
         public int GetClientNumber()
         {
@@ -109,21 +103,14 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示客户端列表（异步）
+        #region//显示客户端列表
 
-        public void ShowClientList()
-        {
-            if (!this.bgwClientList.IsBusy)
-            {
-                this.treeClientList.PauseLayout = true;
-                this.bgwClientList.RunWorkerAsync();
-            }
-        }
-
-        private void bgwClientList_DoWork(object sender, DoWorkEventArgs e)
+        public void RefreshClientList()
         {
             try
             {
+                this.treeClientList.PauseLayout = true;
+
                 var peList = Operate.ProxyConfig.List.lstProxyTCP.ToList();
                 if (peList == null || peList.Count == 0)
                 {
@@ -277,21 +264,21 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void bgwClientList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            try
+            finally
             {
                 this.treeClientList.PauseLayout = false;
-                this.treeClientList.Refresh();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
-        #endregion        
+        #endregion
+
+        #region//显示认证列表
+
+        public void RefreshAuthList()
+        {
+            this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
+        }
+
+        #endregion
     }
 }

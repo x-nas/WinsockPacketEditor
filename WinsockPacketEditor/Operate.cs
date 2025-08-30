@@ -6557,7 +6557,7 @@ namespace WinsockPacketEditor
                 public static readonly ConcurrentDictionary<Guid, ProxyUDP> cdProxyUDP = new ConcurrentDictionary<Guid, ProxyUDP>();
                 public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(5);
 
-                public static BindingList<ProxyInfo> lstProxyInfo = new BindingList<ProxyInfo>();                
+                public static List<ProxyInfo> lstProxyInfo = new List<ProxyInfo>();                
 
                 #region//TCP代理入列表
 

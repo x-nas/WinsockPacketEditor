@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.bgwClientList = new System.ComponentModel.BackgroundWorker();
             this.tlpClientList = new System.Windows.Forms.TableLayoutPanel();
             this.splitterClientList = new AntdUI.Splitter();
             this.treeClientList = new AntdUI.Tree();
@@ -39,11 +38,6 @@
             this.splitterClientList.Panel2.SuspendLayout();
             this.splitterClientList.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // bgwClientList
-            // 
-            this.bgwClientList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwClientList_DoWork);
-            this.bgwClientList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwClientList_RunWorkerCompleted);
             // 
             // tlpClientList
             // 
@@ -126,7 +120,6 @@
         }
 
         #endregion
-        private System.ComponentModel.BackgroundWorker bgwClientList;
         private System.Windows.Forms.TableLayoutPanel tlpClientList;
         private AntdUI.Splitter splitterClientList;
         private AntdUI.Tree treeClientList;

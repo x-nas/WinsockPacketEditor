@@ -1220,31 +1220,28 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void timerPacketListInfo_Tick(object sender, EventArgs e)
+        private async void timerPacketListInfo_Tick(object sender, EventArgs e)
         {
-            this.lTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
-            this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
-            this.lQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
-            this.lFilterPacket_CNT.Text = Operate.PacketConfig.Packet.FilterPacket_CNT.ToString();
-            this.lSend_CNT.Text = Operate.PacketConfig.Packet.Send_CNT.ToString();
-            this.lRecv_CNT.Text = Operate.PacketConfig.Packet.Recv_CNT.ToString();
-            this.lSendTo_CNT.Text = Operate.PacketConfig.Packet.SendTo_CNT.ToString();
-            this.lRecvFrom_CNT.Text = Operate.PacketConfig.Packet.RecvFrom_CNT.ToString();
-            this.lWSASend_CNT.Text = Operate.PacketConfig.Packet.WSASend_CNT.ToString();
-            this.lWSARecv_CNT.Text = Operate.PacketConfig.Packet.WSARecv_CNT.ToString();
-            this.lWSASendTo_CNT.Text = Operate.PacketConfig.Packet.WSASendTo_CNT.ToString();
-            this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Packet.WSARecvFrom_CNT.ToString();
-            this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
-            this.mInjectMode.Items[0].Badge = Operate.PacketConfig.List.lstPacketInfo.Count.ToString();
-            this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
-            this.mInjectMode.Items[2].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
-            this.mInjectMode.Items[3].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
-            this.mInjectMode.Items[9].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+            try
+            {
+                this.timerPacketListInfo.Stop();
 
-            if (!this.bgwPacketList.IsBusy)
-            { 
-                this.bgwPacketList.RunWorkerAsync();
-            }                      
+                await Task.Run(() =>
+                {
+                    this.RefreshPacketList();
+                    this.cLogList?.RefreshLogList();
+
+                    this.ShowInjectInfo();                   
+                });
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            finally
+            {
+                this.timerPacketListInfo.Start();
+            }      
         }
 
         #endregion
@@ -1273,12 +1270,21 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示封包列表（异步）
+        #region//显示封包列表
 
-        private void bgwPacketList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void RefreshPacketList()
         {
             try
             {
+                if (tPacketList.InvokeRequired)
+                {
+                    tPacketList.BeginInvoke(new Action(() => this.tPacketList.Refresh()));
+                }
+                else
+                {
+                    this.tPacketList.Refresh();
+                }
+
                 if (Operate.PacketConfig.List.AutoRoll)
                 {
                     tPacketList.ScrollBar.ValueY = tPacketList.ScrollBar.MaxY;
@@ -1292,29 +1298,6 @@ namespace WinsockPacketEditor
                         this.CleanUp_HexBox();
                     }
                 }
-
-                if (Operate.LogConfig.List.AutoRoll)
-                {
-                    this.cLogList.ScrollToBottom();
-                }
-
-                if (Operate.LogConfig.List.AutoClear)
-                {
-                    if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                    {
-                        this.cLogList.CleanUp_SystemLog();
-                    }
-
-                    if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                    {
-                        this.cLogList.CleanUp_FilterLog();
-                    }
-
-                    if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                    {
-                        this.cLogList.CleanUp_ProxyLog();
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -1322,10 +1305,30 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void bgwPacketList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        #endregion
+
+        #region//显示注入信息
+
+        private void ShowInjectInfo()
         {
-            this.tPacketList.Refresh();
-            this.cLogList.RefreshLogList();
+            this.lTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
+            this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
+            this.lQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
+            this.lFilterPacket_CNT.Text = Operate.PacketConfig.Packet.FilterPacket_CNT.ToString();
+            this.lSend_CNT.Text = Operate.PacketConfig.Packet.Send_CNT.ToString();
+            this.lRecv_CNT.Text = Operate.PacketConfig.Packet.Recv_CNT.ToString();
+            this.lSendTo_CNT.Text = Operate.PacketConfig.Packet.SendTo_CNT.ToString();
+            this.lRecvFrom_CNT.Text = Operate.PacketConfig.Packet.RecvFrom_CNT.ToString();
+            this.lWSASend_CNT.Text = Operate.PacketConfig.Packet.WSASend_CNT.ToString();
+            this.lWSARecv_CNT.Text = Operate.PacketConfig.Packet.WSARecv_CNT.ToString();
+            this.lWSASendTo_CNT.Text = Operate.PacketConfig.Packet.WSASendTo_CNT.ToString();
+            this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Packet.WSARecvFrom_CNT.ToString();
+            this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
+            this.mInjectMode.Items[0].Badge = Operate.PacketConfig.List.lstPacketInfo.Count.ToString();
+            this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
+            this.mInjectMode.Items[2].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
+            this.mInjectMode.Items[3].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
+            this.mInjectMode.Items[9].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
         }
 
         #endregion

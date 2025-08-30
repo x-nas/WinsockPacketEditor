@@ -215,8 +215,12 @@ namespace WinsockPacketEditor
             }
         }
 
+        #endregion
+
+        #region//显示账号列表
+
         public void RefreshAccountList()
-        {            
+        {
             this.tAccountList.Binding(GetPageData(this.pAccountList.Current, this.pAccountList.PageSize));
         }
 
@@ -471,7 +475,8 @@ namespace WinsockPacketEditor
             if (Operate.ProxyConfig.Account.NeedSave && !this.bgwAccountList.IsBusy)
             {
                 Operate.ProxyConfig.Account.NeedSave = false;
-                this.bgwAccountList.RunWorkerAsync();
+                Operate.ProxyConfig.Account.SaveAccountList_ToDB();
+                //this.bgwAccountList.RunWorkerAsync();
             }
         }
 

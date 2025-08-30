@@ -22,13 +22,13 @@ namespace WinsockPacketEditor
         {
             this.tabLogList.SelectTab(0);
 
-            this.InitTable_LogList();
+            this.InitTable_SystemLogList();
             this.InitTable_FilterLogList();
             this.InitTable_ProxyLog();
             this.Dark_Changed();
         }
 
-        private void InitTable_LogList()
+        private void InitTable_SystemLogList()
         {
             tSystemLog.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
@@ -176,14 +176,55 @@ namespace WinsockPacketEditor
 
         public void RefreshLogList()
         {
-            this.tSystemLog.Refresh();
-            this.tFilterLog.Refresh();
-            this.tProxyLog.Refresh();
-        }
+            if (tSystemLog.InvokeRequired)
+            {
+                tSystemLog.BeginInvoke(new Action(() => this.tSystemLog.Refresh()));
+            }
+            else
+            {
+                this.tSystemLog.Refresh();
+            }
 
-        public void ScrollToBottom()
-        {
-            tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
+            if (tFilterLog.InvokeRequired)
+            {
+                tFilterLog.BeginInvoke(new Action(() => this.tFilterLog.Refresh()));
+            }
+            else
+            {
+                this.tFilterLog.Refresh();
+            }
+
+            if (tProxyLog.InvokeRequired)
+            {
+                tProxyLog.BeginInvoke(new Action(() => this.tProxyLog.Refresh()));
+            }
+            else
+            {
+                this.tProxyLog.Refresh();
+            }
+
+            if (Operate.LogConfig.List.AutoRoll)
+            {
+                tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
+            }
+
+            if (Operate.LogConfig.List.AutoClear)
+            {
+                if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                {
+                    this.CleanUp_SystemLog();
+                }
+
+                if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                {
+                    this.CleanUp_FilterLog();
+                }
+
+                if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                {
+                    this.CleanUp_ProxyLog();
+                }
+            }
         }
 
         public void CleanUp_SystemLog()
