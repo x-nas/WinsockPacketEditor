@@ -97,6 +97,8 @@
             this.colorTheme.Location = new System.Drawing.Point(1068, 0);
             this.colorTheme.Name = "colorTheme";
             this.colorTheme.Padding = new System.Windows.Forms.Padding(5);
+            this.colorTheme.ShowClose = true;
+            this.colorTheme.ShowReset = true;
             this.colorTheme.Size = new System.Drawing.Size(40, 40);
             this.colorTheme.TabIndex = 13;
             this.colorTheme.Value = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
