@@ -2150,10 +2150,10 @@ namespace WinsockPacketEditor
                     return "Digit";
 
                 case "FilterEditForm.NoModifyNoDisplay":
-                    return "NoDisplay";
+                    return "NoMod - NoDisp";
 
                 case "FilterEditForm.NoModifyDisplay":
-                    return "Display";
+                    return "NoMod - Disp";
 
                 case "FilterEditForm.LoadComplete":
                     return "Loading Complete";

@@ -93,6 +93,7 @@
             this.dKeyCombination = new AntdUI.Divider();
             this.tlpKeyCombination2 = new System.Windows.Forms.TableLayoutPanel();
             this.bInsert_KeyCombination = new AntdUI.Button();
+            this.txtKeyCombination = new WinsockPacketEditor.HotkeyTextBox();
             this.pKeyBoard = new AntdUI.Panel();
             this.tlpKey = new System.Windows.Forms.TableLayoutPanel();
             this.tlpKey2 = new System.Windows.Forms.TableLayoutPanel();
@@ -133,7 +134,6 @@
             this.tRobotInstruction = new AntdUI.Table();
             this.txtINSTLog = new AntdUI.Input();
             this.txtRobotName = new AntdUI.Input();
-            this.txtKeyCombination = new WinsockPacketEditor.HotkeyTextBox();
             this.tlpRobotEdit.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpRobotINST.SuspendLayout();
@@ -195,7 +195,7 @@
             this.tlpRobotEdit.RowCount = 2;
             this.tlpRobotEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRobotEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpRobotEdit.Size = new System.Drawing.Size(1000, 700);
+            this.tlpRobotEdit.Size = new System.Drawing.Size(1100, 700);
             this.tlpRobotEdit.TabIndex = 1;
             // 
             // tlpButton
@@ -222,7 +222,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(1000, 60);
+            this.tlpButton.Size = new System.Drawing.Size(1100, 60);
             this.tlpButton.TabIndex = 11;
             // 
             // bStop
@@ -237,7 +237,7 @@
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
             this.bStop.LocalizationText = "Stop";
-            this.bStop.Location = new System.Drawing.Point(373, 7);
+            this.bStop.Location = new System.Drawing.Point(423, 7);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(114, 46);
             this.bStop.TabIndex = 3;
@@ -256,7 +256,7 @@
             this.bExecute.LoadingWaveValue = 0.6F;
             this.bExecute.LoadingWaveVertical = true;
             this.bExecute.LocalizationText = "Execute";
-            this.bExecute.Location = new System.Drawing.Point(233, 7);
+            this.bExecute.Location = new System.Drawing.Point(283, 7);
             this.bExecute.Name = "bExecute";
             this.bExecute.Size = new System.Drawing.Size(114, 46);
             this.bExecute.TabIndex = 2;
@@ -275,7 +275,7 @@
             this.bSave.LoadingWaveValue = 0.6F;
             this.bSave.LoadingWaveVertical = true;
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(513, 7);
+            this.bSave.Location = new System.Drawing.Point(563, 7);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(114, 46);
             this.bSave.TabIndex = 0;
@@ -289,7 +289,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(653, 7);
+            this.bExit.Location = new System.Drawing.Point(703, 7);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(114, 46);
             this.bExit.TabIndex = 1;
@@ -313,7 +313,7 @@
             this.tlpRobotINST.RowCount = 2;
             this.tlpRobotINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRobotINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpRobotINST.Size = new System.Drawing.Size(1000, 640);
+            this.tlpRobotINST.Size = new System.Drawing.Size(1100, 640);
             this.tlpRobotINST.TabIndex = 0;
             // 
             // cRobotINST
@@ -330,7 +330,7 @@
             this.cRobotINST.Items.Add(this.ciMouseINST);
             this.cRobotINST.Location = new System.Drawing.Point(3, 3);
             this.cRobotINST.Name = "cRobotINST";
-            this.cRobotINST.Size = new System.Drawing.Size(494, 584);
+            this.cRobotINST.Size = new System.Drawing.Size(544, 584);
             this.cRobotINST.TabIndex = 9;
             this.cRobotINST.Unique = true;
             this.cRobotINST.UniqueFull = true;
@@ -343,7 +343,7 @@
             this.ciPacketINST.LocalizationText = "RobotEditForm.{id}";
             this.ciPacketINST.Location = new System.Drawing.Point(11, 57);
             this.ciPacketINST.Name = "ciPacketINST";
-            this.ciPacketINST.Size = new System.Drawing.Size(472, 369);
+            this.ciPacketINST.Size = new System.Drawing.Size(522, 369);
             this.ciPacketINST.TabIndex = 0;
             this.ciPacketINST.Text = "封包指令";
             // 
@@ -362,7 +362,7 @@
             this.tlpPacketINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tlpPacketINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tlpPacketINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketINST.Size = new System.Drawing.Size(472, 369);
+            this.tlpPacketINST.Size = new System.Drawing.Size(522, 369);
             this.tlpPacketINST.TabIndex = 0;
             // 
             // pSYSSocket
@@ -373,7 +373,7 @@
             this.pSYSSocket.Location = new System.Drawing.Point(3, 183);
             this.pSYSSocket.Name = "pSYSSocket";
             this.pSYSSocket.Radius = 10;
-            this.pSYSSocket.Size = new System.Drawing.Size(466, 183);
+            this.pSYSSocket.Size = new System.Drawing.Size(516, 183);
             this.pSYSSocket.TabIndex = 13;
             // 
             // tlpSYSSocket2
@@ -391,7 +391,7 @@
             this.tlpSYSSocket2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSYSSocket2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSYSSocket2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSYSSocket2.Size = new System.Drawing.Size(462, 179);
+            this.tlpSYSSocket2.Size = new System.Drawing.Size(512, 179);
             this.tlpSYSSocket2.TabIndex = 0;
             // 
             // tlpSYSSocket
@@ -416,7 +416,7 @@
             this.tlpSYSSocket.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tlpSYSSocket.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tlpSYSSocket.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSYSSocket.Size = new System.Drawing.Size(462, 135);
+            this.tlpSYSSocket.Size = new System.Drawing.Size(512, 135);
             this.tlpSYSSocket.TabIndex = 3;
             // 
             // lSelectFilter
@@ -425,7 +425,7 @@
             this.lSelectFilter.LocalizationText = "RobotEditForm.PacketINST.SetSSocket.Filter";
             this.lSelectFilter.Location = new System.Drawing.Point(57, 51);
             this.lSelectFilter.Name = "lSelectFilter";
-            this.lSelectFilter.Size = new System.Drawing.Size(354, 39);
+            this.lSelectFilter.Size = new System.Drawing.Size(404, 39);
             this.lSelectFilter.TabIndex = 7;
             this.lSelectFilter.Text = "调用滤镜的套接字";
             // 
@@ -454,7 +454,7 @@
             this.bInsert_SYSSocket.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_SYSSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_SYSSocket.IconSvg = "ArrowRightOutlined";
-            this.bInsert_SYSSocket.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_SYSSocket.Location = new System.Drawing.Point(467, 3);
             this.bInsert_SYSSocket.Name = "bInsert_SYSSocket";
             this.bInsert_SYSSocket.Size = new System.Drawing.Size(42, 42);
             this.bInsert_SYSSocket.TabIndex = 1;
@@ -478,7 +478,7 @@
             this.lSelectPacket.LocalizationText = "RobotEditForm.PacketINST.SetSSocket.Select";
             this.lSelectPacket.Location = new System.Drawing.Point(57, 3);
             this.lSelectPacket.Name = "lSelectPacket";
-            this.lSelectPacket.Size = new System.Drawing.Size(354, 42);
+            this.lSelectPacket.Size = new System.Drawing.Size(404, 42);
             this.lSelectPacket.TabIndex = 6;
             this.lSelectPacket.Text = "选中封包的套接字";
             // 
@@ -492,7 +492,7 @@
             0,
             0});
             this.nudSelectSocket.Name = "nudSelectSocket";
-            this.nudSelectSocket.Size = new System.Drawing.Size(354, 39);
+            this.nudSelectSocket.Size = new System.Drawing.Size(404, 39);
             this.nudSelectSocket.TabIndex = 8;
             this.nudSelectSocket.Text = "0";
             // 
@@ -504,7 +504,7 @@
             this.dSYSSocket.Location = new System.Drawing.Point(3, 3);
             this.dSYSSocket.Name = "dSYSSocket";
             this.dSYSSocket.Orientation = AntdUI.TOrientation.Left;
-            this.dSYSSocket.Size = new System.Drawing.Size(456, 25);
+            this.dSYSSocket.Size = new System.Drawing.Size(506, 25);
             this.dSYSSocket.TabIndex = 0;
             this.dSYSSocket.Text = "设置 - 系统套接字";
             // 
@@ -516,7 +516,7 @@
             this.pPacketList.Location = new System.Drawing.Point(3, 93);
             this.pPacketList.Name = "pPacketList";
             this.pPacketList.Radius = 10;
-            this.pPacketList.Size = new System.Drawing.Size(466, 84);
+            this.pPacketList.Size = new System.Drawing.Size(516, 84);
             this.pPacketList.TabIndex = 12;
             // 
             // tlpPacketList2
@@ -534,7 +534,7 @@
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketList2.Size = new System.Drawing.Size(462, 80);
+            this.tlpPacketList2.Size = new System.Drawing.Size(512, 80);
             this.tlpPacketList2.TabIndex = 0;
             // 
             // tlpPacketList
@@ -550,7 +550,7 @@
             this.tlpPacketList.Name = "tlpPacketList";
             this.tlpPacketList.RowCount = 1;
             this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketList.Size = new System.Drawing.Size(462, 45);
+            this.tlpPacketList.Size = new System.Drawing.Size(512, 45);
             this.tlpPacketList.TabIndex = 2;
             // 
             // bInsert_PacketList
@@ -558,7 +558,7 @@
             this.bInsert_PacketList.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_PacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_PacketList.IconSvg = "ArrowRightOutlined";
-            this.bInsert_PacketList.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_PacketList.Location = new System.Drawing.Point(467, 3);
             this.bInsert_PacketList.Name = "bInsert_PacketList";
             this.bInsert_PacketList.Size = new System.Drawing.Size(42, 42);
             this.bInsert_PacketList.TabIndex = 1;
@@ -573,7 +573,7 @@
             this.lPacketList.Location = new System.Drawing.Point(3, 3);
             this.lPacketList.Name = "lPacketList";
             this.lPacketList.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lPacketList.Size = new System.Drawing.Size(408, 39);
+            this.lPacketList.Size = new System.Drawing.Size(458, 39);
             this.lPacketList.TabIndex = 2;
             this.lPacketList.Text = "封包列表中选中的封包";
             // 
@@ -585,7 +585,7 @@
             this.dPacketList.Location = new System.Drawing.Point(3, 3);
             this.dPacketList.Name = "dPacketList";
             this.dPacketList.Orientation = AntdUI.TOrientation.Left;
-            this.dPacketList.Size = new System.Drawing.Size(456, 25);
+            this.dPacketList.Size = new System.Drawing.Size(506, 25);
             this.dPacketList.TabIndex = 0;
             this.dPacketList.Text = "发送 - 封包列表";
             // 
@@ -597,7 +597,7 @@
             this.pSendList.Location = new System.Drawing.Point(3, 3);
             this.pSendList.Name = "pSendList";
             this.pSendList.Radius = 10;
-            this.pSendList.Size = new System.Drawing.Size(466, 84);
+            this.pSendList.Size = new System.Drawing.Size(516, 84);
             this.pSendList.TabIndex = 11;
             // 
             // tlpSendList2
@@ -615,7 +615,7 @@
             this.tlpSendList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendList2.Size = new System.Drawing.Size(462, 80);
+            this.tlpSendList2.Size = new System.Drawing.Size(512, 80);
             this.tlpSendList2.TabIndex = 0;
             // 
             // dSendList
@@ -626,7 +626,7 @@
             this.dSendList.Location = new System.Drawing.Point(3, 3);
             this.dSendList.Name = "dSendList";
             this.dSendList.Orientation = AntdUI.TOrientation.Left;
-            this.dSendList.Size = new System.Drawing.Size(456, 25);
+            this.dSendList.Size = new System.Drawing.Size(506, 25);
             this.dSendList.TabIndex = 0;
             this.dSendList.Text = "发送 - 发送列表";
             // 
@@ -643,7 +643,7 @@
             this.tlpSendList.Name = "tlpSendList";
             this.tlpSendList.RowCount = 1;
             this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendList.Size = new System.Drawing.Size(462, 45);
+            this.tlpSendList.Size = new System.Drawing.Size(512, 45);
             this.tlpSendList.TabIndex = 1;
             // 
             // ddlSendList
@@ -654,7 +654,7 @@
             this.ddlSendList.Location = new System.Drawing.Point(3, 3);
             this.ddlSendList.Name = "ddlSendList";
             this.ddlSendList.PlaceholderText = "请选择";
-            this.ddlSendList.Size = new System.Drawing.Size(408, 39);
+            this.ddlSendList.Size = new System.Drawing.Size(458, 39);
             this.ddlSendList.TabIndex = 0;
             // 
             // bInsert_SendList
@@ -662,7 +662,7 @@
             this.bInsert_SendList.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_SendList.IconSvg = "ArrowRightOutlined";
-            this.bInsert_SendList.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_SendList.Location = new System.Drawing.Point(467, 3);
             this.bInsert_SendList.Name = "bInsert_SendList";
             this.bInsert_SendList.Size = new System.Drawing.Size(42, 42);
             this.bInsert_SendList.TabIndex = 1;
@@ -1151,6 +1151,20 @@
             this.bInsert_KeyCombination.TabIndex = 1;
             this.bInsert_KeyCombination.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_KeyCombination.Click += new System.EventHandler(this.bInsert_KeyCombination_Click);
+            // 
+            // txtKeyCombination
+            // 
+            this.txtKeyCombination.BackColor = System.Drawing.SystemColors.Window;
+            this.txtKeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtKeyCombination.ForeColor = System.Drawing.Color.Black;
+            this.txtKeyCombination.LocalizationPlaceholderText = "PressCombinationkey";
+            this.txtKeyCombination.Location = new System.Drawing.Point(3, 3);
+            this.txtKeyCombination.Name = "txtKeyCombination";
+            this.txtKeyCombination.PlaceholderText = "请组合按键";
+            this.txtKeyCombination.ReadOnly = true;
+            this.txtKeyCombination.Size = new System.Drawing.Size(408, 42);
+            this.txtKeyCombination.TabIndex = 2;
+            this.txtKeyCombination.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // pKeyBoard
             // 
@@ -1678,10 +1692,10 @@
             this.pRobotINST.Controls.Add(this.tRobotInstruction);
             this.pRobotINST.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pRobotINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.pRobotINST.Location = new System.Drawing.Point(503, 3);
+            this.pRobotINST.Location = new System.Drawing.Point(553, 3);
             this.pRobotINST.Name = "pRobotINST";
             this.pRobotINST.Padding = new System.Windows.Forms.Padding(3);
-            this.pRobotINST.Size = new System.Drawing.Size(494, 584);
+            this.pRobotINST.Size = new System.Drawing.Size(544, 584);
             this.pRobotINST.TabIndex = 8;
             this.pRobotINST.Text = "panel1";
             // 
@@ -1696,7 +1710,7 @@
             this.tRobotInstruction.Gaps = new System.Drawing.Size(8, 8);
             this.tRobotInstruction.Location = new System.Drawing.Point(4, 4);
             this.tRobotInstruction.Name = "tRobotInstruction";
-            this.tRobotInstruction.Size = new System.Drawing.Size(486, 576);
+            this.tRobotInstruction.Size = new System.Drawing.Size(536, 576);
             this.tRobotInstruction.TabIndex = 3;
             this.tRobotInstruction.VisibleHeader = false;
             this.tRobotInstruction.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotINST_CellClick);
@@ -1706,12 +1720,12 @@
             this.txtINSTLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtINSTLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             this.txtINSTLog.LocalizationPrefixText = "RobotEditForm.Record";
-            this.txtINSTLog.Location = new System.Drawing.Point(503, 593);
+            this.txtINSTLog.Location = new System.Drawing.Point(553, 593);
             this.txtINSTLog.Name = "txtINSTLog";
             this.txtINSTLog.PlaceholderText = "";
             this.txtINSTLog.PrefixText = "运行记录:";
             this.txtINSTLog.ReadOnly = true;
-            this.txtINSTLog.Size = new System.Drawing.Size(494, 44);
+            this.txtINSTLog.Size = new System.Drawing.Size(544, 44);
             this.txtINSTLog.TabIndex = 7;
             this.txtINSTLog.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -1724,23 +1738,9 @@
             this.txtRobotName.Name = "txtRobotName";
             this.txtRobotName.PlaceholderText = "请输入字符";
             this.txtRobotName.PrefixText = "机器人名称:";
-            this.txtRobotName.Size = new System.Drawing.Size(494, 44);
+            this.txtRobotName.Size = new System.Drawing.Size(544, 44);
             this.txtRobotName.TabIndex = 6;
             this.txtRobotName.TextChanged += new System.EventHandler(this.txtRobotName_TextChanged);
-            // 
-            // txtKeyCombination
-            // 
-            this.txtKeyCombination.BackColor = System.Drawing.SystemColors.Window;
-            this.txtKeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtKeyCombination.ForeColor = System.Drawing.Color.Black;
-            this.txtKeyCombination.LocalizationPlaceholderText = "PressCombinationkey";
-            this.txtKeyCombination.Location = new System.Drawing.Point(3, 3);
-            this.txtKeyCombination.Name = "txtKeyCombination";
-            this.txtKeyCombination.PlaceholderText = "请组合按键";
-            this.txtKeyCombination.ReadOnly = true;
-            this.txtKeyCombination.Size = new System.Drawing.Size(408, 42);
-            this.txtKeyCombination.TabIndex = 2;
-            this.txtKeyCombination.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // RobotEdit
             // 
@@ -1751,7 +1751,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "RobotEdit";
-            this.Size = new System.Drawing.Size(1000, 700);
+            this.Size = new System.Drawing.Size(1100, 700);
             this.Load += new System.EventHandler(this.RobotEdit_Load);
             this.tlpRobotEdit.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
