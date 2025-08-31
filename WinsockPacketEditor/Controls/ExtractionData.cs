@@ -1,6 +1,7 @@
 ﻿using AntdUI;
 using System;
-using System.Drawing;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -34,13 +35,17 @@ namespace WinsockPacketEditor
             this.ddlExtraction.Items.Clear();
             this.ddlExtraction.Items.AddRange(new AntdUI.SelectItem[]
             {
-                    new AntdUI.SelectItem("[ Charles XML 会话文件（.chlsx）] 提取 [ 十六进制数据 ]")
+                    new AntdUI.SelectItem("[ Charles XML 会话文件（.chlsx）] 提取到 [ 十六进制数据 ]")
                     {
                         LocalizationText = "ExtractionData.Chlsx",
                     },
-                    new AntdUI.SelectItem("[ FILT过滤器文件（.filt）] 提取 [ WPE64 滤镜文件（.sp）]")
+                    new AntdUI.SelectItem("[ FILT过滤器文件（.filt）] 提取到 [ WPE64 滤镜文件（.sp）]")
                     {
                         LocalizationText = "ExtractionData.Filt",
+                    },
+                    new AntdUI.SelectItem("[ WPE帐号文件（.pa）] 提取到 [ CCProxy帐号文件（.ini）]")
+                    {
+                        LocalizationText = "ExtractionData.Pa",
                     },
             });
 
@@ -86,6 +91,10 @@ namespace WinsockPacketEditor
             else if (this.ddlExtraction.SelectedIndex == 1)
             {
                 this.udExtraction.Filter = "FILT（*.filt）|*.filt";
+            }
+            else if (this.ddlExtraction.SelectedIndex == 2)
+            {
+                this.udExtraction.Filter = "WPE x64（*.pa）|*.pa";
             }
         }
 
@@ -327,6 +336,66 @@ namespace WinsockPacketEditor
                                 #endregion
 
                                 break;
+
+                            case 2:
+
+                                #region//WPE 账号文件
+
+                                XDocument xdoc = new XDocument();
+                                xdoc = XDocument.Load(FilePath);
+
+                                if (xdoc != null)
+                                {
+                                    List<AccountInfo> lstAccount = LoadAccountList_FromXDocument(xdoc);
+
+                                    if (lstAccount.Count > 0)
+                                    {
+                                        StringBuilder sb = new StringBuilder();
+
+                                        sb.AppendLine("[System]");
+                                        sb.AppendLine("UserCount=" + lstAccount.Count);
+                                        sb.AppendLine("AuthModel=1");
+                                        sb.AppendLine("AuthType=2");
+                                        sb.AppendLine("WebFilterCount=0");
+                                        sb.AppendLine("TimeScheduleCount=0");
+
+                                        for (int i = 0; i < lstAccount.Count; i++)
+                                        {
+                                            sb.AppendLine("[User" + (i + 1).ToString("D3") + "]");
+
+                                            sb.AppendLine("UserName=" + lstAccount[i].UserName);
+                                            sb.AppendLine("Password=" + lstAccount[i].Password);
+                                            sb.AppendLine("MACAddress=");
+                                            sb.AppendLine("IPAddressLow=255.255.255.255");
+                                            sb.AppendLine("IPAddressHigh=255.255.255.255");
+                                            sb.AppendLine("ServiceMask=254");
+                                            sb.AppendLine("MaxConn=-1");
+                                            sb.AppendLine("BandWidth=-1");
+                                            sb.AppendLine("BandWidth2=-1");
+                                            sb.AppendLine("WebFilter=-1");
+                                            sb.AppendLine("TimeSchedule=-1");
+                                            sb.AppendLine("EnableUserPassword=1");
+                                            sb.AppendLine("EnableIPAddress=0");
+                                            sb.AppendLine("EnableMACAddress=0");
+                                            sb.AppendLine("Enable=" + Convert.ToInt32(lstAccount[i].IsEnable));
+                                            sb.AppendLine("BelongsGroup=0");
+                                            sb.AppendLine("BelongsGroupName=");
+                                            sb.AppendLine("IsGroup=0");
+                                            sb.AppendLine("AutoDisable=" + Convert.ToInt32(lstAccount[i].IsExpiry));
+                                            sb.AppendLine("DisableDateTime=" + lstAccount[i].ExpiryTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                                            sb.AppendLine("EnableLeftTime=0");
+                                            sb.AppendLine("EnableBandwidthQuota=0");
+                                            sb.AppendLine("BandwidthQuota=0");
+                                            sb.AppendLine("BandwidthQuotaPeriod=1");
+                                        }
+
+                                        this.txtExtraction.Text = sb.ToString().Trim();
+                                    }
+                                }
+
+                                #endregion
+
+                                break;
                         }
                     }
                 }
@@ -335,6 +404,129 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        private List<AccountInfo> LoadAccountList_FromXDocument(XDocument xdoc)
+        {
+            List<AccountInfo> lstAccount = new List<AccountInfo>();
+
+            try
+            {
+                foreach (XElement xeProxyAccount in xdoc.Root.Elements())
+                {
+                    bool IsEnable = false;
+                    if (xeProxyAccount.Element("IsEnable") != null)
+                    {
+                        IsEnable = bool.Parse(xeProxyAccount.Element("IsEnable").Value);
+                    }
+
+                    Guid AID = Guid.NewGuid();
+
+                    string UserName = string.Empty;
+                    if (xeProxyAccount.Element("UserName") != null)
+                    {
+                        UserName = xeProxyAccount.Element("UserName").Value;
+                    }
+
+                    string PassWord = string.Empty;
+                    if (xeProxyAccount.Element("PassWord") != null)
+                    {
+                        PassWord = xeProxyAccount.Element("PassWord").Value;
+                    }
+
+                    bool IsOnLine = false;
+                    if (xeProxyAccount.Element("IsOnLine") != null)
+                    {
+                        IsOnLine = bool.Parse(xeProxyAccount.Element("IsOnLine").Value);
+                    }
+
+                    bool IsLimitLinks = false;
+                    if (xeProxyAccount.Element("IsLimitLinks") != null)
+                    {
+                        IsLimitLinks = bool.Parse(xeProxyAccount.Element("IsLimitLinks").Value);
+                    }
+
+                    int LimitLinks = 1;
+                    if (xeProxyAccount.Element("LimitLinks") != null)
+                    {
+                        LimitLinks = int.Parse(xeProxyAccount.Element("LimitLinks").Value);
+                    }
+
+                    bool IsLimitDevices = true;
+                    if (xeProxyAccount.Element("IsLimitDevices") != null)
+                    {
+                        IsLimitDevices = bool.Parse(xeProxyAccount.Element("IsLimitDevices").Value);
+                    }
+
+                    int LimitDevices = 1;
+                    if (xeProxyAccount.Element("LimitDevices") != null)
+                    {
+                        LimitDevices = int.Parse(xeProxyAccount.Element("LimitDevices").Value);
+                    }
+
+                    bool IsExpiry = false;
+                    if (xeProxyAccount.Element("IsExpiry") != null)
+                    {
+                        IsExpiry = bool.Parse(xeProxyAccount.Element("IsExpiry").Value);
+                    }
+
+                    DateTime ExpiryTime = DateTime.Now;
+                    if (xeProxyAccount.Element("ExpiryTime") != null)
+                    {
+                        ExpiryTime = DateTime.Parse(xeProxyAccount.Element("ExpiryTime").Value);
+                    }
+
+                    DateTime CreateTime = DateTime.Now;
+                    if (xeProxyAccount.Element("CreateTime") != null)
+                    {
+                        CreateTime = DateTime.Parse(xeProxyAccount.Element("CreateTime").Value);
+                    }
+
+                    BindingList<AccountIPInfo> AIPInfo = new BindingList<AccountIPInfo>();
+
+                    if (xeProxyAccount.Element("AccountIPInfo") != null)
+                    {
+                        foreach (XElement xeIPInfo in xeProxyAccount.Element("AccountIPInfo").Elements())
+                        {
+                            DateTime LoginTime = DateTime.MinValue;
+                            if (xeIPInfo.Element("LoginTime") != null)
+                            {
+                                LoginTime = DateTime.Parse(xeIPInfo.Element("LoginTime").Value);
+                            }
+
+                            string LoginIP = string.Empty;
+                            if (xeIPInfo.Element("LoginIP") != null)
+                            {
+                                LoginIP = xeIPInfo.Element("LoginIP").Value;
+                            }
+
+                            Operate.ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP);
+                        }
+                    }
+
+                    AccountInfo ai = new AccountInfo(
+                        AID,
+                        IsEnable,
+                        UserName,
+                        PassWord,
+                        AIPInfo,
+                        IsLimitLinks,
+                        LimitLinks,
+                        IsLimitDevices,
+                        LimitDevices,
+                        IsExpiry,
+                        ExpiryTime,
+                        CreateTime);
+
+                    lstAccount.Add(ai);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return lstAccount;
         }
 
         private void bExtraction_Click(object sender, EventArgs e)
@@ -357,15 +549,16 @@ namespace WinsockPacketEditor
                 switch (this.ddlExtraction.SelectedIndex)
                 {
                     case 0:
-
                         sfdExtraction.Filter = "TXT（*.txt）|*.txt";
-
                         break;
 
                     case 1:
-
                         sfdExtraction.Filter = AntdUI.Localization.Get("ExtractionData.FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
+                        break;
 
+                    case 2:
+                        sfdExtraction.Filter = "CCProxy（*.ini）|*.ini";
+                        sfdExtraction.FileName = "AccInfo";
                         break;
                 }
 

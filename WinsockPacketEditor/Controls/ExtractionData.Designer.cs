@@ -180,6 +180,7 @@
             // 
             // txtExtraction
             // 
+            this.txtExtraction.AutoScroll = true;
             this.txtExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtExtraction.Location = new System.Drawing.Point(0, 0);
             this.txtExtraction.Margin = new System.Windows.Forms.Padding(0);

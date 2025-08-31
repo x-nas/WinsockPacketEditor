@@ -1382,10 +1382,13 @@ namespace WinsockPacketEditor
                     return "After extraction, Click the Extraction button to export the corresponding format of the data file";
 
                 case "ExtractionData.Chlsx":
-                    return "[ Charles XML session file（.chlsx）] Extraction [ HEX Data ]";
+                    return "[ Charles XML session file（.chlsx）] Extraction To [ HEX Data ]";
 
                 case "ExtractionData.Filt":
-                    return "[ FILT Filter file（.filt）] Extraction [ WPE64 Filter file（.sp）]";
+                    return "[ FILT Filter file（.filt）] Extraction To [ WPE64 Filter file（.sp）]";
+
+                case "ExtractionData.Pa":
+                    return "[ WPE Account File（.pa）] Extraction To [ CCProxy Account File（.ini）]";
 
                 case "ExtractionData.Empty":
                     return "Extract data is empty";
