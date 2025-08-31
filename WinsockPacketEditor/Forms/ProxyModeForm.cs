@@ -55,12 +55,12 @@ namespace WinsockPacketEditor
             });
 
             Operate.SystemConfig.MainHandle = this.Handle;
-
-            this.Dark_Changed();
+            
             this.InitForm();
             this.InitControls();
             this.InitHotKeys();
-            
+            this.Dark_Changed();
+
             this.tabProxyMode.TabMenuVisible = false;            
             this.mProxyMode.SelectIndex(0, true);
         }
@@ -324,6 +324,7 @@ namespace WinsockPacketEditor
                 this.tabProxyMode.BackColor = Color.White;
             }
 
+            this.cProxyList?.Dark_Changed();
             this.cAccountList?.Dark_Changed();
             this.cClientList?.Dark_Changed();
             this.cFilterList?.Dark_Changed();

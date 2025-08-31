@@ -871,7 +871,7 @@ namespace WinsockPacketEditor
                     return "Stop SOCKS5 Proxy";
 
                 case "ProxyModeForm.ProxyServerIP":
-                    return "Proxy Server IP: TCP [{0}] UDP [{1}]";
+                    return "Proxy Server IP : TCP [ {0} ] UDP [ {1} ]";
 
                 case "ProxyModeForm.ProxyServer.Auth":
                     return "Proxy service authentication enabled";
@@ -1006,10 +1006,10 @@ namespace WinsockPacketEditor
                     return "Data";
 
                 case "ProxyModeForm.ProxyBytesInfo":
-                    return "Request : {0}  Response : {1}";
+                    return "Request : {0} Response : {1}";
 
                 case "ProxyModeForm.ProxySpeedInfo":
-                    return "UpLink : {0} KB/s  DownLink : {1} KB/s";
+                    return "UpLink : {0} KB/s DownLink : {1} KB/s";
 
                 #endregion                
 

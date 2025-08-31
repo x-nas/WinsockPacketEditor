@@ -291,6 +291,7 @@ namespace WinsockPacketEditor
                 this.tabInjectMode.BackColor = Color.White;
             }
 
+            this.cPacketList?.Dark_Changed();
             this.cFilterList?.Dark_Changed();
             this.cSendList?.Dark_Changed();
             this.cRobotList?.Dark_Changed();

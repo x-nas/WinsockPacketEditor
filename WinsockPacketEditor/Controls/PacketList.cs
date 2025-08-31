@@ -38,14 +38,14 @@ namespace WinsockPacketEditor
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
         }
 
-        private void Dark_Changed()
+        public void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
             {
                 this.tPacketList.BackColor = Operate.SystemConfig.Color_40;
                 this.tPacketList.ColumnBack = Operate.SystemConfig.Color_40;
                 this.tPacketList.ColumnFore = Color.Silver;
-                this.tPacketList.ForeColor = Color.Lime;
+                this.tPacketList.ForeColor = Color.LimeGreen;
 
                 this.pPacketData.Back = Operate.SystemConfig.Color_40;
                 this.hbPacketData.BackColor = Operate.SystemConfig.Color_40;

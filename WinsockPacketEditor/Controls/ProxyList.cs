@@ -35,14 +35,14 @@ namespace WinsockPacketEditor
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, Operate.ProcessConfig.GetInjectProcessName());
         }
 
-        private void Dark_Changed()
+        public void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
             {
                 this.tProxyList.BackColor = Operate.SystemConfig.Color_40;
                 this.tProxyList.ColumnBack = Operate.SystemConfig.Color_40;
                 this.tProxyList.ColumnFore = Color.Silver;
-                this.tProxyList.ForeColor = Color.Lime;
+                this.tProxyList.ForeColor = Color.LimeGreen;
 
                 this.pPacketData.Back = Operate.SystemConfig.Color_40;
                 this.hbProxyData.BackColor = Operate.SystemConfig.Color_40;
@@ -782,7 +782,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址: TCP [{0}] UDP [{1}]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
+                string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址 : TCP [ {0} ] UDP [ {1} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);
 
                 if (Operate.ProxyConfig.Proxy.Enable_Auth)
