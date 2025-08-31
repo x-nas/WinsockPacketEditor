@@ -14687,12 +14687,15 @@ namespace WinsockPacketEditor
                     {
                         if (SendListIndex > -1 && SendListIndex < SendConfig.List.lstSendInfo.Count)
                         {
-                            Guid SID = SendConfig.List.lstSendInfo[SendListIndex].SID;
+                            if (SendConfig.List.lstSendInfo[SendListIndex].IsEnable)
+                            {
+                                Guid SID = SendConfig.List.lstSendInfo[SendListIndex].SID;
 
-                            Task.Run(() => DoSendAsync(SID))
-                              .ConfigureAwait(false)
-                              .GetAwaiter()
-                              .GetResult();
+                                Task.Run(() => DoSendAsync(SID))
+                                  .ConfigureAwait(false)
+                                  .GetAwaiter()
+                                  .GetResult();
+                            }                            
                         }
                     }
                     catch (Exception ex)
@@ -14713,11 +14716,14 @@ namespace WinsockPacketEditor
 
                             if (si != null)
                             {
-                                if (si.SCollection.Count > 0)
+                                if (si.IsEnable)
                                 {
-                                    seReturn = new SendExecute();
-                                    await Task.Run(() => seReturn.StartSend(si));
-                                }
+                                    if (si.SCollection.Count > 0)
+                                    {
+                                        seReturn = new SendExecute();
+                                        await Task.Run(() => seReturn.StartSend(si));
+                                    }
+                                }                                
                             }
                         }
                     }
@@ -16726,8 +16732,11 @@ namespace WinsockPacketEditor
                     {
                         if (RobotListIndex > -1 && RobotListIndex < RobotConfig.List.lstRobotInfo.Count)
                         {
-                            Guid RID = RobotConfig.List.lstRobotInfo[RobotListIndex].RID;
-                            Task.Run(() => DoRobotAsync(RID, null)).GetAwaiter().GetResult();
+                            if (RobotConfig.List.lstRobotInfo[RobotListIndex].IsEnable)
+                            {
+                                Guid RID = RobotConfig.List.lstRobotInfo[RobotListIndex].RID;
+                                Task.Run(() => DoRobotAsync(RID, null)).GetAwaiter().GetResult();
+                            }                            
                         }
                     }
                     catch (Exception ex)
@@ -16748,11 +16757,14 @@ namespace WinsockPacketEditor
 
                             if (ri != null)
                             {
-                                if (ri.RInstruction.Count > 0)
+                                if (ri.IsEnable)
                                 {
-                                    reReturn = new RobotExecute();
-                                    await Task.Run(() => reReturn.StartRobot(ri, parameters));
-                                }
+                                    if (ri.RInstruction.Count > 0)
+                                    {
+                                        reReturn = new RobotExecute();
+                                        await Task.Run(() => reReturn.StartRobot(ri, parameters));
+                                    }
+                                }                                
                             }
                         }
                     }

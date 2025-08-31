@@ -91,11 +91,11 @@ namespace WinsockPacketEditor
                 {
                     int HOTKEY_ID = m.WParam.ToInt32();
 
-                    if (this.tabProxyMode.SelectedIndex == 3)
+                    if (this.tabProxyMode.SelectedIndex == 4)
                     {
                         Operate.SendConfig.Send.DoSend_ByHotKey(HOTKEY_ID);
                     }
-                    else if (this.tabProxyMode.SelectedIndex == 4)
+                    else if (this.tabProxyMode.SelectedIndex == 5)
                     {
                         Operate.RobotConfig.Robot.DoRobot_ByHotKey(HOTKEY_ID);
                     }
