@@ -59,17 +59,12 @@ namespace WinsockPacketEditor
                     break;
             }
 
-            this.lFAColor_Replace.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Replace;
-            this.lFAColor_Replace.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Replace;
-
-            this.lFAColor_Intercept.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept;
-            this.lFAColor_Intercept.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept;
-
-            this.lFAColor_Change.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Change;
-            this.lFAColor_Change.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Change;
-
-            this.lFAColor_Other.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Other;
-            this.lFAColor_Other.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Other;
+            this.cRepalce_ForeColor.Value = Operate.FilterConfig.Filter.FilterActionForeColor_Replace;
+            this.cRepalce_BackColor.Value = Operate.FilterConfig.Filter.FilterActionBackColor_Replace;
+            this.cIntercept_ForeColor.Value = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept;
+            this.cIntercept_BackColor.Value = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept;
+            this.cChange_ForeColor.Value = Operate.FilterConfig.Filter.FilterActionForeColor_Change;
+            this.cChange_BackColor.Value = Operate.FilterConfig.Filter.FilterActionBackColor_Change;
         }
 
         #endregion
@@ -114,6 +109,13 @@ namespace WinsockPacketEditor
 
                     break;
             }
+
+            Operate.FilterConfig.Filter.FilterActionForeColor_Replace = this.cRepalce_ForeColor.Value;
+            Operate.FilterConfig.Filter.FilterActionBackColor_Replace = this.cRepalce_BackColor.Value;
+            Operate.FilterConfig.Filter.FilterActionForeColor_Intercept = this.cIntercept_ForeColor.Value;
+            Operate.FilterConfig.Filter.FilterActionBackColor_Intercept = this.cIntercept_BackColor.Value;
+            Operate.FilterConfig.Filter.FilterActionForeColor_Change = this.cChange_ForeColor.Value;
+            Operate.FilterConfig.Filter.FilterActionBackColor_Change = this.cChange_BackColor.Value;
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统设置保存成功", TType.Success)
             {

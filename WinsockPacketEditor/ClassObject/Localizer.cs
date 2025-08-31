@@ -1912,6 +1912,12 @@ namespace WinsockPacketEditor
                 case "SystemSettingsForm.Success":
                     return "System settings saved successfully";
 
+                case "SystemSettingsForm.BackColor":
+                    return "Back Color";
+
+                case "SystemSettingsForm.ForeColor":
+                    return "Fore Color";
+
                 #endregion
 
                 #region//SearchPacketForm

@@ -11827,14 +11827,12 @@ namespace WinsockPacketEditor
                 public static long FilterNoDisplay_CNT = 0;
                 public static int FilterSize_MaxLen = 500;
                 public static FilterConfig.Filter.Execute FilterExecute = FilterConfig.Filter.Execute.Sequence;
-                public static readonly Color FilterActionForeColor_Replace = Color.Black;
-                public static readonly Color FilterActionBackColor_Replace = Color.Goldenrod;
-                public static readonly Color FilterActionForeColor_Intercept = Color.White;
-                public static readonly Color FilterActionBackColor_Intercept = Color.DarkRed;
-                public static readonly Color FilterActionForeColor_Change = Color.Black;
-                public static readonly Color FilterActionBackColor_Change = Color.DodgerBlue;
-                public static readonly Color FilterActionForeColor_Other = Color.LimeGreen;
-                public static readonly Color FilterActionBackColor_Other = Color.FromArgb(30, 30, 30);
+                public static Color FilterActionForeColor_Replace = Color.Black;
+                public static Color FilterActionBackColor_Replace = Color.Goldenrod;
+                public static Color FilterActionForeColor_Intercept = Color.White;
+                public static Color FilterActionBackColor_Intercept = Color.DarkRed;
+                public static Color FilterActionForeColor_Change = Color.Black;
+                public static Color FilterActionBackColor_Change = Color.DodgerBlue;
 
                 #region//定义结构
 
@@ -17662,12 +17660,25 @@ namespace WinsockPacketEditor
 
         public static async void DoProxyLog(ProxyTCP pt)
         {
-            string UserName = ProxyConfig.Account.GetUserName_ByAccountID(pt.AID);
-            string LoginIP = pt.TCP_Client.EndPoint.Address.ToString();
-            string ViaIP = ((IPEndPoint)pt.TCP_Server.Socket.LocalEndPoint).ToString();
-            string LogContent = string.Format(LogConfig.ProxyLogString, pt.TCP_Server.Address, ViaIP);
+            try
+            {
+                string UserName = ProxyConfig.Account.GetUserName_ByAccountID(pt.AID);
+                string LoginIP = pt?.TCP_Client?.EndPoint?.Address?.ToString() ?? string.Empty;
+                string ViaIP = ((IPEndPoint)pt?.TCP_Server?.Socket?.LocalEndPoint)?.ToString() ?? string.Empty;
 
-            await LogConfig.Queue.ProxyLogToQueueAsync(UserName, LoginIP, LogContent);
+                if (string.IsNullOrEmpty(ViaIP))
+                {
+                    ViaIP = ProxyConfig.Proxy.ProxyTCP_IP.ToString();
+                }
+
+                string LogContent = string.Format(LogConfig.ProxyLogString, pt.TCP_Server.Address, ViaIP);
+
+                await LogConfig.Queue.ProxyLogToQueueAsync(UserName, LoginIP, LogContent);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
