@@ -167,6 +167,16 @@ namespace WinsockPacketEditor.Forms
 
         private void pInjectMode_Click(object sender, EventArgs e)
         {
+            this.StartInjectMode();
+        }
+
+        private void InjectMode_Click(object sender, EventArgs e)
+        {
+            this.StartInjectMode();
+        }
+
+        private void StartInjectMode()
+        {
             var ProcessList = new ProcessList(this);
             AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("ProcessList", "进程列表"), ProcessList)
             {
@@ -194,6 +204,16 @@ namespace WinsockPacketEditor.Forms
 
         private void pRemoteMGT_Click(object sender, EventArgs e)
         {
+            this.StartRemoteMGT();
+        }
+
+        private void aRemoteMGT_Click(object sender, EventArgs e)
+        {
+            this.StartRemoteMGT();
+        }
+
+        private void StartRemoteMGT()
+        {
             var RemoteMGT = new RemoteMGTSetting(this);
             AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("Setting", "设置"), RemoteMGT)
             {
@@ -218,6 +238,16 @@ namespace WinsockPacketEditor.Forms
         }
 
         private void pProxyMode_Click(object sender, EventArgs e)
+        {
+            this.StartProxyMode();
+        }
+
+        private void aProxyMode_Click(object sender, EventArgs e)
+        {
+            this.StartProxyMode();
+        }
+
+        private void StartProxyMode()
         {
             Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Proxy;
             this.SelectedStartMode();
@@ -268,6 +298,8 @@ namespace WinsockPacketEditor.Forms
             Process.Start("https://github.com/x-nas/WinsockPacketEditor/issues");
         }
 
-        #endregion
+
+
+        #endregion        
     }
 }

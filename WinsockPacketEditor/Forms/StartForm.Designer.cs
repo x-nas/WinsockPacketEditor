@@ -190,6 +190,7 @@
             this.InjectMode.Size = new System.Drawing.Size(72, 72);
             this.InjectMode.TabIndex = 0;
             this.InjectMode.Text = "";
+            this.InjectMode.Click += new System.EventHandler(this.InjectMode_Click);
             // 
             // pProxyMode
             // 
@@ -240,6 +241,7 @@
             this.aProxyMode.Size = new System.Drawing.Size(72, 72);
             this.aProxyMode.TabIndex = 0;
             this.aProxyMode.Text = "";
+            this.aProxyMode.Click += new System.EventHandler(this.aProxyMode_Click);
             // 
             // pRemoteMGT
             // 
@@ -289,6 +291,7 @@
             this.aRemoteMGT.Size = new System.Drawing.Size(72, 72);
             this.aRemoteMGT.TabIndex = 0;
             this.aRemoteMGT.Text = "";
+            this.aRemoteMGT.Click += new System.EventHandler(this.aRemoteMGT_Click);
             // 
             // aStartForm
             // 
