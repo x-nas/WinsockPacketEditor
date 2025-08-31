@@ -1772,8 +1772,11 @@ namespace WinsockPacketEditor
                 case "HotKeyForm":
                     return "HotKey Settings";
 
+                case "HotKeyForm.Customize":
+                    return "Customize HotKeys";
+
                 case "HotKeyForm.Apply":
-                    return "HotKeys - Apply to Send and Robot List";
+                    return "Apply To :";
 
                 case "HotKeyForm.Key1":
                     return "HotKey 1 :";
@@ -1819,6 +1822,9 @@ namespace WinsockPacketEditor
 
                 case "HotKeyForm.InputHotKey":
                     return "Please enter the HotKey";
+
+                case "HotKeyForm.Save.Success":
+                    return "Save Hotkey successfully";
 
                 #endregion
 

@@ -90,15 +90,7 @@ namespace WinsockPacketEditor
                 if (m.Msg == User32.WM_HOTKEY)
                 {
                     int HOTKEY_ID = m.WParam.ToInt32();
-
-                    if (this.tabProxyMode.SelectedIndex == 4)
-                    {
-                        Operate.SendConfig.Send.DoSend_ByHotKey(HOTKEY_ID);
-                    }
-                    else if (this.tabProxyMode.SelectedIndex == 5)
-                    {
-                        Operate.RobotConfig.Robot.DoRobot_ByHotKey(HOTKEY_ID);
-                    }
+                    Operate.SystemConfig.DoHotKey(HOTKEY_ID);
                 }
             }
             catch (Exception ex)

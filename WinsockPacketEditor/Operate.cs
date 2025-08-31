@@ -50,6 +50,7 @@ namespace WinsockPacketEditor
             public static string WPE64_IP = "http://101.132.222.195";
             public static string WPE64_Issuse = "https://github.com/x-nas/WinsockPacketEditor/issues";
             public static string WPE64_DLL = "WPEHook.dll";
+            public static int HotKeyType = 0;
             public static string HotKey1 = "Ctrl + Alt + F1";
             public static string HotKey2 = "Ctrl + Alt + F2";
             public static string HotKey3 = "Ctrl + Alt + F3";
@@ -2177,6 +2178,127 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//执行快捷键
+
+            public static void DoHotKey(int HotKeyID)
+            {
+                try
+                {
+                    if (SystemConfig.HotKeyType == 0)
+                    {
+                        switch (HotKeyID)
+                        {
+                            case 9001:
+                                SendConfig.Send.DoSend_ByIndex(0);
+                                break;
+
+                            case 9002:
+                                SendConfig.Send.DoSend_ByIndex(1);
+                                break;
+
+                            case 9003:
+                                SendConfig.Send.DoSend_ByIndex(2);
+                                break;
+
+                            case 9004:
+                                SendConfig.Send.DoSend_ByIndex(3);
+                                break;
+
+                            case 9005:
+                                SendConfig.Send.DoSend_ByIndex(4);
+                                break;
+
+                            case 9006:
+                                SendConfig.Send.DoSend_ByIndex(5);
+                                break;
+
+                            case 9007:
+                                SendConfig.Send.DoSend_ByIndex(6);
+                                break;
+
+                            case 9008:
+                                SendConfig.Send.DoSend_ByIndex(7);
+                                break;
+
+                            case 9009:
+                                SendConfig.Send.DoSend_ByIndex(8);
+                                break;
+
+                            case 9010:
+                                SendConfig.Send.DoSend_ByIndex(9);
+                                break;
+
+                            case 9011:
+                                SendConfig.Send.DoSend_ByIndex(10);
+                                break;
+
+                            case 9012:
+                                SendConfig.Send.DoSend_ByIndex(11);
+                                break;
+                        }
+                    }
+                    else if (SystemConfig.HotKeyType == 1)
+                    {
+                        switch (HotKeyID)
+                        {
+                            case 9001:
+                                RobotConfig.Robot.DoRobot_ByIndex(0);
+                                break;
+
+                            case 9002:
+                                RobotConfig.Robot.DoRobot_ByIndex(1);
+                                break;
+
+                            case 9003:
+                                RobotConfig.Robot.DoRobot_ByIndex(2);
+                                break;
+
+                            case 9004:
+                                RobotConfig.Robot.DoRobot_ByIndex(3);
+                                break;
+
+                            case 9005:
+                                RobotConfig.Robot.DoRobot_ByIndex(4);
+                                break;
+
+                            case 9006:
+                                RobotConfig.Robot.DoRobot_ByIndex(5);
+                                break;
+
+                            case 9007:
+                                RobotConfig.Robot.DoRobot_ByIndex(6);
+                                break;
+
+                            case 9008:
+                                RobotConfig.Robot.DoRobot_ByIndex(7);
+                                break;
+
+                            case 9009:
+                                RobotConfig.Robot.DoRobot_ByIndex(8);
+                                break;
+
+                            case 9010:
+                                RobotConfig.Robot.DoRobot_ByIndex(9);
+                                break;
+
+                            case 9011:
+                                RobotConfig.Robot.DoRobot_ByIndex(10);
+                                break;
+
+                            case 9012:
+                                RobotConfig.Robot.DoRobot_ByIndex(11);
+                                break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//文本对比
 
             public class DifferenceItem
@@ -2592,6 +2714,7 @@ namespace WinsockPacketEditor
                         new XElement("CheckData_Value", SystemConfig.CheckData_Value),
                         new XElement("CheckSize", SystemConfig.CheckLen),
                         new XElement("CheckLength_Value", SystemConfig.CheckLength_Value),
+                        new XElement("HotKeyType", SystemConfig.HotKeyType),
                         new XElement("HotKey1", SystemConfig.HotKey1),
                         new XElement("HotKey2", SystemConfig.HotKey2),
                         new XElement("HotKey3", SystemConfig.HotKey3),
@@ -2666,6 +2789,7 @@ namespace WinsockPacketEditor
                         SystemConfig.CheckData_Value = dtSystemConfig.Rows[0]["CheckData_Value"].ToString();
                         SystemConfig.CheckLen = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckSize"]);
                         SystemConfig.CheckLength_Value = dtSystemConfig.Rows[0]["CheckLength_Value"].ToString();
+                        SystemConfig.HotKeyType = Convert.ToInt32(dtSystemConfig.Rows[0]["HotKeyType"]);
                         SystemConfig.HotKey1 = dtSystemConfig.Rows[0]["HotKey1"].ToString();
                         SystemConfig.HotKey2 = dtSystemConfig.Rows[0]["HotKey2"].ToString();
                         SystemConfig.HotKey3 = dtSystemConfig.Rows[0]["HotKey3"].ToString();
@@ -2914,6 +3038,12 @@ namespace WinsockPacketEditor
                     if (CheckLength_Value != null)
                     {
                         SystemConfig.CheckLength_Value = CheckLength_Value.Value;
+                    }
+
+                    XElement HotKeyType = xeSystemConfig.Element("HotKeyType");
+                    if (HotKeyType != null)
+                    {
+                        SystemConfig.HotKeyType = int.Parse(HotKeyType.Value);
                     }
 
                     XElement HotKey1 = xeSystemConfig.Element("HotKey1");
@@ -14735,60 +14865,6 @@ namespace WinsockPacketEditor
                     return seReturn;
                 }
 
-                public static void DoSend_ByHotKey(int HOTKEY_ID)
-                {
-                    switch (HOTKEY_ID)
-                    {
-                        case 9001:
-                            Send.DoSend_ByIndex(0);
-                            break;
-
-                        case 9002:
-                            Send.DoSend_ByIndex(1);
-                            break;
-
-                        case 9003:
-                            Send.DoSend_ByIndex(2);
-                            break;
-
-                        case 9004:
-                            Send.DoSend_ByIndex(3);
-                            break;
-
-                        case 9005:
-                            Send.DoSend_ByIndex(4);
-                            break;
-
-                        case 9006:
-                            Send.DoSend_ByIndex(5);
-                            break;
-
-                        case 9007:
-                            Send.DoSend_ByIndex(6);
-                            break;
-
-                        case 9008:
-                            Send.DoSend_ByIndex(7);
-                            break;
-
-                        case 9009:
-                            Send.DoSend_ByIndex(8);
-                            break;
-
-                        case 9010:
-                            Send.DoSend_ByIndex(9);
-                            break;
-
-                        case 9011:
-                            Send.DoSend_ByIndex(10);
-                            break;
-
-                        case 9012:
-                            Send.DoSend_ByIndex(11);
-                            break;
-                    }
-                }
-
                 #endregion
 
                 #region//设置发送是否启用
@@ -16726,7 +16802,7 @@ namespace WinsockPacketEditor
                     return Task.Run(() => DoRobotAsync(RID, parameters)).GetAwaiter().GetResult();
                 }
 
-                private static void DoRobot_ByIndex(int RobotListIndex)
+                public static void DoRobot_ByIndex(int RobotListIndex)
                 {
                     try
                     {
@@ -16774,60 +16850,6 @@ namespace WinsockPacketEditor
                     }
 
                     return reReturn;
-                }
-
-                public static void DoRobot_ByHotKey(int HOTKEY_ID)
-                {
-                    switch (HOTKEY_ID)
-                    {
-                        case 9001:
-                            Robot.DoRobot_ByIndex(0);
-                            break;
-
-                        case 9002:
-                            Robot.DoRobot_ByIndex(1);
-                            break;
-
-                        case 9003:
-                            Robot.DoRobot_ByIndex(2);
-                            break;
-
-                        case 9004:
-                            Robot.DoRobot_ByIndex(3);
-                            break;
-
-                        case 9005:
-                            Robot.DoRobot_ByIndex(4);
-                            break;
-
-                        case 9006:
-                            Robot.DoRobot_ByIndex(5);
-                            break;
-
-                        case 9007:
-                            Robot.DoRobot_ByIndex(6);
-                            break;
-
-                        case 9008:
-                            Robot.DoRobot_ByIndex(7);
-                            break;
-
-                        case 9009:
-                            Robot.DoRobot_ByIndex(8);
-                            break;
-
-                        case 9010:
-                            Robot.DoRobot_ByIndex(9);
-                            break;
-
-                        case 9011:
-                            Robot.DoRobot_ByIndex(10);
-                            break;
-
-                        case 9012:
-                            Robot.DoRobot_ByIndex(11);
-                            break;
-                    }
                 }
 
                 #endregion
@@ -17736,6 +17758,7 @@ namespace WinsockPacketEditor
                         sql += "CheckData_Value TEXT,";//过滤数据内容
                         sql += "CheckSize BOOLEAN DEFAULT 0,";//过滤长度
                         sql += "CheckLength_Value TEXT,";//过滤长度内容
+                        sql += "HotKeyType INTEGER DEFAULT 0,";//快捷键类型
                         sql += "HotKey1 TEXT,";//快捷键1
                         sql += "HotKey2 TEXT,";//快捷键2
                         sql += "HotKey3 TEXT,";//快捷键3
@@ -17852,6 +17875,7 @@ namespace WinsockPacketEditor
                         sql += "CheckData_Value,";
                         sql += "CheckSize,";
                         sql += "CheckLength_Value,";
+                        sql += "HotKeyType,";
                         sql += "HotKey1,";
                         sql += "HotKey2,";
                         sql += "HotKey3,";
@@ -17898,6 +17922,7 @@ namespace WinsockPacketEditor
                         sql += "@CheckData_Value,";
                         sql += "@CheckSize,";
                         sql += "@CheckLength_Value,";
+                        sql += "@HotKeyType,";
                         sql += "@HotKey1,";
                         sql += "@HotKey2,";
                         sql += "@HotKey3,";
@@ -17947,6 +17972,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@CheckData_Value", SystemConfig.CheckData_Value);
                             cmd.Parameters.AddWithValue("@CheckSize", SystemConfig.CheckLen);
                             cmd.Parameters.AddWithValue("@CheckLength_Value", SystemConfig.CheckLength_Value);
+                            cmd.Parameters.AddWithValue("@HotKeyType", SystemConfig.HotKeyType);
                             cmd.Parameters.AddWithValue("@HotKey1", SystemConfig.HotKey1);
                             cmd.Parameters.AddWithValue("@HotKey2", SystemConfig.HotKey2);
                             cmd.Parameters.AddWithValue("@HotKey3", SystemConfig.HotKey3);

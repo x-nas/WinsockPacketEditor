@@ -50,12 +50,12 @@ namespace WinsockPacketEditor
             });
 
             Operate.SystemConfig.MainHandle = this.Handle;
-
-            this.Dark_Changed();
+            
             this.InitForm();
             this.InitControls();
             this.InitHotKeys();
-            
+            this.Dark_Changed();
+
             this.tabInjectMode.TabMenuVisible = false;
             this.mInjectMode.SelectIndex(0, true);            
         }
@@ -77,16 +77,8 @@ namespace WinsockPacketEditor
             {
                 if (m.Msg == User32.WM_HOTKEY)
                 {
-                    int HOTKEY_ID = m.WParam.ToInt32();
-
-                    if (this.tabInjectMode.SelectedIndex == 2)
-                    {
-                        Operate.SendConfig.Send.DoSend_ByHotKey(HOTKEY_ID);
-                    }
-                    else if (this.tabInjectMode.SelectedIndex == 3)
-                    {
-                        Operate.RobotConfig.Robot.DoRobot_ByHotKey(HOTKEY_ID);
-                    }
+                    int HOTKEY_ID = m.WParam.ToInt32(); 
+                    Operate.SystemConfig.DoHotKey(HOTKEY_ID);
                 }
             }
             catch (Exception ex)

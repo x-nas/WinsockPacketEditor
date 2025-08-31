@@ -45,6 +45,15 @@ namespace WinsockPacketEditor
             this.txtHotKey12.BackColor = null;
             this.txtHotKey12.ForeColor = null;
 
+            if (Operate.SystemConfig.HotKeyType == 0)
+            {
+                this.rbSendList.Checked = true;
+            }
+            else if(Operate.SystemConfig.HotKeyType == 1)
+            { 
+                this.rbRobotList.Checked = true;
+            }
+            
             this.txtHotKey1.Text = Operate.SystemConfig.HotKey1;
             this.txtHotKey2.Text = Operate.SystemConfig.HotKey2;
             this.txtHotKey3.Text = Operate.SystemConfig.HotKey3;
@@ -58,7 +67,7 @@ namespace WinsockPacketEditor
             this.txtHotKey11.Text = Operate.SystemConfig.HotKey11;
             this.txtHotKey12.Text = Operate.SystemConfig.HotKey12;
 
-            this.bExit.Select();
+            this.bSave.Select();
         }
 
         #endregion        
@@ -259,6 +268,29 @@ namespace WinsockPacketEditor
                 this.txtHotKey12.Status = TType.Error;
                 this.HotKeyError();
             }
+        }
+
+        #endregion
+
+        #region//保存
+
+        private void bSave_Click(object sender, EventArgs e)
+        {
+            if (this.rbSendList.Checked)
+            {
+                Operate.SystemConfig.HotKeyType = 0;
+            }
+            else if (this.rbRobotList.Checked)
+            {
+                Operate.SystemConfig.HotKeyType = 1;
+            }
+
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "快捷键保存成功", TType.Success)
+            {
+                LocalizationText = "HotKeyForm.Save.Success"
+            });
+
+            this.Dispose();
         }
 
         #endregion

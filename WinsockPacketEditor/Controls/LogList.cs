@@ -45,7 +45,7 @@ namespace WinsockPacketEditor
                         return ((DateTime)value).ToString("HH:mm:ss");
                     },
                 }.SetLocalizationTitleID("Table.LogList.Column."),
-                new AntdUI.Column("FuncName", "模块", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.LogList.Column."),
+                new AntdUI.Column("FuncName", "模块").SetLocalizationTitleID("Table.LogList.Column."),
                 new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.LogList.Column."),
             };
 

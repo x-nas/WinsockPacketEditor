@@ -31,6 +31,8 @@ namespace WinsockPacketEditor
 
             this.InitTable_ProxyList();
             this.Dark_Changed();
+
+            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Operate.ProcessConfig.GetInjectProcessName());
         }
 
         private void Dark_Changed()
