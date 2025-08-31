@@ -169,6 +169,7 @@
             this.lInject2.Size = new System.Drawing.Size(191, 20);
             this.lInject2.TabIndex = 2;
             this.lInject2.Text = "以注入进程的方式来拦截封包";
+            this.lInject2.Click += new System.EventHandler(this.lInject2_Click);
             // 
             // lInject1
             // 
@@ -180,6 +181,7 @@
             this.lInject1.Size = new System.Drawing.Size(70, 23);
             this.lInject1.TabIndex = 1;
             this.lInject1.Text = "注入模式";
+            this.lInject1.Click += new System.EventHandler(this.lInject1_Click);
             // 
             // InjectMode
             // 
@@ -220,6 +222,7 @@
             this.lProxy2.Size = new System.Drawing.Size(206, 20);
             this.lProxy2.TabIndex = 2;
             this.lProxy2.Text = "以代理服务端的方式来拦截封包";
+            this.lProxy2.Click += new System.EventHandler(this.lProxy2_Click);
             // 
             // lProxy1
             // 
@@ -231,6 +234,7 @@
             this.lProxy1.Size = new System.Drawing.Size(70, 23);
             this.lProxy1.TabIndex = 1;
             this.lProxy1.Text = "代理模式";
+            this.lProxy1.Click += new System.EventHandler(this.lProxy1_Click);
             // 
             // aProxyMode
             // 
@@ -270,6 +274,7 @@
             this.lRemote2.Size = new System.Drawing.Size(206, 20);
             this.lRemote2.TabIndex = 2;
             this.lRemote2.Text = "配置远程管理后台的账号和端口";
+            this.lRemote2.Click += new System.EventHandler(this.lRemote2_Click);
             // 
             // lRemote1
             // 
@@ -281,6 +286,7 @@
             this.lRemote1.Size = new System.Drawing.Size(70, 23);
             this.lRemote1.TabIndex = 1;
             this.lRemote1.Text = "远程管理";
+            this.lRemote1.Click += new System.EventHandler(this.lRemote1_Click);
             // 
             // aRemoteMGT
             // 

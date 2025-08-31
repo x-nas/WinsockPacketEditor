@@ -175,6 +175,16 @@ namespace WinsockPacketEditor.Forms
             this.StartInjectMode();
         }
 
+        private void lInject1_Click(object sender, EventArgs e)
+        {
+            this.StartInjectMode();
+        }
+
+        private void lInject2_Click(object sender, EventArgs e)
+        {
+            this.StartInjectMode();
+        }
+
         private void StartInjectMode()
         {
             var ProcessList = new ProcessList(this);
@@ -212,6 +222,16 @@ namespace WinsockPacketEditor.Forms
             this.StartRemoteMGT();
         }
 
+        private void lRemote1_Click(object sender, EventArgs e)
+        {
+            this.StartRemoteMGT();
+        }
+
+        private void lRemote2_Click(object sender, EventArgs e)
+        {
+            this.StartRemoteMGT();
+        }
+
         private void StartRemoteMGT()
         {
             var RemoteMGT = new RemoteMGTSetting(this);
@@ -243,6 +263,16 @@ namespace WinsockPacketEditor.Forms
         }
 
         private void aProxyMode_Click(object sender, EventArgs e)
+        {
+            this.StartProxyMode();
+        }
+
+        private void lProxy1_Click(object sender, EventArgs e)
+        {
+            this.StartProxyMode();
+        }
+
+        private void lProxy2_Click(object sender, EventArgs e)
         {
             this.StartProxyMode();
         }
@@ -297,8 +327,6 @@ namespace WinsockPacketEditor.Forms
         {
             Process.Start("https://github.com/x-nas/WinsockPacketEditor/issues");
         }
-
-
 
         #endregion        
     }
