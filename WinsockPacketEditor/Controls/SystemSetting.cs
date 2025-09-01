@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -59,12 +60,34 @@ namespace WinsockPacketEditor
                     break;
             }
 
-            this.cRepalce_ForeColor.Value = Operate.FilterConfig.Filter.FilterActionForeColor_Replace;
-            this.cRepalce_BackColor.Value = Operate.FilterConfig.Filter.FilterActionBackColor_Replace;
-            this.cIntercept_ForeColor.Value = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept;
-            this.cIntercept_BackColor.Value = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept;
-            this.cChange_ForeColor.Value = Operate.FilterConfig.Filter.FilterActionForeColor_Change;
-            this.cChange_BackColor.Value = Operate.FilterConfig.Filter.FilterActionBackColor_Change;
+            this.cRepalce_ForeColor.Value = Operate.FilterConfig.Filter.FilterReplace_ForeColor;
+            this.cRepalce_BackColor.Value = Operate.FilterConfig.Filter.FilterReplace_BackColor;
+            this.cIntercept_ForeColor.Value = Operate.FilterConfig.Filter.FilterIntercept_ForeColor;
+            this.cIntercept_BackColor.Value = Operate.FilterConfig.Filter.FilterIntercept_BackColor;
+            this.cChange_ForeColor.Value = Operate.FilterConfig.Filter.FilterChange_ForeColor;
+            this.cChange_BackColor.Value = Operate.FilterConfig.Filter.FilterChange_BackColor;
+        }
+
+        #endregion
+
+        #region//还原颜色
+
+        private void bReplaceReset_Click(object sender, EventArgs e)
+        {
+            this.cRepalce_ForeColor.Value = Color.Black;
+            this.cRepalce_BackColor.Value = Color.Goldenrod;
+        }
+
+        private void bInterceptReset_Click(object sender, EventArgs e)
+        {
+            this.cIntercept_ForeColor.Value = Color.White;
+            this.cIntercept_BackColor.Value = Color.DarkRed;
+        }
+
+        private void bChangeReset_Click(object sender, EventArgs e)
+        {
+            this.cChange_ForeColor.Value = Color.Black;
+            this.cChange_BackColor.Value = Color.DodgerBlue;
         }
 
         #endregion
@@ -110,12 +133,12 @@ namespace WinsockPacketEditor
                     break;
             }
 
-            Operate.FilterConfig.Filter.FilterActionForeColor_Replace = this.cRepalce_ForeColor.Value;
-            Operate.FilterConfig.Filter.FilterActionBackColor_Replace = this.cRepalce_BackColor.Value;
-            Operate.FilterConfig.Filter.FilterActionForeColor_Intercept = this.cIntercept_ForeColor.Value;
-            Operate.FilterConfig.Filter.FilterActionBackColor_Intercept = this.cIntercept_BackColor.Value;
-            Operate.FilterConfig.Filter.FilterActionForeColor_Change = this.cChange_ForeColor.Value;
-            Operate.FilterConfig.Filter.FilterActionBackColor_Change = this.cChange_BackColor.Value;
+            Operate.FilterConfig.Filter.FilterReplace_ForeColor = this.cRepalce_ForeColor.Value;
+            Operate.FilterConfig.Filter.FilterReplace_BackColor = this.cRepalce_BackColor.Value;
+            Operate.FilterConfig.Filter.FilterIntercept_ForeColor = this.cIntercept_ForeColor.Value;
+            Operate.FilterConfig.Filter.FilterIntercept_BackColor = this.cIntercept_BackColor.Value;
+            Operate.FilterConfig.Filter.FilterChange_ForeColor = this.cChange_ForeColor.Value;
+            Operate.FilterConfig.Filter.FilterChange_BackColor = this.cChange_BackColor.Value;
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统设置保存成功", TType.Success)
             {
@@ -134,6 +157,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion
+        #endregion        
     }
 }

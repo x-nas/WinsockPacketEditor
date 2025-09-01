@@ -57,7 +57,8 @@ namespace WinsockPacketEditor
             this.Dark_Changed();
 
             this.tabInjectMode.TabMenuVisible = false;
-            this.mInjectMode.SelectIndex(0, true);            
+            this.mInjectMode.SelectIndex(0, true);
+            this.colorTheme.Value = Operate.SystemConfig.SystemColor;
         }
 
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -243,13 +244,15 @@ namespace WinsockPacketEditor
         private void colorTheme_ValueChanged(object sender, AntdUI.ColorEventArgs e)
         {
             setcolor = true;
-            AntdUI.Style.SetPrimary(e.Value);
+            Operate.SystemConfig.SystemColor = e.Value;
 
-            for (int i = 0; i < this.mInjectMode.Items.Count; i ++)
+            AntdUI.Style.SetPrimary(Operate.SystemConfig.SystemColor);
+
+            for (int i = 0; i < this.mInjectMode.Items.Count; i++)
             {
-                this.mInjectMode.Items[i].BadgeBack = e.Value;
+                this.mInjectMode.Items[i].BadgeBack = Operate.SystemConfig.SystemColor;
             }
-            
+
             Refresh();
         }
 

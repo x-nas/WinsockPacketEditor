@@ -31,6 +31,17 @@
             this.tlpSystemSettings = new System.Windows.Forms.TableLayoutPanel();
             this.dFloatButton = new AntdUI.Divider();
             this.tlpFilterActionColor = new System.Windows.Forms.TableLayoutPanel();
+            this.lForeColor = new AntdUI.Label();
+            this.lBackColor = new AntdUI.Label();
+            this.cChange_ForeColor = new AntdUI.ColorPicker();
+            this.cChange_BackColor = new AntdUI.ColorPicker();
+            this.lChange = new AntdUI.Label();
+            this.cIntercept_ForeColor = new AntdUI.ColorPicker();
+            this.cIntercept_BackColor = new AntdUI.ColorPicker();
+            this.lIntercept = new AntdUI.Label();
+            this.cRepalce_ForeColor = new AntdUI.ColorPicker();
+            this.lReplace = new AntdUI.Label();
+            this.cRepalce_BackColor = new AntdUI.ColorPicker();
             this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
             this.rbFilterSet_Sequence = new AntdUI.Radio();
             this.rbFilterSet_Priority = new AntdUI.Radio();
@@ -46,17 +57,9 @@
             this.rbListExecute_Sequence = new AntdUI.Radio();
             this.rbListExecute_Together = new AntdUI.Radio();
             this.switchFloatButton = new AntdUI.Switch();
-            this.lReplace = new AntdUI.Label();
-            this.cRepalce_BackColor = new AntdUI.ColorPicker();
-            this.cRepalce_ForeColor = new AntdUI.ColorPicker();
-            this.lIntercept = new AntdUI.Label();
-            this.cIntercept_BackColor = new AntdUI.ColorPicker();
-            this.cIntercept_ForeColor = new AntdUI.ColorPicker();
-            this.lChange = new AntdUI.Label();
-            this.cChange_BackColor = new AntdUI.ColorPicker();
-            this.cChange_ForeColor = new AntdUI.ColorPicker();
-            this.lBackColor = new AntdUI.Label();
-            this.lForeColor = new AntdUI.Label();
+            this.bReplaceReset = new AntdUI.Button();
+            this.bInterceptReset = new AntdUI.Button();
+            this.bChangeReset = new AntdUI.Button();
             this.tlpSystemSettings.SuspendLayout();
             this.tlpFilterActionColor.SuspendLayout();
             this.tlpFilterSet.SuspendLayout();
@@ -115,12 +118,17 @@
             // 
             // tlpFilterActionColor
             // 
-            this.tlpFilterActionColor.ColumnCount = 5;
+            this.tlpFilterActionColor.ColumnCount = 7;
             this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterActionColor.Controls.Add(this.bChangeReset, 5, 3);
+            this.tlpFilterActionColor.Controls.Add(this.bInterceptReset, 5, 2);
+            this.tlpFilterActionColor.Controls.Add(this.bReplaceReset, 5, 1);
             this.tlpFilterActionColor.Controls.Add(this.lForeColor, 3, 0);
             this.tlpFilterActionColor.Controls.Add(this.lBackColor, 2, 0);
             this.tlpFilterActionColor.Controls.Add(this.cChange_ForeColor, 3, 3);
@@ -142,9 +150,135 @@
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFilterActionColor.Size = new System.Drawing.Size(500, 267);
             this.tlpFilterActionColor.TabIndex = 18;
+            // 
+            // lForeColor
+            // 
+            this.lForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lForeColor.LocalizationText = "SystemSettingsForm.ForeColor";
+            this.lForeColor.Location = new System.Drawing.Point(210, 3);
+            this.lForeColor.Name = "lForeColor";
+            this.lForeColor.Size = new System.Drawing.Size(144, 45);
+            this.lForeColor.TabIndex = 46;
+            this.lForeColor.Text = "文字颜色";
+            this.lForeColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lBackColor
+            // 
+            this.lBackColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lBackColor.LocalizationText = "SystemSettingsForm.BackColor";
+            this.lBackColor.Location = new System.Drawing.Point(60, 3);
+            this.lBackColor.Name = "lBackColor";
+            this.lBackColor.Size = new System.Drawing.Size(144, 45);
+            this.lBackColor.TabIndex = 44;
+            this.lBackColor.Text = "背景颜色";
+            this.lBackColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cChange_ForeColor
+            // 
+            this.cChange_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cChange_ForeColor.Location = new System.Drawing.Point(210, 158);
+            this.cChange_ForeColor.Name = "cChange_ForeColor";
+            this.cChange_ForeColor.ShowClose = true;
+            this.cChange_ForeColor.ShowReset = true;
+            this.cChange_ForeColor.ShowText = true;
+            this.cChange_ForeColor.Size = new System.Drawing.Size(144, 46);
+            this.cChange_ForeColor.TabIndex = 8;
+            this.cChange_ForeColor.Value = System.Drawing.Color.Black;
+            // 
+            // cChange_BackColor
+            // 
+            this.cChange_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cChange_BackColor.Location = new System.Drawing.Point(60, 158);
+            this.cChange_BackColor.Name = "cChange_BackColor";
+            this.cChange_BackColor.ShowClose = true;
+            this.cChange_BackColor.ShowReset = true;
+            this.cChange_BackColor.ShowText = true;
+            this.cChange_BackColor.Size = new System.Drawing.Size(144, 46);
+            this.cChange_BackColor.TabIndex = 7;
+            this.cChange_BackColor.Value = System.Drawing.Color.DodgerBlue;
+            // 
+            // lChange
+            // 
+            this.lChange.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lChange.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lChange.LocalizationText = "StatisticalData.Change";
+            this.lChange.Location = new System.Drawing.Point(13, 158);
+            this.lChange.Name = "lChange";
+            this.lChange.Size = new System.Drawing.Size(41, 46);
+            this.lChange.TabIndex = 6;
+            this.lChange.Text = "换包 :";
+            // 
+            // cIntercept_ForeColor
+            // 
+            this.cIntercept_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cIntercept_ForeColor.Location = new System.Drawing.Point(210, 106);
+            this.cIntercept_ForeColor.Name = "cIntercept_ForeColor";
+            this.cIntercept_ForeColor.ShowClose = true;
+            this.cIntercept_ForeColor.ShowReset = true;
+            this.cIntercept_ForeColor.ShowText = true;
+            this.cIntercept_ForeColor.Size = new System.Drawing.Size(144, 46);
+            this.cIntercept_ForeColor.TabIndex = 5;
+            this.cIntercept_ForeColor.Value = System.Drawing.Color.White;
+            // 
+            // cIntercept_BackColor
+            // 
+            this.cIntercept_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cIntercept_BackColor.Location = new System.Drawing.Point(60, 106);
+            this.cIntercept_BackColor.Name = "cIntercept_BackColor";
+            this.cIntercept_BackColor.ShowClose = true;
+            this.cIntercept_BackColor.ShowReset = true;
+            this.cIntercept_BackColor.ShowText = true;
+            this.cIntercept_BackColor.Size = new System.Drawing.Size(144, 46);
+            this.cIntercept_BackColor.TabIndex = 4;
+            this.cIntercept_BackColor.Value = System.Drawing.Color.DarkRed;
+            // 
+            // lIntercept
+            // 
+            this.lIntercept.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lIntercept.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lIntercept.LocalizationText = "StatisticalData.Intercept";
+            this.lIntercept.Location = new System.Drawing.Point(13, 106);
+            this.lIntercept.Name = "lIntercept";
+            this.lIntercept.Size = new System.Drawing.Size(41, 46);
+            this.lIntercept.TabIndex = 3;
+            this.lIntercept.Text = "拦截 :";
+            // 
+            // cRepalce_ForeColor
+            // 
+            this.cRepalce_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cRepalce_ForeColor.Location = new System.Drawing.Point(210, 54);
+            this.cRepalce_ForeColor.Name = "cRepalce_ForeColor";
+            this.cRepalce_ForeColor.ShowClose = true;
+            this.cRepalce_ForeColor.ShowReset = true;
+            this.cRepalce_ForeColor.ShowText = true;
+            this.cRepalce_ForeColor.Size = new System.Drawing.Size(144, 46);
+            this.cRepalce_ForeColor.TabIndex = 2;
+            this.cRepalce_ForeColor.Value = System.Drawing.Color.Black;
+            // 
+            // lReplace
+            // 
+            this.lReplace.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lReplace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lReplace.LocalizationText = "StatisticalData.Replace";
+            this.lReplace.Location = new System.Drawing.Point(13, 54);
+            this.lReplace.Name = "lReplace";
+            this.lReplace.Size = new System.Drawing.Size(41, 46);
+            this.lReplace.TabIndex = 0;
+            this.lReplace.Text = "替换 :";
+            // 
+            // cRepalce_BackColor
+            // 
+            this.cRepalce_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cRepalce_BackColor.Location = new System.Drawing.Point(60, 54);
+            this.cRepalce_BackColor.Name = "cRepalce_BackColor";
+            this.cRepalce_BackColor.ShowClose = true;
+            this.cRepalce_BackColor.ShowReset = true;
+            this.cRepalce_BackColor.ShowText = true;
+            this.cRepalce_BackColor.Size = new System.Drawing.Size(144, 46);
+            this.cRepalce_BackColor.TabIndex = 1;
+            this.cRepalce_BackColor.Value = System.Drawing.Color.Goldenrod;
             // 
             // tlpFilterSet
             // 
@@ -344,132 +478,44 @@
             this.switchFloatButton.TabIndex = 20;
             this.switchFloatButton.Text = "switch1";
             // 
-            // lReplace
+            // bReplaceReset
             // 
-            this.lReplace.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lReplace.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lReplace.LocalizationText = "StatisticalData.Replace";
-            this.lReplace.Location = new System.Drawing.Point(13, 54);
-            this.lReplace.Name = "lReplace";
-            this.lReplace.Size = new System.Drawing.Size(41, 45);
-            this.lReplace.TabIndex = 0;
-            this.lReplace.Text = "替换 :";
+            this.bReplaceReset.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bReplaceReset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bReplaceReset.LocalizationText = "Reset";
+            this.bReplaceReset.Location = new System.Drawing.Point(380, 54);
+            this.bReplaceReset.Name = "bReplaceReset";
+            this.bReplaceReset.Size = new System.Drawing.Size(60, 46);
+            this.bReplaceReset.TabIndex = 50;
+            this.bReplaceReset.Text = "还原";
+            this.bReplaceReset.Type = AntdUI.TTypeMini.Success;
+            this.bReplaceReset.Click += new System.EventHandler(this.bReplaceReset_Click);
             // 
-            // cRepalce_BackColor
+            // bInterceptReset
             // 
-            this.cRepalce_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cRepalce_BackColor.Location = new System.Drawing.Point(60, 54);
-            this.cRepalce_BackColor.Name = "cRepalce_BackColor";
-            this.cRepalce_BackColor.ShowClose = true;
-            this.cRepalce_BackColor.ShowReset = true;
-            this.cRepalce_BackColor.ShowText = true;
-            this.cRepalce_BackColor.Size = new System.Drawing.Size(144, 45);
-            this.cRepalce_BackColor.TabIndex = 1;
-            this.cRepalce_BackColor.Value = System.Drawing.Color.Goldenrod;
+            this.bInterceptReset.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bInterceptReset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bInterceptReset.LocalizationText = "Reset";
+            this.bInterceptReset.Location = new System.Drawing.Point(380, 106);
+            this.bInterceptReset.Name = "bInterceptReset";
+            this.bInterceptReset.Size = new System.Drawing.Size(60, 46);
+            this.bInterceptReset.TabIndex = 52;
+            this.bInterceptReset.Text = "还原";
+            this.bInterceptReset.Type = AntdUI.TTypeMini.Success;
+            this.bInterceptReset.Click += new System.EventHandler(this.bInterceptReset_Click);
             // 
-            // cRepalce_ForeColor
+            // bChangeReset
             // 
-            this.cRepalce_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cRepalce_ForeColor.Location = new System.Drawing.Point(210, 54);
-            this.cRepalce_ForeColor.Name = "cRepalce_ForeColor";
-            this.cRepalce_ForeColor.ShowClose = true;
-            this.cRepalce_ForeColor.ShowReset = true;
-            this.cRepalce_ForeColor.ShowText = true;
-            this.cRepalce_ForeColor.Size = new System.Drawing.Size(144, 45);
-            this.cRepalce_ForeColor.TabIndex = 2;
-            this.cRepalce_ForeColor.Value = System.Drawing.Color.Black;
-            // 
-            // lIntercept
-            // 
-            this.lIntercept.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lIntercept.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lIntercept.LocalizationText = "StatisticalData.Intercept";
-            this.lIntercept.Location = new System.Drawing.Point(13, 105);
-            this.lIntercept.Name = "lIntercept";
-            this.lIntercept.Size = new System.Drawing.Size(41, 45);
-            this.lIntercept.TabIndex = 3;
-            this.lIntercept.Text = "拦截 :";
-            // 
-            // cIntercept_BackColor
-            // 
-            this.cIntercept_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cIntercept_BackColor.Location = new System.Drawing.Point(60, 105);
-            this.cIntercept_BackColor.Name = "cIntercept_BackColor";
-            this.cIntercept_BackColor.ShowClose = true;
-            this.cIntercept_BackColor.ShowReset = true;
-            this.cIntercept_BackColor.ShowText = true;
-            this.cIntercept_BackColor.Size = new System.Drawing.Size(144, 45);
-            this.cIntercept_BackColor.TabIndex = 4;
-            this.cIntercept_BackColor.Value = System.Drawing.Color.DarkRed;
-            // 
-            // cIntercept_ForeColor
-            // 
-            this.cIntercept_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cIntercept_ForeColor.Location = new System.Drawing.Point(210, 105);
-            this.cIntercept_ForeColor.Name = "cIntercept_ForeColor";
-            this.cIntercept_ForeColor.ShowClose = true;
-            this.cIntercept_ForeColor.ShowReset = true;
-            this.cIntercept_ForeColor.ShowText = true;
-            this.cIntercept_ForeColor.Size = new System.Drawing.Size(144, 45);
-            this.cIntercept_ForeColor.TabIndex = 5;
-            this.cIntercept_ForeColor.Value = System.Drawing.Color.White;
-            // 
-            // lChange
-            // 
-            this.lChange.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lChange.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lChange.LocalizationText = "StatisticalData.Change";
-            this.lChange.Location = new System.Drawing.Point(13, 156);
-            this.lChange.Name = "lChange";
-            this.lChange.Size = new System.Drawing.Size(41, 45);
-            this.lChange.TabIndex = 6;
-            this.lChange.Text = "换包 :";
-            // 
-            // cChange_BackColor
-            // 
-            this.cChange_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cChange_BackColor.Location = new System.Drawing.Point(60, 156);
-            this.cChange_BackColor.Name = "cChange_BackColor";
-            this.cChange_BackColor.ShowClose = true;
-            this.cChange_BackColor.ShowReset = true;
-            this.cChange_BackColor.ShowText = true;
-            this.cChange_BackColor.Size = new System.Drawing.Size(144, 45);
-            this.cChange_BackColor.TabIndex = 7;
-            this.cChange_BackColor.Value = System.Drawing.Color.DodgerBlue;
-            // 
-            // cChange_ForeColor
-            // 
-            this.cChange_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cChange_ForeColor.Location = new System.Drawing.Point(210, 156);
-            this.cChange_ForeColor.Name = "cChange_ForeColor";
-            this.cChange_ForeColor.ShowClose = true;
-            this.cChange_ForeColor.ShowReset = true;
-            this.cChange_ForeColor.ShowText = true;
-            this.cChange_ForeColor.Size = new System.Drawing.Size(144, 45);
-            this.cChange_ForeColor.TabIndex = 8;
-            this.cChange_ForeColor.Value = System.Drawing.Color.Black;
-            // 
-            // lBackColor
-            // 
-            this.lBackColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lBackColor.LocalizationText = "SystemSettingsForm.BackColor";
-            this.lBackColor.Location = new System.Drawing.Point(60, 3);
-            this.lBackColor.Name = "lBackColor";
-            this.lBackColor.Size = new System.Drawing.Size(144, 45);
-            this.lBackColor.TabIndex = 44;
-            this.lBackColor.Text = "背景颜色";
-            this.lBackColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lForeColor
-            // 
-            this.lForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lForeColor.LocalizationText = "SystemSettingsForm.ForeColor";
-            this.lForeColor.Location = new System.Drawing.Point(210, 3);
-            this.lForeColor.Name = "lForeColor";
-            this.lForeColor.Size = new System.Drawing.Size(144, 45);
-            this.lForeColor.TabIndex = 46;
-            this.lForeColor.Text = "文字颜色";
-            this.lForeColor.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.bChangeReset.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bChangeReset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bChangeReset.LocalizationText = "Reset";
+            this.bChangeReset.Location = new System.Drawing.Point(380, 158);
+            this.bChangeReset.Name = "bChangeReset";
+            this.bChangeReset.Size = new System.Drawing.Size(60, 46);
+            this.bChangeReset.TabIndex = 54;
+            this.bChangeReset.Text = "还原";
+            this.bChangeReset.Type = AntdUI.TTypeMini.Success;
+            this.bChangeReset.Click += new System.EventHandler(this.bChangeReset_Click);
             // 
             // SystemSetting
             // 
@@ -527,5 +573,8 @@
         private AntdUI.Label lIntercept;
         private AntdUI.Label lForeColor;
         private AntdUI.Label lBackColor;
+        private AntdUI.Button bChangeReset;
+        private AntdUI.Button bInterceptReset;
+        private AntdUI.Button bReplaceReset;
     }
 }

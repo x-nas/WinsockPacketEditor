@@ -194,24 +194,24 @@ namespace WinsockPacketEditor
 
                                 return new AntdUI.Table.CellStyleInfo
                                 {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Replace,
-                                    BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Replace,
+                                    ForeColor = Operate.FilterConfig.Filter.FilterReplace_ForeColor,
+                                    BackColor = Operate.FilterConfig.Filter.FilterReplace_BackColor,
                                 };
 
                             case Operate.FilterConfig.Filter.FilterAction.Intercept:
 
                                 return new AntdUI.Table.CellStyleInfo
                                 {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept,
-                                    BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept,
+                                    ForeColor = Operate.FilterConfig.Filter.FilterIntercept_ForeColor,
+                                    BackColor = Operate.FilterConfig.Filter.FilterIntercept_BackColor,
                                 };
 
                             case Operate.FilterConfig.Filter.FilterAction.Change:
 
                                 return new AntdUI.Table.CellStyleInfo
                                 {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Change,
-                                    BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Change,
+                                    ForeColor = Operate.FilterConfig.Filter.FilterChange_ForeColor,
+                                    BackColor = Operate.FilterConfig.Filter.FilterChange_BackColor,
                                 };
 
                             default:

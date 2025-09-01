@@ -63,6 +63,7 @@ namespace WinsockPacketEditor
 
             this.tabProxyMode.TabMenuVisible = false;            
             this.mProxyMode.SelectIndex(0, true);
+            this.colorTheme.Value = Operate.SystemConfig.SystemColor;
         }
 
         private void ProxyModeForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -276,11 +277,13 @@ namespace WinsockPacketEditor
         private void colorTheme_ValueChanged(object sender, AntdUI.ColorEventArgs e)
         {
             setcolor = true;
-            AntdUI.Style.SetPrimary(e.Value);
+            Operate.SystemConfig.SystemColor = e.Value;
+
+            AntdUI.Style.SetPrimary(Operate.SystemConfig.SystemColor);
 
             for (int i = 0; i < this.mProxyMode.Items.Count; i++)
             {
-                this.mProxyMode.Items[i].BadgeBack = e.Value;
+                this.mProxyMode.Items[i].BadgeBack = Operate.SystemConfig.SystemColor;
             }
 
             Refresh();

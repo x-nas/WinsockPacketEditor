@@ -76,6 +76,7 @@ namespace WinsockPacketEditor
             public static Execute ListExecute = Execute.Sequence;
             public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
             public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+            public static Color SystemColor = Color.FromArgb(22, 119, 255);
             public static Color Color_30 = Color.FromArgb(30, 30, 30);
             public static Color Color_35 = Color.FromArgb(35, 35, 35);
             public static Color Color_40 = Color.FromArgb(40, 40, 40);
@@ -2726,7 +2727,14 @@ namespace WinsockPacketEditor
                         new XElement("HotKey9", SystemConfig.HotKey9),
                         new XElement("HotKey10", SystemConfig.HotKey10),
                         new XElement("HotKey11", SystemConfig.HotKey11),
-                        new XElement("HotKey12", SystemConfig.HotKey12)
+                        new XElement("HotKey12", SystemConfig.HotKey12),
+                        new XElement("SystemColor", SystemConfig.SystemColor.ToArgb()),
+                        new XElement("FilterReplace_BackColor", FilterConfig.Filter.FilterReplace_BackColor.ToArgb()),
+                        new XElement("FilterReplace_ForeColor", FilterConfig.Filter.FilterReplace_ForeColor.ToArgb()),
+                        new XElement("FilterIntercept_BackColor", FilterConfig.Filter.FilterIntercept_BackColor.ToArgb()),
+                        new XElement("FilterIntercept_ForeColor", FilterConfig.Filter.FilterIntercept_ForeColor.ToArgb()),
+                        new XElement("FilterChange_BackColor", FilterConfig.Filter.FilterChange_BackColor.ToArgb()),
+                        new XElement("FilterChange_ForeColor", FilterConfig.Filter.FilterChange_ForeColor.ToArgb())
                         );
 
                     return xeSystemConfig;
@@ -2802,6 +2810,13 @@ namespace WinsockPacketEditor
                         SystemConfig.HotKey10 = dtSystemConfig.Rows[0]["HotKey10"].ToString();
                         SystemConfig.HotKey11 = dtSystemConfig.Rows[0]["HotKey11"].ToString();
                         SystemConfig.HotKey12 = dtSystemConfig.Rows[0]["HotKey12"].ToString();
+                        SystemConfig.SystemColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["SystemColor"]));
+                        FilterConfig.Filter.FilterReplace_ForeColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterReplace_ForeColor"]));
+                        FilterConfig.Filter.FilterReplace_BackColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterReplace_BackColor"]));
+                        FilterConfig.Filter.FilterIntercept_ForeColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterIntercept_ForeColor"]));
+                        FilterConfig.Filter.FilterIntercept_BackColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterIntercept_BackColor"]));
+                        FilterConfig.Filter.FilterChange_ForeColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterChange_ForeColor"]));
+                        FilterConfig.Filter.FilterChange_BackColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterChange_BackColor"]));
                     }
                     else
                     {
@@ -3116,6 +3131,48 @@ namespace WinsockPacketEditor
                     if (HotKey12 != null)
                     {
                         SystemConfig.HotKey12 = HotKey12.Value;
+                    }
+
+                    XElement SystemColor = xeSystemConfig.Element("SystemColor");
+                    if (SystemColor != null)
+                    {
+                        SystemConfig.SystemColor = Color.FromArgb(Convert.ToInt32(SystemColor.Value));
+                    }
+
+                    XElement FilterReplace_BackColor = xeSystemConfig.Element("FilterReplace_BackColor");
+                    if (FilterReplace_BackColor != null)
+                    {
+                        FilterConfig.Filter.FilterReplace_BackColor = Color.FromArgb(Convert.ToInt32(FilterReplace_BackColor.Value));
+                    }
+
+                    XElement FilterReplace_ForeColor = xeSystemConfig.Element("FilterReplace_ForeColor");
+                    if (FilterReplace_ForeColor != null)
+                    {
+                        FilterConfig.Filter.FilterReplace_ForeColor = Color.FromArgb(Convert.ToInt32(FilterReplace_ForeColor.Value));
+                    }
+
+                    XElement FilterIntercept_BackColor = xeSystemConfig.Element("FilterIntercept_BackColor");
+                    if (FilterIntercept_BackColor != null)
+                    {
+                        FilterConfig.Filter.FilterIntercept_BackColor = Color.FromArgb(Convert.ToInt32(FilterIntercept_BackColor.Value));
+                    }
+
+                    XElement FilterIntercept_ForeColor = xeSystemConfig.Element("FilterIntercept_ForeColor");
+                    if (FilterIntercept_ForeColor != null)
+                    {
+                        FilterConfig.Filter.FilterIntercept_ForeColor = Color.FromArgb(Convert.ToInt32(FilterIntercept_ForeColor.Value));
+                    }
+
+                    XElement FilterChange_BackColor = xeSystemConfig.Element("FilterChange_BackColor");
+                    if (FilterChange_BackColor != null)
+                    {
+                        FilterConfig.Filter.FilterChange_BackColor = Color.FromArgb(Convert.ToInt32(FilterChange_BackColor.Value));
+                    }
+
+                    XElement FilterChange_ForeColor = xeSystemConfig.Element("FilterChange_ForeColor");
+                    if (FilterChange_ForeColor != null)
+                    {
+                        FilterConfig.Filter.FilterChange_ForeColor = Color.FromArgb(Convert.ToInt32(FilterChange_ForeColor.Value));
                     }
                 }
                 catch (Exception ex)
@@ -11827,12 +11884,12 @@ namespace WinsockPacketEditor
                 public static long FilterNoDisplay_CNT = 0;
                 public static int FilterSize_MaxLen = 500;
                 public static FilterConfig.Filter.Execute FilterExecute = FilterConfig.Filter.Execute.Sequence;
-                public static Color FilterActionForeColor_Replace = Color.Black;
-                public static Color FilterActionBackColor_Replace = Color.Goldenrod;
-                public static Color FilterActionForeColor_Intercept = Color.White;
-                public static Color FilterActionBackColor_Intercept = Color.DarkRed;
-                public static Color FilterActionForeColor_Change = Color.Black;
-                public static Color FilterActionBackColor_Change = Color.DodgerBlue;
+                public static Color FilterReplace_ForeColor = Color.Black;
+                public static Color FilterReplace_BackColor = Color.Goldenrod;
+                public static Color FilterIntercept_ForeColor = Color.White;
+                public static Color FilterIntercept_BackColor = Color.DarkRed;
+                public static Color FilterChange_ForeColor = Color.Black;
+                public static Color FilterChange_BackColor = Color.DodgerBlue;
 
                 #region//定义结构
 
@@ -17781,7 +17838,14 @@ namespace WinsockPacketEditor
                         sql += "HotKey9 TEXT,";//快捷键9
                         sql += "HotKey10 TEXT,";//快捷键10
                         sql += "HotKey11 TEXT,";//快捷键11
-                        sql += "HotKey12 TEXT";//快捷键12
+                        sql += "HotKey12 TEXT,";//快捷键12
+                        sql += "SystemColor INTEGER,";//系统主题颜色
+                        sql += "FilterReplace_BackColor INTEGER,";//替换背景颜色
+                        sql += "FilterReplace_ForeColor INTEGER,";//替换字体颜色
+                        sql += "FilterIntercept_BackColor INTEGER,";//拦截背景颜色
+                        sql += "FilterIntercept_ForeColor INTEGER,";//拦截字体颜色
+                        sql += "FilterChange_BackColor INTEGER,";//换包背景颜色
+                        sql += "FilterChange_ForeColor INTEGER";//换包字体颜色
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -17898,7 +17962,14 @@ namespace WinsockPacketEditor
                         sql += "HotKey9,";
                         sql += "HotKey10,";
                         sql += "HotKey11,";
-                        sql += "HotKey12";
+                        sql += "HotKey12,";
+                        sql += "SystemColor,";
+                        sql += "FilterReplace_BackColor,";
+                        sql += "FilterReplace_ForeColor,";
+                        sql += "FilterIntercept_BackColor,";
+                        sql += "FilterIntercept_ForeColor,";
+                        sql += "FilterChange_BackColor,";
+                        sql += "FilterChange_ForeColor";
                         sql += ") VALUES (";
                         sql += "@IsAnimation,";
                         sql += "@IsShadowEnabled,";
@@ -17945,7 +18016,14 @@ namespace WinsockPacketEditor
                         sql += "@HotKey9,";
                         sql += "@HotKey10,";
                         sql += "@HotKey11,";
-                        sql += "@HotKey12";
+                        sql += "@HotKey12,";
+                        sql += "@SystemColor,";
+                        sql += "@FilterReplace_BackColor,";
+                        sql += "@FilterReplace_ForeColor,";
+                        sql += "@FilterIntercept_BackColor,";
+                        sql += "@FilterIntercept_ForeColor,";
+                        sql += "@FilterChange_BackColor,";
+                        sql += "@FilterChange_ForeColor";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -17996,6 +18074,13 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@HotKey10", SystemConfig.HotKey10);
                             cmd.Parameters.AddWithValue("@HotKey11", SystemConfig.HotKey11);
                             cmd.Parameters.AddWithValue("@HotKey12", SystemConfig.HotKey12);
+                            cmd.Parameters.AddWithValue("@SystemColor", SystemConfig.SystemColor.ToArgb());
+                            cmd.Parameters.AddWithValue("@FilterReplace_BackColor", FilterConfig.Filter.FilterReplace_BackColor.ToArgb());
+                            cmd.Parameters.AddWithValue("@FilterReplace_ForeColor", FilterConfig.Filter.FilterReplace_ForeColor.ToArgb());
+                            cmd.Parameters.AddWithValue("@FilterIntercept_BackColor", FilterConfig.Filter.FilterIntercept_BackColor.ToArgb());
+                            cmd.Parameters.AddWithValue("@FilterIntercept_ForeColor", FilterConfig.Filter.FilterIntercept_ForeColor.ToArgb());
+                            cmd.Parameters.AddWithValue("@FilterChange_BackColor", FilterConfig.Filter.FilterChange_BackColor.ToArgb());
+                            cmd.Parameters.AddWithValue("@FilterChange_ForeColor", FilterConfig.Filter.FilterChange_ForeColor.ToArgb());
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
