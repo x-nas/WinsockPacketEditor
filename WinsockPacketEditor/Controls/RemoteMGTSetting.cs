@@ -21,13 +21,21 @@ namespace WinsockPacketEditor
 
         private void RemoteMGTSetting_Load(object sender, EventArgs e)
         {
-            this.cbIsRemote.Checked = Operate.SystemConfig.IsRemote;
-            this.nudRemote_Port.Value = Operate.SystemConfig.Remote_Port;
-            this.txtRemote_UserName.Text = Operate.SystemConfig.Remote_UserName;
-            this.txtRemote_PassWord.Text = Operate.SystemConfig.Remote_PassWord;
+            try
+            {
+                this.InitRemoteIP();
+                this.nudRemote_Port.Value = Operate.SystemConfig.Remote_Port;
 
-            this.InitRemoteIP();
-            this.IsRemote_Changed();            
+                this.cbIsRemote.Checked = Operate.SystemConfig.IsRemote;
+                this.IsRemote_Changed();
+                
+                this.txtRemote_UserName.Text = Operate.SystemConfig.Remote_UserName;
+                this.txtRemote_PassWord.Text = Operate.SystemConfig.Remote_PassWord;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }                        
         }
 
         private void InitRemoteIP()
@@ -39,22 +47,30 @@ namespace WinsockPacketEditor
                 this.ddlRemoteIP.Items.Clear();
                 this.ddlRemoteIP.Items.AddRange(ipAddresses.Select(ip => new SelectItem(ip.ToString(), ip)).ToArray());
 
-                if (IPAddress.TryParse(Operate.SystemConfig.Remote_IP, out IPAddress ipRemoteIP))
+                if (this.ddlRemoteIP.Items.Count > 0)
                 {
-                    this.ddlRemoteIP.SelectedValue = ipRemoteIP;
-                }
+                    if (IPAddress.TryParse(Operate.SystemConfig.Remote_IP, out IPAddress ipRemoteIP))
+                    {
+                        this.ddlRemoteIP.SelectedValue = ipRemoteIP;
+                    }
 
-                if (this.ddlRemoteIP.SelectedValue == null)
+                    if (this.ddlRemoteIP.SelectedValue == null)
+                    {
+                        this.ddlRemoteIP.SelectedIndex = 0;
+                    }
+                }
+                else
                 {
+                    this.ddlRemoteIP.Items.Add(new SelectItem("127.0.0.1", IPAddress.Loopback));
                     this.ddlRemoteIP.SelectedIndex = 0;
                 }
 
                 this.SetRemoteMGT_URL();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            }            
         }
 
         private void ddlRemoteIP_SelectedIndexChanged(object sender, IntEventArgs e)
@@ -69,10 +85,20 @@ namespace WinsockPacketEditor
 
         private void SetRemoteMGT_URL()
         {
-            string RemoteIP = this.ddlRemoteIP.SelectedValue.ToString();
-            string RemotePort = this.nudRemote_Port.Value.ToString();
+            try
+            {
+                if (this.ddlRemoteIP.Items.Count > 0 && this.ddlRemoteIP.SelectedValue != null)
+                {
+                    string RemoteIP = this.ddlRemoteIP.SelectedValue.ToString();
+                    string RemotePort = this.nudRemote_Port.Value.ToString();
 
-            this.lRemote.Text = Operate.SystemConfig.GetRemoteMGT_URL(RemoteIP, RemotePort);
+                    this.lRemote.Text = Operate.SystemConfig.GetRemoteMGT_URL(RemoteIP, RemotePort);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }                       
         }
 
         #endregion
