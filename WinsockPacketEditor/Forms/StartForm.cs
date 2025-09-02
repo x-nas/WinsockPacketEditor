@@ -8,6 +8,7 @@ namespace WinsockPacketEditor.Forms
 {
     public partial class StartForm : BorderlessForm
     {
+        private string WebSiteURL = Operate.SystemConfig.WPE64_URL;
         private Color cEnter_Dark = Color.FromArgb(57, 57, 57);
         private Color cLeave_Dark = Color.FromArgb(50, 50, 50);
         private Color cEnter_Light = Color.FromArgb(251, 251, 251);
@@ -26,6 +27,7 @@ namespace WinsockPacketEditor.Forms
             Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.None;
 
             this.InitGlobal();
+            this.GetWebSiteURL();
             this.Dark_Changed();
         }
 
@@ -287,16 +289,26 @@ namespace WinsockPacketEditor.Forms
 
         #region//了解更多
 
+        private async void GetWebSiteURL()
+        {
+            bool bOK = await Operate.SystemConfig.CheckWebSite(Operate.SystemConfig.WPE64_URL);
+
+            if (!bOK)
+            {
+                this.WebSiteURL = Operate.SystemConfig.WPE64_IP;
+            }
+        }
+
         private void bWPEWebSite_Click(object sender, EventArgs e)
         {
             var lang = AntdUI.Localization.CurrentLanguage;
             if (lang.StartsWith("en"))
             {
-                Process.Start("https://www.wpe64.com/index_enUS.html");
+                Process.Start(this.WebSiteURL + "/index_enUS.html");
             }
             else
             {
-                Process.Start("https://www.wpe64.com/index.html");
+                Process.Start(this.WebSiteURL + "/index.html");
             }
         }
 
@@ -305,11 +317,11 @@ namespace WinsockPacketEditor.Forms
             var lang = AntdUI.Localization.CurrentLanguage;
             if (lang.StartsWith("en"))
             {
-                Process.Start("https://www.wpe64.com/Tutorials/WinSockPacketEditor.pdf");
+                Process.Start(this.WebSiteURL + "/tutorials_enUS.html");
             }
             else
             {
-                Process.Start("https://www.wpe64.com/Tutorials/WinSockPacketEditor.pdf");
+                Process.Start(this.WebSiteURL + "/tutorials.html");
             }            
         }
 
