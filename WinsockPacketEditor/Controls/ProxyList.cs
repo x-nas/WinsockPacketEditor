@@ -1099,9 +1099,9 @@ namespace WinsockPacketEditor
                     Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
                 this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
 
-                decimal dUplink = Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;
+                decimal dUplink = (decimal)Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;
                 Operate.ProxyConfig.Proxy.ProxySpeed_Uplink = 0;
-                decimal dDownlink = Operate.ProxyConfig.Proxy.ProxySpeed_Downlink / 1024;
+                decimal dDownlink = (decimal)Operate.ProxyConfig.Proxy.ProxySpeed_Downlink / 1024;
                 Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
 
                 Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
