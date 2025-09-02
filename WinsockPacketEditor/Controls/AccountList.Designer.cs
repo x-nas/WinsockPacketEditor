@@ -80,6 +80,7 @@
             this.tAccountList.TabIndex = 1;
             this.tAccountList.CellClick += new AntdUI.Table.ClickEventHandler(this.tAccountList_CellClick);
             this.tAccountList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tAccountList_CellButtonClick);
+            this.tAccountList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tAccountList_CellDoubleClick);
             // 
             // tlpAccountListButton
             // 

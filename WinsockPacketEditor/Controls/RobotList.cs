@@ -188,13 +188,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        var RobotEdit = new RobotEdit(this.form, ri);
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("RobotEditForm", "机器人编辑"), RobotEdit)
-                        {
-                            Keyboard = false,
-                            MaskClosable = false,
-                            BtnHeight = 0,
-                        });
+                        this.OpenRobotEdit(ri);
 
                         break;
 
@@ -210,6 +204,25 @@ namespace WinsockPacketEditor
                         break;
                 }
             }
+        }
+
+        private void tRobotList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is RobotInfo ri)
+            {
+                this.OpenRobotEdit(ri);
+            }                
+        }
+
+        private void OpenRobotEdit(RobotInfo ri)
+        {
+            var RobotEdit = new RobotEdit(this.form, ri);
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("RobotEditForm", "机器人编辑"), RobotEdit)
+            {
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
         }
 
         #endregion
@@ -375,6 +388,6 @@ namespace WinsockPacketEditor
             this.tRobotList.Enabled = true;
         }
 
-        #endregion
+        #endregion        
     }
 }

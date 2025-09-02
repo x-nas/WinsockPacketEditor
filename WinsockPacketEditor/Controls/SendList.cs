@@ -242,13 +242,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        var SendEdit = new SendEdit(this.form, si);
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("SendEditForm", "发送编辑"), SendEdit)
-                        {
-                            Keyboard = false,
-                            MaskClosable = false,
-                            BtnHeight = 0,
-                        });
+                        this.OpenSendEdit(si);
 
                         break;
 
@@ -264,6 +258,25 @@ namespace WinsockPacketEditor
                         break;
                 }
             }
+        }
+
+        private void tSendList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is SendInfo si)
+            {
+                this.OpenSendEdit(si);
+            }                
+        }
+
+        private void OpenSendEdit(SendInfo si)
+        {
+            var SendEdit = new SendEdit(this.form, si);
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("SendEditForm", "发送编辑"), SendEdit)
+            {
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
         }
 
         #endregion
@@ -430,6 +443,6 @@ namespace WinsockPacketEditor
             this.tSendList.Enabled = true;
         }
 
-        #endregion
+        #endregion        
     }
 }

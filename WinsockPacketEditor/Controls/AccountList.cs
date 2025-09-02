@@ -281,13 +281,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        var AccountEdit = new AccountEdit(this.form, ai);
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
-                        {
-                            Keyboard = false,
-                            MaskClosable = false,
-                            BtnHeight = 0,
-                        });
+                        this.OpenAccountEdit(ai);
 
                         break;
 
@@ -315,6 +309,25 @@ namespace WinsockPacketEditor
                         break;
                 }
             }
+        }
+
+        private void tAccountList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is AccountInfo ai)
+            {
+                this.OpenAccountEdit(ai);
+            }
+        }
+
+        private void OpenAccountEdit(AccountInfo ai)
+        {
+            var AccountEdit = new AccountEdit(this.form, ai);
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
+            {
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
         }
 
         #endregion

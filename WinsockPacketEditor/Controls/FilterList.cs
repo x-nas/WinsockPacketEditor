@@ -281,13 +281,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        var FilterEdit = new FilterEdit(this.form, fi);
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("FilterEditForm", "滤镜编辑"), FilterEdit)
-                        {
-                            Keyboard = false,
-                            MaskClosable = false,
-                            BtnHeight = 0,
-                        });
+                        this.OpenFilterEdit(fi);
 
                         break;
 
@@ -300,6 +294,25 @@ namespace WinsockPacketEditor
                         break;
                 }
             }
+        }
+
+        private void tFilterList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is FilterInfo fi)
+            {
+                this.OpenFilterEdit(fi);
+            }
+        }
+
+        private void OpenFilterEdit(FilterInfo fi)
+        {
+            var FilterEdit = new FilterEdit(this.form, fi);
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("FilterEditForm", "滤镜编辑"), FilterEdit)
+            {
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
         }
 
         #endregion
@@ -396,6 +409,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

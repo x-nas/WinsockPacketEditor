@@ -808,6 +808,7 @@
             this.tPacketList.Size = new System.Drawing.Size(1134, 455);
             this.tPacketList.TabIndex = 1;
             this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
+            this.tPacketList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellDoubleClick);
             this.tPacketList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tPacketList_SetRowStyle);
             this.tPacketList.SelectIndexChanged += new System.EventHandler(this.tPacketList_SelectIndexChanged);
             // 

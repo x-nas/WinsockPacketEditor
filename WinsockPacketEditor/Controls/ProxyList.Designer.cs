@@ -776,6 +776,7 @@
             this.tProxyList.Size = new System.Drawing.Size(1134, 468);
             this.tProxyList.TabIndex = 1;
             this.tProxyList.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyList_CellClick);
+            this.tProxyList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tProxyList_CellDoubleClick);
             this.tProxyList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tProxyList_SetRowStyle);
             this.tProxyList.SelectIndexChanged += new System.EventHandler(this.tProxyList_SelectIndexChanged);
             // 

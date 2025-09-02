@@ -391,6 +391,25 @@ namespace WinsockPacketEditor
             }
         }
 
+        private void tProxyList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is ProxyInfo pi)
+            {
+                this.OpenPacketEdit(pi);
+            }            
+        }
+
+        private void OpenPacketEdit(ProxyInfo pi)
+        {
+            var PacketEdit = new PacketEdit(this.form, pi);
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
+            {
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
+        }
+
         #endregion
 
         #region//代理列表 - 右键菜单
@@ -419,13 +438,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                var PacketEdit = new PacketEdit(this.form, piList[0]);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
+                                this.OpenPacketEdit(piList[0]);
                             }
 
                             break;
@@ -1211,6 +1224,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion                                                
+        #endregion        
     }
 }

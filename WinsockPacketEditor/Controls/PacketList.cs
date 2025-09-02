@@ -358,6 +358,25 @@ namespace WinsockPacketEditor
             }
         }
 
+        private void tPacketList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is PacketInfo pi)
+            {
+                this.OpenPacketEdit(pi);
+            }
+        }
+
+        private void OpenPacketEdit(PacketInfo pi)
+        {
+            var PacketEdit = new PacketEdit(this.form, pi);
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
+            {
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
+        }
+
         #endregion
 
         #region//封包列表 - 右键菜单        
@@ -386,13 +405,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                var PacketEdit = new PacketEdit(this.form, piList[0]);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
+                                this.OpenPacketEdit(piList[0]);
                             }
 
                             break;
@@ -1026,6 +1039,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion                                                        
+        #endregion        
     }
 }
