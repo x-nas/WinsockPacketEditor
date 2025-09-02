@@ -100,7 +100,7 @@
             this.mFilterList.IconRatio = 1F;
             this.mFilterList.itemMargin = 0;
             menuItem1.IconSvg = "PlusOutlined";
-            menuItem2.IconSvg = "UserAddOutlined";
+            menuItem2.IconSvg = "FilterOutlined";
             menuItem2.ID = "miAdd";
             menuItem2.LocalizationText = "FilterList.{id}";
             menuItem2.Text = "新增滤镜";

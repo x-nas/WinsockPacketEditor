@@ -119,7 +119,7 @@
             this.mSendList.IconRatio = 1F;
             this.mSendList.itemMargin = 0;
             menuItem1.IconSvg = "PlusOutlined";
-            menuItem2.IconSvg = "UserAddOutlined";
+            menuItem2.IconSvg = "SendOutlined";
             menuItem2.ID = "miAdd";
             menuItem2.LocalizationText = "SendList.{id}";
             menuItem2.Text = "新增发送";
