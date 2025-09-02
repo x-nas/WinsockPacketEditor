@@ -36,7 +36,6 @@ namespace WinsockPacketEditor
                     Width = "80",
                     Call = (value, record, i_row, i_col) =>
                     {
-                        System.Threading.Thread.Sleep(500);
                         return value;
                     }
                 }.SetFixed().SetLocalizationTitleID("Table.SendList.Column."),
