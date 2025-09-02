@@ -28,16 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem21 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem22 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem23 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem24 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem25 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem26 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem27 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem28 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem29 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem30 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem13 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem14 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem15 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem16 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem17 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem18 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem19 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem20 = new AntdUI.MenuItem();
             this.tlpMapSettings = new System.Windows.Forms.TableLayoutPanel();
             this.tMapRemote = new AntdUI.Table();
             this.tlpMapRemote = new System.Windows.Forms.TableLayoutPanel();
@@ -103,6 +103,7 @@
             this.tMapRemote.TabIndex = 11;
             this.tMapRemote.CellClick += new AntdUI.Table.ClickEventHandler(this.tMapRemote_CellClick);
             this.tMapRemote.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tMapRemote_CellButtonUp);
+            this.tMapRemote.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tMapRemote_CellDoubleClick);
             // 
             // tlpMapRemote
             // 
@@ -127,28 +128,28 @@
             this.mMapRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mMapRemote.Gap = 5;
             this.mMapRemote.IconRatio = 1F;
-            menuItem21.IconSvg = "PlusOutlined";
-            menuItem22.IconSvg = "UserAddOutlined";
-            menuItem22.ID = "miAdd";
-            menuItem22.LocalizationText = "MapSettingsForm.MapRemote.{id}";
-            menuItem22.Text = "新增";
-            menuItem23.IconSvg = "FolderOpenOutlined";
-            menuItem23.ID = "miImport";
-            menuItem23.LocalizationText = "MapSettingsForm.MapRemote.{id}";
-            menuItem23.Text = "导入远程映射";
-            menuItem24.IconSvg = "DeliveredProcedureOutlined";
-            menuItem24.ID = "miExport";
-            menuItem24.LocalizationText = "MapSettingsForm.MapRemote.{id}";
-            menuItem24.Text = "导出远程映射";
-            menuItem25.IconSvg = "DeleteOutlined";
-            menuItem25.ID = "miClear";
-            menuItem25.LocalizationText = "MapSettingsForm.MapRemote.{id}";
-            menuItem25.Text = "清空远程映射";
-            menuItem21.Sub.Add(menuItem22);
-            menuItem21.Sub.Add(menuItem23);
-            menuItem21.Sub.Add(menuItem24);
-            menuItem21.Sub.Add(menuItem25);
-            this.mMapRemote.Items.Add(menuItem21);
+            menuItem11.IconSvg = "PlusOutlined";
+            menuItem12.IconSvg = "UserAddOutlined";
+            menuItem12.ID = "miAdd";
+            menuItem12.LocalizationText = "MapSettingsForm.MapRemote.{id}";
+            menuItem12.Text = "新增";
+            menuItem13.IconSvg = "FolderOpenOutlined";
+            menuItem13.ID = "miImport";
+            menuItem13.LocalizationText = "MapSettingsForm.MapRemote.{id}";
+            menuItem13.Text = "导入远程映射";
+            menuItem14.IconSvg = "DeliveredProcedureOutlined";
+            menuItem14.ID = "miExport";
+            menuItem14.LocalizationText = "MapSettingsForm.MapRemote.{id}";
+            menuItem14.Text = "导出远程映射";
+            menuItem15.IconSvg = "DeleteOutlined";
+            menuItem15.ID = "miClear";
+            menuItem15.LocalizationText = "MapSettingsForm.MapRemote.{id}";
+            menuItem15.Text = "清空远程映射";
+            menuItem11.Sub.Add(menuItem12);
+            menuItem11.Sub.Add(menuItem13);
+            menuItem11.Sub.Add(menuItem14);
+            menuItem11.Sub.Add(menuItem15);
+            this.mMapRemote.Items.Add(menuItem11);
             this.mMapRemote.Location = new System.Drawing.Point(747, 3);
             this.mMapRemote.Mode = AntdUI.TMenuMode.Horizontal;
             this.mMapRemote.Name = "mMapRemote";
@@ -258,6 +259,7 @@
             this.tMapLocal.TabIndex = 8;
             this.tMapLocal.CellClick += new AntdUI.Table.ClickEventHandler(this.tMapLocal_CellClick);
             this.tMapLocal.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tMapLocal_CellButtonClick);
+            this.tMapLocal.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tMapLocal_CellDoubleClick);
             // 
             // tlpMapLocal
             // 
@@ -282,28 +284,28 @@
             this.mMapLocal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mMapLocal.Gap = 5;
             this.mMapLocal.IconRatio = 1F;
-            menuItem26.IconSvg = "PlusOutlined";
-            menuItem27.IconSvg = "UserAddOutlined";
-            menuItem27.ID = "miAdd";
-            menuItem27.LocalizationText = "MapSettingsForm.MapLocal.{id}";
-            menuItem27.Text = "新增";
-            menuItem28.IconSvg = "FolderOpenOutlined";
-            menuItem28.ID = "miImport";
-            menuItem28.LocalizationText = "MapSettingsForm.MapLocal.{id}";
-            menuItem28.Text = "导入本地映射";
-            menuItem29.IconSvg = "DeliveredProcedureOutlined";
-            menuItem29.ID = "miExport";
-            menuItem29.LocalizationText = "MapSettingsForm.MapLocal.{id}";
-            menuItem29.Text = "导出本地映射";
-            menuItem30.IconSvg = "DeleteOutlined";
-            menuItem30.ID = "miClear";
-            menuItem30.LocalizationText = "MapSettingsForm.MapLocal.{id}";
-            menuItem30.Text = "清空本地映射";
-            menuItem26.Sub.Add(menuItem27);
-            menuItem26.Sub.Add(menuItem28);
-            menuItem26.Sub.Add(menuItem29);
-            menuItem26.Sub.Add(menuItem30);
-            this.mMapLocal.Items.Add(menuItem26);
+            menuItem16.IconSvg = "PlusOutlined";
+            menuItem17.IconSvg = "UserAddOutlined";
+            menuItem17.ID = "miAdd";
+            menuItem17.LocalizationText = "MapSettingsForm.MapLocal.{id}";
+            menuItem17.Text = "新增";
+            menuItem18.IconSvg = "FolderOpenOutlined";
+            menuItem18.ID = "miImport";
+            menuItem18.LocalizationText = "MapSettingsForm.MapLocal.{id}";
+            menuItem18.Text = "导入本地映射";
+            menuItem19.IconSvg = "DeliveredProcedureOutlined";
+            menuItem19.ID = "miExport";
+            menuItem19.LocalizationText = "MapSettingsForm.MapLocal.{id}";
+            menuItem19.Text = "导出本地映射";
+            menuItem20.IconSvg = "DeleteOutlined";
+            menuItem20.ID = "miClear";
+            menuItem20.LocalizationText = "MapSettingsForm.MapLocal.{id}";
+            menuItem20.Text = "清空本地映射";
+            menuItem16.Sub.Add(menuItem17);
+            menuItem16.Sub.Add(menuItem18);
+            menuItem16.Sub.Add(menuItem19);
+            menuItem16.Sub.Add(menuItem20);
+            this.mMapLocal.Items.Add(menuItem16);
             this.mMapLocal.Location = new System.Drawing.Point(747, 3);
             this.mMapLocal.Mode = AntdUI.TMenuMode.Horizontal;
             this.mMapLocal.Name = "mMapLocal";

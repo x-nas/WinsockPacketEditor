@@ -481,27 +481,14 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//保存账号列表（异步）
+        #region//保存账号列表
 
         public void SaveAccountList()
         {
-            if (Operate.ProxyConfig.Account.NeedSave && !this.bgwAccountList.IsBusy)
+            if (Operate.ProxyConfig.Account.NeedSave)
             {
                 Operate.ProxyConfig.Account.NeedSave = false;
                 Operate.ProxyConfig.Account.SaveAccountList_ToDB();
-                //this.bgwAccountList.RunWorkerAsync();
-            }
-        }
-
-        private void bgwAccountList_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                Operate.ProxyConfig.Account.SaveAccountList_ToDB();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
