@@ -415,7 +415,8 @@ namespace WinsockPacketEditor
             {
                 get
                 {
-                    return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                    return $"{version.Major}.{version.Minor}.{version.Build}";
                 }
             }
 
@@ -10349,6 +10350,8 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WS2_SendTo:
                                 case Operate.PacketConfig.Packet.PacketType.WSASend:
                                 case Operate.PacketConfig.Packet.PacketType.WSASendTo:
+                                case Operate.PacketConfig.Packet.PacketType.TCP_Req:
+                                case Operate.PacketConfig.Packet.PacketType.UDP_Req:
                                     sIPString = sIPTo;
                                     break;
                                 case Operate.PacketConfig.Packet.PacketType.WS1_Recv:
@@ -10358,6 +10361,8 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WSARecv:
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
+                                case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
+                                case Operate.PacketConfig.Packet.PacketType.UDP_Resp:
                                     sIPString = sIPFrom;
                                     break;
                             }
@@ -10374,6 +10379,8 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WSASend:
                                 case Operate.PacketConfig.Packet.PacketType.WSARecv:
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvEx:
+                                case Operate.PacketConfig.Packet.PacketType.TCP_Req:
+                                case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
                                     res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
                                     break;
                                 case Operate.PacketConfig.Packet.PacketType.WS1_SendTo:
@@ -10388,6 +10395,8 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WS2_RecvFrom:
                                 case Operate.PacketConfig.Packet.PacketType.WSASendTo:
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
+                                case Operate.PacketConfig.Packet.PacketType.UDP_Req:
+                                case Operate.PacketConfig.Packet.PacketType.UDP_Resp:
                                     if (!string.IsNullOrEmpty(sIPString))
                                     {
                                         Operate.PacketConfig.Packet.SockAddr saAddr = PacketConfig.Packet.GetSocketAddr_ByIPString(sIPString);
