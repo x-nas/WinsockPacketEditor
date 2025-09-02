@@ -78,6 +78,21 @@ namespace WinsockPacketEditor
                         };
                     },
                 }.SetLocalizationTitleID("Table.RobotList.Column."),
+                new AntdUI.Column("RInstruction", "指令条数", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is RobotInfo ri)
+                        {
+                            return new AntdUI.CellText(ri.RInstruction.Count.ToString())
+                            {
+                                Fore = Color.Green,
+                            };
+                        }
+
+                        return null;                        
+                    },
+                }.SetLocalizationTitleID("Table.RobotList.Column."),
                 new AntdUI.Column("CellLinks", "操作")
                 {
                     Render = (value, record, rowindex)=>

@@ -1244,6 +1244,9 @@ namespace WinsockPacketEditor
                 case "Table.RobotList.Column.ExecutionCount":
                     return "Execution";
 
+                case "Table.RobotList.Column.RInstruction":
+                    return "Instruction";
+
                 case "Table.RobotList.Column.CellLinks":
                     return "Operation";
 
