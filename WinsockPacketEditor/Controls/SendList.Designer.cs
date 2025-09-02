@@ -146,7 +146,6 @@
             this.mSendList.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.mSendList.Size = new System.Drawing.Size(44, 44);
             this.mSendList.TabIndex = 6;
-            this.mSendList.Trigger = AntdUI.Trigger.Click;
             this.mSendList.SelectChanged += new AntdUI.SelectEventHandler(this.mSendList_SelectChanged);
             // 
             // bSendList_Start

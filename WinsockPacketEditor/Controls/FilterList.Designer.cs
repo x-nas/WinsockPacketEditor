@@ -127,7 +127,6 @@
             this.mFilterList.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.mFilterList.Size = new System.Drawing.Size(44, 44);
             this.mFilterList.TabIndex = 5;
-            this.mFilterList.Trigger = AntdUI.Trigger.Click;
             this.mFilterList.SelectChanged += new AntdUI.SelectEventHandler(this.mFilterList_SelectChanged);
             // 
             // bFilterList_Reset

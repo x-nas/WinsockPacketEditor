@@ -234,7 +234,6 @@
             this.mProxyList.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.mProxyList.Size = new System.Drawing.Size(90, 44);
             this.mProxyList.TabIndex = 6;
-            this.mProxyList.Trigger = AntdUI.Trigger.Click;
             this.mProxyList.SelectChanged += new AntdUI.SelectEventHandler(this.mProxyList_SelectChanged);
             // 
             // bProxyStart

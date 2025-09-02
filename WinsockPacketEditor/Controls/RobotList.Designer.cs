@@ -131,7 +131,6 @@
             this.mRobotList.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.mRobotList.Size = new System.Drawing.Size(44, 44);
             this.mRobotList.TabIndex = 6;
-            this.mRobotList.Trigger = AntdUI.Trigger.Click;
             this.mRobotList.SelectChanged += new AntdUI.SelectEventHandler(this.mRobotList_SelectChanged);
             // 
             // bRobotList_Start

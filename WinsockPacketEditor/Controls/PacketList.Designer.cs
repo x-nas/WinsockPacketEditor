@@ -223,7 +223,6 @@
             this.mPacketList.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.mPacketList.Size = new System.Drawing.Size(90, 44);
             this.mPacketList.TabIndex = 6;
-            this.mPacketList.Trigger = AntdUI.Trigger.Click;
             this.mPacketList.SelectChanged += new AntdUI.SelectEventHandler(this.mPacketList_SelectChanged);
             // 
             // bHookStart
