@@ -2637,6 +2637,61 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//文本过滤（正则表达式）
+
+            public static void FindRegexMatches(string pattern, AntdUI.Input textBoxA, AntdUI.Input textBoxB)
+            {
+                try
+                {
+                    textBoxA.ClearStyle();
+                    textBoxB.ClearStyle();
+
+                    foreach (Match match in Regex.Matches(textBoxA.Text, pattern))
+                    {
+                        textBoxA.SetStyle(match.Index, match.Length, font: null, fore: Color.White, back: Color.DarkSeaGreen);
+                    }
+
+                    foreach (Match match in Regex.Matches(textBoxB.Text, pattern))
+                    {
+                        textBoxB.SetStyle(match.Index, match.Length, font: null, fore: Color.White, back: Color.DarkSeaGreen);
+                    }
+                }
+                catch
+                {
+                    //
+                }
+            }
+
+            public static void LeachRegexMatches(string pattern, AntdUI.Input textBoxA, AntdUI.Input textBoxB)
+            {
+                try
+                {
+                    textBoxA.ClearStyle();
+                    textBoxB.ClearStyle();
+
+                    StringBuilder sbA = new StringBuilder();
+                    StringBuilder sbB = new StringBuilder();
+
+                    foreach (Match match in Regex.Matches(textBoxA.Text, pattern))
+                    {
+                        sbA.Append(match.Value);
+                    }
+                    textBoxA.Text = sbA.ToString();
+
+                    foreach (Match match in Regex.Matches(textBoxB.Text, pattern))
+                    {
+                        sbB.Append(match.Value);
+                    }
+                    textBoxB.Text = sbB.ToString();
+                }
+                catch
+                {
+                    //
+                }
+            }
+
+            #endregion
+
             #region//支持取消的等待（异步）
 
             public static async Task DoSleepAsync(int MilliSecond, CancellationToken cancellationToken)

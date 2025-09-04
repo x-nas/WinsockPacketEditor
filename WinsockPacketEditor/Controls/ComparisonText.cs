@@ -182,9 +182,19 @@ namespace WinsockPacketEditor
             this.lDuplicate_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtDuplicate_B.Text.Length);
         }
 
-        #endregion
+        #endregion        
 
         #region //文本比较
+
+        private void txtComparisonRegex_TextChanged(object sender, EventArgs e)
+        {
+            Operate.SystemConfig.FindRegexMatches(this.txtComparisonRegex.Text, this.txtComparison_A, this.txtComparison_B);
+        }
+
+        private void bComparisonRegex_Click(object sender, EventArgs e)
+        {
+            Operate.SystemConfig.LeachRegexMatches(this.txtComparisonRegex.Text, this.txtComparison_A, this.txtComparison_B);
+        }
 
         private void bComparison_Click(object sender, EventArgs e)
         {
@@ -204,6 +214,16 @@ namespace WinsockPacketEditor
         #endregion
 
         #region//文本查重
+
+        private void txtRegex_TextChanged(object sender, EventArgs e)
+        {
+            Operate.SystemConfig.FindRegexMatches(this.txtDuplicateRegex.Text, this.txtDuplicate_A, this.txtDuplicate_B);
+        }
+
+        private void bDuplicateRegex_Click(object sender, EventArgs e)
+        {
+            Operate.SystemConfig.LeachRegexMatches(this.txtDuplicateRegex.Text, this.txtDuplicate_A, this.txtDuplicate_B);
+        }
 
         private void bDuplicate_Click(object sender, EventArgs e)
         {
@@ -244,6 +264,6 @@ namespace WinsockPacketEditor
             this.txtDuplicate_B.Clear();
         }
 
-        #endregion
+        #endregion        
     }
 }
