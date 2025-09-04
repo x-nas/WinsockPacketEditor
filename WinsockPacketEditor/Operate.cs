@@ -2643,6 +2643,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(pattern))
+                    {
+                        return;
+                    }
+
                     textBoxA.ClearStyle();
                     textBoxB.ClearStyle();
 
@@ -2666,6 +2671,11 @@ namespace WinsockPacketEditor
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(pattern))
+                    {
+                        return;
+                    }
+
                     textBoxA.ClearStyle();
                     textBoxB.ClearStyle();
 

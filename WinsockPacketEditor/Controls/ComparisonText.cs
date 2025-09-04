@@ -254,6 +254,7 @@ namespace WinsockPacketEditor
             this.txtComparison_B.ClearStyle();
             this.txtComparison_A.Clear();
             this.txtComparison_B.Clear();
+            this.txtComparisonRegex.Clear();
         }
 
         private void bDuplicate_Clear_Click(object sender, EventArgs e)
@@ -262,6 +263,7 @@ namespace WinsockPacketEditor
             this.txtDuplicate_B.ClearStyle();
             this.txtDuplicate_A.Clear();
             this.txtDuplicate_B.Clear();
+            this.txtDuplicateRegex.Clear();
         }
 
         #endregion        

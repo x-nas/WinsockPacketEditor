@@ -616,6 +616,9 @@ namespace WinsockPacketEditor
                 case "ImportRobotList.Success":
                     return "Successfully Imported Robot List";
 
+                case "Input.Regex":
+                    return "Please enter a Regex";
+
                 #endregion
 
                 #region//StartForm
@@ -1344,6 +1347,12 @@ namespace WinsockPacketEditor
 
                 case "Table.Duplicate.Column.PositionsInB":
                     return "Position in B";
+
+                case "ComparisonText.Leach":
+                    return "Leach";
+
+                case "ComparisonText.Search":
+                    return "Search :";
 
                 #endregion
 
