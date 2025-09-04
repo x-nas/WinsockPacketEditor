@@ -128,7 +128,7 @@
             // 
             this.tlpStatistical_FilterButton.ColumnCount = 3;
             this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpStatistical_FilterButton.Controls.Add(this.bStatistical_Filter, 1, 1);
             this.tlpStatistical_FilterButton.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -144,13 +144,14 @@
             // 
             // bStatistical_Filter
             // 
+            this.bStatistical_Filter.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bStatistical_Filter.BackExtend = "135, #6253E1, #04BEFE";
             this.bStatistical_Filter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bStatistical_Filter.IconSvg = "SyncOutlined";
             this.bStatistical_Filter.LocalizationText = "Refresh";
-            this.bStatistical_Filter.Location = new System.Drawing.Point(292, 8);
+            this.bStatistical_Filter.Location = new System.Drawing.Point(304, 8);
             this.bStatistical_Filter.Name = "bStatistical_Filter";
-            this.bStatistical_Filter.Size = new System.Drawing.Size(144, 44);
+            this.bStatistical_Filter.Size = new System.Drawing.Size(119, 44);
             this.bStatistical_Filter.TabIndex = 1;
             this.bStatistical_Filter.Text = "刷新数据";
             this.bStatistical_Filter.Type = AntdUI.TTypeMini.Primary;
@@ -420,6 +421,7 @@
             this.tlpStatistical_Filter.ResumeLayout(false);
             this.tlpStatistical_Filter.PerformLayout();
             this.tlpStatistical_FilterButton.ResumeLayout(false);
+            this.tlpStatistical_FilterButton.PerformLayout();
             this.tlpStatistical_FilterTop.ResumeLayout(false);
             this.tlpStatistical_FilterTop.PerformLayout();
             this.tlpStatistical_FilterTop2.ResumeLayout(false);

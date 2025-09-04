@@ -70,8 +70,8 @@
             this.tlpPacketInfo_XOR_Button.ColumnCount = 4;
             this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketInfo_XOR_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketInfo_XOR_Button.Controls.Add(this.lXOR, 0, 1);
             this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR, 2, 1);
             this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR_ClearUp, 3, 1);
@@ -94,18 +94,19 @@
             this.lXOR.LocalizationText = "XORCalculation.XORValue";
             this.lXOR.Location = new System.Drawing.Point(3, 7);
             this.lXOR.Name = "lXOR";
-            this.lXOR.Size = new System.Drawing.Size(176, 45);
+            this.lXOR.Size = new System.Drawing.Size(176, 46);
             this.lXOR.TabIndex = 6;
             this.lXOR.Text = "异或值（支持循环异或）";
             // 
             // bXOR
             // 
+            this.bXOR.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bXOR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bXOR.IconSvg = "BuildFilled";
             this.bXOR.LocalizationText = "XOR";
-            this.bXOR.Location = new System.Drawing.Point(503, 7);
+            this.bXOR.Location = new System.Drawing.Point(557, 7);
             this.bXOR.Name = "bXOR";
-            this.bXOR.Size = new System.Drawing.Size(114, 45);
+            this.bXOR.Size = new System.Drawing.Size(87, 46);
             this.bXOR.TabIndex = 7;
             this.bXOR.Text = "计算";
             this.bXOR.Type = AntdUI.TTypeMini.Primary;
@@ -113,12 +114,13 @@
             // 
             // bXOR_ClearUp
             // 
+            this.bXOR_ClearUp.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bXOR_ClearUp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bXOR_ClearUp.IconSvg = "DeleteOutlined";
             this.bXOR_ClearUp.LocalizationText = "Clear";
-            this.bXOR_ClearUp.Location = new System.Drawing.Point(623, 7);
+            this.bXOR_ClearUp.Location = new System.Drawing.Point(650, 7);
             this.bXOR_ClearUp.Name = "bXOR_ClearUp";
-            this.bXOR_ClearUp.Size = new System.Drawing.Size(114, 45);
+            this.bXOR_ClearUp.Size = new System.Drawing.Size(87, 46);
             this.bXOR_ClearUp.TabIndex = 8;
             this.bXOR_ClearUp.Text = "清空";
             this.bXOR_ClearUp.Type = AntdUI.TTypeMini.Warn;
@@ -131,7 +133,7 @@
             this.txtXOR.Location = new System.Drawing.Point(185, 7);
             this.txtXOR.Name = "txtXOR";
             this.txtXOR.PlaceholderText = "请输入十六进制带空格";
-            this.txtXOR.Size = new System.Drawing.Size(312, 45);
+            this.txtXOR.Size = new System.Drawing.Size(366, 46);
             this.txtXOR.TabIndex = 9;
             this.txtXOR.TextChanged += new System.EventHandler(this.txtXOR_TextChanged);
             // 

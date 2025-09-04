@@ -70,9 +70,9 @@
             // 
             this.tlpButton.ColumnCount = 5;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
@@ -89,13 +89,14 @@
             // 
             // bSave
             // 
+            this.bSave.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(123, 7);
+            this.bSave.Location = new System.Drawing.Point(150, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(114, 46);
+            this.bSave.Size = new System.Drawing.Size(87, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -103,13 +104,14 @@
             // 
             // bExit
             // 
+            this.bExit.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(114, 46);
+            this.bExit.Size = new System.Drawing.Size(87, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -247,6 +249,7 @@
             this.Load += new System.EventHandler(this.ExpiryTime_Load);
             this.tlpExpiryTime.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
+            this.tlpButton.PerformLayout();
             this.tlpAddTime.ResumeLayout(false);
             this.tlpAddTime.PerformLayout();
             this.tlpTimeType.ResumeLayout(false);

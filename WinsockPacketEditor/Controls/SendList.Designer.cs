@@ -81,8 +81,8 @@
             // tlpSendListButton
             // 
             this.tlpSendListButton.ColumnCount = 4;
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSendListButton.Controls.Add(this.bSendList_Stop, 1, 0);
@@ -99,14 +99,15 @@
             // 
             // bSendList_Stop
             // 
+            this.bSendList_Stop.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSendList_Stop.BorderWidth = 1F;
             this.bSendList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSendList_Stop.Enabled = false;
             this.bSendList_Stop.IconSvg = "PauseCircleOutlined";
             this.bSendList_Stop.LocalizationText = "Stop";
-            this.bSendList_Stop.Location = new System.Drawing.Point(123, 3);
+            this.bSendList_Stop.Location = new System.Drawing.Point(96, 3);
             this.bSendList_Stop.Name = "bSendList_Stop";
-            this.bSendList_Stop.Size = new System.Drawing.Size(114, 44);
+            this.bSendList_Stop.Size = new System.Drawing.Size(87, 44);
             this.bSendList_Stop.TabIndex = 8;
             this.bSendList_Stop.Text = "停止";
             this.bSendList_Stop.Type = AntdUI.TTypeMini.Error;
@@ -150,6 +151,7 @@
             // 
             // bSendList_Start
             // 
+            this.bSendList_Start.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSendList_Start.BorderWidth = 1F;
             this.bSendList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSendList_Start.IconSvg = "PlayCircleOutlined";
@@ -161,7 +163,7 @@
             this.bSendList_Start.LocalizationText = "Execute";
             this.bSendList_Start.Location = new System.Drawing.Point(3, 3);
             this.bSendList_Start.Name = "bSendList_Start";
-            this.bSendList_Start.Size = new System.Drawing.Size(114, 44);
+            this.bSendList_Start.Size = new System.Drawing.Size(87, 44);
             this.bSendList_Start.TabIndex = 7;
             this.bSendList_Start.Text = "执行";
             this.bSendList_Start.Type = AntdUI.TTypeMini.Info;
@@ -186,6 +188,7 @@
             this.Load += new System.EventHandler(this.SendList_Load);
             this.tlpSendList.ResumeLayout(false);
             this.tlpSendListButton.ResumeLayout(false);
+            this.tlpSendListButton.PerformLayout();
             this.ResumeLayout(false);
 
         }

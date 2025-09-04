@@ -273,13 +273,13 @@
             // 
             this.tlpButton.ColumnCount = 9;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Controls.Add(this.bStop, 3, 1);
             this.tlpButton.Controls.Add(this.bSend, 1, 1);
@@ -298,6 +298,7 @@
             // 
             // bStop
             // 
+            this.bStop.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bStop.BackExtend = "135, #6253E1, #04BEFE";
             this.bStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bStop.Enabled = false;
@@ -308,9 +309,9 @@
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
             this.bStop.LocalizationText = "Stop";
-            this.bStop.Location = new System.Drawing.Point(373, 7);
+            this.bStop.Location = new System.Drawing.Point(400, 7);
             this.bStop.Name = "bStop";
-            this.bStop.Size = new System.Drawing.Size(114, 46);
+            this.bStop.Size = new System.Drawing.Size(87, 46);
             this.bStop.TabIndex = 3;
             this.bStop.Text = "停止";
             this.bStop.Type = AntdUI.TTypeMini.Info;
@@ -318,6 +319,7 @@
             // 
             // bSend
             // 
+            this.bSend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSend.BackExtend = "135, #6253E1, #04BEFE";
             this.bSend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSend.IconSvg = "PlayCircleOutlined";
@@ -327,9 +329,9 @@
             this.bSend.LoadingWaveValue = 0.6F;
             this.bSend.LoadingWaveVertical = true;
             this.bSend.LocalizationText = "Send";
-            this.bSend.Location = new System.Drawing.Point(233, 7);
+            this.bSend.Location = new System.Drawing.Point(287, 7);
             this.bSend.Name = "bSend";
-            this.bSend.Size = new System.Drawing.Size(114, 46);
+            this.bSend.Size = new System.Drawing.Size(87, 46);
             this.bSend.TabIndex = 2;
             this.bSend.Text = "发送";
             this.bSend.Type = AntdUI.TTypeMini.Info;
@@ -337,6 +339,7 @@
             // 
             // bSave
             // 
+            this.bSave.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSave.BackExtend = "135, #6253E1, #04BEFE";
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
@@ -348,7 +351,7 @@
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(513, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(114, 46);
+            this.bSave.Size = new System.Drawing.Size(87, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Info;
@@ -356,13 +359,14 @@
             // 
             // bExit
             // 
+            this.bExit.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(653, 7);
+            this.bExit.Location = new System.Drawing.Point(626, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(114, 46);
+            this.bExit.Size = new System.Drawing.Size(87, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -851,6 +855,7 @@
             this.tlpSendCollectionInfo.ResumeLayout(false);
             this.tlpSendCollectionInfo.PerformLayout();
             this.tlpButton.ResumeLayout(false);
+            this.tlpButton.PerformLayout();
             this.tlpPacketSettings.ResumeLayout(false);
             this.pProgression.ResumeLayout(false);
             this.tlpProgression.ResumeLayout(false);

@@ -66,8 +66,8 @@
             // tlpRobotListButton
             // 
             this.tlpRobotListButton.ColumnCount = 4;
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 1, 0);
@@ -84,14 +84,15 @@
             // 
             // bRobotList_Stop
             // 
+            this.bRobotList_Stop.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bRobotList_Stop.BorderWidth = 1F;
             this.bRobotList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRobotList_Stop.Enabled = false;
             this.bRobotList_Stop.IconSvg = "PauseCircleOutlined";
             this.bRobotList_Stop.LocalizationText = "Stop";
-            this.bRobotList_Stop.Location = new System.Drawing.Point(123, 3);
+            this.bRobotList_Stop.Location = new System.Drawing.Point(96, 3);
             this.bRobotList_Stop.Name = "bRobotList_Stop";
-            this.bRobotList_Stop.Size = new System.Drawing.Size(114, 44);
+            this.bRobotList_Stop.Size = new System.Drawing.Size(87, 44);
             this.bRobotList_Stop.TabIndex = 8;
             this.bRobotList_Stop.Text = "停止";
             this.bRobotList_Stop.Type = AntdUI.TTypeMini.Error;
@@ -135,6 +136,7 @@
             // 
             // bRobotList_Start
             // 
+            this.bRobotList_Start.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bRobotList_Start.BorderWidth = 1F;
             this.bRobotList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRobotList_Start.IconSvg = "PlayCircleOutlined";
@@ -146,7 +148,7 @@
             this.bRobotList_Start.LocalizationText = "Execute";
             this.bRobotList_Start.Location = new System.Drawing.Point(3, 3);
             this.bRobotList_Start.Name = "bRobotList_Start";
-            this.bRobotList_Start.Size = new System.Drawing.Size(114, 44);
+            this.bRobotList_Start.Size = new System.Drawing.Size(87, 44);
             this.bRobotList_Start.TabIndex = 7;
             this.bRobotList_Start.Text = "执行";
             this.bRobotList_Start.Type = AntdUI.TTypeMini.Info;
@@ -186,6 +188,7 @@
             this.Load += new System.EventHandler(this.RobotList_Load);
             this.tlpRobotList.ResumeLayout(false);
             this.tlpRobotListButton.ResumeLayout(false);
+            this.tlpRobotListButton.PerformLayout();
             this.ResumeLayout(false);
 
         }

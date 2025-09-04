@@ -79,7 +79,7 @@
             // tlpFilterListButton
             // 
             this.tlpFilterListButton.ColumnCount = 3;
-            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterListButton.Controls.Add(this.mFilterList, 2, 0);
@@ -131,12 +131,13 @@
             // 
             // bFilterList_Reset
             // 
+            this.bFilterList_Reset.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bFilterList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bFilterList_Reset.IconSvg = "UndoOutlined";
             this.bFilterList_Reset.LocalizationText = "FilterList.ResetCount";
             this.bFilterList_Reset.Location = new System.Drawing.Point(3, 3);
             this.bFilterList_Reset.Name = "bFilterList_Reset";
-            this.bFilterList_Reset.Size = new System.Drawing.Size(144, 44);
+            this.bFilterList_Reset.Size = new System.Drawing.Size(119, 44);
             this.bFilterList_Reset.TabIndex = 6;
             this.bFilterList_Reset.Text = "重置计数";
             this.bFilterList_Reset.Type = AntdUI.TTypeMini.Info;
@@ -155,6 +156,7 @@
             this.Load += new System.EventHandler(this.FilterList_Load);
             this.tlpFilterList.ResumeLayout(false);
             this.tlpFilterListButton.ResumeLayout(false);
+            this.tlpFilterListButton.PerformLayout();
             this.ResumeLayout(false);
 
         }

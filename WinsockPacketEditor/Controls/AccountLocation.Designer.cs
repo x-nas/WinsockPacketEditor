@@ -56,10 +56,8 @@
             // 
             this.tlpButton.ColumnCount = 3;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpButton.Location = new System.Drawing.Point(0, 640);
@@ -74,13 +72,14 @@
             // 
             // bExit
             // 
+            this.bExit.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(443, 7);
+            this.bExit.Location = new System.Drawing.Point(456, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(114, 46);
+            this.bExit.Size = new System.Drawing.Size(87, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -110,6 +109,7 @@
             this.Load += new System.EventHandler(this.AccountLocation_Load);
             this.tlpLocation.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
+            this.tlpButton.PerformLayout();
             this.ResumeLayout(false);
 
         }

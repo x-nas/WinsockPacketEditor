@@ -150,7 +150,7 @@
             // 
             this.tlpExtractionButton.ColumnCount = 3;
             this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpExtractionButton.Controls.Add(this.bExtraction, 1, 1);
             this.tlpExtractionButton.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -166,13 +166,14 @@
             // 
             // bExtraction
             // 
+            this.bExtraction.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bExtraction.BackExtend = "135, #6253E1, #04BEFE";
             this.bExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExtraction.IconSvg = "SaveOutlined";
             this.bExtraction.LocalizationText = "Extraction";
-            this.bExtraction.Location = new System.Drawing.Point(295, 8);
+            this.bExtraction.Location = new System.Drawing.Point(307, 8);
             this.bExtraction.Name = "bExtraction";
-            this.bExtraction.Size = new System.Drawing.Size(144, 44);
+            this.bExtraction.Size = new System.Drawing.Size(119, 44);
             this.bExtraction.TabIndex = 1;
             this.bExtraction.Text = "生成文件";
             this.bExtraction.Type = AntdUI.TTypeMini.Primary;
@@ -209,6 +210,7 @@
             this.tlpExtractionSelectFile.ResumeLayout(false);
             this.tlpData.ResumeLayout(false);
             this.tlpExtractionButton.ResumeLayout(false);
+            this.tlpExtractionButton.PerformLayout();
             this.ResumeLayout(false);
 
         }

@@ -127,7 +127,7 @@
             // 
             // cbBackUp_RobotList
             // 
-            this.cbBackUp_RobotList.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbBackUp_RobotList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_RobotList.Checked = true;
             this.cbBackUp_RobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_RobotList.LocalizationText = "RobotList";
@@ -139,7 +139,7 @@
             // 
             // cbBackUp_SendList
             // 
-            this.cbBackUp_SendList.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbBackUp_SendList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_SendList.Checked = true;
             this.cbBackUp_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_SendList.LocalizationText = "SendList";
@@ -151,7 +151,7 @@
             // 
             // cbBackUp_FilterList
             // 
-            this.cbBackUp_FilterList.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbBackUp_FilterList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_FilterList.Checked = true;
             this.cbBackUp_FilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_FilterList.LocalizationText = "FilterList";
@@ -163,7 +163,7 @@
             // 
             // cbBackUp_InjectSet
             // 
-            this.cbBackUp_InjectSet.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbBackUp_InjectSet.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_InjectSet.Checked = true;
             this.cbBackUp_InjectSet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_InjectSet.LocalizationText = "BackUpSettingsForm.InjectMode.Configuration";
@@ -177,9 +177,9 @@
             // 
             this.tlpButton2.ColumnCount = 5;
             this.tlpButton2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpButton2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpButton2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton2.Controls.Add(this.bImport, 1, 1);
             this.tlpButton2.Controls.Add(this.bExport, 3, 1);
@@ -196,13 +196,14 @@
             // 
             // bImport
             // 
+            this.bImport.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bImport.BackExtend = "135, #6253E1, #04BEFE";
             this.bImport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bImport.IconSvg = "ImportOutlined";
             this.bImport.LocalizationText = "Import";
-            this.bImport.Location = new System.Drawing.Point(93, 7);
+            this.bImport.Location = new System.Drawing.Point(118, 7);
             this.bImport.Name = "bImport";
-            this.bImport.Size = new System.Drawing.Size(144, 46);
+            this.bImport.Size = new System.Drawing.Size(119, 46);
             this.bImport.TabIndex = 0;
             this.bImport.Text = "导入备份";
             this.bImport.Type = AntdUI.TTypeMini.Primary;
@@ -210,13 +211,14 @@
             // 
             // bExport
             // 
+            this.bExport.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bExport.BackExtend = "135, #6253E1, #04BEFE";
             this.bExport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExport.IconSvg = "ExportOutlined";
             this.bExport.LocalizationText = "Export";
             this.bExport.Location = new System.Drawing.Point(263, 7);
             this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(144, 46);
+            this.bExport.Size = new System.Drawing.Size(119, 46);
             this.bExport.TabIndex = 1;
             this.bExport.Text = "导出备份";
             this.bExport.Type = AntdUI.TTypeMini.Primary;
@@ -226,10 +228,8 @@
             // 
             this.tlpButton.ColumnCount = 3;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpButton.Location = new System.Drawing.Point(0, 640);
@@ -244,13 +244,14 @@
             // 
             // bExit
             // 
+            this.bExit.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(193, 7);
+            this.bExit.Location = new System.Drawing.Point(206, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(114, 46);
+            this.bExit.Size = new System.Drawing.Size(87, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -292,7 +293,7 @@
             // 
             // cbBackUp_ProxyAccount
             // 
-            this.cbBackUp_ProxyAccount.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbBackUp_ProxyAccount.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_ProxyAccount.Checked = true;
             this.cbBackUp_ProxyAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxyAccount.LocalizationText = "BackUpSettingsForm.ProxyAccount";
@@ -304,7 +305,7 @@
             // 
             // cbBackUp_ProxyMapping
             // 
-            this.cbBackUp_ProxyMapping.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbBackUp_ProxyMapping.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_ProxyMapping.Checked = true;
             this.cbBackUp_ProxyMapping.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxyMapping.LocalizationText = "BackUpSettingsForm.ProxyMapping";
@@ -316,7 +317,7 @@
             // 
             // cbBackUp_ProxySet
             // 
-            this.cbBackUp_ProxySet.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbBackUp_ProxySet.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_ProxySet.Checked = true;
             this.cbBackUp_ProxySet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxySet.LocalizationText = "BackUpSettingsForm.ProxyMode.Configuration";
@@ -352,7 +353,7 @@
             // 
             // cbBackUp_SystemConfig
             // 
-            this.cbBackUp_SystemConfig.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbBackUp_SystemConfig.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_SystemConfig.Checked = true;
             this.cbBackUp_SystemConfig.LocalizationText = "BackUpSettingsForm.SystemOperation";
             this.cbBackUp_SystemConfig.Location = new System.Drawing.Point(3, 52);
@@ -377,7 +378,9 @@
             this.tlpListInfo.ResumeLayout(false);
             this.tlpListInfo.PerformLayout();
             this.tlpButton2.ResumeLayout(false);
+            this.tlpButton2.PerformLayout();
             this.tlpButton.ResumeLayout(false);
+            this.tlpButton.PerformLayout();
             this.tlpBackUpContent.ResumeLayout(false);
             this.tlpBackUpContent.PerformLayout();
             this.ResumeLayout(false);

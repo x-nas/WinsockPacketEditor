@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.tlpSearchSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.txtFind = new AntdUI.Input();
             this.pSearchType = new AntdUI.Panel();
             this.tlpSearchType = new System.Windows.Forms.TableLayoutPanel();
             this.rbString = new AntdUI.Radio();
@@ -40,7 +41,6 @@
             this.tlpSearchFrom = new System.Windows.Forms.TableLayoutPanel();
             this.rbFromIndex = new AntdUI.Radio();
             this.rbFromHead = new AntdUI.Radio();
-            this.txtFind = new AntdUI.Input();
             this.tlpSearchSettings.SuspendLayout();
             this.pSearchType.SuspendLayout();
             this.tlpSearchType.SuspendLayout();
@@ -55,7 +55,7 @@
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSearchSettings.Controls.Add(this.txtFind, 1, 0);
             this.tlpSearchSettings.Controls.Add(this.pSearchType, 0, 0);
             this.tlpSearchSettings.Controls.Add(this.tlpButton, 3, 0);
@@ -68,6 +68,17 @@
             this.tlpSearchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSearchSettings.Size = new System.Drawing.Size(1000, 100);
             this.tlpSearchSettings.TabIndex = 3;
+            // 
+            // txtFind
+            // 
+            this.txtFind.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtFind.LocalizationPlaceholderText = "Input.Regex";
+            this.txtFind.Location = new System.Drawing.Point(203, 3);
+            this.txtFind.Multiline = true;
+            this.txtFind.Name = "txtFind";
+            this.txtFind.PlaceholderText = "请输入正则表达式";
+            this.txtFind.Size = new System.Drawing.Size(494, 94);
+            this.txtFind.TabIndex = 25;
             // 
             // pSearchType
             // 
@@ -114,7 +125,6 @@
             this.rbString.Size = new System.Drawing.Size(95, 39);
             this.rbString.TabIndex = 3;
             this.rbString.Text = "查找文本";
-            this.rbString.CheckedChanged += new AntdUI.BoolEventHandler(this.rbString_CheckedChanged);
             // 
             // rbHex
             // 
@@ -131,11 +141,11 @@
             // 
             // tlpButton
             // 
-            this.tlpButton.ColumnCount = 1;
+            this.tlpButton.ColumnCount = 2;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.Controls.Add(this.bExit, 0, 1);
-            this.tlpButton.Controls.Add(this.bSearch, 0, 0);
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpButton.Controls.Add(this.bExit, 1, 1);
+            this.tlpButton.Controls.Add(this.bSearch, 1, 0);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpButton.Location = new System.Drawing.Point(850, 0);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
@@ -148,14 +158,15 @@
             // 
             // bExit
             // 
+            this.bExit.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(3, 53);
+            this.bExit.Location = new System.Drawing.Point(26, 53);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(144, 44);
+            this.bExit.Size = new System.Drawing.Size(79, 44);
             this.bExit.TabIndex = 9;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -163,14 +174,15 @@
             // 
             // bSearch
             // 
+            this.bSearch.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSearch.BackExtend = "135, #6253E1, #04BEFE";
             this.bSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSearch.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bSearch.IconSvg = "SearchOutlined";
             this.bSearch.LocalizationText = "SearchPacketForm.FindNext";
-            this.bSearch.Location = new System.Drawing.Point(3, 3);
+            this.bSearch.Location = new System.Drawing.Point(26, 3);
             this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(144, 44);
+            this.bSearch.Size = new System.Drawing.Size(121, 44);
             this.bSearch.TabIndex = 8;
             this.bSearch.Text = "查找下一个";
             this.bSearch.Type = AntdUI.TTypeMini.Primary;
@@ -234,17 +246,6 @@
             this.rbFromHead.TabIndex = 4;
             this.rbFromHead.Text = "从头开始";
             // 
-            // txtFind
-            // 
-            this.txtFind.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtFind.LocalizationPlaceholderText = "Input.Text";
-            this.txtFind.Location = new System.Drawing.Point(203, 3);
-            this.txtFind.Multiline = true;
-            this.txtFind.Name = "txtFind";
-            this.txtFind.PlaceholderText = "请输入文本";
-            this.txtFind.Size = new System.Drawing.Size(494, 94);
-            this.txtFind.TabIndex = 25;
-            // 
             // SearchPacket
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -261,6 +262,7 @@
             this.tlpSearchType.ResumeLayout(false);
             this.tlpSearchType.PerformLayout();
             this.tlpButton.ResumeLayout(false);
+            this.tlpButton.PerformLayout();
             this.pSearchFrom.ResumeLayout(false);
             this.tlpSearchFrom.ResumeLayout(false);
             this.tlpSearchFrom.PerformLayout();

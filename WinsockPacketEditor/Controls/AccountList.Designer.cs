@@ -85,8 +85,8 @@
             // 
             this.tlpAccountListButton.ColumnCount = 6;
             this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500F));
-            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -107,12 +107,13 @@
             // 
             // bReset
             // 
+            this.bReset.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bReset.BorderWidth = 1F;
             this.bReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bReset.LocalizationText = "Reset";
-            this.bReset.Location = new System.Drawing.Point(603, 2);
+            this.bReset.Location = new System.Drawing.Point(569, 1);
             this.bReset.Name = "bReset";
-            this.bReset.Size = new System.Drawing.Size(94, 45);
+            this.bReset.Size = new System.Drawing.Size(60, 46);
             this.bReset.TabIndex = 8;
             this.bReset.Text = "重置";
             this.bReset.Type = AntdUI.TTypeMini.Warn;
@@ -146,10 +147,10 @@
             menuItem1.Sub.Add(menuItem4);
             menuItem1.Sub.Add(menuItem5);
             this.mAccountList.Items.Add(menuItem1);
-            this.mAccountList.Location = new System.Drawing.Point(1092, 2);
+            this.mAccountList.Location = new System.Drawing.Point(1092, 1);
             this.mAccountList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mAccountList.Name = "mAccountList";
-            this.mAccountList.Size = new System.Drawing.Size(45, 45);
+            this.mAccountList.Size = new System.Drawing.Size(45, 46);
             this.mAccountList.TabIndex = 3;
             this.mAccountList.SelectChanged += new AntdUI.SelectEventHandler(this.mAccountList_SelectChanged);
             // 
@@ -159,11 +160,11 @@
             this.txtSearchUserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchUserName.LocalizationPlaceholderText = "AccountList.SearchAccount";
             this.txtSearchUserName.LocalizationText = "";
-            this.txtSearchUserName.Location = new System.Drawing.Point(842, 2);
+            this.txtSearchUserName.Location = new System.Drawing.Point(842, 1);
             this.txtSearchUserName.Name = "txtSearchUserName";
             this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
             this.txtSearchUserName.PrefixSvg = "SearchOutlined";
-            this.txtSearchUserName.Size = new System.Drawing.Size(244, 45);
+            this.txtSearchUserName.Size = new System.Drawing.Size(244, 46);
             this.txtSearchUserName.TabIndex = 4;
             this.txtSearchUserName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearchUserName_KeyPress);
             // 
@@ -173,22 +174,23 @@
             this.dtpExpiryTime.Format = "yyyy-MM-dd HH:mm:ss";
             this.dtpExpiryTime.LocalizationPlaceholderEnd = "DatePicker.PlaceholderE";
             this.dtpExpiryTime.LocalizationPlaceholderStart = "DatePicker.PlaceholderS";
-            this.dtpExpiryTime.Location = new System.Drawing.Point(3, 2);
+            this.dtpExpiryTime.Location = new System.Drawing.Point(3, 1);
             this.dtpExpiryTime.Name = "dtpExpiryTime";
             this.dtpExpiryTime.PlaceholderEnd = "过期结束时间";
             this.dtpExpiryTime.PlaceholderStart = "过期开始时间";
-            this.dtpExpiryTime.Size = new System.Drawing.Size(494, 45);
+            this.dtpExpiryTime.Size = new System.Drawing.Size(494, 46);
             this.dtpExpiryTime.TabIndex = 5;
             this.dtpExpiryTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // bSearchExpiryTime
             // 
+            this.bSearchExpiryTime.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSearchExpiryTime.BorderWidth = 1F;
             this.bSearchExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSearchExpiryTime.LocalizationText = "Search";
-            this.bSearchExpiryTime.Location = new System.Drawing.Point(503, 2);
+            this.bSearchExpiryTime.Location = new System.Drawing.Point(503, 1);
             this.bSearchExpiryTime.Name = "bSearchExpiryTime";
-            this.bSearchExpiryTime.Size = new System.Drawing.Size(94, 45);
+            this.bSearchExpiryTime.Size = new System.Drawing.Size(60, 46);
             this.bSearchExpiryTime.TabIndex = 7;
             this.bSearchExpiryTime.Text = "查询";
             this.bSearchExpiryTime.Type = AntdUI.TTypeMini.Primary;
@@ -220,6 +222,7 @@
             this.Load += new System.EventHandler(this.AccountList_Load);
             this.tlpAccountList.ResumeLayout(false);
             this.tlpAccountListButton.ResumeLayout(false);
+            this.tlpAccountListButton.PerformLayout();
             this.ResumeLayout(false);
 
         }

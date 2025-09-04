@@ -35,7 +35,6 @@ namespace WinsockPacketEditor
                 }                
 
                 this.Dark_Changed();
-                this.FindTypeChanged();
             }
             catch (Exception ex)
             {
@@ -70,39 +69,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
-
-        #region//搜索类型切换
-
-        private void rbString_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
-        {
-            this.FindTypeChanged();
-        }
-
-        private void FindTypeChanged()
-        {
-            try
-            {
-                if (rbString.Checked)
-                {
-                    this.txtFind.PlaceholderText = "请输入文本";
-                    this.txtFind.LocalizationPlaceholderText = "Input.Text";
-                    this.txtFind.Focus();
-                }
-                else if (rbHex.Checked)
-                {
-                    this.txtFind.PlaceholderText = "请输入正则表达式";
-                    this.txtFind.LocalizationPlaceholderText = "Input.Regex";
-                    this.txtFind.Focus();
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//查找下一个
 

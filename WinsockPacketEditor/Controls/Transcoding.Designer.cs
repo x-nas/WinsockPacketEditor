@@ -94,7 +94,7 @@
             // 
             this.tlpTranscoding_Button.ColumnCount = 3;
             this.tlpTranscoding_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpTranscoding_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpTranscoding_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpTranscoding_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpTranscoding_Button.Controls.Add(this.bEncoding, 1, 1);
             this.tlpTranscoding_Button.Controls.Add(this.bDecoding, 1, 3);
@@ -112,14 +112,15 @@
             // 
             // bEncoding
             // 
+            this.bEncoding.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bEncoding.BackExtend = "135, #0fd850, #3cba92";
             this.bEncoding.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bEncoding.IconPosition = AntdUI.TAlignMini.Right;
             this.bEncoding.IconSvg = "DoubleRightOutlined";
             this.bEncoding.LocalizationText = "Transcoding.Encode";
-            this.bEncoding.Location = new System.Drawing.Point(15, 309);
+            this.bEncoding.Location = new System.Drawing.Point(28, 308);
             this.bEncoding.Name = "bEncoding";
-            this.bEncoding.Size = new System.Drawing.Size(114, 45);
+            this.bEncoding.Size = new System.Drawing.Size(87, 46);
             this.bEncoding.TabIndex = 3;
             this.bEncoding.Text = "编码";
             this.bEncoding.Type = AntdUI.TTypeMini.Success;
@@ -127,14 +128,15 @@
             // 
             // bDecoding
             // 
+            this.bDecoding.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bDecoding.BackExtend = "135, #fa709a, #fee140";
             this.bDecoding.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bDecoding.IconPosition = AntdUI.TAlignMini.Right;
             this.bDecoding.IconSvg = "DoubleRightOutlined";
             this.bDecoding.LocalizationText = "Transcoding.Decode";
-            this.bDecoding.Location = new System.Drawing.Point(15, 420);
+            this.bDecoding.Location = new System.Drawing.Point(28, 420);
             this.bDecoding.Name = "bDecoding";
-            this.bDecoding.Size = new System.Drawing.Size(114, 45);
+            this.bDecoding.Size = new System.Drawing.Size(87, 46);
             this.bDecoding.TabIndex = 4;
             this.bDecoding.Text = "解码";
             this.bDecoding.Type = AntdUI.TTypeMini.Warn;
@@ -501,6 +503,7 @@
             this.Size = new System.Drawing.Size(800, 800);
             this.tlpTranscoding.ResumeLayout(false);
             this.tlpTranscoding_Button.ResumeLayout(false);
+            this.tlpTranscoding_Button.PerformLayout();
             this.pTranscoding_Result.ResumeLayout(false);
             this.tlpTranscoding_Result.ResumeLayout(false);
             this.tlpTranscoding_Result.PerformLayout();

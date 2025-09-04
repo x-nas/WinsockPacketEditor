@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem13 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem14 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem15 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem16 = new AntdUI.MenuItem();
             this.tlpPacketList = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.bPacketList_Clear = new AntdUI.Button();
@@ -128,12 +128,11 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 5;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Controls.Add(this.bPacketList_Clear, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.bHookStop, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.mPacketList, 4, 0);
@@ -149,13 +148,14 @@
             // 
             // bPacketList_Clear
             // 
+            this.bPacketList_Clear.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bPacketList_Clear.BorderWidth = 1F;
             this.bPacketList_Clear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bPacketList_Clear.IconSvg = "DeleteOutlined";
             this.bPacketList_Clear.LocalizationText = "Clear";
-            this.bPacketList_Clear.Location = new System.Drawing.Point(203, 3);
+            this.bPacketList_Clear.Location = new System.Drawing.Point(189, 3);
             this.bPacketList_Clear.Name = "bPacketList_Clear";
-            this.bPacketList_Clear.Size = new System.Drawing.Size(94, 44);
+            this.bPacketList_Clear.Size = new System.Drawing.Size(87, 44);
             this.bPacketList_Clear.TabIndex = 9;
             this.bPacketList_Clear.Text = "清空";
             this.bPacketList_Clear.Type = AntdUI.TTypeMini.Warn;
@@ -163,14 +163,15 @@
             // 
             // bHookStop
             // 
+            this.bHookStop.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bHookStop.BorderWidth = 1F;
             this.bHookStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHookStop.Enabled = false;
             this.bHookStop.IconSvg = "PauseCircleOutlined";
             this.bHookStop.LocalizationText = "Stop";
-            this.bHookStop.Location = new System.Drawing.Point(103, 3);
+            this.bHookStop.Location = new System.Drawing.Point(96, 3);
             this.bHookStop.Name = "bHookStop";
-            this.bHookStop.Size = new System.Drawing.Size(94, 44);
+            this.bHookStop.Size = new System.Drawing.Size(87, 44);
             this.bHookStop.TabIndex = 8;
             this.bHookStop.Text = "停止";
             this.bHookStop.Type = AntdUI.TTypeMini.Error;
@@ -182,41 +183,41 @@
             this.mPacketList.Gap = 5;
             this.mPacketList.IconRatio = 1F;
             this.mPacketList.itemMargin = 0;
-            menuItem1.IconSvg = "SearchOutlined";
-            menuItem1.ID = "miPacketListSearch";
-            menuItem2.IconSvg = "PlusOutlined";
-            menuItem3.IconSvg = "FilterOutlined";
-            menuItem3.ID = "miLeachSettings";
-            menuItem3.LocalizationText = "InjectModeForm.{id}";
-            menuItem3.Text = "过滤设置";
-            menuItem4.IconSvg = "AimOutlined";
-            menuItem4.ID = "miHookSettings";
-            menuItem4.LocalizationText = "InjectModeForm.{id}";
-            menuItem4.Text = "拦截设置";
-            menuItem5.IconSvg = "OrderedListOutlined";
-            menuItem5.ID = "miListSettings";
-            menuItem5.LocalizationText = "InjectModeForm.{id}";
-            menuItem5.Text = "列表设置";
-            menuItem6.IconSvg = "GoldOutlined";
-            menuItem6.ID = "miHotKeySettings";
-            menuItem6.LocalizationText = "InjectModeForm.{id}";
-            menuItem6.Text = "快捷键设置";
-            menuItem7.IconSvg = "DeliveredProcedureOutlined";
-            menuItem7.ID = "miBackUpSettings";
-            menuItem7.LocalizationText = "InjectModeForm.{id}";
-            menuItem7.Text = "备份设置";
-            menuItem8.IconSvg = "SettingOutlined";
-            menuItem8.ID = "miSystemSettings";
-            menuItem8.LocalizationText = "InjectModeForm.{id}";
-            menuItem8.Text = "系统设置";
-            menuItem2.Sub.Add(menuItem3);
-            menuItem2.Sub.Add(menuItem4);
-            menuItem2.Sub.Add(menuItem5);
-            menuItem2.Sub.Add(menuItem6);
-            menuItem2.Sub.Add(menuItem7);
-            menuItem2.Sub.Add(menuItem8);
-            this.mPacketList.Items.Add(menuItem1);
-            this.mPacketList.Items.Add(menuItem2);
+            menuItem9.IconSvg = "SearchOutlined";
+            menuItem9.ID = "miPacketListSearch";
+            menuItem10.IconSvg = "PlusOutlined";
+            menuItem11.IconSvg = "FilterOutlined";
+            menuItem11.ID = "miLeachSettings";
+            menuItem11.LocalizationText = "InjectModeForm.{id}";
+            menuItem11.Text = "过滤设置";
+            menuItem12.IconSvg = "AimOutlined";
+            menuItem12.ID = "miHookSettings";
+            menuItem12.LocalizationText = "InjectModeForm.{id}";
+            menuItem12.Text = "拦截设置";
+            menuItem13.IconSvg = "OrderedListOutlined";
+            menuItem13.ID = "miListSettings";
+            menuItem13.LocalizationText = "InjectModeForm.{id}";
+            menuItem13.Text = "列表设置";
+            menuItem14.IconSvg = "GoldOutlined";
+            menuItem14.ID = "miHotKeySettings";
+            menuItem14.LocalizationText = "InjectModeForm.{id}";
+            menuItem14.Text = "快捷键设置";
+            menuItem15.IconSvg = "DeliveredProcedureOutlined";
+            menuItem15.ID = "miBackUpSettings";
+            menuItem15.LocalizationText = "InjectModeForm.{id}";
+            menuItem15.Text = "备份设置";
+            menuItem16.IconSvg = "SettingOutlined";
+            menuItem16.ID = "miSystemSettings";
+            menuItem16.LocalizationText = "InjectModeForm.{id}";
+            menuItem16.Text = "系统设置";
+            menuItem10.Sub.Add(menuItem11);
+            menuItem10.Sub.Add(menuItem12);
+            menuItem10.Sub.Add(menuItem13);
+            menuItem10.Sub.Add(menuItem14);
+            menuItem10.Sub.Add(menuItem15);
+            menuItem10.Sub.Add(menuItem16);
+            this.mPacketList.Items.Add(menuItem9);
+            this.mPacketList.Items.Add(menuItem10);
             this.mPacketList.Location = new System.Drawing.Point(1047, 3);
             this.mPacketList.Mode = AntdUI.TMenuMode.Horizontal;
             this.mPacketList.Name = "mPacketList";
@@ -227,6 +228,7 @@
             // 
             // bHookStart
             // 
+            this.bHookStart.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bHookStart.BorderWidth = 1F;
             this.bHookStart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHookStart.IconSvg = "PlayCircleOutlined";
@@ -238,7 +240,7 @@
             this.bHookStart.LocalizationText = "Start";
             this.bHookStart.Location = new System.Drawing.Point(3, 3);
             this.bHookStart.Name = "bHookStart";
-            this.bHookStart.Size = new System.Drawing.Size(94, 44);
+            this.bHookStart.Size = new System.Drawing.Size(87, 44);
             this.bHookStart.TabIndex = 7;
             this.bHookStart.Text = "开始";
             this.bHookStart.Type = AntdUI.TTypeMini.Info;
@@ -969,6 +971,7 @@
             this.Load += new System.EventHandler(this.PacketList_Load);
             this.tlpPacketList.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.splitterPacketList.Panel1.ResumeLayout(false);
             this.splitterPacketList.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitterPacketList)).EndInit();
