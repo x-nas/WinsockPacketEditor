@@ -960,6 +960,11 @@ namespace WinsockPacketEditor
             {
                 if (Operate.PacketConfig.List.FindOptions.IsValid)
                 {
+                    if (Operate.PacketConfig.List.FindOptions.Type == FindType.Hex && Operate.PacketConfig.List.FindOptions.Hex.Length == 0)
+                    {
+                        return;
+                    }
+
                     long res = this.hbPacketData.Find(Operate.PacketConfig.List.FindOptions);
 
                     if (res == -1)
@@ -979,34 +984,14 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.PacketConfig.List.lstPacketInfo.Count > 0)
+                if (Operate.PacketConfig.List.lstPacketInfo.Count > 0 && Operate.PacketConfig.List.FindOptions.IsValid)
                 {
-                    if (Operate.PacketConfig.List.FindOptions.IsValid)
+                    if (this.SearchFromHead)
                     {
-                        byte[] bSearchContent = null;
-                        FindType fType = Operate.PacketConfig.List.FindOptions.Type;
-                        Operate.PacketConfig.Packet.EncodingFormat efFormat = new Operate.PacketConfig.Packet.EncodingFormat();
+                        Operate.PacketConfig.List.Search_Index = 0;
+                    }                    
 
-                        switch (fType)
-                        {
-                            case FindType.Text:
-                                efFormat = Operate.PacketConfig.Packet.EncodingFormat.UTF7;
-                                bSearchContent = Operate.SystemConfig.StringToBytes(efFormat, Operate.PacketConfig.List.FindOptions.Text);
-                                break;
-
-                            case FindType.Hex:
-                                efFormat = Operate.PacketConfig.Packet.EncodingFormat.Hex;
-                                bSearchContent = Operate.PacketConfig.List.FindOptions.Hex;
-                                break;
-                        }
-
-                        if (this.SearchFromHead)
-                        {
-                            Operate.PacketConfig.List.Search_Index = 0;
-                        }
-
-                        e.Result = Operate.PacketConfig.List.SearchForPacketList(Operate.PacketConfig.List.Search_Index, bSearchContent);
-                    }
+                    e.Result = Operate.PacketConfig.List.SearchForList<PacketInfo>(Operate.PacketConfig.List.Search_Index, true);
                 }
             }
             catch (Exception ex)

@@ -24,6 +24,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -1751,26 +1752,23 @@ namespace WinsockPacketEditor
 
             private static byte[] Hex_To_Bytes(string hexString)
             {
-                if (string.IsNullOrEmpty(hexString))
-                {
-                    return Array.Empty<byte>();
-                }
-
                 try
                 {
-                    hexString = hexString.Replace(" ", "");
+                    hexString = hexString.Replace(" ", "").Replace("-", "").Replace(":", "");
 
-                    if ((hexString.Length % 2) != 0)
+                    if (string.IsNullOrEmpty(hexString) || hexString.Length % 2 != 0)
                     {
-                        hexString += " ";
+                        return Array.Empty<byte>();
                     }
 
                     byte[] returnBytes = new byte[hexString.Length / 2];
-                    Span<byte> span = returnBytes.AsSpan();
+                    ReadOnlySpan<char> hexSpan = hexString.AsSpan();
 
-                    for (int i = 0; i < span.Length; i++)
+                    for (int i = 0; i < returnBytes.Length; i++)
                     {
-                        span[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+                        int index = i * 2;
+                        string byteStr = hexSpan.Slice(index, 2).ToString();
+                        returnBytes[i] = Convert.ToByte(byteStr, 16);
                     }
 
                     return returnBytes;
@@ -6905,54 +6903,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
-
-                #region//搜索代理列表
-
-                public static int SearchForProxyList(int fromIndex, ReadOnlySpan<byte> searchData)
-                {
-                    int iResult = -1;
-
-                    try
-                    {
-                        if (searchData.Length == 0 || fromIndex < 0)
-                        {
-                            return -1;
-                        }
-
-                        int listCount = ProxyConfig.List.lstProxyInfo.Count;
-                        if (listCount == 0 || fromIndex >= listCount)
-                        {
-                            return -1;
-                        }
-
-                        if (fromIndex == -1)
-                        {
-                            fromIndex = 0;
-                        }
-
-                        for (int i = fromIndex; i < listCount; i++)
-                        {
-                            byte[] packetBuffer = ProxyConfig.List.lstProxyInfo[i].PacketBuffer;
-                            if (packetBuffer != null && packetBuffer.Length >= searchData.Length)
-                            {
-                                ReadOnlySpan<byte> packetSpan = packetBuffer.AsSpan();
-                                if (packetSpan.IndexOf(searchData) != -1)
-                                {
-                                    return i;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-
-                    return iResult;
-                }
-
-                #endregion
+                #endregion                
 
                 #region//关闭代理列表中的指定账号的链接
 
@@ -11546,6 +11497,7 @@ namespace WinsockPacketEditor
                 public static decimal AutoClear_Value = 5000;
                 public static int Search_Index = -1;
                 public static FindOptions FindOptions = new FindOptions();
+                public static string FindRegex = string.Empty;
                 public static PacketInfo piSelect;
                 public static List<PacketInfo> lstPacketInfo = new List<PacketInfo>();
 
@@ -11579,41 +11531,102 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//搜索封包列表
+                #region // 搜索列表（封包/代理）
 
-                public static int SearchForPacketList(int fromIndex, ReadOnlySpan<byte> searchData)
+                public static int SearchForList<T>(int fromIndex, bool isPacketList = true) where T : class
                 {
                     int iResult = -1;
 
                     try
                     {
-                        if (searchData.Length == 0 || fromIndex < 0)
+                        if (!Operate.PacketConfig.List.FindOptions.IsValid)
                         {
                             return -1;
                         }
 
-                        int listCount = PacketConfig.List.lstPacketInfo.Count;
-                        if (listCount == 0 || fromIndex >= listCount)
+                        if (fromIndex < 0)
                         {
                             return -1;
                         }
 
-                        if (fromIndex == -1)
+                        int listCount;
+                        IList<T> listItems;
+
+                        if (isPacketList)
                         {
-                            fromIndex = 0;
+                            listCount = PacketConfig.List.lstPacketInfo.Count;
+                            listItems = PacketConfig.List.lstPacketInfo as IList<T>;
+                        }
+                        else
+                        {
+                            listCount = ProxyConfig.List.lstProxyInfo.Count;
+                            listItems = ProxyConfig.List.lstProxyInfo as IList<T>;
                         }
 
-                        for (int i = fromIndex; i < listCount; i++)
+                        if (listItems == null || listCount == 0 || fromIndex >= listCount)
                         {
-                            byte[] packetBuffer = PacketConfig.List.lstPacketInfo[i].PacketBuffer;
-                            if (packetBuffer != null && packetBuffer.Length >= searchData.Length)
-                            {
-                                ReadOnlySpan<byte> packetSpan = packetBuffer.AsSpan();
-                                if (packetSpan.IndexOf(searchData) != -1)
+                            return -1;
+                        }
+
+                        switch (PacketConfig.List.FindOptions.Type)
+                        {
+                            case FindType.Text:
+
+                                byte[] bSearchContent = SystemConfig.StringToBytes(
+                                    PacketConfig.Packet.EncodingFormat.UTF7,
+                                    PacketConfig.List.FindOptions.Text
+                                );
+
+                                for (int i = fromIndex; i < listCount; i++)
                                 {
-                                    return i;
+                                    ReadOnlySpan<byte> packetSpan = GetPacketBuffer(listItems[i], isPacketList);
+                                    if (packetSpan != null && !packetSpan.IsEmpty && packetSpan.Length >= bSearchContent.Length)
+                                    {
+                                        if (packetSpan.IndexOf(bSearchContent) != -1)
+                                        {
+                                            return i;
+                                        }
+                                    }
                                 }
-                            }
+
+                                break;
+
+                            case FindType.Hex:
+
+                                if (!string.IsNullOrEmpty(PacketConfig.List.FindRegex))
+                                {
+                                    for (int i = fromIndex; i < listCount; i++)
+                                    {
+                                        ReadOnlySpan<byte> packetBuffer = GetPacketBuffer(listItems[i], isPacketList);
+                                        string packetData = SystemConfig.BytesToString(
+                                            PacketConfig.Packet.EncodingFormat.Hex,
+                                            packetBuffer
+                                        );
+
+                                        try
+                                        {
+                                            Match mFind = Regex.Match(packetData, PacketConfig.List.FindRegex);
+                                            if (mFind.Success)
+                                            {
+                                                byte[] bHex = SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, mFind.Value);
+                                                if (bHex.Length == 0)
+                                                {
+                                                    return -1;
+                                                }
+
+                                                Operate.PacketConfig.List.FindOptions.Hex = bHex;
+                                                return i;
+                                            }
+                                        }
+                                        catch
+                                        {
+                                            // 正则表达式错误
+                                            return -1;
+                                        }
+                                    }
+                                }
+
+                                break;
                         }
                     }
                     catch (Exception ex)
@@ -11622,6 +11635,20 @@ namespace WinsockPacketEditor
                     }
 
                     return iResult;
+                }
+
+                private static ReadOnlySpan<byte> GetPacketBuffer<T>(T item, bool isPacketList)
+                {
+                    if (isPacketList && item is PacketInfo packetInfo)
+                    {
+                        return packetInfo.PacketBuffer.AsSpan();
+                    }
+                    else if (!isPacketList && item is ProxyInfo proxyInfo)
+                    {
+                        return proxyInfo.PacketBuffer.AsSpan();
+                    }
+
+                    return ReadOnlySpan<byte>.Empty;
                 }
 
                 #endregion

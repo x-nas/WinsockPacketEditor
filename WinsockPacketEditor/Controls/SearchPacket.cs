@@ -1,7 +1,6 @@
 ﻿using AntdUI;
 using Be.Windows.Forms;
 using System;
-using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -24,28 +23,16 @@ namespace WinsockPacketEditor
             try
             {
                 this.Text = AntdUI.Localization.Get("SearchPacketForm", "查找封包");
-                this.tabSearchType.TabMenuVisible = false;
 
                 if (Operate.PacketConfig.List.FindOptions.Type == FindType.Text)
                 {
                     this.rbString.Checked = true;
+                    this.txtFind.Text = Operate.PacketConfig.List.FindOptions.Text;
                 }
                 else if (Operate.PacketConfig.List.FindOptions.Type == FindType.Hex)
                 {
                     this.rbHex.Checked = true;
-                }
-
-                this.txtFind.Text = Operate.PacketConfig.List.FindOptions.Text;
-                //this.chkMatchCase.Checked = Operate.PacketConfig.List.FindOptions.MatchCase;              
-
-                if (Operate.PacketConfig.List.FindOptions.Hex != null && Operate.PacketConfig.List.FindOptions.Hex.Length > 0)
-                {
-                    this.hexFind.ByteProvider = new DynamicByteProvider(Operate.PacketConfig.List.FindOptions.Hex);
-                }
-                else
-                {
-                    byte[] bNew = new byte[0];
-                    hexFind.ByteProvider = new DynamicByteProvider(bNew);
+                    this.txtFind.Text = Operate.PacketConfig.List.FindRegex;
                 }
 
                 this.Dark_Changed();
@@ -62,14 +49,10 @@ namespace WinsockPacketEditor
             if (AntdUI.Config.IsDark)
             {
                 this.txtFind.BackColor = Operate.SystemConfig.Color_30;
-                this.hexFind.BackColor = Operate.SystemConfig.Color_30;
-                this.hexFind.ForeColor = Color.Silver;
             }
             else
             {
                 this.txtFind.BackColor = null;
-                this.hexFind.BackColor = Color.White;
-                this.hexFind.ForeColor = Color.Black;
             }
         }
 
@@ -103,13 +86,15 @@ namespace WinsockPacketEditor
             {
                 if (rbString.Checked)
                 {
-                    this.tabSearchType.SelectTab(0);
+                    this.txtFind.PlaceholderText = "请输入文本";
+                    this.txtFind.LocalizationPlaceholderText = "Input.Text";
                     this.txtFind.Focus();
                 }
                 else if (rbHex.Checked)
                 {
-                    this.tabSearchType.SelectTab(1);
-                    this.hexFind.Focus();
+                    this.txtFind.PlaceholderText = "请输入正则表达式";
+                    this.txtFind.LocalizationPlaceholderText = "Input.Regex";
+                    this.txtFind.Focus();
                 }
             }
             catch (Exception ex)
@@ -124,72 +109,59 @@ namespace WinsockPacketEditor
 
         private void bSearch_Click(object sender, EventArgs e)
         {
-            string findText = txtFind.Text.Trim();
-            if (rbString.Checked && string.IsNullOrEmpty(findText))
+            try
             {
-                Operate.PacketConfig.List.FindOptions.IsValid = false;
-
-                this.txtFind.Status = TType.Error;
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "查找内容为空", TType.Error)
+                if (string.IsNullOrEmpty(this.txtFind.Text.Trim()))
                 {
-                    LocalizationText = "SearchPacketForm.Empty"
-                });
+                    Operate.PacketConfig.List.FindOptions.IsValid = false;
 
-                return;
-            }
+                    this.txtFind.Status = TType.Error;
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "查找内容为空", TType.Error)
+                    {
+                        LocalizationText = "SearchPacketForm.Empty"
+                    });
 
-            if (rbHex.Checked && hexFind.ByteProvider.Length == 0)
-            {
-                Operate.PacketConfig.List.FindOptions.IsValid = false;
+                    return;
+                }
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "查找内容为空", TType.Error)
+                if (rbString.Checked)
                 {
-                    LocalizationText = "SearchPacketForm.Empty"
-                });
+                    Operate.PacketConfig.List.FindOptions.Type = FindType.Text;
+                    Operate.PacketConfig.List.FindOptions.Text = txtFind.Text;
+                }
+                else
+                {
+                    Operate.PacketConfig.List.FindOptions.Type = FindType.Hex;
+                    Operate.PacketConfig.List.FindRegex = this.txtFind.Text;
+                }
 
-                return;
+                Operate.PacketConfig.List.FindOptions.IsValid = true;
+
+                bool FromHead = this.rbFromHead.Checked;
+                if (FromHead)
+                {
+                    this.rbFromIndex.Checked = true;
+                }
+
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Process:
+
+                        ((InterfaceInfo.IInjectMode)form).SearchPacketList(FromHead);
+
+                        break;
+
+                    case Operate.SystemConfig.SystemMode.Proxy:
+
+                        ((InterfaceInfo.IProxyMode)form).SearchProxyList(FromHead);
+
+                        break;
+                }
             }
-
-            if (rbString.Checked)
+            catch (Exception ex)
             {
-                Operate.PacketConfig.List.FindOptions.Type = FindType.Text;
-            }
-            else
-            {
-                Operate.PacketConfig.List.FindOptions.Type = FindType.Hex;
-            }
-
-            Operate.PacketConfig.List.FindOptions.Text = txtFind.Text;
-            //Operate.PacketConfig.List.FindOptions.MatchCase = chkMatchCase.Checked;
-
-            DynamicByteProvider dbp = this.hexFind.ByteProvider as DynamicByteProvider;
-            if (dbp != null && dbp.Bytes.Count > 0)
-            {
-                Operate.PacketConfig.List.FindOptions.Hex = dbp.Bytes.ToArray();
-            }
-
-            Operate.PacketConfig.List.FindOptions.IsValid = true;
-
-            bool FromHead = this.rbFromHead.Checked;
-            if (FromHead)
-            {
-                this.rbFromIndex.Checked = true;
-            }
-
-            switch (Operate.SystemConfig.StartMode)
-            {
-                case Operate.SystemConfig.SystemMode.Process:
-
-                    ((InterfaceInfo.IInjectMode)form).SearchPacketList(FromHead);
-
-                    break;
-
-                case Operate.SystemConfig.SystemMode.Proxy:
-
-                    ((InterfaceInfo.IProxyMode)form).SearchProxyList(FromHead);
-
-                    break;
-            }
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
