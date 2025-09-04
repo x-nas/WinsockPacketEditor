@@ -507,7 +507,12 @@ namespace WinsockPacketEditor
                             {
                                 if (this.form is InterfaceInfo.IProxyMode proxyForm)
                                 {
-                                    string TextA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
+                                    string TextA = string.Empty;
+                                    foreach (ProxyInfo pi in piList)
+                                    {
+                                        TextA += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
+                                    }
+
                                     proxyForm.SetTextA(TextA);
 
                                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
@@ -525,7 +530,12 @@ namespace WinsockPacketEditor
                             {
                                 if (this.form is InterfaceInfo.IProxyMode proxyForm)
                                 {
-                                    string TextB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, piList[0].PacketBuffer);
+                                    string TextB = string.Empty;
+                                    foreach (ProxyInfo pi in piList)
+                                    {
+                                        TextB += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
+                                    }
+
                                     proxyForm.SetTextB(TextB);
 
                                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本B", TType.Success)
