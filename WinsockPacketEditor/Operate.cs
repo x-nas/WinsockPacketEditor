@@ -24,7 +24,6 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11531,7 +11530,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region // 搜索列表（封包/代理）
+                #region //搜索封包列表
 
                 public static int SearchForList<T>(int fromIndex, bool isPacketList = true) where T : class
                 {
@@ -11572,20 +11571,24 @@ namespace WinsockPacketEditor
                         {
                             case FindType.Text:
 
-                                byte[] bSearchContent = SystemConfig.StringToBytes(
-                                    PacketConfig.Packet.EncodingFormat.UTF7,
-                                    PacketConfig.List.FindOptions.Text
-                                );
-
                                 for (int i = fromIndex; i < listCount; i++)
                                 {
-                                    ReadOnlySpan<byte> packetSpan = GetPacketBuffer(listItems[i], isPacketList);
-                                    if (packetSpan != null && !packetSpan.IsEmpty && packetSpan.Length >= bSearchContent.Length)
+                                    ReadOnlySpan<byte> packetBuffer = GetPacketBuffer(listItems[i], isPacketList);
+                                    string packetData = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.UTF8, packetBuffer);
+
+                                    try
                                     {
-                                        if (packetSpan.IndexOf(bSearchContent) != -1)
+                                        Match mFind = Regex.Match(packetData, PacketConfig.List.FindRegex);
+                                        if (mFind.Success)
                                         {
+                                            PacketConfig.List.FindOptions.Text = mFind.Value;
                                             return i;
                                         }
+                                    }
+                                    catch
+                                    {
+                                        // 正则表达式错误
+                                        return -1;
                                     }
                                 }
 
@@ -11598,10 +11601,7 @@ namespace WinsockPacketEditor
                                     for (int i = fromIndex; i < listCount; i++)
                                     {
                                         ReadOnlySpan<byte> packetBuffer = GetPacketBuffer(listItems[i], isPacketList);
-                                        string packetData = SystemConfig.BytesToString(
-                                            PacketConfig.Packet.EncodingFormat.Hex,
-                                            packetBuffer
-                                        );
+                                        string packetData = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, packetBuffer);
 
                                         try
                                         {

@@ -23,17 +23,16 @@ namespace WinsockPacketEditor
             try
             {
                 this.Text = AntdUI.Localization.Get("SearchPacketForm", "查找封包");
+                this.txtFind.Text = Operate.PacketConfig.List.FindRegex;
 
                 if (Operate.PacketConfig.List.FindOptions.Type == FindType.Text)
                 {
                     this.rbString.Checked = true;
-                    this.txtFind.Text = Operate.PacketConfig.List.FindOptions.Text;
                 }
                 else if (Operate.PacketConfig.List.FindOptions.Type == FindType.Hex)
                 {
-                    this.rbHex.Checked = true;
-                    this.txtFind.Text = Operate.PacketConfig.List.FindRegex;
-                }
+                    this.rbHex.Checked = true;                    
+                }                
 
                 this.Dark_Changed();
                 this.FindTypeChanged();
@@ -127,14 +126,13 @@ namespace WinsockPacketEditor
                 if (rbString.Checked)
                 {
                     Operate.PacketConfig.List.FindOptions.Type = FindType.Text;
-                    Operate.PacketConfig.List.FindOptions.Text = txtFind.Text;
                 }
                 else
                 {
                     Operate.PacketConfig.List.FindOptions.Type = FindType.Hex;
-                    Operate.PacketConfig.List.FindRegex = this.txtFind.Text;
                 }
 
+                Operate.PacketConfig.List.FindRegex = this.txtFind.Text;
                 Operate.PacketConfig.List.FindOptions.IsValid = true;
 
                 bool FromHead = this.rbFromHead.Checked;
