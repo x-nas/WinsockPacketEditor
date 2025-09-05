@@ -2128,11 +2128,12 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找类似 &lt;svg viewBox=&quot;0 0 1024 1024&quot;&gt;&lt;path d=&quot;M431.81 891.72L73.74 526.85a21.53 21.53 0 0 1 0-29.7l358.07-364.87c13.41-14.09 37.14-4.6 37.14 14.85v197.29h465.71A21.54 21.54 0 0 1 956.2 366v292a21.54 21.54 0 0 1-21.54 21.54H469v197.33c0 19.45-23.78 28.94-37.19 14.85z&quot; fill=&quot;#1296db&quot;&gt;&lt;/path&gt;&lt;/svg&gt; 的本地化字符串。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static string Recv {
+        internal static System.Drawing.Bitmap Recv {
             get {
-                return ResourceManager.GetString("Recv", resourceCulture);
+                object obj = ResourceManager.GetObject("Recv", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2227,11 +2228,12 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找类似 &lt;svg viewBox=&quot;0 0 1024 1024&quot;&gt;&lt;path d=&quot;M516.63443469 832.282072l505.51128772-334.76430522-505.51128772-334.76430522 0 164.17023984-502.92215271 0 0 337.10511326 502.92215271 0z&quot; fill=&quot;#36ab60&quot;&gt;&lt;/path&gt;&lt;/svg&gt; 的本地化字符串。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static string Send {
+        internal static System.Drawing.Bitmap Send {
             get {
-                return ResourceManager.GetString("Send", resourceCulture);
+                object obj = ResourceManager.GetObject("Send", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

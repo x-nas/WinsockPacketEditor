@@ -10579,21 +10579,12 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//获取封包类型对应的图标
+                #region//获取封包类型对应的图标                
 
-                private static readonly ConcurrentDictionary<PacketType, string> _packetImageCache = new ConcurrentDictionary<PacketType, string>();
-
-                public static string GetImg_ByPacketType(PacketType ptType)
+                public static Bitmap GetImg_ByPacketType(PacketType ptType)
                 {
-                    string sReturn = string.Empty;
-
                     try
-                    {
-                        if (_packetImageCache.TryGetValue(ptType, out var cachedImage))
-                        {
-                            return cachedImage;
-                        }
-                        
+                    {                        
                         switch (ptType)
                         {
                             case PacketConfig.Packet.PacketType.WS1_Send:
@@ -10604,8 +10595,7 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSASendTo:
                             case PacketConfig.Packet.PacketType.TCP_Req:
                             case PacketConfig.Packet.PacketType.UDP_Req:
-                                sReturn = Properties.Resources.Send;
-                                break;
+                                return Properties.Resources.Send;
 
                             case PacketConfig.Packet.PacketType.WS1_Recv:
                             case PacketConfig.Packet.PacketType.WS2_Recv:
@@ -10616,24 +10606,15 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSARecvFrom:
                             case PacketConfig.Packet.PacketType.TCP_Resp:
                             case PacketConfig.Packet.PacketType.UDP_Resp:
-                                sReturn = Properties.Resources.Recv;
-                                break;
-
-                            default:
-                                break;
+                                return Properties.Resources.Recv;
                         }
-
-                        if (string.IsNullOrEmpty(sReturn))
-                        {
-                            _packetImageCache[ptType] = sReturn;
-                        }                        
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
-                    return sReturn;
+                    return null;
                 }
 
                 #endregion

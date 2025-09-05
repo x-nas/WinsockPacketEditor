@@ -130,12 +130,6 @@
   <data name="Flag_Local" xml:space="preserve">
     <value>&lt;svg viewBox="0 0 1024 1024"&gt;&lt;path d="M640.1 448.2m-59.1 0a59.1 59.1 0 1 0 118.2 0 59.1 59.1 0 1 0-118.2 0Z" fill="#FFFFFF"&gt;&lt;/path&gt;&lt;path d="M384.1 448.2m-59.1 0a59.1 59.1 0 1 0 118.2 0 59.1 59.1 0 1 0-118.2 0Z" fill="#FFFFFF"&gt;&lt;/path&gt;&lt;path d="M407.2 674.7s-17.3 81.4-79.6 58.7V801h368.7v-67.6s-56.5 22.3-79.4-58.7H407.2z" fill="#515F79"&gt;&lt;/path&gt;&lt;path d="M916 679H110c-6.6 0-12-5.4-12-12V541.2c0-6.6 5.4-12 12-12h806c6.6 0 12 5.4 12 12V667c0 6.6-5.4 12-12 12z" fill="#6F82A3"&gt;&lt;/path&gt;&lt;path d="M928 578.9H98V115.1c0-9.3 7.6-16.9 16.9-16.9h796.2c9.3 0 16.9 7.6 16.9 16.9v463.8z" fill="#A6B5D4"&gt;&lt;/path&gt;&lt;path d="M512.1 640m-17.2 0a17.2 17.2 0 1 0 34.4 0 17.2 17.2 0 1 0-34.4 0Z" fill="#51607A"&gt;&lt;/path&gt;&lt;/svg&gt;</value>
   </data>
-  <data name="Recv" xml:space="preserve">
-    <value>&lt;svg viewBox="0 0 1024 1024"&gt;&lt;path d="M431.81 891.72L73.74 526.85a21.53 21.53 0 0 1 0-29.7l358.07-364.87c13.41-14.09 37.14-4.6 37.14 14.85v197.29h465.71A21.54 21.54 0 0 1 956.2 366v292a21.54 21.54 0 0 1-21.54 21.54H469v197.33c0 19.45-23.78 28.94-37.19 14.85z" fill="#1296db"&gt;&lt;/path&gt;&lt;/svg&gt;</value>
-  </data>
-  <data name="Send" xml:space="preserve">
-    <value>&lt;svg viewBox="0 0 1024 1024"&gt;&lt;path d="M516.63443469 832.282072l505.51128772-334.76430522-505.51128772-334.76430522 0 164.17023984-502.92215271 0 0 337.10511326 502.92215271 0z" fill="#36ab60"&gt;&lt;/path&gt;&lt;/svg&gt;</value>
-  </data>
   <data name="ad" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ad.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -948,5 +942,11 @@
   </data>
   <data name="_is" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\is.svg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Recv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Recv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Send" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Send.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

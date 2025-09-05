@@ -653,6 +653,8 @@
     <Content Include="Images\HomeBG.png" />
     <Content Include="Images\InjectMode.png" />
     <Content Include="Images\ProxyMode.png" />
+    <None Include="Images\Recv.png" />
+    <None Include="Images\Send.png" />
     <Content Include="Images\wpe.ico" />
     <Content Include="Images\wpe.png" />
     <Content Include="Images\WPE64.ico" />
