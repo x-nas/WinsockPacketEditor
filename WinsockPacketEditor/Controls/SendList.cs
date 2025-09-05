@@ -23,6 +23,7 @@ namespace WinsockPacketEditor
 
         private void SendList_Load(object sender, EventArgs e)
         {
+            this.InitMenu();
             this.InitTable_SendList();
             this.Dark_Changed();
         }
@@ -148,6 +149,37 @@ namespace WinsockPacketEditor
             this.tSendList.Binding(Operate.SendConfig.List.lstSendInfo);
         }
 
+        private void InitMenu()
+        {
+            this.ddMenu.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("新增发送")
+                {
+                    Tag = "Add",
+                    LocalizationText = "SendList.Add",
+                    IconSvg = "SendOutlined",
+                },
+                new AntdUI.SelectItem("导入发送列表")
+                {
+                    Tag = "Import",
+                    LocalizationText = "SendList.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出所有发送")
+                {
+                    Tag = "Export",
+                    LocalizationText = "SendList.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空所有发送")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "SendList.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
+        }
+
         public void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
@@ -193,27 +225,26 @@ namespace WinsockPacketEditor
             this.bgwSendList.CancelAsync();
         }
 
-        private void mSendList_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mSendList.USelect();
+            this.ddMenu.SelectedValue = null;
 
-            switch (miSelect.ID)
+            switch (e.Value.ToString())
             {
-                case "miAdd":
+                case "Add":
 
                     Operate.SendConfig.Send.AddSend_New();
                     this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
 
                     break;
 
-                case "miImport":
+                case "Import":
 
                     Operate.SendConfig.List.LoadSendList_Dialog(this.form);
 
                     break;
 
-                case "miExport":
+                case "Export":
 
                     if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                     {
@@ -222,7 +253,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miClear":
+                case "Clear":
 
                     if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                     {

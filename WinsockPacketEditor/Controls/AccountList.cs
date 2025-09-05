@@ -25,6 +25,7 @@ namespace WinsockPacketEditor
 
         private void AccountList_Load(object sender, EventArgs e)
         {
+            this.InitMenu();
             this.InitTable_AccountList();
             this.Dark_Changed();
         }
@@ -155,6 +156,37 @@ namespace WinsockPacketEditor
             }
         }
 
+        private void InitMenu()
+        {
+            this.ddMenu.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("新增账号")
+                {
+                    Tag = "Add",
+                    LocalizationText = "AccountList.Add",
+                    IconSvg = "UserAddOutlined",
+                },
+                new AntdUI.SelectItem("导入账号列表")
+                {
+                    Tag = "Import",
+                    LocalizationText = "AccountList.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出所有账号")
+                {
+                    Tag = "Export",
+                    LocalizationText = "AccountList.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空所有账号")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "AccountList.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
+        }
+
         private BindingList<AccountInfo> GetPageData(int current, int pageSize)
         {
             var list = new BindingList<AccountInfo>();
@@ -228,14 +260,13 @@ namespace WinsockPacketEditor
 
         #region//账号列表 - 菜单
 
-        private void mAccountList_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mAccountList.USelect();
+            this.ddMenu.SelectedValue = null;
 
-            switch (miSelect.ID)
+            switch (e.Value.ToString())
             {
-                case "miAdd":
+                case "Add":
 
                     var AccountEdit = new AccountEdit(this.form, null);
                     AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
@@ -247,13 +278,13 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miImport":
+                case "Import":
 
                     Operate.ProxyConfig.Account.LoadAccountList_Dialog(this.form);
 
                     break;
 
-                case "miExport":
+                case "Export":
 
                     if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
                     {
@@ -262,7 +293,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miClear":
+                case "Clear":
 
                     if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
                     {

@@ -7511,7 +7511,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "Export",
                         IconSvg = "DeliveredProcedureOutlined",
-                        LocalizationText = "AccountList.Export",
+                        LocalizationText = "AccountList.BatchExport",
                     });
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
                     menuItems.Add(new AntdUI.ContextMenuStripItem("批量删除")

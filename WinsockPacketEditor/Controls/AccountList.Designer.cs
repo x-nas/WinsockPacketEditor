@@ -28,20 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
             this.tlpAccountList = new System.Windows.Forms.TableLayoutPanel();
             this.tAccountList = new AntdUI.Table();
             this.tlpAccountListButton = new System.Windows.Forms.TableLayoutPanel();
             this.bReset = new AntdUI.Button();
-            this.mAccountList = new AntdUI.Menu();
             this.txtSearchUserName = new AntdUI.Input();
             this.dtpExpiryTime = new AntdUI.DatePickerRange();
             this.bSearchExpiryTime = new AntdUI.Button();
             this.pAccountList = new AntdUI.Pagination();
+            this.ddMenu = new AntdUI.Dropdown();
             this.tlpAccountList.SuspendLayout();
             this.tlpAccountListButton.SuspendLayout();
             this.SuspendLayout();
@@ -90,8 +85,9 @@
             this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAccountListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpAccountListButton.Controls.Add(this.ddMenu, 5, 1);
             this.tlpAccountListButton.Controls.Add(this.bReset, 2, 1);
-            this.tlpAccountListButton.Controls.Add(this.mAccountList, 5, 1);
             this.tlpAccountListButton.Controls.Add(this.txtSearchUserName, 4, 1);
             this.tlpAccountListButton.Controls.Add(this.dtpExpiryTime, 0, 1);
             this.tlpAccountListButton.Controls.Add(this.bSearchExpiryTime, 1, 1);
@@ -111,48 +107,13 @@
             this.bReset.BorderWidth = 1F;
             this.bReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bReset.LocalizationText = "Reset";
-            this.bReset.Location = new System.Drawing.Point(569, 1);
+            this.bReset.Location = new System.Drawing.Point(571, 1);
             this.bReset.Name = "bReset";
-            this.bReset.Size = new System.Drawing.Size(60, 46);
+            this.bReset.Size = new System.Drawing.Size(62, 46);
             this.bReset.TabIndex = 8;
             this.bReset.Text = "重置";
             this.bReset.Type = AntdUI.TTypeMini.Warn;
             this.bReset.Click += new System.EventHandler(this.bReset_Click);
-            // 
-            // mAccountList
-            // 
-            this.mAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mAccountList.Gap = 5;
-            this.mAccountList.IconRatio = 1F;
-            this.mAccountList.itemMargin = 0;
-            menuItem1.IconSvg = "PlusOutlined";
-            menuItem2.IconSvg = "UserAddOutlined";
-            menuItem2.ID = "miAdd";
-            menuItem2.LocalizationText = "AccountList.{id}";
-            menuItem2.Text = "新增账号";
-            menuItem3.IconSvg = "FolderOpenOutlined";
-            menuItem3.ID = "miImport";
-            menuItem3.LocalizationText = "AccountList.{id}";
-            menuItem3.Text = "导入账号列表";
-            menuItem4.IconSvg = "DeliveredProcedureOutlined";
-            menuItem4.ID = "miExport";
-            menuItem4.LocalizationText = "AccountList.{id}";
-            menuItem4.Text = "导出所有账号";
-            menuItem5.IconSvg = "DeleteOutlined";
-            menuItem5.ID = "miClear";
-            menuItem5.LocalizationText = "AccountList.{id}";
-            menuItem5.Text = "清空所有账号";
-            menuItem1.Sub.Add(menuItem2);
-            menuItem1.Sub.Add(menuItem3);
-            menuItem1.Sub.Add(menuItem4);
-            menuItem1.Sub.Add(menuItem5);
-            this.mAccountList.Items.Add(menuItem1);
-            this.mAccountList.Location = new System.Drawing.Point(1092, 1);
-            this.mAccountList.Mode = AntdUI.TMenuMode.Horizontal;
-            this.mAccountList.Name = "mAccountList";
-            this.mAccountList.Size = new System.Drawing.Size(45, 46);
-            this.mAccountList.TabIndex = 3;
-            this.mAccountList.SelectChanged += new AntdUI.SelectEventHandler(this.mAccountList_SelectChanged);
             // 
             // txtSearchUserName
             // 
@@ -160,7 +121,7 @@
             this.txtSearchUserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchUserName.LocalizationPlaceholderText = "AccountList.SearchAccount";
             this.txtSearchUserName.LocalizationText = "";
-            this.txtSearchUserName.Location = new System.Drawing.Point(842, 1);
+            this.txtSearchUserName.Location = new System.Drawing.Point(843, 1);
             this.txtSearchUserName.Name = "txtSearchUserName";
             this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
             this.txtSearchUserName.PrefixSvg = "SearchOutlined";
@@ -190,7 +151,7 @@
             this.bSearchExpiryTime.LocalizationText = "Search";
             this.bSearchExpiryTime.Location = new System.Drawing.Point(503, 1);
             this.bSearchExpiryTime.Name = "bSearchExpiryTime";
-            this.bSearchExpiryTime.Size = new System.Drawing.Size(60, 46);
+            this.bSearchExpiryTime.Size = new System.Drawing.Size(62, 46);
             this.bSearchExpiryTime.TabIndex = 7;
             this.bSearchExpiryTime.Text = "查询";
             this.bSearchExpiryTime.Type = AntdUI.TTypeMini.Primary;
@@ -208,6 +169,22 @@
             this.pAccountList.TabIndex = 3;
             this.pAccountList.ValueChanged += new AntdUI.PageValueEventHandler(this.pAccountList_ValueChanged);
             this.pAccountList.ShowTotalChanged += new AntdUI.PageValueRtEventHandler(this.pAccountList_ShowTotalChanged);
+            // 
+            // ddMenu
+            // 
+            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu.Ghost = true;
+            this.ddMenu.IconRatio = 1F;
+            this.ddMenu.IconSvg = "PlusOutlined";
+            this.ddMenu.Location = new System.Drawing.Point(1093, 1);
+            this.ddMenu.MaxCount = 10;
+            this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Size = new System.Drawing.Size(44, 46);
+            this.ddMenu.TabIndex = 11;
+            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu.WaveSize = 0;
+            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
             // 
             // AccountList
             // 
@@ -232,11 +209,11 @@
         private System.Windows.Forms.TableLayoutPanel tlpAccountList;
         private AntdUI.Table tAccountList;
         private System.Windows.Forms.TableLayoutPanel tlpAccountListButton;
-        private AntdUI.Menu mAccountList;
         private AntdUI.Input txtSearchUserName;
         private AntdUI.DatePickerRange dtpExpiryTime;
         private AntdUI.Button bSearchExpiryTime;
         private AntdUI.Pagination pAccountList;
         private AntdUI.Button bReset;
+        private AntdUI.Dropdown ddMenu;
     }
 }

@@ -1049,16 +1049,16 @@ namespace WinsockPacketEditor
                 case "AccountList.SearchAccount":
                     return "Please enter Account";
 
-                case "AccountList.miAdd":
+                case "AccountList.Add":
                     return "Add Account";
 
-                case "AccountList.miImport":
+                case "AccountList.Import":
                     return "Import Account";
 
-                case "AccountList.miExport":
+                case "AccountList.Export":
                     return "Export Account";
 
-                case "AccountList.miClear":
+                case "AccountList.Clear":
                     return "Clear Account";
 
                 case "AccountList.BatchAdjustment":
@@ -1073,7 +1073,7 @@ namespace WinsockPacketEditor
                 case "AccountList.LimitDevices":
                     return "Devices";
 
-                case "AccountList.Export":
+                case "AccountList.BatchExport":
                     return "Batch Export";
 
                 case "AccountList.Delete":
@@ -1110,16 +1110,16 @@ namespace WinsockPacketEditor
                 case "FilterList.ResetCount":
                     return "Reset Count";
 
-                case "FilterList.miAdd":
+                case "FilterList.Add":
                     return "Add Filter";
 
-                case "FilterList.miImport":
+                case "FilterList.Import":
                     return "Import Filter";
 
-                case "FilterList.miExport":
+                case "FilterList.Export":
                     return "Export Filter";
 
-                case "FilterList.miClear":
+                case "FilterList.Clear":
                     return "Clear Filter";
 
                 case "Table.FilterList.Column.IsEnable":
@@ -1153,16 +1153,16 @@ namespace WinsockPacketEditor
                 case "SendList.NewSend":
                     return "Send {0}";
 
-                case "SendList.miAdd":
+                case "SendList.Add":
                     return "Add Send";
 
-                case "SendList.miImport":
+                case "SendList.Import":
                     return "Import Send";
 
-                case "SendList.miExport":
+                case "SendList.Export":
                     return "Export Send";
 
-                case "SendList.miClear":
+                case "SendList.Clear":
                     return "Clear Send";
 
                 case "Table.SendList.Column.IsEnable":
@@ -1205,16 +1205,16 @@ namespace WinsockPacketEditor
                 case "RobotList.NewRobot":
                     return "Robot {0}";
 
-                case "RobotList.miAdd":
+                case "RobotList.Add":
                     return "Add Robot";
 
-                case "RobotList.miImport":
+                case "RobotList.Import":
                     return "Import Robot";
 
-                case "RobotList.miExport":
+                case "RobotList.Export":
                     return "Export Robot";
 
-                case "RobotList.miClear":
+                case "RobotList.Clear":
                     return "Clear Robot";
 
                 case "Table.RobotList.Column.IsEnable":
@@ -1603,28 +1603,28 @@ namespace WinsockPacketEditor
                 case "MapSettingsForm.MapRemote":
                     return "Map Remote";
 
-                case "MapSettingsForm.MapLocal.miAdd":
+                case "MapSettingsForm.MapLocal.Add":
                     return "Add Map Local";
 
-                case "MapSettingsForm.MapLocal.miImport":
+                case "MapSettingsForm.MapLocal.Import":
                     return "Import Map Local";
 
-                case "MapSettingsForm.MapLocal.miExport":
+                case "MapSettingsForm.MapLocal.Export":
                     return "Export Map Local";
 
-                case "MapSettingsForm.MapLocal.miClear":
+                case "MapSettingsForm.MapLocal.Clear":
                     return "Clear Map Local";
 
-                case "MapSettingsForm.MapRemote.miAdd":
+                case "MapSettingsForm.MapRemote.Add":
                     return "Add Map Remote";
 
-                case "MapSettingsForm.MapRemote.miImport":
+                case "MapSettingsForm.MapRemote.Import":
                     return "Import Map Remote";
 
-                case "MapSettingsForm.MapRemote.miExport":
+                case "MapSettingsForm.MapRemote.Export":
                     return "Export Map Remote";
 
-                case "MapSettingsForm.MapRemote.miClear":
+                case "MapSettingsForm.MapRemote.Clear":
                     return "Clear Map Remote";
 
                 case "Table.MapLocal.Column.RemotePath":

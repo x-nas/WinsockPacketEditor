@@ -28,16 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
             this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
             this.tFilterList = new AntdUI.Table();
             this.tlpFilterListButton = new System.Windows.Forms.TableLayoutPanel();
-            this.mFilterList = new AntdUI.Menu();
             this.bFilterList_Reset = new AntdUI.Button();
+            this.ddMenu = new AntdUI.Dropdown();
             this.tlpFilterList.SuspendLayout();
             this.tlpFilterListButton.SuspendLayout();
             this.SuspendLayout();
@@ -82,7 +77,8 @@
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpFilterListButton.Controls.Add(this.mFilterList, 2, 0);
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpFilterListButton.Controls.Add(this.ddMenu, 2, 0);
             this.tlpFilterListButton.Controls.Add(this.bFilterList_Reset, 0, 0);
             this.tlpFilterListButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFilterListButton.Location = new System.Drawing.Point(30, 20);
@@ -93,42 +89,6 @@
             this.tlpFilterListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpFilterListButton.TabIndex = 2;
             // 
-            // mFilterList
-            // 
-            this.mFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mFilterList.Gap = 5;
-            this.mFilterList.IconRatio = 1F;
-            this.mFilterList.itemMargin = 0;
-            menuItem1.IconSvg = "PlusOutlined";
-            menuItem2.IconSvg = "FilterOutlined";
-            menuItem2.ID = "miAdd";
-            menuItem2.LocalizationText = "FilterList.{id}";
-            menuItem2.Text = "新增滤镜";
-            menuItem3.IconSvg = "FolderOpenOutlined";
-            menuItem3.ID = "miImport";
-            menuItem3.LocalizationText = "FilterList.{id}";
-            menuItem3.Text = "导入滤镜列表";
-            menuItem4.IconSvg = "DeliveredProcedureOutlined";
-            menuItem4.ID = "miExport";
-            menuItem4.LocalizationText = "FilterList.{id}";
-            menuItem4.Text = "导出所有滤镜";
-            menuItem5.IconSvg = "DeleteOutlined";
-            menuItem5.ID = "miClear";
-            menuItem5.LocalizationText = "FilterList.{id}";
-            menuItem5.Text = "清空所有滤镜";
-            menuItem1.Sub.Add(menuItem2);
-            menuItem1.Sub.Add(menuItem3);
-            menuItem1.Sub.Add(menuItem4);
-            menuItem1.Sub.Add(menuItem5);
-            this.mFilterList.Items.Add(menuItem1);
-            this.mFilterList.Location = new System.Drawing.Point(693, 3);
-            this.mFilterList.Mode = AntdUI.TMenuMode.Horizontal;
-            this.mFilterList.Name = "mFilterList";
-            this.mFilterList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mFilterList.Size = new System.Drawing.Size(44, 44);
-            this.mFilterList.TabIndex = 5;
-            this.mFilterList.SelectChanged += new AntdUI.SelectEventHandler(this.mFilterList_SelectChanged);
-            // 
             // bFilterList_Reset
             // 
             this.bFilterList_Reset.AutoSizeMode = AntdUI.TAutoSize.Width;
@@ -137,11 +97,27 @@
             this.bFilterList_Reset.LocalizationText = "FilterList.ResetCount";
             this.bFilterList_Reset.Location = new System.Drawing.Point(3, 3);
             this.bFilterList_Reset.Name = "bFilterList_Reset";
-            this.bFilterList_Reset.Size = new System.Drawing.Size(119, 44);
+            this.bFilterList_Reset.Size = new System.Drawing.Size(114, 44);
             this.bFilterList_Reset.TabIndex = 6;
             this.bFilterList_Reset.Text = "重置计数";
             this.bFilterList_Reset.Type = AntdUI.TTypeMini.Info;
             this.bFilterList_Reset.Click += new System.EventHandler(this.bFilterList_Reset_Click);
+            // 
+            // ddMenu
+            // 
+            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu.Ghost = true;
+            this.ddMenu.IconRatio = 1F;
+            this.ddMenu.IconSvg = "PlusOutlined";
+            this.ddMenu.Location = new System.Drawing.Point(693, 3);
+            this.ddMenu.MaxCount = 10;
+            this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Size = new System.Drawing.Size(44, 44);
+            this.ddMenu.TabIndex = 12;
+            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu.WaveSize = 0;
+            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
             // 
             // FilterList
             // 
@@ -166,7 +142,7 @@
         private System.Windows.Forms.TableLayoutPanel tlpFilterList;
         private AntdUI.Table tFilterList;
         private System.Windows.Forms.TableLayoutPanel tlpFilterListButton;
-        private AntdUI.Menu mFilterList;
         private AntdUI.Button bFilterList_Reset;
+        private AntdUI.Dropdown ddMenu;
     }
 }

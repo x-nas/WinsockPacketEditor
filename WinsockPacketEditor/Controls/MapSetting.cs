@@ -23,11 +23,75 @@ namespace WinsockPacketEditor
 
             this.cbEnable_MapLocal.Checked = Operate.ProxyConfig.Mapping.Enable_MapLocal;
             this.cbEnable_MapRemote.Checked = Operate.ProxyConfig.Mapping.Enable_MapRemote;
-
+            
             this.InitTable_MapLocal();
             this.InitTable_MapRemote();
+            this.InitMenu_MapLocal();
+            this.InitMenu_MapRemote();
             this.EnableMapLocal_Changed();
             this.EnableMapRemote_Changed();
+        }
+
+        private void InitMenu_MapLocal()
+        {
+            this.ddMenu_MapLocal.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("新增")
+                {
+                    Tag = "Add",
+                    LocalizationText = "MapSettingsForm.MapLocal.Add",
+                    IconSvg = "BlockOutlined",
+                },
+                new AntdUI.SelectItem("导入本地映射")
+                {
+                    Tag = "Import",
+                    LocalizationText = "MapSettingsForm.MapLocal.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出本地映射")
+                {
+                    Tag = "Export",
+                    LocalizationText = "MapSettingsForm.MapLocal.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空本地映射")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "MapSettingsForm.MapLocal.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
+        }
+
+        private void InitMenu_MapRemote()
+        {
+            this.ddMenu_MapRemote.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("新增")
+                {
+                    Tag = "Add",
+                    LocalizationText = "MapSettingsForm.MapRemote.Add",
+                    IconSvg = "BlockOutlined",
+                },
+                new AntdUI.SelectItem("导入远程映射")
+                {
+                    Tag = "Import",
+                    LocalizationText = "MapSettingsForm.MapRemote.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出远程映射")
+                {
+                    Tag = "Export",
+                    LocalizationText = "MapSettingsForm.MapRemote.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空远程映射")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "MapSettingsForm.MapRemote.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
         }
 
         #endregion
@@ -124,7 +188,7 @@ namespace WinsockPacketEditor
 
         private void EnableMapLocal_Changed()
         {
-            this.tMapLocal.Enabled = this.mMapLocal.Enabled = this.cbEnable_MapLocal.Checked;
+            this.tMapLocal.Enabled = this.ddMenu_MapLocal.Enabled = this.cbEnable_MapLocal.Checked;
         }
 
         #endregion        
@@ -138,21 +202,20 @@ namespace WinsockPacketEditor
 
         private void EnableMapRemote_Changed()
         {
-            this.tMapRemote.Enabled = this.mMapRemote.Enabled = this.cbEnable_MapRemote.Checked;
+            this.tMapRemote.Enabled = this.ddMenu_MapRemote.Enabled = this.cbEnable_MapRemote.Checked;
         }
 
         #endregion        
 
         #region//本地映射 - 菜单
 
-        private void mMapLocal_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void ddMenu_MapLocal_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mMapLocal.SelectIndex(-1);
+            this.ddMenu_MapLocal.SelectedValue = null;
 
-            switch (miSelect.ID)
+            switch (e.Value.ToString())
             {
-                case "miAdd":
+                case "Add":
 
                     var MapLocalEdit = new MapLocalEdit(this.form, null);
                     AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapLocalForm", "本地映射编辑"), MapLocalEdit)
@@ -164,13 +227,13 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miImport":
+                case "Import":
 
                     Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
 
                     break;
 
-                case "miExport":
+                case "Export":
 
                     if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
                     {
@@ -179,7 +242,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miClear":
+                case "Clear":
 
                     if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
                     {
@@ -284,14 +347,13 @@ namespace WinsockPacketEditor
 
         #region//远程映射 - 菜单
 
-        private void mMapRemote_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void ddMenu_MapRemote_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mMapRemote.SelectIndex(-1);
+            this.ddMenu_MapRemote.SelectedValue = null;
 
-            switch (miSelect.ID)
+            switch (e.Value.ToString())
             {
-                case "miAdd":
+                case "Add":
 
                     var MapRemoteEdit = new MapRemoteEdit(this.form, null);
                     AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapRemoteForm", "远程映射编辑"), MapRemoteEdit)
@@ -303,13 +365,13 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miImport":
+                case "Import":
 
                     Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
 
                     break;
 
-                case "miExport":
+                case "Export":
 
                     if (Operate.ProxyConfig.Mapping.lstMapRemote.Count > 0)
                     {
@@ -318,7 +380,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miClear":
+                case "Clear":
 
                     if (Operate.ProxyConfig.Mapping.lstMapRemote.Count > 0)
                     {
@@ -328,7 +390,7 @@ namespace WinsockPacketEditor
                     break;
             }
         }
-
+                
         private void tMapRemote_CellButtonUp(object sender, TableButtonEventArgs e)
         {
             if (e.Record is MapRemote mr)
@@ -444,7 +506,6 @@ namespace WinsockPacketEditor
         {
             this.Dispose();
         }
-
 
         #endregion        
     }

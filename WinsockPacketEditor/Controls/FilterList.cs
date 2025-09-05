@@ -20,6 +20,7 @@ namespace WinsockPacketEditor
 
         private void FilterList_Load(object sender, EventArgs e)
         {
+            this.InitMenu();
             this.InitTable_FilterList();
             this.Dark_Changed();
         }
@@ -204,6 +205,37 @@ namespace WinsockPacketEditor
             this.tFilterList.Binding(Operate.FilterConfig.List.lstFilterInfo);
         }
 
+        private void InitMenu()
+        {
+            this.ddMenu.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("新增滤镜")
+                {
+                    Tag = "Add",
+                    LocalizationText = "FilterList.Add",
+                    IconSvg = "FilterOutlined",
+                },
+                new AntdUI.SelectItem("导入滤镜列表")
+                {
+                    Tag = "Import",
+                    LocalizationText = "FilterList.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出所有滤镜")
+                {
+                    Tag = "Export",
+                    LocalizationText = "FilterList.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空所有滤镜")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "FilterList.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
+        }
+
         public void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
@@ -232,27 +264,26 @@ namespace WinsockPacketEditor
             Operate.FilterConfig.List.InitFilterList_Count();
         }
 
-        private void mFilterList_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mFilterList.USelect();
+            this.ddMenu.SelectedValue = null;
 
-            switch (miSelect.ID)
+            switch (e.Value.ToString())
             {
-                case "miAdd":
+                case "Add":
 
                     Operate.FilterConfig.Filter.AddFilter_New();
                     this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
 
                     break;
 
-                case "miImport":
+                case "Import":
 
                     Operate.FilterConfig.List.LoadFilterList_Dialog(this.form);
 
                     break;
 
-                case "miExport":
+                case "Export":
 
                     if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                     {
@@ -261,7 +292,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miClear":
+                case "Clear":
 
                     if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                     {

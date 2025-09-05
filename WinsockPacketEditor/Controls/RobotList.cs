@@ -23,6 +23,7 @@ namespace WinsockPacketEditor
 
         private void RobotList_Load(object sender, EventArgs e)
         {
+            this.InitMenu();
             this.InitTable_RobotList();
             this.Dark_Changed();
         }
@@ -109,6 +110,37 @@ namespace WinsockPacketEditor
             this.tRobotList.Binding(Operate.RobotConfig.List.lstRobotInfo);
         }
 
+        private void InitMenu()
+        {
+            this.ddMenu.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("新增机器人")
+                {
+                    Tag = "Add",
+                    LocalizationText = "RobotList.Add",
+                    IconSvg = "RobotOutlined",
+                },
+                new AntdUI.SelectItem("导入机器人列表")
+                {
+                    Tag = "Import",
+                    LocalizationText = "RobotList.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出所有机器人")
+                {
+                    Tag = "Export",
+                    LocalizationText = "RobotList.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空所有机器人")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "RobotList.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
+        }
+
         public void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
@@ -154,27 +186,26 @@ namespace WinsockPacketEditor
             this.bgwRobotList.CancelAsync();
         }
 
-        private void mRobotList_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mRobotList.USelect();
+            this.ddMenu.SelectedValue = null;
 
-            switch (miSelect.ID)
+            switch (e.Value.ToString())
             {
-                case "miAdd":
+                case "Add":
 
                     Operate.RobotConfig.Robot.AddRobot_New();
                     this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
 
                     break;
 
-                case "miImport":
+                case "Import":
 
                     Operate.RobotConfig.List.LoadRobotList_Dialog(this.form);
 
                     break;
 
-                case "miExport":
+                case "Export":
 
                     if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                     {
@@ -183,7 +214,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miClear":
+                case "Clear":
 
                     if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                     {

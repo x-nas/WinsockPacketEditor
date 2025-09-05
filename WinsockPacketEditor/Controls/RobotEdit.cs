@@ -28,7 +28,7 @@ namespace WinsockPacketEditor
 
         private void RobotEdit_Load(object sender, EventArgs e)
         {
-            this.ciPacketINST.Expand = true;
+            this.ciPacketINST.Expand = false;
 
             this.txtKeyCombination.BackColor = null;
             this.txtKeyCombination.ForeColor = null;

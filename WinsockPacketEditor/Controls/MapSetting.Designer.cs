@@ -28,20 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
             this.tlpMapSettings = new System.Windows.Forms.TableLayoutPanel();
             this.tMapRemote = new AntdUI.Table();
             this.tlpMapRemote = new System.Windows.Forms.TableLayoutPanel();
-            this.mMapRemote = new AntdUI.Menu();
             this.cbEnable_MapRemote = new AntdUI.Checkbox();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new AntdUI.Button();
@@ -50,8 +39,9 @@
             this.dMapRemote = new AntdUI.Divider();
             this.tMapLocal = new AntdUI.Table();
             this.tlpMapLocal = new System.Windows.Forms.TableLayoutPanel();
-            this.mMapLocal = new AntdUI.Menu();
             this.cbEnable_MapLocal = new AntdUI.Checkbox();
+            this.ddMenu_MapLocal = new AntdUI.Dropdown();
+            this.ddMenu_MapRemote = new AntdUI.Dropdown();
             this.tlpMapSettings.SuspendLayout();
             this.tlpMapRemote.SuspendLayout();
             this.tlpButton.SuspendLayout();
@@ -111,7 +101,8 @@
             this.tlpMapRemote.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpMapRemote.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMapRemote.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpMapRemote.Controls.Add(this.mMapRemote, 2, 0);
+            this.tlpMapRemote.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMapRemote.Controls.Add(this.ddMenu_MapRemote, 2, 0);
             this.tlpMapRemote.Controls.Add(this.cbEnable_MapRemote, 0, 0);
             this.tlpMapRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMapRemote.Location = new System.Drawing.Point(0, 359);
@@ -123,40 +114,6 @@
             this.tlpMapRemote.Size = new System.Drawing.Size(800, 55);
             this.tlpMapRemote.TabIndex = 10;
             // 
-            // mMapRemote
-            // 
-            this.mMapRemote.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mMapRemote.Gap = 5;
-            this.mMapRemote.IconRatio = 1F;
-            menuItem1.IconSvg = "PlusOutlined";
-            menuItem2.IconSvg = "BlockOutlined";
-            menuItem2.ID = "miAdd";
-            menuItem2.LocalizationText = "MapSettingsForm.MapRemote.{id}";
-            menuItem2.Text = "新增";
-            menuItem3.IconSvg = "FolderOpenOutlined";
-            menuItem3.ID = "miImport";
-            menuItem3.LocalizationText = "MapSettingsForm.MapRemote.{id}";
-            menuItem3.Text = "导入远程映射";
-            menuItem4.IconSvg = "DeliveredProcedureOutlined";
-            menuItem4.ID = "miExport";
-            menuItem4.LocalizationText = "MapSettingsForm.MapRemote.{id}";
-            menuItem4.Text = "导出远程映射";
-            menuItem5.IconSvg = "DeleteOutlined";
-            menuItem5.ID = "miClear";
-            menuItem5.LocalizationText = "MapSettingsForm.MapRemote.{id}";
-            menuItem5.Text = "清空远程映射";
-            menuItem1.Sub.Add(menuItem2);
-            menuItem1.Sub.Add(menuItem3);
-            menuItem1.Sub.Add(menuItem4);
-            menuItem1.Sub.Add(menuItem5);
-            this.mMapRemote.Items.Add(menuItem1);
-            this.mMapRemote.Location = new System.Drawing.Point(747, 3);
-            this.mMapRemote.Mode = AntdUI.TMenuMode.Horizontal;
-            this.mMapRemote.Name = "mMapRemote";
-            this.mMapRemote.Size = new System.Drawing.Size(50, 45);
-            this.mMapRemote.TabIndex = 10;
-            this.mMapRemote.SelectChanged += new AntdUI.SelectEventHandler(this.mMapRemote_SelectChanged);
-            // 
             // cbEnable_MapRemote
             // 
             this.cbEnable_MapRemote.AutoSizeMode = AntdUI.TAutoSize.Width;
@@ -164,7 +121,7 @@
             this.cbEnable_MapRemote.LocalizationText = "Enable";
             this.cbEnable_MapRemote.Location = new System.Drawing.Point(3, 3);
             this.cbEnable_MapRemote.Name = "cbEnable_MapRemote";
-            this.cbEnable_MapRemote.Size = new System.Drawing.Size(138, 45);
+            this.cbEnable_MapRemote.Size = new System.Drawing.Size(140, 46);
             this.cbEnable_MapRemote.TabIndex = 8;
             this.cbEnable_MapRemote.Text = "启用远程映射";
             this.cbEnable_MapRemote.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_MapRemote_CheckedChanged);
@@ -197,9 +154,9 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(300, 7);
+            this.bSave.Location = new System.Drawing.Point(305, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -214,7 +171,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(413, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -268,7 +225,8 @@
             this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpMapLocal.Controls.Add(this.mMapLocal, 2, 0);
+            this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMapLocal.Controls.Add(this.ddMenu_MapLocal, 2, 0);
             this.tlpMapLocal.Controls.Add(this.cbEnable_MapLocal, 0, 0);
             this.tlpMapLocal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMapLocal.Location = new System.Drawing.Point(0, 29);
@@ -280,40 +238,6 @@
             this.tlpMapLocal.Size = new System.Drawing.Size(800, 55);
             this.tlpMapLocal.TabIndex = 9;
             // 
-            // mMapLocal
-            // 
-            this.mMapLocal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mMapLocal.Gap = 5;
-            this.mMapLocal.IconRatio = 1F;
-            menuItem6.IconSvg = "PlusOutlined";
-            menuItem7.IconSvg = "BlockOutlined";
-            menuItem7.ID = "miAdd";
-            menuItem7.LocalizationText = "MapSettingsForm.MapLocal.{id}";
-            menuItem7.Text = "新增";
-            menuItem8.IconSvg = "FolderOpenOutlined";
-            menuItem8.ID = "miImport";
-            menuItem8.LocalizationText = "MapSettingsForm.MapLocal.{id}";
-            menuItem8.Text = "导入本地映射";
-            menuItem9.IconSvg = "DeliveredProcedureOutlined";
-            menuItem9.ID = "miExport";
-            menuItem9.LocalizationText = "MapSettingsForm.MapLocal.{id}";
-            menuItem9.Text = "导出本地映射";
-            menuItem10.IconSvg = "DeleteOutlined";
-            menuItem10.ID = "miClear";
-            menuItem10.LocalizationText = "MapSettingsForm.MapLocal.{id}";
-            menuItem10.Text = "清空本地映射";
-            menuItem6.Sub.Add(menuItem7);
-            menuItem6.Sub.Add(menuItem8);
-            menuItem6.Sub.Add(menuItem9);
-            menuItem6.Sub.Add(menuItem10);
-            this.mMapLocal.Items.Add(menuItem6);
-            this.mMapLocal.Location = new System.Drawing.Point(747, 3);
-            this.mMapLocal.Mode = AntdUI.TMenuMode.Horizontal;
-            this.mMapLocal.Name = "mMapLocal";
-            this.mMapLocal.Size = new System.Drawing.Size(50, 45);
-            this.mMapLocal.TabIndex = 9;
-            this.mMapLocal.SelectChanged += new AntdUI.SelectEventHandler(this.mMapLocal_SelectChanged);
-            // 
             // cbEnable_MapLocal
             // 
             this.cbEnable_MapLocal.AutoSizeMode = AntdUI.TAutoSize.Width;
@@ -321,10 +245,42 @@
             this.cbEnable_MapLocal.LocalizationText = "Enable";
             this.cbEnable_MapLocal.Location = new System.Drawing.Point(3, 3);
             this.cbEnable_MapLocal.Name = "cbEnable_MapLocal";
-            this.cbEnable_MapLocal.Size = new System.Drawing.Size(138, 45);
+            this.cbEnable_MapLocal.Size = new System.Drawing.Size(140, 46);
             this.cbEnable_MapLocal.TabIndex = 8;
             this.cbEnable_MapLocal.Text = "启用本地映射";
             this.cbEnable_MapLocal.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_MapLocal_CheckedChanged);
+            // 
+            // ddMenu_MapLocal
+            // 
+            this.ddMenu_MapLocal.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu_MapLocal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu_MapLocal.Ghost = true;
+            this.ddMenu_MapLocal.IconRatio = 1F;
+            this.ddMenu_MapLocal.IconSvg = "PlusOutlined";
+            this.ddMenu_MapLocal.Location = new System.Drawing.Point(753, 3);
+            this.ddMenu_MapLocal.MaxCount = 10;
+            this.ddMenu_MapLocal.Name = "ddMenu_MapLocal";
+            this.ddMenu_MapLocal.Size = new System.Drawing.Size(44, 46);
+            this.ddMenu_MapLocal.TabIndex = 12;
+            this.ddMenu_MapLocal.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu_MapLocal.WaveSize = 0;
+            this.ddMenu_MapLocal.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_MapLocal_SelectedValueChanged);
+            // 
+            // ddMenu_MapRemote
+            // 
+            this.ddMenu_MapRemote.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu_MapRemote.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu_MapRemote.Ghost = true;
+            this.ddMenu_MapRemote.IconRatio = 1F;
+            this.ddMenu_MapRemote.IconSvg = "PlusOutlined";
+            this.ddMenu_MapRemote.Location = new System.Drawing.Point(753, 3);
+            this.ddMenu_MapRemote.MaxCount = 10;
+            this.ddMenu_MapRemote.Name = "ddMenu_MapRemote";
+            this.ddMenu_MapRemote.Size = new System.Drawing.Size(44, 46);
+            this.ddMenu_MapRemote.TabIndex = 13;
+            this.ddMenu_MapRemote.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu_MapRemote.WaveSize = 0;
+            this.ddMenu_MapRemote.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_MapRemote_SelectedValueChanged);
             // 
             // MapSetting
             // 
@@ -353,7 +309,6 @@
         private System.Windows.Forms.TableLayoutPanel tlpMapSettings;
         private AntdUI.Table tMapRemote;
         private System.Windows.Forms.TableLayoutPanel tlpMapRemote;
-        private AntdUI.Menu mMapRemote;
         private AntdUI.Checkbox cbEnable_MapRemote;
         private System.Windows.Forms.TableLayoutPanel tlpButton;
         private AntdUI.Button bSave;
@@ -362,7 +317,8 @@
         private AntdUI.Divider dMapRemote;
         private AntdUI.Table tMapLocal;
         private System.Windows.Forms.TableLayoutPanel tlpMapLocal;
-        private AntdUI.Menu mMapLocal;
         private AntdUI.Checkbox cbEnable_MapLocal;
+        private AntdUI.Dropdown ddMenu_MapLocal;
+        private AntdUI.Dropdown ddMenu_MapRemote;
     }
 }
