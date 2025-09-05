@@ -11964,7 +11964,7 @@ namespace WinsockPacketEditor
                 public static long FilterIntercept_CNT = 0;
                 public static long FilterDisplay_CNT = 0;
                 public static long FilterNoDisplay_CNT = 0;
-                public static int FilterSize_MaxLen = 500;
+                public static int FilterSize_MaxLen = 1000;
                 public static FilterConfig.Filter.Execute FilterExecute = FilterConfig.Filter.Execute.Sequence;
                 public static Color FilterReplace_ForeColor = Color.Black;
                 public static Color FilterReplace_BackColor = Color.Goldenrod;
