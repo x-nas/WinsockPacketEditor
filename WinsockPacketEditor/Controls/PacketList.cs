@@ -153,7 +153,7 @@ namespace WinsockPacketEditor
             };
 
             this.tPacketList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tPacketList.DataSource = Operate.PacketConfig.List.lstPacketInfo;
+            this.tPacketList.Binding(Operate.PacketConfig.List.lstPacketInfo);
         }
 
         public void SetColumnVisible_PacketList()
@@ -889,15 +889,6 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (tPacketList.InvokeRequired)
-                {
-                    tPacketList.BeginInvoke(new Action(() => this.tPacketList.Refresh()));
-                }
-                else
-                {
-                    this.tPacketList.Refresh();
-                }
-
                 if (Operate.PacketConfig.List.AutoRoll)
                 {
                     tPacketList.ScrollBar.ValueY = tPacketList.ScrollBar.MaxY;
@@ -911,8 +902,6 @@ namespace WinsockPacketEditor
                         this.CleanUp_HexBox();
                     }
                 }
-
-                this.ShowInjectInfo();
             }
             catch (Exception ex)
             {
@@ -924,7 +913,7 @@ namespace WinsockPacketEditor
 
         #region//显示注入信息
 
-        private void ShowInjectInfo()
+        public void ShowInjectInfo()
         {
             this.lTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
             this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();

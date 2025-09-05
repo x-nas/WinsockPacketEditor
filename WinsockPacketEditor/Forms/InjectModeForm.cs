@@ -443,16 +443,19 @@ namespace WinsockPacketEditor
                     if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
                     {
                         Operate.PacketConfig.List.PacketToList();
+                        this.cPacketList.RefreshPacketList();
                     }
 
                     if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
                     {
                         Operate.LogConfig.List.LogToList();
+                        this.cLogList?.RefreshSystemLog();
                     }
 
                     if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
                     {
                         Operate.LogConfig.List.FilterLogToList();
+                        this.cLogList?.RefreshFilterLog();
                     }
                 });
             }
@@ -474,9 +477,7 @@ namespace WinsockPacketEditor
 
                 await Task.Run(() =>
                 {
-                    this.cPacketList.RefreshPacketList();
-                    this.cLogList?.RefreshLogList();
-
+                    this.cPacketList.ShowInjectInfo();
                     this.ShowMenuInfo();                   
                 });
             }

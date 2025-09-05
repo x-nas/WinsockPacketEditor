@@ -6808,7 +6808,7 @@ namespace WinsockPacketEditor
                 public static readonly ConcurrentDictionary<Guid, ProxyUDP> cdProxyUDP = new ConcurrentDictionary<Guid, ProxyUDP>();
                 public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(5);
 
-                public static List<ProxyInfo> lstProxyInfo = new List<ProxyInfo>();                
+                public static BindingList<ProxyInfo> lstProxyInfo = new BindingList<ProxyInfo>();                
 
                 #region//TCP代理入列表
 
@@ -11479,7 +11479,7 @@ namespace WinsockPacketEditor
                 public static FindOptions FindOptions = new FindOptions();
                 public static string FindRegex = string.Empty;
                 public static PacketInfo piSelect;
-                public static List<PacketInfo> lstPacketInfo = new List<PacketInfo>();
+                public static BindingList<PacketInfo> lstPacketInfo = new BindingList<PacketInfo>();
 
                 #region//封包入列表
 
@@ -17587,9 +17587,9 @@ namespace WinsockPacketEditor
             {
                 public static bool AutoRoll = false, AutoClear = true;
                 public static decimal AutoClear_Value = 5000;
-                public static List<LogInfo> lstLogInfo = new List<LogInfo>();
-                public static List<FilterLogInfo> lstFilterLogInfo = new List<FilterLogInfo>();
-                public static List<ProxyLogInfo> lstProxyLogInfo = new List<ProxyLogInfo>();
+                public static BindingList<LogInfo> lstLogInfo = new BindingList<LogInfo>();
+                public static BindingList<FilterLogInfo> lstFilterLogInfo = new BindingList<FilterLogInfo>();
+                public static BindingList<ProxyLogInfo> lstProxyLogInfo = new BindingList<ProxyLogInfo>();
 
                 #region//日志入列表
 

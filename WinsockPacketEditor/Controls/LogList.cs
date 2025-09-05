@@ -50,7 +50,7 @@ namespace WinsockPacketEditor
             };
 
             this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tSystemLog.DataSource = Operate.LogConfig.List.lstLogInfo;
+            this.tSystemLog.Binding(Operate.LogConfig.List.lstLogInfo);
         }
 
         private void InitTable_FilterLogList()
@@ -109,7 +109,7 @@ namespace WinsockPacketEditor
             };
 
             this.tFilterLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tFilterLog.DataSource = Operate.LogConfig.List.lstFilterLogInfo;
+            this.tFilterLog.Binding(Operate.LogConfig.List.lstFilterLogInfo);
         }
 
         private void InitTable_ProxyLog()
@@ -145,7 +145,7 @@ namespace WinsockPacketEditor
             };
 
             this.tProxyLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tProxyLog.DataSource = Operate.LogConfig.List.lstProxyLogInfo;
+            this.tProxyLog.Binding(Operate.LogConfig.List.lstProxyLogInfo);
         }
 
         public void Dark_Changed()
@@ -174,35 +174,8 @@ namespace WinsockPacketEditor
             }
         }
 
-        public void RefreshLogList()
+        public void RefreshSystemLog()
         {
-            if (tSystemLog.InvokeRequired)
-            {
-                tSystemLog.BeginInvoke(new Action(() => this.tSystemLog.Refresh()));
-            }
-            else
-            {
-                this.tSystemLog.Refresh();
-            }
-
-            if (tFilterLog.InvokeRequired)
-            {
-                tFilterLog.BeginInvoke(new Action(() => this.tFilterLog.Refresh()));
-            }
-            else
-            {
-                this.tFilterLog.Refresh();
-            }
-
-            if (tProxyLog.InvokeRequired)
-            {
-                tProxyLog.BeginInvoke(new Action(() => this.tProxyLog.Refresh()));
-            }
-            else
-            {
-                this.tProxyLog.Refresh();
-            }
-
             if (Operate.LogConfig.List.AutoRoll)
             {
                 tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
@@ -214,12 +187,24 @@ namespace WinsockPacketEditor
                 {
                     this.CleanUp_SystemLog();
                 }
+            }
+        }
 
+        public void RefreshFilterLog()
+        {
+            if (Operate.LogConfig.List.AutoClear)
+            {
                 if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
                 {
                     this.CleanUp_FilterLog();
                 }
+            }
+        }
 
+        public void RefreshProxyLog()
+        {
+            if (Operate.LogConfig.List.AutoClear)
+            {
                 if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
                 {
                     this.CleanUp_ProxyLog();

@@ -150,7 +150,7 @@ namespace WinsockPacketEditor
             };
 
             this.tProxyList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tProxyList.DataSource = Operate.ProxyConfig.List.lstProxyInfo;
+            this.tProxyList.Binding(Operate.ProxyConfig.List.lstProxyInfo);
         }
 
         public void SetColumnVisible_ProxyList()
@@ -1046,15 +1046,6 @@ namespace WinsockPacketEditor
 
         public void RefreshProxyList()
         {
-            if (tProxyList.InvokeRequired)
-            {
-                tProxyList.BeginInvoke(new Action(() => this.tProxyList.Refresh()));
-            }
-            else
-            {
-                this.tProxyList.Refresh();
-            }
-
             if (Operate.ProxyConfig.List.AutoRoll)
             {
                 tProxyList.ScrollBar.ValueY = tProxyList.ScrollBar.MaxY;
@@ -1068,15 +1059,13 @@ namespace WinsockPacketEditor
                     this.CleanUp_HexBox();
                 }
             }
-
-            this.ShowProxyInfo();
         }
 
         #endregion
 
         #region//显示代理信息
 
-        private void ShowProxyInfo()
+        public void ShowProxyInfo()
         {
             try
             {
