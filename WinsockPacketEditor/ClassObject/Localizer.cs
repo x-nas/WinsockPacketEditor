@@ -815,24 +815,6 @@ namespace WinsockPacketEditor
                 case "Table.PacketList.Column.PacketData":
                     return "Data";
 
-                case "InjectModeForm.miLeachSettings":
-                    return "Leach Settings";
-
-                case "InjectModeForm.miHookSettings":
-                    return "Hook Settings";
-
-                case "InjectModeForm.miListSettings":
-                    return "List Settings";
-
-                case "InjectModeForm.miHotKeySettings":
-                    return "HotKey Settings";
-
-                case "InjectModeForm.miBackUpSettings":
-                    return "BackUp Settings";
-
-                case "InjectModeForm.miSystemSettings":
-                    return "System Settings";
-
                 case "InjectModeForm.SpeedInfo":
                     return "Sent : {0} Received : {1}";
 
@@ -951,31 +933,31 @@ namespace WinsockPacketEditor
                 case "ProxyModeForm.UDPResp":
                     return "UDP Resp :";
 
-                case "ProxyModeForm.miProxySettings":
+                case "ProxyModeForm.ProxySettings":
                     return "Proxy Settings";
 
-                case "ProxyModeForm.miLeachSettings":
+                case "ProxyModeForm.LeachSettings":
                     return "Leach Settings";
 
-                case "ProxyModeForm.miHookSettings":
+                case "ProxyModeForm.HookSettings":
                     return "Hook Settings";
 
-                case "ProxyModeForm.miListSettings":
+                case "ProxyModeForm.ListSettings":
                     return "List Settings";
 
-                case "ProxyModeForm.miMapSettings":
+                case "ProxyModeForm.MapSettings":
                     return "Map Settings";
 
-                case "ProxyModeForm.miExternalProxySettings":
+                case "ProxyModeForm.ExternalProxySettings":
                     return "EXTProxy Settings";
 
-                case "ProxyModeForm.miHotKeySettings":
+                case "ProxyModeForm.HotKeySettings":
                     return "HotKey Settings";
 
-                case "ProxyModeForm.miBackUpSettings":
+                case "ProxyModeForm.BackUpSettings":
                     return "BackUp Settings";
 
-                case "ProxyModeForm.miSystemSettings":
+                case "ProxyModeForm.SystemSettings":
                     return "System Settings";
 
                 case "Table.ProxyList.Column.ID":

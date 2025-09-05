@@ -28,23 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
             this.tlpProxyList = new System.Windows.Forms.TableLayoutPanel();
             this.tlpProxyList_Button = new System.Windows.Forms.TableLayoutPanel();
             this.bProxyList_Clear = new AntdUI.Button();
             this.bProxyStop = new AntdUI.Button();
-            this.mProxyList = new AntdUI.Menu();
             this.bProxyStart = new AntdUI.Button();
+            this.ddMenu = new AntdUI.Dropdown();
+            this.bSearchPacket = new AntdUI.Button();
             this.splitterProxyList = new AntdUI.Splitter();
             this.tlpProxyList2 = new System.Windows.Forms.TableLayoutPanel();
             this.tlpPacketListInfo = new System.Windows.Forms.TableLayoutPanel();
@@ -123,16 +113,19 @@
             // 
             // tlpProxyList_Button
             // 
-            this.tlpProxyList_Button.ColumnCount = 5;
+            this.tlpProxyList_Button.ColumnCount = 6;
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpProxyList_Button.Controls.Add(this.bProxyList_Clear, 2, 0);
             this.tlpProxyList_Button.Controls.Add(this.bProxyStop, 1, 0);
-            this.tlpProxyList_Button.Controls.Add(this.mProxyList, 4, 0);
             this.tlpProxyList_Button.Controls.Add(this.bProxyStart, 0, 0);
+            this.tlpProxyList_Button.Controls.Add(this.ddMenu, 5, 0);
+            this.tlpProxyList_Button.Controls.Add(this.bSearchPacket, 4, 0);
             this.tlpProxyList_Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpProxyList_Button.Location = new System.Drawing.Point(30, 20);
             this.tlpProxyList_Button.Margin = new System.Windows.Forms.Padding(0);
@@ -149,9 +142,9 @@
             this.bProxyList_Clear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bProxyList_Clear.IconSvg = "DeleteOutlined";
             this.bProxyList_Clear.LocalizationText = "Clear";
-            this.bProxyList_Clear.Location = new System.Drawing.Point(189, 3);
+            this.bProxyList_Clear.Location = new System.Drawing.Point(179, 3);
             this.bProxyList_Clear.Name = "bProxyList_Clear";
-            this.bProxyList_Clear.Size = new System.Drawing.Size(87, 44);
+            this.bProxyList_Clear.Size = new System.Drawing.Size(82, 44);
             this.bProxyList_Clear.TabIndex = 9;
             this.bProxyList_Clear.Text = "清空";
             this.bProxyList_Clear.Type = AntdUI.TTypeMini.Warn;
@@ -165,77 +158,13 @@
             this.bProxyStop.Enabled = false;
             this.bProxyStop.IconSvg = "PauseCircleOutlined";
             this.bProxyStop.LocalizationText = "Stop";
-            this.bProxyStop.Location = new System.Drawing.Point(96, 3);
+            this.bProxyStop.Location = new System.Drawing.Point(91, 3);
             this.bProxyStop.Name = "bProxyStop";
-            this.bProxyStop.Size = new System.Drawing.Size(87, 44);
+            this.bProxyStop.Size = new System.Drawing.Size(82, 44);
             this.bProxyStop.TabIndex = 8;
             this.bProxyStop.Text = "停止";
             this.bProxyStop.Type = AntdUI.TTypeMini.Error;
             this.bProxyStop.Click += new System.EventHandler(this.bProxyStop_Click);
-            // 
-            // mProxyList
-            // 
-            this.mProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mProxyList.Gap = 5;
-            this.mProxyList.IconRatio = 1F;
-            this.mProxyList.itemMargin = 0;
-            menuItem1.IconSvg = "SearchOutlined";
-            menuItem1.ID = "miProxyListSearch";
-            menuItem2.IconSvg = "PlusOutlined";
-            menuItem3.IconSvg = "ShareAltOutlined";
-            menuItem3.ID = "miProxySettings";
-            menuItem3.LocalizationText = "ProxyModeForm.{id}";
-            menuItem3.Text = "代理设置";
-            menuItem4.IconSvg = "FilterOutlined";
-            menuItem4.ID = "miLeachSettings";
-            menuItem4.LocalizationText = "ProxyModeForm.{id}";
-            menuItem4.Text = "过滤设置";
-            menuItem5.IconSvg = "AimOutlined";
-            menuItem5.ID = "miHookSettings";
-            menuItem5.LocalizationText = "ProxyModeForm.{id}";
-            menuItem5.Text = "拦截设置";
-            menuItem6.IconSvg = "OrderedListOutlined";
-            menuItem6.ID = "miListSettings";
-            menuItem6.LocalizationText = "ProxyModeForm.{id}";
-            menuItem6.Text = "列表设置";
-            menuItem7.IconSvg = "BlockOutlined";
-            menuItem7.ID = "miMapSettings";
-            menuItem7.LocalizationText = "ProxyModeForm.{id}";
-            menuItem7.Text = "映射设置";
-            menuItem8.IconSvg = "CloudUploadOutlined";
-            menuItem8.ID = "miExternalProxySettings";
-            menuItem8.LocalizationText = "ProxyModeForm.{id}";
-            menuItem8.Text = "外部代理设置";
-            menuItem9.IconSvg = "GoldOutlined";
-            menuItem9.ID = "miHotKeySettings";
-            menuItem9.LocalizationText = "ProxyModeForm.{id}";
-            menuItem9.Text = "快捷键设置";
-            menuItem10.IconSvg = "DeliveredProcedureOutlined";
-            menuItem10.ID = "miBackUpSettings";
-            menuItem10.LocalizationText = "ProxyModeForm.{id}";
-            menuItem10.Text = "备份设置";
-            menuItem11.IconSvg = "SettingOutlined";
-            menuItem11.ID = "miSystemSettings";
-            menuItem11.LocalizationText = "ProxyModeForm.{id}";
-            menuItem11.Text = "系统设置";
-            menuItem2.Sub.Add(menuItem3);
-            menuItem2.Sub.Add(menuItem4);
-            menuItem2.Sub.Add(menuItem5);
-            menuItem2.Sub.Add(menuItem6);
-            menuItem2.Sub.Add(menuItem7);
-            menuItem2.Sub.Add(menuItem8);
-            menuItem2.Sub.Add(menuItem9);
-            menuItem2.Sub.Add(menuItem10);
-            menuItem2.Sub.Add(menuItem11);
-            this.mProxyList.Items.Add(menuItem1);
-            this.mProxyList.Items.Add(menuItem2);
-            this.mProxyList.Location = new System.Drawing.Point(1047, 3);
-            this.mProxyList.Mode = AntdUI.TMenuMode.Horizontal;
-            this.mProxyList.Name = "mProxyList";
-            this.mProxyList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mProxyList.Size = new System.Drawing.Size(90, 44);
-            this.mProxyList.TabIndex = 6;
-            this.mProxyList.SelectChanged += new AntdUI.SelectEventHandler(this.mProxyList_SelectChanged);
             // 
             // bProxyStart
             // 
@@ -251,11 +180,40 @@
             this.bProxyStart.LocalizationText = "Start";
             this.bProxyStart.Location = new System.Drawing.Point(3, 3);
             this.bProxyStart.Name = "bProxyStart";
-            this.bProxyStart.Size = new System.Drawing.Size(87, 44);
+            this.bProxyStart.Size = new System.Drawing.Size(82, 44);
             this.bProxyStart.TabIndex = 7;
             this.bProxyStart.Text = "开始";
             this.bProxyStart.Type = AntdUI.TTypeMini.Info;
             this.bProxyStart.Click += new System.EventHandler(this.bProxyStart_Click);
+            // 
+            // ddMenu
+            // 
+            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu.Ghost = true;
+            this.ddMenu.IconRatio = 1F;
+            this.ddMenu.IconSvg = "PlusOutlined";
+            this.ddMenu.Location = new System.Drawing.Point(1093, 3);
+            this.ddMenu.MaxCount = 10;
+            this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Size = new System.Drawing.Size(44, 44);
+            this.ddMenu.TabIndex = 10;
+            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu.WaveSize = 0;
+            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            // 
+            // bSearchPacket
+            // 
+            this.bSearchPacket.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bSearchPacket.Ghost = true;
+            this.bSearchPacket.IconRatio = 1F;
+            this.bSearchPacket.IconSvg = "SearchOutlined";
+            this.bSearchPacket.Location = new System.Drawing.Point(1043, 3);
+            this.bSearchPacket.Name = "bSearchPacket";
+            this.bSearchPacket.Size = new System.Drawing.Size(44, 44);
+            this.bSearchPacket.TabIndex = 11;
+            this.bSearchPacket.WaveSize = 0;
+            this.bSearchPacket.Click += new System.EventHandler(this.bSearchPacket_Click);
             // 
             // splitterProxyList
             // 
@@ -776,6 +734,7 @@
             this.tProxyList.Name = "tProxyList";
             this.tProxyList.Size = new System.Drawing.Size(1134, 468);
             this.tProxyList.TabIndex = 1;
+            this.tProxyList.VirtualMode = true;
             this.tProxyList.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyList_CellClick);
             this.tProxyList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tProxyList_CellDoubleClick);
             this.tProxyList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tProxyList_SetRowStyle);
@@ -904,7 +863,6 @@
         private System.Windows.Forms.TableLayoutPanel tlpProxyList_Button;
         private AntdUI.Button bProxyList_Clear;
         private AntdUI.Button bProxyStop;
-        private AntdUI.Menu mProxyList;
         private AntdUI.Button bProxyStart;
         private AntdUI.Splitter splitterProxyList;
         private System.Windows.Forms.TableLayoutPanel tlpProxyList2;
@@ -949,5 +907,7 @@
         private AntdUI.Label lSplit1;
         private AntdUI.Label lProxySpeed;
         private System.ComponentModel.BackgroundWorker bgwSearchProxyList;
+        private AntdUI.Dropdown ddMenu;
+        private AntdUI.Button bSearchPacket;
     }
 }

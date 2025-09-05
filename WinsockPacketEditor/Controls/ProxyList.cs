@@ -29,10 +29,72 @@ namespace WinsockPacketEditor
         {
             this.hbProxyData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
 
+            this.InitMenu();
             this.InitTable_ProxyList();
             this.Dark_Changed();
 
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, Operate.ProcessConfig.GetInjectProcessName());
+        }
+
+        private void InitMenu()
+        { 
+            this.ddMenu.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("代理设置")
+                {
+                    Tag = "ProxySettings",
+                    LocalizationText = "ProxyModeForm.ProxySettings",
+                    IconSvg = "ShareAltOutlined",
+                },
+                new AntdUI.SelectItem("过滤设置")
+                {
+                    Tag = "LeachSettings",
+                    LocalizationText = "ProxyModeForm.LeachSettings",
+                    IconSvg = "FilterOutlined",
+                },
+                new AntdUI.SelectItem("拦截设置")
+                {
+                    Tag = "HookSettings",
+                    LocalizationText = "ProxyModeForm.HookSettings",
+                    IconSvg = "AimOutlined",
+                },
+                new AntdUI.SelectItem("列表设置")
+                {
+                    Tag = "ListSettings",
+                    LocalizationText = "ProxyModeForm.ListSettings",
+                    IconSvg = "OrderedListOutlined",
+                },
+                new AntdUI.SelectItem("映射设置")
+                {
+                    Tag = "MapSettings",
+                    LocalizationText = "ProxyModeForm.MapSettings",
+                    IconSvg = "BlockOutlined",
+                },
+                new AntdUI.SelectItem("外部代理设置")
+                {
+                    Tag = "ExternalProxySettings",
+                    LocalizationText = "ProxyModeForm.ExternalProxySettings",
+                    IconSvg = "CloudUploadOutlined",
+                },
+                new AntdUI.SelectItem("快捷键设置")
+                {
+                    Tag = "HotKeySettings",
+                    LocalizationText = "ProxyModeForm.HotKeySettings",
+                    IconSvg = "GoldOutlined",
+                },
+                new AntdUI.SelectItem("备份设置")
+                {
+                    Tag = "BackUpSettings",
+                    LocalizationText = "ProxyModeForm.BackUpSettings",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("系统设置")
+                {
+                    Tag = "SystemSettings",
+                    LocalizationText = "ProxyModeForm.SystemSettings",
+                    IconSvg = "SettingOutlined",
+                },
+            });
         }
 
         public void Dark_Changed()
@@ -263,25 +325,23 @@ namespace WinsockPacketEditor
             });
         }
 
-        private void mProxyList_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void bSearchPacket_Click(object sender, EventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mProxyList.USelect();
-
-            switch (miSelect.ID)
+            AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new SearchPacket(this.form))
             {
-                case "miProxyListSearch":
+                Align = AntdUI.TAlignMini.Top,
+                Mask = false,
+                DisplayDelay = 0,
+            });
+        }
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new SearchPacket(this.form))
-                    {
-                        Align = AntdUI.TAlignMini.Top,
-                        Mask = false,
-                        DisplayDelay = 0,
-                    });
+        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        {
+            this.ddMenu.SelectedValue = null;
 
-                    break;
-
-                case "miProxySettings":
+            switch (e.Value.ToString())
+            {
+                case "ProxySettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new ProxySetting(this.form))
                     {
@@ -293,7 +353,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miLeachSettings":
+                case "LeachSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new LeachSetting(this.form))
                     {
@@ -305,7 +365,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miHookSettings":
+                case "HookSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new HookSetting(this.form))
                     {
@@ -317,7 +377,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miListSettings":
+                case "ListSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new ListSetting(this.form))
                     {
@@ -329,7 +389,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miMapSettings":
+                case "MapSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new MapSetting(this.form))
                     {
@@ -341,7 +401,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miExternalProxySettings":
+                case "ExternalProxySettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new EXTProxySetting(this.form))
                     {
@@ -353,7 +413,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miHotKeySettings":
+                case "HotKeySettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new HotKeySetting(this.form))
                     {
@@ -365,7 +425,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miBackUpSettings":
+                case "BackUpSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new BackUpSetting(this.form))
                     {
@@ -377,7 +437,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miSystemSettings":
+                case "SystemSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new SystemSetting(this.form))
                     {

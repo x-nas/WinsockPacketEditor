@@ -28,19 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
             this.tlpPacketList = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.bPacketList_Clear = new AntdUI.Button();
             this.bHookStop = new AntdUI.Button();
-            this.mPacketList = new AntdUI.Menu();
             this.bHookStart = new AntdUI.Button();
             this.splitterPacketList = new AntdUI.Splitter();
             this.tlpPacketList2 = new System.Windows.Forms.TableLayoutPanel();
@@ -92,6 +83,8 @@
             this.lModuleName = new AntdUI.Label();
             this.lProcessName = new AntdUI.Label();
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
+            this.bSearchPacket = new AntdUI.Button();
+            this.ddMenu = new AntdUI.Dropdown();
             this.tlpPacketList.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterPacketList)).BeginInit();
@@ -127,15 +120,18 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 5;
+            this.tableLayoutPanel2.ColumnCount = 6;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Controls.Add(this.ddMenu, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.bSearchPacket, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.bPacketList_Clear, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.bHookStop, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.mPacketList, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.bHookStart, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(30, 20);
@@ -176,55 +172,6 @@
             this.bHookStop.Text = "停止";
             this.bHookStop.Type = AntdUI.TTypeMini.Error;
             this.bHookStop.Click += new System.EventHandler(this.bHookStop_Click);
-            // 
-            // mPacketList
-            // 
-            this.mPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mPacketList.Gap = 5;
-            this.mPacketList.IconRatio = 1F;
-            this.mPacketList.itemMargin = 0;
-            menuItem1.IconSvg = "SearchOutlined";
-            menuItem1.ID = "miPacketListSearch";
-            menuItem2.IconSvg = "PlusOutlined";
-            menuItem3.IconSvg = "FilterOutlined";
-            menuItem3.ID = "miLeachSettings";
-            menuItem3.LocalizationText = "InjectModeForm.{id}";
-            menuItem3.Text = "过滤设置";
-            menuItem4.IconSvg = "AimOutlined";
-            menuItem4.ID = "miHookSettings";
-            menuItem4.LocalizationText = "InjectModeForm.{id}";
-            menuItem4.Text = "拦截设置";
-            menuItem5.IconSvg = "OrderedListOutlined";
-            menuItem5.ID = "miListSettings";
-            menuItem5.LocalizationText = "InjectModeForm.{id}";
-            menuItem5.Text = "列表设置";
-            menuItem6.IconSvg = "GoldOutlined";
-            menuItem6.ID = "miHotKeySettings";
-            menuItem6.LocalizationText = "InjectModeForm.{id}";
-            menuItem6.Text = "快捷键设置";
-            menuItem7.IconSvg = "DeliveredProcedureOutlined";
-            menuItem7.ID = "miBackUpSettings";
-            menuItem7.LocalizationText = "InjectModeForm.{id}";
-            menuItem7.Text = "备份设置";
-            menuItem8.IconSvg = "SettingOutlined";
-            menuItem8.ID = "miSystemSettings";
-            menuItem8.LocalizationText = "InjectModeForm.{id}";
-            menuItem8.Text = "系统设置";
-            menuItem2.Sub.Add(menuItem3);
-            menuItem2.Sub.Add(menuItem4);
-            menuItem2.Sub.Add(menuItem5);
-            menuItem2.Sub.Add(menuItem6);
-            menuItem2.Sub.Add(menuItem7);
-            menuItem2.Sub.Add(menuItem8);
-            this.mPacketList.Items.Add(menuItem1);
-            this.mPacketList.Items.Add(menuItem2);
-            this.mPacketList.Location = new System.Drawing.Point(1047, 3);
-            this.mPacketList.Mode = AntdUI.TMenuMode.Horizontal;
-            this.mPacketList.Name = "mPacketList";
-            this.mPacketList.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.mPacketList.Size = new System.Drawing.Size(90, 44);
-            this.mPacketList.TabIndex = 6;
-            this.mPacketList.SelectChanged += new AntdUI.SelectEventHandler(this.mPacketList_SelectChanged);
             // 
             // bHookStart
             // 
@@ -959,6 +906,35 @@
             this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
             this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
             // 
+            // bSearchPacket
+            // 
+            this.bSearchPacket.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bSearchPacket.Ghost = true;
+            this.bSearchPacket.IconRatio = 1F;
+            this.bSearchPacket.IconSvg = "SearchOutlined";
+            this.bSearchPacket.Location = new System.Drawing.Point(1043, 3);
+            this.bSearchPacket.Name = "bSearchPacket";
+            this.bSearchPacket.Size = new System.Drawing.Size(44, 44);
+            this.bSearchPacket.TabIndex = 12;
+            this.bSearchPacket.WaveSize = 0;
+            this.bSearchPacket.Click += new System.EventHandler(this.bSearchPacket_Click);
+            // 
+            // ddMenu
+            // 
+            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu.Ghost = true;
+            this.ddMenu.IconRatio = 1F;
+            this.ddMenu.IconSvg = "PlusOutlined";
+            this.ddMenu.Location = new System.Drawing.Point(1093, 3);
+            this.ddMenu.MaxCount = 10;
+            this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Size = new System.Drawing.Size(44, 44);
+            this.ddMenu.TabIndex = 13;
+            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu.WaveSize = 0;
+            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            // 
             // PacketList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -993,7 +969,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private AntdUI.Button bPacketList_Clear;
         private AntdUI.Button bHookStop;
-        private AntdUI.Menu mPacketList;
         private AntdUI.Button bHookStart;
         private AntdUI.Splitter splitterPacketList;
         private System.Windows.Forms.TableLayoutPanel tlpPacketList2;
@@ -1045,5 +1020,7 @@
         private AntdUI.Label lModuleName;
         private AntdUI.Label lProcessName;
         private System.ComponentModel.BackgroundWorker bgwSearchPacketList;
+        private AntdUI.Button bSearchPacket;
+        private AntdUI.Dropdown ddMenu;
     }
 }

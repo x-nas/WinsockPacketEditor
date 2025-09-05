@@ -32,10 +32,54 @@ namespace WinsockPacketEditor
             this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
             this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
 
+            this.InitMenu();
             this.InitTable_PacketList();
             this.Dark_Changed();
 
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
+        }
+
+        private void InitMenu()
+        {
+            this.ddMenu.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("过滤设置")
+                {
+                    Tag = "LeachSettings",
+                    LocalizationText = "ProxyModeForm.LeachSettings",
+                    IconSvg = "FilterOutlined",
+                },
+                new AntdUI.SelectItem("拦截设置")
+                {
+                    Tag = "HookSettings",
+                    LocalizationText = "ProxyModeForm.HookSettings",
+                    IconSvg = "AimOutlined",
+                },
+                new AntdUI.SelectItem("列表设置")
+                {
+                    Tag = "ListSettings",
+                    LocalizationText = "ProxyModeForm.ListSettings",
+                    IconSvg = "OrderedListOutlined",
+                },
+                new AntdUI.SelectItem("快捷键设置")
+                {
+                    Tag = "HotKeySettings",
+                    LocalizationText = "ProxyModeForm.HotKeySettings",
+                    IconSvg = "GoldOutlined",
+                },
+                new AntdUI.SelectItem("备份设置")
+                {
+                    Tag = "BackUpSettings",
+                    LocalizationText = "ProxyModeForm.BackUpSettings",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("系统设置")
+                {
+                    Tag = "SystemSettings",
+                    LocalizationText = "ProxyModeForm.SystemSettings",
+                    IconSvg = "SettingOutlined",
+                },
+            });
         }
 
         public void Dark_Changed()
@@ -266,25 +310,23 @@ namespace WinsockPacketEditor
             });
         }
 
-        private void mPacketList_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void bSearchPacket_Click(object sender, EventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mPacketList.USelect();
-
-            switch (miSelect.ID)
+            AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new SearchPacket(this.form))
             {
-                case "miPacketListSearch":
+                Align = AntdUI.TAlignMini.Top,
+                Mask = false,
+                DisplayDelay = 0,
+            });
+        }
 
-                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new SearchPacket(this.form))
-                    {
-                        Align = AntdUI.TAlignMini.Top,
-                        Mask = false,
-                        DisplayDelay = 0,
-                    });
+        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        {
+            this.ddMenu.SelectedValue = null;
 
-                    break;
-
-                case "miLeachSettings":
+            switch (e.Value.ToString())
+            {
+                case "LeachSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new LeachSetting(this.form))
                     {
@@ -296,7 +338,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miHookSettings":
+                case "HookSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new HookSetting(this.form))
                     {
@@ -308,7 +350,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miListSettings":
+                case "ListSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new ListSetting(this.form))
                     {
@@ -320,7 +362,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miHotKeySettings":
+                case "HotKeySettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new HotKeySetting(this.form))
                     {
@@ -332,7 +374,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miBackUpSettings":
+                case "BackUpSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new BackUpSetting(this.form))
                     {
@@ -344,7 +386,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miSystemSettings":
+                case "SystemSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new SystemSetting(this.form))
                     {
@@ -356,7 +398,7 @@ namespace WinsockPacketEditor
 
                     break;
             }
-        }
+        }       
 
         private void tPacketList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
@@ -1022,6 +1064,7 @@ namespace WinsockPacketEditor
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
 
         #endregion        
     }
