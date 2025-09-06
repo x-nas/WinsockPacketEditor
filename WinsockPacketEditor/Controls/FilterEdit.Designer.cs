@@ -214,9 +214,9 @@
             this.bSave.LoadingWaveValue = 0.6F;
             this.bSave.LoadingWaveVertical = true;
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(450, 7);
+            this.bSave.Location = new System.Drawing.Point(455, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Info;
@@ -231,7 +231,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(563, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -256,9 +256,9 @@
             // 
             this.tpAdvance.Controls.Add(this.tlpAdvance);
             this.tpAdvance.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpAdvance.Location = new System.Drawing.Point(3, 33);
+            this.tpAdvance.Location = new System.Drawing.Point(0, 36);
             this.tpAdvance.Name = "tpAdvance";
-            this.tpAdvance.Size = new System.Drawing.Size(1088, 214);
+            this.tpAdvance.Size = new System.Drawing.Size(1094, 214);
             this.tpAdvance.TabIndex = 0;
             this.tpAdvance.Text = "Advance";
             // 
@@ -276,7 +276,7 @@
             this.tlpAdvance.RowCount = 2;
             this.tlpAdvance.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpAdvance.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpAdvance.Size = new System.Drawing.Size(1088, 214);
+            this.tlpAdvance.Size = new System.Drawing.Size(1094, 214);
             this.tlpAdvance.TabIndex = 0;
             // 
             // tFilterAdvanced_Search
@@ -287,7 +287,7 @@
             this.tFilterAdvanced_Search.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Search.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Search.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Search.EditMode = AntdUI.TEditMode.DoubleClick;
+            this.tFilterAdvanced_Search.EditMode = AntdUI.TEditMode.Click;
             this.tFilterAdvanced_Search.Gap = 8;
             this.tFilterAdvanced_Search.GapCell = 0;
             this.tFilterAdvanced_Search.Gaps = new System.Drawing.Size(8, 8);
@@ -295,7 +295,7 @@
             this.tFilterAdvanced_Search.Name = "tFilterAdvanced_Search";
             this.tFilterAdvanced_Search.RowHeight = 40;
             this.tFilterAdvanced_Search.RowSelectedBg = System.Drawing.Color.Transparent;
-            this.tFilterAdvanced_Search.Size = new System.Drawing.Size(1082, 101);
+            this.tFilterAdvanced_Search.Size = new System.Drawing.Size(1088, 101);
             this.tFilterAdvanced_Search.TabIndex = 1;
             this.tFilterAdvanced_Search.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterAdvanced_Search_CellClick);
             this.tFilterAdvanced_Search.CellBeginEditInputStyle += new AntdUI.Table.BeginEditInputStyleEventHandler(this.tFilterAdvanced_Search_CellBeginEditInputStyle);
@@ -306,14 +306,14 @@
             // 
             this.tabFilterFrom.Controls.Add(this.tpFromPosition);
             this.tabFilterFrom.Controls.Add(this.tpFromHead);
-            this.tabFilterFrom.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabFilterFrom.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabFilterFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterFrom.Location = new System.Drawing.Point(3, 110);
             this.tabFilterFrom.Name = "tabFilterFrom";
             this.tabFilterFrom.Pages.Add(this.tpFromHead);
             this.tabFilterFrom.Pages.Add(this.tpFromPosition);
             this.tabFilterFrom.SelectedIndex = 1;
-            this.tabFilterFrom.Size = new System.Drawing.Size(1082, 101);
+            this.tabFilterFrom.Size = new System.Drawing.Size(1088, 101);
             this.tabFilterFrom.Style = styleLine1;
             this.tabFilterFrom.TabIndex = 2;
             this.tabFilterFrom.Text = "tabs1";
@@ -322,9 +322,9 @@
             // 
             this.tpFromPosition.Controls.Add(this.tFilterAdvanced_Modify_Position);
             this.tpFromPosition.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpFromPosition.Location = new System.Drawing.Point(3, 33);
+            this.tpFromPosition.Location = new System.Drawing.Point(0, 36);
             this.tpFromPosition.Name = "tpFromPosition";
-            this.tpFromPosition.Size = new System.Drawing.Size(1076, 65);
+            this.tpFromPosition.Size = new System.Drawing.Size(1088, 65);
             this.tpFromPosition.TabIndex = 1;
             this.tpFromPosition.Text = "Position";
             // 
@@ -336,7 +336,7 @@
             this.tFilterAdvanced_Modify_Position.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Position.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Modify_Position.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Modify_Position.EditMode = AntdUI.TEditMode.DoubleClick;
+            this.tFilterAdvanced_Modify_Position.EditMode = AntdUI.TEditMode.Click;
             this.tFilterAdvanced_Modify_Position.Gap = 8;
             this.tFilterAdvanced_Modify_Position.GapCell = 0;
             this.tFilterAdvanced_Modify_Position.Gaps = new System.Drawing.Size(8, 8);
@@ -344,7 +344,7 @@
             this.tFilterAdvanced_Modify_Position.Name = "tFilterAdvanced_Modify_Position";
             this.tFilterAdvanced_Modify_Position.RowHeight = 40;
             this.tFilterAdvanced_Modify_Position.RowSelectedBg = System.Drawing.Color.Transparent;
-            this.tFilterAdvanced_Modify_Position.Size = new System.Drawing.Size(1076, 65);
+            this.tFilterAdvanced_Modify_Position.Size = new System.Drawing.Size(1088, 65);
             this.tFilterAdvanced_Modify_Position.TabIndex = 2;
             this.tFilterAdvanced_Modify_Position.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterAdvanced_Modify_Position_CellClick);
             this.tFilterAdvanced_Modify_Position.CellBeginEditInputStyle += new AntdUI.Table.BeginEditInputStyleEventHandler(this.tFilterAdvanced_Modify_Position_CellBeginEditInputStyle);
@@ -355,9 +355,9 @@
             // 
             this.tpFromHead.Controls.Add(this.tFilterAdvanced_Modify_Head);
             this.tpFromHead.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpFromHead.Location = new System.Drawing.Point(3, 33);
+            this.tpFromHead.Location = new System.Drawing.Point(0, 36);
             this.tpFromHead.Name = "tpFromHead";
-            this.tpFromHead.Size = new System.Drawing.Size(1076, 65);
+            this.tpFromHead.Size = new System.Drawing.Size(1088, 65);
             this.tpFromHead.TabIndex = 0;
             this.tpFromHead.Text = "Head";
             // 
@@ -369,7 +369,7 @@
             this.tFilterAdvanced_Modify_Head.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Head.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Modify_Head.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Modify_Head.EditMode = AntdUI.TEditMode.DoubleClick;
+            this.tFilterAdvanced_Modify_Head.EditMode = AntdUI.TEditMode.Click;
             this.tFilterAdvanced_Modify_Head.Gap = 8;
             this.tFilterAdvanced_Modify_Head.GapCell = 0;
             this.tFilterAdvanced_Modify_Head.Gaps = new System.Drawing.Size(8, 8);
@@ -377,7 +377,7 @@
             this.tFilterAdvanced_Modify_Head.Name = "tFilterAdvanced_Modify_Head";
             this.tFilterAdvanced_Modify_Head.RowHeight = 40;
             this.tFilterAdvanced_Modify_Head.RowSelectedBg = System.Drawing.Color.Transparent;
-            this.tFilterAdvanced_Modify_Head.Size = new System.Drawing.Size(1076, 65);
+            this.tFilterAdvanced_Modify_Head.Size = new System.Drawing.Size(1088, 65);
             this.tFilterAdvanced_Modify_Head.TabIndex = 2;
             this.tFilterAdvanced_Modify_Head.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterAdvanced_Modify_Head_CellClick);
             this.tFilterAdvanced_Modify_Head.CellBeginEditInputStyle += new AntdUI.Table.BeginEditInputStyleEventHandler(this.tFilterAdvanced_Modify_Head_CellBeginEditInputStyle);
@@ -388,9 +388,9 @@
             // 
             this.tpNormal.Controls.Add(this.tlpNormal);
             this.tpNormal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpNormal.Location = new System.Drawing.Point(3, 33);
+            this.tpNormal.Location = new System.Drawing.Point(0, 36);
             this.tpNormal.Name = "tpNormal";
-            this.tpNormal.Size = new System.Drawing.Size(1088, 214);
+            this.tpNormal.Size = new System.Drawing.Size(1094, 214);
             this.tpNormal.TabIndex = 1;
             this.tpNormal.Text = "Normal";
             // 
@@ -405,8 +405,8 @@
             this.tlpNormal.Name = "tlpNormal";
             this.tlpNormal.RowCount = 1;
             this.tlpNormal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpNormal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 244F));
-            this.tlpNormal.Size = new System.Drawing.Size(1088, 214);
+            this.tlpNormal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tlpNormal.Size = new System.Drawing.Size(1094, 214);
             this.tlpNormal.TabIndex = 0;
             // 
             // tFilterNormal
@@ -417,7 +417,7 @@
             this.tFilterNormal.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterNormal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterNormal.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterNormal.EditMode = AntdUI.TEditMode.DoubleClick;
+            this.tFilterNormal.EditMode = AntdUI.TEditMode.Click;
             this.tFilterNormal.Gap = 8;
             this.tFilterNormal.GapCell = 0;
             this.tFilterNormal.Gaps = new System.Drawing.Size(8, 8);
@@ -425,7 +425,7 @@
             this.tFilterNormal.Name = "tFilterNormal";
             this.tFilterNormal.RowHeight = 40;
             this.tFilterNormal.RowSelectedBg = System.Drawing.Color.Transparent;
-            this.tFilterNormal.Size = new System.Drawing.Size(1082, 208);
+            this.tFilterNormal.Size = new System.Drawing.Size(1088, 208);
             this.tFilterNormal.TabIndex = 1;
             this.tFilterNormal.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterNormal_CellClick);
             this.tFilterNormal.CellBeginEditInputStyle += new AntdUI.Table.BeginEditInputStyleEventHandler(this.tFilterNormal_CellBeginEditInputStyle);
@@ -514,7 +514,7 @@
             this.cbProgressionContinuous.LocalizationText = "FilterEditForm.StartFrom.Progression.Continuous";
             this.cbProgressionContinuous.Location = new System.Drawing.Point(6, 6);
             this.cbProgressionContinuous.Name = "cbProgressionContinuous";
-            this.cbProgressionContinuous.Size = new System.Drawing.Size(95, 39);
+            this.cbProgressionContinuous.Size = new System.Drawing.Size(94, 39);
             this.cbProgressionContinuous.TabIndex = 40;
             this.cbProgressionContinuous.Text = "连续递进";
             // 
@@ -525,7 +525,7 @@
             this.cbProgressionCarry.LocalizationText = "FilterEditForm.StartFrom.Progression.Carry";
             this.cbProgressionCarry.Location = new System.Drawing.Point(6, 51);
             this.cbProgressionCarry.Name = "cbProgressionCarry";
-            this.cbProgressionCarry.Size = new System.Drawing.Size(95, 39);
+            this.cbProgressionCarry.Size = new System.Drawing.Size(94, 39);
             this.cbProgressionCarry.TabIndex = 41;
             this.cbProgressionCarry.Text = "进位递进";
             this.cbProgressionCarry.CheckedChanged += new AntdUI.BoolEventHandler(this.cbProgressionCarry_CheckedChanged);
@@ -533,9 +533,9 @@
             // nudProgressionStep
             // 
             this.nudProgressionStep.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudProgressionStep.Location = new System.Drawing.Point(107, 6);
+            this.nudProgressionStep.Location = new System.Drawing.Point(106, 6);
             this.nudProgressionStep.Name = "nudProgressionStep";
-            this.nudProgressionStep.Size = new System.Drawing.Size(173, 39);
+            this.nudProgressionStep.Size = new System.Drawing.Size(174, 39);
             this.nudProgressionStep.TabIndex = 42;
             this.nudProgressionStep.Text = "1";
             this.nudProgressionStep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -548,9 +548,9 @@
             // nudProgressionCarry
             // 
             this.nudProgressionCarry.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudProgressionCarry.Location = new System.Drawing.Point(107, 51);
+            this.nudProgressionCarry.Location = new System.Drawing.Point(106, 51);
             this.nudProgressionCarry.Name = "nudProgressionCarry";
-            this.nudProgressionCarry.Size = new System.Drawing.Size(173, 39);
+            this.nudProgressionCarry.Size = new System.Drawing.Size(174, 39);
             this.nudProgressionCarry.TabIndex = 43;
             this.nudProgressionCarry.Text = "1";
             this.nudProgressionCarry.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -649,11 +649,11 @@
             // 
             this.txtFilter_LengthContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFilter_LengthContent.LocalizationPlaceholderText = "FilterEditForm.Appoint.Example";
-            this.txtFilter_LengthContent.Location = new System.Drawing.Point(90, 78);
+            this.txtFilter_LengthContent.Location = new System.Drawing.Point(89, 78);
             this.txtFilter_LengthContent.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.txtFilter_LengthContent.Name = "txtFilter_LengthContent";
             this.txtFilter_LengthContent.PlaceholderText = "例如 0-99;100";
-            this.txtFilter_LengthContent.Size = new System.Drawing.Size(282, 39);
+            this.txtFilter_LengthContent.Size = new System.Drawing.Size(283, 39);
             this.txtFilter_LengthContent.TabIndex = 5;
             this.txtFilter_LengthContent.TextChanged += new System.EventHandler(this.txtFilter_LengthContent_TextChanged);
             // 
@@ -665,7 +665,7 @@
             this.cbFilter_AppointLength.Location = new System.Drawing.Point(3, 78);
             this.cbFilter_AppointLength.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilter_AppointLength.Name = "cbFilter_AppointLength";
-            this.cbFilter_AppointLength.Size = new System.Drawing.Size(67, 39);
+            this.cbFilter_AppointLength.Size = new System.Drawing.Size(66, 39);
             this.cbFilter_AppointLength.TabIndex = 4;
             this.cbFilter_AppointLength.Text = "长度";
             this.cbFilter_AppointLength.CheckedChanged += new AntdUI.BoolEventHandler(this.cbFilter_AppointLength_CheckedChanged);
@@ -678,7 +678,7 @@
             this.cbFilter_AppointSocket.Location = new System.Drawing.Point(3, 0);
             this.cbFilter_AppointSocket.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilter_AppointSocket.Name = "cbFilter_AppointSocket";
-            this.cbFilter_AppointSocket.Size = new System.Drawing.Size(81, 39);
+            this.cbFilter_AppointSocket.Size = new System.Drawing.Size(80, 39);
             this.cbFilter_AppointSocket.TabIndex = 0;
             this.cbFilter_AppointSocket.Text = "套接字";
             this.cbFilter_AppointSocket.CheckedChanged += new AntdUI.BoolEventHandler(this.cbFilter_AppointSocket_CheckedChanged);
@@ -691,7 +691,7 @@
             this.cbFilter_AppointPort.Location = new System.Drawing.Point(3, 39);
             this.cbFilter_AppointPort.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilter_AppointPort.Name = "cbFilter_AppointPort";
-            this.cbFilter_AppointPort.Size = new System.Drawing.Size(67, 39);
+            this.cbFilter_AppointPort.Size = new System.Drawing.Size(66, 39);
             this.cbFilter_AppointPort.TabIndex = 1;
             this.cbFilter_AppointPort.Text = "端口";
             this.cbFilter_AppointPort.CheckedChanged += new AntdUI.BoolEventHandler(this.cbFilter_AppointPort_CheckedChanged);
@@ -700,11 +700,11 @@
             // 
             this.txtFilter_SocketContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFilter_SocketContent.LocalizationPlaceholderText = "SemicolonDelimiter";
-            this.txtFilter_SocketContent.Location = new System.Drawing.Point(90, 0);
+            this.txtFilter_SocketContent.Location = new System.Drawing.Point(89, 0);
             this.txtFilter_SocketContent.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.txtFilter_SocketContent.Name = "txtFilter_SocketContent";
             this.txtFilter_SocketContent.PlaceholderText = "支持 ; 分隔符";
-            this.txtFilter_SocketContent.Size = new System.Drawing.Size(282, 39);
+            this.txtFilter_SocketContent.Size = new System.Drawing.Size(283, 39);
             this.txtFilter_SocketContent.TabIndex = 2;
             this.txtFilter_SocketContent.TextChanged += new System.EventHandler(this.txtFilter_SocketContent_TextChanged);
             // 
@@ -712,11 +712,11 @@
             // 
             this.txtFilter_PortContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFilter_PortContent.LocalizationPlaceholderText = "FilterEditForm.Appoint.Example";
-            this.txtFilter_PortContent.Location = new System.Drawing.Point(90, 39);
+            this.txtFilter_PortContent.Location = new System.Drawing.Point(89, 39);
             this.txtFilter_PortContent.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.txtFilter_PortContent.Name = "txtFilter_PortContent";
             this.txtFilter_PortContent.PlaceholderText = "例如 80-89;1080";
-            this.txtFilter_PortContent.Size = new System.Drawing.Size(282, 39);
+            this.txtFilter_PortContent.Size = new System.Drawing.Size(283, 39);
             this.txtFilter_PortContent.TabIndex = 3;
             this.txtFilter_PortContent.TextChanged += new System.EventHandler(this.txtFilter_PortContent_TextChanged);
             // 
@@ -776,7 +776,7 @@
             // 
             this.tabFilterFunction.Controls.Add(this.tpInjectMode);
             this.tabFilterFunction.Controls.Add(this.tpProxyMode);
-            this.tabFilterFunction.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabFilterFunction.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabFilterFunction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterFunction.Location = new System.Drawing.Point(3, 39);
             this.tabFilterFunction.Name = "tabFilterFunction";
@@ -791,9 +791,9 @@
             // 
             this.tpInjectMode.Controls.Add(this.tlpFilterFunction_InjectMode);
             this.tpInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpInjectMode.Location = new System.Drawing.Point(3, 30);
+            this.tpInjectMode.Location = new System.Drawing.Point(0, 33);
             this.tpInjectMode.Name = "tpInjectMode";
-            this.tpInjectMode.Size = new System.Drawing.Size(308, 126);
+            this.tpInjectMode.Size = new System.Drawing.Size(314, 126);
             this.tpInjectMode.TabIndex = 1;
             this.tpInjectMode.Text = "注入模式";
             // 
@@ -822,7 +822,7 @@
             this.tlpFilterFunction_InjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterFunction_InjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterFunction_InjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterFunction_InjectMode.Size = new System.Drawing.Size(308, 126);
+            this.tlpFilterFunction_InjectMode.Size = new System.Drawing.Size(314, 126);
             this.tlpFilterFunction_InjectMode.TabIndex = 4;
             // 
             // cbFilterFunction_Send
@@ -833,7 +833,7 @@
             this.cbFilterFunction_Send.Location = new System.Drawing.Point(6, 3);
             this.cbFilterFunction_Send.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilterFunction_Send.Name = "cbFilterFunction_Send";
-            this.cbFilterFunction_Send.Size = new System.Drawing.Size(67, 34);
+            this.cbFilterFunction_Send.Size = new System.Drawing.Size(66, 34);
             this.cbFilterFunction_Send.TabIndex = 51;
             this.cbFilterFunction_Send.Text = "发送";
             // 
@@ -842,10 +842,10 @@
             this.cbFilterFunction_WSARecvFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbFilterFunction_WSARecvFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbFilterFunction_WSARecvFrom.LocalizationText = "WSARecvFrom";
-            this.cbFilterFunction_WSARecvFrom.Location = new System.Drawing.Point(188, 115);
+            this.cbFilterFunction_WSARecvFrom.Location = new System.Drawing.Point(195, 115);
             this.cbFilterFunction_WSARecvFrom.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilterFunction_WSARecvFrom.Name = "cbFilterFunction_WSARecvFrom";
-            this.cbFilterFunction_WSARecvFrom.Size = new System.Drawing.Size(114, 39);
+            this.cbFilterFunction_WSARecvFrom.Size = new System.Drawing.Size(113, 39);
             this.cbFilterFunction_WSARecvFrom.TabIndex = 50;
             this.cbFilterFunction_WSARecvFrom.Text = "WSA接收自";
             // 
@@ -857,7 +857,7 @@
             this.cbFilterFunction_RecvFrom.Location = new System.Drawing.Point(6, 115);
             this.cbFilterFunction_RecvFrom.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilterFunction_RecvFrom.Name = "cbFilterFunction_RecvFrom";
-            this.cbFilterFunction_RecvFrom.Size = new System.Drawing.Size(81, 39);
+            this.cbFilterFunction_RecvFrom.Size = new System.Drawing.Size(80, 39);
             this.cbFilterFunction_RecvFrom.TabIndex = 48;
             this.cbFilterFunction_RecvFrom.Text = "接收自";
             // 
@@ -866,10 +866,10 @@
             this.cbFilterFunction_WSARecv.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbFilterFunction_WSARecv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbFilterFunction_WSARecv.LocalizationText = "WSARecv";
-            this.cbFilterFunction_WSARecv.Location = new System.Drawing.Point(188, 76);
+            this.cbFilterFunction_WSARecv.Location = new System.Drawing.Point(195, 76);
             this.cbFilterFunction_WSARecv.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilterFunction_WSARecv.Name = "cbFilterFunction_WSARecv";
-            this.cbFilterFunction_WSARecv.Size = new System.Drawing.Size(100, 39);
+            this.cbFilterFunction_WSARecv.Size = new System.Drawing.Size(99, 39);
             this.cbFilterFunction_WSARecv.TabIndex = 47;
             this.cbFilterFunction_WSARecv.Text = "WSA接收";
             // 
@@ -881,7 +881,7 @@
             this.cbFilterFunction_Recv.Location = new System.Drawing.Point(6, 76);
             this.cbFilterFunction_Recv.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilterFunction_Recv.Name = "cbFilterFunction_Recv";
-            this.cbFilterFunction_Recv.Size = new System.Drawing.Size(67, 39);
+            this.cbFilterFunction_Recv.Size = new System.Drawing.Size(66, 39);
             this.cbFilterFunction_Recv.TabIndex = 45;
             this.cbFilterFunction_Recv.Text = "接收";
             // 
@@ -890,10 +890,10 @@
             this.cbFilterFunction_WSASendTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbFilterFunction_WSASendTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbFilterFunction_WSASendTo.LocalizationText = "WSASendTo";
-            this.cbFilterFunction_WSASendTo.Location = new System.Drawing.Point(188, 37);
+            this.cbFilterFunction_WSASendTo.Location = new System.Drawing.Point(195, 37);
             this.cbFilterFunction_WSASendTo.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilterFunction_WSASendTo.Name = "cbFilterFunction_WSASendTo";
-            this.cbFilterFunction_WSASendTo.Size = new System.Drawing.Size(114, 39);
+            this.cbFilterFunction_WSASendTo.Size = new System.Drawing.Size(113, 39);
             this.cbFilterFunction_WSASendTo.TabIndex = 44;
             this.cbFilterFunction_WSASendTo.Text = "WSA发送到";
             // 
@@ -905,7 +905,7 @@
             this.cbFilterFunction_SendTo.Location = new System.Drawing.Point(6, 37);
             this.cbFilterFunction_SendTo.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilterFunction_SendTo.Name = "cbFilterFunction_SendTo";
-            this.cbFilterFunction_SendTo.Size = new System.Drawing.Size(81, 39);
+            this.cbFilterFunction_SendTo.Size = new System.Drawing.Size(80, 39);
             this.cbFilterFunction_SendTo.TabIndex = 42;
             this.cbFilterFunction_SendTo.Text = "发送到";
             // 
@@ -914,10 +914,10 @@
             this.cbFilterFunction_WSASend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbFilterFunction_WSASend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbFilterFunction_WSASend.LocalizationText = "WSASend";
-            this.cbFilterFunction_WSASend.Location = new System.Drawing.Point(188, 3);
+            this.cbFilterFunction_WSASend.Location = new System.Drawing.Point(195, 3);
             this.cbFilterFunction_WSASend.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.cbFilterFunction_WSASend.Name = "cbFilterFunction_WSASend";
-            this.cbFilterFunction_WSASend.Size = new System.Drawing.Size(100, 34);
+            this.cbFilterFunction_WSASend.Size = new System.Drawing.Size(99, 34);
             this.cbFilterFunction_WSASend.TabIndex = 41;
             this.cbFilterFunction_WSASend.Text = "WSA发送";
             // 
@@ -925,9 +925,9 @@
             // 
             this.tpProxyMode.Controls.Add(this.tlpFilterFunction_ProxyMode);
             this.tpProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpProxyMode.Location = new System.Drawing.Point(3, 30);
+            this.tpProxyMode.Location = new System.Drawing.Point(0, 33);
             this.tpProxyMode.Name = "tpProxyMode";
-            this.tpProxyMode.Size = new System.Drawing.Size(308, 126);
+            this.tpProxyMode.Size = new System.Drawing.Size(314, 126);
             this.tpProxyMode.TabIndex = 0;
             this.tpProxyMode.Text = "代理模式";
             // 
@@ -952,7 +952,7 @@
             this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFilterFunction_ProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpFilterFunction_ProxyMode.Size = new System.Drawing.Size(308, 126);
+            this.tlpFilterFunction_ProxyMode.Size = new System.Drawing.Size(314, 126);
             this.tlpFilterFunction_ProxyMode.TabIndex = 4;
             // 
             // cbFilterFunction_TCP_Req
@@ -962,7 +962,7 @@
             this.cbFilterFunction_TCP_Req.LocalizationText = "TCPReq";
             this.cbFilterFunction_TCP_Req.Location = new System.Drawing.Point(6, 6);
             this.cbFilterFunction_TCP_Req.Name = "cbFilterFunction_TCP_Req";
-            this.cbFilterFunction_TCP_Req.Size = new System.Drawing.Size(93, 34);
+            this.cbFilterFunction_TCP_Req.Size = new System.Drawing.Size(92, 34);
             this.cbFilterFunction_TCP_Req.TabIndex = 51;
             this.cbFilterFunction_TCP_Req.Text = "TCP请求";
             // 
@@ -971,9 +971,9 @@
             this.cbFilterFunction_UDP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbFilterFunction_UDP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbFilterFunction_UDP_Resp.LocalizationText = "UDPResp";
-            this.cbFilterFunction_UDP_Resp.Location = new System.Drawing.Point(205, 46);
+            this.cbFilterFunction_UDP_Resp.Location = new System.Drawing.Point(212, 46);
             this.cbFilterFunction_UDP_Resp.Name = "cbFilterFunction_UDP_Resp";
-            this.cbFilterFunction_UDP_Resp.Size = new System.Drawing.Size(97, 34);
+            this.cbFilterFunction_UDP_Resp.Size = new System.Drawing.Size(96, 34);
             this.cbFilterFunction_UDP_Resp.TabIndex = 44;
             this.cbFilterFunction_UDP_Resp.Text = "UDP响应";
             // 
@@ -982,9 +982,9 @@
             this.cbFilterFunction_UDP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbFilterFunction_UDP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbFilterFunction_UDP_Req.LocalizationText = "UDPReq";
-            this.cbFilterFunction_UDP_Req.Location = new System.Drawing.Point(205, 6);
+            this.cbFilterFunction_UDP_Req.Location = new System.Drawing.Point(212, 6);
             this.cbFilterFunction_UDP_Req.Name = "cbFilterFunction_UDP_Req";
-            this.cbFilterFunction_UDP_Req.Size = new System.Drawing.Size(97, 34);
+            this.cbFilterFunction_UDP_Req.Size = new System.Drawing.Size(96, 34);
             this.cbFilterFunction_UDP_Req.TabIndex = 42;
             this.cbFilterFunction_UDP_Req.Text = "UDP请求";
             // 
@@ -995,7 +995,7 @@
             this.cbFilterFunction_TCP_Resp.LocalizationText = "TCPResp";
             this.cbFilterFunction_TCP_Resp.Location = new System.Drawing.Point(6, 46);
             this.cbFilterFunction_TCP_Resp.Name = "cbFilterFunction_TCP_Resp";
-            this.cbFilterFunction_TCP_Resp.Size = new System.Drawing.Size(93, 34);
+            this.cbFilterFunction_TCP_Resp.Size = new System.Drawing.Size(92, 34);
             this.cbFilterFunction_TCP_Resp.TabIndex = 41;
             this.cbFilterFunction_TCP_Resp.Text = "TCP响应";
             // 
@@ -1060,7 +1060,7 @@
             this.rbFilterAction_Replace.LocalizationText = "Replace";
             this.rbFilterAction_Replace.Location = new System.Drawing.Point(3, 3);
             this.rbFilterAction_Replace.Name = "rbFilterAction_Replace";
-            this.rbFilterAction_Replace.Size = new System.Drawing.Size(67, 39);
+            this.rbFilterAction_Replace.Size = new System.Drawing.Size(66, 39);
             this.rbFilterAction_Replace.TabIndex = 23;
             this.rbFilterAction_Replace.Text = "替换";
             // 
@@ -1069,9 +1069,9 @@
             this.rbFilterAction_Change.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbFilterAction_Change.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFilterAction_Change.LocalizationText = "Change";
-            this.rbFilterAction_Change.Location = new System.Drawing.Point(76, 3);
+            this.rbFilterAction_Change.Location = new System.Drawing.Point(75, 3);
             this.rbFilterAction_Change.Name = "rbFilterAction_Change";
-            this.rbFilterAction_Change.Size = new System.Drawing.Size(67, 39);
+            this.rbFilterAction_Change.Size = new System.Drawing.Size(66, 39);
             this.rbFilterAction_Change.TabIndex = 24;
             this.rbFilterAction_Change.Text = "换包";
             // 
@@ -1082,7 +1082,7 @@
             this.rbFilterAction_NoModify_Display.LocalizationText = "FilterEditForm.NoModifyDisplay";
             this.rbFilterAction_NoModify_Display.Location = new System.Drawing.Point(234, 3);
             this.rbFilterAction_NoModify_Display.Name = "rbFilterAction_NoModify_Display";
-            this.rbFilterAction_NoModify_Display.Size = new System.Drawing.Size(138, 39);
+            this.rbFilterAction_NoModify_Display.Size = new System.Drawing.Size(137, 39);
             this.rbFilterAction_NoModify_Display.TabIndex = 25;
             this.rbFilterAction_NoModify_Display.Text = "不修改 - 只显示";
             // 
@@ -1093,7 +1093,7 @@
             this.rbFilterAction_Intercept.LocalizationText = "Intercept";
             this.rbFilterAction_Intercept.Location = new System.Drawing.Point(3, 48);
             this.rbFilterAction_Intercept.Name = "rbFilterAction_Intercept";
-            this.rbFilterAction_Intercept.Size = new System.Drawing.Size(67, 39);
+            this.rbFilterAction_Intercept.Size = new System.Drawing.Size(66, 39);
             this.rbFilterAction_Intercept.TabIndex = 26;
             this.rbFilterAction_Intercept.Text = "拦截";
             // 
@@ -1104,7 +1104,7 @@
             this.rbFilterAction_NoModify_NoDisplay.LocalizationText = "FilterEditForm.NoModifyNoDisplay";
             this.rbFilterAction_NoModify_NoDisplay.Location = new System.Drawing.Point(234, 48);
             this.rbFilterAction_NoModify_NoDisplay.Name = "rbFilterAction_NoModify_NoDisplay";
-            this.rbFilterAction_NoModify_NoDisplay.Size = new System.Drawing.Size(138, 39);
+            this.rbFilterAction_NoModify_NoDisplay.Size = new System.Drawing.Size(137, 39);
             this.rbFilterAction_NoModify_NoDisplay.TabIndex = 27;
             this.rbFilterAction_NoModify_NoDisplay.Text = "不修改 - 不显示";
             // 
@@ -1115,7 +1115,7 @@
             this.cbFilterAction_Execute.LocalizationText = "Execute";
             this.cbFilterAction_Execute.Location = new System.Drawing.Point(3, 93);
             this.cbFilterAction_Execute.Name = "cbFilterAction_Execute";
-            this.cbFilterAction_Execute.Size = new System.Drawing.Size(67, 39);
+            this.cbFilterAction_Execute.Size = new System.Drawing.Size(66, 39);
             this.cbFilterAction_Execute.TabIndex = 28;
             this.cbFilterAction_Execute.Text = "执行";
             this.cbFilterAction_Execute.CheckedChanged += new AntdUI.BoolEventHandler(this.cbFilterAction_Execute_CheckedChanged);
@@ -1126,10 +1126,10 @@
             this.cbbFilterAction_ExecuteType.List = true;
             this.cbbFilterAction_ExecuteType.ListAutoWidth = true;
             this.cbbFilterAction_ExecuteType.LocalizationPlaceholderText = "";
-            this.cbbFilterAction_ExecuteType.Location = new System.Drawing.Point(76, 93);
+            this.cbbFilterAction_ExecuteType.Location = new System.Drawing.Point(75, 93);
             this.cbbFilterAction_ExecuteType.Name = "cbbFilterAction_ExecuteType";
             this.cbbFilterAction_ExecuteType.PlaceholderText = "";
-            this.cbbFilterAction_ExecuteType.Size = new System.Drawing.Size(152, 39);
+            this.cbbFilterAction_ExecuteType.Size = new System.Drawing.Size(153, 39);
             this.cbbFilterAction_ExecuteType.TabIndex = 29;
             this.cbbFilterAction_ExecuteType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.cbbFilterAction_ExecuteType_SelectedIndexChanged);
             // 
@@ -1211,7 +1211,7 @@
             this.rbFilterMode_Advanced.LocalizationText = "Advanced";
             this.rbFilterMode_Advanced.Location = new System.Drawing.Point(3, 84);
             this.rbFilterMode_Advanced.Name = "rbFilterMode_Advanced";
-            this.rbFilterMode_Advanced.Size = new System.Drawing.Size(67, 39);
+            this.rbFilterMode_Advanced.Size = new System.Drawing.Size(66, 39);
             this.rbFilterMode_Advanced.TabIndex = 2;
             this.rbFilterMode_Advanced.Text = "高级";
             // 
@@ -1234,7 +1234,7 @@
             this.rbFilterMode_Normal.LocalizationText = "Normal";
             this.rbFilterMode_Normal.Location = new System.Drawing.Point(3, 39);
             this.rbFilterMode_Normal.Name = "rbFilterMode_Normal";
-            this.rbFilterMode_Normal.Size = new System.Drawing.Size(67, 39);
+            this.rbFilterMode_Normal.Size = new System.Drawing.Size(66, 39);
             this.rbFilterMode_Normal.TabIndex = 1;
             this.rbFilterMode_Normal.Text = "普通";
             this.rbFilterMode_Normal.CheckedChanged += new AntdUI.BoolEventHandler(this.rbFilterMode_Normal_CheckedChanged);
@@ -1277,7 +1277,7 @@
             this.rbFilterModifyFrom_Position.LocalizationText = "FilterEditForm.StartFrom.Position";
             this.rbFilterModifyFrom_Position.Location = new System.Drawing.Point(3, 84);
             this.rbFilterModifyFrom_Position.Name = "rbFilterModifyFrom_Position";
-            this.rbFilterModifyFrom_Position.Size = new System.Drawing.Size(165, 39);
+            this.rbFilterModifyFrom_Position.Size = new System.Drawing.Size(164, 39);
             this.rbFilterModifyFrom_Position.TabIndex = 3;
             this.rbFilterModifyFrom_Position.Text = "自发现有连锁的位置";
             // 
@@ -1288,7 +1288,7 @@
             this.rbFilterModifyFrom_Head.LocalizationText = "FilterEditForm.StartFrom.Packet";
             this.rbFilterModifyFrom_Head.Location = new System.Drawing.Point(3, 39);
             this.rbFilterModifyFrom_Head.Name = "rbFilterModifyFrom_Head";
-            this.rbFilterModifyFrom_Head.Size = new System.Drawing.Size(109, 39);
+            this.rbFilterModifyFrom_Head.Size = new System.Drawing.Size(108, 39);
             this.rbFilterModifyFrom_Head.TabIndex = 2;
             this.rbFilterModifyFrom_Head.Text = "数据包开头";
             this.rbFilterModifyFrom_Head.CheckedChanged += new AntdUI.BoolEventHandler(this.rbFilterModifyFrom_Head_CheckedChanged);
@@ -1375,7 +1375,7 @@
             this.cbFilter_AppointHeader.LocalizationText = "FilterEditForm.AppointHead";
             this.cbFilter_AppointHeader.Location = new System.Drawing.Point(6, 6);
             this.cbFilter_AppointHeader.Name = "cbFilter_AppointHeader";
-            this.cbFilter_AppointHeader.Size = new System.Drawing.Size(95, 39);
+            this.cbFilter_AppointHeader.Size = new System.Drawing.Size(94, 39);
             this.cbFilter_AppointHeader.TabIndex = 32;
             this.cbFilter_AppointHeader.Text = "指定包头";
             this.cbFilter_AppointHeader.CheckedChanged += new AntdUI.BoolEventHandler(this.cbFilter_AppointHeader_CheckedChanged);
@@ -1384,10 +1384,10 @@
             // 
             this.txtFilter_HeaderContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFilter_HeaderContent.LocalizationPlaceholderText = "HexWithSpaces";
-            this.txtFilter_HeaderContent.Location = new System.Drawing.Point(107, 6);
+            this.txtFilter_HeaderContent.Location = new System.Drawing.Point(106, 6);
             this.txtFilter_HeaderContent.Name = "txtFilter_HeaderContent";
             this.txtFilter_HeaderContent.PlaceholderText = "请输入十六进制和空格";
-            this.txtFilter_HeaderContent.Size = new System.Drawing.Size(262, 39);
+            this.txtFilter_HeaderContent.Size = new System.Drawing.Size(263, 39);
             this.txtFilter_HeaderContent.TabIndex = 33;
             this.txtFilter_HeaderContent.TextChanged += new System.EventHandler(this.txtFilter_HeaderContent_TextChanged);
             // 

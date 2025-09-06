@@ -78,6 +78,9 @@
             this.lSplit1 = new AntdUI.Label();
             this.lProxySpeed = new AntdUI.Label();
             this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
+            this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
+            this.cbPacketList_AutoClear = new AntdUI.Checkbox();
+            this.txtPacketList_AutoClear = new AntdUI.InputNumber();
             this.tlpProxyList.SuspendLayout();
             this.tlpProxyList_Button.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterProxyList)).BeginInit();
@@ -113,19 +116,25 @@
             // 
             // tlpProxyList_Button
             // 
-            this.tlpProxyList_Button.ColumnCount = 6;
+            this.tlpProxyList_Button.ColumnCount = 9;
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpProxyList_Button.Controls.Add(this.txtPacketList_AutoClear, 4, 0);
+            this.tlpProxyList_Button.Controls.Add(this.cbPacketList_AutoClear, 3, 0);
+            this.tlpProxyList_Button.Controls.Add(this.cbPacketList_AutoRoll, 5, 0);
             this.tlpProxyList_Button.Controls.Add(this.bProxyList_Clear, 2, 0);
             this.tlpProxyList_Button.Controls.Add(this.bProxyStop, 1, 0);
             this.tlpProxyList_Button.Controls.Add(this.bProxyStart, 0, 0);
-            this.tlpProxyList_Button.Controls.Add(this.ddMenu, 5, 0);
-            this.tlpProxyList_Button.Controls.Add(this.bSearchPacket, 4, 0);
+            this.tlpProxyList_Button.Controls.Add(this.ddMenu, 8, 0);
+            this.tlpProxyList_Button.Controls.Add(this.bSearchPacket, 7, 0);
             this.tlpProxyList_Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpProxyList_Button.Location = new System.Drawing.Point(30, 20);
             this.tlpProxyList_Button.Margin = new System.Windows.Forms.Padding(0);
@@ -829,6 +838,51 @@
             this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
             this.bgwSearchProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchProxyList_RunWorkerCompleted);
             // 
+            // cbPacketList_AutoRoll
+            // 
+            this.cbPacketList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbPacketList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbPacketList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
+            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(501, 3);
+            this.cbPacketList_AutoRoll.Name = "cbPacketList_AutoRoll";
+            this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(108, 44);
+            this.cbPacketList_AutoRoll.TabIndex = 15;
+            this.cbPacketList_AutoRoll.Text = "自动滚动";
+            this.cbPacketList_AutoRoll.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoRoll_CheckedChanged);
+            // 
+            // cbPacketList_AutoClear
+            // 
+            this.cbPacketList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbPacketList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
+            this.cbPacketList_AutoClear.Location = new System.Drawing.Point(267, 3);
+            this.cbPacketList_AutoClear.Name = "cbPacketList_AutoClear";
+            this.cbPacketList_AutoClear.Size = new System.Drawing.Size(108, 44);
+            this.cbPacketList_AutoClear.TabIndex = 16;
+            this.cbPacketList_AutoClear.Text = "自动清理";
+            this.cbPacketList_AutoClear.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoClear_CheckedChanged);
+            // 
+            // txtPacketList_AutoClear
+            // 
+            this.txtPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPacketList_AutoClear.Location = new System.Drawing.Point(381, 3);
+            this.txtPacketList_AutoClear.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtPacketList_AutoClear.Name = "txtPacketList_AutoClear";
+            this.txtPacketList_AutoClear.SelectionStart = 1;
+            this.txtPacketList_AutoClear.Size = new System.Drawing.Size(114, 44);
+            this.txtPacketList_AutoClear.TabIndex = 17;
+            this.txtPacketList_AutoClear.Text = "5000";
+            this.txtPacketList_AutoClear.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtPacketList_AutoClear.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            // 
             // ProxyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -909,5 +963,8 @@
         private System.ComponentModel.BackgroundWorker bgwSearchProxyList;
         private AntdUI.Dropdown ddMenu;
         private AntdUI.Button bSearchPacket;
+        private AntdUI.Checkbox cbPacketList_AutoRoll;
+        private AntdUI.Checkbox cbPacketList_AutoClear;
+        private AntdUI.InputNumber txtPacketList_AutoClear;
     }
 }

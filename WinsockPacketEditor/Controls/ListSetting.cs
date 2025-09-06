@@ -19,6 +19,7 @@ namespace WinsockPacketEditor
         private void ListSetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("ListSettingsForm", "列表设置");
+            this.tabListSettings.TabMenuVisible = false;
 
             switch (Operate.SystemConfig.StartMode)
             {
@@ -26,9 +27,6 @@ namespace WinsockPacketEditor
 
                     this.tabListSettings.SelectTab(0);
 
-                    this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
-                    this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
-                    this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
                     this.cbIsShow_ProxyTime_Inject.Checked = Operate.PacketConfig.List.IsShow_ProxyTime;
                     this.cbIsShow_PacketSocket_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketSocket;
                     this.cbIsShow_PacketType_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketType;
@@ -45,9 +43,6 @@ namespace WinsockPacketEditor
 
                     this.tabListSettings.SelectTab(1);
 
-                    this.cbPacketList_AutoRoll.Checked = Operate.ProxyConfig.List.AutoRoll;
-                    this.cbPacketList_AutoClear.Checked = Operate.ProxyConfig.List.AutoClear;
-                    this.txtPacketList_AutoClear.Value = Operate.ProxyConfig.List.AutoClear_Value;
                     this.cbIsShow_ID_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ID;
                     this.cbIsShow_ProxyTime_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ProxyTime;
                     this.cbIsShow_PacketSocket_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketSocket;
@@ -61,45 +56,9 @@ namespace WinsockPacketEditor
 
                     break;
             }
-
-            this.tabListSettings.TabMenuVisible = false;
-            this.cbLogList_AutoRoll.Checked = Operate.LogConfig.List.AutoRoll;
-            this.cbLogList_AutoClear.Checked = Operate.LogConfig.List.AutoClear;
-            this.txtLogList_AutoClear.Value = Operate.LogConfig.List.AutoClear_Value;
-
-            this.PacketList_AutoClear_Changed();
-            this.LogList_AutoClear_Changed();
         }
 
-        #endregion
-
-        #region//代理列表
-
-        private void cbPacketList_AutoClear_CheckedChanged(object sender, BoolEventArgs e)
-        {
-            this.PacketList_AutoClear_Changed();
-        }
-
-        private void PacketList_AutoClear_Changed()
-        {
-            this.txtPacketList_AutoClear.Enabled = this.cbPacketList_AutoClear.Checked;
-        }
-
-        #endregion
-
-        #region//日志列表
-
-        private void cbLogList_AutoClear_CheckedChanged(object sender, BoolEventArgs e)
-        {
-            this.LogList_AutoClear_Changed();
-        }
-
-        private void LogList_AutoClear_Changed()
-        {
-            this.txtLogList_AutoClear.Enabled = this.cbLogList_AutoClear.Checked;
-        }
-
-        #endregion
+        #endregion      
 
         #region//保存
 
@@ -109,9 +68,6 @@ namespace WinsockPacketEditor
             {
                 case Operate.SystemConfig.SystemMode.Process:
 
-                    Operate.PacketConfig.List.AutoRoll = this.cbPacketList_AutoRoll.Checked;
-                    Operate.PacketConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;
-                    Operate.PacketConfig.List.AutoClear_Value = this.txtPacketList_AutoClear.Value;
                     Operate.PacketConfig.List.IsShow_ID = this.cbIsShow_ID_Inject.Checked;
                     Operate.PacketConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Inject.Checked;
                     Operate.PacketConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Inject.Checked;
@@ -129,9 +85,6 @@ namespace WinsockPacketEditor
 
                 case Operate.SystemConfig.SystemMode.Proxy:
 
-                    Operate.ProxyConfig.List.AutoRoll = this.cbPacketList_AutoRoll.Checked;
-                    Operate.ProxyConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;
-                    Operate.ProxyConfig.List.AutoClear_Value = this.txtPacketList_AutoClear.Value;
                     Operate.ProxyConfig.List.IsShow_ID = this.cbIsShow_ID_Proxy.Checked;
                     Operate.ProxyConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Proxy.Checked;
                     Operate.ProxyConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Proxy.Checked;
@@ -147,10 +100,6 @@ namespace WinsockPacketEditor
 
                     break;
             }
-
-            Operate.LogConfig.List.AutoRoll = this.cbLogList_AutoRoll.Checked;
-            Operate.LogConfig.List.AutoClear = this.cbLogList_AutoClear.Checked;
-            Operate.LogConfig.List.AutoClear_Value = this.txtLogList_AutoClear.Value;
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "列表设置保存成功", TType.Success)
             {

@@ -36,6 +36,11 @@ namespace WinsockPacketEditor
             this.InitTable_PacketList();
             this.Dark_Changed();
 
+            this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
+            this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
+            this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
+            this.PacketList_AutoClear_Changed();
+
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
         }
 
@@ -897,6 +902,37 @@ namespace WinsockPacketEditor
 
                 hbPacketData.ByteProvider = null;
             }
+        }
+
+        #endregion
+
+        #region//自动清理
+
+        private void cbPacketList_AutoClear_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.PacketList_AutoClear_Changed();
+
+            Operate.PacketConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;
+            Operate.PacketConfig.List.AutoClear_Value = this.txtPacketList_AutoClear.Value;
+        }
+
+        private void PacketList_AutoClear_Changed()
+        {
+            this.txtPacketList_AutoClear.Enabled = this.cbPacketList_AutoClear.Checked;            
+        }
+
+        #endregion
+
+        #region//自动滚动
+
+        private void cbPacketList_AutoRoll_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.PacketList_AutoRoll_Changed();
+        }
+
+        private void PacketList_AutoRoll_Changed()
+        {
+            Operate.PacketConfig.List.AutoRoll = this.cbPacketList_AutoRoll.Checked;
         }
 
         #endregion

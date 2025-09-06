@@ -30,6 +30,8 @@
         {
             this.tlpPacketList = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.ddMenu = new AntdUI.Dropdown();
+            this.bSearchPacket = new AntdUI.Button();
             this.bPacketList_Clear = new AntdUI.Button();
             this.bHookStop = new AntdUI.Button();
             this.bHookStart = new AntdUI.Button();
@@ -83,8 +85,9 @@
             this.lModuleName = new AntdUI.Label();
             this.lProcessName = new AntdUI.Label();
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
-            this.bSearchPacket = new AntdUI.Button();
-            this.ddMenu = new AntdUI.Dropdown();
+            this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
+            this.cbPacketList_AutoClear = new AntdUI.Checkbox();
+            this.txtPacketList_AutoClear = new AntdUI.InputNumber();
             this.tlpPacketList.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterPacketList)).BeginInit();
@@ -120,16 +123,21 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnCount = 9;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Controls.Add(this.ddMenu, 5, 0);
-            this.tableLayoutPanel2.Controls.Add(this.bSearchPacket, 4, 0);
+            this.tableLayoutPanel2.Controls.Add(this.txtPacketList_AutoClear, 4, 0);
+            this.tableLayoutPanel2.Controls.Add(this.cbPacketList_AutoClear, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.cbPacketList_AutoRoll, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.ddMenu, 8, 0);
+            this.tableLayoutPanel2.Controls.Add(this.bSearchPacket, 7, 0);
             this.tableLayoutPanel2.Controls.Add(this.bPacketList_Clear, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.bHookStop, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.bHookStart, 0, 0);
@@ -141,6 +149,35 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(1140, 50);
             this.tableLayoutPanel2.TabIndex = 6;
+            // 
+            // ddMenu
+            // 
+            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu.Ghost = true;
+            this.ddMenu.IconRatio = 1F;
+            this.ddMenu.IconSvg = "PlusOutlined";
+            this.ddMenu.Location = new System.Drawing.Point(1093, 3);
+            this.ddMenu.MaxCount = 10;
+            this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Size = new System.Drawing.Size(44, 44);
+            this.ddMenu.TabIndex = 13;
+            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu.WaveSize = 0;
+            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            // 
+            // bSearchPacket
+            // 
+            this.bSearchPacket.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bSearchPacket.Ghost = true;
+            this.bSearchPacket.IconRatio = 1F;
+            this.bSearchPacket.IconSvg = "SearchOutlined";
+            this.bSearchPacket.Location = new System.Drawing.Point(1043, 3);
+            this.bSearchPacket.Name = "bSearchPacket";
+            this.bSearchPacket.Size = new System.Drawing.Size(44, 44);
+            this.bSearchPacket.TabIndex = 12;
+            this.bSearchPacket.WaveSize = 0;
+            this.bSearchPacket.Click += new System.EventHandler(this.bSearchPacket_Click);
             // 
             // bPacketList_Clear
             // 
@@ -906,34 +943,50 @@
             this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
             this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
             // 
-            // bSearchPacket
+            // cbPacketList_AutoRoll
             // 
-            this.bSearchPacket.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bSearchPacket.Ghost = true;
-            this.bSearchPacket.IconRatio = 1F;
-            this.bSearchPacket.IconSvg = "SearchOutlined";
-            this.bSearchPacket.Location = new System.Drawing.Point(1043, 3);
-            this.bSearchPacket.Name = "bSearchPacket";
-            this.bSearchPacket.Size = new System.Drawing.Size(44, 44);
-            this.bSearchPacket.TabIndex = 12;
-            this.bSearchPacket.WaveSize = 0;
-            this.bSearchPacket.Click += new System.EventHandler(this.bSearchPacket_Click);
+            this.cbPacketList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbPacketList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbPacketList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
+            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(501, 3);
+            this.cbPacketList_AutoRoll.Name = "cbPacketList_AutoRoll";
+            this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(108, 44);
+            this.cbPacketList_AutoRoll.TabIndex = 14;
+            this.cbPacketList_AutoRoll.Text = "自动滚动";
+            this.cbPacketList_AutoRoll.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoRoll_CheckedChanged);
             // 
-            // ddMenu
+            // cbPacketList_AutoClear
             // 
-            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ddMenu.Ghost = true;
-            this.ddMenu.IconRatio = 1F;
-            this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(1093, 3);
-            this.ddMenu.MaxCount = 10;
-            this.ddMenu.Name = "ddMenu";
-            this.ddMenu.Size = new System.Drawing.Size(44, 44);
-            this.ddMenu.TabIndex = 13;
-            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
-            this.ddMenu.WaveSize = 0;
-            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            this.cbPacketList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbPacketList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
+            this.cbPacketList_AutoClear.Location = new System.Drawing.Point(267, 3);
+            this.cbPacketList_AutoClear.Name = "cbPacketList_AutoClear";
+            this.cbPacketList_AutoClear.Size = new System.Drawing.Size(108, 44);
+            this.cbPacketList_AutoClear.TabIndex = 15;
+            this.cbPacketList_AutoClear.Text = "自动清理";
+            this.cbPacketList_AutoClear.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoClear_CheckedChanged);
+            // 
+            // txtPacketList_AutoClear
+            // 
+            this.txtPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPacketList_AutoClear.Location = new System.Drawing.Point(381, 3);
+            this.txtPacketList_AutoClear.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtPacketList_AutoClear.Name = "txtPacketList_AutoClear";
+            this.txtPacketList_AutoClear.SelectionStart = 1;
+            this.txtPacketList_AutoClear.Size = new System.Drawing.Size(114, 44);
+            this.txtPacketList_AutoClear.TabIndex = 16;
+            this.txtPacketList_AutoClear.Text = "5000";
+            this.txtPacketList_AutoClear.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtPacketList_AutoClear.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
             // 
             // PacketList
             // 
@@ -1022,5 +1075,8 @@
         private System.ComponentModel.BackgroundWorker bgwSearchPacketList;
         private AntdUI.Button bSearchPacket;
         private AntdUI.Dropdown ddMenu;
+        private AntdUI.Checkbox cbPacketList_AutoRoll;
+        private AntdUI.Checkbox cbPacketList_AutoClear;
+        private AntdUI.InputNumber txtPacketList_AutoClear;
     }
 }

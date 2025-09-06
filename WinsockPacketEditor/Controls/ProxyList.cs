@@ -33,6 +33,11 @@ namespace WinsockPacketEditor
             this.InitTable_ProxyList();
             this.Dark_Changed();
 
+            this.cbPacketList_AutoRoll.Checked = Operate.ProxyConfig.List.AutoRoll;
+            this.cbPacketList_AutoClear.Checked = Operate.ProxyConfig.List.AutoClear;
+            this.txtPacketList_AutoClear.Value = Operate.ProxyConfig.List.AutoClear_Value;
+            this.PacketList_AutoClear_Changed();
+
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, Operate.ProcessConfig.GetInjectProcessName());
         }
 
@@ -1074,6 +1079,37 @@ namespace WinsockPacketEditor
 
                 hbProxyData.ByteProvider = null;
             }
+        }
+
+        #endregion
+
+        #region//自动清理
+
+        private void cbPacketList_AutoClear_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.PacketList_AutoClear_Changed();
+
+            Operate.ProxyConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;
+            Operate.ProxyConfig.List.AutoClear_Value = this.txtPacketList_AutoClear.Value;
+        }
+
+        private void PacketList_AutoClear_Changed()
+        {
+            this.txtPacketList_AutoClear.Enabled = this.cbPacketList_AutoClear.Checked;            
+        }
+
+        #endregion
+
+        #region//自动滚动
+
+        private void cbPacketList_AutoRoll_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.PacketList_AutoRoll_Changed();
+        }
+
+        private void PacketList_AutoRoll_Changed()
+        {
+            Operate.ProxyConfig.List.AutoRoll = this.cbPacketList_AutoRoll.Checked;
         }
 
         #endregion
