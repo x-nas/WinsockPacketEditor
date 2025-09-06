@@ -56,7 +56,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                return new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "停止"));
+                                return new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "禁用"));
                             }
                         }
 
@@ -262,6 +262,22 @@ namespace WinsockPacketEditor
         private void bFilterList_Reset_Click(object sender, EventArgs e)
         {
             Operate.FilterConfig.List.InitFilterList_Count();
+        }
+
+        private void bEnableAll_Click(object sender, EventArgs e)
+        {
+            foreach (FilterInfo fi in Operate.FilterConfig.List.lstFilterInfo)
+            {
+                fi.IsEnable = true;
+            }
+        }
+
+        private void bDisableAll_Click(object sender, EventArgs e)
+        {
+            foreach (FilterInfo fi in Operate.FilterConfig.List.lstFilterInfo)
+            {
+                fi.IsEnable = false;
+            }
         }
 
         private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)

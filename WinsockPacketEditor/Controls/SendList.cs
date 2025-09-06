@@ -59,7 +59,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "停止"));
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "禁用"));
                             }
 
                             return cellBadge;
@@ -202,6 +202,22 @@ namespace WinsockPacketEditor
         #endregion
 
         #region//发送列表 - 菜单
+
+        private void bEnableAll_Click(object sender, EventArgs e)
+        {
+            foreach (SendInfo si in Operate.SendConfig.List.lstSendInfo)
+            {
+                si.IsEnable = true;
+            }
+        }
+
+        private void bDisableAll_Click(object sender, EventArgs e)
+        {
+            foreach (SendInfo si in Operate.SendConfig.List.lstSendInfo)
+            {
+                si.IsEnable = false;
+            }
+        }
 
         private void bSendList_Start_Click(object sender, EventArgs e)
         {

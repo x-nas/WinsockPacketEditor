@@ -31,8 +31,10 @@
             this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
             this.tFilterList = new AntdUI.Table();
             this.tlpFilterListButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bFilterList_Reset = new AntdUI.Button();
+            this.bDisableAll = new AntdUI.Button();
             this.ddMenu = new AntdUI.Dropdown();
+            this.bFilterList_Reset = new AntdUI.Button();
+            this.bEnableAll = new AntdUI.Button();
             this.tlpFilterList.SuspendLayout();
             this.tlpFilterListButton.SuspendLayout();
             this.SuspendLayout();
@@ -73,13 +75,18 @@
             // 
             // tlpFilterListButton
             // 
-            this.tlpFilterListButton.ColumnCount = 3;
+            this.tlpFilterListButton.ColumnCount = 5;
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpFilterListButton.Controls.Add(this.ddMenu, 2, 0);
-            this.tlpFilterListButton.Controls.Add(this.bFilterList_Reset, 0, 0);
+            this.tlpFilterListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpFilterListButton.Controls.Add(this.bDisableAll, 1, 0);
+            this.tlpFilterListButton.Controls.Add(this.ddMenu, 4, 0);
+            this.tlpFilterListButton.Controls.Add(this.bFilterList_Reset, 2, 0);
+            this.tlpFilterListButton.Controls.Add(this.bEnableAll, 0, 0);
             this.tlpFilterListButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFilterListButton.Location = new System.Drawing.Point(30, 20);
             this.tlpFilterListButton.Margin = new System.Windows.Forms.Padding(0);
@@ -89,19 +96,17 @@
             this.tlpFilterListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpFilterListButton.TabIndex = 2;
             // 
-            // bFilterList_Reset
+            // bDisableAll
             // 
-            this.bFilterList_Reset.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bFilterList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bFilterList_Reset.IconSvg = "UndoOutlined";
-            this.bFilterList_Reset.LocalizationText = "FilterList.ResetCount";
-            this.bFilterList_Reset.Location = new System.Drawing.Point(3, 3);
-            this.bFilterList_Reset.Name = "bFilterList_Reset";
-            this.bFilterList_Reset.Size = new System.Drawing.Size(114, 44);
-            this.bFilterList_Reset.TabIndex = 6;
-            this.bFilterList_Reset.Text = "重置计数";
-            this.bFilterList_Reset.Type = AntdUI.TTypeMini.Info;
-            this.bFilterList_Reset.Click += new System.EventHandler(this.bFilterList_Reset_Click);
+            this.bDisableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bDisableAll.IconSvg = "CloseCircleOutlined";
+            this.bDisableAll.Location = new System.Drawing.Point(123, 3);
+            this.bDisableAll.Name = "bDisableAll";
+            this.bDisableAll.Size = new System.Drawing.Size(114, 44);
+            this.bDisableAll.TabIndex = 14;
+            this.bDisableAll.Text = "全部禁用";
+            this.bDisableAll.Type = AntdUI.TTypeMini.Error;
+            this.bDisableAll.Click += new System.EventHandler(this.bDisableAll_Click);
             // 
             // ddMenu
             // 
@@ -118,6 +123,32 @@
             this.ddMenu.Trigger = AntdUI.Trigger.Hover;
             this.ddMenu.WaveSize = 0;
             this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            // 
+            // bFilterList_Reset
+            // 
+            this.bFilterList_Reset.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bFilterList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bFilterList_Reset.IconSvg = "UndoOutlined";
+            this.bFilterList_Reset.LocalizationText = "FilterList.ResetCount";
+            this.bFilterList_Reset.Location = new System.Drawing.Point(243, 3);
+            this.bFilterList_Reset.Name = "bFilterList_Reset";
+            this.bFilterList_Reset.Size = new System.Drawing.Size(114, 44);
+            this.bFilterList_Reset.TabIndex = 6;
+            this.bFilterList_Reset.Text = "重置计数";
+            this.bFilterList_Reset.Type = AntdUI.TTypeMini.Warn;
+            this.bFilterList_Reset.Click += new System.EventHandler(this.bFilterList_Reset_Click);
+            // 
+            // bEnableAll
+            // 
+            this.bEnableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bEnableAll.IconSvg = "CheckCircleOutlined";
+            this.bEnableAll.Location = new System.Drawing.Point(3, 3);
+            this.bEnableAll.Name = "bEnableAll";
+            this.bEnableAll.Size = new System.Drawing.Size(114, 44);
+            this.bEnableAll.TabIndex = 13;
+            this.bEnableAll.Text = "全部启用";
+            this.bEnableAll.Type = AntdUI.TTypeMini.Success;
+            this.bEnableAll.Click += new System.EventHandler(this.bEnableAll_Click);
             // 
             // FilterList
             // 
@@ -144,5 +175,7 @@
         private System.Windows.Forms.TableLayoutPanel tlpFilterListButton;
         private AntdUI.Button bFilterList_Reset;
         private AntdUI.Dropdown ddMenu;
+        private AntdUI.Button bDisableAll;
+        private AntdUI.Button bEnableAll;
     }
 }

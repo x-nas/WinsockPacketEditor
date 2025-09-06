@@ -31,12 +31,12 @@
             this.tlpAccountList = new System.Windows.Forms.TableLayoutPanel();
             this.tAccountList = new AntdUI.Table();
             this.tlpAccountListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.ddMenu = new AntdUI.Dropdown();
             this.bReset = new AntdUI.Button();
             this.txtSearchUserName = new AntdUI.Input();
             this.dtpExpiryTime = new AntdUI.DatePickerRange();
             this.bSearchExpiryTime = new AntdUI.Button();
             this.pAccountList = new AntdUI.Pagination();
-            this.ddMenu = new AntdUI.Dropdown();
             this.tlpAccountList.SuspendLayout();
             this.tlpAccountListButton.SuspendLayout();
             this.SuspendLayout();
@@ -101,15 +101,32 @@
             this.tlpAccountListButton.Size = new System.Drawing.Size(1140, 50);
             this.tlpAccountListButton.TabIndex = 2;
             // 
+            // ddMenu
+            // 
+            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu.Ghost = true;
+            this.ddMenu.IconRatio = 1F;
+            this.ddMenu.IconSvg = "PlusOutlined";
+            this.ddMenu.Location = new System.Drawing.Point(1093, 1);
+            this.ddMenu.MaxCount = 10;
+            this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Size = new System.Drawing.Size(44, 46);
+            this.ddMenu.TabIndex = 11;
+            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu.WaveSize = 0;
+            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            // 
             // bReset
             // 
             this.bReset.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bReset.BorderWidth = 1F;
             this.bReset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bReset.IconSvg = "RedoOutlined";
             this.bReset.LocalizationText = "Reset";
-            this.bReset.Location = new System.Drawing.Point(571, 1);
+            this.bReset.Location = new System.Drawing.Point(591, 1);
             this.bReset.Name = "bReset";
-            this.bReset.Size = new System.Drawing.Size(62, 46);
+            this.bReset.Size = new System.Drawing.Size(82, 46);
             this.bReset.TabIndex = 8;
             this.bReset.Text = "重置";
             this.bReset.Type = AntdUI.TTypeMini.Warn;
@@ -148,10 +165,11 @@
             this.bSearchExpiryTime.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSearchExpiryTime.BorderWidth = 1F;
             this.bSearchExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSearchExpiryTime.IconSvg = "SearchOutlined";
             this.bSearchExpiryTime.LocalizationText = "Search";
             this.bSearchExpiryTime.Location = new System.Drawing.Point(503, 1);
             this.bSearchExpiryTime.Name = "bSearchExpiryTime";
-            this.bSearchExpiryTime.Size = new System.Drawing.Size(62, 46);
+            this.bSearchExpiryTime.Size = new System.Drawing.Size(82, 46);
             this.bSearchExpiryTime.TabIndex = 7;
             this.bSearchExpiryTime.Text = "查询";
             this.bSearchExpiryTime.Type = AntdUI.TTypeMini.Primary;
@@ -169,22 +187,6 @@
             this.pAccountList.TabIndex = 3;
             this.pAccountList.ValueChanged += new AntdUI.PageValueEventHandler(this.pAccountList_ValueChanged);
             this.pAccountList.ShowTotalChanged += new AntdUI.PageValueRtEventHandler(this.pAccountList_ShowTotalChanged);
-            // 
-            // ddMenu
-            // 
-            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ddMenu.Ghost = true;
-            this.ddMenu.IconRatio = 1F;
-            this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(1093, 1);
-            this.ddMenu.MaxCount = 10;
-            this.ddMenu.Name = "ddMenu";
-            this.ddMenu.Size = new System.Drawing.Size(44, 46);
-            this.ddMenu.TabIndex = 11;
-            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
-            this.ddMenu.WaveSize = 0;
-            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
             // 
             // AccountList
             // 

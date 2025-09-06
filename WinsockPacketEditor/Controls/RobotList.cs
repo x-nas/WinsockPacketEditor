@@ -59,7 +59,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "停止"));
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, AntdUI.Localization.Get("Disable", "禁用"));
                             }
 
                             return cellBadge;
@@ -163,6 +163,22 @@ namespace WinsockPacketEditor
         #endregion
 
         #region//机器人列表 - 菜单
+
+        private void bEnableAll_Click(object sender, EventArgs e)
+        {
+            foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
+            {
+                ri.IsEnable = true;
+            }
+        }
+
+        private void bDisableAll_Click(object sender, EventArgs e)
+        {
+            foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
+            {
+                ri.IsEnable = false;
+            }
+        }
 
         private void bRobotList_Start_Click(object sender, EventArgs e)
         {

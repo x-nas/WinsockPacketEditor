@@ -31,10 +31,12 @@
             this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
             this.tSendList = new AntdUI.Table();
             this.tlpSendListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.ddMenu = new AntdUI.Dropdown();
             this.bSendList_Stop = new AntdUI.Button();
             this.bSendList_Start = new AntdUI.Button();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
-            this.ddMenu = new AntdUI.Dropdown();
+            this.bEnableAll = new AntdUI.Button();
+            this.bDisableAll = new AntdUI.Button();
             this.tlpSendList.SuspendLayout();
             this.tlpSendListButton.SuspendLayout();
             this.SuspendLayout();
@@ -75,15 +77,20 @@
             // 
             // tlpSendListButton
             // 
-            this.tlpSendListButton.ColumnCount = 4;
+            this.tlpSendListButton.ColumnCount = 6;
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpSendListButton.Controls.Add(this.ddMenu, 3, 0);
-            this.tlpSendListButton.Controls.Add(this.bSendList_Stop, 1, 0);
-            this.tlpSendListButton.Controls.Add(this.bSendList_Start, 0, 0);
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSendListButton.Controls.Add(this.bDisableAll, 1, 0);
+            this.tlpSendListButton.Controls.Add(this.bEnableAll, 0, 0);
+            this.tlpSendListButton.Controls.Add(this.ddMenu, 5, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_Stop, 3, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_Start, 2, 0);
             this.tlpSendListButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSendListButton.Location = new System.Drawing.Point(30, 20);
             this.tlpSendListButton.Margin = new System.Windows.Forms.Padding(0);
@@ -92,48 +99,6 @@
             this.tlpSendListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSendListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpSendListButton.TabIndex = 3;
-            // 
-            // bSendList_Stop
-            // 
-            this.bSendList_Stop.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bSendList_Stop.BorderWidth = 1F;
-            this.bSendList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_Stop.Enabled = false;
-            this.bSendList_Stop.IconSvg = "PauseCircleOutlined";
-            this.bSendList_Stop.LocalizationText = "Stop";
-            this.bSendList_Stop.Location = new System.Drawing.Point(91, 3);
-            this.bSendList_Stop.Name = "bSendList_Stop";
-            this.bSendList_Stop.Size = new System.Drawing.Size(82, 44);
-            this.bSendList_Stop.TabIndex = 8;
-            this.bSendList_Stop.Text = "停止";
-            this.bSendList_Stop.Type = AntdUI.TTypeMini.Error;
-            this.bSendList_Stop.Click += new System.EventHandler(this.bSendList_Stop_Click);
-            // 
-            // bSendList_Start
-            // 
-            this.bSendList_Start.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bSendList_Start.BorderWidth = 1F;
-            this.bSendList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_Start.IconSvg = "PlayCircleOutlined";
-            this.bSendList_Start.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
-            this.bSendList_Start.LoadingWaveCount = 6;
-            this.bSendList_Start.LoadingWaveSize = 6;
-            this.bSendList_Start.LoadingWaveValue = 0.6F;
-            this.bSendList_Start.LoadingWaveVertical = true;
-            this.bSendList_Start.LocalizationText = "Execute";
-            this.bSendList_Start.Location = new System.Drawing.Point(3, 3);
-            this.bSendList_Start.Name = "bSendList_Start";
-            this.bSendList_Start.Size = new System.Drawing.Size(82, 44);
-            this.bSendList_Start.TabIndex = 7;
-            this.bSendList_Start.Text = "执行";
-            this.bSendList_Start.Type = AntdUI.TTypeMini.Info;
-            this.bSendList_Start.Click += new System.EventHandler(this.bSendList_Start_Click);
-            // 
-            // bgwSendList
-            // 
-            this.bgwSendList.WorkerSupportsCancellation = true;
-            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
-            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
             // 
             // ddMenu
             // 
@@ -150,6 +115,72 @@
             this.ddMenu.Trigger = AntdUI.Trigger.Hover;
             this.ddMenu.WaveSize = 0;
             this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            // 
+            // bSendList_Stop
+            // 
+            this.bSendList_Stop.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bSendList_Stop.BorderWidth = 1F;
+            this.bSendList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Stop.Enabled = false;
+            this.bSendList_Stop.IconSvg = "PauseCircleOutlined";
+            this.bSendList_Stop.LocalizationText = "Stop";
+            this.bSendList_Stop.Location = new System.Drawing.Point(331, 3);
+            this.bSendList_Stop.Name = "bSendList_Stop";
+            this.bSendList_Stop.Size = new System.Drawing.Size(82, 44);
+            this.bSendList_Stop.TabIndex = 8;
+            this.bSendList_Stop.Text = "停止";
+            this.bSendList_Stop.Type = AntdUI.TTypeMini.Warn;
+            this.bSendList_Stop.Click += new System.EventHandler(this.bSendList_Stop_Click);
+            // 
+            // bSendList_Start
+            // 
+            this.bSendList_Start.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bSendList_Start.BorderWidth = 1F;
+            this.bSendList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Start.IconSvg = "PlayCircleOutlined";
+            this.bSendList_Start.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bSendList_Start.LoadingWaveCount = 6;
+            this.bSendList_Start.LoadingWaveSize = 6;
+            this.bSendList_Start.LoadingWaveValue = 0.6F;
+            this.bSendList_Start.LoadingWaveVertical = true;
+            this.bSendList_Start.LocalizationText = "Execute";
+            this.bSendList_Start.Location = new System.Drawing.Point(243, 3);
+            this.bSendList_Start.Name = "bSendList_Start";
+            this.bSendList_Start.Size = new System.Drawing.Size(82, 44);
+            this.bSendList_Start.TabIndex = 7;
+            this.bSendList_Start.Text = "执行";
+            this.bSendList_Start.Type = AntdUI.TTypeMini.Info;
+            this.bSendList_Start.Click += new System.EventHandler(this.bSendList_Start_Click);
+            // 
+            // bgwSendList
+            // 
+            this.bgwSendList.WorkerSupportsCancellation = true;
+            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
+            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
+            // 
+            // bEnableAll
+            // 
+            this.bEnableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bEnableAll.IconSvg = "CheckCircleOutlined";
+            this.bEnableAll.Location = new System.Drawing.Point(3, 3);
+            this.bEnableAll.Name = "bEnableAll";
+            this.bEnableAll.Size = new System.Drawing.Size(114, 44);
+            this.bEnableAll.TabIndex = 14;
+            this.bEnableAll.Text = "全部启用";
+            this.bEnableAll.Type = AntdUI.TTypeMini.Success;
+            this.bEnableAll.Click += new System.EventHandler(this.bEnableAll_Click);
+            // 
+            // bDisableAll
+            // 
+            this.bDisableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bDisableAll.IconSvg = "CloseCircleOutlined";
+            this.bDisableAll.Location = new System.Drawing.Point(123, 3);
+            this.bDisableAll.Name = "bDisableAll";
+            this.bDisableAll.Size = new System.Drawing.Size(114, 44);
+            this.bDisableAll.TabIndex = 15;
+            this.bDisableAll.Text = "全部禁用";
+            this.bDisableAll.Type = AntdUI.TTypeMini.Error;
+            this.bDisableAll.Click += new System.EventHandler(this.bDisableAll_Click);
             // 
             // SendList
             // 
@@ -178,5 +209,7 @@
         private AntdUI.Button bSendList_Start;
         private System.ComponentModel.BackgroundWorker bgwSendList;
         private AntdUI.Dropdown ddMenu;
+        private AntdUI.Button bEnableAll;
+        private AntdUI.Button bDisableAll;
     }
 }

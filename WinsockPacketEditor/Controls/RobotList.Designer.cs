@@ -30,11 +30,13 @@
         {
             this.tlpRobotList = new System.Windows.Forms.TableLayoutPanel();
             this.tlpRobotListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.ddMenu = new AntdUI.Dropdown();
             this.bRobotList_Stop = new AntdUI.Button();
             this.bRobotList_Start = new AntdUI.Button();
             this.tRobotList = new AntdUI.Table();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
-            this.ddMenu = new AntdUI.Dropdown();
+            this.bEnableAll = new AntdUI.Button();
+            this.bDisableAll = new AntdUI.Button();
             this.tlpRobotList.SuspendLayout();
             this.tlpRobotListButton.SuspendLayout();
             this.SuspendLayout();
@@ -60,15 +62,18 @@
             // 
             // tlpRobotListButton
             // 
-            this.tlpRobotListButton.ColumnCount = 4;
+            this.tlpRobotListButton.ColumnCount = 6;
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpRobotListButton.Controls.Add(this.ddMenu, 3, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 1, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_Start, 0, 0);
+            this.tlpRobotListButton.Controls.Add(this.bDisableAll, 1, 0);
+            this.tlpRobotListButton.Controls.Add(this.bEnableAll, 0, 0);
+            this.tlpRobotListButton.Controls.Add(this.ddMenu, 5, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 3, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Start, 2, 0);
             this.tlpRobotListButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpRobotListButton.Location = new System.Drawing.Point(30, 20);
             this.tlpRobotListButton.Margin = new System.Windows.Forms.Padding(0);
@@ -78,6 +83,22 @@
             this.tlpRobotListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpRobotListButton.TabIndex = 4;
             // 
+            // ddMenu
+            // 
+            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu.Ghost = true;
+            this.ddMenu.IconRatio = 1F;
+            this.ddMenu.IconSvg = "PlusOutlined";
+            this.ddMenu.Location = new System.Drawing.Point(693, 3);
+            this.ddMenu.MaxCount = 10;
+            this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Size = new System.Drawing.Size(44, 44);
+            this.ddMenu.TabIndex = 12;
+            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu.WaveSize = 0;
+            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            // 
             // bRobotList_Stop
             // 
             this.bRobotList_Stop.AutoSizeMode = AntdUI.TAutoSize.Width;
@@ -86,12 +107,12 @@
             this.bRobotList_Stop.Enabled = false;
             this.bRobotList_Stop.IconSvg = "PauseCircleOutlined";
             this.bRobotList_Stop.LocalizationText = "Stop";
-            this.bRobotList_Stop.Location = new System.Drawing.Point(91, 3);
+            this.bRobotList_Stop.Location = new System.Drawing.Point(331, 3);
             this.bRobotList_Stop.Name = "bRobotList_Stop";
             this.bRobotList_Stop.Size = new System.Drawing.Size(82, 44);
             this.bRobotList_Stop.TabIndex = 8;
             this.bRobotList_Stop.Text = "停止";
-            this.bRobotList_Stop.Type = AntdUI.TTypeMini.Error;
+            this.bRobotList_Stop.Type = AntdUI.TTypeMini.Warn;
             this.bRobotList_Stop.Click += new System.EventHandler(this.bRobotList_Stop_Click);
             // 
             // bRobotList_Start
@@ -106,7 +127,7 @@
             this.bRobotList_Start.LoadingWaveValue = 0.6F;
             this.bRobotList_Start.LoadingWaveVertical = true;
             this.bRobotList_Start.LocalizationText = "Execute";
-            this.bRobotList_Start.Location = new System.Drawing.Point(3, 3);
+            this.bRobotList_Start.Location = new System.Drawing.Point(243, 3);
             this.bRobotList_Start.Name = "bRobotList_Start";
             this.bRobotList_Start.Size = new System.Drawing.Size(82, 44);
             this.bRobotList_Start.TabIndex = 7;
@@ -135,21 +156,29 @@
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
             // 
-            // ddMenu
+            // bEnableAll
             // 
-            this.ddMenu.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.ddMenu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ddMenu.Ghost = true;
-            this.ddMenu.IconRatio = 1F;
-            this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(693, 3);
-            this.ddMenu.MaxCount = 10;
-            this.ddMenu.Name = "ddMenu";
-            this.ddMenu.Size = new System.Drawing.Size(44, 44);
-            this.ddMenu.TabIndex = 12;
-            this.ddMenu.Trigger = AntdUI.Trigger.Hover;
-            this.ddMenu.WaveSize = 0;
-            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
+            this.bEnableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bEnableAll.IconSvg = "CheckCircleOutlined";
+            this.bEnableAll.Location = new System.Drawing.Point(3, 3);
+            this.bEnableAll.Name = "bEnableAll";
+            this.bEnableAll.Size = new System.Drawing.Size(114, 44);
+            this.bEnableAll.TabIndex = 15;
+            this.bEnableAll.Text = "全部启用";
+            this.bEnableAll.Type = AntdUI.TTypeMini.Success;
+            this.bEnableAll.Click += new System.EventHandler(this.bEnableAll_Click);
+            // 
+            // bDisableAll
+            // 
+            this.bDisableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bDisableAll.IconSvg = "CloseCircleOutlined";
+            this.bDisableAll.Location = new System.Drawing.Point(123, 3);
+            this.bDisableAll.Name = "bDisableAll";
+            this.bDisableAll.Size = new System.Drawing.Size(114, 44);
+            this.bDisableAll.TabIndex = 16;
+            this.bDisableAll.Text = "全部禁用";
+            this.bDisableAll.Type = AntdUI.TTypeMini.Error;
+            this.bDisableAll.Click += new System.EventHandler(this.bDisableAll_Click);
             // 
             // RobotList
             // 
@@ -178,5 +207,7 @@
         private AntdUI.Table tRobotList;
         private System.ComponentModel.BackgroundWorker bgwRobotList;
         private AntdUI.Dropdown ddMenu;
+        private AntdUI.Button bEnableAll;
+        private AntdUI.Button bDisableAll;
     }
 }
