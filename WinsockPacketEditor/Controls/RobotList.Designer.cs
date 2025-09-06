@@ -30,13 +30,13 @@
         {
             this.tlpRobotList = new System.Windows.Forms.TableLayoutPanel();
             this.tlpRobotListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bDisableAll = new AntdUI.Button();
+            this.bEnableAll = new AntdUI.Button();
             this.ddMenu = new AntdUI.Dropdown();
             this.bRobotList_Stop = new AntdUI.Button();
             this.bRobotList_Start = new AntdUI.Button();
             this.tRobotList = new AntdUI.Table();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
-            this.bEnableAll = new AntdUI.Button();
-            this.bDisableAll = new AntdUI.Button();
             this.tlpRobotList.SuspendLayout();
             this.tlpRobotListButton.SuspendLayout();
             this.SuspendLayout();
@@ -82,6 +82,32 @@
             this.tlpRobotListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRobotListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpRobotListButton.TabIndex = 4;
+            // 
+            // bDisableAll
+            // 
+            this.bDisableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bDisableAll.IconSvg = "CloseCircleOutlined";
+            this.bDisableAll.LocalizationText = "DisableAll";
+            this.bDisableAll.Location = new System.Drawing.Point(123, 3);
+            this.bDisableAll.Name = "bDisableAll";
+            this.bDisableAll.Size = new System.Drawing.Size(114, 44);
+            this.bDisableAll.TabIndex = 16;
+            this.bDisableAll.Text = "全部禁用";
+            this.bDisableAll.Type = AntdUI.TTypeMini.Error;
+            this.bDisableAll.Click += new System.EventHandler(this.bDisableAll_Click);
+            // 
+            // bEnableAll
+            // 
+            this.bEnableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bEnableAll.IconSvg = "CheckCircleOutlined";
+            this.bEnableAll.LocalizationText = "EnableAll";
+            this.bEnableAll.Location = new System.Drawing.Point(3, 3);
+            this.bEnableAll.Name = "bEnableAll";
+            this.bEnableAll.Size = new System.Drawing.Size(114, 44);
+            this.bEnableAll.TabIndex = 15;
+            this.bEnableAll.Text = "全部启用";
+            this.bEnableAll.Type = AntdUI.TTypeMini.Success;
+            this.bEnableAll.Click += new System.EventHandler(this.bEnableAll_Click);
             // 
             // ddMenu
             // 
@@ -155,30 +181,6 @@
             this.bgwRobotList.WorkerSupportsCancellation = true;
             this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
             this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
-            // 
-            // bEnableAll
-            // 
-            this.bEnableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bEnableAll.IconSvg = "CheckCircleOutlined";
-            this.bEnableAll.Location = new System.Drawing.Point(3, 3);
-            this.bEnableAll.Name = "bEnableAll";
-            this.bEnableAll.Size = new System.Drawing.Size(114, 44);
-            this.bEnableAll.TabIndex = 15;
-            this.bEnableAll.Text = "全部启用";
-            this.bEnableAll.Type = AntdUI.TTypeMini.Success;
-            this.bEnableAll.Click += new System.EventHandler(this.bEnableAll_Click);
-            // 
-            // bDisableAll
-            // 
-            this.bDisableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bDisableAll.IconSvg = "CloseCircleOutlined";
-            this.bDisableAll.Location = new System.Drawing.Point(123, 3);
-            this.bDisableAll.Name = "bDisableAll";
-            this.bDisableAll.Size = new System.Drawing.Size(114, 44);
-            this.bDisableAll.TabIndex = 16;
-            this.bDisableAll.Text = "全部禁用";
-            this.bDisableAll.Type = AntdUI.TTypeMini.Error;
-            this.bDisableAll.Click += new System.EventHandler(this.bDisableAll_Click);
             // 
             // RobotList
             // 

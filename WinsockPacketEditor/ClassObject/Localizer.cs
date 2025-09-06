@@ -619,6 +619,12 @@ namespace WinsockPacketEditor
                 case "Input.Regex":
                     return "Please enter a Regex";
 
+                case "EnableAll":
+                    return "Enable ALL";
+
+                case "DisableAll":
+                    return "Disable ALL";
+
                 #endregion
 
                 #region//StartForm

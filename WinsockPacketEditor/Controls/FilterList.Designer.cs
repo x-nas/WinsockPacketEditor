@@ -100,6 +100,7 @@
             // 
             this.bDisableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bDisableAll.IconSvg = "CloseCircleOutlined";
+            this.bDisableAll.LocalizationText = "DisableAll";
             this.bDisableAll.Location = new System.Drawing.Point(123, 3);
             this.bDisableAll.Name = "bDisableAll";
             this.bDisableAll.Size = new System.Drawing.Size(114, 44);
@@ -142,6 +143,7 @@
             // 
             this.bEnableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bEnableAll.IconSvg = "CheckCircleOutlined";
+            this.bEnableAll.LocalizationText = "EnableAll";
             this.bEnableAll.Location = new System.Drawing.Point(3, 3);
             this.bEnableAll.Name = "bEnableAll";
             this.bEnableAll.Size = new System.Drawing.Size(114, 44);
