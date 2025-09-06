@@ -42,6 +42,7 @@ namespace WinsockPacketEditor
                 this.InitProgressionPosition();
                 this.InitFilterExecuteType();
                 this.ShowFilterData();
+                this.ScrollToColumn("000");
                 this.Dark_Changed();
 
                 switch (fiSelect.FMode)
@@ -169,176 +170,210 @@ namespace WinsockPacketEditor
 
         private void InitTable_FilterNormal()
         {
-            int rowCount = 2;
-            var columns = new AntdUI.ColumnCollection();
-
-            for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
+            try
             {
-                string Title = (i + 1).ToString("D3");
+                int rowCount = 2;
+                var columns = new AntdUI.ColumnCollection();
 
-                AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
-                columns.Add(column);
-
-                dtFilterNormal.Columns.Add(Title, typeof(CellText));
-            }
-            tFilterNormal.Columns = columns;
-
-            Color color;
-            for (int row = 0; row < rowCount; row++)
-            {
-                if (row == 0)
+                for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
                 {
-                    color = Color.LightYellow;
+                    string Title = (i + 1).ToString("D3");
+
+                    AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
+                    columns.Add(column);
+
+                    dtFilterNormal.Columns.Add(Title, typeof(CellText));
                 }
-                else
-                {
-                    color = Color.Yellow;
-                }
+                tFilterNormal.Columns = columns;
 
-                DataRow dr = dtFilterNormal.NewRow();
-                for (int col = 0; col < dtFilterNormal.Columns.Count; col++)
+                Color color;
+                for (int row = 0; row < rowCount; row++)
                 {
-                    dr[col] = new CellText(string.Empty)
+                    if (row == 0)
                     {
-                        Back = color,
-                        Fore = Color.RoyalBlue,
-                    };
+                        color = Color.LightYellow;
+                    }
+                    else
+                    {
+                        color = Color.Yellow;
+                    }
+
+                    DataRow dr = dtFilterNormal.NewRow();
+                    for (int col = 0; col < dtFilterNormal.Columns.Count; col++)
+                    {
+                        dr[col] = new CellText(string.Empty)
+                        {
+                            Back = color,
+                            Fore = Color.RoyalBlue,
+                        };
+                    }
+
+                    dtFilterNormal.Rows.Add(dr);
                 }
 
-                dtFilterNormal.Rows.Add(dr);
+                tFilterNormal.DataSource = dtFilterNormal;
             }
-
-            tFilterNormal.DataSource = dtFilterNormal;
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void InitTable_FilterAdvanced_Search()
         {
-            var columns = new AntdUI.ColumnCollection();
-
-            for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
+            try
             {
-                string Title = (i + 1).ToString("D3");
+                var columns = new AntdUI.ColumnCollection();
 
-                AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
-                columns.Add(column);
-
-                dtFilterAdvanced_Search.Columns.Add(Title, typeof(CellText));
-            }
-            tFilterAdvanced_Search.Columns = columns;
-
-            DataRow dr = dtFilterAdvanced_Search.NewRow();
-            for (int col = 0; col < dtFilterAdvanced_Search.Columns.Count; col++)
-            {
-                dr[col] = new CellText(string.Empty)
+                for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
                 {
-                    Back = Color.LightYellow,
-                    Fore = Color.RoyalBlue,
-                };
-            }
+                    string Title = (i + 1).ToString("D3");
 
-            dtFilterAdvanced_Search.Rows.Add(dr);
-            tFilterAdvanced_Search.DataSource = dtFilterAdvanced_Search;
+                    AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
+                    columns.Add(column);
+
+                    dtFilterAdvanced_Search.Columns.Add(Title, typeof(CellText));
+                }
+                tFilterAdvanced_Search.Columns = columns;
+
+                DataRow dr = dtFilterAdvanced_Search.NewRow();
+                for (int col = 0; col < dtFilterAdvanced_Search.Columns.Count; col++)
+                {
+                    dr[col] = new CellText(string.Empty)
+                    {
+                        Back = Color.LightYellow,
+                        Fore = Color.RoyalBlue,
+                    };
+                }
+
+                dtFilterAdvanced_Search.Rows.Add(dr);
+                tFilterAdvanced_Search.DataSource = dtFilterAdvanced_Search;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void InitTable_FilterAdvanced_Modify_Head()
         {
-            var columns = new AntdUI.ColumnCollection();
-
-            for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
+            try
             {
-                string Title = (i + 1).ToString("D3");
+                var columns = new AntdUI.ColumnCollection();
 
-                AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
-                columns.Add(column);
-
-                dtFilterAdvanced_Modify_Head.Columns.Add(Title, typeof(CellText));
-            }
-            tFilterAdvanced_Modify_Head.Columns = columns;
-
-            DataRow dr = dtFilterAdvanced_Modify_Head.NewRow();
-            for (int col = 0; col < dtFilterAdvanced_Modify_Head.Columns.Count; col++)
-            {
-                dr[col] = new CellText(string.Empty)
+                for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
                 {
-                    Back = Color.Yellow,
-                    Fore = Color.RoyalBlue,
-                };
-            }
+                    string Title = (i + 1).ToString("D3");
 
-            dtFilterAdvanced_Modify_Head.Rows.Add(dr);
-            tFilterAdvanced_Modify_Head.DataSource = dtFilterAdvanced_Modify_Head;
+                    AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
+                    columns.Add(column);
+
+                    dtFilterAdvanced_Modify_Head.Columns.Add(Title, typeof(CellText));
+                }
+                tFilterAdvanced_Modify_Head.Columns = columns;
+
+                DataRow dr = dtFilterAdvanced_Modify_Head.NewRow();
+                for (int col = 0; col < dtFilterAdvanced_Modify_Head.Columns.Count; col++)
+                {
+                    dr[col] = new CellText(string.Empty)
+                    {
+                        Back = Color.Yellow,
+                        Fore = Color.RoyalBlue,
+                    };
+                }
+
+                dtFilterAdvanced_Modify_Head.Rows.Add(dr);
+                tFilterAdvanced_Modify_Head.DataSource = dtFilterAdvanced_Modify_Head;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void InitTable_FilterAdvanced_Modify_Position()
         {
-            var columns = new AntdUI.ColumnCollection();
-
-            int iSize = Operate.FilterConfig.Filter.FilterSize_MaxLen;
-            for (int i = -iSize; i < iSize; i++)
+            try
             {
-                string Title = i.ToString("D3");
+                var columns = new AntdUI.ColumnCollection();
 
-                AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
-                columns.Add(column);
-
-                dtFilterAdvanced_Modify_Position.Columns.Add(Title, typeof(CellText));
-            }
-            tFilterAdvanced_Modify_Position.Columns = columns;
-
-            DataRow dr = dtFilterAdvanced_Modify_Position.NewRow();
-            for (int col = 0; col < dtFilterAdvanced_Modify_Position.Columns.Count; col++)
-            {
-                dr[col] = new CellText(string.Empty)
+                int iSize = Operate.FilterConfig.Filter.FilterSize_MaxLen;
+                for (int i = -iSize; i < iSize; i++)
                 {
-                    Back = Color.Yellow,
-                    Fore = Color.RoyalBlue,
-                };
-            }
+                    string Title = i.ToString("D3");
 
-            dtFilterAdvanced_Modify_Position.Rows.Add(dr);
-            tFilterAdvanced_Modify_Position.DataSource = dtFilterAdvanced_Modify_Position;
-            tFilterAdvanced_Modify_Position.ScrollBar.ValueX = iSize * 50;
+                    AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
+                    columns.Add(column);
+
+                    dtFilterAdvanced_Modify_Position.Columns.Add(Title, typeof(CellText));
+                }
+                tFilterAdvanced_Modify_Position.Columns = columns;
+
+                DataRow dr = dtFilterAdvanced_Modify_Position.NewRow();
+                for (int col = 0; col < dtFilterAdvanced_Modify_Position.Columns.Count; col++)
+                {
+                    dr[col] = new CellText(string.Empty)
+                    {
+                        Back = Color.Yellow,
+                        Fore = Color.RoyalBlue,
+                    };
+                }
+
+                dtFilterAdvanced_Modify_Position.Rows.Add(dr);
+                tFilterAdvanced_Modify_Position.DataSource = dtFilterAdvanced_Modify_Position;                
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void InitFilterExecuteType()
         {
-            this.cbbFilterAction_ExecuteType.Items.Clear();
+            try
+            {
+                this.cbbFilterAction_ExecuteType.Items.Clear();
 
-            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
-            {
-                this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
+                if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                 {
-                    Online = 1,
-                    LocalizationText = "SendList",
-                });
-            }
-            else
-            {
-                this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
+                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
+                    {
+                        Online = 1,
+                        LocalizationText = "SendList",
+                    });
+                }
+                else
                 {
-                    Enable = false,
-                    LocalizationText = "SendList",
-                });
-            }
+                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
+                    {
+                        Enable = false,
+                        LocalizationText = "SendList",
+                    });
+                }
 
-            this.cbbFilterAction_ExecuteType.Items.Add(new DividerSelectItem());
+                this.cbbFilterAction_ExecuteType.Items.Add(new DividerSelectItem());
 
-            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
-            {
-                this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
+                if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                 {
-                    Online = 1,
-                    LocalizationText = "RobotList",
-                });
-            }
-            else
-            {
-                this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
+                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
+                    {
+                        Online = 1,
+                        LocalizationText = "RobotList",
+                    });
+                }
+                else
                 {
-                    Enable = false,
-                    LocalizationText = "RobotList",
-                });
+                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
+                    {
+                        Enable = false,
+                        LocalizationText = "RobotList",
+                    });
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void InitSendInfo()
@@ -430,6 +465,34 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        private void ScrollToColumn(string ColumnTitle)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(ColumnTitle))
+                {
+                    return;
+                }
+
+                int xValue = 0;
+                foreach (var column in tFilterAdvanced_Modify_Position.Columns)
+                {
+                    if (column.Title == ColumnTitle)
+                    {
+                        break;
+                    }
+
+                    xValue += column.WidthPixel;
+                }
+
+                this.tFilterAdvanced_Modify_Position.ScrollBar.ValueX = xValue;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void Dark_Changed()
