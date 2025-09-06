@@ -282,12 +282,13 @@
             // tFilterAdvanced_Search
             // 
             this.tFilterAdvanced_Search.Bordered = true;
-            this.tFilterAdvanced_Search.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Dash;
+            this.tFilterAdvanced_Search.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Solid;
             this.tFilterAdvanced_Search.CellImpactHeight = true;
             this.tFilterAdvanced_Search.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Search.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Search.EditInputStyle = AntdUI.TEditInputStyle.Full;
             this.tFilterAdvanced_Search.EditMode = AntdUI.TEditMode.Click;
+            this.tFilterAdvanced_Search.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Search.Gap = 8;
             this.tFilterAdvanced_Search.GapCell = 0;
             this.tFilterAdvanced_Search.Gaps = new System.Drawing.Size(8, 8);
@@ -331,12 +332,13 @@
             // tFilterAdvanced_Modify_Position
             // 
             this.tFilterAdvanced_Modify_Position.Bordered = true;
-            this.tFilterAdvanced_Modify_Position.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Dash;
+            this.tFilterAdvanced_Modify_Position.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Solid;
             this.tFilterAdvanced_Modify_Position.CellImpactHeight = true;
             this.tFilterAdvanced_Modify_Position.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Position.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Modify_Position.EditInputStyle = AntdUI.TEditInputStyle.Full;
             this.tFilterAdvanced_Modify_Position.EditMode = AntdUI.TEditMode.Click;
+            this.tFilterAdvanced_Modify_Position.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Modify_Position.Gap = 8;
             this.tFilterAdvanced_Modify_Position.GapCell = 0;
             this.tFilterAdvanced_Modify_Position.Gaps = new System.Drawing.Size(8, 8);
@@ -364,12 +366,13 @@
             // tFilterAdvanced_Modify_Head
             // 
             this.tFilterAdvanced_Modify_Head.Bordered = true;
-            this.tFilterAdvanced_Modify_Head.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Dash;
+            this.tFilterAdvanced_Modify_Head.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Solid;
             this.tFilterAdvanced_Modify_Head.CellImpactHeight = true;
             this.tFilterAdvanced_Modify_Head.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Head.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Modify_Head.EditInputStyle = AntdUI.TEditInputStyle.Full;
             this.tFilterAdvanced_Modify_Head.EditMode = AntdUI.TEditMode.Click;
+            this.tFilterAdvanced_Modify_Head.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Modify_Head.Gap = 8;
             this.tFilterAdvanced_Modify_Head.GapCell = 0;
             this.tFilterAdvanced_Modify_Head.Gaps = new System.Drawing.Size(8, 8);
@@ -412,12 +415,13 @@
             // tFilterNormal
             // 
             this.tFilterNormal.Bordered = true;
-            this.tFilterNormal.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Dash;
+            this.tFilterNormal.CellFocusedStyle = AntdUI.TableCellFocusedStyle.Solid;
             this.tFilterNormal.CellImpactHeight = true;
             this.tFilterNormal.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterNormal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterNormal.EditInputStyle = AntdUI.TEditInputStyle.Full;
             this.tFilterNormal.EditMode = AntdUI.TEditMode.Click;
+            this.tFilterNormal.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterNormal.Gap = 8;
             this.tFilterNormal.GapCell = 0;
             this.tFilterNormal.Gaps = new System.Drawing.Size(8, 8);
