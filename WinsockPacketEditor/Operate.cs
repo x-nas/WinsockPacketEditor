@@ -635,7 +635,7 @@ namespace WinsockPacketEditor
 
             #region//获取IP所属地图标
 
-            private static readonly ConcurrentDictionary<string, Image> PNGCache = new ConcurrentDictionary<string, Image>();
+            private static readonly ConcurrentDictionary<string, byte[]> PngCache = new ConcurrentDictionary<string, byte[]>();
 
             private static readonly Dictionary<string, string> CountryNameToCode = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -910,7 +910,13 @@ namespace WinsockPacketEditor
                     {
                         if (IPLocation.StartsWith(pair.Key, StringComparison.OrdinalIgnoreCase))
                         {
-                            return PNGCache.GetOrAdd(pair.Value, code => GetFlagByCountryCode(code));
+                            var imageBytes = PngCache.GetOrAdd(pair.Value, code =>
+                                GetFlagBytesByCountryCode(code));
+
+                            using (var ms = new MemoryStream(imageBytes))
+                            {
+                                return Image.FromStream(ms);
+                            }
                         }
                     }
                 }
@@ -922,16 +928,29 @@ namespace WinsockPacketEditor
                 return GetDefaultPng();
             }
 
-            private static Image GetFlagByCountryCode(string countryCode)
+            private static byte[] GetFlagBytesByCountryCode(string countryCode)
             {
                 try
                 {
                     var bitmap = Properties.Resources.ResourceManager.GetObject(countryCode.ToLower()) as Bitmap;
-                    return bitmap ?? GetDefaultPng();
+                    using (var ms = new MemoryStream())
+                    {
+                        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        return ms.ToArray();
+                    }
                 }
                 catch
                 {
-                    return GetDefaultPng();
+                    return GetDefaultPngBytes();
+                }
+            }
+
+            private static byte[] GetDefaultPngBytes()
+            {
+                using (var ms = new MemoryStream())
+                {
+                    Properties.Resources.Flag_Local.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    return ms.ToArray();
                 }
             }
 
