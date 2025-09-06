@@ -171,7 +171,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                PrefixSvg = Operate.SystemConfig.GetSvgByLocation(pi.FromLocation),
+                                Prefix = Operate.SystemConfig.GetFlagByLocation(pi.FromLocation),
                                 IconRatio = 1.0F
                             };
                         }
@@ -188,7 +188,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                PrefixSvg = Operate.SystemConfig.GetSvgByLocation(pi.ToLocation),
+                                Prefix = Operate.SystemConfig.GetFlagByLocation(pi.ToLocation),
                                 IconRatio = 1.0F
                             };
                         }
@@ -912,7 +912,11 @@ namespace WinsockPacketEditor
         {
             this.PacketList_AutoClear_Changed();
 
-            Operate.PacketConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;
+            Operate.PacketConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;            
+        }
+
+        private void txtPacketList_AutoClear_ValueChanged(object sender, DecimalEventArgs e)
+        {
             Operate.PacketConfig.List.AutoClear_Value = this.txtPacketList_AutoClear.Value;
         }
 

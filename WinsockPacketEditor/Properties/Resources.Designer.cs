@@ -61,1181 +61,1182 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] _as {
+        internal static System.Drawing.Bitmap _as {
             get {
                 object obj = ResourceManager.GetObject("_as", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] _do {
+        internal static System.Drawing.Bitmap _do {
             get {
                 object obj = ResourceManager.GetObject("_do", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] _in {
+        internal static System.Drawing.Bitmap _in {
             get {
                 object obj = ResourceManager.GetObject("_in", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] _is {
+        internal static System.Drawing.Bitmap _is {
             get {
                 object obj = ResourceManager.GetObject("_is", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ad {
+        internal static System.Drawing.Bitmap ad {
             get {
                 object obj = ResourceManager.GetObject("ad", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ae {
+        internal static System.Drawing.Bitmap ae {
             get {
                 object obj = ResourceManager.GetObject("ae", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] af {
+        internal static System.Drawing.Bitmap af {
             get {
                 object obj = ResourceManager.GetObject("af", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ag {
+        internal static System.Drawing.Bitmap ag {
             get {
                 object obj = ResourceManager.GetObject("ag", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ai {
+        internal static System.Drawing.Bitmap ai {
             get {
                 object obj = ResourceManager.GetObject("ai", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] al {
+        internal static System.Drawing.Bitmap al {
             get {
                 object obj = ResourceManager.GetObject("al", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] am {
+        internal static System.Drawing.Bitmap am {
             get {
                 object obj = ResourceManager.GetObject("am", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ao {
+        internal static System.Drawing.Bitmap ao {
             get {
                 object obj = ResourceManager.GetObject("ao", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] aq {
+        internal static System.Drawing.Bitmap aq {
             get {
                 object obj = ResourceManager.GetObject("aq", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ar {
+        internal static System.Drawing.Bitmap ar {
             get {
                 object obj = ResourceManager.GetObject("ar", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] arab {
+        internal static System.Drawing.Bitmap arab {
             get {
                 object obj = ResourceManager.GetObject("arab", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] asean {
+        internal static System.Drawing.Bitmap asean {
             get {
                 object obj = ResourceManager.GetObject("asean", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] at {
+        internal static System.Drawing.Bitmap at {
             get {
                 object obj = ResourceManager.GetObject("at", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] au {
+        internal static System.Drawing.Bitmap au {
             get {
                 object obj = ResourceManager.GetObject("au", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] aw {
+        internal static System.Drawing.Bitmap aw {
             get {
                 object obj = ResourceManager.GetObject("aw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ax {
+        internal static System.Drawing.Bitmap ax {
             get {
                 object obj = ResourceManager.GetObject("ax", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] az {
+        internal static System.Drawing.Bitmap az {
             get {
                 object obj = ResourceManager.GetObject("az", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ba {
+        internal static System.Drawing.Bitmap ba {
             get {
                 object obj = ResourceManager.GetObject("ba", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bb {
+        internal static System.Drawing.Bitmap bb {
             get {
                 object obj = ResourceManager.GetObject("bb", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bd {
+        internal static System.Drawing.Bitmap bd {
             get {
                 object obj = ResourceManager.GetObject("bd", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] be {
+        internal static System.Drawing.Bitmap be {
             get {
                 object obj = ResourceManager.GetObject("be", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bf {
+        internal static System.Drawing.Bitmap bf {
             get {
                 object obj = ResourceManager.GetObject("bf", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bg {
+        internal static System.Drawing.Bitmap bg {
             get {
                 object obj = ResourceManager.GetObject("bg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bh {
+        internal static System.Drawing.Bitmap bh {
             get {
                 object obj = ResourceManager.GetObject("bh", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bi {
+        internal static System.Drawing.Bitmap bi {
             get {
                 object obj = ResourceManager.GetObject("bi", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bj {
+        internal static System.Drawing.Bitmap bj {
             get {
                 object obj = ResourceManager.GetObject("bj", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bl {
+        internal static System.Drawing.Bitmap bl {
             get {
                 object obj = ResourceManager.GetObject("bl", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bm {
+        internal static System.Drawing.Bitmap bm {
             get {
                 object obj = ResourceManager.GetObject("bm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bn {
+        internal static System.Drawing.Bitmap bn {
             get {
                 object obj = ResourceManager.GetObject("bn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bo {
+        internal static System.Drawing.Bitmap bo {
             get {
                 object obj = ResourceManager.GetObject("bo", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bq {
+        internal static System.Drawing.Bitmap bq {
             get {
                 object obj = ResourceManager.GetObject("bq", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] br {
+        internal static System.Drawing.Bitmap br {
             get {
                 object obj = ResourceManager.GetObject("br", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bs {
+        internal static System.Drawing.Bitmap bs {
             get {
                 object obj = ResourceManager.GetObject("bs", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bt {
+        internal static System.Drawing.Bitmap bt {
             get {
                 object obj = ResourceManager.GetObject("bt", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bv {
+        internal static System.Drawing.Bitmap bv {
             get {
                 object obj = ResourceManager.GetObject("bv", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bw {
+        internal static System.Drawing.Bitmap bw {
             get {
                 object obj = ResourceManager.GetObject("bw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] by {
+        internal static System.Drawing.Bitmap by {
             get {
                 object obj = ResourceManager.GetObject("by", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] bz {
+        internal static System.Drawing.Bitmap bz {
             get {
                 object obj = ResourceManager.GetObject("bz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ca {
+        internal static System.Drawing.Bitmap ca {
             get {
                 object obj = ResourceManager.GetObject("ca", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cc {
+        internal static System.Drawing.Bitmap cc {
             get {
                 object obj = ResourceManager.GetObject("cc", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cd {
+        internal static System.Drawing.Bitmap cd {
             get {
                 object obj = ResourceManager.GetObject("cd", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cefta {
+        internal static System.Drawing.Bitmap cefta {
             get {
                 object obj = ResourceManager.GetObject("cefta", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cf {
+        internal static System.Drawing.Bitmap cf {
             get {
                 object obj = ResourceManager.GetObject("cf", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cg {
+        internal static System.Drawing.Bitmap cg {
             get {
                 object obj = ResourceManager.GetObject("cg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ch {
+        internal static System.Drawing.Bitmap ch {
             get {
                 object obj = ResourceManager.GetObject("ch", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ci {
+        internal static System.Drawing.Bitmap ci {
             get {
                 object obj = ResourceManager.GetObject("ci", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ck {
+        internal static System.Drawing.Bitmap ck {
             get {
                 object obj = ResourceManager.GetObject("ck", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cl {
+        internal static System.Drawing.Bitmap cl {
             get {
                 object obj = ResourceManager.GetObject("cl", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cm {
+        internal static System.Drawing.Bitmap cm {
             get {
                 object obj = ResourceManager.GetObject("cm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cn {
+        internal static System.Drawing.Bitmap cn {
             get {
                 object obj = ResourceManager.GetObject("cn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] co {
+        internal static System.Drawing.Bitmap co {
             get {
                 object obj = ResourceManager.GetObject("co", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cp {
+        internal static System.Drawing.Bitmap cp {
             get {
                 object obj = ResourceManager.GetObject("cp", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cr {
+        internal static System.Drawing.Bitmap cr {
             get {
                 object obj = ResourceManager.GetObject("cr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cu {
+        internal static System.Drawing.Bitmap cu {
             get {
                 object obj = ResourceManager.GetObject("cu", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cv {
+        internal static System.Drawing.Bitmap cv {
             get {
                 object obj = ResourceManager.GetObject("cv", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cw {
+        internal static System.Drawing.Bitmap cw {
             get {
                 object obj = ResourceManager.GetObject("cw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cx {
+        internal static System.Drawing.Bitmap cx {
             get {
                 object obj = ResourceManager.GetObject("cx", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cy {
+        internal static System.Drawing.Bitmap cy {
             get {
                 object obj = ResourceManager.GetObject("cy", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] cz {
+        internal static System.Drawing.Bitmap cz {
             get {
                 object obj = ResourceManager.GetObject("cz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] de {
+        internal static System.Drawing.Bitmap de {
             get {
                 object obj = ResourceManager.GetObject("de", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] dg {
+        internal static System.Drawing.Bitmap dg {
             get {
                 object obj = ResourceManager.GetObject("dg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] dj {
+        internal static System.Drawing.Bitmap dj {
             get {
                 object obj = ResourceManager.GetObject("dj", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] dk {
+        internal static System.Drawing.Bitmap dk {
             get {
                 object obj = ResourceManager.GetObject("dk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] dm {
+        internal static System.Drawing.Bitmap dm {
             get {
                 object obj = ResourceManager.GetObject("dm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] dz {
+        internal static System.Drawing.Bitmap dz {
             get {
                 object obj = ResourceManager.GetObject("dz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] eac {
+        internal static System.Drawing.Bitmap eac {
             get {
                 object obj = ResourceManager.GetObject("eac", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ec {
+        internal static System.Drawing.Bitmap ec {
             get {
                 object obj = ResourceManager.GetObject("ec", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ee {
+        internal static System.Drawing.Bitmap ee {
             get {
                 object obj = ResourceManager.GetObject("ee", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] eg {
+        internal static System.Drawing.Bitmap eg {
             get {
                 object obj = ResourceManager.GetObject("eg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] eh {
+        internal static System.Drawing.Bitmap eh {
             get {
                 object obj = ResourceManager.GetObject("eh", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] er {
+        internal static System.Drawing.Bitmap er {
             get {
                 object obj = ResourceManager.GetObject("er", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] es {
+        internal static System.Drawing.Bitmap es {
             get {
                 object obj = ResourceManager.GetObject("es", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] es_ct {
+        internal static System.Drawing.Bitmap es_ct {
             get {
                 object obj = ResourceManager.GetObject("es_ct", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] es_ga {
+        internal static System.Drawing.Bitmap es_ga {
             get {
                 object obj = ResourceManager.GetObject("es_ga", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] es_pv {
+        internal static System.Drawing.Bitmap es_pv {
             get {
                 object obj = ResourceManager.GetObject("es_pv", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] et {
+        internal static System.Drawing.Bitmap et {
             get {
                 object obj = ResourceManager.GetObject("et", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] eu {
+        internal static System.Drawing.Bitmap eu {
             get {
                 object obj = ResourceManager.GetObject("eu", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] fi {
+        internal static System.Drawing.Bitmap fi {
             get {
                 object obj = ResourceManager.GetObject("fi", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] fj {
+        internal static System.Drawing.Bitmap fj {
             get {
                 object obj = ResourceManager.GetObject("fj", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] fk {
+        internal static System.Drawing.Bitmap fk {
             get {
                 object obj = ResourceManager.GetObject("fk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找类似 &lt;svg viewBox=&quot;0 0 1024 1024&quot;&gt;&lt;path d=&quot;M640.1 448.2m-59.1 0a59.1 59.1 0 1 0 118.2 0 59.1 59.1 0 1 0-118.2 0Z&quot; fill=&quot;#FFFFFF&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M384.1 448.2m-59.1 0a59.1 59.1 0 1 0 118.2 0 59.1 59.1 0 1 0-118.2 0Z&quot; fill=&quot;#FFFFFF&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M407.2 674.7s-17.3 81.4-79.6 58.7V801h368.7v-67.6s-56.5 22.3-79.4-58.7H407.2z&quot; fill=&quot;#515F79&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M916 679H110c-6.6 0-12-5.4-12-12V541.2c0-6.6 5.4-12 12-12h806c6.6 0 12 5.4 12 12V667c0 6.6-5.4 12-12 12z&quot; fill=&quot;#6F82A3&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M928 578.9H98V115.1c0-9 [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static string Flag_Local {
+        internal static System.Drawing.Bitmap Flag_Local {
             get {
-                return ResourceManager.GetString("Flag_Local", resourceCulture);
+                object obj = ResourceManager.GetObject("Flag_Local", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] fm {
+        internal static System.Drawing.Bitmap fm {
             get {
                 object obj = ResourceManager.GetObject("fm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] fo {
+        internal static System.Drawing.Bitmap fo {
             get {
                 object obj = ResourceManager.GetObject("fo", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] fr {
+        internal static System.Drawing.Bitmap fr {
             get {
                 object obj = ResourceManager.GetObject("fr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ga {
+        internal static System.Drawing.Bitmap ga {
             get {
                 object obj = ResourceManager.GetObject("ga", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gb {
+        internal static System.Drawing.Bitmap gb {
             get {
                 object obj = ResourceManager.GetObject("gb", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gb_eng {
+        internal static System.Drawing.Bitmap gb_eng {
             get {
                 object obj = ResourceManager.GetObject("gb_eng", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gb_nir {
+        internal static System.Drawing.Bitmap gb_nir {
             get {
                 object obj = ResourceManager.GetObject("gb_nir", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gb_sct {
+        internal static System.Drawing.Bitmap gb_sct {
             get {
                 object obj = ResourceManager.GetObject("gb_sct", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gb_wls {
+        internal static System.Drawing.Bitmap gb_wls {
             get {
                 object obj = ResourceManager.GetObject("gb_wls", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gd {
+        internal static System.Drawing.Bitmap gd {
             get {
                 object obj = ResourceManager.GetObject("gd", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ge {
+        internal static System.Drawing.Bitmap ge {
             get {
                 object obj = ResourceManager.GetObject("ge", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gf {
+        internal static System.Drawing.Bitmap gf {
             get {
                 object obj = ResourceManager.GetObject("gf", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gg {
+        internal static System.Drawing.Bitmap gg {
             get {
                 object obj = ResourceManager.GetObject("gg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gh {
+        internal static System.Drawing.Bitmap gh {
             get {
                 object obj = ResourceManager.GetObject("gh", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gi {
+        internal static System.Drawing.Bitmap gi {
             get {
                 object obj = ResourceManager.GetObject("gi", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gl {
+        internal static System.Drawing.Bitmap gl {
             get {
                 object obj = ResourceManager.GetObject("gl", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gm {
+        internal static System.Drawing.Bitmap gm {
             get {
                 object obj = ResourceManager.GetObject("gm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gn {
+        internal static System.Drawing.Bitmap gn {
             get {
                 object obj = ResourceManager.GetObject("gn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gp {
+        internal static System.Drawing.Bitmap gp {
             get {
                 object obj = ResourceManager.GetObject("gp", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gq {
+        internal static System.Drawing.Bitmap gq {
             get {
                 object obj = ResourceManager.GetObject("gq", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gr {
+        internal static System.Drawing.Bitmap gr {
             get {
                 object obj = ResourceManager.GetObject("gr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gs {
+        internal static System.Drawing.Bitmap gs {
             get {
                 object obj = ResourceManager.GetObject("gs", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gt {
+        internal static System.Drawing.Bitmap gt {
             get {
                 object obj = ResourceManager.GetObject("gt", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gu {
+        internal static System.Drawing.Bitmap gu {
             get {
                 object obj = ResourceManager.GetObject("gu", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gw {
+        internal static System.Drawing.Bitmap gw {
             get {
                 object obj = ResourceManager.GetObject("gw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] gy {
+        internal static System.Drawing.Bitmap gy {
             get {
                 object obj = ResourceManager.GetObject("gy", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] hk {
+        internal static System.Drawing.Bitmap hk {
             get {
                 object obj = ResourceManager.GetObject("hk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] hm {
+        internal static System.Drawing.Bitmap hm {
             get {
                 object obj = ResourceManager.GetObject("hm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] hn {
+        internal static System.Drawing.Bitmap hn {
             get {
                 object obj = ResourceManager.GetObject("hn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] hr {
+        internal static System.Drawing.Bitmap hr {
             get {
                 object obj = ResourceManager.GetObject("hr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ht {
+        internal static System.Drawing.Bitmap ht {
             get {
                 object obj = ResourceManager.GetObject("ht", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] hu {
+        internal static System.Drawing.Bitmap hu {
             get {
                 object obj = ResourceManager.GetObject("hu", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ic {
+        internal static System.Drawing.Bitmap ic {
             get {
                 object obj = ResourceManager.GetObject("ic", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -1258,872 +1259,872 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] id {
+        internal static System.Drawing.Bitmap id {
             get {
                 object obj = ResourceManager.GetObject("id", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ie {
+        internal static System.Drawing.Bitmap ie {
             get {
                 object obj = ResourceManager.GetObject("ie", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] il {
+        internal static System.Drawing.Bitmap il {
             get {
                 object obj = ResourceManager.GetObject("il", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] im {
+        internal static System.Drawing.Bitmap im {
             get {
                 object obj = ResourceManager.GetObject("im", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] io {
+        internal static System.Drawing.Bitmap io {
             get {
                 object obj = ResourceManager.GetObject("io", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] iq {
+        internal static System.Drawing.Bitmap iq {
             get {
                 object obj = ResourceManager.GetObject("iq", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ir {
+        internal static System.Drawing.Bitmap ir {
             get {
                 object obj = ResourceManager.GetObject("ir", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] it {
+        internal static System.Drawing.Bitmap it {
             get {
                 object obj = ResourceManager.GetObject("it", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] je {
+        internal static System.Drawing.Bitmap je {
             get {
                 object obj = ResourceManager.GetObject("je", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] jm {
+        internal static System.Drawing.Bitmap jm {
             get {
                 object obj = ResourceManager.GetObject("jm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] jo {
+        internal static System.Drawing.Bitmap jo {
             get {
                 object obj = ResourceManager.GetObject("jo", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] jp {
+        internal static System.Drawing.Bitmap jp {
             get {
                 object obj = ResourceManager.GetObject("jp", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ke {
+        internal static System.Drawing.Bitmap ke {
             get {
                 object obj = ResourceManager.GetObject("ke", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] kg {
+        internal static System.Drawing.Bitmap kg {
             get {
                 object obj = ResourceManager.GetObject("kg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] kh {
+        internal static System.Drawing.Bitmap kh {
             get {
                 object obj = ResourceManager.GetObject("kh", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ki {
+        internal static System.Drawing.Bitmap ki {
             get {
                 object obj = ResourceManager.GetObject("ki", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] km {
+        internal static System.Drawing.Bitmap km {
             get {
                 object obj = ResourceManager.GetObject("km", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] kn {
+        internal static System.Drawing.Bitmap kn {
             get {
                 object obj = ResourceManager.GetObject("kn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] kp {
+        internal static System.Drawing.Bitmap kp {
             get {
                 object obj = ResourceManager.GetObject("kp", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] kr {
+        internal static System.Drawing.Bitmap kr {
             get {
                 object obj = ResourceManager.GetObject("kr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] kw {
+        internal static System.Drawing.Bitmap kw {
             get {
                 object obj = ResourceManager.GetObject("kw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ky {
+        internal static System.Drawing.Bitmap ky {
             get {
                 object obj = ResourceManager.GetObject("ky", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] kz {
+        internal static System.Drawing.Bitmap kz {
             get {
                 object obj = ResourceManager.GetObject("kz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] la {
+        internal static System.Drawing.Bitmap la {
             get {
                 object obj = ResourceManager.GetObject("la", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] lb {
+        internal static System.Drawing.Bitmap lb {
             get {
                 object obj = ResourceManager.GetObject("lb", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] lc {
+        internal static System.Drawing.Bitmap lc {
             get {
                 object obj = ResourceManager.GetObject("lc", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] li {
+        internal static System.Drawing.Bitmap li {
             get {
                 object obj = ResourceManager.GetObject("li", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] lk {
+        internal static System.Drawing.Bitmap lk {
             get {
                 object obj = ResourceManager.GetObject("lk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] lr {
+        internal static System.Drawing.Bitmap lr {
             get {
                 object obj = ResourceManager.GetObject("lr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ls {
+        internal static System.Drawing.Bitmap ls {
             get {
                 object obj = ResourceManager.GetObject("ls", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] lt {
+        internal static System.Drawing.Bitmap lt {
             get {
                 object obj = ResourceManager.GetObject("lt", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] lu {
+        internal static System.Drawing.Bitmap lu {
             get {
                 object obj = ResourceManager.GetObject("lu", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] lv {
+        internal static System.Drawing.Bitmap lv {
             get {
                 object obj = ResourceManager.GetObject("lv", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ly {
+        internal static System.Drawing.Bitmap ly {
             get {
                 object obj = ResourceManager.GetObject("ly", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ma {
+        internal static System.Drawing.Bitmap ma {
             get {
                 object obj = ResourceManager.GetObject("ma", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mc {
+        internal static System.Drawing.Bitmap mc {
             get {
                 object obj = ResourceManager.GetObject("mc", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] md {
+        internal static System.Drawing.Bitmap md {
             get {
                 object obj = ResourceManager.GetObject("md", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] me {
+        internal static System.Drawing.Bitmap me {
             get {
                 object obj = ResourceManager.GetObject("me", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mf {
+        internal static System.Drawing.Bitmap mf {
             get {
                 object obj = ResourceManager.GetObject("mf", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mg {
+        internal static System.Drawing.Bitmap mg {
             get {
                 object obj = ResourceManager.GetObject("mg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mh {
+        internal static System.Drawing.Bitmap mh {
             get {
                 object obj = ResourceManager.GetObject("mh", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mk {
+        internal static System.Drawing.Bitmap mk {
             get {
                 object obj = ResourceManager.GetObject("mk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ml {
+        internal static System.Drawing.Bitmap ml {
             get {
                 object obj = ResourceManager.GetObject("ml", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mm {
+        internal static System.Drawing.Bitmap mm {
             get {
                 object obj = ResourceManager.GetObject("mm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mn {
+        internal static System.Drawing.Bitmap mn {
             get {
                 object obj = ResourceManager.GetObject("mn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mo {
+        internal static System.Drawing.Bitmap mo {
             get {
                 object obj = ResourceManager.GetObject("mo", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mp {
+        internal static System.Drawing.Bitmap mp {
             get {
                 object obj = ResourceManager.GetObject("mp", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mq {
+        internal static System.Drawing.Bitmap mq {
             get {
                 object obj = ResourceManager.GetObject("mq", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mr {
+        internal static System.Drawing.Bitmap mr {
             get {
                 object obj = ResourceManager.GetObject("mr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ms {
+        internal static System.Drawing.Bitmap ms {
             get {
                 object obj = ResourceManager.GetObject("ms", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mt {
+        internal static System.Drawing.Bitmap mt {
             get {
                 object obj = ResourceManager.GetObject("mt", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mu {
+        internal static System.Drawing.Bitmap mu {
             get {
                 object obj = ResourceManager.GetObject("mu", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mv {
+        internal static System.Drawing.Bitmap mv {
             get {
                 object obj = ResourceManager.GetObject("mv", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mw {
+        internal static System.Drawing.Bitmap mw {
             get {
                 object obj = ResourceManager.GetObject("mw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mx {
+        internal static System.Drawing.Bitmap mx {
             get {
                 object obj = ResourceManager.GetObject("mx", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] my {
+        internal static System.Drawing.Bitmap my {
             get {
                 object obj = ResourceManager.GetObject("my", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] mz {
+        internal static System.Drawing.Bitmap mz {
             get {
                 object obj = ResourceManager.GetObject("mz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] na {
+        internal static System.Drawing.Bitmap na {
             get {
                 object obj = ResourceManager.GetObject("na", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] nc {
+        internal static System.Drawing.Bitmap nc {
             get {
                 object obj = ResourceManager.GetObject("nc", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ne {
+        internal static System.Drawing.Bitmap ne {
             get {
                 object obj = ResourceManager.GetObject("ne", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] nf {
+        internal static System.Drawing.Bitmap nf {
             get {
                 object obj = ResourceManager.GetObject("nf", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ng {
+        internal static System.Drawing.Bitmap ng {
             get {
                 object obj = ResourceManager.GetObject("ng", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ni {
+        internal static System.Drawing.Bitmap ni {
             get {
                 object obj = ResourceManager.GetObject("ni", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] nl {
+        internal static System.Drawing.Bitmap nl {
             get {
                 object obj = ResourceManager.GetObject("nl", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] no {
+        internal static System.Drawing.Bitmap no {
             get {
                 object obj = ResourceManager.GetObject("no", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] np {
+        internal static System.Drawing.Bitmap np {
             get {
                 object obj = ResourceManager.GetObject("np", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] nr {
+        internal static System.Drawing.Bitmap nr {
             get {
                 object obj = ResourceManager.GetObject("nr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] nu {
+        internal static System.Drawing.Bitmap nu {
             get {
                 object obj = ResourceManager.GetObject("nu", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] nz {
+        internal static System.Drawing.Bitmap nz {
             get {
                 object obj = ResourceManager.GetObject("nz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] om {
+        internal static System.Drawing.Bitmap om {
             get {
                 object obj = ResourceManager.GetObject("om", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pa {
+        internal static System.Drawing.Bitmap pa {
             get {
                 object obj = ResourceManager.GetObject("pa", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pc {
+        internal static System.Drawing.Bitmap pc {
             get {
                 object obj = ResourceManager.GetObject("pc", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pe {
+        internal static System.Drawing.Bitmap pe {
             get {
                 object obj = ResourceManager.GetObject("pe", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pf {
+        internal static System.Drawing.Bitmap pf {
             get {
                 object obj = ResourceManager.GetObject("pf", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pg {
+        internal static System.Drawing.Bitmap pg {
             get {
                 object obj = ResourceManager.GetObject("pg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ph {
+        internal static System.Drawing.Bitmap ph {
             get {
                 object obj = ResourceManager.GetObject("ph", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pk {
+        internal static System.Drawing.Bitmap pk {
             get {
                 object obj = ResourceManager.GetObject("pk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pl {
+        internal static System.Drawing.Bitmap pl {
             get {
                 object obj = ResourceManager.GetObject("pl", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pm {
+        internal static System.Drawing.Bitmap pm {
             get {
                 object obj = ResourceManager.GetObject("pm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pn {
+        internal static System.Drawing.Bitmap pn {
             get {
                 object obj = ResourceManager.GetObject("pn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pr {
+        internal static System.Drawing.Bitmap pr {
             get {
                 object obj = ResourceManager.GetObject("pr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ps {
+        internal static System.Drawing.Bitmap ps {
             get {
                 object obj = ResourceManager.GetObject("ps", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pt {
+        internal static System.Drawing.Bitmap pt {
             get {
                 object obj = ResourceManager.GetObject("pt", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] pw {
+        internal static System.Drawing.Bitmap pw {
             get {
                 object obj = ResourceManager.GetObject("pw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] py {
+        internal static System.Drawing.Bitmap py {
             get {
                 object obj = ResourceManager.GetObject("py", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] qa {
+        internal static System.Drawing.Bitmap qa {
             get {
                 object obj = ResourceManager.GetObject("qa", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] re {
+        internal static System.Drawing.Bitmap re {
             get {
                 object obj = ResourceManager.GetObject("re", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2138,92 +2139,92 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ro {
+        internal static System.Drawing.Bitmap ro {
             get {
                 object obj = ResourceManager.GetObject("ro", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] rs {
+        internal static System.Drawing.Bitmap rs {
             get {
                 object obj = ResourceManager.GetObject("rs", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ru {
+        internal static System.Drawing.Bitmap ru {
             get {
                 object obj = ResourceManager.GetObject("ru", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] rw {
+        internal static System.Drawing.Bitmap rw {
             get {
                 object obj = ResourceManager.GetObject("rw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sa {
+        internal static System.Drawing.Bitmap sa {
             get {
                 object obj = ResourceManager.GetObject("sa", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sb {
+        internal static System.Drawing.Bitmap sb {
             get {
                 object obj = ResourceManager.GetObject("sb", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sc {
+        internal static System.Drawing.Bitmap sc {
             get {
                 object obj = ResourceManager.GetObject("sc", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sd {
+        internal static System.Drawing.Bitmap sd {
             get {
                 object obj = ResourceManager.GetObject("sd", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] se {
+        internal static System.Drawing.Bitmap se {
             get {
                 object obj = ResourceManager.GetObject("se", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2238,502 +2239,502 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sg {
+        internal static System.Drawing.Bitmap sg {
             get {
                 object obj = ResourceManager.GetObject("sg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sh {
+        internal static System.Drawing.Bitmap sh {
             get {
                 object obj = ResourceManager.GetObject("sh", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sh_ac {
+        internal static System.Drawing.Bitmap sh_ac {
             get {
                 object obj = ResourceManager.GetObject("sh_ac", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sh_hl {
+        internal static System.Drawing.Bitmap sh_hl {
             get {
                 object obj = ResourceManager.GetObject("sh_hl", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sh_ta {
+        internal static System.Drawing.Bitmap sh_ta {
             get {
                 object obj = ResourceManager.GetObject("sh_ta", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] si {
+        internal static System.Drawing.Bitmap si {
             get {
                 object obj = ResourceManager.GetObject("si", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sj {
+        internal static System.Drawing.Bitmap sj {
             get {
                 object obj = ResourceManager.GetObject("sj", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sk {
+        internal static System.Drawing.Bitmap sk {
             get {
                 object obj = ResourceManager.GetObject("sk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sl {
+        internal static System.Drawing.Bitmap sl {
             get {
                 object obj = ResourceManager.GetObject("sl", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sm {
+        internal static System.Drawing.Bitmap sm {
             get {
                 object obj = ResourceManager.GetObject("sm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sn {
+        internal static System.Drawing.Bitmap sn {
             get {
                 object obj = ResourceManager.GetObject("sn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] so {
+        internal static System.Drawing.Bitmap so {
             get {
                 object obj = ResourceManager.GetObject("so", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sr {
+        internal static System.Drawing.Bitmap sr {
             get {
                 object obj = ResourceManager.GetObject("sr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ss {
+        internal static System.Drawing.Bitmap ss {
             get {
                 object obj = ResourceManager.GetObject("ss", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] st {
+        internal static System.Drawing.Bitmap st {
             get {
                 object obj = ResourceManager.GetObject("st", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sv {
+        internal static System.Drawing.Bitmap sv {
             get {
                 object obj = ResourceManager.GetObject("sv", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sx {
+        internal static System.Drawing.Bitmap sx {
             get {
                 object obj = ResourceManager.GetObject("sx", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sy {
+        internal static System.Drawing.Bitmap sy {
             get {
                 object obj = ResourceManager.GetObject("sy", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] sz {
+        internal static System.Drawing.Bitmap sz {
             get {
                 object obj = ResourceManager.GetObject("sz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tc {
+        internal static System.Drawing.Bitmap tc {
             get {
                 object obj = ResourceManager.GetObject("tc", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] td {
+        internal static System.Drawing.Bitmap td {
             get {
                 object obj = ResourceManager.GetObject("td", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tf {
+        internal static System.Drawing.Bitmap tf {
             get {
                 object obj = ResourceManager.GetObject("tf", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tg {
+        internal static System.Drawing.Bitmap tg {
             get {
                 object obj = ResourceManager.GetObject("tg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] th {
+        internal static System.Drawing.Bitmap th {
             get {
                 object obj = ResourceManager.GetObject("th", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tj {
+        internal static System.Drawing.Bitmap tj {
             get {
                 object obj = ResourceManager.GetObject("tj", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tk {
+        internal static System.Drawing.Bitmap tk {
             get {
                 object obj = ResourceManager.GetObject("tk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tl {
+        internal static System.Drawing.Bitmap tl {
             get {
                 object obj = ResourceManager.GetObject("tl", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tm {
+        internal static System.Drawing.Bitmap tm {
             get {
                 object obj = ResourceManager.GetObject("tm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tn {
+        internal static System.Drawing.Bitmap tn {
             get {
                 object obj = ResourceManager.GetObject("tn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] to {
+        internal static System.Drawing.Bitmap to {
             get {
                 object obj = ResourceManager.GetObject("to", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tr {
+        internal static System.Drawing.Bitmap tr {
             get {
                 object obj = ResourceManager.GetObject("tr", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tt {
+        internal static System.Drawing.Bitmap tt {
             get {
                 object obj = ResourceManager.GetObject("tt", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tv {
+        internal static System.Drawing.Bitmap tv {
             get {
                 object obj = ResourceManager.GetObject("tv", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tw {
+        internal static System.Drawing.Bitmap tw {
             get {
                 object obj = ResourceManager.GetObject("tw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] tz {
+        internal static System.Drawing.Bitmap tz {
             get {
                 object obj = ResourceManager.GetObject("tz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ua {
+        internal static System.Drawing.Bitmap ua {
             get {
                 object obj = ResourceManager.GetObject("ua", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ug {
+        internal static System.Drawing.Bitmap ug {
             get {
                 object obj = ResourceManager.GetObject("ug", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] um {
+        internal static System.Drawing.Bitmap um {
             get {
                 object obj = ResourceManager.GetObject("um", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] un {
+        internal static System.Drawing.Bitmap un {
             get {
                 object obj = ResourceManager.GetObject("un", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] us {
+        internal static System.Drawing.Bitmap us {
             get {
                 object obj = ResourceManager.GetObject("us", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] uy {
+        internal static System.Drawing.Bitmap uy {
             get {
                 object obj = ResourceManager.GetObject("uy", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] uz {
+        internal static System.Drawing.Bitmap uz {
             get {
                 object obj = ResourceManager.GetObject("uz", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] va {
+        internal static System.Drawing.Bitmap va {
             get {
                 object obj = ResourceManager.GetObject("va", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] vc {
+        internal static System.Drawing.Bitmap vc {
             get {
                 object obj = ResourceManager.GetObject("vc", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ve {
+        internal static System.Drawing.Bitmap ve {
             get {
                 object obj = ResourceManager.GetObject("ve", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] vg {
+        internal static System.Drawing.Bitmap vg {
             get {
                 object obj = ResourceManager.GetObject("vg", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] vi {
+        internal static System.Drawing.Bitmap vi {
             get {
                 object obj = ResourceManager.GetObject("vi", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] vn {
+        internal static System.Drawing.Bitmap vn {
             get {
                 object obj = ResourceManager.GetObject("vn", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] vu {
+        internal static System.Drawing.Bitmap vu {
             get {
                 object obj = ResourceManager.GetObject("vu", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] wf {
+        internal static System.Drawing.Bitmap wf {
             get {
                 object obj = ResourceManager.GetObject("wf", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2748,82 +2749,82 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ws {
+        internal static System.Drawing.Bitmap ws {
             get {
                 object obj = ResourceManager.GetObject("ws", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] xk {
+        internal static System.Drawing.Bitmap xk {
             get {
                 object obj = ResourceManager.GetObject("xk", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] xx {
+        internal static System.Drawing.Bitmap xx {
             get {
                 object obj = ResourceManager.GetObject("xx", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] ye {
+        internal static System.Drawing.Bitmap ye {
             get {
                 object obj = ResourceManager.GetObject("ye", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] yt {
+        internal static System.Drawing.Bitmap yt {
             get {
                 object obj = ResourceManager.GetObject("yt", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] za {
+        internal static System.Drawing.Bitmap za {
             get {
                 object obj = ResourceManager.GetObject("za", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] zm {
+        internal static System.Drawing.Bitmap zm {
             get {
                 object obj = ResourceManager.GetObject("zm", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static byte[] zw {
+        internal static System.Drawing.Bitmap zw {
             get {
                 object obj = ResourceManager.GetObject("zw", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

@@ -33,9 +33,9 @@ namespace WinsockPacketEditor
             this.InitTable_ProxyList();
             this.Dark_Changed();
 
-            this.cbPacketList_AutoRoll.Checked = Operate.ProxyConfig.List.AutoRoll;
-            this.cbPacketList_AutoClear.Checked = Operate.ProxyConfig.List.AutoClear;
-            this.txtPacketList_AutoClear.Value = Operate.ProxyConfig.List.AutoClear_Value;
+            this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
+            this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
+            this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
             this.PacketList_AutoClear_Changed();
 
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, Operate.ProcessConfig.GetInjectProcessName());
@@ -186,7 +186,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                PrefixSvg = Operate.SystemConfig.GetSvgByLocation(pi.ClientLocation),
+                                Prefix = Operate.SystemConfig.GetFlagByLocation(pi.ClientLocation),
                                 IconRatio = 1.0F
                             };
                         }
@@ -203,7 +203,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                PrefixSvg = Operate.SystemConfig.GetSvgByLocation(pi.ServerLocation),
+                                Prefix = Operate.SystemConfig.GetFlagByLocation(pi.ServerLocation),
                                 IconRatio = 1.0F
                             };
                         }
@@ -1089,13 +1089,17 @@ namespace WinsockPacketEditor
         {
             this.PacketList_AutoClear_Changed();
 
-            Operate.ProxyConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;
-            Operate.ProxyConfig.List.AutoClear_Value = this.txtPacketList_AutoClear.Value;
+            Operate.PacketConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;
+        }
+
+        private void txtPacketList_AutoClear_ValueChanged(object sender, DecimalEventArgs e)
+        {
+            Operate.PacketConfig.List.AutoClear_Value = this.txtPacketList_AutoClear.Value;
         }
 
         private void PacketList_AutoClear_Changed()
         {
-            this.txtPacketList_AutoClear.Enabled = this.cbPacketList_AutoClear.Checked;            
+            this.txtPacketList_AutoClear.Enabled = this.cbPacketList_AutoClear.Checked;
         }
 
         #endregion
@@ -1109,7 +1113,7 @@ namespace WinsockPacketEditor
 
         private void PacketList_AutoRoll_Changed()
         {
-            Operate.ProxyConfig.List.AutoRoll = this.cbPacketList_AutoRoll.Checked;
+            Operate.PacketConfig.List.AutoRoll = this.cbPacketList_AutoRoll.Checked;
         }
 
         #endregion
@@ -1142,14 +1146,14 @@ namespace WinsockPacketEditor
 
         public void RefreshProxyList()
         {
-            if (Operate.ProxyConfig.List.AutoRoll)
+            if (Operate.PacketConfig.List.AutoRoll)
             {
                 tProxyList.ScrollBar.ValueY = tProxyList.ScrollBar.MaxY;
             }
 
-            if (Operate.ProxyConfig.List.AutoClear)
+            if (Operate.PacketConfig.List.AutoClear)
             {
-                if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.ProxyConfig.List.AutoClear_Value)
+                if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.PacketConfig.List.AutoClear_Value)
                 {
                     this.CleanUp_ProxyList();
                     this.CleanUp_HexBox();

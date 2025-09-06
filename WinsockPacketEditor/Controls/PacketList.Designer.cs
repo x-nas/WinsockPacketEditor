@@ -30,6 +30,9 @@
         {
             this.tlpPacketList = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.txtPacketList_AutoClear = new AntdUI.InputNumber();
+            this.cbPacketList_AutoClear = new AntdUI.Checkbox();
+            this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
             this.ddMenu = new AntdUI.Dropdown();
             this.bSearchPacket = new AntdUI.Button();
             this.bPacketList_Clear = new AntdUI.Button();
@@ -85,9 +88,6 @@
             this.lModuleName = new AntdUI.Label();
             this.lProcessName = new AntdUI.Label();
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
-            this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
-            this.cbPacketList_AutoClear = new AntdUI.Checkbox();
-            this.txtPacketList_AutoClear = new AntdUI.InputNumber();
             this.tlpPacketList.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterPacketList)).BeginInit();
@@ -149,6 +149,52 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(1140, 50);
             this.tableLayoutPanel2.TabIndex = 6;
+            // 
+            // txtPacketList_AutoClear
+            // 
+            this.txtPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPacketList_AutoClear.Location = new System.Drawing.Point(381, 3);
+            this.txtPacketList_AutoClear.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.txtPacketList_AutoClear.Name = "txtPacketList_AutoClear";
+            this.txtPacketList_AutoClear.SelectionStart = 1;
+            this.txtPacketList_AutoClear.Size = new System.Drawing.Size(114, 44);
+            this.txtPacketList_AutoClear.TabIndex = 16;
+            this.txtPacketList_AutoClear.Text = "5000";
+            this.txtPacketList_AutoClear.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtPacketList_AutoClear.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.txtPacketList_AutoClear.ValueChanged += new AntdUI.DecimalEventHandler(this.txtPacketList_AutoClear_ValueChanged);
+            // 
+            // cbPacketList_AutoClear
+            // 
+            this.cbPacketList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbPacketList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
+            this.cbPacketList_AutoClear.Location = new System.Drawing.Point(267, 3);
+            this.cbPacketList_AutoClear.Name = "cbPacketList_AutoClear";
+            this.cbPacketList_AutoClear.Size = new System.Drawing.Size(108, 44);
+            this.cbPacketList_AutoClear.TabIndex = 15;
+            this.cbPacketList_AutoClear.Text = "自动清理";
+            this.cbPacketList_AutoClear.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoClear_CheckedChanged);
+            // 
+            // cbPacketList_AutoRoll
+            // 
+            this.cbPacketList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbPacketList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbPacketList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
+            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(501, 3);
+            this.cbPacketList_AutoRoll.Name = "cbPacketList_AutoRoll";
+            this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(108, 44);
+            this.cbPacketList_AutoRoll.TabIndex = 14;
+            this.cbPacketList_AutoRoll.Text = "自动滚动";
+            this.cbPacketList_AutoRoll.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoRoll_CheckedChanged);
             // 
             // ddMenu
             // 
@@ -942,51 +988,6 @@
             // 
             this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
             this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
-            // 
-            // cbPacketList_AutoRoll
-            // 
-            this.cbPacketList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbPacketList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbPacketList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
-            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(501, 3);
-            this.cbPacketList_AutoRoll.Name = "cbPacketList_AutoRoll";
-            this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(108, 44);
-            this.cbPacketList_AutoRoll.TabIndex = 14;
-            this.cbPacketList_AutoRoll.Text = "自动滚动";
-            this.cbPacketList_AutoRoll.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoRoll_CheckedChanged);
-            // 
-            // cbPacketList_AutoClear
-            // 
-            this.cbPacketList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbPacketList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
-            this.cbPacketList_AutoClear.Location = new System.Drawing.Point(267, 3);
-            this.cbPacketList_AutoClear.Name = "cbPacketList_AutoClear";
-            this.cbPacketList_AutoClear.Size = new System.Drawing.Size(108, 44);
-            this.cbPacketList_AutoClear.TabIndex = 15;
-            this.cbPacketList_AutoClear.Text = "自动清理";
-            this.cbPacketList_AutoClear.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoClear_CheckedChanged);
-            // 
-            // txtPacketList_AutoClear
-            // 
-            this.txtPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPacketList_AutoClear.Location = new System.Drawing.Point(381, 3);
-            this.txtPacketList_AutoClear.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.txtPacketList_AutoClear.Name = "txtPacketList_AutoClear";
-            this.txtPacketList_AutoClear.SelectionStart = 1;
-            this.txtPacketList_AutoClear.Size = new System.Drawing.Size(114, 44);
-            this.txtPacketList_AutoClear.TabIndex = 16;
-            this.txtPacketList_AutoClear.Text = "5000";
-            this.txtPacketList_AutoClear.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtPacketList_AutoClear.Value = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
             // 
             // PacketList
             // 

@@ -47,7 +47,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                PrefixSvg = Operate.SystemConfig.GetSvgByLocation(ai.IPLocation),
+                                Prefix = Operate.SystemConfig.GetFlagByLocation(ai.IPLocation),
                                 IconRatio = 1.0F
                             };
                         }
