@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
-            this.tlpHookSettings = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpHookSettings = new TableLayoutPanelEx();
+            this.tlpButton = new TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.tabHookSettings = new AntdUI.Tabs();
             this.tpInjectMode = new AntdUI.TabPage();
-            this.tlpInjectMode = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpWS2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpInjectMode = new TableLayoutPanelEx();
+            this.tlpWS2 = new TableLayoutPanelEx();
             this.cbHookWSA_RecvFrom = new AntdUI.Checkbox();
             this.cbHookWSA_Recv = new AntdUI.Checkbox();
             this.cbHookWSA_SendTo = new AntdUI.Checkbox();
@@ -45,7 +45,7 @@
             this.cbHookWS2_Recv = new AntdUI.Checkbox();
             this.cbHookWS2_SendTo = new AntdUI.Checkbox();
             this.cbHookWS2_Send = new AntdUI.Checkbox();
-            this.tlpWS1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpWS1 = new TableLayoutPanelEx();
             this.cbHookWS1_RecvFrom = new AntdUI.Checkbox();
             this.cbHookWS1_Recv = new AntdUI.Checkbox();
             this.cbHookWS1_SendTo = new AntdUI.Checkbox();
@@ -53,11 +53,11 @@
             this.dWS1 = new AntdUI.Divider();
             this.dWS2 = new AntdUI.Divider();
             this.tpProxyMode = new AntdUI.TabPage();
-            this.tlpProxyMode = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpUDP = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProxyMode = new TableLayoutPanelEx();
+            this.tlpUDP = new TableLayoutPanelEx();
             this.cbUDP_Resp = new AntdUI.Checkbox();
             this.cbUDP_Req = new AntdUI.Checkbox();
-            this.tlpTCP = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpTCP = new TableLayoutPanelEx();
             this.cbTCP_Resp = new AntdUI.Checkbox();
             this.cbTCP_Req = new AntdUI.Checkbox();
             this.dTCP = new AntdUI.Divider();
@@ -548,14 +548,14 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpHookSettings;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpHookSettings;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
         private AntdUI.Tabs tabHookSettings;
         private AntdUI.TabPage tpInjectMode;
-        private System.Windows.Forms.TableLayoutPanel tlpInjectMode;
-        private System.Windows.Forms.TableLayoutPanel tlpWS2;
+        private TableLayoutPanelEx tlpInjectMode;
+        private TableLayoutPanelEx tlpWS2;
         private AntdUI.Checkbox cbHookWSA_RecvFrom;
         private AntdUI.Checkbox cbHookWSA_Recv;
         private AntdUI.Checkbox cbHookWSA_SendTo;
@@ -564,7 +564,7 @@
         private AntdUI.Checkbox cbHookWS2_Recv;
         private AntdUI.Checkbox cbHookWS2_SendTo;
         private AntdUI.Checkbox cbHookWS2_Send;
-        private System.Windows.Forms.TableLayoutPanel tlpWS1;
+        private TableLayoutPanelEx tlpWS1;
         private AntdUI.Checkbox cbHookWS1_RecvFrom;
         private AntdUI.Checkbox cbHookWS1_Recv;
         private AntdUI.Checkbox cbHookWS1_SendTo;
@@ -572,11 +572,11 @@
         private AntdUI.Divider dWS1;
         private AntdUI.Divider dWS2;
         private AntdUI.TabPage tpProxyMode;
-        private System.Windows.Forms.TableLayoutPanel tlpProxyMode;
-        private System.Windows.Forms.TableLayoutPanel tlpUDP;
+        private TableLayoutPanelEx tlpProxyMode;
+        private TableLayoutPanelEx tlpUDP;
         private AntdUI.Checkbox cbUDP_Resp;
         private AntdUI.Checkbox cbUDP_Req;
-        private System.Windows.Forms.TableLayoutPanel tlpTCP;
+        private TableLayoutPanelEx tlpTCP;
         private AntdUI.Checkbox cbTCP_Resp;
         private AntdUI.Checkbox cbTCP_Req;
         private AntdUI.Divider dTCP;

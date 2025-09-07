@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpExtractionData = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpExtractionData = new WinsockPacketEditor.TableLayoutPanelEx();
             this.splitterExtraction = new AntdUI.Splitter();
-            this.tlpExtractionSelectFile = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpExtractionSelectFile = new WinsockPacketEditor.TableLayoutPanelEx();
             this.ddlExtraction = new AntdUI.Select();
             this.udExtraction = new AntdUI.UploadDragger();
-            this.tlpData = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpExtractionButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpData = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpExtractionButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bExtraction = new AntdUI.Button();
             this.txtExtraction = new AntdUI.Input();
             this.tlpExtractionData.SuspendLayout();
@@ -53,6 +53,7 @@
             this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpExtractionData.Controls.Add(this.splitterExtraction, 1, 1);
             this.tlpExtractionData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpExtractionData.Location = new System.Drawing.Point(0, 0);
@@ -171,9 +172,9 @@
             this.bExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExtraction.IconSvg = "SaveOutlined";
             this.bExtraction.LocalizationText = "Extraction";
-            this.bExtraction.Location = new System.Drawing.Point(307, 8);
+            this.bExtraction.Location = new System.Drawing.Point(310, 8);
             this.bExtraction.Name = "bExtraction";
-            this.bExtraction.Size = new System.Drawing.Size(119, 44);
+            this.bExtraction.Size = new System.Drawing.Size(114, 44);
             this.bExtraction.TabIndex = 1;
             this.bExtraction.Text = "生成文件";
             this.bExtraction.Type = AntdUI.TTypeMini.Primary;
@@ -217,13 +218,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpExtractionData;
+        private TableLayoutPanelEx tlpExtractionData;
         private AntdUI.Splitter splitterExtraction;
-        private System.Windows.Forms.TableLayoutPanel tlpExtractionSelectFile;
+        private TableLayoutPanelEx tlpExtractionSelectFile;
         private AntdUI.Select ddlExtraction;
         private AntdUI.UploadDragger udExtraction;
-        private System.Windows.Forms.TableLayoutPanel tlpData;
-        private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
+        private TableLayoutPanelEx tlpData;
+        private TableLayoutPanelEx tlpExtractionButton;
         private AntdUI.Button bExtraction;
         private AntdUI.Input txtExtraction;
     }

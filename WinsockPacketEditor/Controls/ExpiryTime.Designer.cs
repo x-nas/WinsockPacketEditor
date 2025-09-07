@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpExpiryTime = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpExpiryTime = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpAddTime = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpAddTime = new WinsockPacketEditor.TableLayoutPanelEx();
             this.rbFromNow = new AntdUI.Radio();
             this.rbFromExpiryTime = new AntdUI.Radio();
             this.nudAddTime = new AntdUI.InputNumber();
-            this.tlpTimeType = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpTimeType = new WinsockPacketEditor.TableLayoutPanelEx();
             this.rbAddHour = new AntdUI.Radio();
             this.rbAddDay = new AntdUI.Radio();
             this.lAccountCNT = new AntdUI.Label();
@@ -50,6 +50,7 @@
             // 
             this.tlpExpiryTime.ColumnCount = 1;
             this.tlpExpiryTime.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExpiryTime.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpExpiryTime.Controls.Add(this.tlpButton, 0, 4);
             this.tlpExpiryTime.Controls.Add(this.tlpAddTime, 0, 2);
             this.tlpExpiryTime.Controls.Add(this.lAccountCNT, 0, 0);
@@ -94,9 +95,9 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(150, 7);
+            this.bSave.Location = new System.Drawing.Point(155, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -111,7 +112,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -144,7 +145,7 @@
             this.rbFromNow.LocalizationText = "ExpiryTimeForm.FromNow";
             this.rbFromNow.Location = new System.Drawing.Point(253, 3);
             this.rbFromNow.Name = "rbFromNow";
-            this.rbFromNow.Size = new System.Drawing.Size(138, 42);
+            this.rbFromNow.Size = new System.Drawing.Size(140, 42);
             this.rbFromNow.TabIndex = 5;
             this.rbFromNow.Text = "基于当前时间";
             // 
@@ -156,7 +157,7 @@
             this.rbFromExpiryTime.LocalizationText = "ExpiryTimeForm.FromExpiryTime";
             this.rbFromExpiryTime.Location = new System.Drawing.Point(3, 3);
             this.rbFromExpiryTime.Name = "rbFromExpiryTime";
-            this.rbFromExpiryTime.Size = new System.Drawing.Size(138, 42);
+            this.rbFromExpiryTime.Size = new System.Drawing.Size(140, 42);
             this.rbFromExpiryTime.TabIndex = 4;
             this.rbFromExpiryTime.Text = "基于原有时间";
             // 
@@ -210,7 +211,7 @@
             this.rbAddHour.LocalizationText = "Hour";
             this.rbAddHour.Location = new System.Drawing.Point(3, 3);
             this.rbAddHour.Name = "rbAddHour";
-            this.rbAddHour.Size = new System.Drawing.Size(74, 45);
+            this.rbAddHour.Size = new System.Drawing.Size(76, 45);
             this.rbAddHour.TabIndex = 0;
             this.rbAddHour.Text = "小时";
             // 
@@ -221,7 +222,7 @@
             this.rbAddDay.LocalizationText = "Day";
             this.rbAddDay.Location = new System.Drawing.Point(128, 3);
             this.rbAddDay.Name = "rbAddDay";
-            this.rbAddDay.Size = new System.Drawing.Size(58, 45);
+            this.rbAddDay.Size = new System.Drawing.Size(60, 45);
             this.rbAddDay.TabIndex = 1;
             this.rbAddDay.Text = "天";
             // 
@@ -260,15 +261,15 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpExpiryTime;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpExpiryTime;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private System.Windows.Forms.TableLayoutPanel tlpAddTime;
+        private TableLayoutPanelEx tlpAddTime;
         private AntdUI.Radio rbFromNow;
         private AntdUI.Radio rbFromExpiryTime;
         private AntdUI.InputNumber nudAddTime;
-        private System.Windows.Forms.TableLayoutPanel tlpTimeType;
+        private TableLayoutPanelEx tlpTimeType;
         private AntdUI.Radio rbAddHour;
         private AntdUI.Radio rbAddDay;
         private AntdUI.Label lAccountCNT;

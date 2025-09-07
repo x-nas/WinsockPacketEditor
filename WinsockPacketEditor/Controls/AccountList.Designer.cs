@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpAccountList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpAccountList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tAccountList = new AntdUI.Table();
-            this.tlpAccountListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpAccountListButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.ddMenu = new AntdUI.Dropdown();
             this.bReset = new AntdUI.Button();
             this.txtSearchUserName = new AntdUI.Input();
@@ -47,6 +47,7 @@
             this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpAccountList.Controls.Add(this.tAccountList, 1, 2);
             this.tlpAccountList.Controls.Add(this.tlpAccountListButton, 1, 1);
             this.tlpAccountList.Controls.Add(this.pAccountList, 1, 3);
@@ -208,9 +209,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpAccountList;
+        private TableLayoutPanelEx tlpAccountList;
         private AntdUI.Table tAccountList;
-        private System.Windows.Forms.TableLayoutPanel tlpAccountListButton;
+        private TableLayoutPanelEx tlpAccountListButton;
         private AntdUI.Input txtSearchUserName;
         private AntdUI.DatePickerRange dtpExpiryTime;
         private AntdUI.Button bSearchExpiryTime;

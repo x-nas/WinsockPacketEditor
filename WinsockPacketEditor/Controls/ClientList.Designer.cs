@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpClientList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpClientList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.splitterClientList = new AntdUI.Splitter();
             this.treeClientList = new AntdUI.Tree();
             this.tAuthList = new AntdUI.Table();
@@ -45,6 +45,7 @@
             this.tlpClientList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpClientList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpClientList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpClientList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpClientList.Controls.Add(this.splitterClientList, 1, 1);
             this.tlpClientList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpClientList.Location = new System.Drawing.Point(0, 0);
@@ -53,7 +54,6 @@
             this.tlpClientList.RowCount = 2;
             this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpClientList.Size = new System.Drawing.Size(1200, 800);
             this.tlpClientList.TabIndex = 0;
             // 
@@ -120,7 +120,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.TableLayoutPanel tlpClientList;
+        private TableLayoutPanelEx tlpClientList;
         private AntdUI.Splitter splitterClientList;
         private AntdUI.Tree treeClientList;
         private AntdUI.Table tAuthList;

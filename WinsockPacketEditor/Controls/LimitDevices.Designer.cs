@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpLimitDevices = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpLimitDevices = new TableLayoutPanelEx();
+            this.tlpButton = new TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpSet = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSet = new TableLayoutPanelEx();
             this.cbIsLimitDevices = new AntdUI.Checkbox();
             this.nudLimitDevices = new AntdUI.InputNumber();
             this.lAccountCNT = new AntdUI.Label();
@@ -198,11 +198,11 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpLimitDevices;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpLimitDevices;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private System.Windows.Forms.TableLayoutPanel tlpSet;
+        private TableLayoutPanelEx tlpSet;
         private AntdUI.Checkbox cbIsLimitDevices;
         private AntdUI.InputNumber nudLimitDevices;
         private AntdUI.Label lAccountCNT;

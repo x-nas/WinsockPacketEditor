@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpEncryption = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpEncryption = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtEncryption = new AntdUI.Input();
             this.pEncryption = new AntdUI.Panel();
             this.lEncryption = new AntdUI.Label();
@@ -40,6 +40,7 @@
             // 
             this.tlpEncryption.ColumnCount = 1;
             this.tlpEncryption.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpEncryption.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpEncryption.Controls.Add(this.txtEncryption, 0, 1);
             this.tlpEncryption.Controls.Add(this.pEncryption, 0, 0);
             this.tlpEncryption.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -50,7 +51,6 @@
             this.tlpEncryption.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpEncryption.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpEncryption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpEncryption.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpEncryption.Size = new System.Drawing.Size(500, 200);
             this.tlpEncryption.TabIndex = 1;
             // 
@@ -111,7 +111,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpEncryption;
+        private TableLayoutPanelEx tlpEncryption;
         private AntdUI.Input txtEncryption;
         private AntdUI.Panel pEncryption;
         private AntdUI.Label lEncryption;

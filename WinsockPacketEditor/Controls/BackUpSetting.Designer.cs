@@ -28,20 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpBackUpSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpBackUpSettings = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dListInfo = new AntdUI.Divider();
-            this.tlpListInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbBackUp_RobotList = new AntdUI.Checkbox();
             this.cbBackUp_SendList = new AntdUI.Checkbox();
             this.cbBackUp_FilterList = new AntdUI.Checkbox();
             this.cbBackUp_InjectSet = new AntdUI.Checkbox();
-            this.tlpButton2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bImport = new AntdUI.Button();
             this.bExport = new AntdUI.Button();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bExit = new AntdUI.Button();
             this.dSystemConfig = new AntdUI.Divider();
-            this.tlpBackUpContent = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpBackUpContent = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbBackUp_ProxyAccount = new AntdUI.Checkbox();
             this.cbBackUp_ProxyMapping = new AntdUI.Checkbox();
             this.cbBackUp_ProxySet = new AntdUI.Checkbox();
@@ -59,6 +59,7 @@
             // 
             this.tlpBackUpSettings.ColumnCount = 1;
             this.tlpBackUpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpBackUpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpBackUpSettings.Controls.Add(this.dListInfo, 0, 12);
             this.tlpBackUpSettings.Controls.Add(this.tlpListInfo, 0, 14);
             this.tlpBackUpSettings.Controls.Add(this.cbBackUp_InjectSet, 0, 10);
@@ -133,7 +134,7 @@
             this.cbBackUp_RobotList.LocalizationText = "RobotList";
             this.cbBackUp_RobotList.Location = new System.Drawing.Point(3, 51);
             this.cbBackUp_RobotList.Name = "cbBackUp_RobotList";
-            this.cbBackUp_RobotList.Size = new System.Drawing.Size(122, 42);
+            this.cbBackUp_RobotList.Size = new System.Drawing.Size(124, 42);
             this.cbBackUp_RobotList.TabIndex = 4;
             this.cbBackUp_RobotList.Text = "机器人列表";
             // 
@@ -145,7 +146,7 @@
             this.cbBackUp_SendList.LocalizationText = "SendList";
             this.cbBackUp_SendList.Location = new System.Drawing.Point(253, 3);
             this.cbBackUp_SendList.Name = "cbBackUp_SendList";
-            this.cbBackUp_SendList.Size = new System.Drawing.Size(106, 42);
+            this.cbBackUp_SendList.Size = new System.Drawing.Size(108, 42);
             this.cbBackUp_SendList.TabIndex = 3;
             this.cbBackUp_SendList.Text = "发送列表";
             // 
@@ -157,7 +158,7 @@
             this.cbBackUp_FilterList.LocalizationText = "FilterList";
             this.cbBackUp_FilterList.Location = new System.Drawing.Point(3, 3);
             this.cbBackUp_FilterList.Name = "cbBackUp_FilterList";
-            this.cbBackUp_FilterList.Size = new System.Drawing.Size(106, 42);
+            this.cbBackUp_FilterList.Size = new System.Drawing.Size(108, 42);
             this.cbBackUp_FilterList.TabIndex = 2;
             this.cbBackUp_FilterList.Text = "滤镜列表";
             // 
@@ -169,7 +170,7 @@
             this.cbBackUp_InjectSet.LocalizationText = "BackUpSettingsForm.InjectMode.Configuration";
             this.cbBackUp_InjectSet.Location = new System.Drawing.Point(3, 338);
             this.cbBackUp_InjectSet.Name = "cbBackUp_InjectSet";
-            this.cbBackUp_InjectSet.Size = new System.Drawing.Size(138, 42);
+            this.cbBackUp_InjectSet.Size = new System.Drawing.Size(140, 42);
             this.cbBackUp_InjectSet.TabIndex = 11;
             this.cbBackUp_InjectSet.Text = "注入模式配置";
             // 
@@ -201,9 +202,9 @@
             this.bImport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bImport.IconSvg = "ImportOutlined";
             this.bImport.LocalizationText = "Import";
-            this.bImport.Location = new System.Drawing.Point(118, 7);
+            this.bImport.Location = new System.Drawing.Point(123, 7);
             this.bImport.Name = "bImport";
-            this.bImport.Size = new System.Drawing.Size(119, 46);
+            this.bImport.Size = new System.Drawing.Size(114, 46);
             this.bImport.TabIndex = 0;
             this.bImport.Text = "导入备份";
             this.bImport.Type = AntdUI.TTypeMini.Primary;
@@ -218,7 +219,7 @@
             this.bExport.LocalizationText = "Export";
             this.bExport.Location = new System.Drawing.Point(263, 7);
             this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(119, 46);
+            this.bExport.Size = new System.Drawing.Size(114, 46);
             this.bExport.TabIndex = 1;
             this.bExport.Text = "导出备份";
             this.bExport.Type = AntdUI.TTypeMini.Primary;
@@ -249,9 +250,9 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(206, 7);
+            this.bExit.Location = new System.Drawing.Point(209, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -299,7 +300,7 @@
             this.cbBackUp_ProxyAccount.LocalizationText = "BackUpSettingsForm.ProxyAccount";
             this.cbBackUp_ProxyAccount.Location = new System.Drawing.Point(253, 3);
             this.cbBackUp_ProxyAccount.Name = "cbBackUp_ProxyAccount";
-            this.cbBackUp_ProxyAccount.Size = new System.Drawing.Size(106, 42);
+            this.cbBackUp_ProxyAccount.Size = new System.Drawing.Size(108, 42);
             this.cbBackUp_ProxyAccount.TabIndex = 4;
             this.cbBackUp_ProxyAccount.Text = "代理账号";
             // 
@@ -311,7 +312,7 @@
             this.cbBackUp_ProxyMapping.LocalizationText = "BackUpSettingsForm.ProxyMapping";
             this.cbBackUp_ProxyMapping.Location = new System.Drawing.Point(3, 51);
             this.cbBackUp_ProxyMapping.Name = "cbBackUp_ProxyMapping";
-            this.cbBackUp_ProxyMapping.Size = new System.Drawing.Size(106, 42);
+            this.cbBackUp_ProxyMapping.Size = new System.Drawing.Size(108, 42);
             this.cbBackUp_ProxyMapping.TabIndex = 2;
             this.cbBackUp_ProxyMapping.Text = "代理映射";
             // 
@@ -323,7 +324,7 @@
             this.cbBackUp_ProxySet.LocalizationText = "BackUpSettingsForm.ProxyMode.Configuration";
             this.cbBackUp_ProxySet.Location = new System.Drawing.Point(3, 3);
             this.cbBackUp_ProxySet.Name = "cbBackUp_ProxySet";
-            this.cbBackUp_ProxySet.Size = new System.Drawing.Size(138, 42);
+            this.cbBackUp_ProxySet.Size = new System.Drawing.Size(140, 42);
             this.cbBackUp_ProxySet.TabIndex = 0;
             this.cbBackUp_ProxySet.Text = "代理模式配置";
             // 
@@ -358,7 +359,7 @@
             this.cbBackUp_SystemConfig.LocalizationText = "BackUpSettingsForm.SystemOperation";
             this.cbBackUp_SystemConfig.Location = new System.Drawing.Point(3, 52);
             this.cbBackUp_SystemConfig.Name = "cbBackUp_SystemConfig";
-            this.cbBackUp_SystemConfig.Size = new System.Drawing.Size(138, 42);
+            this.cbBackUp_SystemConfig.Size = new System.Drawing.Size(140, 42);
             this.cbBackUp_SystemConfig.TabIndex = 9;
             this.cbBackUp_SystemConfig.Text = "系统运行配置";
             // 
@@ -389,20 +390,20 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpBackUpSettings;
+        private TableLayoutPanelEx tlpBackUpSettings;
         private AntdUI.Divider dListInfo;
-        private System.Windows.Forms.TableLayoutPanel tlpListInfo;
+        private TableLayoutPanelEx tlpListInfo;
         private AntdUI.Checkbox cbBackUp_RobotList;
         private AntdUI.Checkbox cbBackUp_SendList;
         private AntdUI.Checkbox cbBackUp_FilterList;
         private AntdUI.Checkbox cbBackUp_InjectSet;
-        private System.Windows.Forms.TableLayoutPanel tlpButton2;
+        private TableLayoutPanelEx tlpButton2;
         private AntdUI.Button bImport;
         private AntdUI.Button bExport;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bExit;
         private AntdUI.Divider dSystemConfig;
-        private System.Windows.Forms.TableLayoutPanel tlpBackUpContent;
+        private TableLayoutPanelEx tlpBackUpContent;
         private AntdUI.Checkbox cbBackUp_ProxyAccount;
         private AntdUI.Checkbox cbBackUp_ProxyMapping;
         private AntdUI.Checkbox cbBackUp_ProxySet;

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpRemoteMGT = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpRemoteMGT = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.lRemote = new AntdUI.Label();
@@ -46,6 +46,7 @@
             // 
             this.tlpRemoteMGT.ColumnCount = 1;
             this.tlpRemoteMGT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRemoteMGT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpRemoteMGT.Controls.Add(this.tlpButton, 0, 6);
             this.tlpRemoteMGT.Controls.Add(this.lRemote, 0, 5);
             this.tlpRemoteMGT.Controls.Add(this.cbIsRemote, 0, 0);
@@ -96,9 +97,9 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(40, 7);
+            this.bSave.Location = new System.Drawing.Point(45, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -113,7 +114,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(153, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -139,7 +140,7 @@
             this.cbIsRemote.LocalizationText = "RemoteMGTSetting.EnableMGT";
             this.cbIsRemote.Location = new System.Drawing.Point(3, 3);
             this.cbIsRemote.Name = "cbIsRemote";
-            this.cbIsRemote.Size = new System.Drawing.Size(138, 42);
+            this.cbIsRemote.Size = new System.Drawing.Size(140, 42);
             this.cbIsRemote.TabIndex = 0;
             this.cbIsRemote.Text = "启用远程管理";
             this.cbIsRemote.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsRemote_CheckedChanged);
@@ -217,14 +218,14 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpRemoteMGT;
+        private TableLayoutPanelEx tlpRemoteMGT;
         private AntdUI.Checkbox cbIsRemote;
         private AntdUI.Input txtRemote_UserName;
         private AntdUI.Input txtRemote_PassWord;
         private AntdUI.InputNumber nudRemote_Port;
         private AntdUI.Select ddlRemoteIP;
         private AntdUI.Label lRemote;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
     }

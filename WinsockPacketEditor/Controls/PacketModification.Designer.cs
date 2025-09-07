@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpModification = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpModification = new TableLayoutPanelEx();
+            this.tlpButton = new TableLayoutPanelEx();
             this.bExit = new AntdUI.Button();
             this.splitterModification = new AntdUI.Splitter();
-            this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketData = new TableLayoutPanelEx();
             this.txtPacketData_New = new AntdUI.Input();
             this.lPacketData_New = new AntdUI.Label();
             this.lPacketData_Raw = new AntdUI.Label();
@@ -218,11 +218,11 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpModification;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpModification;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bExit;
         private AntdUI.Splitter splitterModification;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketData;
+        private TableLayoutPanelEx tlpPacketData;
         private AntdUI.Input txtPacketData_New;
         private AntdUI.Label lPacketData_New;
         private AntdUI.Label lPacketData_Raw;

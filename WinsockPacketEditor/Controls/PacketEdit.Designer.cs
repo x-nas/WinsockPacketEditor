@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpPacketEdit = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketEdit = new TableLayoutPanelEx();
             this.pPacketData = new AntdUI.Panel();
             this.hbPacketEdit = new Be.Windows.Forms.HexBox();
-            this.tlpSendCollectionInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendCollectionInfo = new TableLayoutPanelEx();
             this.lSend_Fail_CNT = new AntdUI.Label();
             this.lSend_Success_CNT = new AntdUI.Label();
             this.lTotal_Send_CNT = new AntdUI.Label();
@@ -40,15 +40,15 @@
             this.lSend_Fail = new AntdUI.Label();
             this.lSend_Success = new AntdUI.Label();
             this.lTotal_Send = new AntdUI.Label();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new TableLayoutPanelEx();
             this.bStop = new AntdUI.Button();
             this.bSend = new AntdUI.Button();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpPacketSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketSettings = new TableLayoutPanelEx();
             this.pProgression = new AntdUI.Panel();
-            this.tlpProgression = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProgression = new TableLayoutPanelEx();
+            this.tableLayoutPanel4 = new TableLayoutPanelEx();
             this.nudProgressionCarry = new AntdUI.InputNumber();
             this.cbProgressionCarry = new AntdUI.Checkbox();
             this.cbProgressionPosition = new AntdUI.Checkbox();
@@ -56,16 +56,16 @@
             this.nudProgressionStep = new AntdUI.InputNumber();
             this.dProgression = new AntdUI.Divider();
             this.pPacketSend = new AntdUI.Panel();
-            this.tlpPacketSend = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketSend = new TableLayoutPanelEx();
+            this.tableLayoutPanel2 = new TableLayoutPanelEx();
             this.rbSendType_Continuously = new AntdUI.Radio();
             this.nudSendType_Times = new AntdUI.InputNumber();
             this.nudSendType_Interval = new AntdUI.InputNumber();
             this.rbSendType_Times = new AntdUI.Radio();
             this.dPacketSend = new AntdUI.Divider();
             this.pPacketSocket = new AntdUI.Panel();
-            this.tlpPacketSocket = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpFilterProgression = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketSocket = new TableLayoutPanelEx();
+            this.tlpFilterProgression = new TableLayoutPanelEx();
             this.nudPacketLength = new AntdUI.InputNumber();
             this.lPacketLength = new AntdUI.Label();
             this.lPacketTo = new AntdUI.Label();
@@ -875,10 +875,10 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpPacketEdit;
+        private TableLayoutPanelEx tlpPacketEdit;
         private AntdUI.Panel pPacketData;
         private Be.Windows.Forms.HexBox hbPacketEdit;
-        private System.Windows.Forms.TableLayoutPanel tlpSendCollectionInfo;
+        private TableLayoutPanelEx tlpSendCollectionInfo;
         private AntdUI.Label lSend_Fail_CNT;
         private AntdUI.Label lSend_Success_CNT;
         private AntdUI.Label lTotal_Send_CNT;
@@ -887,15 +887,15 @@
         private AntdUI.Label lSend_Fail;
         private AntdUI.Label lSend_Success;
         private AntdUI.Label lTotal_Send;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bStop;
         private AntdUI.Button bSend;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketSettings;
+        private TableLayoutPanelEx tlpPacketSettings;
         private AntdUI.Panel pProgression;
-        private System.Windows.Forms.TableLayoutPanel tlpProgression;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private TableLayoutPanelEx tlpProgression;
+        private TableLayoutPanelEx tableLayoutPanel4;
         private AntdUI.InputNumber nudProgressionCarry;
         private AntdUI.Checkbox cbProgressionCarry;
         private AntdUI.Checkbox cbProgressionPosition;
@@ -903,16 +903,16 @@
         private AntdUI.InputNumber nudProgressionStep;
         private AntdUI.Divider dProgression;
         private AntdUI.Panel pPacketSend;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketSend;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanelEx tlpPacketSend;
+        private TableLayoutPanelEx tableLayoutPanel2;
         private AntdUI.Radio rbSendType_Continuously;
         private AntdUI.InputNumber nudSendType_Times;
         private AntdUI.InputNumber nudSendType_Interval;
         private AntdUI.Radio rbSendType_Times;
         private AntdUI.Divider dPacketSend;
         private AntdUI.Panel pPacketSocket;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketSocket;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterProgression;
+        private TableLayoutPanelEx tlpPacketSocket;
+        private TableLayoutPanelEx tlpFilterProgression;
         private AntdUI.InputNumber nudPacketLength;
         private AntdUI.Label lPacketLength;
         private AntdUI.Label lPacketTo;

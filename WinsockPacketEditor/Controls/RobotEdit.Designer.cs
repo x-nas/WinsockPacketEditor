@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpRobotEdit = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpRobotEdit = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bStop = new AntdUI.Button();
             this.bExecute = new AntdUI.Button();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpRobotINST = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpRobotINST = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cRobotINST = new AntdUI.Collapse();
             this.ciPacketINST = new AntdUI.CollapseItem();
-            this.tlpPacketINST = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketINST = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pSYSSocket = new AntdUI.Panel();
-            this.tlpSYSSocket2 = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpSYSSocket = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSYSSocket2 = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpSYSSocket = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lSelectFilter = new AntdUI.Label();
             this.rbSelectSocket = new AntdUI.Radio();
             this.rbSelectFilter = new AntdUI.Radio();
@@ -50,29 +50,29 @@
             this.nudSelectSocket = new AntdUI.InputNumber();
             this.dSYSSocket = new AntdUI.Divider();
             this.pPacketList = new AntdUI.Panel();
-            this.tlpPacketList2 = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpPacketList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketList2 = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpPacketList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bInsert_PacketList = new AntdUI.Button();
             this.lPacketList = new AntdUI.Label();
             this.dPacketList = new AntdUI.Divider();
             this.pSendList = new AntdUI.Panel();
-            this.tlpSendList2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendList2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dSendList = new AntdUI.Divider();
-            this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.ddlSendList = new AntdUI.Select();
             this.bInsert_SendList = new AntdUI.Button();
             this.ciControlINST = new AntdUI.CollapseItem();
-            this.tlpControlINST = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpControlINST = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pLoop = new AntdUI.Panel();
-            this.tlpLoop = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpLoop = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dLoop = new AntdUI.Divider();
-            this.tlpLoop2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpLoop2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudLoop = new AntdUI.InputNumber();
             this.bInsert_LoopStart = new AntdUI.Button();
             this.bInsert_LoopEnd = new AntdUI.Button();
             this.pDelay = new AntdUI.Panel();
-            this.tlpDelay = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpDelay2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpDelay = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpDelay2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudnudDelayRandom_To = new AntdUI.InputNumber();
             this.nudDelayFix = new AntdUI.InputNumber();
             this.rbDelayRandom = new AntdUI.Radio();
@@ -81,22 +81,22 @@
             this.nudnudDelayRandom_From = new AntdUI.InputNumber();
             this.dDelay = new AntdUI.Divider();
             this.ciKeyBoardINST = new AntdUI.CollapseItem();
-            this.tlpKeyboardINST = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpKeyboardINST = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pText = new AntdUI.Panel();
-            this.tlpText = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpText = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dText = new AntdUI.Divider();
-            this.tlpText2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpText2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bInsert_Text = new AntdUI.Button();
             this.txtText = new AntdUI.Input();
             this.pKeyCombination = new AntdUI.Panel();
-            this.tlpKeyCombination = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpKeyCombination = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dKeyCombination = new AntdUI.Divider();
-            this.tlpKeyCombination2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpKeyCombination2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bInsert_KeyCombination = new AntdUI.Button();
             this.txtKeyCombination = new WinsockPacketEditor.HotkeyTextBox();
             this.pKeyBoard = new AntdUI.Panel();
-            this.tlpKey = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpKey2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpKey = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpKey2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bInsert_KeyBoard = new AntdUI.Button();
             this.lkey = new AntdUI.Label();
             this.lKeyType = new AntdUI.Label();
@@ -104,28 +104,28 @@
             this.ddlKeyType = new AntdUI.Select();
             this.dkey = new AntdUI.Divider();
             this.ciMouseINST = new AntdUI.CollapseItem();
-            this.tlpMouseINST = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMouseINST = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pMouseMove = new AntdUI.Panel();
-            this.tlpMouseMove = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMouseMove = new WinsockPacketEditor.TableLayoutPanelEx();
             this.divider8 = new AntdUI.Divider();
-            this.tlpMouseMove2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMouseMove2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudMouseMove_X = new AntdUI.InputNumber();
             this.rbMoveBy = new AntdUI.Radio();
             this.bInsert_MouseMove = new AntdUI.Button();
             this.nudMouseMove_Y = new AntdUI.InputNumber();
             this.rbMoveTo = new AntdUI.Radio();
             this.pMouseWheel = new AntdUI.Panel();
-            this.tlpMouseWheel = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMouseWheel = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dMouseWheel = new AntdUI.Divider();
-            this.tlpMouseWheel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMouseWheel2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lWheelDistance = new AntdUI.Label();
             this.ddlMouseWheel = new AntdUI.Select();
             this.lMouseWheel = new AntdUI.Label();
             this.bInsert_MouseWheel = new AntdUI.Button();
             this.nudWheelDistance = new AntdUI.InputNumber();
             this.pMouseKey = new AntdUI.Panel();
-            this.tlpMouseKey = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpMouseKey2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMouseKey = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpMouseKey2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bInsert_MouseKey = new AntdUI.Button();
             this.lMouseKey = new AntdUI.Label();
             this.ddlMouseKey = new AntdUI.Select();
@@ -186,6 +186,7 @@
             // 
             this.tlpRobotEdit.ColumnCount = 1;
             this.tlpRobotEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpRobotEdit.Controls.Add(this.tlpButton, 0, 1);
             this.tlpRobotEdit.Controls.Add(this.tlpRobotINST, 0, 0);
             this.tlpRobotEdit.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -238,9 +239,9 @@
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
             this.bStop.LocalizationText = "Stop";
-            this.bStop.Location = new System.Drawing.Point(450, 7);
+            this.bStop.Location = new System.Drawing.Point(455, 7);
             this.bStop.Name = "bStop";
-            this.bStop.Size = new System.Drawing.Size(87, 46);
+            this.bStop.Size = new System.Drawing.Size(82, 46);
             this.bStop.TabIndex = 3;
             this.bStop.Text = "停止";
             this.bStop.Type = AntdUI.TTypeMini.Primary;
@@ -258,9 +259,9 @@
             this.bExecute.LoadingWaveValue = 0.6F;
             this.bExecute.LoadingWaveVertical = true;
             this.bExecute.LocalizationText = "Execute";
-            this.bExecute.Location = new System.Drawing.Point(337, 7);
+            this.bExecute.Location = new System.Drawing.Point(347, 7);
             this.bExecute.Name = "bExecute";
-            this.bExecute.Size = new System.Drawing.Size(87, 46);
+            this.bExecute.Size = new System.Drawing.Size(82, 46);
             this.bExecute.TabIndex = 2;
             this.bExecute.Text = "执行";
             this.bExecute.Type = AntdUI.TTypeMini.Info;
@@ -280,7 +281,7 @@
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(563, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -293,9 +294,9 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(676, 7);
+            this.bExit.Location = new System.Drawing.Point(671, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -427,9 +428,9 @@
             // 
             this.lSelectFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSelectFilter.LocalizationText = "RobotEditForm.PacketINST.SetSSocket.Filter";
-            this.lSelectFilter.Location = new System.Drawing.Point(57, 51);
+            this.lSelectFilter.Location = new System.Drawing.Point(55, 51);
             this.lSelectFilter.Name = "lSelectFilter";
-            this.lSelectFilter.Size = new System.Drawing.Size(404, 39);
+            this.lSelectFilter.Size = new System.Drawing.Size(408, 39);
             this.lSelectFilter.TabIndex = 7;
             this.lSelectFilter.Text = "调用滤镜的套接字";
             // 
@@ -439,7 +440,7 @@
             this.rbSelectSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSelectSocket.Location = new System.Drawing.Point(3, 96);
             this.rbSelectSocket.Name = "rbSelectSocket";
-            this.rbSelectSocket.Size = new System.Drawing.Size(48, 39);
+            this.rbSelectSocket.Size = new System.Drawing.Size(46, 39);
             this.rbSelectSocket.TabIndex = 5;
             this.rbSelectSocket.Text = "=";
             // 
@@ -449,7 +450,7 @@
             this.rbSelectFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSelectFilter.Location = new System.Drawing.Point(3, 51);
             this.rbSelectFilter.Name = "rbSelectFilter";
-            this.rbSelectFilter.Size = new System.Drawing.Size(48, 39);
+            this.rbSelectFilter.Size = new System.Drawing.Size(46, 39);
             this.rbSelectFilter.TabIndex = 3;
             this.rbSelectFilter.Text = "=";
             // 
@@ -458,9 +459,9 @@
             this.bInsert_SYSSocket.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_SYSSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_SYSSocket.IconSvg = "ArrowRightOutlined";
-            this.bInsert_SYSSocket.Location = new System.Drawing.Point(467, 3);
+            this.bInsert_SYSSocket.Location = new System.Drawing.Point(469, 3);
             this.bInsert_SYSSocket.Name = "bInsert_SYSSocket";
-            this.bInsert_SYSSocket.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_SYSSocket.Size = new System.Drawing.Size(40, 40);
             this.bInsert_SYSSocket.TabIndex = 1;
             this.bInsert_SYSSocket.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_SYSSocket.Click += new System.EventHandler(this.bInsert_SYSSocket_Click);
@@ -472,7 +473,7 @@
             this.rbSelectPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSelectPacket.Location = new System.Drawing.Point(3, 3);
             this.rbSelectPacket.Name = "rbSelectPacket";
-            this.rbSelectPacket.Size = new System.Drawing.Size(48, 42);
+            this.rbSelectPacket.Size = new System.Drawing.Size(46, 42);
             this.rbSelectPacket.TabIndex = 2;
             this.rbSelectPacket.Text = "=";
             // 
@@ -480,23 +481,23 @@
             // 
             this.lSelectPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSelectPacket.LocalizationText = "RobotEditForm.PacketINST.SetSSocket.Select";
-            this.lSelectPacket.Location = new System.Drawing.Point(57, 3);
+            this.lSelectPacket.Location = new System.Drawing.Point(55, 3);
             this.lSelectPacket.Name = "lSelectPacket";
-            this.lSelectPacket.Size = new System.Drawing.Size(404, 42);
+            this.lSelectPacket.Size = new System.Drawing.Size(408, 42);
             this.lSelectPacket.TabIndex = 6;
             this.lSelectPacket.Text = "选中封包的套接字";
             // 
             // nudSelectSocket
             // 
             this.nudSelectSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudSelectSocket.Location = new System.Drawing.Point(57, 96);
+            this.nudSelectSocket.Location = new System.Drawing.Point(55, 96);
             this.nudSelectSocket.Minimum = new decimal(new int[] {
             0,
             0,
             0,
             0});
             this.nudSelectSocket.Name = "nudSelectSocket";
-            this.nudSelectSocket.Size = new System.Drawing.Size(404, 39);
+            this.nudSelectSocket.Size = new System.Drawing.Size(408, 39);
             this.nudSelectSocket.TabIndex = 8;
             this.nudSelectSocket.Text = "0";
             // 
@@ -562,9 +563,9 @@
             this.bInsert_PacketList.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_PacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_PacketList.IconSvg = "ArrowRightOutlined";
-            this.bInsert_PacketList.Location = new System.Drawing.Point(467, 3);
+            this.bInsert_PacketList.Location = new System.Drawing.Point(469, 3);
             this.bInsert_PacketList.Name = "bInsert_PacketList";
-            this.bInsert_PacketList.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_PacketList.Size = new System.Drawing.Size(40, 40);
             this.bInsert_PacketList.TabIndex = 1;
             this.bInsert_PacketList.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_PacketList.Click += new System.EventHandler(this.bInsert_PacketList_Click);
@@ -577,7 +578,7 @@
             this.lPacketList.Location = new System.Drawing.Point(3, 3);
             this.lPacketList.Name = "lPacketList";
             this.lPacketList.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lPacketList.Size = new System.Drawing.Size(458, 39);
+            this.lPacketList.Size = new System.Drawing.Size(460, 39);
             this.lPacketList.TabIndex = 2;
             this.lPacketList.Text = "封包列表中选中的封包";
             // 
@@ -658,7 +659,7 @@
             this.ddlSendList.Location = new System.Drawing.Point(3, 3);
             this.ddlSendList.Name = "ddlSendList";
             this.ddlSendList.PlaceholderText = "请选择";
-            this.ddlSendList.Size = new System.Drawing.Size(458, 39);
+            this.ddlSendList.Size = new System.Drawing.Size(460, 39);
             this.ddlSendList.TabIndex = 0;
             // 
             // bInsert_SendList
@@ -666,9 +667,9 @@
             this.bInsert_SendList.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_SendList.IconSvg = "ArrowRightOutlined";
-            this.bInsert_SendList.Location = new System.Drawing.Point(467, 3);
+            this.bInsert_SendList.Location = new System.Drawing.Point(469, 3);
             this.bInsert_SendList.Name = "bInsert_SendList";
-            this.bInsert_SendList.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_SendList.Size = new System.Drawing.Size(40, 40);
             this.bInsert_SendList.TabIndex = 1;
             this.bInsert_SendList.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_SendList.Click += new System.EventHandler(this.bInsert_SendList_Click);
@@ -772,7 +773,7 @@
             0,
             0});
             this.nudLoop.Name = "nudLoop";
-            this.nudLoop.Size = new System.Drawing.Size(290, 42);
+            this.nudLoop.Size = new System.Drawing.Size(306, 42);
             this.nudLoop.SuffixText = "次";
             this.nudLoop.TabIndex = 10;
             this.nudLoop.Text = "1";
@@ -790,9 +791,9 @@
             this.bInsert_LoopStart.IconPosition = AntdUI.TAlignMini.Right;
             this.bInsert_LoopStart.IconSvg = "ArrowRightOutlined";
             this.bInsert_LoopStart.LocalizationText = "Begin";
-            this.bInsert_LoopStart.Location = new System.Drawing.Point(299, 3);
+            this.bInsert_LoopStart.Location = new System.Drawing.Point(315, 3);
             this.bInsert_LoopStart.Name = "bInsert_LoopStart";
-            this.bInsert_LoopStart.Size = new System.Drawing.Size(77, 42);
+            this.bInsert_LoopStart.Size = new System.Drawing.Size(69, 40);
             this.bInsert_LoopStart.TabIndex = 2;
             this.bInsert_LoopStart.Text = "开始";
             this.bInsert_LoopStart.Type = AntdUI.TTypeMini.Primary;
@@ -805,9 +806,9 @@
             this.bInsert_LoopEnd.IconPosition = AntdUI.TAlignMini.Right;
             this.bInsert_LoopEnd.IconSvg = "ArrowRightOutlined";
             this.bInsert_LoopEnd.LocalizationText = "End";
-            this.bInsert_LoopEnd.Location = new System.Drawing.Point(382, 3);
+            this.bInsert_LoopEnd.Location = new System.Drawing.Point(390, 3);
             this.bInsert_LoopEnd.Name = "bInsert_LoopEnd";
-            this.bInsert_LoopEnd.Size = new System.Drawing.Size(77, 42);
+            this.bInsert_LoopEnd.Size = new System.Drawing.Size(69, 40);
             this.bInsert_LoopEnd.TabIndex = 1;
             this.bInsert_LoopEnd.Text = "结束";
             this.bInsert_LoopEnd.Type = AntdUI.TTypeMini.Primary;
@@ -877,7 +878,7 @@
             0,
             0});
             this.nudnudDelayRandom_To.Name = "nudnudDelayRandom_To";
-            this.nudnudDelayRandom_To.Size = new System.Drawing.Size(165, 39);
+            this.nudnudDelayRandom_To.Size = new System.Drawing.Size(167, 39);
             this.nudnudDelayRandom_To.SuffixText = "毫秒";
             this.nudnudDelayRandom_To.TabIndex = 11;
             this.nudnudDelayRandom_To.Text = "100";
@@ -892,14 +893,14 @@
             // 
             this.nudDelayFix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudDelayFix.LocalizationSuffixText = "Millisecond";
-            this.nudDelayFix.Location = new System.Drawing.Point(74, 3);
+            this.nudDelayFix.Location = new System.Drawing.Point(72, 3);
             this.nudDelayFix.Minimum = new decimal(new int[] {
             0,
             0,
             0,
             0});
             this.nudDelayFix.Name = "nudDelayFix";
-            this.nudDelayFix.Size = new System.Drawing.Size(165, 42);
+            this.nudDelayFix.Size = new System.Drawing.Size(167, 42);
             this.nudDelayFix.SuffixText = "毫秒";
             this.nudDelayFix.TabIndex = 9;
             this.nudDelayFix.Text = "100";
@@ -917,7 +918,7 @@
             this.rbDelayRandom.LocalizationText = "RobotEditForm.ControlINST.Delay.Random";
             this.rbDelayRandom.Location = new System.Drawing.Point(3, 51);
             this.rbDelayRandom.Name = "rbDelayRandom";
-            this.rbDelayRandom.Size = new System.Drawing.Size(65, 39);
+            this.rbDelayRandom.Size = new System.Drawing.Size(63, 39);
             this.rbDelayRandom.TabIndex = 5;
             this.rbDelayRandom.Text = "随机";
             this.rbDelayRandom.CheckedChanged += new AntdUI.BoolEventHandler(this.rbDelayRandom_CheckedChanged);
@@ -927,9 +928,9 @@
             this.bInsert_Delay.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_Delay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_Delay.IconSvg = "ArrowRightOutlined";
-            this.bInsert_Delay.Location = new System.Drawing.Point(416, 3);
+            this.bInsert_Delay.Location = new System.Drawing.Point(418, 3);
             this.bInsert_Delay.Name = "bInsert_Delay";
-            this.bInsert_Delay.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_Delay.Size = new System.Drawing.Size(40, 40);
             this.bInsert_Delay.TabIndex = 1;
             this.bInsert_Delay.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_Delay.Click += new System.EventHandler(this.bInsert_Delay_Click);
@@ -942,7 +943,7 @@
             this.rbDelayFix.LocalizationText = "RobotEditForm.ControlINST.Delay.Fixed";
             this.rbDelayFix.Location = new System.Drawing.Point(3, 3);
             this.rbDelayFix.Name = "rbDelayFix";
-            this.rbDelayFix.Size = new System.Drawing.Size(65, 42);
+            this.rbDelayFix.Size = new System.Drawing.Size(63, 42);
             this.rbDelayFix.TabIndex = 2;
             this.rbDelayFix.Text = "定时";
             this.rbDelayFix.CheckedChanged += new AntdUI.BoolEventHandler(this.rbDelayFix_CheckedChanged);
@@ -951,14 +952,14 @@
             // 
             this.nudnudDelayRandom_From.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudnudDelayRandom_From.LocalizationSuffixText = "";
-            this.nudnudDelayRandom_From.Location = new System.Drawing.Point(74, 51);
+            this.nudnudDelayRandom_From.Location = new System.Drawing.Point(72, 51);
             this.nudnudDelayRandom_From.Minimum = new decimal(new int[] {
             0,
             0,
             0,
             0});
             this.nudnudDelayRandom_From.Name = "nudnudDelayRandom_From";
-            this.nudnudDelayRandom_From.Size = new System.Drawing.Size(165, 39);
+            this.nudnudDelayRandom_From.Size = new System.Drawing.Size(167, 39);
             this.nudnudDelayRandom_From.SuffixText = "-";
             this.nudnudDelayRandom_From.TabIndex = 8;
             this.nudnudDelayRandom_From.Text = "0";
@@ -1069,9 +1070,9 @@
             this.bInsert_Text.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_Text.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_Text.IconSvg = "ArrowRightOutlined";
-            this.bInsert_Text.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_Text.Location = new System.Drawing.Point(419, 3);
             this.bInsert_Text.Name = "bInsert_Text";
-            this.bInsert_Text.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_Text.Size = new System.Drawing.Size(40, 40);
             this.bInsert_Text.TabIndex = 1;
             this.bInsert_Text.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_Text.Click += new System.EventHandler(this.bInsert_Text_Click);
@@ -1083,7 +1084,7 @@
             this.txtText.Location = new System.Drawing.Point(3, 3);
             this.txtText.Name = "txtText";
             this.txtText.PlaceholderText = "请输入文本";
-            this.txtText.Size = new System.Drawing.Size(408, 42);
+            this.txtText.Size = new System.Drawing.Size(410, 42);
             this.txtText.TabIndex = 2;
             // 
             // pKeyCombination
@@ -1149,9 +1150,9 @@
             this.bInsert_KeyCombination.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_KeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_KeyCombination.IconSvg = "ArrowRightOutlined";
-            this.bInsert_KeyCombination.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_KeyCombination.Location = new System.Drawing.Point(419, 3);
             this.bInsert_KeyCombination.Name = "bInsert_KeyCombination";
-            this.bInsert_KeyCombination.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_KeyCombination.Size = new System.Drawing.Size(40, 40);
             this.bInsert_KeyCombination.TabIndex = 1;
             this.bInsert_KeyCombination.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_KeyCombination.Click += new System.EventHandler(this.bInsert_KeyCombination_Click);
@@ -1166,7 +1167,7 @@
             this.txtKeyCombination.Name = "txtKeyCombination";
             this.txtKeyCombination.PlaceholderText = "请组合按键";
             this.txtKeyCombination.ReadOnly = true;
-            this.txtKeyCombination.Size = new System.Drawing.Size(408, 42);
+            this.txtKeyCombination.Size = new System.Drawing.Size(410, 42);
             this.txtKeyCombination.TabIndex = 2;
             this.txtKeyCombination.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -1227,9 +1228,9 @@
             this.bInsert_KeyBoard.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_KeyBoard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_KeyBoard.IconSvg = "ArrowRightOutlined";
-            this.bInsert_KeyBoard.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_KeyBoard.Location = new System.Drawing.Point(419, 3);
             this.bInsert_KeyBoard.Name = "bInsert_KeyBoard";
-            this.bInsert_KeyBoard.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_KeyBoard.Size = new System.Drawing.Size(40, 40);
             this.bInsert_KeyBoard.TabIndex = 1;
             this.bInsert_KeyBoard.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_KeyBoard.Click += new System.EventHandler(this.bInsert_KeyBoard_Click);
@@ -1265,7 +1266,7 @@
             this.txtKey.Location = new System.Drawing.Point(53, 3);
             this.txtKey.Name = "txtKey";
             this.txtKey.PlaceholderText = "请按键";
-            this.txtKey.Size = new System.Drawing.Size(358, 42);
+            this.txtKey.Size = new System.Drawing.Size(360, 42);
             this.txtKey.TabIndex = 14;
             this.txtKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKey_KeyDown);
@@ -1278,7 +1279,7 @@
             this.ddlKeyType.Location = new System.Drawing.Point(53, 51);
             this.ddlKeyType.Name = "ddlKeyType";
             this.ddlKeyType.PlaceholderText = "请选择";
-            this.ddlKeyType.Size = new System.Drawing.Size(358, 39);
+            this.ddlKeyType.Size = new System.Drawing.Size(360, 39);
             this.ddlKeyType.TabIndex = 15;
             this.ddlKeyType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -1391,7 +1392,7 @@
             // 
             this.nudMouseMove_X.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudMouseMove_X.LocalizationSuffixText = "Pixel";
-            this.nudMouseMove_X.Location = new System.Drawing.Point(3, 51);
+            this.nudMouseMove_X.Location = new System.Drawing.Point(3, 49);
             this.nudMouseMove_X.Minimum = new decimal(new int[] {
             0,
             0,
@@ -1399,7 +1400,7 @@
             0});
             this.nudMouseMove_X.Name = "nudMouseMove_X";
             this.nudMouseMove_X.PrefixText = "X :";
-            this.nudMouseMove_X.Size = new System.Drawing.Size(201, 39);
+            this.nudMouseMove_X.Size = new System.Drawing.Size(202, 39);
             this.nudMouseMove_X.SuffixText = "像素";
             this.nudMouseMove_X.TabIndex = 19;
             this.nudMouseMove_X.Text = "0";
@@ -1410,9 +1411,9 @@
             this.rbMoveBy.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbMoveBy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbMoveBy.LocalizationText = "MoveBy";
-            this.rbMoveBy.Location = new System.Drawing.Point(210, 3);
+            this.rbMoveBy.Location = new System.Drawing.Point(211, 3);
             this.rbMoveBy.Name = "rbMoveBy";
-            this.rbMoveBy.Size = new System.Drawing.Size(92, 38);
+            this.rbMoveBy.Size = new System.Drawing.Size(90, 36);
             this.rbMoveBy.TabIndex = 18;
             this.rbMoveBy.Text = "相对移动";
             // 
@@ -1421,9 +1422,9 @@
             this.bInsert_MouseMove.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_MouseMove.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_MouseMove.IconSvg = "ArrowRightOutlined";
-            this.bInsert_MouseMove.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_MouseMove.Location = new System.Drawing.Point(419, 3);
             this.bInsert_MouseMove.Name = "bInsert_MouseMove";
-            this.bInsert_MouseMove.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_MouseMove.Size = new System.Drawing.Size(40, 40);
             this.bInsert_MouseMove.TabIndex = 1;
             this.bInsert_MouseMove.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_MouseMove.Click += new System.EventHandler(this.bInsert_MouseMove_Click);
@@ -1432,7 +1433,7 @@
             // 
             this.nudMouseMove_Y.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudMouseMove_Y.LocalizationSuffixText = "Pixel";
-            this.nudMouseMove_Y.Location = new System.Drawing.Point(210, 51);
+            this.nudMouseMove_Y.Location = new System.Drawing.Point(211, 49);
             this.nudMouseMove_Y.Minimum = new decimal(new int[] {
             0,
             0,
@@ -1440,7 +1441,7 @@
             0});
             this.nudMouseMove_Y.Name = "nudMouseMove_Y";
             this.nudMouseMove_Y.PrefixText = "Y :";
-            this.nudMouseMove_Y.Size = new System.Drawing.Size(201, 39);
+            this.nudMouseMove_Y.Size = new System.Drawing.Size(202, 39);
             this.nudMouseMove_Y.SuffixText = "像素";
             this.nudMouseMove_Y.TabIndex = 16;
             this.nudMouseMove_Y.Text = "0";
@@ -1454,7 +1455,7 @@
             this.rbMoveTo.LocalizationText = "MoveTo";
             this.rbMoveTo.Location = new System.Drawing.Point(3, 3);
             this.rbMoveTo.Name = "rbMoveTo";
-            this.rbMoveTo.Size = new System.Drawing.Size(78, 38);
+            this.rbMoveTo.Size = new System.Drawing.Size(76, 36);
             this.rbMoveTo.TabIndex = 17;
             this.rbMoveTo.Text = "移动到";
             // 
@@ -1543,7 +1544,7 @@
             this.ddlMouseWheel.Name = "ddlMouseWheel";
             this.ddlMouseWheel.PlaceholderText = "请选择";
             this.ddlMouseWheel.PrefixSvg = "";
-            this.ddlMouseWheel.Size = new System.Drawing.Size(358, 42);
+            this.ddlMouseWheel.Size = new System.Drawing.Size(360, 42);
             this.ddlMouseWheel.TabIndex = 14;
             this.ddlMouseWheel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -1564,9 +1565,9 @@
             this.bInsert_MouseWheel.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_MouseWheel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_MouseWheel.IconSvg = "ArrowRightOutlined";
-            this.bInsert_MouseWheel.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_MouseWheel.Location = new System.Drawing.Point(419, 3);
             this.bInsert_MouseWheel.Name = "bInsert_MouseWheel";
-            this.bInsert_MouseWheel.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_MouseWheel.Size = new System.Drawing.Size(40, 40);
             this.bInsert_MouseWheel.TabIndex = 1;
             this.bInsert_MouseWheel.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_MouseWheel.Click += new System.EventHandler(this.bInsert_MouseWheel_Click);
@@ -1582,7 +1583,7 @@
             0,
             0});
             this.nudWheelDistance.Name = "nudWheelDistance";
-            this.nudWheelDistance.Size = new System.Drawing.Size(358, 39);
+            this.nudWheelDistance.Size = new System.Drawing.Size(360, 39);
             this.nudWheelDistance.SuffixText = "像素";
             this.nudWheelDistance.TabIndex = 16;
             this.nudWheelDistance.Text = "10";
@@ -1647,9 +1648,9 @@
             this.bInsert_MouseKey.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bInsert_MouseKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_MouseKey.IconSvg = "ArrowRightOutlined";
-            this.bInsert_MouseKey.Location = new System.Drawing.Point(417, 3);
+            this.bInsert_MouseKey.Location = new System.Drawing.Point(419, 3);
             this.bInsert_MouseKey.Name = "bInsert_MouseKey";
-            this.bInsert_MouseKey.Size = new System.Drawing.Size(42, 42);
+            this.bInsert_MouseKey.Size = new System.Drawing.Size(40, 40);
             this.bInsert_MouseKey.TabIndex = 1;
             this.bInsert_MouseKey.Type = AntdUI.TTypeMini.Primary;
             this.bInsert_MouseKey.Click += new System.EventHandler(this.bInsert_MouseKey_Click);
@@ -1674,7 +1675,7 @@
             this.ddlMouseKey.Location = new System.Drawing.Point(53, 3);
             this.ddlMouseKey.Name = "ddlMouseKey";
             this.ddlMouseKey.PlaceholderText = "请选择";
-            this.ddlMouseKey.Size = new System.Drawing.Size(358, 42);
+            this.ddlMouseKey.Size = new System.Drawing.Size(360, 42);
             this.ddlMouseKey.TabIndex = 13;
             this.ddlMouseKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -1821,19 +1822,19 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpRobotEdit;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpRobotEdit;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bStop;
         private AntdUI.Button bExecute;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private System.Windows.Forms.TableLayoutPanel tlpRobotINST;
+        private TableLayoutPanelEx tlpRobotINST;
         private AntdUI.Collapse cRobotINST;
         private AntdUI.CollapseItem ciPacketINST;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketINST;
+        private TableLayoutPanelEx tlpPacketINST;
         private AntdUI.Panel pSYSSocket;
-        private System.Windows.Forms.TableLayoutPanel tlpSYSSocket2;
-        private System.Windows.Forms.TableLayoutPanel tlpSYSSocket;
+        private TableLayoutPanelEx tlpSYSSocket2;
+        private TableLayoutPanelEx tlpSYSSocket;
         private AntdUI.Label lSelectFilter;
         private AntdUI.Radio rbSelectSocket;
         private AntdUI.Radio rbSelectFilter;
@@ -1843,29 +1844,29 @@
         private AntdUI.InputNumber nudSelectSocket;
         private AntdUI.Divider dSYSSocket;
         private AntdUI.Panel pPacketList;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketList2;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketList;
+        private TableLayoutPanelEx tlpPacketList2;
+        private TableLayoutPanelEx tlpPacketList;
         private AntdUI.Button bInsert_PacketList;
         private AntdUI.Label lPacketList;
         private AntdUI.Divider dPacketList;
         private AntdUI.Panel pSendList;
-        private System.Windows.Forms.TableLayoutPanel tlpSendList2;
+        private TableLayoutPanelEx tlpSendList2;
         private AntdUI.Divider dSendList;
-        private System.Windows.Forms.TableLayoutPanel tlpSendList;
+        private TableLayoutPanelEx tlpSendList;
         private AntdUI.Select ddlSendList;
         private AntdUI.Button bInsert_SendList;
         private AntdUI.CollapseItem ciControlINST;
-        private System.Windows.Forms.TableLayoutPanel tlpControlINST;
+        private TableLayoutPanelEx tlpControlINST;
         private AntdUI.Panel pLoop;
-        private System.Windows.Forms.TableLayoutPanel tlpLoop;
+        private TableLayoutPanelEx tlpLoop;
         private AntdUI.Divider dLoop;
-        private System.Windows.Forms.TableLayoutPanel tlpLoop2;
+        private TableLayoutPanelEx tlpLoop2;
         private AntdUI.InputNumber nudLoop;
         private AntdUI.Button bInsert_LoopStart;
         private AntdUI.Button bInsert_LoopEnd;
         private AntdUI.Panel pDelay;
-        private System.Windows.Forms.TableLayoutPanel tlpDelay;
-        private System.Windows.Forms.TableLayoutPanel tlpDelay2;
+        private TableLayoutPanelEx tlpDelay;
+        private TableLayoutPanelEx tlpDelay2;
         private AntdUI.InputNumber nudnudDelayRandom_To;
         private AntdUI.InputNumber nudDelayFix;
         private AntdUI.Radio rbDelayRandom;
@@ -1874,22 +1875,22 @@
         private AntdUI.InputNumber nudnudDelayRandom_From;
         private AntdUI.Divider dDelay;
         private AntdUI.CollapseItem ciKeyBoardINST;
-        private System.Windows.Forms.TableLayoutPanel tlpKeyboardINST;
+        private TableLayoutPanelEx tlpKeyboardINST;
         private AntdUI.Panel pText;
-        private System.Windows.Forms.TableLayoutPanel tlpText;
+        private TableLayoutPanelEx tlpText;
         private AntdUI.Divider dText;
-        private System.Windows.Forms.TableLayoutPanel tlpText2;
+        private TableLayoutPanelEx tlpText2;
         private AntdUI.Button bInsert_Text;
         private AntdUI.Input txtText;
         private AntdUI.Panel pKeyCombination;
-        private System.Windows.Forms.TableLayoutPanel tlpKeyCombination;
+        private TableLayoutPanelEx tlpKeyCombination;
         private AntdUI.Divider dKeyCombination;
-        private System.Windows.Forms.TableLayoutPanel tlpKeyCombination2;
+        private TableLayoutPanelEx tlpKeyCombination2;
         private AntdUI.Button bInsert_KeyCombination;
         private HotkeyTextBox txtKeyCombination;
         private AntdUI.Panel pKeyBoard;
-        private System.Windows.Forms.TableLayoutPanel tlpKey;
-        private System.Windows.Forms.TableLayoutPanel tlpKey2;
+        private TableLayoutPanelEx tlpKey;
+        private TableLayoutPanelEx tlpKey2;
         private AntdUI.Button bInsert_KeyBoard;
         private AntdUI.Label lkey;
         private AntdUI.Label lKeyType;
@@ -1897,28 +1898,28 @@
         private AntdUI.Select ddlKeyType;
         private AntdUI.Divider dkey;
         private AntdUI.CollapseItem ciMouseINST;
-        private System.Windows.Forms.TableLayoutPanel tlpMouseINST;
+        private TableLayoutPanelEx tlpMouseINST;
         private AntdUI.Panel pMouseMove;
-        private System.Windows.Forms.TableLayoutPanel tlpMouseMove;
+        private TableLayoutPanelEx tlpMouseMove;
         private AntdUI.Divider divider8;
-        private System.Windows.Forms.TableLayoutPanel tlpMouseMove2;
+        private TableLayoutPanelEx tlpMouseMove2;
         private AntdUI.InputNumber nudMouseMove_X;
         private AntdUI.Radio rbMoveBy;
         private AntdUI.Button bInsert_MouseMove;
         private AntdUI.InputNumber nudMouseMove_Y;
         private AntdUI.Radio rbMoveTo;
         private AntdUI.Panel pMouseWheel;
-        private System.Windows.Forms.TableLayoutPanel tlpMouseWheel;
+        private TableLayoutPanelEx tlpMouseWheel;
         private AntdUI.Divider dMouseWheel;
-        private System.Windows.Forms.TableLayoutPanel tlpMouseWheel2;
+        private TableLayoutPanelEx tlpMouseWheel2;
         private AntdUI.Label lWheelDistance;
         private AntdUI.Select ddlMouseWheel;
         private AntdUI.Label lMouseWheel;
         private AntdUI.Button bInsert_MouseWheel;
         private AntdUI.InputNumber nudWheelDistance;
         private AntdUI.Panel pMouseKey;
-        private System.Windows.Forms.TableLayoutPanel tlpMouseKey;
-        private System.Windows.Forms.TableLayoutPanel tlpMouseKey2;
+        private TableLayoutPanelEx tlpMouseKey;
+        private TableLayoutPanelEx tlpMouseKey2;
         private AntdUI.Button bInsert_MouseKey;
         private AntdUI.Label lMouseKey;
         private AntdUI.Select ddlMouseKey;

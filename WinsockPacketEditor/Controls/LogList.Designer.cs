@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             AntdUI.Tabs.StyleCard styleCard1 = new AntdUI.Tabs.StyleCard();
-            this.tlpLogList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpLogList = new TableLayoutPanelEx();
             this.tabLogList = new AntdUI.Tabs();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
@@ -170,7 +170,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpLogList;
+        private TableLayoutPanelEx tlpLogList;
         private AntdUI.Tabs tabLogList;
         private AntdUI.TabPage tpSystemLog;
         private AntdUI.Table tSystemLog;

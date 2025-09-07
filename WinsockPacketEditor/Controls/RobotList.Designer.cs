@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpRobotList = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpRobotListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpRobotList = new TableLayoutPanelEx();
+            this.tlpRobotListButton = new TableLayoutPanelEx();
             this.bDisableAll = new AntdUI.Button();
             this.bEnableAll = new AntdUI.Button();
             this.ddMenu = new AntdUI.Dropdown();
@@ -202,8 +202,8 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpRobotList;
-        private System.Windows.Forms.TableLayoutPanel tlpRobotListButton;
+        private TableLayoutPanelEx tlpRobotList;
+        private TableLayoutPanelEx tlpRobotListButton;
         private AntdUI.Button bRobotList_Stop;
         private AntdUI.Button bRobotList_Start;
         private AntdUI.Table tRobotList;

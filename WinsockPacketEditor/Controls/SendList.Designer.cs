@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendList = new TableLayoutPanelEx();
             this.tSendList = new AntdUI.Table();
-            this.tlpSendListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendListButton = new TableLayoutPanelEx();
             this.bDisableAll = new AntdUI.Button();
             this.bEnableAll = new AntdUI.Button();
             this.ddMenu = new AntdUI.Dropdown();
@@ -204,9 +204,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpSendList;
+        private TableLayoutPanelEx tlpSendList;
         private AntdUI.Table tSendList;
-        private System.Windows.Forms.TableLayoutPanel tlpSendListButton;
+        private TableLayoutPanelEx tlpSendListButton;
         private AntdUI.Button bSendList_Stop;
         private AntdUI.Button bSendList_Start;
         private System.ComponentModel.BackgroundWorker bgwSendList;

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpSystemSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSystemSettings = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dFloatButton = new AntdUI.Divider();
-            this.tlpFilterActionColor = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpFilterActionColor = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bChangeReset = new AntdUI.Button();
             this.bInterceptReset = new AntdUI.Button();
             this.bReplaceReset = new AntdUI.Button();
@@ -45,10 +45,10 @@
             this.cRepalce_ForeColor = new AntdUI.ColorPicker();
             this.lReplace = new AntdUI.Label();
             this.cRepalce_BackColor = new AntdUI.ColorPicker();
-            this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpFilterSet = new WinsockPacketEditor.TableLayoutPanelEx();
             this.rbFilterSet_Sequence = new AntdUI.Radio();
             this.rbFilterSet_Priority = new AntdUI.Radio();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.cbSpeedMode = new AntdUI.Checkbox();
@@ -56,7 +56,7 @@
             this.dListExecute = new AntdUI.Divider();
             this.dFilterSet = new AntdUI.Divider();
             this.dFilterActionColor = new AntdUI.Divider();
-            this.tlpListExecute = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpListExecute = new WinsockPacketEditor.TableLayoutPanelEx();
             this.rbListExecute_Sequence = new AntdUI.Radio();
             this.rbListExecute_Together = new AntdUI.Radio();
             this.switchFloatButton = new AntdUI.Switch();
@@ -72,6 +72,7 @@
             this.tlpSystemSettings.AutoSize = true;
             this.tlpSystemSettings.ColumnCount = 1;
             this.tlpSystemSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSystemSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSystemSettings.Controls.Add(this.dFloatButton, 0, 3);
             this.tlpSystemSettings.Controls.Add(this.tlpFilterActionColor, 0, 11);
             this.tlpSystemSettings.Controls.Add(this.tlpFilterSet, 0, 9);
@@ -160,7 +161,7 @@
             this.bChangeReset.LocalizationText = "Reset";
             this.bChangeReset.Location = new System.Drawing.Point(380, 158);
             this.bChangeReset.Name = "bChangeReset";
-            this.bChangeReset.Size = new System.Drawing.Size(60, 46);
+            this.bChangeReset.Size = new System.Drawing.Size(62, 46);
             this.bChangeReset.TabIndex = 54;
             this.bChangeReset.Text = "还原";
             this.bChangeReset.Type = AntdUI.TTypeMini.Success;
@@ -173,7 +174,7 @@
             this.bInterceptReset.LocalizationText = "Reset";
             this.bInterceptReset.Location = new System.Drawing.Point(380, 106);
             this.bInterceptReset.Name = "bInterceptReset";
-            this.bInterceptReset.Size = new System.Drawing.Size(60, 46);
+            this.bInterceptReset.Size = new System.Drawing.Size(62, 46);
             this.bInterceptReset.TabIndex = 52;
             this.bInterceptReset.Text = "还原";
             this.bInterceptReset.Type = AntdUI.TTypeMini.Success;
@@ -186,7 +187,7 @@
             this.bReplaceReset.LocalizationText = "Reset";
             this.bReplaceReset.Location = new System.Drawing.Point(380, 54);
             this.bReplaceReset.Name = "bReplaceReset";
-            this.bReplaceReset.Size = new System.Drawing.Size(60, 46);
+            this.bReplaceReset.Size = new System.Drawing.Size(62, 46);
             this.bReplaceReset.TabIndex = 50;
             this.bReplaceReset.Text = "还原";
             this.bReplaceReset.Type = AntdUI.TTypeMini.Success;
@@ -344,7 +345,7 @@
             this.rbFilterSet_Sequence.LocalizationText = "SystemSettingsForm.Order";
             this.rbFilterSet_Sequence.Location = new System.Drawing.Point(253, 3);
             this.rbFilterSet_Sequence.Name = "rbFilterSet_Sequence";
-            this.rbFilterSet_Sequence.Size = new System.Drawing.Size(122, 42);
+            this.rbFilterSet_Sequence.Size = new System.Drawing.Size(124, 42);
             this.rbFilterSet_Sequence.TabIndex = 2;
             this.rbFilterSet_Sequence.Text = "按顺序执行";
             // 
@@ -355,7 +356,7 @@
             this.rbFilterSet_Priority.LocalizationText = "SystemSettingsForm.Priority";
             this.rbFilterSet_Priority.Location = new System.Drawing.Point(3, 3);
             this.rbFilterSet_Priority.Name = "rbFilterSet_Priority";
-            this.rbFilterSet_Priority.Size = new System.Drawing.Size(106, 42);
+            this.rbFilterSet_Priority.Size = new System.Drawing.Size(108, 42);
             this.rbFilterSet_Priority.TabIndex = 1;
             this.rbFilterSet_Priority.Text = "优先原则";
             // 
@@ -387,9 +388,9 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(150, 7);
+            this.bSave.Location = new System.Drawing.Point(155, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -404,7 +405,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -417,7 +418,7 @@
             this.cbSpeedMode.LocalizationText = "SystemSettingsForm.SpeedMode";
             this.cbSpeedMode.Location = new System.Drawing.Point(3, 32);
             this.cbSpeedMode.Name = "cbSpeedMode";
-            this.cbSpeedMode.Size = new System.Drawing.Size(106, 42);
+            this.cbSpeedMode.Size = new System.Drawing.Size(108, 42);
             this.cbSpeedMode.TabIndex = 6;
             this.cbSpeedMode.Text = "极速模式";
             // 
@@ -494,7 +495,7 @@
             this.rbListExecute_Sequence.LocalizationText = "SystemSettingsForm.Order";
             this.rbListExecute_Sequence.Location = new System.Drawing.Point(253, 3);
             this.rbListExecute_Sequence.Name = "rbListExecute_Sequence";
-            this.rbListExecute_Sequence.Size = new System.Drawing.Size(122, 42);
+            this.rbListExecute_Sequence.Size = new System.Drawing.Size(124, 42);
             this.rbListExecute_Sequence.TabIndex = 2;
             this.rbListExecute_Sequence.Text = "按顺序执行";
             // 
@@ -505,7 +506,7 @@
             this.rbListExecute_Together.LocalizationText = "SystemSettingsForm.Simultaneously";
             this.rbListExecute_Together.Location = new System.Drawing.Point(3, 3);
             this.rbListExecute_Together.Name = "rbListExecute_Together";
-            this.rbListExecute_Together.Size = new System.Drawing.Size(106, 42);
+            this.rbListExecute_Together.Size = new System.Drawing.Size(108, 42);
             this.rbListExecute_Together.TabIndex = 1;
             this.rbListExecute_Together.Text = "同时执行";
             // 
@@ -547,13 +548,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpSystemSettings;
+        private TableLayoutPanelEx tlpSystemSettings;
         private AntdUI.Divider dFloatButton;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterActionColor;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
+        private TableLayoutPanelEx tlpFilterActionColor;
+        private TableLayoutPanelEx tlpFilterSet;
         private AntdUI.Radio rbFilterSet_Sequence;
         private AntdUI.Radio rbFilterSet_Priority;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
         private AntdUI.Checkbox cbSpeedMode;
@@ -561,7 +562,7 @@
         private AntdUI.Divider dListExecute;
         private AntdUI.Divider dFilterSet;
         private AntdUI.Divider dFilterActionColor;
-        private System.Windows.Forms.TableLayoutPanel tlpListExecute;
+        private TableLayoutPanelEx tlpListExecute;
         private AntdUI.Radio rbListExecute_Sequence;
         private AntdUI.Radio rbListExecute_Together;
         private AntdUI.Switch switchFloatButton;

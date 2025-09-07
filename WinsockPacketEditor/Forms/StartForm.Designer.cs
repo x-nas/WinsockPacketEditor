@@ -32,7 +32,7 @@
             this.pageHeader = new AntdUI.PageHeader();
             this.btn_mode = new AntdUI.Button();
             this.btn_global = new AntdUI.Dropdown();
-            this.tlpSelectMode = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSelectMode = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pInjectMode = new AntdUI.Panel();
             this.lInject2 = new AntdUI.Label();
             this.lInject1 = new AntdUI.Label();
@@ -46,12 +46,12 @@
             this.lRemote1 = new AntdUI.Label();
             this.aRemoteMGT = new AntdUI.Avatar();
             this.aStartForm = new AntdUI.Avatar();
-            this.tlpBackground = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpBackground = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lBG2 = new AntdUI.Label();
             this.lBG1 = new AntdUI.Label();
-            this.tlpStartForm = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpStartForm = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lMore = new AntdUI.Label();
-            this.tlpMore = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMore = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bQA = new AntdUI.Button();
             this.bGitee = new AntdUI.Button();
             this.bGitHub = new AntdUI.Button();
@@ -365,6 +365,7 @@
             this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpStartForm.Controls.Add(this.aStartForm, 1, 1);
             this.tlpStartForm.Controls.Add(this.tlpSelectMode, 1, 3);
             this.tlpStartForm.Controls.Add(this.lMore, 1, 5);
@@ -433,7 +434,7 @@
             this.bQA.Location = new System.Drawing.Point(1, 139);
             this.bQA.Margin = new System.Windows.Forms.Padding(1);
             this.bQA.Name = "bQA";
-            this.bQA.Size = new System.Drawing.Size(108, 30);
+            this.bQA.Size = new System.Drawing.Size(110, 30);
             this.bQA.TabIndex = 8;
             this.bQA.Text = "问题 & 反馈";
             this.bQA.WaveSize = 0;
@@ -450,7 +451,7 @@
             this.bGitee.Location = new System.Drawing.Point(1, 107);
             this.bGitee.Margin = new System.Windows.Forms.Padding(1);
             this.bGitee.Name = "bGitee";
-            this.bGitee.Size = new System.Drawing.Size(61, 30);
+            this.bGitee.Size = new System.Drawing.Size(63, 30);
             this.bGitee.TabIndex = 6;
             this.bGitee.Text = "Gitee";
             this.bGitee.WaveSize = 0;
@@ -467,7 +468,7 @@
             this.bGitHub.Location = new System.Drawing.Point(1, 75);
             this.bGitHub.Margin = new System.Windows.Forms.Padding(1);
             this.bGitHub.Name = "bGitHub";
-            this.bGitHub.Size = new System.Drawing.Size(75, 30);
+            this.bGitHub.Size = new System.Drawing.Size(77, 30);
             this.bGitHub.TabIndex = 4;
             this.bGitHub.Text = "GitHub";
             this.bGitHub.WaveSize = 0;
@@ -485,7 +486,7 @@
             this.bTutorials.Location = new System.Drawing.Point(1, 43);
             this.bTutorials.Margin = new System.Windows.Forms.Padding(1);
             this.bTutorials.Name = "bTutorials";
-            this.bTutorials.Size = new System.Drawing.Size(116, 30);
+            this.bTutorials.Size = new System.Drawing.Size(118, 30);
             this.bTutorials.TabIndex = 2;
             this.bTutorials.Text = "软件使用教程";
             this.bTutorials.WaveSize = 0;
@@ -503,7 +504,7 @@
             this.bWPEWebSite.Location = new System.Drawing.Point(1, 11);
             this.bWPEWebSite.Margin = new System.Windows.Forms.Padding(1);
             this.bWPEWebSite.Name = "bWPEWebSite";
-            this.bWPEWebSite.Size = new System.Drawing.Size(84, 30);
+            this.bWPEWebSite.Size = new System.Drawing.Size(86, 30);
             this.bWPEWebSite.TabIndex = 0;
             this.bWPEWebSite.Text = "官方网站";
             this.bWPEWebSite.WaveSize = 0;
@@ -551,16 +552,16 @@
 
         private AntdUI.PageHeader pageHeader;
         private AntdUI.Dropdown btn_global;
-        private System.Windows.Forms.TableLayoutPanel tlpSelectMode;
+        private TableLayoutPanelEx tlpSelectMode;
         private AntdUI.Panel pRemoteMGT;
         private AntdUI.Label lRemote2;
         private AntdUI.Label lRemote1;
         private AntdUI.Avatar aRemoteMGT;
         private AntdUI.Avatar aStartForm;
-        private System.Windows.Forms.TableLayoutPanel tlpBackground;
+        private TableLayoutPanelEx tlpBackground;
         private AntdUI.Label lBG2;
         private AntdUI.Label lBG1;
-        private System.Windows.Forms.TableLayoutPanel tlpStartForm;
+        private TableLayoutPanelEx tlpStartForm;
         private AntdUI.Panel pInjectMode;
         private AntdUI.Label lInject2;
         private AntdUI.Label lInject1;
@@ -570,7 +571,7 @@
         private AntdUI.Label lProxy1;
         private AntdUI.Avatar aProxyMode;
         private AntdUI.Label lMore;
-        private System.Windows.Forms.TableLayoutPanel tlpMore;
+        private TableLayoutPanelEx tlpMore;
         private AntdUI.Button bGitHub;
         private AntdUI.Button bTutorials;
         private AntdUI.Button bWPEWebSite;

@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpSearchSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSearchSettings = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtFind = new AntdUI.Input();
             this.pSearchType = new AntdUI.Panel();
-            this.tlpSearchType = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSearchType = new WinsockPacketEditor.TableLayoutPanelEx();
             this.rbString = new AntdUI.Radio();
             this.rbHex = new AntdUI.Radio();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bExit = new AntdUI.Button();
             this.bSearch = new AntdUI.Button();
             this.pSearchFrom = new AntdUI.Panel();
-            this.tlpSearchFrom = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSearchFrom = new WinsockPacketEditor.TableLayoutPanelEx();
             this.rbFromIndex = new AntdUI.Radio();
             this.rbFromHead = new AntdUI.Radio();
             this.tlpSearchSettings.SuspendLayout();
@@ -56,6 +56,7 @@
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSearchSettings.Controls.Add(this.txtFind, 1, 0);
             this.tlpSearchSettings.Controls.Add(this.pSearchType, 0, 0);
             this.tlpSearchSettings.Controls.Add(this.tlpButton, 3, 0);
@@ -98,6 +99,7 @@
             this.tlpSearchType.ColumnCount = 2;
             this.tlpSearchType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSearchType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSearchType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSearchType.Controls.Add(this.rbString, 0, 0);
             this.tlpSearchType.Controls.Add(this.rbHex, 0, 1);
             this.tlpSearchType.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -108,7 +110,6 @@
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSearchType.Size = new System.Drawing.Size(180, 80);
             this.tlpSearchType.TabIndex = 21;
             // 
@@ -122,7 +123,7 @@
             this.rbString.Location = new System.Drawing.Point(1, 1);
             this.rbString.Margin = new System.Windows.Forms.Padding(1);
             this.rbString.Name = "rbString";
-            this.rbString.Size = new System.Drawing.Size(95, 39);
+            this.rbString.Size = new System.Drawing.Size(94, 39);
             this.rbString.TabIndex = 3;
             this.rbString.Text = "查找文本";
             // 
@@ -135,7 +136,7 @@
             this.rbHex.Location = new System.Drawing.Point(1, 42);
             this.rbHex.Margin = new System.Windows.Forms.Padding(1);
             this.rbHex.Name = "rbHex";
-            this.rbHex.Size = new System.Drawing.Size(123, 35);
+            this.rbHex.Size = new System.Drawing.Size(122, 35);
             this.rbHex.TabIndex = 2;
             this.rbHex.Text = "查找十六进制";
             // 
@@ -144,6 +145,7 @@
             this.tlpButton.ColumnCount = 2;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Controls.Add(this.bSearch, 1, 0);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -164,9 +166,9 @@
             this.bExit.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(26, 53);
+            this.bExit.Location = new System.Drawing.Point(33, 53);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(79, 44);
+            this.bExit.Size = new System.Drawing.Size(72, 44);
             this.bExit.TabIndex = 9;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -180,9 +182,9 @@
             this.bSearch.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bSearch.IconSvg = "SearchOutlined";
             this.bSearch.LocalizationText = "SearchPacketForm.FindNext";
-            this.bSearch.Location = new System.Drawing.Point(26, 3);
+            this.bSearch.Location = new System.Drawing.Point(33, 3);
             this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(121, 44);
+            this.bSearch.Size = new System.Drawing.Size(114, 44);
             this.bSearch.TabIndex = 8;
             this.bSearch.Text = "查找下一个";
             this.bSearch.Type = AntdUI.TTypeMini.Primary;
@@ -205,6 +207,7 @@
             this.tlpSearchFrom.ColumnCount = 2;
             this.tlpSearchFrom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSearchFrom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSearchFrom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSearchFrom.Controls.Add(this.rbFromIndex, 0, 1);
             this.tlpSearchFrom.Controls.Add(this.rbFromHead, 0, 0);
             this.tlpSearchFrom.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -215,7 +218,6 @@
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSearchFrom.Size = new System.Drawing.Size(130, 80);
             this.tlpSearchFrom.TabIndex = 22;
             // 
@@ -228,7 +230,7 @@
             this.rbFromIndex.Location = new System.Drawing.Point(1, 38);
             this.rbFromIndex.Margin = new System.Windows.Forms.Padding(1);
             this.rbFromIndex.Name = "rbFromIndex";
-            this.rbFromIndex.Size = new System.Drawing.Size(95, 35);
+            this.rbFromIndex.Size = new System.Drawing.Size(94, 35);
             this.rbFromIndex.TabIndex = 5;
             this.rbFromIndex.Text = "向下搜索";
             // 
@@ -242,7 +244,7 @@
             this.rbFromHead.Location = new System.Drawing.Point(1, 1);
             this.rbFromHead.Margin = new System.Windows.Forms.Padding(1);
             this.rbFromHead.Name = "rbFromHead";
-            this.rbFromHead.Size = new System.Drawing.Size(95, 35);
+            this.rbFromHead.Size = new System.Drawing.Size(94, 35);
             this.rbFromHead.TabIndex = 4;
             this.rbFromHead.Text = "从头开始";
             // 
@@ -272,16 +274,16 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpSearchSettings;
+        private TableLayoutPanelEx tlpSearchSettings;
         private AntdUI.Panel pSearchType;
-        private System.Windows.Forms.TableLayoutPanel tlpSearchType;
+        private TableLayoutPanelEx tlpSearchType;
         private AntdUI.Radio rbString;
         private AntdUI.Radio rbHex;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bExit;
         private AntdUI.Button bSearch;
         private AntdUI.Panel pSearchFrom;
-        private System.Windows.Forms.TableLayoutPanel tlpSearchFrom;
+        private TableLayoutPanelEx tlpSearchFrom;
         private AntdUI.Radio rbFromIndex;
         private AntdUI.Radio rbFromHead;
         private AntdUI.Input txtFind;

@@ -28,21 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpProxySettings = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProxySettings = new TableLayoutPanelEx();
+            this.tableLayoutPanel1 = new TableLayoutPanelEx();
             this.cbEnable_Auth = new AntdUI.Checkbox();
             this.ddlAuthType = new AntdUI.Select();
             this.dProxyAuth = new AntdUI.Divider();
             this.dSystemProxy = new AntdUI.Divider();
-            this.tlpProxyType = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProxyType = new TableLayoutPanelEx();
             this.cbEnable_SOCKS5 = new AntdUI.Checkbox();
             this.nudSOCKS5Port = new AntdUI.InputNumber();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.dProxyServerIP = new AntdUI.Divider();
             this.dProxyType = new AntdUI.Divider();
-            this.tlpProxyServerIP = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProxyServerIP = new TableLayoutPanelEx();
             this.cbProxyIP_Auto = new AntdUI.Checkbox();
             this.ddlProxyIP_Appoint = new AntdUI.Select();
             this.switchSystemProxy = new AntdUI.Switch();
@@ -359,21 +359,21 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpProxySettings;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanelEx tlpProxySettings;
+        private TableLayoutPanelEx tableLayoutPanel1;
         private AntdUI.Checkbox cbEnable_Auth;
         private AntdUI.Select ddlAuthType;
         private AntdUI.Divider dProxyAuth;
         private AntdUI.Divider dSystemProxy;
-        private System.Windows.Forms.TableLayoutPanel tlpProxyType;
+        private TableLayoutPanelEx tlpProxyType;
         private AntdUI.Checkbox cbEnable_SOCKS5;
         private AntdUI.InputNumber nudSOCKS5Port;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
         private AntdUI.Divider dProxyServerIP;
         private AntdUI.Divider dProxyType;
-        private System.Windows.Forms.TableLayoutPanel tlpProxyServerIP;
+        private TableLayoutPanelEx tlpProxyServerIP;
         private AntdUI.Checkbox cbProxyIP_Auto;
         private AntdUI.Select ddlProxyIP_Appoint;
         private AntdUI.Switch switchSystemProxy;

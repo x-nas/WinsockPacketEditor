@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpMapLocal = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMapLocal = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.dLocal = new AntdUI.Divider();
-            this.tlpRemote = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpRemote = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lRemotePath = new AntdUI.Label();
             this.lPort = new AntdUI.Label();
             this.lHost = new AntdUI.Label();
@@ -54,6 +54,7 @@
             // 
             this.tlpMapLocal.ColumnCount = 1;
             this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMapLocal.Controls.Add(this.tlpButton, 0, 5);
             this.tlpMapLocal.Controls.Add(this.dLocal, 0, 2);
             this.tlpMapLocal.Controls.Add(this.tlpRemote, 0, 1);
@@ -101,9 +102,9 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(150, 7);
+            this.bSave.Location = new System.Drawing.Point(155, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -118,7 +119,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -324,12 +325,12 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpMapLocal;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpMapLocal;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
         private AntdUI.Divider dLocal;
-        private System.Windows.Forms.TableLayoutPanel tlpRemote;
+        private TableLayoutPanelEx tlpRemote;
         private AntdUI.Label lRemotePath;
         private AntdUI.Label lPort;
         private AntdUI.Label lHost;

@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
-            this.tlpListSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpListSettings = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dColumn = new AntdUI.Divider();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.tabListSettings = new AntdUI.Tabs();
             this.tpInject = new AntdUI.TabPage();
-            this.tlpInject = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpInject = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbIsShow_PacketData_Inject = new AntdUI.Checkbox();
             this.cbIsShow_PacketLen_Inject = new AntdUI.Checkbox();
             this.cbIsShow_ServerLocation_Inject = new AntdUI.Checkbox();
@@ -48,7 +48,7 @@
             this.cbIsShow_ProxyTime_Inject = new AntdUI.Checkbox();
             this.cbIsShow_ID_Inject = new AntdUI.Checkbox();
             this.tpProxy = new AntdUI.TabPage();
-            this.tlpProxy = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProxy = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbIsShow_PacketData_Proxy = new AntdUI.Checkbox();
             this.cbIsShow_PacketLen_Proxy = new AntdUI.Checkbox();
             this.cbIsShow_ServerLocation_Proxy = new AntdUI.Checkbox();
@@ -72,6 +72,7 @@
             // 
             this.tlpListSettings.ColumnCount = 1;
             this.tlpListSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpListSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpListSettings.Controls.Add(this.dColumn, 0, 0);
             this.tlpListSettings.Controls.Add(this.tlpButton, 0, 3);
             this.tlpListSettings.Controls.Add(this.tabListSettings, 0, 2);
@@ -84,12 +85,6 @@
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpListSettings.Size = new System.Drawing.Size(500, 750);
             this.tlpListSettings.TabIndex = 2;
             // 
@@ -516,14 +511,14 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpListSettings;
+        private TableLayoutPanelEx tlpListSettings;
         private AntdUI.Divider dColumn;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
         private AntdUI.Tabs tabListSettings;
         private AntdUI.TabPage tpInject;
-        private System.Windows.Forms.TableLayoutPanel tlpInject;
+        private TableLayoutPanelEx tlpInject;
         private AntdUI.Checkbox cbIsShow_PacketData_Inject;
         private AntdUI.Checkbox cbIsShow_PacketLen_Inject;
         private AntdUI.Checkbox cbIsShow_ServerLocation_Inject;
@@ -535,7 +530,7 @@
         private AntdUI.Checkbox cbIsShow_ProxyTime_Inject;
         private AntdUI.Checkbox cbIsShow_ID_Inject;
         private AntdUI.TabPage tpProxy;
-        private System.Windows.Forms.TableLayoutPanel tlpProxy;
+        private TableLayoutPanelEx tlpProxy;
         private AntdUI.Checkbox cbIsShow_PacketData_Proxy;
         private AntdUI.Checkbox cbIsShow_PacketLen_Proxy;
         private AntdUI.Checkbox cbIsShow_ServerLocation_Proxy;

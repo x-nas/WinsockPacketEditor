@@ -48,7 +48,7 @@
             this.btn_mode = new AntdUI.Button();
             this.btn_global = new AntdUI.Dropdown();
             this.btn_setting = new AntdUI.Button();
-            this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMenu = new TableLayoutPanelEx();
             this.mProxyMode = new AntdUI.Menu();
             this.bMenuCollapse = new AntdUI.Button();
             this.tabProxyMode = new AntdUI.Tabs();
@@ -438,7 +438,7 @@
         private AntdUI.Button btn_mode;
         private AntdUI.Dropdown btn_global;
         private AntdUI.Button btn_setting;
-        private System.Windows.Forms.TableLayoutPanel tlpMenu;
+        private TableLayoutPanelEx tlpMenu;
         private AntdUI.Menu mProxyMode;
         private AntdUI.Button bMenuCollapse;
         private AntdUI.Tabs tabProxyMode;

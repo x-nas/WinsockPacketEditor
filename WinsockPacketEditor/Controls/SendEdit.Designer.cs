@@ -32,13 +32,13 @@
             AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
-            this.tlpSendEdit = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendEdit = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bStop = new AntdUI.Button();
             this.bExecute = new AntdUI.Button();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpSendCollectionInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendCollectionInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.mSendCollection = new AntdUI.Menu();
             this.lSend_Fail_CNT = new AntdUI.Label();
             this.lSend_Success_CNT = new AntdUI.Label();
@@ -50,21 +50,21 @@
             this.lTotal_Send = new AntdUI.Label();
             this.tSendCollection = new AntdUI.Table();
             this.txtNotes = new AntdUI.Input();
-            this.tlpSendCollectionSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendCollectionSettings = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pLoopINT = new AntdUI.Panel();
-            this.tlpLoopINT = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpLoopINT = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudLoopINT = new AntdUI.InputNumber();
             this.dLoopINT = new AntdUI.Divider();
             this.pLoopCNT = new AntdUI.Panel();
-            this.tlpLoopCNT = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpLoopCNT = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dLoopCNT = new AntdUI.Divider();
             this.nudLoopCNT = new AntdUI.InputNumber();
             this.pSendSocket = new AntdUI.Panel();
-            this.tlpSendSocket = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendSocket = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dSendSocket = new AntdUI.Divider();
             this.cbSystemSocket = new AntdUI.Checkbox();
             this.pSendName = new AntdUI.Panel();
-            this.tlpSendName = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendName = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dSendName = new AntdUI.Divider();
             this.txtSendName = new AntdUI.Input();
             this.tlpSendEdit.SuspendLayout();
@@ -85,6 +85,7 @@
             // 
             this.tlpSendEdit.ColumnCount = 1;
             this.tlpSendEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSendEdit.Controls.Add(this.tlpButton, 0, 4);
             this.tlpSendEdit.Controls.Add(this.tlpSendCollectionInfo, 0, 0);
             this.tlpSendEdit.Controls.Add(this.tSendCollection, 0, 1);
@@ -143,9 +144,9 @@
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
             this.bStop.LocalizationText = "Stop";
-            this.bStop.Location = new System.Drawing.Point(450, 7);
+            this.bStop.Location = new System.Drawing.Point(455, 7);
             this.bStop.Name = "bStop";
-            this.bStop.Size = new System.Drawing.Size(87, 46);
+            this.bStop.Size = new System.Drawing.Size(82, 46);
             this.bStop.TabIndex = 3;
             this.bStop.Text = "停止";
             this.bStop.Type = AntdUI.TTypeMini.Primary;
@@ -163,9 +164,9 @@
             this.bExecute.LoadingWaveValue = 0.6F;
             this.bExecute.LoadingWaveVertical = true;
             this.bExecute.LocalizationText = "Execute";
-            this.bExecute.Location = new System.Drawing.Point(337, 7);
+            this.bExecute.Location = new System.Drawing.Point(347, 7);
             this.bExecute.Name = "bExecute";
-            this.bExecute.Size = new System.Drawing.Size(87, 46);
+            this.bExecute.Size = new System.Drawing.Size(82, 46);
             this.bExecute.TabIndex = 2;
             this.bExecute.Text = "执行";
             this.bExecute.Type = AntdUI.TTypeMini.Info;
@@ -185,7 +186,7 @@
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(563, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -198,9 +199,9 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(676, 7);
+            this.bExit.Location = new System.Drawing.Point(671, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -593,7 +594,7 @@
             this.cbSystemSocket.LocalizationText = "SendEditForm.UseSSocket";
             this.cbSystemSocket.Location = new System.Drawing.Point(3, 39);
             this.cbSystemSocket.Name = "cbSystemSocket";
-            this.cbSystemSocket.Size = new System.Drawing.Size(154, 42);
+            this.cbSystemSocket.Size = new System.Drawing.Size(156, 44);
             this.cbSystemSocket.TabIndex = 1;
             this.cbSystemSocket.Text = "使用系统套接字";
             // 
@@ -681,13 +682,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpSendEdit;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpSendEdit;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bStop;
         private AntdUI.Button bExecute;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private System.Windows.Forms.TableLayoutPanel tlpSendCollectionInfo;
+        private TableLayoutPanelEx tlpSendCollectionInfo;
         private AntdUI.Menu mSendCollection;
         private AntdUI.Label lSend_Fail_CNT;
         private AntdUI.Label lSend_Success_CNT;
@@ -699,21 +700,21 @@
         private AntdUI.Label lTotal_Send;
         private AntdUI.Table tSendCollection;
         private AntdUI.Input txtNotes;
-        private System.Windows.Forms.TableLayoutPanel tlpSendCollectionSettings;
+        private TableLayoutPanelEx tlpSendCollectionSettings;
         private AntdUI.Panel pLoopINT;
-        private System.Windows.Forms.TableLayoutPanel tlpLoopINT;
+        private TableLayoutPanelEx tlpLoopINT;
         private AntdUI.InputNumber nudLoopINT;
         private AntdUI.Divider dLoopINT;
         private AntdUI.Panel pLoopCNT;
-        private System.Windows.Forms.TableLayoutPanel tlpLoopCNT;
+        private TableLayoutPanelEx tlpLoopCNT;
         private AntdUI.Divider dLoopCNT;
         private AntdUI.InputNumber nudLoopCNT;
         private AntdUI.Panel pSendSocket;
-        private System.Windows.Forms.TableLayoutPanel tlpSendSocket;
+        private TableLayoutPanelEx tlpSendSocket;
         private AntdUI.Divider dSendSocket;
         private AntdUI.Checkbox cbSystemSocket;
         private AntdUI.Panel pSendName;
-        private System.Windows.Forms.TableLayoutPanel tlpSendName;
+        private TableLayoutPanelEx tlpSendName;
         private AntdUI.Divider dSendName;
         private AntdUI.Input txtSendName;
     }

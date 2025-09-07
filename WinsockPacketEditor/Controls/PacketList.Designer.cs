@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpPacketList = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketList = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tableLayoutPanel2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtPacketList_AutoClear = new AntdUI.InputNumber();
             this.cbPacketList_AutoClear = new AntdUI.Checkbox();
             this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
@@ -39,8 +39,8 @@
             this.bHookStop = new AntdUI.Button();
             this.bHookStart = new AntdUI.Button();
             this.splitterPacketList = new AntdUI.Splitter();
-            this.tlpPacketList2 = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpPacketListInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpPacketList2 = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpPacketListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lWSARecvFrom_CNT = new AntdUI.Label();
             this.lWSARecvFrom = new AntdUI.Label();
             this.label33 = new AntdUI.Label();
@@ -79,7 +79,7 @@
             this.tPacketList = new AntdUI.Table();
             this.pPacketData = new AntdUI.Panel();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
-            this.tlpProcessInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProcessInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lSpeedInfo = new AntdUI.Label();
             this.lSplit3 = new AntdUI.Label();
             this.lSplit2 = new AntdUI.Label();
@@ -106,6 +106,7 @@
             this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpPacketList.Controls.Add(this.tableLayoutPanel2, 1, 1);
             this.tlpPacketList.Controls.Add(this.splitterPacketList, 1, 2);
             this.tlpPacketList.Controls.Add(this.tlpProcessInfo, 1, 3);
@@ -1019,14 +1020,14 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpPacketList;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanelEx tlpPacketList;
+        private TableLayoutPanelEx tableLayoutPanel2;
         private AntdUI.Button bPacketList_Clear;
         private AntdUI.Button bHookStop;
         private AntdUI.Button bHookStart;
         private AntdUI.Splitter splitterPacketList;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketList2;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketListInfo;
+        private TableLayoutPanelEx tlpPacketList2;
+        private TableLayoutPanelEx tlpPacketListInfo;
         private AntdUI.Label lWSARecvFrom_CNT;
         private AntdUI.Label lWSARecvFrom;
         private AntdUI.Label label33;
@@ -1065,7 +1066,7 @@
         private AntdUI.Table tPacketList;
         private AntdUI.Panel pPacketData;
         private Be.Windows.Forms.HexBox hbPacketData;
-        private System.Windows.Forms.TableLayoutPanel tlpProcessInfo;
+        private TableLayoutPanelEx tlpProcessInfo;
         private AntdUI.Label lSpeedInfo;
         private AntdUI.Label lSplit3;
         private AntdUI.Label lSplit2;

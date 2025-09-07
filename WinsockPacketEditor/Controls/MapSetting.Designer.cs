@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpMapSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMapSettings = new TableLayoutPanelEx();
             this.tMapRemote = new AntdUI.Table();
-            this.tlpMapRemote = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMapRemote = new TableLayoutPanelEx();
             this.cbEnable_MapRemote = new AntdUI.Checkbox();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.dMapLocal = new AntdUI.Divider();
             this.dMapRemote = new AntdUI.Divider();
             this.tMapLocal = new AntdUI.Table();
-            this.tlpMapLocal = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMapLocal = new TableLayoutPanelEx();
             this.cbEnable_MapLocal = new AntdUI.Checkbox();
             this.ddMenu_MapLocal = new AntdUI.Dropdown();
             this.ddMenu_MapRemote = new AntdUI.Dropdown();
@@ -306,17 +306,17 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpMapSettings;
+        private TableLayoutPanelEx tlpMapSettings;
         private AntdUI.Table tMapRemote;
-        private System.Windows.Forms.TableLayoutPanel tlpMapRemote;
+        private TableLayoutPanelEx tlpMapRemote;
         private AntdUI.Checkbox cbEnable_MapRemote;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
         private AntdUI.Divider dMapLocal;
         private AntdUI.Divider dMapRemote;
         private AntdUI.Table tMapLocal;
-        private System.Windows.Forms.TableLayoutPanel tlpMapLocal;
+        private TableLayoutPanelEx tlpMapLocal;
         private AntdUI.Checkbox cbEnable_MapLocal;
         private AntdUI.Dropdown ddMenu_MapLocal;
         private AntdUI.Dropdown ddMenu_MapRemote;

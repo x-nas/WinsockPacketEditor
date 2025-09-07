@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpProxyList = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpProxyList_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProxyList = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpProxyList_Button = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtPacketList_AutoClear = new AntdUI.InputNumber();
             this.cbPacketList_AutoClear = new AntdUI.Checkbox();
             this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
@@ -39,8 +39,8 @@
             this.ddMenu = new AntdUI.Dropdown();
             this.bSearchPacket = new AntdUI.Button();
             this.splitterProxyList = new AntdUI.Splitter();
-            this.tlpProxyList2 = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpPacketListInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProxyList2 = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpPacketListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lSplit16 = new AntdUI.Label();
             this.lFilterProxy_CNT = new AntdUI.Label();
             this.lFilterProxy = new AntdUI.Label();
@@ -76,7 +76,7 @@
             this.tProxyList = new AntdUI.Table();
             this.pPacketData = new AntdUI.Panel();
             this.hbProxyData = new Be.Windows.Forms.HexBox();
-            this.tlpProxyInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpProxyInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lTotalBytes = new AntdUI.Label();
             this.lSplit1 = new AntdUI.Label();
             this.lProxySpeed = new AntdUI.Label();
@@ -99,6 +99,7 @@
             this.tlpProxyList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpProxyList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpProxyList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpProxyList.Controls.Add(this.tlpProxyList_Button, 1, 1);
             this.tlpProxyList.Controls.Add(this.splitterProxyList, 1, 2);
             this.tlpProxyList.Controls.Add(this.tlpProxyInfo, 1, 3);
@@ -914,14 +915,14 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpProxyList;
-        private System.Windows.Forms.TableLayoutPanel tlpProxyList_Button;
+        private TableLayoutPanelEx tlpProxyList;
+        private TableLayoutPanelEx tlpProxyList_Button;
         private AntdUI.Button bProxyList_Clear;
         private AntdUI.Button bProxyStop;
         private AntdUI.Button bProxyStart;
         private AntdUI.Splitter splitterProxyList;
-        private System.Windows.Forms.TableLayoutPanel tlpProxyList2;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketListInfo;
+        private TableLayoutPanelEx tlpProxyList2;
+        private TableLayoutPanelEx tlpPacketListInfo;
         private AntdUI.Label lSplit16;
         private AntdUI.Label lFilterProxy_CNT;
         private AntdUI.Label lFilterProxy;
@@ -957,7 +958,7 @@
         private AntdUI.Table tProxyList;
         private AntdUI.Panel pPacketData;
         private Be.Windows.Forms.HexBox hbProxyData;
-        private System.Windows.Forms.TableLayoutPanel tlpProxyInfo;
+        private TableLayoutPanelEx tlpProxyInfo;
         private AntdUI.Label lTotalBytes;
         private AntdUI.Label lSplit1;
         private AntdUI.Label lProxySpeed;

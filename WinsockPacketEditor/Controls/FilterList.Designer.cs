@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpFilterList = new TableLayoutPanelEx();
             this.tFilterList = new AntdUI.Table();
-            this.tlpFilterListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpFilterListButton = new TableLayoutPanelEx();
             this.bDisableAll = new AntdUI.Button();
             this.ddMenu = new AntdUI.Dropdown();
             this.bFilterList_Reset = new AntdUI.Button();
@@ -172,9 +172,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpFilterList;
+        private TableLayoutPanelEx tlpFilterList;
         private AntdUI.Table tFilterList;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterListButton;
+        private TableLayoutPanelEx tlpFilterListButton;
         private AntdUI.Button bFilterList_Reset;
         private AntdUI.Dropdown ddMenu;
         private AntdUI.Button bDisableAll;

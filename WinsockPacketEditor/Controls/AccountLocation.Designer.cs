@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpLocation = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpLocation = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bExit = new AntdUI.Button();
             this.tLocation = new AntdUI.Table();
             this.tlpLocation.SuspendLayout();
@@ -40,6 +40,7 @@
             // 
             this.tlpLocation.ColumnCount = 1;
             this.tlpLocation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLocation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpLocation.Controls.Add(this.tlpButton, 0, 1);
             this.tlpLocation.Controls.Add(this.tLocation, 0, 0);
             this.tlpLocation.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -77,9 +78,9 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(456, 7);
+            this.bExit.Location = new System.Drawing.Point(459, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -116,8 +117,8 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpLocation;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpLocation;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bExit;
         private AntdUI.Table tLocation;
     }

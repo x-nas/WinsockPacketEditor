@@ -439,6 +439,12 @@
     <Compile Include="Controls\SystemSetting.Designer.cs">
       <DependentUpon>SystemSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TableLayoutPanelEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TableLayoutPanelEx.Designer.cs">
+      <DependentUpon>TableLayoutPanelEx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Transcoding.cs">
       <SubType>UserControl</SubType>
     </Compile>

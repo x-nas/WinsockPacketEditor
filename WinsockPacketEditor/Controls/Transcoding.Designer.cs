@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpTranscoding = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpTranscoding_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpTranscoding = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpTranscoding_Button = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bEncoding = new AntdUI.Button();
             this.bDecoding = new AntdUI.Button();
             this.txtTranscoding = new AntdUI.Input();
             this.pTranscoding_Result = new AntdUI.Panel();
-            this.tlpTranscoding_Result = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpTranscoding_Result = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtANSIbase64 = new AntdUI.Input();
             this.lANSIbase64 = new AntdUI.Label();
             this.txtANSIUnicode = new AntdUI.Input();
@@ -74,7 +74,7 @@
             this.tlpTranscoding.ColumnCount = 5;
             this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tlpTranscoding.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpTranscoding.Controls.Add(this.tlpTranscoding_Button, 2, 1);
@@ -99,7 +99,7 @@
             this.tlpTranscoding_Button.Controls.Add(this.bEncoding, 1, 1);
             this.tlpTranscoding_Button.Controls.Add(this.bDecoding, 1, 3);
             this.tlpTranscoding_Button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpTranscoding_Button.Location = new System.Drawing.Point(210, 23);
+            this.tlpTranscoding_Button.Location = new System.Drawing.Point(219, 23);
             this.tlpTranscoding_Button.Name = "tlpTranscoding_Button";
             this.tlpTranscoding_Button.RowCount = 5;
             this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -107,7 +107,7 @@
             this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpTranscoding_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpTranscoding_Button.Size = new System.Drawing.Size(144, 774);
+            this.tlpTranscoding_Button.Size = new System.Drawing.Size(114, 774);
             this.tlpTranscoding_Button.TabIndex = 2;
             // 
             // bEncoding
@@ -118,9 +118,9 @@
             this.bEncoding.IconPosition = AntdUI.TAlignMini.Right;
             this.bEncoding.IconSvg = "DoubleRightOutlined";
             this.bEncoding.LocalizationText = "Transcoding.Encode";
-            this.bEncoding.Location = new System.Drawing.Point(28, 308);
+            this.bEncoding.Location = new System.Drawing.Point(16, 308);
             this.bEncoding.Name = "bEncoding";
-            this.bEncoding.Size = new System.Drawing.Size(87, 46);
+            this.bEncoding.Size = new System.Drawing.Size(82, 46);
             this.bEncoding.TabIndex = 3;
             this.bEncoding.Text = "编码";
             this.bEncoding.Type = AntdUI.TTypeMini.Success;
@@ -134,9 +134,9 @@
             this.bDecoding.IconPosition = AntdUI.TAlignMini.Right;
             this.bDecoding.IconSvg = "DoubleRightOutlined";
             this.bDecoding.LocalizationText = "Transcoding.Decode";
-            this.bDecoding.Location = new System.Drawing.Point(28, 420);
+            this.bDecoding.Location = new System.Drawing.Point(16, 420);
             this.bDecoding.Name = "bDecoding";
-            this.bDecoding.Size = new System.Drawing.Size(87, 46);
+            this.bDecoding.Size = new System.Drawing.Size(82, 46);
             this.bDecoding.TabIndex = 4;
             this.bDecoding.Text = "解码";
             this.bDecoding.Type = AntdUI.TTypeMini.Warn;
@@ -150,7 +150,7 @@
             this.txtTranscoding.Multiline = true;
             this.txtTranscoding.Name = "txtTranscoding";
             this.txtTranscoding.PlaceholderText = "请输入文本";
-            this.txtTranscoding.Size = new System.Drawing.Size(171, 774);
+            this.txtTranscoding.Size = new System.Drawing.Size(180, 774);
             this.txtTranscoding.TabIndex = 4;
             this.txtTranscoding.TextChanged += new System.EventHandler(this.txtTranscoding_TextChanged);
             // 
@@ -159,11 +159,11 @@
             this.pTranscoding_Result.BorderWidth = 1F;
             this.pTranscoding_Result.Controls.Add(this.tlpTranscoding_Result);
             this.pTranscoding_Result.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pTranscoding_Result.Location = new System.Drawing.Point(363, 26);
+            this.pTranscoding_Result.Location = new System.Drawing.Point(342, 26);
             this.pTranscoding_Result.Margin = new System.Windows.Forms.Padding(6);
             this.pTranscoding_Result.Name = "pTranscoding_Result";
             this.pTranscoding_Result.Padding = new System.Windows.Forms.Padding(3);
-            this.pTranscoding_Result.Size = new System.Drawing.Size(401, 768);
+            this.pTranscoding_Result.Size = new System.Drawing.Size(422, 768);
             this.pTranscoding_Result.TabIndex = 5;
             this.pTranscoding_Result.Text = "panel1";
             // 
@@ -221,7 +221,7 @@
             this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
             this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7F));
             this.tlpTranscoding_Result.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 1F));
-            this.tlpTranscoding_Result.Size = new System.Drawing.Size(393, 760);
+            this.tlpTranscoding_Result.Size = new System.Drawing.Size(414, 760);
             this.tlpTranscoding_Result.TabIndex = 4;
             // 
             // txtANSIbase64
@@ -230,7 +230,7 @@
             this.txtANSIbase64.Location = new System.Drawing.Point(127, 699);
             this.txtANSIbase64.Name = "txtANSIbase64";
             this.txtANSIbase64.ReadOnly = true;
-            this.txtANSIbase64.Size = new System.Drawing.Size(263, 47);
+            this.txtANSIbase64.Size = new System.Drawing.Size(284, 47);
             this.txtANSIbase64.TabIndex = 113;
             // 
             // lANSIbase64
@@ -249,7 +249,7 @@
             this.txtANSIUnicode.Location = new System.Drawing.Point(127, 593);
             this.txtANSIUnicode.Name = "txtANSIUnicode";
             this.txtANSIUnicode.ReadOnly = true;
-            this.txtANSIUnicode.Size = new System.Drawing.Size(263, 47);
+            this.txtANSIUnicode.Size = new System.Drawing.Size(284, 47);
             this.txtANSIUnicode.TabIndex = 109;
             // 
             // lANSIUnicode
@@ -269,7 +269,7 @@
             this.txtANSIUTF32.Location = new System.Drawing.Point(127, 487);
             this.txtANSIUTF32.Name = "txtANSIUTF32";
             this.txtANSIUTF32.ReadOnly = true;
-            this.txtANSIUTF32.Size = new System.Drawing.Size(263, 47);
+            this.txtANSIUTF32.Size = new System.Drawing.Size(284, 47);
             this.txtANSIUTF32.TabIndex = 105;
             // 
             // lANSIUTF32
@@ -288,7 +288,7 @@
             this.txtANSIUTF16.Location = new System.Drawing.Point(127, 381);
             this.txtANSIUTF16.Name = "txtANSIUTF16";
             this.txtANSIUTF16.ReadOnly = true;
-            this.txtANSIUTF16.Size = new System.Drawing.Size(263, 47);
+            this.txtANSIUTF16.Size = new System.Drawing.Size(284, 47);
             this.txtANSIUTF16.TabIndex = 101;
             // 
             // lANSIUTF16
@@ -307,7 +307,7 @@
             this.txtANSIUTF8.Location = new System.Drawing.Point(127, 275);
             this.txtANSIUTF8.Name = "txtANSIUTF8";
             this.txtANSIUTF8.ReadOnly = true;
-            this.txtANSIUTF8.Size = new System.Drawing.Size(263, 47);
+            this.txtANSIUTF8.Size = new System.Drawing.Size(284, 47);
             this.txtANSIUTF8.TabIndex = 97;
             // 
             // lANSIUTF8
@@ -326,7 +326,7 @@
             this.txtANSIUTF7.Location = new System.Drawing.Point(127, 169);
             this.txtANSIUTF7.Name = "txtANSIUTF7";
             this.txtANSIUTF7.ReadOnly = true;
-            this.txtANSIUTF7.Size = new System.Drawing.Size(263, 47);
+            this.txtANSIUTF7.Size = new System.Drawing.Size(284, 47);
             this.txtANSIUTF7.TabIndex = 93;
             // 
             // lANSIUTF7
@@ -345,7 +345,7 @@
             this.txtANSIGBK.Location = new System.Drawing.Point(127, 63);
             this.txtANSIGBK.Name = "txtANSIGBK";
             this.txtANSIGBK.ReadOnly = true;
-            this.txtANSIGBK.Size = new System.Drawing.Size(263, 47);
+            this.txtANSIGBK.Size = new System.Drawing.Size(284, 47);
             this.txtANSIGBK.TabIndex = 89;
             // 
             // lANSIGBK
@@ -364,7 +364,7 @@
             this.txtbase64.Location = new System.Drawing.Point(127, 646);
             this.txtbase64.Name = "txtbase64";
             this.txtbase64.ReadOnly = true;
-            this.txtbase64.Size = new System.Drawing.Size(263, 47);
+            this.txtbase64.Size = new System.Drawing.Size(284, 47);
             this.txtbase64.TabIndex = 85;
             // 
             // lbase64
@@ -383,7 +383,7 @@
             this.txtUnicode.Location = new System.Drawing.Point(127, 540);
             this.txtUnicode.Name = "txtUnicode";
             this.txtUnicode.ReadOnly = true;
-            this.txtUnicode.Size = new System.Drawing.Size(263, 47);
+            this.txtUnicode.Size = new System.Drawing.Size(284, 47);
             this.txtUnicode.TabIndex = 81;
             // 
             // lUnicode
@@ -402,7 +402,7 @@
             this.txtUTF32.Location = new System.Drawing.Point(127, 434);
             this.txtUTF32.Name = "txtUTF32";
             this.txtUTF32.ReadOnly = true;
-            this.txtUTF32.Size = new System.Drawing.Size(263, 47);
+            this.txtUTF32.Size = new System.Drawing.Size(284, 47);
             this.txtUTF32.TabIndex = 77;
             // 
             // lUTF32
@@ -421,7 +421,7 @@
             this.txtUTF16.Location = new System.Drawing.Point(127, 328);
             this.txtUTF16.Name = "txtUTF16";
             this.txtUTF16.ReadOnly = true;
-            this.txtUTF16.Size = new System.Drawing.Size(263, 47);
+            this.txtUTF16.Size = new System.Drawing.Size(284, 47);
             this.txtUTF16.TabIndex = 73;
             // 
             // lUTF16
@@ -440,7 +440,7 @@
             this.txtUTF8.Location = new System.Drawing.Point(127, 222);
             this.txtUTF8.Name = "txtUTF8";
             this.txtUTF8.ReadOnly = true;
-            this.txtUTF8.Size = new System.Drawing.Size(263, 47);
+            this.txtUTF8.Size = new System.Drawing.Size(284, 47);
             this.txtUTF8.TabIndex = 69;
             // 
             // lUTF8
@@ -459,7 +459,7 @@
             this.txtUTF7.Location = new System.Drawing.Point(127, 116);
             this.txtUTF7.Name = "txtUTF7";
             this.txtUTF7.ReadOnly = true;
-            this.txtUTF7.Size = new System.Drawing.Size(263, 47);
+            this.txtUTF7.Size = new System.Drawing.Size(284, 47);
             this.txtUTF7.TabIndex = 65;
             // 
             // lUTF7
@@ -488,7 +488,7 @@
             this.txtBytes.Location = new System.Drawing.Point(127, 10);
             this.txtBytes.Name = "txtBytes";
             this.txtBytes.ReadOnly = true;
-            this.txtBytes.Size = new System.Drawing.Size(263, 47);
+            this.txtBytes.Size = new System.Drawing.Size(284, 47);
             this.txtBytes.TabIndex = 61;
             // 
             // Transcoding
@@ -513,13 +513,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpTranscoding;
-        private System.Windows.Forms.TableLayoutPanel tlpTranscoding_Button;
+        private TableLayoutPanelEx tlpTranscoding;
+        private TableLayoutPanelEx tlpTranscoding_Button;
         private AntdUI.Button bEncoding;
         private AntdUI.Button bDecoding;
         private AntdUI.Input txtTranscoding;
         private AntdUI.Panel pTranscoding_Result;
-        private System.Windows.Forms.TableLayoutPanel tlpTranscoding_Result;
+        private TableLayoutPanelEx tlpTranscoding_Result;
         private AntdUI.Input txtANSIbase64;
         private AntdUI.Label lANSIbase64;
         private AntdUI.Input txtANSIUnicode;

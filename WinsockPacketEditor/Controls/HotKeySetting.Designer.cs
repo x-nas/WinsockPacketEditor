@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpHotKey = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpHotKey = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.dHotKey = new AntdUI.Divider();
-            this.tlpSetKeys = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpHotKeyType = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSetKeys = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpHotKeyType = new WinsockPacketEditor.TableLayoutPanelEx();
             this.rbSendList = new AntdUI.Radio();
             this.rbRobotList = new AntdUI.Radio();
             this.lHKType = new AntdUI.Label();
@@ -84,6 +84,7 @@
             // 
             this.tlpHotKey.ColumnCount = 1;
             this.tlpHotKey.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpHotKey.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpHotKey.Controls.Add(this.tlpButton, 0, 2);
             this.tlpHotKey.Controls.Add(this.dHotKey, 0, 0);
             this.tlpHotKey.Controls.Add(this.tlpSetKeys, 0, 2);
@@ -127,9 +128,9 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(150, 7);
+            this.bSave.Location = new System.Drawing.Point(155, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -144,7 +145,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -255,7 +256,7 @@
             this.rbSendList.LocalizationText = "SendList";
             this.rbSendList.Location = new System.Drawing.Point(3, 3);
             this.rbSendList.Name = "rbSendList";
-            this.rbSendList.Size = new System.Drawing.Size(106, 42);
+            this.rbSendList.Size = new System.Drawing.Size(108, 42);
             this.rbSendList.TabIndex = 1;
             this.rbSendList.Text = "发送列表";
             // 
@@ -264,9 +265,9 @@
             this.rbRobotList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbRobotList.LocalizationText = "RobotList";
-            this.rbRobotList.Location = new System.Drawing.Point(115, 3);
+            this.rbRobotList.Location = new System.Drawing.Point(117, 3);
             this.rbRobotList.Name = "rbRobotList";
-            this.rbRobotList.Size = new System.Drawing.Size(122, 42);
+            this.rbRobotList.Size = new System.Drawing.Size(124, 42);
             this.rbRobotList.TabIndex = 2;
             this.rbRobotList.Text = "机器人列表";
             // 
@@ -761,9 +762,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpHotKey;
+        private TableLayoutPanelEx tlpHotKey;
         private AntdUI.Divider dHotKey;
-        private System.Windows.Forms.TableLayoutPanel tlpSetKeys;
+        private TableLayoutPanelEx tlpSetKeys;
         private AntdUI.Button bHotKey12;
         private AntdUI.Button bHotKey11;
         private AntdUI.Button bHotKey10;
@@ -800,11 +801,11 @@
         private AntdUI.Label lHotKey1;
         private HotkeyTextBox txtHotKey1;
         private AntdUI.Button bHotKey1;
-        private System.Windows.Forms.TableLayoutPanel tlpHotKeyType;
+        private TableLayoutPanelEx tlpHotKeyType;
         private AntdUI.Radio rbSendList;
         private AntdUI.Radio rbRobotList;
         private AntdUI.Label lHKType;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
     }

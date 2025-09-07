@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label2 = new AntdUI.Label();
-            this.tlpSetting = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSetting = new WinsockPacketEditor.TableLayoutPanelEx();
             this.switch5 = new AntdUI.Switch();
             this.label5 = new AntdUI.Label();
             this.switch4 = new AntdUI.Switch();
@@ -58,6 +58,7 @@
             this.tlpSetting.ColumnCount = 2;
             this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSetting.Controls.Add(this.switch5, 1, 4);
             this.tlpSetting.Controls.Add(this.label5, 0, 4);
             this.tlpSetting.Controls.Add(this.switch4, 1, 3);
@@ -176,14 +177,14 @@
             this.switch1.TabIndex = 1;
             this.switch1.Text = "switch1";
             // 
-            // SystemSetting
+            // DisplaySetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpSetting);
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.Name = "SystemSetting";
+            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Name = "DisplaySetting";
             this.Size = new System.Drawing.Size(250, 300);
             this.tlpSetting.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -193,7 +194,7 @@
         #endregion
 
         private AntdUI.Label label2;
-        private System.Windows.Forms.TableLayoutPanel tlpSetting;
+        private TableLayoutPanelEx tlpSetting;
         private AntdUI.Switch switch5;
         private AntdUI.Label label5;
         private AntdUI.Switch switch4;

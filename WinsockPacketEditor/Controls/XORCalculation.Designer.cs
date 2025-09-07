@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpXOR = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpPacketInfo_XOR_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpXOR = new TableLayoutPanelEx();
+            this.tlpPacketInfo_XOR_Button = new TableLayoutPanelEx();
             this.lXOR = new AntdUI.Label();
             this.bXOR = new AntdUI.Button();
             this.bXOR_ClearUp = new AntdUI.Button();
@@ -228,8 +228,8 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpXOR;
-        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_XOR_Button;
+        private TableLayoutPanelEx tlpXOR;
+        private TableLayoutPanelEx tlpPacketInfo_XOR_Button;
         private AntdUI.Label lXOR;
         private AntdUI.Button bXOR;
         private AntdUI.Button bXOR_ClearUp;

@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpSelectProcess = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSelectProcess = new TableLayoutPanelEx();
             this.pProcessList = new AntdUI.Panel();
             this.tProcessList = new AntdUI.Table();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new TableLayoutPanelEx();
             this.bExit = new AntdUI.Button();
             this.bCreate = new AntdUI.Button();
             this.bRefresh = new AntdUI.Button();
             this.bInject = new AntdUI.Button();
-            this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSearch = new TableLayoutPanelEx();
             this.txtSearchProcess = new AntdUI.Input();
             this.txtSelectProcess = new AntdUI.Input();
             this.tlpSelectProcess.SuspendLayout();
@@ -243,14 +243,14 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpSelectProcess;
+        private TableLayoutPanelEx tlpSelectProcess;
         private AntdUI.Panel pProcessList;
         private AntdUI.Table tProcessList;
-        private System.Windows.Forms.TableLayoutPanel tlpButton;
+        private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bCreate;
         private AntdUI.Button bRefresh;
         private AntdUI.Button bInject;
-        private System.Windows.Forms.TableLayoutPanel tlpSearch;
+        private TableLayoutPanelEx tlpSearch;
         private AntdUI.Input txtSearchProcess;
         private AntdUI.Input txtSelectProcess;
         private AntdUI.Button bExit;
