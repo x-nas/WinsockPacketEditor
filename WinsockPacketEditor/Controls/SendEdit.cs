@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
             this.se.Worker.RunWorkerCompleted += this.Worker_RunWorkerCompleted;
 
             this.InitTable_SendCollection();
+            this.InitMenu();
             this.Dark_Changed();
         }
 
@@ -80,6 +81,31 @@ namespace WinsockPacketEditor
 
             this.tSendCollection.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSendCollection.Binding(this.SendCollection);
+        }
+
+        private void InitMenu()
+        {
+            this.ddMenu.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("导入发送集")
+                {
+                    Tag = "Import",
+                    LocalizationText = "SendEditForm.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出所有发送集")
+                {
+                    Tag = "Export",
+                    LocalizationText = "SendEditForm.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空所有发送集")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "SendEditForm.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
         }
 
         private void txtSendName_TextChanged(object sender, EventArgs e)
@@ -180,20 +206,19 @@ namespace WinsockPacketEditor
 
         #region//发送集 - 菜单
 
-        private void mSendCollection_SelectChanged(object sender, MenuSelectEventArgs e)
+        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            AntdUI.MenuItem miSelect = e.Value;
-            this.mSendCollection.SelectIndex(-1);
+            this.ddMenu.SelectedValue = null;
 
-            switch (miSelect.ID)
+            switch (e.Value.ToString())
             {
-                case "miImport":
+                case "Import":
 
                     Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Import, this.SendCollection.ToList());
 
                     break;
 
-                case "miExport":
+                case "Export":
 
                     if (this.SendCollection.Count > 0)
                     {
@@ -202,7 +227,7 @@ namespace WinsockPacketEditor
 
                     break;
 
-                case "miClear":
+                case "Clear":
 
                     if (this.SendCollection.Count > 0)
                     {

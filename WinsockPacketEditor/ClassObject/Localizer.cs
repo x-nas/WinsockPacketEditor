@@ -2216,13 +2216,13 @@ namespace WinsockPacketEditor
                 case "SendEditForm.Remarks":
                     return "Remarks";
 
-                case "SendEditForm.miImport":
+                case "SendEditForm.Import":
                     return "Import Packet";
 
-                case "SendEditForm.miExport":
+                case "SendEditForm.Export":
                     return "Export Packet";
 
-                case "SendEditForm.miClear":
+                case "SendEditForm.Clear":
                     return "Clear Packet";
 
                 case "SendEditForm.SystemSocket.Error":
