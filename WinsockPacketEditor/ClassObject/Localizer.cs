@@ -1085,6 +1085,9 @@ namespace WinsockPacketEditor
                 case "AccountList.Delete":
                     return "Batch Delete";
 
+                case "AccountList.Empty":
+                    return "Please select account";
+
                 case "Table.AccountList.Column.ID":
                     return "ID";
 

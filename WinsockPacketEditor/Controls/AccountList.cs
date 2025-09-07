@@ -385,6 +385,16 @@ namespace WinsockPacketEditor
                         }
                     }
 
+                    if (aiList.Count == 0)
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请选择账号", TType.Warn)
+                        {
+                            LocalizationText = "AccountList.Empty"
+                        });
+
+                        return;
+                    }
+
                     switch (item.ID)
                     {
                         case "ExpiryTime":
