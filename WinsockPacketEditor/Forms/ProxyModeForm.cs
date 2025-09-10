@@ -405,15 +405,10 @@ namespace WinsockPacketEditor
 
                 await Task.Run(() =>
                 {
-                    if (Operate.ProxyConfig.Queue.qProxyTCP.Count > 0)
-                    {
-                        Operate.ProxyConfig.List.ProxyTCP_ToList();
-                        this.cProxyList?.RefreshProxyList();
-                    }
-
                     if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
                     {
                         Operate.ProxyConfig.List.ProxyInfo_ToList();
+                        this.cProxyList?.RefreshProxyList();
                     }
 
                     if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
@@ -459,6 +454,8 @@ namespace WinsockPacketEditor
                     this.cAccountList?.RefreshAccountList();
                     this.cAccountList?.SaveAccountList();
                     this.ShowMenuInfo();
+
+                    Operate.ProxyConfig.Proxy.CheckUDPTimeOut();
                 });
             }
             catch (Exception ex)

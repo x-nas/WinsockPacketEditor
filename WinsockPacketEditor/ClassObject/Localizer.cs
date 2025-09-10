@@ -855,8 +855,14 @@ namespace WinsockPacketEditor
                 case "ProxyModeForm":
                     return "Proxy Mode";
 
-                case "ProxyModeForm.StartProxy":
-                    return "Start SOCKS5 Proxy";
+                case "ProxyModeForm.StartSocks5Proxy":
+                    return "Start Socks5 Proxy";
+
+                case "ProxyModeForm.StartSocks5Proxy.Fail":
+                    return "Failed to Start Socks5 Proxy";
+
+                case "ProxyModeForm.SetupSocks5Proxy.Fail":
+                    return "Failed to Setup Socks5 Proxy";
 
                 case "ProxyModeForm.StopProxy":
                     return "Stop SOCKS5 Proxy";
@@ -868,7 +874,7 @@ namespace WinsockPacketEditor
                     return "Proxy service authentication enabled";
 
                 case "ProxyModeForm.ProxyServer.EXTProxy":
-                    return "External SOCKS5 proxy enabled";
+                    return "External proxy server enabled [ {0}:{1} ]";
 
                 case "ProxyModeForm.miProxyList":
                     return "Proxy List";

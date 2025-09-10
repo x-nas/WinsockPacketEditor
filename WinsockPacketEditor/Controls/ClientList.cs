@@ -1,7 +1,9 @@
 ﻿using AntdUI;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -109,34 +111,31 @@ namespace WinsockPacketEditor
         {
             try
             {
-                this.treeClientList.PauseLayout = true;
-
-                var peList = Operate.ProxyConfig.List.lstProxyTCP.ToList();
-                if (peList == null || peList.Count == 0)
+                if (Operate.ProxyConfig.Proxy.ProxyServer_Socks5 == null)
                 {
                     return;
                 }
 
-                foreach (ProxyTCP pe in peList)
+                #region//更新客户端列表
+
+                this.treeClientList.PauseLayout = true;
+
+                foreach (var rootItem in treeClientList.Items)
                 {
-                    if (pe == null)
-                    {
-                        continue;
-                    }
+                    rootItem.Sub.Clear();
+                }
 
-                    if (pe.TCP_Client == null)
-                    {
-                        Operate.ProxyConfig.List.lstProxyTCP.Remove(pe);
-                        pe?.Dispose();
-                        continue;
-                    }
+                var sessions = Operate.ProxyConfig.Proxy.ProxyServer_Socks5.GetAllSessions();
+                var SessionList = sessions?.ToList() ?? new List<Socks5ProxySession>();
 
+                foreach (Socks5ProxySession Session in SessionList)
+                {
                     #region//更新客户端链接
 
-                    if (pe.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
+                    if (Session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
                     {
-                        string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
-                        string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
+                        string ClientIP = Session.ClientIP;
+                        string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(Session.AID);
                         string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
 
                         if (string.IsNullOrEmpty(sRootName))
@@ -154,7 +153,7 @@ namespace WinsockPacketEditor
                             this.treeClientList.Items.Add(tiRoot);
                         }
 
-                        string sChildName = pe.TCP_Client.Address;
+                        string sChildName = Session.ClientAddress;
                         if (string.IsNullOrEmpty(sChildName))
                         {
                             return;
@@ -164,7 +163,7 @@ namespace WinsockPacketEditor
                         if (tiChild == null)
                         {
                             tiChild = new TreeItem(sChildName);
-                            switch (pe.DomainType)
+                            switch (Session.DomainType)
                             {
                                 case Operate.ProxyConfig.Proxy.DomainType.Http:
                                     tiChild.IconSvg = "IeOutlined";
@@ -179,7 +178,7 @@ namespace WinsockPacketEditor
                                     break;
 
                                 case Operate.ProxyConfig.Proxy.DomainType.External:
-
+                                    tiChild.IconSvg = "CloudUploadOutlined";
                                     break;
                             }
                             tiRoot.Sub.Add(tiChild);
@@ -187,62 +186,21 @@ namespace WinsockPacketEditor
                     }
 
                     #endregion
+                }
 
-                    if (pe.TCP_Client.Socket == null)
+                foreach (var rootItem in treeClientList.Items)
+                {
+                    if (rootItem.Sub.Count == 0)
                     {
-                        #region//移除关闭的客户端链接                    
-
-                        string ClientIP = Operate.ProxyConfig.Proxy.GetClientIPAddress(pe);
-                        string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(pe.AID);
-
-                        if (string.IsNullOrEmpty(ClientUserName))
-                        {
-                            TreeItem tiChild = Operate.SystemConfig.FindNodeByName(this.treeClientList, pe.TCP_Client.Address);
-                            if (tiChild != null)
-                            {
-                                this.treeClientList.Items.Remove(tiChild);
-                            }
-                            Operate.ProxyConfig.List.lstProxyTCP.Remove(pe);
-                            pe?.Dispose();
-                        }
-                        else
-                        {
-                            string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
-                            if (string.IsNullOrEmpty(sRootName))
-                            {
-                                return;
-                            }
-
-                            TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, sRootName);
-                            if (tiRoot == null)
-                            {
-                                return;
-                            }
-
-                            TreeItem tiChild = Operate.SystemConfig.FindNodeByName(tiRoot.Sub, pe.TCP_Client.Address);
-                            if (tiChild != null)
-                            {
-                                tiRoot.Sub.Remove(tiChild);
-                            }
-
-                            if (tiRoot.Sub.Count == 0)
-                            {
-                                this.treeClientList.Items.Remove(tiRoot);
-                                Operate.ProxyConfig.Account.DeleteProxyAuthInfo_ByAIDAndIP(pe.AID, ClientIP);
-
-                                if (pe.AID != null && pe.AID != Guid.Empty)
-                                {
-                                    Operate.ProxyConfig.Account.SetOnline_ByAccountID(pe.AID, false);
-                                }
-                            }
-
-                            Operate.ProxyConfig.List.lstProxyTCP.Remove(pe);
-                            pe?.Dispose();
-                        }
-
-                        #endregion
+                        rootItem.Remove();
                     }
                 }
+
+                this.treeClientList.PauseLayout = false;
+
+                #endregion
+
+                #region//更新认证列表
 
                 foreach (AuthInfo ai in Operate.ProxyConfig.Account.cdAuthInfo.Values)
                 {
@@ -250,15 +208,25 @@ namespace WinsockPacketEditor
                     ai.LinksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, clientIP, this.treeClientList);
                     ai.DevicesNumber = Operate.ProxyConfig.Account.GetDevicesNumber_ByAccountID(ai.AID);
 
-                    var key = (ai.AID, ai.AuthIP);
-                    Operate.ProxyConfig.Account.cdAuthInfo.AddOrUpdate(
-                        key,
-                        ai,
-                        (_, existing) => ai
-                    );
+                    var keyAdd = (ai.AID, ai.AuthIP);
+                    Operate.ProxyConfig.Account.cdAuthInfo.TryUpdate(keyAdd, ai, ai);
                 }
 
-                Operate.ProxyConfig.Proxy.CheckUDPTimeOut();
+                foreach (AuthInfo ai in Operate.ProxyConfig.Account.cdAuthInfo.Values)
+                {
+                    if (ai.LinksNumber == 0)
+                    {
+                        Operate.ProxyConfig.Account.DeleteProxyAuthInfo_ByAIDAndIP(ai.AID, ai.AuthIP);
+
+                        int count = Operate.ProxyConfig.Account.cdAuthInfo.Count(kv => kv.Key.AID == ai.AID);
+                        if (count == 0)
+                        {
+                            Operate.ProxyConfig.Account.SetOnline_ByAccountID(ai.AID, false);
+                        }
+                    }
+                }
+
+                #endregion                
             }
             catch (Exception ex)
             {
