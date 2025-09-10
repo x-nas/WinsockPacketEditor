@@ -5716,12 +5716,7 @@ namespace WinsockPacketEditor
                         cdAuthInfo.AddOrUpdate(
                             key,
                             _ => new AuthInfo(AID, AuthIP, IPLocation, AuthResult, DateTime.Now),
-                            (_, existingItem) =>
-                            {
-                                existingItem.AuthResult = AuthResult;
-                                existingItem.AuthTime = DateTime.Now;
-                                return existingItem;
-                            });
+                            (_, existingItem) => existingItem);
                     }
                     catch (Exception ex)
                     {
