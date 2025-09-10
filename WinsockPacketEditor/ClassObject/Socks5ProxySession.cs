@@ -6,8 +6,6 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using System.Xml.Linq;
-using static WinsockPacketEditor.Operate;
 
 namespace WinsockPacketEditor
 {
@@ -433,7 +431,7 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        byte[] AuthRequest = Operate.ProxyConfig.Proxy.CreateSOCKS5AuthPacket(Operate.ProxyConfig.Proxy.ExternalProxy_UserName, ProxyConfig.Proxy.ExternalProxy_PassWord);
+                        byte[] AuthRequest = Operate.ProxyConfig.Proxy.CreateSOCKS5AuthPacket(Operate.ProxyConfig.Proxy.ExternalProxy_UserName, Operate.ProxyConfig.Proxy.ExternalProxy_PassWord);
                         if (AuthRequest == null)
                         {
                             return;
