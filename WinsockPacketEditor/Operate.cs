@@ -7422,196 +7422,54 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//获取远程代理映射的数据
+                #region//获取远程代理映射的请求数据
 
-                public static byte[] GetRemoteMappedData(string remoteUrl, string originalRequest, Dictionary<string, string> headers)
+                public static byte[] ModifyRequestHostAndPath(string originalRequest, Dictionary<string, string> headers, string newHost, int newPort, string newPath)
                 {
                     try
                     {
                         // 解析原始请求
-                        string[] requestParts = originalRequest.Split(new[] { "\r\n" }, StringSplitOptions.None);
-                        string[] requestLine = requestParts[0].Split(' ');
-                        string method = requestLine[0];
-                        string path = requestLine.Length > 1 ? requestLine[1] : "/";
+                        string[] requestLines = originalRequest.Split(new[] { "\r\n" }, StringSplitOptions.None);
 
-                        // 构建新的请求URL
-                        UriBuilder remoteUri = new UriBuilder(remoteUrl);
-                        if (!string.IsNullOrEmpty(path) && path != "/")
+                        // 修改第一行（请求行）
+                        string[] firstLineParts = requestLines[0].Split(' ');
+                        if (firstLineParts.Length >= 3)
                         {
-                            // 保留原始路径参数
-                            string queryToAppend = remoteUri.Query;
-                            if (!string.IsNullOrEmpty(remoteUri.Query))
-                            {
-                                queryToAppend = "&" + remoteUri.Query.TrimStart('?');
-                            }
-
-                            // 处理路径拼接
-                            string originalPath = path.Split('?')[0];
-                            string originalQuery = path.Contains('?') ? path.Substring(path.IndexOf('?')) : "";
-
-                            remoteUri.Path = remoteUri.Path.TrimEnd('/') + "/" + originalPath.TrimStart('/');
-                            remoteUri.Query = originalQuery.TrimStart('?') + queryToAppend;
+                            // 完全替换路径部分
+                            firstLineParts[1] = newPath;
+                            requestLines[0] = string.Join(" ", firstLineParts);
                         }
 
-                        // 创建HTTP请求
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(remoteUri.Uri);
-                        request.Method = method;
-
-                        // 设置超时时间
-                        request.Timeout = 10000; // 10秒超时
-                        request.ReadWriteTimeout = 10000;
-
-                        // 复制原始请求头（排除不应转发的头）
-                        foreach (var header in headers)
+                        // 修改Host头
+                        for (int i = 1; i < requestLines.Length; i++)
                         {
-                            string headerKey = header.Key.ToLower();
+                            if (string.IsNullOrEmpty(requestLines[i]))
+                                break;
 
-                            // 跳过这些不应该转发的头
-                            if (headerKey == "connection" ||
-                                headerKey == "keep-alive" ||
-                                headerKey == "proxy-connection" ||
-                                headerKey == "te" ||
-                                headerKey == "trailer" ||
-                                headerKey == "transfer-encoding" ||
-                                headerKey == "upgrade")
+                            if (requestLines[i].StartsWith("Host:", StringComparison.OrdinalIgnoreCase))
                             {
-                                continue;
-                            }
-
-                            switch (headerKey)
-                            {
-                                case "host":
-                                    request.Host = remoteUri.Host;
-                                    break;
-                                case "accept":
-                                    request.Accept = header.Value;
-                                    break;
-                                case "user-agent":
-                                    request.UserAgent = header.Value;
-                                    break;
-                                case "content-type":
-                                    request.ContentType = header.Value;
-                                    break;
-                                case "content-length":
-                                    // 将在处理请求体时设置
-                                    break;
-                                case "referer":
-                                    // 更新Referer为新的远程地址
-                                    if (Uri.TryCreate(header.Value, UriKind.Absolute, out Uri originalReferer))
-                                    {
-                                        string newReferer = remoteUri.Scheme + "://" + remoteUri.Host + originalReferer.PathAndQuery;
-                                        request.Referer = newReferer;
-                                    }
-                                    else
-                                    {
-                                        request.Referer = header.Value;
-                                    }
-                                    break;
-                                default:
-                                    request.Headers[header.Key] = header.Value;
-                                    break;
+                                string portPart = newPort == 80 ? "" : $":{newPort}";
+                                requestLines[i] = $"Host: {newHost}{portPart}";
+                                break;
                             }
                         }
 
-                        // 处理请求体（POST/PUT等）
-                        if ((method == "POST" || method == "PUT" || method == "PATCH") &&
-                            headers.TryGetValue("content-length", out string contentLengthStr) &&
-                            int.TryParse(contentLengthStr, out int contentLength) &&
-                            contentLength > 0)
+                        // 重新构建请求
+                        StringBuilder modifiedRequest = new StringBuilder();
+                        foreach (string line in requestLines)
                         {
-                            // 从原始请求中提取请求体
-                            int bodyStartIndex = originalRequest.IndexOf("\r\n\r\n") + 4;
-                            if (bodyStartIndex >= 4 && bodyStartIndex < originalRequest.Length)
-                            {
-                                string requestBody = originalRequest.Substring(bodyStartIndex);
-
-                                using (Stream requestStream = request.GetRequestStream())
-                                using (StreamWriter writer = new StreamWriter(requestStream))
-                                {
-                                    writer.Write(requestBody);
-                                }
-                            }
+                            if (string.IsNullOrEmpty(line))
+                                break;
+                            modifiedRequest.AppendLine(line);
                         }
+                        modifiedRequest.AppendLine(); // 结束头部
 
-                        // 获取响应
-                        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                        using (Stream responseStream = response.GetResponseStream())
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            responseStream.CopyTo(memoryStream);
-
-                            // 构建响应头
-                            StringBuilder responseHeaders = new StringBuilder();
-                            responseHeaders.Append($"HTTP/1.1 {(int)response.StatusCode} {response.StatusDescription}\r\n");
-
-                            // 复制响应头（排除不应转发的头）
-                            foreach (string headerName in response.Headers.AllKeys)
-                            {
-                                string lowerHeaderName = headerName.ToLower();
-
-                                if (lowerHeaderName == "transfer-encoding" ||
-                                    lowerHeaderName == "connection" ||
-                                    lowerHeaderName == "keep-alive")
-                                {
-                                    continue;
-                                }
-
-                                responseHeaders.Append($"{headerName}: {response.Headers[headerName]}\r\n");
-                            }
-
-                            responseHeaders.Append("\r\n");
-
-                            // 合并响应头和响应体
-                            byte[] headerBytes = Encoding.UTF8.GetBytes(responseHeaders.ToString());
-                            byte[] responseBytes = memoryStream.ToArray();
-
-                            byte[] fullResponse = new byte[headerBytes.Length + responseBytes.Length];
-                            Buffer.BlockCopy(headerBytes, 0, fullResponse, 0, headerBytes.Length);
-                            Buffer.BlockCopy(responseBytes, 0, fullResponse, headerBytes.Length, responseBytes.Length);
-
-                            return fullResponse;
-                        }
-                    }
-                    catch (WebException webEx) when (webEx.Response is HttpWebResponse errorResponse)
-                    {
-                        // 处理远程服务器返回的错误响应
-                        using (Stream errorStream = errorResponse.GetResponseStream())
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            errorStream?.CopyTo(memoryStream);
-
-                            StringBuilder responseHeaders = new StringBuilder();
-                            responseHeaders.Append($"HTTP/1.1 {(int)errorResponse.StatusCode} {errorResponse.StatusDescription}\r\n");
-
-                            foreach (string headerName in errorResponse.Headers.AllKeys)
-                            {
-                                responseHeaders.Append($"{headerName}: {errorResponse.Headers[headerName]}\r\n");
-                            }
-
-                            responseHeaders.Append("\r\n");
-
-                            byte[] headerBytes = Encoding.UTF8.GetBytes(responseHeaders.ToString());
-                            byte[] responseBytes = memoryStream.ToArray();
-
-                            byte[] fullResponse = new byte[headerBytes.Length + responseBytes.Length];
-                            Buffer.BlockCopy(headerBytes, 0, fullResponse, 0, headerBytes.Length);
-                            Buffer.BlockCopy(responseBytes, 0, fullResponse, headerBytes.Length, responseBytes.Length);
-
-                            return fullResponse;
-                        }
+                        return Encoding.UTF8.GetBytes(modifiedRequest.ToString());
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, $"远程映射失败: {ex.Message}");
-
-                        // 返回500错误响应
-                        string errorResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
-                                              "Content-Type: text/plain\r\n" +
-                                              "Connection: close\r\n" +
-                                              "\r\n" +
-                                              "Remote mapping failed: " + ex.Message;
-
-                        return Encoding.UTF8.GetBytes(errorResponse);
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return Encoding.UTF8.GetBytes(originalRequest);
                     }
                 }
 
@@ -16456,7 +16314,7 @@ namespace WinsockPacketEditor
 
         public static class DataBase
         {
-            private static string dbPath = @"C:\WPE64Cache";
+            private static string dbPath = AppDomain.CurrentDomain.BaseDirectory;
             private static string dbName = SystemConfig.AssemblyVersion + ".db";
             private static string conStr = string.Format("Data Source={0}\\{1};Version=3;", dbPath, dbName);
 

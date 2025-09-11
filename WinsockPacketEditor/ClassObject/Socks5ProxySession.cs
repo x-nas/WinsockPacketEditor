@@ -2,6 +2,7 @@
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -314,6 +315,28 @@ namespace WinsockPacketEditor
                                                 this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                                                 return;
                                             }
+                                        }
+                                    }
+
+                                    #endregion
+
+                                    #region//远程代理映射
+
+                                    if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                                    {
+                                        var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
+                                            Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                            TargetAddress,
+                                            TargetPort,
+                                            string.Empty);
+
+                                        if (remoteRule != null)
+                                        {
+                                            this.ServerIP = TargetAddress;
+                                            this.ServerPort = TargetPort;
+
+                                            TargetIP = remoteRule.HostTo;
+                                            TargetPort = remoteRule.PortTo;
                                         }
                                     }
 
@@ -693,25 +716,34 @@ namespace WinsockPacketEditor
 
                                         #region//远程代理映射
 
-                                        //if (!requestHandled && Operate.ProxyConfig.Mapping.Enable_MapRemote)
-                                        //{
-                                        //    var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
-                                        //        Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                        //        hostHeader.Split(':')[0],
-                                        //        pt.TCP_Server.EndPoint.Port,
-                                        //        cleanPath);
+                                        if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                                        {
+                                            var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
+                                                Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                                hostHeader.Split(':')[0],
+                                                this.ServerPort,
+                                                cleanPath);
 
-                                        //    if (remoteRule != null)
-                                        //    {
-                                        //        string RemoteURL = remoteRule.ProtocolTypeTo.ToString() + "://" + remoteRule.HostTo + ":" + remoteRule.PortTo + remoteRule.PathTo;
-                                        //        byte[] remoteResponse = Operate.ProxyConfig.Mapping.GetRemoteMappedData(RemoteURL, request, headers);
-                                        //        if (remoteResponse != null)
-                                        //        {
-                                        //            Operate.ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, remoteResponse);
-                                        //            requestHandled = true;
-                                        //        }
-                                        //    }
-                                        //}
+                                            if (remoteRule != null)
+                                            {
+                                                this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Req, bData.ToArray());
+
+                                                byte[] modifiedRequestBytes = Operate.ProxyConfig.Mapping.ModifyRequestHostAndPath(
+                                                    request,
+                                                    headers,
+                                                    remoteRule.HostTo,
+                                                    remoteRule.PortTo,
+                                                    remoteRule.PathTo);
+
+                                                if (modifiedRequestBytes != null)
+                                                {
+                                                    this.TargetSocket.Send(modifiedRequestBytes);
+                                                    this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Req, modifiedRequestBytes);
+                                                }
+
+                                                return;
+                                            }
+                                        }
 
                                         #endregion
                                     }
@@ -1136,6 +1168,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
+        #endregion        
     }
 }
