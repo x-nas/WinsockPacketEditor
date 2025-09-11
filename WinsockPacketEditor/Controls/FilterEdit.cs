@@ -42,7 +42,6 @@ namespace WinsockPacketEditor
                 this.InitProgressionPosition();
                 this.InitFilterExecuteType();
                 this.ShowFilterData();
-                this.ScrollToColumn("000");
                 this.Dark_Changed();
 
                 switch (fiSelect.FMode)
@@ -320,7 +319,9 @@ namespace WinsockPacketEditor
                 }
 
                 dtFilterAdvanced_Modify_Position.Rows.Add(dr);
-                tFilterAdvanced_Modify_Position.DataSource = dtFilterAdvanced_Modify_Position;                
+                tFilterAdvanced_Modify_Position.DataSource = dtFilterAdvanced_Modify_Position;
+
+                this.tFilterAdvanced_Modify_Position.ScrollColumn(Operate.FilterConfig.Filter.FilterSize_MaxLen);
             }
             catch (Exception ex)
             {
@@ -465,35 +466,7 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void ScrollToColumn(string ColumnTitle)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(ColumnTitle))
-                {
-                    return;
-                }
-
-                int xValue = 0;
-                foreach (var column in tFilterAdvanced_Modify_Position.Columns)
-                {
-                    if (column.Title == ColumnTitle)
-                    {
-                        break;
-                    }
-
-                    xValue += column.WidthPixel;
-                }
-
-                this.tFilterAdvanced_Modify_Position.ScrollBar.ValueX = xValue;
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
+        }        
 
         private void Dark_Changed()
         {
