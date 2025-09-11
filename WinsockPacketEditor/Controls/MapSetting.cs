@@ -365,7 +365,7 @@ namespace WinsockPacketEditor
             {
                 case "Add":
 
-                    var MapRemoteEdit = new MapRemoteEdit(this.form, null);
+                    var MapRemoteEdit = new MapRemoteEdit(this.form, this, null);
                     AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapRemoteForm", "远程映射编辑"), MapRemoteEdit)
                     {
                         Keyboard = false,
@@ -432,7 +432,7 @@ namespace WinsockPacketEditor
 
         private void OpenMapRemoteEdit(MapRemote mr)
         {
-            var MapRemoteEdit = new MapRemoteEdit(this.form, mr);
+            var MapRemoteEdit = new MapRemoteEdit(this.form, this, mr);
             AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapRemoteForm", "远程映射编辑"), MapRemoteEdit)
             {
                 Keyboard = false,

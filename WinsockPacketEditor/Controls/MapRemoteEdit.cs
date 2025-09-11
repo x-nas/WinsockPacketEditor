@@ -8,15 +8,17 @@ namespace WinsockPacketEditor
     public partial class MapRemoteEdit : UserControl
     {
         private Form form;
+        private MapSetting msForm;
         private MapRemote mrSelect;
 
         #region//窗体事件
 
-        public MapRemoteEdit(Form form, MapRemote mr)
+        public MapRemoteEdit(Form form, MapSetting msForm, MapRemote mr)
         {
             InitializeComponent();
             this.mrSelect = mr;
             this.form = form;
+            this.msForm = msForm;
         }
 
         private void MapRemoteEdit_Load(object sender, EventArgs e)
@@ -197,6 +199,7 @@ namespace WinsockPacketEditor
                     LocalizationText = "MapRemoteForm.Success"
                 });
 
+                this.msForm.RefreshMapRemote();
                 this.Dispose();
             }
             catch (Exception ex)
