@@ -7424,51 +7424,102 @@ namespace WinsockPacketEditor
 
                 #region//获取远程代理映射的请求数据
 
-                public static byte[] ModifyRequestHostAndPath(string originalRequest, Dictionary<string, string> headers, string newHost, int newPort, string newPath)
+                public static byte[] ModifyRequestHostAndPath(
+                    string originalRequest, 
+                    Dictionary<string, string> headers,
+                    string newHost, 
+                    int newPort, 
+                    string newPath)
                 {
                     try
                     {
-                        // 解析原始请求
-                        string[] requestLines = originalRequest.Split(new[] { "\r\n" }, StringSplitOptions.None);
+                        string[] lines = originalRequest.Split(new[] { "\r\n" }, StringSplitOptions.None);
+                        StringBuilder sb = new StringBuilder();
 
-                        // 修改第一行（请求行）
-                        string[] firstLineParts = requestLines[0].Split(' ');
-                        if (firstLineParts.Length >= 3)
-                        {
-                            // 完全替换路径部分
-                            firstLineParts[1] = newPath;
-                            requestLines[0] = string.Join(" ", firstLineParts);
-                        }
+                        bool firstLine = true;
+                        bool hostHeaderFound = false;
 
-                        // 修改Host头
-                        for (int i = 1; i < requestLines.Length; i++)
-                        {
-                            if (string.IsNullOrEmpty(requestLines[i]))
-                                break;
-
-                            if (requestLines[i].StartsWith("Host:", StringComparison.OrdinalIgnoreCase))
-                            {
-                                string portPart = newPort == 80 ? "" : $":{newPort}";
-                                requestLines[i] = $"Host: {newHost}{portPart}";
-                                break;
-                            }
-                        }
-
-                        // 重新构建请求
-                        StringBuilder modifiedRequest = new StringBuilder();
-                        foreach (string line in requestLines)
+                        foreach (string line in lines)
                         {
                             if (string.IsNullOrEmpty(line))
                                 break;
-                            modifiedRequest.AppendLine(line);
-                        }
-                        modifiedRequest.AppendLine(); // 结束头部
 
-                        return Encoding.UTF8.GetBytes(modifiedRequest.ToString());
+                            if (firstLine)
+                            {
+                                string[] parts = line.Split(' ');
+                                if (parts.Length >= 3)
+                                {
+                                    string originalRequestPath = parts[1];
+
+                                    string pathOnly = originalRequestPath;
+                                    string queryString = "";
+
+                                    int queryIndex = originalRequestPath.IndexOf('?');
+                                    if (queryIndex >= 0)
+                                    {
+                                        pathOnly = originalRequestPath.Substring(0, queryIndex);
+                                        queryString = originalRequestPath.Substring(queryIndex);
+                                    }
+
+                                    string finalPath;
+                                    if (string.IsNullOrEmpty(newPath))
+                                    {
+                                        finalPath = pathOnly;
+                                    }
+                                    else
+                                    {
+                                        finalPath = newPath;
+                                    }
+
+                                    if (string.IsNullOrEmpty(finalPath) || !finalPath.StartsWith("/"))
+                                    {
+                                        finalPath = "/" + finalPath;
+                                    }
+
+                                    parts[1] = finalPath + queryString;
+                                    sb.AppendLine(string.Join(" ", parts));
+                                }
+                                else
+                                {
+                                    sb.AppendLine(line);
+                                }
+                                firstLine = false;
+                            }
+                            else if (line.StartsWith("Host:", StringComparison.OrdinalIgnoreCase))
+                            {
+                                string portPart = newPort == 80 ? "" : $":{newPort}";
+                                sb.AppendLine($"Host: {newHost}{portPart}");
+                                hostHeaderFound = true;
+                            }
+                            else
+                            {
+                                sb.AppendLine(line);
+                            }
+                        }
+
+                        if (!hostHeaderFound)
+                        {
+                            string portPart = newPort == 80 ? "" : $":{newPort}";
+                            string hostLine = $"Host: {newHost}{portPart}";
+
+                            string requestStr = sb.ToString();
+                            int insertIndex = requestStr.IndexOf("\r\n", StringComparison.Ordinal);
+                            if (insertIndex > 0)
+                            {
+                                sb.Insert(insertIndex + 2, hostLine + "\r\n");
+                            }
+                            else
+                            {
+                                sb.AppendLine(hostLine);
+                            }
+                        }
+
+                        sb.AppendLine();
+                        return Encoding.UTF8.GetBytes(sb.ToString());
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(ModifyRequestHostAndPath), ex.Message);
                         return Encoding.UTF8.GetBytes(originalRequest);
                     }
                 }
