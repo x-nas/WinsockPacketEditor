@@ -57,6 +57,6 @@ namespace WinsockPacketEditor
             void SetTextB(string TextB);
         }
 
-        #endregion
+        #endregion        
     }
 }

@@ -1,11 +1,14 @@
-﻿using SuperSocket.SocketBase;
+﻿using SuperSocket.Common;
+using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using static WinsockPacketEditor.Operate.FilterConfig.Filter;
 
 namespace WinsockPacketEditor
 {
@@ -280,6 +283,47 @@ namespace WinsockPacketEditor
                                 break;
 
                             case Operate.ProxyConfig.Proxy.DomainType.Http:
+
+                                this.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(TargetAddress, TargetPort);
+
+                                if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                                {
+                                    #region//本地代理映射
+
+                                    if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
+                                    {
+                                        var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
+                                            Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                            TargetAddress,
+                                            TargetPort,
+                                            string.Empty);
+
+                                        if (localRule != null)
+                                        {
+                                            this.ServerIP = TargetAddress;
+                                            this.ServerPort = TargetPort;
+
+                                            if (File.Exists(localRule.LocalPath))
+                                            {
+                                                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                                                this.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
+                                                return;
+                                            }
+                                            else
+                                            {
+                                                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                                                return;
+                                            }
+                                        }
+                                    }
+
+                                    #endregion
+                                }
+
+                                this.ConnectToTarget(TargetIP, TargetPort);
+
+                                break;
+
                             case Operate.ProxyConfig.Proxy.DomainType.Https:
                             case Operate.ProxyConfig.Proxy.DomainType.Socket:
 
@@ -548,6 +592,33 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//缓存映射数据
+
+        private void MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType ptType, byte[] bData)
+        {
+            try
+            {
+                _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                    DateTime.Now,
+                    Operate.FilterConfig.Filter.FilterAction.None,
+                    bData.Length,
+                    this.SocketSession.Client.Handle.ToInt32(),
+                    ptType,
+                    $"{this.ClientIP}:{this.ClientPort}",
+                    $"{this.ClientIP}:{this.ClientPort}",
+                    this.ServerAddress,
+                    this.DomainType,
+                    bData,
+                    bData);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//处理 TCP 请求数据
 
         private void ForwardData(Span<byte> bData)
@@ -556,107 +627,113 @@ namespace WinsockPacketEditor
             {
                 if (this.CommandType == Operate.ProxyConfig.Proxy.CommandType.Connect)
                 {
-                    bool requestHandled = false;
-
                     switch (this.DomainType)
                     {
                         case Operate.ProxyConfig.Proxy.DomainType.Http:
 
-                            //string request = Encoding.ASCII.GetString(bData.ToArray());
+                            if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                            {
+                                string request = Encoding.ASCII.GetString(bData.ToArray());
 
-                            //if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
-                            //{
-                            //    var headers = Operate.ProxyConfig.Proxy.ParseHttpHeaders(request);
-                            //    if (headers.TryGetValue("Host", out string hostHeader))
-                            //    {
-                            //        string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
-                            //        string cleanPath = requestPath.Split('?')[0];
+                                if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
+                                {
+                                    var headers = Operate.ProxyConfig.Proxy.ParseHttpHeaders(request);
+                                    if (headers.TryGetValue("Host", out string hostHeader))
+                                    {
+                                        string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
+                                        string cleanPath = requestPath.Split('?')[0];
 
-                            //        #region//本地代理映射
+                                        #region//本地代理映射
 
-                            //        //if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
-                            //        //{
-                            //        //    var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
-                            //        //        Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                            //        //        hostHeader.Split(':')[0],
-                            //        //        pt.TCP_Server.EndPoint.Port,
-                            //        //        cleanPath);
+                                        if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
+                                        {
+                                            var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
+                                                Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                                hostHeader.Split(':')[0],
+                                                this.ServerPort,
+                                                cleanPath);
 
-                            //        //    if (localRule != null)
-                            //        //    {
-                            //        //        if (File.Exists(localRule.LocalPath))
-                            //        //        {
-                            //        //            byte[] fileBytes = File.ReadAllBytes(localRule.LocalPath);
-                            //        //            string contentType = Operate.ProxyConfig.Proxy.GetContentType(Path.GetExtension(localRule.LocalPath));
+                                            if (localRule != null)
+                                            {
+                                                this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Req, bData.ToArray());
 
-                            //        //            string response =
-                            //        //                $"HTTP/1.1 200 OK\r\n" +
-                            //        //                $"Content-Type: {contentType}\r\n" +
-                            //        //                $"Content-Length: {fileBytes.Length}\r\n" +
-                            //        //                "Connection: close\r\n\r\n";
+                                                if (File.Exists(localRule.LocalPath))
+                                                {
+                                                    byte[] fileBytes = File.ReadAllBytes(localRule.LocalPath);
+                                                    string contentType = Operate.ProxyConfig.Proxy.GetContentType(Path.GetExtension(localRule.LocalPath));
 
-                            //        //            byte[] headerBytes = Encoding.UTF8.GetBytes(response);
-                            //        //            Operate.ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, headerBytes);
-                            //        //            Operate.ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, fileBytes);
-                            //        //            requestHandled = true;
-                            //        //        }
-                            //        //        else
-                            //        //        {
-                            //        //            Operate.ProxyConfig.Proxy.Send404Response(pt.TCP_Client.Socket);
-                            //        //            requestHandled = true;
-                            //        //        }
-                            //        //    }
-                            //        //}
+                                                    string response =
+                                                        $"HTTP/1.1 200 OK\r\n" +
+                                                        $"Content-Type: {contentType}\r\n" +
+                                                        $"Content-Length: {fileBytes.Length}\r\n" +
+                                                        "Connection: close\r\n\r\n";
 
-                            //        #endregion
+                                                    byte[] headerBytes = Encoding.UTF8.GetBytes(response);
 
-                            //        #region//远程代理映射
+                                                    this.TrySend(headerBytes, 0, headerBytes.Length);
+                                                    this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Resp, headerBytes);
 
-                            //        //if (!requestHandled && Operate.ProxyConfig.Mapping.Enable_MapRemote)
-                            //        //{
-                            //        //    var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
-                            //        //        Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                            //        //        hostHeader.Split(':')[0],
-                            //        //        pt.TCP_Server.EndPoint.Port,
-                            //        //        cleanPath);
+                                                    this.TrySend(fileBytes, 0, fileBytes.Length);
+                                                    this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Resp, fileBytes);
 
-                            //        //    if (remoteRule != null)
-                            //        //    {
-                            //        //        string RemoteURL = remoteRule.ProtocolTypeTo.ToString() + "://" + remoteRule.HostTo + ":" + remoteRule.PortTo + remoteRule.PathTo;
-                            //        //        byte[] remoteResponse = Operate.ProxyConfig.Mapping.GetRemoteMappedData(RemoteURL, request, headers);
-                            //        //        if (remoteResponse != null)
-                            //        //        {
-                            //        //            Operate.ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, remoteResponse);
-                            //        //            requestHandled = true;
-                            //        //        }
-                            //        //    }
-                            //        //}
+                                                    return;
+                                                }
+                                                else
+                                                {
+                                                    byte[] b404 = Operate.ProxyConfig.Proxy.Get404Response();
+                                                    this.TrySend(b404, 0, b404.Length);
+                                                    this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Resp, b404);
 
-                            //        #endregion
-                            //    }
-                            //}
+                                                    return;
+                                                }
+                                            }
+                                        }
+
+                                        #endregion
+
+                                        #region//远程代理映射
+
+                                        //if (!requestHandled && Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                                        //{
+                                        //    var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
+                                        //        Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                        //        hostHeader.Split(':')[0],
+                                        //        pt.TCP_Server.EndPoint.Port,
+                                        //        cleanPath);
+
+                                        //    if (remoteRule != null)
+                                        //    {
+                                        //        string RemoteURL = remoteRule.ProtocolTypeTo.ToString() + "://" + remoteRule.HostTo + ":" + remoteRule.PortTo + remoteRule.PathTo;
+                                        //        byte[] remoteResponse = Operate.ProxyConfig.Mapping.GetRemoteMappedData(RemoteURL, request, headers);
+                                        //        if (remoteResponse != null)
+                                        //        {
+                                        //            Operate.ProxyConfig.Proxy.SendTCPData(pt.TCP_Client.Socket, remoteResponse);
+                                        //            requestHandled = true;
+                                        //        }
+                                        //    }
+                                        //}
+
+                                        #endregion
+                                    }
+                                }
+                            }
 
                             break;
 
                         case Operate.ProxyConfig.Proxy.DomainType.Https:
                         case Operate.ProxyConfig.Proxy.DomainType.Socket:
-                        case Operate.ProxyConfig.Proxy.DomainType.External:
-
-                            requestHandled = false;
+                        case Operate.ProxyConfig.Proxy.DomainType.External:                            
 
                             break;
                     }
 
-                    if (!requestHandled)
+                    if (Operate.ProxyConfig.Proxy.HookTCP_Req)
                     {
-                        if (Operate.ProxyConfig.Proxy.HookTCP_Req)
-                        {
-                            this.DoFilter_TCP(bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
-                        }
-                        else
-                        {
-                            this.TargetSocket.Send(bData.ToArray());
-                        }
+                        this.DoFilter_TCP(bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
+                    }
+                    else
+                    {
+                        this.TargetSocket.Send(bData.ToArray());
                     }
                 }
             }

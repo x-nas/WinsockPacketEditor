@@ -94,6 +94,16 @@ namespace WinsockPacketEditor
             });
         }
 
+        public void RefreshMapLocal()
+        { 
+            this.tMapLocal.Refresh();
+        }
+
+        public void RefreshMapRemote()
+        {
+            this.tMapRemote.Refresh();
+        }
+
         #endregion
 
         #region//初始化数据表
@@ -217,7 +227,7 @@ namespace WinsockPacketEditor
             {
                 case "Add":
 
-                    var MapLocalEdit = new MapLocalEdit(this.form, null);
+                    var MapLocalEdit = new MapLocalEdit(this.form, this, null);
                     AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapLocalForm", "本地映射编辑"), MapLocalEdit)
                     {
                         Keyboard = false,
@@ -284,7 +294,7 @@ namespace WinsockPacketEditor
 
         private void OpenMapLocalEdit(MapLocal ml)
         {
-            var MapLocalEdit = new MapLocalEdit(this.form, ml);
+            var MapLocalEdit = new MapLocalEdit(this.form, this, ml);
             AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapLocalForm", "本地映射编辑"), MapLocalEdit)
             {
                 Keyboard = false,

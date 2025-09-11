@@ -612,20 +612,29 @@ namespace WinsockPacketEditor
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(IPString))
+                    {
+                        return string.Empty;
+                    }
+
                     var IPSearch = await ProxyConfig.Proxy.ipSearch.GetIpLocationAsync(IPString);
+                    if (IPSearch == null)
+                    {
+                        return string.Empty;
+                    }
 
                     if (IPSearch.Country.Equals("IANA"))
                     {
-                        return IPSearch.Area;
+                        return IPSearch.Area ?? string.Empty;
                     }
                     else
                     {
-                        return IPSearch.Country + IPSearch.Area;
+                        return (IPSearch.Country ?? string.Empty) + (IPSearch.Area ?? string.Empty);
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    //
                 }
 
                 return string.Empty;
@@ -639,6 +648,8 @@ namespace WinsockPacketEditor
 
             private static readonly Dictionary<string, string> CountryNameToCode = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
+                #region//国家简称代码
+
                 // A
                 { "阿富汗", "af" },
                 { "阿尔巴尼亚", "al" },
@@ -897,6 +908,8 @@ namespace WinsockPacketEditor
                 { "联合国", "un" },
                 { "非洲联盟", "au" },  // 与澳大利亚代码冲突，需特殊处理
                 { "阿拉伯国家联盟", "arab" } // 非标准代码
+
+                #endregion
             };
 
             public static Image GetFlagByLocation(string IPLocation)
@@ -5065,6 +5078,21 @@ namespace WinsockPacketEditor
 
                 #endregion                
 
+                #region//发送404响应
+
+                public static byte[] Get404Response()
+                {
+                    string response =
+                        "HTTP/1.1 404 Not Found\r\n" +
+                        "Content-Type: text/html\r\n" +
+                        "Content-Length: 0\r\n" +
+                        "Connection: close\r\n\r\n";
+
+                    return Encoding.UTF8.GetBytes(response);
+                }
+
+                #endregion
+
                 #region//是否显示代理数据（过滤条件）
 
                 public static bool IsShowProxy_ByFilter(ProxyInfo pi)
@@ -7832,24 +7860,21 @@ namespace WinsockPacketEditor
 
                 public static MapLocal GetMapLocal(ProxyConfig.Proxy.MapProtocol ProtocolType, string host, int port, string path)
                 {
-                    if (string.IsNullOrEmpty(path))
+                    try
                     {
                         return ProxyConfig.Mapping.lstMapLocal.FirstOrDefault(rule =>
-                        rule.IsEnable == true &&
-                        rule.ProtocolType == ProtocolType &&
-                        rule.Host.Equals(host, StringComparison.OrdinalIgnoreCase) &&
-                        rule.Port == port);
+                            rule.IsEnable == true &&
+                            rule.ProtocolType == ProtocolType &&
+                            rule.Host.Equals(host, StringComparison.OrdinalIgnoreCase) &&
+                            rule.Port == port &&
+                            path.StartsWith(rule.RemotePath, StringComparison.OrdinalIgnoreCase));
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        return ProxyConfig.Mapping.lstMapLocal.FirstOrDefault(rule =>
-                        rule.IsEnable == true &&
-                        rule.ProtocolType == ProtocolType &&
-                        rule.Host.Equals(host, StringComparison.OrdinalIgnoreCase) &&
-                        rule.Port == port &&
-                        path.StartsWith(rule.RemotePath, StringComparison.OrdinalIgnoreCase));
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
 
+                    return null;
                 }
 
                 #endregion

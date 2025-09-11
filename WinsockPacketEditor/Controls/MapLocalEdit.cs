@@ -9,15 +9,17 @@ namespace WinsockPacketEditor
     public partial class MapLocalEdit : UserControl
     {
         private Form form;
+        private MapSetting msForm;
         private MapLocal mlSelect;
 
         #region//窗体事件
 
-        public MapLocalEdit(Form form, MapLocal ml)
+        public MapLocalEdit(Form form, MapSetting msForm, MapLocal ml)
         {
             InitializeComponent();
             this.mlSelect = ml;
             this.form = form;
+            this.msForm = msForm;
         }
 
         private void MapLocalEdit_Load(object sender, EventArgs e)
@@ -150,6 +152,7 @@ namespace WinsockPacketEditor
                     LocalizationText = "MapLocalForm.Success"
                 });
 
+                this.msForm.RefreshMapLocal();
                 this.Dispose();
             }
             catch (Exception ex)
