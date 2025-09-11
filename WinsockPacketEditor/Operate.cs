@@ -4852,11 +4852,11 @@ namespace WinsockPacketEditor
 
                 #region//检测外部代理服务器
 
-                public static async Task<bool> DetectionExternalProxy(Form form)
+                public static async Task<bool> DetectionExternalProxy(Form form, string EXTIP, ushort EXTPort, bool EXTAuth, string EXTUsername, string EXTPassword)
                 {
                     try
                     {
-                        IPEndPoint ExternalProxyEP = ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
+                        IPEndPoint ExternalProxyEP = ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(EXTIP, EXTPort);
                         if (ExternalProxyEP == null)
                         {
                             AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理设置错误", TType.Error)
@@ -4885,7 +4885,7 @@ namespace WinsockPacketEditor
 
                             //SOCKS5 握手
                             byte[] handshakeRequest = null;
-                            if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
+                            if (EXTAuth)
                             {
                                 handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
                             }
@@ -4916,7 +4916,7 @@ namespace WinsockPacketEditor
 
                                 case 0x02:
                                     // 需要用户名/密码认证
-                                    if (!Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
+                                    if (!EXTAuth)
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理要求认证", TType.Error)
                                         {
@@ -4926,7 +4926,7 @@ namespace WinsockPacketEditor
                                         return false;
                                     }
 
-                                    byte[] AuthRequest = ProxyConfig.Proxy.CreateSOCKS5AuthPacket(Operate.ProxyConfig.Proxy.ExternalProxy_UserName, Operate.ProxyConfig.Proxy.ExternalProxy_PassWord);
+                                    byte[] AuthRequest = ProxyConfig.Proxy.CreateSOCKS5AuthPacket(EXTUsername, EXTPassword);
                                     if (AuthRequest == null)
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理认证失败", TType.Error)

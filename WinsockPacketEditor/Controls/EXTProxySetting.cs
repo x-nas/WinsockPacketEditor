@@ -239,7 +239,14 @@ namespace WinsockPacketEditor
             }
 
             this.bExternalProxy_Detection.Loading = true;
-            bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(this.form);
+
+            string EXTIP = this.txtExternalProxy_IP.Text.Trim();
+            ushort EXTPort = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
+            bool EXTAuth = this.cbExternalProxy_EnableAuth.Checked;
+            string EXTUsername = this.txtExternalProxy_UserName.Text.Trim();
+            string EXTPassword = this.txtExternalProxy_PassWord.Text.Trim();
+
+            bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(this.form, EXTIP, EXTPort, EXTAuth, EXTUsername, EXTPassword);
 
             if (Result)
             {
