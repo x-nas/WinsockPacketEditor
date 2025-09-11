@@ -4918,7 +4918,7 @@ namespace WinsockPacketEditor
                                     // 需要用户名/密码认证
                                     if (!EXTAuth)
                                     {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理要求认证", TType.Error)
+                                        AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理要求认证", TType.Warn)
                                         {
                                             LocalizationText = "SystemSettingsForm.Success"
                                         });
@@ -4952,7 +4952,7 @@ namespace WinsockPacketEditor
                                     break;
 
                                 default:
-                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "不支持的认证方式", TType.Error)
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "不支持的认证方式", TType.Warn)
                                     {
                                         LocalizationText = "SystemSettingsForm.Success"
                                     });
