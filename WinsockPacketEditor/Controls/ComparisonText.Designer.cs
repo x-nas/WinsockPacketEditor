@@ -137,7 +137,7 @@
             // bStore
             // 
             this.bStore.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bStore.IconSvg = "CheckCircleOutlined";
+            this.bStore.IconSvg = "SaveOutlined";
             this.bStore.LocalizationText = "StoreText";
             this.bStore.Location = new System.Drawing.Point(935, 3);
             this.bStore.Name = "bStore";
