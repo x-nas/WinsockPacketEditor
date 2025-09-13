@@ -52,8 +52,6 @@ namespace WinsockPacketEditor
                     this.nudPortTo.Value = this.mrSelect.PortTo;
                     this.txtPathTo.Text = this.mrSelect.PathTo;
                 }
-
-                this.ProtocolTo_Changed();
             }
             catch (Exception ex)
             {
@@ -85,32 +83,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
-
-        #region//协议类型
-
-        private void ddlProtocolTo_SelectedIndexChanged(object sender, IntEventArgs e)
-        {
-            this.ProtocolTo_Changed();
-        }
-
-        private void ProtocolTo_Changed()
-        {
-            if (this.ddlProtocolTo.SelectedIndex == 0)
-            {
-                this.txtHostTo.PrefixText = "http://";
-            }
-            else if (this.ddlProtocolTo.SelectedIndex == 1)
-            {
-                this.txtHostTo.PrefixText = "https://";
-            }
-            else
-            {
-                this.txtHostTo.PrefixText = string.Empty;
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//保存
 

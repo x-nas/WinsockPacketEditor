@@ -86,6 +86,7 @@
             this.tlpMapTo.ColumnCount = 2;
             this.tlpMapTo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpMapTo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMapTo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMapTo.Controls.Add(this.lPathTo, 0, 3);
             this.tlpMapTo.Controls.Add(this.lPortTo, 0, 2);
             this.tlpMapTo.Controls.Add(this.lHostTo, 0, 1);
@@ -105,9 +106,6 @@
             this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMapTo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMapTo.Size = new System.Drawing.Size(500, 250);
             this.tlpMapTo.TabIndex = 18;
             // 
@@ -159,8 +157,7 @@
             // 
             this.ddlProtocolTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlProtocolTo.Items.AddRange(new object[] {
-            "http",
-            "https"});
+            "http"});
             this.ddlProtocolTo.List = true;
             this.ddlProtocolTo.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlProtocolTo.LocalizationSuffixText = "";
@@ -169,7 +166,6 @@
             this.ddlProtocolTo.PlaceholderText = "请选择";
             this.ddlProtocolTo.Size = new System.Drawing.Size(418, 45);
             this.ddlProtocolTo.TabIndex = 11;
-            this.ddlProtocolTo.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlProtocolTo_SelectedIndexChanged);
             // 
             // txtHostTo
             // 
