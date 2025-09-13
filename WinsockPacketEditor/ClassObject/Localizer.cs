@@ -631,6 +631,9 @@ namespace WinsockPacketEditor
                 case "DisableAll":
                     return "Disable ALL";
 
+                case "StoreText":
+                    return "Store Text";
+
                 #endregion
 
                 #region//StartForm

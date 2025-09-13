@@ -266,6 +266,42 @@ namespace WinsockPacketEditor
             this.txtDuplicateRegex.Clear();
         }
 
-        #endregion        
+        #endregion
+
+        #region//暂存文本
+
+        private void bStore_Click(object sender, EventArgs e)
+        {
+            if (this.tabComparisonText.SelectedIndex == 0)
+            {
+                this.TextA = this.txtComparison_A.Text;
+                this.TextB = this.txtComparison_B.Text;
+            }
+            else if (this.tabComparisonText.SelectedIndex == 1)
+            {
+                this.TextA = this.txtDuplicate_A.Text;
+                this.TextB = this.txtDuplicate_B.Text;
+            }
+        }
+
+        #endregion
+
+        #region//还原
+
+        private void bReset_Click(object sender, EventArgs e)
+        {
+            if (this.tabComparisonText.SelectedIndex == 0)
+            {
+                this.txtComparison_A.Text = this.TextA;
+                this.txtComparison_B.Text = this.TextB;
+            }
+            else if (this.tabComparisonText.SelectedIndex == 1)
+            {
+                this.txtDuplicate_A.Text = this.TextA;
+                this.txtDuplicate_B.Text = this.TextB;
+            }
+        }
+
+        #endregion
     }
 }

@@ -28,25 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.Tabs.StyleCard styleCard2 = new AntdUI.Tabs.StyleCard();
+            AntdUI.Tabs.StyleCard styleCard1 = new AntdUI.Tabs.StyleCard();
             this.tlpLogList = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.tlpProxyList_Button = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpLogList_Button = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtLogList_AutoClear = new AntdUI.InputNumber();
             this.cbLogList_AutoClear = new AntdUI.Checkbox();
             this.cbLogList_AutoRoll = new AntdUI.Checkbox();
             this.tabLogList = new AntdUI.Tabs();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
-            this.tpProxyLog = new AntdUI.TabPage();
-            this.tProxyLog = new AntdUI.Table();
             this.tpFilterLog = new AntdUI.TabPage();
             this.tFilterLog = new AntdUI.Table();
+            this.tpProxyLog = new AntdUI.TabPage();
+            this.tProxyLog = new AntdUI.Table();
             this.tlpLogList.SuspendLayout();
-            this.tlpProxyList_Button.SuspendLayout();
+            this.tlpLogList_Button.SuspendLayout();
             this.tabLogList.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
-            this.tpProxyLog.SuspendLayout();
             this.tpFilterLog.SuspendLayout();
+            this.tpProxyLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpLogList
@@ -55,7 +55,7 @@
             this.tlpLogList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpLogList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpLogList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpLogList.Controls.Add(this.tlpProxyList_Button, 1, 1);
+            this.tlpLogList.Controls.Add(this.tlpLogList_Button, 1, 1);
             this.tlpLogList.Controls.Add(this.tabLogList, 1, 2);
             this.tlpLogList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpLogList.Location = new System.Drawing.Point(0, 0);
@@ -68,24 +68,24 @@
             this.tlpLogList.Size = new System.Drawing.Size(800, 800);
             this.tlpLogList.TabIndex = 0;
             // 
-            // tlpProxyList_Button
+            // tlpLogList_Button
             // 
-            this.tlpProxyList_Button.ColumnCount = 4;
-            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpProxyList_Button.Controls.Add(this.txtLogList_AutoClear, 2, 0);
-            this.tlpProxyList_Button.Controls.Add(this.cbLogList_AutoClear, 1, 0);
-            this.tlpProxyList_Button.Controls.Add(this.cbLogList_AutoRoll, 3, 0);
-            this.tlpProxyList_Button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpProxyList_Button.Location = new System.Drawing.Point(30, 20);
-            this.tlpProxyList_Button.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpProxyList_Button.Name = "tlpProxyList_Button";
-            this.tlpProxyList_Button.RowCount = 1;
-            this.tlpProxyList_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyList_Button.Size = new System.Drawing.Size(740, 50);
-            this.tlpProxyList_Button.TabIndex = 8;
+            this.tlpLogList_Button.ColumnCount = 4;
+            this.tlpLogList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLogList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpLogList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpLogList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpLogList_Button.Controls.Add(this.txtLogList_AutoClear, 2, 0);
+            this.tlpLogList_Button.Controls.Add(this.cbLogList_AutoClear, 1, 0);
+            this.tlpLogList_Button.Controls.Add(this.cbLogList_AutoRoll, 3, 0);
+            this.tlpLogList_Button.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpLogList_Button.Location = new System.Drawing.Point(30, 20);
+            this.tlpLogList_Button.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpLogList_Button.Name = "tlpLogList_Button";
+            this.tlpLogList_Button.RowCount = 1;
+            this.tlpLogList_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLogList_Button.Size = new System.Drawing.Size(740, 50);
+            this.tlpLogList_Button.TabIndex = 8;
             // 
             // txtLogList_AutoClear
             // 
@@ -147,7 +147,7 @@
             this.tabLogList.Pages.Add(this.tpFilterLog);
             this.tabLogList.Pages.Add(this.tpProxyLog);
             this.tabLogList.Size = new System.Drawing.Size(734, 724);
-            this.tabLogList.Style = styleCard2;
+            this.tabLogList.Style = styleCard1;
             this.tabLogList.TabIndex = 0;
             this.tabLogList.Type = AntdUI.TabType.Card;
             // 
@@ -176,29 +176,6 @@
             this.tSystemLog.Text = "table1";
             this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
             // 
-            // tpProxyLog
-            // 
-            this.tpProxyLog.Controls.Add(this.tProxyLog);
-            this.tpProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpProxyLog.LocalizationText = "LogList.LogList.{id}";
-            this.tpProxyLog.Location = new System.Drawing.Point(0, 45);
-            this.tpProxyLog.Name = "tpProxyLog";
-            this.tpProxyLog.Size = new System.Drawing.Size(734, 679);
-            this.tpProxyLog.TabIndex = 2;
-            this.tpProxyLog.Text = "代理日志";
-            // 
-            // tProxyLog
-            // 
-            this.tProxyLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tProxyLog.CellImpactHeight = false;
-            this.tProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tProxyLog.Gap = 12;
-            this.tProxyLog.Location = new System.Drawing.Point(0, 0);
-            this.tProxyLog.Name = "tProxyLog";
-            this.tProxyLog.Size = new System.Drawing.Size(734, 679);
-            this.tProxyLog.TabIndex = 10;
-            this.tProxyLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyLog_CellClick);
-            // 
             // tpFilterLog
             // 
             this.tpFilterLog.Controls.Add(this.tFilterLog);
@@ -222,6 +199,29 @@
             this.tFilterLog.TabIndex = 11;
             this.tFilterLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterLog_CellClick);
             // 
+            // tpProxyLog
+            // 
+            this.tpProxyLog.Controls.Add(this.tProxyLog);
+            this.tpProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpProxyLog.LocalizationText = "LogList.LogList.{id}";
+            this.tpProxyLog.Location = new System.Drawing.Point(0, 45);
+            this.tpProxyLog.Name = "tpProxyLog";
+            this.tpProxyLog.Size = new System.Drawing.Size(734, 679);
+            this.tpProxyLog.TabIndex = 2;
+            this.tpProxyLog.Text = "代理日志";
+            // 
+            // tProxyLog
+            // 
+            this.tProxyLog.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tProxyLog.CellImpactHeight = false;
+            this.tProxyLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tProxyLog.Gap = 12;
+            this.tProxyLog.Location = new System.Drawing.Point(0, 0);
+            this.tProxyLog.Name = "tProxyLog";
+            this.tProxyLog.Size = new System.Drawing.Size(734, 679);
+            this.tProxyLog.TabIndex = 10;
+            this.tProxyLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyLog_CellClick);
+            // 
             // LogList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -234,12 +234,12 @@
             this.Size = new System.Drawing.Size(800, 800);
             this.Load += new System.EventHandler(this.LogList_Load);
             this.tlpLogList.ResumeLayout(false);
-            this.tlpProxyList_Button.ResumeLayout(false);
-            this.tlpProxyList_Button.PerformLayout();
+            this.tlpLogList_Button.ResumeLayout(false);
+            this.tlpLogList_Button.PerformLayout();
             this.tabLogList.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
-            this.tpProxyLog.ResumeLayout(false);
             this.tpFilterLog.ResumeLayout(false);
+            this.tpProxyLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -254,7 +254,7 @@
         private AntdUI.TabPage tpProxyLog;
         private AntdUI.Table tProxyLog;
         private AntdUI.Table tFilterLog;
-        private TableLayoutPanelEx tlpProxyList_Button;
+        private TableLayoutPanelEx tlpLogList_Button;
         private AntdUI.InputNumber txtLogList_AutoClear;
         private AntdUI.Checkbox cbLogList_AutoClear;
         private AntdUI.Checkbox cbLogList_AutoRoll;
