@@ -442,6 +442,12 @@ namespace WinsockPacketEditor
                 case "ExcelColumn.Log":
                     return "Log Time\tModule\tContent\t";
 
+                case "ExcelColumn.FilterLog":
+                    return "Log Time\tFilter Name\tAction\tMatch\tType\tLength\t";
+
+                case "ExcelColumn.ProxyLog":
+                    return "Log Time\tAccount\tIP Address\tContent\t";
+
                 case "ExcelColumn.Proxy":
                     return "Time\tType\tSocket\tClient Addr\tServer Addr\tLength\tData\t";
 

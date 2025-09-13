@@ -239,7 +239,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//日志列表 - 右键菜单
+        #region//系统日志列表 - 右键菜单
 
         private void tSystemLog_CellClick(object sender, TableClickEventArgs e)
         {
@@ -265,13 +265,7 @@ namespace WinsockPacketEditor
 
                             if (liList.Count > 0)
                             {
-                                string LogString = string.Empty;
-                                foreach (LogInfo li in liList)
-                                {
-                                    LogString += li.LogTime.ToString() + ": " + li.FuncName + " - " + li.LogContent + "\r\n";
-                                }
-
-                                Clipboard.SetText(LogString);
+                                this.tSystemLog.CopyData(this.tSystemLog.SelectedIndexs);
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
                                 {
@@ -304,9 +298,190 @@ namespace WinsockPacketEditor
 
                             break;
 
+                        case "SelectAll":
+
+                            int[] IndexALL = new int[Operate.LogConfig.List.lstLogInfo.Count];
+
+                            for (int i = 0; i < IndexALL.Length; i++)
+                            {
+                                IndexALL[i] = i + 1;
+                            }
+
+                            this.tSystemLog.SelectedIndexs = IndexALL;
+
+                            break;
+
                         case "DeSelect":
 
                             this.tSystemLog.SelectedIndex = -1;
+
+                            break;
+                    }
+                }, Operate.LogConfig.List.GetCMS_LogList());
+            }
+        }
+
+        #endregion
+
+        #region//滤镜日志列表 - 右键菜单
+
+        private void tFilterLog_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.LogConfig.List.lstFilterLogInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(tFilterLog, item =>
+                {
+                    List<FilterLogInfo> liList = new List<FilterLogInfo>();
+
+                    foreach (int SelectIndex in this.tFilterLog.SelectedIndexs)
+                    {
+                        liList.Add(Operate.LogConfig.List.lstFilterLogInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Copy":
+
+                            if (liList.Count > 0)
+                            {
+                                this.tFilterLog.CopyData(this.tFilterLog.SelectedIndexs);
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                                {
+                                    LocalizationText = "CopyToClipboard"
+                                });
+                            }
+
+                            break;
+
+                        case "ToExcel":
+
+                            Operate.LogConfig.List.SaveFilterLogList_Dialog(this.form, this.tFilterLog, Operate.PacketConfig.Packet.InjectProcess, liList);
+
+                            break;
+
+                        case "ClearUp":
+
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LogList.LogList", "日志列表"), AntdUI.Localization.Get("SureToDelete", "\r\n确定删除所有数据吗\r\n\r\n"))
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    this.CleanUp_FilterLog();
+
+                                    return true;
+                                }
+                            });
+
+                            break;
+
+                        case "SelectAll":
+
+                            int[] IndexALL = new int[Operate.LogConfig.List.lstFilterLogInfo.Count];
+
+                            for (int i = 0; i < IndexALL.Length; i++)
+                            {
+                                IndexALL[i] = i + 1;
+                            }
+
+                            this.tFilterLog.SelectedIndexs = IndexALL;
+
+                            break;
+
+                        case "DeSelect":
+
+                            this.tFilterLog.SelectedIndex = -1;
+
+                            break;
+                    }
+                }, Operate.LogConfig.List.GetCMS_LogList());
+            }
+        }
+
+        #endregion
+
+        #region//代理日志列表 - 右键菜单
+
+        private void tProxyLog_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.LogConfig.List.lstProxyLogInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(tProxyLog, item =>
+                {
+                    List<ProxyLogInfo> liList = new List<ProxyLogInfo>();
+
+                    foreach (int SelectIndex in this.tProxyLog.SelectedIndexs)
+                    {
+                        liList.Add(Operate.LogConfig.List.lstProxyLogInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Copy":
+
+                            if (liList.Count > 0)
+                            {
+                                this.tProxyLog.CopyData(this.tProxyLog.SelectedIndexs);
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                                {
+                                    LocalizationText = "CopyToClipboard"
+                                });
+                            }
+
+                            break;
+
+                        case "ToExcel":
+
+                            Operate.LogConfig.List.SaveProxyLogList_Dialog(this.form, this.tProxyLog, Operate.PacketConfig.Packet.InjectProcess, liList);
+
+                            break;
+
+                        case "ClearUp":
+
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LogList.LogList", "日志列表"), AntdUI.Localization.Get("SureToDelete", "\r\n确定删除所有数据吗\r\n\r\n"))
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    this.CleanUp_ProxyLog();
+
+                                    return true;
+                                }
+                            });
+
+                            break;
+
+                        case "SelectAll":
+
+                            int[] IndexALL = new int[Operate.LogConfig.List.lstProxyLogInfo.Count];
+
+                            for (int i = 0; i < IndexALL.Length; i++)
+                            {
+                                IndexALL[i] = i + 1;
+                            }
+
+                            this.tProxyLog.SelectedIndexs = IndexALL;
+
+                            break;
+
+                        case "DeSelect":
+
+                            this.tProxyLog.SelectedIndex = -1;
 
                             break;
                     }

@@ -10276,6 +10276,13 @@ namespace WinsockPacketEditor
                         LocalizationText = "Edit",
                     });
 
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("复制", "Ctrl+C")
+                    {
+                        ID = "Copy",
+                        IconSvg = "CopyOutlined",
+                        LocalizationText = "Copy",
+                    });
+
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
 
                     if (SendConfig.List.lstSendInfo.Count > 0)
@@ -10351,7 +10358,7 @@ namespace WinsockPacketEditor
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
 
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("全选")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("全选", "Ctrl+A")
                     {
                         ID = "SelectAll",
                         IconSvg = "UnorderedListOutlined",
@@ -16192,7 +16199,7 @@ namespace WinsockPacketEditor
                 {
                     List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
 
-                    menuItems.Add(new AntdUI.ContextMenuStripItem("复制日志信息")
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("复制", "Ctrl+C")
                     {
                         ID = "Copy",
                         IconSvg = "CopyOutlined",
@@ -16217,6 +16224,13 @@ namespace WinsockPacketEditor
                         LocalizationText = "Clear",
                     });
 
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("全选", "Ctrl+A")
+                    {
+                        ID = "SelectAll",
+                        IconSvg = "UnorderedListOutlined",
+                        LocalizationText = "SelectAll",
+                    });
+
                     menuItems.Add(new AntdUI.ContextMenuStripItem("取消选择")
                     {
                         ID = "DeSelect",
@@ -16229,7 +16243,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存日志列表为Excel（对话框）
+                #region//保存系统日志列表为Excel（对话框）
 
                 public static void SaveLogList_Dialog(Form form, AntdUI.Table tTable, string FileName, List<LogInfo> liList)
                 {
@@ -16300,6 +16314,196 @@ namespace WinsockPacketEditor
 
                                     lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
                                     lineBuilder.Append(log.FuncName).Append('\t');
+                                    lineBuilder.Append(log.LogContent).Append('\t');
+
+                                    writer.WriteLine(lineBuilder.ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return false;
+                    }
+                }
+
+                #endregion                
+
+                #region//保存滤镜日志列表为Excel（对话框）
+
+                public static void SaveFilterLogList_Dialog(Form form, AntdUI.Table tTable, string FileName, List<FilterLogInfo> liList)
+                {
+                    try
+                    {
+                        if (LogConfig.List.lstFilterLogInfo.Count > 0)
+                        {
+                            int SaveCount = LogConfig.List.lstFilterLogInfo.Count;
+
+                            SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
+                            sfdSaveToExcel.Filter = AntdUI.Localization.Get("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
+                            sfdSaveToExcel.RestoreDirectory = true;
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveToExcel.FileName = FileName;
+                            }
+
+                            if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveToExcel.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    bool bOK = false;
+                                    tTable.Spin(AntdUI.Localization.Get("Exporting", "正在导出..."), config =>
+                                    {
+                                        bOK = SaveFilterLogListToExcel(FilePath, liList);
+                                    }, () =>
+                                    {
+                                        if (bOK)
+                                        {
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到 Excel 成功");
+                                            AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        }
+                                        else
+                                        {
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到 Excel 失败");
+                                            string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                            AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                private static bool SaveFilterLogListToExcel(string filePath, List<FilterLogInfo> liList)
+                {
+                    try
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                        using (var writer = new StreamWriter(stream, Encoding.Default))
+                        {
+                            writer.WriteLine(AntdUI.Localization.Get("ExcelColumn.FilterLog", "记录时间\t滤镜名称\t动作\t匹配数\t类别\t长度\t"));
+
+                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstFilterLogInfo.ToList();
+                            foreach (var log in dataSource)
+                            {
+                                try
+                                {
+                                    var lineBuilder = new StringBuilder();
+
+                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
+                                    lineBuilder.Append(log.FName).Append('\t');
+                                    lineBuilder.Append(log.FAction).Append('\t');
+                                    lineBuilder.Append(log.MatchNum).Append('\t');
+                                    lineBuilder.Append(log.PacketType).Append('\t');
+                                    lineBuilder.Append(log.PacketLen).Append('\t');
+
+                                    writer.WriteLine(lineBuilder.ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return false;
+                    }
+                }
+
+                #endregion                
+
+                #region//保存滤镜日志列表为Excel（对话框）
+
+                public static void SaveProxyLogList_Dialog(Form form, AntdUI.Table tTable, string FileName, List<ProxyLogInfo> liList)
+                {
+                    try
+                    {
+                        if (LogConfig.List.lstProxyLogInfo.Count > 0)
+                        {
+                            int SaveCount = LogConfig.List.lstProxyLogInfo.Count;
+
+                            SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
+                            sfdSaveToExcel.Filter = AntdUI.Localization.Get("ExcelFile", "Excel 文件") + " (*.xls)|*.xls";
+                            sfdSaveToExcel.RestoreDirectory = true;
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveToExcel.FileName = FileName;
+                            }
+
+                            if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveToExcel.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    bool bOK = false;
+                                    tTable.Spin(AntdUI.Localization.Get("Exporting", "正在导出..."), config =>
+                                    {
+                                        bOK = SaveProxyLogListToExcel(FilePath, liList);
+                                    }, () =>
+                                    {
+                                        if (bOK)
+                                        {
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到 Excel 成功");
+                                            AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        }
+                                        else
+                                        {
+                                            string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到 Excel 失败");
+                                            string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                            AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                private static bool SaveProxyLogListToExcel(string filePath, List<ProxyLogInfo> liList)
+                {
+                    try
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                        using (var writer = new StreamWriter(stream, Encoding.Default))
+                        {
+                            writer.WriteLine(AntdUI.Localization.Get("ExcelColumn.ProxyLog", "记录时间\t账号\tIP地址\t日志内容\t"));
+
+                            var dataSource = liList.Count > 0 ? liList : LogConfig.List.lstProxyLogInfo.ToList();
+                            foreach (var log in dataSource)
+                            {
+                                try
+                                {
+                                    var lineBuilder = new StringBuilder();
+
+                                    lineBuilder.Append(log.LogTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff")).Append('\t');
+                                    lineBuilder.Append(log.UserName).Append('\t');
+                                    lineBuilder.Append(log.LoginIP).Append('\t');
                                     lineBuilder.Append(log.LogContent).Append('\t');
 
                                     writer.WriteLine(lineBuilder.ToString());

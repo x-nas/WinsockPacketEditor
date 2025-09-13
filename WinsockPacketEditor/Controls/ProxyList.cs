@@ -509,6 +509,20 @@ namespace WinsockPacketEditor
 
                             break;
 
+                        case "Copy":
+
+                            if (piList.Count > 0)
+                            {
+                                this.tProxyList.CopyData(this.tProxyList.SelectedIndexs);
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                                {
+                                    LocalizationText = "CopyToClipboard"
+                                });
+                            }
+
+                            break;
+
                         case "ToFilterList":
 
                             if (piList.Count > 0)

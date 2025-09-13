@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             AntdUI.Tabs.StyleCard styleCard1 = new AntdUI.Tabs.StyleCard();
-            this.tlpLogList = new TableLayoutPanelEx();
+            this.tlpLogList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tabLogList = new AntdUI.Tabs();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
@@ -63,10 +63,10 @@
             // 
             // tabLogList
             // 
-            this.tabLogList.Controls.Add(this.tpSystemLog);
-            this.tabLogList.Controls.Add(this.tpFilterLog);
             this.tabLogList.Controls.Add(this.tpProxyLog);
-            this.tabLogList.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabLogList.Controls.Add(this.tpFilterLog);
+            this.tabLogList.Controls.Add(this.tpSystemLog);
+            this.tabLogList.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabLogList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabLogList.Gap = 20;
             this.tabLogList.Location = new System.Drawing.Point(33, 23);
@@ -74,6 +74,7 @@
             this.tabLogList.Pages.Add(this.tpSystemLog);
             this.tabLogList.Pages.Add(this.tpFilterLog);
             this.tabLogList.Pages.Add(this.tpProxyLog);
+            this.tabLogList.SelectedIndex = 2;
             this.tabLogList.Size = new System.Drawing.Size(734, 774);
             this.tabLogList.Style = styleCard1;
             this.tabLogList.TabIndex = 0;
@@ -125,6 +126,7 @@
             this.tFilterLog.Name = "tFilterLog";
             this.tFilterLog.Size = new System.Drawing.Size(734, 729);
             this.tFilterLog.TabIndex = 11;
+            this.tFilterLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterLog_CellClick);
             // 
             // tpProxyLog
             // 
@@ -147,6 +149,7 @@
             this.tProxyLog.Name = "tProxyLog";
             this.tProxyLog.Size = new System.Drawing.Size(734, 729);
             this.tProxyLog.TabIndex = 10;
+            this.tProxyLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyLog_CellClick);
             // 
             // LogList
             // 
