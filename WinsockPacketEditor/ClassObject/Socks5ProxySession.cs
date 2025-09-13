@@ -1,15 +1,12 @@
-﻿using SuperSocket.Common;
-using SuperSocket.SocketBase;
+﻿using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using static WinsockPacketEditor.Operate.FilterConfig.Filter;
 
 namespace WinsockPacketEditor
 {
@@ -727,14 +724,18 @@ namespace WinsockPacketEditor
 
                                         if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
                                         {
+                                            string TargetIP = hostHeader.Split(':')[0];
+                                            int TargetPort = 80;
+
                                             var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
                                                 Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                                hostHeader.Split(':')[0],
-                                                80,
+                                                TargetIP,
+                                                TargetPort,
                                                 cleanPath);
 
                                             if (remoteRule != null)
                                             {
+                                                this.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(TargetIP, TargetPort);
                                                 this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Req, bData.ToArray(), true);
 
                                                 byte[] modifiedRequestBytes = Operate.ProxyConfig.Mapping.ModifyRequestHostAndPath(
