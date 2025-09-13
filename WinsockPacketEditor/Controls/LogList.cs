@@ -20,6 +20,10 @@ namespace WinsockPacketEditor
 
         private void LogList_Load(object sender, EventArgs e)
         {
+            this.cbLogList_AutoClear.Checked = Operate.LogConfig.List.AutoClear;
+            this.txtLogList_AutoClear.Value = Operate.LogConfig.List.AutoClear_Value;
+            this.cbLogList_AutoRoll.Checked = Operate.LogConfig.List.AutoRoll;
+
             this.tabLogList.SelectTab(0);
 
             this.InitTable_SystemLogList();
@@ -192,6 +196,11 @@ namespace WinsockPacketEditor
 
         public void RefreshFilterLog()
         {
+            if (Operate.LogConfig.List.AutoRoll)
+            {
+                tFilterLog.ScrollBar.ValueY = tFilterLog.ScrollBar.MaxY;
+            }
+
             if (Operate.LogConfig.List.AutoClear)
             {
                 if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
@@ -203,6 +212,11 @@ namespace WinsockPacketEditor
 
         public void RefreshProxyLog()
         {
+            if (Operate.LogConfig.List.AutoRoll)
+            {
+                tProxyLog.ScrollBar.ValueY = tProxyLog.ScrollBar.MaxY;
+            }
+
             if (Operate.LogConfig.List.AutoClear)
             {
                 if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
@@ -238,6 +252,41 @@ namespace WinsockPacketEditor
         }
 
         #endregion
+
+        #region//自动清理
+
+        private void cbLogList_AutoClear_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.LogList_AutoClear_Changed();
+
+            Operate.LogConfig.List.AutoClear = this.cbLogList_AutoClear.Checked;
+        }
+
+        private void txtLogList_AutoClear_ValueChanged(object sender, DecimalEventArgs e)
+        {
+            Operate.LogConfig.List.AutoClear_Value = this.txtLogList_AutoClear.Value;
+        }
+
+        private void LogList_AutoClear_Changed()
+        {
+            this.txtLogList_AutoClear.Enabled = this.cbLogList_AutoClear.Checked;
+        }
+
+        #endregion
+
+        #region//自动滚动
+
+        private void cbLogList_AutoRoll_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.LogList_AutoRoll_Changed();
+        }
+
+        private void LogList_AutoRoll_Changed()
+        {
+            Operate.LogConfig.List.AutoRoll = this.cbLogList_AutoRoll.Checked;
+        }
+
+        #endregion        
 
         #region//系统日志列表 - 右键菜单
 
