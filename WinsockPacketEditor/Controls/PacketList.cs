@@ -561,6 +561,19 @@ namespace WinsockPacketEditor
 
                             break;
 
+                        case "SelectAll":
+
+                            int[] IndexALL = new int[Operate.PacketConfig.List.lstPacketInfo.Count];
+
+                            for (int i = 0; i < IndexALL.Length; i++)
+                            {
+                                IndexALL[i] = i + 1;
+                            }
+
+                            this.tPacketList.SelectedIndexs = IndexALL;
+
+                            break;
+
                         case "DeSelect":
 
                             this.tPacketList.SelectedIndex = -1;

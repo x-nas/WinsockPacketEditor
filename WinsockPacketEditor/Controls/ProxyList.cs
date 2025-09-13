@@ -613,6 +613,19 @@ namespace WinsockPacketEditor
 
                             break;
 
+                        case "SelectAll":
+
+                            int[] IndexALL = new int[Operate.ProxyConfig.List.lstProxyInfo.Count];
+
+                            for (int i = 0; i < IndexALL.Length; i++)
+                            {
+                                IndexALL[i] = i + 1;
+                            }
+
+                            this.tProxyList.SelectedIndexs = IndexALL;
+
+                            break;
+
                         case "DeSelect":
 
                             this.tProxyList.SelectedIndex = -1;

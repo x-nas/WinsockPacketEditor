@@ -10351,6 +10351,13 @@ namespace WinsockPacketEditor
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
 
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("全选")
+                    {
+                        ID = "SelectAll",
+                        IconSvg = "UnorderedListOutlined",
+                        LocalizationText = "SelectAll",
+                    });
+
                     menuItems.Add(new AntdUI.ContextMenuStripItem("取消选择")
                     {
                         ID = "DeSelect",
