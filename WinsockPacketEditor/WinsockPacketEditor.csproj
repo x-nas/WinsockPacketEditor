@@ -225,16 +225,19 @@
     <Compile Include="ClassObject\MapRemote.cs" />
     <Compile Include="ClassObject\PacketInfo.cs" />
     <Compile Include="ClassObject\ProcessInfo.cs" />
+    <Compile Include="ClassObject\ProxyAppServer.cs" />
     <Compile Include="ClassObject\ProxyLogInfo.cs" />
     <Compile Include="ClassObject\ProxyInfo.cs" />
+    <Compile Include="ClassObject\ProxySession.cs" />
     <Compile Include="ClassObject\ProxyUDP.cs" />
     <Compile Include="ClassObject\RobotExecute.cs" />
     <Compile Include="ClassObject\RobotInfo.cs" />
     <Compile Include="ClassObject\SendExecute.cs" />
     <Compile Include="ClassObject\SendInfo.cs" />
     <Compile Include="ClassObject\Socks5ProxyReceiveFilter.cs" />
-    <Compile Include="ClassObject\Socks5ProxyServer.cs" />
-    <Compile Include="ClassObject\Socks5ProxySession.cs" />
+    <Compile Include="ClassObject\SocksProxyReceiveFilterFactory.cs" />
+    <Compile Include="ClassObject\SocksProxyServer.cs" />
+    <Compile Include="ClassObject\SocksSwitchReceiveFilter.cs" />
     <Compile Include="ClassObject\WinSockHook.cs" />
     <Compile Include="Controls\AccountEdit.cs">
       <SubType>UserControl</SubType>

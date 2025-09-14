@@ -21,7 +21,7 @@ namespace WinsockPacketEditor
             string ProxyCache = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
             long ProxyTotal = ProxyTCP + ProxyUDP;
             string ProxyOnLine = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
-            string ProxyLinks = Operate.ProxyConfig.Proxy.ProxyServer_Socks5?.GetAllSessions().Count().ToString() ?? "0";
+            string ProxyLinks = Operate.ProxyConfig.Proxy.ProxyServer?.GetAllSessions().Count().ToString() ?? "0";
             string ProxySpeed = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
             string ProxyBytes = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
 

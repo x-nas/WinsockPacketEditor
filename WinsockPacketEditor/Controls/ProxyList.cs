@@ -880,18 +880,18 @@ namespace WinsockPacketEditor
             {
                 this.InitProxyServer();
 
-                if (Operate.ProxyConfig.Proxy.ProxyServer_Socks5 == null)
+                if (Operate.ProxyConfig.Proxy.ProxyServer == null)
                 {
-                    Operate.ProxyConfig.Proxy.ProxyServer_Socks5 = new Socks5ProxyServer();
+                    Operate.ProxyConfig.Proxy.ProxyServer = new SocksProxyServer();
                 }                
 
-                if (Operate.ProxyConfig.Proxy.ProxyServer_Socks5.State != ServerState.Running)
+                if (Operate.ProxyConfig.Proxy.ProxyServer.State != ServerState.Running)
                 {
-                    if (Operate.ProxyConfig.Proxy.ProxyServer_Socks5.State == ServerState.NotInitialized)
+                    if (Operate.ProxyConfig.Proxy.ProxyServer.State == ServerState.NotInitialized)
                     {
                         this.InitSocks5Proxy();
                     }
-                    else if(Operate.ProxyConfig.Proxy.ProxyServer_Socks5.State == ServerState.NotStarted)
+                    else if(Operate.ProxyConfig.Proxy.ProxyServer.State == ServerState.NotStarted)
                     {
                         this.StartSocks5Proxy();
                     }
@@ -967,7 +967,7 @@ namespace WinsockPacketEditor
                     MaxRequestLength = 1024 * 1024 * 10,
                 };
 
-                if (Operate.ProxyConfig.Proxy.ProxyServer_Socks5.Setup(config))
+                if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config))
                 {
                     this.StartSocks5Proxy();
                 }
@@ -989,7 +989,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.ProxyConfig.Proxy.ProxyServer_Socks5.Start())
+                if (Operate.ProxyConfig.Proxy.ProxyServer.Start())
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "开始 SOCKS5 代理", TType.Success)
                     {
@@ -1018,9 +1018,9 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.ProxyConfig.Proxy.ProxyServer_Socks5 != null && Operate.ProxyConfig.Proxy.ProxyServer_Socks5.State == ServerState.Running)
+                if (Operate.ProxyConfig.Proxy.ProxyServer != null && Operate.ProxyConfig.Proxy.ProxyServer.State == ServerState.Running)
                 {
-                    Operate.ProxyConfig.Proxy.ProxyServer_Socks5.Stop();
+                    Operate.ProxyConfig.Proxy.ProxyServer.Stop();
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "停止 SOCKS5 代理", TType.Warn)
                     {
@@ -1192,7 +1192,7 @@ namespace WinsockPacketEditor
                 this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
                 this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
                 this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
-                var sessions = Operate.ProxyConfig.Proxy.ProxyServer_Socks5?.GetAllSessions();
+                var sessions = Operate.ProxyConfig.Proxy.ProxyServer?.GetAllSessions();
                 this.lProxyTCP_CNT.Text = (sessions?.Count() ?? 0).ToString();                
                 this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.cdProxyUDP.Count.ToString();
 

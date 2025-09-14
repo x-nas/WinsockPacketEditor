@@ -110,7 +110,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.ProxyConfig.Proxy.ProxyServer_Socks5 == null)
+                if (Operate.ProxyConfig.Proxy.ProxyServer == null)
                 {
                     return;
                 }
@@ -124,10 +124,10 @@ namespace WinsockPacketEditor
                     rootItem.Sub.Clear();
                 }
 
-                var sessions = Operate.ProxyConfig.Proxy.ProxyServer_Socks5.GetAllSessions();
-                var SessionList = sessions?.ToList() ?? new List<Socks5ProxySession>();
+                var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
+                var SessionList = sessions?.ToList() ?? new List<ProxySession>();
 
-                foreach (Socks5ProxySession Session in SessionList)
+                foreach (ProxySession Session in SessionList)
                 {
                     #region//更新客户端链接
 
