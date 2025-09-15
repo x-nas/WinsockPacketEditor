@@ -11,8 +11,7 @@ using System.Threading;
 namespace WinsockPacketEditor
 {
     public class Socks5ProxyReceiveFilter : IReceiveFilter<BinaryRequestInfo>
-    {
-        private byte[] bBuffer = new byte[8192];
+    {        
         private ProxySession m_Session;
 
         public int LeftBufferSize { get; set; }
@@ -25,7 +24,8 @@ namespace WinsockPacketEditor
 
         public Socks5ProxyReceiveFilter(ProxySession session)
         {
-            this.m_Session = session;
+            this.m_Session = session;            
+            this.m_Session.ProxyType = Operate.ProxyConfig.Proxy.ProxyType.Socket5;
             this.m_Session.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Handshake;
         }
 
@@ -50,40 +50,37 @@ namespace WinsockPacketEditor
 
             byte[] body = new byte[length];
             Buffer.BlockCopy(readBuffer, offset, body, 0, length);
-
-            BinaryRequestInfo bRequest = new BinaryRequestInfo("SOCKS5", body);
-            if (this.HandleSocks5Request(bRequest))
+            
+            if (this.HandleSocks5Request(body.AsSpan()))
             {
                 return null;
             }
             else
             {
-                return bRequest;
+                return new BinaryRequestInfo("SOCKS5", body);
             }
         }
 
-        private bool HandleSocks5Request(BinaryRequestInfo requestInfo)
+        private bool HandleSocks5Request(Span<byte> bDataSpan)
         {
             try
             {
-                byte[] bData = requestInfo.Body;
-
                 switch (this.m_Session.ProxyStep)
                 {
                     case Operate.ProxyConfig.Proxy.ProxyStep.Handshake:
-                        this.Handshake(bData.AsSpan());
+                        this.Handshake(bDataSpan);
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName:
-                        this.AuthUserName(bData);
+                        this.AuthUserName(bDataSpan);
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.Command:
-                        this.Command(bData);
+                        this.Command(bDataSpan);
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.ForwardData:
-                        this.ForwardData(bData);
+                        this.ForwardData(bDataSpan);
                         break;
                 }
 
@@ -754,7 +751,7 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                targetSocket.BeginReceive(this.bBuffer, 0, this.bBuffer.Length, SocketFlags.None, OnTargetDataReceived, null);
+                targetSocket.BeginReceive(this.m_Session.bBuffer, 0, this.m_Session.bBuffer.Length, SocketFlags.None, OnTargetDataReceived, null);
             }
             catch (ObjectDisposedException)
             {
@@ -784,7 +781,7 @@ namespace WinsockPacketEditor
                 int bytesRead = targetSocket.EndReceive(ar);
                 if (bytesRead > 0)
                 {
-                    byte[] bData = this.bBuffer.AsSpan(0, bytesRead).ToArray();
+                    byte[] bData = this.m_Session.bBuffer.AsSpan(0, bytesRead).ToArray();
 
                     if (this.m_Session.CommandType == Operate.ProxyConfig.Proxy.CommandType.Connect)
                     {

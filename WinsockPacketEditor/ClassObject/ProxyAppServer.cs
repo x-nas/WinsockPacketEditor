@@ -28,31 +28,30 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//租用缓存池
+        #region // 租用缓存池
 
-        internal ArraySegment<byte> RequestProxyBuffer()
+        internal byte[] RequestProxyBuffer()
         {
             try
             {
-                var buffer = m_BufferPool.Rent(m_ProxyReceiveBufferSize);
-                return new ArraySegment<byte>(buffer, 0, m_ProxyReceiveBufferSize);
+                return m_BufferPool.Rent(m_ProxyReceiveBufferSize);
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                return new ArraySegment<byte>(new byte[0]);
+                return Array.Empty<byte>();
             }
         }
 
         #endregion
 
-        #region//归还缓存池
+        #region // 归还缓存池
 
-        internal void PushProxyBuffer(ArraySegment<byte> buffer)
+        internal void PushProxyBuffer(byte[] buffer)
         {
-            if (buffer.Array != null && buffer.Array.Length >= m_ProxyReceiveBufferSize)
+            if (buffer != null && buffer.Length >= m_ProxyReceiveBufferSize)
             {
-                m_BufferPool.Return(buffer.Array);
+                m_BufferPool.Return(buffer);
             }
         }
 

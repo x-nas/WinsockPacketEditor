@@ -8,6 +8,7 @@ namespace WinsockPacketEditor
 {
     public class ProxySession : AppSession<ProxySession, BinaryRequestInfo>
     {
+        public byte[] bBuffer = null;
         public string ClientIP = string.Empty;
         public int ClientPort = 0;
         public string ServerIP = string.Empty;
@@ -19,9 +20,9 @@ namespace WinsockPacketEditor
         public Operate.ProxyConfig.Proxy.CommandType CommandType;
         public Operate.ProxyConfig.Proxy.AddressType AddressType;
         public Operate.ProxyConfig.Proxy.DomainType DomainType;
-        public Socket TargetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public Socket TargetSocket = null;
 
-        public Operate.ProxyConfig.Proxy.ProxyType Type { get; internal set; }
+        public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; internal set; }
 
         public new ProxyAppServer AppServer
         {
@@ -41,7 +42,9 @@ namespace WinsockPacketEditor
 
                 this.ClientIP = this.RemoteEndPoint.Address.ToString();
                 this.ClientPort = this.RemoteEndPoint.Port;
-                
+
+                this.bBuffer = AppServer.RequestProxyBuffer();
+                this.TargetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
             catch (Exception ex)
             {
@@ -56,7 +59,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//无法处理的代理数据
+        #region//记录无法处理的代理数据
 
         protected override void HandleUnknownRequest(BinaryRequestInfo requestInfo)
         {
@@ -65,11 +68,29 @@ namespace WinsockPacketEditor
                 byte[] bData = requestInfo.Body;
 
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, "无法处理的代理数据：" + Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, bData));
+                Close(CloseReason.ProtocolError);
             }
             catch (Exception ex)
             {
                 Close(CloseReason.SocketError);
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//客户端断开链接
+
+        protected override void OnSessionClosed(CloseReason reason)
+        {
+            if (this.bBuffer != null)
+            { 
+                AppServer.PushProxyBuffer(this.bBuffer);
+            }
+
+            if (this.TargetSocket != null)
+            {
+                this.TargetSocket.Close();            
             }
         }
 
