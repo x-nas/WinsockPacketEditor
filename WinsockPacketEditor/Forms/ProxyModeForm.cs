@@ -454,9 +454,9 @@ namespace WinsockPacketEditor
                     this.cAccountList?.RefreshAccountList();
                     this.cAccountList?.SaveAccountList();
                     this.ShowMenuInfo();
-
-                    Operate.ProxyConfig.Proxy.CheckUDPTimeOut();
                 });
+
+                await Operate.ProxyConfig.Proxy.CheckUDPTimeOutAsync();
             }
             catch (Exception ex)
             {

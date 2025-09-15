@@ -4612,24 +4612,35 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
-                public static void CheckUDPTimeOut()
+                public static async Task CheckUDPTimeOutAsync()
                 {
                     try
                     {
                         var now = DateTime.Now;
+                        var UDPToRemove = new List<Guid>();
+
                         foreach (var pair in ProxyConfig.List.cdProxyUDP)
                         {
                             if (now - pair.Value.LastActivityTime > ProxyConfig.List.UDPTimeout)
                             {
-                                ProxyConfig.List.cdProxyUDP.TryRemove(pair.Key, out _);
-                                pair.Value.Close();
+                                UDPToRemove.Add(pair.Key);
                             }
                         }
+
+                        var closeTasks = UDPToRemove.Select(async UDP =>
+                        {
+                            if (ProxyConfig.List.cdProxyUDP.TryRemove(UDP, out var udpInstance))
+                            {
+                                await Task.Run(() => udpInstance.Close());
+                            }
+                        });
+
+                        await Task.WhenAll(closeTasks).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }                    
+                        DoLog(nameof(CheckUDPTimeOutAsync), ex.Message);
+                    }
                 }
 
                 #endregion                
