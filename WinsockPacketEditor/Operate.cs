@@ -4614,7 +4614,7 @@ namespace WinsockPacketEditor
                     {
                         if (Guid.TryParse(SessionID, out Guid gUDP))
                         {
-                            var pu = new ProxyUDP(new IPEndPoint(ProxyConfig.Proxy.ProxyUDP_IP, 0));
+                            var pu = new ProxyUDP(new IPEndPoint(IPAddress.Any, 0));
                             ProxyConfig.List.cdProxyUDP.TryAdd(gUDP, pu);
 
                             pu.UpdateActivity();

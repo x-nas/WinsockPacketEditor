@@ -7,7 +7,7 @@ namespace WinsockPacketEditor
 {
     public class ProxyUDP
     {
-        public UdpClient ClientUDP { get; private set; }
+        public Socket ClientSocket { get; private set; }
         public IPEndPoint ClientEndPoint { get; set; }
         public DateTime LastActivityTime { get; private set; }
         public bool IsActive { get; private set; }
@@ -16,7 +16,8 @@ namespace WinsockPacketEditor
 
         public ProxyUDP(IPEndPoint udpClientEndpoint)
         {
-            this.ClientUDP = new UdpClient(udpClientEndpoint);
+            this.ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            this.ClientSocket.Bind(udpClientEndpoint);
             this.LastActivityTime = DateTime.Now;
             this.IsActive = true;
         }
@@ -44,12 +45,12 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    ClientUDP?.Close();
-                    ClientUDP?.Dispose();
+                    ClientSocket?.Close();
+                    ClientSocket?.Dispose();
                 }
                 finally
                 {
-                    ClientUDP = null;
+                    ClientSocket = null;
                 }
             }
             catch (Exception ex)

@@ -1,6 +1,8 @@
 ﻿using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using System;
+using System.Buffers;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -25,6 +27,7 @@ namespace WinsockPacketEditor
         public Operate.ProxyConfig.Proxy.AddressType AddressType;
         public Operate.ProxyConfig.Proxy.DomainType DomainType;
         public Socket TargetSocket = null;
+        private readonly SocketAsyncEventArgsPool _socketEventArgsPool = new SocketAsyncEventArgsPool(5000);
 
         public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; internal set; }
 
@@ -59,6 +62,76 @@ namespace WinsockPacketEditor
         internal protected new void SetNextReceiveFilter(IReceiveFilter<BinaryRequestInfo> receiveFilter)
         {
             base.SetNextReceiveFilter(receiveFilter);
+        }
+
+        #endregion
+
+        #region//SocketAsyncEventArgs 专用池
+
+        public class SocketAsyncEventArgsPool
+        {
+            private readonly ConcurrentBag<SocketAsyncEventArgs> _pool;
+            private readonly int _maxSize;
+
+            public SocketAsyncEventArgsPool(int maxSize = 100)
+            {
+                _maxSize = maxSize;
+                _pool = new ConcurrentBag<SocketAsyncEventArgs>();
+            }
+
+            public SocketAsyncEventArgs Get()
+            {
+                if (_pool.TryTake(out SocketAsyncEventArgs item))
+                {
+                    return item;
+                }
+                return new SocketAsyncEventArgs();
+            }
+
+            public void Return(SocketAsyncEventArgs item)
+            {
+                if (item == null) return;
+
+                // 清理状态
+                item.SetBuffer(null, 0, 0);
+                item.RemoteEndPoint = null;
+                item.UserToken = null;
+                item.SocketError = SocketError.Success;
+
+                if (_pool.Count < _maxSize)
+                {
+                    _pool.Add(item);
+                }
+                else
+                {
+                    // 池已满，释放资源
+                    item.Dispose();
+                }
+            }
+
+            public int Count => _pool.Count;
+        }
+
+        private void ReturnSocketEventArgs(SocketAsyncEventArgs e)
+        {
+            try
+            {
+                e.Completed -= UdpReceiveCompleted;
+
+                if (e.Buffer != null)
+                {
+                    ArrayPool<byte>.Shared.Return(e.Buffer);
+                    e.SetBuffer(null, 0, 0);
+                }
+
+                e.UserToken = null;
+                e.RemoteEndPoint = null;
+                _socketEventArgsPool.Return(e);
+            }
+            catch
+            {
+                e.Dispose();
+            }
         }
 
         #endregion
@@ -498,7 +571,8 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                this.SendCommandResponse(ProtocolType.Udp, Operate.ProxyConfig.Proxy.CommandResponse.Success, ((IPEndPoint)pu.ClientUDP.Client.LocalEndPoint).Port);
+                int localPort = ((IPEndPoint)pu.ClientSocket.LocalEndPoint).Port;
+                this.SendCommandResponse(ProtocolType.Udp, Operate.ProxyConfig.Proxy.CommandResponse.Success, localPort);
 
                 this.StartUdpReceive(pu);
             }
@@ -506,186 +580,215 @@ namespace WinsockPacketEditor
             {
                 this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Fault);
             }
-        }
+        }        
 
         #endregion
 
-        #region//处理 UDP 中继数据
+        #region//处理 UDP 请求数据
 
-        public void StartUdpReceive(ProxyUDP pu)
+        private void ProcessUdpRequest(ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData)
         {
-            try
+            Operate.ProxyConfig.Proxy.AddressType addressType = (Operate.ProxyConfig.Proxy.AddressType)bData[3];
+
+            if (addressType == Operate.ProxyConfig.Proxy.AddressType.IPv4 ||
+                addressType == Operate.ProxyConfig.Proxy.AddressType.IPv6 ||
+                addressType == Operate.ProxyConfig.Proxy.AddressType.Domain)
             {
-                if (pu.ClientUDP != null)
+                pu.ClientEndPoint = epRemote;
+
+                ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
+                IPEndPoint targetEndPoint = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
+                if (targetEndPoint != null)
                 {
-                    pu.ClientUDP.BeginReceive(new AsyncCallback(UdpReceiveCallback), pu);
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void UdpReceiveCallback(IAsyncResult ar)
-        {
-            if (ar == null || !(ar.AsyncState is ProxyUDP pu))
-            {
-                return;
-            }
-
-            if (pu.ClientUDP == null)
-            {
-                return;
-            }
-
-            try
-            {
-                IPEndPoint epRemote = new IPEndPoint(IPAddress.Any, 0);
-
-                byte[] bReceivedData = this.ReceiveUDPData(pu.ClientUDP, ar, ref epRemote);
-                if (bReceivedData.Length == 0 || epRemote.Address.Equals(IPAddress.Any) || epRemote.Port == 0)
-                {
-                    return;
-                }
-
-                Span<byte> bData = bReceivedData.AsSpan();
-                if (bData[0] == 0 && bData[1] == 0 && bData[2] == 0)
-                {
-                    #region//处理 UDP 请求数据
-
-                    Operate.ProxyConfig.Proxy.AddressType addressType = (Operate.ProxyConfig.Proxy.AddressType)bData[3];
-
-                    if (addressType == Operate.ProxyConfig.Proxy.AddressType.IPv4 ||
-                        addressType == Operate.ProxyConfig.Proxy.AddressType.IPv6 ||
-                        addressType == Operate.ProxyConfig.Proxy.AddressType.Domain)
+                    Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
+                    if (!bRequestData.IsEmpty)
                     {
-                        pu.ClientEndPoint = epRemote;
+                        Operate.ProxyConfig.Proxy.UDP_Req_CNT++;
+                        Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Request, bRequestData.Length);
+                        Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
 
-                        ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
-                        IPEndPoint targetEndPoint = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
-                        if (targetEndPoint != null)
+                        if (Operate.ProxyConfig.Proxy.HookUDP_Req)
                         {
-                            Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
-                            if (!bRequestData.IsEmpty)
-                            {
-                                Operate.ProxyConfig.Proxy.UDP_Req_CNT++;
-                                Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Request, bRequestData.Length);
-                                Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
-
-                                if (Operate.ProxyConfig.Proxy.HookUDP_Req)
-                                {
-                                    this.DoFilter_UDP(pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
-                                }
-                                else
-                                {
-                                    this.SendUDPData(pu.ClientUDP, bRequestData, targetEndPoint);
-                                }
-
-                                pu.UpdateActivity();
-                            }
-                        }
-                    }
-
-                    #endregion
-                }
-                else
-                {
-                    #region//处理 UDP 响应数据
-
-                    if (pu.ClientEndPoint == null)
-                    {
-                        return;
-                    }
-
-                    ReadOnlySpan<byte> bIP = pu.ClientEndPoint.Address.GetAddressBytes();
-                    ushort port = ((ushort)pu.ClientEndPoint.Port);
-                    ReadOnlySpan<byte> bPort = new byte[2] { (byte)(port >> 8), (byte)port };
-
-                    Span<byte> bResponseData = stackalloc byte[4 + bIP.Length + bPort.Length + bData.Length];
-                    bResponseData[0] = 0x00;
-                    bResponseData[1] = 0x00;
-                    bResponseData[2] = 0x00;
-                    bResponseData[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
-                    bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
-                    bPort.CopyTo(bResponseData.Slice(8, bPort.Length));
-                    bData.CopyTo(bResponseData.Slice(10, bData.Length));
-
-                    if (!bResponseData.IsEmpty)
-                    {
-                        Operate.ProxyConfig.Proxy.UDP_Resp_CNT++;
-                        Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Response, bResponseData.Length);
-                        Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
-
-                        if (Operate.ProxyConfig.Proxy.HookUDP_Resp)
-                        {
-                            this.DoFilter_UDP(pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
+                            this.DoFilter_UDP(pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
                         }
                         else
                         {
-                            this.SendUDPData(pu.ClientUDP, bResponseData, pu.ClientEndPoint);
+                            this.SendUdpData(pu.ClientSocket, bRequestData, targetEndPoint);
                         }
 
                         pu.UpdateActivity();
                     }
-
-                    #endregion
                 }
-
-                this.StartUdpReceive(pu);
-            }
-            catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
-            {
-                //
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                this.StartUdpReceive(pu);
             }
         }
 
         #endregion
 
-        #region//发送和接收 UDP 数据        
+        #region//处理 UDP 响应数据
 
-        public int SendUDPData(UdpClient ClientUDP, ReadOnlySpan<byte> bData, IPEndPoint ep)
+        private void ProcessUdpResponse(ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData)
+        {
+            if (pu.ClientEndPoint == null)
+            {
+                return;
+            }
+
+            ReadOnlySpan<byte> bIP = pu.ClientEndPoint.Address.GetAddressBytes();
+            ushort port = ((ushort)pu.ClientEndPoint.Port);
+            ReadOnlySpan<byte> bPort = stackalloc byte[2] { (byte)(port >> 8), (byte)port };
+
+            byte[] responseBuffer = ArrayPool<byte>.Shared.Rent(4 + bIP.Length + bPort.Length + bData.Length);
+            Span<byte> bResponseData = responseBuffer.AsSpan(0, 4 + bIP.Length + bPort.Length + bData.Length);
+
+            bResponseData[0] = 0x00;
+            bResponseData[1] = 0x00;
+            bResponseData[2] = 0x00;
+            bResponseData[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
+            bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
+            bPort.CopyTo(bResponseData.Slice(4 + bIP.Length, bPort.Length));
+            bData.CopyTo(bResponseData.Slice(4 + bIP.Length + bPort.Length, bData.Length));
+
+            if (!bResponseData.IsEmpty)
+            {
+                Operate.ProxyConfig.Proxy.UDP_Resp_CNT++;
+                Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Response, bResponseData.Length);
+                Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
+
+                if (Operate.ProxyConfig.Proxy.HookUDP_Resp)
+                {
+                    this.DoFilter_UDP(pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
+                }
+                else
+                {
+                    this.SendUdpData(pu.ClientSocket, bResponseData, pu.ClientEndPoint);
+                }
+
+                pu.UpdateActivity();
+            }
+
+            ArrayPool<byte>.Shared.Return(responseBuffer);
+        }
+
+        #endregion        
+
+        #region//发送和接收 UDP 数据
+
+        public int SendUdpData(Socket clientSocket, ReadOnlySpan<byte> bData, IPEndPoint ep)
         {
             int iReturn = 0;
 
             try
             {
-                if (ClientUDP != null && !bData.IsEmpty)
+                if (clientSocket != null && !bData.IsEmpty && ep != null)
                 {
-                    iReturn = ClientUDP.Send(bData.ToArray(), bData.Length, ep);
+                    byte[] sendBuffer = ArrayPool<byte>.Shared.Rent(bData.Length);
+                    bData.CopyTo(sendBuffer);
+
+                    iReturn = clientSocket.SendTo(sendBuffer, 0, bData.Length, SocketFlags.None, ep);
+
+                    ArrayPool<byte>.Shared.Return(sendBuffer);
                 }
             }
             catch
             {
-                //
+                //忽略错误
             }
 
             return iReturn;
         }
 
-        public byte[] ReceiveUDPData(UdpClient ClientUDP, IAsyncResult ar, ref IPEndPoint ep)
+        public void StartUdpReceive(ProxyUDP pu)
         {
+            if (pu == null || pu.ClientSocket == null || !pu.ClientSocket.IsBound || !pu.IsActive)
+            {
+                return;
+            }
+
             try
             {
-                if (ClientUDP != null && ClientUDP.Client != null)
+                SocketAsyncEventArgs socketEventArgs = _socketEventArgsPool.Get();
+                socketEventArgs.UserToken = pu;
+
+                byte[] buffer = ArrayPool<byte>.Shared.Rent(65535);
+                socketEventArgs.SetBuffer(buffer, 0, buffer.Length);
+                socketEventArgs.RemoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                socketEventArgs.Completed += UdpReceiveCompleted;
+
+                if (!pu.ClientSocket.ReceiveFromAsync(socketEventArgs))
                 {
-                    return ClientUDP.EndReceive(ar, ref ep);
+                    ProcessUdpReceive(socketEventArgs);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return Array.Empty<byte>();
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-
-            return Array.Empty<byte>();
         }
 
-        #endregion        
+        private void UdpReceiveCompleted(object sender, SocketAsyncEventArgs e)
+        {
+            ProcessUdpReceive(e);
+        }
+
+        private void ProcessUdpReceive(SocketAsyncEventArgs e)
+        {
+            ProxyUDP pu = e.UserToken as ProxyUDP;
+
+            if (pu == null || !pu.IsActive || pu.ClientSocket == null)
+            {
+                ReturnSocketEventArgs(e);
+                return;
+            }
+
+            try
+            {
+                if (e.SocketError != SocketError.Success || e.BytesTransferred == 0)
+                {
+                    ReturnSocketEventArgs(e);
+                    return;
+                }
+
+                IPEndPoint epRemote = e.RemoteEndPoint as IPEndPoint;
+                if (epRemote == null || epRemote.Address.Equals(IPAddress.Any) || epRemote.Port == 0)
+                {
+                    ReturnSocketEventArgs(e);
+                    return;
+                }
+
+                Span<byte> bData = e.Buffer.AsSpan(e.Offset, e.BytesTransferred);
+
+                if (bData[0] == 0 && bData[1] == 0 && bData[2] == 0)
+                {
+                    ProcessUdpRequest(pu, epRemote, bData);
+                }
+                else
+                {
+                    ProcessUdpResponse(pu, epRemote, bData);
+                }
+
+                e.RemoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
+                if (pu.IsActive && pu.ClientSocket != null && !pu.ClientSocket.ReceiveFromAsync(e))
+                {
+                    ProcessUdpReceive(e);
+                }
+            }
+            catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
+            {
+                ReturnSocketEventArgs(e);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                ReturnSocketEventArgs(e);
+                if (pu.IsActive)
+                {
+                    this.StartUdpReceive(pu);
+                }
+            }
+        }
+
+        #endregion
 
         #region//缓存映射数据
 
@@ -813,12 +916,12 @@ namespace WinsockPacketEditor
                         break;
                 }
 
-                if (epSend == null || pu?.ClientUDP?.Client == null)
+                if (epSend == null || pu?.ClientSocket == null)
                 {
                     return;
                 }
 
-                int iSocket = pu.ClientUDP.Client.Handle.ToInt32();
+                int iSocket = pu.ClientSocket.Handle.ToInt32();
 
                 Int32 res = 0;
                 byte[] bRawBuffer = bData.ToArray();
@@ -834,7 +937,7 @@ namespace WinsockPacketEditor
 
                 if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
                 {
-                    res = this.SendUDPData(pu.ClientUDP, bNewBuffer, epSend);
+                    res = this.SendUdpData(pu.ClientSocket, bNewBuffer, epSend);
                 }
 
                 string ClientAddr = $"{pu.ClientEndPoint.Address.ToString()}:{pu.ClientEndPoint.Port.ToString()}";
