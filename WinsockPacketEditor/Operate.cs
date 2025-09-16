@@ -14123,6 +14123,27 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//初始化发送列表的计数
+
+                public static void InitSendList_Count()
+                {
+                    try
+                    {
+                        foreach (SendInfo si in lstSendInfo)
+                        {
+                            si.ExecutionCount = 0;
+                            si.ExecutionSuccess = 0;
+                            si.ExecutionFail = 0;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
                 #region//发送列表的列表操作
 
                 public static void UpdateSendList_ByListAction(Form form, SystemConfig.ListAction listAction, List<SendInfo> siList)
@@ -15592,6 +15613,25 @@ namespace WinsockPacketEditor
                     try
                     {
                         RobotConfig.List.lstRobotInfo.Add(ri);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//初始化机器人列表的计数
+
+                public static void InitRobotList_Count()
+                {
+                    try
+                    {
+                        foreach (RobotInfo ri in lstRobotInfo)
+                        {
+                            ri.ExecutionCount = 0;
+                        }
                     }
                     catch (Exception ex)
                     {

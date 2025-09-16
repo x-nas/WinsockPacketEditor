@@ -219,6 +219,11 @@ namespace WinsockPacketEditor
             }
         }
 
+        private void bSendList_Reset_Click(object sender, EventArgs e)
+        {
+            Operate.SendConfig.List.InitSendList_Count();
+        }
+
         private void bSendList_Start_Click(object sender, EventArgs e)
         {
             if (Operate.SendConfig.List.lstSendInfo.Count > 0)

@@ -180,6 +180,11 @@ namespace WinsockPacketEditor
             }
         }
 
+        private void bRobotList_Reset_Click(object sender, EventArgs e)
+        {
+            Operate.RobotConfig.List.InitRobotList_Count();
+        }
+
         private void bRobotList_Start_Click(object sender, EventArgs e)
         {
             if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)

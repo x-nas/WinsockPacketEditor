@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpRobotList = new TableLayoutPanelEx();
-            this.tlpRobotListButton = new TableLayoutPanelEx();
+            this.tlpRobotList = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpRobotListButton = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.bRobotList_Reset = new AntdUI.Button();
             this.bDisableAll = new AntdUI.Button();
             this.bEnableAll = new AntdUI.Button();
             this.ddMenu = new AntdUI.Dropdown();
@@ -62,18 +63,20 @@
             // 
             // tlpRobotListButton
             // 
-            this.tlpRobotListButton.ColumnCount = 6;
+            this.tlpRobotListButton.ColumnCount = 7;
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Reset, 2, 0);
             this.tlpRobotListButton.Controls.Add(this.bDisableAll, 1, 0);
             this.tlpRobotListButton.Controls.Add(this.bEnableAll, 0, 0);
-            this.tlpRobotListButton.Controls.Add(this.ddMenu, 5, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 3, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_Start, 2, 0);
+            this.tlpRobotListButton.Controls.Add(this.ddMenu, 6, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 4, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Start, 3, 0);
             this.tlpRobotListButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpRobotListButton.Location = new System.Drawing.Point(30, 20);
             this.tlpRobotListButton.Margin = new System.Windows.Forms.Padding(0);
@@ -82,6 +85,20 @@
             this.tlpRobotListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRobotListButton.Size = new System.Drawing.Size(740, 50);
             this.tlpRobotListButton.TabIndex = 4;
+            // 
+            // bRobotList_Reset
+            // 
+            this.bRobotList_Reset.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bRobotList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_Reset.IconSvg = "UndoOutlined";
+            this.bRobotList_Reset.LocalizationText = "FilterList.ResetCount";
+            this.bRobotList_Reset.Location = new System.Drawing.Point(243, 3);
+            this.bRobotList_Reset.Name = "bRobotList_Reset";
+            this.bRobotList_Reset.Size = new System.Drawing.Size(114, 44);
+            this.bRobotList_Reset.TabIndex = 17;
+            this.bRobotList_Reset.Text = "重置计数";
+            this.bRobotList_Reset.Type = AntdUI.TTypeMini.Warn;
+            this.bRobotList_Reset.Click += new System.EventHandler(this.bRobotList_Reset_Click);
             // 
             // bDisableAll
             // 
@@ -133,7 +150,7 @@
             this.bRobotList_Stop.Enabled = false;
             this.bRobotList_Stop.IconSvg = "PauseCircleOutlined";
             this.bRobotList_Stop.LocalizationText = "Stop";
-            this.bRobotList_Stop.Location = new System.Drawing.Point(331, 3);
+            this.bRobotList_Stop.Location = new System.Drawing.Point(451, 3);
             this.bRobotList_Stop.Name = "bRobotList_Stop";
             this.bRobotList_Stop.Size = new System.Drawing.Size(82, 44);
             this.bRobotList_Stop.TabIndex = 8;
@@ -153,7 +170,7 @@
             this.bRobotList_Start.LoadingWaveValue = 0.6F;
             this.bRobotList_Start.LoadingWaveVertical = true;
             this.bRobotList_Start.LocalizationText = "Execute";
-            this.bRobotList_Start.Location = new System.Drawing.Point(243, 3);
+            this.bRobotList_Start.Location = new System.Drawing.Point(363, 3);
             this.bRobotList_Start.Name = "bRobotList_Start";
             this.bRobotList_Start.Size = new System.Drawing.Size(82, 44);
             this.bRobotList_Start.TabIndex = 7;
@@ -211,5 +228,6 @@
         private AntdUI.Dropdown ddMenu;
         private AntdUI.Button bEnableAll;
         private AntdUI.Button bDisableAll;
+        private AntdUI.Button bRobotList_Reset;
     }
 }
