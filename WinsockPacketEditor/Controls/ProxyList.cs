@@ -36,6 +36,7 @@ namespace WinsockPacketEditor
 
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
             this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
+            this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
             this.PacketList_AutoClear_Changed();
 
@@ -958,12 +959,12 @@ namespace WinsockPacketEditor
                     Mode = SocketMode.Tcp,
 
                     // 连接限制
-                    MaxConnectionNumber = 10000,
+                    MaxConnectionNumber = Operate.ProxyConfig.Proxy.MaxConnectionNumber,
                     ListenBacklog = 1000,
 
                     // 缓冲区设置
-                    ReceiveBufferSize = 8192,
-                    SendBufferSize = 8192,
+                    ReceiveBufferSize = Operate.ProxyConfig.Proxy.BufferSize,
+                    SendBufferSize = Operate.ProxyConfig.Proxy.BufferSize,
                     MaxRequestLength = 1024 * 1024 * 10,
                 };
 
@@ -1126,6 +1127,36 @@ namespace WinsockPacketEditor
         }
 
         #endregion
+
+        #region//系统代理
+
+        private void switchSystemProxy_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
+        {
+            this.EnableSystemProxy_Changed();
+        }
+
+        private void EnableSystemProxy_Changed()
+        {
+            try
+            {
+                if (this.switchSystemProxy.Checked)
+                {
+                    Operate.ProxyConfig.Proxy.Enable_SystemProxy = true;
+                    Operate.ProxyConfig.Proxy.EnableSystemProxy(this.form);
+                }
+                else
+                {
+                    Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
+                    Operate.ProxyConfig.Proxy.DisableSystemProxy(this.form);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
 
         #region//显示选中的封包数据
 

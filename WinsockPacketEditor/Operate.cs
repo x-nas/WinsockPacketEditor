@@ -3478,6 +3478,8 @@ namespace WinsockPacketEditor
                         new XElement("Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5),
                         new XElement("ProxyIP", ProxyConfig.Proxy.ProxyIP),
                         new XElement("ProxyPort", ProxyConfig.Proxy.ProxyPort),
+                        new XElement("MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber),
+                        new XElement("BufferSize", ProxyConfig.Proxy.BufferSize),
                         new XElement("Enable_Auth", ProxyConfig.Proxy.Enable_Auth),
                         new XElement("Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal),
                         new XElement("Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote),
@@ -3518,6 +3520,8 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(ProxyMode.Rows[0]["EnableSOCKS5"]);
                         ProxyConfig.Proxy.ProxyIP = ProxyMode.Rows[0]["ProxyIP"].ToString();
                         ProxyConfig.Proxy.ProxyPort = ushort.Parse(ProxyMode.Rows[0]["ProxyPort"].ToString());
+                        ProxyConfig.Proxy.MaxConnectionNumber = int.Parse(ProxyMode.Rows[0]["MaxConnectionNumber"].ToString());
+                        ProxyConfig.Proxy.BufferSize = int.Parse(ProxyMode.Rows[0]["BufferSize"].ToString());
                         ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);
                         ProxyConfig.Mapping.Enable_MapLocal = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapLocal"]);
                         ProxyConfig.Mapping.Enable_MapRemote = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapRemote"]);
@@ -3564,6 +3568,18 @@ namespace WinsockPacketEditor
                     if (ProxyPort != null)
                     {
                         ProxyConfig.Proxy.ProxyPort = ushort.Parse(ProxyPort.Value);
+                    }
+
+                    XElement MaxConnectionNumber = xeProxyMode.Element("MaxConnectionNumber");
+                    if (MaxConnectionNumber != null)
+                    {
+                        ProxyConfig.Proxy.MaxConnectionNumber = Convert.ToInt32(MaxConnectionNumber.Value);
+                    }
+
+                    XElement BufferSize = xeProxyMode.Element("BufferSize");
+                    if (BufferSize != null)
+                    {
+                        ProxyConfig.Proxy.BufferSize = Convert.ToInt32(BufferSize.Value);
                     }
 
                     XElement Enable_Auth = xeProxyMode.Element("Enable_Auth");
@@ -4509,6 +4525,8 @@ namespace WinsockPacketEditor
                 public static int SocketBufferSize = 8192;
                 public static string ProxyIP = string.Empty;
                 public static ushort ProxyPort = 1080;
+                public static int MaxConnectionNumber = 5000;
+                public static int BufferSize = 8192;
                 public static long Total_Request = 0;
                 public static long Total_Response = 0;
                 public static string ProxyOnLineInfo = string.Empty;
@@ -17141,6 +17159,8 @@ namespace WinsockPacketEditor
                         sql += "EnableSOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
                         sql += "ProxyIP TEXT,";//代理模式 - 代理IP
                         sql += "ProxyPort INTEGER DEFAULT 1080,";//代理模式 - 代理端口
+                        sql += "MaxConnectionNumber INTEGER DEFAULT 5000,";//代理模式 - 最大链接数
+                        sql += "BufferSize INTEGER DEFAULT 8192,";//代理模式 - 缓存区大小
                         sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证
                         sql += "Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
                         sql += "Enable_MapRemote BOOLEAN DEFAULT 0,";//代理模式 - 启用远程代理映射
@@ -17228,6 +17248,8 @@ namespace WinsockPacketEditor
                         sql += "EnableSOCKS5,";
                         sql += "ProxyIP,";
                         sql += "ProxyPort,";
+                        sql += "MaxConnectionNumber,";
+                        sql += "BufferSize,";
                         sql += "EnableAuth,";
                         sql += "Enable_MapLocal,";
                         sql += "Enable_MapRemote,";
@@ -17245,6 +17267,8 @@ namespace WinsockPacketEditor
                         sql += "@EnableSOCKS5,";
                         sql += "@ProxyIP,";
                         sql += "@ProxyPort,";
+                        sql += "@MaxConnectionNumber,";
+                        sql += "@BufferSize,";
                         sql += "@EnableAuth,";
                         sql += "@Enable_MapLocal,";
                         sql += "@Enable_MapRemote,";
@@ -17265,6 +17289,8 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@EnableSOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
                             cmd.Parameters.AddWithValue("@ProxyIP", ProxyConfig.Proxy.ProxyIP);
                             cmd.Parameters.AddWithValue("@ProxyPort", ProxyConfig.Proxy.ProxyPort);
+                            cmd.Parameters.AddWithValue("@MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber);
+                            cmd.Parameters.AddWithValue("@BufferSize", ProxyConfig.Proxy.BufferSize);
                             cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);
                             cmd.Parameters.AddWithValue("@Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
                             cmd.Parameters.AddWithValue("@Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote);

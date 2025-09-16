@@ -30,6 +30,7 @@
         {
             this.tlpProxyList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpProxyList_Button = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.switchSystemProxy = new AntdUI.Switch();
             this.txtPacketList_AutoClear = new AntdUI.InputNumber();
             this.cbPacketList_AutoClear = new AntdUI.Checkbox();
             this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
@@ -38,6 +39,7 @@
             this.bProxyStart = new AntdUI.Button();
             this.ddMenu = new AntdUI.Dropdown();
             this.bSearchPacket = new AntdUI.Button();
+            this.lSystemProxy = new AntdUI.Label();
             this.splitterProxyList = new AntdUI.Splitter();
             this.tlpProxyList2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpPacketListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
@@ -117,7 +119,9 @@
             // 
             // tlpProxyList_Button
             // 
-            this.tlpProxyList_Button.ColumnCount = 9;
+            this.tlpProxyList_Button.ColumnCount = 11;
+            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -128,14 +132,17 @@
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpProxyList_Button.Controls.Add(this.txtPacketList_AutoClear, 4, 0);
-            this.tlpProxyList_Button.Controls.Add(this.cbPacketList_AutoClear, 3, 0);
-            this.tlpProxyList_Button.Controls.Add(this.cbPacketList_AutoRoll, 5, 0);
+            this.tlpProxyList_Button.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpProxyList_Button.Controls.Add(this.switchSystemProxy, 4, 0);
+            this.tlpProxyList_Button.Controls.Add(this.txtPacketList_AutoClear, 6, 0);
+            this.tlpProxyList_Button.Controls.Add(this.cbPacketList_AutoClear, 5, 0);
+            this.tlpProxyList_Button.Controls.Add(this.cbPacketList_AutoRoll, 7, 0);
             this.tlpProxyList_Button.Controls.Add(this.bProxyList_Clear, 2, 0);
             this.tlpProxyList_Button.Controls.Add(this.bProxyStop, 1, 0);
             this.tlpProxyList_Button.Controls.Add(this.bProxyStart, 0, 0);
-            this.tlpProxyList_Button.Controls.Add(this.ddMenu, 8, 0);
-            this.tlpProxyList_Button.Controls.Add(this.bSearchPacket, 7, 0);
+            this.tlpProxyList_Button.Controls.Add(this.ddMenu, 10, 0);
+            this.tlpProxyList_Button.Controls.Add(this.bSearchPacket, 9, 0);
+            this.tlpProxyList_Button.Controls.Add(this.lSystemProxy, 3, 0);
             this.tlpProxyList_Button.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpProxyList_Button.Location = new System.Drawing.Point(30, 20);
             this.tlpProxyList_Button.Margin = new System.Windows.Forms.Padding(0);
@@ -145,10 +152,20 @@
             this.tlpProxyList_Button.Size = new System.Drawing.Size(1140, 50);
             this.tlpProxyList_Button.TabIndex = 7;
             // 
+            // switchSystemProxy
+            // 
+            this.switchSystemProxy.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.switchSystemProxy.Location = new System.Drawing.Point(340, 10);
+            this.switchSystemProxy.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
+            this.switchSystemProxy.Name = "switchSystemProxy";
+            this.switchSystemProxy.Size = new System.Drawing.Size(50, 30);
+            this.switchSystemProxy.TabIndex = 19;
+            this.switchSystemProxy.CheckedChanged += new AntdUI.BoolEventHandler(this.switchSystemProxy_CheckedChanged);
+            // 
             // txtPacketList_AutoClear
             // 
             this.txtPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPacketList_AutoClear.Location = new System.Drawing.Point(381, 3);
+            this.txtPacketList_AutoClear.Location = new System.Drawing.Point(510, 3);
             this.txtPacketList_AutoClear.Minimum = new decimal(new int[] {
             1,
             0,
@@ -172,7 +189,7 @@
             this.cbPacketList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbPacketList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
-            this.cbPacketList_AutoClear.Location = new System.Drawing.Point(267, 3);
+            this.cbPacketList_AutoClear.Location = new System.Drawing.Point(396, 3);
             this.cbPacketList_AutoClear.Name = "cbPacketList_AutoClear";
             this.cbPacketList_AutoClear.Size = new System.Drawing.Size(108, 44);
             this.cbPacketList_AutoClear.TabIndex = 16;
@@ -184,7 +201,7 @@
             this.cbPacketList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbPacketList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbPacketList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
-            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(501, 3);
+            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(630, 3);
             this.cbPacketList_AutoRoll.Name = "cbPacketList_AutoRoll";
             this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(108, 44);
             this.cbPacketList_AutoRoll.TabIndex = 15;
@@ -270,6 +287,17 @@
             this.bSearchPacket.TabIndex = 11;
             this.bSearchPacket.WaveSize = 0;
             this.bSearchPacket.Click += new System.EventHandler(this.bSearchPacket_Click);
+            // 
+            // lSystemProxy
+            // 
+            this.lSystemProxy.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSystemProxy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSystemProxy.LocalizationText = "ProxySettingsForm.SystemProxy";
+            this.lSystemProxy.Location = new System.Drawing.Point(267, 3);
+            this.lSystemProxy.Name = "lSystemProxy";
+            this.lSystemProxy.Size = new System.Drawing.Size(64, 44);
+            this.lSystemProxy.TabIndex = 18;
+            this.lSystemProxy.Text = "系统代理";
             // 
             // splitterProxyList
             // 
@@ -968,5 +996,7 @@
         private AntdUI.Checkbox cbPacketList_AutoRoll;
         private AntdUI.Checkbox cbPacketList_AutoClear;
         private AntdUI.InputNumber txtPacketList_AutoClear;
+        private AntdUI.Label lSystemProxy;
+        private AntdUI.Switch switchSystemProxy;
     }
 }
