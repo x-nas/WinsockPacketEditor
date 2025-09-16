@@ -538,6 +538,16 @@
             // 
             this.nudProgressionStep.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionStep.Location = new System.Drawing.Point(106, 6);
+            this.nudProgressionStep.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
+            this.nudProgressionStep.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudProgressionStep.Name = "nudProgressionStep";
             this.nudProgressionStep.Size = new System.Drawing.Size(174, 39);
             this.nudProgressionStep.TabIndex = 42;
@@ -553,6 +563,16 @@
             // 
             this.nudProgressionCarry.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionCarry.Location = new System.Drawing.Point(106, 51);
+            this.nudProgressionCarry.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
+            this.nudProgressionCarry.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudProgressionCarry.Name = "nudProgressionCarry";
             this.nudProgressionCarry.Size = new System.Drawing.Size(174, 39);
             this.nudProgressionCarry.TabIndex = 43;

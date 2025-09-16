@@ -230,6 +230,11 @@
             // 
             this.nudLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudLimitLinks.Location = new System.Drawing.Point(172, 105);
+            this.nudLimitLinks.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudLimitLinks.Minimum = new decimal(new int[] {
             1,
             0,
@@ -250,6 +255,11 @@
             // 
             this.nudLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudLimitDevices.Location = new System.Drawing.Point(172, 156);
+            this.nudLimitDevices.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudLimitDevices.Minimum = new decimal(new int[] {
             1,
             0,

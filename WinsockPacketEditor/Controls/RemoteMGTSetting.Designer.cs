@@ -174,6 +174,16 @@
             // 
             this.nudRemote_Port.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudRemote_Port.Location = new System.Drawing.Point(3, 204);
+            this.nudRemote_Port.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.nudRemote_Port.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudRemote_Port.Name = "nudRemote_Port";
             this.nudRemote_Port.Size = new System.Drawing.Size(274, 45);
             this.nudRemote_Port.TabIndex = 3;

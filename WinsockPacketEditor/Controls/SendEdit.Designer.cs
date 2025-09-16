@@ -435,6 +435,11 @@
             this.nudLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudLoopINT.LocalizationSuffixText = "Millisecond";
             this.nudLoopINT.Location = new System.Drawing.Point(3, 39);
+            this.nudLoopINT.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudLoopINT.Minimum = new decimal(new int[] {
             0,
             0,
@@ -510,6 +515,11 @@
             this.nudLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudLoopCNT.LocalizationSuffixText = "Times";
             this.nudLoopCNT.Location = new System.Drawing.Point(3, 39);
+            this.nudLoopCNT.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudLoopCNT.Minimum = new decimal(new int[] {
             1,
             0,

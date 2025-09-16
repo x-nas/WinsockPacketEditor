@@ -166,6 +166,11 @@
             this.nudAddTime.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudAddTime.LocalizationPrefixText = "Add";
             this.nudAddTime.Location = new System.Drawing.Point(3, 51);
+            this.nudAddTime.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudAddTime.Minimum = new decimal(new int[] {
             1,
             0,

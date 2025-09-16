@@ -155,6 +155,11 @@
             // 
             this.txtPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPacketList_AutoClear.Location = new System.Drawing.Point(381, 3);
+            this.txtPacketList_AutoClear.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.txtPacketList_AutoClear.Minimum = new decimal(new int[] {
             1,
             0,

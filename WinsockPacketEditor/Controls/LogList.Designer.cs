@@ -91,6 +91,11 @@
             // 
             this.txtLogList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtLogList_AutoClear.Location = new System.Drawing.Point(509, 3);
+            this.txtLogList_AutoClear.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.txtLogList_AutoClear.Minimum = new decimal(new int[] {
             1,
             0,

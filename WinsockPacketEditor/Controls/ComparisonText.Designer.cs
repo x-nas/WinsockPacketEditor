@@ -149,8 +149,8 @@
             // 
             // tabComparisonText
             // 
-            this.tabComparisonText.Controls.Add(this.tpDuplicate);
             this.tabComparisonText.Controls.Add(this.tpComparison);
+            this.tabComparisonText.Controls.Add(this.tpDuplicate);
             this.tabComparisonText.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabComparisonText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabComparisonText.Gap = 20;
@@ -158,7 +158,6 @@
             this.tabComparisonText.Name = "tabComparisonText";
             this.tabComparisonText.Pages.Add(this.tpComparison);
             this.tabComparisonText.Pages.Add(this.tpDuplicate);
-            this.tabComparisonText.SelectedIndex = 1;
             this.tabComparisonText.Size = new System.Drawing.Size(1134, 724);
             this.tabComparisonText.Style = styleCard1;
             this.tabComparisonText.TabIndex = 1;
@@ -344,6 +343,11 @@
             this.nudDuplicate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudDuplicate.LocalizationPrefixText = "ComparisonText.DuplicateCNT";
             this.nudDuplicate.Location = new System.Drawing.Point(729, 7);
+            this.nudDuplicate.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudDuplicate.Minimum = new decimal(new int[] {
             1,
             0,

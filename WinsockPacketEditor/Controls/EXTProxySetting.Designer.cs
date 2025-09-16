@@ -183,6 +183,11 @@
             this.txtExternalProxy_Port.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtExternalProxy_Port.LocalizationPrefixText = "EXTProxySettingsForm.Port";
             this.txtExternalProxy_Port.Location = new System.Drawing.Point(149, 55);
+            this.txtExternalProxy_Port.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
             this.txtExternalProxy_Port.Minimum = new decimal(new int[] {
             1,
             0,

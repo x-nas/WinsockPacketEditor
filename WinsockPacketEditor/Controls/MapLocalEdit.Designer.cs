@@ -238,6 +238,11 @@
             // 
             this.nudPort.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudPort.Location = new System.Drawing.Point(76, 108);
+            this.nudPort.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
             this.nudPort.Minimum = new decimal(new int[] {
             1,
             0,

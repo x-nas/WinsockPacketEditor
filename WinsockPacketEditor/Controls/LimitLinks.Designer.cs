@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpLimitLinks = new TableLayoutPanelEx();
-            this.tlpButton = new TableLayoutPanelEx();
+            this.tlpLimitLinks = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpSet = new TableLayoutPanelEx();
+            this.tlpSet = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbIsLimitLinks = new AntdUI.Checkbox();
             this.nudLimitLinks = new AntdUI.InputNumber();
             this.lAccountCNT = new AntdUI.Label();
@@ -89,9 +89,9 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(150, 7);
+            this.bSave.Location = new System.Drawing.Point(155, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -106,7 +106,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -137,7 +137,7 @@
             this.cbIsLimitLinks.LocalizationText = "LimitLinksForm.LimitLinks";
             this.cbIsLimitLinks.Location = new System.Drawing.Point(3, 3);
             this.cbIsLimitLinks.Name = "cbIsLimitLinks";
-            this.cbIsLimitLinks.Size = new System.Drawing.Size(131, 45);
+            this.cbIsLimitLinks.Size = new System.Drawing.Size(133, 45);
             this.cbIsLimitLinks.TabIndex = 6;
             this.cbIsLimitLinks.Text = "限制链接数 :";
             this.cbIsLimitLinks.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsLimitLinks_CheckedChanged);
@@ -145,7 +145,12 @@
             // nudLimitLinks
             // 
             this.nudLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLimitLinks.Location = new System.Drawing.Point(140, 3);
+            this.nudLimitLinks.Location = new System.Drawing.Point(142, 3);
+            this.nudLimitLinks.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudLimitLinks.Minimum = new decimal(new int[] {
             1,
             0,
@@ -154,7 +159,7 @@
             this.nudLimitLinks.Name = "nudLimitLinks";
             this.nudLimitLinks.PrefixSvg = "";
             this.nudLimitLinks.SelectionStart = 1;
-            this.nudLimitLinks.Size = new System.Drawing.Size(357, 45);
+            this.nudLimitLinks.Size = new System.Drawing.Size(355, 45);
             this.nudLimitLinks.SuffixSvg = "ForkOutlined";
             this.nudLimitLinks.TabIndex = 7;
             this.nudLimitLinks.Text = "1";

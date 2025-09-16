@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpLimitDevices = new TableLayoutPanelEx();
-            this.tlpButton = new TableLayoutPanelEx();
+            this.tlpLimitDevices = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpSet = new TableLayoutPanelEx();
+            this.tlpSet = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbIsLimitDevices = new AntdUI.Checkbox();
             this.nudLimitDevices = new AntdUI.InputNumber();
             this.lAccountCNT = new AntdUI.Label();
@@ -89,9 +89,9 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(150, 7);
+            this.bSave.Location = new System.Drawing.Point(155, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -106,7 +106,7 @@
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(263, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -137,7 +137,7 @@
             this.cbIsLimitDevices.LocalizationText = "LimitDevicesForm.LimitDevices";
             this.cbIsLimitDevices.Location = new System.Drawing.Point(3, 3);
             this.cbIsLimitDevices.Name = "cbIsLimitDevices";
-            this.cbIsLimitDevices.Size = new System.Drawing.Size(131, 45);
+            this.cbIsLimitDevices.Size = new System.Drawing.Size(133, 45);
             this.cbIsLimitDevices.TabIndex = 6;
             this.cbIsLimitDevices.Text = "限制设备数 :";
             this.cbIsLimitDevices.CheckedChanged += new AntdUI.BoolEventHandler(this.cbIsLimitDevices_CheckedChanged);
@@ -145,7 +145,12 @@
             // nudLimitDevices
             // 
             this.nudLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLimitDevices.Location = new System.Drawing.Point(140, 3);
+            this.nudLimitDevices.Location = new System.Drawing.Point(142, 3);
+            this.nudLimitDevices.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudLimitDevices.Minimum = new decimal(new int[] {
             1,
             0,
@@ -154,7 +159,7 @@
             this.nudLimitDevices.Name = "nudLimitDevices";
             this.nudLimitDevices.PrefixSvg = "";
             this.nudLimitDevices.SelectionStart = 1;
-            this.nudLimitDevices.Size = new System.Drawing.Size(357, 45);
+            this.nudLimitDevices.Size = new System.Drawing.Size(355, 45);
             this.nudLimitDevices.SuffixSvg = "TabletOutlined";
             this.nudLimitDevices.TabIndex = 7;
             this.nudLimitDevices.Text = "1";

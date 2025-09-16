@@ -28,23 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.SliderMarkItem sliderMarkItem59 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem60 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem61 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem62 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem63 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem64 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem49 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem50 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem51 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem52 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem53 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem54 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem55 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem56 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem57 = new AntdUI.SliderMarkItem();
-            AntdUI.SliderMarkItem sliderMarkItem58 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem1 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem2 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem3 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem4 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem5 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem6 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem7 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem8 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem9 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem10 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem11 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem12 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem13 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem14 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem15 = new AntdUI.SliderMarkItem();
+            AntdUI.SliderMarkItem sliderMarkItem16 = new AntdUI.SliderMarkItem();
             this.tlpProxySettings = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.sliderMaxLinks = new AntdUI.Slider();
+            this.dBufferSize = new AntdUI.Divider();
             this.tableLayoutPanel1 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbEnable_Auth = new AntdUI.Checkbox();
             this.ddlAuthType = new AntdUI.Select();
@@ -61,9 +63,7 @@
             this.tlpProxyServerIP = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbProxyIP_Auto = new AntdUI.Checkbox();
             this.ddlProxyIP_Appoint = new AntdUI.Select();
-            this.dBufferSize = new AntdUI.Divider();
             this.sliderBufferSize = new AntdUI.Slider();
-            this.sliderMaxLinks = new AntdUI.Slider();
             this.ttcMaxLinks = new AntdUI.TooltipComponent();
             this.tlpProxySettings.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -113,6 +113,60 @@
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpProxySettings.Size = new System.Drawing.Size(500, 700);
             this.tlpProxySettings.TabIndex = 2;
+            // 
+            // sliderMaxLinks
+            // 
+            this.sliderMaxLinks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sliderMaxLinks.Dots = true;
+            this.sliderMaxLinks.Location = new System.Drawing.Point(3, 419);
+            sliderMarkItem1.Text = "1K";
+            sliderMarkItem2.Text = "2K";
+            sliderMarkItem2.Value = 1;
+            sliderMarkItem3.Text = "3K";
+            sliderMarkItem3.Value = 2;
+            sliderMarkItem4.Text = "5K";
+            sliderMarkItem4.Value = 3;
+            sliderMarkItem5.Text = "8K";
+            sliderMarkItem5.Value = 4;
+            sliderMarkItem6.Text = "12K";
+            sliderMarkItem6.Value = 5;
+            sliderMarkItem7.Text = "15K";
+            sliderMarkItem7.Value = 6;
+            sliderMarkItem8.Text = "20K";
+            sliderMarkItem8.Value = 7;
+            sliderMarkItem9.Text = "30K";
+            sliderMarkItem9.Value = 8;
+            sliderMarkItem10.Text = "50K";
+            sliderMarkItem10.Value = 9;
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem1);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem2);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem3);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem4);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem5);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem6);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem7);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem8);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem9);
+            this.sliderMaxLinks.Marks.Add(sliderMarkItem10);
+            this.sliderMaxLinks.MaxValue = 9;
+            this.sliderMaxLinks.Name = "sliderMaxLinks";
+            this.sliderMaxLinks.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.sliderMaxLinks.Size = new System.Drawing.Size(494, 60);
+            this.sliderMaxLinks.TabIndex = 15;
+            this.ttcMaxLinks.SetTip(this.sliderMaxLinks, "服务器配置        推荐连接数\r\n1核2GB内存      1,000 - 2,000\r\n2核4GB内存      3,000 - 5,000\r\n4核8GB" +
+        "内存      8,000 - 12,000\r\n8核16GB内存    15,000 - 20,000\r\n高性能服务器     20,000 - 50,000");
+            // 
+            // dBufferSize
+            // 
+            this.dBufferSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dBufferSize.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dBufferSize.LocalizationText = "ProxySettingsForm.BufferSize";
+            this.dBufferSize.Location = new System.Drawing.Point(3, 505);
+            this.dBufferSize.Name = "dBufferSize";
+            this.dBufferSize.Orientation = AntdUI.TOrientation.Left;
+            this.dBufferSize.Size = new System.Drawing.Size(494, 23);
+            this.dBufferSize.TabIndex = 13;
+            this.dBufferSize.Text = "缓存区大小";
             // 
             // tableLayoutPanel1
             // 
@@ -213,6 +267,11 @@
             this.nudSOCKS5Port.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudSOCKS5Port.LocalizationPrefixText = "ProxySettingsForm.Port";
             this.nudSOCKS5Port.Location = new System.Drawing.Point(120, 3);
+            this.nudSOCKS5Port.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
             this.nudSOCKS5Port.Minimum = new decimal(new int[] {
             1,
             0,
@@ -346,88 +405,34 @@
             this.ddlProxyIP_Appoint.Size = new System.Drawing.Size(380, 42);
             this.ddlProxyIP_Appoint.TabIndex = 1;
             // 
-            // dBufferSize
-            // 
-            this.dBufferSize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dBufferSize.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dBufferSize.LocalizationText = "ProxySettingsForm.BufferSize";
-            this.dBufferSize.Location = new System.Drawing.Point(3, 505);
-            this.dBufferSize.Name = "dBufferSize";
-            this.dBufferSize.Orientation = AntdUI.TOrientation.Left;
-            this.dBufferSize.Size = new System.Drawing.Size(494, 23);
-            this.dBufferSize.TabIndex = 13;
-            this.dBufferSize.Text = "缓存区大小";
-            // 
             // sliderBufferSize
             // 
             this.sliderBufferSize.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sliderBufferSize.Dots = true;
             this.sliderBufferSize.Location = new System.Drawing.Point(3, 534);
-            sliderMarkItem59.Text = "8KB";
-            sliderMarkItem60.Text = "16KB";
-            sliderMarkItem60.Value = 2;
-            sliderMarkItem61.Text = "32KB";
-            sliderMarkItem61.Value = 4;
-            sliderMarkItem62.Text = "64KB";
-            sliderMarkItem62.Value = 6;
-            sliderMarkItem63.Text = "128KB";
-            sliderMarkItem63.Value = 8;
-            sliderMarkItem64.Text = "256KB";
-            sliderMarkItem64.Value = 10;
-            this.sliderBufferSize.Marks.Add(sliderMarkItem59);
-            this.sliderBufferSize.Marks.Add(sliderMarkItem60);
-            this.sliderBufferSize.Marks.Add(sliderMarkItem61);
-            this.sliderBufferSize.Marks.Add(sliderMarkItem62);
-            this.sliderBufferSize.Marks.Add(sliderMarkItem63);
-            this.sliderBufferSize.Marks.Add(sliderMarkItem64);
+            sliderMarkItem11.Text = "8KB";
+            sliderMarkItem12.Text = "16KB";
+            sliderMarkItem12.Value = 2;
+            sliderMarkItem13.Text = "32KB";
+            sliderMarkItem13.Value = 4;
+            sliderMarkItem14.Text = "64KB";
+            sliderMarkItem14.Value = 6;
+            sliderMarkItem15.Text = "128KB";
+            sliderMarkItem15.Value = 8;
+            sliderMarkItem16.Text = "256KB";
+            sliderMarkItem16.Value = 10;
+            this.sliderBufferSize.Marks.Add(sliderMarkItem11);
+            this.sliderBufferSize.Marks.Add(sliderMarkItem12);
+            this.sliderBufferSize.Marks.Add(sliderMarkItem13);
+            this.sliderBufferSize.Marks.Add(sliderMarkItem14);
+            this.sliderBufferSize.Marks.Add(sliderMarkItem15);
+            this.sliderBufferSize.Marks.Add(sliderMarkItem16);
             this.sliderBufferSize.MaxValue = 10;
             this.sliderBufferSize.Name = "sliderBufferSize";
             this.sliderBufferSize.Padding = new System.Windows.Forms.Padding(10, 0, 30, 0);
             this.sliderBufferSize.Size = new System.Drawing.Size(494, 60);
             this.sliderBufferSize.TabIndex = 14;
             this.ttcMaxLinks.SetTip(this.sliderBufferSize, "默认值：8KB\r\n推荐值：16KB - 32KB\r\n大流量值：64KB - 128KB\r\n最大值：256KB");
-            // 
-            // sliderMaxLinks
-            // 
-            this.sliderMaxLinks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sliderMaxLinks.Dots = true;
-            this.sliderMaxLinks.Location = new System.Drawing.Point(3, 419);
-            sliderMarkItem49.Text = "1K";
-            sliderMarkItem50.Text = "2K";
-            sliderMarkItem50.Value = 1;
-            sliderMarkItem51.Text = "3K";
-            sliderMarkItem51.Value = 2;
-            sliderMarkItem52.Text = "5K";
-            sliderMarkItem52.Value = 3;
-            sliderMarkItem53.Text = "8K";
-            sliderMarkItem53.Value = 4;
-            sliderMarkItem54.Text = "12K";
-            sliderMarkItem54.Value = 5;
-            sliderMarkItem55.Text = "15K";
-            sliderMarkItem55.Value = 6;
-            sliderMarkItem56.Text = "20K";
-            sliderMarkItem56.Value = 7;
-            sliderMarkItem57.Text = "30K";
-            sliderMarkItem57.Value = 8;
-            sliderMarkItem58.Text = "50K";
-            sliderMarkItem58.Value = 9;
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem49);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem50);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem51);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem52);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem53);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem54);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem55);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem56);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem57);
-            this.sliderMaxLinks.Marks.Add(sliderMarkItem58);
-            this.sliderMaxLinks.MaxValue = 9;
-            this.sliderMaxLinks.Name = "sliderMaxLinks";
-            this.sliderMaxLinks.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
-            this.sliderMaxLinks.Size = new System.Drawing.Size(494, 60);
-            this.sliderMaxLinks.TabIndex = 15;
-            this.ttcMaxLinks.SetTip(this.sliderMaxLinks, "服务器配置        推荐连接数\r\n1核2GB内存      1,000 - 2,000\r\n2核4GB内存      3,000 - 5,000\r\n4核8GB" +
-        "内存      8,000 - 12,000\r\n8核16GB内存    15,000 - 20,000\r\n高性能服务器     20,000 - 50,000");
             // 
             // ProxySetting
             // 

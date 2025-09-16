@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpPacketEdit = new TableLayoutPanelEx();
+            this.tlpPacketEdit = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pPacketData = new AntdUI.Panel();
             this.hbPacketEdit = new Be.Windows.Forms.HexBox();
-            this.tlpSendCollectionInfo = new TableLayoutPanelEx();
+            this.tlpSendCollectionInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lSend_Fail_CNT = new AntdUI.Label();
             this.lSend_Success_CNT = new AntdUI.Label();
             this.lTotal_Send_CNT = new AntdUI.Label();
@@ -40,15 +40,15 @@
             this.lSend_Fail = new AntdUI.Label();
             this.lSend_Success = new AntdUI.Label();
             this.lTotal_Send = new AntdUI.Label();
-            this.tlpButton = new TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bStop = new AntdUI.Button();
             this.bSend = new AntdUI.Button();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpPacketSettings = new TableLayoutPanelEx();
+            this.tlpPacketSettings = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pProgression = new AntdUI.Panel();
-            this.tlpProgression = new TableLayoutPanelEx();
-            this.tableLayoutPanel4 = new TableLayoutPanelEx();
+            this.tlpProgression = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tableLayoutPanel4 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudProgressionCarry = new AntdUI.InputNumber();
             this.cbProgressionCarry = new AntdUI.Checkbox();
             this.cbProgressionPosition = new AntdUI.Checkbox();
@@ -56,16 +56,16 @@
             this.nudProgressionStep = new AntdUI.InputNumber();
             this.dProgression = new AntdUI.Divider();
             this.pPacketSend = new AntdUI.Panel();
-            this.tlpPacketSend = new TableLayoutPanelEx();
-            this.tableLayoutPanel2 = new TableLayoutPanelEx();
+            this.tlpPacketSend = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tableLayoutPanel2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.rbSendType_Continuously = new AntdUI.Radio();
             this.nudSendType_Times = new AntdUI.InputNumber();
             this.nudSendType_Interval = new AntdUI.InputNumber();
             this.rbSendType_Times = new AntdUI.Radio();
             this.dPacketSend = new AntdUI.Divider();
             this.pPacketSocket = new AntdUI.Panel();
-            this.tlpPacketSocket = new TableLayoutPanelEx();
-            this.tlpFilterProgression = new TableLayoutPanelEx();
+            this.tlpPacketSocket = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpFilterProgression = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudPacketLength = new AntdUI.InputNumber();
             this.lPacketLength = new AntdUI.Label();
             this.lPacketTo = new AntdUI.Label();
@@ -309,9 +309,9 @@
             this.bStop.LoadingWaveValue = 0.6F;
             this.bStop.LoadingWaveVertical = true;
             this.bStop.LocalizationText = "Stop";
-            this.bStop.Location = new System.Drawing.Point(400, 7);
+            this.bStop.Location = new System.Drawing.Point(405, 7);
             this.bStop.Name = "bStop";
-            this.bStop.Size = new System.Drawing.Size(87, 46);
+            this.bStop.Size = new System.Drawing.Size(82, 46);
             this.bStop.TabIndex = 3;
             this.bStop.Text = "停止";
             this.bStop.Type = AntdUI.TTypeMini.Info;
@@ -329,9 +329,9 @@
             this.bSend.LoadingWaveValue = 0.6F;
             this.bSend.LoadingWaveVertical = true;
             this.bSend.LocalizationText = "Send";
-            this.bSend.Location = new System.Drawing.Point(287, 7);
+            this.bSend.Location = new System.Drawing.Point(297, 7);
             this.bSend.Name = "bSend";
-            this.bSend.Size = new System.Drawing.Size(87, 46);
+            this.bSend.Size = new System.Drawing.Size(82, 46);
             this.bSend.TabIndex = 2;
             this.bSend.Text = "发送";
             this.bSend.Type = AntdUI.TTypeMini.Info;
@@ -351,7 +351,7 @@
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(513, 7);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(87, 46);
+            this.bSave.Size = new System.Drawing.Size(82, 46);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Info;
@@ -364,9 +364,9 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(626, 7);
+            this.bExit.Location = new System.Drawing.Point(621, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -445,7 +445,12 @@
             // 
             this.nudProgressionCarry.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionCarry.LocalizationSuffixText = "FilterEditForm.StartFrom.Progression.Digits";
-            this.nudProgressionCarry.Location = new System.Drawing.Point(118, 102);
+            this.nudProgressionCarry.Location = new System.Drawing.Point(120, 104);
+            this.nudProgressionCarry.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudProgressionCarry.Minimum = new decimal(new int[] {
             1,
             0,
@@ -453,7 +458,7 @@
             0});
             this.nudProgressionCarry.Name = "nudProgressionCarry";
             this.nudProgressionCarry.SelectionStart = 1;
-            this.nudProgressionCarry.Size = new System.Drawing.Size(206, 42);
+            this.nudProgressionCarry.Size = new System.Drawing.Size(204, 44);
             this.nudProgressionCarry.SuffixText = "位数";
             this.nudProgressionCarry.TabIndex = 45;
             this.nudProgressionCarry.Text = "1";
@@ -468,9 +473,9 @@
             // 
             this.cbProgressionCarry.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbProgressionCarry.LocalizationText = "FilterEditForm.StartFrom.Progression.Carry";
-            this.cbProgressionCarry.Location = new System.Drawing.Point(6, 102);
+            this.cbProgressionCarry.Location = new System.Drawing.Point(6, 104);
             this.cbProgressionCarry.Name = "cbProgressionCarry";
-            this.cbProgressionCarry.Size = new System.Drawing.Size(106, 42);
+            this.cbProgressionCarry.Size = new System.Drawing.Size(108, 44);
             this.cbProgressionCarry.TabIndex = 44;
             this.cbProgressionCarry.Text = "进位递进";
             this.cbProgressionCarry.CheckedChanged += new AntdUI.BoolEventHandler(this.cbProgressionCarry_CheckedChanged);
@@ -481,7 +486,7 @@
             this.cbProgressionPosition.LocalizationText = "Enable";
             this.cbProgressionPosition.Location = new System.Drawing.Point(6, 6);
             this.cbProgressionPosition.Name = "cbProgressionPosition";
-            this.cbProgressionPosition.Size = new System.Drawing.Size(106, 42);
+            this.cbProgressionPosition.Size = new System.Drawing.Size(108, 44);
             this.cbProgressionPosition.TabIndex = 40;
             this.cbProgressionPosition.Text = "启用递进";
             this.cbProgressionPosition.CheckedChanged += new AntdUI.BoolEventHandler(this.cbProgressionPosition_CheckedChanged);
@@ -490,7 +495,12 @@
             // 
             this.nudProgressionPosition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionPosition.LocalizationSuffixText = "Position";
-            this.nudProgressionPosition.Location = new System.Drawing.Point(118, 6);
+            this.nudProgressionPosition.Location = new System.Drawing.Point(120, 6);
+            this.nudProgressionPosition.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudProgressionPosition.Minimum = new decimal(new int[] {
             0,
             0,
@@ -498,7 +508,7 @@
             0});
             this.nudProgressionPosition.Name = "nudProgressionPosition";
             this.nudProgressionPosition.ReadOnly = true;
-            this.nudProgressionPosition.Size = new System.Drawing.Size(206, 42);
+            this.nudProgressionPosition.Size = new System.Drawing.Size(204, 44);
             this.nudProgressionPosition.SuffixText = "位置";
             this.nudProgressionPosition.TabIndex = 42;
             this.nudProgressionPosition.Text = "1";
@@ -513,7 +523,7 @@
             // 
             this.nudProgressionStep.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionStep.LocalizationSuffixText = "FilterEditForm.StartFrom.Progression.Step";
-            this.nudProgressionStep.Location = new System.Drawing.Point(118, 54);
+            this.nudProgressionStep.Location = new System.Drawing.Point(120, 56);
             this.nudProgressionStep.Maximum = new decimal(new int[] {
             255,
             0,
@@ -525,7 +535,7 @@
             0,
             -2147483648});
             this.nudProgressionStep.Name = "nudProgressionStep";
-            this.nudProgressionStep.Size = new System.Drawing.Size(206, 42);
+            this.nudProgressionStep.Size = new System.Drawing.Size(204, 42);
             this.nudProgressionStep.SuffixText = "步长";
             this.nudProgressionStep.TabIndex = 43;
             this.nudProgressionStep.Text = "1";
@@ -603,9 +613,9 @@
             this.rbSendType_Continuously.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbSendType_Continuously.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSendType_Continuously.LocalizationText = "PacketEditForm.Send.Continuously";
-            this.rbSendType_Continuously.Location = new System.Drawing.Point(6, 54);
+            this.rbSendType_Continuously.Location = new System.Drawing.Point(6, 56);
             this.rbSendType_Continuously.Name = "rbSendType_Continuously";
-            this.rbSendType_Continuously.Size = new System.Drawing.Size(106, 42);
+            this.rbSendType_Continuously.Size = new System.Drawing.Size(108, 44);
             this.rbSendType_Continuously.TabIndex = 45;
             this.rbSendType_Continuously.Text = "连续发送";
             // 
@@ -613,7 +623,12 @@
             // 
             this.nudSendType_Times.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudSendType_Times.LocalizationSuffixText = "Times";
-            this.nudSendType_Times.Location = new System.Drawing.Point(118, 6);
+            this.nudSendType_Times.Location = new System.Drawing.Point(120, 6);
+            this.nudSendType_Times.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudSendType_Times.Minimum = new decimal(new int[] {
             1,
             0,
@@ -621,7 +636,7 @@
             0});
             this.nudSendType_Times.Name = "nudSendType_Times";
             this.nudSendType_Times.SelectionStart = 1;
-            this.nudSendType_Times.Size = new System.Drawing.Size(196, 42);
+            this.nudSendType_Times.Size = new System.Drawing.Size(194, 44);
             this.nudSendType_Times.SuffixText = "次数";
             this.nudSendType_Times.TabIndex = 42;
             this.nudSendType_Times.Text = "1";
@@ -636,14 +651,19 @@
             // 
             this.nudSendType_Interval.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudSendType_Interval.LocalizationSuffixText = "Millisecond";
-            this.nudSendType_Interval.Location = new System.Drawing.Point(118, 54);
+            this.nudSendType_Interval.Location = new System.Drawing.Point(120, 56);
+            this.nudSendType_Interval.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
             this.nudSendType_Interval.Minimum = new decimal(new int[] {
             0,
             0,
             0,
             0});
             this.nudSendType_Interval.Name = "nudSendType_Interval";
-            this.nudSendType_Interval.Size = new System.Drawing.Size(196, 42);
+            this.nudSendType_Interval.Size = new System.Drawing.Size(194, 44);
             this.nudSendType_Interval.SuffixText = "毫秒";
             this.nudSendType_Interval.TabIndex = 43;
             this.nudSendType_Interval.Text = "100";
@@ -662,7 +682,7 @@
             this.rbSendType_Times.LocalizationText = "PacketEditForm.Send.ByTime";
             this.rbSendType_Times.Location = new System.Drawing.Point(6, 6);
             this.rbSendType_Times.Name = "rbSendType_Times";
-            this.rbSendType_Times.Size = new System.Drawing.Size(106, 42);
+            this.rbSendType_Times.Size = new System.Drawing.Size(108, 44);
             this.rbSendType_Times.TabIndex = 44;
             this.rbSendType_Times.Text = "按次发送";
             this.rbSendType_Times.CheckedChanged += new AntdUI.BoolEventHandler(this.rbSendType_Times_CheckedChanged);
