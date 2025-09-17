@@ -36,7 +36,6 @@ namespace WinsockPacketEditor
 
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
             this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
-            this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
             this.PacketList_AutoClear_Changed();
 
@@ -959,18 +958,18 @@ namespace WinsockPacketEditor
                     Mode = SocketMode.Tcp,
 
                     // 连接限制
-                    MaxConnectionNumber = Operate.ProxyConfig.Proxy.MaxConnectionNumber,
+                    MaxConnectionNumber = 20000,
                     ListenBacklog = 1000,
 
                     // 缓冲区设置
-                    ReceiveBufferSize = Operate.ProxyConfig.Proxy.BufferSize,
-                    SendBufferSize = Operate.ProxyConfig.Proxy.BufferSize,
+                    ReceiveBufferSize = 65535,
+                    SendBufferSize = 65535,
                     MaxRequestLength = 1024 * 1024 * 10,
 
                     // 超时设置
                     ClearIdleSession = true,
                     ClearIdleSessionInterval = 60,
-                    IdleSessionTimeOut = 120,
+                    IdleSessionTimeOut = 300,
                 };
 
                 if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config))
@@ -1129,36 +1128,6 @@ namespace WinsockPacketEditor
         private void PacketList_AutoRoll_Changed()
         {
             Operate.PacketConfig.List.AutoRoll = this.cbPacketList_AutoRoll.Checked;
-        }
-
-        #endregion
-
-        #region//系统代理
-
-        private void switchSystemProxy_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
-        {
-            this.EnableSystemProxy_Changed();
-        }
-
-        private void EnableSystemProxy_Changed()
-        {
-            try
-            {
-                if (this.switchSystemProxy.Checked)
-                {
-                    Operate.ProxyConfig.Proxy.Enable_SystemProxy = true;
-                    Operate.ProxyConfig.Proxy.EnableSystemProxy(this.form);
-                }
-                else
-                {
-                    Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
-                    Operate.ProxyConfig.Proxy.DisableSystemProxy(this.form);
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
         }
 
         #endregion        

@@ -28,7 +28,8 @@ namespace WinsockPacketEditor
                 this.cbProxyIP_Auto.Checked = Operate.ProxyConfig.Proxy.ProxyIP_Auto;
                 this.cbEnable_SOCKS5.Checked = Operate.ProxyConfig.Proxy.Enable_SOCKS5;
                 this.nudSOCKS5Port.Value = Operate.ProxyConfig.Proxy.ProxyPort;
-                this.cbEnable_Auth.Checked = Operate.ProxyConfig.Proxy.Enable_Auth;                
+                this.cbEnable_Auth.Checked = Operate.ProxyConfig.Proxy.Enable_Auth;
+                this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
 
                 if (Operate.ProxyConfig.Proxy.ProxyServerIP == null)
                 {
@@ -54,71 +55,6 @@ namespace WinsockPacketEditor
                 if (this.ddlAuthType.Items.Count > 0)
                 {
                     this.ddlAuthType.SelectedIndex = 0;
-                }
-
-                switch (Operate.ProxyConfig.Proxy.MaxConnectionNumber)
-                {
-                    case 1000:
-                        this.sliderMaxLinks.Value = 0;
-                        break;
-
-                    case 2000:
-                        this.sliderMaxLinks.Value = 1;
-                        break;
-
-                    case 3000:
-                        this.sliderMaxLinks.Value = 2;
-                        break;
-
-                    case 5000:
-                        this.sliderMaxLinks.Value = 3;
-                        break;
-
-                    case 8000:
-                        this.sliderMaxLinks.Value = 4;
-                        break;
-
-                    case 12000:
-                        this.sliderMaxLinks.Value = 5;
-                        break;
-
-                    case 15000:
-                        this.sliderMaxLinks.Value = 6;
-                        break;
-
-                    case 20000:
-                        this.sliderMaxLinks.Value = 7;
-                        break;
-
-                    case 30000:
-                        this.sliderMaxLinks.Value = 8;
-                        break;
-
-                    case 50000:
-                        this.sliderMaxLinks.Value = 9;
-                        break;
-                }
-
-                switch (Operate.ProxyConfig.Proxy.BufferSize)
-                {
-                    case 8192:
-                        this.sliderBufferSize.Value = 0;
-                        break;
-                    case 16384:
-                        this.sliderBufferSize.Value = 2;
-                        break;
-                    case 32768:
-                        this.sliderBufferSize.Value = 4;
-                        break;
-                    case 65535:
-                        this.sliderBufferSize.Value = 6;
-                        break;
-                    case 131072:
-                        this.sliderBufferSize.Value = 8;
-                        break;
-                    case 262144:
-                        this.sliderBufferSize.Value = 10;
-                        break;
                 }
 
                 this.ProxyIP_Appoint_Changed();
@@ -175,6 +111,36 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//系统代理
+
+        private void switchSystemProxy_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
+        {
+            this.EnableSystemProxy_Changed();
+        }
+
+        private void EnableSystemProxy_Changed()
+        {
+            try
+            {
+                if (this.switchSystemProxy.Checked)
+                {
+                    Operate.ProxyConfig.Proxy.Enable_SystemProxy = true;
+                    Operate.ProxyConfig.Proxy.EnableSystemProxy(this.form);
+                }
+                else
+                {
+                    Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
+                    Operate.ProxyConfig.Proxy.DisableSystemProxy(this.form);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
+
         #region//保存
 
         private void bSave_Click(object sender, EventArgs e)
@@ -189,71 +155,6 @@ namespace WinsockPacketEditor
                     });
 
                     return;
-                }
-
-                switch (this.sliderMaxLinks.Value)
-                { 
-                    case 0:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 1000;
-                        break;
-
-                    case 1:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 2000;
-                        break;
-
-                    case 2:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 3000;
-                        break;
-
-                    case 3:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 5000;
-                        break;
-
-                    case 4:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 8000;
-                        break;
-
-                    case 5:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 12000;
-                        break;
-
-                    case 6:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 15000;
-                        break;
-
-                    case 7:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 20000;
-                        break;
-
-                    case 8:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 30000;
-                        break;
-
-                    case 9:
-                        Operate.ProxyConfig.Proxy.MaxConnectionNumber = 50000;
-                        break;
-                }
-
-                switch (this.sliderBufferSize.Value)
-                {
-                    case 0:
-                        Operate.ProxyConfig.Proxy.BufferSize = 8192;
-                        break;
-                    case 2:
-                        Operate.ProxyConfig.Proxy.BufferSize = 16384;
-                        break;
-                    case 4:
-                        Operate.ProxyConfig.Proxy.BufferSize = 32768;
-                        break;
-                    case 6:
-                        Operate.ProxyConfig.Proxy.BufferSize = 65535;
-                        break;
-                    case 8:
-                        Operate.ProxyConfig.Proxy.BufferSize = 131072;
-                        break;
-                    case 10:
-                        Operate.ProxyConfig.Proxy.BufferSize = 262144;
-                        break;
                 }
 
                 Operate.ProxyConfig.Proxy.ProxyIP_Auto = this.cbProxyIP_Auto.Checked;
