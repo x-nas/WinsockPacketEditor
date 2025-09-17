@@ -966,6 +966,11 @@ namespace WinsockPacketEditor
                     ReceiveBufferSize = Operate.ProxyConfig.Proxy.BufferSize,
                     SendBufferSize = Operate.ProxyConfig.Proxy.BufferSize,
                     MaxRequestLength = 1024 * 1024 * 10,
+
+                    // 超时设置
+                    ClearIdleSession = true,
+                    ClearIdleSessionInterval = 60,
+                    IdleSessionTimeOut = 120,
                 };
 
                 if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config))
