@@ -8,13 +8,17 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
     public partial class ProcessList : UserControl
-    {
+    {        
+        private IntPtr ipHook = IntPtr.Zero;
+        private bool isPickingWindow = true;
         private Form form = null;
+        private User32.LowLevelMouseProc lmpProc = null;
         private List<ProcessInfo> processList = new List<ProcessInfo>();
 
         #region//窗体事件
@@ -226,6 +230,11 @@ namespace WinsockPacketEditor
                 return;
             }
 
+            this.DoInject();
+        }
+
+        private void DoInject()
+        {
             try
             {
                 string channelName = "WPE64";
@@ -243,7 +252,7 @@ namespace WinsockPacketEditor
 
                 Operate.SystemConfig.LastInjection = Operate.SystemConfig.PNAME;
                 Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Process;
-                Operate.SystemConfig.SaveSystemConfig_LastInjection_ToDB();                
+                Operate.SystemConfig.SaveSystemConfig_LastInjection_ToDB();
 
                 this.Dispose();
             }
@@ -285,7 +294,85 @@ namespace WinsockPacketEditor
 
         private void bExit_Click(object sender, EventArgs e)
         {
+            this.UnHook();
             this.Dispose();
+        }
+
+        #endregion
+
+        #region//选择窗体
+
+        private void bSelectForm_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.Cross;
+                this.lmpProc = this.HookCallback;
+
+                if (this.lmpProc != null)
+                {
+                    using (Process curProcess = Process.GetCurrentProcess())
+                    using (ProcessModule curModule = curProcess.MainModule)
+                    {
+                        this.ipHook = User32.SetWindowsHookEx(User32.WH_MOUSE_LL, this.lmpProc, Kernel32.GetModuleHandle(curModule.ModuleName), 0);
+                    }
+                }                
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            try
+            {
+                if (nCode >= 0 && wParam == (IntPtr)User32.WM_LBUTTONDOWN && isPickingWindow)
+                {
+                    User32.MSLLHOOKSTRUCT hookStruct = Marshal.PtrToStructure<User32.MSLLHOOKSTRUCT>(lParam);
+                    User32.POINT point = hookStruct.pt;
+
+                    IntPtr hWnd = User32.WindowFromPoint(point);
+                    if (hWnd != IntPtr.Zero)
+                    {
+                        this.Invoke((MethodInvoker)delegate {
+                            isPickingWindow = false;
+                            this.UnHook();
+                            this.Cursor = Cursors.Default;
+
+                            int processId;
+                            User32.GetWindowThreadProcessId(hWnd, out processId);
+
+                            var proc = Process.GetProcessById(processId);
+                            if (proc != null)
+                            {
+                                Operate.SystemConfig.PID = processId;
+                                Operate.SystemConfig.PNAME = proc.ProcessName;
+
+                                this.ShowSelectProcess();
+                                this.DoInject();
+                            }
+                        });
+                    }
+                }
+
+                return User32.CallNextHookEx(this.ipHook, nCode, wParam, lParam);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return IntPtr.Zero;            
+        }
+
+        private void UnHook()
+        {
+            if (this.ipHook != IntPtr.Zero)
+            {
+                User32.UnhookWindowsHookEx(this.ipHook);
+            }
         }
 
         #endregion

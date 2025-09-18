@@ -11,6 +11,9 @@ namespace WinsockPacketEditor
         [SuppressUnmanagedCodeSecurity]
         public static extern int GetMappedFileName(IntPtr hProcess, IntPtr lpv, StringBuilder lpFilename, int nSize);
 
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
+
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
