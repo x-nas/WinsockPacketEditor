@@ -495,6 +495,11 @@ namespace WinsockPacketEditor
 
                     foreach (int SelectIndex in this.tProxyList.SelectedIndexs)
                     {
+                        if (SelectIndex == 0)
+                        {
+                            break;
+                        }
+
                         piList.Add(Operate.ProxyConfig.List.lstProxyInfo[SelectIndex - 1]);
                     }
 
