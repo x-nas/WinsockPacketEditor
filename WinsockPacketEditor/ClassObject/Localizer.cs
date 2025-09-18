@@ -703,6 +703,27 @@ namespace WinsockPacketEditor
                 case "ProcessList":
                     return "Process List";
 
+                case "ProcessList.Process":
+                    return "Process : ";
+
+                case "ProcessList.PID":
+                    return "PID : ";
+
+                case "ProcessList.Title":
+                    return "Title : ";
+
+                case "ProcessList.Path":
+                    return "Path : ";
+
+                case "ProcessList.Handle":
+                    return "Handle : ";
+
+                case "ProcessList.NoTitle":
+                    return "No Title";
+
+                case "ProcessList.NoInfo":
+                    return "(No Information)";
+
                 case "Table.ProcessList.Column.ICO":
                     return "";
 
@@ -715,11 +736,17 @@ namespace WinsockPacketEditor
                 case "Table.ProcessList.Column.ProcessPath":
                     return "Path";
 
+                case "ProcessList.SelectForm":
+                    return "Please select a form";
+
                 case "ProcessList.txtSelectProcess":
                     return "Please select a process or program";
 
                 case "ProcessList.txtSearchProcess":
                     return "Filter process list";
+
+                case "ProcessList.bSelectForm":
+                    return "Select Form";
 
                 case "ProcessList.bCreate":
                     return "Program";

@@ -32,6 +32,7 @@
             this.pProcessList = new AntdUI.Panel();
             this.tProcessList = new AntdUI.Table();
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.bSelectForm = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.bCreate = new AntdUI.Button();
             this.bRefresh = new AntdUI.Button();
@@ -39,7 +40,6 @@
             this.tlpSearch = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtSearchProcess = new AntdUI.Input();
             this.txtSelectProcess = new AntdUI.Input();
-            this.bSelectForm = new AntdUI.Button();
             this.tlpSelectProcess.SuspendLayout();
             this.pProcessList.SuspendLayout();
             this.tlpButton.SuspendLayout();
@@ -79,6 +79,7 @@
             this.tProcessList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tProcessList.CellImpactHeight = false;
             this.tProcessList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tProcessList.Empty = false;
             this.tProcessList.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tProcessList.Gap = 8;
             this.tProcessList.GapCell = 0;
@@ -118,6 +119,21 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpButton.Size = new System.Drawing.Size(800, 60);
             this.tlpButton.TabIndex = 2;
+            // 
+            // bSelectForm
+            // 
+            this.bSelectForm.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bSelectForm.BackExtend = "135, #6253E1, #04BEFE";
+            this.bSelectForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSelectForm.IconSvg = "CreditCardOutlined";
+            this.bSelectForm.LocalizationText = "ProcessList.{id}";
+            this.bSelectForm.Location = new System.Drawing.Point(111, 3);
+            this.bSelectForm.Name = "bSelectForm";
+            this.bSelectForm.Size = new System.Drawing.Size(114, 46);
+            this.bSelectForm.TabIndex = 4;
+            this.bSelectForm.Text = "选择窗体";
+            this.bSelectForm.Type = AntdUI.TTypeMini.Primary;
+            this.bSelectForm.Click += new System.EventHandler(this.bSelectForm_Click);
             // 
             // bExit
             // 
@@ -224,21 +240,6 @@
             this.txtSelectProcess.TabIndex = 2;
             this.txtSelectProcess.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSelectProcess.TextChanged += new System.EventHandler(this.txtSelectProcess_TextChanged);
-            // 
-            // bSelectForm
-            // 
-            this.bSelectForm.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bSelectForm.BackExtend = "135, #6253E1, #04BEFE";
-            this.bSelectForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSelectForm.IconSvg = "CreditCardOutlined";
-            this.bSelectForm.LocalizationText = "ProcessList.{id}";
-            this.bSelectForm.Location = new System.Drawing.Point(111, 3);
-            this.bSelectForm.Name = "bSelectForm";
-            this.bSelectForm.Size = new System.Drawing.Size(114, 46);
-            this.bSelectForm.TabIndex = 4;
-            this.bSelectForm.Text = "选择窗体";
-            this.bSelectForm.Type = AntdUI.TTypeMini.Primary;
-            this.bSelectForm.Click += new System.EventHandler(this.bSelectForm_Click);
             // 
             // ProcessList
             // 

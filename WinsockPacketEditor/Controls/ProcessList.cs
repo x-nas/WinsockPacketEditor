@@ -15,10 +15,14 @@ namespace WinsockPacketEditor
 {
     public partial class ProcessList : UserControl
     {        
-        private IntPtr ipHook = IntPtr.Zero;
-        private bool isPickingWindow = true;
+        private IntPtr ipMouseHook = IntPtr.Zero;
+        private IntPtr ipKeyHook = IntPtr.Zero;
+        private IntPtr lastHoverHwnd = IntPtr.Zero;
+        private bool isPickingWindow = false;
         private Form form = null;
-        private User32.LowLevelMouseProc lmpProc = null;
+        private ToolTip processToolTip = null;
+        private User32.HookProc mProc;
+        private User32.HookProc kProc;
         private List<ProcessInfo> processList = new List<ProcessInfo>();
 
         #region//窗体事件
@@ -68,6 +72,12 @@ namespace WinsockPacketEditor
                 this.tProcessList.BackColor = Color.White;
                 this.tProcessList.ColumnBack = null;
             }
+        }
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            this.UnHook();
+            base.OnHandleDestroyed(e);
         }
 
         #endregion
@@ -302,77 +312,226 @@ namespace WinsockPacketEditor
 
         #region//选择窗体
 
+        private void InitializeToolTip()
+        {
+            processToolTip = new ToolTip();
+            processToolTip.InitialDelay = 100;
+            processToolTip.ReshowDelay = 100;
+            processToolTip.ShowAlways = true;
+        }
+
         private void bSelectForm_Click(object sender, EventArgs e)
         {
             try
             {
-                this.Cursor = Cursors.Cross;
-                this.lmpProc = this.HookCallback;
+                this.isPickingWindow = true;
 
-                if (this.lmpProc != null)
+                if (processToolTip == null)
+                {
+                    InitializeToolTip();
+                }
+
+                this.mProc = new User32.HookProc(MouseHook);
+                this.kProc = new User32.HookProc(KeyBoardHook);
+
+                if (this.mProc != null)
                 {
                     using (Process curProcess = Process.GetCurrentProcess())
                     using (ProcessModule curModule = curProcess.MainModule)
                     {
-                        this.ipHook = User32.SetWindowsHookEx(User32.WH_MOUSE_LL, this.lmpProc, Kernel32.GetModuleHandle(curModule.ModuleName), 0);
+                        this.ipMouseHook = User32.SetWindowsHookEx(User32.WH_MOUSE_LL, this.mProc, Kernel32.GetModuleHandle(curModule.ModuleName), 0);
                     }
-                }                
+                }
+
+                if (this.kProc != null)
+                {
+                    using (Process curProc = Process.GetCurrentProcess())
+                    using (ProcessModule curMod = curProc.MainModule)
+                    {
+                        this.ipKeyHook = User32.SetWindowsHookEx(User32.WH_KEYBOARD_LL, this.kProc, Kernel32.GetModuleHandle(curMod.ModuleName), 0);
+                    }
+                }
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请选择一个窗体", TType.Success)
+                {
+                    LocalizationText = "ProcessList.SelectForm"
+                });
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                this.UnHook();
             }
         }
 
-        private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        private IntPtr MouseHook(int nCode, IntPtr wParam, IntPtr lParam)
         {
             try
             {
-                if (nCode >= 0 && wParam == (IntPtr)User32.WM_LBUTTONDOWN && isPickingWindow)
+                if (nCode >= 0 && this.isPickingWindow)
                 {
                     User32.MSLLHOOKSTRUCT hookStruct = Marshal.PtrToStructure<User32.MSLLHOOKSTRUCT>(lParam);
                     User32.POINT point = hookStruct.pt;
 
-                    IntPtr hWnd = User32.WindowFromPoint(point);
-                    if (hWnd != IntPtr.Zero)
+                    if (wParam == (IntPtr)User32.WM_MOUSEMOVE)
                     {
-                        this.Invoke((MethodInvoker)delegate {
-                            isPickingWindow = false;
-                            this.UnHook();
-                            this.Cursor = Cursors.Default;
+                        IntPtr hWnd = User32.WindowFromPoint(point);
+                        if (hWnd != IntPtr.Zero && hWnd != lastHoverHwnd)
+                        {
+                            lastHoverHwnd = hWnd;
 
                             int processId;
                             User32.GetWindowThreadProcessId(hWnd, out processId);
 
-                            var proc = Process.GetProcessById(processId);
-                            if (proc != null)
-                            {
-                                Operate.SystemConfig.PID = processId;
-                                Operate.SystemConfig.PNAME = proc.ProcessName;
+                            string processInfo = GetProcessInfo(processId, hWnd);
 
-                                this.ShowSelectProcess();
-                                this.DoInject();
-                            }
-                        });
+                            this.BeginInvoke((MethodInvoker)delegate {
+                                ShowProcessToolTip(new Point(point.x, point.y), processInfo);
+                            });
+                        }
+                    }
+
+                    if (wParam == (IntPtr)User32.WM_LBUTTONDOWN)
+                    {
+                        IntPtr hWnd = User32.WindowFromPoint(point);
+                        if (hWnd != IntPtr.Zero)
+                        {
+                            this.BeginInvoke((MethodInvoker)delegate {
+                                this.isPickingWindow = false;
+                                this.UnHook();
+
+                                int processId;
+                                User32.GetWindowThreadProcessId(hWnd, out processId);
+
+                                var proc = Process.GetProcessById(processId);
+                                if (proc != null)
+                                {
+                                    Operate.SystemConfig.PID = processId;
+                                    Operate.SystemConfig.PNAME = proc.ProcessName;
+
+                                    this.ShowSelectProcess();
+                                    this.DoInject();
+                                }
+                            });
+                        }
                     }
                 }
 
-                return User32.CallNextHookEx(this.ipHook, nCode, wParam, lParam);
+                return User32.CallNextHookEx(this.ipMouseHook, nCode, wParam, lParam);
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return IntPtr.Zero;            
+            return IntPtr.Zero;
+        }
+
+        private IntPtr KeyBoardHook(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            try
+            {
+                if (nCode >= 0 && this.isPickingWindow)
+                {
+                    var kb = Marshal.PtrToStructure<User32.KBDLLHOOKSTRUCT>(lParam);
+                    if (kb.vkCode == (uint)Keys.Escape)
+                    {
+                        this.BeginInvoke((MethodInvoker)delegate
+                        {                            
+                            UnHook();
+                        });
+
+                        return (IntPtr)1;
+                    }
+                }
+                return User32.CallNextHookEx(ipKeyHook, nCode, wParam, lParam);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return User32.CallNextHookEx(ipKeyHook, nCode, wParam, lParam);
+        }
+
+        private string GetProcessInfo(int processId, IntPtr hWnd)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+            try
+            {
+                Process process = Process.GetProcessById(processId);
+                string windowTitle = GetWindowTitle(hWnd);
+
+                sb.Append(AntdUI.Localization.Get("ProcessList.Process", "进程 : ")).AppendLine(process.ProcessName)
+                  .Append(AntdUI.Localization.Get("ProcessList.PID", "PID : ")).AppendLine(processId.ToString())
+                  .Append(AntdUI.Localization.Get("ProcessList.Title", "标题 : ")).AppendLine(windowTitle)
+                  .Append(AntdUI.Localization.Get("ProcessList.Path", "路径 : ")).AppendLine(process.MainModule?.FileName ?? string.Empty);
+            }
+            catch
+            {
+                sb.Append(AntdUI.Localization.Get("ProcessList.PID", "PID : ")).AppendLine(processId.ToString())
+                  .Append(AntdUI.Localization.Get("ProcessList.Handle", "窗口句柄 : ")).AppendLine(hWnd.ToString())
+                  .AppendLine(AntdUI.Localization.Get("ProcessList.NoInfo", "(无法获取详细信息)"));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetWindowTitle(IntPtr hWnd)
+        {
+            try
+            {
+                System.Text.StringBuilder title = new System.Text.StringBuilder(256);
+                if (User32.GetWindowText(hWnd, title, title.Capacity) > 0)
+                {
+                    return title.ToString();
+                }
+            }
+            catch
+            {
+                // 忽略错误
+            }
+
+            return AntdUI.Localization.Get("ProcessList.NoTitle", "无标题");
+        }
+
+        private void ShowProcessToolTip(Point screenPoint, string text)
+        {
+            Point controlPoint = this.PointToClient(screenPoint);
+            this.processToolTip.Show(text, this, controlPoint.X + 15, controlPoint.Y + 15);
         }
 
         private void UnHook()
         {
-            if (this.ipHook != IntPtr.Zero)
+            try
             {
-                User32.UnhookWindowsHookEx(this.ipHook);
+                if (this.ipMouseHook != IntPtr.Zero)
+                {
+                    User32.UnhookWindowsHookEx(this.ipMouseHook);
+                    this.ipMouseHook = IntPtr.Zero;
+                }
+
+                if (ipKeyHook != IntPtr.Zero)
+                {
+                    User32.UnhookWindowsHookEx(this.ipKeyHook);
+                    ipKeyHook = IntPtr.Zero;
+                }
+
+                if (processToolTip != null)
+                {
+                    processToolTip.Hide(this);
+                    processToolTip.Dispose();
+                    processToolTip = null;
+                }
+
+                this.lastHoverHwnd = IntPtr.Zero;
+                this.isPickingWindow = false;
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
