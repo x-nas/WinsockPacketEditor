@@ -82,7 +82,7 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("Length", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Duplicate.Column."),
                 new AntdUI.Column("CountInA", "A 次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Duplicate.Column."),                
                 new AntdUI.Column("CountInB", "B 次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.Duplicate.Column."),
-                new AntdUI.Column("PositionsInA", "A 位置", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("PositionsInA", "A 位置")
                 {
                     Render = (value, record, rowIndex) =>
                     {
@@ -93,7 +93,7 @@ namespace WinsockPacketEditor
                         return value;
                     }
                 }.SetLocalizationTitleID("Table.Duplicate.Column."),
-                new AntdUI.Column("PositionsInB", "B 位置", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("PositionsInB", "B 位置")
                 {
                     Render = (value, record, rowIndex) =>
                     {
@@ -200,10 +200,24 @@ namespace WinsockPacketEditor
         {
             try
             {
+                List<Operate.SystemConfig.DifferenceItem> diResult = null;
+
                 this.txtComparison_A.ClearStyle();
                 this.txtComparison_B.ClearStyle();
 
-                this.tComparison.DataSource = Operate.SystemConfig.CompareText(this.txtComparison_A, this.txtComparison_B);
+                AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+                {
+                    Radius = 6,
+                    Font = new Font("Microsoft YaHei UI", 12f),
+                }, (config) =>
+                {
+                    config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+                    diResult = Operate.SystemConfig.CompareText(this.txtComparison_A, this.txtComparison_B);
+
+                }, () =>
+                {
+                    this.tComparison.DataSource = diResult;
+                });
             }
             catch (Exception ex)
             {
@@ -232,11 +246,24 @@ namespace WinsockPacketEditor
                 string StringA = this.txtDuplicate_A.Text.Trim();
                 string StringB = this.txtDuplicate_B.Text.Trim();
                 int minBytes = (int)nudDuplicate.Value;
-                var results = Operate.SystemConfig.ComparePackets(StringA, StringB, minBytes);
 
-                this.txtDuplicate_A.Text = Operate.SystemConfig.FormatHex(results.TextA);
-                this.txtDuplicate_B.Text = Operate.SystemConfig.FormatHex(results.TextB);
-                this.tDuplicate.DataSource = results.Duplicates;
+                (string TextA, string TextB, List<Operate.SystemConfig.DuplicateInfo> Duplicates) diResult = (TextA: "", TextB: "", Duplicates: new List<Operate.SystemConfig.DuplicateInfo>());
+
+                AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+                {
+                    Radius = 6,
+                    Font = new Font("Microsoft YaHei UI", 12f),
+                }, (config) =>
+                {
+                    config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+                    diResult = Operate.SystemConfig.ComparePackets(StringA, StringB, minBytes);
+
+                }, () =>
+                {
+                    this.txtDuplicate_A.Text = Operate.SystemConfig.FormatHex(diResult.TextA);
+                    this.txtDuplicate_B.Text = Operate.SystemConfig.FormatHex(diResult.TextB);
+                    this.tDuplicate.DataSource = diResult.Duplicates;
+                });
             }
             catch (Exception ex)
             {

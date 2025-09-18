@@ -1,6 +1,7 @@
 ﻿using AntdUI;
 using DiffPlex.DiffBuilder.Model;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -68,7 +69,21 @@ namespace WinsockPacketEditor
                 this.Dark_Changed();
                 this.SetPacketInfo();
 
-                this.tPacketModification.DataSource = Operate.SystemConfig.CompareText(this.txtPacketData_Raw, this.txtPacketData_New);
+                List<Operate.SystemConfig.DifferenceItem> diResult = null;
+
+                AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+                {
+                    Radius = 6,
+                    Font = new Font("Microsoft YaHei UI", 12f),
+                }, (config) =>
+                {
+                    config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+                    diResult = Operate.SystemConfig.CompareText(this.txtPacketData_Raw, this.txtPacketData_New);
+
+                }, () =>
+                {
+                    this.tPacketModification.DataSource = diResult;
+                });                
             }
             catch (Exception ex)
             {
