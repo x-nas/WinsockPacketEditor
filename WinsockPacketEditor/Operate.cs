@@ -2003,16 +2003,71 @@ namespace WinsockPacketEditor
                 return bReturn;
             }
 
-            public static bool IsValidFilterString(string value)
+            public static void VerifyHexCharWithWildcard(InputVerifyCharEventArgs verifyArgs)
             {
-                if (!String.IsNullOrEmpty(value))
+                try
                 {
-                    return IsHexString(value);
+                    char c = verifyArgs.Char;
+                    if (c == '\b') // 退格键
+                    {
+                        verifyArgs.Result = true;
+                        return;
+                    }
+
+                    // 允许通配符 *
+                    if (c == '*')
+                    {
+                        verifyArgs.Result = true;
+                        return;
+                    }
+
+                    if (char.IsDigit(c))
+                    {
+                        verifyArgs.Result = true;
+                    }
+                    else if (c >= 'A' && c <= 'F')
+                    {
+                        verifyArgs.Result = true;
+                    }
+                    else if (c >= 'a' && c <= 'f')
+                    {
+                        verifyArgs.ReplaceText = c.ToString().ToUpper();
+                        verifyArgs.Result = true;
+                    }
+                    else
+                    {
+                        verifyArgs.Result = false;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static bool ValidateHexValueWithWildcardAndShowMessage(Form form, string ValidateHex)
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(ValidateHex, "^([0-9A-F*]{2})$"))
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(form, "请输入有效的十六进制数值或通配符 (*)", TType.Error)
+                    {
+                        LocalizationText = "InvalidHex"
+                    });
+
                     return false;
                 }
+
+                if (ValidateHex == "**")
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(form, "请使用留空替代 (**)", TType.Warn)
+                    {
+                        LocalizationText = "InvalidWildcard"
+                    });
+
+                    return false;
+                }
+
+                return true;
             }
 
             #endregion
@@ -10624,6 +10679,8 @@ namespace WinsockPacketEditor
                 {
                     public int RelativePosition { get; set; }
                     public byte Value { get; set; }
+                    public byte Mask { get; set; }
+                    public bool IsPartialWildcard { get; set; } // 部分通配符 F*, *A
                 }
 
                 private struct Modification
@@ -11651,43 +11708,64 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//检查滤镜是否匹配成功（普通滤镜）
+                #region // 检查滤镜是否匹配成功（普通滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public static bool CheckFilter_IsMatch_Normal(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
                 {
-                    if (string.IsNullOrEmpty(sfi.FSearch))
+                    if (string.IsNullOrEmpty(sfi.FSearch) || bufferSpan.IsEmpty)
                         return false;
 
                     try
                     {
-                        string[] searchParts = sfi.FSearch.Split(',');
-                        foreach (string part in searchParts)
+                        // 使用 SpanSplit 避免字符串分配
+                        var searchParts = sfi.FSearch.AsSpan();
+
+                        while (!searchParts.IsEmpty)
                         {
-                            if (!string.IsNullOrEmpty(part) && part.IndexOf('|') > 0)
+                            // 查找下一个逗号或结尾
+                            int commaIndex = searchParts.IndexOf(',');
+                            ReadOnlySpan<char> partSpan = commaIndex >= 0
+                                ? searchParts.Slice(0, commaIndex)
+                                : searchParts;
+
+                            // 移动到下一部分
+                            searchParts = commaIndex >= 0
+                                ? searchParts.Slice(commaIndex + 1)
+                                : ReadOnlySpan<char>.Empty;
+
+                            // 跳过空部分
+                            if (partSpan.IsEmpty || partSpan.IsWhiteSpace())
+                                continue;
+
+                            // 查找分隔符 '|'
+                            int pipeIndex = partSpan.IndexOf('|');
+                            if (pipeIndex <= 0 || pipeIndex >= partSpan.Length - 1)
+                                return false; // 格式错误
+
+                            // 解析索引
+                            var indexSpan = partSpan.Slice(0, pipeIndex).Trim();
+                            if (!TryParseNonNegativeInt(indexSpan, out int index) ||
+                                index >= bufferSpan.Length)
                             {
-                                string[] pair = part.Split('|');
-                                if (pair.Length != 2)
-                                    return false;
+                                return false;
+                            }
 
-                                if (!TryParseNonNegativeInt(pair[0], out int index) ||
-                                    index >= bufferSpan.Length)
-                                {
-                                    return false;
-                                }
+                            // 解析十六进制值（支持通配符）
+                            var hexSpan = partSpan.Slice(pipeIndex + 1).Trim();
+                            if (!HexCharsWithWildcardToByte(hexSpan, out byte expected, out byte mask))
+                                return false;
 
-                                if (pair[1].Length != 2 ||
-                                    !HexCharsToByte(pair[1], out byte expected) ||
-                                    bufferSpan[index] != expected)
-                                {
-                                    return false;
-                                }
+                            // 匹配逻辑：实际值 & 掩码 == 期望值 & 掩码
+                            if ((bufferSpan[index] & mask) != (expected & mask))
+                            {
+                                return false;
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckFilter_IsMatch_Normal), ex.Message);
                         return false;
                     }
 
@@ -11695,41 +11773,84 @@ namespace WinsockPacketEditor
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static bool TryParseNonNegativeInt(string s, out int result)
-                {
-                    return int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out result) &&
-                           result >= 0;
-                }
 
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static bool HexCharsToByte(string s, out byte result)
+                private static bool HexCharsWithWildcardToByte(ReadOnlySpan<char> s, out byte result, out byte mask)
                 {
                     result = 0;
-                    if (s.Length != 2) return false;
+                    mask = 0;
 
-                    int high = CharToNibble(s[0]);
-                    int low = CharToNibble(s[1]);
-                    if (high == -1 || low == -1)
+                    if (s.Length != 2)
                         return false;
 
-                    result = (byte)((high << 4) | low);
+                    // 处理第一个字符（高4位）
+                    if (s[0] == '*')
+                    {
+                        // 通配符：不检查高4位（掩码为0）
+                        mask &= 0x0F; // 高4位掩码为0
+                    }
+                    else
+                    {
+                        int high = CharToNibble(s[0]);
+                        if (high == -1) return false;
+                        result |= (byte)(high << 4);
+                        mask |= 0xF0; // 高4位掩码为1（需要比较）
+                    }
+
+                    // 处理第二个字符（低4位）
+                    if (s[1] == '*')
+                    {
+                        // 通配符：不检查低4位（掩码为0）
+                        mask &= 0xF0; // 低4位掩码为0
+                    }
+                    else
+                    {
+                        int low = CharToNibble(s[1]);
+                        if (low == -1) return false;
+                        result |= (byte)low;
+                        mask |= 0x0F; // 低4位掩码为1（需要比较）
+                    }
+
                     return true;
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
+                private static bool TryParseNonNegativeInt(ReadOnlySpan<char> s, out int result)
+                {
+                    result = 0;
+                    if (s.IsEmpty) return false;
+
+                    foreach (char c in s)
+                    {
+                        if (c < '0' || c > '9')
+                            return false;
+                        result = result * 10 + (c - '0');
+                    }
+                    return true;
+                }
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 private static int CharToNibble(char c)
                 {
-                    if (c >= '0' && c <= '9') return c - '0';
-                    if (c >= 'A' && c <= 'F') return 10 + (c - 'A');
-                    if (c >= 'a' && c <= 'f') return 10 + (c - 'a');
+                    uint digit = (uint)(c - '0');
+                    if (digit < 10) return (int)digit;
+
+                    uint lower = (uint)(c - 'a');
+                    if (lower < 6) return (int)(10 + lower);
+
+                    uint upper = (uint)(c - 'A');
+                    if (upper < 6) return (int)(10 + upper);
+
                     return -1;
                 }
 
                 #endregion
 
-                #region//检查滤镜是否匹配成功（高级滤镜）
+                #region//检查滤镜是否匹配成功（高级滤镜）- 支持通配符
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 public static List<int> CheckFilter_IsMatch_Advanced(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
                 {
                     var result = new List<int>();
@@ -11738,7 +11859,7 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        var searchConditions = FilterConfig.Filter.ParseSearchConditions(sfi.FSearch);
+                        var searchConditions = ParseSearchConditions(sfi.FSearch);
                         if (searchConditions.Count == 0)
                             return result;
 
@@ -11758,12 +11879,32 @@ namespace WinsockPacketEditor
                                     var condition = searchConditions[j];
                                     int checkIndex = i + condition.RelativePosition - relativePosition;
 
-                                    if (checkIndex < 0 || checkIndex >= bufferSpan.Length ||
-                                        bufferSpan[checkIndex] != condition.Value)
+                                    if (checkIndex < 0 || checkIndex >= bufferSpan.Length)
                                     {
                                         isMatch = false;
                                         break;
                                     }
+
+                                    // 处理部分通配符（如 F*, *A 等）
+                                    if (condition.IsPartialWildcard)
+                                    {
+                                        byte actualByte = bufferSpan[checkIndex];
+                                        if ((actualByte & condition.Mask) != (condition.Value & condition.Mask))
+                                        {
+                                            isMatch = false;
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // 精确匹配
+                                        if (bufferSpan[checkIndex] != condition.Value)
+                                        {
+                                            isMatch = false;
+                                            break;
+                                        }
+                                    }
+
                                     lastCheckedIndex = Math.Max(lastCheckedIndex, checkIndex);
                                 }
 
@@ -11790,6 +11931,7 @@ namespace WinsockPacketEditor
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 private static List<SearchCondition> ParseSearchConditions(string searchPattern)
                 {
                     var conditions = new List<SearchCondition>();
@@ -11804,16 +11946,46 @@ namespace WinsockPacketEditor
                         if (pair.Length != 2)
                             continue;
 
-                        if (int.TryParse(pair[0], out int position) &&
-                            byte.TryParse(pair[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
+                        if (int.TryParse(pair[0], out int position))
                         {
-                            conditions.Add(new FilterConfig.Filter.SearchCondition
+                            string hexValue = pair[1].Trim();
+
+                            // 处理部分通配符（如 F*, *A）
+                            if (hexValue.Contains('*'))
                             {
-                                RelativePosition = position,
-                                Value = value
-                            });
+                                if (hexValue.Length == 2 && (hexValue[0] == '*' || hexValue[1] == '*'))
+                                {
+                                    if (HexCharsWithWildcardToByte(hexValue.AsSpan(), out byte value, out byte mask))
+                                    {
+                                        conditions.Add(new SearchCondition
+                                        {
+                                            RelativePosition = position,
+                                            Value = value,
+                                            Mask = mask,
+                                            IsPartialWildcard = true
+                                        });
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // 精确匹配
+                                if (byte.TryParse(hexValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
+                                {
+                                    conditions.Add(new SearchCondition
+                                    {
+                                        RelativePosition = position,
+                                        Value = value,
+                                        Mask = 0xFF, // 完全匹配
+                                        IsPartialWildcard = false
+                                    });
+                                }
+                            }
                         }
                     }
+
+                    // 按位置排序，确保相对位置正确
+                    conditions.Sort((a, b) => a.RelativePosition.CompareTo(b.RelativePosition));
 
                     return conditions;
                 }

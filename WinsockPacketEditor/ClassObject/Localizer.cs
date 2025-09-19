@@ -358,7 +358,10 @@ namespace WinsockPacketEditor
                     return "Advanced";
 
                 case "InvalidHex":
-                    return "Please enter a valid HEX";
+                    return "Please enter a valid HEX or (*)";
+
+                case "InvalidWildcard":
+                    return "Please use blank as (**)";
 
                 case "Paste.Success":
                     return "Pasting Completed";

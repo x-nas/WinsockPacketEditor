@@ -497,64 +497,14 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//验证并处理十六进制字符输入
-
-        public void VerifyHexChar(InputVerifyCharEventArgs verifyArgs)
-        {
-            try
-            {
-                char c = verifyArgs.Char;
-                if (c == '\b')
-                {
-                    verifyArgs.Result = true;
-                    return;
-                }
-
-                if (char.IsDigit(c))
-                {
-                    verifyArgs.Result = true;
-                }
-                else if (c >= 'A' && c <= 'F')
-                {
-                    verifyArgs.Result = true;
-                }
-                else if (c >= 'a' && c <= 'f')
-                {
-                    verifyArgs.ReplaceText = c.ToString().ToUpper();
-                    verifyArgs.Result = true;
-                }
-                else
-                {
-                    verifyArgs.Result = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        public bool ValidateHexValueAndShowMessage(string ValidateHex)
-        {
-            if (!System.Text.RegularExpressions.Regex.IsMatch(ValidateHex, "^[0-9A-F]{2}$"))
-            {
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请输入有效的十六进制数值", TType.Error)
-                {
-                    LocalizationText = "InvalidHex"
-                });
-
-                return false;
-            }
-
-            return true;
-        }
+        #region//验证并处理十六进制字符输入        
 
         private void tFilterNormal_CellBeginEditInputStyle(object sender, TableBeginEditInputStyleEventArgs e)
         {
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                VerifyHexChar(verifyArgs);
+                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs);
             };
         }
 
@@ -563,7 +513,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                VerifyHexChar(verifyArgs);
+                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs);
             };
         }
 
@@ -572,7 +522,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                VerifyHexChar(verifyArgs);
+                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs);
             };
         }
 
@@ -581,7 +531,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                VerifyHexChar(verifyArgs);
+                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs);
             };
         }
 
@@ -592,7 +542,7 @@ namespace WinsockPacketEditor
                 return true;
             }
 
-            return ValidateHexValueAndShowMessage(e.Value);
+            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(this.form, e.Value);
         }
 
         private bool tFilterAdvanced_Search_CellEndEdit(object sender, TableEndEditEventArgs e)
@@ -602,7 +552,7 @@ namespace WinsockPacketEditor
                 return true;
             }
 
-            return ValidateHexValueAndShowMessage(e.Value);
+            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(this.form, e.Value);
         }
 
         private bool tFilterAdvanced_Modify_Head_CellEndEdit(object sender, TableEndEditEventArgs e)
@@ -612,7 +562,7 @@ namespace WinsockPacketEditor
                 return true;
             }
 
-            return ValidateHexValueAndShowMessage(e.Value);
+            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(this.form, e.Value);
         }
 
         private bool tFilterAdvanced_Modify_Position_CellEndEdit(object sender, TableEndEditEventArgs e)
@@ -622,7 +572,7 @@ namespace WinsockPacketEditor
                 return true;
             }
 
-            return ValidateHexValueAndShowMessage(e.Value);
+            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(this.form, e.Value);
         }
 
         #endregion
