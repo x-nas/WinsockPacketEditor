@@ -261,39 +261,56 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//发送序号
+        #region//执行发送序号
 
-        Guid _SID;
+        Guid _Execute_SID;
 
-        public Guid SID
+        public Guid Execute_SID
         {
-            get => _SID;
+            get => _Execute_SID;
             set
             {
-                if (_SID == value) return;
-                _SID = value;
+                if (_Execute_SID == value) return;
+                _Execute_SID = value;
                 OnPropertyChanged();
             }
         }
 
         #endregion        
 
-        #region//机器人序号
+        #region//执行机器人序号
 
-        Guid _RID;
+        Guid _Execute_RID;
 
-        public Guid RID
+        public Guid Execute_RID
         {
-            get => _RID;
+            get => _Execute_RID;
             set
             {
-                if (_RID == value) return;
-                _RID = value;
+                if (_Execute_RID == value) return;
+                _Execute_RID = value;
                 OnPropertyChanged();
             }
         }
 
-        #endregion        
+        #endregion
+
+        #region//执行滤镜序号
+
+        Guid _Execute_FID;
+
+        public Guid Execute_FID
+        {
+            get => _Execute_FID;
+            set
+            {
+                if (_Execute_FID == value) return;
+                _Execute_FID = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         #region//作用类别
 
@@ -499,8 +516,9 @@ namespace WinsockPacketEditor
             Operate.FilterConfig.Filter.FilterAction FAction,
             bool IsExecute,
             Operate.FilterConfig.Filter.FilterExecuteType FEType,
-            Guid SID,
-            Guid RID,
+            Guid Execute_SID,
+            Guid Execute_RID,
+            Guid Execute_FID,
             Operate.FilterConfig.Filter.FilterFunction FFunction, 
             Operate.FilterConfig.Filter.FilterStartFrom FStartFrom,
             bool IsProgressionDone,
@@ -528,8 +546,9 @@ namespace WinsockPacketEditor
             this._FAction = FAction;
             this._IsExecute = IsExecute;
             this._FEType = FEType;
-            this._SID = SID;
-            this._RID = RID;
+            this._Execute_SID = Execute_SID;
+            this._Execute_RID = Execute_RID;
+            this._Execute_FID = Execute_FID;
             this._FFunction = FFunction;
             this._FStartFrom = FStartFrom;
             this._IsProgressionDone = IsProgressionDone;

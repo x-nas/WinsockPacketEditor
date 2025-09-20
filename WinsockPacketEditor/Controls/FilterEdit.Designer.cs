@@ -800,7 +800,7 @@
             // 
             this.tabFilterFunction.Controls.Add(this.tpInjectMode);
             this.tabFilterFunction.Controls.Add(this.tpProxyMode);
-            this.tabFilterFunction.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabFilterFunction.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabFilterFunction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterFunction.Location = new System.Drawing.Point(3, 39);
             this.tabFilterFunction.Name = "tabFilterFunction";

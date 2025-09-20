@@ -119,6 +119,10 @@ namespace WinsockPacketEditor
                         this.cbbFilterAction_ExecuteType.SelectedIndex = 1;
                         break;
 
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Filter:
+                        this.cbbFilterAction_ExecuteType.SelectedIndex = 2;
+                        break;
+
                     default:
                         this.cbbFilterAction_ExecuteType.SelectedIndex = -1;
                         break;
@@ -352,8 +356,6 @@ namespace WinsockPacketEditor
                     });
                 }
 
-                this.cbbFilterAction_ExecuteType.Items.Add(new DividerSelectItem());
-
                 if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                 {
                     this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
@@ -368,6 +370,23 @@ namespace WinsockPacketEditor
                     {
                         Enable = false,
                         LocalizationText = "RobotList",
+                    });
+                }
+
+                if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                {
+                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("滤镜列表")
+                    {
+                        Online = 1,
+                        LocalizationText = "FilterList",
+                    });
+                }
+                else
+                {
+                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("滤镜列表")
+                    {
+                        Enable = false,
+                        LocalizationText = "FilterList",
                     });
                 }
             }
@@ -387,7 +406,7 @@ namespace WinsockPacketEditor
 
                     this.cbbFilterAction_Execute.Items.Clear();
                     this.cbbFilterAction_Execute.Items.AddRange(selectItems);
-                    this.cbbFilterAction_Execute.SelectedValue = Operate.SendConfig.Send.GetSend_ByGuid(fiSelect.SID);
+                    this.cbbFilterAction_Execute.SelectedValue = Operate.SendConfig.Send.GetSend_ByGuid(fiSelect.Execute_SID);
                 }
             }
             catch (Exception ex)
@@ -406,7 +425,26 @@ namespace WinsockPacketEditor
 
                     this.cbbFilterAction_Execute.Items.Clear();
                     this.cbbFilterAction_Execute.Items.AddRange(selectItems);
-                    this.cbbFilterAction_Execute.SelectedValue = Operate.RobotConfig.Robot.GetRobot_ByGuid(fiSelect.RID);
+                    this.cbbFilterAction_Execute.SelectedValue = Operate.RobotConfig.Robot.GetRobot_ByGuid(fiSelect.Execute_RID);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitFilterInfo()
+        {
+            try
+            {
+                if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                {
+                    var selectItems = Operate.FilterConfig.List.lstFilterInfo.Select(info => new SelectItem(info.FName, info)).ToArray();
+
+                    this.cbbFilterAction_Execute.Items.Clear();
+                    this.cbbFilterAction_Execute.Items.AddRange(selectItems);
+                    this.cbbFilterAction_Execute.SelectedValue = Operate.FilterConfig.Filter.GetFilter_ByGuid(fiSelect.Execute_FID);
                 }
             }
             catch (Exception ex)
@@ -504,7 +542,14 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs);
+                if (e.RowIndex == 1)
+                {
+                    Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, true);
+                }
+                else
+                {
+                    Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, false);
+                }
             };
         }
 
@@ -513,7 +558,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs);
+                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, true);
             };
         }
 
@@ -522,7 +567,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs);
+                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, false);
             };
         }
 
@@ -531,7 +576,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs);
+                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, false);
             };
         }
 
@@ -646,9 +691,13 @@ namespace WinsockPacketEditor
                 {
                     this.InitSendInfo();
                 }
-                else
+                else if(this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
                 {
                     this.InitRobotInfo();
+                }
+                else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 2)
+                {
+                    this.InitFilterInfo();
                 }
             }
             catch (Exception ex)
@@ -1517,8 +1566,9 @@ namespace WinsockPacketEditor
                 Operate.FilterConfig.Filter.FilterMode FilterMode_New;
                 Operate.FilterConfig.Filter.FilterAction FilterAction_New;
                 Operate.FilterConfig.Filter.FilterExecuteType FilterExecuteType_New;
-                Guid SID_New = Guid.Empty;
-                Guid RID_New = Guid.Empty;
+                Guid Execute_SID_New = Guid.Empty;
+                Guid Execute_RID_New = Guid.Empty;
+                Guid Execute_FID_New = Guid.Empty;
                 Operate.FilterConfig.Filter.FilterFunction FilterFunction_New;
                 Operate.FilterConfig.Filter.FilterStartFrom FilterStartFrom_New;
 
@@ -1583,7 +1633,7 @@ namespace WinsockPacketEditor
 
                         if (cbbFilterAction_Execute.SelectedValue != null)
                         {
-                            SID_New = ((SendInfo)cbbFilterAction_Execute.SelectedValue).SID;
+                            Execute_SID_New = ((SendInfo)cbbFilterAction_Execute.SelectedValue).SID;
                         }
                     }
                     else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
@@ -1592,7 +1642,16 @@ namespace WinsockPacketEditor
 
                         if (cbbFilterAction_Execute.SelectedValue != null)
                         {
-                            RID_New = ((RobotInfo)cbbFilterAction_Execute.SelectedValue).RID;
+                            Execute_RID_New = ((RobotInfo)cbbFilterAction_Execute.SelectedValue).RID;
+                        }
+                    }
+                    else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 2)
+                    {
+                        FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.Filter;
+
+                        if (cbbFilterAction_Execute.SelectedValue != null)
+                        {
+                            Execute_FID_New = ((FilterInfo)cbbFilterAction_Execute.SelectedValue).FID;
                         }
                     }
                     else
@@ -1746,8 +1805,9 @@ namespace WinsockPacketEditor
                     FilterAction_New,
                     bIsExecute_New,
                     FilterExecuteType_New,
-                    SID_New,
-                    RID_New,
+                    Execute_SID_New,
+                    Execute_RID_New,
+                    Execute_FID_New,
                     FilterFunction_New,
                     FilterStartFrom_New,
                     bIsProgressionContinuous_New,
