@@ -1384,6 +1384,12 @@ namespace WinsockPacketEditor
                 case "Table.Duplicate.Column.PositionsInB":
                     return "Position in B";
 
+                case "Table.Comparison.Column.CellLinks":
+                    return "Operation";
+
+                case "Table.Duplicate.Column.CellLinks":
+                    return "Operation";
+
                 case "ComparisonText.Leach":
                     return "Leach";
 

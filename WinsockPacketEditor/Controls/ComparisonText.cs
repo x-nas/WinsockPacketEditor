@@ -62,6 +62,16 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.Comparison.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bLocation", null, AntdUI.TTypeMini.Warn).SetIcon("EnvironmentOutlined"),                            
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Comparison.Column."),
             };
 
             this.tComparison.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -182,6 +192,29 @@ namespace WinsockPacketEditor
             this.lDuplicate_B.Text = string.Format(AntdUI.Localization.Get("ComparisonText.TextB", "文本 B  ( 长度 {0} )"), this.txtDuplicate_B.Text.Length);
         }
 
+        private void tComparison_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is Operate.SystemConfig.DifferenceItem di)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bLocation":
+
+                        this.ScrollToPosition(di.Position, di.Position);
+
+                        break;
+                }
+            }
+        }
+
+        private void tComparison_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is Operate.SystemConfig.DifferenceItem di)
+            {
+                this.ScrollToPosition(di.Position, di.Position);
+            }
+        }
+
         #endregion        
 
         #region //文本比较
@@ -269,6 +302,19 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
+        }
+
+        #endregion
+
+        #region//跳转到指定位置
+
+        private void ScrollToPosition(int PositionA, int PositionB)
+        {
+            this.txtComparison_A.SelectionStart = PositionA;
+            this.txtComparison_A.ScrollToCaret();
+
+            this.txtComparison_B.SelectionStart = PositionB;
+            this.txtComparison_B.ScrollToCaret();
         }
 
         #endregion
