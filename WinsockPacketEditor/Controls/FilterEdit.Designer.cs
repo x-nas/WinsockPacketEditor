@@ -1155,6 +1155,7 @@
             this.cbbFilterAction_ExecuteType.PlaceholderText = "";
             this.cbbFilterAction_ExecuteType.Size = new System.Drawing.Size(153, 39);
             this.cbbFilterAction_ExecuteType.TabIndex = 29;
+            this.cbbFilterAction_ExecuteType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.cbbFilterAction_ExecuteType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.cbbFilterAction_ExecuteType_SelectedIndexChanged);
             // 
             // cbbFilterAction_Execute
@@ -1168,6 +1169,7 @@
             this.cbbFilterAction_Execute.PlaceholderText = "请选择";
             this.cbbFilterAction_Execute.Size = new System.Drawing.Size(138, 39);
             this.cbbFilterAction_Execute.TabIndex = 30;
+            this.cbbFilterAction_Execute.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // dFilterAction
             // 
