@@ -434,13 +434,18 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void InitFilterInfo()
+        private void InitFilterInfo(Guid excludeFID)
         {
             try
             {
                 if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                 {
-                    var selectItems = Operate.FilterConfig.List.lstFilterInfo.Select(info => new SelectItem(info.FName, info)).ToArray();
+                    var query = Operate.FilterConfig.List.lstFilterInfo.AsEnumerable();
+                    query = query.Where(info => info.FID != excludeFID);
+
+                    var selectItems = query
+                        .Select(info => new SelectItem(info.FName, info))
+                        .ToArray();
 
                     this.cbbFilterAction_Execute.Items.Clear();
                     this.cbbFilterAction_Execute.Items.AddRange(selectItems);
@@ -697,7 +702,7 @@ namespace WinsockPacketEditor
                 }
                 else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 2)
                 {
-                    this.InitFilterInfo();
+                    this.InitFilterInfo(this.fiSelect.FID);
                 }
             }
             catch (Exception ex)
