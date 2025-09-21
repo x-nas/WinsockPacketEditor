@@ -512,7 +512,7 @@ namespace WinsockPacketEditor
                     return "{0} Handle: {1}";
 
                 case "SOCKS.Unsupported":
-                    return "Unsupported SOCKS protocol: {0}";
+                    return "Unsupported SOCKS protocol: {0} [ {1} ]";
 
                 case "Command.Unsupported":
                     return "{0} - Unsupported command: {1}";

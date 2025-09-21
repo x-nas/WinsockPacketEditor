@@ -31,7 +31,7 @@ namespace WinsockPacketEditor
                     left = 0;
                     State = FilterState.Error;
 
-                    string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupported", "不支持的 SOCKS 协议版本: {0}"), version);
+                    string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupported", "不支持的 SOCKS 协议版本: {0} [ {1} ]"), version, session.ClientIP);
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
 
                     return null;

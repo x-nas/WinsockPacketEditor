@@ -158,7 +158,7 @@ namespace WinsockPacketEditor
                 }
                 else
                 {
-                    string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupported", "不支持的 SOCKS 协议版本: {0}"), ptType);
+                    string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupported", "不支持的 SOCKS 协议版本: {0} [ {1} ]"), ptType, this.m_Session.ClientIP);
                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                 }
             }
