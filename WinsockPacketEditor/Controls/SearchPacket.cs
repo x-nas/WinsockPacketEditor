@@ -106,21 +106,15 @@ namespace WinsockPacketEditor
                 if (FromHead)
                 {
                     this.rbFromIndex.Checked = true;
-                }
+                }                
 
-                switch (Operate.SystemConfig.StartMode)
+                if (this.form is InterfaceInfo.IInjectMode injectForm)
                 {
-                    case Operate.SystemConfig.SystemMode.Process:
-
-                        ((InterfaceInfo.IInjectMode)form).SearchPacketList(FromHead);
-
-                        break;
-
-                    case Operate.SystemConfig.SystemMode.Proxy:
-
-                        ((InterfaceInfo.IProxyMode)form).SearchProxyList(FromHead);
-
-                        break;
+                    injectForm.SearchPacketList(FromHead);
+                }
+                else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                {
+                    proxyForm.SearchProxyList(FromHead);
                 }
             }
             catch (Exception ex)

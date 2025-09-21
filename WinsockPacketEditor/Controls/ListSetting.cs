@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -64,49 +65,61 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            switch (Operate.SystemConfig.StartMode)
+            try
             {
-                case Operate.SystemConfig.SystemMode.Process:
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Process:
 
-                    Operate.PacketConfig.List.IsShow_ID = this.cbIsShow_ID_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_PacketType = this.cbIsShow_PacketType_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_ClientAddr = this.cbIsShow_ClientAddr_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_ClientLocation = this.cbIsShow_ClientLocation_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_ServerAddr = this.cbIsShow_ServerAddr_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_ServerLocation = this.cbIsShow_ServerLocation_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Inject.Checked;
-                    Operate.PacketConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_ID = this.cbIsShow_ID_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_PacketType = this.cbIsShow_PacketType_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_ClientAddr = this.cbIsShow_ClientAddr_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_ClientLocation = this.cbIsShow_ClientLocation_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_ServerAddr = this.cbIsShow_ServerAddr_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_ServerLocation = this.cbIsShow_ServerLocation_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Inject.Checked;
+                        Operate.PacketConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Inject.Checked;
 
-                    ((InterfaceInfo.IInjectMode)form).SetColumnVisible_PacketList();
+                        break;
 
-                    break;
+                    case Operate.SystemConfig.SystemMode.Proxy:
 
-                case Operate.SystemConfig.SystemMode.Proxy:
+                        Operate.ProxyConfig.List.IsShow_ID = this.cbIsShow_ID_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_PacketType = this.cbIsShow_PacketType_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_ClientAddr = this.cbIsShow_ClientAddr_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_ClientLocation = this.cbIsShow_ClientLocation_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_ServerAddr = this.cbIsShow_ServerAddr_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_ServerLocation = this.cbIsShow_ServerLocation_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Proxy.Checked;
+                        Operate.ProxyConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Proxy.Checked;
 
-                    Operate.ProxyConfig.List.IsShow_ID = this.cbIsShow_ID_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_PacketType = this.cbIsShow_PacketType_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_ClientAddr = this.cbIsShow_ClientAddr_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_ClientLocation = this.cbIsShow_ClientLocation_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_ServerAddr = this.cbIsShow_ServerAddr_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_ServerLocation = this.cbIsShow_ServerLocation_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Proxy.Checked;
-                    Operate.ProxyConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Proxy.Checked;
+                        break;
+                }
 
-                    ((InterfaceInfo.IProxyMode)form).SetColumnVisible_ProxyList();
+                if (this.form is InterfaceInfo.IInjectMode injectForm)
+                {
+                    injectForm.SetColumnVisible_PacketList();
+                }
+                else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                {
+                    proxyForm.SetColumnVisible_ProxyList();
+                }
 
-                    break;
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "列表设置保存成功", TType.Success)
+                {
+                    LocalizationText = "ListSettingsForm.Success"
+                });
+
+                this.Dispose();
             }
-
-            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "列表设置保存成功", TType.Success)
+            catch (Exception ex)
             {
-                LocalizationText = "ListSettingsForm.Success"
-            });
-
-            this.Dispose();
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion

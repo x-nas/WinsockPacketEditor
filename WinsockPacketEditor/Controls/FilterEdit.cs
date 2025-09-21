@@ -1822,21 +1822,15 @@ namespace WinsockPacketEditor
                     sProgression_New,
                     iProgressionCount_New,
                     sSearch_New,
-                    sModify_New);
+                    sModify_New);                
 
-                switch (Operate.SystemConfig.StartMode)
+                if (this.form is InterfaceInfo.IInjectMode injectForm)
                 {
-                    case Operate.SystemConfig.SystemMode.Process:
-
-                        ((InterfaceInfo.IInjectMode)form).RefreshFilterList();
-
-                        break;
-
-                    case Operate.SystemConfig.SystemMode.Proxy:
-
-                        ((InterfaceInfo.IProxyMode)form).RefreshFilterList();
-
-                        break;
+                    injectForm.RefreshFilterList();
+                }
+                else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                {
+                    proxyForm.RefreshFilterList();
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "滤镜保存成功", TType.Success)

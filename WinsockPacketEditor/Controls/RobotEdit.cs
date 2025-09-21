@@ -780,19 +780,13 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                switch (Operate.SystemConfig.StartMode)
+                if (this.form is InterfaceInfo.IInjectMode injectForm)
                 {
-                    case Operate.SystemConfig.SystemMode.Process:
-
-                        ((InterfaceInfo.IInjectMode)form).RefreshRobotList();
-
-                        break;
-
-                    case Operate.SystemConfig.SystemMode.Proxy:
-
-                        ((InterfaceInfo.IProxyMode)form).RefreshRobotList();
-
-                        break;
+                    injectForm.RefreshRobotList();
+                }
+                else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                {
+                    proxyForm.RefreshRobotList();
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人保存成功", TType.Success)

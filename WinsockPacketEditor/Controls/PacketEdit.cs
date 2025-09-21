@@ -640,21 +640,15 @@ namespace WinsockPacketEditor
                                 this.proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
 
                                 break;
-                        }
+                        }                        
 
-                        switch (Operate.SystemConfig.StartMode)
+                        if (this.form is InterfaceInfo.IInjectMode injectForm)
                         {
-                            case Operate.SystemConfig.SystemMode.Process:
-
-                                ((InterfaceInfo.IInjectMode)form).RefreshPacketData();
-
-                                break;
-
-                            case Operate.SystemConfig.SystemMode.Proxy:
-
-                                ((InterfaceInfo.IProxyMode)form).RefreshProxyData();
-
-                                break;
+                            injectForm.RefreshPacketData();
+                        }
+                        else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                        {
+                            proxyForm.RefreshProxyData();
                         }
 
                         AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包保存成功", TType.Success)

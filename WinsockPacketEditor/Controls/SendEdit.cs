@@ -451,19 +451,13 @@ namespace WinsockPacketEditor
             {
                 if (this.SaveSend())
                 {
-                    switch (Operate.SystemConfig.StartMode)
+                    if (this.form is InterfaceInfo.IInjectMode injectForm)
                     {
-                        case Operate.SystemConfig.SystemMode.Process:
-
-                            ((InterfaceInfo.IInjectMode)form).RefreshSendList();
-
-                            break;
-
-                        case Operate.SystemConfig.SystemMode.Proxy:
-
-                            ((InterfaceInfo.IProxyMode)form).RefreshSendList();
-
-                            break;
+                        injectForm.RefreshSendList();
+                    }
+                    else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                    {
+                        proxyForm.RefreshSendList();
                     }
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送保存成功", TType.Success)

@@ -1,6 +1,7 @@
 ﻿using AntdUI;
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -96,56 +97,66 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            Operate.SystemConfig.IsShow_FloatButton = this.switchFloatButton.Checked;
-
-            if (this.rbListExecute_Together.Checked)
+            try
             {
-                Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Together;
+                Operate.SystemConfig.IsShow_FloatButton = this.switchFloatButton.Checked;
+
+                if (this.rbListExecute_Together.Checked)
+                {
+                    Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Together;
+                }
+                else
+                {
+                    Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Sequence;
+                }
+
+                if (this.rbFilterSet_Priority.Checked)
+                {
+                    Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Priority;
+                }
+                else
+                {
+                    Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Sequence;
+                }
+
+                switch (Operate.SystemConfig.StartMode)
+                {
+                    case Operate.SystemConfig.SystemMode.Process:
+                        Operate.PacketConfig.Packet.SpeedMode = this.cbSpeedMode.Checked;
+                        break;
+
+                    case Operate.SystemConfig.SystemMode.Proxy:
+                        Operate.ProxyConfig.Proxy.SpeedMode = this.cbSpeedMode.Checked;
+                        break;
+                }
+
+                Operate.FilterConfig.Filter.FilterReplace_ForeColor = this.cRepalce_ForeColor.Value;
+                Operate.FilterConfig.Filter.FilterReplace_BackColor = this.cRepalce_BackColor.Value;
+                Operate.FilterConfig.Filter.FilterIntercept_ForeColor = this.cIntercept_ForeColor.Value;
+                Operate.FilterConfig.Filter.FilterIntercept_BackColor = this.cIntercept_BackColor.Value;
+                Operate.FilterConfig.Filter.FilterChange_ForeColor = this.cChange_ForeColor.Value;
+                Operate.FilterConfig.Filter.FilterChange_BackColor = this.cChange_BackColor.Value;
+
+                if (this.form is InterfaceInfo.IInjectMode injectForm)
+                {
+                    injectForm.InitFloatButton();
+                }
+                else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                {
+                    proxyForm.InitFloatButton();
+                }
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统设置保存成功", TType.Success)
+                {
+                    LocalizationText = "SystemSettingsForm.Success"
+                });
+
+                this.Dispose();
             }
-            else
+            catch (Exception ex)
             {
-                Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Sequence;
-            }
-
-            if (this.rbFilterSet_Priority.Checked)
-            {
-                Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Priority;
-            }
-            else
-            {
-                Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Sequence;
-            }
-
-            switch (Operate.SystemConfig.StartMode)
-            {
-                case Operate.SystemConfig.SystemMode.Process:
-
-                    Operate.PacketConfig.Packet.SpeedMode = this.cbSpeedMode.Checked;
-                    ((InterfaceInfo.IInjectMode)form).InitFloatButton();
-
-                    break;
-
-                case Operate.SystemConfig.SystemMode.Proxy:
-
-                    Operate.ProxyConfig.Proxy.SpeedMode = this.cbSpeedMode.Checked;
-                    ((InterfaceInfo.IProxyMode)form).InitFloatButton();
-
-                    break;
-            }
-
-            Operate.FilterConfig.Filter.FilterReplace_ForeColor = this.cRepalce_ForeColor.Value;
-            Operate.FilterConfig.Filter.FilterReplace_BackColor = this.cRepalce_BackColor.Value;
-            Operate.FilterConfig.Filter.FilterIntercept_ForeColor = this.cIntercept_ForeColor.Value;
-            Operate.FilterConfig.Filter.FilterIntercept_BackColor = this.cIntercept_BackColor.Value;
-            Operate.FilterConfig.Filter.FilterChange_ForeColor = this.cChange_ForeColor.Value;
-            Operate.FilterConfig.Filter.FilterChange_BackColor = this.cChange_BackColor.Value;
-
-            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统设置保存成功", TType.Success)
-            {
-                LocalizationText = "SystemSettingsForm.Success"
-            });
-
-            this.Dispose();
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
