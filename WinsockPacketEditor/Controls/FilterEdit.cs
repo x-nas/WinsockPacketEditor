@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
                 this.InitTable_FilterAdvanced_Modify_Head();
                 this.InitTable_FilterAdvanced_Modify_Position();
                 this.InitProgressionPosition();
+                this.InitExcludePosition();
                 this.InitFilterExecuteType();
                 this.ShowFilterData();
                 this.Dark_Changed();
@@ -509,7 +510,46 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
+
+        private void InitExcludePosition()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(fiSelect.ExcludePosition))
+                {
+                    string[] slExcludePosition = fiSelect.ExcludePosition.Split(',');
+
+                    foreach (string sPosition in slExcludePosition)
+                    {
+                        if (!string.IsNullOrEmpty(sPosition))
+                        {
+                            if (int.TryParse(sPosition, out int iIndex))
+                            {
+                                switch (fiSelect.FMode)
+                                {
+                                    case Operate.FilterConfig.Filter.FilterMode.Normal:
+
+                                        ((CellText)this.dtFilterNormal.Rows[0][iIndex]).Back = Color.Violet;
+
+                                        break;
+
+                                    case Operate.FilterConfig.Filter.FilterMode.Advanced:
+
+                                        ((CellText)this.dtFilterAdvanced_Search.Rows[0][iIndex]).Back = Color.Violet;                                        
+
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private void Dark_Changed()
         {
@@ -1207,6 +1247,19 @@ namespace WinsockPacketEditor
             {
                 menulist = new AntdUI.IContextMenuStripItem[]
                 {
+                    new AntdUI.ContextMenuStripItem("启用排除")
+                    {
+                        ID = "cmsFilterEdit_Exclude_Enable",
+                        IconSvg = "CheckSquareFilled",
+                        LocalizationText = "FilterEditForm.Appoint.Exclude.Enable",
+                    },
+                    new AntdUI.ContextMenuStripItem("取消排除")
+                    {
+                        ID = "cmsFilterEdit_Exclude_Disable",
+                        IconSvg = "CloseSquareOutlined",
+                        LocalizationText = "FilterEditForm.Appoint.Exclude.Disable",
+                    },
+                    new AntdUI.ContextMenuStripItemDivider(),
                     new AntdUI.ContextMenuStripItem("复制", "Ctrl+C")
                     {
                         ID = "cmsFilterEdit_Copy",
@@ -1249,6 +1302,20 @@ namespace WinsockPacketEditor
                     case "cmsFilterEdit_Progression_Disable":
 
                         ((CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex]).Back = Color.Yellow;
+                        tFilterEdit.Refresh();
+
+                        break;
+
+                    case "cmsFilterEdit_Exclude_Enable":
+
+                        ((CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex]).Back = Color.Violet;
+                        tFilterEdit.Refresh();
+
+                        break;
+
+                    case "cmsFilterEdit_Exclude_Disable":
+
+                        ((CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex]).Back = Color.LightYellow;
                         tFilterEdit.Refresh();
 
                         break;
@@ -1565,6 +1632,7 @@ namespace WinsockPacketEditor
                 bool bIsExecute_New, bIsProgressionContinuous_New, bIsProgressionCarry_New;
                 bool bAppointHeader_New, bAppointSocket_New, bAppointLength_New, bAppointPort_New;
                 StringBuilder sbProgression = new StringBuilder();
+                StringBuilder sbExclude = new StringBuilder();
                 StringBuilder sbSearch = new StringBuilder();
                 StringBuilder sbModify = new StringBuilder();
 
@@ -1697,15 +1765,15 @@ namespace WinsockPacketEditor
 
                         for (int i = 0; i < this.dtFilterNormal.Columns.Count; i++)
                         {
-                            CellText cell = (CellText)dtFilterNormal.Rows[1][i];
-                            if (cell.Back == Color.DarkRed)
-                            {
-                                sbProgression.Append(i).Append(",");
-                            }
-
                             if (dtFilterNormal.Rows[0][i] != null)
                             {
-                                string sSearchValue = ((CellText)dtFilterNormal.Rows[0][i]).Text.Trim();
+                                CellText ctSearch = (CellText)dtFilterNormal.Rows[0][i];
+                                if (ctSearch.Back == Color.Violet)
+                                {
+                                    sbExclude.Append(i).Append(",");
+                                }
+
+                                string sSearchValue = ctSearch.Text.Trim();
                                 if (!String.IsNullOrEmpty(sSearchValue))
                                 {
                                     sbSearch.Append(i).Append("|").Append(sSearchValue).Append(",");
@@ -1714,7 +1782,13 @@ namespace WinsockPacketEditor
 
                             if (dtFilterNormal.Rows[1][i] != null)
                             {
-                                string sModifyValue = ((CellText)dtFilterNormal.Rows[1][i]).Text.Trim();
+                                CellText ctModify = (CellText)dtFilterNormal.Rows[1][i];
+                                if (ctModify.Back == Color.DarkRed)
+                                {
+                                    sbProgression.Append(i).Append(",");
+                                }
+
+                                string sModifyValue = ctModify.Text.Trim();
                                 if (!String.IsNullOrEmpty(sModifyValue))
                                 {
                                     sbModify.Append(i).Append("|").Append(sModifyValue).Append(",");
@@ -1730,7 +1804,13 @@ namespace WinsockPacketEditor
                         {
                             if (dtFilterAdvanced_Search.Rows[0][i] != null)
                             {
-                                string sValue = ((CellText)dtFilterAdvanced_Search.Rows[0][i]).Text.Trim();
+                                CellText ctSearch = (CellText)dtFilterAdvanced_Search.Rows[0][i];
+                                if (ctSearch.Back == Color.Violet)
+                                {
+                                    sbExclude.Append(i).Append(",");
+                                }
+
+                                string sValue = ctSearch.Text.Trim();
                                 if (!String.IsNullOrEmpty(sValue))
                                 {
                                     sbSearch.Append(i).Append("|").Append(sValue).Append(",");
@@ -1744,15 +1824,15 @@ namespace WinsockPacketEditor
 
                                 for (int i = 0; i < this.dtFilterAdvanced_Modify_Head.Columns.Count; i++)
                                 {
-                                    CellText cell = (CellText)dtFilterAdvanced_Modify_Head.Rows[0][i];
-                                    if (cell.Back == Color.DarkRed)
-                                    {
-                                        sbProgression.Append(i).Append(",");
-                                    }
-
                                     if (dtFilterAdvanced_Modify_Head.Rows[0][i] != null)
                                     {
-                                        string sValue = ((CellText)dtFilterAdvanced_Modify_Head.Rows[0][i]).Text.Trim();
+                                        CellText ctModify = (CellText)dtFilterAdvanced_Modify_Head.Rows[0][i];
+                                        if (ctModify.Back == Color.DarkRed)
+                                        {
+                                            sbProgression.Append(i).Append(",");
+                                        }
+
+                                        string sValue = ctModify.Text.Trim();
                                         if (!String.IsNullOrEmpty(sValue))
                                         {
                                             sbModify.Append(i).Append("|").Append(sValue).Append(",");
@@ -1768,15 +1848,15 @@ namespace WinsockPacketEditor
                                 {
                                     if (int.TryParse(dtFilterAdvanced_Modify_Position.Columns[i].ColumnName, out int iIndex))
                                     {
-                                        CellText cell = (CellText)dtFilterAdvanced_Modify_Position.Rows[0][i];
-                                        if (cell.Back == Color.DarkRed)
-                                        {
-                                            sbProgression.Append(iIndex).Append(",");
-                                        }
-
                                         if (dtFilterAdvanced_Modify_Position.Rows[0][i] != null)
                                         {
-                                            string sValue = ((CellText)dtFilterAdvanced_Modify_Position.Rows[0][i]).Text.Trim();
+                                            CellText ctModify = (CellText)dtFilterAdvanced_Modify_Position.Rows[0][i];
+                                            if (ctModify.Back == Color.DarkRed)
+                                            {
+                                                sbProgression.Append(iIndex).Append(",");
+                                            }
+
+                                            string sValue = ctModify.Text.Trim();
                                             if (!String.IsNullOrEmpty(sValue))
                                             {
                                                 sbModify.Append(iIndex).Append("|").Append(sValue).Append(",");
@@ -1792,6 +1872,7 @@ namespace WinsockPacketEditor
                 }
 
                 string sProgression_New = sbProgression.ToString().TrimEnd(',');
+                string sExclude_New = sbExclude.ToString().TrimEnd(',');
                 string sSearch_New = sbSearch.ToString().TrimEnd(',');
                 string sModify_New = sbModify.ToString().TrimEnd(',');
 
@@ -1821,6 +1902,7 @@ namespace WinsockPacketEditor
                     iProgressionCarryNumber_New,
                     sProgression_New,
                     iProgressionCount_New,
+                    sExclude_New,
                     sSearch_New,
                     sModify_New);                
 

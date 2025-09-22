@@ -464,6 +464,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//排除位置
+
+        string _ExcludePosition;
+
+        public string ExcludePosition
+        {
+            get => _ExcludePosition;
+            set
+            {
+                if (_ExcludePosition == value) return;
+                _ExcludePosition = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//搜索内容
 
         string _FSearch;
@@ -528,6 +545,7 @@ namespace WinsockPacketEditor
             int ProgressionCarryNumber,
             string ProgressionPosition,
             int ProgressionCount,
+            string ExcludePosition,
             string FSearch, 
             string FModify) 
         {
@@ -558,6 +576,7 @@ namespace WinsockPacketEditor
             this._ProgressionCarryNumber = ProgressionCarryNumber;
             this._ProgressionPosition = ProgressionPosition;
             this._ProgressionCount = ProgressionCount;
+            this._ExcludePosition = ExcludePosition;
             this._FSearch = FSearch;          
             this._FModify = FModify;            
             this._ExecutionCount = 0;            

@@ -2248,6 +2248,12 @@ namespace WinsockPacketEditor
                 case "FilterEditForm.Appoint.Progression.Disable":
                     return "Disable Progression";
 
+                case "FilterEditForm.Appoint.Exclude.Enable":
+                    return "Enable Exclude";
+
+                case "FilterEditForm.Appoint.Exclude.Disable":
+                    return "Disable Exclude";
+
                 #endregion
 
                 #region//SendEditForm

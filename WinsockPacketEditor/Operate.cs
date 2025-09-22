@@ -10711,7 +10711,37 @@ namespace WinsockPacketEditor
                         FilterConfig.Filter.FilterFunction FilterFunction = new FilterConfig.Filter.FilterFunction(true, true, true, true, true, true, true, true, true, true, true, true);
                         FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
 
-                        FilterConfig.Filter.AddFilter(false, FID, FName, false, string.Empty, false, string.Empty, false, string.Empty, false, string.Empty, FilterMode, FilterAction, false, FilterExecuteType, Execute_SID, Execute_RID, Execute_FID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, string.Empty, string.Empty);
+                        FilterConfig.Filter.AddFilter(
+                            false, 
+                            FID, 
+                            FName, 
+                            false, 
+                            string.Empty, 
+                            false, 
+                            string.Empty, 
+                            false, 
+                            string.Empty, 
+                            false, 
+                            string.Empty, 
+                            FilterMode, 
+                            FilterAction, 
+                            false, 
+                            FilterExecuteType, 
+                            Execute_SID, 
+                            Execute_RID, 
+                            Execute_FID, 
+                            FilterFunction, 
+                            FilterStartFrom, 
+                            false, 
+                            false, 
+                            1, 
+                            false, 
+                            1, 
+                            string.Empty, 
+                            0, 
+                            string.Empty,
+                            string.Empty, 
+                            string.Empty);
                     }
                     catch (Exception ex)
                     {
@@ -10771,6 +10801,7 @@ namespace WinsockPacketEditor
                                 1, 
                                 string.Empty, 
                                 0, 
+                                string.Empty,
                                 sFSearch, 
                                 string.Empty);
 
@@ -10837,6 +10868,7 @@ namespace WinsockPacketEditor
                                 1,
                                 string.Empty,
                                 0,
+                                string.Empty,
                                 sFSearch,
                                 string.Empty);
 
@@ -10879,6 +10911,7 @@ namespace WinsockPacketEditor
                     int ProgressionCarryNumber,
                     string ProgressionPosition,
                     int ProgressionCount,
+                    string ExcludePosition,
                     string FSearch,
                     string FModify)
                 {
@@ -10914,6 +10947,7 @@ namespace WinsockPacketEditor
                             ProgressionCarryNumber,
                             ProgressionPosition,
                             ProgressionCount,
+                            ExcludePosition,
                             FSearch,
                             FModify);
 
@@ -10956,6 +10990,7 @@ namespace WinsockPacketEditor
                     int ProgressionCarryNumber,
                     string ProgressionPosition,
                     int ProgressionCount,
+                    string ExcludePosition,
                     string FSearch,
                     string FModify)
                 {
@@ -10987,6 +11022,7 @@ namespace WinsockPacketEditor
                             fi.ProgressionCarryNumber = ProgressionCarryNumber;
                             fi.ProgressionPosition = ProgressionPosition;
                             fi.ProgressionCount = ProgressionCount;
+                            fi.ExcludePosition = ExcludePosition;
                             fi.FSearch = FSearch;
                             fi.FModify = FModify;
                         }
@@ -11065,6 +11101,7 @@ namespace WinsockPacketEditor
                         int ProgressionCarryNumber = fi.ProgressionCarryNumber;
                         string ProgressionPosition = fi.ProgressionPosition;
                         int ProgressionCount = 0;
+                        string ExcludePosition = fi.ExcludePosition;
                         string FSearch = fi.FSearch;
                         string FModify = fi.FModify;
 
@@ -11096,6 +11133,7 @@ namespace WinsockPacketEditor
                             ProgressionCarryNumber,
                             ProgressionPosition,
                             ProgressionCount,
+                            ExcludePosition,
                             FSearch,
                             FModify);
                     }
@@ -12890,6 +12928,7 @@ namespace WinsockPacketEditor
                             int ProgressionCarryNumber = Convert.ToInt32(dataRow["ProgressionCarryNumber"]);
                             string FProgressionPosition = dataRow["ProgressionPosition"].ToString();
                             int ProgressionCount = 0;
+                            string FExcludePosition = dataRow["ExcludePosition"].ToString();
                             string FSearch = dataRow["Search"].ToString();
                             string FModify = dataRow["Modify"].ToString();
 
@@ -12921,6 +12960,7 @@ namespace WinsockPacketEditor
                                 ProgressionCarryNumber,
                                 FProgressionPosition,
                                 ProgressionCount,
+                                FExcludePosition,
                                 FSearch,
                                 FModify);
                         }
@@ -13086,6 +13126,7 @@ namespace WinsockPacketEditor
                                 new XElement("IsProgressionCarry", fi.IsProgressionCarry.ToString()),
                                 new XElement("ProgressionCarryNumber", fi.ProgressionCarryNumber),
                                 new XElement("ProgressionPosition", fi.ProgressionPosition),
+                                new XElement("ExcludePosition", fi.ExcludePosition),
                                 new XElement("Search", fi.FSearch),
                                 new XElement("Modify", fi.FModify)
                                 );
@@ -13372,6 +13413,12 @@ namespace WinsockPacketEditor
 
                             int iProgressionCount = 0;
 
+                            string sFExcludePosition = string.Empty;
+                            if (xeFilter.Element("ExcludePosition") != null)
+                            {
+                                sFExcludePosition = xeFilter.Element("ExcludePosition").Value;
+                            }
+
                             string sFSearch = string.Empty;
                             if (xeFilter.Element("Search") != null)
                             {
@@ -13412,6 +13459,7 @@ namespace WinsockPacketEditor
                                 iFProgressionCarryNumber,
                                 sFProgressionPosition,
                                 iProgressionCount,
+                                sFExcludePosition,
                                 sFSearch,
                                 sFModify);
                         }
@@ -17590,6 +17638,7 @@ namespace WinsockPacketEditor
                         sql += "IsProgressionCarry BOOLEAN DEFAULT 0,";
                         sql += "ProgressionCarryNumber INTEGER DEFAULT 1,";
                         sql += "ProgressionPosition TEXT,";
+                        sql += "ExcludePosition TEXT,";
                         sql += "Search TEXT,";
                         sql += "Modify TEXT";
                         sql += ");";
@@ -17688,6 +17737,7 @@ namespace WinsockPacketEditor
                         sql += "IsProgressionCarry,";
                         sql += "ProgressionCarryNumber,";
                         sql += "ProgressionPosition,";
+                        sql += "ExcludePosition,";
                         sql += "Search,";
                         sql += "Modify";
                         sql += ") VALUES (";
@@ -17716,6 +17766,7 @@ namespace WinsockPacketEditor
                         sql += "@IsProgressionCarry,";
                         sql += "@ProgressionCarryNumber,";
                         sql += "@ProgressionPosition,";
+                        sql += "@ExcludePosition,";
                         sql += "@Search,";
                         sql += "@Modify";
                         sql += ");";
@@ -17747,6 +17798,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@IsProgressionCarry", sfi.IsProgressionCarry);
                             cmd.Parameters.AddWithValue("@ProgressionCarryNumber", sfi.ProgressionCarryNumber);
                             cmd.Parameters.AddWithValue("@ProgressionPosition", sfi.ProgressionPosition);
+                            cmd.Parameters.AddWithValue("@ExcludePosition", sfi.ExcludePosition);
                             cmd.Parameters.AddWithValue("@Search", sfi.FSearch);
                             cmd.Parameters.AddWithValue("@Modify", sfi.FModify);
 
