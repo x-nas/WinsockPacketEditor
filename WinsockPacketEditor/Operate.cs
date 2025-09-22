@@ -11758,93 +11758,10 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region // 检查滤镜是否匹配成功（普通滤镜）
+                #region//检查滤镜辅助方法
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public static bool CheckFilter_IsMatch_Normal(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
-                {
-                    if (string.IsNullOrEmpty(sfi.FSearch) || bufferSpan.IsEmpty)
-                        return false;
 
-                    try
-                    {
-                        // 预处理排除位置（如果有的话）
-                        HashSet<int> excludePositions = null;
-                        if (!string.IsNullOrEmpty(sfi.ExcludePosition))
-                        {
-                            excludePositions = ParseExcludePositions(sfi.ExcludePosition);
-                        }
-
-                        // 使用 SpanSplit 避免字符串分配
-                        var searchParts = sfi.FSearch.AsSpan();
-
-                        while (!searchParts.IsEmpty)
-                        {
-                            // 查找下一个逗号或结尾
-                            int commaIndex = searchParts.IndexOf(',');
-                            ReadOnlySpan<char> partSpan = commaIndex >= 0
-                                ? searchParts.Slice(0, commaIndex)
-                                : searchParts;
-
-                            // 移动到下一部分
-                            searchParts = commaIndex >= 0
-                                ? searchParts.Slice(commaIndex + 1)
-                                : ReadOnlySpan<char>.Empty;
-
-                            // 跳过空部分
-                            if (partSpan.IsEmpty || partSpan.IsWhiteSpace())
-                                continue;
-
-                            // 查找分隔符 '|'
-                            int pipeIndex = partSpan.IndexOf('|');
-                            if (pipeIndex <= 0 || pipeIndex >= partSpan.Length - 1)
-                                return false; // 格式错误
-
-                            // 解析索引
-                            var indexSpan = partSpan.Slice(0, pipeIndex).Trim();
-                            if (!TryParseNonNegativeInt(indexSpan, out int index) ||
-                                index >= bufferSpan.Length)
-                            {
-                                return false;
-                            }
-
-                            // 解析十六进制值（支持通配符）
-                            var hexSpan = partSpan.Slice(pipeIndex + 1).Trim();
-                            if (!HexCharsWithWildcardToByte(hexSpan, out byte expected, out byte mask))
-                                return false;
-
-                            // 检查是否为排除位置
-                            bool isExcludePosition = excludePositions != null && excludePositions.Contains(index);
-
-                            if (isExcludePosition)
-                            {
-                                // 排除规则：实际值 & 掩码 != 期望值 & 掩码
-                                byte actualValue = bufferSpan[index];
-                                if ((actualValue & mask) == (expected & mask))
-                                {
-                                    return false; // 匹配了要排除的值，返回false
-                                }
-                            }
-                            else
-                            {
-                                // 正常匹配规则：实际值 & 掩码 == 期望值 & 掩码
-                                if ((bufferSpan[index] & mask) != (expected & mask))
-                                {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(CheckFilter_IsMatch_Normal), ex.Message);
-                        return false;
-                    }
-
-                    return true;
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 private static HashSet<int> ParseExcludePositions(string excludeString)
                 {
                     var positions = new HashSet<int>();
@@ -11858,22 +11775,18 @@ namespace WinsockPacketEditor
 
                         while (!excludeParts.IsEmpty)
                         {
-                            // 查找下一个逗号或结尾
                             int commaIndex = excludeParts.IndexOf(',');
                             ReadOnlySpan<char> partSpan = commaIndex >= 0
                                 ? excludeParts.Slice(0, commaIndex)
                                 : excludeParts;
 
-                            // 移动到下一部分
                             excludeParts = commaIndex >= 0
                                 ? excludeParts.Slice(commaIndex + 1)
                                 : ReadOnlySpan<char>.Empty;
 
-                            // 跳过空部分
                             if (partSpan.IsEmpty || partSpan.IsWhiteSpace())
                                 continue;
 
-                            // 解析位置索引
                             var positionSpan = partSpan.Trim();
                             if (TryParseNonNegativeInt(positionSpan, out int position))
                             {
@@ -11889,8 +11802,8 @@ namespace WinsockPacketEditor
                     return positions;
                 }
 
-                // 原有的辅助方法保持不变
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 private static bool HexCharsWithWildcardToByte(ReadOnlySpan<char> s, out byte result, out byte mask)
                 {
                     result = 0;
@@ -11899,36 +11812,35 @@ namespace WinsockPacketEditor
                     if (s.Length != 2)
                         return false;
 
-                    // 处理第一个字符（高4位）
                     if (s[0] == '*')
                     {
-                        mask &= 0x0F; // 高4位掩码为0
+                        mask &= 0x0F;
                     }
                     else
                     {
                         int high = CharToNibble(s[0]);
                         if (high == -1) return false;
                         result |= (byte)(high << 4);
-                        mask |= 0xF0; // 高4位掩码为1（需要比较）
+                        mask |= 0xF0;
                     }
 
-                    // 处理第二个字符（低4位）
                     if (s[1] == '*')
                     {
-                        mask &= 0xF0; // 低4位掩码为0
+                        mask &= 0xF0;
                     }
                     else
                     {
                         int low = CharToNibble(s[1]);
                         if (low == -1) return false;
                         result |= (byte)low;
-                        mask |= 0x0F; // 低4位掩码为1（需要比较）
+                        mask |= 0x0F;
                     }
 
                     return true;
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 private static bool TryParseNonNegativeInt(ReadOnlySpan<char> s, out int result)
                 {
                     result = 0;
@@ -11944,6 +11856,7 @@ namespace WinsockPacketEditor
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 private static int CharToNibble(char c)
                 {
                     uint digit = (uint)(c - '0');
@@ -11960,6 +11873,84 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region // 检查滤镜是否匹配成功（普通滤镜）
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
+                public static bool CheckFilter_IsMatch_Normal(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
+                {
+                    if (string.IsNullOrEmpty(sfi.FSearch) || bufferSpan.IsEmpty)
+                        return false;
+
+                    try
+                    {
+                        HashSet<int> excludePositions = null;
+                        if (!string.IsNullOrEmpty(sfi.ExcludePosition))
+                        {
+                            excludePositions = ParseExcludePositions(sfi.ExcludePosition);
+                        }
+
+                        var searchParts = sfi.FSearch.AsSpan();
+
+                        while (!searchParts.IsEmpty)
+                        {
+                            int commaIndex = searchParts.IndexOf(',');
+                            ReadOnlySpan<char> partSpan = commaIndex >= 0
+                                ? searchParts.Slice(0, commaIndex)
+                                : searchParts;
+
+                            searchParts = commaIndex >= 0
+                                ? searchParts.Slice(commaIndex + 1)
+                                : ReadOnlySpan<char>.Empty;
+
+                            if (partSpan.IsEmpty || partSpan.IsWhiteSpace())
+                                continue;
+
+                            int pipeIndex = partSpan.IndexOf('|');
+                            if (pipeIndex <= 0 || pipeIndex >= partSpan.Length - 1)
+                                return false;
+
+                            var indexSpan = partSpan.Slice(0, pipeIndex).Trim();
+                            if (!TryParseNonNegativeInt(indexSpan, out int index) ||
+                                index >= bufferSpan.Length)
+                            {
+                                return false;
+                            }
+
+                            var hexSpan = partSpan.Slice(pipeIndex + 1).Trim();
+                            if (!HexCharsWithWildcardToByte(hexSpan, out byte expected, out byte mask))
+                                return false;
+
+                            bool isExcludePosition = excludePositions != null && excludePositions.Contains(index);
+
+                            if (isExcludePosition)
+                            {
+                                byte actualValue = bufferSpan[index];
+                                if ((actualValue & mask) == (expected & mask))
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                if ((bufferSpan[index] & mask) != (expected & mask))
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(CheckFilter_IsMatch_Normal), ex.Message);
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                #endregion
+
                 #region//检查滤镜是否匹配成功（高级滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -11972,6 +11963,12 @@ namespace WinsockPacketEditor
 
                     try
                     {
+                        HashSet<int> excludePositions = null;
+                        if (!string.IsNullOrEmpty(sfi.ExcludePosition))
+                        {
+                            excludePositions = ParseExcludePositions(sfi.ExcludePosition);
+                        }
+
                         var searchConditions = ParseSearchConditions(sfi.FSearch);
                         if (searchConditions.Count == 0)
                             return result;
@@ -11998,11 +11995,12 @@ namespace WinsockPacketEditor
                                         break;
                                     }
 
-                                    // 处理部分通配符（如 F*, *A 等）
-                                    if (condition.IsPartialWildcard)
+                                    bool isExcludePosition = excludePositions != null && excludePositions.Contains(condition.RelativePosition);
+
+                                    if (isExcludePosition)
                                     {
                                         byte actualByte = bufferSpan[checkIndex];
-                                        if ((actualByte & condition.Mask) != (condition.Value & condition.Mask))
+                                        if ((actualByte & condition.Mask) == (condition.Value & condition.Mask))
                                         {
                                             isMatch = false;
                                             break;
@@ -12010,11 +12008,22 @@ namespace WinsockPacketEditor
                                     }
                                     else
                                     {
-                                        // 精确匹配
-                                        if (bufferSpan[checkIndex] != condition.Value)
+                                        if (condition.IsPartialWildcard)
                                         {
-                                            isMatch = false;
-                                            break;
+                                            byte actualByte = bufferSpan[checkIndex];
+                                            if ((actualByte & condition.Mask) != (condition.Value & condition.Mask))
+                                            {
+                                                isMatch = false;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (bufferSpan[checkIndex] != condition.Value)
+                                            {
+                                                isMatch = false;
+                                                break;
+                                            }
                                         }
                                     }
 
@@ -12063,7 +12072,6 @@ namespace WinsockPacketEditor
                         {
                             string hexValue = pair[1].Trim();
 
-                            // 处理部分通配符（如 F*, *A）
                             if (hexValue.Contains('*'))
                             {
                                 if (hexValue.Length == 2 && (hexValue[0] == '*' || hexValue[1] == '*'))
@@ -12082,14 +12090,13 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                // 精确匹配
                                 if (byte.TryParse(hexValue, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
                                 {
                                     conditions.Add(new SearchCondition
                                     {
                                         RelativePosition = position,
                                         Value = value,
-                                        Mask = 0xFF, // 完全匹配
+                                        Mask = 0xFF,
                                         IsPartialWildcard = false
                                     });
                                 }
@@ -12097,7 +12104,6 @@ namespace WinsockPacketEditor
                         }
                     }
 
-                    // 按位置排序，确保相对位置正确
                     conditions.Sort((a, b) => a.RelativePosition.CompareTo(b.RelativePosition));
 
                     return conditions;
