@@ -11723,6 +11723,7 @@ namespace WinsockPacketEditor
                 #region // 检查滤镜是否匹配成功（普通滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 public static bool CheckFilter_IsMatch_Normal(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
                 {
                     if (string.IsNullOrEmpty(sfi.FSearch) || bufferSpan.IsEmpty)
@@ -11859,7 +11860,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//检查滤镜是否匹配成功（高级滤镜）- 支持通配符
+                #region//检查滤镜是否匹配成功（高级滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
 
@@ -12795,9 +12796,12 @@ namespace WinsockPacketEditor
                         var filters = FilterConfig.List.lstFilterInfo;
                         for (int i = 0; i < filters.Count; i++)
                         {
-                            faReturn = FilterConfig.Filter.DoFilter(filters[i], iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
-                            if (faReturn != Filter.FilterAction.None)
+                            FilterConfig.Filter.FilterAction faDoFilter = FilterConfig.Filter.DoFilter(filters[i], iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
+
+                            if (faDoFilter != Filter.FilterAction.None)
                             {
+                                faReturn = faDoFilter;
+
                                 if (faReturn == Filter.FilterAction.Intercept ||
                                     faReturn == Filter.FilterAction.NoModify_Display ||
                                     faReturn == Filter.FilterAction.NoModify_NoDisplay ||
@@ -12821,7 +12825,7 @@ namespace WinsockPacketEditor
                     if (bNewBuffer == null)
                     {
                         bNewBuffer = bufferSpan.ToArray();
-                    }
+                    }                    
 
                     return faReturn;
                 }
