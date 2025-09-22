@@ -20,7 +20,10 @@ namespace WinsockPacketEditor
         private IntPtr lastHoverHwnd = IntPtr.Zero;
         private bool isPickingWindow = false;
         private Form form = null;
-        private ToolTip processToolTip = null;
+        private Form currentTooltip;
+        private Timer tooltipTimer;
+        private Point pendingScreenPoint;
+        private string pendingText;
         private User32.HookProc mProc;
         private User32.HookProc kProc;
         private List<ProcessInfo> processList = new List<ProcessInfo>();
@@ -192,26 +195,13 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//选择窗体
-
-        private void InitializeToolTip()
-        {
-            processToolTip = new ToolTip();
-            processToolTip.InitialDelay = 100;
-            processToolTip.ReshowDelay = 100;
-            processToolTip.ShowAlways = true;
-        }
+        #region//选择窗体        
 
         private void bSelectForm_Click(object sender, EventArgs e)
         {
             try
             {
                 this.isPickingWindow = true;
-
-                if (processToolTip == null)
-                {
-                    InitializeToolTip();
-                }
 
                 this.mProc = new User32.HookProc(MouseHook);
                 this.kProc = new User32.HookProc(KeyBoardHook);
@@ -380,14 +370,70 @@ namespace WinsockPacketEditor
 
         private void ShowProcessToolTip(Point screenPoint, string text)
         {
-            Point controlPoint = this.PointToClient(screenPoint);
-            this.processToolTip.Show(text, this, controlPoint.X + 15, controlPoint.Y + 15);
+            try
+            {
+                tooltipTimer?.Stop();
+
+                if (currentTooltip != null && !currentTooltip.IsDisposed)
+                {
+                    currentTooltip.Close();
+                    currentTooltip = null;
+                }
+
+                pendingScreenPoint = screenPoint;
+                pendingText = text;
+
+                if (tooltipTimer == null)
+                {
+                    tooltipTimer = new Timer();
+                    tooltipTimer.Interval = 200;
+                    tooltipTimer.Tick += TooltipTimer_Tick;
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            finally
+            {
+                tooltipTimer.Start();
+            }
+        }
+
+        private void TooltipTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                tooltipTimer?.Stop();
+
+                Point formPoint = this.PointToClient(pendingScreenPoint);
+
+                var config = new AntdUI.Tooltip.Config(this, pendingText)
+                {
+                    Offset = new Rectangle(formPoint.X, formPoint.Y, 0, 0),
+                    ArrowAlign = TAlign.Top,
+                    Font = this.Font
+                };
+
+                currentTooltip = AntdUI.Tooltip.open(config);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void UnHook()
         {
             try
             {
+                tooltipTimer?.Stop();
+                tooltipTimer?.Dispose();
+                tooltipTimer = null;
+
+                currentTooltip?.Close();
+                currentTooltip = null;
+
                 if (this.ipMouseHook != IntPtr.Zero)
                 {
                     User32.UnhookWindowsHookEx(this.ipMouseHook);
@@ -398,13 +444,6 @@ namespace WinsockPacketEditor
                 {
                     User32.UnhookWindowsHookEx(this.ipKeyHook);
                     ipKeyHook = IntPtr.Zero;
-                }
-
-                if (processToolTip != null)
-                {
-                    processToolTip.Hide(this);
-                    processToolTip.Dispose();
-                    processToolTip = null;
                 }
 
                 this.lastHoverHwnd = IntPtr.Zero;
