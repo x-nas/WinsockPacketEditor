@@ -192,124 +192,6 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//选择程序
-
-        private void bCreate_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofdCreate = new OpenFileDialog();
-
-            ofdCreate.Title = AntdUI.Localization.Get("ProcessList.SelectProgram", "请选择要注入的应用程序");
-            ofdCreate.Multiselect = false;
-            ofdCreate.InitialDirectory = string.Empty;
-            ofdCreate.Filter = AntdUI.Localization.Get("ProcessList.ProgramFilter", "可执行文件 (*.exe)|*.exe|所有文件 (*.*)|*.*");
-            ofdCreate.ShowDialog();
-
-            Operate.SystemConfig.PID = -1;
-            Operate.SystemConfig.PATH = ofdCreate.FileName;
-            Operate.SystemConfig.PNAME = Path.GetFileName(Operate.SystemConfig.PATH);
-
-            this.ShowSelectProcess();
-        }
-
-        #endregion
-
-        #region//刷新
-
-        private void bRefresh_Click(object sender, EventArgs e)
-        {
-            this.txtSelectProcess.Text = string.Empty;
-            this.txtSearchProcess.Text = string.Empty;
-
-            this.ShowProcessList();
-        }
-
-        #endregion
-
-        #region//注入
-
-        private void bInject_Click(object sender, EventArgs e)
-        {
-            string selectedProcess = this.txtSelectProcess.Text.Trim();
-            if (string.IsNullOrEmpty(selectedProcess))
-            {
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请选择一个进程或程序", TType.Error)
-                {
-                    LocalizationText = "ProcessList.txtSelectProcess"
-                });
-
-                return;
-            }
-
-            this.DoInject();
-        }
-
-        private void DoInject()
-        {
-            try
-            {
-                string channelName = "WPE64";
-                string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
-                string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
-
-                if (Operate.SystemConfig.PID > -1)
-                {
-                    RemoteHooking.Inject(Operate.SystemConfig.PID, injectionLibrary_x86, injectionLibrary_x64, channelName);
-                }
-                else
-                {
-                    RemoteHooking.CreateAndInject(Operate.SystemConfig.PATH, string.Empty, 0, injectionLibrary_x86, injectionLibrary_x64, out Operate.SystemConfig.PID, channelName);
-                }
-
-                Operate.SystemConfig.LastInjection = Operate.SystemConfig.PNAME;
-                Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Process;
-                Operate.SystemConfig.SaveSystemConfig_LastInjection_ToDB();
-
-                this.Dispose();
-            }
-            catch (Exception ex)
-            {
-                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("ProcessList.InjectError", "注入失败"), "\r\n" + ex.Message + "\r\n\r\n")
-                {
-                    Icon = TType.Error,
-                    CloseIcon = true,
-                    Keyboard = false,
-                    MaskClosable = false,
-                    CancelText = null,
-                    OkText = AntdUI.Localization.Get("ProcessList.SearchOnWebSite", "查询 WPE64.com"),
-                    OnButtonStyle = (id, btn) =>
-                    {
-                        btn.BackExtend = "135, #6253E1, #04BEFE";
-                    },
-                    OnOk = config =>
-                    {
-                        var lang = AntdUI.Localization.CurrentLanguage;
-                        if (lang.StartsWith("en"))
-                        {
-                            Process.Start(Operate.SystemConfig.WebSite_Tutorials_EN);
-                        }
-                        else
-                        {
-                            Process.Start(Operate.SystemConfig.WebSite_Tutorials_CN);
-                        }
-
-                        return false;
-                    }
-                });
-            }
-        }
-
-        #endregion
-
-        #region//退出
-
-        private void bExit_Click(object sender, EventArgs e)
-        {
-            this.UnHook();
-            this.Dispose();
-        }
-
-        #endregion
-
         #region//选择窗体
 
         private void InitializeToolTip()
@@ -437,7 +319,7 @@ namespace WinsockPacketEditor
                     if (kb.vkCode == (uint)Keys.Escape)
                     {
                         this.BeginInvoke((MethodInvoker)delegate
-                        {                            
+                        {
                             UnHook();
                         });
 
@@ -531,9 +413,127 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
         }
 
         #endregion
+
+        #region//选择程序
+
+        private void bCreate_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofdCreate = new OpenFileDialog();
+
+            ofdCreate.Title = AntdUI.Localization.Get("ProcessList.SelectProgram", "请选择要注入的应用程序");
+            ofdCreate.Multiselect = false;
+            ofdCreate.InitialDirectory = string.Empty;
+            ofdCreate.Filter = AntdUI.Localization.Get("ProcessList.ProgramFilter", "可执行文件 (*.exe)|*.exe|所有文件 (*.*)|*.*");
+            ofdCreate.ShowDialog();
+
+            Operate.SystemConfig.PID = -1;
+            Operate.SystemConfig.PATH = ofdCreate.FileName;
+            Operate.SystemConfig.PNAME = Path.GetFileName(Operate.SystemConfig.PATH);
+
+            this.ShowSelectProcess();
+        }
+
+        #endregion
+
+        #region//刷新
+
+        private void bRefresh_Click(object sender, EventArgs e)
+        {
+            this.txtSelectProcess.Text = string.Empty;
+            this.txtSearchProcess.Text = string.Empty;
+
+            this.ShowProcessList();
+        }
+
+        #endregion
+
+        #region//注入
+
+        private void bInject_Click(object sender, EventArgs e)
+        {
+            string selectedProcess = this.txtSelectProcess.Text.Trim();
+            if (string.IsNullOrEmpty(selectedProcess))
+            {
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请选择一个进程或程序", TType.Error)
+                {
+                    LocalizationText = "ProcessList.txtSelectProcess"
+                });
+
+                return;
+            }
+
+            this.DoInject();
+        }
+
+        private void DoInject()
+        {
+            try
+            {
+                string channelName = "WPE64";
+                string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
+                string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
+
+                if (Operate.SystemConfig.PID > -1)
+                {
+                    RemoteHooking.Inject(Operate.SystemConfig.PID, injectionLibrary_x86, injectionLibrary_x64, channelName);
+                }
+                else
+                {
+                    RemoteHooking.CreateAndInject(Operate.SystemConfig.PATH, string.Empty, 0, injectionLibrary_x86, injectionLibrary_x64, out Operate.SystemConfig.PID, channelName);
+                }
+
+                Operate.SystemConfig.LastInjection = Operate.SystemConfig.PNAME;
+                Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Process;
+                Operate.SystemConfig.SaveSystemConfig_LastInjection_ToDB();
+
+                this.Dispose();
+            }
+            catch (Exception ex)
+            {
+                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("ProcessList.InjectError", "注入失败"), "\r\n" + ex.Message + "\r\n\r\n")
+                {
+                    Icon = TType.Error,
+                    CloseIcon = true,
+                    Keyboard = false,
+                    MaskClosable = false,
+                    CancelText = null,
+                    OkText = AntdUI.Localization.Get("ProcessList.SearchOnWebSite", "查询 WPE64.com"),
+                    OnButtonStyle = (id, btn) =>
+                    {
+                        btn.BackExtend = "135, #6253E1, #04BEFE";
+                    },
+                    OnOk = config =>
+                    {
+                        var lang = AntdUI.Localization.CurrentLanguage;
+                        if (lang.StartsWith("en"))
+                        {
+                            Process.Start(Operate.SystemConfig.WebSite_Tutorials_EN);
+                        }
+                        else
+                        {
+                            Process.Start(Operate.SystemConfig.WebSite_Tutorials_CN);
+                        }
+
+                        return false;
+                    }
+                });
+            }
+        }
+
+        #endregion
+
+        #region//退出
+
+        private void bExit_Click(object sender, EventArgs e)
+        {
+            this.UnHook();
+            this.Dispose();
+        }
+
+        #endregion        
     }
 }
