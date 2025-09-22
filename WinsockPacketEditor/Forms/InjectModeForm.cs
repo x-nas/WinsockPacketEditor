@@ -56,6 +56,8 @@ namespace WinsockPacketEditor
             this.InitHotKeys();
             this.Dark_Changed();
 
+            this.timerAutoSave.Interval = Operate.SystemConfig.AutoSaveINT;
+            this.timerAutoSave.Enabled = true;
             this.tabInjectMode.TabMenuVisible = false;
             this.mInjectMode.SelectIndex(0, true);
             this.colorTheme.Value = Operate.SystemConfig.SystemColor;
@@ -491,6 +493,14 @@ namespace WinsockPacketEditor
             }      
         }
 
+        private void timerAutoSave_Tick(object sender, EventArgs e)
+        {
+            if (!this.bgwAutoSave.IsBusy)
+            {
+                this.bgwAutoSave.RunWorkerAsync();
+            }
+        }
+
         #endregion
 
         #region//显示菜单信息
@@ -504,6 +514,28 @@ namespace WinsockPacketEditor
             this.mInjectMode.Items[9].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
         }
 
+
         #endregion
+
+        #region//自动保存（异步）
+
+        private void bgwAutoSave_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                Operate.SystemConfig.SaveSystemConfig_ToDB();
+                Operate.SystemConfig.SaveInjectMode_ToDB();
+                Operate.SystemConfig.SaveProxyMode_ToDB();
+                Operate.SystemConfig.SaveSystemList_ToDB();                
+                Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
+                Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
     }
 }

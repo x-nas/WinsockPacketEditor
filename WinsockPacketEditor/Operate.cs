@@ -41,6 +41,7 @@ namespace WinsockPacketEditor
         public static class SystemConfig
         {
             public static int PID = -1;
+            public static int AutoSaveINT = 600000;
             public static string PNAME = string.Empty;
             public static string PATH = string.Empty;
             public static string WebSite_Tutorials_CN = "https://www.wpe64.com/tutorials.html";

@@ -61,6 +61,8 @@ namespace WinsockPacketEditor
             this.InitHotKeys();
             this.Dark_Changed();
 
+            this.timerAutoSave.Interval = Operate.SystemConfig.AutoSaveINT;
+            this.timerAutoSave.Enabled = true;
             this.tabProxyMode.TabMenuVisible = false;            
             this.mProxyMode.SelectIndex(0, true);
             this.colorTheme.Value = Operate.SystemConfig.SystemColor;
@@ -451,8 +453,7 @@ namespace WinsockPacketEditor
                     this.cProxyList?.ShowProxyInfo();
                     this.cClientList?.RefreshClientList();
                     this.cClientList?.RefreshAuthList();
-                    this.cAccountList?.RefreshAccountList();
-                    this.cAccountList?.SaveAccountList();
+                    this.cAccountList?.RefreshAccountList();                    
                     this.ShowMenuInfo();
                 });
 
@@ -468,7 +469,15 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion      
+        private void timerAutoSave_Tick(object sender, EventArgs e)
+        {
+            if (!this.bgwAutoSave.IsBusy)
+            { 
+                this.bgwAutoSave.RunWorkerAsync();
+            }
+        }
+
+        #endregion        
 
         #region//显示菜单信息
 
@@ -565,6 +574,29 @@ namespace WinsockPacketEditor
                 case "miSystemLog":
                     this.tabProxyMode.SelectTab("tpSystemLog");
                     break;
+            }
+        }
+
+        #endregion      
+
+        #region//自动保存（异步）
+
+        private void bgwAutoSave_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                Operate.SystemConfig.SaveSystemConfig_ToDB();
+                Operate.SystemConfig.SaveInjectMode_ToDB();
+                Operate.SystemConfig.SaveProxyMode_ToDB();
+                Operate.SystemConfig.SaveSystemList_ToDB();
+                Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
+                Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
+
+                this.cAccountList?.SaveAccountList();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
