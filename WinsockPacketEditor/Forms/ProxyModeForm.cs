@@ -48,6 +48,8 @@ namespace WinsockPacketEditor
                 this.InitProxyServerIP();
                 this.InitGlobal();
                 this.InitFloatButton();
+                this.InitControls();
+                this.InitHotKeys();
 
             }, () =>
             {
@@ -57,8 +59,6 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.MainHandle = this.Handle;
             
             this.InitForm();
-            this.InitControls();
-            this.InitHotKeys();
             this.Dark_Changed();
 
             this.timerAutoSave.Interval = Operate.SystemConfig.AutoSaveINT;
@@ -106,53 +106,197 @@ namespace WinsockPacketEditor
 
         private void InitControls()
         {
-            cProxyList = new ProxyList(this);
-            cProxyList.Dock = DockStyle.Fill;
-            this.tpProxyList.Controls.Add(cProxyList);
+            if (this.tpProxyList.InvokeRequired)
+            {
+                this.tpProxyList.Invoke(new Action(() =>
+                {
+                    cProxyList = new ProxyList(this);
+                    cProxyList.Dock = DockStyle.Fill;
+                    this.tpProxyList.Controls.Add(cProxyList);
+                }));
+            }
+            else
+            {
+                cProxyList = new ProxyList(this);
+                cProxyList.Dock = DockStyle.Fill;
+                this.tpProxyList.Controls.Add(cProxyList);
+            }
 
-            cAccountList = new AccountList(this);
-            cAccountList.Dock = DockStyle.Fill;
-            this.tpAccountList.Controls.Add(cAccountList);
+            if (this.tpAccountList.InvokeRequired)
+            {
+                this.tpAccountList.Invoke(new Action(() =>
+                {
+                    cAccountList = new AccountList(this);
+                    cAccountList.Dock = DockStyle.Fill;
+                    this.tpAccountList.Controls.Add(cAccountList);
+                }));
+            }
+            else
+            {
+                cAccountList = new AccountList(this);
+                cAccountList.Dock = DockStyle.Fill;
+                this.tpAccountList.Controls.Add(cAccountList);
+            }
 
-            cClientList = new ClientList();
-            cClientList.Dock = DockStyle.Fill;
-            this.tpClientList.Controls.Add(cClientList);
+            if (this.tpClientList.InvokeRequired)
+            {
+                this.tpClientList.Invoke(new Action(() =>
+                {
+                    cClientList = new ClientList();
+                    cClientList.Dock = DockStyle.Fill;
+                    this.tpClientList.Controls.Add(cClientList);
+                }));
+            }
+            else
+            {
+                cClientList = new ClientList();
+                cClientList.Dock = DockStyle.Fill;
+                this.tpClientList.Controls.Add(cClientList);
+            }
 
-            cFilterList = new FilterList(this);
-            cFilterList.Dock = DockStyle.Fill;
-            this.tpFilterList.Controls.Add(cFilterList);
+            if (this.tpFilterList.InvokeRequired)
+            {
+                this.tpFilterList.Invoke(new Action(() =>
+                {
+                    cFilterList = new FilterList(this);
+                    cFilterList.Dock = DockStyle.Fill;
+                    this.tpFilterList.Controls.Add(cFilterList);
+                }));
+            }
+            else
+            {
+                cFilterList = new FilterList(this);
+                cFilterList.Dock = DockStyle.Fill;
+                this.tpFilterList.Controls.Add(cFilterList);
+            }
 
-            cSendList = new SendList(this);
-            cSendList.Dock = DockStyle.Fill;
-            this.tpSendList.Controls.Add(cSendList);
+            if (this.tpSendList.InvokeRequired)
+            {
+                this.tpSendList.Invoke(new Action(() =>
+                {
+                    cSendList = new SendList(this);
+                    cSendList.Dock = DockStyle.Fill;
+                    this.tpSendList.Controls.Add(cSendList);
+                }));
+            }
+            else
+            {
+                cSendList = new SendList(this);
+                cSendList.Dock = DockStyle.Fill;
+                this.tpSendList.Controls.Add(cSendList);
+            }
 
-            cRobotList = new RobotList(this);
-            cRobotList.Dock = DockStyle.Fill;
-            this.tpRobotList.Controls.Add(cRobotList);
+            if (this.tpRobotList.InvokeRequired)
+            {
+                this.tpRobotList.Invoke(new Action(() =>
+                {
+                    cRobotList = new RobotList(this);
+                    cRobotList.Dock = DockStyle.Fill;
+                    this.tpRobotList.Controls.Add(cRobotList);
+                }));
+            }
+            else
+            {
+                cRobotList = new RobotList(this);
+                cRobotList.Dock = DockStyle.Fill;
+                this.tpRobotList.Controls.Add(cRobotList);
+            }
 
-            cLogList = new LogList(this);
-            cLogList.Dock = DockStyle.Fill;
-            this.tpSystemLog.Controls.Add(cLogList);
+            if (this.tpSystemLog.InvokeRequired)
+            {
+                this.tpSystemLog.Invoke(new Action(() =>
+                {
+                    cLogList = new LogList(this);
+                    cLogList.Dock = DockStyle.Fill;
+                    this.tpSystemLog.Controls.Add(cLogList);
+                }));
+            }
+            else
+            {
+                cLogList = new LogList(this);
+                cLogList.Dock = DockStyle.Fill;
+                this.tpSystemLog.Controls.Add(cLogList);
+            }
 
-            cStatisticalData = new StatisticalData();
-            cStatisticalData.Dock = DockStyle.Fill;
-            this.tpStatistical.Controls.Add(cStatisticalData);
+            if (this.tpStatistical.InvokeRequired)
+            {
+                this.tpStatistical.Invoke(new Action(() =>
+                {
+                    cStatisticalData = new StatisticalData();
+                    cStatisticalData.Dock = DockStyle.Fill;
+                    this.tpStatistical.Controls.Add(cStatisticalData);
+                }));
+            }
+            else
+            {
+                cStatisticalData = new StatisticalData();
+                cStatisticalData.Dock = DockStyle.Fill;
+                this.tpStatistical.Controls.Add(cStatisticalData);
+            }
 
-            cComparisonText = new ComparisonText();
-            cComparisonText.Dock = DockStyle.Fill;
-            this.tpComparison.Controls.Add(cComparisonText);
+            if (this.tpComparison.InvokeRequired)
+            {
+                this.tpComparison.Invoke(new Action(() =>
+                {
+                    cComparisonText = new ComparisonText();
+                    cComparisonText.Dock = DockStyle.Fill;
+                    this.tpComparison.Controls.Add(cComparisonText);
+                }));
+            }
+            else
+            {
+                cComparisonText = new ComparisonText();
+                cComparisonText.Dock = DockStyle.Fill;
+                this.tpComparison.Controls.Add(cComparisonText);
+            }
 
-            cXORCalculation = new XORCalculation(this);
-            cXORCalculation.Dock = DockStyle.Fill;
-            this.tpXOR.Controls.Add(cXORCalculation);
+            if (this.tpXOR.InvokeRequired)
+            {
+                this.tpXOR.Invoke(new Action(() =>
+                {
+                    cXORCalculation = new XORCalculation(this);
+                    cXORCalculation.Dock = DockStyle.Fill;
+                    this.tpXOR.Controls.Add(cXORCalculation);
+                }));
+            }
+            else
+            {
+                cXORCalculation = new XORCalculation(this);
+                cXORCalculation.Dock = DockStyle.Fill;
+                this.tpXOR.Controls.Add(cXORCalculation);
+            }
 
-            cTranscoding = new Transcoding();
-            cTranscoding.Dock = DockStyle.Fill;
-            this.tpTranscoding.Controls.Add(cTranscoding);
+            if (this.tpTranscoding.InvokeRequired)
+            {
+                this.tpTranscoding.Invoke(new Action(() =>
+                {
+                    cTranscoding = new Transcoding();
+                    cTranscoding.Dock = DockStyle.Fill;
+                    this.tpTranscoding.Controls.Add(cTranscoding);
+                }));
+            }
+            else
+            {
+                cTranscoding = new Transcoding();
+                cTranscoding.Dock = DockStyle.Fill;
+                this.tpTranscoding.Controls.Add(cTranscoding);
+            }
 
-            cExtractionData = new ExtractionData(this);
-            cExtractionData.Dock = DockStyle.Fill;
-            this.tpExtraction.Controls.Add(cExtractionData);
+            if (this.tpExtraction.InvokeRequired)
+            {
+                this.tpExtraction.Invoke(new Action(() =>
+                {
+                    cExtractionData = new ExtractionData(this);
+                    cExtractionData.Dock = DockStyle.Fill;
+                    this.tpExtraction.Controls.Add(cExtractionData);
+                }));
+            }
+            else
+            {
+                cExtractionData = new ExtractionData(this);
+                cExtractionData.Dock = DockStyle.Fill;
+                this.tpExtraction.Controls.Add(cExtractionData);
+            }
         }
 
         private void InitForm()
@@ -486,8 +630,8 @@ namespace WinsockPacketEditor
             try
             {
                 this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
-                this.mProxyMode.Items[1].Badge = this.cClientList.GetClientNumber().ToString();
-                this.mProxyMode.Items[2].Badge = this.cAccountList.lstAccount.Count.ToString();
+                this.mProxyMode.Items[1].Badge = this.cClientList?.GetClientNumber().ToString();
+                this.mProxyMode.Items[2].Badge = this.cAccountList?.lstAccount.Count.ToString();
                 this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
                 this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
                 this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();

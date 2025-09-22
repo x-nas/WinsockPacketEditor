@@ -41,8 +41,10 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();                
 
-                this.InitGlobal();
+                this.InitGlobal();                
+                this.InitHotKeys();
                 this.InitFloatButton();
+                this.InitControls();
 
             }, () =>
             {
@@ -52,8 +54,7 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.MainHandle = this.Handle;
             
             this.InitForm();
-            this.InitControls();
-            this.InitHotKeys();
+            
             this.Dark_Changed();
 
             this.timerAutoSave.Interval = Operate.SystemConfig.AutoSaveINT;
@@ -94,45 +95,165 @@ namespace WinsockPacketEditor
 
         private void InitControls()
         {
-            cPacketList = new PacketList(this);
-            cPacketList.Dock = DockStyle.Fill;
-            this.tpPacketList.Controls.Add(cPacketList);
+            if (this.tpPacketList.InvokeRequired)
+            {
+                this.tpPacketList.Invoke(new Action(() =>
+                {
+                    cPacketList = new PacketList(this);
+                    cPacketList.Dock = DockStyle.Fill;
+                    this.tpPacketList.Controls.Add(cPacketList);
+                }));
+            }
+            else
+            {
+                cPacketList = new PacketList(this);
+                cPacketList.Dock = DockStyle.Fill;
+                this.tpPacketList.Controls.Add(cPacketList);
+            }
 
-            cFilterList = new FilterList(this);
-            cFilterList.Dock = DockStyle.Fill;
-            this.tpFilterList.Controls.Add(cFilterList);
+            if (this.tpFilterList.InvokeRequired)
+            {
+                this.tpFilterList.Invoke(new Action(() =>
+                {
+                    cFilterList = new FilterList(this);
+                    cFilterList.Dock = DockStyle.Fill;
+                    this.tpFilterList.Controls.Add(cFilterList);
+                }));
+            }
+            else
+            {
+                cFilterList = new FilterList(this);
+                cFilterList.Dock = DockStyle.Fill;
+                this.tpFilterList.Controls.Add(cFilterList);
+            }
 
-            cSendList = new SendList(this);
-            cSendList.Dock = DockStyle.Fill;
-            this.tpSendList.Controls.Add(cSendList);
+            if (this.tpSendList.InvokeRequired)
+            {
+                this.tpSendList.Invoke(new Action(() =>
+                {
+                    cSendList = new SendList(this);
+                    cSendList.Dock = DockStyle.Fill;
+                    this.tpSendList.Controls.Add(cSendList);
+                }));
+            }
+            else
+            {
+                cSendList = new SendList(this);
+                cSendList.Dock = DockStyle.Fill;
+                this.tpSendList.Controls.Add(cSendList);
+            }
 
-            cRobotList = new RobotList(this);
-            cRobotList.Dock = DockStyle.Fill;
-            this.tpRobotList.Controls.Add(cRobotList);
+            if (this.tpRobotList.InvokeRequired)
+            {
+                this.tpRobotList.Invoke(new Action(() =>
+                {
+                    cRobotList = new RobotList(this);
+                    cRobotList.Dock = DockStyle.Fill;
+                    this.tpRobotList.Controls.Add(cRobotList);
+                }));
+            }
+            else
+            {
+                cRobotList = new RobotList(this);
+                cRobotList.Dock = DockStyle.Fill;
+                this.tpRobotList.Controls.Add(cRobotList);
+            }
 
-            cLogList = new LogList(this);
-            cLogList.Dock = DockStyle.Fill;
-            this.tpSystemLog.Controls.Add(cLogList);
+            if (this.tpSystemLog.InvokeRequired)
+            {
+                this.tpSystemLog.Invoke(new Action(() =>
+                {
+                    cLogList = new LogList(this);
+                    cLogList.Dock = DockStyle.Fill;
+                    this.tpSystemLog.Controls.Add(cLogList);
+                }));
+            }
+            else
+            {
+                cLogList = new LogList(this);
+                cLogList.Dock = DockStyle.Fill;
+                this.tpSystemLog.Controls.Add(cLogList);
+            }
 
-            cStatisticalData = new StatisticalData();
-            cStatisticalData.Dock = DockStyle.Fill;
-            this.tpStatistical.Controls.Add(cStatisticalData);
+            if (this.tpStatistical.InvokeRequired)
+            {
+                this.tpStatistical.Invoke(new Action(() =>
+                {
+                    cStatisticalData = new StatisticalData();
+                    cStatisticalData.Dock = DockStyle.Fill;
+                    this.tpStatistical.Controls.Add(cStatisticalData);
+                }));
+            }
+            else
+            {
+                cStatisticalData = new StatisticalData();
+                cStatisticalData.Dock = DockStyle.Fill;
+                this.tpStatistical.Controls.Add(cStatisticalData);
+            }
 
-            cComparisonText = new ComparisonText();
-            cComparisonText.Dock = DockStyle.Fill;
-            this.tpComparison.Controls.Add(cComparisonText);
+            if (this.tpComparison.InvokeRequired)
+            {
+                this.tpComparison.Invoke(new Action(() =>
+                {
+                    cComparisonText = new ComparisonText();
+                    cComparisonText.Dock = DockStyle.Fill;
+                    this.tpComparison.Controls.Add(cComparisonText);
+                }));
+            }
+            else
+            {
+                cComparisonText = new ComparisonText();
+                cComparisonText.Dock = DockStyle.Fill;
+                this.tpComparison.Controls.Add(cComparisonText);
+            }
 
-            cXORCalculation = new XORCalculation(this);
-            cXORCalculation.Dock = DockStyle.Fill;
-            this.tpXOR.Controls.Add(cXORCalculation);
+            if (this.tpXOR.InvokeRequired)
+            {
+                this.tpXOR.Invoke(new Action(() =>
+                {
+                    cXORCalculation = new XORCalculation(this);
+                    cXORCalculation.Dock = DockStyle.Fill;
+                    this.tpXOR.Controls.Add(cXORCalculation);
+                }));
+            }
+            else
+            {
+                cXORCalculation = new XORCalculation(this);
+                cXORCalculation.Dock = DockStyle.Fill;
+                this.tpXOR.Controls.Add(cXORCalculation);
+            }
 
-            cTranscoding = new Transcoding();
-            cTranscoding.Dock = DockStyle.Fill;
-            this.tpTranscoding.Controls.Add(cTranscoding);
+            if (this.tpTranscoding.InvokeRequired)
+            {
+                this.tpTranscoding.Invoke(new Action(() =>
+                {
+                    cTranscoding = new Transcoding();
+                    cTranscoding.Dock = DockStyle.Fill;
+                    this.tpTranscoding.Controls.Add(cTranscoding);
+                }));
+            }
+            else
+            {
+                cTranscoding = new Transcoding();
+                cTranscoding.Dock = DockStyle.Fill;
+                this.tpTranscoding.Controls.Add(cTranscoding);
+            }
 
-            cExtractionData = new ExtractionData(this);
-            cExtractionData.Dock = DockStyle.Fill;
-            this.tpExtraction.Controls.Add(cExtractionData);
+            if (this.tpExtraction.InvokeRequired)
+            {
+                this.tpExtraction.Invoke(new Action(() =>
+                {
+                    cExtractionData = new ExtractionData(this);
+                    cExtractionData.Dock = DockStyle.Fill;
+                    this.tpExtraction.Controls.Add(cExtractionData);
+                }));
+            }
+            else
+            {
+                cExtractionData = new ExtractionData(this);
+                cExtractionData.Dock = DockStyle.Fill;
+                this.tpExtraction.Controls.Add(cExtractionData);
+            }
         }
 
         private void InitForm()
@@ -445,7 +566,7 @@ namespace WinsockPacketEditor
                     if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
                     {
                         Operate.PacketConfig.List.PacketToList();
-                        this.cPacketList.RefreshPacketList();
+                        this.cPacketList?.RefreshPacketList();
                     }
 
                     if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
@@ -479,7 +600,7 @@ namespace WinsockPacketEditor
 
                 await Task.Run(() =>
                 {
-                    this.cPacketList.ShowInjectInfo();
+                    this.cPacketList?.ShowInjectInfo();
                     this.ShowMenuInfo();                   
                 });
             }

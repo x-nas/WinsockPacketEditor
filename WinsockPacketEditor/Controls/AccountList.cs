@@ -27,6 +27,7 @@ namespace WinsockPacketEditor
         {
             this.InitMenu();
             this.InitTable_AccountList();
+            this.InitCalendar_ExpiryTime();
             this.Dark_Changed();
         }
 
@@ -125,7 +126,9 @@ namespace WinsockPacketEditor
             {
                 Dictionary<string, int> TimeCounts = new Dictionary<string, int>();
 
-                foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo)
+                var accountInfos = Operate.ProxyConfig.Account.lstAccountInfo.ToList();
+
+                foreach (AccountInfo ai in accountInfos)
                 {
                     string ExpiryTime = ai.ExpiryTime.ToString("yyyy-MM-dd");
 
@@ -146,7 +149,6 @@ namespace WinsockPacketEditor
                     {
                         dbList.Add(new AntdUI.DateBadge(kvp.Key, kvp.Value));
                     }
-
                     return dbList;
                 };
             }
@@ -204,9 +206,7 @@ namespace WinsockPacketEditor
                 for (int i = start; i < this.lstAccount.Count && i < start + pageSize; i++)
                 {
                     list.Add(this.lstAccount[i]);
-                }
-
-                this.InitCalendar_ExpiryTime();
+                }                
             }
             catch (Exception ex)
             {
