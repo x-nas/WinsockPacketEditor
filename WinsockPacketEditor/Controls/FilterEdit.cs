@@ -1308,7 +1308,19 @@ namespace WinsockPacketEditor
 
                     case "cmsFilterEdit_Exclude_Enable":
 
-                        ((CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex]).Back = Color.Violet;
+                        CellText ctExclude = (CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex];
+                        if (!string.IsNullOrEmpty(ctExclude.Text.Trim()))
+                        {
+                            ctExclude.Back = Color.Violet;                            
+                        }
+                        else
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "空值无法设置排除", TType.Error)
+                            {
+                                LocalizationText = "FilterEditForm.Exclude.Error"
+                            });
+                        }
+
                         tFilterEdit.Refresh();
 
                         break;
@@ -1768,14 +1780,15 @@ namespace WinsockPacketEditor
                             if (dtFilterNormal.Rows[0][i] != null)
                             {
                                 CellText ctSearch = (CellText)dtFilterNormal.Rows[0][i];
-                                if (ctSearch.Back == Color.Violet)
-                                {
-                                    sbExclude.Append(i).Append(",");
-                                }
-
                                 string sSearchValue = ctSearch.Text.Trim();
+
                                 if (!String.IsNullOrEmpty(sSearchValue))
                                 {
+                                    if (ctSearch.Back == Color.Violet)
+                                    {
+                                        sbExclude.Append(i).Append(",");
+                                    }
+
                                     sbSearch.Append(i).Append("|").Append(sSearchValue).Append(",");
                                 }
                             }
@@ -1805,14 +1818,15 @@ namespace WinsockPacketEditor
                             if (dtFilterAdvanced_Search.Rows[0][i] != null)
                             {
                                 CellText ctSearch = (CellText)dtFilterAdvanced_Search.Rows[0][i];
-                                if (ctSearch.Back == Color.Violet)
-                                {
-                                    sbExclude.Append(i).Append(",");
-                                }
-
                                 string sValue = ctSearch.Text.Trim();
+
                                 if (!String.IsNullOrEmpty(sValue))
                                 {
+                                    if (ctSearch.Back == Color.Violet)
+                                    {
+                                        sbExclude.Append(i).Append(",");
+                                    }
+
                                     sbSearch.Append(i).Append("|").Append(sValue).Append(",");
                                 }
                             }

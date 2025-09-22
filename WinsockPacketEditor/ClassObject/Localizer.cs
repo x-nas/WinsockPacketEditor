@@ -2188,6 +2188,9 @@ namespace WinsockPacketEditor
                 case "FilterEditForm.Progression":
                     return "Progression";
 
+                case "FilterEditForm.Exclude.Error":
+                    return "Cannot set Exclude for Empty";
+
                 case "FilterEditForm.AppointHead":
                     return "Appoint Head";
 
