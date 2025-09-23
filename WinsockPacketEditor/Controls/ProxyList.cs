@@ -963,13 +963,13 @@ namespace WinsockPacketEditor
                     Mode = SocketMode.Tcp,
 
                     // 连接限制
-                    MaxConnectionNumber = 20000,
-                    ListenBacklog = 1000,
+                    MaxConnectionNumber = 30000,
+                    ListenBacklog = 2048,
 
                     // 缓冲区设置
                     ReceiveBufferSize = 65535,
-                    SendBufferSize = 65535,
                     MaxRequestLength = 1024 * 1024 * 10,
+                    SendingQueueSize = 100,
 
                     // 超时设置
                     ClearIdleSession = true,
