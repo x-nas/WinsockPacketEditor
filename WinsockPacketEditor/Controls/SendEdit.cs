@@ -451,11 +451,7 @@ namespace WinsockPacketEditor
             {
                 if (this.SaveSend())
                 {
-                    if (this.form is InterfaceInfo.IInjectMode injectForm)
-                    {
-                        injectForm.RefreshSendList();
-                    }
-                    else if (this.form is InterfaceInfo.ISendList slForm)
+                    if (this.form is InterfaceInfo.ISendList slForm)
                     {
                         slForm.RefreshSendList();
                     }

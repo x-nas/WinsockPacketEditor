@@ -1920,11 +1920,7 @@ namespace WinsockPacketEditor
                     sSearch_New,
                     sModify_New);                
 
-                if (this.form is InterfaceInfo.IInjectMode injectForm)
-                {
-                    injectForm.RefreshFilterList();
-                }
-                else if (this.form is InterfaceInfo.IFilterList flForm)
+                if (this.form is InterfaceInfo.IFilterList flForm)
                 {
                     flForm.RefreshFilterList();
                 }

@@ -11,10 +11,7 @@ namespace WinsockPacketEditor
     {        
         private bool setcolor = false;
         private AntdUI.FormFloatButton FloatButton = null;
-        private PacketList cPacketList = null;
-        private FilterList cFilterList = null;
-        private SendList cSendList = null;
-        private RobotList cRobotList = null;
+        private PacketList cPacketList = null;        
         private LogList cLogList = null;
         private StatisticalData cStatisticalData = null;
         private ComparisonText cComparisonText = null;
@@ -109,55 +106,7 @@ namespace WinsockPacketEditor
                 cPacketList = new PacketList(this);
                 cPacketList.Dock = DockStyle.Fill;
                 this.tpPacketList.Controls.Add(cPacketList);
-            }
-
-            if (this.tpFilterList.InvokeRequired)
-            {
-                this.tpFilterList.Invoke(new Action(() =>
-                {
-                    cFilterList = new FilterList(this);
-                    cFilterList.Dock = DockStyle.Fill;
-                    this.tpFilterList.Controls.Add(cFilterList);
-                }));
-            }
-            else
-            {
-                cFilterList = new FilterList(this);
-                cFilterList.Dock = DockStyle.Fill;
-                this.tpFilterList.Controls.Add(cFilterList);
-            }
-
-            if (this.tpSendList.InvokeRequired)
-            {
-                this.tpSendList.Invoke(new Action(() =>
-                {
-                    cSendList = new SendList(this);
-                    cSendList.Dock = DockStyle.Fill;
-                    this.tpSendList.Controls.Add(cSendList);
-                }));
-            }
-            else
-            {
-                cSendList = new SendList(this);
-                cSendList.Dock = DockStyle.Fill;
-                this.tpSendList.Controls.Add(cSendList);
-            }
-
-            if (this.tpRobotList.InvokeRequired)
-            {
-                this.tpRobotList.Invoke(new Action(() =>
-                {
-                    cRobotList = new RobotList(this);
-                    cRobotList.Dock = DockStyle.Fill;
-                    this.tpRobotList.Controls.Add(cRobotList);
-                }));
-            }
-            else
-            {
-                cRobotList = new RobotList(this);
-                cRobotList.Dock = DockStyle.Fill;
-                this.tpRobotList.Controls.Add(cRobotList);
-            }
+            }            
 
             if (this.tpSystemLog.InvokeRequired)
             {
@@ -325,21 +274,6 @@ namespace WinsockPacketEditor
             this.cPacketList?.SearchPacketList(FromHead);
         }
 
-        public void RefreshFilterList()
-        {
-            this.cFilterList?.RefreshFilterList();
-        }
-
-        public void RefreshSendList()
-        {
-            this.cSendList?.RefreshSendList();
-        }
-
-        public void RefreshRobotList()
-        {
-            this.cSendList?.Refresh();
-        }
-
         public void RefreshPacketData()
         {
             this.cPacketList?.RefreshPacketData();
@@ -417,10 +351,7 @@ namespace WinsockPacketEditor
                 this.tabInjectMode.BackColor = Color.White;
             }
 
-            this.cPacketList?.Dark_Changed();
-            this.cFilterList?.Dark_Changed();
-            this.cSendList?.Dark_Changed();
-            this.cRobotList?.Dark_Changed();
+            this.cPacketList?.Dark_Changed();            
             this.cStatisticalData?.Dark_Changed();
             this.cComparisonText?.Dark_Changed();
             this.cXORCalculation?.Dark_Changed();
@@ -514,15 +445,33 @@ namespace WinsockPacketEditor
                     break;
 
                 case "miFilterList":
-                    this.tabInjectMode.SelectTab("tpFilterList");
+
+                    if (!Operate.FilterConfig.List.IsFilterListFormShow)
+                    {
+                        FilterListForm flForm = new FilterListForm();
+                        flForm.Show();
+                    }
+
                     break;
 
                 case "miSendList":
-                    this.tabInjectMode.SelectTab("tpSendList");
+
+                    if (!Operate.SendConfig.List.IsSendListFormShow)
+                    {
+                        SendListForm slForm = new SendListForm();
+                        slForm.Show();
+                    }
+
                     break;
 
                 case "miRobotList":
-                    this.tabInjectMode.SelectTab("tpRobotList");
+
+                    if (!Operate.RobotConfig.List.IsRobotListFormShow)
+                    {
+                        RobotListForm rlForm = new RobotListForm();
+                        rlForm.Show();
+                    }
+
                     break;
 
                 case "miStatistical":

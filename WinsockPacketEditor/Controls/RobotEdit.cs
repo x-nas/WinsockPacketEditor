@@ -780,11 +780,7 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                if (this.form is InterfaceInfo.IInjectMode injectForm)
-                {
-                    injectForm.RefreshRobotList();
-                }
-                else if (this.form is InterfaceInfo.IRobotList rlForm)
+                if (this.form is InterfaceInfo.IRobotList rlForm)
                 {
                     rlForm.RefreshRobotList();
                 }

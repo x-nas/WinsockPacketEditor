@@ -36,12 +36,6 @@ namespace WinsockPacketEditor
 
             void RefreshPacketData();
 
-            void RefreshFilterList();
-
-            void RefreshSendList();
-
-            void RefreshRobotList();
-
             void CleanUp_LogList();
 
             void SetTextA(string TextA);
