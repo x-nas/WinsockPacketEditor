@@ -33,10 +33,7 @@ namespace WinsockPacketEditor
             {
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
-                Operate.SystemConfig.LoadSystemList_FromDB();
-                Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
-                Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
-                Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();                
+                Operate.SystemConfig.LoadSystemList_FromDB();        
 
                 this.InitGlobal();                
                 this.InitHotKeys();
@@ -67,9 +64,6 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();
-            Operate.ProxyConfig.Account.SaveAccountList_ToDB();
-            Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
-            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
@@ -596,9 +590,7 @@ namespace WinsockPacketEditor
                 Operate.SystemConfig.SaveSystemConfig_ToDB();
                 Operate.SystemConfig.SaveInjectMode_ToDB();
                 Operate.SystemConfig.SaveProxyMode_ToDB();
-                Operate.SystemConfig.SaveSystemList_ToDB();                
-                Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
-                Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
+                Operate.SystemConfig.SaveSystemList_ToDB();
             }
             catch (Exception ex)
             {
