@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            AntdUI.MenuItem menuItem37 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem38 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem39 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem40 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem41 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem42 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem43 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem44 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem45 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem46 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem47 = new AntdUI.MenuItem();
-            AntdUI.MenuItem menuItem48 = new AntdUI.MenuItem();
-            AntdUI.Tabs.StyleLine styleLine4 = new AntdUI.Tabs.StyleLine();
+            AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem4 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem5 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxyModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -53,11 +53,6 @@
             this.bMenuCollapse = new AntdUI.Button();
             this.tabProxyMode = new AntdUI.Tabs();
             this.tpProxyList = new AntdUI.TabPage();
-            this.tpClientList = new AntdUI.TabPage();
-            this.tpAccountList = new AntdUI.TabPage();
-            this.tpFilterList = new AntdUI.TabPage();
-            this.tpSendList = new AntdUI.TabPage();
-            this.tpRobotList = new AntdUI.TabPage();
             this.tpStatistical = new AntdUI.TabPage();
             this.tpComparison = new AntdUI.TabPage();
             this.tpXOR = new AntdUI.TabPage();
@@ -169,69 +164,69 @@
             this.mProxyMode.Dock = System.Windows.Forms.DockStyle.Left;
             this.mProxyMode.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.mProxyMode.IconRatio = 1F;
-            menuItem37.Badge = "";
-            menuItem37.IconSvg = "ProjectFilled";
-            menuItem37.ID = "miProxyList";
-            menuItem37.LocalizationText = "ProxyModeForm.{id}";
-            menuItem37.Select = true;
-            menuItem37.Text = "代理数据";
-            menuItem38.IconSvg = "DesktopOutlined";
-            menuItem38.ID = "miClientList";
-            menuItem38.LocalizationText = "ProxyModeForm.{id}";
-            menuItem38.Text = "客户端列表";
-            menuItem39.IconSvg = "TeamOutlined";
-            menuItem39.ID = "miAccountList";
-            menuItem39.LocalizationText = "ProxyModeForm.{id}";
-            menuItem39.Text = "账号列表";
-            menuItem40.IconSvg = "FilterOutlined";
-            menuItem40.ID = "miFilterList";
-            menuItem40.LocalizationText = "ProxyModeForm.{id}";
-            menuItem40.Text = "滤镜列表";
-            menuItem41.IconSvg = "SendOutlined";
-            menuItem41.ID = "miSendList";
-            menuItem41.LocalizationText = "ProxyModeForm.{id}";
-            menuItem41.Text = "发送列表";
-            menuItem42.IconSvg = "RobotOutlined";
-            menuItem42.ID = "miRobotList";
-            menuItem42.LocalizationText = "ProxyModeForm.{id}";
-            menuItem42.Text = "机器人列表";
-            menuItem43.IconSvg = "PieChartOutlined";
-            menuItem43.ID = "miStatistical";
-            menuItem43.LocalizationText = "ProxyModeForm.{id}";
-            menuItem43.Text = "统计数据";
-            menuItem44.IconSvg = "DiffOutlined";
-            menuItem44.ID = "miComparison";
-            menuItem44.LocalizationText = "ProxyModeForm.{id}";
-            menuItem44.Text = "文本对比";
-            menuItem45.IconSvg = "BuildOutlined";
-            menuItem45.ID = "miXOR";
-            menuItem45.LocalizationText = "ProxyModeForm.{id}";
-            menuItem45.Text = "异或计算";
-            menuItem46.IconSvg = "InteractionOutlined";
-            menuItem46.ID = "miTranscoding";
-            menuItem46.LocalizationText = "ProxyModeForm.{id}";
-            menuItem46.Text = "编码转换";
-            menuItem47.IconSvg = "DeliveredProcedureOutlined";
-            menuItem47.ID = "miExtraction";
-            menuItem47.LocalizationText = "ProxyModeForm.{id}";
-            menuItem47.Text = "数据提取";
-            menuItem48.Badge = "";
-            menuItem48.IconSvg = "ExceptionOutlined";
-            menuItem48.ID = "miSystemLog";
-            menuItem48.LocalizationText = "ProxyModeForm.{id}";
-            menuItem48.Text = "系统日志";
-            this.mProxyMode.Items.Add(menuItem37);
-            this.mProxyMode.Items.Add(menuItem38);
-            this.mProxyMode.Items.Add(menuItem39);
-            this.mProxyMode.Items.Add(menuItem40);
-            this.mProxyMode.Items.Add(menuItem41);
-            this.mProxyMode.Items.Add(menuItem42);
-            this.mProxyMode.Items.Add(menuItem43);
-            this.mProxyMode.Items.Add(menuItem44);
-            this.mProxyMode.Items.Add(menuItem45);
-            this.mProxyMode.Items.Add(menuItem46);
-            this.mProxyMode.Items.Add(menuItem47);
-            this.mProxyMode.Items.Add(menuItem48);
+            menuItem1.Badge = "";
+            menuItem1.IconSvg = "ProjectFilled";
+            menuItem1.ID = "miProxyList";
+            menuItem1.LocalizationText = "ProxyModeForm.{id}";
+            menuItem1.Select = true;
+            menuItem1.Text = "代理数据";
+            menuItem2.IconSvg = "DesktopOutlined";
+            menuItem2.ID = "miClientList";
+            menuItem2.LocalizationText = "ProxyModeForm.{id}";
+            menuItem2.Text = "客户端列表";
+            menuItem3.IconSvg = "TeamOutlined";
+            menuItem3.ID = "miAccountList";
+            menuItem3.LocalizationText = "ProxyModeForm.{id}";
+            menuItem3.Text = "账号列表";
+            menuItem4.IconSvg = "FilterOutlined";
+            menuItem4.ID = "miFilterList";
+            menuItem4.LocalizationText = "ProxyModeForm.{id}";
+            menuItem4.Text = "滤镜列表";
+            menuItem5.IconSvg = "SendOutlined";
+            menuItem5.ID = "miSendList";
+            menuItem5.LocalizationText = "ProxyModeForm.{id}";
+            menuItem5.Text = "发送列表";
+            menuItem6.IconSvg = "RobotOutlined";
+            menuItem6.ID = "miRobotList";
+            menuItem6.LocalizationText = "ProxyModeForm.{id}";
+            menuItem6.Text = "机器人列表";
+            menuItem7.IconSvg = "PieChartOutlined";
+            menuItem7.ID = "miStatistical";
+            menuItem7.LocalizationText = "ProxyModeForm.{id}";
+            menuItem7.Text = "统计数据";
+            menuItem8.IconSvg = "DiffOutlined";
+            menuItem8.ID = "miComparison";
+            menuItem8.LocalizationText = "ProxyModeForm.{id}";
+            menuItem8.Text = "文本对比";
+            menuItem9.IconSvg = "BuildOutlined";
+            menuItem9.ID = "miXOR";
+            menuItem9.LocalizationText = "ProxyModeForm.{id}";
+            menuItem9.Text = "异或计算";
+            menuItem10.IconSvg = "InteractionOutlined";
+            menuItem10.ID = "miTranscoding";
+            menuItem10.LocalizationText = "ProxyModeForm.{id}";
+            menuItem10.Text = "编码转换";
+            menuItem11.IconSvg = "DeliveredProcedureOutlined";
+            menuItem11.ID = "miExtraction";
+            menuItem11.LocalizationText = "ProxyModeForm.{id}";
+            menuItem11.Text = "数据提取";
+            menuItem12.Badge = "";
+            menuItem12.IconSvg = "ExceptionOutlined";
+            menuItem12.ID = "miSystemLog";
+            menuItem12.LocalizationText = "ProxyModeForm.{id}";
+            menuItem12.Text = "系统日志";
+            this.mProxyMode.Items.Add(menuItem1);
+            this.mProxyMode.Items.Add(menuItem2);
+            this.mProxyMode.Items.Add(menuItem3);
+            this.mProxyMode.Items.Add(menuItem4);
+            this.mProxyMode.Items.Add(menuItem5);
+            this.mProxyMode.Items.Add(menuItem6);
+            this.mProxyMode.Items.Add(menuItem7);
+            this.mProxyMode.Items.Add(menuItem8);
+            this.mProxyMode.Items.Add(menuItem9);
+            this.mProxyMode.Items.Add(menuItem10);
+            this.mProxyMode.Items.Add(menuItem11);
+            this.mProxyMode.Items.Add(menuItem12);
             this.mProxyMode.Location = new System.Drawing.Point(3, 49);
             this.mProxyMode.Name = "mProxyMode";
             this.mProxyMode.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
@@ -256,11 +251,6 @@
             // tabProxyMode
             // 
             this.tabProxyMode.Controls.Add(this.tpProxyList);
-            this.tabProxyMode.Controls.Add(this.tpClientList);
-            this.tabProxyMode.Controls.Add(this.tpAccountList);
-            this.tabProxyMode.Controls.Add(this.tpFilterList);
-            this.tabProxyMode.Controls.Add(this.tpSendList);
-            this.tabProxyMode.Controls.Add(this.tpRobotList);
             this.tabProxyMode.Controls.Add(this.tpStatistical);
             this.tabProxyMode.Controls.Add(this.tpComparison);
             this.tabProxyMode.Controls.Add(this.tpXOR);
@@ -272,11 +262,6 @@
             this.tabProxyMode.Location = new System.Drawing.Point(170, 60);
             this.tabProxyMode.Name = "tabProxyMode";
             this.tabProxyMode.Pages.Add(this.tpProxyList);
-            this.tabProxyMode.Pages.Add(this.tpClientList);
-            this.tabProxyMode.Pages.Add(this.tpAccountList);
-            this.tabProxyMode.Pages.Add(this.tpFilterList);
-            this.tabProxyMode.Pages.Add(this.tpSendList);
-            this.tabProxyMode.Pages.Add(this.tpRobotList);
             this.tabProxyMode.Pages.Add(this.tpStatistical);
             this.tabProxyMode.Pages.Add(this.tpComparison);
             this.tabProxyMode.Pages.Add(this.tpXOR);
@@ -284,7 +269,7 @@
             this.tabProxyMode.Pages.Add(this.tpExtraction);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
             this.tabProxyMode.Size = new System.Drawing.Size(1280, 742);
-            this.tabProxyMode.Style = styleLine4;
+            this.tabProxyMode.Style = styleLine1;
             this.tabProxyMode.TabIndex = 11;
             this.tabProxyMode.Text = "tabs1";
             // 
@@ -296,51 +281,6 @@
             this.tpProxyList.Size = new System.Drawing.Size(1280, 706);
             this.tpProxyList.TabIndex = 0;
             this.tpProxyList.Text = "代理数据";
-            // 
-            // tpClientList
-            // 
-            this.tpClientList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpClientList.Location = new System.Drawing.Point(0, 36);
-            this.tpClientList.Name = "tpClientList";
-            this.tpClientList.Size = new System.Drawing.Size(1280, 706);
-            this.tpClientList.TabIndex = 8;
-            this.tpClientList.Text = "客户端列表";
-            // 
-            // tpAccountList
-            // 
-            this.tpAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpAccountList.Location = new System.Drawing.Point(0, 36);
-            this.tpAccountList.Name = "tpAccountList";
-            this.tpAccountList.Size = new System.Drawing.Size(1280, 706);
-            this.tpAccountList.TabIndex = 7;
-            this.tpAccountList.Text = "账号列表";
-            // 
-            // tpFilterList
-            // 
-            this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpFilterList.Location = new System.Drawing.Point(0, 36);
-            this.tpFilterList.Name = "tpFilterList";
-            this.tpFilterList.Size = new System.Drawing.Size(1280, 706);
-            this.tpFilterList.TabIndex = 9;
-            this.tpFilterList.Text = "滤镜列表";
-            // 
-            // tpSendList
-            // 
-            this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpSendList.Location = new System.Drawing.Point(0, 36);
-            this.tpSendList.Name = "tpSendList";
-            this.tpSendList.Size = new System.Drawing.Size(1280, 706);
-            this.tpSendList.TabIndex = 10;
-            this.tpSendList.Text = "发送列表";
-            // 
-            // tpRobotList
-            // 
-            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpRobotList.Location = new System.Drawing.Point(0, 36);
-            this.tpRobotList.Name = "tpRobotList";
-            this.tpRobotList.Size = new System.Drawing.Size(1280, 706);
-            this.tpRobotList.TabIndex = 11;
-            this.tpRobotList.Text = "机器人列表";
             // 
             // tpStatistical
             // 
@@ -454,15 +394,10 @@
         private AntdUI.Button bMenuCollapse;
         private AntdUI.Tabs tabProxyMode;
         private AntdUI.TabPage tpProxyList;
-        private AntdUI.TabPage tpAccountList;
         private AntdUI.TabPage tpStatistical;
         private AntdUI.TabPage tpSystemLog;
-        private AntdUI.TabPage tpClientList;
         private System.Windows.Forms.Timer timerProxyList;
         private System.Windows.Forms.Timer timerProxyListInfo;
-        private AntdUI.TabPage tpFilterList;
-        private AntdUI.TabPage tpSendList;
-        private AntdUI.TabPage tpRobotList;
         private AntdUI.TabPage tpComparison;
         private AntdUI.TabPage tpXOR;
         private AntdUI.TabPage tpTranscoding;
