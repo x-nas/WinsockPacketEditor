@@ -333,6 +333,9 @@ namespace WinsockPacketEditor
                 case "RobotList":
                     return "Robot List";
 
+                case "ClientList":
+                    return "Client List";
+
                 case "Username":
                     return "Username";
 

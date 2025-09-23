@@ -11,18 +11,13 @@ namespace WinsockPacketEditor
     {        
         private bool setcolor = false;                        
         private AntdUI.FormFloatButton FloatButton = null;
-        private ProxyList cProxyList = null;
-        private FilterList cFilterList = null;
-        private SendList cSendList = null;
-        private RobotList cRobotList = null;
+        private ProxyList cProxyList = null;        
         private LogList cLogList = null;
         private StatisticalData cStatisticalData = null;
         private ComparisonText cComparisonText = null;
         private XORCalculation cXORCalculation = null;
         private Transcoding cTranscoding = null;
-        private ExtractionData cExtractionData = null;
-        private AccountList cAccountList = null;
-        private ClientList cClientList = null;
+        private ExtractionData cExtractionData = null;        
 
         #region//窗体事件
 
@@ -120,86 +115,6 @@ namespace WinsockPacketEditor
                 cProxyList = new ProxyList(this);
                 cProxyList.Dock = DockStyle.Fill;
                 this.tpProxyList.Controls.Add(cProxyList);
-            }
-
-            if (this.tpAccountList.InvokeRequired)
-            {
-                this.tpAccountList.Invoke(new Action(() =>
-                {
-                    cAccountList = new AccountList(this);
-                    cAccountList.Dock = DockStyle.Fill;
-                    this.tpAccountList.Controls.Add(cAccountList);
-                }));
-            }
-            else
-            {
-                cAccountList = new AccountList(this);
-                cAccountList.Dock = DockStyle.Fill;
-                this.tpAccountList.Controls.Add(cAccountList);
-            }
-
-            if (this.tpClientList.InvokeRequired)
-            {
-                this.tpClientList.Invoke(new Action(() =>
-                {
-                    cClientList = new ClientList();
-                    cClientList.Dock = DockStyle.Fill;
-                    this.tpClientList.Controls.Add(cClientList);
-                }));
-            }
-            else
-            {
-                cClientList = new ClientList();
-                cClientList.Dock = DockStyle.Fill;
-                this.tpClientList.Controls.Add(cClientList);
-            }
-
-            if (this.tpFilterList.InvokeRequired)
-            {
-                this.tpFilterList.Invoke(new Action(() =>
-                {
-                    cFilterList = new FilterList(this);
-                    cFilterList.Dock = DockStyle.Fill;
-                    this.tpFilterList.Controls.Add(cFilterList);
-                }));
-            }
-            else
-            {
-                cFilterList = new FilterList(this);
-                cFilterList.Dock = DockStyle.Fill;
-                this.tpFilterList.Controls.Add(cFilterList);
-            }
-
-            if (this.tpSendList.InvokeRequired)
-            {
-                this.tpSendList.Invoke(new Action(() =>
-                {
-                    cSendList = new SendList(this);
-                    cSendList.Dock = DockStyle.Fill;
-                    this.tpSendList.Controls.Add(cSendList);
-                }));
-            }
-            else
-            {
-                cSendList = new SendList(this);
-                cSendList.Dock = DockStyle.Fill;
-                this.tpSendList.Controls.Add(cSendList);
-            }
-
-            if (this.tpRobotList.InvokeRequired)
-            {
-                this.tpRobotList.Invoke(new Action(() =>
-                {
-                    cRobotList = new RobotList(this);
-                    cRobotList.Dock = DockStyle.Fill;
-                    this.tpRobotList.Controls.Add(cRobotList);
-                }));
-            }
-            else
-            {
-                cRobotList = new RobotList(this);
-                cRobotList.Dock = DockStyle.Fill;
-                this.tpRobotList.Controls.Add(cRobotList);
             }
 
             if (this.tpSystemLog.InvokeRequired)
@@ -374,31 +289,11 @@ namespace WinsockPacketEditor
         public void InitFloatButton()
         {
             Operate.SystemConfig.InitFloatButton(this, this.FloatButton);
-        }
-
-        public void RefreshFilterList()
-        {
-            this.cFilterList?.RefreshFilterList();
-        }
+        }        
 
         public void RefreshProxyData()
         {
             this.cProxyList?.RefreshProxyData();
-        }
-
-        public void RefreshAccountList()
-        {
-            this.cAccountList?.RefreshAccountList();
-        }
-
-        public void RefreshSendList()
-        {
-            this.cSendList?.RefreshSendList();
-        }
-
-        public void RefreshRobotList()
-        {
-            this.cRobotList?.RefreshRobotList();
         }
 
         public void CleanUp_LogList()
@@ -473,12 +368,7 @@ namespace WinsockPacketEditor
                 this.tabProxyMode.BackColor = Color.White;
             }
 
-            this.cProxyList?.Dark_Changed();
-            this.cAccountList?.Dark_Changed();
-            this.cClientList?.Dark_Changed();
-            this.cFilterList?.Dark_Changed();
-            this.cSendList?.Dark_Changed();
-            this.cRobotList?.Dark_Changed();
+            this.cProxyList?.Dark_Changed();        
             this.cStatisticalData?.Dark_Changed();
             this.cComparisonText?.Dark_Changed();
             this.cXORCalculation?.Dark_Changed();
@@ -594,10 +484,7 @@ namespace WinsockPacketEditor
 
                 await Task.Run(() =>
                 {
-                    this.cProxyList?.ShowProxyInfo();
-                    this.cClientList?.RefreshClientList();
-                    this.cClientList?.RefreshAuthList();
-                    this.cAccountList?.RefreshAccountList();                    
+                    this.cProxyList?.ShowProxyInfo();                
                     this.ShowMenuInfo();
                 });
 
@@ -630,8 +517,8 @@ namespace WinsockPacketEditor
             try
             {
                 this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
-                this.mProxyMode.Items[1].Badge = this.cClientList?.GetClientNumber().ToString();
-                this.mProxyMode.Items[2].Badge = this.cAccountList?.lstAccount.Count.ToString();
+                this.mProxyMode.Items[1].Badge = Operate.ProxyConfig.List.ClientNumber.ToString();
+                this.mProxyMode.Items[2].Badge = Operate.ProxyConfig.Account.lstAccountInfo.Count.ToString();
                 this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
                 this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
                 this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
@@ -676,23 +563,53 @@ namespace WinsockPacketEditor
                     break;
 
                 case "miClientList":
-                    this.tabProxyMode.SelectTab("tpClientList");
+
+                    if (!Operate.ProxyConfig.List.IsClientListFormShow)
+                    {
+                        ClientListForm clForm = new ClientListForm();
+                        clForm.Show();
+                    }
+
                     break;
 
                 case "miAccountList":
-                    this.tabProxyMode.SelectTab("tpAccountList");
+
+                    if (!Operate.ProxyConfig.Account.IsAccountListFormShow)
+                    {
+                        AccountListForm alForm = new AccountListForm();
+                        alForm.Show();
+                    }
+
                     break;
 
                 case "miFilterList":
-                    this.tabProxyMode.SelectTab("tpFilterList");
+
+                    if (!Operate.FilterConfig.List.IsFilterListFormShow)
+                    {
+                        FilterListForm flForm = new FilterListForm();
+                        flForm.Show();
+                    }                    
+
                     break;
 
                 case "miSendList":
-                    this.tabProxyMode.SelectTab("tpSendList");
+
+                    if (!Operate.SendConfig.List.IsSendListFormShow)
+                    {
+                        SendListForm slForm = new SendListForm();
+                        slForm.Show();
+                    }
+
                     break;
 
                 case "miRobotList":
-                    this.tabProxyMode.SelectTab("tpRobotList");
+
+                    if (!Operate.RobotConfig.List.IsRobotListFormShow)
+                    {
+                        RobotListForm rlForm = new RobotListForm();
+                        rlForm.Show();
+                    }
+
                     break;
 
                 case "miStatistical":
@@ -736,7 +653,11 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
                 Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
 
-                this.cAccountList?.SaveAccountList();
+                if (Operate.ProxyConfig.Account.NeedSave)
+                {
+                    Operate.ProxyConfig.Account.NeedSave = false;
+                    Operate.ProxyConfig.Account.SaveAccountList_ToDB();
+                }
             }
             catch (Exception ex)
             {

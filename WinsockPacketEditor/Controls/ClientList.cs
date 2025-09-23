@@ -95,12 +95,7 @@ namespace WinsockPacketEditor
                 this.tAuthList.BackColor = Color.White;
                 this.tAuthList.ColumnBack = null;                    
             }
-        }        
-
-        public int GetClientNumber()
-        {
-            return this.treeClientList.Items.Count();
-        }        
+        }                  
 
         #endregion
 
@@ -196,6 +191,8 @@ namespace WinsockPacketEditor
                 }
 
                 this.treeClientList.PauseLayout = false;
+
+                Operate.ProxyConfig.List.ClientNumber = this.treeClientList.Items.Count();
 
                 #endregion
 

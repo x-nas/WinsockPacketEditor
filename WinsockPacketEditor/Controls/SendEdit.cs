@@ -455,9 +455,9 @@ namespace WinsockPacketEditor
                     {
                         injectForm.RefreshSendList();
                     }
-                    else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                    else if (this.form is InterfaceInfo.ISendList slForm)
                     {
-                        proxyForm.RefreshSendList();
+                        slForm.RefreshSendList();
                     }
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送保存成功", TType.Success)

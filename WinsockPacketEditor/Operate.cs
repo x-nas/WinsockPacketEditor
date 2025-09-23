@@ -5642,6 +5642,8 @@ namespace WinsockPacketEditor
                 public static bool IsShow_PacketData = true;
                 public static int Search_Index = -1;                
                 public static ProxyInfo piSelect = null;
+                public static int ClientNumber = 0;
+                public static bool IsClientListFormShow = false;
 
                 public static readonly ConcurrentDictionary<Guid, ProxyUDP> cdProxyUDP = new ConcurrentDictionary<Guid, ProxyUDP>();
                 public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(5);
@@ -5790,6 +5792,7 @@ namespace WinsockPacketEditor
 
             public static class Account
             {
+                public static bool IsAccountListFormShow = false;
                 public static bool NeedSave = false;
                 public static bool IsShow_ProxyAccount = false, IsShow_ProxyAuth = false;                
                 public static string CCProxy_HTML = string.Empty;
@@ -6448,10 +6451,10 @@ namespace WinsockPacketEditor
                                     }
                                 }
 
-                                if (form is InterfaceInfo.IProxyMode proxyForm)
+                                if (form is InterfaceInfo.IAccountList alForm)
                                 {
                                     Operate.ProxyConfig.Account.NeedSave = true;
-                                    proxyForm.RefreshAccountList();
+                                    alForm.RefreshAccountList();
                                 }
 
                                 return true;
@@ -7095,10 +7098,10 @@ namespace WinsockPacketEditor
                                     }
                                 }, () =>
                                 {
-                                    if (form is InterfaceInfo.IProxyMode proxyForm)
+                                    if (form is InterfaceInfo.IAccountList alForm)
                                     {
                                         Operate.ProxyConfig.Account.NeedSave = true;
-                                        proxyForm.RefreshAccountList();
+                                        alForm.RefreshAccountList();
                                     }
                                 });                                
                             }
@@ -12707,6 +12710,7 @@ namespace WinsockPacketEditor
 
             public static class List
             {
+                public static bool IsFilterListFormShow = false;
                 public static BindingList<FilterInfo> lstFilterInfo = new BindingList<FilterInfo>();
 
                 #region//滤镜入列表
@@ -14410,6 +14414,7 @@ namespace WinsockPacketEditor
 
             public static class List
             {
+                public static bool IsSendListFormShow = false;
                 public static List<SendExecute> lstSendExecute = new List<SendExecute>();
                 public static BindingList<SendInfo> lstSendInfo = new BindingList<SendInfo>();
 
@@ -15925,6 +15930,7 @@ namespace WinsockPacketEditor
 
             public static class List
             {
+                public static bool IsRobotListFormShow = false;
                 public static List<RobotExecute> lstRobotExecute = new List<RobotExecute>();
                 public static BindingList<RobotInfo> lstRobotInfo = new BindingList<RobotInfo>();
 

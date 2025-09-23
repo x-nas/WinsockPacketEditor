@@ -520,19 +520,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
-
-        #region//保存账号列表
-
-        public void SaveAccountList()
-        {
-            if (Operate.ProxyConfig.Account.NeedSave)
-            {
-                Operate.ProxyConfig.Account.NeedSave = false;
-                Operate.ProxyConfig.Account.SaveAccountList_ToDB();
-            }
-        }
-
-        #endregion        
+        #endregion                
     }
 }

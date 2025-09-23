@@ -784,9 +784,9 @@ namespace WinsockPacketEditor
                 {
                     injectForm.RefreshRobotList();
                 }
-                else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                else if (this.form is InterfaceInfo.IRobotList rlForm)
                 {
-                    proxyForm.RefreshRobotList();
+                    rlForm.RefreshRobotList();
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人保存成功", TType.Success)

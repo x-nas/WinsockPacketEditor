@@ -43,24 +43,21 @@
             // 
             // tlpAccountList
             // 
-            this.tlpAccountList.ColumnCount = 3;
-            this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpAccountList.ColumnCount = 1;
             this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpAccountList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpAccountList.Controls.Add(this.tAccountList, 1, 2);
-            this.tlpAccountList.Controls.Add(this.tlpAccountListButton, 1, 1);
-            this.tlpAccountList.Controls.Add(this.pAccountList, 1, 3);
+            this.tlpAccountList.Controls.Add(this.tAccountList, 0, 1);
+            this.tlpAccountList.Controls.Add(this.tlpAccountListButton, 0, 0);
+            this.tlpAccountList.Controls.Add(this.pAccountList, 0, 2);
             this.tlpAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpAccountList.Location = new System.Drawing.Point(0, 0);
             this.tlpAccountList.Margin = new System.Windows.Forms.Padding(0);
             this.tlpAccountList.Name = "tlpAccountList";
-            this.tlpAccountList.RowCount = 4;
-            this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpAccountList.RowCount = 3;
             this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpAccountList.Size = new System.Drawing.Size(1200, 800);
+            this.tlpAccountList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpAccountList.Size = new System.Drawing.Size(1100, 600);
             this.tlpAccountList.TabIndex = 2;
             // 
             // tAccountList
@@ -69,9 +66,9 @@
             this.tAccountList.CellImpactHeight = false;
             this.tAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tAccountList.Gap = 12;
-            this.tAccountList.Location = new System.Drawing.Point(33, 73);
+            this.tAccountList.Location = new System.Drawing.Point(3, 53);
             this.tAccountList.Name = "tAccountList";
-            this.tAccountList.Size = new System.Drawing.Size(1134, 678);
+            this.tAccountList.Size = new System.Drawing.Size(1094, 498);
             this.tAccountList.TabIndex = 1;
             this.tAccountList.CellClick += new AntdUI.Table.ClickEventHandler(this.tAccountList_CellClick);
             this.tAccountList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tAccountList_CellButtonClick);
@@ -93,13 +90,13 @@
             this.tlpAccountListButton.Controls.Add(this.dtpExpiryTime, 0, 1);
             this.tlpAccountListButton.Controls.Add(this.bSearchExpiryTime, 1, 1);
             this.tlpAccountListButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpAccountListButton.Location = new System.Drawing.Point(30, 20);
+            this.tlpAccountListButton.Location = new System.Drawing.Point(0, 0);
             this.tlpAccountListButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpAccountListButton.Name = "tlpAccountListButton";
             this.tlpAccountListButton.RowCount = 2;
             this.tlpAccountListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAccountListButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpAccountListButton.Size = new System.Drawing.Size(1140, 50);
+            this.tlpAccountListButton.Size = new System.Drawing.Size(1100, 50);
             this.tlpAccountListButton.TabIndex = 2;
             // 
             // ddMenu
@@ -109,7 +106,7 @@
             this.ddMenu.Ghost = true;
             this.ddMenu.IconRatio = 1F;
             this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(1093, 1);
+            this.ddMenu.Location = new System.Drawing.Point(1053, 1);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
             this.ddMenu.Size = new System.Drawing.Size(44, 46);
@@ -139,7 +136,7 @@
             this.txtSearchUserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchUserName.LocalizationPlaceholderText = "AccountList.SearchAccount";
             this.txtSearchUserName.LocalizationText = "";
-            this.txtSearchUserName.Location = new System.Drawing.Point(843, 1);
+            this.txtSearchUserName.Location = new System.Drawing.Point(803, 1);
             this.txtSearchUserName.Name = "txtSearchUserName";
             this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
             this.txtSearchUserName.PrefixSvg = "SearchOutlined";
@@ -180,11 +177,11 @@
             // 
             this.pAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pAccountList.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.pAccountList.Location = new System.Drawing.Point(33, 757);
+            this.pAccountList.Location = new System.Drawing.Point(3, 557);
             this.pAccountList.Name = "pAccountList";
             this.pAccountList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.pAccountList.ShowSizeChanger = true;
-            this.pAccountList.Size = new System.Drawing.Size(1134, 40);
+            this.pAccountList.Size = new System.Drawing.Size(1094, 40);
             this.pAccountList.TabIndex = 3;
             this.pAccountList.ValueChanged += new AntdUI.PageValueEventHandler(this.pAccountList_ValueChanged);
             this.pAccountList.ShowTotalChanged += new AntdUI.PageValueRtEventHandler(this.pAccountList_ShowTotalChanged);
@@ -198,7 +195,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "AccountList";
-            this.Size = new System.Drawing.Size(1200, 800);
+            this.Size = new System.Drawing.Size(1100, 600);
             this.Load += new System.EventHandler(this.AccountList_Load);
             this.tlpAccountList.ResumeLayout(false);
             this.tlpAccountListButton.ResumeLayout(false);

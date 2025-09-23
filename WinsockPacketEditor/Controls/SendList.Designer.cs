@@ -31,33 +31,31 @@
             this.tlpSendList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tSendList = new AntdUI.Table();
             this.tlpSendListButton = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.bSendList_Reset = new AntdUI.Button();
             this.bDisableAll = new AntdUI.Button();
             this.bEnableAll = new AntdUI.Button();
             this.ddMenu = new AntdUI.Dropdown();
             this.bSendList_Stop = new AntdUI.Button();
             this.bSendList_Start = new AntdUI.Button();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
-            this.bSendList_Reset = new AntdUI.Button();
             this.tlpSendList.SuspendLayout();
             this.tlpSendListButton.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSendList
             // 
-            this.tlpSendList.ColumnCount = 3;
-            this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpSendList.ColumnCount = 1;
             this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpSendList.Controls.Add(this.tSendList, 1, 2);
-            this.tlpSendList.Controls.Add(this.tlpSendListButton, 1, 1);
+            this.tlpSendList.Controls.Add(this.tSendList, 0, 1);
+            this.tlpSendList.Controls.Add(this.tlpSendListButton, 0, 0);
             this.tlpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSendList.Location = new System.Drawing.Point(0, 0);
             this.tlpSendList.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendList.Name = "tlpSendList";
-            this.tlpSendList.RowCount = 3;
-            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSendList.RowCount = 2;
             this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSendList.Size = new System.Drawing.Size(800, 800);
             this.tlpSendList.TabIndex = 4;
             // 
@@ -67,10 +65,10 @@
             this.tSendList.CellImpactHeight = false;
             this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tSendList.Gap = 12;
-            this.tSendList.Location = new System.Drawing.Point(33, 73);
+            this.tSendList.Location = new System.Drawing.Point(3, 53);
             this.tSendList.MultipleRows = true;
             this.tSendList.Name = "tSendList";
-            this.tSendList.Size = new System.Drawing.Size(734, 724);
+            this.tSendList.Size = new System.Drawing.Size(794, 744);
             this.tSendList.TabIndex = 1;
             this.tSendList.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellClick);
             this.tSendList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tSendList_CellButtonClick);
@@ -93,13 +91,27 @@
             this.tlpSendListButton.Controls.Add(this.bSendList_Stop, 4, 0);
             this.tlpSendListButton.Controls.Add(this.bSendList_Start, 3, 0);
             this.tlpSendListButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSendListButton.Location = new System.Drawing.Point(30, 20);
+            this.tlpSendListButton.Location = new System.Drawing.Point(0, 0);
             this.tlpSendListButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendListButton.Name = "tlpSendListButton";
             this.tlpSendListButton.RowCount = 1;
             this.tlpSendListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendListButton.Size = new System.Drawing.Size(740, 50);
+            this.tlpSendListButton.Size = new System.Drawing.Size(800, 50);
             this.tlpSendListButton.TabIndex = 3;
+            // 
+            // bSendList_Reset
+            // 
+            this.bSendList_Reset.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bSendList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Reset.IconSvg = "UndoOutlined";
+            this.bSendList_Reset.LocalizationText = "FilterList.ResetCount";
+            this.bSendList_Reset.Location = new System.Drawing.Point(243, 3);
+            this.bSendList_Reset.Name = "bSendList_Reset";
+            this.bSendList_Reset.Size = new System.Drawing.Size(114, 44);
+            this.bSendList_Reset.TabIndex = 16;
+            this.bSendList_Reset.Text = "重置计数";
+            this.bSendList_Reset.Type = AntdUI.TTypeMini.Warn;
+            this.bSendList_Reset.Click += new System.EventHandler(this.bSendList_Reset_Click);
             // 
             // bDisableAll
             // 
@@ -134,7 +146,7 @@
             this.ddMenu.Ghost = true;
             this.ddMenu.IconRatio = 1F;
             this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(693, 3);
+            this.ddMenu.Location = new System.Drawing.Point(753, 3);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
             this.ddMenu.Size = new System.Drawing.Size(44, 44);
@@ -184,20 +196,6 @@
             this.bgwSendList.WorkerSupportsCancellation = true;
             this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
             this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
-            // 
-            // bSendList_Reset
-            // 
-            this.bSendList_Reset.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.bSendList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_Reset.IconSvg = "UndoOutlined";
-            this.bSendList_Reset.LocalizationText = "FilterList.ResetCount";
-            this.bSendList_Reset.Location = new System.Drawing.Point(243, 3);
-            this.bSendList_Reset.Name = "bSendList_Reset";
-            this.bSendList_Reset.Size = new System.Drawing.Size(114, 44);
-            this.bSendList_Reset.TabIndex = 16;
-            this.bSendList_Reset.Text = "重置计数";
-            this.bSendList_Reset.Type = AntdUI.TTypeMini.Warn;
-            this.bSendList_Reset.Click += new System.EventHandler(this.bSendList_Reset_Click);
             // 
             // SendList
             // 

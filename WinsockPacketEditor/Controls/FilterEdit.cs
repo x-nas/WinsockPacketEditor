@@ -1924,9 +1924,9 @@ namespace WinsockPacketEditor
                 {
                     injectForm.RefreshFilterList();
                 }
-                else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                else if (this.form is InterfaceInfo.IFilterList flForm)
                 {
-                    proxyForm.RefreshFilterList();
+                    flForm.RefreshFilterList();
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "滤镜保存成功", TType.Success)
