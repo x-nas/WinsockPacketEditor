@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Windows.Forms;
 using WinsockPacketEditor.Forms;
 
@@ -36,9 +35,6 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.SystemConfig.StartMode == Operate.SystemConfig.SystemMode.Proxy)
                         {
-                            ThreadPool.SetMinThreads(100, 100);
-                            ThreadPool.SetMaxThreads(Environment.ProcessorCount * 2, 1000);
-
                             Application.Run(new ProxyModeForm());
                         }
                     }
