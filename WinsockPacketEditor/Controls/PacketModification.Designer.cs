@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpModification = new TableLayoutPanelEx();
-            this.tlpButton = new TableLayoutPanelEx();
+            this.tlpModification = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bExit = new AntdUI.Button();
             this.splitterModification = new AntdUI.Splitter();
-            this.tlpPacketData = new TableLayoutPanelEx();
+            this.tlpPacketData = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtPacketData_New = new AntdUI.Input();
             this.lPacketData_New = new AntdUI.Label();
             this.lPacketData_Raw = new AntdUI.Label();
@@ -88,9 +88,9 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(456, 7);
+            this.bExit.Location = new System.Drawing.Point(459, 7);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(87, 46);
+            this.bExit.Size = new System.Drawing.Size(82, 46);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -192,6 +192,8 @@
             this.tPacketModification.Size = new System.Drawing.Size(994, 260);
             this.tPacketModification.TabIndex = 0;
             this.tPacketModification.Text = "table1";
+            this.tPacketModification.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tPacketModification_CellButtonClick);
+            this.tPacketModification.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tPacketModification_CellDoubleClick);
             // 
             // PacketModification
             // 

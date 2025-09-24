@@ -2157,6 +2157,9 @@ namespace WinsockPacketEditor
                 case "Table.ComparisonText.Column.ValueB":
                     return "Value B";
 
+                case "Table.ComparisonText.Column.CellLinks":
+                    return "Operation";
+
                 #endregion
 
                 #region//FilterEditForm

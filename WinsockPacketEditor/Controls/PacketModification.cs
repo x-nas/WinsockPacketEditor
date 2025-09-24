@@ -123,6 +123,16 @@ namespace WinsockPacketEditor
                         return value;
                     },
                 }.SetLocalizationTitleID("Table.ComparisonText.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bLocation", null, AntdUI.TTypeMini.Warn).SetIcon("EnvironmentOutlined"),
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.ComparisonText.Column."),
             };
 
             this.tPacketModification.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -167,7 +177,43 @@ namespace WinsockPacketEditor
             }
         }
 
+        private void tPacketModification_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is Operate.SystemConfig.DifferenceItem di)
+            {
+                this.ScrollToPosition(di.Position, di.Position);
+            }
+        }
+
+        private void tPacketModification_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is Operate.SystemConfig.DifferenceItem di)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bLocation":
+
+                        this.ScrollToPosition(di.Position, di.Position);
+
+                        break;
+                }
+            }
+        }
+
         #endregion
+
+        #region//跳转到指定位置
+
+        private void ScrollToPosition(int PositionA, int PositionB)
+        {
+            this.txtPacketData_Raw.SelectionStart = PositionA;
+            this.txtPacketData_Raw.ScrollToCaret();
+
+            this.txtPacketData_New.SelectionStart = PositionB;
+            this.txtPacketData_New.ScrollToCaret();
+        }
+
+        #endregion        
 
         #region//退出
 
@@ -176,6 +222,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion
+        #endregion        
     }
 }
