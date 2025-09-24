@@ -3535,6 +3535,7 @@ namespace WinsockPacketEditor
                         new XElement("ProxyIP", ProxyConfig.Proxy.ProxyIP),
                         new XElement("ProxyPort", ProxyConfig.Proxy.ProxyPort),                        
                         new XElement("Enable_Auth", ProxyConfig.Proxy.Enable_Auth),
+                        new XElement("MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber),
                         new XElement("Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal),
                         new XElement("Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote),
                         new XElement("Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy),
@@ -3575,6 +3576,7 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.ProxyIP = ProxyMode.Rows[0]["ProxyIP"].ToString();
                         ProxyConfig.Proxy.ProxyPort = ushort.Parse(ProxyMode.Rows[0]["ProxyPort"].ToString());                        
                         ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);
+                        ProxyConfig.Proxy.MaxConnectionNumber = Convert.ToInt32(ProxyMode.Rows[0]["MaxConnectionNumber"].ToString());
                         ProxyConfig.Mapping.Enable_MapLocal = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapLocal"]);
                         ProxyConfig.Mapping.Enable_MapRemote = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapRemote"]);
                         ProxyConfig.Proxy.Enable_ExternalProxy = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy"]);
@@ -4565,6 +4567,7 @@ namespace WinsockPacketEditor
                 public static int SocketBufferSize = 8192;
                 public static string ProxyIP = string.Empty;
                 public static ushort ProxyPort = 1080;
+                public static int MaxConnectionNumber = 20000;
                 public static long Total_Request = 0;
                 public static long Total_Response = 0;
                 public static string ProxyOnLineInfo = string.Empty;
@@ -17528,6 +17531,7 @@ namespace WinsockPacketEditor
                         sql += "ProxyIP TEXT,";//代理模式 - 代理IP
                         sql += "ProxyPort INTEGER DEFAULT 1080,";//代理模式 - 代理端口                        
                         sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证
+                        sql += "MaxConnectionNumber INTEGER DEFAULT 5000,";//代理模式 - 最大连接数
                         sql += "Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
                         sql += "Enable_MapRemote BOOLEAN DEFAULT 0,";//代理模式 - 启用远程代理映射
                         sql += "Enable_ExternalProxy BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理
@@ -17615,6 +17619,7 @@ namespace WinsockPacketEditor
                         sql += "ProxyIP,";
                         sql += "ProxyPort,";                        
                         sql += "EnableAuth,";
+                        sql += "MaxConnectionNumber,";
                         sql += "Enable_MapLocal,";
                         sql += "Enable_MapRemote,";
                         sql += "Enable_ExternalProxy,";
@@ -17632,6 +17637,7 @@ namespace WinsockPacketEditor
                         sql += "@ProxyIP,";
                         sql += "@ProxyPort,";                        
                         sql += "@EnableAuth,";
+                        sql += "@MaxConnectionNumber,";
                         sql += "@Enable_MapLocal,";
                         sql += "@Enable_MapRemote,";
                         sql += "@Enable_ExternalProxy,";
@@ -17652,6 +17658,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@ProxyIP", ProxyConfig.Proxy.ProxyIP);
                             cmd.Parameters.AddWithValue("@ProxyPort", ProxyConfig.Proxy.ProxyPort);                            
                             cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);
+                            cmd.Parameters.AddWithValue("@MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber);
                             cmd.Parameters.AddWithValue("@Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
                             cmd.Parameters.AddWithValue("@Enable_MapRemote", ProxyConfig.Mapping.Enable_MapRemote);
                             cmd.Parameters.AddWithValue("@Enable_ExternalProxy", ProxyConfig.Proxy.Enable_ExternalProxy);

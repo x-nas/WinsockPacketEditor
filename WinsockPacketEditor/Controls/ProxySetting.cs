@@ -30,6 +30,7 @@ namespace WinsockPacketEditor
                 this.nudSOCKS5Port.Value = Operate.ProxyConfig.Proxy.ProxyPort;
                 this.cbEnable_Auth.Checked = Operate.ProxyConfig.Proxy.Enable_Auth;
                 this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
+                this.txtMaxConnectionNumber.Value = Operate.ProxyConfig.Proxy.MaxConnectionNumber;
 
                 if (Operate.ProxyConfig.Proxy.ProxyServerIP == null)
                 {
@@ -162,6 +163,7 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Proxy.ProxyIP = this.ddlProxyIP_Appoint.SelectedValue.ToString();
                 Operate.ProxyConfig.Proxy.ProxyPort = ((ushort)this.nudSOCKS5Port.Value);
                 Operate.ProxyConfig.Proxy.Enable_Auth = this.cbEnable_Auth.Checked;
+                Operate.ProxyConfig.Proxy.MaxConnectionNumber = ((int)this.txtMaxConnectionNumber.Value);
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理设置保存成功", TType.Success)
                 {

@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
@@ -300,10 +299,11 @@ namespace WinsockPacketEditor
 
         private void bProxyStart_Click(object sender, EventArgs e)
         {
-            this.bProxyStart.Enabled = false;
-            this.bProxyStop.Enabled = true;
-
-            this.Start_Proxy();
+            if (this.Start_Proxy())
+            {
+                this.bProxyStart.Enabled = false;
+                this.bProxyStop.Enabled = true;
+            }
         }
 
         private void bProxyStop_Click(object sender, EventArgs e)
@@ -879,11 +879,14 @@ namespace WinsockPacketEditor
 
         #region//开始代理
 
-        private void Start_Proxy()
+        private bool Start_Proxy()
         {
             try
             {
-                this.InitProxyServer();
+                if (!this.InitProxyServer())
+                { 
+                    return false;
+                }
 
                 if (Operate.ProxyConfig.Proxy.ProxyServer == null)
                 {
@@ -892,23 +895,18 @@ namespace WinsockPacketEditor
 
                 if (Operate.ProxyConfig.Proxy.ProxyServer.State != ServerState.Running)
                 {
-                    if (Operate.ProxyConfig.Proxy.ProxyServer.State == ServerState.NotInitialized)
-                    {
-                        this.InitSocks5Proxy();
-                    }
-                    else if(Operate.ProxyConfig.Proxy.ProxyServer.State == ServerState.NotStarted)
-                    {
-                        this.StartSocks5Proxy();
-                    }
+                    return this.InitSocks5ProxyServer();
                 }
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+
+            return false;
         }
 
-        private void InitProxyServer()
+        private bool InitProxyServer()
         {
             try
             {
@@ -929,29 +927,19 @@ namespace WinsockPacketEditor
                         Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
                         Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
                     }
-                }
+                }                
 
-                string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址 : TCP [ {0} ] UDP [ {1} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);
-
-                if (Operate.ProxyConfig.Proxy.Enable_Auth)
-                {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用代理服务身份认证"));
-                }
-
-                if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
-                {
-                    string sLog = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServer.EXTProxy", "已启用外部代理 [ {0}:{1} ]"), Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
-                }
+                return true;
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+
+            return false;
         }
 
-        private void InitSocks5Proxy()
+        private bool InitSocks5ProxyServer()
         {
             try
             {
@@ -963,8 +951,8 @@ namespace WinsockPacketEditor
                     Mode = SocketMode.Tcp,
 
                     // 连接限制
-                    MaxConnectionNumber = 30000,
-                    ListenBacklog = 2048,
+                    MaxConnectionNumber = Operate.ProxyConfig.Proxy.MaxConnectionNumber,
+                    ListenBacklog = 1000,
 
                     // 缓冲区设置
                     ReceiveBufferSize = 65535,
@@ -979,7 +967,41 @@ namespace WinsockPacketEditor
 
                 if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config))
                 {
-                    this.StartSocks5Proxy();
+                    if (Operate.ProxyConfig.Proxy.ProxyServer.Start())
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "开始 SOCKS5 代理", TType.Success)
+                        {
+                            LocalizationText = "ProxyModeForm.StartSocks5Proxy"
+                        });
+
+                        string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址 : TCP [ {0} ] UDP [ {1} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);
+
+                        if (Operate.ProxyConfig.Proxy.Enable_Auth)
+                        {
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用代理服务身份认证"));
+                        }
+
+                        if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
+                        {
+                            string sLog = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServer.EXTProxy", "已启用外部代理 [ {0}:{1} ]"), Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
+                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        }
+
+                        return true;
+                    }
+                    else
+                    {
+                        Operate.ProxyConfig.Proxy.ProxyServer.Dispose();
+                        Operate.ProxyConfig.Proxy.ProxyServer = null;
+
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "启动失败，请尝试调低最大连接数", TType.Error)
+                        {
+                            LocalizationText = "ProxyModeForm.StartSocks5Proxy.Fail"
+                        });
+
+                        return false;
+                    }
                 }
                 else
                 {
@@ -987,38 +1009,16 @@ namespace WinsockPacketEditor
                     {
                         LocalizationText = "ProxyModeForm.SetupSocks5Proxy.Fail"
                     });
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
 
-        private void StartSocks5Proxy()
-        {
-            try
-            {
-                if (Operate.ProxyConfig.Proxy.ProxyServer.Start())
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "开始 SOCKS5 代理", TType.Success)
-                    {
-                        LocalizationText = "ProxyModeForm.StartSocks5Proxy"
-                    });
-                }
-                else
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "启动 SOCKS5 代理失败", TType.Error)
-                    {
-                        LocalizationText = "ProxyModeForm.StartSocks5Proxy.Fail"
-                    });
+                    return false;
                 }
             }
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+                return false;
+            }            
+        }        
 
         #endregion
 
@@ -1031,6 +1031,8 @@ namespace WinsockPacketEditor
                 if (Operate.ProxyConfig.Proxy.ProxyServer != null && Operate.ProxyConfig.Proxy.ProxyServer.State == ServerState.Running)
                 {
                     Operate.ProxyConfig.Proxy.ProxyServer.Stop();
+                    Operate.ProxyConfig.Proxy.ProxyServer.Dispose();
+                    Operate.ProxyConfig.Proxy.ProxyServer = null;
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "停止 SOCKS5 代理", TType.Warn)
                     {
@@ -1201,9 +1203,8 @@ namespace WinsockPacketEditor
                 this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
                 this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
                 this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
-                this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
-                var sessions = Operate.ProxyConfig.Proxy.ProxyServer?.GetAllSessions();
-                this.lProxyTCP_CNT.Text = (sessions?.Count() ?? 0).ToString();                
+                this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();                
+                this.lProxyTCP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyServer?.SessionCount.ToString() ?? "0";
                 this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.cdProxyUDP.Count.ToString();
 
                 Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(

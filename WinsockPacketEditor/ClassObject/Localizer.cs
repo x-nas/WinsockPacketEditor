@@ -901,7 +901,7 @@ namespace WinsockPacketEditor
                     return "Start Socks5 Proxy";
 
                 case "ProxyModeForm.StartSocks5Proxy.Fail":
-                    return "Failed to Start Socks5 Proxy";
+                    return "Startup failed, please try lowering the MaxConnectionNumber";
 
                 case "ProxyModeForm.SetupSocks5Proxy.Fail":
                     return "Failed to Setup Socks5 Proxy";
