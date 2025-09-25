@@ -5305,9 +5305,10 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
-                public static IPEndPoint GetIPEndPoint_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData, out string AddressString)
+                public static (IPEndPoint EndPoint, string AddressString) GetIPEndPoint_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData)
                 {
-                    AddressString = string.Empty;
+                    string addressString = string.Empty;
+                    IPEndPoint endPoint = null;
 
                     try
                     {
@@ -5320,22 +5321,22 @@ namespace WinsockPacketEditor
                             case Operate.ProxyConfig.Proxy.AddressType.IPv4:
                                 ip = new IPAddress(bData.Slice(0, 4).ToArray());
                                 portPosition = 4;
-                                AddressString = ip.ToString();
+                                addressString = ip.ToString();
                                 break;
 
                             case Operate.ProxyConfig.Proxy.AddressType.IPv6:
                                 ip = new IPAddress(bData.Slice(0, 16).ToArray());
                                 portPosition = 16;
-                                AddressString = ip.ToString();
+                                addressString = ip.ToString();
                                 break;
 
                             case Operate.ProxyConfig.Proxy.AddressType.Domain:
                                 byte length = bData[0];
                                 var domainBytes = bData.Slice(1, length);
-                                AddressString = Operate.SystemConfig.BytesToString(
+                                addressString = Operate.SystemConfig.BytesToString(
                                     Operate.PacketConfig.Packet.EncodingFormat.UTF8,
                                     domainBytes.ToArray());
-                                ip = ProxyConfig.Proxy.ResolveAddress(AddressString);
+                                ip = ProxyConfig.Proxy.ResolveAddress(addressString);
                                 portPosition = 1 + length;
                                 break;
                         }
@@ -5343,7 +5344,7 @@ namespace WinsockPacketEditor
                         if (ip != null)
                         {
                             port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.Slice(portPosition, 2).ToArray());
-                            return new IPEndPoint(ip, port);
+                            endPoint = new IPEndPoint(ip, port);
                         }
                     }
                     catch (Exception ex)
@@ -5351,7 +5352,7 @@ namespace WinsockPacketEditor
                         DoLog(nameof(GetIPEndPoint_ByAddressType), ex.Message);
                     }
 
-                    return null;
+                    return (endPoint, addressString);
                 }
 
                 private static IPAddress ResolveAddress(string addressString)

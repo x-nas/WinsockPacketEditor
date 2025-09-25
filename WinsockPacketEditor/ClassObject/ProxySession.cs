@@ -599,7 +599,7 @@ namespace WinsockPacketEditor
                     pu.ClientEndPoint = epRemote;
 
                     ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
-                    IPEndPoint targetEndPoint = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
+                    var(targetEndPoint, AddressString) = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS);
                     if (targetEndPoint != null)
                     {
                         Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
