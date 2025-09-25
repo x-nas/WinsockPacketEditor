@@ -35,7 +35,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//处理 Socks5 代理步骤
+        #region//处理 Socks5 代理步骤（异步）
 
         public BinaryRequestInfo Filter(byte[] readBuffer, int offset, int length, bool toBeCopied, out int rest)
         {
@@ -84,7 +84,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//握手过程                
+        #region//握手过程（异步）                
 
         private async Task Handshake(byte[] bData)
         {
@@ -158,7 +158,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//验证账号密码
+        #region//验证账号密码（异步）
 
         private async Task AuthUserName(byte[] bData)
         {
