@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -443,7 +442,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bgwRobotList_DoWork), ex.Message);
             }
         }
 

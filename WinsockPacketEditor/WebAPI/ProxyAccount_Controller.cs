@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Web.Http;
 using System.ComponentModel;
 
@@ -91,7 +90,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(AddProxyAccount), ex.Message);
             }
 
             return BadRequest(AntdUI.Localization.Get("AddAccount.Error", "添加账号失败"));

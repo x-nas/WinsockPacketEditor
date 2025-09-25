@@ -1,7 +1,6 @@
 ﻿using AntdUI;
 using Be.Windows.Forms;
 using System;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -38,7 +37,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(SearchPacket_Load), ex.Message);
             }
         }
 
@@ -119,7 +118,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bSearch_Click), ex.Message);
             }            
         }
 

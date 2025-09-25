@@ -1,6 +1,5 @@
 ﻿using SuperSocket.SocketBase.Protocol;
 using System;
-using System.Reflection;
 
 namespace WinsockPacketEditor
 {
@@ -32,7 +31,7 @@ namespace WinsockPacketEditor
                     State = FilterState.Error;
 
                     string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupported", "不支持的 SOCKS 协议版本: {0} [ {1} ]"), version, session.ClientIP);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                    Operate.DoLog(nameof(Filter), sLog);
 
                     return null;
                 }
@@ -40,7 +39,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 left = 0;
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Filter), ex.Message);
             }            
 
             return null;

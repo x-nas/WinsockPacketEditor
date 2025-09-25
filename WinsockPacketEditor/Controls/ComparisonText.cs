@@ -3,7 +3,6 @@ using DiffPlex.DiffBuilder.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -254,7 +253,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bComparison_Click), ex.Message);
             }            
         }
 
@@ -300,7 +299,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bDuplicate_Click), ex.Message);
             }            
         }
 

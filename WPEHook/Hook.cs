@@ -1,6 +1,5 @@
 ﻿using EasyHook;
 using System;
-using System.Reflection;
 using WinsockPacketEditor;
 using System.Windows.Forms;
 
@@ -37,7 +36,7 @@ namespace WPEHook
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Run), ex.Message);
             }
         }
 

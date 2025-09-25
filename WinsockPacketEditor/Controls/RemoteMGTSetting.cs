@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -34,7 +33,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(RemoteMGTSetting_Load), ex.Message);
             }                        
         }
 
@@ -69,7 +68,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(InitRemoteIP), ex.Message);
             }            
         }
 
@@ -97,7 +96,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(SetRemoteMGT_URL), ex.Message);
             }                       
         }
 

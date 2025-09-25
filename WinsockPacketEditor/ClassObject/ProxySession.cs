@@ -55,7 +55,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(OnSessionStarted), ex.Message);
             }
         }
 
@@ -175,7 +175,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(SendCommandResponse), ex.Message);
             }
         }
 
@@ -194,7 +194,7 @@ namespace WinsockPacketEditor
                 this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
 
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ConnectToTarget), ex.Message);
             }
         }
 
@@ -225,7 +225,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(OnTargetConnected), ex.Message);
             }
         }
 
@@ -244,7 +244,7 @@ namespace WinsockPacketEditor
                 this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
 
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ConnectToEXTProxyServer), ex.Message);
             }
         }
 
@@ -331,7 +331,7 @@ namespace WinsockPacketEditor
                 this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
 
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(OnEXTProxyServerConnected), ex.Message);
             }
         }
 
@@ -471,7 +471,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ForwardData), ex.Message);
                 this.Close(CloseReason.SocketError);
             }
         }
@@ -503,7 +503,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 this.Close(CloseReason.SocketError);
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(StartReceivingFromTarget), ex.Message);
             }
         }
 
@@ -552,7 +552,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 this.Close(CloseReason.SocketError);
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(OnTargetDataReceived), ex.Message);
             }
         }
 
@@ -625,7 +625,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ProcessUdpRequest), ex.Message);
             }            
         }
 
@@ -679,7 +679,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ProcessUdpResponse), ex.Message);
             }            
         }
 
@@ -735,7 +735,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(StartUdpReceive), ex.Message);
             }
         }
 
@@ -793,7 +793,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ProcessUdpReceive), ex.Message);
                 ReturnSocketEventArgs(e);
 
                 if (pu.IsActive)
@@ -838,7 +838,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(MappingData_ToQueue), ex.Message);
             }
         }
 
@@ -911,7 +911,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(DoFilter_TCP), ex.Message);
             }
         }
 
@@ -973,7 +973,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(DoFilter_UDP), ex.Message);
             }
         }
 
@@ -987,13 +987,13 @@ namespace WinsockPacketEditor
             {
                 byte[] bData = requestInfo.Body;
 
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, "无法处理的代理数据：" + Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, bData));
+                Operate.DoLog(nameof(HandleUnknownRequest), "无法处理的代理数据：" + Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, bData));
                 Close(CloseReason.ProtocolError);
             }
             catch (Exception ex)
             {
                 Close(CloseReason.SocketError);
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(HandleUnknownRequest), ex.Message);
             }
         }
 

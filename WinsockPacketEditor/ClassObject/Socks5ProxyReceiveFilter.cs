@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
 
 namespace WinsockPacketEditor
 {
@@ -85,7 +84,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(HandleSocks5Request), ex.Message);
             }
 
             return false;
@@ -159,12 +158,12 @@ namespace WinsockPacketEditor
                 else
                 {
                     string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupported", "不支持的 SOCKS 协议版本: {0} [ {1} ]"), ptType, this.m_Session.ClientIP);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                    Operate.DoLog(nameof(Handshake), sLog);
                 }
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Handshake), ex.Message);
             }
         }
 
@@ -240,7 +239,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(AuthUserName), ex.Message);
             }
         }
 
@@ -388,7 +387,7 @@ namespace WinsockPacketEditor
                         this.m_Session.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unsupport);
 
                         string sLog = string.Format(AntdUI.Localization.Get("Command.Unsupported", "{0} - 不支持的命令: {1}"), this.m_Session.ClientAddress, this.m_Session.CommandType);
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        Operate.DoLog(nameof(Command), sLog);
 
                         #endregion
 
@@ -397,7 +396,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Command), ex.Message);
             }
         }
 

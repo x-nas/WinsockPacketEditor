@@ -3,7 +3,6 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -64,7 +63,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ProxySetting_Load), ex.Message);
             }
         }
 
@@ -136,7 +135,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(EnableSystemProxy_Changed), ex.Message);
             }
         }
 
@@ -174,7 +173,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex.Message);
             }
         }
 

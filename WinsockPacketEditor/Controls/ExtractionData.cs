@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -402,7 +401,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(udExtraction_DragChanged), ex.Message);
             }
         }
 
@@ -523,7 +522,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(LoadAccountList_FromXDocument), ex.Message);
             }
 
             return lstAccount;
@@ -571,13 +570,13 @@ namespace WinsockPacketEditor
 
                         string Title = AntdUI.Localization.Get("ExtractionData.Successful", "数据提取成功");
                         AntdUI.Notification.success(this.form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                        Operate.DoLog(nameof(bExtraction_Click), Title + ": " + FilePath);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bExtraction_Click), ex.Message);
             }
         }
 

@@ -3,7 +3,6 @@ using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Protocol;
 using System;
 using System.Buffers;
-using System.Reflection;
 
 namespace WinsockPacketEditor
 {
@@ -38,7 +37,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(RequestProxyBuffer), ex.Message);
                 return Array.Empty<byte>();
             }
         }

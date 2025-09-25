@@ -3,7 +3,6 @@ using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -79,7 +78,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(PacketEdit_Load), ex.Message);
             }
         }
 
@@ -428,7 +427,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bSend_Click), ex.Message);
             }
         }
 
@@ -500,7 +499,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bgwSendPacket_DoWork), ex.Message);
             }
         }
 
@@ -584,7 +583,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bgwSendPacket_RunWorkerCompleted), ex.Message);
             }
         }
 
@@ -670,7 +669,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex.Message);
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包保存失败", TType.Error)
                 {

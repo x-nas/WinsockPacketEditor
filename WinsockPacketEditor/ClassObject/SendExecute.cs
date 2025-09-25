@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Reflection;
 using System.Threading;
 
 namespace WinsockPacketEditor
@@ -65,13 +64,13 @@ namespace WinsockPacketEditor
                         this.Worker.RunWorkerAsync();
 
                         string sLog = string.Format(AntdUI.Localization.Get("SendExecute.DoSend", "执行发送 [{0}]"), this.SendName);
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        Operate.DoLog(nameof(StartSend), sLog);
                     }
                 }         
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(StartSend), ex.Message);
             }
         }
 
@@ -95,7 +94,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(StopSend), ex.Message);
             }
         }
 
@@ -111,7 +110,7 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.SystemConfig.SystemSocket <= 0)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("System.SystemSocket.Error", "系统套接字未设置"));
+                        Operate.DoLog(nameof(Send_DoWork), AntdUI.Localization.Get("System.SystemSocket.Error", "系统套接字未设置"));
                         return;
                     }
                 }
@@ -168,7 +167,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Send_DoWork), ex.Message);
             }
         }
 
@@ -204,11 +203,11 @@ namespace WinsockPacketEditor
                     sMsg = string.Format(AntdUI.Localization.Get("SendExecute.Success", "发送[{0}] 执行完毕"), this.SendName);                    
                 }
 
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, sMsg);                
+                Operate.DoLog(nameof(Send_RunCompleted), sMsg);                
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Send_RunCompleted), ex.Message);
             }
         }
 

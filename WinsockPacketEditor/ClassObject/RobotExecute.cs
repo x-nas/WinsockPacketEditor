@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using WindowsInput.Native;
@@ -69,7 +68,7 @@ namespace WinsockPacketEditor
                         if (iReturn > -1)
                         {
                             string sLog = string.Format(AntdUI.Localization.Get("System.Robot.Error", "机器人指令 {0} 错误! [{1}]"), iReturn + 1, this.RobotName);
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                            Operate.DoLog(nameof(StartRobot), sLog);
                         }
                         else
                         {
@@ -77,14 +76,14 @@ namespace WinsockPacketEditor
                             this.Worker.RunWorkerAsync();
 
                             string sLog = string.Format(AntdUI.Localization.Get("System.Robot.Start", "启动机器人 [{0}]"), this.RobotName);
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                            Operate.DoLog(nameof(StartRobot), sLog);
                         }
                     }
                 }      
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(StartRobot), ex.Message);
             }
         }
 
@@ -108,7 +107,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(StopRobot), ex.Message);
             }
         }
 
@@ -469,7 +468,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Robot_DoWork), ex.Message);
             }
         }
 
@@ -493,22 +492,22 @@ namespace WinsockPacketEditor
                 if (e.Cancelled)
                 {
                     string sLog = string.Format(AntdUI.Localization.Get("Robot.Stop", "机器人 [{0}] 已停止"), this.RobotName);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);                    
+                    Operate.DoLog(nameof(Robot_RunCompleted), sLog);                    
                 }
                 else if (e.Error != null)
                 {
                     string sLog = string.Format(AntdUI.Localization.Get("Robot.Error", "机器人 [{0}] 发生错误: {1}"), this.RobotName, e.Error.Message);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                    Operate.DoLog(nameof(Robot_RunCompleted), sLog);
                 }
                 else
                 {
                     string sLog = string.Format(AntdUI.Localization.Get("Robot.Success", "机器人 [{0}] 执行完毕"), this.RobotName);
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                    Operate.DoLog(nameof(Robot_RunCompleted), sLog);
                 }              
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Robot_RunCompleted), ex.Message);
             }
         }
 
@@ -527,7 +526,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(GetParameter), ex.Message);
             }            
 
             return null;
@@ -551,7 +550,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(GetParameter), ex.Message);
             }
             
             return defaultValue;

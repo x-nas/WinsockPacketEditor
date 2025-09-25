@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -231,7 +230,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bSelectForm_Click), ex.Message);
                 this.UnHook();
             }
         }
@@ -293,7 +292,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(MouseHook), ex.Message);
             }
 
             return IntPtr.Zero;
@@ -320,7 +319,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(KeyBoardHook), ex.Message);
             }
 
             return User32.CallNextHookEx(ipKeyHook, nCode, wParam, lParam);
@@ -392,7 +391,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ShowProcessToolTip), ex.Message);
             }
             finally
             {
@@ -419,7 +418,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(TooltipTimer_Tick), ex.Message);
             }            
         }
 
@@ -451,7 +450,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(UnHook), ex.Message);
             }
         }
 
@@ -513,8 +512,8 @@ namespace WinsockPacketEditor
             try
             {
                 string channelName = "WPE64";
-                string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
-                string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
+                string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
+                string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
 
                 if (Operate.SystemConfig.PID > -1)
                 {

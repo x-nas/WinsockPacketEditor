@@ -1,7 +1,6 @@
 ﻿using EasyHook;
 using System;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace WinsockPacketEditor
@@ -120,7 +119,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(StartHook), ex.Message);
             }
         }
 
@@ -220,7 +219,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(StopHook), ex.Message);
             }
         }
 
@@ -237,7 +236,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ExitHook), ex.Message);
             }
         }
 
@@ -289,7 +288,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Send_Hook), ex.Message);
             }
 
             return res;
@@ -351,7 +350,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Recv_Hook), ex.Message);
             }
 
             return res;
@@ -407,7 +406,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(SendTo_Hook), ex.Message);
             }
 
             return res;
@@ -467,7 +466,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(RecvFrom_Hook), ex.Message);
             }
 
             return res;
@@ -665,7 +664,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(WSASend_Hook), ex.Message);
             }
 
             return res;
@@ -808,7 +807,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(WSARecv_Hook), ex.Message);
             }
 
             return res;
@@ -1012,7 +1011,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(WSASendTo_Hook), ex.Message);
             }
 
             return res;
@@ -1157,7 +1156,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(WSARecvFrom_Hook), ex.Message);
             }
 
             return res;

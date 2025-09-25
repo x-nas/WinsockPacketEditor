@@ -6,7 +6,6 @@ using System.Net;
 using System.Security.Principal;
 using System.Text;
 using System;
-using System.Reflection;
 using Microsoft.Owin;
 using System.IO;
 
@@ -277,7 +276,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Configuration), ex.Message);
             }
         }
     }

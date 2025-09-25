@@ -21,7 +21,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -131,16 +130,16 @@ namespace WinsockPacketEditor
             {
                 get
                 {
-                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                    object[] attributes = System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Reflection.AssemblyTitleAttribute), false);
                     if (attributes.Length > 0)
                     {
-                        AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
+                        System.Reflection.AssemblyTitleAttribute titleAttribute = (System.Reflection.AssemblyTitleAttribute)attributes[0];
                         if (titleAttribute.Title != "")
                         {
                             return titleAttribute.Title;
                         }
                     }
-                    return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                    return System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
                 }
             }
 
@@ -148,7 +147,7 @@ namespace WinsockPacketEditor
             {
                 get
                 {
-                    Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                    Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
                     return $"{version.Major}.{version.Minor}.{version.Build}";
                 }
             }
@@ -157,12 +156,12 @@ namespace WinsockPacketEditor
             {
                 get
                 {
-                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+                    object[] attributes = System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Reflection.AssemblyDescriptionAttribute), false);
                     if (attributes.Length == 0)
                     {
                         return "";
                     }
-                    return ((AssemblyDescriptionAttribute)attributes[0]).Description;
+                    return ((System.Reflection.AssemblyDescriptionAttribute)attributes[0]).Description;
                 }
             }
 
@@ -170,12 +169,12 @@ namespace WinsockPacketEditor
             {
                 get
                 {
-                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                    object[] attributes = System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Reflection.AssemblyProductAttribute), false);
                     if (attributes.Length == 0)
                     {
                         return "";
                     }
-                    return ((AssemblyProductAttribute)attributes[0]).Product;
+                    return ((System.Reflection.AssemblyProductAttribute)attributes[0]).Product;
                 }
             }
 
@@ -183,12 +182,12 @@ namespace WinsockPacketEditor
             {
                 get
                 {
-                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                    object[] attributes = System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Reflection.AssemblyCopyrightAttribute), false);
                     if (attributes.Length == 0)
                     {
                         return "";
                     }
-                    return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                    return ((System.Reflection.AssemblyCopyrightAttribute)attributes[0]).Copyright;
                 }
             }
 
@@ -196,12 +195,12 @@ namespace WinsockPacketEditor
             {
                 get
                 {
-                    object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                    object[] attributes = System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Reflection.AssemblyCompanyAttribute), false);
                     if (attributes.Length == 0)
                     {
                         return "";
                     }
-                    return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                    return ((System.Reflection.AssemblyCompanyAttribute)attributes[0]).Company;
                 }
             }
 
