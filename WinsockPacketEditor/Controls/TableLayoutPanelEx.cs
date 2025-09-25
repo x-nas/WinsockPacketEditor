@@ -6,7 +6,10 @@ namespace WinsockPacketEditor
     {
         public TableLayoutPanelEx()
         {
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | 
+                ControlStyles.AllPaintingInWmPaint | 
+                ControlStyles.SupportsTransparentBackColor, true);
+
             UpdateStyles();
         }
     }
