@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Net;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -38,7 +37,7 @@ namespace WinsockPacketEditor
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
             this.PacketList_AutoClear_Changed();
 
-            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Operate.ProcessConfig.GetInjectProcessName());
+            Operate.DoLog(nameof(ProxyList_Load), Operate.ProcessConfig.GetInjectProcessName());
         }
 
         private void InitMenu()
@@ -238,7 +237,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(SetColumnVisible_ProxyList), ex.Message);
             }
         }
 
@@ -287,7 +286,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(tProxyList_SetRowStyle), ex.Message);
             }
 
             return null;
@@ -924,7 +923,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Start_Proxy), ex.Message);
             }
 
             return false;
@@ -957,7 +956,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(InitProxyServer), ex.Message);
             }
 
             return false;
@@ -999,17 +998,17 @@ namespace WinsockPacketEditor
                         });
 
                         string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址 : TCP [ {0} ] UDP [ {1} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProxyIP);
+                        Operate.DoLog(nameof(InitSocks5ProxyServer), sProxyIP);
 
                         if (Operate.ProxyConfig.Proxy.Enable_Auth)
                         {
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用代理服务身份认证"));
+                            Operate.DoLog(nameof(InitSocks5ProxyServer), AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用代理服务身份认证"));
                         }
 
                         if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
                         {
                             string sLog = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServer.EXTProxy", "已启用外部代理 [ {0}:{1} ]"), Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                            Operate.DoLog(nameof(InitSocks5ProxyServer), sLog);
                         }
 
                         return true;
@@ -1039,7 +1038,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(InitSocks5ProxyServer), ex.Message);
                 return false;
             }            
         }        
@@ -1066,7 +1065,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Stop_Proxy), ex.Message);
             }
         }
 
@@ -1101,7 +1100,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(CleanUp_ProxyList), ex.Message);
             }
         }
 
@@ -1181,7 +1180,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(tProxyList_SelectIndexChanged), ex.Message);
             }
         }
 
@@ -1256,7 +1255,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(ShowProxyInfo), ex.Message);
             }
         }
 
@@ -1295,7 +1294,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(HexBox_FindNext), ex.Message);
             }
         }
 
@@ -1315,7 +1314,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bgwSearchProxyList_DoWork), ex.Message);
             }
         }
 
@@ -1349,7 +1348,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bgwSearchProxyList_RunWorkerCompleted), ex.Message);
             }
         }
 
