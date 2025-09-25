@@ -597,9 +597,9 @@ namespace WinsockPacketEditor
                     addressType == Operate.ProxyConfig.Proxy.AddressType.Domain)
                 {
                     pu.ClientEndPoint = epRemote;
+                    byte[] bADDRESS = bData.Slice(4, bData.Length - 4).ToArray();
 
-                    ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
-                    var(targetEndPoint, AddressString) = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS);
+                    var (targetEndPoint, AddressString) = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS).ConfigureAwait(false).GetAwaiter().GetResult(); ;
                     if (targetEndPoint != null)
                     {
                         Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);

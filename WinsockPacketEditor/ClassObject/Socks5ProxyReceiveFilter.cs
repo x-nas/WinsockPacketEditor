@@ -254,7 +254,7 @@ namespace WinsockPacketEditor
                 byte[] bADDRESS = new byte[bData.Length - 4];
                 Array.Copy(bData, 4, bADDRESS, 0, bADDRESS.Length);
 
-                var(epServer, TargetAddress) = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(this.m_Session.AddressType, bADDRESS);
+                var(epServer, TargetAddress) = await Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(this.m_Session.AddressType, bADDRESS);
                 if (epServer == null)
                 {
                     this.m_Session.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Fault);

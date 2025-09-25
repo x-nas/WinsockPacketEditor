@@ -5305,7 +5305,7 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
-                public static (IPEndPoint EndPoint, string AddressString) GetIPEndPoint_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, ReadOnlySpan<byte> bData)
+                public static async Task<(IPEndPoint EndPoint, string AddressString)> GetIPEndPoint_ByAddressType(Operate.ProxyConfig.Proxy.AddressType addressType, byte[] bData)
                 {
                     string addressString = string.Empty;
                     IPEndPoint endPoint = null;
@@ -5319,31 +5319,31 @@ namespace WinsockPacketEditor
                         switch (addressType)
                         {
                             case Operate.ProxyConfig.Proxy.AddressType.IPv4:
-                                ip = new IPAddress(bData.Slice(0, 4).ToArray());
+                                ip = new IPAddress(bData.AsSpan(0, 4).ToArray());
                                 portPosition = 4;
                                 addressString = ip.ToString();
                                 break;
 
                             case Operate.ProxyConfig.Proxy.AddressType.IPv6:
-                                ip = new IPAddress(bData.Slice(0, 16).ToArray());
+                                ip = new IPAddress(bData.AsSpan(0, 16).ToArray());
                                 portPosition = 16;
                                 addressString = ip.ToString();
                                 break;
 
                             case Operate.ProxyConfig.Proxy.AddressType.Domain:
                                 byte length = bData[0];
-                                var domainBytes = bData.Slice(1, length);
+                                var domainBytes = bData.AsSpan(1, length).ToArray();
                                 addressString = Operate.SystemConfig.BytesToString(
                                     Operate.PacketConfig.Packet.EncodingFormat.UTF8,
-                                    domainBytes.ToArray());
-                                ip = ProxyConfig.Proxy.ResolveAddress(addressString).ConfigureAwait(false).GetAwaiter().GetResult();
+                                    domainBytes);
+                                ip = await ProxyConfig.Proxy.ResolveAddress(addressString);
                                 portPosition = 1 + length;
                                 break;
                         }
 
                         if (ip != null)
                         {
-                            port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.Slice(portPosition, 2).ToArray());
+                            port = Operate.SystemConfig.ByteArrayToInt16BigEndian(bData.AsSpan(portPosition, 2).ToArray());
                             endPoint = new IPEndPoint(ip, port);
                         }
                     }
