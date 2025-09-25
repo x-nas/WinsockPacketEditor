@@ -68,7 +68,7 @@ namespace WinsockPacketEditor
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.Command:
-                        Command(bData);
+                        await Command(bData);
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.ForwardData:
@@ -236,9 +236,9 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//执行命令
+        #region//执行命令（异步）
 
-        private void Command(ReadOnlySpan<byte> bData)
+        private async Task Command(byte[] bData)
         {
             try
             {
@@ -251,7 +251,8 @@ namespace WinsockPacketEditor
                 this.m_Session.CommandType = (Operate.ProxyConfig.Proxy.CommandType)bData[1];
                 this.m_Session.AddressType = (Operate.ProxyConfig.Proxy.AddressType)bData[3];
 
-                ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
+                byte[] bADDRESS = new byte[bData.Length - 4];
+                Array.Copy(bData, 4, bADDRESS, 0, bADDRESS.Length);
 
                 IPEndPoint epServer = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(this.m_Session.AddressType, bADDRESS, out string TargetAddress);
                 if (epServer == null)
@@ -269,119 +270,15 @@ namespace WinsockPacketEditor
                 switch (this.m_Session.CommandType)
                 {
                     case Operate.ProxyConfig.Proxy.CommandType.Connect:
-
-                        #region//代理 TCP
-
-                        switch (this.m_Session.DomainType)
-                        {
-                            case Operate.ProxyConfig.Proxy.DomainType.External:
-
-                                this.m_Session.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                                this.m_Session.ConnectToEXTProxyServer(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port, bData.ToArray());
-
-                                break;
-
-                            case Operate.ProxyConfig.Proxy.DomainType.Http:
-
-                                this.m_Session.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(TargetAddress, TargetPort);
-
-                                if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
-                                {
-                                    #region//本地代理映射
-
-                                    if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
-                                    {
-                                        var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
-                                            Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                            TargetAddress,
-                                            TargetPort,
-                                            string.Empty);
-
-                                        if (localRule != null)
-                                        {
-                                            this.m_Session.ServerIP = TargetAddress;
-                                            this.m_Session.ServerPort = TargetPort;
-
-                                            if (File.Exists(localRule.LocalPath))
-                                            {
-                                                this.m_Session.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
-                                                this.m_Session.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
-                                                return;
-                                            }
-                                            else
-                                            {
-                                                this.m_Session.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
-                                                return;
-                                            }
-                                        }
-                                    }
-
-                                    #endregion
-
-                                    #region//远程代理映射
-
-                                    if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
-                                    {
-                                        var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
-                                            Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                            TargetAddress,
-                                            TargetPort,
-                                            string.Empty);
-
-                                        if (remoteRule != null)
-                                        {
-                                            this.m_Session.ConnectToTarget(remoteRule.HostTo, remoteRule.PortTo);
-                                            return;
-                                        }
-                                    }
-
-                                    #endregion
-                                }
-
-                                this.m_Session.ConnectToTarget(TargetIP, TargetPort);
-
-                                break;
-
-                            case Operate.ProxyConfig.Proxy.DomainType.Https:
-                            case Operate.ProxyConfig.Proxy.DomainType.Socket:
-
-                                this.m_Session.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(TargetAddress, TargetPort);
-                                this.m_Session.ConnectToTarget(TargetIP, TargetPort);
-
-                                break;
-                        }
-
-                        if (!Operate.ProxyConfig.Proxy.SpeedMode)
-                        {
-                            string ProxyIP = (this.m_Session.SocketSession.Client.LocalEndPoint as IPEndPoint).Address.ToString();
-                            Operate.DoProxyLog(this.m_Session.AID, this.m_Session.ClientIP, this.m_Session.ServerAddress, ProxyIP);
-                        }
-
-                        #endregion
-
+                        await HandleConnectCommandAsync(bData, TargetIP, TargetPort, TargetAddress);
                         break;
 
                     case Operate.ProxyConfig.Proxy.CommandType.UDP:
-
-                        #region//UDP 中继
-
                         this.m_Session.UDPRelay(this.m_Session.SessionID);
-
-                        #endregion
-
                         break;
 
                     default:
-
-                        #region//不支持的命令
-
-                        this.m_Session.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unsupport);
-
-                        string sLog = string.Format(AntdUI.Localization.Get("Command.Unsupported", "{0} - 不支持的命令: {1}"), this.m_Session.ClientAddress, this.m_Session.CommandType);
-                        Operate.DoLog(nameof(Command), sLog);
-
-                        #endregion
-
+                        HandleUnsupportedCommand();
                         break;
                 }
             }
@@ -389,6 +286,96 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(nameof(Command), ex.Message);
             }
+        }
+
+        private async Task HandleConnectCommandAsync(byte[] bData, string targetIP, int targetPort, string targetAddress)
+        {
+            switch (this.m_Session.DomainType)
+            {
+                case Operate.ProxyConfig.Proxy.DomainType.External:
+                    this.m_Session.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
+                    this.m_Session.ConnectToEXTProxyServer(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port, bData);
+                    break;
+
+                case Operate.ProxyConfig.Proxy.DomainType.Http:
+                    await HandleHttpConnect(targetIP, targetPort, targetAddress);
+                    break;
+
+                case Operate.ProxyConfig.Proxy.DomainType.Https:
+                case Operate.ProxyConfig.Proxy.DomainType.Socket:
+                    this.m_Session.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
+                    this.m_Session.ConnectToTarget(targetIP, targetPort);
+                    break;
+            }
+
+            if (!Operate.ProxyConfig.Proxy.SpeedMode)
+            {
+                string ProxyIP = (this.m_Session.SocketSession.Client.LocalEndPoint as IPEndPoint).Address.ToString();
+                Operate.DoProxyLog(this.m_Session.AID, this.m_Session.ClientIP, this.m_Session.ServerAddress, ProxyIP);
+            }
+        }
+
+        private async Task HandleHttpConnect(string targetIP, int targetPort, string targetAddress)
+        {
+            this.m_Session.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
+
+            if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
+            {
+                // 本地代理映射
+                if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
+                {
+                    var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
+                        Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                        targetAddress,
+                        targetPort,
+                        string.Empty);
+
+                    if (localRule != null)
+                    {
+                        this.m_Session.ServerIP = targetAddress;
+                        this.m_Session.ServerPort = targetPort;
+
+                        bool fileExists = await Task.Run(() => File.Exists(localRule.LocalPath));
+                        if (fileExists)
+                        {
+                            this.m_Session.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                            this.m_Session.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
+                            return;
+                        }
+                        else
+                        {
+                            this.m_Session.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                            return;
+                        }
+                    }
+                }
+
+                // 远程代理映射
+                if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                {
+                    var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
+                        Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                        targetAddress,
+                        targetPort,
+                        string.Empty);
+
+                    if (remoteRule != null)
+                    {
+                        this.m_Session.ConnectToTarget(remoteRule.HostTo, remoteRule.PortTo);
+                        return;
+                    }
+                }
+            }
+
+            this.m_Session.ConnectToTarget(targetIP, targetPort);
+        }
+
+        private void HandleUnsupportedCommand()
+        {
+            this.m_Session.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unsupport);
+
+            string sLog = string.Format(AntdUI.Localization.Get("Command.Unsupported", "{0} - 不支持的命令: {1}"), this.m_Session.ClientAddress, this.m_Session.CommandType);
+            Operate.DoLog(nameof(HandleUnsupportedCommand), sLog);
         }
 
         #endregion        
