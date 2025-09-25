@@ -4,7 +4,6 @@ using EasyHook;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -41,7 +40,7 @@ namespace WinsockPacketEditor
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
             this.PacketList_AutoClear_Changed();
 
-            Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
+            Operate.DoLog(nameof(PacketList_Load), this.lProcessName.Text);
         }
 
         private void InitMenu()
@@ -223,7 +222,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(SetColumnVisible_PacketList), ex.Message);
             }
         }
 
@@ -272,7 +271,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(tPacketList_SetRowStyle), ex.Message);
             }
 
             return null;
@@ -869,7 +868,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Start_Hook), ex.Message);
             }
         }
 
@@ -890,7 +889,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(Stop_Hook), ex.Message);
             }
         }
 
@@ -923,7 +922,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(CleanUp_PacketListInfo), ex.Message);
             }
         }
 
@@ -936,7 +935,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(CleanUp_PacketList), ex.Message);
             }
         }
 
@@ -1010,7 +1009,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(tPacketList_SelectIndexChanged), ex.Message);
             }
         }
 
@@ -1038,7 +1037,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(RefreshPacketList), ex.Message);
             }
         }
 
@@ -1098,7 +1097,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(HexBox_FindNext), ex.Message);
             }
         }
 
@@ -1118,7 +1117,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bgwSearchPacketList_DoWork), ex.Message);
             }
         }
 
@@ -1152,10 +1151,9 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bgwSearchPacketList_RunWorkerCompleted), ex.Message);
             }
         }
-
 
         #endregion        
     }

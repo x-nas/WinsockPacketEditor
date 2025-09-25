@@ -1,7 +1,6 @@
 ﻿using AntdUI;
 using System;
 using System.Drawing;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -78,7 +77,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(WndProc), ex.Message);
             }
 
             base.WndProc(ref m);
@@ -527,7 +526,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(timerPacketList_Tick), ex.Message);
             }
             finally
             {
@@ -549,7 +548,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(timerPacketListInfo_Tick), ex.Message);
             }
             finally
             {
@@ -594,7 +593,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(bgwAutoSave_DoWork), ex.Message);
             }
         }
 
