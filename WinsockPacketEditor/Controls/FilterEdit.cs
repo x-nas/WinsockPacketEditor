@@ -1405,20 +1405,13 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//粘贴数据
+        #region//粘贴数据        
 
         private void tFilterNormal_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                Point pMouse = tFilterNormal.PointToClient(MousePosition);
-                tFilterNormal.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
-
-                if (RIndex > 0 && CIndex > -1)
-                {
-                    string sClipboardText = Clipboard.GetText().Trim();
-                    this.PastePacketData(tFilterNormal, dtFilterNormal, RIndex - 1, CIndex, sClipboardText);
-                }
+                this.PasteToMousePosition(tFilterNormal, dtFilterNormal);
             }
         }
 
@@ -1426,14 +1419,7 @@ namespace WinsockPacketEditor
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                Point pMouse = tFilterAdvanced_Search.PointToClient(MousePosition);
-                tFilterAdvanced_Search.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
-
-                if (RIndex > 0 && CIndex > -1)
-                {
-                    string sClipboardText = Clipboard.GetText().Trim();
-                    this.PastePacketData(tFilterAdvanced_Search, dtFilterAdvanced_Search, RIndex - 1, CIndex, sClipboardText);
-                }
+                this.PasteToMousePosition(tFilterAdvanced_Search, dtFilterAdvanced_Search);
             }
         }
 
@@ -1441,14 +1427,7 @@ namespace WinsockPacketEditor
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                Point pMouse = tFilterAdvanced_Modify_Head.PointToClient(MousePosition);
-                tFilterAdvanced_Modify_Head.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
-
-                if (RIndex > 0 && CIndex > -1)
-                {
-                    string sClipboardText = Clipboard.GetText().Trim();
-                    this.PastePacketData(tFilterAdvanced_Modify_Head, dtFilterAdvanced_Modify_Head, RIndex - 1, CIndex, sClipboardText);
-                }
+                this.PasteToMousePosition(tFilterAdvanced_Modify_Head, dtFilterAdvanced_Modify_Head);
             }
         }
 
@@ -1456,14 +1435,26 @@ namespace WinsockPacketEditor
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                Point pMouse = tFilterAdvanced_Modify_Position.PointToClient(MousePosition);
-                tFilterAdvanced_Modify_Position.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
+                this.PasteToMousePosition(tFilterAdvanced_Modify_Position, dtFilterAdvanced_Modify_Position);
+            }
+        }
+
+        private void PasteToMousePosition(AntdUI.Table tTable, DataTable dt)
+        {
+            try
+            {
+                Point pMouse = tTable.PointToClient(MousePosition);
+                tTable.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
 
                 if (RIndex > 0 && CIndex > -1)
                 {
                     string sClipboardText = Clipboard.GetText().Trim();
-                    this.PastePacketData(tFilterAdvanced_Modify_Position, dtFilterAdvanced_Modify_Position, RIndex - 1, CIndex, sClipboardText);
+                    this.PastePacketData(tTable, dt, RIndex - 1, CIndex, sClipboardText);
                 }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
