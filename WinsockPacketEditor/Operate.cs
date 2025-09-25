@@ -4938,7 +4938,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        IPEndPoint ExternalProxyEP = ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(EXTIP, EXTPort);
+                        IPEndPoint ExternalProxyEP = await ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(EXTIP, EXTPort);
                         if (ExternalProxyEP == null)
                         {
                             AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理设置错误", TType.Error)
@@ -5290,11 +5290,11 @@ namespace WinsockPacketEditor
 
                 #region//获取IP地址信息                
 
-                public static IPEndPoint GetIPEndPoint_ByAddressString(string AddressString, ushort Port)
+                public static async Task<IPEndPoint> GetIPEndPoint_ByAddressString(string AddressString, ushort Port)
                 {
                     try
                     {
-                        IPAddress ipAddress = ProxyConfig.Proxy.ResolveAddress(AddressString);
+                        IPAddress ipAddress = await ProxyConfig.Proxy.ResolveAddress(AddressString);
                         return new IPEndPoint(ipAddress, Port);
                     }
                     catch (Exception ex)
@@ -5336,7 +5336,7 @@ namespace WinsockPacketEditor
                                 addressString = Operate.SystemConfig.BytesToString(
                                     Operate.PacketConfig.Packet.EncodingFormat.UTF8,
                                     domainBytes.ToArray());
-                                ip = ProxyConfig.Proxy.ResolveAddress(addressString);
+                                ip = ProxyConfig.Proxy.ResolveAddress(addressString).ConfigureAwait(false).GetAwaiter().GetResult();
                                 portPosition = 1 + length;
                                 break;
                         }
@@ -5355,12 +5355,7 @@ namespace WinsockPacketEditor
                     return (endPoint, addressString);
                 }
 
-                private static IPAddress ResolveAddress(string addressString)
-                {
-                    return ResolveAddressAsync(addressString).ConfigureAwait(false).GetAwaiter().GetResult();
-                }
-
-                private static async Task<IPAddress> ResolveAddressAsync(string addressString)
+                private static async Task<IPAddress> ResolveAddress(string addressString)
                 {
                     try
                     {
@@ -5401,7 +5396,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(ResolveAddressAsync), ex.Message);
+                        DoLog(nameof(ResolveAddress), ex.Message);
                     }
 
                     return null;
