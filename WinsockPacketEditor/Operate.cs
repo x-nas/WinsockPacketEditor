@@ -284,7 +284,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetCPUAndMemory), ex.Message);
                 }
 
                 return sReturn;
@@ -304,7 +304,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(GetListExecute_ByString), ex.Message);
                 }
 
                 return leReturn;
@@ -324,7 +324,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(GetSystemMode_ByString), ex.Message);
                 }
 
                 return systemMode;
@@ -545,7 +545,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetBoolFromChineseString), ex.Message);
                 }
 
                 return bReturn;
@@ -574,7 +574,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetSystemModeName), ex.Message);
                 }
                 return sReturn;
             }
@@ -600,7 +600,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetWorkModeName), ex.Message);
                 }
                 return sReturn;
             }
@@ -936,7 +936,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(GetFlagByLocation), ex.Message);
                 }
 
                 return GetDefaultPng();
@@ -1047,7 +1047,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(FindNodeByName), ex.Message);
                 }
                 
                 return null;
@@ -1078,7 +1078,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(FindNodeByName), ex.Message);
                 }                
 
                 return null;
@@ -1113,13 +1113,13 @@ namespace WinsockPacketEditor
                                 sLog = string.Format(AntdUI.Localization.Get("MGT.Error", "远程管理启动失败: 请尝试使用管理员权限启动 {0}"), Process.GetCurrentProcess().ProcessName);
                             }
 
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                            Operate.DoLog(nameof(StartRemoteMGT), sLog);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(StartRemoteMGT), ex.Message);
                 }
             }
 
@@ -1134,7 +1134,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(StopRemoteMGT), ex.Message);
                 }
             }
 
@@ -1153,7 +1153,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetRemoteMGT_URL), ex.Message);
                 }
 
                 return string.Empty;
@@ -1204,7 +1204,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetDisplayBytes), ex.Message);
                 }
 
                 return sReturn;
@@ -1220,7 +1220,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ConvertBytesDisplay), ex.Message);
                 }
 
                 return sReturn;
@@ -1237,7 +1237,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ConvertToOneDigit), ex.Message);
                 }
 
                 return sReturn;
@@ -1282,7 +1282,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetAESKeyFromString), ex.Message);
                 }
 
                 return bReturn;
@@ -1314,7 +1314,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(EncryptXMLFile), ex.Message);
                 }
             }
 
@@ -1351,7 +1351,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DecryptXMLFile), ex.Message);
                 }
 
                 return xdReturn;
@@ -1486,7 +1486,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(PassWord_Encrypt), ex.Message);
                 }
 
                 return string.Empty;
@@ -1525,7 +1525,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(PassWord_Decrypt), ex.Message);
                 }
 
                 return string.Empty;
@@ -1547,7 +1547,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SortDictionaryByKey), ex.Message);
                 }
 
                 return dReturn;
@@ -1565,7 +1565,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SortDictionaryByValue), ex.Message);
                 }
 
                 return dReturn;
@@ -1618,7 +1618,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(StringToBytes), ex.Message);
                 }
 
                 return bReturn;
@@ -1766,7 +1766,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(BytesToString), ex.Message);
                 }
 
                 return sReturn;
@@ -1845,7 +1845,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(Base64_Encoding), ex.Message);
                 }
 
                 return sReturn;
@@ -1885,7 +1885,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ByteArrayToInt16BigEndian), ex.Message);
                 }
 
                 return uReturn;
@@ -1908,7 +1908,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(StringToBool), ex.Message);
                 }
                 return bReturn;
             }
@@ -1932,7 +1932,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(StringToDateTime), ex.Message);
                 }
 
                 return dtReturn;
@@ -1976,7 +1976,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ConvertFILTString), ex.Message);
                 }
 
                 return Return;
@@ -1998,7 +1998,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(IsHexString), ex.Message);
                 }
 
                 return bReturn;
@@ -2042,7 +2042,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(VerifyHexCharWithWildcard), ex.Message);
                 }
             }
 
@@ -2092,7 +2092,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(RegisterHotkey_FromText), ex.Message);
                 }
 
                 return false;
@@ -2141,7 +2141,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(RegisterRecordedHotkey), ex.Message);
                 }
 
                 return false;
@@ -2194,7 +2194,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ParseHotkeyString), ex.Message);
                 }
 
                 return result;
@@ -2238,7 +2238,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ConvertHotkeyToString), ex.Message);
                 }
 
                 return result;
@@ -2374,7 +2374,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DoHotKey), ex.Message);
                 }
             }
 
@@ -2443,7 +2443,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CompareText), ex.Message);
                 }
 
                 return differences;
@@ -2519,7 +2519,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ComparePackets), ex.Message);
                 }
 
                 return (string.Empty, string.Empty, new List<DuplicateInfo>());
@@ -2603,7 +2603,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(AnalyzeContinuousDuplicates), ex.Message);
                 }
 
                 return null;
@@ -2800,7 +2800,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(SaveSystemConfig_LastInjection_ToDB), ex.Message);
                 }
             }
 
@@ -2817,7 +2817,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(SaveSystemConfig_ToDB), ex.Message);
                 }
             }
 
@@ -2886,7 +2886,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(GetSystemConfig_XML), ex.Message);
                 }
 
                 return null;
@@ -2983,7 +2983,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(LoadSystemConfig_FromDB), ex.Message);
                 }
             }
 
@@ -3322,7 +3322,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(SetSystemConfig_FromXML), ex.Message);
                 }
             }
 
@@ -3364,7 +3364,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(GetInjectMode_XML), ex.Message);
                 }
 
                 return null;
@@ -3404,7 +3404,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(LoadInjectMode_FromDB), ex.Message);
                 }
             }            
 
@@ -3510,7 +3510,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(SetInjectMode_FromXML), ex.Message);
                 }
             }
 
@@ -3553,7 +3553,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(GetProxyMode_XML), ex.Message);
                 }
 
                 return null;
@@ -3592,7 +3592,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(LoadProxyMode_FromDB), ex.Message);
                 }
             }
 
@@ -3698,7 +3698,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(SetProxyMode_FromXML), ex.Message);
                 }
             }
 
@@ -3820,7 +3820,7 @@ namespace WinsockPacketEditor
                             {
                                 string Title = AntdUI.Localization.Get("BackUpSettingsForm.Export.Success", "导出系统备份成功");
                                 AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                Operate.DoLog(nameof(ExportSystemBackUp_Dialog), Title + ": " + FilePath);
                             }
                             else
                             {
@@ -3833,7 +3833,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ExportSystemBackUp_Dialog), ex.Message);
                 }
             }
 
@@ -3970,7 +3970,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ExportSystemBackUp), ex.Message);
                 }
 
                 return false;
@@ -3997,14 +3997,14 @@ namespace WinsockPacketEditor
                             {
                                 string Title = AntdUI.Localization.Get("BackUpSettingsForm.Import.Success", "导入系统备份成功");
                                 AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                Operate.DoLog(nameof(ImportSystemBackUp_Dialog), Title + ": " + FilePath);
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ImportSystemBackUp_Dialog), ex.Message);
                 }
             }
 
@@ -4066,7 +4066,7 @@ namespace WinsockPacketEditor
                             }
                             else
                             {
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                                Operate.DoLog(nameof(ImportSystemBackUp), sError);
                             }
 
                             return false;
@@ -4078,7 +4078,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(ImportSystemBackUp), ex.Message);
                 }
 
                 return false;
@@ -4319,7 +4319,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(GetProcessList), ex.Message);
                 }
 
                 return piReturn;
@@ -4358,7 +4358,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(IconFromFile), ex.Message);
                 }
 
                 return new Icon(SystemIcons.Application, 256, 256).ToBitmap();
@@ -4432,7 +4432,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetInjectProcessName), ex.Message);
                 }
 
                 return sReturn;
@@ -4475,7 +4475,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetInjectModuleName), ex.Message);
                 }
 
                 return sReturn;
@@ -4531,7 +4531,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(GetInjectWinsockInfo), ex.Message);
                 }
 
                 return sReturn;
@@ -4665,7 +4665,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(CreateNewUDP), ex.Message);
                     }
 
                     return null;
@@ -4714,7 +4714,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetClientListName), ex.Message);
                     }
 
                     return string.Empty;
@@ -4753,7 +4753,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(EnableSystemProxy), ex.Message);
                         return false;
                     }
                 }
@@ -4781,7 +4781,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(DisableSystemProxy), ex.Message);
                         return false;
                     }
                 }
@@ -4925,7 +4925,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(CheckDataIsMatchProxyStep), ex.Message);
                     }
 
                     return bReturn;
@@ -5140,7 +5140,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(ParseHttpHeaders), ex.Message);
                     }
 
                     return headers;
@@ -5233,7 +5233,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsShowProxy_ByFilter), ex.Message);
                     }
 
                     return true;
@@ -5281,7 +5281,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetContentType), ex.Message);
                     }
 
                     return "application/octet-stream";
@@ -5300,7 +5300,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetIPEndPoint_ByAddressString), ex.Message);
                     }
 
                     return null;
@@ -5349,7 +5349,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetIPEndPoint_ByAddressType), ex.Message);
                     }
 
                     return null;
@@ -5440,7 +5440,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetUDPData_ByAddressType), ex.Message);
                         return Span<byte>.Empty;
                     }
                 }
@@ -5481,7 +5481,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetDomainType_ByPort), ex.Message);
                     }
 
                     return Operate.ProxyConfig.Proxy.DomainType.Socket;
@@ -5504,7 +5504,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                        
+                        Operate.DoLog(nameof(GetServerAddress), ex.Message);                        
                     }
 
                     return string.Empty;
@@ -5600,7 +5600,7 @@ namespace WinsockPacketEditor
                         }
                         catch (Exception ex)
                         {
-                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                            Operate.DoLog(nameof(ProxyInfo_ToQueue), ex.Message);
                         }
                     });                    
                 }
@@ -5620,7 +5620,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(ResetProxyInfoQueue), ex.Message);
                     }
                 }
 
@@ -5676,7 +5676,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(ProxyInfo_ToList), ex.Message);
                     }
                 }
 
@@ -5740,7 +5740,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveProxyList_Dialog), ex.Message);
                     }
                 }
 
@@ -5772,7 +5772,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                    Operate.DoLog(nameof(SaveProxyListToExcel), ex.Message);
                                 }
                             }
                         }
@@ -5781,7 +5781,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveProxyListToExcel), ex.Message);
                         return false;
                     }
                 }
@@ -5821,7 +5821,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AuthInfo_ToList), ex.Message);
                     }
                 }
 
@@ -5845,7 +5845,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                        
+                        Operate.DoLog(nameof(GetProxyAuthInfo), ex.Message);                        
                     }
 
                     return null;
@@ -5869,7 +5869,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteProxyAuthInfo_ByAIDAndIP), ex.Message);
                     }
                 }
 
@@ -5885,7 +5885,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetLinksCount_FromAuthList), ex.Message);
                         return 0;
                     }
                 }
@@ -5900,7 +5900,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetDevicesCount_FromAuthList), ex.Message);
                         return 0;
                     }
                 }
@@ -5922,7 +5922,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsValidAdmin), ex.Message);
                     }
 
                     return bReturn;
@@ -5946,7 +5946,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckProxyAccount_Exist), ex.Message);
                     }
 
                     return false;
@@ -5986,7 +5986,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckUserNameAndPassWord), ex.Message);
                     }
 
                     return false;
@@ -6022,7 +6022,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckLimitLinks), ex.Message);
                     }
 
                     return false;
@@ -6072,7 +6072,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckLimitDevices), ex.Message);
                     }
 
                     return false;
@@ -6105,7 +6105,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SetOnline_ByAccountID), ex.Message);
                     }
                 }
 
@@ -6129,7 +6129,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetOnLineProxyAccountCount), ex.Message);
                     }
 
                     return iReturn;
@@ -6154,7 +6154,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetLinksNumber_ByAccountID), ex.Message);
                     }
 
                     return 0;
@@ -6175,7 +6175,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetDevicesNumber_ByAccountID), ex.Message);
                         return 0;
                     }
                 }
@@ -6262,7 +6262,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(IPInfo_ToAccount), ex.Message);
                     }
                 }
 
@@ -6312,7 +6312,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddProxyAccount), ex.Message);
                     }
 
                     return false;
@@ -6333,7 +6333,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddAccountIPInfo), ex.Message);
                     }
                 }
 
@@ -6380,7 +6380,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateProxyAccount_ByAccountID), ex.Message);
                     }
 
                     return false;
@@ -6421,7 +6421,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateProxyAccount_ByCCProxy), ex.Message);
                     }
 
                     return false;
@@ -6466,7 +6466,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteAccount_Dialog), ex.Message);
                     }
                 }
 
@@ -6488,7 +6488,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteProxyAccount_ByAccountID), ex.Message);
                     }
 
                     return false;
@@ -6512,7 +6512,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteProxyAccount_ByUserName), ex.Message);
                     }
 
                     return false;
@@ -6526,7 +6526,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AccountListClear), ex.Message);
                     }
                 }
 
@@ -6550,7 +6550,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetUserName_ByAccountID), ex.Message);
                     }
 
                     return string.Empty;
@@ -6572,7 +6572,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByAccountID), ex.Message);
                     }
 
                     return null;
@@ -6596,7 +6596,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetAccount_ByUserName), ex.Message);
                     }
 
                     return null;
@@ -6613,7 +6613,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsEnable), ex.Message);
                     }
 
                     return null;
@@ -6630,7 +6630,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsOnLine), ex.Message);
                     }
 
                     return null;
@@ -6647,7 +6647,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsExpiry), ex.Message);
                     }
 
                     return null;
@@ -6664,7 +6664,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitLinks), ex.Message);
                     }
 
                     return null;
@@ -6681,7 +6681,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitDevices), ex.Message);
                     }
 
                     return null;
@@ -6698,7 +6698,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByExpireTime), ex.Message);
                     }
 
                     return null;
@@ -6716,7 +6716,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(ProxyAccountToList), ex.Message);
                     }
                 }
 
@@ -6758,7 +6758,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AdjustExpiryTime), ex.Message);
                     }
                 }
 
@@ -6781,7 +6781,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AdjustLimitLinks), ex.Message);
                     }
                 }
 
@@ -6804,7 +6804,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AdjustLimitDevices), ex.Message);
                     }
                 }
 
@@ -6825,7 +6825,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadAccountIPInfo_FromDB), ex.Message);
                     }
 
                     return dtReturn;
@@ -6844,7 +6844,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveAccountList_ToDB), ex.Message);
                     }
                 }
 
@@ -6961,7 +6961,7 @@ namespace WinsockPacketEditor
                                 {
                                     string Title = AntdUI.Localization.Get("InjectModeForm.ExportProxyAccountList.Success", "导出代理账号列表成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    Operate.DoLog(nameof(SaveAccount_Dialog), Title + ": " + FilePath);
                                 }
                                 else
                                 {
@@ -6974,7 +6974,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveAccount_Dialog), ex.Message);
                     }
                 }
 
@@ -7008,7 +7008,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveAccountList), ex.Message);
                     }
 
                     return false;
@@ -7068,7 +7068,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetAccountList_XML), ex.Message);
                     }
 
                     return null;
@@ -7112,7 +7112,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadAccountList_Dialog), ex.Message);
                     }
                 }
 
@@ -7186,7 +7186,7 @@ namespace WinsockPacketEditor
                                         }
                                         else
                                         {
-                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                                            Operate.DoLog(nameof(LoadAccountList), sError);
                                         }
 
                                         return false;
@@ -7203,7 +7203,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadAccountList), ex.Message);
                     }
 
                     return false;
@@ -7326,13 +7326,13 @@ namespace WinsockPacketEditor
                             if (!bOK)
                             {
                                 string FailLog = string.Format(AntdUI.Localization.Get("ImportAccount.Error", "导入账号失败！用户名：{0}"), UserName);
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, FailLog);
+                                Operate.DoLog(nameof(LoadAccountList_FromXDocument), FailLog);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadAccountList_FromXDocument), ex.Message);
                     }
                 }
 
@@ -7406,7 +7406,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadAccountList_FromInIFile), ex.Message);
                     }
                 }
 
@@ -7451,13 +7451,13 @@ namespace WinsockPacketEditor
                             if (!bOK)
                             {
                                 string FailLog = string.Format(AntdUI.Localization.Get("ImportAccount.Error", "导入账号失败！用户名：{0}"), pai.UserName);
-                                Operate.DoLog(MethodBase.GetCurrentMethod().Name, FailLog);
+                                Operate.DoLog(nameof(AddAccount_FromIniFile), FailLog);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddAccount_FromIniFile), ex.Message);
                     }
                 }
 
@@ -7487,7 +7487,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetMapProtocol_ByString), ex.Message);
                     }
 
                     return MProtocol;
@@ -7613,7 +7613,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddMapLocal), ex.Message);
                     }
                 }
 
@@ -7652,7 +7652,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddMapRemote), ex.Message);
                     }
                 }
 
@@ -7682,7 +7682,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteMapLocal_Dialog), ex.Message);
                     }
                 }
 
@@ -7712,7 +7712,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteMapRemote_Dialog), ex.Message);
                     }
                 }
 
@@ -7743,7 +7743,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(MapLocalClear), ex.Message);
                     }
                 }
 
@@ -7774,7 +7774,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(MapRemoteClear), ex.Message);
                     }
                 }
 
@@ -7797,7 +7797,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateMapLocal), ex.Message);
                     }
                 }
 
@@ -7832,7 +7832,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateMapRemote), ex.Message);
                     }
                 }
 
@@ -7853,7 +7853,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetMapLocal), ex.Message);
                     }
 
                     return null;
@@ -7991,7 +7991,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateMapLocal_ByListAction), ex.Message);
                     }
                 }
 
@@ -8064,7 +8064,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateMapRemote_ByListAction), ex.Message);
                     }
                 }
 
@@ -8081,7 +8081,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveMapLocal_ToDB), ex.Message);
                     }
                 }
 
@@ -8098,7 +8098,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveMapRemote_ToDB), ex.Message);
                     }
                 }
 
@@ -8239,7 +8239,7 @@ namespace WinsockPacketEditor
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapLocal.Success", "导出本地映射成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        Operate.DoLog(nameof(SaveMapLocal_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
@@ -8253,7 +8253,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveMapLocal_Dialog), ex.Message);
                     }
                 }
 
@@ -8287,7 +8287,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveMapLocal), ex.Message);
                     }
 
                     return false;
@@ -8318,7 +8318,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetMapLocal_XML), ex.Message);
                     }
 
                     return null;
@@ -8385,7 +8385,7 @@ namespace WinsockPacketEditor
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapRemote.Success", "导出远程映射成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        Operate.DoLog(nameof(SaveMapRemote_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
@@ -8399,7 +8399,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveMapRemote_Dialog), ex.Message);
                     }
                 }
 
@@ -8433,7 +8433,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveMapRemote), ex.Message);
                     }
 
                     return false;
@@ -8467,7 +8467,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetMapRemote_XML), ex.Message);
                     }
 
                     return null;
@@ -8494,14 +8494,14 @@ namespace WinsockPacketEditor
                                 {
                                     string Title = AntdUI.Localization.Get("InjectModeForm.ImportMapLocal.Success", "导入本地映射成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    Operate.DoLog(nameof(LoadMapLocal_Dialog), Title + ": " + FilePath);
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadMapLocal_Dialog), ex.Message);
                     }
                 }
 
@@ -8563,7 +8563,7 @@ namespace WinsockPacketEditor
                                 }
                                 else
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                                    Operate.DoLog(nameof(LoadMapLocal), sError);
                                 }
 
                                 return false;
@@ -8575,7 +8575,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadMapLocal), ex.Message);
                     }
 
                     return false;
@@ -8628,7 +8628,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadMapLocal_FromXDocument), ex.Message);
                     }
                 }
 
@@ -8653,14 +8653,14 @@ namespace WinsockPacketEditor
                                 {
                                     string Title = AntdUI.Localization.Get("InjectModeForm.ImportMapRemote.Success", "导入远程映射成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    Operate.DoLog(nameof(LoadMapRemote_Dialog), Title + ": " + FilePath);
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadMapRemote_Dialog), ex.Message);
                     }
                 }
 
@@ -8722,7 +8722,7 @@ namespace WinsockPacketEditor
                                 }
                                 else
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                                    Operate.DoLog(nameof(LoadMapRemote), sError);
                                 }
 
                                 return false;
@@ -8734,7 +8734,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadMapRemote), ex.Message);
                     }
 
                     return false;
@@ -8814,7 +8814,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadMapRemote_FromXDocument), ex.Message);
                     }
                 }
 
@@ -9042,7 +9042,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SendPacket), ex.Message);
                     }
                     finally
                     {
@@ -9072,7 +9072,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(GetPacketSpeedInfo), ex.Message);
                     }
 
                     return sReturn;
@@ -9092,7 +9092,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetPacketType_ByString), ex.Message);
                     }
 
                     return ptReturn;
@@ -9186,7 +9186,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetName_ByPacketType), ex.Message);
                         return string.Empty;
                     }
                 }
@@ -9225,7 +9225,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetImg_ByPacketType), ex.Message);
                     }
 
                     return null;
@@ -9303,7 +9303,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsShowPacket_ByFilter), ex.Message);
                     }
 
                     return true;
@@ -9333,7 +9333,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsFilter_BySocket), ex.Message);
                     }
 
                     return false;
@@ -9359,7 +9359,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsFilter_ByIP), ex.Message);
                     }
 
                     return false;
@@ -9385,7 +9385,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsFilter_ByPort), ex.Message);
                     }
 
                     return false;
@@ -9435,7 +9435,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsFilter_ByHead), ex.Message);
                     }
 
                     return false;
@@ -9469,7 +9469,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsFilter_ByPacket), ex.Message);
                     }
 
                     return false;
@@ -9522,7 +9522,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(IsFilter_BySize), ex.Message);
                     }
 
                     return false;
@@ -9554,7 +9554,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetPacketData_Hex), ex.Message);
                     }
 
                     return sReturn;
@@ -9821,7 +9821,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetIPString_BySocketAddr), ex.Message);
                     }
 
                     return string.Empty;
@@ -9842,7 +9842,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetIP_BySockAddr), ex.Message);
                     }
 
                     return sReturn;
@@ -9873,7 +9873,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetIP_BySocket), ex.Message);
                     }
 
                     return sReturn;
@@ -9903,7 +9903,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetSocketAddr_ByIPString), ex.Message);
                     }
 
                     return saReturn;
@@ -9972,7 +9972,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CountPacketInfo), ex.Message);
                     }
                 }
 
@@ -10044,7 +10044,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(PacketToQueue), ex.Message);
                     }
                 }
 
@@ -10063,7 +10063,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(ClearPacketQueue), ex.Message);
                     }
                 }
 
@@ -10226,7 +10226,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SearchForList), ex.Message);
                     }
 
                     return iResult;
@@ -10286,7 +10286,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(StatisticalSocketList_ByPacketLen), ex.Message);
                     }
 
                     return dtReturn;
@@ -10328,7 +10328,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(StatisticalSocketList_ByPacketSocket), ex.Message);
                     }
 
                     return dtReturn;
@@ -10469,7 +10469,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SendSocketList_BySelect), ex.Message);
                     }
                 }
 
@@ -10524,7 +10524,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SavePacketList_Dialog), ex.Message);
                     }
                 }
 
@@ -10556,7 +10556,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                    Operate.DoLog(nameof(SavePacketListToExcel), ex.Message);
                                 }
                             }
                         }
@@ -10565,7 +10565,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SavePacketListToExcel), ex.Message);
                         return false;
                     }
                 }
@@ -10752,7 +10752,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddFilter_New), ex.Message);
                     }
                 }
 
@@ -10817,7 +10817,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddFilter_ByPacketInfo), ex.Message);
                     }
 
                     return false;
@@ -10884,7 +10884,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddFilter_ByProxyInfo), ex.Message);
                     }
 
                     return false;
@@ -10963,7 +10963,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddFilter), ex.Message);
                     }
                 }
 
@@ -11036,7 +11036,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateFilter), ex.Message);
                     }
                 }
 
@@ -11069,7 +11069,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteFilter_Dialog), ex.Message);
                     }
                 }
 
@@ -11146,7 +11146,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CopyFilter), ex.Message);
                     }
                 }
 
@@ -11171,7 +11171,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilter_ByGuid), ex.Message);
                     }
 
                     return null;
@@ -11192,7 +11192,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         FMode = FilterConfig.Filter.FilterMode.Normal;
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterMode_ByString), ex.Message);
                     }
 
                     return FMode;
@@ -11209,7 +11209,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         FAction = FilterConfig.Filter.FilterAction.Replace;
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterAction_ByString), ex.Message);
                     }
 
                     return FAction;
@@ -11225,7 +11225,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterExecuteType_ByString), ex.Message);
                     }
 
                     return FEType;
@@ -11265,7 +11265,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterFunction_ByString), ex.Message);
                     }
 
                     return FFunction;
@@ -11282,7 +11282,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         FStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterStartFrom_ByString), ex.Message);
                     }
 
                     return FStartFrom;
@@ -11309,7 +11309,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         sReturn = "";
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterString_ByBytes), ex.Message);
                     }
 
                     return sReturn;
@@ -11376,7 +11376,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterFunctionString), ex.Message);
                     }
 
                     return sReturn;
@@ -11465,7 +11465,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterFunction_ByPacketType), ex.Message);
                     }
 
                     return ffReturn;
@@ -11569,7 +11569,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                        
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointSocket), ex.Message);                        
                     }
 
                     return false;
@@ -11620,7 +11620,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointLength), ex.Message);
                         return false;
                     }
                 }
@@ -11655,7 +11655,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointPort), ex.Message);
                         return false;
                     }
                 }
@@ -11757,7 +11757,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointHeader), ex.Message);
                     }
 
                     return false;
@@ -12053,7 +12053,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckFilter_IsMatch_Advanced), ex.Message);
                     }
 
                     return result;
@@ -12301,7 +12301,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DoFilter), ex.Message);
                     }
 
                     return faReturn;
@@ -12341,7 +12341,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(Replace_Normal), ex.Message);
                         return false;
                     }
                 }
@@ -12455,7 +12455,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(Replace_Advanced), ex.Message);
                         return false;
                     }
                 }
@@ -12588,7 +12588,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(ChangePacket_Filter), ex.Message);
                         return Array.Empty<byte>();
                     }
                 }
@@ -12726,7 +12726,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(FilterToList), ex.Message);
                     }
                 }
 
@@ -12746,7 +12746,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(InitFilterList_Count), ex.Message);
                     }
                 }
 
@@ -12777,7 +12777,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(FilterListClear), ex.Message);
                     }
                 }
 
@@ -12796,7 +12796,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         FLExecute = FilterConfig.Filter.Execute.Priority;
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterListExecute_ByString), ex.Message);
                     }
 
                     return FLExecute;
@@ -12887,7 +12887,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateFilterList_ByListAction), ex.Message);
                     }
                 }
 
@@ -12933,7 +12933,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DoFilterList), ex.Message);
                     }
 
                     if (bNewBuffer == null)
@@ -12961,7 +12961,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveFilterList_ToDB), ex.Message);
                     }
                 }
 
@@ -13043,7 +13043,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadFilterList_FromDB), ex.Message);
                     }
                 }
 
@@ -13108,7 +13108,7 @@ namespace WinsockPacketEditor
                                     {
                                         string Title = AntdUI.Localization.Get("ExportFilterList.Success", "导出滤镜列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        Operate.DoLog(nameof(SaveFilterList_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
@@ -13122,7 +13122,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveFilterList_Dialog), ex.Message);
                     }
                 }
 
@@ -13156,7 +13156,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveFilterList), ex.Message);
                     }
 
                     return false;
@@ -13214,7 +13214,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetFilterList_XML), ex.Message);
                     }
 
                     return null;
@@ -13241,14 +13241,14 @@ namespace WinsockPacketEditor
                                 {
                                     string Title = AntdUI.Localization.Get("ImportFilterList.Success", "导入滤镜列表成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    Operate.DoLog(nameof(LoadFilterList_Dialog), Title + ": " + FilePath);
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadFilterList_Dialog), ex.Message);
                     }
                 }
 
@@ -13311,7 +13311,7 @@ namespace WinsockPacketEditor
                                 }
                                 else
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                                    Operate.DoLog(nameof(LoadFilterList), sError);
                                 }
 
                                 return false;
@@ -13323,7 +13323,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadFilterList), ex.Message);
                     }
 
                     return false;
@@ -13542,7 +13542,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadFilterList_FromXDocument), ex.Message);
                     }
                 }
 
@@ -13582,7 +13582,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddSend_New), ex.Message);
                     }
                 }
 
@@ -13598,7 +13598,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddSend), ex.Message);
                     }
                 }
 
@@ -13628,7 +13628,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddSendCollection_ByPacketInfo), ex.Message);
                     }
 
                     return false;
@@ -13656,7 +13656,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddSendCollection_ByProxyInfo), ex.Message);
                     }
 
                     return false;
@@ -13678,7 +13678,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddSendCollection), ex.Message);
                     }
                 }
 
@@ -13702,7 +13702,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateSend), ex.Message);
                     }
                 }
 
@@ -13727,7 +13727,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CopySend), ex.Message);
                     }
                 }
 
@@ -13760,7 +13760,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteSend_Dialog), ex.Message);
                     }
                 }
 
@@ -13785,7 +13785,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetSend_ByGuid), ex.Message);
                     }
 
                     return null;
@@ -13814,7 +13814,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetSendName_ByGuid), ex.Message);
                     }
 
                     return sReturn;
@@ -13843,7 +13843,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetSendCollection_ByGuid), ex.Message);
                     }
 
                     return sscReturn;
@@ -13880,7 +13880,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DoSend_ByIndex), ex.Message);
                     }
                 }
 
@@ -13930,7 +13930,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SetIsCheck_BySendIndex), ex.Message);
                     }
                 }
 
@@ -14057,7 +14057,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateSendCollection_ByListAction), ex.Message);
                     }
                 }
 
@@ -14122,7 +14122,7 @@ namespace WinsockPacketEditor
                                     {
                                         string Title = AntdUI.Localization.Get("ExportSendCollection.Success", "导出发送集成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        Operate.DoLog(nameof(SaveSendCollection_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
@@ -14136,7 +14136,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveSendCollection_Dialog), ex.Message);
                     }
                 }
 
@@ -14158,7 +14158,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveSendCollection), ex.Message);
                     }
 
                     return false;
@@ -14196,7 +14196,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveSendCollection_ToXDocument), ex.Message);
                     }
                 }
 
@@ -14221,14 +14221,14 @@ namespace WinsockPacketEditor
                                 {
                                     string Title = AntdUI.Localization.Get("InjectModeForm.ImportSendCollection.Success", "导入发送集成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    Operate.DoLog(nameof(LoadSendCollection_Dialog), Title + ": " + FilePath);
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadSendCollection_Dialog), ex.Message);
                     }
                 }
 
@@ -14290,7 +14290,7 @@ namespace WinsockPacketEditor
                                 }
                                 else
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                                    Operate.DoLog(nameof(LoadSendCollection), sError);
                                 }
 
                                 return false;
@@ -14302,7 +14302,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadSendCollection), ex.Message);
                     }
                     return false;
                 }
@@ -14404,7 +14404,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadSendCollection_FromXDocument), ex.Message);
                     }
                 }
 
@@ -14447,7 +14447,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SendToList), ex.Message);
                     }
                 }
 
@@ -14468,7 +14468,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(InitSendList_Count), ex.Message);
                     }
                 }
 
@@ -14555,7 +14555,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateSendList_ByListAction), ex.Message);
                     }
                 }
 
@@ -14621,7 +14621,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveSendList_ToDB), ex.Message);
                     }
                 }
 
@@ -14662,7 +14662,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadSendList_FromDB), ex.Message);
                     }
                 }
 
@@ -14727,7 +14727,7 @@ namespace WinsockPacketEditor
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendList.Success", "导出发送列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        Operate.DoLog(nameof(SaveSendList_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
@@ -14741,7 +14741,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveSendList_Dialog), ex.Message);
                     }
                 }
 
@@ -14775,7 +14775,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveSendList), ex.Message);
                     }
 
                     return false;
@@ -14834,7 +14834,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetSendList_XML), ex.Message);
                     }
 
                     return null;
@@ -14861,14 +14861,14 @@ namespace WinsockPacketEditor
                                 {
                                     string Title = AntdUI.Localization.Get("InjectModeForm.ImportSendList.Success", "导入发送列表成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    Operate.DoLog(nameof(LoadSendList_Dialog), Title + ": " + FilePath);
                                 }                    
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadSendList_Dialog), ex.Message);
                     }
                 }
 
@@ -14930,7 +14930,7 @@ namespace WinsockPacketEditor
                                 }
                                 else
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                                    Operate.DoLog(nameof(LoadSendList), sError);
                                 }
 
                                 return false;
@@ -14942,7 +14942,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadSendList), ex.Message);
                     }
 
                     return false;
@@ -15041,7 +15041,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadSendList_FromXDocument), ex.Message);
                     }
                 }
 
@@ -15118,7 +15118,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddRobot_New), ex.Message);
                     }
                 }
 
@@ -15134,7 +15134,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddRobot), ex.Message);
                     }
                 }
 
@@ -15154,7 +15154,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateRobot), ex.Message);
                     }
                 }
 
@@ -15175,7 +15175,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CopyRobot), ex.Message);
                     }
                 }
 
@@ -15208,7 +15208,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DeleteRobot_Dialog), ex.Message);
                     }
                 }
 
@@ -15233,7 +15233,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetRobot_ByGuid), ex.Message);
                     }
 
                     return null;
@@ -15286,7 +15286,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetName_ByInstructionType), ex.Message);
                     }
 
                     return sReturn;
@@ -15339,7 +15339,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetColor_ByInstructionType), ex.Message);
                     }
 
                     return cReturn;
@@ -15514,7 +15514,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetContentString_ByInstructionType), ex.Message);
                     }
 
                     return sReturn;
@@ -15534,7 +15534,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetInstructionType_ByString), ex.Message);
                     }
 
                     return instructionType;
@@ -15554,7 +15554,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetKeyBoardType_ByString), ex.Message);
                     }
 
                     return kbType;
@@ -15574,7 +15574,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetMouseType_ByString), ex.Message);
                     }
 
                     return mType;
@@ -15596,7 +15596,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(AddRobotInstruction), ex.Message);
                     }
                 }
 
@@ -15745,7 +15745,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateInstruction_ByListAction), ex.Message);
                     }
                 }
 
@@ -15859,7 +15859,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(CheckRobotInstruction), ex.Message);
                     }
 
                     return iReturn;
@@ -15889,7 +15889,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(DoRobot_ByIndex), ex.Message);
                     }
                 }
 
@@ -15947,7 +15947,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(RobotToList), ex.Message);
                     }
                 }
 
@@ -15966,7 +15966,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(InitRobotList_Count), ex.Message);
                     }
                 }
 
@@ -16077,7 +16077,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(UpdateRobotList_ByListAction), ex.Message);
                     }
                 }
 
@@ -16098,7 +16098,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveRobotList_ToDB), ex.Message);
                     }
                 }
 
@@ -16133,7 +16133,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadRobotList_FromDB), ex.Message);
                     }
                 }
 
@@ -16199,7 +16199,7 @@ namespace WinsockPacketEditor
                                     {
                                         string Title = AntdUI.Localization.Get("ExportRobotList.Success", "导出机器人列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                        Operate.DoLog(nameof(SaveRobotList_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
@@ -16213,7 +16213,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveRobotList_Dialog), ex.Message);
                     }
                 }
 
@@ -16247,7 +16247,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveRobotList), ex.Message);
                     }
 
                     return false;
@@ -16296,7 +16296,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(GetRobotList_XML), ex.Message);
                     }
 
                     return null;
@@ -16325,14 +16325,14 @@ namespace WinsockPacketEditor
                                 {
                                     string Title = AntdUI.Localization.Get("InjectModeForm.ImportRobotList.Success", "导入机器人列表成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    Operate.DoLog(nameof(LoadRobotList_Dialog), Title + ": " + FilePath);
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadRobotList_Dialog), ex.Message);
                     }
                 }
 
@@ -16394,7 +16394,7 @@ namespace WinsockPacketEditor
                                 }
                                 else
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                                    Operate.DoLog(nameof(LoadRobotList), sError);
                                 }
 
                                 return false;
@@ -16406,7 +16406,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadRobotList), ex.Message);
                     }
 
                     return false;
@@ -16452,7 +16452,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(LoadRobotList_FromXDocument), ex.Message);
                     }
                 }
 
@@ -16677,7 +16677,7 @@ namespace WinsockPacketEditor
                                         {
                                             string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到 Excel 成功");
                                             AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                            Operate.DoLog(nameof(SaveLogList_Dialog), Title + ": " + FilePath);
                                         }
                                         else
                                         {
@@ -16692,7 +16692,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveLogList_Dialog), ex.Message);
                     }
                 }
 
@@ -16720,7 +16720,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                    Operate.DoLog(nameof(SaveLogListToExcel), ex.Message);
                                 }
                             }
                         }
@@ -16729,7 +16729,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(SaveLogListToExcel), ex.Message);
                         return false;
                     }
                 }
@@ -16770,7 +16770,7 @@ namespace WinsockPacketEditor
                                         {
                                             string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到 Excel 成功");
                                             AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                            Operate.DoLog(nameof(SaveFilterLogList_Dialog), Title + ": " + FilePath);
                                         }
                                         else
                                         {
@@ -16785,7 +16785,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveFilterLogList_Dialog), ex.Message);
                     }
                 }
 
@@ -16816,7 +16816,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                    Operate.DoLog(nameof(SaveFilterLogListToExcel), ex.Message);
                                 }
                             }
                         }
@@ -16825,7 +16825,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(SaveFilterLogListToExcel), ex.Message);
                         return false;
                     }
                 }
@@ -16866,7 +16866,7 @@ namespace WinsockPacketEditor
                                         {
                                             string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到 Excel 成功");
                                             AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                            Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                            Operate.DoLog(nameof(SaveProxyLogList_Dialog), Title + ": " + FilePath);
                                         }
                                         else
                                         {
@@ -16881,7 +16881,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Operate.DoLog(nameof(SaveProxyLogList_Dialog), ex.Message);
                     }
                 }
 
@@ -16910,7 +16910,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                    Operate.DoLog(nameof(SaveProxyLogListToExcel), ex.Message);
                                 }
                             }
                         }
@@ -16919,7 +16919,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        DoLog(nameof(SaveProxyLogListToExcel), ex.Message);
                         return false;
                     }
                 }
@@ -16966,7 +16966,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(nameof(DoProxyLog), ex.Message);
             }            
         }
 
@@ -17008,7 +17008,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    DoLog(nameof(InitdbPath), ex.Message);
                 }
             }
 
@@ -17091,7 +17091,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_SystemConfig), ex.Message);
                 }
 
                 return bReturn;
@@ -17115,7 +17115,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_SystemConfig), ex.Message);
                 }
 
                 return dtReturn;
@@ -17138,7 +17138,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_SystemConfig), ex.Message);
                 }
             }
 
@@ -17321,7 +17321,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_SystemConfig), ex.Message);
                 }
             }
 
@@ -17344,7 +17344,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(UpdateTable_SystemConfig_LastInjection), ex.Message);
                 }
             }
 
@@ -17390,7 +17390,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_InjectMode), ex.Message);
                 }
 
                 return bReturn;
@@ -17414,7 +17414,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_InjectMode), ex.Message);
                 }
 
                 return dtReturn;
@@ -17437,7 +17437,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_InjectMode), ex.Message);
                 }
             }
 
@@ -17509,7 +17509,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_InjectMode), ex.Message);
                 }
             }
 
@@ -17556,7 +17556,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_ProxyMode), ex.Message);
                 }
 
                 return bReturn;
@@ -17580,7 +17580,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyMode), ex.Message);
                 }
 
                 return dtReturn;
@@ -17603,7 +17603,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyMode), ex.Message);
                 }
             }
 
@@ -17678,7 +17678,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_ProxyMode), ex.Message);
                 }
             }
 
@@ -17736,7 +17736,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_Filter), ex.Message);
                 }
 
                 return bReturn;
@@ -17760,7 +17760,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_Filter), ex.Message);
                 }
 
                 return dtReturn;
@@ -17783,7 +17783,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_Filter), ex.Message);
                 }
             }
 
@@ -17891,7 +17891,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_Filter), ex.Message);
                 }
             }
 
@@ -17938,7 +17938,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_Send), ex.Message);
                 }
 
                 return bReturn;
@@ -17962,7 +17962,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_Send), ex.Message);
                 }
 
                 return dtReturn;
@@ -17989,7 +17989,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_SendCollection), ex.Message);
                 }
 
                 return dtReturn;
@@ -18013,7 +18013,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_Send), ex.Message);
                 }
             }
 
@@ -18088,7 +18088,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_Send), ex.Message);
                 }
             }
 
@@ -18128,7 +18128,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_Robot), ex.Message);
                 }
 
                 return bReturn;
@@ -18152,7 +18152,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_Robot), ex.Message);
                 }
 
                 return dtReturn;
@@ -18179,7 +18179,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_RobotInstruction), ex.Message);
                 }
 
                 return dtReturn;
@@ -18203,7 +18203,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_Robot), ex.Message);
                 }
             }
 
@@ -18257,7 +18257,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_Robot), ex.Message);
                 }
             }
 
@@ -18306,7 +18306,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_ProxyAccount), ex.Message);
                 }
 
                 return bReturn;
@@ -18330,7 +18330,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyAccount), ex.Message);
                 }
 
                 return dtReturn;
@@ -18357,7 +18357,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyAccountIPInfo), ex.Message);
                 }
 
                 return dtReturn;
@@ -18381,7 +18381,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyAccount), ex.Message);
                 }
             }
 
@@ -18474,7 +18474,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_ProxyAccount), ex.Message);
                 }
             }
 
@@ -18510,7 +18510,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_ProxyMapLocal), ex.Message);
                 }
 
                 return bReturn;
@@ -18534,7 +18534,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyMapLocal), ex.Message);
                 }
 
                 return dtReturn;
@@ -18557,7 +18557,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyMapLocal), ex.Message);
                 }
             }
 
@@ -18605,7 +18605,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_ProxyMapLocal), ex.Message);
                 }
             }
 
@@ -18644,7 +18644,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(CreateTable_ProxyMapRemote), ex.Message);
                 }
 
                 return bReturn;
@@ -18668,7 +18668,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyMapRemote), ex.Message);
                 }
 
                 return dtReturn;
@@ -18691,7 +18691,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyMapRemote), ex.Message);
                 }
             }
 
@@ -18747,7 +18747,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Operate.DoLog(nameof(InsertTable_ProxyMapRemote), ex.Message);
                 }
             }
 
