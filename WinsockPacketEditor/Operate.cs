@@ -5804,7 +5804,7 @@ namespace WinsockPacketEditor
 
                 #region//代理认证入列表            
 
-                public static async void AuthInfo_ToList(Guid AID, string AuthIP, bool AuthResult)
+                public static async Task AuthInfo_ToList(Guid AID, string AuthIP, bool AuthResult)
                 {
                     try
                     {
@@ -5955,32 +5955,22 @@ namespace WinsockPacketEditor
 
                 #region//检测用户名和密码是否正确（区分大小写）
 
-                public static bool CheckUserNameAndPassWord(string UserName, string PassWord, out Guid AccountID)
+                public static (bool ok, Guid accountId) CheckUserNameAndPassWord(string userName, string passWord)
                 {
-                    AccountID = Guid.Empty;
-
                     try
                     {
-                        string pwEncrypt = SystemConfig.PassWord_Encrypt(PassWord);
+                        string pwEncrypt = SystemConfig.PassWord_Encrypt(passWord);
 
-                        foreach (AccountInfo pai in ProxyConfig.Account.lstAccountInfo)
+                        foreach (var acc in ProxyConfig.Account.lstAccountInfo)
                         {
-                            if (pai.IsEnable && pai.UserName.Equals(UserName) && pai.Password.Equals(pwEncrypt))
-                            {
-                                if (pai.IsExpiry)
-                                {
-                                    if (pai.ExpiryTime > DateTime.Now)
-                                    {
-                                        AccountID = pai.AID;
-                                        return true;
-                                    }
-                                }
-                                else
-                                {
-                                    AccountID = pai.AID;
-                                    return true;
-                                }
-                            }
+                            if (!acc.IsEnable) continue;
+                            if (!acc.UserName.Equals(userName)) continue;
+                            if (!acc.Password.Equals(pwEncrypt)) continue;
+
+                            if (acc.IsExpiry && acc.ExpiryTime <= DateTime.Now)
+                                return (false, Guid.Empty);
+
+                            return (true, acc.AID);
                         }
                     }
                     catch (Exception ex)
@@ -5988,7 +5978,7 @@ namespace WinsockPacketEditor
                         Operate.DoLog(nameof(CheckUserNameAndPassWord), ex.Message);
                     }
 
-                    return false;
+                    return (false, Guid.Empty);
                 }
 
                 #endregion
@@ -6236,7 +6226,7 @@ namespace WinsockPacketEditor
 
                 #region//记录代理账号的IP地址（异步）
 
-                public static async void IPInfo_ToAccount(Guid AccountID, string IPAddress)
+                public static async Task IPInfo_ToAccount(Guid AccountID, string IPAddress)
                 {
                     try
                     {

@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace WinsockPacketEditor
 {
@@ -46,55 +47,46 @@ namespace WinsockPacketEditor
 
             byte[] body = new byte[length];
             Buffer.BlockCopy(readBuffer, offset, body, 0, length);
-            
-            if (this.HandleSocks5Request(body.AsSpan()))
-            {
-                return null;
-            }
-            else
-            {
-                return new BinaryRequestInfo("SOCKS5", body);
-            }
+
+            _ = HandleSocks5Request(body);
+
+            return null;
         }
 
-        private bool HandleSocks5Request(Span<byte> bDataSpan)
+        private async Task HandleSocks5Request(byte[] bData)
         {
             try
             {
                 switch (this.m_Session.ProxyStep)
                 {
                     case Operate.ProxyConfig.Proxy.ProxyStep.Handshake:
-                        this.Handshake(bDataSpan);
+                        await Handshake(bData);
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName:
-                        this.AuthUserName(bDataSpan);
+                        await AuthUserName(bData);
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.Command:
-                        this.Command(bDataSpan);
+                        Command(bData);
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.ForwardData:
-                        this.m_Session.ForwardData(bDataSpan);
+                        this.m_Session.ForwardData(bData.AsSpan());
                         break;
                 }
-
-                return true;
             }
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(HandleSocks5Request), ex.Message);
             }
-
-            return false;
         }
 
         #endregion
 
         #region//握手过程                
 
-        private void Handshake(ReadOnlySpan<byte> bData)
+        private async Task Handshake(byte[] bData)
         {
             try
             {
@@ -104,18 +96,14 @@ namespace WinsockPacketEditor
                 {
                     bool bSupportAuthType = false;
 
-                    Operate.ProxyConfig.Proxy.AuthType atServer = new Operate.ProxyConfig.Proxy.AuthType();
-                    if (Operate.ProxyConfig.Proxy.Enable_Auth)
-                    {
-                        atServer = Operate.ProxyConfig.Proxy.AuthType.UserName;
-                    }
-                    else
-                    {
-                        atServer = Operate.ProxyConfig.Proxy.AuthType.None;
-                    }
+                    Operate.ProxyConfig.Proxy.AuthType atServer = Operate.ProxyConfig.Proxy.Enable_Auth
+                        ? Operate.ProxyConfig.Proxy.AuthType.UserName
+                        : Operate.ProxyConfig.Proxy.AuthType.None;
 
                     int iMETHODS_COUNT = bData[1];
-                    ReadOnlySpan<byte> bMETHODS = bData.Slice(2, iMETHODS_COUNT);
+                    byte[] bMETHODS = new byte[iMETHODS_COUNT];
+                    Array.Copy(bData, 2, bMETHODS, 0, iMETHODS_COUNT);
+
                     foreach (byte method in bMETHODS)
                     {
                         Operate.ProxyConfig.Proxy.AuthType atClient = (Operate.ProxyConfig.Proxy.AuthType)method;
@@ -140,12 +128,13 @@ namespace WinsockPacketEditor
 
                             if (bData.Length > iMETHODS_COUNT + 2)
                             {
-                                ReadOnlySpan<byte> bAuthDate = bData.Slice(iMETHODS_COUNT + 2);
+                                byte[] bAuthDate = new byte[bData.Length - (iMETHODS_COUNT + 2)];
+                                Array.Copy(bData, iMETHODS_COUNT + 2, bAuthDate, 0, bAuthDate.Length);
 
                                 bool bIsMatch = Operate.ProxyConfig.Proxy.CheckDataIsMatchProxyStep(bAuthDate, Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName);
                                 if (bIsMatch)
                                 {
-                                    this.AuthUserName(bAuthDate);
+                                    await AuthUserName(bAuthDate);
                                 }
                             }
                         }
@@ -171,7 +160,7 @@ namespace WinsockPacketEditor
 
         #region//验证账号密码
 
-        private void AuthUserName(ReadOnlySpan<byte> bData)
+        private async Task AuthUserName(byte[] bData)
         {
             try
             {
@@ -180,43 +169,45 @@ namespace WinsockPacketEditor
                 if (VERSION == 0x01)
                 {
                     int USERNAME_LENGTH = bData[1];
-                    ReadOnlySpan<byte> USERNAME = bData.Slice(2, USERNAME_LENGTH);
+
+                    byte[] USERNAME_BYTES = new byte[USERNAME_LENGTH];
+                    Array.Copy(bData, 2, USERNAME_BYTES, 0, USERNAME_LENGTH);
 
                     int PASSWORD_LENGTH = bData[2 + USERNAME_LENGTH];
-                    ReadOnlySpan<byte> PASSWORD = bData.Slice(3 + USERNAME_LENGTH, PASSWORD_LENGTH);
 
-                    string sUserName = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, USERNAME);
-                    string sPassWord = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, PASSWORD);
+                    byte[] PASSWORD_BYTES = new byte[PASSWORD_LENGTH];
+                    Array.Copy(bData, 3 + USERNAME_LENGTH, PASSWORD_BYTES, 0, PASSWORD_LENGTH);
 
-                    Span<byte> bAuth = stackalloc byte[2];
+                    string sUserName = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, USERNAME_BYTES);
+                    string sPassWord = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, PASSWORD_BYTES);
+
+                    byte[] bAuth = new byte[2];
                     bAuth[0] = 0x01;
 
-                    // 第一步：先验证账号密码
-                    bool bAuthOK = Operate.ProxyConfig.Account.CheckUserNameAndPassWord(sUserName, sPassWord, out Guid AccountID);
-
+                    // 第一步：先验证账号密码（异步）
+                    var(bAuthOK, AccountID) = Operate.ProxyConfig.Account.CheckUserNameAndPassWord(sUserName, sPassWord);
                     if (!bAuthOK)
                     {
-                        // 账号密码验证失败直接返回
                         bAuth[1] = (byte)0x01;
-                        this.m_Session.TrySend(bAuth.ToArray(), 0, bAuth.Length);
+                        this.m_Session.TrySend(bAuth, 0, bAuth.Length);
                         return;
                     }
 
-                    // 第二步：验证通过后检查连接数限制
+                    // 第二步：验证通过后检查连接数限制（异步）
                     bool isOverLinks = Operate.ProxyConfig.Account.CheckLimitLinks(AccountID, this.m_Session.ClientIP);
                     if (isOverLinks)
                     {
                         bAuth[1] = (byte)0x01;
-                        this.m_Session.TrySend(bAuth.ToArray(), 0, bAuth.Length);
+                        this.m_Session.TrySend(bAuth, 0, bAuth.Length);
                         return;
                     }
 
-                    // 第三步：检查设备数限制
+                    // 第三步：检查设备数限制（异步）
                     bool isOverDevices = Operate.ProxyConfig.Account.CheckLimitDevices(AccountID, this.m_Session.ClientIP);
                     if (isOverDevices)
                     {
                         bAuth[1] = (byte)0x01;
-                        this.m_Session.TrySend(bAuth.ToArray(), 0, bAuth.Length);
+                        this.m_Session.TrySend(bAuth, 0, bAuth.Length);
                         return;
                     }
 
@@ -227,14 +218,14 @@ namespace WinsockPacketEditor
                     if (isAllowed)
                     {
                         Operate.ProxyConfig.Account.SetOnline_ByAccountID(AccountID, true);
-                        Operate.ProxyConfig.Account.IPInfo_ToAccount(AccountID, this.m_Session.ClientIP);
-                        Operate.ProxyConfig.Account.AuthInfo_ToList(AccountID, this.m_Session.ClientIP, true);
+                        await Operate.ProxyConfig.Account.IPInfo_ToAccount(AccountID, this.m_Session.ClientIP);
+                        await Operate.ProxyConfig.Account.AuthInfo_ToList(AccountID, this.m_Session.ClientIP, true);
 
                         this.m_Session.AID = AccountID;
                         this.m_Session.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
                     }
 
-                    this.m_Session.TrySend(bAuth.ToArray(), 0, bAuth.Length);
+                    this.m_Session.TrySend(bAuth, 0, bAuth.Length);
                 }
             }
             catch (Exception ex)
