@@ -287,7 +287,7 @@
             this.tFilterAdvanced_Search.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Search.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Search.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Search.EditMode = AntdUI.TEditMode.Click;
+            this.tFilterAdvanced_Search.EditMode = AntdUI.TEditMode.DoubleClick;
             this.tFilterAdvanced_Search.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Search.Gap = 8;
             this.tFilterAdvanced_Search.GapCell = 0;
@@ -305,15 +305,14 @@
             // 
             // tabFilterFrom
             // 
-            this.tabFilterFrom.Controls.Add(this.tpFromPosition);
             this.tabFilterFrom.Controls.Add(this.tpFromHead);
-            this.tabFilterFrom.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabFilterFrom.Controls.Add(this.tpFromPosition);
+            this.tabFilterFrom.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabFilterFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterFrom.Location = new System.Drawing.Point(3, 110);
             this.tabFilterFrom.Name = "tabFilterFrom";
             this.tabFilterFrom.Pages.Add(this.tpFromHead);
             this.tabFilterFrom.Pages.Add(this.tpFromPosition);
-            this.tabFilterFrom.SelectedIndex = 1;
             this.tabFilterFrom.Size = new System.Drawing.Size(1088, 101);
             this.tabFilterFrom.Style = styleLine1;
             this.tabFilterFrom.TabIndex = 2;
@@ -337,7 +336,7 @@
             this.tFilterAdvanced_Modify_Position.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Position.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Modify_Position.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Modify_Position.EditMode = AntdUI.TEditMode.Click;
+            this.tFilterAdvanced_Modify_Position.EditMode = AntdUI.TEditMode.DoubleClick;
             this.tFilterAdvanced_Modify_Position.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Modify_Position.Gap = 8;
             this.tFilterAdvanced_Modify_Position.GapCell = 0;
@@ -371,7 +370,7 @@
             this.tFilterAdvanced_Modify_Head.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Head.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Modify_Head.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Modify_Head.EditMode = AntdUI.TEditMode.Click;
+            this.tFilterAdvanced_Modify_Head.EditMode = AntdUI.TEditMode.DoubleClick;
             this.tFilterAdvanced_Modify_Head.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Modify_Head.Gap = 8;
             this.tFilterAdvanced_Modify_Head.GapCell = 0;
@@ -420,7 +419,7 @@
             this.tFilterNormal.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterNormal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterNormal.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterNormal.EditMode = AntdUI.TEditMode.Click;
+            this.tFilterNormal.EditMode = AntdUI.TEditMode.DoubleClick;
             this.tFilterNormal.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterNormal.Gap = 8;
             this.tFilterNormal.GapCell = 0;
@@ -800,7 +799,7 @@
             // 
             this.tabFilterFunction.Controls.Add(this.tpInjectMode);
             this.tabFilterFunction.Controls.Add(this.tpProxyMode);
-            this.tabFilterFunction.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabFilterFunction.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabFilterFunction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterFunction.Location = new System.Drawing.Point(3, 39);
             this.tabFilterFunction.Name = "tabFilterFunction";
