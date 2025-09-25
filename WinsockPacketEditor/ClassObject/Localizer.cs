@@ -1536,8 +1536,8 @@ namespace WinsockPacketEditor
                 case "ProxySettingsForm.SystemProxy":
                     return "System Proxy";
 
-                case "ProxySettingsForm.MaxLinks":
-                    return "Max Links";
+                case "ProxySettingsForm.MaxConnection":
+                    return "Max Connection";
 
                 case "ProxySettingsForm.BufferSize":
                     return "Buffer Size";

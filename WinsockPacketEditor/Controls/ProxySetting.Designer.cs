@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.tlpProxySettings = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.dMaxConnection = new AntdUI.Divider();
             this.tableLayoutPanel1 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbEnable_Auth = new AntdUI.Checkbox();
             this.ddlAuthType = new AntdUI.Select();
@@ -46,7 +47,6 @@
             this.cbProxyIP_Auto = new AntdUI.Checkbox();
             this.ddlProxyIP_Appoint = new AntdUI.Select();
             this.switchSystemProxy = new AntdUI.Switch();
-            this.dMaxConnection = new AntdUI.Divider();
             this.txtMaxConnectionNumber = new AntdUI.InputNumber();
             this.tlpProxySettings.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -98,6 +98,18 @@
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpProxySettings.Size = new System.Drawing.Size(500, 700);
             this.tlpProxySettings.TabIndex = 2;
+            // 
+            // dMaxConnection
+            // 
+            this.dMaxConnection.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dMaxConnection.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dMaxConnection.LocalizationText = "ProxySettingsForm.MaxConnection";
+            this.dMaxConnection.Location = new System.Drawing.Point(3, 495);
+            this.dMaxConnection.Name = "dMaxConnection";
+            this.dMaxConnection.Orientation = AntdUI.TOrientation.Left;
+            this.dMaxConnection.Size = new System.Drawing.Size(494, 23);
+            this.dMaxConnection.TabIndex = 13;
+            this.dMaxConnection.Text = "最大连接数";
             // 
             // tableLayoutPanel1
             // 
@@ -340,18 +352,6 @@
             this.switchSystemProxy.Size = new System.Drawing.Size(50, 30);
             this.switchSystemProxy.TabIndex = 10;
             this.switchSystemProxy.CheckedChanged += new AntdUI.BoolEventHandler(this.switchSystemProxy_CheckedChanged);
-            // 
-            // dMaxConnection
-            // 
-            this.dMaxConnection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dMaxConnection.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dMaxConnection.LocalizationText = "ProxySettingsForm.SystemProxy";
-            this.dMaxConnection.Location = new System.Drawing.Point(3, 495);
-            this.dMaxConnection.Name = "dMaxConnection";
-            this.dMaxConnection.Orientation = AntdUI.TOrientation.Left;
-            this.dMaxConnection.Size = new System.Drawing.Size(494, 23);
-            this.dMaxConnection.TabIndex = 13;
-            this.dMaxConnection.Text = "最大连接数";
             // 
             // txtMaxConnectionNumber
             // 

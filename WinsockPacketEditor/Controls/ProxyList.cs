@@ -686,6 +686,20 @@ namespace WinsockPacketEditor
 
         #region//代理数据 - 右键菜单
 
+        private void hbProxyData_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C && this.hbProxyData.CanCopy())
+            {
+                e.Handled = true;
+                this.hbProxyData.CopyHex();
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                {
+                    LocalizationText = "CopyToClipboard"
+                });
+            }
+        }
+
         private void hbProxyData_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -753,11 +767,21 @@ namespace WinsockPacketEditor
 
                             this.hbProxyData.Copy();
 
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                            {
+                                LocalizationText = "CopyToClipboard"
+                            });
+
                             break;
 
                         case "Copy_Hex":
 
                             this.hbProxyData.CopyHex();
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                            {
+                                LocalizationText = "CopyToClipboard"
+                            });
 
                             break;
 

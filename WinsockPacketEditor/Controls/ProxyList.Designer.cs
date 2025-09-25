@@ -829,6 +829,7 @@
             this.hbProxyData.StringViewVisible = true;
             this.hbProxyData.TabIndex = 1;
             this.hbProxyData.VScrollBarVisible = true;
+            this.hbProxyData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbProxyData_KeyDown);
             this.hbProxyData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbProxyData_MouseDown);
             // 
             // tlpProxyInfo
