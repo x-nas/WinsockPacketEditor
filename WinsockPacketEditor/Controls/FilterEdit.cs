@@ -1908,11 +1908,15 @@ namespace WinsockPacketEditor
                     iProgressionCount_New,
                     sExclude_New,
                     sSearch_New,
-                    sModify_New);                
+                    sModify_New);
 
-                if (this.form is InterfaceInfo.IFilterList flForm)
+                if (this.form is InterfaceInfo.IProxyMode pmForm)
                 {
-                    flForm.RefreshFilterList();
+                    pmForm.RefreshFilterList();
+                }
+                else if (this.form is InterfaceInfo.IInjectMode imForm)
+                {
+                    imForm.RefreshFilterList();
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "滤镜保存成功", TType.Success)

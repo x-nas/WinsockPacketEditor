@@ -53,10 +53,10 @@ namespace WinsockPacketEditor
                         LocalizationText = "BatchSuccess"
                     });
 
-                    if (this.form is InterfaceInfo.IAccountList alForm)
+                    if (this.form is InterfaceInfo.IProxyMode pmForm)
                     {
                         Operate.ProxyConfig.Account.NeedSave = true;
-                        alForm.RefreshAccountList();
+                        pmForm.RefreshAccountList();
                     }
 
                     this.Dispose();

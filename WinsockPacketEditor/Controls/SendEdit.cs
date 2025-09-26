@@ -450,9 +450,13 @@ namespace WinsockPacketEditor
             {
                 if (this.SaveSend())
                 {
-                    if (this.form is InterfaceInfo.ISendList slForm)
+                    if (this.form is InterfaceInfo.IProxyMode pmForm)
                     {
-                        slForm.RefreshSendList();
+                        pmForm.RefreshSendList();
+                    }
+                    else if (this.form is InterfaceInfo.IInjectMode imForm)
+                    {
+                        imForm.RefreshSendList();
                     }
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送保存成功", TType.Success)

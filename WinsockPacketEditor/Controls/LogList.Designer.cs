@@ -51,20 +51,18 @@
             // 
             // tlpLogList
             // 
-            this.tlpLogList.ColumnCount = 3;
-            this.tlpLogList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpLogList.ColumnCount = 1;
             this.tlpLogList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLogList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpLogList.Controls.Add(this.tlpLogList_Button, 1, 1);
-            this.tlpLogList.Controls.Add(this.tabLogList, 1, 2);
+            this.tlpLogList.Controls.Add(this.tlpLogList_Button, 0, 0);
+            this.tlpLogList.Controls.Add(this.tabLogList, 0, 1);
             this.tlpLogList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpLogList.Location = new System.Drawing.Point(0, 0);
             this.tlpLogList.Margin = new System.Windows.Forms.Padding(0);
             this.tlpLogList.Name = "tlpLogList";
-            this.tlpLogList.RowCount = 3;
-            this.tlpLogList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpLogList.RowCount = 2;
             this.tlpLogList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpLogList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLogList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpLogList.Size = new System.Drawing.Size(800, 800);
             this.tlpLogList.TabIndex = 0;
             // 
@@ -79,18 +77,18 @@
             this.tlpLogList_Button.Controls.Add(this.cbLogList_AutoClear, 1, 0);
             this.tlpLogList_Button.Controls.Add(this.cbLogList_AutoRoll, 3, 0);
             this.tlpLogList_Button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpLogList_Button.Location = new System.Drawing.Point(30, 20);
+            this.tlpLogList_Button.Location = new System.Drawing.Point(0, 0);
             this.tlpLogList_Button.Margin = new System.Windows.Forms.Padding(0);
             this.tlpLogList_Button.Name = "tlpLogList_Button";
             this.tlpLogList_Button.RowCount = 1;
             this.tlpLogList_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLogList_Button.Size = new System.Drawing.Size(740, 50);
+            this.tlpLogList_Button.Size = new System.Drawing.Size(800, 50);
             this.tlpLogList_Button.TabIndex = 8;
             // 
             // txtLogList_AutoClear
             // 
             this.txtLogList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtLogList_AutoClear.Location = new System.Drawing.Point(509, 3);
+            this.txtLogList_AutoClear.Location = new System.Drawing.Point(569, 3);
             this.txtLogList_AutoClear.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -119,7 +117,7 @@
             this.cbLogList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbLogList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbLogList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
-            this.cbLogList_AutoClear.Location = new System.Drawing.Point(395, 3);
+            this.cbLogList_AutoClear.Location = new System.Drawing.Point(455, 3);
             this.cbLogList_AutoClear.Name = "cbLogList_AutoClear";
             this.cbLogList_AutoClear.Size = new System.Drawing.Size(108, 44);
             this.cbLogList_AutoClear.TabIndex = 16;
@@ -131,7 +129,7 @@
             this.cbLogList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbLogList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbLogList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
-            this.cbLogList_AutoRoll.Location = new System.Drawing.Point(629, 3);
+            this.cbLogList_AutoRoll.Location = new System.Drawing.Point(689, 3);
             this.cbLogList_AutoRoll.Name = "cbLogList_AutoRoll";
             this.cbLogList_AutoRoll.Size = new System.Drawing.Size(108, 44);
             this.cbLogList_AutoRoll.TabIndex = 15;
@@ -146,12 +144,12 @@
             this.tabLogList.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabLogList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabLogList.Gap = 20;
-            this.tabLogList.Location = new System.Drawing.Point(33, 73);
+            this.tabLogList.Location = new System.Drawing.Point(3, 53);
             this.tabLogList.Name = "tabLogList";
             this.tabLogList.Pages.Add(this.tpSystemLog);
             this.tabLogList.Pages.Add(this.tpFilterLog);
             this.tabLogList.Pages.Add(this.tpProxyLog);
-            this.tabLogList.Size = new System.Drawing.Size(734, 724);
+            this.tabLogList.Size = new System.Drawing.Size(794, 744);
             this.tabLogList.Style = styleCard1;
             this.tabLogList.TabIndex = 0;
             this.tabLogList.Type = AntdUI.TabType.Card;
@@ -163,7 +161,7 @@
             this.tpSystemLog.LocalizationText = "LogList.LogList.{id}";
             this.tpSystemLog.Location = new System.Drawing.Point(0, 45);
             this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(734, 679);
+            this.tpSystemLog.Size = new System.Drawing.Size(794, 699);
             this.tpSystemLog.TabIndex = 0;
             this.tpSystemLog.Text = "系统日志";
             // 
@@ -176,7 +174,7 @@
             this.tSystemLog.Location = new System.Drawing.Point(0, 0);
             this.tSystemLog.MultipleRows = true;
             this.tSystemLog.Name = "tSystemLog";
-            this.tSystemLog.Size = new System.Drawing.Size(734, 679);
+            this.tSystemLog.Size = new System.Drawing.Size(794, 699);
             this.tSystemLog.TabIndex = 5;
             this.tSystemLog.Text = "table1";
             this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
@@ -188,7 +186,7 @@
             this.tpFilterLog.LocalizationText = "LogList.LogList.{id}";
             this.tpFilterLog.Location = new System.Drawing.Point(0, 45);
             this.tpFilterLog.Name = "tpFilterLog";
-            this.tpFilterLog.Size = new System.Drawing.Size(734, 679);
+            this.tpFilterLog.Size = new System.Drawing.Size(794, 699);
             this.tpFilterLog.TabIndex = 1;
             this.tpFilterLog.Text = "滤镜日志";
             // 
@@ -200,7 +198,7 @@
             this.tFilterLog.Gap = 12;
             this.tFilterLog.Location = new System.Drawing.Point(0, 0);
             this.tFilterLog.Name = "tFilterLog";
-            this.tFilterLog.Size = new System.Drawing.Size(734, 679);
+            this.tFilterLog.Size = new System.Drawing.Size(794, 699);
             this.tFilterLog.TabIndex = 11;
             this.tFilterLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterLog_CellClick);
             // 
@@ -211,7 +209,7 @@
             this.tpProxyLog.LocalizationText = "LogList.LogList.{id}";
             this.tpProxyLog.Location = new System.Drawing.Point(0, 45);
             this.tpProxyLog.Name = "tpProxyLog";
-            this.tpProxyLog.Size = new System.Drawing.Size(734, 679);
+            this.tpProxyLog.Size = new System.Drawing.Size(794, 699);
             this.tpProxyLog.TabIndex = 2;
             this.tpProxyLog.Text = "代理日志";
             // 
@@ -223,7 +221,7 @@
             this.tProxyLog.Gap = 12;
             this.tProxyLog.Location = new System.Drawing.Point(0, 0);
             this.tProxyLog.Name = "tProxyLog";
-            this.tProxyLog.Size = new System.Drawing.Size(734, 679);
+            this.tProxyLog.Size = new System.Drawing.Size(794, 699);
             this.tProxyLog.TabIndex = 10;
             this.tProxyLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyLog_CellClick);
             // 

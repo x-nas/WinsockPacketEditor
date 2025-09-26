@@ -4,7 +4,6 @@ using DiffPlex.DiffBuilder.Model;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using QQWry;
-using SuperSocket.SocketBase;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -6337,7 +6336,6 @@ namespace WinsockPacketEditor
                 public static int Search_Index = -1;                
                 public static ProxyInfo piSelect = null;
                 public static int ClientNumber = 0;
-                public static bool IsClientListFormShow = false;
 
                 public static readonly ConcurrentDictionary<Guid, ProxyUDP> cdProxyUDP = new ConcurrentDictionary<Guid, ProxyUDP>();
                 public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(5);
@@ -6486,7 +6484,6 @@ namespace WinsockPacketEditor
 
             public static class Account
             {
-                public static bool IsAccountListFormShow = false;
                 public static bool NeedSave = false;
                 public static bool IsShow_ProxyAccount = false, IsShow_ProxyAuth = false;                
                 public static string CCProxy_HTML = string.Empty;
@@ -7135,10 +7132,10 @@ namespace WinsockPacketEditor
                                     }
                                 }
 
-                                if (form is InterfaceInfo.IAccountList alForm)
+                                if (form is InterfaceInfo.IProxyMode pmForm)
                                 {
                                     Operate.ProxyConfig.Account.NeedSave = true;
-                                    alForm.RefreshAccountList();
+                                    pmForm.RefreshAccountList();
                                 }
 
                                 return true;
@@ -7782,10 +7779,10 @@ namespace WinsockPacketEditor
                                     }
                                 }, () =>
                                 {
-                                    if (form is InterfaceInfo.IAccountList alForm)
+                                    if (form is InterfaceInfo.IProxyMode pmForm)
                                     {
                                         Operate.ProxyConfig.Account.NeedSave = true;
-                                        alForm.RefreshAccountList();
+                                        pmForm.RefreshAccountList();
                                     }
                                 });                                
                             }
@@ -15272,7 +15269,6 @@ namespace WinsockPacketEditor
 
             public static class List
             {
-                public static bool IsSendListFormShow = false;
                 public static List<SendExecute> lstSendExecute = new List<SendExecute>();
                 public static BindingList<SendInfo> lstSendInfo = new BindingList<SendInfo>();
 
@@ -16788,7 +16784,6 @@ namespace WinsockPacketEditor
 
             public static class List
             {
-                public static bool IsRobotListFormShow = false;
                 public static List<RobotExecute> lstRobotExecute = new List<RobotExecute>();
                 public static BindingList<RobotInfo> lstRobotInfo = new BindingList<RobotInfo>();
 

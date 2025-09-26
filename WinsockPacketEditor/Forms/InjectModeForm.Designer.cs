@@ -61,6 +61,9 @@
             this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
             this.bgwAutoSave = new System.ComponentModel.BackgroundWorker();
+            this.tpFilterList = new AntdUI.TabPage();
+            this.tpSendList = new AntdUI.TabPage();
+            this.tpRobotList = new AntdUI.TabPage();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -243,6 +246,9 @@
             // tabInjectMode
             // 
             this.tabInjectMode.Controls.Add(this.tpPacketList);
+            this.tabInjectMode.Controls.Add(this.tpFilterList);
+            this.tabInjectMode.Controls.Add(this.tpSendList);
+            this.tabInjectMode.Controls.Add(this.tpRobotList);
             this.tabInjectMode.Controls.Add(this.tpStatistical);
             this.tabInjectMode.Controls.Add(this.tpComparison);
             this.tabInjectMode.Controls.Add(this.tpXOR);
@@ -254,6 +260,9 @@
             this.tabInjectMode.Location = new System.Drawing.Point(170, 60);
             this.tabInjectMode.Name = "tabInjectMode";
             this.tabInjectMode.Pages.Add(this.tpPacketList);
+            this.tabInjectMode.Pages.Add(this.tpFilterList);
+            this.tabInjectMode.Pages.Add(this.tpSendList);
+            this.tabInjectMode.Pages.Add(this.tpRobotList);
             this.tabInjectMode.Pages.Add(this.tpStatistical);
             this.tabInjectMode.Pages.Add(this.tpComparison);
             this.tabInjectMode.Pages.Add(this.tpXOR);
@@ -349,6 +358,33 @@
             // 
             this.bgwAutoSave.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAutoSave_DoWork);
             // 
+            // tpFilterList
+            // 
+            this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpFilterList.Location = new System.Drawing.Point(0, 36);
+            this.tpFilterList.Name = "tpFilterList";
+            this.tpFilterList.Size = new System.Drawing.Size(1280, 706);
+            this.tpFilterList.TabIndex = 7;
+            this.tpFilterList.Text = "滤镜列表";
+            // 
+            // tpSendList
+            // 
+            this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSendList.Location = new System.Drawing.Point(0, 36);
+            this.tpSendList.Name = "tpSendList";
+            this.tpSendList.Size = new System.Drawing.Size(1280, 706);
+            this.tpSendList.TabIndex = 8;
+            this.tpSendList.Text = "发送列表";
+            // 
+            // tpRobotList
+            // 
+            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpRobotList.Location = new System.Drawing.Point(0, 36);
+            this.tpRobotList.Name = "tpRobotList";
+            this.tpRobotList.Size = new System.Drawing.Size(1280, 706);
+            this.tpRobotList.TabIndex = 9;
+            this.tpRobotList.Text = "机器人列表";
+            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -395,5 +431,8 @@
         private System.Windows.Forms.Timer timerPacketListInfo;
         private System.Windows.Forms.Timer timerAutoSave;
         private System.ComponentModel.BackgroundWorker bgwAutoSave;
+        private AntdUI.TabPage tpFilterList;
+        private AntdUI.TabPage tpSendList;
+        private AntdUI.TabPage tpRobotList;
     }
 }

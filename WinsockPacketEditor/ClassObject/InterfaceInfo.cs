@@ -15,6 +15,14 @@ namespace WinsockPacketEditor
 
             void RefreshProxyData();
 
+            void RefreshAccountList();
+
+            void RefreshFilterList();
+
+            void RefreshSendList();
+
+            void RefreshRobotList();
+
             void CleanUp_LogList();
 
             void SetTextA(string TextA);
@@ -36,6 +44,12 @@ namespace WinsockPacketEditor
 
             void RefreshPacketData();
 
+            void RefreshFilterList();
+
+            void RefreshSendList();
+
+            void RefreshRobotList();
+
             void CleanUp_LogList();
 
             void SetTextA(string TextA);
@@ -43,26 +57,6 @@ namespace WinsockPacketEditor
             void SetTextB(string TextB);
         }
 
-        #endregion        
-
-        public interface IAccountList
-        {
-            void RefreshAccountList();
-        }
-
-        public interface IFilterList
-        {
-            void RefreshFilterList();
-        }
-
-        public interface ISendList
-        {
-            void RefreshSendList();
-        }
-
-        public interface IRobotList
-        {
-            void RefreshRobotList();
-        }
+        #endregion                
     }
 }

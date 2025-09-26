@@ -10,13 +10,18 @@ namespace WinsockPacketEditor
     {        
         private bool setcolor = false;                        
         private AntdUI.FormFloatButton FloatButton = null;
-        private ProxyList cProxyList = null;        
-        private LogList cLogList = null;
+        private ProxyList cProxyList = null;
+        private ClientList cClientList = null;
+        private AccountList cAccountList = null;
+        private FilterList cFilterList = null;
+        private SendList cSendList = null;
+        private RobotList cRobotList = null;
         private StatisticalData cStatisticalData = null;
         private ComparisonText cComparisonText = null;
         private XORCalculation cXORCalculation = null;
         private Transcoding cTranscoding = null;
-        private ExtractionData cExtractionData = null;        
+        private ExtractionData cExtractionData = null;
+        private LogList cLogList = null;
 
         #region//窗体事件
 
@@ -100,6 +105,7 @@ namespace WinsockPacketEditor
 
         private void InitControls()
         {
+            //ProxyList
             if (this.tpProxyList.InvokeRequired)
             {
                 this.tpProxyList.Invoke(new Action(() =>
@@ -116,22 +122,92 @@ namespace WinsockPacketEditor
                 this.tpProxyList.Controls.Add(cProxyList);
             }
 
-            if (this.tpSystemLog.InvokeRequired)
+            //ClientList
+            if (this.tpClientList.InvokeRequired)
             {
-                this.tpSystemLog.Invoke(new Action(() =>
+                this.tpClientList.Invoke(new Action(() =>
                 {
-                    cLogList = new LogList(this);
-                    cLogList.Dock = DockStyle.Fill;
-                    this.tpSystemLog.Controls.Add(cLogList);
+                    cClientList = new ClientList();
+                    cClientList.Dock = DockStyle.Fill;
+                    this.tpClientList.Controls.Add(cClientList);
                 }));
             }
             else
             {
-                cLogList = new LogList(this);
-                cLogList.Dock = DockStyle.Fill;
-                this.tpSystemLog.Controls.Add(cLogList);
+                cClientList = new ClientList();
+                cClientList.Dock = DockStyle.Fill;
+                this.tpClientList.Controls.Add(cClientList);
             }
 
+            //AccountList
+            if (this.tpAccountList.InvokeRequired)
+            {
+                this.tpAccountList.Invoke(new Action(() =>
+                {
+                    cAccountList = new AccountList(this);
+                    cAccountList.Dock = DockStyle.Fill;
+                    this.tpAccountList.Controls.Add(cAccountList);
+                }));
+            }
+            else
+            {
+                cAccountList = new AccountList(this);
+                cAccountList.Dock = DockStyle.Fill;
+                this.tpAccountList.Controls.Add(cAccountList);
+            }
+
+            //FilterList
+            if (this.tpFilterList.InvokeRequired)
+            {
+                this.tpFilterList.Invoke(new Action(() =>
+                {
+                    cFilterList = new FilterList(this);
+                    cFilterList.Dock = DockStyle.Fill;
+                    this.tpFilterList.Controls.Add(cFilterList);
+                }));
+            }
+            else
+            {
+                cFilterList = new FilterList(this);
+                cFilterList.Dock = DockStyle.Fill;
+                this.tpFilterList.Controls.Add(cFilterList);
+            }
+
+            //SendList
+            if (this.tpSendList.InvokeRequired)
+            {
+                this.tpSendList.Invoke(new Action(() =>
+                {
+                    cSendList = new SendList(this);
+                    cSendList.Dock = DockStyle.Fill;
+                    this.tpSendList.Controls.Add(cSendList);
+                }));
+            }
+            else
+            {
+                cSendList = new SendList(this);
+                cSendList.Dock = DockStyle.Fill;
+                this.tpSendList.Controls.Add(cSendList);
+            }
+
+            //RobotList
+            if (this.tpRobotList.InvokeRequired)
+            {
+                this.tpRobotList.Invoke(new Action(() =>
+                {
+                    cRobotList = new RobotList(this);
+                    cRobotList.Dock = DockStyle.Fill;
+                    this.tpRobotList.Controls.Add(cRobotList);
+                }));
+            }
+            else
+            {
+                cRobotList = new RobotList(this);
+                cRobotList.Dock = DockStyle.Fill;
+                this.tpRobotList.Controls.Add(cRobotList);
+            }
+
+            //StatisticalData
             if (this.tpStatistical.InvokeRequired)
             {
                 this.tpStatistical.Invoke(new Action(() =>
@@ -148,6 +224,7 @@ namespace WinsockPacketEditor
                 this.tpStatistical.Controls.Add(cStatisticalData);
             }
 
+            //ComparisonText
             if (this.tpComparison.InvokeRequired)
             {
                 this.tpComparison.Invoke(new Action(() =>
@@ -164,6 +241,7 @@ namespace WinsockPacketEditor
                 this.tpComparison.Controls.Add(cComparisonText);
             }
 
+            //XORCalculation
             if (this.tpXOR.InvokeRequired)
             {
                 this.tpXOR.Invoke(new Action(() =>
@@ -180,6 +258,7 @@ namespace WinsockPacketEditor
                 this.tpXOR.Controls.Add(cXORCalculation);
             }
 
+            //Transcoding
             if (this.tpTranscoding.InvokeRequired)
             {
                 this.tpTranscoding.Invoke(new Action(() =>
@@ -196,6 +275,7 @@ namespace WinsockPacketEditor
                 this.tpTranscoding.Controls.Add(cTranscoding);
             }
 
+            //ExtractionData
             if (this.tpExtraction.InvokeRequired)
             {
                 this.tpExtraction.Invoke(new Action(() =>
@@ -210,6 +290,23 @@ namespace WinsockPacketEditor
                 cExtractionData = new ExtractionData(this);
                 cExtractionData.Dock = DockStyle.Fill;
                 this.tpExtraction.Controls.Add(cExtractionData);
+            }
+
+            //LogList
+            if (this.tpSystemLog.InvokeRequired)
+            {
+                this.tpSystemLog.Invoke(new Action(() =>
+                {
+                    cLogList = new LogList(this);
+                    cLogList.Dock = DockStyle.Fill;
+                    this.tpSystemLog.Controls.Add(cLogList);
+                }));
+            }
+            else
+            {
+                cLogList = new LogList(this);
+                cLogList.Dock = DockStyle.Fill;
+                this.tpSystemLog.Controls.Add(cLogList);
             }
         }
 
@@ -295,6 +392,26 @@ namespace WinsockPacketEditor
             this.cProxyList?.RefreshProxyData();
         }
 
+        public void RefreshAccountList()
+        {
+            this.cAccountList?.RefreshAccountList();
+        }
+
+        public void RefreshFilterList()
+        {
+            this.cFilterList?.RefreshFilterList();
+        }
+
+        public void RefreshSendList()
+        {
+            this.cSendList?.RefreshSendList();
+        }
+
+        public void RefreshRobotList()
+        {
+            this.cRobotList?.RefreshRobotList();
+        }
+
         public void CleanUp_LogList()
         {
             this.cLogList?.CleanUp_LogList();
@@ -367,7 +484,12 @@ namespace WinsockPacketEditor
                 this.tabProxyMode.BackColor = Color.White;
             }
 
-            this.cProxyList?.Dark_Changed();        
+            this.cProxyList?.Dark_Changed();
+            this.cClientList?.Dark_Changed();
+            this.cAccountList?.Dark_Changed();
+            this.cFilterList?.Dark_Changed();
+            this.cSendList?.Dark_Changed();
+            this.cRobotList?.Dark_Changed();
             this.cStatisticalData?.Dark_Changed();
             this.cComparisonText?.Dark_Changed();
             this.cXORCalculation?.Dark_Changed();
@@ -483,7 +605,9 @@ namespace WinsockPacketEditor
 
                 await Task.Run(() =>
                 {
-                    this.cProxyList?.ShowProxyInfo();                
+                    this.cProxyList?.ShowProxyInfo();
+                    this.cClientList?.RefreshClientList();
+                    this.cClientList?.RefreshAuthList();
                     this.ShowMenuInfo();
                 });
 
@@ -562,53 +686,23 @@ namespace WinsockPacketEditor
                     break;
 
                 case "miClientList":
-
-                    if (!Operate.ProxyConfig.List.IsClientListFormShow)
-                    {
-                        ClientListForm clForm = new ClientListForm();
-                        clForm.Show();
-                    }
-
+                    this.tabProxyMode.SelectTab("tpClientList");
                     break;
 
                 case "miAccountList":
-
-                    if (!Operate.ProxyConfig.Account.IsAccountListFormShow)
-                    {
-                        AccountListForm alForm = new AccountListForm();
-                        alForm.Show();
-                    }
-
+                    this.tabProxyMode.SelectTab("tpAccountList");
                     break;
 
                 case "miFilterList":
-
-                    if (!Operate.FilterConfig.List.IsFilterListFormShow)
-                    {
-                        FilterListForm flForm = new FilterListForm();
-                        flForm.Show();
-                    }                    
-
+                    this.tabProxyMode.SelectTab("tpFilterList");
                     break;
 
                 case "miSendList":
-
-                    if (!Operate.SendConfig.List.IsSendListFormShow)
-                    {
-                        SendListForm slForm = new SendListForm();
-                        slForm.Show();
-                    }
-
+                    this.tabProxyMode.SelectTab("tpSendList");
                     break;
 
                 case "miRobotList":
-
-                    if (!Operate.RobotConfig.List.IsRobotListFormShow)
-                    {
-                        RobotListForm rlForm = new RobotListForm();
-                        rlForm.Show();
-                    }
-
+                    this.tabProxyMode.SelectTab("tpRobotList");
                     break;
 
                 case "miStatistical":

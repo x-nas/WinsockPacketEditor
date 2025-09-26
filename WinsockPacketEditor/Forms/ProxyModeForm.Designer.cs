@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             AntdUI.MenuItem menuItem1 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem2 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem3 = new AntdUI.MenuItem();
@@ -41,16 +42,12 @@
             AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem12 = new AntdUI.MenuItem();
-            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxyModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
             this.btn_mode = new AntdUI.Button();
             this.btn_global = new AntdUI.Dropdown();
             this.btn_setting = new AntdUI.Button();
-            this.tlpMenu = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.mProxyMode = new AntdUI.Menu();
-            this.bMenuCollapse = new AntdUI.Button();
             this.tabProxyMode = new AntdUI.Tabs();
             this.tpProxyList = new AntdUI.TabPage();
             this.tpStatistical = new AntdUI.TabPage();
@@ -63,9 +60,17 @@
             this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
             this.bgwAutoSave = new System.ComponentModel.BackgroundWorker();
+            this.tpAccountList = new AntdUI.TabPage();
+            this.tlpMenu = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.mProxyMode = new AntdUI.Menu();
+            this.bMenuCollapse = new AntdUI.Button();
+            this.tpClientList = new AntdUI.TabPage();
+            this.tpFilterList = new AntdUI.TabPage();
+            this.tpSendList = new AntdUI.TabPage();
+            this.tpRobotList = new AntdUI.TabPage();
             this.pageHeader.SuspendLayout();
-            this.tlpMenu.SuspendLayout();
             this.tabProxyMode.SuspendLayout();
+            this.tlpMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -142,6 +147,134 @@
             this.btn_setting.TabIndex = 10;
             this.btn_setting.WaveSize = 0;
             this.btn_setting.Click += new System.EventHandler(this.btn_setting_Click);
+            // 
+            // tabProxyMode
+            // 
+            this.tabProxyMode.Controls.Add(this.tpProxyList);
+            this.tabProxyMode.Controls.Add(this.tpClientList);
+            this.tabProxyMode.Controls.Add(this.tpAccountList);
+            this.tabProxyMode.Controls.Add(this.tpFilterList);
+            this.tabProxyMode.Controls.Add(this.tpSendList);
+            this.tabProxyMode.Controls.Add(this.tpRobotList);
+            this.tabProxyMode.Controls.Add(this.tpStatistical);
+            this.tabProxyMode.Controls.Add(this.tpComparison);
+            this.tabProxyMode.Controls.Add(this.tpXOR);
+            this.tabProxyMode.Controls.Add(this.tpTranscoding);
+            this.tabProxyMode.Controls.Add(this.tpExtraction);
+            this.tabProxyMode.Controls.Add(this.tpSystemLog);
+            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabProxyMode.Location = new System.Drawing.Point(170, 60);
+            this.tabProxyMode.Name = "tabProxyMode";
+            this.tabProxyMode.Pages.Add(this.tpProxyList);
+            this.tabProxyMode.Pages.Add(this.tpClientList);
+            this.tabProxyMode.Pages.Add(this.tpAccountList);
+            this.tabProxyMode.Pages.Add(this.tpFilterList);
+            this.tabProxyMode.Pages.Add(this.tpSendList);
+            this.tabProxyMode.Pages.Add(this.tpRobotList);
+            this.tabProxyMode.Pages.Add(this.tpStatistical);
+            this.tabProxyMode.Pages.Add(this.tpComparison);
+            this.tabProxyMode.Pages.Add(this.tpXOR);
+            this.tabProxyMode.Pages.Add(this.tpTranscoding);
+            this.tabProxyMode.Pages.Add(this.tpExtraction);
+            this.tabProxyMode.Pages.Add(this.tpSystemLog);
+            this.tabProxyMode.Size = new System.Drawing.Size(1280, 742);
+            this.tabProxyMode.Style = styleLine1;
+            this.tabProxyMode.TabIndex = 11;
+            this.tabProxyMode.Text = "tabs1";
+            // 
+            // tpProxyList
+            // 
+            this.tpProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpProxyList.Location = new System.Drawing.Point(0, 36);
+            this.tpProxyList.Name = "tpProxyList";
+            this.tpProxyList.Size = new System.Drawing.Size(1280, 706);
+            this.tpProxyList.TabIndex = 0;
+            this.tpProxyList.Text = "代理数据";
+            // 
+            // tpStatistical
+            // 
+            this.tpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpStatistical.Location = new System.Drawing.Point(0, 36);
+            this.tpStatistical.Name = "tpStatistical";
+            this.tpStatistical.Size = new System.Drawing.Size(1280, 706);
+            this.tpStatistical.TabIndex = 1;
+            this.tpStatistical.Text = "统计数据";
+            // 
+            // tpComparison
+            // 
+            this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpComparison.Location = new System.Drawing.Point(0, 36);
+            this.tpComparison.Name = "tpComparison";
+            this.tpComparison.Size = new System.Drawing.Size(1280, 706);
+            this.tpComparison.TabIndex = 12;
+            this.tpComparison.Text = "文本对比";
+            // 
+            // tpXOR
+            // 
+            this.tpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpXOR.Location = new System.Drawing.Point(0, 36);
+            this.tpXOR.Name = "tpXOR";
+            this.tpXOR.Size = new System.Drawing.Size(1280, 706);
+            this.tpXOR.TabIndex = 13;
+            this.tpXOR.Text = "异或计算";
+            // 
+            // tpTranscoding
+            // 
+            this.tpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpTranscoding.Location = new System.Drawing.Point(0, 36);
+            this.tpTranscoding.Name = "tpTranscoding";
+            this.tpTranscoding.Size = new System.Drawing.Size(1280, 706);
+            this.tpTranscoding.TabIndex = 14;
+            this.tpTranscoding.Text = "编码转换";
+            // 
+            // tpExtraction
+            // 
+            this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpExtraction.Location = new System.Drawing.Point(0, 36);
+            this.tpExtraction.Name = "tpExtraction";
+            this.tpExtraction.Size = new System.Drawing.Size(1280, 706);
+            this.tpExtraction.TabIndex = 15;
+            this.tpExtraction.Text = "数据提取";
+            // 
+            // tpSystemLog
+            // 
+            this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSystemLog.Location = new System.Drawing.Point(0, 36);
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.Size = new System.Drawing.Size(1280, 706);
+            this.tpSystemLog.TabIndex = 6;
+            this.tpSystemLog.Text = "系统日志";
+            // 
+            // timerProxyList
+            // 
+            this.timerProxyList.Enabled = true;
+            this.timerProxyList.Interval = 10;
+            this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
+            // 
+            // timerProxyListInfo
+            // 
+            this.timerProxyListInfo.Enabled = true;
+            this.timerProxyListInfo.Interval = 1000;
+            this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
+            // 
+            // timerAutoSave
+            // 
+            this.timerAutoSave.Interval = 1000;
+            this.timerAutoSave.Tick += new System.EventHandler(this.timerAutoSave_Tick);
+            // 
+            // bgwAutoSave
+            // 
+            this.bgwAutoSave.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAutoSave_DoWork);
+            // 
+            // tpAccountList
+            // 
+            this.tpAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpAccountList.Location = new System.Drawing.Point(0, 36);
+            this.tpAccountList.Name = "tpAccountList";
+            this.tpAccountList.Size = new System.Drawing.Size(1280, 706);
+            this.tpAccountList.TabIndex = 16;
+            this.tpAccountList.Text = "账号列表";
             // 
             // tlpMenu
             // 
@@ -248,114 +381,41 @@
             this.bMenuCollapse.WaveSize = 0;
             this.bMenuCollapse.Click += new System.EventHandler(this.bMenuCollapse_Click);
             // 
-            // tabProxyMode
+            // tpClientList
             // 
-            this.tabProxyMode.Controls.Add(this.tpProxyList);
-            this.tabProxyMode.Controls.Add(this.tpStatistical);
-            this.tabProxyMode.Controls.Add(this.tpComparison);
-            this.tabProxyMode.Controls.Add(this.tpXOR);
-            this.tabProxyMode.Controls.Add(this.tpTranscoding);
-            this.tabProxyMode.Controls.Add(this.tpExtraction);
-            this.tabProxyMode.Controls.Add(this.tpSystemLog);
-            this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
-            this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabProxyMode.Location = new System.Drawing.Point(170, 60);
-            this.tabProxyMode.Name = "tabProxyMode";
-            this.tabProxyMode.Pages.Add(this.tpProxyList);
-            this.tabProxyMode.Pages.Add(this.tpStatistical);
-            this.tabProxyMode.Pages.Add(this.tpComparison);
-            this.tabProxyMode.Pages.Add(this.tpXOR);
-            this.tabProxyMode.Pages.Add(this.tpTranscoding);
-            this.tabProxyMode.Pages.Add(this.tpExtraction);
-            this.tabProxyMode.Pages.Add(this.tpSystemLog);
-            this.tabProxyMode.Size = new System.Drawing.Size(1280, 742);
-            this.tabProxyMode.Style = styleLine1;
-            this.tabProxyMode.TabIndex = 11;
-            this.tabProxyMode.Text = "tabs1";
+            this.tpClientList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpClientList.Location = new System.Drawing.Point(0, 36);
+            this.tpClientList.Name = "tpClientList";
+            this.tpClientList.Size = new System.Drawing.Size(1280, 706);
+            this.tpClientList.TabIndex = 17;
+            this.tpClientList.Text = "客户端列表";
             // 
-            // tpProxyList
+            // tpFilterList
             // 
-            this.tpProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpProxyList.Location = new System.Drawing.Point(0, 36);
-            this.tpProxyList.Name = "tpProxyList";
-            this.tpProxyList.Size = new System.Drawing.Size(1280, 706);
-            this.tpProxyList.TabIndex = 0;
-            this.tpProxyList.Text = "代理数据";
+            this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpFilterList.Location = new System.Drawing.Point(0, 36);
+            this.tpFilterList.Name = "tpFilterList";
+            this.tpFilterList.Size = new System.Drawing.Size(1280, 706);
+            this.tpFilterList.TabIndex = 18;
+            this.tpFilterList.Text = "滤镜列表";
             // 
-            // tpStatistical
+            // tpSendList
             // 
-            this.tpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpStatistical.Location = new System.Drawing.Point(0, 36);
-            this.tpStatistical.Name = "tpStatistical";
-            this.tpStatistical.Size = new System.Drawing.Size(1280, 706);
-            this.tpStatistical.TabIndex = 1;
-            this.tpStatistical.Text = "统计数据";
+            this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSendList.Location = new System.Drawing.Point(0, 36);
+            this.tpSendList.Name = "tpSendList";
+            this.tpSendList.Size = new System.Drawing.Size(1280, 706);
+            this.tpSendList.TabIndex = 19;
+            this.tpSendList.Text = "发送列表";
             // 
-            // tpComparison
+            // tpRobotList
             // 
-            this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpComparison.Location = new System.Drawing.Point(0, 36);
-            this.tpComparison.Name = "tpComparison";
-            this.tpComparison.Size = new System.Drawing.Size(1280, 706);
-            this.tpComparison.TabIndex = 12;
-            this.tpComparison.Text = "文本对比";
-            // 
-            // tpXOR
-            // 
-            this.tpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpXOR.Location = new System.Drawing.Point(0, 36);
-            this.tpXOR.Name = "tpXOR";
-            this.tpXOR.Size = new System.Drawing.Size(1280, 706);
-            this.tpXOR.TabIndex = 13;
-            this.tpXOR.Text = "异或计算";
-            // 
-            // tpTranscoding
-            // 
-            this.tpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpTranscoding.Location = new System.Drawing.Point(0, 36);
-            this.tpTranscoding.Name = "tpTranscoding";
-            this.tpTranscoding.Size = new System.Drawing.Size(1280, 706);
-            this.tpTranscoding.TabIndex = 14;
-            this.tpTranscoding.Text = "编码转换";
-            // 
-            // tpExtraction
-            // 
-            this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpExtraction.Location = new System.Drawing.Point(0, 36);
-            this.tpExtraction.Name = "tpExtraction";
-            this.tpExtraction.Size = new System.Drawing.Size(1280, 706);
-            this.tpExtraction.TabIndex = 15;
-            this.tpExtraction.Text = "数据提取";
-            // 
-            // tpSystemLog
-            // 
-            this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpSystemLog.Location = new System.Drawing.Point(0, 36);
-            this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(1280, 706);
-            this.tpSystemLog.TabIndex = 6;
-            this.tpSystemLog.Text = "系统日志";
-            // 
-            // timerProxyList
-            // 
-            this.timerProxyList.Enabled = true;
-            this.timerProxyList.Interval = 10;
-            this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
-            // 
-            // timerProxyListInfo
-            // 
-            this.timerProxyListInfo.Enabled = true;
-            this.timerProxyListInfo.Interval = 1000;
-            this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
-            // 
-            // timerAutoSave
-            // 
-            this.timerAutoSave.Interval = 1000;
-            this.timerAutoSave.Tick += new System.EventHandler(this.timerAutoSave_Tick);
-            // 
-            // bgwAutoSave
-            // 
-            this.bgwAutoSave.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAutoSave_DoWork);
+            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpRobotList.Location = new System.Drawing.Point(0, 36);
+            this.tpRobotList.Name = "tpRobotList";
+            this.tpRobotList.Size = new System.Drawing.Size(1280, 706);
+            this.tpRobotList.TabIndex = 20;
+            this.tpRobotList.Text = "机器人列表";
             // 
             // ProxyModeForm
             // 
@@ -375,9 +435,9 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProxyModeForm_FormClosing);
             this.Load += new System.EventHandler(this.ProxyModeForm_Load);
             this.pageHeader.ResumeLayout(false);
+            this.tabProxyMode.ResumeLayout(false);
             this.tlpMenu.ResumeLayout(false);
             this.tlpMenu.PerformLayout();
-            this.tabProxyMode.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -404,6 +464,11 @@
         private AntdUI.TabPage tpExtraction;
         private System.Windows.Forms.Timer timerAutoSave;
         private System.ComponentModel.BackgroundWorker bgwAutoSave;
+        private AntdUI.TabPage tpAccountList;
+        private AntdUI.TabPage tpClientList;
+        private AntdUI.TabPage tpFilterList;
+        private AntdUI.TabPage tpSendList;
+        private AntdUI.TabPage tpRobotList;
     }
 }
 

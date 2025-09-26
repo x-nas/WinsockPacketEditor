@@ -249,10 +249,10 @@ namespace WinsockPacketEditor
                     LocalizationText = "AccountEditForm.Success"
                 });
 
-                if (this.form is InterfaceInfo.IAccountList alForm)
+                if (this.form is InterfaceInfo.IProxyMode pmForm)
                 {
                     Operate.ProxyConfig.Account.NeedSave = true;
-                    alForm.RefreshAccountList();
+                    pmForm.RefreshAccountList();
                 }
 
                 this.Dispose();

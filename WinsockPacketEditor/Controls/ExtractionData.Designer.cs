@@ -49,19 +49,16 @@
             // 
             // tlpExtractionData
             // 
-            this.tlpExtractionData.ColumnCount = 3;
-            this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpExtractionData.ColumnCount = 1;
             this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpExtractionData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpExtractionData.Controls.Add(this.splitterExtraction, 1, 1);
+            this.tlpExtractionData.Controls.Add(this.splitterExtraction, 0, 0);
             this.tlpExtractionData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpExtractionData.Location = new System.Drawing.Point(0, 0);
             this.tlpExtractionData.Margin = new System.Windows.Forms.Padding(0);
             this.tlpExtractionData.Name = "tlpExtractionData";
-            this.tlpExtractionData.RowCount = 2;
-            this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpExtractionData.RowCount = 1;
             this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpExtractionData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpExtractionData.Size = new System.Drawing.Size(800, 800);
             this.tlpExtractionData.TabIndex = 0;
             // 
@@ -70,7 +67,7 @@
             this.splitterExtraction.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterExtraction.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterExtraction.Location = new System.Drawing.Point(33, 23);
+            this.splitterExtraction.Location = new System.Drawing.Point(3, 3);
             this.splitterExtraction.Name = "splitterExtraction";
             this.splitterExtraction.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -83,8 +80,8 @@
             // 
             this.splitterExtraction.Panel2.Controls.Add(this.tlpData);
             this.splitterExtraction.Panel2MinSize = 0;
-            this.splitterExtraction.Size = new System.Drawing.Size(734, 774);
-            this.splitterExtraction.SplitterDistance = 405;
+            this.splitterExtraction.Size = new System.Drawing.Size(794, 794);
+            this.splitterExtraction.SplitterDistance = 415;
             this.splitterExtraction.SplitterSize = 80;
             this.splitterExtraction.SplitterWidth = 10;
             this.splitterExtraction.TabIndex = 3;
@@ -102,7 +99,7 @@
             this.tlpExtractionSelectFile.RowCount = 2;
             this.tlpExtractionSelectFile.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpExtractionSelectFile.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpExtractionSelectFile.Size = new System.Drawing.Size(734, 405);
+            this.tlpExtractionSelectFile.Size = new System.Drawing.Size(794, 415);
             this.tlpExtractionSelectFile.TabIndex = 0;
             // 
             // ddlExtraction
@@ -113,7 +110,7 @@
             this.ddlExtraction.Location = new System.Drawing.Point(3, 3);
             this.ddlExtraction.Name = "ddlExtraction";
             this.ddlExtraction.PlaceholderText = "请选择提取类型";
-            this.ddlExtraction.Size = new System.Drawing.Size(728, 44);
+            this.ddlExtraction.Size = new System.Drawing.Size(788, 44);
             this.ddlExtraction.TabIndex = 2;
             this.ddlExtraction.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlExtraction_SelectedIndexChanged);
             // 
@@ -124,7 +121,7 @@
             this.udExtraction.Location = new System.Drawing.Point(3, 53);
             this.udExtraction.Multiselect = false;
             this.udExtraction.Name = "udExtraction";
-            this.udExtraction.Size = new System.Drawing.Size(728, 349);
+            this.udExtraction.Size = new System.Drawing.Size(788, 359);
             this.udExtraction.TabIndex = 1;
             this.udExtraction.Text = "单击或拖动文件到此区域进行数据提取";
             this.udExtraction.TextDesc = "";
@@ -144,7 +141,7 @@
             this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tlpData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpData.Size = new System.Drawing.Size(734, 359);
+            this.tlpData.Size = new System.Drawing.Size(794, 369);
             this.tlpData.TabIndex = 0;
             // 
             // tlpExtractionButton
@@ -155,14 +152,14 @@
             this.tlpExtractionButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpExtractionButton.Controls.Add(this.bExtraction, 1, 1);
             this.tlpExtractionButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpExtractionButton.Location = new System.Drawing.Point(0, 299);
+            this.tlpExtractionButton.Location = new System.Drawing.Point(0, 309);
             this.tlpExtractionButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpExtractionButton.Name = "tlpExtractionButton";
             this.tlpExtractionButton.RowCount = 3;
             this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpExtractionButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpExtractionButton.Size = new System.Drawing.Size(734, 60);
+            this.tlpExtractionButton.Size = new System.Drawing.Size(794, 60);
             this.tlpExtractionButton.TabIndex = 2;
             // 
             // bExtraction
@@ -172,7 +169,7 @@
             this.bExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExtraction.IconSvg = "SaveOutlined";
             this.bExtraction.LocalizationText = "Extraction";
-            this.bExtraction.Location = new System.Drawing.Point(310, 8);
+            this.bExtraction.Location = new System.Drawing.Point(340, 8);
             this.bExtraction.Name = "bExtraction";
             this.bExtraction.Size = new System.Drawing.Size(114, 44);
             this.bExtraction.TabIndex = 1;
@@ -189,7 +186,7 @@
             this.txtExtraction.Multiline = true;
             this.txtExtraction.Name = "txtExtraction";
             this.txtExtraction.ReadOnly = true;
-            this.txtExtraction.Size = new System.Drawing.Size(734, 299);
+            this.txtExtraction.Size = new System.Drawing.Size(794, 309);
             this.txtExtraction.TabIndex = 1;
             // 
             // ExtractionData

@@ -64,19 +64,16 @@
             // 
             // tlpStatistical
             // 
-            this.tlpStatistical.ColumnCount = 3;
-            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpStatistical.ColumnCount = 1;
             this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpStatistical.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStatistical.Controls.Add(this.tabStatistical, 1, 1);
+            this.tlpStatistical.Controls.Add(this.tabStatistical, 0, 0);
             this.tlpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatistical.Location = new System.Drawing.Point(0, 0);
             this.tlpStatistical.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatistical.Name = "tlpStatistical";
-            this.tlpStatistical.RowCount = 2;
-            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatistical.RowCount = 1;
             this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatistical.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpStatistical.Size = new System.Drawing.Size(800, 800);
             this.tlpStatistical.TabIndex = 1;
             // 
@@ -85,10 +82,10 @@
             this.tabStatistical.Controls.Add(this.tpFilter);
             this.tabStatistical.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabStatistical.Location = new System.Drawing.Point(33, 23);
+            this.tabStatistical.Location = new System.Drawing.Point(3, 3);
             this.tabStatistical.Name = "tabStatistical";
             this.tabStatistical.Pages.Add(this.tpFilter);
-            this.tabStatistical.Size = new System.Drawing.Size(734, 774);
+            this.tabStatistical.Size = new System.Drawing.Size(794, 794);
             this.tabStatistical.Style = styleLine1;
             this.tabStatistical.TabIndex = 0;
             // 
@@ -98,7 +95,7 @@
             this.tpFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpFilter.Location = new System.Drawing.Point(0, 36);
             this.tpFilter.Name = "tpFilter";
-            this.tpFilter.Size = new System.Drawing.Size(734, 738);
+            this.tpFilter.Size = new System.Drawing.Size(794, 758);
             this.tpFilter.TabIndex = 0;
             this.tpFilter.Text = "tpFilter";
             // 
@@ -122,7 +119,7 @@
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatistical_Filter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpStatistical_Filter.Size = new System.Drawing.Size(734, 738);
+            this.tlpStatistical_Filter.Size = new System.Drawing.Size(794, 758);
             this.tlpStatistical_Filter.TabIndex = 0;
             // 
             // tlpStatistical_FilterButton
@@ -133,14 +130,14 @@
             this.tlpStatistical_FilterButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpStatistical_FilterButton.Controls.Add(this.bStatistical_Filter, 1, 1);
             this.tlpStatistical_FilterButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatistical_FilterButton.Location = new System.Drawing.Point(0, 678);
+            this.tlpStatistical_FilterButton.Location = new System.Drawing.Point(0, 698);
             this.tlpStatistical_FilterButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatistical_FilterButton.Name = "tlpStatistical_FilterButton";
             this.tlpStatistical_FilterButton.RowCount = 3;
             this.tlpStatistical_FilterButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpStatistical_FilterButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpStatistical_FilterButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpStatistical_FilterButton.Size = new System.Drawing.Size(734, 60);
+            this.tlpStatistical_FilterButton.Size = new System.Drawing.Size(794, 60);
             this.tlpStatistical_FilterButton.TabIndex = 4;
             // 
             // bStatistical_Filter
@@ -150,7 +147,7 @@
             this.bStatistical_Filter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bStatistical_Filter.IconSvg = "SyncOutlined";
             this.bStatistical_Filter.LocalizationText = "Refresh";
-            this.bStatistical_Filter.Location = new System.Drawing.Point(310, 8);
+            this.bStatistical_Filter.Location = new System.Drawing.Point(340, 8);
             this.bStatistical_Filter.Name = "bStatistical_Filter";
             this.bStatistical_Filter.Size = new System.Drawing.Size(114, 44);
             this.bStatistical_Filter.TabIndex = 1;
@@ -186,7 +183,7 @@
             this.tlpStatistical_FilterTop.RowCount = 2;
             this.tlpStatistical_FilterTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpStatistical_FilterTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatistical_FilterTop.Size = new System.Drawing.Size(734, 300);
+            this.tlpStatistical_FilterTop.Size = new System.Drawing.Size(794, 300);
             this.tlpStatistical_FilterTop.TabIndex = 1;
             // 
             // lStatisticalFilter_Action
@@ -195,7 +192,7 @@
             this.lStatisticalFilter_Action.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lStatisticalFilter_Action.Font = new System.Drawing.Font("微软雅黑", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lStatisticalFilter_Action.LocalizationText = "StatisticalData.FilterAction";
-            this.lStatisticalFilter_Action.Location = new System.Drawing.Point(296, 3);
+            this.lStatisticalFilter_Action.Location = new System.Drawing.Point(320, 3);
             this.lStatisticalFilter_Action.Name = "lStatisticalFilter_Action";
             this.lStatisticalFilter_Action.Size = new System.Drawing.Size(86, 29);
             this.lStatisticalFilter_Action.TabIndex = 2;
@@ -211,7 +208,7 @@
             this.progressExecute.Name = "progressExecute";
             this.progressExecute.Radius = 30;
             this.progressExecute.Shape = AntdUI.TShapeProgress.Circle;
-            this.progressExecute.Size = new System.Drawing.Size(287, 259);
+            this.progressExecute.Size = new System.Drawing.Size(311, 259);
             this.progressExecute.TabIndex = 0;
             this.progressExecute.Text = "75%";
             this.progressExecute.UseSystemText = true;
@@ -246,7 +243,7 @@
             this.tlpStatistical_FilterTop2.Controls.Add(this.progressReplace, 2, 0);
             this.tlpStatistical_FilterTop2.Controls.Add(this.lReplace, 1, 0);
             this.tlpStatistical_FilterTop2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatistical_FilterTop2.Location = new System.Drawing.Point(293, 35);
+            this.tlpStatistical_FilterTop2.Location = new System.Drawing.Point(317, 35);
             this.tlpStatistical_FilterTop2.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatistical_FilterTop2.Name = "tlpStatistical_FilterTop2";
             this.tlpStatistical_FilterTop2.RowCount = 5;
@@ -255,7 +252,7 @@
             this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tlpStatistical_FilterTop2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tlpStatistical_FilterTop2.Size = new System.Drawing.Size(441, 265);
+            this.tlpStatistical_FilterTop2.Size = new System.Drawing.Size(477, 265);
             this.tlpStatistical_FilterTop2.TabIndex = 3;
             // 
             // progressNoDisplay
@@ -265,7 +262,7 @@
             this.progressNoDisplay.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.progressNoDisplay.Location = new System.Drawing.Point(116, 215);
             this.progressNoDisplay.Name = "progressNoDisplay";
-            this.progressNoDisplay.Size = new System.Drawing.Size(322, 47);
+            this.progressNoDisplay.Size = new System.Drawing.Size(358, 47);
             this.progressNoDisplay.TabIndex = 13;
             this.progressNoDisplay.Text = "50%";
             this.progressNoDisplay.UseSystemText = true;
@@ -280,7 +277,7 @@
             this.progressDisplay.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.progressDisplay.Location = new System.Drawing.Point(116, 162);
             this.progressDisplay.Name = "progressDisplay";
-            this.progressDisplay.Size = new System.Drawing.Size(322, 47);
+            this.progressDisplay.Size = new System.Drawing.Size(358, 47);
             this.progressDisplay.TabIndex = 12;
             this.progressDisplay.Text = "60%";
             this.progressDisplay.UseSystemText = true;
@@ -295,7 +292,7 @@
             this.progressIntercept.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.progressIntercept.Location = new System.Drawing.Point(116, 109);
             this.progressIntercept.Name = "progressIntercept";
-            this.progressIntercept.Size = new System.Drawing.Size(322, 47);
+            this.progressIntercept.Size = new System.Drawing.Size(358, 47);
             this.progressIntercept.TabIndex = 11;
             this.progressIntercept.Text = "70%";
             this.progressIntercept.UseSystemText = true;
@@ -310,7 +307,7 @@
             this.progressChange.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.progressChange.Location = new System.Drawing.Point(116, 56);
             this.progressChange.Name = "progressChange";
-            this.progressChange.Size = new System.Drawing.Size(322, 47);
+            this.progressChange.Size = new System.Drawing.Size(358, 47);
             this.progressChange.TabIndex = 10;
             this.progressChange.Text = "80%";
             this.progressChange.UseSystemText = true;
@@ -369,7 +366,7 @@
             this.progressReplace.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.progressReplace.Location = new System.Drawing.Point(116, 3);
             this.progressReplace.Name = "progressReplace";
-            this.progressReplace.Size = new System.Drawing.Size(322, 47);
+            this.progressReplace.Size = new System.Drawing.Size(358, 47);
             this.progressReplace.TabIndex = 0;
             this.progressReplace.Text = "90%";
             this.progressReplace.UseSystemText = true;
@@ -396,7 +393,7 @@
             this.tStatisticalFilter.Gap = 12;
             this.tStatisticalFilter.Location = new System.Drawing.Point(3, 388);
             this.tStatisticalFilter.Name = "tStatisticalFilter";
-            this.tStatisticalFilter.Size = new System.Drawing.Size(728, 287);
+            this.tStatisticalFilter.Size = new System.Drawing.Size(788, 307);
             this.tStatisticalFilter.TabIndex = 2;
             this.tStatisticalFilter.Text = "table1";
             // 

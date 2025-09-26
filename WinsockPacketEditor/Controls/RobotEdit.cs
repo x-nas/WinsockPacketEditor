@@ -778,9 +778,13 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                if (this.form is InterfaceInfo.IRobotList rlForm)
+                if (this.form is InterfaceInfo.IProxyMode pmForm)
                 {
-                    rlForm.RefreshRobotList();
+                    pmForm.RefreshRobotList();
+                }
+                else if (this.form is InterfaceInfo.IInjectMode imForm)
+                {
+                    imForm.RefreshRobotList();
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人保存成功", TType.Success)
