@@ -177,18 +177,13 @@
             this.bSendList_Start.BorderWidth = 1F;
             this.bSendList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSendList_Start.IconSvg = "PlayCircleOutlined";
-            this.bSendList_Start.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
-            this.bSendList_Start.LoadingWaveCount = 6;
-            this.bSendList_Start.LoadingWaveSize = 6;
-            this.bSendList_Start.LoadingWaveValue = 0.6F;
-            this.bSendList_Start.LoadingWaveVertical = true;
             this.bSendList_Start.LocalizationText = "Execute";
             this.bSendList_Start.Location = new System.Drawing.Point(363, 3);
             this.bSendList_Start.Name = "bSendList_Start";
             this.bSendList_Start.Size = new System.Drawing.Size(82, 44);
             this.bSendList_Start.TabIndex = 7;
             this.bSendList_Start.Text = "执行";
-            this.bSendList_Start.Type = AntdUI.TTypeMini.Info;
+            this.bSendList_Start.Type = AntdUI.TTypeMini.Primary;
             this.bSendList_Start.Click += new System.EventHandler(this.bSendList_Start_Click);
             // 
             // bgwSendList

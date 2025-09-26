@@ -162,18 +162,13 @@
             this.bRobotList_Start.BorderWidth = 1F;
             this.bRobotList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRobotList_Start.IconSvg = "PlayCircleOutlined";
-            this.bRobotList_Start.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
-            this.bRobotList_Start.LoadingWaveCount = 6;
-            this.bRobotList_Start.LoadingWaveSize = 6;
-            this.bRobotList_Start.LoadingWaveValue = 0.6F;
-            this.bRobotList_Start.LoadingWaveVertical = true;
             this.bRobotList_Start.LocalizationText = "Execute";
             this.bRobotList_Start.Location = new System.Drawing.Point(363, 3);
             this.bRobotList_Start.Name = "bRobotList_Start";
             this.bRobotList_Start.Size = new System.Drawing.Size(82, 44);
             this.bRobotList_Start.TabIndex = 7;
             this.bRobotList_Start.Text = "执行";
-            this.bRobotList_Start.Type = AntdUI.TTypeMini.Info;
+            this.bRobotList_Start.Type = AntdUI.TTypeMini.Primary;
             this.bRobotList_Start.Click += new System.EventHandler(this.bRobotList_Start_Click);
             // 
             // tRobotList

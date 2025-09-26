@@ -17831,7 +17831,7 @@ namespace WinsockPacketEditor
 
         public static class DataBase
         {
-            private static string dbPath = AppDomain.CurrentDomain.BaseDirectory;
+            private static string dbPath = @"C:\WPE64DB";
             private static string dbName = SystemConfig.AssemblyVersion + ".db";
             private static string conStr = string.Format("Data Source={0}\\{1};Version=3;", dbPath, dbName);
 

@@ -190,7 +190,7 @@ namespace WinsockPacketEditor
             {
                 if (!this.bgwRobotList.IsBusy)
                 {
-                    this.bRobotList_Start.Loading = true;
+                    this.bRobotList_Start.Enabled = false;
                     this.bRobotList_Stop.Enabled = true;
                     this.tRobotList.Enabled = false;
 
@@ -448,7 +448,7 @@ namespace WinsockPacketEditor
 
         private void bgwRobotList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            this.bRobotList_Start.Loading = false;
+            this.bRobotList_Start.Enabled = true;
             this.bRobotList_Stop.Enabled = false;
             this.tRobotList.Enabled = true;
         }

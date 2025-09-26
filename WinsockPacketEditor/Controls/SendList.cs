@@ -229,7 +229,7 @@ namespace WinsockPacketEditor
             {
                 if (!this.bgwSendList.IsBusy)
                 {
-                    this.bSendList_Start.Loading = true;
+                    this.bSendList_Start.Enabled = false;
                     this.bSendList_Stop.Enabled = true;
                     this.tSendList.Enabled = false;
 
@@ -488,7 +488,7 @@ namespace WinsockPacketEditor
 
         private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            this.bSendList_Start.Loading = false;
+            this.bSendList_Start.Enabled = true;
             this.bSendList_Stop.Enabled = false;
             this.tSendList.Enabled = true;
         }
