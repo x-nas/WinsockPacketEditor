@@ -373,7 +373,7 @@ namespace WinsockPacketEditor
                     });
                 }
 
-                if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                 {
                     this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("滤镜列表")
                     {

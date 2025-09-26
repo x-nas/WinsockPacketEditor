@@ -4,6 +4,7 @@ using DiffPlex.DiffBuilder.Model;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using QQWry;
+using SuperSocket.SocketBase;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -4646,6 +4647,433 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//SocketAsyncEventArgsPool
+
+                public class SocketAsyncEventArgsPool
+                {
+                    private readonly ConcurrentBag<SocketAsyncEventArgs> _pool;
+                    private readonly int _maxSize;
+
+                    public SocketAsyncEventArgsPool(int maxSize = 100)
+                    {
+                        _maxSize = maxSize;
+                        _pool = new ConcurrentBag<SocketAsyncEventArgs>();
+                    }
+
+                    public SocketAsyncEventArgs Get()
+                    {
+                        if (_pool.TryTake(out SocketAsyncEventArgs item))
+                        {
+                            return item;
+                        }
+                        return new SocketAsyncEventArgs();
+                    }
+
+                    public void Return(SocketAsyncEventArgs item)
+                    {
+                        if (item == null) return;
+
+                        if (_pool.Count < _maxSize)
+                        {
+                            _pool.Add(item);
+                        }
+                        else
+                        {
+                            item.Dispose();
+                        }
+                    }
+
+                    public int Count => _pool.Count;
+                }
+
+                public static class SocketAsyncEventArgsPoolManager
+                {
+                    private const int DefaultPoolSize = 5000;
+
+                    private static readonly ConcurrentDictionary<string, SocketAsyncEventArgsPool> _pools = new ConcurrentDictionary<string, SocketAsyncEventArgsPool>();
+
+                    public static SocketAsyncEventArgsPool GetOrCreatePool(string poolName, int maxSize = DefaultPoolSize)
+                    {
+                        return _pools.GetOrAdd(poolName, name => new SocketAsyncEventArgsPool(maxSize));
+                    }
+
+                    public static SocketAsyncEventArgs Get(string poolName = "default")
+                    {
+                        var pool = GetOrCreatePool(poolName);
+                        return pool.Get();
+                    }
+
+                    public static void Return(SocketAsyncEventArgs e, string poolName = "default")
+                    {
+                        if (e == null) return;
+
+                        var pool = GetOrCreatePool(poolName);
+
+                        try
+                        {
+                            // 清理通用状态
+                            if (e.Buffer != null)
+                            {
+                                ArrayPool<byte>.Shared.Return(e.Buffer);
+                                e.SetBuffer(null, 0, 0);
+                            }
+
+                            e.UserToken = null;
+                            e.RemoteEndPoint = null;
+                            e.SocketError = SocketError.Success;
+
+                            pool.Return(e);
+                        }
+                        catch
+                        {
+                            e.Dispose();
+                        }
+                    }                    
+                }
+
+                #endregion
+
+                #region//握手过程（异步）                
+
+                public static async Task Handshake(ProxySession psSession, byte[] bData)
+                {
+                    try
+                    {
+                        Operate.ProxyConfig.Proxy.ProxyType ptType = (Operate.ProxyConfig.Proxy.ProxyType)bData[0];
+
+                        if (ptType == Operate.ProxyConfig.Proxy.ProxyType.Socket5)
+                        {
+                            bool bSupportAuthType = false;
+
+                            Operate.ProxyConfig.Proxy.AuthType atServer = Operate.ProxyConfig.Proxy.Enable_Auth
+                                ? Operate.ProxyConfig.Proxy.AuthType.UserName
+                                : Operate.ProxyConfig.Proxy.AuthType.None;
+
+                            int iMETHODS_COUNT = bData[1];
+                            byte[] bMETHODS = new byte[iMETHODS_COUNT];
+                            Array.Copy(bData, 2, bMETHODS, 0, iMETHODS_COUNT);
+
+                            foreach (byte method in bMETHODS)
+                            {
+                                Operate.ProxyConfig.Proxy.AuthType atClient = (Operate.ProxyConfig.Proxy.AuthType)method;
+
+                                if (atServer == atClient)
+                                {
+                                    bSupportAuthType = true;
+                                    break;
+                                }
+                            }
+
+                            if (bSupportAuthType)
+                            {
+                                byte[] bAuth = new byte[2];
+                                bAuth[0] = (byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5;
+                                bAuth[1] = (byte)atServer;
+                                psSession.TrySend(bAuth, 0, bAuth.Length);
+
+                                if (atServer == Operate.ProxyConfig.Proxy.AuthType.UserName)
+                                {
+                                    psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName;
+
+                                    if (bData.Length > iMETHODS_COUNT + 2)
+                                    {
+                                        byte[] bAuthDate = new byte[bData.Length - (iMETHODS_COUNT + 2)];
+                                        Array.Copy(bData, iMETHODS_COUNT + 2, bAuthDate, 0, bAuthDate.Length);
+
+                                        bool bIsMatch = Operate.ProxyConfig.Proxy.CheckDataIsMatchProxyStep(bAuthDate, Operate.ProxyConfig.Proxy.ProxyStep.AuthUserName);
+                                        if (bIsMatch)
+                                        {
+                                            await Operate.ProxyConfig.Proxy.AuthUserName(psSession, bAuthDate);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            string sLog = string.Format(AntdUI.Localization.Get("SOCKS.Unsupported", "不支持的 SOCKS 协议版本: {0} [ {1} ]"), ptType, psSession.ClientIP);
+                            Operate.DoLog(nameof(Handshake), sLog);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(Handshake), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//验证账号密码（异步）
+
+                public static async Task AuthUserName(ProxySession psSession, byte[] bData)
+                {
+                    try
+                    {
+                        byte VERSION = bData[0];
+
+                        if (VERSION == 0x01)
+                        {
+                            int USERNAME_LENGTH = bData[1];
+
+                            byte[] USERNAME_BYTES = new byte[USERNAME_LENGTH];
+                            Array.Copy(bData, 2, USERNAME_BYTES, 0, USERNAME_LENGTH);
+
+                            int PASSWORD_LENGTH = bData[2 + USERNAME_LENGTH];
+
+                            byte[] PASSWORD_BYTES = new byte[PASSWORD_LENGTH];
+                            Array.Copy(bData, 3 + USERNAME_LENGTH, PASSWORD_BYTES, 0, PASSWORD_LENGTH);
+
+                            string sUserName = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, USERNAME_BYTES);
+                            string sPassWord = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, PASSWORD_BYTES);
+
+                            byte[] bAuth = new byte[2];
+                            bAuth[0] = 0x01;
+
+                            // 第一步：先验证账号密码（异步）
+                            var (bAuthOK, AccountID) = Operate.ProxyConfig.Account.CheckUserNameAndPassWord(sUserName, sPassWord);
+                            if (!bAuthOK)
+                            {
+                                bAuth[1] = (byte)0x01;
+                                psSession.TrySend(bAuth, 0, bAuth.Length);
+                                return;
+                            }
+
+                            // 第二步：验证通过后检查连接数限制（异步）
+                            bool isOverLinks = Operate.ProxyConfig.Account.CheckLimitLinks(AccountID, psSession.ClientIP);
+                            if (isOverLinks)
+                            {
+                                bAuth[1] = (byte)0x01;
+                                psSession.TrySend(bAuth, 0, bAuth.Length);
+                                return;
+                            }
+
+                            // 第三步：检查设备数限制（异步）
+                            bool isOverDevices = Operate.ProxyConfig.Account.CheckLimitDevices(AccountID, psSession.ClientIP);
+                            if (isOverDevices)
+                            {
+                                bAuth[1] = (byte)0x01;
+                                psSession.TrySend(bAuth, 0, bAuth.Length);
+                                return;
+                            }
+
+                            // 最终判断是否允许登录
+                            bool isAllowed = bAuthOK && !isOverLinks && !isOverDevices;
+                            bAuth[1] = isAllowed ? (byte)0x00 : (byte)0x01;
+
+                            if (isAllowed)
+                            {
+                                Operate.ProxyConfig.Account.SetOnline_ByAccountID(AccountID, true);
+                                await Operate.ProxyConfig.Account.IPInfo_ToAccount(AccountID, psSession.ClientIP);
+                                await Operate.ProxyConfig.Account.AuthInfo_ToList(AccountID, psSession.ClientIP, true);
+
+                                psSession.AID = AccountID;
+                                psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
+                            }
+
+                            psSession.TrySend(bAuth, 0, bAuth.Length);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AuthUserName), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//执行命令（异步）
+
+                public static async Task Command(ProxySession psSession, byte[] bData)
+                {
+                    try
+                    {
+                        Operate.ProxyConfig.Proxy.ProxyType ptType = (Operate.ProxyConfig.Proxy.ProxyType)bData[0];
+                        if (ptType != Operate.ProxyConfig.Proxy.ProxyType.Socket5)
+                        {
+                            return;
+                        }
+
+                        psSession.CommandType = (Operate.ProxyConfig.Proxy.CommandType)bData[1];
+                        psSession.AddressType = (Operate.ProxyConfig.Proxy.AddressType)bData[3];
+
+                        byte[] bADDRESS = new byte[bData.Length - 4];
+                        Array.Copy(bData, 4, bADDRESS, 0, bADDRESS.Length);
+
+                        var (epServer, TargetAddress) = await Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(psSession.AddressType, bADDRESS);
+                        if (epServer == null)
+                        {
+                            Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Fault);
+                            return;
+                        }
+
+                        string TargetIP = epServer.Address.ToString();
+                        int TargetPort = epServer.Port;
+
+                        psSession.DomainType = Operate.ProxyConfig.Proxy.GetDomainType_ByPort(TargetPort);
+                        psSession.ClientAddress = Operate.ProxyConfig.Proxy.GetClientAddress(TargetAddress, TargetPort, psSession.ClientPort);
+
+                        switch (psSession.CommandType)
+                        {
+                            case Operate.ProxyConfig.Proxy.CommandType.Connect:
+                                await HandleConnectCommandAsync(psSession, bData, TargetIP, TargetPort, TargetAddress);
+                                break;
+
+                            case Operate.ProxyConfig.Proxy.CommandType.UDP:
+                                Operate.ProxyConfig.Proxy.UDPRelay(psSession);
+                                break;
+
+                            default:
+                                HandleUnsupportedCommand(psSession);
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(Command), ex.Message);
+                    }
+                }
+
+                public static async Task HandleConnectCommandAsync(ProxySession psSession, byte[] bData, string targetIP, int targetPort, string targetAddress)
+                {
+                    switch (psSession.DomainType)
+                    {
+                        case Operate.ProxyConfig.Proxy.DomainType.External:
+                            psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
+                            psSession.ConnectToEXTProxyServer(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port, bData);
+                            break;
+
+                        case Operate.ProxyConfig.Proxy.DomainType.Http:
+                            await HandleHttpConnect(psSession, targetIP, targetPort, targetAddress);
+                            break;
+
+                        case Operate.ProxyConfig.Proxy.DomainType.Https:
+                        case Operate.ProxyConfig.Proxy.DomainType.Socket:
+                            psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
+                            psSession.ConnectToTarget(targetIP, targetPort);
+                            break;
+                    }
+
+                    if (!Operate.ProxyConfig.Proxy.SpeedMode)
+                    {
+                        string ProxyIP = (psSession.SocketSession.Client.LocalEndPoint as IPEndPoint).Address.ToString();
+                        Operate.DoProxyLog(psSession.AID, psSession.ClientIP, psSession.ServerAddress, ProxyIP);
+                    }
+                }
+
+                public static async Task HandleHttpConnect(ProxySession psSession, string targetIP, int targetPort, string targetAddress)
+                {
+                    psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
+
+                    if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                    {
+                        // 本地代理映射
+                        if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
+                        {
+                            var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
+                                Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                targetAddress,
+                                targetPort,
+                                string.Empty);
+
+                            if (localRule != null)
+                            {
+                                psSession.ServerIP = targetAddress;
+                                psSession.ServerPort = targetPort;
+
+                                bool fileExists = await Task.Run(() => File.Exists(localRule.LocalPath));
+                                if (fileExists)
+                                {
+                                    Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                                    psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
+                                    return;
+                                }
+                                else
+                                {
+                                    Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                                    return;
+                                }
+                            }
+                        }
+
+                        // 远程代理映射
+                        if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                        {
+                            var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
+                                Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                targetAddress,
+                                targetPort,
+                                string.Empty);
+
+                            if (remoteRule != null)
+                            {
+                                psSession.ConnectToTarget(remoteRule.HostTo, remoteRule.PortTo);
+                                return;
+                            }
+                        }
+                    }
+
+                    psSession.ConnectToTarget(targetIP, targetPort);
+                }
+
+                public static void HandleUnsupportedCommand(ProxySession psSession)
+                {
+                    Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unsupport);
+
+                    string sLog = string.Format(AntdUI.Localization.Get("Command.Unsupported", "{0} - 不支持的命令: {1}"), psSession.ClientAddress, psSession.CommandType);
+                    Operate.DoLog(nameof(HandleUnsupportedCommand), sLog);
+                }
+
+                #endregion
+
+                #region//发送 Command 响应数据
+
+                public static void SendCommandResponse(ProxySession psSession, ProtocolType ProtocolType, Operate.ProxyConfig.Proxy.CommandResponse CommandResponse, int UDPPort = 0)
+                {
+                    try
+                    {
+                        ReadOnlySpan<byte> bServerIP = null;
+                        ReadOnlySpan<byte> bServerPort = null;
+
+                        switch (ProtocolType)
+                        {
+                            case ProtocolType.Tcp:
+
+                                bServerIP = Operate.ProxyConfig.Proxy.ProxyTCP_IP.GetAddressBytes();
+                                bServerPort = BitConverter.GetBytes(Operate.ProxyConfig.Proxy.ProxyPort);
+
+                                break;
+
+                            case ProtocolType.Udp:
+
+                                bServerIP = Operate.ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
+                                bServerPort = BitConverter.GetBytes(UDPPort);
+
+                                break;
+                        }
+
+                        Span<byte> response = stackalloc byte[10];
+                        response[0] = (byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5;
+                        response[1] = (byte)CommandResponse;
+                        response[2] = 0x00;
+                        response[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
+                        bServerIP.CopyTo(response.Slice(4, 4));
+                        response[8] = bServerPort[1];
+                        response[9] = bServerPort[0];
+
+                        psSession.TrySend(response.ToArray(), 0, response.Length);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SendCommandResponse), ex.Message);
+                    }
+                }
+
+                #endregion
+
                 #region//创建新 UDP 监听端口
 
                 public static ProxyUDP CreateNewUDP(string SessionID)
@@ -4701,7 +5129,275 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion                
+                #endregion
+
+                #region//处理 TCP 请求数据
+
+                public static void ForwardData(ProxySession psSession, byte[] bData)
+                {
+                    try
+                    {
+                        if (psSession.CommandType == Operate.ProxyConfig.Proxy.CommandType.Connect)
+                        {
+                            switch (psSession.DomainType)
+                            {
+                                case Operate.ProxyConfig.Proxy.DomainType.Http:
+
+                                    if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                                    {
+                                        string request = Encoding.ASCII.GetString(bData);
+
+                                        if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
+                                        {
+                                            var headers = Operate.ProxyConfig.Proxy.ParseHttpHeaders(request);
+                                            if (headers.TryGetValue("Host", out string hostHeader))
+                                            {
+                                                string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
+                                                string cleanPath = requestPath.Split('?')[0];
+
+                                                #region//本地代理映射
+
+                                                if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
+                                                {
+                                                    var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
+                                                        Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                                        hostHeader.Split(':')[0],
+                                                        80,
+                                                        cleanPath);
+
+                                                    if (localRule != null)
+                                                    {
+                                                        Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, bData, false);
+
+                                                        if (File.Exists(localRule.LocalPath))
+                                                        {
+                                                            byte[] fileBytes = File.ReadAllBytes(localRule.LocalPath);
+                                                            string contentType = Operate.ProxyConfig.Proxy.GetContentType(Path.GetExtension(localRule.LocalPath));
+
+                                                            string response =
+                                                                $"HTTP/1.1 200 OK\r\n" +
+                                                                $"Content-Type: {contentType}\r\n" +
+                                                                $"Content-Length: {fileBytes.Length}\r\n" +
+                                                                "Connection: close\r\n\r\n";
+
+                                                            byte[] headerBytes = Encoding.UTF8.GetBytes(response);
+
+                                                            psSession.TrySend(headerBytes, 0, headerBytes.Length);
+                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, headerBytes, false);
+
+                                                            psSession.TrySend(fileBytes, 0, fileBytes.Length);
+                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, fileBytes, false);
+
+                                                            return;
+                                                        }
+                                                        else
+                                                        {
+                                                            byte[] b404 = Operate.ProxyConfig.Proxy.Get404Response();
+                                                            psSession.TrySend(b404, 0, b404.Length);
+                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Resp, b404, false);
+
+                                                            return;
+                                                        }
+                                                    }
+                                                }
+
+                                                #endregion
+
+                                                #region//远程代理映射
+
+                                                if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
+                                                {
+                                                    string TargetIP = hostHeader.Split(':')[0];
+                                                    int TargetPort = 80;
+
+                                                    var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
+                                                        Operate.ProxyConfig.Proxy.MapProtocol.Http,
+                                                        TargetIP,
+                                                        TargetPort,
+                                                        cleanPath);
+
+                                                    if (remoteRule != null)
+                                                    {
+                                                        psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(TargetIP, TargetPort);
+                                                        Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, bData, true);
+
+                                                        byte[] modifiedRequestBytes = Operate.ProxyConfig.Mapping.ModifyRequestHostAndPath(
+                                                            request,
+                                                            headers,
+                                                            remoteRule.HostTo,
+                                                            remoteRule.PortTo,
+                                                            remoteRule.PathTo);
+
+                                                        if (modifiedRequestBytes != null)
+                                                        {
+                                                            psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(remoteRule.HostTo, remoteRule.PortTo);
+                                                            psSession.TargetSocket.Send(modifiedRequestBytes);
+                                                            Operate.ProxyConfig.Mapping.MappingData_ToQueue(psSession, Operate.PacketConfig.Packet.PacketType.TCP_Req, modifiedRequestBytes, true);
+                                                        }
+
+                                                        return;
+                                                    }
+                                                }
+
+                                                #endregion
+                                            }
+                                        }
+                                    }
+
+                                    break;
+
+                                case Operate.ProxyConfig.Proxy.DomainType.Https:
+                                case Operate.ProxyConfig.Proxy.DomainType.Socket:
+                                case Operate.ProxyConfig.Proxy.DomainType.External:
+
+                                    break;
+                            }
+
+                            if (Operate.ProxyConfig.Proxy.HookTCP_Req)
+                            {
+                                Operate.FilterConfig.Filter.DoFilter_TCP(psSession, bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
+                            }
+                            else
+                            {
+                                psSession.TargetSocket.Send(bData);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ForwardData), ex.Message);
+                        psSession.Close(SuperSocket.SocketBase.CloseReason.SocketError);
+                    }
+                }
+
+                #endregion
+
+                #region//执行 UDP 中继
+
+                public static void UDPRelay(ProxySession psSession)
+                {
+                    try
+                    {
+                        ProxyUDP pu = Operate.ProxyConfig.Proxy.CreateNewUDP(psSession.SessionID);
+
+                        if (pu == null)
+                        {
+                            return;
+                        }
+
+                        int localPort = ((IPEndPoint)pu.ClientSocket.LocalEndPoint).Port;
+                        Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Udp, Operate.ProxyConfig.Proxy.CommandResponse.Success, localPort);
+
+                        psSession.StartUdpReceive(pu);
+                    }
+                    catch (SocketException)
+                    {
+                        Operate.ProxyConfig.Proxy.SendCommandResponse(psSession, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Fault);
+                    }
+                }
+
+                #endregion
+
+                #region//处理 UDP 请求数据
+
+                public static void ProcessUdpRequest(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData)
+                {
+                    try
+                    {
+                        Operate.ProxyConfig.Proxy.AddressType addressType = (Operate.ProxyConfig.Proxy.AddressType)bData[3];
+
+                        if (addressType == Operate.ProxyConfig.Proxy.AddressType.IPv4 ||
+                            addressType == Operate.ProxyConfig.Proxy.AddressType.IPv6 ||
+                            addressType == Operate.ProxyConfig.Proxy.AddressType.Domain)
+                        {
+                            pu.ClientEndPoint = epRemote;
+                            byte[] bADDRESS = bData.Slice(4, bData.Length - 4).ToArray();
+
+                            var (targetEndPoint, AddressString) = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS).ConfigureAwait(false).GetAwaiter().GetResult(); ;
+                            if (targetEndPoint != null)
+                            {
+                                Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
+                                if (!bRequestData.IsEmpty)
+                                {
+                                    Operate.ProxyConfig.Proxy.UDP_Req_CNT++;
+                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Request, bRequestData.Length);
+                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
+
+                                    if (Operate.ProxyConfig.Proxy.HookUDP_Req)
+                                    {
+                                        Operate.FilterConfig.Filter.DoFilter_UDP(psSession, pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
+                                    }
+                                    else
+                                    {
+                                        psSession.SendUdpData(pu.ClientSocket, bRequestData, targetEndPoint);
+                                    }
+
+                                    pu.UpdateActivity();
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ProcessUdpRequest), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//处理 UDP 响应数据
+
+                public static void ProcessUdpResponse(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData)
+                {
+                    try
+                    {
+                        if (pu.ClientEndPoint == null)
+                        {
+                            return;
+                        }
+
+                        ReadOnlySpan<byte> bIP = pu.ClientEndPoint.Address.GetAddressBytes();
+                        ushort port = ((ushort)pu.ClientEndPoint.Port);
+                        ReadOnlySpan<byte> bPort = stackalloc byte[2] { (byte)(port >> 8), (byte)port };
+
+                        byte[] responseBuffer = ArrayPool<byte>.Shared.Rent(4 + bIP.Length + bPort.Length + bData.Length);
+                        Span<byte> bResponseData = responseBuffer.AsSpan(0, 4 + bIP.Length + bPort.Length + bData.Length);
+
+                        bResponseData[0] = 0x00;
+                        bResponseData[1] = 0x00;
+                        bResponseData[2] = 0x00;
+                        bResponseData[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
+                        bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
+                        bPort.CopyTo(bResponseData.Slice(4 + bIP.Length, bPort.Length));
+                        bData.CopyTo(bResponseData.Slice(4 + bIP.Length + bPort.Length, bData.Length));
+
+                        if (!bResponseData.IsEmpty)
+                        {
+                            Operate.ProxyConfig.Proxy.UDP_Resp_CNT++;
+                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Response, bResponseData.Length);
+                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
+
+                            if (Operate.ProxyConfig.Proxy.HookUDP_Resp)
+                            {
+                                Operate.FilterConfig.Filter.DoFilter_UDP(psSession, pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
+                            }
+                            else
+                            {
+                                psSession.SendUdpData(pu.ClientSocket, bResponseData, pu.ClientEndPoint);
+                            }
+
+                            pu.UpdateActivity();
+                        }
+
+                        ArrayPool<byte>.Shared.Return(responseBuffer);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ProcessUdpResponse), ex.Message);
+                    }
+                }
+
+                #endregion
 
                 #region//获取客户端列表名称
 
@@ -7579,6 +8275,45 @@ namespace WinsockPacketEditor
                     {
                         DoLog(nameof(ModifyRequestHostAndPath), ex.Message);
                         return Encoding.UTF8.GetBytes(originalRequest);
+                    }
+                }
+
+                #endregion
+
+                #region//缓存映射数据
+
+                public static void MappingData_ToQueue(ProxySession psSession, Operate.PacketConfig.Packet.PacketType ptType, byte[] bData, bool MapRemote)
+                {
+                    try
+                    {
+                        string ClientAddr = $"{psSession.ClientIP}:{psSession.ClientPort}";
+                        string ServerAddr = string.Empty;
+
+                        if (MapRemote)
+                        {
+                            ServerAddr = $"{psSession.ServerIP}:{psSession.ServerPort}";
+                        }
+                        else
+                        {
+                            ServerAddr = $"{psSession.ClientIP}:{psSession.ClientPort}";
+                        }
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            bData.Length,
+                            psSession.SocketSession.Client.Handle.ToInt32(),
+                            ptType,
+                            ClientAddr,
+                            ServerAddr,
+                            psSession.ServerAddress,
+                            psSession.DomainType,
+                            bData,
+                            bData);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(MappingData_ToQueue), ex.Message);
                     }
                 }
 
@@ -12290,6 +13025,141 @@ namespace WinsockPacketEditor
                     }
 
                     return faReturn;
+                }
+
+                #endregion
+
+                #region//执行滤镜 - 代理模式
+
+                public static void DoFilter_TCP(ProxySession psSession, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
+                {
+                    try
+                    {
+                        Socket TargetSocket = null;
+
+                        switch (ptType)
+                        {
+                            case Operate.PacketConfig.Packet.PacketType.TCP_Req:
+                                TargetSocket = psSession.TargetSocket;
+                                break;
+
+                            case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
+                                TargetSocket = psSession.SocketSession.Client;
+                                break;
+                        }
+
+                        if (TargetSocket == null || !TargetSocket.Connected)
+                        {
+                            return;
+                        }
+
+                        IPEndPoint epRemote = TargetSocket.RemoteEndPoint as IPEndPoint;
+                        int SocketID = TargetSocket.Handle.ToInt32();
+
+                        byte[] bRawBuffer = bData.ToArray();
+                        byte[] bNewBuffer = null;
+
+                        Operate.FilterConfig.Filter.FilterAction FilterAction =
+                            Operate.FilterConfig.List.DoFilterList(
+                                SocketID,
+                                bData,
+                                out bNewBuffer,
+                                ptType,
+                                new Operate.PacketConfig.Packet.SockAddr());
+
+                        if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
+                        {
+                            switch (ptType)
+                            {
+                                case Operate.PacketConfig.Packet.PacketType.TCP_Req:
+                                    psSession.TargetSocket.Send(bNewBuffer);
+                                    break;
+
+                                case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
+                                    psSession.TrySend(bNewBuffer, 0, bNewBuffer.Length);
+                                    break;
+                            }
+                        }
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            FilterAction,
+                            bNewBuffer.Length,
+                            SocketID,
+                            ptType,
+                            $"{psSession.ClientIP}:{psSession.ClientPort}",
+                            $"{psSession.ServerIP}:{psSession.ServerPort}",
+                            psSession.ServerAddress,
+                            psSession.DomainType,
+                            bRawBuffer,
+                            bNewBuffer);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DoFilter_TCP), ex.Message);
+                    }
+                }
+
+                public static void DoFilter_UDP(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
+                {
+                    try
+                    {
+                        IPEndPoint epSend = null;
+                        switch (ptType)
+                        {
+                            case Operate.PacketConfig.Packet.PacketType.UDP_Req:
+                                epSend = epRemote;
+                                break;
+
+                            case Operate.PacketConfig.Packet.PacketType.UDP_Resp:
+                                epSend = pu.ClientEndPoint;
+                                break;
+                        }
+
+                        if (epSend == null || pu?.ClientSocket == null)
+                        {
+                            return;
+                        }
+
+                        int iSocket = pu.ClientSocket.Handle.ToInt32();
+
+                        Int32 res = 0;
+                        byte[] bRawBuffer = bData.ToArray();
+                        byte[] bNewBuffer = null;
+
+                        Operate.FilterConfig.Filter.FilterAction FilterAction =
+                            Operate.FilterConfig.List.DoFilterList(
+                                iSocket,
+                                bData,
+                                out bNewBuffer,
+                                ptType,
+                                new Operate.PacketConfig.Packet.SockAddr());
+
+                        if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
+                        {
+                            res = psSession.SendUdpData(pu.ClientSocket, bNewBuffer, epSend);
+                        }
+
+                        string ClientAddr = $"{pu.ClientEndPoint.Address.ToString()}:{pu.ClientEndPoint.Port.ToString()}";
+                        string ServerAddr = $"{epRemote.Address.ToString()}:{epRemote.Port.ToString()}";
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            FilterAction,
+                            res,
+                            iSocket,
+                            ptType,
+                            ClientAddr,
+                            ServerAddr,
+                            ServerAddr,
+                            Operate.ProxyConfig.Proxy.DomainType.External,
+                            bRawBuffer,
+                            bNewBuffer);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DoFilter_UDP), ex.Message);
+                    }
                 }
 
                 #endregion

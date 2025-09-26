@@ -2,18 +2,14 @@
 using SuperSocket.SocketBase.Protocol;
 using System;
 using System.Buffers;
-using System.Collections.Concurrent;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
-using System.Text;
-using System.Threading;
 
 namespace WinsockPacketEditor
 {
     public class ProxySession : AppSession<ProxySession, BinaryRequestInfo>
     {
+        public Socket TargetSocket = null;
         public byte[] bBuffer = null;
         public string ClientIP = string.Empty;
         public int ClientPort = 0;
@@ -25,9 +21,7 @@ namespace WinsockPacketEditor
         public Operate.ProxyConfig.Proxy.ProxyStep ProxyStep;
         public Operate.ProxyConfig.Proxy.CommandType CommandType;
         public Operate.ProxyConfig.Proxy.AddressType AddressType;
-        public Operate.ProxyConfig.Proxy.DomainType DomainType;
-        public Socket TargetSocket = null;
-        private readonly SocketAsyncEventArgsPool _socketEventArgsPool = new SocketAsyncEventArgsPool(5000);
+        public Operate.ProxyConfig.Proxy.DomainType DomainType;        
 
         public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; internal set; }
 
@@ -64,122 +58,7 @@ namespace WinsockPacketEditor
             base.SetNextReceiveFilter(receiveFilter);
         }
 
-        #endregion
-
-        #region//SocketAsyncEventArgs 专用池
-
-        public class SocketAsyncEventArgsPool
-        {
-            private readonly ConcurrentBag<SocketAsyncEventArgs> _pool;
-            private readonly int _maxSize;
-
-            public SocketAsyncEventArgsPool(int maxSize = 100)
-            {
-                _maxSize = maxSize;
-                _pool = new ConcurrentBag<SocketAsyncEventArgs>();
-            }
-
-            public SocketAsyncEventArgs Get()
-            {
-                if (_pool.TryTake(out SocketAsyncEventArgs item))
-                {
-                    return item;
-                }
-                return new SocketAsyncEventArgs();
-            }
-
-            public void Return(SocketAsyncEventArgs item)
-            {
-                if (item == null) return;
-
-                // 清理状态
-                item.SetBuffer(null, 0, 0);
-                item.RemoteEndPoint = null;
-                item.UserToken = null;
-                item.SocketError = SocketError.Success;
-
-                if (_pool.Count < _maxSize)
-                {
-                    _pool.Add(item);
-                }
-                else
-                {
-                    // 池已满，释放资源
-                    item.Dispose();
-                }
-            }
-
-            public int Count => _pool.Count;
-        }
-
-        private void ReturnSocketEventArgs(SocketAsyncEventArgs e)
-        {
-            try
-            {
-                e.Completed -= UdpReceiveCompleted;
-
-                if (e.Buffer != null)
-                {
-                    ArrayPool<byte>.Shared.Return(e.Buffer);
-                    e.SetBuffer(null, 0, 0);
-                }
-
-                e.UserToken = null;
-                e.RemoteEndPoint = null;
-                _socketEventArgsPool.Return(e);
-            }
-            catch
-            {
-                e.Dispose();
-            }
-        }
-
-        #endregion
-
-        #region//发送 Command 响应数据
-
-        public void SendCommandResponse(ProtocolType ProtocolType, Operate.ProxyConfig.Proxy.CommandResponse CommandResponse, int UDPPort = 0)
-        {
-            try
-            {
-                ReadOnlySpan<byte> bServerIP = null;
-                ReadOnlySpan<byte> bServerPort = null;
-
-                switch (ProtocolType)
-                {
-                    case ProtocolType.Tcp:
-
-                        bServerIP = Operate.ProxyConfig.Proxy.ProxyTCP_IP.GetAddressBytes();
-                        bServerPort = BitConverter.GetBytes(Operate.ProxyConfig.Proxy.ProxyPort);
-
-                        break;
-
-                    case ProtocolType.Udp:
-
-                        bServerIP = Operate.ProxyConfig.Proxy.ProxyUDP_IP.GetAddressBytes();
-                        bServerPort = BitConverter.GetBytes(UDPPort);
-
-                        break;
-                }
-
-                Span<byte> response = stackalloc byte[10];
-                response[0] = (byte)Operate.ProxyConfig.Proxy.ProxyType.Socket5;
-                response[1] = (byte)CommandResponse;
-                response[2] = 0x00;
-                response[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
-                bServerIP.CopyTo(response.Slice(4, 4));
-                response[8] = bServerPort[1];
-                response[9] = bServerPort[0];
-
-                this.TrySend(response.ToArray(), 0, response.Length);
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(SendCommandResponse), ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//连接远程服务器
 
@@ -191,14 +70,13 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
 
                 Operate.DoLog(nameof(ConnectToTarget), ex.Message);
             }
         }
-
-        private readonly object m_SocketLock = new object();
+        
         private void OnTargetConnected(IAsyncResult ar)
         {
             try
@@ -214,7 +92,7 @@ namespace WinsockPacketEditor
                 this.ServerIP = (targetSocket.RemoteEndPoint as IPEndPoint)?.Address.ToString();
                 this.ServerPort = (targetSocket.RemoteEndPoint as IPEndPoint)?.Port ?? 0;
 
-                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
                 this.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
                 this.StartReceivingFromTarget();
             }
@@ -224,7 +102,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 Operate.DoLog(nameof(OnTargetConnected), ex.Message);
             }
         }
@@ -241,7 +119,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
 
                 Operate.DoLog(nameof(ConnectToEXTProxyServer), ex.Message);
@@ -318,17 +196,17 @@ namespace WinsockPacketEditor
 
                 if (connectResponse[1] != 0x00)
                 {
-                    this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Fault);
+                    Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Fault);
                     return;
                 }
 
-                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
+                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
                 this.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
                 this.StartReceivingFromTarget();
             }
             catch (Exception ex)
             {
-                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
 
                 Operate.DoLog(nameof(OnEXTProxyServerConnected), ex.Message);
@@ -337,148 +215,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//处理 TCP 请求数据
-
-        public void ForwardData(Span<byte> bData)
-        {
-            try
-            {
-                if (this.CommandType == Operate.ProxyConfig.Proxy.CommandType.Connect)
-                {
-                    switch (this.DomainType)
-                    {
-                        case Operate.ProxyConfig.Proxy.DomainType.Http:
-
-                            if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
-                            {
-                                string request = Encoding.ASCII.GetString(bData.ToArray());
-
-                                if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
-                                {
-                                    var headers = Operate.ProxyConfig.Proxy.ParseHttpHeaders(request);
-                                    if (headers.TryGetValue("Host", out string hostHeader))
-                                    {
-                                        string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
-                                        string cleanPath = requestPath.Split('?')[0];
-
-                                        #region//本地代理映射
-
-                                        if (Operate.ProxyConfig.Mapping.Enable_MapLocal)
-                                        {
-                                            var localRule = Operate.ProxyConfig.Mapping.GetMapLocal(
-                                                Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                                hostHeader.Split(':')[0],
-                                                80,
-                                                cleanPath);
-
-                                            if (localRule != null)
-                                            {
-                                                this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Req, bData.ToArray(), false);
-
-                                                if (File.Exists(localRule.LocalPath))
-                                                {
-                                                    byte[] fileBytes = File.ReadAllBytes(localRule.LocalPath);
-                                                    string contentType = Operate.ProxyConfig.Proxy.GetContentType(Path.GetExtension(localRule.LocalPath));
-
-                                                    string response =
-                                                        $"HTTP/1.1 200 OK\r\n" +
-                                                        $"Content-Type: {contentType}\r\n" +
-                                                        $"Content-Length: {fileBytes.Length}\r\n" +
-                                                        "Connection: close\r\n\r\n";
-
-                                                    byte[] headerBytes = Encoding.UTF8.GetBytes(response);
-
-                                                    this.TrySend(headerBytes, 0, headerBytes.Length);
-                                                    this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Resp, headerBytes, false);
-
-                                                    this.TrySend(fileBytes, 0, fileBytes.Length);
-                                                    this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Resp, fileBytes, false);
-
-                                                    return;
-                                                }
-                                                else
-                                                {
-                                                    byte[] b404 = Operate.ProxyConfig.Proxy.Get404Response();
-                                                    this.TrySend(b404, 0, b404.Length);
-                                                    this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Resp, b404, false);
-
-                                                    return;
-                                                }
-                                            }
-                                        }
-
-                                        #endregion
-
-                                        #region//远程代理映射
-
-                                        if (Operate.ProxyConfig.Mapping.Enable_MapRemote)
-                                        {
-                                            string TargetIP = hostHeader.Split(':')[0];
-                                            int TargetPort = 80;
-
-                                            var remoteRule = Operate.ProxyConfig.Mapping.GetMapRemote(
-                                                Operate.ProxyConfig.Proxy.MapProtocol.Http,
-                                                TargetIP,
-                                                TargetPort,
-                                                cleanPath);
-
-                                            if (remoteRule != null)
-                                            {
-                                                this.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(TargetIP, TargetPort);
-                                                this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Req, bData.ToArray(), true);
-
-                                                byte[] modifiedRequestBytes = Operate.ProxyConfig.Mapping.ModifyRequestHostAndPath(
-                                                    request,
-                                                    headers,
-                                                    remoteRule.HostTo,
-                                                    remoteRule.PortTo,
-                                                    remoteRule.PathTo);
-
-                                                if (modifiedRequestBytes != null)
-                                                {
-                                                    this.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(remoteRule.HostTo, remoteRule.PortTo);
-                                                    this.TargetSocket.Send(modifiedRequestBytes);
-                                                    this.MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType.TCP_Req, modifiedRequestBytes, true);
-                                                }
-
-                                                return;
-                                            }
-                                        }
-
-                                        #endregion
-                                    }
-                                }
-                            }
-
-                            break;
-
-                        case Operate.ProxyConfig.Proxy.DomainType.Https:
-                        case Operate.ProxyConfig.Proxy.DomainType.Socket:
-                        case Operate.ProxyConfig.Proxy.DomainType.External:
-
-                            break;
-                    }
-
-                    if (Operate.ProxyConfig.Proxy.HookTCP_Req)
-                    {
-                        this.DoFilter_TCP(bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
-                    }
-                    else
-                    {
-                        this.TargetSocket.Send(bData.ToArray());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(ForwardData), ex.Message);
-                this.Close(CloseReason.SocketError);
-            }
-        }
-
-        #endregion
-
-        #region//处理 TCP 响应数据
+        #region//发送和接收 TCP 数据
 
         private void StartReceivingFromTarget()
         {
@@ -526,7 +263,7 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.ProxyConfig.Proxy.HookTCP_Resp)
                         {
-                            this.DoFilter_TCP(bData.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
+                            Operate.FilterConfig.Filter.DoFilter_TCP(this, bData.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
                         }
                         else
                         {
@@ -557,133 +294,6 @@ namespace WinsockPacketEditor
         }
 
         #endregion
-
-        #region//执行 UDP 中继
-
-        public void UDPRelay(string SessionID)
-        {
-            try
-            {
-                ProxyUDP pu = Operate.ProxyConfig.Proxy.CreateNewUDP(SessionID);
-
-                if (pu == null)
-                {
-                    return;
-                }
-
-                int localPort = ((IPEndPoint)pu.ClientSocket.LocalEndPoint).Port;
-                this.SendCommandResponse(ProtocolType.Udp, Operate.ProxyConfig.Proxy.CommandResponse.Success, localPort);
-
-                this.StartUdpReceive(pu);
-            }
-            catch (SocketException)
-            {
-                this.SendCommandResponse(ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Fault);
-            }
-        }        
-
-        #endregion
-
-        #region//处理 UDP 请求数据
-
-        private void ProcessUdpRequest(ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData)
-        {
-            try
-            {
-                Operate.ProxyConfig.Proxy.AddressType addressType = (Operate.ProxyConfig.Proxy.AddressType)bData[3];
-
-                if (addressType == Operate.ProxyConfig.Proxy.AddressType.IPv4 ||
-                    addressType == Operate.ProxyConfig.Proxy.AddressType.IPv6 ||
-                    addressType == Operate.ProxyConfig.Proxy.AddressType.Domain)
-                {
-                    pu.ClientEndPoint = epRemote;
-                    byte[] bADDRESS = bData.Slice(4, bData.Length - 4).ToArray();
-
-                    var (targetEndPoint, AddressString) = Operate.ProxyConfig.Proxy.GetIPEndPoint_ByAddressType(addressType, bADDRESS).ConfigureAwait(false).GetAwaiter().GetResult(); ;
-                    if (targetEndPoint != null)
-                    {
-                        Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
-                        if (!bRequestData.IsEmpty)
-                        {
-                            Operate.ProxyConfig.Proxy.UDP_Req_CNT++;
-                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Request, bRequestData.Length);
-                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
-
-                            if (Operate.ProxyConfig.Proxy.HookUDP_Req)
-                            {
-                                this.DoFilter_UDP(pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
-                            }
-                            else
-                            {
-                                this.SendUdpData(pu.ClientSocket, bRequestData, targetEndPoint);
-                            }
-
-                            pu.UpdateActivity();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(ProcessUdpRequest), ex.Message);
-            }            
-        }
-
-        #endregion
-
-        #region//处理 UDP 响应数据
-
-        private void ProcessUdpResponse(ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData)
-        {
-            try
-            {
-                if (pu.ClientEndPoint == null)
-                {
-                    return;
-                }
-
-                ReadOnlySpan<byte> bIP = pu.ClientEndPoint.Address.GetAddressBytes();
-                ushort port = ((ushort)pu.ClientEndPoint.Port);
-                ReadOnlySpan<byte> bPort = stackalloc byte[2] { (byte)(port >> 8), (byte)port };
-
-                byte[] responseBuffer = ArrayPool<byte>.Shared.Rent(4 + bIP.Length + bPort.Length + bData.Length);
-                Span<byte> bResponseData = responseBuffer.AsSpan(0, 4 + bIP.Length + bPort.Length + bData.Length);
-
-                bResponseData[0] = 0x00;
-                bResponseData[1] = 0x00;
-                bResponseData[2] = 0x00;
-                bResponseData[3] = (byte)Operate.ProxyConfig.Proxy.AddressType.IPv4;
-                bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
-                bPort.CopyTo(bResponseData.Slice(4 + bIP.Length, bPort.Length));
-                bData.CopyTo(bResponseData.Slice(4 + bIP.Length + bPort.Length, bData.Length));
-
-                if (!bResponseData.IsEmpty)
-                {
-                    Operate.ProxyConfig.Proxy.UDP_Resp_CNT++;
-                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Response, bResponseData.Length);
-                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
-
-                    if (Operate.ProxyConfig.Proxy.HookUDP_Resp)
-                    {
-                        this.DoFilter_UDP(pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
-                    }
-                    else
-                    {
-                        this.SendUdpData(pu.ClientSocket, bResponseData, pu.ClientEndPoint);
-                    }
-
-                    pu.UpdateActivity();
-                }
-
-                ArrayPool<byte>.Shared.Return(responseBuffer);
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(ProcessUdpResponse), ex.Message);
-            }            
-        }
-
-        #endregion        
 
         #region//发送和接收 UDP 数据
 
@@ -720,7 +330,7 @@ namespace WinsockPacketEditor
 
             try
             {
-                SocketAsyncEventArgs socketEventArgs = _socketEventArgsPool.Get();
+                SocketAsyncEventArgs socketEventArgs = Operate.ProxyConfig.Proxy.SocketAsyncEventArgsPoolManager.Get("UDPRelay");
                 socketEventArgs.UserToken = pu;
 
                 byte[] buffer = ArrayPool<byte>.Shared.Rent(65535);
@@ -739,7 +349,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void UdpReceiveCompleted(object sender, SocketAsyncEventArgs e)
+        public void UdpReceiveCompleted(object sender, SocketAsyncEventArgs e)
         {
             ProcessUdpReceive(e);
         }
@@ -750,7 +360,7 @@ namespace WinsockPacketEditor
 
             if (pu == null || !pu.IsActive || pu.ClientSocket == null)
             {
-                ReturnSocketEventArgs(e);
+                this.ReturnUdpSocketEventArgs(e);
                 return;
             }
 
@@ -758,14 +368,14 @@ namespace WinsockPacketEditor
             {
                 if (e.SocketError != SocketError.Success || e.BytesTransferred == 0)
                 {
-                    ReturnSocketEventArgs(e);
+                    this.ReturnUdpSocketEventArgs(e);
                     return;
                 }
 
                 IPEndPoint epRemote = e.RemoteEndPoint as IPEndPoint;
                 if (epRemote == null || epRemote.Address.Equals(IPAddress.Any) || epRemote.Port == 0)
                 {
-                    ReturnSocketEventArgs(e);
+                    this.ReturnUdpSocketEventArgs(e);
                     return;
                 }
 
@@ -773,11 +383,11 @@ namespace WinsockPacketEditor
 
                 if (bData[0] == 0 && bData[1] == 0 && bData[2] == 0)
                 {
-                    ProcessUdpRequest(pu, epRemote, bData);
+                    Operate.ProxyConfig.Proxy.ProcessUdpRequest(this, pu, epRemote, bData);
                 }
                 else
                 {
-                    ProcessUdpResponse(pu, epRemote, bData);
+                    Operate.ProxyConfig.Proxy.ProcessUdpResponse(this, pu, epRemote, bData);
                 }
 
                 e.RemoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -789,12 +399,13 @@ namespace WinsockPacketEditor
             }
             catch (SocketException ex) when (Operate.PacketConfig.Packet.IsExpectedSocketError(ex.ErrorCode))
             {
-                ReturnSocketEventArgs(e);
+                this.ReturnUdpSocketEventArgs(e);
             }
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(ProcessUdpReceive), ex.Message);
-                ReturnSocketEventArgs(e);
+
+                this.ReturnUdpSocketEventArgs(e);
 
                 if (pu.IsActive)
                 {
@@ -803,181 +414,22 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
-
-        #region//缓存映射数据
-
-        private void MappingData_ToQueue(Operate.PacketConfig.Packet.PacketType ptType, byte[] bData, bool MapRemote)
+        private void ReturnUdpSocketEventArgs(SocketAsyncEventArgs e, string poolName = "UDPRelay")
         {
+            if (e == null) return;
+
             try
             {
-                string ClientAddr = $"{this.ClientIP}:{this.ClientPort}";
-                string ServerAddr = string.Empty;
-
-                if (MapRemote)
-                {
-                    ServerAddr = $"{this.ServerIP}:{this.ServerPort}";
-                }
-                else
-                {
-                    ServerAddr = $"{this.ClientIP}:{this.ClientPort}";
-                }
-
-                _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                    DateTime.Now,
-                    Operate.FilterConfig.Filter.FilterAction.None,
-                    bData.Length,
-                    this.SocketSession.Client.Handle.ToInt32(),
-                    ptType,
-                    ClientAddr,
-                    ServerAddr,
-                    this.ServerAddress,
-                    this.DomainType,
-                    bData,
-                    bData);
+                e.Completed -= UdpReceiveCompleted;
+                Operate.ProxyConfig.Proxy.SocketAsyncEventArgsPoolManager.Return(e, poolName);
             }
-            catch (Exception ex)
+            catch
             {
-                Operate.DoLog(nameof(MappingData_ToQueue), ex.Message);
+                e.Dispose();
             }
         }
 
         #endregion
-
-        #region//执行滤镜 - 代理模式
-
-        public void DoFilter_TCP(Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
-        {
-            try
-            {
-                Socket TargetSocket = null;
-
-                switch (ptType)
-                {
-                    case Operate.PacketConfig.Packet.PacketType.TCP_Req:
-                        TargetSocket = this.TargetSocket;
-                        break;
-
-                    case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
-                        TargetSocket = this.SocketSession.Client;
-                        break;
-                }
-
-                if (TargetSocket == null || !TargetSocket.Connected)
-                {
-                    return;
-                }
-
-                IPEndPoint epRemote = TargetSocket.RemoteEndPoint as IPEndPoint;
-                int SocketID = TargetSocket.Handle.ToInt32();
-
-                byte[] bRawBuffer = bData.ToArray();
-                byte[] bNewBuffer = null;
-
-                Operate.FilterConfig.Filter.FilterAction FilterAction =
-                    Operate.FilterConfig.List.DoFilterList(
-                        SocketID,
-                        bData,
-                        out bNewBuffer,
-                        ptType,
-                        new Operate.PacketConfig.Packet.SockAddr());
-
-                if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
-                {
-                    switch (ptType)
-                    {
-                        case Operate.PacketConfig.Packet.PacketType.TCP_Req:
-                            this.TargetSocket.Send(bNewBuffer);
-                            break;
-
-                        case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
-                            this.TrySend(bNewBuffer, 0, bNewBuffer.Length);
-                            break;
-                    }
-                }
-
-                _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                    DateTime.Now,
-                    FilterAction,
-                    bNewBuffer.Length,
-                    SocketID,
-                    ptType,
-                    $"{this.ClientIP}:{this.ClientPort}",
-                    $"{this.ServerIP}:{this.ServerPort}",
-                    this.ServerAddress,
-                    this.DomainType,
-                    bRawBuffer,
-                    bNewBuffer);
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(DoFilter_TCP), ex.Message);
-            }
-        }
-
-        public void DoFilter_UDP(ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
-        {
-            try
-            {
-                IPEndPoint epSend = null;
-                switch (ptType)
-                {
-                    case Operate.PacketConfig.Packet.PacketType.UDP_Req:
-                        epSend = epRemote;
-                        break;
-
-                    case Operate.PacketConfig.Packet.PacketType.UDP_Resp:
-                        epSend = pu.ClientEndPoint;
-                        break;
-                }
-
-                if (epSend == null || pu?.ClientSocket == null)
-                {
-                    return;
-                }
-
-                int iSocket = pu.ClientSocket.Handle.ToInt32();
-
-                Int32 res = 0;
-                byte[] bRawBuffer = bData.ToArray();
-                byte[] bNewBuffer = null;
-
-                Operate.FilterConfig.Filter.FilterAction FilterAction =
-                    Operate.FilterConfig.List.DoFilterList(
-                        iSocket,
-                        bData,
-                        out bNewBuffer,
-                        ptType,
-                        new Operate.PacketConfig.Packet.SockAddr());
-
-                if (FilterAction != Operate.FilterConfig.Filter.FilterAction.Intercept)
-                {
-                    res = this.SendUdpData(pu.ClientSocket, bNewBuffer, epSend);
-                }
-
-                string ClientAddr = $"{pu.ClientEndPoint.Address.ToString()}:{pu.ClientEndPoint.Port.ToString()}";
-                string ServerAddr = $"{epRemote.Address.ToString()}:{epRemote.Port.ToString()}";
-
-                _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                    DateTime.Now,
-                    FilterAction,
-                    res,
-                    iSocket,
-                    ptType,
-                    ClientAddr,
-                    ServerAddr,
-                    ServerAddr,
-                    Operate.ProxyConfig.Proxy.DomainType.External,
-                    bRawBuffer,
-                    bNewBuffer);
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(DoFilter_UDP), ex.Message);
-            }
-        }
-
-        #endregion        
 
         #region//记录无法处理的代理数据
 
