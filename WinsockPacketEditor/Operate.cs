@@ -6491,21 +6491,25 @@ namespace WinsockPacketEditor
                 public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
                 public static ConcurrentDictionary<(Guid AID, string AuthIP), AuthInfo> cdAuthInfo = new ConcurrentDictionary<(Guid, string), AuthInfo>();
 
-                #region//代理认证入列表            
+                #region//代理认证入列表（异步）
 
                 public static async Task AuthInfo_ToList(Guid AID, string AuthIP, bool AuthResult)
                 {
                     try
                     {
-                        if (AID == null || AID == Guid.Empty) return;
+                        if (AID == Guid.Empty) return;
+                        if (string.IsNullOrEmpty(AuthIP)) return;
 
                         var key = (AID, AuthIP);
-                        string IPLocation = await SystemConfig.GetIPLocation(AuthIP);
+                        string IPLocation = await SystemConfig.GetIPLocation(AuthIP).ConfigureAwait(false);
 
                         cdAuthInfo.AddOrUpdate(
                             key,
                             _ => new AuthInfo(AID, AuthIP, IPLocation, AuthResult, DateTime.Now),
-                            (_, existingItem) => existingItem);
+                            (_, existing) =>
+                            {
+                                return existing;
+                            });
                     }
                     catch (Exception ex)
                     {
