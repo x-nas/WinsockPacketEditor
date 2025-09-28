@@ -252,7 +252,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        this.OpenRobotEdit(ri);
+                        Operate.RobotConfig.Robot.OpenRobotEdit(this.form, ri);
 
                         break;
 
@@ -274,20 +274,9 @@ namespace WinsockPacketEditor
         {
             if (e.Record is RobotInfo ri)
             {
-                this.OpenRobotEdit(ri);
+                Operate.RobotConfig.Robot.OpenRobotEdit(this.form, ri);
             }                
-        }
-
-        private void OpenRobotEdit(RobotInfo ri)
-        {
-            var RobotEdit = new RobotEdit(this.form, ri);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("RobotEditForm", "机器人编辑"), RobotEdit)
-            {
-                Keyboard = false,
-                MaskClosable = false,
-                BtnHeight = 0,
-            });
-        }
+        }        
 
         #endregion
 

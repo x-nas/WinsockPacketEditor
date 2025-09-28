@@ -64,9 +64,9 @@
             this.tSendList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tSendList.CellImpactHeight = false;
             this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tSendList.Gap = 8;
+            this.tSendList.Gap = 10;
             this.tSendList.GapCell = 5;
-            this.tSendList.Gaps = new System.Drawing.Size(8, 8);
+            this.tSendList.Gaps = new System.Drawing.Size(10, 10);
             this.tSendList.Location = new System.Drawing.Point(2, 42);
             this.tSendList.Margin = new System.Windows.Forms.Padding(2);
             this.tSendList.MultipleRows = true;

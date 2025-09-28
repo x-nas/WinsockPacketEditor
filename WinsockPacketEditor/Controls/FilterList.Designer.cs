@@ -61,9 +61,9 @@
             this.tFilterList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tFilterList.CellImpactHeight = false;
             this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tFilterList.Gap = 8;
+            this.tFilterList.Gap = 10;
             this.tFilterList.GapCell = 5;
-            this.tFilterList.Gaps = new System.Drawing.Size(8, 8);
+            this.tFilterList.Gaps = new System.Drawing.Size(10, 10);
             this.tFilterList.Location = new System.Drawing.Point(2, 42);
             this.tFilterList.Margin = new System.Windows.Forms.Padding(2);
             this.tFilterList.MultipleRows = true;

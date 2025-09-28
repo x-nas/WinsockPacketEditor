@@ -321,6 +321,9 @@ namespace WinsockPacketEditor
                 case "Detection":
                     return "Detection";
 
+                case "Filter":
+                    return "Filter";
+
                 case "FilterList":
                     return "Filter List";
 
@@ -329,6 +332,9 @@ namespace WinsockPacketEditor
 
                 case "SendCollection":
                     return "Send Collection";
+
+                case "Robot":
+                    return "Robot";
 
                 case "RobotList":
                     return "Robot List";

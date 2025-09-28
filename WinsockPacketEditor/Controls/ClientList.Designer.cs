@@ -92,9 +92,9 @@
             this.tAuthList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tAuthList.CellImpactHeight = false;
             this.tAuthList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tAuthList.Gap = 8;
+            this.tAuthList.Gap = 10;
             this.tAuthList.GapCell = 5;
-            this.tAuthList.Gaps = new System.Drawing.Size(8, 8);
+            this.tAuthList.Gaps = new System.Drawing.Size(10, 10);
             this.tAuthList.Location = new System.Drawing.Point(0, 0);
             this.tAuthList.Margin = new System.Windows.Forms.Padding(2);
             this.tAuthList.Name = "tAuthList";

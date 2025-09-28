@@ -65,13 +65,14 @@
             this.tAccountList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tAccountList.CellImpactHeight = false;
             this.tAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tAccountList.Gap = 8;
+            this.tAccountList.Gap = 10;
             this.tAccountList.GapCell = 5;
-            this.tAccountList.Gaps = new System.Drawing.Size(8, 8);
+            this.tAccountList.Gaps = new System.Drawing.Size(10, 10);
             this.tAccountList.Location = new System.Drawing.Point(2, 42);
             this.tAccountList.Margin = new System.Windows.Forms.Padding(2);
             this.tAccountList.Name = "tAccountList";
             this.tAccountList.Size = new System.Drawing.Size(1096, 520);
+            this.tAccountList.SwitchSize = 12;
             this.tAccountList.TabIndex = 1;
             this.tAccountList.CellClick += new AntdUI.Table.ClickEventHandler(this.tAccountList_CellClick);
             this.tAccountList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tAccountList_CellButtonClick);

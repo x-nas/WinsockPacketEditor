@@ -326,7 +326,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        this.OpenFilterEdit(fi);
+                        Operate.FilterConfig.Filter.OpenFilterEdit(this.form, fi);
 
                         break;
 
@@ -345,20 +345,9 @@ namespace WinsockPacketEditor
         {
             if (e.Record is FilterInfo fi)
             {
-                this.OpenFilterEdit(fi);
+                Operate.FilterConfig.Filter.OpenFilterEdit(this.form, fi);
             }
-        }
-
-        private void OpenFilterEdit(FilterInfo fi)
-        {
-            var FilterEdit = new FilterEdit(this.form, fi);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("FilterEditForm", "滤镜编辑"), FilterEdit)
-            {
-                Keyboard = false,
-                MaskClosable = false,
-                BtnHeight = 0,
-            });
-        }
+        }        
 
         #endregion
 

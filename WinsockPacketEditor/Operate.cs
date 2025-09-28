@@ -11873,6 +11873,21 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//编辑滤镜
+
+                public static void OpenFilterEdit(Form form, FilterInfo fi)
+                {
+                    var FilterEdit = new FilterEdit(form, fi);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("FilterEditForm", "滤镜编辑"), FilterEdit)
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
                 #region//获取滤镜
 
                 public static FilterInfo GetFilter_ByGuid(Guid FID)
@@ -14622,6 +14637,21 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//编辑发送
+
+                public static void OpenSendEdit(Form form, SendInfo si)
+                {
+                    var SendEdit = new SendEdit(form, si);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("SendEditForm", "发送编辑"), SendEdit)
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
                 #region//获取发送
 
                 public static SendInfo GetSend_ByGuid(Guid SID)
@@ -16065,6 +16095,21 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(DeleteRobot_Dialog), ex.Message);
                     }
+                }
+
+                #endregion
+
+                #region//编辑机器人
+
+                public static void OpenRobotEdit(Form form, RobotInfo ri)
+                {
+                    var RobotEdit = new RobotEdit(form, ri);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("RobotEditForm", "机器人编辑"), RobotEdit)
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
                 }
 
                 #endregion

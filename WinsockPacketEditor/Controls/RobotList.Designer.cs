@@ -182,9 +182,9 @@
             this.tRobotList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tRobotList.CellImpactHeight = false;
             this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tRobotList.Gap = 8;
+            this.tRobotList.Gap = 10;
             this.tRobotList.GapCell = 5;
-            this.tRobotList.Gaps = new System.Drawing.Size(8, 8);
+            this.tRobotList.Gaps = new System.Drawing.Size(10, 10);
             this.tRobotList.Location = new System.Drawing.Point(2, 42);
             this.tRobotList.Margin = new System.Windows.Forms.Padding(2);
             this.tRobotList.MultipleRows = true;

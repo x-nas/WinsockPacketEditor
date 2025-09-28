@@ -291,7 +291,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        this.OpenSendEdit(si);
+                        Operate.SendConfig.Send.OpenSendEdit(this.form, si);
 
                         break;
 
@@ -313,20 +313,9 @@ namespace WinsockPacketEditor
         {
             if (e.Record is SendInfo si)
             {
-                this.OpenSendEdit(si);
+                Operate.SendConfig.Send.OpenSendEdit(this.form, si);
             }                
-        }
-
-        private void OpenSendEdit(SendInfo si)
-        {
-            var SendEdit = new SendEdit(this.form, si);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("SendEditForm", "发送编辑"), SendEdit)
-            {
-                Keyboard = false,
-                MaskClosable = false,
-                BtnHeight = 0,
-            });
-        }
+        }        
 
         #endregion
 
