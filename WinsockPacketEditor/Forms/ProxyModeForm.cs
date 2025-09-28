@@ -533,15 +533,15 @@ namespace WinsockPacketEditor
 
         private void btn_setting_Click(object sender, EventArgs e)
         {
-            var setting = new DisplaySetting();
-            if (AntdUI.Modal.open(this, AntdUI.Localization.Get("Setting", "设置"), setting) == DialogResult.OK)
+            var DisplaySetting = new DisplaySetting();
+            if (AntdUI.Modal.open(this, AntdUI.Localization.Get("Setting", "设置"), DisplaySetting) == DialogResult.OK)
             {
-                AntdUI.Config.Animation = setting.Animation;
-                AntdUI.Config.ShadowEnabled = setting.ShadowEnabled;
-                AntdUI.Config.ShowInWindow = setting.ShowInWindow;
-                AntdUI.Config.ScrollBarHide = setting.ScrollBarHide;
-                AntdUI.Config.TextRenderingHighQuality = setting.TextRenderingHighQuality;
-                if (AntdUI.Config.TextRenderingHighQuality == setting.TextRenderingHighQuality)
+                AntdUI.Config.Animation = DisplaySetting.Animation;
+                AntdUI.Config.ShadowEnabled = DisplaySetting.ShadowEnabled;
+                AntdUI.Config.ShowInWindow = DisplaySetting.ShowInWindow;
+                AntdUI.Config.ScrollBarHide = DisplaySetting.ScrollBarHide;
+                AntdUI.Config.TextRenderingHighQuality = DisplaySetting.TextRenderingHighQuality;
+                if (AntdUI.Config.TextRenderingHighQuality == DisplaySetting.TextRenderingHighQuality)
                 {
                     return;
                 }
