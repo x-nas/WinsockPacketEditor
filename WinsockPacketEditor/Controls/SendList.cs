@@ -33,7 +33,7 @@ namespace WinsockPacketEditor
             {
                 new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
                 {
-                    Width = "80",
+                    Width = "60",
                     Call = (value, record, i_row, i_col) =>
                     {
                         return value;
@@ -144,7 +144,6 @@ namespace WinsockPacketEditor
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.SendList.Column."),
             };
 
-            this.tSendList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSendList.Binding(Operate.SendConfig.List.lstSendInfo);
         }
 

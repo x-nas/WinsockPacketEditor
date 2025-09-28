@@ -72,6 +72,7 @@
             this.tSendList.MultipleRows = true;
             this.tSendList.Name = "tSendList";
             this.tSendList.Size = new System.Drawing.Size(1096, 656);
+            this.tSendList.SwitchSize = 12;
             this.tSendList.TabIndex = 1;
             this.tSendList.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellClick);
             this.tSendList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tSendList_CellButtonClick);

@@ -69,6 +69,7 @@
             this.tFilterList.MultipleRows = true;
             this.tFilterList.Name = "tFilterList";
             this.tFilterList.Size = new System.Drawing.Size(1096, 656);
+            this.tFilterList.SwitchSize = 12;
             this.tFilterList.TabIndex = 1;
             this.tFilterList.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterList_CellClick);
             this.tFilterList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tFilterList_CellButtonClick);

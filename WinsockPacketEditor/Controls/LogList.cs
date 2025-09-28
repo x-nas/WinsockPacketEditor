@@ -53,7 +53,6 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.LogList.Column."),
             };
 
-            this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSystemLog.Binding(Operate.LogConfig.List.lstLogInfo);
         }
 
@@ -112,7 +111,6 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
             };
 
-            this.tFilterLog.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tFilterLog.Binding(Operate.LogConfig.List.lstFilterLogInfo);
         }
 
@@ -148,7 +146,6 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.ProxyLog.Column."),
             };
 
-            this.tProxyLog.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tProxyLog.Binding(Operate.LogConfig.List.lstProxyLogInfo);
         }
 

@@ -410,6 +410,12 @@
     <Compile Include="Controls\ProxySetting.Designer.cs">
       <DependentUpon>ProxySetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\QuickList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\QuickList.Designer.cs">
+      <DependentUpon>QuickList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RemoteMGTSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -605,6 +611,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProxySetting.resx">
       <DependentUpon>ProxySetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\QuickList.resx">
+      <DependentUpon>QuickList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\RemoteMGTSetting.resx">
       <DependentUpon>RemoteMGTSetting.cs</DependentUpon>

@@ -1,6 +1,5 @@
 ﻿using AntdUI;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -138,7 +137,6 @@ namespace WinsockPacketEditor
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.MapLocal.Column."),
             };
 
-            this.tMapLocal.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tMapLocal.Binding(Operate.ProxyConfig.Mapping.lstMapLocal);
         }
 
@@ -183,7 +181,6 @@ namespace WinsockPacketEditor
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.MapRemote.Column."),
             };
 
-            this.tMapRemote.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tMapRemote.Binding(Operate.ProxyConfig.Mapping.lstMapRemote);
         }
 

@@ -190,6 +190,7 @@
             this.tRobotList.MultipleRows = true;
             this.tRobotList.Name = "tRobotList";
             this.tRobotList.Size = new System.Drawing.Size(1096, 656);
+            this.tRobotList.SwitchSize = 12;
             this.tRobotList.TabIndex = 1;
             this.tRobotList.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellClick);
             this.tRobotList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tRobotList_CellButtonClick);

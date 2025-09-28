@@ -15,6 +15,7 @@ namespace WinsockPacketEditor
     {
         private Form form;
         public bool SearchFromHead = true;
+        private QuickList cQuickList = null;
 
         #region//窗体事件
 
@@ -25,11 +26,12 @@ namespace WinsockPacketEditor
         }
 
         private void ProxyList_Load(object sender, EventArgs e)
-        {
+        {            
             this.hbProxyData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
 
             this.InitMenu();
             this.InitTable_ProxyList();
+            this.InitControl();
             this.Dark_Changed();
 
             this.splitterProxyList.SplitterWidth = 5;
@@ -100,6 +102,26 @@ namespace WinsockPacketEditor
                     IconSvg = "SettingOutlined",
                 },
             });
+        }
+
+        private void InitControl()
+        {
+            //QuickList
+            if (this.splitterQuickList.InvokeRequired)
+            {
+                this.splitterQuickList.Invoke(new Action(() =>
+                {
+                    cQuickList = new QuickList(this.form);
+                    cQuickList.Dock = DockStyle.Fill;
+                    this.splitterQuickList.Panel1.Controls.Add(cQuickList);
+                }));
+            }
+            else
+            {
+                cQuickList = new QuickList(this.form);
+                cQuickList.Dock = DockStyle.Fill;
+                this.splitterQuickList.Panel1.Controls.Add(cQuickList);
+            }
         }
 
         public void Dark_Changed()
