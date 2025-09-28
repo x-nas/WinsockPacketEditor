@@ -32,6 +32,7 @@ namespace WinsockPacketEditor
             this.InitTable_ProxyList();
             this.Dark_Changed();
 
+            this.splitterProxyList.SplitterWidth = 5;
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
             this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
@@ -215,7 +216,7 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.ProxyList.Column."),
             };
 
-            this.tProxyList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tProxyList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tProxyList.Binding(Operate.ProxyConfig.List.lstProxyInfo);
         }
 

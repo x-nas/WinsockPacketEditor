@@ -78,7 +78,7 @@ namespace WinsockPacketEditor
                 this.tSendCollection.ForeColor = Color.Green;
             }
 
-            this.tSendCollection.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tSendCollection.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSendCollection.Binding(this.SendCollection);
         }
 

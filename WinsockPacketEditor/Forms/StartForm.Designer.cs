@@ -75,16 +75,16 @@
             this.pageHeader.Controls.Add(this.btn_mode);
             this.pageHeader.Controls.Add(this.btn_global);
             this.pageHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pageHeader.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.pageHeader.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.pageHeader.Icon = global::WinsockPacketEditor.Properties.Resources.wpe;
             this.pageHeader.Location = new System.Drawing.Point(0, 0);
-            this.pageHeader.Margin = new System.Windows.Forms.Padding(5);
+            this.pageHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pageHeader.MaximizeBox = false;
             this.pageHeader.MinimizeBox = false;
             this.pageHeader.Name = "pageHeader";
             this.pageHeader.ShowButton = true;
             this.pageHeader.ShowIcon = true;
-            this.pageHeader.Size = new System.Drawing.Size(1200, 40);
+            this.pageHeader.Size = new System.Drawing.Size(1100, 32);
             this.pageHeader.SubText = "";
             this.pageHeader.TabIndex = 5;
             this.pageHeader.Text = "WPE x64";
@@ -94,10 +94,11 @@
             this.btn_mode.Dock = System.Windows.Forms.DockStyle.Right;
             this.btn_mode.Ghost = true;
             this.btn_mode.IconSvg = "SunOutlined";
-            this.btn_mode.Location = new System.Drawing.Point(1060, 0);
+            this.btn_mode.Location = new System.Drawing.Point(990, 0);
+            this.btn_mode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_mode.Name = "btn_mode";
             this.btn_mode.Radius = 0;
-            this.btn_mode.Size = new System.Drawing.Size(50, 40);
+            this.btn_mode.Size = new System.Drawing.Size(35, 32);
             this.btn_mode.TabIndex = 13;
             this.btn_mode.ToggleIconSvg = "MoonOutlined";
             this.btn_mode.WaveSize = 0;
@@ -111,12 +112,12 @@
             this.btn_global.DropDownRadius = 6;
             this.btn_global.Ghost = true;
             this.btn_global.IconSvg = "GlobalOutlined";
-            this.btn_global.Location = new System.Drawing.Point(1110, 0);
-            this.btn_global.Margin = new System.Windows.Forms.Padding(5);
+            this.btn_global.Location = new System.Drawing.Point(1025, 0);
+            this.btn_global.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btn_global.Name = "btn_global";
             this.btn_global.Placement = AntdUI.TAlignFrom.BR;
             this.btn_global.Radius = 0;
-            this.btn_global.Size = new System.Drawing.Size(50, 40);
+            this.btn_global.Size = new System.Drawing.Size(35, 32);
             this.btn_global.TabIndex = 11;
             this.btn_global.WaveSize = 0;
             this.btn_global.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.btn_global_SelectedValueChanged);
@@ -125,20 +126,20 @@
             // 
             this.tlpSelectMode.ColumnCount = 5;
             this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
-            this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 7F));
             this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34F));
-            this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 7F));
             this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
             this.tlpSelectMode.Controls.Add(this.pInjectMode, 2, 0);
             this.tlpSelectMode.Controls.Add(this.pProxyMode, 4, 0);
             this.tlpSelectMode.Controls.Add(this.pRemoteMGT, 0, 0);
             this.tlpSelectMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSelectMode.Location = new System.Drawing.Point(30, 240);
+            this.tlpSelectMode.Location = new System.Drawing.Point(21, 194);
             this.tlpSelectMode.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSelectMode.Name = "tlpSelectMode";
             this.tlpSelectMode.RowCount = 1;
             this.tlpSelectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSelectMode.Size = new System.Drawing.Size(1140, 120);
+            this.tlpSelectMode.Size = new System.Drawing.Size(1058, 97);
             this.tlpSelectMode.TabIndex = 1;
             // 
             // pInjectMode
@@ -149,9 +150,10 @@
             this.pInjectMode.Controls.Add(this.InjectMode);
             this.pInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.pInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pInjectMode.Location = new System.Drawing.Point(382, 3);
+            this.pInjectMode.Location = new System.Drawing.Point(353, 2);
+            this.pInjectMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pInjectMode.Name = "pInjectMode";
-            this.pInjectMode.Size = new System.Drawing.Size(374, 114);
+            this.pInjectMode.Size = new System.Drawing.Size(350, 93);
             this.pInjectMode.TabIndex = 2;
             this.pInjectMode.Text = "panel1";
             this.pInjectMode.Click += new System.EventHandler(this.pInjectMode_Click);
@@ -161,12 +163,13 @@
             // lInject2
             // 
             this.lInject2.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lInject2.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lInject2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lInject2.ForeColor = System.Drawing.Color.Gray;
             this.lInject2.LocalizationText = "StartForm.InjectMode.Description";
-            this.lInject2.Location = new System.Drawing.Point(113, 58);
+            this.lInject2.Location = new System.Drawing.Point(79, 47);
+            this.lInject2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lInject2.Name = "lInject2";
-            this.lInject2.Size = new System.Drawing.Size(191, 20);
+            this.lInject2.Size = new System.Drawing.Size(182, 19);
             this.lInject2.TabIndex = 2;
             this.lInject2.Text = "以注入进程的方式来拦截封包";
             this.lInject2.Click += new System.EventHandler(this.lInject2_Click);
@@ -174,11 +177,12 @@
             // lInject1
             // 
             this.lInject1.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lInject1.Font = new System.Drawing.Font("微软雅黑", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lInject1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lInject1.LocalizationText = "StartForm.InjectMode";
-            this.lInject1.Location = new System.Drawing.Point(113, 34);
+            this.lInject1.Location = new System.Drawing.Point(79, 28);
+            this.lInject1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lInject1.Name = "lInject1";
-            this.lInject1.Size = new System.Drawing.Size(70, 23);
+            this.lInject1.Size = new System.Drawing.Size(56, 19);
             this.lInject1.TabIndex = 1;
             this.lInject1.Text = "注入模式";
             this.lInject1.Click += new System.EventHandler(this.lInject1_Click);
@@ -186,10 +190,11 @@
             // InjectMode
             // 
             this.InjectMode.Image = ((System.Drawing.Image)(resources.GetObject("InjectMode.Image")));
-            this.InjectMode.ImageFit = AntdUI.TFit.None;
-            this.InjectMode.Location = new System.Drawing.Point(22, 21);
+            this.InjectMode.ImageFit = AntdUI.TFit.Fill;
+            this.InjectMode.Location = new System.Drawing.Point(15, 17);
+            this.InjectMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.InjectMode.Name = "InjectMode";
-            this.InjectMode.Size = new System.Drawing.Size(72, 72);
+            this.InjectMode.Size = new System.Drawing.Size(50, 58);
             this.InjectMode.TabIndex = 0;
             this.InjectMode.Text = "";
             this.InjectMode.Click += new System.EventHandler(this.InjectMode_Click);
@@ -202,9 +207,10 @@
             this.pProxyMode.Controls.Add(this.aProxyMode);
             this.pProxyMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.pProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pProxyMode.Location = new System.Drawing.Point(772, 3);
+            this.pProxyMode.Location = new System.Drawing.Point(714, 2);
+            this.pProxyMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pProxyMode.Name = "pProxyMode";
-            this.pProxyMode.Size = new System.Drawing.Size(365, 114);
+            this.pProxyMode.Size = new System.Drawing.Size(342, 93);
             this.pProxyMode.TabIndex = 1;
             this.pProxyMode.Text = "panel1";
             this.pProxyMode.Click += new System.EventHandler(this.pProxyMode_Click);
@@ -214,12 +220,13 @@
             // lProxy2
             // 
             this.lProxy2.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lProxy2.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxy2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lProxy2.ForeColor = System.Drawing.Color.Gray;
             this.lProxy2.LocalizationText = "StartForm.ProxyMode.Description";
-            this.lProxy2.Location = new System.Drawing.Point(115, 58);
+            this.lProxy2.Location = new System.Drawing.Point(80, 47);
+            this.lProxy2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lProxy2.Name = "lProxy2";
-            this.lProxy2.Size = new System.Drawing.Size(206, 20);
+            this.lProxy2.Size = new System.Drawing.Size(196, 19);
             this.lProxy2.TabIndex = 2;
             this.lProxy2.Text = "以代理服务端的方式来拦截封包";
             this.lProxy2.Click += new System.EventHandler(this.lProxy2_Click);
@@ -227,11 +234,12 @@
             // lProxy1
             // 
             this.lProxy1.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lProxy1.Font = new System.Drawing.Font("微软雅黑", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProxy1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lProxy1.LocalizationText = "StartForm.ProxyMode";
-            this.lProxy1.Location = new System.Drawing.Point(115, 34);
+            this.lProxy1.Location = new System.Drawing.Point(80, 28);
+            this.lProxy1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lProxy1.Name = "lProxy1";
-            this.lProxy1.Size = new System.Drawing.Size(70, 23);
+            this.lProxy1.Size = new System.Drawing.Size(56, 19);
             this.lProxy1.TabIndex = 1;
             this.lProxy1.Text = "代理模式";
             this.lProxy1.Click += new System.EventHandler(this.lProxy1_Click);
@@ -239,10 +247,11 @@
             // aProxyMode
             // 
             this.aProxyMode.Image = ((System.Drawing.Image)(resources.GetObject("aProxyMode.Image")));
-            this.aProxyMode.ImageFit = AntdUI.TFit.None;
-            this.aProxyMode.Location = new System.Drawing.Point(22, 21);
+            this.aProxyMode.ImageFit = AntdUI.TFit.Fill;
+            this.aProxyMode.Location = new System.Drawing.Point(15, 17);
+            this.aProxyMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.aProxyMode.Name = "aProxyMode";
-            this.aProxyMode.Size = new System.Drawing.Size(72, 72);
+            this.aProxyMode.Size = new System.Drawing.Size(50, 58);
             this.aProxyMode.TabIndex = 0;
             this.aProxyMode.Text = "";
             this.aProxyMode.Click += new System.EventHandler(this.aProxyMode_Click);
@@ -255,9 +264,10 @@
             this.pRemoteMGT.Controls.Add(this.aRemoteMGT);
             this.pRemoteMGT.Cursor = System.Windows.Forms.Cursors.Default;
             this.pRemoteMGT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pRemoteMGT.Location = new System.Drawing.Point(3, 3);
+            this.pRemoteMGT.Location = new System.Drawing.Point(2, 2);
+            this.pRemoteMGT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pRemoteMGT.Name = "pRemoteMGT";
-            this.pRemoteMGT.Size = new System.Drawing.Size(363, 114);
+            this.pRemoteMGT.Size = new System.Drawing.Size(340, 93);
             this.pRemoteMGT.TabIndex = 0;
             this.pRemoteMGT.Click += new System.EventHandler(this.pRemoteMGT_Click);
             this.pRemoteMGT.MouseEnter += new System.EventHandler(this.pRemoteMGT_MouseEnter);
@@ -266,12 +276,13 @@
             // lRemote2
             // 
             this.lRemote2.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lRemote2.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRemote2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lRemote2.ForeColor = System.Drawing.Color.Gray;
             this.lRemote2.LocalizationText = "StartForm.RemoteMGT.Description";
-            this.lRemote2.Location = new System.Drawing.Point(115, 58);
+            this.lRemote2.Location = new System.Drawing.Point(80, 47);
+            this.lRemote2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lRemote2.Name = "lRemote2";
-            this.lRemote2.Size = new System.Drawing.Size(206, 20);
+            this.lRemote2.Size = new System.Drawing.Size(196, 19);
             this.lRemote2.TabIndex = 2;
             this.lRemote2.Text = "配置远程管理后台的账号和端口";
             this.lRemote2.Click += new System.EventHandler(this.lRemote2_Click);
@@ -279,11 +290,12 @@
             // lRemote1
             // 
             this.lRemote1.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lRemote1.Font = new System.Drawing.Font("微软雅黑", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRemote1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lRemote1.LocalizationText = "StartForm.RemoteMGT";
-            this.lRemote1.Location = new System.Drawing.Point(115, 34);
+            this.lRemote1.Location = new System.Drawing.Point(80, 28);
+            this.lRemote1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lRemote1.Name = "lRemote1";
-            this.lRemote1.Size = new System.Drawing.Size(70, 23);
+            this.lRemote1.Size = new System.Drawing.Size(56, 19);
             this.lRemote1.TabIndex = 1;
             this.lRemote1.Text = "远程管理";
             this.lRemote1.Click += new System.EventHandler(this.lRemote1_Click);
@@ -291,10 +303,11 @@
             // aRemoteMGT
             // 
             this.aRemoteMGT.Image = ((System.Drawing.Image)(resources.GetObject("aRemoteMGT.Image")));
-            this.aRemoteMGT.ImageFit = AntdUI.TFit.None;
-            this.aRemoteMGT.Location = new System.Drawing.Point(22, 21);
+            this.aRemoteMGT.ImageFit = AntdUI.TFit.Fill;
+            this.aRemoteMGT.Location = new System.Drawing.Point(15, 17);
+            this.aRemoteMGT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.aRemoteMGT.Name = "aRemoteMGT";
-            this.aRemoteMGT.Size = new System.Drawing.Size(72, 72);
+            this.aRemoteMGT.Size = new System.Drawing.Size(50, 58);
             this.aRemoteMGT.TabIndex = 0;
             this.aRemoteMGT.Text = "";
             this.aRemoteMGT.Click += new System.EventHandler(this.aRemoteMGT_Click);
@@ -304,10 +317,11 @@
             this.aStartForm.Controls.Add(this.tlpBackground);
             this.aStartForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.aStartForm.Image = ((System.Drawing.Image)(resources.GetObject("aStartForm.Image")));
-            this.aStartForm.Location = new System.Drawing.Point(33, 23);
+            this.aStartForm.Location = new System.Drawing.Point(23, 18);
+            this.aStartForm.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.aStartForm.Name = "aStartForm";
             this.aStartForm.Radius = 10;
-            this.aStartForm.Size = new System.Drawing.Size(1134, 194);
+            this.aStartForm.Size = new System.Drawing.Size(1054, 158);
             this.aStartForm.TabIndex = 0;
             this.aStartForm.Text = "";
             // 
@@ -324,19 +338,19 @@
             this.tlpBackground.RowCount = 2;
             this.tlpBackground.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.tlpBackground.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tlpBackground.Size = new System.Drawing.Size(1134, 194);
+            this.tlpBackground.Size = new System.Drawing.Size(1054, 158);
             this.tlpBackground.TabIndex = 0;
             // 
             // lBG2
             // 
             this.lBG2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lBG2.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lBG2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lBG2.ForeColor = System.Drawing.Color.White;
-            this.lBG2.Location = new System.Drawing.Point(3, 126);
-            this.lBG2.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.lBG2.Location = new System.Drawing.Point(2, 102);
+            this.lBG2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 2);
             this.lBG2.Name = "lBG2";
             this.lBG2.Shadow = 20;
-            this.lBG2.Size = new System.Drawing.Size(1128, 65);
+            this.lBG2.Size = new System.Drawing.Size(1050, 54);
             this.lBG2.TabIndex = 1;
             this.lBG2.Text = "Winsock Packet Editor";
             this.lBG2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -346,13 +360,13 @@
             // 
             this.lBG1.ColorExtend = "";
             this.lBG1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lBG1.Font = new System.Drawing.Font("微软雅黑", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lBG1.Font = new System.Drawing.Font("微软雅黑", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lBG1.ForeColor = System.Drawing.Color.White;
-            this.lBG1.Location = new System.Drawing.Point(3, 3);
-            this.lBG1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.lBG1.Location = new System.Drawing.Point(2, 2);
+            this.lBG1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 0);
             this.lBG1.Name = "lBG1";
             this.lBG1.Shadow = 5;
-            this.lBG1.Size = new System.Drawing.Size(1128, 123);
+            this.lBG1.Size = new System.Drawing.Size(1050, 100);
             this.lBG1.TabIndex = 0;
             this.lBG1.Text = "WPE x64";
             this.lBG1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -362,37 +376,38 @@
             // 
             this.tlpStartForm.BackColor = System.Drawing.Color.Transparent;
             this.tlpStartForm.ColumnCount = 3;
-            this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+            this.tlpStartForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpStartForm.Controls.Add(this.aStartForm, 1, 1);
             this.tlpStartForm.Controls.Add(this.tlpSelectMode, 1, 3);
             this.tlpStartForm.Controls.Add(this.lMore, 1, 5);
             this.tlpStartForm.Controls.Add(this.tlpMore, 1, 6);
             this.tlpStartForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStartForm.Location = new System.Drawing.Point(0, 40);
+            this.tlpStartForm.Location = new System.Drawing.Point(0, 32);
             this.tlpStartForm.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStartForm.Name = "tlpStartForm";
             this.tlpStartForm.RowCount = 7;
-            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 162F));
+            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 97F));
+            this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpStartForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStartForm.Size = new System.Drawing.Size(1200, 710);
+            this.tlpStartForm.Size = new System.Drawing.Size(1100, 618);
             this.tlpStartForm.TabIndex = 6;
             // 
             // lMore
             // 
             this.lMore.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lMore.Font = new System.Drawing.Font("微软雅黑", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lMore.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lMore.LocalizationText = "StartForm.LearnMore";
-            this.lMore.Location = new System.Drawing.Point(33, 383);
+            this.lMore.Location = new System.Drawing.Point(23, 309);
+            this.lMore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lMore.Name = "lMore";
-            this.lMore.Size = new System.Drawing.Size(75, 25);
+            this.lMore.Size = new System.Drawing.Size(56, 19);
             this.lMore.TabIndex = 2;
             this.lMore.Text = "了解更多";
             // 
@@ -401,25 +416,25 @@
             this.tlpMore.ColumnCount = 2;
             this.tlpMore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpMore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpMore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpMore.Controls.Add(this.bQA, 0, 5);
             this.tlpMore.Controls.Add(this.bGitee, 0, 4);
             this.tlpMore.Controls.Add(this.bGitHub, 0, 3);
             this.tlpMore.Controls.Add(this.bTutorials, 0, 2);
             this.tlpMore.Controls.Add(this.bWPEWebSite, 0, 1);
             this.tlpMore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpMore.Location = new System.Drawing.Point(30, 411);
+            this.tlpMore.Location = new System.Drawing.Point(21, 330);
             this.tlpMore.Margin = new System.Windows.Forms.Padding(0);
             this.tlpMore.Name = "tlpMore";
             this.tlpMore.RowCount = 7;
-            this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMore.Size = new System.Drawing.Size(1140, 299);
+            this.tlpMore.Size = new System.Drawing.Size(1058, 288);
             this.tlpMore.TabIndex = 3;
             // 
             // bQA
@@ -427,14 +442,14 @@
             this.bQA.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bQA.ColorScheme = AntdUI.TAMode.Dark;
             this.bQA.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bQA.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bQA.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bQA.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bQA.Ghost = true;
             this.bQA.LocalizationText = "StartForm.QA";
-            this.bQA.Location = new System.Drawing.Point(1, 139);
+            this.bQA.Location = new System.Drawing.Point(1, 113);
             this.bQA.Margin = new System.Windows.Forms.Padding(1);
             this.bQA.Name = "bQA";
-            this.bQA.Size = new System.Drawing.Size(110, 30);
+            this.bQA.Size = new System.Drawing.Size(96, 24);
             this.bQA.TabIndex = 8;
             this.bQA.Text = "问题 & 反馈";
             this.bQA.WaveSize = 0;
@@ -445,13 +460,13 @@
             this.bGitee.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bGitee.ColorScheme = AntdUI.TAMode.Dark;
             this.bGitee.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bGitee.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bGitee.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bGitee.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bGitee.Ghost = true;
-            this.bGitee.Location = new System.Drawing.Point(1, 107);
+            this.bGitee.Location = new System.Drawing.Point(1, 87);
             this.bGitee.Margin = new System.Windows.Forms.Padding(1);
             this.bGitee.Name = "bGitee";
-            this.bGitee.Size = new System.Drawing.Size(63, 30);
+            this.bGitee.Size = new System.Drawing.Size(55, 24);
             this.bGitee.TabIndex = 6;
             this.bGitee.Text = "Gitee";
             this.bGitee.WaveSize = 0;
@@ -462,13 +477,13 @@
             this.bGitHub.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bGitHub.ColorScheme = AntdUI.TAMode.Dark;
             this.bGitHub.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bGitHub.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bGitHub.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bGitHub.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bGitHub.Ghost = true;
-            this.bGitHub.Location = new System.Drawing.Point(1, 75);
+            this.bGitHub.Location = new System.Drawing.Point(1, 61);
             this.bGitHub.Margin = new System.Windows.Forms.Padding(1);
             this.bGitHub.Name = "bGitHub";
-            this.bGitHub.Size = new System.Drawing.Size(77, 30);
+            this.bGitHub.Size = new System.Drawing.Size(67, 24);
             this.bGitHub.TabIndex = 4;
             this.bGitHub.Text = "GitHub";
             this.bGitHub.WaveSize = 0;
@@ -479,14 +494,14 @@
             this.bTutorials.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bTutorials.ColorScheme = AntdUI.TAMode.Dark;
             this.bTutorials.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bTutorials.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bTutorials.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bTutorials.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bTutorials.Ghost = true;
             this.bTutorials.LocalizationText = "StartForm.Tutorials";
-            this.bTutorials.Location = new System.Drawing.Point(1, 43);
+            this.bTutorials.Location = new System.Drawing.Point(1, 35);
             this.bTutorials.Margin = new System.Windows.Forms.Padding(1);
             this.bTutorials.Name = "bTutorials";
-            this.bTutorials.Size = new System.Drawing.Size(118, 30);
+            this.bTutorials.Size = new System.Drawing.Size(103, 24);
             this.bTutorials.TabIndex = 2;
             this.bTutorials.Text = "软件使用教程";
             this.bTutorials.WaveSize = 0;
@@ -497,14 +512,14 @@
             this.bWPEWebSite.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bWPEWebSite.ColorScheme = AntdUI.TAMode.Dark;
             this.bWPEWebSite.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bWPEWebSite.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bWPEWebSite.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bWPEWebSite.ForeColor = System.Drawing.Color.DodgerBlue;
             this.bWPEWebSite.Ghost = true;
             this.bWPEWebSite.LocalizationText = "StartForm.OfficialWebsite";
-            this.bWPEWebSite.Location = new System.Drawing.Point(1, 11);
+            this.bWPEWebSite.Location = new System.Drawing.Point(1, 9);
             this.bWPEWebSite.Margin = new System.Windows.Forms.Padding(1);
             this.bWPEWebSite.Name = "bWPEWebSite";
-            this.bWPEWebSite.Size = new System.Drawing.Size(86, 30);
+            this.bWPEWebSite.Size = new System.Drawing.Size(75, 24);
             this.bWPEWebSite.TabIndex = 0;
             this.bWPEWebSite.Text = "官方网站";
             this.bWPEWebSite.WaveSize = 0;
@@ -512,17 +527,17 @@
             // 
             // StartForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1200, 750);
+            this.ClientSize = new System.Drawing.Size(1100, 650);
             this.Controls.Add(this.tlpStartForm);
             this.Controls.Add(this.pageHeader);
             this.Dark = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ForeColor = System.Drawing.Color.Black;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Mode = AntdUI.TAMode.Dark;
             this.Name = "StartForm";
             this.Resizable = false;

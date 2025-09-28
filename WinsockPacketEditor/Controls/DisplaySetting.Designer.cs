@@ -46,10 +46,9 @@
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.LocalizationText = "ShadowEnabled";
-            this.label2.Location = new System.Drawing.Point(4, 60);
-            this.label2.Margin = new System.Windows.Forms.Padding(4);
+            this.label2.Location = new System.Drawing.Point(3, 48);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(182, 48);
+            this.label2.Size = new System.Drawing.Size(202, 39);
             this.label2.TabIndex = 2;
             this.label2.Text = "阴影使能";
             // 
@@ -57,8 +56,8 @@
             // 
             this.tlpSetting.ColumnCount = 2;
             this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
+            this.tlpSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpSetting.Controls.Add(this.switch5, 1, 4);
             this.tlpSetting.Controls.Add(this.label5, 0, 4);
             this.tlpSetting.Controls.Add(this.switch4, 1, 3);
@@ -71,7 +70,6 @@
             this.tlpSetting.Controls.Add(this.switch1, 1, 0);
             this.tlpSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSetting.Location = new System.Drawing.Point(0, 0);
-            this.tlpSetting.Margin = new System.Windows.Forms.Padding(4);
             this.tlpSetting.Name = "tlpSetting";
             this.tlpSetting.RowCount = 6;
             this.tlpSetting.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -86,10 +84,9 @@
             // switch5
             // 
             this.switch5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch5.Location = new System.Drawing.Point(195, 237);
-            this.switch5.Margin = new System.Windows.Forms.Padding(4);
+            this.switch5.Location = new System.Drawing.Point(211, 190);
             this.switch5.Name = "switch5";
-            this.switch5.Size = new System.Drawing.Size(50, 30);
+            this.switch5.Size = new System.Drawing.Size(35, 24);
             this.switch5.TabIndex = 9;
             this.switch5.Text = "switch5";
             // 
@@ -97,20 +94,18 @@
             // 
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label5.LocalizationText = "TextRenderingHighQuality";
-            this.label5.Location = new System.Drawing.Point(4, 228);
-            this.label5.Margin = new System.Windows.Forms.Padding(4);
+            this.label5.Location = new System.Drawing.Point(3, 183);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(182, 48);
+            this.label5.Size = new System.Drawing.Size(202, 39);
             this.label5.TabIndex = 8;
             this.label5.Text = "文本高质量呈现";
             // 
             // switch4
             // 
             this.switch4.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch4.Location = new System.Drawing.Point(195, 181);
-            this.switch4.Margin = new System.Windows.Forms.Padding(4);
+            this.switch4.Location = new System.Drawing.Point(211, 145);
             this.switch4.Name = "switch4";
-            this.switch4.Size = new System.Drawing.Size(50, 30);
+            this.switch4.Size = new System.Drawing.Size(35, 24);
             this.switch4.TabIndex = 7;
             this.switch4.Text = "switch4";
             // 
@@ -118,20 +113,18 @@
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label4.LocalizationText = "ScrollBarHidden";
-            this.label4.Location = new System.Drawing.Point(4, 172);
-            this.label4.Margin = new System.Windows.Forms.Padding(4);
+            this.label4.Location = new System.Drawing.Point(3, 138);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(182, 48);
+            this.label4.Size = new System.Drawing.Size(202, 39);
             this.label4.TabIndex = 6;
             this.label4.Text = "滚动条隐藏样式";
             // 
             // switch3
             // 
             this.switch3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch3.Location = new System.Drawing.Point(195, 125);
-            this.switch3.Margin = new System.Windows.Forms.Padding(4);
+            this.switch3.Location = new System.Drawing.Point(211, 100);
             this.switch3.Name = "switch3";
-            this.switch3.Size = new System.Drawing.Size(50, 30);
+            this.switch3.Size = new System.Drawing.Size(35, 24);
             this.switch3.TabIndex = 5;
             this.switch3.Text = "switch3";
             // 
@@ -139,20 +132,18 @@
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.LocalizationText = "PopupWindow";
-            this.label3.Location = new System.Drawing.Point(4, 116);
-            this.label3.Margin = new System.Windows.Forms.Padding(4);
+            this.label3.Location = new System.Drawing.Point(3, 93);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(182, 48);
+            this.label3.Size = new System.Drawing.Size(202, 39);
             this.label3.TabIndex = 4;
             this.label3.Text = "弹出在窗口";
             // 
             // switch2
             // 
             this.switch2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch2.Location = new System.Drawing.Point(195, 69);
-            this.switch2.Margin = new System.Windows.Forms.Padding(4);
+            this.switch2.Location = new System.Drawing.Point(211, 55);
             this.switch2.Name = "switch2";
-            this.switch2.Size = new System.Drawing.Size(50, 30);
+            this.switch2.Size = new System.Drawing.Size(35, 24);
             this.switch2.TabIndex = 3;
             this.switch2.Text = "switch2";
             // 
@@ -160,30 +151,28 @@
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.LocalizationText = "AnimationEnabled";
-            this.label1.Location = new System.Drawing.Point(4, 4);
-            this.label1.Margin = new System.Windows.Forms.Padding(4);
+            this.label1.Location = new System.Drawing.Point(3, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(182, 48);
+            this.label1.Size = new System.Drawing.Size(202, 39);
             this.label1.TabIndex = 0;
             this.label1.Text = "动画使能";
             // 
             // switch1
             // 
             this.switch1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.switch1.Location = new System.Drawing.Point(195, 13);
-            this.switch1.Margin = new System.Windows.Forms.Padding(4);
+            this.switch1.Location = new System.Drawing.Point(211, 10);
             this.switch1.Name = "switch1";
-            this.switch1.Size = new System.Drawing.Size(50, 30);
+            this.switch1.Size = new System.Drawing.Size(35, 24);
             this.switch1.TabIndex = 1;
             this.switch1.Text = "switch1";
             // 
             // DisplaySetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpSetting);
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "DisplaySetting";
             this.Size = new System.Drawing.Size(250, 300);
             this.tlpSetting.ResumeLayout(false);

@@ -57,10 +57,10 @@
             this.tlpXOR.Name = "tlpXOR";
             this.tlpXOR.RowCount = 3;
             this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpXOR.Size = new System.Drawing.Size(800, 800);
+            this.tlpXOR.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpXOR.Size = new System.Drawing.Size(1100, 700);
             this.tlpXOR.TabIndex = 2;
             // 
             // tlpPacketInfo_XOR_Button
@@ -75,14 +75,14 @@
             this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR_ClearUp, 3, 1);
             this.tlpPacketInfo_XOR_Button.Controls.Add(this.txtXOR, 1, 1);
             this.tlpPacketInfo_XOR_Button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpPacketInfo_XOR_Button.Location = new System.Drawing.Point(0, 370);
+            this.tlpPacketInfo_XOR_Button.Location = new System.Drawing.Point(0, 325);
             this.tlpPacketInfo_XOR_Button.Margin = new System.Windows.Forms.Padding(0);
             this.tlpPacketInfo_XOR_Button.Name = "tlpPacketInfo_XOR_Button";
             this.tlpPacketInfo_XOR_Button.RowCount = 3;
             this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketInfo_XOR_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPacketInfo_XOR_Button.Size = new System.Drawing.Size(800, 60);
+            this.tlpPacketInfo_XOR_Button.Size = new System.Drawing.Size(1100, 49);
             this.tlpPacketInfo_XOR_Button.TabIndex = 2;
             // 
             // lXOR
@@ -90,9 +90,10 @@
             this.lXOR.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lXOR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lXOR.LocalizationText = "XORCalculation.XORValue";
-            this.lXOR.Location = new System.Drawing.Point(3, 7);
+            this.lXOR.Location = new System.Drawing.Point(2, 6);
+            this.lXOR.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lXOR.Name = "lXOR";
-            this.lXOR.Size = new System.Drawing.Size(176, 46);
+            this.lXOR.Size = new System.Drawing.Size(132, 37);
             this.lXOR.TabIndex = 6;
             this.lXOR.Text = "异或值（支持循环异或）";
             // 
@@ -102,9 +103,10 @@
             this.bXOR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bXOR.IconSvg = "BuildFilled";
             this.bXOR.LocalizationText = "XOR";
-            this.bXOR.Location = new System.Drawing.Point(627, 7);
+            this.bXOR.Location = new System.Drawing.Point(968, 6);
+            this.bXOR.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bXOR.Name = "bXOR";
-            this.bXOR.Size = new System.Drawing.Size(82, 46);
+            this.bXOR.Size = new System.Drawing.Size(63, 37);
             this.bXOR.TabIndex = 7;
             this.bXOR.Text = "计算";
             this.bXOR.Type = AntdUI.TTypeMini.Primary;
@@ -116,9 +118,10 @@
             this.bXOR_ClearUp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bXOR_ClearUp.IconSvg = "DeleteOutlined";
             this.bXOR_ClearUp.LocalizationText = "Clear";
-            this.bXOR_ClearUp.Location = new System.Drawing.Point(715, 7);
+            this.bXOR_ClearUp.Location = new System.Drawing.Point(1035, 6);
+            this.bXOR_ClearUp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bXOR_ClearUp.Name = "bXOR_ClearUp";
-            this.bXOR_ClearUp.Size = new System.Drawing.Size(82, 46);
+            this.bXOR_ClearUp.Size = new System.Drawing.Size(63, 37);
             this.bXOR_ClearUp.TabIndex = 8;
             this.bXOR_ClearUp.Text = "清空";
             this.bXOR_ClearUp.Type = AntdUI.TTypeMini.Warn;
@@ -128,10 +131,11 @@
             // 
             this.txtXOR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtXOR.LocalizationPlaceholderText = "HexWithSpaces";
-            this.txtXOR.Location = new System.Drawing.Point(185, 7);
+            this.txtXOR.Location = new System.Drawing.Point(138, 6);
+            this.txtXOR.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtXOR.Name = "txtXOR";
             this.txtXOR.PlaceholderText = "请输入十六进制带空格";
-            this.txtXOR.Size = new System.Drawing.Size(436, 46);
+            this.txtXOR.Size = new System.Drawing.Size(826, 37);
             this.txtXOR.TabIndex = 9;
             this.txtXOR.TextChanged += new System.EventHandler(this.txtXOR_TextChanged);
             // 
@@ -140,10 +144,11 @@
             this.pXOR_To.BorderWidth = 1F;
             this.pXOR_To.Controls.Add(this.hbXOR_To);
             this.pXOR_To.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pXOR_To.Location = new System.Drawing.Point(3, 433);
+            this.pXOR_To.Location = new System.Drawing.Point(2, 376);
+            this.pXOR_To.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pXOR_To.Name = "pXOR_To";
-            this.pXOR_To.Padding = new System.Windows.Forms.Padding(3);
-            this.pXOR_To.Size = new System.Drawing.Size(794, 364);
+            this.pXOR_To.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pXOR_To.Size = new System.Drawing.Size(1096, 322);
             this.pXOR_To.TabIndex = 1;
             this.pXOR_To.Text = "panel2";
             // 
@@ -159,13 +164,14 @@
             this.hbXOR_To.BuiltInContextMenu.SelectAllMenuItemText = "全选";
             this.hbXOR_To.ColumnInfoVisible = true;
             this.hbXOR_To.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbXOR_To.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbXOR_To.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hbXOR_To.LineInfoVisible = true;
-            this.hbXOR_To.Location = new System.Drawing.Point(4, 4);
+            this.hbXOR_To.Location = new System.Drawing.Point(3, 3);
+            this.hbXOR_To.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.hbXOR_To.Name = "hbXOR_To";
             this.hbXOR_To.ReadOnly = true;
             this.hbXOR_To.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbXOR_To.Size = new System.Drawing.Size(786, 356);
+            this.hbXOR_To.Size = new System.Drawing.Size(1090, 316);
             this.hbXOR_To.TabIndex = 3;
             this.hbXOR_To.VScrollBarVisible = true;
             this.hbXOR_To.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbXOR_To_MouseDown);
@@ -175,10 +181,11 @@
             this.pXOR_From.BorderWidth = 1F;
             this.pXOR_From.Controls.Add(this.hbXOR_From);
             this.pXOR_From.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pXOR_From.Location = new System.Drawing.Point(3, 3);
+            this.pXOR_From.Location = new System.Drawing.Point(2, 2);
+            this.pXOR_From.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pXOR_From.Name = "pXOR_From";
-            this.pXOR_From.Padding = new System.Windows.Forms.Padding(3);
-            this.pXOR_From.Size = new System.Drawing.Size(794, 364);
+            this.pXOR_From.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pXOR_From.Size = new System.Drawing.Size(1096, 321);
             this.pXOR_From.TabIndex = 0;
             this.pXOR_From.Text = "panel1";
             // 
@@ -194,26 +201,27 @@
             this.hbXOR_From.BuiltInContextMenu.SelectAllMenuItemText = "全选";
             this.hbXOR_From.ColumnInfoVisible = true;
             this.hbXOR_From.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbXOR_From.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbXOR_From.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hbXOR_From.LineInfoVisible = true;
-            this.hbXOR_From.Location = new System.Drawing.Point(4, 4);
+            this.hbXOR_From.Location = new System.Drawing.Point(3, 3);
+            this.hbXOR_From.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.hbXOR_From.Name = "hbXOR_From";
             this.hbXOR_From.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbXOR_From.Size = new System.Drawing.Size(786, 356);
+            this.hbXOR_From.Size = new System.Drawing.Size(1090, 315);
             this.hbXOR_From.TabIndex = 2;
             this.hbXOR_From.VScrollBarVisible = true;
             this.hbXOR_From.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbXOR_From_MouseDown);
             // 
             // XORCalculation
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpXOR);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "XORCalculation";
-            this.Size = new System.Drawing.Size(800, 800);
+            this.Size = new System.Drawing.Size(1100, 700);
             this.Load += new System.EventHandler(this.XORCalculation_Load);
             this.tlpXOR.ResumeLayout(false);
             this.tlpPacketInfo_XOR_Button.ResumeLayout(false);

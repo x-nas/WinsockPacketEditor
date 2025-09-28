@@ -40,7 +40,7 @@
             // 
             this.tlpEncryption.ColumnCount = 1;
             this.tlpEncryption.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpEncryption.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpEncryption.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpEncryption.Controls.Add(this.txtEncryption, 0, 1);
             this.tlpEncryption.Controls.Add(this.pEncryption, 0, 0);
             this.tlpEncryption.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -58,11 +58,11 @@
             // 
             this.txtEncryption.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtEncryption.LocalizationPlaceholderText = "Input.Password";
-            this.txtEncryption.Location = new System.Drawing.Point(5, 135);
-            this.txtEncryption.Margin = new System.Windows.Forms.Padding(5);
+            this.txtEncryption.Location = new System.Drawing.Point(4, 109);
+            this.txtEncryption.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtEncryption.Name = "txtEncryption";
             this.txtEncryption.PlaceholderText = "请输入密码";
-            this.txtEncryption.Size = new System.Drawing.Size(490, 40);
+            this.txtEncryption.Size = new System.Drawing.Size(492, 32);
             this.txtEncryption.TabIndex = 1;
             this.txtEncryption.TextChanged += new System.EventHandler(this.txtEncryption_TextChanged);
             // 
@@ -78,7 +78,7 @@
             this.pEncryption.Radius = 10;
             this.pEncryption.Shadow = 24;
             this.pEncryption.ShadowOpacityAnimation = true;
-            this.pEncryption.Size = new System.Drawing.Size(500, 130);
+            this.pEncryption.Size = new System.Drawing.Size(500, 105);
             this.pEncryption.TabIndex = 2;
             // 
             // lEncryption
@@ -86,21 +86,21 @@
             this.lEncryption.BackColor = System.Drawing.Color.Transparent;
             this.lEncryption.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lEncryption.Location = new System.Drawing.Point(24, 24);
-            this.lEncryption.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.lEncryption.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lEncryption.Name = "lEncryption";
-            this.lEncryption.Size = new System.Drawing.Size(452, 82);
+            this.lEncryption.Size = new System.Drawing.Size(452, 57);
             this.lEncryption.TabIndex = 4;
             this.lEncryption.Text = "lEncryption";
             this.lEncryption.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // EncryptionPassword
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpEncryption);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "EncryptionPassword";
             this.Size = new System.Drawing.Size(500, 200);
             this.tlpEncryption.ResumeLayout(false);

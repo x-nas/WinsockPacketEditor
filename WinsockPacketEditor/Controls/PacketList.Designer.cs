@@ -102,24 +102,21 @@
             // 
             // tlpPacketList
             // 
-            this.tlpPacketList.ColumnCount = 3;
-            this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpPacketList.ColumnCount = 1;
             this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketList.Controls.Add(this.tableLayoutPanel2, 1, 1);
-            this.tlpPacketList.Controls.Add(this.splitterPacketList, 1, 2);
-            this.tlpPacketList.Controls.Add(this.tlpProcessInfo, 1, 3);
+            this.tlpPacketList.Controls.Add(this.tableLayoutPanel2, 0, 0);
+            this.tlpPacketList.Controls.Add(this.splitterPacketList, 0, 1);
+            this.tlpPacketList.Controls.Add(this.tlpProcessInfo, 0, 2);
             this.tlpPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpPacketList.Location = new System.Drawing.Point(0, 0);
             this.tlpPacketList.Margin = new System.Windows.Forms.Padding(0);
             this.tlpPacketList.Name = "tlpPacketList";
-            this.tlpPacketList.RowCount = 4;
-            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpPacketList.RowCount = 3;
+            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpPacketList.Size = new System.Drawing.Size(1200, 800);
+            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpPacketList.Size = new System.Drawing.Size(1200, 700);
             this.tlpPacketList.TabIndex = 11;
             // 
             // tableLayoutPanel2
@@ -129,7 +126,7 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 84F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -143,18 +140,19 @@
             this.tableLayoutPanel2.Controls.Add(this.bHookStop, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.bHookStart, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(30, 20);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1140, 50);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1200, 40);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
             // txtPacketList_AutoClear
             // 
             this.txtPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPacketList_AutoClear.Location = new System.Drawing.Point(381, 3);
+            this.txtPacketList_AutoClear.Location = new System.Drawing.Point(287, 2);
+            this.txtPacketList_AutoClear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPacketList_AutoClear.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -167,7 +165,7 @@
             0});
             this.txtPacketList_AutoClear.Name = "txtPacketList_AutoClear";
             this.txtPacketList_AutoClear.SelectionStart = 1;
-            this.txtPacketList_AutoClear.Size = new System.Drawing.Size(114, 44);
+            this.txtPacketList_AutoClear.Size = new System.Drawing.Size(80, 36);
             this.txtPacketList_AutoClear.TabIndex = 16;
             this.txtPacketList_AutoClear.Text = "5000";
             this.txtPacketList_AutoClear.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -183,9 +181,10 @@
             this.cbPacketList_AutoClear.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbPacketList_AutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbPacketList_AutoClear.LocalizationText = "ListSettingsForm.AutoClear";
-            this.cbPacketList_AutoClear.Location = new System.Drawing.Point(267, 3);
+            this.cbPacketList_AutoClear.Location = new System.Drawing.Point(203, 2);
+            this.cbPacketList_AutoClear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbPacketList_AutoClear.Name = "cbPacketList_AutoClear";
-            this.cbPacketList_AutoClear.Size = new System.Drawing.Size(108, 44);
+            this.cbPacketList_AutoClear.Size = new System.Drawing.Size(80, 36);
             this.cbPacketList_AutoClear.TabIndex = 15;
             this.cbPacketList_AutoClear.Text = "自动清理";
             this.cbPacketList_AutoClear.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoClear_CheckedChanged);
@@ -195,9 +194,10 @@
             this.cbPacketList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbPacketList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbPacketList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
-            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(501, 3);
+            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(371, 2);
+            this.cbPacketList_AutoRoll.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbPacketList_AutoRoll.Name = "cbPacketList_AutoRoll";
-            this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(108, 44);
+            this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(80, 36);
             this.cbPacketList_AutoRoll.TabIndex = 14;
             this.cbPacketList_AutoRoll.Text = "自动滚动";
             this.cbPacketList_AutoRoll.CheckedChanged += new AntdUI.BoolEventHandler(this.cbPacketList_AutoRoll_CheckedChanged);
@@ -209,10 +209,11 @@
             this.ddMenu.Ghost = true;
             this.ddMenu.IconRatio = 1F;
             this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(1093, 3);
+            this.ddMenu.Location = new System.Drawing.Point(1166, 2);
+            this.ddMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
-            this.ddMenu.Size = new System.Drawing.Size(44, 44);
+            this.ddMenu.Size = new System.Drawing.Size(32, 36);
             this.ddMenu.TabIndex = 13;
             this.ddMenu.Trigger = AntdUI.Trigger.Hover;
             this.ddMenu.WaveSize = 0;
@@ -224,9 +225,10 @@
             this.bSearchPacket.Ghost = true;
             this.bSearchPacket.IconRatio = 1F;
             this.bSearchPacket.IconSvg = "SearchOutlined";
-            this.bSearchPacket.Location = new System.Drawing.Point(1043, 3);
+            this.bSearchPacket.Location = new System.Drawing.Point(1130, 2);
+            this.bSearchPacket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bSearchPacket.Name = "bSearchPacket";
-            this.bSearchPacket.Size = new System.Drawing.Size(44, 44);
+            this.bSearchPacket.Size = new System.Drawing.Size(32, 36);
             this.bSearchPacket.TabIndex = 12;
             this.bSearchPacket.WaveSize = 0;
             this.bSearchPacket.Click += new System.EventHandler(this.bSearchPacket_Click);
@@ -238,9 +240,10 @@
             this.bPacketList_Clear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bPacketList_Clear.IconSvg = "DeleteOutlined";
             this.bPacketList_Clear.LocalizationText = "Clear";
-            this.bPacketList_Clear.Location = new System.Drawing.Point(179, 3);
+            this.bPacketList_Clear.Location = new System.Drawing.Point(136, 2);
+            this.bPacketList_Clear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bPacketList_Clear.Name = "bPacketList_Clear";
-            this.bPacketList_Clear.Size = new System.Drawing.Size(82, 44);
+            this.bPacketList_Clear.Size = new System.Drawing.Size(63, 36);
             this.bPacketList_Clear.TabIndex = 9;
             this.bPacketList_Clear.Text = "清空";
             this.bPacketList_Clear.Type = AntdUI.TTypeMini.Warn;
@@ -254,9 +257,10 @@
             this.bHookStop.Enabled = false;
             this.bHookStop.IconSvg = "PauseCircleOutlined";
             this.bHookStop.LocalizationText = "Stop";
-            this.bHookStop.Location = new System.Drawing.Point(91, 3);
+            this.bHookStop.Location = new System.Drawing.Point(69, 2);
+            this.bHookStop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHookStop.Name = "bHookStop";
-            this.bHookStop.Size = new System.Drawing.Size(82, 44);
+            this.bHookStop.Size = new System.Drawing.Size(63, 36);
             this.bHookStop.TabIndex = 8;
             this.bHookStop.Text = "停止";
             this.bHookStop.Type = AntdUI.TTypeMini.Error;
@@ -274,9 +278,10 @@
             this.bHookStart.LoadingWaveValue = 0.6F;
             this.bHookStart.LoadingWaveVertical = true;
             this.bHookStart.LocalizationText = "Start";
-            this.bHookStart.Location = new System.Drawing.Point(3, 3);
+            this.bHookStart.Location = new System.Drawing.Point(2, 2);
+            this.bHookStart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHookStart.Name = "bHookStart";
-            this.bHookStart.Size = new System.Drawing.Size(82, 44);
+            this.bHookStart.Size = new System.Drawing.Size(63, 36);
             this.bHookStart.TabIndex = 7;
             this.bHookStart.Text = "开始";
             this.bHookStart.Type = AntdUI.TTypeMini.Info;
@@ -287,7 +292,8 @@
             this.splitterPacketList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterPacketList.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterPacketList.Location = new System.Drawing.Point(33, 73);
+            this.splitterPacketList.Location = new System.Drawing.Point(2, 42);
+            this.splitterPacketList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.splitterPacketList.Name = "splitterPacketList";
             this.splitterPacketList.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -300,8 +306,8 @@
             // 
             this.splitterPacketList.Panel2.Controls.Add(this.pPacketData);
             this.splitterPacketList.Panel2MinSize = 0;
-            this.splitterPacketList.Size = new System.Drawing.Size(1134, 694);
-            this.splitterPacketList.SplitterDistance = 485;
+            this.splitterPacketList.Size = new System.Drawing.Size(1196, 632);
+            this.splitterPacketList.SplitterDistance = 441;
             this.splitterPacketList.SplitterSize = 80;
             this.splitterPacketList.SplitterWidth = 10;
             this.splitterPacketList.TabIndex = 2;
@@ -319,7 +325,7 @@
             this.tlpPacketList2.RowCount = 2;
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketList2.Size = new System.Drawing.Size(1134, 485);
+            this.tlpPacketList2.Size = new System.Drawing.Size(1196, 441);
             this.tlpPacketList2.TabIndex = 0;
             // 
             // tlpPacketListInfo
@@ -397,25 +403,26 @@
             this.tlpPacketListInfo.Controls.Add(this.lFilterExecute, 3, 1);
             this.tlpPacketListInfo.Controls.Add(this.lTotal, 0, 1);
             this.tlpPacketListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpPacketListInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tlpPacketListInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tlpPacketListInfo.Location = new System.Drawing.Point(0, 0);
             this.tlpPacketListInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpPacketListInfo.Name = "tlpPacketListInfo";
             this.tlpPacketListInfo.RowCount = 3;
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPacketListInfo.Size = new System.Drawing.Size(1134, 30);
+            this.tlpPacketListInfo.Size = new System.Drawing.Size(1196, 24);
             this.tlpPacketListInfo.TabIndex = 6;
             // 
             // lWSARecvFrom_CNT
             // 
             this.lWSARecvFrom_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSARecvFrom_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWSARecvFrom_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWSARecvFrom_CNT.Location = new System.Drawing.Point(1015, 3);
+            this.lWSARecvFrom_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSARecvFrom_CNT.Location = new System.Drawing.Point(873, 2);
+            this.lWSARecvFrom_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWSARecvFrom_CNT.Name = "lWSARecvFrom_CNT";
-            this.lWSARecvFrom_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lWSARecvFrom_CNT.Size = new System.Drawing.Size(8, 20);
             this.lWSARecvFrom_CNT.TabIndex = 40;
             this.lWSARecvFrom_CNT.Text = "0";
             // 
@@ -423,11 +430,12 @@
             // 
             this.lWSARecvFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSARecvFrom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWSARecvFrom.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSARecvFrom.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lWSARecvFrom.LocalizationText = "InjectModeForm.WSARecvFrom";
-            this.lWSARecvFrom.Location = new System.Drawing.Point(931, 3);
+            this.lWSARecvFrom.Location = new System.Drawing.Point(798, 2);
+            this.lWSARecvFrom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWSARecvFrom.Name = "lWSARecvFrom";
-            this.lWSARecvFrom.Size = new System.Drawing.Size(78, 24);
+            this.lWSARecvFrom.Size = new System.Drawing.Size(71, 20);
             this.lWSARecvFrom.TabIndex = 39;
             this.lWSARecvFrom.Text = "WSA接收自 :";
             // 
@@ -435,11 +443,12 @@
             // 
             this.label33.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label33.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label33.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label33.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label33.ForeColor = System.Drawing.Color.Silver;
-            this.label33.Location = new System.Drawing.Point(920, 3);
+            this.label33.Location = new System.Drawing.Point(789, 2);
+            this.label33.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(5, 24);
+            this.label33.Size = new System.Drawing.Size(5, 20);
             this.label33.TabIndex = 38;
             this.label33.Text = "|";
             this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -448,10 +457,11 @@
             // 
             this.lWSASendTo_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSASendTo_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWSASendTo_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWSASendTo_CNT.Location = new System.Drawing.Point(905, 3);
+            this.lWSASendTo_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSASendTo_CNT.Location = new System.Drawing.Point(777, 2);
+            this.lWSASendTo_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWSASendTo_CNT.Name = "lWSASendTo_CNT";
-            this.lWSASendTo_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lWSASendTo_CNT.Size = new System.Drawing.Size(8, 20);
             this.lWSASendTo_CNT.TabIndex = 37;
             this.lWSASendTo_CNT.Text = "0";
             // 
@@ -459,11 +469,12 @@
             // 
             this.lWSASendTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSASendTo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWSASendTo.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSASendTo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lWSASendTo.LocalizationText = "InjectModeForm.WSASendTo";
-            this.lWSASendTo.Location = new System.Drawing.Point(821, 3);
+            this.lWSASendTo.Location = new System.Drawing.Point(702, 2);
+            this.lWSASendTo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWSASendTo.Name = "lWSASendTo";
-            this.lWSASendTo.Size = new System.Drawing.Size(78, 24);
+            this.lWSASendTo.Size = new System.Drawing.Size(71, 20);
             this.lWSASendTo.TabIndex = 36;
             this.lWSASendTo.Text = "WSA发送到 :";
             // 
@@ -471,11 +482,12 @@
             // 
             this.label30.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label30.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label30.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label30.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label30.ForeColor = System.Drawing.Color.Silver;
-            this.label30.Location = new System.Drawing.Point(810, 3);
+            this.label30.Location = new System.Drawing.Point(693, 2);
+            this.label30.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(5, 24);
+            this.label30.Size = new System.Drawing.Size(5, 20);
             this.label30.TabIndex = 35;
             this.label30.Text = "|";
             this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -484,10 +496,11 @@
             // 
             this.lWSARecv_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSARecv_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWSARecv_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWSARecv_CNT.Location = new System.Drawing.Point(795, 3);
+            this.lWSARecv_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSARecv_CNT.Location = new System.Drawing.Point(681, 2);
+            this.lWSARecv_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWSARecv_CNT.Name = "lWSARecv_CNT";
-            this.lWSARecv_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lWSARecv_CNT.Size = new System.Drawing.Size(8, 20);
             this.lWSARecv_CNT.TabIndex = 34;
             this.lWSARecv_CNT.Text = "0";
             // 
@@ -495,11 +508,12 @@
             // 
             this.lWSARecv.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSARecv.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWSARecv.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSARecv.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lWSARecv.LocalizationText = "InjectModeForm.WSARecv";
-            this.lWSARecv.Location = new System.Drawing.Point(724, 3);
+            this.lWSARecv.Location = new System.Drawing.Point(618, 2);
+            this.lWSARecv.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWSARecv.Name = "lWSARecv";
-            this.lWSARecv.Size = new System.Drawing.Size(65, 24);
+            this.lWSARecv.Size = new System.Drawing.Size(59, 20);
             this.lWSARecv.TabIndex = 33;
             this.lWSARecv.Text = "WSA接收 :";
             // 
@@ -507,11 +521,12 @@
             // 
             this.label27.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label27.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label27.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label27.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label27.ForeColor = System.Drawing.Color.Silver;
-            this.label27.Location = new System.Drawing.Point(713, 3);
+            this.label27.Location = new System.Drawing.Point(609, 2);
+            this.label27.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(5, 24);
+            this.label27.Size = new System.Drawing.Size(5, 20);
             this.label27.TabIndex = 32;
             this.label27.Text = "|";
             this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -520,10 +535,11 @@
             // 
             this.lWSASend_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSASend_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWSASend_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWSASend_CNT.Location = new System.Drawing.Point(698, 3);
+            this.lWSASend_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSASend_CNT.Location = new System.Drawing.Point(597, 2);
+            this.lWSASend_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWSASend_CNT.Name = "lWSASend_CNT";
-            this.lWSASend_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lWSASend_CNT.Size = new System.Drawing.Size(8, 20);
             this.lWSASend_CNT.TabIndex = 31;
             this.lWSASend_CNT.Text = "0";
             // 
@@ -531,11 +547,12 @@
             // 
             this.lWSASend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWSASend.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWSASend.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWSASend.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lWSASend.LocalizationText = "InjectModeForm.WSASend";
-            this.lWSASend.Location = new System.Drawing.Point(627, 3);
+            this.lWSASend.Location = new System.Drawing.Point(534, 2);
+            this.lWSASend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWSASend.Name = "lWSASend";
-            this.lWSASend.Size = new System.Drawing.Size(65, 24);
+            this.lWSASend.Size = new System.Drawing.Size(59, 20);
             this.lWSASend.TabIndex = 30;
             this.lWSASend.Text = "WSA发送 :";
             // 
@@ -543,11 +560,12 @@
             // 
             this.label24.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label24.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label24.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label24.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label24.ForeColor = System.Drawing.Color.Silver;
-            this.label24.Location = new System.Drawing.Point(616, 3);
+            this.label24.Location = new System.Drawing.Point(525, 2);
+            this.label24.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(5, 24);
+            this.label24.Size = new System.Drawing.Size(5, 20);
             this.label24.TabIndex = 29;
             this.label24.Text = "|";
             this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -556,10 +574,11 @@
             // 
             this.lRecvFrom_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRecvFrom_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRecvFrom_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRecvFrom_CNT.Location = new System.Drawing.Point(601, 3);
+            this.lRecvFrom_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRecvFrom_CNT.Location = new System.Drawing.Point(513, 2);
+            this.lRecvFrom_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lRecvFrom_CNT.Name = "lRecvFrom_CNT";
-            this.lRecvFrom_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lRecvFrom_CNT.Size = new System.Drawing.Size(8, 20);
             this.lRecvFrom_CNT.TabIndex = 28;
             this.lRecvFrom_CNT.Text = "0";
             // 
@@ -567,11 +586,12 @@
             // 
             this.lRecvFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRecvFrom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRecvFrom.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRecvFrom.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lRecvFrom.LocalizationText = "InjectModeForm.RecvFrom";
-            this.lRecvFrom.Location = new System.Drawing.Point(547, 3);
+            this.lRecvFrom.Location = new System.Drawing.Point(466, 2);
+            this.lRecvFrom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lRecvFrom.Name = "lRecvFrom";
-            this.lRecvFrom.Size = new System.Drawing.Size(48, 24);
+            this.lRecvFrom.Size = new System.Drawing.Size(43, 20);
             this.lRecvFrom.TabIndex = 27;
             this.lRecvFrom.Text = "接收自 :";
             // 
@@ -579,11 +599,12 @@
             // 
             this.label21.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label21.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label21.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label21.ForeColor = System.Drawing.Color.Silver;
-            this.label21.Location = new System.Drawing.Point(536, 3);
+            this.label21.Location = new System.Drawing.Point(457, 2);
+            this.label21.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(5, 24);
+            this.label21.Size = new System.Drawing.Size(5, 20);
             this.label21.TabIndex = 26;
             this.label21.Text = "|";
             this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -592,10 +613,11 @@
             // 
             this.lSendTo_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSendTo_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSendTo_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSendTo_CNT.Location = new System.Drawing.Point(521, 3);
+            this.lSendTo_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSendTo_CNT.Location = new System.Drawing.Point(445, 2);
+            this.lSendTo_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lSendTo_CNT.Name = "lSendTo_CNT";
-            this.lSendTo_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lSendTo_CNT.Size = new System.Drawing.Size(8, 20);
             this.lSendTo_CNT.TabIndex = 25;
             this.lSendTo_CNT.Text = "0";
             // 
@@ -603,11 +625,12 @@
             // 
             this.lSendTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSendTo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSendTo.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSendTo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSendTo.LocalizationText = "InjectModeForm.SendTo";
-            this.lSendTo.Location = new System.Drawing.Point(467, 3);
+            this.lSendTo.Location = new System.Drawing.Point(398, 2);
+            this.lSendTo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lSendTo.Name = "lSendTo";
-            this.lSendTo.Size = new System.Drawing.Size(48, 24);
+            this.lSendTo.Size = new System.Drawing.Size(43, 20);
             this.lSendTo.TabIndex = 24;
             this.lSendTo.Text = "发送到 :";
             // 
@@ -615,11 +638,12 @@
             // 
             this.label18.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label18.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label18.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label18.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label18.ForeColor = System.Drawing.Color.Silver;
-            this.label18.Location = new System.Drawing.Point(456, 3);
+            this.label18.Location = new System.Drawing.Point(389, 2);
+            this.label18.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(5, 24);
+            this.label18.Size = new System.Drawing.Size(5, 20);
             this.label18.TabIndex = 23;
             this.label18.Text = "|";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -628,10 +652,11 @@
             // 
             this.lRecv_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRecv_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRecv_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRecv_CNT.Location = new System.Drawing.Point(441, 3);
+            this.lRecv_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRecv_CNT.Location = new System.Drawing.Point(377, 2);
+            this.lRecv_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lRecv_CNT.Name = "lRecv_CNT";
-            this.lRecv_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lRecv_CNT.Size = new System.Drawing.Size(8, 20);
             this.lRecv_CNT.TabIndex = 22;
             this.lRecv_CNT.Text = "0";
             // 
@@ -639,11 +664,12 @@
             // 
             this.lRecv.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRecv.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRecv.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lRecv.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lRecv.LocalizationText = "InjectModeForm.Recv";
-            this.lRecv.Location = new System.Drawing.Point(401, 3);
+            this.lRecv.Location = new System.Drawing.Point(342, 2);
+            this.lRecv.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lRecv.Name = "lRecv";
-            this.lRecv.Size = new System.Drawing.Size(34, 24);
+            this.lRecv.Size = new System.Drawing.Size(31, 20);
             this.lRecv.TabIndex = 21;
             this.lRecv.Text = "接收 :";
             // 
@@ -653,9 +679,10 @@
             this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label15.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label15.ForeColor = System.Drawing.Color.Silver;
-            this.label15.Location = new System.Drawing.Point(390, 3);
+            this.label15.Location = new System.Drawing.Point(333, 2);
+            this.label15.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(5, 24);
+            this.label15.Size = new System.Drawing.Size(5, 20);
             this.label15.TabIndex = 20;
             this.label15.Text = "|";
             this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -664,10 +691,11 @@
             // 
             this.lSend_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSend_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSend_CNT.Location = new System.Drawing.Point(375, 3);
+            this.lSend_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSend_CNT.Location = new System.Drawing.Point(321, 2);
+            this.lSend_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lSend_CNT.Name = "lSend_CNT";
-            this.lSend_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lSend_CNT.Size = new System.Drawing.Size(8, 20);
             this.lSend_CNT.TabIndex = 19;
             this.lSend_CNT.Text = "0";
             // 
@@ -675,11 +703,12 @@
             // 
             this.lSend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSend.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSend.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSend.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend.LocalizationText = "InjectModeForm.Send";
-            this.lSend.Location = new System.Drawing.Point(335, 3);
+            this.lSend.Location = new System.Drawing.Point(286, 2);
+            this.lSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lSend.Name = "lSend";
-            this.lSend.Size = new System.Drawing.Size(34, 24);
+            this.lSend.Size = new System.Drawing.Size(31, 20);
             this.lSend.TabIndex = 18;
             this.lSend.Text = "发送 :";
             // 
@@ -687,11 +716,12 @@
             // 
             this.label12.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label12.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label12.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label12.ForeColor = System.Drawing.Color.Silver;
-            this.label12.Location = new System.Drawing.Point(324, 3);
+            this.label12.Location = new System.Drawing.Point(277, 2);
+            this.label12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(5, 24);
+            this.label12.Size = new System.Drawing.Size(5, 20);
             this.label12.TabIndex = 17;
             this.label12.Text = "|";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -700,10 +730,11 @@
             // 
             this.lFilterPacket_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lFilterPacket_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lFilterPacket_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lFilterPacket_CNT.Location = new System.Drawing.Point(309, 3);
+            this.lFilterPacket_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterPacket_CNT.Location = new System.Drawing.Point(265, 2);
+            this.lFilterPacket_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lFilterPacket_CNT.Name = "lFilterPacket_CNT";
-            this.lFilterPacket_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lFilterPacket_CNT.Size = new System.Drawing.Size(8, 20);
             this.lFilterPacket_CNT.TabIndex = 16;
             this.lFilterPacket_CNT.Text = "0";
             // 
@@ -711,11 +742,12 @@
             // 
             this.lFilterPacket.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lFilterPacket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lFilterPacket.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterPacket.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lFilterPacket.LocalizationText = "InjectModeForm.Filter";
-            this.lFilterPacket.Location = new System.Drawing.Point(269, 3);
+            this.lFilterPacket.Location = new System.Drawing.Point(230, 2);
+            this.lFilterPacket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lFilterPacket.Name = "lFilterPacket";
-            this.lFilterPacket.Size = new System.Drawing.Size(34, 24);
+            this.lFilterPacket.Size = new System.Drawing.Size(31, 20);
             this.lFilterPacket.TabIndex = 15;
             this.lFilterPacket.Text = "过滤 :";
             // 
@@ -723,10 +755,11 @@
             // 
             this.lQueue_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lQueue_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lQueue_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lQueue_CNT.Location = new System.Drawing.Point(243, 3);
+            this.lQueue_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lQueue_CNT.Location = new System.Drawing.Point(209, 2);
+            this.lQueue_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lQueue_CNT.Name = "lQueue_CNT";
-            this.lQueue_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lQueue_CNT.Size = new System.Drawing.Size(8, 20);
             this.lQueue_CNT.TabIndex = 14;
             this.lQueue_CNT.Text = "0";
             // 
@@ -734,10 +767,11 @@
             // 
             this.lFilterExecute_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lFilterExecute_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lFilterExecute_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lFilterExecute_CNT.Location = new System.Drawing.Point(163, 3);
+            this.lFilterExecute_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterExecute_CNT.Location = new System.Drawing.Point(141, 2);
+            this.lFilterExecute_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lFilterExecute_CNT.Name = "lFilterExecute_CNT";
-            this.lFilterExecute_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lFilterExecute_CNT.Size = new System.Drawing.Size(8, 20);
             this.lFilterExecute_CNT.TabIndex = 13;
             this.lFilterExecute_CNT.Text = "0";
             // 
@@ -745,10 +779,11 @@
             // 
             this.lTotal_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTotal_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lTotal_CNT.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lTotal_CNT.Location = new System.Drawing.Point(70, 3);
+            this.lTotal_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTotal_CNT.Location = new System.Drawing.Point(61, 2);
+            this.lTotal_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lTotal_CNT.Name = "lTotal_CNT";
-            this.lTotal_CNT.Size = new System.Drawing.Size(9, 24);
+            this.lTotal_CNT.Size = new System.Drawing.Size(8, 20);
             this.lTotal_CNT.TabIndex = 12;
             this.lTotal_CNT.Text = "0";
             // 
@@ -756,11 +791,12 @@
             // 
             this.label2.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label2.ForeColor = System.Drawing.Color.Silver;
-            this.label2.Location = new System.Drawing.Point(258, 3);
+            this.label2.Location = new System.Drawing.Point(221, 2);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(5, 24);
+            this.label2.Size = new System.Drawing.Size(5, 20);
             this.label2.TabIndex = 10;
             this.label2.Text = "|";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -769,11 +805,12 @@
             // 
             this.label3.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.ForeColor = System.Drawing.Color.Silver;
-            this.label3.Location = new System.Drawing.Point(178, 3);
+            this.label3.Location = new System.Drawing.Point(153, 2);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(5, 24);
+            this.label3.Size = new System.Drawing.Size(5, 20);
             this.label3.TabIndex = 9;
             this.label3.Text = "|";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -782,11 +819,12 @@
             // 
             this.label4.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label4.ForeColor = System.Drawing.Color.Silver;
-            this.label4.Location = new System.Drawing.Point(85, 3);
+            this.label4.Location = new System.Drawing.Point(73, 2);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(5, 24);
+            this.label4.Size = new System.Drawing.Size(5, 20);
             this.label4.TabIndex = 8;
             this.label4.Text = "|";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -795,11 +833,12 @@
             // 
             this.lQueue.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lQueue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lQueue.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lQueue.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lQueue.LocalizationText = "InjectModeForm.Buffer";
-            this.lQueue.Location = new System.Drawing.Point(189, 3);
+            this.lQueue.Location = new System.Drawing.Point(162, 2);
+            this.lQueue.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lQueue.Name = "lQueue";
-            this.lQueue.Size = new System.Drawing.Size(48, 24);
+            this.lQueue.Size = new System.Drawing.Size(43, 20);
             this.lQueue.TabIndex = 7;
             this.lQueue.Text = "缓存区 :";
             // 
@@ -807,11 +846,12 @@
             // 
             this.lFilterExecute.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lFilterExecute.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lFilterExecute.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lFilterExecute.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lFilterExecute.LocalizationText = "InjectModeForm.ExecuteFilter";
-            this.lFilterExecute.Location = new System.Drawing.Point(96, 3);
+            this.lFilterExecute.Location = new System.Drawing.Point(82, 2);
+            this.lFilterExecute.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lFilterExecute.Name = "lFilterExecute";
-            this.lFilterExecute.Size = new System.Drawing.Size(61, 24);
+            this.lFilterExecute.Size = new System.Drawing.Size(55, 20);
             this.lFilterExecute.TabIndex = 6;
             this.lFilterExecute.Text = "滤镜执行 :";
             // 
@@ -819,11 +859,12 @@
             // 
             this.lTotal.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lTotal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lTotal.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lTotal.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lTotal.LocalizationText = "InjectModeForm.TotalPackets";
-            this.lTotal.Location = new System.Drawing.Point(3, 3);
+            this.lTotal.Location = new System.Drawing.Point(2, 2);
+            this.lTotal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lTotal.Name = "lTotal";
-            this.lTotal.Size = new System.Drawing.Size(61, 24);
+            this.lTotal.Size = new System.Drawing.Size(55, 20);
             this.lTotal.TabIndex = 5;
             this.lTotal.Text = "封包总数 :";
             // 
@@ -834,15 +875,15 @@
             this.tPacketList.CellImpactHeight = false;
             this.tPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tPacketList.EmptyHeader = true;
-            this.tPacketList.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tPacketList.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tPacketList.Gap = 8;
             this.tPacketList.GapCell = 0;
             this.tPacketList.Gaps = new System.Drawing.Size(8, 8);
-            this.tPacketList.Location = new System.Drawing.Point(0, 30);
+            this.tPacketList.Location = new System.Drawing.Point(0, 24);
             this.tPacketList.Margin = new System.Windows.Forms.Padding(0);
             this.tPacketList.MultipleRows = true;
             this.tPacketList.Name = "tPacketList";
-            this.tPacketList.Size = new System.Drawing.Size(1134, 455);
+            this.tPacketList.Size = new System.Drawing.Size(1196, 417);
             this.tPacketList.TabIndex = 1;
             this.tPacketList.VirtualMode = true;
             this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
@@ -856,10 +897,11 @@
             this.pPacketData.Controls.Add(this.hbPacketData);
             this.pPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pPacketData.Location = new System.Drawing.Point(0, 0);
+            this.pPacketData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pPacketData.Name = "pPacketData";
-            this.pPacketData.Padding = new System.Windows.Forms.Padding(6);
+            this.pPacketData.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pPacketData.Radius = 0;
-            this.pPacketData.Size = new System.Drawing.Size(1134, 199);
+            this.pPacketData.Size = new System.Drawing.Size(1196, 183);
             this.pPacketData.TabIndex = 0;
             // 
             // hbPacketData
@@ -867,13 +909,14 @@
             this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.hbPacketData.ColumnInfoVisible = true;
             this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hbPacketData.LineInfoVisible = true;
-            this.hbPacketData.Location = new System.Drawing.Point(7, 7);
+            this.hbPacketData.Location = new System.Drawing.Point(5, 6);
+            this.hbPacketData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.hbPacketData.Name = "hbPacketData";
             this.hbPacketData.ReadOnly = true;
             this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(1120, 185);
+            this.hbPacketData.Size = new System.Drawing.Size(1186, 171);
             this.hbPacketData.StringViewVisible = true;
             this.hbPacketData.TabIndex = 1;
             this.hbPacketData.VScrollBarVisible = true;
@@ -890,7 +933,7 @@
             this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpProcessInfo.Controls.Add(this.lSpeedInfo, 6, 0);
             this.tlpProcessInfo.Controls.Add(this.lSplit3, 5, 0);
             this.tlpProcessInfo.Controls.Add(this.lSplit2, 3, 0);
@@ -899,23 +942,24 @@
             this.tlpProcessInfo.Controls.Add(this.lModuleName, 2, 0);
             this.tlpProcessInfo.Controls.Add(this.lProcessName, 0, 0);
             this.tlpProcessInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpProcessInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tlpProcessInfo.Location = new System.Drawing.Point(30, 770);
+            this.tlpProcessInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tlpProcessInfo.Location = new System.Drawing.Point(0, 676);
             this.tlpProcessInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpProcessInfo.Name = "tlpProcessInfo";
             this.tlpProcessInfo.RowCount = 1;
             this.tlpProcessInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProcessInfo.Size = new System.Drawing.Size(1140, 30);
+            this.tlpProcessInfo.Size = new System.Drawing.Size(1200, 24);
             this.tlpProcessInfo.TabIndex = 4;
             // 
             // lSpeedInfo
             // 
             this.lSpeedInfo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSpeedInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSpeedInfo.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSpeedInfo.Location = new System.Drawing.Point(309, 3);
+            this.lSpeedInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSpeedInfo.Location = new System.Drawing.Point(270, 2);
+            this.lSpeedInfo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lSpeedInfo.Name = "lSpeedInfo";
-            this.lSpeedInfo.Size = new System.Drawing.Size(66, 24);
+            this.lSpeedInfo.Size = new System.Drawing.Size(59, 20);
             this.lSpeedInfo.TabIndex = 11;
             this.lSpeedInfo.Text = "SpeedInfo";
             // 
@@ -923,11 +967,12 @@
             // 
             this.lSplit3.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSplit3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit3.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSplit3.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit3.Location = new System.Drawing.Point(298, 3);
+            this.lSplit3.Location = new System.Drawing.Point(261, 2);
+            this.lSplit3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lSplit3.Name = "lSplit3";
-            this.lSplit3.Size = new System.Drawing.Size(5, 24);
+            this.lSplit3.Size = new System.Drawing.Size(5, 20);
             this.lSplit3.TabIndex = 10;
             this.lSplit3.Text = "|";
             this.lSplit3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -936,11 +981,12 @@
             // 
             this.lSplit2.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSplit2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit2.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSplit2.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit2.Location = new System.Drawing.Point(201, 3);
+            this.lSplit2.Location = new System.Drawing.Point(176, 2);
+            this.lSplit2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lSplit2.Name = "lSplit2";
-            this.lSplit2.Size = new System.Drawing.Size(5, 24);
+            this.lSplit2.Size = new System.Drawing.Size(5, 20);
             this.lSplit2.TabIndex = 9;
             this.lSplit2.Text = "|";
             this.lSplit2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -949,11 +995,12 @@
             // 
             this.lSplit1.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lSplit1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit1.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSplit1.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit1.Location = new System.Drawing.Point(96, 3);
+            this.lSplit1.Location = new System.Drawing.Point(84, 2);
+            this.lSplit1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lSplit1.Name = "lSplit1";
-            this.lSplit1.Size = new System.Drawing.Size(5, 24);
+            this.lSplit1.Size = new System.Drawing.Size(5, 20);
             this.lSplit1.TabIndex = 8;
             this.lSplit1.Text = "|";
             this.lSplit1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -962,10 +1009,11 @@
             // 
             this.lWinsockInfo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWinsockInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWinsockInfo.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWinsockInfo.Location = new System.Drawing.Point(212, 3);
+            this.lWinsockInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWinsockInfo.Location = new System.Drawing.Point(185, 2);
+            this.lWinsockInfo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lWinsockInfo.Name = "lWinsockInfo";
-            this.lWinsockInfo.Size = new System.Drawing.Size(80, 24);
+            this.lWinsockInfo.Size = new System.Drawing.Size(72, 20);
             this.lWinsockInfo.TabIndex = 7;
             this.lWinsockInfo.Text = "WinsockInfo";
             // 
@@ -973,10 +1021,11 @@
             // 
             this.lModuleName.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lModuleName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lModuleName.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lModuleName.Location = new System.Drawing.Point(107, 3);
+            this.lModuleName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lModuleName.Location = new System.Drawing.Point(93, 2);
+            this.lModuleName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lModuleName.Name = "lModuleName";
-            this.lModuleName.Size = new System.Drawing.Size(88, 24);
+            this.lModuleName.Size = new System.Drawing.Size(79, 20);
             this.lModuleName.TabIndex = 6;
             this.lModuleName.Text = "ModuleName";
             // 
@@ -984,10 +1033,11 @@
             // 
             this.lProcessName.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProcessName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lProcessName.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProcessName.Location = new System.Drawing.Point(3, 3);
+            this.lProcessName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProcessName.Location = new System.Drawing.Point(2, 2);
+            this.lProcessName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lProcessName.Name = "lProcessName";
-            this.lProcessName.Size = new System.Drawing.Size(87, 24);
+            this.lProcessName.Size = new System.Drawing.Size(78, 20);
             this.lProcessName.TabIndex = 5;
             this.lProcessName.Text = "ProcessName";
             // 
@@ -998,14 +1048,14 @@
             // 
             // PacketList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpPacketList);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "PacketList";
-            this.Size = new System.Drawing.Size(1200, 800);
+            this.Size = new System.Drawing.Size(1200, 700);
             this.Load += new System.EventHandler(this.PacketList_Load);
             this.tlpPacketList.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);

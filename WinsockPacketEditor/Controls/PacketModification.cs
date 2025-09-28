@@ -73,7 +73,7 @@ namespace WinsockPacketEditor
                 AntdUI.Spin.open(this, new AntdUI.Spin.Config()
                 {
                     Radius = 6,
-                    Font = new Font("Microsoft YaHei UI", 12f),
+                    Font = new Font("Microsoft YaHei UI", 9F),
                 }, (config) =>
                 {
                     config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
@@ -134,7 +134,7 @@ namespace WinsockPacketEditor
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.ComparisonText.Column."),
             };
 
-            this.tPacketModification.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tPacketModification.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
         }
 
         private void Dark_Changed()

@@ -50,7 +50,7 @@
             this.tlpClientList.Name = "tlpClientList";
             this.tlpClientList.RowCount = 1;
             this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 486F));
             this.tlpClientList.Size = new System.Drawing.Size(1100, 600);
             this.tlpClientList.TabIndex = 0;
             // 
@@ -59,7 +59,8 @@
             this.splitterClientList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterClientList.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterClientList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterClientList.Location = new System.Drawing.Point(3, 3);
+            this.splitterClientList.Location = new System.Drawing.Point(2, 2);
+            this.splitterClientList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.splitterClientList.Name = "splitterClientList";
             // 
             // splitterClientList.Panel1
@@ -71,7 +72,7 @@
             // 
             this.splitterClientList.Panel2.Controls.Add(this.tAuthList);
             this.splitterClientList.Panel2MinSize = 0;
-            this.splitterClientList.Size = new System.Drawing.Size(1094, 594);
+            this.splitterClientList.Size = new System.Drawing.Size(1096, 596);
             this.splitterClientList.SplitterDistance = 270;
             this.splitterClientList.SplitterSize = 80;
             this.splitterClientList.SplitterWidth = 10;
@@ -81,8 +82,9 @@
             // 
             this.treeClientList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeClientList.Location = new System.Drawing.Point(0, 0);
+            this.treeClientList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.treeClientList.Name = "treeClientList";
-            this.treeClientList.Size = new System.Drawing.Size(270, 594);
+            this.treeClientList.Size = new System.Drawing.Size(270, 596);
             this.treeClientList.TabIndex = 0;
             // 
             // tAuthList
@@ -92,18 +94,19 @@
             this.tAuthList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tAuthList.Gap = 12;
             this.tAuthList.Location = new System.Drawing.Point(0, 0);
+            this.tAuthList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tAuthList.Name = "tAuthList";
-            this.tAuthList.Size = new System.Drawing.Size(814, 594);
+            this.tAuthList.Size = new System.Drawing.Size(819, 596);
             this.tAuthList.TabIndex = 9;
             // 
             // ClientList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpClientList);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ClientList";
             this.Size = new System.Drawing.Size(1100, 600);
             this.Load += new System.EventHandler(this.ClientList_Load);

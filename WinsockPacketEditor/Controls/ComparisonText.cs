@@ -73,7 +73,7 @@ namespace WinsockPacketEditor
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Comparison.Column."),
             };
 
-            this.tComparison.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tComparison.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
         }
 
         private void InitTable_Duplicate()
@@ -115,7 +115,7 @@ namespace WinsockPacketEditor
                 }.SetLocalizationTitleID("Table.Duplicate.Column."),
             };
 
-            this.tDuplicate.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tDuplicate.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
         }
 
         public void SetTextInfo()

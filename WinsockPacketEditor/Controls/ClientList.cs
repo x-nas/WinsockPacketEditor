@@ -18,6 +18,8 @@ namespace WinsockPacketEditor
 
         private void ClientList_Load(object sender, EventArgs e)
         {
+            this.splitterClientList.SplitterWidth = 5;
+
             this.InitTable_AuthList();            
             this.Dark_Changed();
         }
@@ -74,7 +76,7 @@ namespace WinsockPacketEditor
                 }.SetLocalizationTitleID("Table.AuthList.Column."),
             };
 
-            this.tAuthList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tAuthList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
         }        
 

@@ -59,7 +59,7 @@
             this.tlpModification.Name = "tlpModification";
             this.tlpModification.RowCount = 2;
             this.tlpModification.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpModification.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpModification.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tlpModification.Size = new System.Drawing.Size(1000, 700);
             this.tlpModification.TabIndex = 1;
             // 
@@ -71,14 +71,14 @@
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 640);
+            this.tlpButton.Location = new System.Drawing.Point(0, 651);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(1000, 60);
+            this.tlpButton.Size = new System.Drawing.Size(1000, 49);
             this.tlpButton.TabIndex = 17;
             // 
             // bExit
@@ -88,9 +88,10 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(459, 7);
+            this.bExit.Location = new System.Drawing.Point(468, 6);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(82, 46);
+            this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -101,7 +102,8 @@
             this.splitterModification.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterModification.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterModification.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterModification.Location = new System.Drawing.Point(3, 3);
+            this.splitterModification.Location = new System.Drawing.Point(2, 2);
+            this.splitterModification.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.splitterModification.Name = "splitterModification";
             this.splitterModification.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -114,8 +116,8 @@
             // 
             this.splitterModification.Panel2.Controls.Add(this.tPacketModification);
             this.splitterModification.Panel2MinSize = 0;
-            this.splitterModification.Size = new System.Drawing.Size(994, 634);
-            this.splitterModification.SplitterDistance = 364;
+            this.splitterModification.Size = new System.Drawing.Size(996, 647);
+            this.splitterModification.SplitterDistance = 371;
             this.splitterModification.SplitterSize = 80;
             this.splitterModification.SplitterWidth = 10;
             this.splitterModification.TabIndex = 2;
@@ -136,27 +138,29 @@
             this.tlpPacketData.RowCount = 2;
             this.tlpPacketData.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketData.Size = new System.Drawing.Size(994, 364);
+            this.tlpPacketData.Size = new System.Drawing.Size(996, 371);
             this.tlpPacketData.TabIndex = 0;
             // 
             // txtPacketData_New
             // 
             this.txtPacketData_New.AutoScroll = true;
             this.txtPacketData_New.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPacketData_New.Location = new System.Drawing.Point(500, 49);
+            this.txtPacketData_New.Location = new System.Drawing.Point(500, 38);
+            this.txtPacketData_New.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPacketData_New.Multiline = true;
             this.txtPacketData_New.Name = "txtPacketData_New";
             this.txtPacketData_New.ReadOnly = true;
-            this.txtPacketData_New.Size = new System.Drawing.Size(491, 312);
+            this.txtPacketData_New.Size = new System.Drawing.Size(494, 331);
             this.txtPacketData_New.TabIndex = 6;
             // 
             // lPacketData_New
             // 
             this.lPacketData_New.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPacketData_New.LocalizationText = "PacketModificationForm.Modified";
-            this.lPacketData_New.Location = new System.Drawing.Point(500, 3);
+            this.lPacketData_New.Location = new System.Drawing.Point(500, 2);
+            this.lPacketData_New.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lPacketData_New.Name = "lPacketData_New";
-            this.lPacketData_New.Size = new System.Drawing.Size(491, 40);
+            this.lPacketData_New.Size = new System.Drawing.Size(494, 32);
             this.lPacketData_New.TabIndex = 4;
             this.lPacketData_New.Text = "修改后封包数据";
             this.lPacketData_New.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -165,9 +169,10 @@
             // 
             this.lPacketData_Raw.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPacketData_Raw.LocalizationText = "PacketModificationForm.Raw";
-            this.lPacketData_Raw.Location = new System.Drawing.Point(3, 3);
+            this.lPacketData_Raw.Location = new System.Drawing.Point(2, 2);
+            this.lPacketData_Raw.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lPacketData_Raw.Name = "lPacketData_Raw";
-            this.lPacketData_Raw.Size = new System.Drawing.Size(491, 40);
+            this.lPacketData_Raw.Size = new System.Drawing.Size(494, 32);
             this.lPacketData_Raw.TabIndex = 3;
             this.lPacketData_Raw.Text = "原始封包数据";
             this.lPacketData_Raw.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -176,11 +181,12 @@
             // 
             this.txtPacketData_Raw.AutoScroll = true;
             this.txtPacketData_Raw.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPacketData_Raw.Location = new System.Drawing.Point(3, 49);
+            this.txtPacketData_Raw.Location = new System.Drawing.Point(2, 38);
+            this.txtPacketData_Raw.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPacketData_Raw.Multiline = true;
             this.txtPacketData_Raw.Name = "txtPacketData_Raw";
             this.txtPacketData_Raw.ReadOnly = true;
-            this.txtPacketData_Raw.Size = new System.Drawing.Size(491, 312);
+            this.txtPacketData_Raw.Size = new System.Drawing.Size(494, 331);
             this.txtPacketData_Raw.TabIndex = 5;
             // 
             // tPacketModification
@@ -188,8 +194,9 @@
             this.tPacketModification.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tPacketModification.Gap = 12;
             this.tPacketModification.Location = new System.Drawing.Point(0, 0);
+            this.tPacketModification.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tPacketModification.Name = "tPacketModification";
-            this.tPacketModification.Size = new System.Drawing.Size(994, 260);
+            this.tPacketModification.Size = new System.Drawing.Size(996, 268);
             this.tPacketModification.TabIndex = 0;
             this.tPacketModification.Text = "table1";
             this.tPacketModification.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tPacketModification_CellButtonClick);
@@ -197,12 +204,12 @@
             // 
             // PacketModification
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpModification);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "PacketModification";
             this.Size = new System.Drawing.Size(1000, 700);
             this.Load += new System.EventHandler(this.PacketModification_Load);

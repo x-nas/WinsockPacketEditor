@@ -87,7 +87,7 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.StatisticalData.Column."),
             };
 
-            this.tStatisticalFilter.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tStatisticalFilter.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tStatisticalFilter.Binding(Operate.FilterConfig.List.lstFilterInfo);
         }
 

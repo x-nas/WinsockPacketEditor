@@ -1,12 +1,6 @@
 ﻿using AntdUI;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -57,7 +51,7 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.Location.Column."),
             };
 
-            this.tLocation.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tLocation.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tLocation.Binding(aiSelect.AIPInfo);
         }
 

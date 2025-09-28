@@ -52,11 +52,11 @@
             // tlpSearchSettings
             // 
             this.tlpSearchSettings.ColumnCount = 4;
-            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 105F));
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpSearchSettings.Controls.Add(this.txtFind, 1, 0);
             this.tlpSearchSettings.Controls.Add(this.pSearchType, 0, 0);
             this.tlpSearchSettings.Controls.Add(this.tlpButton, 3, 0);
@@ -67,18 +67,19 @@
             this.tlpSearchSettings.Name = "tlpSearchSettings";
             this.tlpSearchSettings.RowCount = 1;
             this.tlpSearchSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchSettings.Size = new System.Drawing.Size(1000, 100);
+            this.tlpSearchSettings.Size = new System.Drawing.Size(1100, 80);
             this.tlpSearchSettings.TabIndex = 3;
             // 
             // txtFind
             // 
             this.txtFind.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFind.LocalizationPlaceholderText = "Input.Regex";
-            this.txtFind.Location = new System.Drawing.Point(203, 3);
+            this.txtFind.Location = new System.Drawing.Point(142, 2);
+            this.txtFind.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtFind.Multiline = true;
             this.txtFind.Name = "txtFind";
             this.txtFind.PlaceholderText = "请输入正则表达式";
-            this.txtFind.Size = new System.Drawing.Size(494, 94);
+            this.txtFind.Size = new System.Drawing.Size(746, 76);
             this.txtFind.TabIndex = 25;
             // 
             // pSearchType
@@ -86,11 +87,11 @@
             this.pSearchType.BorderWidth = 1F;
             this.pSearchType.Controls.Add(this.tlpSearchType);
             this.pSearchType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pSearchType.Location = new System.Drawing.Point(6, 6);
-            this.pSearchType.Margin = new System.Windows.Forms.Padding(6);
+            this.pSearchType.Location = new System.Drawing.Point(4, 5);
+            this.pSearchType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pSearchType.Name = "pSearchType";
-            this.pSearchType.Padding = new System.Windows.Forms.Padding(3);
-            this.pSearchType.Size = new System.Drawing.Size(188, 88);
+            this.pSearchType.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pSearchType.Size = new System.Drawing.Size(132, 70);
             this.pSearchType.TabIndex = 22;
             this.pSearchType.Text = "panel1";
             // 
@@ -99,18 +100,18 @@
             this.tlpSearchType.ColumnCount = 2;
             this.tlpSearchType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSearchType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSearchType.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpSearchType.Controls.Add(this.rbString, 0, 0);
             this.tlpSearchType.Controls.Add(this.rbHex, 0, 1);
             this.tlpSearchType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSearchType.Location = new System.Drawing.Point(4, 4);
+            this.tlpSearchType.Location = new System.Drawing.Point(3, 3);
             this.tlpSearchType.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSearchType.Name = "tlpSearchType";
             this.tlpSearchType.RowCount = 3;
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchType.Size = new System.Drawing.Size(180, 80);
+            this.tlpSearchType.Size = new System.Drawing.Size(126, 64);
             this.tlpSearchType.TabIndex = 21;
             // 
             // rbString
@@ -118,12 +119,12 @@
             this.rbString.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbString.Checked = true;
             this.rbString.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rbString.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbString.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbString.LocalizationText = "SearchPacketForm.FindText";
             this.rbString.Location = new System.Drawing.Point(1, 1);
             this.rbString.Margin = new System.Windows.Forms.Padding(1);
             this.rbString.Name = "rbString";
-            this.rbString.Size = new System.Drawing.Size(94, 39);
+            this.rbString.Size = new System.Drawing.Size(80, 32);
             this.rbString.TabIndex = 3;
             this.rbString.Text = "查找文本";
             // 
@@ -131,12 +132,12 @@
             // 
             this.rbHex.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbHex.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rbHex.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbHex.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbHex.LocalizationText = "SearchPacketForm.FindHex";
-            this.rbHex.Location = new System.Drawing.Point(1, 42);
+            this.rbHex.Location = new System.Drawing.Point(1, 35);
             this.rbHex.Margin = new System.Windows.Forms.Padding(1);
             this.rbHex.Name = "rbHex";
-            this.rbHex.Size = new System.Drawing.Size(122, 35);
+            this.rbHex.Size = new System.Drawing.Size(104, 28);
             this.rbHex.TabIndex = 2;
             this.rbHex.Text = "查找十六进制";
             // 
@@ -145,17 +146,17 @@
             this.tlpButton.ColumnCount = 2;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Controls.Add(this.bSearch, 1, 0);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(850, 0);
+            this.tlpButton.Location = new System.Drawing.Point(995, 0);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 2;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(150, 100);
+            this.tlpButton.Size = new System.Drawing.Size(105, 80);
             this.tlpButton.TabIndex = 23;
             // 
             // bExit
@@ -163,12 +164,13 @@
             this.bExit.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bExit.BackExtend = "135, #6253E1, #04BEFE";
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bExit.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bExit.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(33, 53);
+            this.bExit.Location = new System.Drawing.Point(4, 42);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(72, 44);
+            this.bExit.Size = new System.Drawing.Size(63, 36);
             this.bExit.TabIndex = 9;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -179,12 +181,13 @@
             this.bSearch.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bSearch.BackExtend = "135, #6253E1, #04BEFE";
             this.bSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSearch.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.bSearch.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.bSearch.IconSvg = "SearchOutlined";
             this.bSearch.LocalizationText = "SearchPacketForm.FindNext";
-            this.bSearch.Location = new System.Drawing.Point(33, 3);
+            this.bSearch.Location = new System.Drawing.Point(4, 2);
+            this.bSearch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(114, 44);
+            this.bSearch.Size = new System.Drawing.Size(99, 36);
             this.bSearch.TabIndex = 8;
             this.bSearch.Text = "查找下一个";
             this.bSearch.Type = AntdUI.TTypeMini.Primary;
@@ -195,11 +198,11 @@
             this.pSearchFrom.BorderWidth = 1F;
             this.pSearchFrom.Controls.Add(this.tlpSearchFrom);
             this.pSearchFrom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pSearchFrom.Location = new System.Drawing.Point(706, 6);
-            this.pSearchFrom.Margin = new System.Windows.Forms.Padding(6);
+            this.pSearchFrom.Location = new System.Drawing.Point(894, 5);
+            this.pSearchFrom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pSearchFrom.Name = "pSearchFrom";
-            this.pSearchFrom.Padding = new System.Windows.Forms.Padding(3);
-            this.pSearchFrom.Size = new System.Drawing.Size(138, 88);
+            this.pSearchFrom.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pSearchFrom.Size = new System.Drawing.Size(97, 70);
             this.pSearchFrom.TabIndex = 24;
             // 
             // tlpSearchFrom
@@ -207,30 +210,30 @@
             this.tlpSearchFrom.ColumnCount = 2;
             this.tlpSearchFrom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSearchFrom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchFrom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSearchFrom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpSearchFrom.Controls.Add(this.rbFromIndex, 0, 1);
             this.tlpSearchFrom.Controls.Add(this.rbFromHead, 0, 0);
             this.tlpSearchFrom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSearchFrom.Location = new System.Drawing.Point(4, 4);
+            this.tlpSearchFrom.Location = new System.Drawing.Point(3, 3);
             this.tlpSearchFrom.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSearchFrom.Name = "tlpSearchFrom";
             this.tlpSearchFrom.RowCount = 3;
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchFrom.Size = new System.Drawing.Size(130, 80);
+            this.tlpSearchFrom.Size = new System.Drawing.Size(91, 64);
             this.tlpSearchFrom.TabIndex = 22;
             // 
             // rbFromIndex
             // 
             this.rbFromIndex.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbFromIndex.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rbFromIndex.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbFromIndex.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbFromIndex.LocalizationText = "SearchPacketForm.SeekDown";
-            this.rbFromIndex.Location = new System.Drawing.Point(1, 38);
+            this.rbFromIndex.Location = new System.Drawing.Point(1, 31);
             this.rbFromIndex.Margin = new System.Windows.Forms.Padding(1);
             this.rbFromIndex.Name = "rbFromIndex";
-            this.rbFromIndex.Size = new System.Drawing.Size(94, 35);
+            this.rbFromIndex.Size = new System.Drawing.Size(80, 28);
             this.rbFromIndex.TabIndex = 5;
             this.rbFromIndex.Text = "向下搜索";
             // 
@@ -239,25 +242,25 @@
             this.rbFromHead.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbFromHead.Checked = true;
             this.rbFromHead.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rbFromHead.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.rbFromHead.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbFromHead.LocalizationText = "SearchPacketForm.FromScratch";
             this.rbFromHead.Location = new System.Drawing.Point(1, 1);
             this.rbFromHead.Margin = new System.Windows.Forms.Padding(1);
             this.rbFromHead.Name = "rbFromHead";
-            this.rbFromHead.Size = new System.Drawing.Size(94, 35);
+            this.rbFromHead.Size = new System.Drawing.Size(80, 28);
             this.rbFromHead.TabIndex = 4;
             this.rbFromHead.Text = "从头开始";
             // 
             // SearchPacket
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpSearchSettings);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "SearchPacket";
-            this.Size = new System.Drawing.Size(1000, 100);
+            this.Size = new System.Drawing.Size(1100, 80);
             this.Load += new System.EventHandler(this.SearchPacket_Load);
             this.tlpSearchSettings.ResumeLayout(false);
             this.pSearchType.ResumeLayout(false);

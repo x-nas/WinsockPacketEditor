@@ -54,7 +54,7 @@
             // 
             this.tlpMapLocal.ColumnCount = 1;
             this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMapLocal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpMapLocal.Controls.Add(this.tlpButton, 0, 5);
             this.tlpMapLocal.Controls.Add(this.dLocal, 0, 2);
             this.tlpMapLocal.Controls.Add(this.tlpRemote, 0, 1);
@@ -63,14 +63,15 @@
             this.tlpMapLocal.Controls.Add(this.txtLocalPath, 0, 3);
             this.tlpMapLocal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMapLocal.Location = new System.Drawing.Point(0, 0);
+            this.tlpMapLocal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tlpMapLocal.Name = "tlpMapLocal";
             this.tlpMapLocal.RowCount = 6;
             this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 202F));
             this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tlpMapLocal.Size = new System.Drawing.Size(500, 700);
             this.tlpMapLocal.TabIndex = 2;
             // 
@@ -79,20 +80,20 @@
             this.tlpButton.ColumnCount = 5;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 640);
+            this.tlpButton.Location = new System.Drawing.Point(0, 651);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(500, 60);
+            this.tlpButton.Size = new System.Drawing.Size(500, 49);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -102,9 +103,10 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(155, 7);
+            this.bSave.Location = new System.Drawing.Point(178, 6);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(82, 46);
+            this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -117,9 +119,10 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(263, 7);
+            this.bExit.Location = new System.Drawing.Point(259, 6);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(82, 46);
+            this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -128,12 +131,13 @@
             // dLocal
             // 
             this.dLocal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dLocal.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLocal.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dLocal.LocalizationText = "MapLocalForm.Local";
-            this.dLocal.Location = new System.Drawing.Point(3, 282);
+            this.dLocal.Location = new System.Drawing.Point(2, 227);
+            this.dLocal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dLocal.Name = "dLocal";
             this.dLocal.Orientation = AntdUI.TOrientation.Left;
-            this.dLocal.Size = new System.Drawing.Size(494, 23);
+            this.dLocal.Size = new System.Drawing.Size(496, 19);
             this.dLocal.TabIndex = 5;
             this.dLocal.Text = "本地文件";
             // 
@@ -151,20 +155,20 @@
             this.tlpRemote.Controls.Add(this.nudPort, 1, 2);
             this.tlpRemote.Controls.Add(this.txtRemotePath, 1, 3);
             this.tlpRemote.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpRemote.Location = new System.Drawing.Point(0, 29);
+            this.tlpRemote.Location = new System.Drawing.Point(0, 23);
             this.tlpRemote.Margin = new System.Windows.Forms.Padding(0);
             this.tlpRemote.Name = "tlpRemote";
-            this.tlpRemote.Padding = new System.Windows.Forms.Padding(3);
+            this.tlpRemote.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tlpRemote.RowCount = 5;
             this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpRemote.Size = new System.Drawing.Size(500, 250);
+            this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpRemote.Size = new System.Drawing.Size(500, 202);
             this.tlpRemote.TabIndex = 4;
             // 
             // lRemotePath
@@ -172,9 +176,10 @@
             this.lRemotePath.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRemotePath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lRemotePath.LocalizationText = "Path";
-            this.lRemotePath.Location = new System.Drawing.Point(6, 159);
+            this.lRemotePath.Location = new System.Drawing.Point(4, 124);
+            this.lRemotePath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lRemotePath.Name = "lRemotePath";
-            this.lRemotePath.Size = new System.Drawing.Size(32, 45);
+            this.lRemotePath.Size = new System.Drawing.Size(24, 36);
             this.lRemotePath.TabIndex = 16;
             this.lRemotePath.Text = "路径";
             // 
@@ -183,9 +188,10 @@
             this.lPort.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPort.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPort.LocalizationText = "Port";
-            this.lPort.Location = new System.Drawing.Point(6, 108);
+            this.lPort.Location = new System.Drawing.Point(4, 84);
+            this.lPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lPort.Name = "lPort";
-            this.lPort.Size = new System.Drawing.Size(32, 45);
+            this.lPort.Size = new System.Drawing.Size(24, 36);
             this.lPort.TabIndex = 14;
             this.lPort.Text = "端口";
             // 
@@ -194,9 +200,10 @@
             this.lHost.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHost.LocalizationText = "Host";
-            this.lHost.Location = new System.Drawing.Point(6, 57);
+            this.lHost.Location = new System.Drawing.Point(4, 44);
+            this.lHost.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHost.Name = "lHost";
-            this.lHost.Size = new System.Drawing.Size(64, 45);
+            this.lHost.Size = new System.Drawing.Size(48, 36);
             this.lHost.TabIndex = 12;
             this.lHost.Text = "主机地址";
             // 
@@ -205,9 +212,10 @@
             this.lProtocolType.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lProtocolType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lProtocolType.LocalizationText = "Protocol";
-            this.lProtocolType.Location = new System.Drawing.Point(6, 6);
+            this.lProtocolType.Location = new System.Drawing.Point(4, 4);
+            this.lProtocolType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lProtocolType.Name = "lProtocolType";
-            this.lProtocolType.Size = new System.Drawing.Size(32, 45);
+            this.lProtocolType.Size = new System.Drawing.Size(24, 36);
             this.lProtocolType.TabIndex = 10;
             this.lProtocolType.Text = "协议";
             // 
@@ -218,26 +226,29 @@
             "http"});
             this.ddlProtocolType.List = true;
             this.ddlProtocolType.LocalizationPlaceholderText = "PleaseSelect";
-            this.ddlProtocolType.Location = new System.Drawing.Point(76, 6);
+            this.ddlProtocolType.Location = new System.Drawing.Point(56, 4);
+            this.ddlProtocolType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ddlProtocolType.Name = "ddlProtocolType";
             this.ddlProtocolType.PlaceholderText = "请选择";
-            this.ddlProtocolType.Size = new System.Drawing.Size(418, 45);
+            this.ddlProtocolType.Size = new System.Drawing.Size(440, 36);
             this.ddlProtocolType.TabIndex = 11;
             // 
             // txtHost
             // 
             this.txtHost.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtHost.Location = new System.Drawing.Point(76, 57);
+            this.txtHost.Location = new System.Drawing.Point(56, 44);
+            this.txtHost.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHost.Name = "txtHost";
             this.txtHost.PrefixText = "http://";
-            this.txtHost.Size = new System.Drawing.Size(418, 45);
+            this.txtHost.Size = new System.Drawing.Size(440, 36);
             this.txtHost.TabIndex = 13;
             this.txtHost.TextChanged += new System.EventHandler(this.txtHost_TextChanged);
             // 
             // nudPort
             // 
             this.nudPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudPort.Location = new System.Drawing.Point(76, 108);
+            this.nudPort.Location = new System.Drawing.Point(56, 84);
+            this.nudPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.nudPort.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -250,7 +261,7 @@
             0});
             this.nudPort.Name = "nudPort";
             this.nudPort.SelectionStart = 1;
-            this.nudPort.Size = new System.Drawing.Size(418, 45);
+            this.nudPort.Size = new System.Drawing.Size(440, 36);
             this.nudPort.TabIndex = 15;
             this.nudPort.Text = "80";
             this.nudPort.Value = new decimal(new int[] {
@@ -263,21 +274,23 @@
             // 
             this.txtRemotePath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtRemotePath.LocalizationPlaceholderText = "MapLocalForm.InputPath";
-            this.txtRemotePath.Location = new System.Drawing.Point(76, 159);
+            this.txtRemotePath.Location = new System.Drawing.Point(56, 124);
+            this.txtRemotePath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtRemotePath.Name = "txtRemotePath";
             this.txtRemotePath.PlaceholderText = "请填写远端路径";
-            this.txtRemotePath.Size = new System.Drawing.Size(418, 45);
+            this.txtRemotePath.Size = new System.Drawing.Size(440, 36);
             this.txtRemotePath.TabIndex = 17;
             // 
             // dRemote
             // 
             this.dRemote.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dRemote.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dRemote.LocalizationText = "MapLocalForm.Remote";
-            this.dRemote.Location = new System.Drawing.Point(3, 3);
+            this.dRemote.Location = new System.Drawing.Point(2, 2);
+            this.dRemote.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dRemote.Name = "dRemote";
             this.dRemote.Orientation = AntdUI.TOrientation.Left;
-            this.dRemote.Size = new System.Drawing.Size(494, 23);
+            this.dRemote.Size = new System.Drawing.Size(496, 19);
             this.dRemote.TabIndex = 3;
             this.dRemote.Text = "远端地址";
             // 
@@ -286,10 +299,11 @@
             this.udLocalPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.udLocalPath.Filter = "";
             this.udLocalPath.LocalizationText = "MapLocalForm.DragFiles";
-            this.udLocalPath.Location = new System.Drawing.Point(3, 362);
+            this.udLocalPath.Location = new System.Drawing.Point(2, 290);
+            this.udLocalPath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.udLocalPath.Multiselect = false;
             this.udLocalPath.Name = "udLocalPath";
-            this.udLocalPath.Size = new System.Drawing.Size(494, 275);
+            this.udLocalPath.Size = new System.Drawing.Size(496, 359);
             this.udLocalPath.TabIndex = 6;
             this.udLocalPath.Text = "点击或拖拽文件到此区域";
             this.udLocalPath.TextDesc = "";
@@ -299,23 +313,24 @@
             // 
             this.txtLocalPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtLocalPath.LocalizationPlaceholderText = "MapLocalForm.SelectLocal";
-            this.txtLocalPath.Location = new System.Drawing.Point(3, 311);
+            this.txtLocalPath.Location = new System.Drawing.Point(2, 250);
+            this.txtLocalPath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtLocalPath.Name = "txtLocalPath";
             this.txtLocalPath.PlaceholderText = "请选择本地文件";
             this.txtLocalPath.PrefixSvg = "FolderOpenOutlined";
             this.txtLocalPath.ReadOnly = true;
-            this.txtLocalPath.Size = new System.Drawing.Size(494, 45);
+            this.txtLocalPath.Size = new System.Drawing.Size(496, 36);
             this.txtLocalPath.TabIndex = 7;
             this.txtLocalPath.TextChanged += new System.EventHandler(this.txtLocalPath_TextChanged);
             // 
             // MapLocalEdit
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpMapLocal);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "MapLocalEdit";
             this.Size = new System.Drawing.Size(500, 700);
             this.Load += new System.EventHandler(this.MapLocalEdit_Load);

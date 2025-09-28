@@ -201,7 +201,7 @@ namespace WinsockPacketEditor
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.FilterList.Column."),
             };
 
-            this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tFilterList.Binding(Operate.FilterConfig.List.lstFilterInfo);
         }
 

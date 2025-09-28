@@ -40,7 +40,7 @@
             // 
             this.tlpLocation.ColumnCount = 1;
             this.tlpLocation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLocation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpLocation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpLocation.Controls.Add(this.tlpButton, 0, 1);
             this.tlpLocation.Controls.Add(this.tLocation, 0, 0);
             this.tlpLocation.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -49,8 +49,8 @@
             this.tlpLocation.Name = "tlpLocation";
             this.tlpLocation.RowCount = 2;
             this.tlpLocation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLocation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpLocation.Size = new System.Drawing.Size(1000, 700);
+            this.tlpLocation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tlpLocation.Size = new System.Drawing.Size(1100, 700);
             this.tlpLocation.TabIndex = 1;
             // 
             // tlpButton
@@ -61,14 +61,14 @@
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 640);
+            this.tlpButton.Location = new System.Drawing.Point(0, 651);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(1000, 60);
+            this.tlpButton.Size = new System.Drawing.Size(1100, 49);
             this.tlpButton.TabIndex = 4;
             // 
             // bExit
@@ -78,9 +78,10 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(459, 7);
+            this.bExit.Location = new System.Drawing.Point(518, 6);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(82, 46);
+            this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -91,22 +92,23 @@
             this.tLocation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tLocation.EmptyHeader = true;
             this.tLocation.Gap = 12;
-            this.tLocation.Location = new System.Drawing.Point(3, 3);
+            this.tLocation.Location = new System.Drawing.Point(2, 2);
+            this.tLocation.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tLocation.Name = "tLocation";
-            this.tLocation.Size = new System.Drawing.Size(994, 634);
+            this.tLocation.Size = new System.Drawing.Size(1096, 647);
             this.tLocation.TabIndex = 0;
             this.tLocation.Text = "table1";
             // 
             // AccountLocation
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpLocation);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AccountLocation";
-            this.Size = new System.Drawing.Size(1000, 700);
+            this.Size = new System.Drawing.Size(1100, 700);
             this.Load += new System.EventHandler(this.AccountLocation_Load);
             this.tlpLocation.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);

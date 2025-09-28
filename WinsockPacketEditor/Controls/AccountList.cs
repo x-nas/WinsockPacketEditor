@@ -114,7 +114,7 @@ namespace WinsockPacketEditor
                 }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.AccountList.Column."),
             };
 
-            this.tAccountList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tAccountList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.pAccountList.PageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
             this.tAccountList.Binding(GetPageData(this.pAccountList.Current, this.pAccountList.PageSize));
         }

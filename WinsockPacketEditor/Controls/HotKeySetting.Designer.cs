@@ -84,7 +84,7 @@
             // 
             this.tlpHotKey.ColumnCount = 1;
             this.tlpHotKey.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpHotKey.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpHotKey.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpHotKey.Controls.Add(this.tlpButton, 0, 2);
             this.tlpHotKey.Controls.Add(this.dHotKey, 0, 0);
             this.tlpHotKey.Controls.Add(this.tlpSetKeys, 0, 2);
@@ -94,10 +94,10 @@
             this.tlpHotKey.Name = "tlpHotKey";
             this.tlpHotKey.RowCount = 4;
             this.tlpHotKey.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpHotKey.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpHotKey.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tlpHotKey.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpHotKey.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpHotKey.Size = new System.Drawing.Size(500, 800);
+            this.tlpHotKey.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tlpHotKey.Size = new System.Drawing.Size(500, 700);
             this.tlpHotKey.TabIndex = 1;
             // 
             // tlpButton
@@ -105,20 +105,20 @@
             this.tlpButton.ColumnCount = 5;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 740);
+            this.tlpButton.Location = new System.Drawing.Point(0, 651);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(500, 60);
+            this.tlpButton.Size = new System.Drawing.Size(500, 49);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -128,9 +128,10 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(155, 7);
+            this.bSave.Location = new System.Drawing.Point(178, 6);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(82, 46);
+            this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Primary;
@@ -143,9 +144,10 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(263, 7);
+            this.bExit.Location = new System.Drawing.Point(259, 6);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(82, 46);
+            this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -154,12 +156,13 @@
             // dHotKey
             // 
             this.dHotKey.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dHotKey.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dHotKey.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dHotKey.LocalizationText = "HotKeyForm.Customize";
-            this.dHotKey.Location = new System.Drawing.Point(3, 3);
+            this.dHotKey.Location = new System.Drawing.Point(2, 2);
+            this.dHotKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dHotKey.Name = "dHotKey";
             this.dHotKey.Orientation = AntdUI.TOrientation.Left;
-            this.dHotKey.Size = new System.Drawing.Size(494, 23);
+            this.dHotKey.Size = new System.Drawing.Size(496, 19);
             this.dHotKey.TabIndex = 0;
             this.dHotKey.Text = "自定义快捷键";
             // 
@@ -208,25 +211,25 @@
             this.tlpSetKeys.Controls.Add(this.txtHotKey1, 1, 1);
             this.tlpSetKeys.Controls.Add(this.bHotKey1, 2, 1);
             this.tlpSetKeys.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSetKeys.Location = new System.Drawing.Point(0, 49);
+            this.tlpSetKeys.Location = new System.Drawing.Point(0, 39);
             this.tlpSetKeys.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSetKeys.Name = "tlpSetKeys";
             this.tlpSetKeys.RowCount = 14;
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpSetKeys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSetKeys.Size = new System.Drawing.Size(500, 691);
+            this.tlpSetKeys.Size = new System.Drawing.Size(500, 612);
             this.tlpSetKeys.TabIndex = 1;
             // 
             // tlpHotKeyType
@@ -239,13 +242,13 @@
             this.tlpHotKeyType.Controls.Add(this.rbSendList, 1, 0);
             this.tlpHotKeyType.Controls.Add(this.rbRobotList, 2, 0);
             this.tlpHotKeyType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpHotKeyType.Location = new System.Drawing.Point(87, 0);
+            this.tlpHotKeyType.Location = new System.Drawing.Point(65, 0);
             this.tlpHotKeyType.Margin = new System.Windows.Forms.Padding(0);
             this.tlpHotKeyType.Name = "tlpHotKeyType";
             this.tlpHotKeyType.RowCount = 2;
             this.tlpHotKeyType.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpHotKeyType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpHotKeyType.Size = new System.Drawing.Size(361, 50);
+            this.tlpHotKeyType.Size = new System.Drawing.Size(399, 40);
             this.tlpHotKeyType.TabIndex = 37;
             // 
             // rbSendList
@@ -254,9 +257,10 @@
             this.rbSendList.Checked = true;
             this.rbSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSendList.LocalizationText = "SendList";
-            this.rbSendList.Location = new System.Drawing.Point(3, 3);
+            this.rbSendList.Location = new System.Drawing.Point(2, 2);
+            this.rbSendList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbSendList.Name = "rbSendList";
-            this.rbSendList.Size = new System.Drawing.Size(108, 42);
+            this.rbSendList.Size = new System.Drawing.Size(80, 34);
             this.rbSendList.TabIndex = 1;
             this.rbSendList.Text = "发送列表";
             // 
@@ -265,9 +269,10 @@
             this.rbRobotList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbRobotList.LocalizationText = "RobotList";
-            this.rbRobotList.Location = new System.Drawing.Point(117, 3);
+            this.rbRobotList.Location = new System.Drawing.Point(86, 2);
+            this.rbRobotList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rbRobotList.Name = "rbRobotList";
-            this.rbRobotList.Size = new System.Drawing.Size(124, 42);
+            this.rbRobotList.Size = new System.Drawing.Size(92, 34);
             this.rbRobotList.TabIndex = 2;
             this.rbRobotList.Text = "机器人列表";
             // 
@@ -276,9 +281,10 @@
             this.lHKType.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHKType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHKType.LocalizationText = "HotKeyForm.Apply";
-            this.lHKType.Location = new System.Drawing.Point(3, 3);
+            this.lHKType.Location = new System.Drawing.Point(2, 2);
+            this.lHKType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHKType.Name = "lHKType";
-            this.lHKType.Size = new System.Drawing.Size(57, 44);
+            this.lHKType.Size = new System.Drawing.Size(43, 36);
             this.lHKType.TabIndex = 36;
             this.lHKType.Text = "作用于 :";
             // 
@@ -287,10 +293,11 @@
             this.bHotKey12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey12.IconSvg = "FormOutlined";
             this.bHotKey12.LoadingWaveVertical = true;
-            this.bHotKey12.Location = new System.Drawing.Point(451, 603);
+            this.bHotKey12.Location = new System.Drawing.Point(466, 482);
+            this.bHotKey12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey12.Name = "bHotKey12";
             this.bHotKey12.Shape = AntdUI.TShape.Circle;
-            this.bHotKey12.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey12.Size = new System.Drawing.Size(32, 36);
             this.bHotKey12.TabIndex = 35;
             this.bHotKey12.Type = AntdUI.TTypeMini.Success;
             this.bHotKey12.Click += new System.EventHandler(this.bHotKey12_Click);
@@ -300,10 +307,11 @@
             this.bHotKey11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey11.IconSvg = "FormOutlined";
             this.bHotKey11.LoadingWaveVertical = true;
-            this.bHotKey11.Location = new System.Drawing.Point(451, 553);
+            this.bHotKey11.Location = new System.Drawing.Point(466, 442);
+            this.bHotKey11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey11.Name = "bHotKey11";
             this.bHotKey11.Shape = AntdUI.TShape.Circle;
-            this.bHotKey11.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey11.Size = new System.Drawing.Size(32, 36);
             this.bHotKey11.TabIndex = 34;
             this.bHotKey11.Type = AntdUI.TTypeMini.Success;
             this.bHotKey11.Click += new System.EventHandler(this.bHotKey11_Click);
@@ -313,10 +321,11 @@
             this.bHotKey10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey10.IconSvg = "FormOutlined";
             this.bHotKey10.LoadingWaveVertical = true;
-            this.bHotKey10.Location = new System.Drawing.Point(451, 503);
+            this.bHotKey10.Location = new System.Drawing.Point(466, 402);
+            this.bHotKey10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey10.Name = "bHotKey10";
             this.bHotKey10.Shape = AntdUI.TShape.Circle;
-            this.bHotKey10.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey10.Size = new System.Drawing.Size(32, 36);
             this.bHotKey10.TabIndex = 33;
             this.bHotKey10.Type = AntdUI.TTypeMini.Success;
             this.bHotKey10.Click += new System.EventHandler(this.bHotKey10_Click);
@@ -326,10 +335,11 @@
             this.bHotKey9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey9.IconSvg = "FormOutlined";
             this.bHotKey9.LoadingWaveVertical = true;
-            this.bHotKey9.Location = new System.Drawing.Point(451, 453);
+            this.bHotKey9.Location = new System.Drawing.Point(466, 362);
+            this.bHotKey9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey9.Name = "bHotKey9";
             this.bHotKey9.Shape = AntdUI.TShape.Circle;
-            this.bHotKey9.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey9.Size = new System.Drawing.Size(32, 36);
             this.bHotKey9.TabIndex = 32;
             this.bHotKey9.Type = AntdUI.TTypeMini.Success;
             this.bHotKey9.Click += new System.EventHandler(this.bHotKey9_Click);
@@ -339,10 +349,11 @@
             this.bHotKey8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey8.IconSvg = "FormOutlined";
             this.bHotKey8.LoadingWaveVertical = true;
-            this.bHotKey8.Location = new System.Drawing.Point(451, 403);
+            this.bHotKey8.Location = new System.Drawing.Point(466, 322);
+            this.bHotKey8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey8.Name = "bHotKey8";
             this.bHotKey8.Shape = AntdUI.TShape.Circle;
-            this.bHotKey8.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey8.Size = new System.Drawing.Size(32, 36);
             this.bHotKey8.TabIndex = 31;
             this.bHotKey8.Type = AntdUI.TTypeMini.Success;
             this.bHotKey8.Click += new System.EventHandler(this.bHotKey8_Click);
@@ -352,10 +363,11 @@
             this.bHotKey7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey7.IconSvg = "FormOutlined";
             this.bHotKey7.LoadingWaveVertical = true;
-            this.bHotKey7.Location = new System.Drawing.Point(451, 353);
+            this.bHotKey7.Location = new System.Drawing.Point(466, 282);
+            this.bHotKey7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey7.Name = "bHotKey7";
             this.bHotKey7.Shape = AntdUI.TShape.Circle;
-            this.bHotKey7.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey7.Size = new System.Drawing.Size(32, 36);
             this.bHotKey7.TabIndex = 30;
             this.bHotKey7.Type = AntdUI.TTypeMini.Success;
             this.bHotKey7.Click += new System.EventHandler(this.bHotKey7_Click);
@@ -365,10 +377,11 @@
             this.bHotKey6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey6.IconSvg = "FormOutlined";
             this.bHotKey6.LoadingWaveVertical = true;
-            this.bHotKey6.Location = new System.Drawing.Point(451, 303);
+            this.bHotKey6.Location = new System.Drawing.Point(466, 242);
+            this.bHotKey6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey6.Name = "bHotKey6";
             this.bHotKey6.Shape = AntdUI.TShape.Circle;
-            this.bHotKey6.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey6.Size = new System.Drawing.Size(32, 36);
             this.bHotKey6.TabIndex = 29;
             this.bHotKey6.Type = AntdUI.TTypeMini.Success;
             this.bHotKey6.Click += new System.EventHandler(this.bHotKey6_Click);
@@ -378,10 +391,11 @@
             this.bHotKey5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey5.IconSvg = "FormOutlined";
             this.bHotKey5.LoadingWaveVertical = true;
-            this.bHotKey5.Location = new System.Drawing.Point(451, 253);
+            this.bHotKey5.Location = new System.Drawing.Point(466, 202);
+            this.bHotKey5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey5.Name = "bHotKey5";
             this.bHotKey5.Shape = AntdUI.TShape.Circle;
-            this.bHotKey5.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey5.Size = new System.Drawing.Size(32, 36);
             this.bHotKey5.TabIndex = 28;
             this.bHotKey5.Type = AntdUI.TTypeMini.Success;
             this.bHotKey5.Click += new System.EventHandler(this.bHotKey5_Click);
@@ -391,10 +405,11 @@
             this.bHotKey4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey4.IconSvg = "FormOutlined";
             this.bHotKey4.LoadingWaveVertical = true;
-            this.bHotKey4.Location = new System.Drawing.Point(451, 203);
+            this.bHotKey4.Location = new System.Drawing.Point(466, 162);
+            this.bHotKey4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey4.Name = "bHotKey4";
             this.bHotKey4.Shape = AntdUI.TShape.Circle;
-            this.bHotKey4.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey4.Size = new System.Drawing.Size(32, 36);
             this.bHotKey4.TabIndex = 27;
             this.bHotKey4.Type = AntdUI.TTypeMini.Success;
             this.bHotKey4.Click += new System.EventHandler(this.bHotKey4_Click);
@@ -404,10 +419,11 @@
             this.bHotKey3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey3.IconSvg = "FormOutlined";
             this.bHotKey3.LoadingWaveVertical = true;
-            this.bHotKey3.Location = new System.Drawing.Point(451, 153);
+            this.bHotKey3.Location = new System.Drawing.Point(466, 122);
+            this.bHotKey3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey3.Name = "bHotKey3";
             this.bHotKey3.Shape = AntdUI.TShape.Circle;
-            this.bHotKey3.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey3.Size = new System.Drawing.Size(32, 36);
             this.bHotKey3.TabIndex = 26;
             this.bHotKey3.Type = AntdUI.TTypeMini.Success;
             this.bHotKey3.Click += new System.EventHandler(this.bHotKey3_Click);
@@ -417,10 +433,11 @@
             this.bHotKey2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey2.IconSvg = "FormOutlined";
             this.bHotKey2.LoadingWaveVertical = true;
-            this.bHotKey2.Location = new System.Drawing.Point(451, 103);
+            this.bHotKey2.Location = new System.Drawing.Point(466, 82);
+            this.bHotKey2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey2.Name = "bHotKey2";
             this.bHotKey2.Shape = AntdUI.TShape.Circle;
-            this.bHotKey2.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey2.Size = new System.Drawing.Size(32, 36);
             this.bHotKey2.TabIndex = 25;
             this.bHotKey2.Type = AntdUI.TTypeMini.Success;
             this.bHotKey2.Click += new System.EventHandler(this.bHotKey2_Click);
@@ -431,11 +448,12 @@
             this.txtHotKey12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey12.HandShortcutKeys = false;
             this.txtHotKey12.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey12.Location = new System.Drawing.Point(90, 603);
+            this.txtHotKey12.Location = new System.Drawing.Point(67, 482);
+            this.txtHotKey12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey12.Name = "txtHotKey12";
             this.txtHotKey12.PlaceholderText = "请输入按键组合";
             this.txtHotKey12.ReadOnly = true;
-            this.txtHotKey12.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey12.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey12.TabIndex = 23;
             this.txtHotKey12.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -444,9 +462,10 @@
             this.lHotKey12.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey12.LocalizationText = "HotKeyForm.Key12";
-            this.lHotKey12.Location = new System.Drawing.Point(3, 603);
+            this.lHotKey12.Location = new System.Drawing.Point(2, 482);
+            this.lHotKey12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey12.Name = "lHotKey12";
-            this.lHotKey12.Size = new System.Drawing.Size(81, 44);
+            this.lHotKey12.Size = new System.Drawing.Size(61, 36);
             this.lHotKey12.TabIndex = 22;
             this.lHotKey12.Text = "快捷键 12 :";
             // 
@@ -456,11 +475,12 @@
             this.txtHotKey11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey11.HandShortcutKeys = false;
             this.txtHotKey11.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey11.Location = new System.Drawing.Point(90, 553);
+            this.txtHotKey11.Location = new System.Drawing.Point(67, 442);
+            this.txtHotKey11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey11.Name = "txtHotKey11";
             this.txtHotKey11.PlaceholderText = "请输入按键组合";
             this.txtHotKey11.ReadOnly = true;
-            this.txtHotKey11.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey11.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey11.TabIndex = 21;
             this.txtHotKey11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -469,9 +489,10 @@
             this.lHotKey11.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey11.LocalizationText = "HotKeyForm.Key11";
-            this.lHotKey11.Location = new System.Drawing.Point(3, 553);
+            this.lHotKey11.Location = new System.Drawing.Point(2, 442);
+            this.lHotKey11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey11.Name = "lHotKey11";
-            this.lHotKey11.Size = new System.Drawing.Size(81, 44);
+            this.lHotKey11.Size = new System.Drawing.Size(61, 36);
             this.lHotKey11.TabIndex = 20;
             this.lHotKey11.Text = "快捷键 11 :";
             // 
@@ -481,11 +502,12 @@
             this.txtHotKey10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey10.HandShortcutKeys = false;
             this.txtHotKey10.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey10.Location = new System.Drawing.Point(90, 503);
+            this.txtHotKey10.Location = new System.Drawing.Point(67, 402);
+            this.txtHotKey10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey10.Name = "txtHotKey10";
             this.txtHotKey10.PlaceholderText = "请输入按键组合";
             this.txtHotKey10.ReadOnly = true;
-            this.txtHotKey10.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey10.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey10.TabIndex = 19;
             this.txtHotKey10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -494,9 +516,10 @@
             this.lHotKey10.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey10.LocalizationText = "HotKeyForm.Key10";
-            this.lHotKey10.Location = new System.Drawing.Point(3, 503);
+            this.lHotKey10.Location = new System.Drawing.Point(2, 402);
+            this.lHotKey10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey10.Name = "lHotKey10";
-            this.lHotKey10.Size = new System.Drawing.Size(81, 44);
+            this.lHotKey10.Size = new System.Drawing.Size(61, 36);
             this.lHotKey10.TabIndex = 18;
             this.lHotKey10.Text = "快捷键 10 :";
             // 
@@ -506,11 +529,12 @@
             this.txtHotKey9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey9.HandShortcutKeys = false;
             this.txtHotKey9.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey9.Location = new System.Drawing.Point(90, 453);
+            this.txtHotKey9.Location = new System.Drawing.Point(67, 362);
+            this.txtHotKey9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey9.Name = "txtHotKey9";
             this.txtHotKey9.PlaceholderText = "请输入按键组合";
             this.txtHotKey9.ReadOnly = true;
-            this.txtHotKey9.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey9.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey9.TabIndex = 17;
             this.txtHotKey9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -519,9 +543,10 @@
             this.lHotKey9.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey9.LocalizationText = "HotKeyForm.Key9";
-            this.lHotKey9.Location = new System.Drawing.Point(3, 453);
+            this.lHotKey9.Location = new System.Drawing.Point(2, 362);
+            this.lHotKey9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey9.Name = "lHotKey9";
-            this.lHotKey9.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey9.Size = new System.Drawing.Size(54, 36);
             this.lHotKey9.TabIndex = 16;
             this.lHotKey9.Text = "快捷键 9 :";
             // 
@@ -531,11 +556,12 @@
             this.txtHotKey8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey8.HandShortcutKeys = false;
             this.txtHotKey8.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey8.Location = new System.Drawing.Point(90, 403);
+            this.txtHotKey8.Location = new System.Drawing.Point(67, 322);
+            this.txtHotKey8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey8.Name = "txtHotKey8";
             this.txtHotKey8.PlaceholderText = "请输入按键组合";
             this.txtHotKey8.ReadOnly = true;
-            this.txtHotKey8.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey8.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey8.TabIndex = 15;
             this.txtHotKey8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -544,9 +570,10 @@
             this.lHotKey8.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey8.LocalizationText = "HotKeyForm.Key8";
-            this.lHotKey8.Location = new System.Drawing.Point(3, 403);
+            this.lHotKey8.Location = new System.Drawing.Point(2, 322);
+            this.lHotKey8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey8.Name = "lHotKey8";
-            this.lHotKey8.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey8.Size = new System.Drawing.Size(54, 36);
             this.lHotKey8.TabIndex = 14;
             this.lHotKey8.Text = "快捷键 8 :";
             // 
@@ -556,11 +583,12 @@
             this.txtHotKey7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey7.HandShortcutKeys = false;
             this.txtHotKey7.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey7.Location = new System.Drawing.Point(90, 353);
+            this.txtHotKey7.Location = new System.Drawing.Point(67, 282);
+            this.txtHotKey7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey7.Name = "txtHotKey7";
             this.txtHotKey7.PlaceholderText = "请输入按键组合";
             this.txtHotKey7.ReadOnly = true;
-            this.txtHotKey7.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey7.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey7.TabIndex = 13;
             this.txtHotKey7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -569,9 +597,10 @@
             this.lHotKey7.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey7.LocalizationText = "HotKeyForm.Key7";
-            this.lHotKey7.Location = new System.Drawing.Point(3, 353);
+            this.lHotKey7.Location = new System.Drawing.Point(2, 282);
+            this.lHotKey7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey7.Name = "lHotKey7";
-            this.lHotKey7.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey7.Size = new System.Drawing.Size(54, 36);
             this.lHotKey7.TabIndex = 12;
             this.lHotKey7.Text = "快捷键 7 :";
             // 
@@ -581,11 +610,12 @@
             this.txtHotKey6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey6.HandShortcutKeys = false;
             this.txtHotKey6.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey6.Location = new System.Drawing.Point(90, 303);
+            this.txtHotKey6.Location = new System.Drawing.Point(67, 242);
+            this.txtHotKey6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey6.Name = "txtHotKey6";
             this.txtHotKey6.PlaceholderText = "请输入按键组合";
             this.txtHotKey6.ReadOnly = true;
-            this.txtHotKey6.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey6.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey6.TabIndex = 11;
             this.txtHotKey6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -594,9 +624,10 @@
             this.lHotKey6.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey6.LocalizationText = "HotKeyForm.Key6";
-            this.lHotKey6.Location = new System.Drawing.Point(3, 303);
+            this.lHotKey6.Location = new System.Drawing.Point(2, 242);
+            this.lHotKey6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey6.Name = "lHotKey6";
-            this.lHotKey6.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey6.Size = new System.Drawing.Size(54, 36);
             this.lHotKey6.TabIndex = 10;
             this.lHotKey6.Text = "快捷键 6 :";
             // 
@@ -606,11 +637,12 @@
             this.txtHotKey5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey5.HandShortcutKeys = false;
             this.txtHotKey5.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey5.Location = new System.Drawing.Point(90, 253);
+            this.txtHotKey5.Location = new System.Drawing.Point(67, 202);
+            this.txtHotKey5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey5.Name = "txtHotKey5";
             this.txtHotKey5.PlaceholderText = "请输入按键组合";
             this.txtHotKey5.ReadOnly = true;
-            this.txtHotKey5.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey5.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey5.TabIndex = 9;
             this.txtHotKey5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -619,9 +651,10 @@
             this.lHotKey5.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey5.LocalizationText = "HotKeyForm.Key5";
-            this.lHotKey5.Location = new System.Drawing.Point(3, 253);
+            this.lHotKey5.Location = new System.Drawing.Point(2, 202);
+            this.lHotKey5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey5.Name = "lHotKey5";
-            this.lHotKey5.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey5.Size = new System.Drawing.Size(54, 36);
             this.lHotKey5.TabIndex = 8;
             this.lHotKey5.Text = "快捷键 5 :";
             // 
@@ -631,11 +664,12 @@
             this.txtHotKey4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey4.HandShortcutKeys = false;
             this.txtHotKey4.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey4.Location = new System.Drawing.Point(90, 203);
+            this.txtHotKey4.Location = new System.Drawing.Point(67, 162);
+            this.txtHotKey4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey4.Name = "txtHotKey4";
             this.txtHotKey4.PlaceholderText = "请输入按键组合";
             this.txtHotKey4.ReadOnly = true;
-            this.txtHotKey4.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey4.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey4.TabIndex = 7;
             this.txtHotKey4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -644,9 +678,10 @@
             this.lHotKey4.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey4.LocalizationText = "HotKeyForm.Key4";
-            this.lHotKey4.Location = new System.Drawing.Point(3, 203);
+            this.lHotKey4.Location = new System.Drawing.Point(2, 162);
+            this.lHotKey4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey4.Name = "lHotKey4";
-            this.lHotKey4.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey4.Size = new System.Drawing.Size(54, 36);
             this.lHotKey4.TabIndex = 6;
             this.lHotKey4.Text = "快捷键 4 :";
             // 
@@ -656,11 +691,12 @@
             this.txtHotKey3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey3.HandShortcutKeys = false;
             this.txtHotKey3.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey3.Location = new System.Drawing.Point(90, 153);
+            this.txtHotKey3.Location = new System.Drawing.Point(67, 122);
+            this.txtHotKey3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey3.Name = "txtHotKey3";
             this.txtHotKey3.PlaceholderText = "请输入按键组合";
             this.txtHotKey3.ReadOnly = true;
-            this.txtHotKey3.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey3.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey3.TabIndex = 5;
             this.txtHotKey3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -669,9 +705,10 @@
             this.lHotKey3.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey3.LocalizationText = "HotKeyForm.Key3";
-            this.lHotKey3.Location = new System.Drawing.Point(3, 153);
+            this.lHotKey3.Location = new System.Drawing.Point(2, 122);
+            this.lHotKey3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey3.Name = "lHotKey3";
-            this.lHotKey3.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey3.Size = new System.Drawing.Size(54, 36);
             this.lHotKey3.TabIndex = 4;
             this.lHotKey3.Text = "快捷键 3 :";
             // 
@@ -681,11 +718,12 @@
             this.txtHotKey2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey2.HandShortcutKeys = false;
             this.txtHotKey2.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey2.Location = new System.Drawing.Point(90, 103);
+            this.txtHotKey2.Location = new System.Drawing.Point(67, 82);
+            this.txtHotKey2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey2.Name = "txtHotKey2";
             this.txtHotKey2.PlaceholderText = "请输入按键组合";
             this.txtHotKey2.ReadOnly = true;
-            this.txtHotKey2.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey2.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey2.TabIndex = 3;
             this.txtHotKey2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -694,9 +732,10 @@
             this.lHotKey2.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey2.LocalizationText = "HotKeyForm.Key2";
-            this.lHotKey2.Location = new System.Drawing.Point(3, 103);
+            this.lHotKey2.Location = new System.Drawing.Point(2, 82);
+            this.lHotKey2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey2.Name = "lHotKey2";
-            this.lHotKey2.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey2.Size = new System.Drawing.Size(54, 36);
             this.lHotKey2.TabIndex = 2;
             this.lHotKey2.Text = "快捷键 2 :";
             // 
@@ -705,9 +744,10 @@
             this.lHotKey1.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lHotKey1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lHotKey1.LocalizationText = "HotKeyForm.Key1";
-            this.lHotKey1.Location = new System.Drawing.Point(3, 53);
+            this.lHotKey1.Location = new System.Drawing.Point(2, 42);
+            this.lHotKey1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.lHotKey1.Name = "lHotKey1";
-            this.lHotKey1.Size = new System.Drawing.Size(71, 44);
+            this.lHotKey1.Size = new System.Drawing.Size(54, 36);
             this.lHotKey1.TabIndex = 0;
             this.lHotKey1.Text = "快捷键 1 :";
             // 
@@ -717,11 +757,12 @@
             this.txtHotKey1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtHotKey1.HandShortcutKeys = false;
             this.txtHotKey1.LocalizationPlaceholderText = "HotKeyForm.InputHotKey";
-            this.txtHotKey1.Location = new System.Drawing.Point(90, 53);
+            this.txtHotKey1.Location = new System.Drawing.Point(67, 42);
+            this.txtHotKey1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtHotKey1.Name = "txtHotKey1";
             this.txtHotKey1.PlaceholderText = "请输入按键组合";
             this.txtHotKey1.ReadOnly = true;
-            this.txtHotKey1.Size = new System.Drawing.Size(355, 44);
+            this.txtHotKey1.Size = new System.Drawing.Size(395, 36);
             this.txtHotKey1.TabIndex = 21;
             this.txtHotKey1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -730,24 +771,25 @@
             this.bHotKey1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bHotKey1.IconSvg = "FormOutlined";
             this.bHotKey1.LoadingWaveVertical = true;
-            this.bHotKey1.Location = new System.Drawing.Point(451, 53);
+            this.bHotKey1.Location = new System.Drawing.Point(466, 42);
+            this.bHotKey1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bHotKey1.Name = "bHotKey1";
             this.bHotKey1.Shape = AntdUI.TShape.Circle;
-            this.bHotKey1.Size = new System.Drawing.Size(46, 44);
+            this.bHotKey1.Size = new System.Drawing.Size(32, 36);
             this.bHotKey1.TabIndex = 24;
             this.bHotKey1.Type = AntdUI.TTypeMini.Success;
             this.bHotKey1.Click += new System.EventHandler(this.bHotKey1_Click);
             // 
             // HotKeySetting
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpHotKey);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "HotKeySetting";
-            this.Size = new System.Drawing.Size(500, 800);
+            this.Size = new System.Drawing.Size(500, 700);
             this.Load += new System.EventHandler(this.HotKeySetting_Load);
             this.tlpHotKey.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);

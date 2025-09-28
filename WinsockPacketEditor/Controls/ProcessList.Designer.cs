@@ -58,9 +58,9 @@
             this.tlpSelectProcess.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSelectProcess.Name = "tlpSelectProcess";
             this.tlpSelectProcess.RowCount = 3;
-            this.tlpSelectProcess.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpSelectProcess.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tlpSelectProcess.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSelectProcess.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tlpSelectProcess.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tlpSelectProcess.Size = new System.Drawing.Size(800, 500);
             this.tlpSelectProcess.TabIndex = 3;
             // 
@@ -68,9 +68,10 @@
             // 
             this.pProcessList.Controls.Add(this.tProcessList);
             this.pProcessList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pProcessList.Location = new System.Drawing.Point(3, 63);
+            this.pProcessList.Location = new System.Drawing.Point(2, 51);
+            this.pProcessList.Margin = new System.Windows.Forms.Padding(2);
             this.pProcessList.Name = "pProcessList";
-            this.pProcessList.Size = new System.Drawing.Size(794, 374);
+            this.pProcessList.Size = new System.Drawing.Size(796, 398);
             this.pProcessList.TabIndex = 1;
             this.pProcessList.Text = "panel1";
             // 
@@ -80,14 +81,16 @@
             this.tProcessList.CellImpactHeight = false;
             this.tProcessList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tProcessList.Empty = false;
-            this.tProcessList.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tProcessList.EmptyHeader = true;
+            this.tProcessList.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tProcessList.Gap = 8;
             this.tProcessList.GapCell = 0;
             this.tProcessList.Gaps = new System.Drawing.Size(8, 8);
             this.tProcessList.Location = new System.Drawing.Point(0, 0);
+            this.tProcessList.Margin = new System.Windows.Forms.Padding(2);
             this.tProcessList.Name = "tProcessList";
             this.tProcessList.Radius = 6;
-            this.tProcessList.Size = new System.Drawing.Size(794, 374);
+            this.tProcessList.Size = new System.Drawing.Size(796, 398);
             this.tProcessList.TabIndex = 0;
             this.tProcessList.CellClick += new AntdUI.Table.ClickEventHandler(this.tProcessList_CellClick);
             // 
@@ -96,13 +99,13 @@
             this.tlpButton.ColumnCount = 11;
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Controls.Add(this.bSelectForm, 1, 0);
@@ -111,13 +114,13 @@
             this.tlpButton.Controls.Add(this.bRefresh, 5, 0);
             this.tlpButton.Controls.Add(this.bInject, 7, 0);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 440);
+            this.tlpButton.Location = new System.Drawing.Point(0, 451);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 2;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButton.Size = new System.Drawing.Size(800, 60);
+            this.tlpButton.Size = new System.Drawing.Size(800, 49);
             this.tlpButton.TabIndex = 2;
             // 
             // bSelectForm
@@ -127,9 +130,10 @@
             this.bSelectForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSelectForm.IconSvg = "CreditCardOutlined";
             this.bSelectForm.LocalizationText = "ProcessList.{id}";
-            this.bSelectForm.Location = new System.Drawing.Point(111, 3);
+            this.bSelectForm.Location = new System.Drawing.Point(182, 2);
+            this.bSelectForm.Margin = new System.Windows.Forms.Padding(2);
             this.bSelectForm.Name = "bSelectForm";
-            this.bSelectForm.Size = new System.Drawing.Size(114, 46);
+            this.bSelectForm.Size = new System.Drawing.Size(87, 37);
             this.bSelectForm.TabIndex = 4;
             this.bSelectForm.Text = "选择窗体";
             this.bSelectForm.Type = AntdUI.TTypeMini.Primary;
@@ -142,9 +146,10 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(607, 3);
+            this.bExit.Location = new System.Drawing.Point(554, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(82, 46);
+            this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 3;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
@@ -157,9 +162,10 @@
             this.bCreate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bCreate.IconSvg = "SelectOutlined";
             this.bCreate.LocalizationText = "ProcessList.{id}";
-            this.bCreate.Location = new System.Drawing.Point(251, 3);
+            this.bCreate.Location = new System.Drawing.Point(287, 2);
+            this.bCreate.Margin = new System.Windows.Forms.Padding(2);
             this.bCreate.Name = "bCreate";
-            this.bCreate.Size = new System.Drawing.Size(114, 46);
+            this.bCreate.Size = new System.Drawing.Size(87, 37);
             this.bCreate.TabIndex = 0;
             this.bCreate.Text = "选择程序";
             this.bCreate.Type = AntdUI.TTypeMini.Primary;
@@ -172,9 +178,10 @@
             this.bRefresh.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRefresh.IconSvg = "ReloadOutlined";
             this.bRefresh.LocalizationText = "ProcessList.{id}";
-            this.bRefresh.Location = new System.Drawing.Point(391, 3);
+            this.bRefresh.Location = new System.Drawing.Point(392, 2);
+            this.bRefresh.Margin = new System.Windows.Forms.Padding(2);
             this.bRefresh.Name = "bRefresh";
-            this.bRefresh.Size = new System.Drawing.Size(82, 46);
+            this.bRefresh.Size = new System.Drawing.Size(63, 37);
             this.bRefresh.TabIndex = 1;
             this.bRefresh.Text = "刷新";
             this.bRefresh.Type = AntdUI.TTypeMini.Primary;
@@ -187,9 +194,10 @@
             this.bInject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInject.IconSvg = "AimOutlined";
             this.bInject.LocalizationText = "ProcessList.{id}";
-            this.bInject.Location = new System.Drawing.Point(499, 3);
+            this.bInject.Location = new System.Drawing.Point(473, 2);
+            this.bInject.Margin = new System.Windows.Forms.Padding(2);
             this.bInject.Name = "bInject";
-            this.bInject.Size = new System.Drawing.Size(82, 46);
+            this.bInject.Size = new System.Drawing.Size(63, 37);
             this.bInject.TabIndex = 2;
             this.bInject.Text = "注入";
             this.bInject.Type = AntdUI.TTypeMini.Primary;
@@ -208,9 +216,9 @@
             this.tlpSearch.Name = "tlpSearch";
             this.tlpSearch.RowCount = 3;
             this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpSearch.Size = new System.Drawing.Size(800, 60);
+            this.tlpSearch.Size = new System.Drawing.Size(800, 49);
             this.tlpSearch.TabIndex = 3;
             // 
             // txtSearchProcess
@@ -218,11 +226,12 @@
             this.txtSearchProcess.AllowClear = true;
             this.txtSearchProcess.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearchProcess.LocalizationPlaceholderText = "ProcessList.{id}";
-            this.txtSearchProcess.Location = new System.Drawing.Point(403, 8);
+            this.txtSearchProcess.Location = new System.Drawing.Point(402, 6);
+            this.txtSearchProcess.Margin = new System.Windows.Forms.Padding(2);
             this.txtSearchProcess.Name = "txtSearchProcess";
             this.txtSearchProcess.PlaceholderText = "筛选进程列表";
             this.txtSearchProcess.PrefixSvg = "SearchOutlined";
-            this.txtSearchProcess.Size = new System.Drawing.Size(394, 44);
+            this.txtSearchProcess.Size = new System.Drawing.Size(396, 36);
             this.txtSearchProcess.TabIndex = 3;
             this.txtSearchProcess.TextChanged += new System.EventHandler(this.txtSearchProcess_TextChanged);
             // 
@@ -230,12 +239,13 @@
             // 
             this.txtSelectProcess.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSelectProcess.LocalizationPlaceholderText = "ProcessList.{id}";
-            this.txtSelectProcess.Location = new System.Drawing.Point(3, 8);
+            this.txtSelectProcess.Location = new System.Drawing.Point(2, 6);
+            this.txtSelectProcess.Margin = new System.Windows.Forms.Padding(2);
             this.txtSelectProcess.Name = "txtSelectProcess";
             this.txtSelectProcess.PlaceholderText = "请选择一个进程或程序";
             this.txtSelectProcess.ReadOnly = true;
             this.txtSelectProcess.Round = true;
-            this.txtSelectProcess.Size = new System.Drawing.Size(394, 44);
+            this.txtSelectProcess.Size = new System.Drawing.Size(396, 36);
             this.txtSelectProcess.Status = AntdUI.TType.Error;
             this.txtSelectProcess.TabIndex = 2;
             this.txtSelectProcess.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -243,12 +253,12 @@
             // 
             // ProcessList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpSelectProcess);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ProcessList";
             this.Size = new System.Drawing.Size(800, 500);
             this.Load += new System.EventHandler(this.ProcessList_Load);

@@ -37,13 +37,13 @@ namespace WinsockPacketEditor
 
         private void ProcessList_Load(object sender, EventArgs e)
         {
-            this.InitTableColumns();
+            this.InitProcessList();
             this.InitLastInjection();
             this.Dark_Changed();
             this.ShowProcessList();
         }
 
-        private void InitTableColumns()
+        private void InitProcessList()
         {
             tProcessList.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.Column("ICO", string.Empty, AntdUI.ColumnAlign.Center)
@@ -52,7 +52,7 @@ namespace WinsockPacketEditor
                     {
                         return new AntdUI.CellImage((Image)value)
                         {
-                            Size = new Size(45, 45),
+                            Size = new Size(35, 35),
                         };
                     },
                 }.SetLocalizationTitleID("Table.ProcessList.Column."),
@@ -111,7 +111,7 @@ namespace WinsockPacketEditor
             AntdUI.Spin.open(this, new AntdUI.Spin.Config()
             {
                 Radius = 6,
-                Font = new Font("Microsoft YaHei UI", 12f),
+                Font = new Font("Microsoft YaHei UI", 9F),
             }, (config) =>
             {
                 config.Text = AntdUI.Localization.Get("Loading", "正在加载...");

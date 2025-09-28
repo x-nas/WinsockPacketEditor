@@ -53,10 +53,10 @@
             this.tlpRobotList.Margin = new System.Windows.Forms.Padding(0);
             this.tlpRobotList.Name = "tlpRobotList";
             this.tlpRobotList.RowCount = 2;
-            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpRobotList.Size = new System.Drawing.Size(800, 800);
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpRobotList.Size = new System.Drawing.Size(1100, 800);
             this.tlpRobotList.TabIndex = 5;
             // 
             // tlpRobotListButton
@@ -81,7 +81,7 @@
             this.tlpRobotListButton.Name = "tlpRobotListButton";
             this.tlpRobotListButton.RowCount = 1;
             this.tlpRobotListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRobotListButton.Size = new System.Drawing.Size(800, 50);
+            this.tlpRobotListButton.Size = new System.Drawing.Size(1100, 40);
             this.tlpRobotListButton.TabIndex = 4;
             // 
             // bRobotList_Reset
@@ -90,9 +90,10 @@
             this.bRobotList_Reset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRobotList_Reset.IconSvg = "UndoOutlined";
             this.bRobotList_Reset.LocalizationText = "FilterList.ResetCount";
-            this.bRobotList_Reset.Location = new System.Drawing.Point(243, 3);
+            this.bRobotList_Reset.Location = new System.Drawing.Point(184, 2);
+            this.bRobotList_Reset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bRobotList_Reset.Name = "bRobotList_Reset";
-            this.bRobotList_Reset.Size = new System.Drawing.Size(114, 44);
+            this.bRobotList_Reset.Size = new System.Drawing.Size(87, 36);
             this.bRobotList_Reset.TabIndex = 17;
             this.bRobotList_Reset.Text = "重置计数";
             this.bRobotList_Reset.Type = AntdUI.TTypeMini.Warn;
@@ -103,9 +104,10 @@
             this.bDisableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bDisableAll.IconSvg = "CloseCircleOutlined";
             this.bDisableAll.LocalizationText = "DisableAll";
-            this.bDisableAll.Location = new System.Drawing.Point(123, 3);
+            this.bDisableAll.Location = new System.Drawing.Point(93, 2);
+            this.bDisableAll.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bDisableAll.Name = "bDisableAll";
-            this.bDisableAll.Size = new System.Drawing.Size(114, 44);
+            this.bDisableAll.Size = new System.Drawing.Size(87, 36);
             this.bDisableAll.TabIndex = 16;
             this.bDisableAll.Text = "全部禁用";
             this.bDisableAll.Type = AntdUI.TTypeMini.Error;
@@ -116,9 +118,10 @@
             this.bEnableAll.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bEnableAll.IconSvg = "CheckCircleOutlined";
             this.bEnableAll.LocalizationText = "EnableAll";
-            this.bEnableAll.Location = new System.Drawing.Point(3, 3);
+            this.bEnableAll.Location = new System.Drawing.Point(2, 2);
+            this.bEnableAll.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bEnableAll.Name = "bEnableAll";
-            this.bEnableAll.Size = new System.Drawing.Size(114, 44);
+            this.bEnableAll.Size = new System.Drawing.Size(87, 36);
             this.bEnableAll.TabIndex = 15;
             this.bEnableAll.Text = "全部启用";
             this.bEnableAll.Type = AntdUI.TTypeMini.Success;
@@ -131,10 +134,11 @@
             this.ddMenu.Ghost = true;
             this.ddMenu.IconRatio = 1F;
             this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(753, 3);
+            this.ddMenu.Location = new System.Drawing.Point(1066, 2);
+            this.ddMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
-            this.ddMenu.Size = new System.Drawing.Size(44, 44);
+            this.ddMenu.Size = new System.Drawing.Size(32, 36);
             this.ddMenu.TabIndex = 12;
             this.ddMenu.Trigger = AntdUI.Trigger.Hover;
             this.ddMenu.WaveSize = 0;
@@ -148,9 +152,10 @@
             this.bRobotList_Stop.Enabled = false;
             this.bRobotList_Stop.IconSvg = "PauseCircleOutlined";
             this.bRobotList_Stop.LocalizationText = "Stop";
-            this.bRobotList_Stop.Location = new System.Drawing.Point(451, 3);
+            this.bRobotList_Stop.Location = new System.Drawing.Point(342, 2);
+            this.bRobotList_Stop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bRobotList_Stop.Name = "bRobotList_Stop";
-            this.bRobotList_Stop.Size = new System.Drawing.Size(82, 44);
+            this.bRobotList_Stop.Size = new System.Drawing.Size(63, 36);
             this.bRobotList_Stop.TabIndex = 8;
             this.bRobotList_Stop.Text = "停止";
             this.bRobotList_Stop.Type = AntdUI.TTypeMini.Warn;
@@ -163,9 +168,10 @@
             this.bRobotList_Start.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRobotList_Start.IconSvg = "PlayCircleOutlined";
             this.bRobotList_Start.LocalizationText = "Execute";
-            this.bRobotList_Start.Location = new System.Drawing.Point(363, 3);
+            this.bRobotList_Start.Location = new System.Drawing.Point(275, 2);
+            this.bRobotList_Start.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bRobotList_Start.Name = "bRobotList_Start";
-            this.bRobotList_Start.Size = new System.Drawing.Size(82, 44);
+            this.bRobotList_Start.Size = new System.Drawing.Size(63, 36);
             this.bRobotList_Start.TabIndex = 7;
             this.bRobotList_Start.Text = "执行";
             this.bRobotList_Start.Type = AntdUI.TTypeMini.Primary;
@@ -177,10 +183,11 @@
             this.tRobotList.CellImpactHeight = false;
             this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tRobotList.Gap = 12;
-            this.tRobotList.Location = new System.Drawing.Point(3, 53);
+            this.tRobotList.Location = new System.Drawing.Point(2, 42);
+            this.tRobotList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tRobotList.MultipleRows = true;
             this.tRobotList.Name = "tRobotList";
-            this.tRobotList.Size = new System.Drawing.Size(794, 744);
+            this.tRobotList.Size = new System.Drawing.Size(1096, 756);
             this.tRobotList.TabIndex = 1;
             this.tRobotList.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellClick);
             this.tRobotList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tRobotList_CellButtonClick);
@@ -194,14 +201,14 @@
             // 
             // RobotList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tlpRobotList);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "RobotList";
-            this.Size = new System.Drawing.Size(800, 800);
+            this.Size = new System.Drawing.Size(1100, 800);
             this.Load += new System.EventHandler(this.RobotList_Load);
             this.tlpRobotList.ResumeLayout(false);
             this.tlpRobotListButton.ResumeLayout(false);

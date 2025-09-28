@@ -86,7 +86,7 @@ namespace WinsockPacketEditor
                 }.SetLocalizationTitleID("Table.RobotINST.Column."),
             };
 
-            this.tRobotInstruction.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tRobotInstruction.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tRobotInstruction.Binding(this.RInstruction);
         }
 

@@ -30,6 +30,7 @@ namespace WinsockPacketEditor
             this.lWinsockInfo.Text = Operate.ProcessConfig.GetInjectWinsockInfo();
             this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
             this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.splitterPacketList.SplitterWidth = 5;
 
             this.InitMenu();
             this.InitTable_PacketList();
@@ -200,7 +201,7 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };
 
-            this.tPacketList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tPacketList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tPacketList.Binding(Operate.PacketConfig.List.lstPacketInfo);
         }
 
