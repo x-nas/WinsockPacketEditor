@@ -320,7 +320,7 @@
             this.aStartForm.Location = new System.Drawing.Point(23, 17);
             this.aStartForm.Margin = new System.Windows.Forms.Padding(2);
             this.aStartForm.Name = "aStartForm";
-            this.aStartForm.Radius = 10;
+            this.aStartForm.Radius = 8;
             this.aStartForm.Size = new System.Drawing.Size(954, 146);
             this.aStartForm.TabIndex = 0;
             this.aStartForm.Text = "";
