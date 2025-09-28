@@ -89,7 +89,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(468, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -103,7 +103,7 @@
             this.splitterModification.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterModification.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitterModification.Location = new System.Drawing.Point(2, 2);
-            this.splitterModification.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.splitterModification.Margin = new System.Windows.Forms.Padding(2);
             this.splitterModification.Name = "splitterModification";
             this.splitterModification.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -146,7 +146,7 @@
             this.txtPacketData_New.AutoScroll = true;
             this.txtPacketData_New.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPacketData_New.Location = new System.Drawing.Point(500, 38);
-            this.txtPacketData_New.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPacketData_New.Margin = new System.Windows.Forms.Padding(2);
             this.txtPacketData_New.Multiline = true;
             this.txtPacketData_New.Name = "txtPacketData_New";
             this.txtPacketData_New.ReadOnly = true;
@@ -158,7 +158,7 @@
             this.lPacketData_New.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPacketData_New.LocalizationText = "PacketModificationForm.Modified";
             this.lPacketData_New.Location = new System.Drawing.Point(500, 2);
-            this.lPacketData_New.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lPacketData_New.Margin = new System.Windows.Forms.Padding(2);
             this.lPacketData_New.Name = "lPacketData_New";
             this.lPacketData_New.Size = new System.Drawing.Size(494, 32);
             this.lPacketData_New.TabIndex = 4;
@@ -170,7 +170,7 @@
             this.lPacketData_Raw.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPacketData_Raw.LocalizationText = "PacketModificationForm.Raw";
             this.lPacketData_Raw.Location = new System.Drawing.Point(2, 2);
-            this.lPacketData_Raw.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lPacketData_Raw.Margin = new System.Windows.Forms.Padding(2);
             this.lPacketData_Raw.Name = "lPacketData_Raw";
             this.lPacketData_Raw.Size = new System.Drawing.Size(494, 32);
             this.lPacketData_Raw.TabIndex = 3;
@@ -182,7 +182,7 @@
             this.txtPacketData_Raw.AutoScroll = true;
             this.txtPacketData_Raw.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPacketData_Raw.Location = new System.Drawing.Point(2, 38);
-            this.txtPacketData_Raw.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPacketData_Raw.Margin = new System.Windows.Forms.Padding(2);
             this.txtPacketData_Raw.Multiline = true;
             this.txtPacketData_Raw.Name = "txtPacketData_Raw";
             this.txtPacketData_Raw.ReadOnly = true;
@@ -192,11 +192,13 @@
             // tPacketModification
             // 
             this.tPacketModification.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tPacketModification.Gap = 12;
+            this.tPacketModification.Gap = 8;
+            this.tPacketModification.GapCell = 5;
+            this.tPacketModification.Gaps = new System.Drawing.Size(8, 8);
             this.tPacketModification.Location = new System.Drawing.Point(0, 0);
-            this.tPacketModification.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tPacketModification.Margin = new System.Windows.Forms.Padding(2);
             this.tPacketModification.Name = "tPacketModification";
-            this.tPacketModification.Size = new System.Drawing.Size(996, 268);
+            this.tPacketModification.Size = new System.Drawing.Size(996, 266);
             this.tPacketModification.TabIndex = 0;
             this.tPacketModification.Text = "table1";
             this.tPacketModification.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tPacketModification_CellButtonClick);
@@ -209,7 +211,7 @@
             this.Controls.Add(this.tlpModification);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PacketModification";
             this.Size = new System.Drawing.Size(1000, 700);
             this.Load += new System.EventHandler(this.PacketModification_Load);

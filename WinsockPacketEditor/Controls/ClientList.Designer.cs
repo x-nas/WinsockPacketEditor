@@ -60,7 +60,7 @@
             this.splitterClientList.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterClientList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitterClientList.Location = new System.Drawing.Point(2, 2);
-            this.splitterClientList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.splitterClientList.Margin = new System.Windows.Forms.Padding(2);
             this.splitterClientList.Name = "splitterClientList";
             // 
             // splitterClientList.Panel1
@@ -82,7 +82,7 @@
             // 
             this.treeClientList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeClientList.Location = new System.Drawing.Point(0, 0);
-            this.treeClientList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.treeClientList.Margin = new System.Windows.Forms.Padding(2);
             this.treeClientList.Name = "treeClientList";
             this.treeClientList.Size = new System.Drawing.Size(270, 596);
             this.treeClientList.TabIndex = 0;
@@ -92,11 +92,13 @@
             this.tAuthList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tAuthList.CellImpactHeight = false;
             this.tAuthList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tAuthList.Gap = 12;
+            this.tAuthList.Gap = 8;
+            this.tAuthList.GapCell = 5;
+            this.tAuthList.Gaps = new System.Drawing.Size(8, 8);
             this.tAuthList.Location = new System.Drawing.Point(0, 0);
-            this.tAuthList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tAuthList.Margin = new System.Windows.Forms.Padding(2);
             this.tAuthList.Name = "tAuthList";
-            this.tAuthList.Size = new System.Drawing.Size(819, 596);
+            this.tAuthList.Size = new System.Drawing.Size(816, 596);
             this.tAuthList.TabIndex = 9;
             // 
             // ClientList
@@ -106,7 +108,7 @@
             this.Controls.Add(this.tlpClientList);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ClientList";
             this.Size = new System.Drawing.Size(1100, 600);
             this.Load += new System.EventHandler(this.ClientList_Load);

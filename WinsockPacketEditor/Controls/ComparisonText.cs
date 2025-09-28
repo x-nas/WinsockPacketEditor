@@ -22,6 +22,8 @@ namespace WinsockPacketEditor
         private void ComparisonText_Load(object sender, EventArgs e)
         {
             this.tabComparisonText.SelectTab(0);
+            this.splitterComparison.SplitterWidth = 5;
+            this.splitterDuplicate.SplitterWidth = 5;
 
             this.InitTable_Comparison();
             this.InitTable_Duplicate();

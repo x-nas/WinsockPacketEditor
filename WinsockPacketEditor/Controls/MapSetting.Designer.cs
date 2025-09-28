@@ -74,7 +74,7 @@
             this.tlpMapSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tlpMapSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tlpMapSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpMapSettings.Size = new System.Drawing.Size(800, 700);
+            this.tlpMapSettings.Size = new System.Drawing.Size(500, 700);
             this.tlpMapSettings.TabIndex = 2;
             // 
             // tMapRemote
@@ -85,12 +85,12 @@
             this.tMapRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tMapRemote.EmptyHeader = true;
             this.tMapRemote.Gap = 8;
-            this.tMapRemote.GapCell = 0;
+            this.tMapRemote.GapCell = 5;
             this.tMapRemote.Gaps = new System.Drawing.Size(8, 8);
             this.tMapRemote.Location = new System.Drawing.Point(2, 403);
             this.tMapRemote.Margin = new System.Windows.Forms.Padding(2);
             this.tMapRemote.Name = "tMapRemote";
-            this.tMapRemote.Size = new System.Drawing.Size(796, 245);
+            this.tMapRemote.Size = new System.Drawing.Size(496, 245);
             this.tMapRemote.TabIndex = 11;
             this.tMapRemote.CellClick += new AntdUI.Table.ClickEventHandler(this.tMapRemote_CellClick);
             this.tMapRemote.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tMapRemote_CellButtonUp);
@@ -112,7 +112,7 @@
             this.tlpMapRemote.RowCount = 2;
             this.tlpMapRemote.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMapRemote.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMapRemote.Size = new System.Drawing.Size(800, 45);
+            this.tlpMapRemote.Size = new System.Drawing.Size(500, 45);
             this.tlpMapRemote.TabIndex = 10;
             // 
             // ddMenu_MapRemote
@@ -122,7 +122,7 @@
             this.ddMenu_MapRemote.Ghost = true;
             this.ddMenu_MapRemote.IconRatio = 1F;
             this.ddMenu_MapRemote.IconSvg = "PlusOutlined";
-            this.ddMenu_MapRemote.Location = new System.Drawing.Point(766, 2);
+            this.ddMenu_MapRemote.Location = new System.Drawing.Point(466, 2);
             this.ddMenu_MapRemote.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu_MapRemote.MaxCount = 10;
             this.ddMenu_MapRemote.Name = "ddMenu_MapRemote";
@@ -163,7 +163,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(800, 50);
+            this.tlpButton.Size = new System.Drawing.Size(500, 50);
             this.tlpButton.TabIndex = 3;
             // 
             // bSave
@@ -173,7 +173,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(328, 6);
+            this.bSave.Location = new System.Drawing.Point(178, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -189,7 +189,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(409, 6);
+            this.bExit.Location = new System.Drawing.Point(259, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -207,7 +207,7 @@
             this.dMapLocal.Margin = new System.Windows.Forms.Padding(2);
             this.dMapLocal.Name = "dMapLocal";
             this.dMapLocal.Orientation = AntdUI.TOrientation.Left;
-            this.dMapLocal.Size = new System.Drawing.Size(796, 19);
+            this.dMapLocal.Size = new System.Drawing.Size(496, 19);
             this.dMapLocal.TabIndex = 4;
             this.dMapLocal.Text = "本地映射";
             // 
@@ -220,7 +220,7 @@
             this.dMapRemote.Margin = new System.Windows.Forms.Padding(2);
             this.dMapRemote.Name = "dMapRemote";
             this.dMapRemote.Orientation = AntdUI.TOrientation.Left;
-            this.dMapRemote.Size = new System.Drawing.Size(796, 19);
+            this.dMapRemote.Size = new System.Drawing.Size(496, 19);
             this.dMapRemote.TabIndex = 6;
             this.dMapRemote.Text = "远程映射";
             // 
@@ -232,12 +232,12 @@
             this.tMapLocal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tMapLocal.EmptyHeader = true;
             this.tMapLocal.Gap = 8;
-            this.tMapLocal.GapCell = 0;
+            this.tMapLocal.GapCell = 5;
             this.tMapLocal.Gaps = new System.Drawing.Size(8, 8);
             this.tMapLocal.Location = new System.Drawing.Point(2, 70);
             this.tMapLocal.Margin = new System.Windows.Forms.Padding(2);
             this.tMapLocal.Name = "tMapLocal";
-            this.tMapLocal.Size = new System.Drawing.Size(796, 245);
+            this.tMapLocal.Size = new System.Drawing.Size(496, 245);
             this.tMapLocal.TabIndex = 8;
             this.tMapLocal.CellClick += new AntdUI.Table.ClickEventHandler(this.tMapLocal_CellClick);
             this.tMapLocal.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tMapLocal_CellButtonClick);
@@ -259,7 +259,7 @@
             this.tlpMapLocal.RowCount = 2;
             this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMapLocal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMapLocal.Size = new System.Drawing.Size(800, 45);
+            this.tlpMapLocal.Size = new System.Drawing.Size(500, 45);
             this.tlpMapLocal.TabIndex = 9;
             // 
             // ddMenu_MapLocal
@@ -269,7 +269,7 @@
             this.ddMenu_MapLocal.Ghost = true;
             this.ddMenu_MapLocal.IconRatio = 1F;
             this.ddMenu_MapLocal.IconSvg = "PlusOutlined";
-            this.ddMenu_MapLocal.Location = new System.Drawing.Point(766, 2);
+            this.ddMenu_MapLocal.Location = new System.Drawing.Point(466, 2);
             this.ddMenu_MapLocal.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu_MapLocal.MaxCount = 10;
             this.ddMenu_MapLocal.Name = "ddMenu_MapLocal";
@@ -301,7 +301,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MapSetting";
-            this.Size = new System.Drawing.Size(800, 700);
+            this.Size = new System.Drawing.Size(500, 700);
             this.Load += new System.EventHandler(this.MapSetting_Load);
             this.tlpMapSettings.ResumeLayout(false);
             this.tlpMapRemote.ResumeLayout(false);

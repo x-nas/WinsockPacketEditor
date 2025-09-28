@@ -116,9 +116,9 @@
             this.pPacketData.Controls.Add(this.hbPacketEdit);
             this.pPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pPacketData.Location = new System.Drawing.Point(2, 38);
-            this.pPacketData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pPacketData.Margin = new System.Windows.Forms.Padding(2);
             this.pPacketData.Name = "pPacketData";
-            this.pPacketData.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pPacketData.Padding = new System.Windows.Forms.Padding(2);
             this.pPacketData.Radius = 10;
             this.pPacketData.Size = new System.Drawing.Size(1096, 449);
             this.pPacketData.TabIndex = 49;
@@ -132,7 +132,7 @@
             this.hbPacketEdit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hbPacketEdit.LineInfoVisible = true;
             this.hbPacketEdit.Location = new System.Drawing.Point(4, 4);
-            this.hbPacketEdit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.hbPacketEdit.Margin = new System.Windows.Forms.Padding(2);
             this.hbPacketEdit.Name = "hbPacketEdit";
             this.hbPacketEdit.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
             this.hbPacketEdit.Size = new System.Drawing.Size(1088, 441);
@@ -180,7 +180,7 @@
             this.lSend_Fail_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend_Fail_CNT.ForeColor = System.Drawing.Color.Red;
             this.lSend_Fail_CNT.Location = new System.Drawing.Point(173, 2);
-            this.lSend_Fail_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lSend_Fail_CNT.Margin = new System.Windows.Forms.Padding(2);
             this.lSend_Fail_CNT.Name = "lSend_Fail_CNT";
             this.lSend_Fail_CNT.Size = new System.Drawing.Size(8, 32);
             this.lSend_Fail_CNT.TabIndex = 14;
@@ -193,7 +193,7 @@
             this.lSend_Success_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend_Success_CNT.ForeColor = System.Drawing.Color.Green;
             this.lSend_Success_CNT.Location = new System.Drawing.Point(117, 2);
-            this.lSend_Success_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lSend_Success_CNT.Margin = new System.Windows.Forms.Padding(2);
             this.lSend_Success_CNT.Name = "lSend_Success_CNT";
             this.lSend_Success_CNT.Size = new System.Drawing.Size(8, 32);
             this.lSend_Success_CNT.TabIndex = 13;
@@ -206,7 +206,7 @@
             this.lTotal_Send_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lTotal_Send_CNT.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             this.lTotal_Send_CNT.Location = new System.Drawing.Point(61, 2);
-            this.lTotal_Send_CNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lTotal_Send_CNT.Margin = new System.Windows.Forms.Padding(2);
             this.lTotal_Send_CNT.Name = "lTotal_Send_CNT";
             this.lTotal_Send_CNT.Size = new System.Drawing.Size(8, 32);
             this.lTotal_Send_CNT.TabIndex = 12;
@@ -219,7 +219,7 @@
             this.lSplit2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSplit2.ForeColor = System.Drawing.Color.Silver;
             this.lSplit2.Location = new System.Drawing.Point(129, 2);
-            this.lSplit2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lSplit2.Margin = new System.Windows.Forms.Padding(2);
             this.lSplit2.Name = "lSplit2";
             this.lSplit2.Size = new System.Drawing.Size(5, 32);
             this.lSplit2.TabIndex = 9;
@@ -233,7 +233,7 @@
             this.lSplit1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSplit1.ForeColor = System.Drawing.Color.Silver;
             this.lSplit1.Location = new System.Drawing.Point(73, 2);
-            this.lSplit1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lSplit1.Margin = new System.Windows.Forms.Padding(2);
             this.lSplit1.Name = "lSplit1";
             this.lSplit1.Size = new System.Drawing.Size(5, 32);
             this.lSplit1.TabIndex = 8;
@@ -247,7 +247,7 @@
             this.lSend_Fail.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend_Fail.LocalizationText = "SendEditForm.SendFailure";
             this.lSend_Fail.Location = new System.Drawing.Point(138, 2);
-            this.lSend_Fail.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lSend_Fail.Margin = new System.Windows.Forms.Padding(2);
             this.lSend_Fail.Name = "lSend_Fail";
             this.lSend_Fail.Size = new System.Drawing.Size(31, 32);
             this.lSend_Fail.TabIndex = 7;
@@ -260,7 +260,7 @@
             this.lSend_Success.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lSend_Success.LocalizationText = "SendEditForm.SendSuccess";
             this.lSend_Success.Location = new System.Drawing.Point(82, 2);
-            this.lSend_Success.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lSend_Success.Margin = new System.Windows.Forms.Padding(2);
             this.lSend_Success.Name = "lSend_Success";
             this.lSend_Success.Size = new System.Drawing.Size(31, 32);
             this.lSend_Success.TabIndex = 6;
@@ -273,7 +273,7 @@
             this.lTotal_Send.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lTotal_Send.LocalizationText = "SendEditForm.TotalSend";
             this.lTotal_Send.Location = new System.Drawing.Point(2, 2);
-            this.lTotal_Send.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lTotal_Send.Margin = new System.Windows.Forms.Padding(2);
             this.lTotal_Send.Name = "lTotal_Send";
             this.lTotal_Send.Size = new System.Drawing.Size(55, 32);
             this.lTotal_Send.TabIndex = 5;
@@ -320,7 +320,7 @@
             this.bStop.LoadingWaveVertical = true;
             this.bStop.LocalizationText = "Stop";
             this.bStop.Location = new System.Drawing.Point(478, 6);
-            this.bStop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bStop.Margin = new System.Windows.Forms.Padding(2);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(63, 37);
             this.bStop.TabIndex = 3;
@@ -341,7 +341,7 @@
             this.bSend.LoadingWaveVertical = true;
             this.bSend.LocalizationText = "Send";
             this.bSend.Location = new System.Drawing.Point(397, 6);
-            this.bSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSend.Margin = new System.Windows.Forms.Padding(2);
             this.bSend.Name = "bSend";
             this.bSend.Size = new System.Drawing.Size(63, 37);
             this.bSend.TabIndex = 2;
@@ -362,7 +362,7 @@
             this.bSave.LoadingWaveVertical = true;
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(559, 6);
-            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
@@ -378,7 +378,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(640, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -410,7 +410,7 @@
             this.pProgression.Controls.Add(this.tlpProgression);
             this.pProgression.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pProgression.Location = new System.Drawing.Point(728, 2);
-            this.pProgression.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pProgression.Margin = new System.Windows.Forms.Padding(2);
             this.pProgression.Name = "pProgression";
             this.pProgression.Radius = 10;
             this.pProgression.Size = new System.Drawing.Size(370, 158);
@@ -447,7 +447,7 @@
             this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 28);
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel4.Padding = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel4.RowCount = 4;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -461,7 +461,7 @@
             this.nudProgressionCarry.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionCarry.LocalizationSuffixText = "FilterEditForm.StartFrom.Progression.Digits";
             this.nudProgressionCarry.Location = new System.Drawing.Point(88, 82);
-            this.nudProgressionCarry.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudProgressionCarry.Margin = new System.Windows.Forms.Padding(2);
             this.nudProgressionCarry.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -490,7 +490,7 @@
             this.cbProgressionCarry.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbProgressionCarry.LocalizationText = "FilterEditForm.StartFrom.Progression.Carry";
             this.cbProgressionCarry.Location = new System.Drawing.Point(4, 82);
-            this.cbProgressionCarry.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbProgressionCarry.Margin = new System.Windows.Forms.Padding(2);
             this.cbProgressionCarry.Name = "cbProgressionCarry";
             this.cbProgressionCarry.Size = new System.Drawing.Size(80, 32);
             this.cbProgressionCarry.TabIndex = 44;
@@ -502,7 +502,7 @@
             this.cbProgressionPosition.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbProgressionPosition.LocalizationText = "Enable";
             this.cbProgressionPosition.Location = new System.Drawing.Point(4, 4);
-            this.cbProgressionPosition.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbProgressionPosition.Margin = new System.Windows.Forms.Padding(2);
             this.cbProgressionPosition.Name = "cbProgressionPosition";
             this.cbProgressionPosition.Size = new System.Drawing.Size(80, 32);
             this.cbProgressionPosition.TabIndex = 40;
@@ -514,7 +514,7 @@
             this.nudProgressionPosition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionPosition.LocalizationSuffixText = "Position";
             this.nudProgressionPosition.Location = new System.Drawing.Point(88, 4);
-            this.nudProgressionPosition.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudProgressionPosition.Margin = new System.Windows.Forms.Padding(2);
             this.nudProgressionPosition.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -543,7 +543,7 @@
             this.nudProgressionStep.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudProgressionStep.LocalizationSuffixText = "FilterEditForm.StartFrom.Progression.Step";
             this.nudProgressionStep.Location = new System.Drawing.Point(88, 44);
-            this.nudProgressionStep.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudProgressionStep.Margin = new System.Windows.Forms.Padding(2);
             this.nudProgressionStep.Maximum = new decimal(new int[] {
             255,
             0,
@@ -569,10 +569,10 @@
             // dProgression
             // 
             this.dProgression.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dProgression.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dProgression.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dProgression.LocalizationText = "FilterEditForm.Progression";
             this.dProgression.Location = new System.Drawing.Point(2, 2);
-            this.dProgression.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dProgression.Margin = new System.Windows.Forms.Padding(2);
             this.dProgression.Name = "dProgression";
             this.dProgression.Orientation = AntdUI.TOrientation.Left;
             this.dProgression.Size = new System.Drawing.Size(362, 24);
@@ -585,7 +585,7 @@
             this.pPacketSend.Controls.Add(this.tlpPacketSend);
             this.pPacketSend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pPacketSend.Location = new System.Drawing.Point(365, 2);
-            this.pPacketSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pPacketSend.Margin = new System.Windows.Forms.Padding(2);
             this.pPacketSend.Name = "pPacketSend";
             this.pPacketSend.Radius = 10;
             this.pPacketSend.Size = new System.Drawing.Size(359, 158);
@@ -622,7 +622,7 @@
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 28);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel2.RowCount = 3;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -636,7 +636,7 @@
             this.rbSendType_Continuously.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSendType_Continuously.LocalizationText = "PacketEditForm.Send.Continuously";
             this.rbSendType_Continuously.Location = new System.Drawing.Point(4, 44);
-            this.rbSendType_Continuously.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbSendType_Continuously.Margin = new System.Windows.Forms.Padding(2);
             this.rbSendType_Continuously.Name = "rbSendType_Continuously";
             this.rbSendType_Continuously.Size = new System.Drawing.Size(80, 32);
             this.rbSendType_Continuously.TabIndex = 45;
@@ -647,7 +647,7 @@
             this.nudSendType_Times.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudSendType_Times.LocalizationSuffixText = "Times";
             this.nudSendType_Times.Location = new System.Drawing.Point(88, 4);
-            this.nudSendType_Times.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudSendType_Times.Margin = new System.Windows.Forms.Padding(2);
             this.nudSendType_Times.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -676,7 +676,7 @@
             this.nudSendType_Interval.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudSendType_Interval.LocalizationSuffixText = "Millisecond";
             this.nudSendType_Interval.Location = new System.Drawing.Point(88, 44);
-            this.nudSendType_Interval.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudSendType_Interval.Margin = new System.Windows.Forms.Padding(2);
             this.nudSendType_Interval.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -706,7 +706,7 @@
             this.rbSendType_Times.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSendType_Times.LocalizationText = "PacketEditForm.Send.ByTime";
             this.rbSendType_Times.Location = new System.Drawing.Point(4, 4);
-            this.rbSendType_Times.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbSendType_Times.Margin = new System.Windows.Forms.Padding(2);
             this.rbSendType_Times.Name = "rbSendType_Times";
             this.rbSendType_Times.Size = new System.Drawing.Size(80, 32);
             this.rbSendType_Times.TabIndex = 44;
@@ -716,10 +716,10 @@
             // dPacketSend
             // 
             this.dPacketSend.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dPacketSend.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dPacketSend.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dPacketSend.LocalizationText = "Send";
             this.dPacketSend.Location = new System.Drawing.Point(2, 2);
-            this.dPacketSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dPacketSend.Margin = new System.Windows.Forms.Padding(2);
             this.dPacketSend.Name = "dPacketSend";
             this.dPacketSend.Orientation = AntdUI.TOrientation.Left;
             this.dPacketSend.Size = new System.Drawing.Size(351, 24);
@@ -732,7 +732,7 @@
             this.pPacketSocket.Controls.Add(this.tlpPacketSocket);
             this.pPacketSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pPacketSocket.Location = new System.Drawing.Point(2, 2);
-            this.pPacketSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pPacketSocket.Margin = new System.Windows.Forms.Padding(2);
             this.pPacketSocket.Name = "pPacketSocket";
             this.pPacketSocket.Radius = 10;
             this.pPacketSocket.Size = new System.Drawing.Size(359, 158);
@@ -770,7 +770,7 @@
             this.tlpFilterProgression.Location = new System.Drawing.Point(0, 28);
             this.tlpFilterProgression.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFilterProgression.Name = "tlpFilterProgression";
-            this.tlpFilterProgression.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tlpFilterProgression.Padding = new System.Windows.Forms.Padding(2);
             this.tlpFilterProgression.RowCount = 4;
             this.tlpFilterProgression.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterProgression.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -783,7 +783,7 @@
             // 
             this.nudPacketLength.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudPacketLength.Location = new System.Drawing.Point(75, 76);
-            this.nudPacketLength.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudPacketLength.Margin = new System.Windows.Forms.Padding(2);
             this.nudPacketLength.Minimum = new decimal(new int[] {
             0,
             0,
@@ -807,7 +807,7 @@
             this.lPacketLength.Dock = System.Windows.Forms.DockStyle.Right;
             this.lPacketLength.LocalizationText = "PacketEditForm.Length";
             this.lPacketLength.Location = new System.Drawing.Point(40, 76);
-            this.lPacketLength.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lPacketLength.Margin = new System.Windows.Forms.Padding(2);
             this.lPacketLength.Name = "lPacketLength";
             this.lPacketLength.Size = new System.Drawing.Size(31, 32);
             this.lPacketLength.TabIndex = 47;
@@ -820,7 +820,7 @@
             this.lPacketTo.Dock = System.Windows.Forms.DockStyle.Right;
             this.lPacketTo.LocalizationText = "PacketEditForm.ToAddr";
             this.lPacketTo.Location = new System.Drawing.Point(16, 40);
-            this.lPacketTo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lPacketTo.Margin = new System.Windows.Forms.Padding(2);
             this.lPacketTo.Name = "lPacketTo";
             this.lPacketTo.Size = new System.Drawing.Size(55, 32);
             this.lPacketTo.TabIndex = 45;
@@ -831,7 +831,7 @@
             // 
             this.nudPacketSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudPacketSocket.Location = new System.Drawing.Point(75, 4);
-            this.nudPacketSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudPacketSocket.Margin = new System.Windows.Forms.Padding(2);
             this.nudPacketSocket.Minimum = new decimal(new int[] {
             1,
             0,
@@ -855,7 +855,7 @@
             this.lPacketSocket.Dock = System.Windows.Forms.DockStyle.Right;
             this.lPacketSocket.LocalizationText = "PacketEditForm.UseSocket";
             this.lPacketSocket.Location = new System.Drawing.Point(4, 4);
-            this.lPacketSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lPacketSocket.Margin = new System.Windows.Forms.Padding(2);
             this.lPacketSocket.Name = "lPacketSocket";
             this.lPacketSocket.Size = new System.Drawing.Size(67, 32);
             this.lPacketSocket.TabIndex = 44;
@@ -866,7 +866,7 @@
             // 
             this.txtPacketTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPacketTo.Location = new System.Drawing.Point(75, 40);
-            this.txtPacketTo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPacketTo.Margin = new System.Windows.Forms.Padding(2);
             this.txtPacketTo.Name = "txtPacketTo";
             this.txtPacketTo.ReadOnly = true;
             this.txtPacketTo.Size = new System.Drawing.Size(276, 32);
@@ -876,10 +876,10 @@
             // dPacketSocket
             // 
             this.dPacketSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dPacketSocket.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dPacketSocket.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dPacketSocket.LocalizationText = "Socket";
             this.dPacketSocket.Location = new System.Drawing.Point(2, 2);
-            this.dPacketSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dPacketSocket.Margin = new System.Windows.Forms.Padding(2);
             this.dPacketSocket.Name = "dPacketSocket";
             this.dPacketSocket.Orientation = AntdUI.TOrientation.Left;
             this.dPacketSocket.Size = new System.Drawing.Size(351, 24);
@@ -901,7 +901,7 @@
             this.Controls.Add(this.tlpPacketEdit);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PacketEdit";
             this.Size = new System.Drawing.Size(1100, 700);
             this.Load += new System.EventHandler(this.PacketEdit_Load);

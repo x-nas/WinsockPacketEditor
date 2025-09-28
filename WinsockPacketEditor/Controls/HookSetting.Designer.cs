@@ -88,7 +88,7 @@
             this.tlpHookSettings.RowCount = 2;
             this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpHookSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpHookSettings.Size = new System.Drawing.Size(500, 700);
+            this.tlpHookSettings.Size = new System.Drawing.Size(350, 700);
             this.tlpHookSettings.TabIndex = 1;
             // 
             // tlpButton
@@ -109,7 +109,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(500, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 49);
             this.tlpButton.TabIndex = 4;
             // 
             // bSave
@@ -119,7 +119,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(178, 6);
+            this.bSave.Location = new System.Drawing.Point(103, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -135,7 +135,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(259, 6);
+            this.bExit.Location = new System.Drawing.Point(184, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -146,17 +146,16 @@
             // 
             // tabHookSettings
             // 
-            this.tabHookSettings.Controls.Add(this.tpProxyMode);
             this.tabHookSettings.Controls.Add(this.tpInjectMode);
-            this.tabHookSettings.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabHookSettings.Controls.Add(this.tpProxyMode);
+            this.tabHookSettings.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabHookSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabHookSettings.Location = new System.Drawing.Point(2, 2);
             this.tabHookSettings.Margin = new System.Windows.Forms.Padding(2);
             this.tabHookSettings.Name = "tabHookSettings";
             this.tabHookSettings.Pages.Add(this.tpInjectMode);
             this.tabHookSettings.Pages.Add(this.tpProxyMode);
-            this.tabHookSettings.SelectedIndex = 1;
-            this.tabHookSettings.Size = new System.Drawing.Size(496, 647);
+            this.tabHookSettings.Size = new System.Drawing.Size(346, 647);
             this.tabHookSettings.Style = styleLine1;
             this.tabHookSettings.TabIndex = 0;
             this.tabHookSettings.Text = "tabs1";
@@ -168,7 +167,7 @@
             this.tpInjectMode.Location = new System.Drawing.Point(0, 28);
             this.tpInjectMode.Margin = new System.Windows.Forms.Padding(2);
             this.tpInjectMode.Name = "tpInjectMode";
-            this.tpInjectMode.Size = new System.Drawing.Size(496, 619);
+            this.tpInjectMode.Size = new System.Drawing.Size(346, 619);
             this.tpInjectMode.TabIndex = 0;
             this.tpInjectMode.Text = "tpInjectMode";
             // 
@@ -193,7 +192,7 @@
             this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpInjectMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpInjectMode.Size = new System.Drawing.Size(496, 619);
+            this.tlpInjectMode.Size = new System.Drawing.Size(346, 619);
             this.tlpInjectMode.TabIndex = 1;
             // 
             // tlpWS2
@@ -219,14 +218,14 @@
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpWS2.Size = new System.Drawing.Size(496, 444);
+            this.tlpWS2.Size = new System.Drawing.Size(346, 444);
             this.tlpWS2.TabIndex = 7;
             // 
             // cbHookWSA_RecvFrom
             // 
             this.cbHookWSA_RecvFrom.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbHookWSA_RecvFrom.LocalizationText = "HookSettingsForm.WSARecvFrom";
-            this.cbHookWSA_RecvFrom.Location = new System.Drawing.Point(250, 110);
+            this.cbHookWSA_RecvFrom.Location = new System.Drawing.Point(175, 110);
             this.cbHookWSA_RecvFrom.Margin = new System.Windows.Forms.Padding(2);
             this.cbHookWSA_RecvFrom.Name = "cbHookWSA_RecvFrom";
             this.cbHookWSA_RecvFrom.Size = new System.Drawing.Size(96, 32);
@@ -248,7 +247,7 @@
             // 
             this.cbHookWSA_SendTo.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbHookWSA_SendTo.LocalizationText = "HookSettingsForm.WSASendTo";
-            this.cbHookWSA_SendTo.Location = new System.Drawing.Point(250, 74);
+            this.cbHookWSA_SendTo.Location = new System.Drawing.Point(175, 74);
             this.cbHookWSA_SendTo.Margin = new System.Windows.Forms.Padding(2);
             this.cbHookWSA_SendTo.Name = "cbHookWSA_SendTo";
             this.cbHookWSA_SendTo.Size = new System.Drawing.Size(96, 32);
@@ -270,7 +269,7 @@
             // 
             this.cbHookWS2_RecvFrom.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbHookWS2_RecvFrom.LocalizationText = "HookSettingsForm.RecvFrom";
-            this.cbHookWS2_RecvFrom.Location = new System.Drawing.Point(250, 38);
+            this.cbHookWS2_RecvFrom.Location = new System.Drawing.Point(175, 38);
             this.cbHookWS2_RecvFrom.Margin = new System.Windows.Forms.Padding(2);
             this.cbHookWS2_RecvFrom.Name = "cbHookWS2_RecvFrom";
             this.cbHookWS2_RecvFrom.Size = new System.Drawing.Size(68, 32);
@@ -292,7 +291,7 @@
             // 
             this.cbHookWS2_SendTo.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbHookWS2_SendTo.LocalizationText = "HookSettingsForm.SendTo";
-            this.cbHookWS2_SendTo.Location = new System.Drawing.Point(250, 2);
+            this.cbHookWS2_SendTo.Location = new System.Drawing.Point(175, 2);
             this.cbHookWS2_SendTo.Margin = new System.Windows.Forms.Padding(2);
             this.cbHookWS2_SendTo.Name = "cbHookWS2_SendTo";
             this.cbHookWS2_SendTo.Size = new System.Drawing.Size(68, 32);
@@ -327,14 +326,14 @@
             this.tlpWS1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWS1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpWS1.Size = new System.Drawing.Size(496, 81);
+            this.tlpWS1.Size = new System.Drawing.Size(346, 81);
             this.tlpWS1.TabIndex = 5;
             // 
             // cbHookWS1_RecvFrom
             // 
             this.cbHookWS1_RecvFrom.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbHookWS1_RecvFrom.LocalizationText = "HookSettingsForm.RecvFrom1";
-            this.cbHookWS1_RecvFrom.Location = new System.Drawing.Point(250, 38);
+            this.cbHookWS1_RecvFrom.Location = new System.Drawing.Point(175, 38);
             this.cbHookWS1_RecvFrom.Margin = new System.Windows.Forms.Padding(2);
             this.cbHookWS1_RecvFrom.Name = "cbHookWS1_RecvFrom";
             this.cbHookWS1_RecvFrom.Size = new System.Drawing.Size(89, 32);
@@ -356,7 +355,7 @@
             // 
             this.cbHookWS1_SendTo.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbHookWS1_SendTo.LocalizationText = "HookSettingsForm.SendTo1";
-            this.cbHookWS1_SendTo.Location = new System.Drawing.Point(250, 2);
+            this.cbHookWS1_SendTo.Location = new System.Drawing.Point(175, 2);
             this.cbHookWS1_SendTo.Margin = new System.Windows.Forms.Padding(2);
             this.cbHookWS1_SendTo.Name = "cbHookWS1_SendTo";
             this.cbHookWS1_SendTo.Size = new System.Drawing.Size(89, 32);
@@ -382,7 +381,7 @@
             this.dWS1.Margin = new System.Windows.Forms.Padding(2);
             this.dWS1.Name = "dWS1";
             this.dWS1.Orientation = AntdUI.TOrientation.Left;
-            this.dWS1.Size = new System.Drawing.Size(492, 19);
+            this.dWS1.Size = new System.Drawing.Size(342, 19);
             this.dWS1.TabIndex = 4;
             this.dWS1.Text = "Winsock 1.1";
             // 
@@ -394,7 +393,7 @@
             this.dWS2.Margin = new System.Windows.Forms.Padding(2);
             this.dWS2.Name = "dWS2";
             this.dWS2.Orientation = AntdUI.TOrientation.Left;
-            this.dWS2.Size = new System.Drawing.Size(492, 19);
+            this.dWS2.Size = new System.Drawing.Size(342, 19);
             this.dWS2.TabIndex = 6;
             this.dWS2.Text = "Winsock 2.0";
             // 
@@ -405,7 +404,7 @@
             this.tpProxyMode.Location = new System.Drawing.Point(0, 28);
             this.tpProxyMode.Margin = new System.Windows.Forms.Padding(2);
             this.tpProxyMode.Name = "tpProxyMode";
-            this.tpProxyMode.Size = new System.Drawing.Size(496, 619);
+            this.tpProxyMode.Size = new System.Drawing.Size(346, 619);
             this.tpProxyMode.TabIndex = 1;
             this.tpProxyMode.Text = "tpProxyMode";
             // 
@@ -430,7 +429,7 @@
             this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyMode.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpProxyMode.Size = new System.Drawing.Size(496, 619);
+            this.tlpProxyMode.Size = new System.Drawing.Size(346, 619);
             this.tlpProxyMode.TabIndex = 2;
             // 
             // tlpUDP
@@ -450,14 +449,14 @@
             this.tlpUDP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tlpUDP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tlpUDP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpUDP.Size = new System.Drawing.Size(496, 444);
+            this.tlpUDP.Size = new System.Drawing.Size(346, 444);
             this.tlpUDP.TabIndex = 7;
             // 
             // cbUDP_Resp
             // 
             this.cbUDP_Resp.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbUDP_Resp.LocalizationText = "Response";
-            this.cbUDP_Resp.Location = new System.Drawing.Point(250, 2);
+            this.cbUDP_Resp.Location = new System.Drawing.Point(175, 2);
             this.cbUDP_Resp.Margin = new System.Windows.Forms.Padding(2);
             this.cbUDP_Resp.Name = "cbUDP_Resp";
             this.cbUDP_Resp.Size = new System.Drawing.Size(56, 32);
@@ -490,14 +489,14 @@
             this.tlpTCP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpTCP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTCP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpTCP.Size = new System.Drawing.Size(496, 81);
+            this.tlpTCP.Size = new System.Drawing.Size(346, 81);
             this.tlpTCP.TabIndex = 5;
             // 
             // cbTCP_Resp
             // 
             this.cbTCP_Resp.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbTCP_Resp.LocalizationText = "Response";
-            this.cbTCP_Resp.Location = new System.Drawing.Point(250, 2);
+            this.cbTCP_Resp.Location = new System.Drawing.Point(175, 2);
             this.cbTCP_Resp.Margin = new System.Windows.Forms.Padding(2);
             this.cbTCP_Resp.Name = "cbTCP_Resp";
             this.cbTCP_Resp.Size = new System.Drawing.Size(56, 32);
@@ -524,7 +523,7 @@
             this.dTCP.Margin = new System.Windows.Forms.Padding(2);
             this.dTCP.Name = "dTCP";
             this.dTCP.Orientation = AntdUI.TOrientation.Left;
-            this.dTCP.Size = new System.Drawing.Size(492, 19);
+            this.dTCP.Size = new System.Drawing.Size(342, 19);
             this.dTCP.TabIndex = 4;
             this.dTCP.Text = "TCP 协议";
             // 
@@ -537,7 +536,7 @@
             this.dUDP.Margin = new System.Windows.Forms.Padding(2);
             this.dUDP.Name = "dUDP";
             this.dUDP.Orientation = AntdUI.TOrientation.Left;
-            this.dUDP.Size = new System.Drawing.Size(492, 19);
+            this.dUDP.Size = new System.Drawing.Size(342, 19);
             this.dUDP.TabIndex = 6;
             this.dUDP.Text = "UDP 协议";
             // 
@@ -550,7 +549,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "HookSetting";
-            this.Size = new System.Drawing.Size(500, 700);
+            this.Size = new System.Drawing.Size(350, 700);
             this.Load += new System.EventHandler(this.HookSetting_Load);
             this.tlpHookSettings.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);

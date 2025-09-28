@@ -66,7 +66,7 @@
             this.tlpFLeachSettings.RowCount = 2;
             this.tlpFLeachSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFLeachSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpFLeachSettings.Size = new System.Drawing.Size(500, 700);
+            this.tlpFLeachSettings.Size = new System.Drawing.Size(350, 700);
             this.tlpFLeachSettings.TabIndex = 2;
             // 
             // tlpContent
@@ -102,7 +102,7 @@
             this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpContent.Size = new System.Drawing.Size(500, 651);
+            this.tlpContent.Size = new System.Drawing.Size(350, 651);
             this.tlpContent.TabIndex = 1;
             // 
             // txtCheckData
@@ -114,7 +114,7 @@
             this.txtCheckData.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckData.Name = "txtCheckData";
             this.txtCheckData.PlaceholderText = "十六进制带空格，支持 ; 分隔符";
-            this.txtCheckData.Size = new System.Drawing.Size(412, 36);
+            this.txtCheckData.Size = new System.Drawing.Size(262, 36);
             this.txtCheckData.TabIndex = 11;
             this.txtCheckData.TextChanged += new System.EventHandler(this.txtCheckData_TextChanged);
             // 
@@ -140,7 +140,7 @@
             this.txtCheckHead.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckHead.Name = "txtCheckHead";
             this.txtCheckHead.PlaceholderText = "十六进制带空格，支持 ; 分隔符";
-            this.txtCheckHead.Size = new System.Drawing.Size(412, 36);
+            this.txtCheckHead.Size = new System.Drawing.Size(262, 36);
             this.txtCheckHead.TabIndex = 9;
             this.txtCheckHead.TextChanged += new System.EventHandler(this.txtCheckHead_TextChanged);
             // 
@@ -166,7 +166,7 @@
             this.txtCheckPort.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckPort.Name = "txtCheckPort";
             this.txtCheckPort.PlaceholderText = "支持 ; 分隔符";
-            this.txtCheckPort.Size = new System.Drawing.Size(412, 36);
+            this.txtCheckPort.Size = new System.Drawing.Size(262, 36);
             this.txtCheckPort.TabIndex = 7;
             this.txtCheckPort.TextChanged += new System.EventHandler(this.txtCheckPort_TextChanged);
             // 
@@ -192,7 +192,7 @@
             this.txtCheckIP.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckIP.Name = "txtCheckIP";
             this.txtCheckIP.PlaceholderText = "支持 ; 分隔符";
-            this.txtCheckIP.Size = new System.Drawing.Size(412, 36);
+            this.txtCheckIP.Size = new System.Drawing.Size(262, 36);
             this.txtCheckIP.TabIndex = 5;
             this.txtCheckIP.TextChanged += new System.EventHandler(this.txtCheckIP_TextChanged);
             // 
@@ -218,7 +218,7 @@
             this.txtCheckLen.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckLen.Name = "txtCheckLen";
             this.txtCheckLen.PlaceholderText = "例如：0-99;100";
-            this.txtCheckLen.Size = new System.Drawing.Size(412, 36);
+            this.txtCheckLen.Size = new System.Drawing.Size(262, 36);
             this.txtCheckLen.TabIndex = 3;
             this.txtCheckLen.TextChanged += new System.EventHandler(this.txtCheckLen_TextChanged);
             // 
@@ -257,7 +257,7 @@
             this.txtCheckSocket.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckSocket.Name = "txtCheckSocket";
             this.txtCheckSocket.PlaceholderText = "支持 ; 分隔符";
-            this.txtCheckSocket.Size = new System.Drawing.Size(412, 36);
+            this.txtCheckSocket.Size = new System.Drawing.Size(262, 36);
             this.txtCheckSocket.TabIndex = 12;
             this.txtCheckSocket.TextChanged += new System.EventHandler(this.txtCheckSocket_TextChanged);
             // 
@@ -305,7 +305,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(500, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 49);
             this.tlpButton.TabIndex = 2;
             // 
             // bSave
@@ -315,7 +315,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(178, 6);
+            this.bSave.Location = new System.Drawing.Point(103, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -331,7 +331,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(259, 6);
+            this.bExit.Location = new System.Drawing.Point(184, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -349,7 +349,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LeachSetting";
-            this.Size = new System.Drawing.Size(500, 700);
+            this.Size = new System.Drawing.Size(350, 700);
             this.Load += new System.EventHandler(this.LeachSetting_Load);
             this.tlpFLeachSettings.ResumeLayout(false);
             this.tlpContent.ResumeLayout(false);

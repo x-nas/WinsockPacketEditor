@@ -53,7 +53,7 @@
             this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpFilterList.Size = new System.Drawing.Size(1100, 800);
+            this.tlpFilterList.Size = new System.Drawing.Size(1100, 700);
             this.tlpFilterList.TabIndex = 3;
             // 
             // tFilterList
@@ -61,12 +61,14 @@
             this.tFilterList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tFilterList.CellImpactHeight = false;
             this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tFilterList.Gap = 12;
+            this.tFilterList.Gap = 8;
+            this.tFilterList.GapCell = 5;
+            this.tFilterList.Gaps = new System.Drawing.Size(8, 8);
             this.tFilterList.Location = new System.Drawing.Point(2, 42);
-            this.tFilterList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tFilterList.Margin = new System.Windows.Forms.Padding(2);
             this.tFilterList.MultipleRows = true;
             this.tFilterList.Name = "tFilterList";
-            this.tFilterList.Size = new System.Drawing.Size(1096, 756);
+            this.tFilterList.Size = new System.Drawing.Size(1096, 656);
             this.tFilterList.TabIndex = 1;
             this.tFilterList.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterList_CellClick);
             this.tFilterList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tFilterList_CellButtonClick);
@@ -101,7 +103,7 @@
             this.bDisableAll.IconSvg = "CloseCircleOutlined";
             this.bDisableAll.LocalizationText = "DisableAll";
             this.bDisableAll.Location = new System.Drawing.Point(93, 2);
-            this.bDisableAll.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bDisableAll.Margin = new System.Windows.Forms.Padding(2);
             this.bDisableAll.Name = "bDisableAll";
             this.bDisableAll.Size = new System.Drawing.Size(87, 36);
             this.bDisableAll.TabIndex = 14;
@@ -117,7 +119,7 @@
             this.ddMenu.IconRatio = 1F;
             this.ddMenu.IconSvg = "PlusOutlined";
             this.ddMenu.Location = new System.Drawing.Point(1066, 2);
-            this.ddMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddMenu.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
             this.ddMenu.Size = new System.Drawing.Size(32, 36);
@@ -133,7 +135,7 @@
             this.bFilterList_Reset.IconSvg = "UndoOutlined";
             this.bFilterList_Reset.LocalizationText = "FilterList.ResetCount";
             this.bFilterList_Reset.Location = new System.Drawing.Point(184, 2);
-            this.bFilterList_Reset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bFilterList_Reset.Margin = new System.Windows.Forms.Padding(2);
             this.bFilterList_Reset.Name = "bFilterList_Reset";
             this.bFilterList_Reset.Size = new System.Drawing.Size(87, 36);
             this.bFilterList_Reset.TabIndex = 6;
@@ -147,7 +149,7 @@
             this.bEnableAll.IconSvg = "CheckCircleOutlined";
             this.bEnableAll.LocalizationText = "EnableAll";
             this.bEnableAll.Location = new System.Drawing.Point(2, 2);
-            this.bEnableAll.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bEnableAll.Margin = new System.Windows.Forms.Padding(2);
             this.bEnableAll.Name = "bEnableAll";
             this.bEnableAll.Size = new System.Drawing.Size(87, 36);
             this.bEnableAll.TabIndex = 13;
@@ -162,9 +164,9 @@
             this.Controls.Add(this.tlpFilterList);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FilterList";
-            this.Size = new System.Drawing.Size(1100, 800);
+            this.Size = new System.Drawing.Size(1100, 700);
             this.Load += new System.EventHandler(this.FilterList_Load);
             this.tlpFilterList.ResumeLayout(false);
             this.tlpFilterListButton.ResumeLayout(false);

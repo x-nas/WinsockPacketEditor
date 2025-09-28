@@ -102,7 +102,7 @@
             this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSystemSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpSystemSettings.Size = new System.Drawing.Size(500, 700);
+            this.tlpSystemSettings.Size = new System.Drawing.Size(350, 700);
             this.tlpSystemSettings.TabIndex = 1;
             // 
             // dFloatButton
@@ -114,7 +114,7 @@
             this.dFloatButton.Margin = new System.Windows.Forms.Padding(2);
             this.dFloatButton.Name = "dFloatButton";
             this.dFloatButton.Orientation = AntdUI.TOrientation.Left;
-            this.dFloatButton.Size = new System.Drawing.Size(496, 19);
+            this.dFloatButton.Size = new System.Drawing.Size(346, 19);
             this.dFloatButton.TabIndex = 19;
             this.dFloatButton.Text = "悬浮按钮";
             // 
@@ -152,7 +152,7 @@
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterActionColor.Size = new System.Drawing.Size(500, 312);
+            this.tlpFilterActionColor.Size = new System.Drawing.Size(350, 312);
             this.tlpFilterActionColor.TabIndex = 18;
             // 
             // bChangeReset
@@ -349,7 +349,7 @@
             this.tlpFilterSet.RowCount = 2;
             this.tlpFilterSet.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterSet.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterSet.Size = new System.Drawing.Size(500, 57);
+            this.tlpFilterSet.Size = new System.Drawing.Size(350, 57);
             this.tlpFilterSet.TabIndex = 17;
             // 
             // rbFilterSet_Sequence
@@ -358,7 +358,7 @@
             this.rbFilterSet_Sequence.Checked = true;
             this.rbFilterSet_Sequence.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFilterSet_Sequence.LocalizationText = "SystemSettingsForm.Order";
-            this.rbFilterSet_Sequence.Location = new System.Drawing.Point(252, 2);
+            this.rbFilterSet_Sequence.Location = new System.Drawing.Point(177, 2);
             this.rbFilterSet_Sequence.Margin = new System.Windows.Forms.Padding(2);
             this.rbFilterSet_Sequence.Name = "rbFilterSet_Sequence";
             this.rbFilterSet_Sequence.Size = new System.Drawing.Size(92, 34);
@@ -395,7 +395,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(500, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 49);
             this.tlpButton.TabIndex = 16;
             // 
             // bSave
@@ -405,7 +405,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(178, 6);
+            this.bSave.Location = new System.Drawing.Point(103, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -421,7 +421,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(259, 6);
+            this.bExit.Location = new System.Drawing.Point(184, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -451,7 +451,7 @@
             this.dWorkMode.Margin = new System.Windows.Forms.Padding(2);
             this.dWorkMode.Name = "dWorkMode";
             this.dWorkMode.Orientation = AntdUI.TOrientation.Left;
-            this.dWorkMode.Size = new System.Drawing.Size(496, 19);
+            this.dWorkMode.Size = new System.Drawing.Size(346, 19);
             this.dWorkMode.TabIndex = 1;
             this.dWorkMode.Text = "工作模式";
             // 
@@ -464,7 +464,7 @@
             this.dListExecute.Margin = new System.Windows.Forms.Padding(2);
             this.dListExecute.Name = "dListExecute";
             this.dListExecute.Orientation = AntdUI.TOrientation.Left;
-            this.dListExecute.Size = new System.Drawing.Size(496, 19);
+            this.dListExecute.Size = new System.Drawing.Size(346, 19);
             this.dListExecute.TabIndex = 2;
             this.dListExecute.Text = "列表执行模式";
             // 
@@ -477,7 +477,7 @@
             this.dFilterSet.Margin = new System.Windows.Forms.Padding(2);
             this.dFilterSet.Name = "dFilterSet";
             this.dFilterSet.Orientation = AntdUI.TOrientation.Left;
-            this.dFilterSet.Size = new System.Drawing.Size(496, 19);
+            this.dFilterSet.Size = new System.Drawing.Size(346, 19);
             this.dFilterSet.TabIndex = 3;
             this.dFilterSet.Text = "滤镜执行模式";
             // 
@@ -490,7 +490,7 @@
             this.dFilterActionColor.Margin = new System.Windows.Forms.Padding(2);
             this.dFilterActionColor.Name = "dFilterActionColor";
             this.dFilterActionColor.Orientation = AntdUI.TOrientation.Left;
-            this.dFilterActionColor.Size = new System.Drawing.Size(496, 19);
+            this.dFilterActionColor.Size = new System.Drawing.Size(346, 19);
             this.dFilterActionColor.TabIndex = 4;
             this.dFilterActionColor.Text = "滤镜动作";
             // 
@@ -508,7 +508,7 @@
             this.tlpListExecute.RowCount = 2;
             this.tlpListExecute.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListExecute.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpListExecute.Size = new System.Drawing.Size(500, 57);
+            this.tlpListExecute.Size = new System.Drawing.Size(350, 57);
             this.tlpListExecute.TabIndex = 15;
             // 
             // rbListExecute_Sequence
@@ -517,7 +517,7 @@
             this.rbListExecute_Sequence.Checked = true;
             this.rbListExecute_Sequence.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbListExecute_Sequence.LocalizationText = "SystemSettingsForm.Order";
-            this.rbListExecute_Sequence.Location = new System.Drawing.Point(252, 2);
+            this.rbListExecute_Sequence.Location = new System.Drawing.Point(177, 2);
             this.rbListExecute_Sequence.Margin = new System.Windows.Forms.Padding(2);
             this.rbListExecute_Sequence.Name = "rbListExecute_Sequence";
             this.rbListExecute_Sequence.Size = new System.Drawing.Size(92, 34);
@@ -555,7 +555,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SystemSetting";
-            this.Size = new System.Drawing.Size(500, 700);
+            this.Size = new System.Drawing.Size(350, 700);
             this.Load += new System.EventHandler(this.SystemSetting_Load);
             this.tlpSystemSettings.ResumeLayout(false);
             this.tlpSystemSettings.PerformLayout();

@@ -64,6 +64,7 @@ namespace WinsockPacketEditor
                         break;
                 }
 
+                this.splitterModification.SplitterWidth = 5;
                 this.InitTable_Comparison();
                 this.Dark_Changed();
                 this.SetPacketInfo();

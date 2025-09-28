@@ -92,7 +92,7 @@
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpBackUpSettings.Size = new System.Drawing.Size(300, 700);
+            this.tlpBackUpSettings.Size = new System.Drawing.Size(350, 700);
             this.tlpBackUpSettings.TabIndex = 1;
             // 
             // dListInfo
@@ -104,7 +104,7 @@
             this.dListInfo.Margin = new System.Windows.Forms.Padding(2);
             this.dListInfo.Name = "dListInfo";
             this.dListInfo.Orientation = AntdUI.TOrientation.Left;
-            this.dListInfo.Size = new System.Drawing.Size(296, 19);
+            this.dListInfo.Size = new System.Drawing.Size(346, 19);
             this.dListInfo.TabIndex = 13;
             this.dListInfo.Text = "列表数据";
             // 
@@ -124,7 +124,7 @@
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpListInfo.Size = new System.Drawing.Size(300, 241);
+            this.tlpListInfo.Size = new System.Drawing.Size(350, 241);
             this.tlpListInfo.TabIndex = 12;
             // 
             // cbBackUp_RobotList
@@ -146,7 +146,7 @@
             this.cbBackUp_SendList.Checked = true;
             this.cbBackUp_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_SendList.LocalizationText = "SendList";
-            this.cbBackUp_SendList.Location = new System.Drawing.Point(152, 2);
+            this.cbBackUp_SendList.Location = new System.Drawing.Point(177, 2);
             this.cbBackUp_SendList.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_SendList.Name = "cbBackUp_SendList";
             this.cbBackUp_SendList.Size = new System.Drawing.Size(80, 34);
@@ -197,7 +197,7 @@
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton2.Size = new System.Drawing.Size(300, 49);
+            this.tlpButton2.Size = new System.Drawing.Size(350, 49);
             this.tlpButton2.TabIndex = 6;
             // 
             // bImport
@@ -207,7 +207,7 @@
             this.bImport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bImport.IconSvg = "ImportOutlined";
             this.bImport.LocalizationText = "Import";
-            this.bImport.Location = new System.Drawing.Point(54, 6);
+            this.bImport.Location = new System.Drawing.Point(79, 6);
             this.bImport.Margin = new System.Windows.Forms.Padding(2);
             this.bImport.Name = "bImport";
             this.bImport.Size = new System.Drawing.Size(87, 37);
@@ -223,7 +223,7 @@
             this.bExport.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExport.IconSvg = "ExportOutlined";
             this.bExport.LocalizationText = "Export";
-            this.bExport.Location = new System.Drawing.Point(159, 6);
+            this.bExport.Location = new System.Drawing.Point(184, 6);
             this.bExport.Margin = new System.Windows.Forms.Padding(2);
             this.bExport.Name = "bExport";
             this.bExport.Size = new System.Drawing.Size(87, 37);
@@ -247,7 +247,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(300, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 49);
             this.tlpButton.TabIndex = 5;
             // 
             // bExit
@@ -257,7 +257,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(118, 6);
+            this.bExit.Location = new System.Drawing.Point(143, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -275,7 +275,7 @@
             this.dSystemConfig.Margin = new System.Windows.Forms.Padding(2);
             this.dSystemConfig.Name = "dSystemConfig";
             this.dSystemConfig.Orientation = AntdUI.TOrientation.Left;
-            this.dSystemConfig.Size = new System.Drawing.Size(296, 19);
+            this.dSystemConfig.Size = new System.Drawing.Size(346, 19);
             this.dSystemConfig.TabIndex = 0;
             this.dSystemConfig.Text = "系统运行";
             // 
@@ -298,7 +298,7 @@
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBackUpContent.Size = new System.Drawing.Size(300, 81);
+            this.tlpBackUpContent.Size = new System.Drawing.Size(350, 81);
             this.tlpBackUpContent.TabIndex = 1;
             // 
             // cbBackUp_ProxyAccount
@@ -307,7 +307,7 @@
             this.cbBackUp_ProxyAccount.Checked = true;
             this.cbBackUp_ProxyAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxyAccount.LocalizationText = "BackUpSettingsForm.ProxyAccount";
-            this.cbBackUp_ProxyAccount.Location = new System.Drawing.Point(152, 2);
+            this.cbBackUp_ProxyAccount.Location = new System.Drawing.Point(177, 2);
             this.cbBackUp_ProxyAccount.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_ProxyAccount.Name = "cbBackUp_ProxyAccount";
             this.cbBackUp_ProxyAccount.Size = new System.Drawing.Size(80, 34);
@@ -349,7 +349,7 @@
             this.dProxyMode.Margin = new System.Windows.Forms.Padding(2);
             this.dProxyMode.Name = "dProxyMode";
             this.dProxyMode.Orientation = AntdUI.TOrientation.Left;
-            this.dProxyMode.Size = new System.Drawing.Size(296, 19);
+            this.dProxyMode.Size = new System.Drawing.Size(346, 19);
             this.dProxyMode.TabIndex = 7;
             this.dProxyMode.Text = "代理模式";
             // 
@@ -362,7 +362,7 @@
             this.dInjectMode.Margin = new System.Windows.Forms.Padding(2);
             this.dInjectMode.Name = "dInjectMode";
             this.dInjectMode.Orientation = AntdUI.TOrientation.Left;
-            this.dInjectMode.Size = new System.Drawing.Size(296, 19);
+            this.dInjectMode.Size = new System.Drawing.Size(346, 19);
             this.dInjectMode.TabIndex = 8;
             this.dInjectMode.Text = "注入模式";
             // 
@@ -387,7 +387,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "BackUpSetting";
-            this.Size = new System.Drawing.Size(300, 700);
+            this.Size = new System.Drawing.Size(350, 700);
             this.Load += new System.EventHandler(this.BackUpSetting_Load);
             this.tlpBackUpSettings.ResumeLayout(false);
             this.tlpBackUpSettings.PerformLayout();

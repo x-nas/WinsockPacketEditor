@@ -85,7 +85,7 @@
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpListSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpListSettings.Size = new System.Drawing.Size(500, 700);
+            this.tlpListSettings.Size = new System.Drawing.Size(350, 700);
             this.tlpListSettings.TabIndex = 2;
             // 
             // dColumn
@@ -97,7 +97,7 @@
             this.dColumn.Margin = new System.Windows.Forms.Padding(2);
             this.dColumn.Name = "dColumn";
             this.dColumn.Orientation = AntdUI.TOrientation.Left;
-            this.dColumn.Size = new System.Drawing.Size(496, 19);
+            this.dColumn.Size = new System.Drawing.Size(346, 19);
             this.dColumn.TabIndex = 7;
             this.dColumn.Text = "标题设置";
             // 
@@ -119,7 +119,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(500, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 49);
             this.tlpButton.TabIndex = 4;
             // 
             // bSave
@@ -129,7 +129,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(178, 6);
+            this.bSave.Location = new System.Drawing.Point(103, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -145,7 +145,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(259, 6);
+            this.bExit.Location = new System.Drawing.Point(184, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -165,7 +165,7 @@
             this.tabListSettings.Name = "tabListSettings";
             this.tabListSettings.Pages.Add(this.tpInject);
             this.tabListSettings.Pages.Add(this.tpProxy);
-            this.tabListSettings.Size = new System.Drawing.Size(496, 608);
+            this.tabListSettings.Size = new System.Drawing.Size(346, 608);
             this.tabListSettings.Style = styleLine1;
             this.tabListSettings.TabIndex = 8;
             this.tabListSettings.Text = "tabs1";
@@ -177,7 +177,7 @@
             this.tpInject.Location = new System.Drawing.Point(0, 28);
             this.tpInject.Margin = new System.Windows.Forms.Padding(2);
             this.tpInject.Name = "tpInject";
-            this.tpInject.Size = new System.Drawing.Size(496, 580);
+            this.tpInject.Size = new System.Drawing.Size(346, 580);
             this.tpInject.TabIndex = 0;
             this.tpInject.Text = "tpInject";
             // 
@@ -207,7 +207,7 @@
             this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpInject.Size = new System.Drawing.Size(496, 580);
+            this.tlpInject.Size = new System.Drawing.Size(346, 580);
             this.tlpInject.TabIndex = 2;
             // 
             // cbIsShow_PacketData_Inject
@@ -216,7 +216,7 @@
             this.cbIsShow_PacketData_Inject.Checked = true;
             this.cbIsShow_PacketData_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_PacketData_Inject.LocalizationText = "Table.PacketList.Column.PacketData";
-            this.cbIsShow_PacketData_Inject.Location = new System.Drawing.Point(250, 154);
+            this.cbIsShow_PacketData_Inject.Location = new System.Drawing.Point(175, 154);
             this.cbIsShow_PacketData_Inject.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_PacketData_Inject.Name = "cbIsShow_PacketData_Inject";
             this.cbIsShow_PacketData_Inject.Size = new System.Drawing.Size(56, 34);
@@ -242,7 +242,7 @@
             this.cbIsShow_ServerLocation_Inject.Checked = true;
             this.cbIsShow_ServerLocation_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_ServerLocation_Inject.LocalizationText = "Table.PacketList.Column.ToLocation";
-            this.cbIsShow_ServerLocation_Inject.Location = new System.Drawing.Point(250, 116);
+            this.cbIsShow_ServerLocation_Inject.Location = new System.Drawing.Point(175, 116);
             this.cbIsShow_ServerLocation_Inject.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_ServerLocation_Inject.Name = "cbIsShow_ServerLocation_Inject";
             this.cbIsShow_ServerLocation_Inject.Size = new System.Drawing.Size(92, 34);
@@ -268,7 +268,7 @@
             this.cbIsShow_ClientLocation_Inject.Checked = true;
             this.cbIsShow_ClientLocation_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_ClientLocation_Inject.LocalizationText = "Table.PacketList.Column.FromLocation";
-            this.cbIsShow_ClientLocation_Inject.Location = new System.Drawing.Point(250, 78);
+            this.cbIsShow_ClientLocation_Inject.Location = new System.Drawing.Point(175, 78);
             this.cbIsShow_ClientLocation_Inject.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_ClientLocation_Inject.Name = "cbIsShow_ClientLocation_Inject";
             this.cbIsShow_ClientLocation_Inject.Size = new System.Drawing.Size(92, 34);
@@ -294,7 +294,7 @@
             this.cbIsShow_PacketSocket_Inject.Checked = true;
             this.cbIsShow_PacketSocket_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_PacketSocket_Inject.LocalizationText = "Table.PacketList.Column.PacketSocket";
-            this.cbIsShow_PacketSocket_Inject.Location = new System.Drawing.Point(250, 40);
+            this.cbIsShow_PacketSocket_Inject.Location = new System.Drawing.Point(175, 40);
             this.cbIsShow_PacketSocket_Inject.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_PacketSocket_Inject.Name = "cbIsShow_PacketSocket_Inject";
             this.cbIsShow_PacketSocket_Inject.Size = new System.Drawing.Size(68, 34);
@@ -320,7 +320,7 @@
             this.cbIsShow_ProxyTime_Inject.Checked = true;
             this.cbIsShow_ProxyTime_Inject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_ProxyTime_Inject.LocalizationText = "Table.PacketList.Column.PacketTime";
-            this.cbIsShow_ProxyTime_Inject.Location = new System.Drawing.Point(250, 2);
+            this.cbIsShow_ProxyTime_Inject.Location = new System.Drawing.Point(175, 2);
             this.cbIsShow_ProxyTime_Inject.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_ProxyTime_Inject.Name = "cbIsShow_ProxyTime_Inject";
             this.cbIsShow_ProxyTime_Inject.Size = new System.Drawing.Size(68, 34);
@@ -347,7 +347,7 @@
             this.tpProxy.Location = new System.Drawing.Point(0, 28);
             this.tpProxy.Margin = new System.Windows.Forms.Padding(2);
             this.tpProxy.Name = "tpProxy";
-            this.tpProxy.Size = new System.Drawing.Size(496, 580);
+            this.tpProxy.Size = new System.Drawing.Size(346, 580);
             this.tpProxy.TabIndex = 1;
             this.tpProxy.Text = "tpProxy";
             // 
@@ -377,7 +377,7 @@
             this.tlpProxy.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxy.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxy.Size = new System.Drawing.Size(496, 580);
+            this.tlpProxy.Size = new System.Drawing.Size(346, 580);
             this.tlpProxy.TabIndex = 1;
             // 
             // cbIsShow_PacketData_Proxy
@@ -386,7 +386,7 @@
             this.cbIsShow_PacketData_Proxy.Checked = true;
             this.cbIsShow_PacketData_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_PacketData_Proxy.LocalizationText = "Table.ProxyList.Column.PacketData";
-            this.cbIsShow_PacketData_Proxy.Location = new System.Drawing.Point(250, 154);
+            this.cbIsShow_PacketData_Proxy.Location = new System.Drawing.Point(175, 154);
             this.cbIsShow_PacketData_Proxy.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_PacketData_Proxy.Name = "cbIsShow_PacketData_Proxy";
             this.cbIsShow_PacketData_Proxy.Size = new System.Drawing.Size(56, 34);
@@ -412,7 +412,7 @@
             this.cbIsShow_ServerLocation_Proxy.Checked = true;
             this.cbIsShow_ServerLocation_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_ServerLocation_Proxy.LocalizationText = "Table.ProxyList.Column.ServerLocation";
-            this.cbIsShow_ServerLocation_Proxy.Location = new System.Drawing.Point(250, 116);
+            this.cbIsShow_ServerLocation_Proxy.Location = new System.Drawing.Point(175, 116);
             this.cbIsShow_ServerLocation_Proxy.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_ServerLocation_Proxy.Name = "cbIsShow_ServerLocation_Proxy";
             this.cbIsShow_ServerLocation_Proxy.Size = new System.Drawing.Size(104, 34);
@@ -438,7 +438,7 @@
             this.cbIsShow_ClientLocation_Proxy.Checked = true;
             this.cbIsShow_ClientLocation_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_ClientLocation_Proxy.LocalizationText = "Table.ProxyList.Column.ClientLocation";
-            this.cbIsShow_ClientLocation_Proxy.Location = new System.Drawing.Point(250, 78);
+            this.cbIsShow_ClientLocation_Proxy.Location = new System.Drawing.Point(175, 78);
             this.cbIsShow_ClientLocation_Proxy.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_ClientLocation_Proxy.Name = "cbIsShow_ClientLocation_Proxy";
             this.cbIsShow_ClientLocation_Proxy.Size = new System.Drawing.Size(104, 34);
@@ -464,7 +464,7 @@
             this.cbIsShow_PacketSocket_Proxy.Checked = true;
             this.cbIsShow_PacketSocket_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_PacketSocket_Proxy.LocalizationText = "Table.ProxyList.Column.PacketSocket";
-            this.cbIsShow_PacketSocket_Proxy.Location = new System.Drawing.Point(250, 40);
+            this.cbIsShow_PacketSocket_Proxy.Location = new System.Drawing.Point(175, 40);
             this.cbIsShow_PacketSocket_Proxy.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_PacketSocket_Proxy.Name = "cbIsShow_PacketSocket_Proxy";
             this.cbIsShow_PacketSocket_Proxy.Size = new System.Drawing.Size(68, 34);
@@ -490,7 +490,7 @@
             this.cbIsShow_ProxyTime_Proxy.Checked = true;
             this.cbIsShow_ProxyTime_Proxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsShow_ProxyTime_Proxy.LocalizationText = "Table.ProxyList.Column.ProxyTime";
-            this.cbIsShow_ProxyTime_Proxy.Location = new System.Drawing.Point(250, 2);
+            this.cbIsShow_ProxyTime_Proxy.Location = new System.Drawing.Point(175, 2);
             this.cbIsShow_ProxyTime_Proxy.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsShow_ProxyTime_Proxy.Name = "cbIsShow_ProxyTime_Proxy";
             this.cbIsShow_ProxyTime_Proxy.Size = new System.Drawing.Size(68, 34);
@@ -519,7 +519,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ListSetting";
-            this.Size = new System.Drawing.Size(500, 700);
+            this.Size = new System.Drawing.Size(350, 700);
             this.Load += new System.EventHandler(this.ListSetting_Load);
             this.tlpListSettings.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);

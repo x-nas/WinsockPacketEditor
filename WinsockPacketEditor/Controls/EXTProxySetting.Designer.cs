@@ -68,7 +68,7 @@
             this.tlpExternalProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 486F));
             this.tlpExternalProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpExternalProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpExternalProxy.Size = new System.Drawing.Size(500, 700);
+            this.tlpExternalProxy.Size = new System.Drawing.Size(350, 700);
             this.tlpExternalProxy.TabIndex = 3;
             // 
             // cbEnable_ExternalProxy
@@ -104,7 +104,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(500, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 49);
             this.tlpButton.TabIndex = 3;
             // 
             // bSave
@@ -114,7 +114,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(178, 6);
+            this.bSave.Location = new System.Drawing.Point(103, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -130,7 +130,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(259, 6);
+            this.bExit.Location = new System.Drawing.Point(184, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -148,7 +148,7 @@
             this.dEXTProxy.Margin = new System.Windows.Forms.Padding(2);
             this.dEXTProxy.Name = "dEXTProxy";
             this.dEXTProxy.Orientation = AntdUI.TOrientation.Left;
-            this.dEXTProxy.Size = new System.Drawing.Size(496, 19);
+            this.dEXTProxy.Size = new System.Drawing.Size(346, 19);
             this.dEXTProxy.TabIndex = 4;
             this.dEXTProxy.Text = "外部 SOCKS 代理";
             // 
@@ -179,7 +179,7 @@
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpServerInfo.Size = new System.Drawing.Size(500, 486);
+            this.tlpServerInfo.Size = new System.Drawing.Size(350, 486);
             this.tlpServerInfo.TabIndex = 7;
             // 
             // txtExternalProxy_Port
@@ -202,7 +202,7 @@
             this.txtExternalProxy_Port.PlaceholderText = "请输入端口号";
             this.txtExternalProxy_Port.PrefixText = "端口号:";
             this.txtExternalProxy_Port.SelectionStart = 1;
-            this.txtExternalProxy_Port.Size = new System.Drawing.Size(388, 36);
+            this.txtExternalProxy_Port.Size = new System.Drawing.Size(238, 36);
             this.txtExternalProxy_Port.TabIndex = 25;
             this.txtExternalProxy_Port.Text = "8889";
             this.txtExternalProxy_Port.Value = new decimal(new int[] {
@@ -242,7 +242,7 @@
             this.txtExternalProxy_PassWord.Name = "txtExternalProxy_PassWord";
             this.txtExternalProxy_PassWord.PlaceholderText = "请输入密码";
             this.txtExternalProxy_PassWord.PrefixText = "密码:";
-            this.txtExternalProxy_PassWord.Size = new System.Drawing.Size(388, 36);
+            this.txtExternalProxy_PassWord.Size = new System.Drawing.Size(238, 36);
             this.txtExternalProxy_PassWord.TabIndex = 23;
             this.txtExternalProxy_PassWord.TextChanged += new System.EventHandler(this.txtExternalProxy_PassWord_TextChanged);
             // 
@@ -256,7 +256,7 @@
             this.txtExternalProxy_UserName.Name = "txtExternalProxy_UserName";
             this.txtExternalProxy_UserName.PlaceholderText = "请输入账号";
             this.txtExternalProxy_UserName.PrefixText = "账号:";
-            this.txtExternalProxy_UserName.Size = new System.Drawing.Size(388, 36);
+            this.txtExternalProxy_UserName.Size = new System.Drawing.Size(238, 36);
             this.txtExternalProxy_UserName.TabIndex = 21;
             this.txtExternalProxy_UserName.TextChanged += new System.EventHandler(this.txtExternalProxy_UserName_TextChanged);
             // 
@@ -297,7 +297,7 @@
             this.txtExternalProxy_IP.Name = "txtExternalProxy_IP";
             this.txtExternalProxy_IP.PlaceholderText = "请输入IP或者域名";
             this.txtExternalProxy_IP.PrefixText = "http://";
-            this.txtExternalProxy_IP.Size = new System.Drawing.Size(388, 37);
+            this.txtExternalProxy_IP.Size = new System.Drawing.Size(238, 37);
             this.txtExternalProxy_IP.TabIndex = 1;
             this.txtExternalProxy_IP.TextChanged += new System.EventHandler(this.txtExternalProxy_IP_TextChanged);
             // 
@@ -311,7 +311,7 @@
             this.txtExternalProxy_AppointPort.Name = "txtExternalProxy_AppointPort";
             this.txtExternalProxy_AppointPort.PlaceholderText = "比如 80,443";
             this.txtExternalProxy_AppointPort.PrefixText = "端口号:";
-            this.txtExternalProxy_AppointPort.Size = new System.Drawing.Size(388, 36);
+            this.txtExternalProxy_AppointPort.Size = new System.Drawing.Size(238, 36);
             this.txtExternalProxy_AppointPort.TabIndex = 13;
             this.txtExternalProxy_AppointPort.TextChanged += new System.EventHandler(this.txtExternalProxy_AppointPort_TextChanged);
             // 
@@ -324,7 +324,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "EXTProxySetting";
-            this.Size = new System.Drawing.Size(500, 700);
+            this.Size = new System.Drawing.Size(350, 700);
             this.Load += new System.EventHandler(this.EXTProxySetting_Load);
             this.tlpExternalProxy.ResumeLayout(false);
             this.tlpExternalProxy.PerformLayout();

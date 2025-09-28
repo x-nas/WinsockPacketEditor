@@ -240,7 +240,7 @@
             this.bStop.LoadingWaveVertical = true;
             this.bStop.LocalizationText = "Stop";
             this.bStop.Location = new System.Drawing.Point(478, 6);
-            this.bStop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bStop.Margin = new System.Windows.Forms.Padding(2);
             this.bStop.Name = "bStop";
             this.bStop.Size = new System.Drawing.Size(63, 37);
             this.bStop.TabIndex = 3;
@@ -261,7 +261,7 @@
             this.bExecute.LoadingWaveVertical = true;
             this.bExecute.LocalizationText = "Execute";
             this.bExecute.Location = new System.Drawing.Point(397, 6);
-            this.bExecute.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExecute.Margin = new System.Windows.Forms.Padding(2);
             this.bExecute.Name = "bExecute";
             this.bExecute.Size = new System.Drawing.Size(63, 37);
             this.bExecute.TabIndex = 2;
@@ -282,7 +282,7 @@
             this.bSave.LoadingWaveVertical = true;
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(559, 6);
-            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
@@ -298,7 +298,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(640, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -338,7 +338,7 @@
             this.cRobotINST.Items.Add(this.ciKeyBoardINST);
             this.cRobotINST.Items.Add(this.ciMouseINST);
             this.cRobotINST.Location = new System.Drawing.Point(2, 2);
-            this.cRobotINST.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cRobotINST.Margin = new System.Windows.Forms.Padding(2);
             this.cRobotINST.Name = "cRobotINST";
             this.cRobotINST.Size = new System.Drawing.Size(546, 607);
             this.cRobotINST.TabIndex = 9;
@@ -351,7 +351,7 @@
             this.ciPacketINST.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ciPacketINST.LocalizationText = "RobotEditForm.{id}";
             this.ciPacketINST.Location = new System.Drawing.Point(-526, -418);
-            this.ciPacketINST.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ciPacketINST.Margin = new System.Windows.Forms.Padding(2);
             this.ciPacketINST.Name = "ciPacketINST";
             this.ciPacketINST.Size = new System.Drawing.Size(526, 418);
             this.ciPacketINST.TabIndex = 0;
@@ -381,7 +381,7 @@
             this.pSYSSocket.Controls.Add(this.tlpSYSSocket2);
             this.pSYSSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pSYSSocket.Location = new System.Drawing.Point(2, 148);
-            this.pSYSSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pSYSSocket.Margin = new System.Windows.Forms.Padding(2);
             this.pSYSSocket.Name = "pSYSSocket";
             this.pSYSSocket.Radius = 10;
             this.pSYSSocket.Size = new System.Drawing.Size(522, 268);
@@ -435,7 +435,7 @@
             this.lSelectFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSelectFilter.LocalizationText = "RobotEditForm.PacketINST.SetSSocket.Filter";
             this.lSelectFilter.Location = new System.Drawing.Point(47, 42);
-            this.lSelectFilter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lSelectFilter.Margin = new System.Windows.Forms.Padding(2);
             this.lSelectFilter.Name = "lSelectFilter";
             this.lSelectFilter.Size = new System.Drawing.Size(429, 32);
             this.lSelectFilter.TabIndex = 7;
@@ -446,7 +446,7 @@
             this.rbSelectSocket.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbSelectSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSelectSocket.Location = new System.Drawing.Point(2, 78);
-            this.rbSelectSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbSelectSocket.Margin = new System.Windows.Forms.Padding(2);
             this.rbSelectSocket.Name = "rbSelectSocket";
             this.rbSelectSocket.Size = new System.Drawing.Size(41, 32);
             this.rbSelectSocket.TabIndex = 5;
@@ -457,7 +457,7 @@
             this.rbSelectFilter.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbSelectFilter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSelectFilter.Location = new System.Drawing.Point(2, 42);
-            this.rbSelectFilter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbSelectFilter.Margin = new System.Windows.Forms.Padding(2);
             this.rbSelectFilter.Name = "rbSelectFilter";
             this.rbSelectFilter.Size = new System.Drawing.Size(41, 32);
             this.rbSelectFilter.TabIndex = 3;
@@ -469,7 +469,7 @@
             this.bInsert_SYSSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_SYSSocket.IconSvg = "ArrowRightOutlined";
             this.bInsert_SYSSocket.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_SYSSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_SYSSocket.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_SYSSocket.Name = "bInsert_SYSSocket";
             this.bInsert_SYSSocket.Size = new System.Drawing.Size(36, 36);
             this.bInsert_SYSSocket.TabIndex = 1;
@@ -482,7 +482,7 @@
             this.rbSelectPacket.Checked = true;
             this.rbSelectPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbSelectPacket.Location = new System.Drawing.Point(2, 2);
-            this.rbSelectPacket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbSelectPacket.Margin = new System.Windows.Forms.Padding(2);
             this.rbSelectPacket.Name = "rbSelectPacket";
             this.rbSelectPacket.Size = new System.Drawing.Size(41, 36);
             this.rbSelectPacket.TabIndex = 2;
@@ -493,7 +493,7 @@
             this.lSelectPacket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lSelectPacket.LocalizationText = "RobotEditForm.PacketINST.SetSSocket.Select";
             this.lSelectPacket.Location = new System.Drawing.Point(47, 2);
-            this.lSelectPacket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lSelectPacket.Margin = new System.Windows.Forms.Padding(2);
             this.lSelectPacket.Name = "lSelectPacket";
             this.lSelectPacket.Size = new System.Drawing.Size(429, 36);
             this.lSelectPacket.TabIndex = 6;
@@ -503,7 +503,7 @@
             // 
             this.nudSelectSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudSelectSocket.Location = new System.Drawing.Point(47, 78);
-            this.nudSelectSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudSelectSocket.Margin = new System.Windows.Forms.Padding(2);
             this.nudSelectSocket.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -525,7 +525,7 @@
             this.dSYSSocket.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dSYSSocket.LocalizationText = "RobotEditForm.PacketINST.SetSSocket";
             this.dSYSSocket.Location = new System.Drawing.Point(2, 2);
-            this.dSYSSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dSYSSocket.Margin = new System.Windows.Forms.Padding(2);
             this.dSYSSocket.Name = "dSYSSocket";
             this.dSYSSocket.Orientation = AntdUI.TOrientation.Left;
             this.dSYSSocket.Size = new System.Drawing.Size(514, 20);
@@ -538,7 +538,7 @@
             this.pPacketList.Controls.Add(this.tlpPacketList2);
             this.pPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pPacketList.Location = new System.Drawing.Point(2, 75);
-            this.pPacketList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pPacketList.Margin = new System.Windows.Forms.Padding(2);
             this.pPacketList.Name = "pPacketList";
             this.pPacketList.Radius = 10;
             this.pPacketList.Size = new System.Drawing.Size(522, 69);
@@ -584,7 +584,7 @@
             this.bInsert_PacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_PacketList.IconSvg = "ArrowRightOutlined";
             this.bInsert_PacketList.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_PacketList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_PacketList.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_PacketList.Name = "bInsert_PacketList";
             this.bInsert_PacketList.Size = new System.Drawing.Size(36, 36);
             this.bInsert_PacketList.TabIndex = 1;
@@ -597,7 +597,7 @@
             this.lPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPacketList.LocalizationText = "RobotEditForm.PacketINST.PacketList.Select";
             this.lPacketList.Location = new System.Drawing.Point(2, 2);
-            this.lPacketList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lPacketList.Margin = new System.Windows.Forms.Padding(2);
             this.lPacketList.Name = "lPacketList";
             this.lPacketList.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lPacketList.Size = new System.Drawing.Size(474, 32);
@@ -610,7 +610,7 @@
             this.dPacketList.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dPacketList.LocalizationText = "RobotEditForm.PacketINST.PacketList";
             this.dPacketList.Location = new System.Drawing.Point(2, 2);
-            this.dPacketList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dPacketList.Margin = new System.Windows.Forms.Padding(2);
             this.dPacketList.Name = "dPacketList";
             this.dPacketList.Orientation = AntdUI.TOrientation.Left;
             this.dPacketList.Size = new System.Drawing.Size(514, 20);
@@ -623,7 +623,7 @@
             this.pSendList.Controls.Add(this.tlpSendList2);
             this.pSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pSendList.Location = new System.Drawing.Point(2, 2);
-            this.pSendList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pSendList.Margin = new System.Windows.Forms.Padding(2);
             this.pSendList.Name = "pSendList";
             this.pSendList.Radius = 10;
             this.pSendList.Size = new System.Drawing.Size(522, 69);
@@ -653,7 +653,7 @@
             this.dSendList.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dSendList.LocalizationText = "RobotEditForm.PacketINST.SendList";
             this.dSendList.Location = new System.Drawing.Point(2, 2);
-            this.dSendList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dSendList.Margin = new System.Windows.Forms.Padding(2);
             this.dSendList.Name = "dSendList";
             this.dSendList.Orientation = AntdUI.TOrientation.Left;
             this.dSendList.Size = new System.Drawing.Size(514, 20);
@@ -682,7 +682,7 @@
             this.ddlSendList.List = true;
             this.ddlSendList.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlSendList.Location = new System.Drawing.Point(2, 2);
-            this.ddlSendList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddlSendList.Margin = new System.Windows.Forms.Padding(2);
             this.ddlSendList.Name = "ddlSendList";
             this.ddlSendList.PlaceholderText = "请选择";
             this.ddlSendList.Size = new System.Drawing.Size(474, 32);
@@ -694,7 +694,7 @@
             this.bInsert_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_SendList.IconSvg = "ArrowRightOutlined";
             this.bInsert_SendList.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_SendList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_SendList.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_SendList.Name = "bInsert_SendList";
             this.bInsert_SendList.Size = new System.Drawing.Size(36, 36);
             this.bInsert_SendList.TabIndex = 1;
@@ -707,7 +707,7 @@
             this.ciControlINST.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ciControlINST.LocalizationText = "RobotEditForm.{id}";
             this.ciControlINST.Location = new System.Drawing.Point(-526, -418);
-            this.ciControlINST.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ciControlINST.Margin = new System.Windows.Forms.Padding(2);
             this.ciControlINST.Name = "ciControlINST";
             this.ciControlINST.Size = new System.Drawing.Size(526, 418);
             this.ciControlINST.TabIndex = 1;
@@ -736,7 +736,7 @@
             this.pLoop.Controls.Add(this.tlpLoop);
             this.pLoop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pLoop.Location = new System.Drawing.Point(2, 115);
-            this.pLoop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pLoop.Margin = new System.Windows.Forms.Padding(2);
             this.pLoop.Name = "pLoop";
             this.pLoop.Radius = 10;
             this.pLoop.Size = new System.Drawing.Size(522, 77);
@@ -766,7 +766,7 @@
             this.dLoop.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dLoop.LocalizationText = "RobotEditForm.ControlINST.Loop";
             this.dLoop.Location = new System.Drawing.Point(2, 2);
-            this.dLoop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dLoop.Margin = new System.Windows.Forms.Padding(2);
             this.dLoop.Name = "dLoop";
             this.dLoop.Orientation = AntdUI.TOrientation.Left;
             this.dLoop.Size = new System.Drawing.Size(514, 20);
@@ -797,7 +797,7 @@
             this.nudLoop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudLoop.LocalizationSuffixText = "Times";
             this.nudLoop.Location = new System.Drawing.Point(2, 2);
-            this.nudLoop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudLoop.Margin = new System.Windows.Forms.Padding(2);
             this.nudLoop.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -828,7 +828,7 @@
             this.bInsert_LoopStart.IconSvg = "ArrowRightOutlined";
             this.bInsert_LoopStart.LocalizationText = "Begin";
             this.bInsert_LoopStart.Location = new System.Drawing.Point(386, 2);
-            this.bInsert_LoopStart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_LoopStart.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_LoopStart.Name = "bInsert_LoopStart";
             this.bInsert_LoopStart.Size = new System.Drawing.Size(63, 36);
             this.bInsert_LoopStart.TabIndex = 2;
@@ -844,7 +844,7 @@
             this.bInsert_LoopEnd.IconSvg = "ArrowRightOutlined";
             this.bInsert_LoopEnd.LocalizationText = "End";
             this.bInsert_LoopEnd.Location = new System.Drawing.Point(453, 2);
-            this.bInsert_LoopEnd.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_LoopEnd.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_LoopEnd.Name = "bInsert_LoopEnd";
             this.bInsert_LoopEnd.Size = new System.Drawing.Size(63, 36);
             this.bInsert_LoopEnd.TabIndex = 1;
@@ -858,7 +858,7 @@
             this.pDelay.Controls.Add(this.tlpDelay);
             this.pDelay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pDelay.Location = new System.Drawing.Point(2, 2);
-            this.pDelay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pDelay.Margin = new System.Windows.Forms.Padding(2);
             this.pDelay.Name = "pDelay";
             this.pDelay.Radius = 10;
             this.pDelay.Size = new System.Drawing.Size(522, 109);
@@ -911,7 +911,7 @@
             this.nudnudDelayRandom_To.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudnudDelayRandom_To.LocalizationSuffixText = "Millisecond";
             this.nudnudDelayRandom_To.Location = new System.Drawing.Point(271, 42);
-            this.nudnudDelayRandom_To.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudnudDelayRandom_To.Margin = new System.Windows.Forms.Padding(2);
             this.nudnudDelayRandom_To.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -939,7 +939,7 @@
             this.nudDelayFix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudDelayFix.LocalizationSuffixText = "Millisecond";
             this.nudDelayFix.Location = new System.Drawing.Point(62, 2);
-            this.nudDelayFix.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudDelayFix.Margin = new System.Windows.Forms.Padding(2);
             this.nudDelayFix.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -968,7 +968,7 @@
             this.rbDelayRandom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbDelayRandom.LocalizationText = "RobotEditForm.ControlINST.Delay.Random";
             this.rbDelayRandom.Location = new System.Drawing.Point(2, 42);
-            this.rbDelayRandom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbDelayRandom.Margin = new System.Windows.Forms.Padding(2);
             this.rbDelayRandom.Name = "rbDelayRandom";
             this.rbDelayRandom.Size = new System.Drawing.Size(56, 32);
             this.rbDelayRandom.TabIndex = 5;
@@ -981,7 +981,7 @@
             this.bInsert_Delay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_Delay.IconSvg = "ArrowRightOutlined";
             this.bInsert_Delay.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_Delay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_Delay.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_Delay.Name = "bInsert_Delay";
             this.bInsert_Delay.Size = new System.Drawing.Size(36, 36);
             this.bInsert_Delay.TabIndex = 1;
@@ -995,7 +995,7 @@
             this.rbDelayFix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbDelayFix.LocalizationText = "RobotEditForm.ControlINST.Delay.Fixed";
             this.rbDelayFix.Location = new System.Drawing.Point(2, 2);
-            this.rbDelayFix.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbDelayFix.Margin = new System.Windows.Forms.Padding(2);
             this.rbDelayFix.Name = "rbDelayFix";
             this.rbDelayFix.Size = new System.Drawing.Size(56, 36);
             this.rbDelayFix.TabIndex = 2;
@@ -1007,7 +1007,7 @@
             this.nudnudDelayRandom_From.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudnudDelayRandom_From.LocalizationSuffixText = "";
             this.nudnudDelayRandom_From.Location = new System.Drawing.Point(62, 42);
-            this.nudnudDelayRandom_From.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudnudDelayRandom_From.Margin = new System.Windows.Forms.Padding(2);
             this.nudnudDelayRandom_From.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -1036,7 +1036,7 @@
             this.dDelay.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dDelay.LocalizationText = "RobotEditForm.ControlINST.Delay";
             this.dDelay.Location = new System.Drawing.Point(2, 2);
-            this.dDelay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dDelay.Margin = new System.Windows.Forms.Padding(2);
             this.dDelay.Name = "dDelay";
             this.dDelay.Orientation = AntdUI.TOrientation.Left;
             this.dDelay.Size = new System.Drawing.Size(514, 20);
@@ -1049,7 +1049,7 @@
             this.ciKeyBoardINST.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ciKeyBoardINST.LocalizationText = "RobotEditForm.{id}";
             this.ciKeyBoardINST.Location = new System.Drawing.Point(-526, -418);
-            this.ciKeyBoardINST.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ciKeyBoardINST.Margin = new System.Windows.Forms.Padding(2);
             this.ciKeyBoardINST.Name = "ciKeyBoardINST";
             this.ciKeyBoardINST.Size = new System.Drawing.Size(526, 418);
             this.ciKeyBoardINST.TabIndex = 2;
@@ -1080,7 +1080,7 @@
             this.pText.Controls.Add(this.tlpText);
             this.pText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pText.Location = new System.Drawing.Point(2, 196);
-            this.pText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pText.Margin = new System.Windows.Forms.Padding(2);
             this.pText.Name = "pText";
             this.pText.Radius = 10;
             this.pText.Size = new System.Drawing.Size(522, 77);
@@ -1110,7 +1110,7 @@
             this.dText.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dText.LocalizationText = "RobotEditForm.KeyBoardINST.Text";
             this.dText.Location = new System.Drawing.Point(2, 2);
-            this.dText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dText.Margin = new System.Windows.Forms.Padding(2);
             this.dText.Name = "dText";
             this.dText.Orientation = AntdUI.TOrientation.Left;
             this.dText.Size = new System.Drawing.Size(514, 20);
@@ -1140,7 +1140,7 @@
             this.bInsert_Text.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_Text.IconSvg = "ArrowRightOutlined";
             this.bInsert_Text.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_Text.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_Text.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_Text.Name = "bInsert_Text";
             this.bInsert_Text.Size = new System.Drawing.Size(36, 36);
             this.bInsert_Text.TabIndex = 1;
@@ -1152,7 +1152,7 @@
             this.txtText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtText.LocalizationPlaceholderText = "Input.Text";
             this.txtText.Location = new System.Drawing.Point(2, 2);
-            this.txtText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtText.Margin = new System.Windows.Forms.Padding(2);
             this.txtText.Name = "txtText";
             this.txtText.PlaceholderText = "请输入文本";
             this.txtText.Size = new System.Drawing.Size(474, 36);
@@ -1164,7 +1164,7 @@
             this.pKeyCombination.Controls.Add(this.tlpKeyCombination);
             this.pKeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pKeyCombination.Location = new System.Drawing.Point(2, 115);
-            this.pKeyCombination.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pKeyCombination.Margin = new System.Windows.Forms.Padding(2);
             this.pKeyCombination.Name = "pKeyCombination";
             this.pKeyCombination.Radius = 10;
             this.pKeyCombination.Size = new System.Drawing.Size(522, 77);
@@ -1194,7 +1194,7 @@
             this.dKeyCombination.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dKeyCombination.LocalizationText = "RobotEditForm.KeyBoardINST.CombinationKey";
             this.dKeyCombination.Location = new System.Drawing.Point(2, 2);
-            this.dKeyCombination.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dKeyCombination.Margin = new System.Windows.Forms.Padding(2);
             this.dKeyCombination.Name = "dKeyCombination";
             this.dKeyCombination.Orientation = AntdUI.TOrientation.Left;
             this.dKeyCombination.Size = new System.Drawing.Size(514, 20);
@@ -1224,7 +1224,7 @@
             this.bInsert_KeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_KeyCombination.IconSvg = "ArrowRightOutlined";
             this.bInsert_KeyCombination.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_KeyCombination.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_KeyCombination.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_KeyCombination.Name = "bInsert_KeyCombination";
             this.bInsert_KeyCombination.Size = new System.Drawing.Size(36, 36);
             this.bInsert_KeyCombination.TabIndex = 1;
@@ -1238,7 +1238,7 @@
             this.txtKeyCombination.ForeColor = System.Drawing.Color.Black;
             this.txtKeyCombination.LocalizationPlaceholderText = "PressCombinationkey";
             this.txtKeyCombination.Location = new System.Drawing.Point(2, 2);
-            this.txtKeyCombination.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtKeyCombination.Margin = new System.Windows.Forms.Padding(2);
             this.txtKeyCombination.Name = "txtKeyCombination";
             this.txtKeyCombination.PlaceholderText = "请组合按键";
             this.txtKeyCombination.ReadOnly = true;
@@ -1252,7 +1252,7 @@
             this.pKeyBoard.Controls.Add(this.tlpKey);
             this.pKeyBoard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pKeyBoard.Location = new System.Drawing.Point(2, 2);
-            this.pKeyBoard.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pKeyBoard.Margin = new System.Windows.Forms.Padding(2);
             this.pKeyBoard.Name = "pKeyBoard";
             this.pKeyBoard.Radius = 10;
             this.pKeyBoard.Size = new System.Drawing.Size(522, 109);
@@ -1305,7 +1305,7 @@
             this.bInsert_KeyBoard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_KeyBoard.IconSvg = "ArrowRightOutlined";
             this.bInsert_KeyBoard.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_KeyBoard.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_KeyBoard.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_KeyBoard.Name = "bInsert_KeyBoard";
             this.bInsert_KeyBoard.Size = new System.Drawing.Size(36, 36);
             this.bInsert_KeyBoard.TabIndex = 1;
@@ -1318,7 +1318,7 @@
             this.lkey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lkey.LocalizationText = "RobotEditForm.KeyBoardINST.Key";
             this.lkey.Location = new System.Drawing.Point(9, 2);
-            this.lkey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lkey.Margin = new System.Windows.Forms.Padding(2);
             this.lkey.Name = "lkey";
             this.lkey.Size = new System.Drawing.Size(31, 36);
             this.lkey.TabIndex = 12;
@@ -1331,7 +1331,7 @@
             this.lKeyType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lKeyType.LocalizationText = "RobotEditForm.KeyBoardINST.Key.Type";
             this.lKeyType.Location = new System.Drawing.Point(9, 42);
-            this.lKeyType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lKeyType.Margin = new System.Windows.Forms.Padding(2);
             this.lKeyType.Name = "lKeyType";
             this.lKeyType.Size = new System.Drawing.Size(31, 32);
             this.lKeyType.TabIndex = 13;
@@ -1343,7 +1343,7 @@
             this.txtKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtKey.LocalizationPlaceholderText = "Presskey";
             this.txtKey.Location = new System.Drawing.Point(44, 2);
-            this.txtKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtKey.Margin = new System.Windows.Forms.Padding(2);
             this.txtKey.Name = "txtKey";
             this.txtKey.PlaceholderText = "请按键";
             this.txtKey.Size = new System.Drawing.Size(432, 36);
@@ -1357,7 +1357,7 @@
             this.ddlKeyType.List = true;
             this.ddlKeyType.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlKeyType.Location = new System.Drawing.Point(44, 42);
-            this.ddlKeyType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddlKeyType.Margin = new System.Windows.Forms.Padding(2);
             this.ddlKeyType.Name = "ddlKeyType";
             this.ddlKeyType.PlaceholderText = "请选择";
             this.ddlKeyType.Size = new System.Drawing.Size(432, 32);
@@ -1370,7 +1370,7 @@
             this.dkey.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dkey.LocalizationText = "RobotEditForm.KeyBoardINST.Key";
             this.dkey.Location = new System.Drawing.Point(2, 2);
-            this.dkey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dkey.Margin = new System.Windows.Forms.Padding(2);
             this.dkey.Name = "dkey";
             this.dkey.Orientation = AntdUI.TOrientation.Left;
             this.dkey.Size = new System.Drawing.Size(514, 20);
@@ -1383,7 +1383,7 @@
             this.ciMouseINST.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ciMouseINST.LocalizationText = "RobotEditForm.{id}";
             this.ciMouseINST.Location = new System.Drawing.Point(-526, -418);
-            this.ciMouseINST.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ciMouseINST.Margin = new System.Windows.Forms.Padding(2);
             this.ciMouseINST.Name = "ciMouseINST";
             this.ciMouseINST.Size = new System.Drawing.Size(526, 418);
             this.ciMouseINST.TabIndex = 3;
@@ -1413,7 +1413,7 @@
             this.pMouseMove.Controls.Add(this.tlpMouseMove);
             this.pMouseMove.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pMouseMove.Location = new System.Drawing.Point(2, 188);
-            this.pMouseMove.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pMouseMove.Margin = new System.Windows.Forms.Padding(2);
             this.pMouseMove.Name = "pMouseMove";
             this.pMouseMove.Radius = 10;
             this.pMouseMove.Size = new System.Drawing.Size(522, 228);
@@ -1442,7 +1442,7 @@
             this.divider8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.divider8.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.divider8.Location = new System.Drawing.Point(2, 2);
-            this.divider8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.divider8.Margin = new System.Windows.Forms.Padding(2);
             this.divider8.Name = "divider8";
             this.divider8.Orientation = AntdUI.TOrientation.Left;
             this.divider8.Size = new System.Drawing.Size(514, 20);
@@ -1478,7 +1478,7 @@
             this.nudMouseMove_X.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudMouseMove_X.LocalizationSuffixText = "Pixel";
             this.nudMouseMove_X.Location = new System.Drawing.Point(2, 42);
-            this.nudMouseMove_X.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudMouseMove_X.Margin = new System.Windows.Forms.Padding(2);
             this.nudMouseMove_X.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -1503,7 +1503,7 @@
             this.rbMoveBy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbMoveBy.LocalizationText = "MoveBy";
             this.rbMoveBy.Location = new System.Drawing.Point(241, 2);
-            this.rbMoveBy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbMoveBy.Margin = new System.Windows.Forms.Padding(2);
             this.rbMoveBy.Name = "rbMoveBy";
             this.rbMoveBy.Size = new System.Drawing.Size(80, 32);
             this.rbMoveBy.TabIndex = 18;
@@ -1515,7 +1515,7 @@
             this.bInsert_MouseMove.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_MouseMove.IconSvg = "ArrowRightOutlined";
             this.bInsert_MouseMove.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_MouseMove.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_MouseMove.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_MouseMove.Name = "bInsert_MouseMove";
             this.bInsert_MouseMove.Size = new System.Drawing.Size(36, 36);
             this.bInsert_MouseMove.TabIndex = 1;
@@ -1527,7 +1527,7 @@
             this.nudMouseMove_Y.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudMouseMove_Y.LocalizationSuffixText = "Pixel";
             this.nudMouseMove_Y.Location = new System.Drawing.Point(241, 42);
-            this.nudMouseMove_Y.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudMouseMove_Y.Margin = new System.Windows.Forms.Padding(2);
             this.nudMouseMove_Y.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -1553,7 +1553,7 @@
             this.rbMoveTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbMoveTo.LocalizationText = "MoveTo";
             this.rbMoveTo.Location = new System.Drawing.Point(2, 2);
-            this.rbMoveTo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbMoveTo.Margin = new System.Windows.Forms.Padding(2);
             this.rbMoveTo.Name = "rbMoveTo";
             this.rbMoveTo.Size = new System.Drawing.Size(68, 32);
             this.rbMoveTo.TabIndex = 17;
@@ -1565,7 +1565,7 @@
             this.pMouseWheel.Controls.Add(this.tlpMouseWheel);
             this.pMouseWheel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pMouseWheel.Location = new System.Drawing.Point(2, 75);
-            this.pMouseWheel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pMouseWheel.Margin = new System.Windows.Forms.Padding(2);
             this.pMouseWheel.Name = "pMouseWheel";
             this.pMouseWheel.Radius = 10;
             this.pMouseWheel.Size = new System.Drawing.Size(522, 109);
@@ -1595,7 +1595,7 @@
             this.dMouseWheel.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dMouseWheel.LocalizationText = "RobotEditForm.MouseINST.Wheel";
             this.dMouseWheel.Location = new System.Drawing.Point(2, 2);
-            this.dMouseWheel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dMouseWheel.Margin = new System.Windows.Forms.Padding(2);
             this.dMouseWheel.Name = "dMouseWheel";
             this.dMouseWheel.Orientation = AntdUI.TOrientation.Left;
             this.dMouseWheel.Size = new System.Drawing.Size(514, 20);
@@ -1631,7 +1631,7 @@
             this.lWheelDistance.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lWheelDistance.LocalizationText = "RobotEditForm.MouseINST.Wheel.Distance";
             this.lWheelDistance.Location = new System.Drawing.Point(9, 42);
-            this.lWheelDistance.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lWheelDistance.Margin = new System.Windows.Forms.Padding(2);
             this.lWheelDistance.Name = "lWheelDistance";
             this.lWheelDistance.Size = new System.Drawing.Size(31, 32);
             this.lWheelDistance.TabIndex = 15;
@@ -1644,7 +1644,7 @@
             this.ddlMouseWheel.List = true;
             this.ddlMouseWheel.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlMouseWheel.Location = new System.Drawing.Point(44, 2);
-            this.ddlMouseWheel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddlMouseWheel.Margin = new System.Windows.Forms.Padding(2);
             this.ddlMouseWheel.Name = "ddlMouseWheel";
             this.ddlMouseWheel.PlaceholderText = "请选择";
             this.ddlMouseWheel.PrefixSvg = "";
@@ -1658,7 +1658,7 @@
             this.lMouseWheel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lMouseWheel.LocalizationText = "RobotEditForm.MouseINST.Wheel.Scroll";
             this.lMouseWheel.Location = new System.Drawing.Point(9, 2);
-            this.lMouseWheel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lMouseWheel.Margin = new System.Windows.Forms.Padding(2);
             this.lMouseWheel.Name = "lMouseWheel";
             this.lMouseWheel.Size = new System.Drawing.Size(31, 36);
             this.lMouseWheel.TabIndex = 13;
@@ -1671,7 +1671,7 @@
             this.bInsert_MouseWheel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_MouseWheel.IconSvg = "ArrowRightOutlined";
             this.bInsert_MouseWheel.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_MouseWheel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_MouseWheel.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_MouseWheel.Name = "bInsert_MouseWheel";
             this.bInsert_MouseWheel.Size = new System.Drawing.Size(36, 36);
             this.bInsert_MouseWheel.TabIndex = 1;
@@ -1683,7 +1683,7 @@
             this.nudWheelDistance.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudWheelDistance.LocalizationSuffixText = "Pixel";
             this.nudWheelDistance.Location = new System.Drawing.Point(44, 42);
-            this.nudWheelDistance.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudWheelDistance.Margin = new System.Windows.Forms.Padding(2);
             this.nudWheelDistance.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -1712,7 +1712,7 @@
             this.pMouseKey.Controls.Add(this.tlpMouseKey);
             this.pMouseKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pMouseKey.Location = new System.Drawing.Point(2, 2);
-            this.pMouseKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pMouseKey.Margin = new System.Windows.Forms.Padding(2);
             this.pMouseKey.Name = "pMouseKey";
             this.pMouseKey.Radius = 10;
             this.pMouseKey.Size = new System.Drawing.Size(522, 69);
@@ -1762,7 +1762,7 @@
             this.bInsert_MouseKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInsert_MouseKey.IconSvg = "ArrowRightOutlined";
             this.bInsert_MouseKey.Location = new System.Drawing.Point(480, 2);
-            this.bInsert_MouseKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInsert_MouseKey.Margin = new System.Windows.Forms.Padding(2);
             this.bInsert_MouseKey.Name = "bInsert_MouseKey";
             this.bInsert_MouseKey.Size = new System.Drawing.Size(36, 36);
             this.bInsert_MouseKey.TabIndex = 1;
@@ -1775,7 +1775,7 @@
             this.lMouseKey.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lMouseKey.LocalizationText = "RobotEditForm.MouseINST.Key";
             this.lMouseKey.Location = new System.Drawing.Point(9, 2);
-            this.lMouseKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lMouseKey.Margin = new System.Windows.Forms.Padding(2);
             this.lMouseKey.Name = "lMouseKey";
             this.lMouseKey.Size = new System.Drawing.Size(31, 36);
             this.lMouseKey.TabIndex = 12;
@@ -1788,7 +1788,7 @@
             this.ddlMouseKey.List = true;
             this.ddlMouseKey.LocalizationPlaceholderText = "PleaseSelect";
             this.ddlMouseKey.Location = new System.Drawing.Point(44, 2);
-            this.ddlMouseKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddlMouseKey.Margin = new System.Windows.Forms.Padding(2);
             this.ddlMouseKey.Name = "ddlMouseKey";
             this.ddlMouseKey.PlaceholderText = "请选择";
             this.ddlMouseKey.Size = new System.Drawing.Size(432, 36);
@@ -1801,7 +1801,7 @@
             this.dMouseKey.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dMouseKey.LocalizationText = "RobotEditForm.MouseINST.Key";
             this.dMouseKey.Location = new System.Drawing.Point(2, 2);
-            this.dMouseKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dMouseKey.Margin = new System.Windows.Forms.Padding(2);
             this.dMouseKey.Name = "dMouseKey";
             this.dMouseKey.Orientation = AntdUI.TOrientation.Left;
             this.dMouseKey.Size = new System.Drawing.Size(514, 20);
@@ -1815,9 +1815,9 @@
             this.pRobotINST.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pRobotINST.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.pRobotINST.Location = new System.Drawing.Point(552, 2);
-            this.pRobotINST.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pRobotINST.Margin = new System.Windows.Forms.Padding(2);
             this.pRobotINST.Name = "pRobotINST";
-            this.pRobotINST.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pRobotINST.Padding = new System.Windows.Forms.Padding(2);
             this.pRobotINST.Size = new System.Drawing.Size(546, 607);
             this.pRobotINST.TabIndex = 8;
             this.pRobotINST.Text = "panel1";
@@ -1829,10 +1829,10 @@
             this.tRobotInstruction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tRobotInstruction.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tRobotInstruction.Gap = 8;
-            this.tRobotInstruction.GapCell = 0;
+            this.tRobotInstruction.GapCell = 5;
             this.tRobotInstruction.Gaps = new System.Drawing.Size(8, 8);
             this.tRobotInstruction.Location = new System.Drawing.Point(3, 3);
-            this.tRobotInstruction.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tRobotInstruction.Margin = new System.Windows.Forms.Padding(2);
             this.tRobotInstruction.Name = "tRobotInstruction";
             this.tRobotInstruction.Size = new System.Drawing.Size(540, 601);
             this.tRobotInstruction.TabIndex = 3;
@@ -1845,7 +1845,7 @@
             this.txtINSTLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             this.txtINSTLog.LocalizationPrefixText = "RobotEditForm.Record";
             this.txtINSTLog.Location = new System.Drawing.Point(552, 613);
-            this.txtINSTLog.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtINSTLog.Margin = new System.Windows.Forms.Padding(2);
             this.txtINSTLog.Name = "txtINSTLog";
             this.txtINSTLog.PlaceholderText = "";
             this.txtINSTLog.PrefixText = "运行记录:";
@@ -1860,7 +1860,7 @@
             this.txtRobotName.LocalizationPlaceholderText = "Input.Text";
             this.txtRobotName.LocalizationPrefixText = "RobotEditForm.RName";
             this.txtRobotName.Location = new System.Drawing.Point(2, 613);
-            this.txtRobotName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtRobotName.Margin = new System.Windows.Forms.Padding(2);
             this.txtRobotName.Name = "txtRobotName";
             this.txtRobotName.PlaceholderText = "请输入字符";
             this.txtRobotName.PrefixText = "机器人名称:";
@@ -1875,7 +1875,7 @@
             this.Controls.Add(this.tlpRobotEdit);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "RobotEdit";
             this.Size = new System.Drawing.Size(1100, 700);
             this.Load += new System.EventHandler(this.RobotEdit_Load);

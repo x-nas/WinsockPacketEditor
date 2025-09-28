@@ -64,7 +64,7 @@
             this.tlpProxyAccount.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyAccount.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyAccount.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpProxyAccount.Size = new System.Drawing.Size(500, 700);
+            this.tlpProxyAccount.Size = new System.Drawing.Size(350, 350);
             this.tlpProxyAccount.TabIndex = 2;
             // 
             // tlpButton
@@ -78,14 +78,14 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 651);
+            this.tlpButton.Location = new System.Drawing.Point(0, 301);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(500, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 49);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -95,7 +95,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(178, 6);
+            this.bSave.Location = new System.Drawing.Point(103, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -111,7 +111,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(259, 6);
+            this.bExit.Location = new System.Drawing.Point(184, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -149,14 +149,14 @@
             this.tlpAccountInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAccountInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpAccountInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAccountInfo.Size = new System.Drawing.Size(500, 615);
+            this.tlpAccountInfo.Size = new System.Drawing.Size(350, 265);
             this.tlpAccountInfo.TabIndex = 1;
             // 
             // lUserName
             // 
             this.lUserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lUserName.LocalizationText = "AccountEditForm.Username";
-            this.lUserName.Location = new System.Drawing.Point(95, 2);
+            this.lUserName.Location = new System.Drawing.Point(20, 2);
             this.lUserName.Margin = new System.Windows.Forms.Padding(2);
             this.lUserName.Name = "lUserName";
             this.lUserName.Size = new System.Drawing.Size(99, 36);
@@ -168,7 +168,7 @@
             // 
             this.lPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPassword.LocalizationText = "AccountEditForm.Password";
-            this.lPassword.Location = new System.Drawing.Point(95, 42);
+            this.lPassword.Location = new System.Drawing.Point(20, 42);
             this.lPassword.Margin = new System.Windows.Forms.Padding(2);
             this.lPassword.Name = "lPassword";
             this.lPassword.Size = new System.Drawing.Size(99, 36);
@@ -179,7 +179,7 @@
             // txtUserName
             // 
             this.txtUserName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtUserName.Location = new System.Drawing.Point(198, 2);
+            this.txtUserName.Location = new System.Drawing.Point(123, 2);
             this.txtUserName.Margin = new System.Windows.Forms.Padding(2);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(206, 36);
@@ -189,7 +189,7 @@
             // txtPassword
             // 
             this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPassword.Location = new System.Drawing.Point(198, 42);
+            this.txtPassword.Location = new System.Drawing.Point(123, 42);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(2);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(206, 36);
@@ -201,7 +201,7 @@
             this.cbIsLimitLinks.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbIsLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsLimitLinks.LocalizationText = "AccountEditForm.LimitLinks";
-            this.cbIsLimitLinks.Location = new System.Drawing.Point(95, 82);
+            this.cbIsLimitLinks.Location = new System.Drawing.Point(20, 82);
             this.cbIsLimitLinks.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsLimitLinks.Name = "cbIsLimitLinks";
             this.cbIsLimitLinks.Size = new System.Drawing.Size(99, 36);
@@ -214,7 +214,7 @@
             this.cbIsLimitDevices.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbIsLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsLimitDevices.LocalizationText = "AccountEditForm.LimitDevices";
-            this.cbIsLimitDevices.Location = new System.Drawing.Point(95, 122);
+            this.cbIsLimitDevices.Location = new System.Drawing.Point(20, 122);
             this.cbIsLimitDevices.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsLimitDevices.Name = "cbIsLimitDevices";
             this.cbIsLimitDevices.Size = new System.Drawing.Size(99, 36);
@@ -227,7 +227,7 @@
             this.cbIsExpiry.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbIsExpiry.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsExpiry.LocalizationText = "AccountEditForm.ExpireTime";
-            this.cbIsExpiry.Location = new System.Drawing.Point(95, 162);
+            this.cbIsExpiry.Location = new System.Drawing.Point(20, 162);
             this.cbIsExpiry.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsExpiry.Name = "cbIsExpiry";
             this.cbIsExpiry.Size = new System.Drawing.Size(87, 34);
@@ -238,7 +238,7 @@
             // nudLimitLinks
             // 
             this.nudLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLimitLinks.Location = new System.Drawing.Point(198, 82);
+            this.nudLimitLinks.Location = new System.Drawing.Point(123, 82);
             this.nudLimitLinks.Margin = new System.Windows.Forms.Padding(2);
             this.nudLimitLinks.Maximum = new decimal(new int[] {
             99999999,
@@ -264,7 +264,7 @@
             // nudLimitDevices
             // 
             this.nudLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLimitDevices.Location = new System.Drawing.Point(198, 122);
+            this.nudLimitDevices.Location = new System.Drawing.Point(123, 122);
             this.nudLimitDevices.Margin = new System.Windows.Forms.Padding(2);
             this.nudLimitDevices.Maximum = new decimal(new int[] {
             99999999,
@@ -291,7 +291,7 @@
             // 
             this.dtpExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dtpExpiryTime.Format = "yyyy-MM-dd HH:mm:ss";
-            this.dtpExpiryTime.Location = new System.Drawing.Point(198, 162);
+            this.dtpExpiryTime.Location = new System.Drawing.Point(123, 162);
             this.dtpExpiryTime.Margin = new System.Windows.Forms.Padding(2);
             this.dtpExpiryTime.MaxDate = new System.DateTime(8888, 12, 31, 0, 0, 0, 0);
             this.dtpExpiryTime.Name = "dtpExpiryTime";
@@ -320,7 +320,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "AccountEdit";
-            this.Size = new System.Drawing.Size(500, 700);
+            this.Size = new System.Drawing.Size(350, 350);
             this.Load += new System.EventHandler(this.AccountEdit_Load);
             this.tlpProxyAccount.ResumeLayout(false);
             this.tlpProxyAccount.PerformLayout();
