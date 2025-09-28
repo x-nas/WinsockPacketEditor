@@ -61,7 +61,7 @@
             this.tlpFLeachSettings.Controls.Add(this.tlpButton, 0, 1);
             this.tlpFLeachSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFLeachSettings.Location = new System.Drawing.Point(0, 0);
-            this.tlpFLeachSettings.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tlpFLeachSettings.Margin = new System.Windows.Forms.Padding(2);
             this.tlpFLeachSettings.Name = "tlpFLeachSettings";
             this.tlpFLeachSettings.RowCount = 2;
             this.tlpFLeachSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -111,7 +111,7 @@
             this.txtCheckData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckData.LocalizationPlaceholderText = "HEXSemicolonDelimiter";
             this.txtCheckData.Location = new System.Drawing.Point(86, 248);
-            this.txtCheckData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCheckData.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckData.Name = "txtCheckData";
             this.txtCheckData.PlaceholderText = "十六进制带空格，支持 ; 分隔符";
             this.txtCheckData.Size = new System.Drawing.Size(412, 36);
@@ -124,7 +124,7 @@
             this.cbCheckData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbCheckData.LocalizationText = "PacketContent";
             this.cbCheckData.Location = new System.Drawing.Point(2, 248);
-            this.cbCheckData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCheckData.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckData.Name = "cbCheckData";
             this.cbCheckData.Size = new System.Drawing.Size(80, 32);
             this.cbCheckData.TabIndex = 10;
@@ -137,7 +137,7 @@
             this.txtCheckHead.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckHead.LocalizationPlaceholderText = "HEXSemicolonDelimiter";
             this.txtCheckHead.Location = new System.Drawing.Point(86, 208);
-            this.txtCheckHead.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCheckHead.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckHead.Name = "txtCheckHead";
             this.txtCheckHead.PlaceholderText = "十六进制带空格，支持 ; 分隔符";
             this.txtCheckHead.Size = new System.Drawing.Size(412, 36);
@@ -150,7 +150,7 @@
             this.cbCheckHead.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbCheckHead.LocalizationText = "PacketHead";
             this.cbCheckHead.Location = new System.Drawing.Point(2, 208);
-            this.cbCheckHead.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCheckHead.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckHead.Name = "cbCheckHead";
             this.cbCheckHead.Size = new System.Drawing.Size(80, 32);
             this.cbCheckHead.TabIndex = 8;
@@ -163,7 +163,7 @@
             this.txtCheckPort.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckPort.LocalizationPlaceholderText = "SemicolonDelimiter";
             this.txtCheckPort.Location = new System.Drawing.Point(86, 168);
-            this.txtCheckPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCheckPort.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckPort.Name = "txtCheckPort";
             this.txtCheckPort.PlaceholderText = "支持 ; 分隔符";
             this.txtCheckPort.Size = new System.Drawing.Size(412, 36);
@@ -176,7 +176,7 @@
             this.cbCheckPort.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbCheckPort.LocalizationText = "Port";
             this.cbCheckPort.Location = new System.Drawing.Point(2, 168);
-            this.cbCheckPort.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCheckPort.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckPort.Name = "cbCheckPort";
             this.cbCheckPort.Size = new System.Drawing.Size(68, 32);
             this.cbCheckPort.TabIndex = 6;
@@ -189,7 +189,7 @@
             this.txtCheckIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckIP.LocalizationPlaceholderText = "SemicolonDelimiter";
             this.txtCheckIP.Location = new System.Drawing.Point(86, 128);
-            this.txtCheckIP.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCheckIP.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckIP.Name = "txtCheckIP";
             this.txtCheckIP.PlaceholderText = "支持 ; 分隔符";
             this.txtCheckIP.Size = new System.Drawing.Size(412, 36);
@@ -202,7 +202,7 @@
             this.cbCheckIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbCheckIP.LocalizationText = "IPAddress";
             this.cbCheckIP.Location = new System.Drawing.Point(2, 128);
-            this.cbCheckIP.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCheckIP.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckIP.Name = "cbCheckIP";
             this.cbCheckIP.Size = new System.Drawing.Size(67, 32);
             this.cbCheckIP.TabIndex = 4;
@@ -215,7 +215,7 @@
             this.txtCheckLen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckLen.LocalizationPlaceholderText = "LeachSetting.Length";
             this.txtCheckLen.Location = new System.Drawing.Point(86, 88);
-            this.txtCheckLen.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCheckLen.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckLen.Name = "txtCheckLen";
             this.txtCheckLen.PlaceholderText = "例如：0-99;100";
             this.txtCheckLen.Size = new System.Drawing.Size(412, 36);
@@ -228,7 +228,7 @@
             this.cbCheckLen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbCheckLen.LocalizationText = "Length";
             this.cbCheckLen.Location = new System.Drawing.Point(2, 88);
-            this.cbCheckLen.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCheckLen.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckLen.Name = "cbCheckLen";
             this.cbCheckLen.Size = new System.Drawing.Size(56, 32);
             this.cbCheckLen.TabIndex = 2;
@@ -241,7 +241,7 @@
             this.cbCheckSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbCheckSocket.LocalizationText = "Socket";
             this.cbCheckSocket.Location = new System.Drawing.Point(2, 48);
-            this.cbCheckSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbCheckSocket.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckSocket.Name = "cbCheckSocket";
             this.cbCheckSocket.Size = new System.Drawing.Size(68, 32);
             this.cbCheckSocket.TabIndex = 0;
@@ -254,7 +254,7 @@
             this.txtCheckSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckSocket.LocalizationPlaceholderText = "SemicolonDelimiter";
             this.txtCheckSocket.Location = new System.Drawing.Point(86, 48);
-            this.txtCheckSocket.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCheckSocket.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckSocket.Name = "txtCheckSocket";
             this.txtCheckSocket.PlaceholderText = "支持 ; 分隔符";
             this.txtCheckSocket.Size = new System.Drawing.Size(412, 36);
@@ -267,7 +267,7 @@
             this.lIsShow.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lIsShow.LocalizationText = "LeachSetting.IsShow";
             this.lIsShow.Location = new System.Drawing.Point(2, 2);
-            this.lIsShow.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lIsShow.Margin = new System.Windows.Forms.Padding(2);
             this.lIsShow.Name = "lIsShow";
             this.lIsShow.Size = new System.Drawing.Size(80, 26);
             this.lIsShow.TabIndex = 13;
@@ -281,7 +281,7 @@
             this.sIsShow.LocalizationCheckedText = "Yes";
             this.sIsShow.LocalizationUnCheckedText = "No";
             this.sIsShow.Location = new System.Drawing.Point(86, 2);
-            this.sIsShow.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.sIsShow.Margin = new System.Windows.Forms.Padding(2);
             this.sIsShow.Name = "sIsShow";
             this.sIsShow.Size = new System.Drawing.Size(49, 26);
             this.sIsShow.TabIndex = 14;
@@ -316,7 +316,7 @@
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(178, 6);
-            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
@@ -332,7 +332,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(259, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -347,7 +347,7 @@
             this.Controls.Add(this.tlpFLeachSettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LeachSetting";
             this.Size = new System.Drawing.Size(500, 700);
             this.Load += new System.EventHandler(this.LeachSetting_Load);

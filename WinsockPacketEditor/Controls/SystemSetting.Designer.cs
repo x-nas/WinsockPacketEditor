@@ -111,7 +111,7 @@
             this.dFloatButton.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dFloatButton.LocalizationText = "SystemSettingsForm.FloatingButton";
             this.dFloatButton.Location = new System.Drawing.Point(2, 79);
-            this.dFloatButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dFloatButton.Margin = new System.Windows.Forms.Padding(2);
             this.dFloatButton.Name = "dFloatButton";
             this.dFloatButton.Orientation = AntdUI.TOrientation.Left;
             this.dFloatButton.Size = new System.Drawing.Size(496, 19);
@@ -161,7 +161,7 @@
             this.bChangeReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bChangeReset.LocalizationText = "Reset";
             this.bChangeReset.Location = new System.Drawing.Point(268, 124);
-            this.bChangeReset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bChangeReset.Margin = new System.Windows.Forms.Padding(2);
             this.bChangeReset.Name = "bChangeReset";
             this.bChangeReset.Size = new System.Drawing.Size(48, 37);
             this.bChangeReset.TabIndex = 54;
@@ -175,7 +175,7 @@
             this.bInterceptReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInterceptReset.LocalizationText = "Reset";
             this.bInterceptReset.Location = new System.Drawing.Point(268, 83);
-            this.bInterceptReset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bInterceptReset.Margin = new System.Windows.Forms.Padding(2);
             this.bInterceptReset.Name = "bInterceptReset";
             this.bInterceptReset.Size = new System.Drawing.Size(48, 37);
             this.bInterceptReset.TabIndex = 52;
@@ -189,7 +189,7 @@
             this.bReplaceReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bReplaceReset.LocalizationText = "Reset";
             this.bReplaceReset.Location = new System.Drawing.Point(268, 42);
-            this.bReplaceReset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bReplaceReset.Margin = new System.Windows.Forms.Padding(2);
             this.bReplaceReset.Name = "bReplaceReset";
             this.bReplaceReset.Size = new System.Drawing.Size(48, 37);
             this.bReplaceReset.TabIndex = 50;
@@ -202,7 +202,7 @@
             this.lForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lForeColor.LocalizationText = "SystemSettingsForm.ForeColor";
             this.lForeColor.Location = new System.Drawing.Point(149, 2);
-            this.lForeColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lForeColor.Margin = new System.Windows.Forms.Padding(2);
             this.lForeColor.Name = "lForeColor";
             this.lForeColor.Size = new System.Drawing.Size(101, 36);
             this.lForeColor.TabIndex = 46;
@@ -214,7 +214,7 @@
             this.lBackColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lBackColor.LocalizationText = "SystemSettingsForm.BackColor";
             this.lBackColor.Location = new System.Drawing.Point(44, 2);
-            this.lBackColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lBackColor.Margin = new System.Windows.Forms.Padding(2);
             this.lBackColor.Name = "lBackColor";
             this.lBackColor.Size = new System.Drawing.Size(101, 36);
             this.lBackColor.TabIndex = 44;
@@ -225,7 +225,7 @@
             // 
             this.cChange_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cChange_ForeColor.Location = new System.Drawing.Point(149, 124);
-            this.cChange_ForeColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cChange_ForeColor.Margin = new System.Windows.Forms.Padding(2);
             this.cChange_ForeColor.Name = "cChange_ForeColor";
             this.cChange_ForeColor.ShowClose = true;
             this.cChange_ForeColor.ShowReset = true;
@@ -238,7 +238,7 @@
             // 
             this.cChange_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cChange_BackColor.Location = new System.Drawing.Point(44, 124);
-            this.cChange_BackColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cChange_BackColor.Margin = new System.Windows.Forms.Padding(2);
             this.cChange_BackColor.Name = "cChange_BackColor";
             this.cChange_BackColor.ShowClose = true;
             this.cChange_BackColor.ShowReset = true;
@@ -253,7 +253,7 @@
             this.lChange.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lChange.LocalizationText = "StatisticalData.Change";
             this.lChange.Location = new System.Drawing.Point(9, 124);
-            this.lChange.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lChange.Margin = new System.Windows.Forms.Padding(2);
             this.lChange.Name = "lChange";
             this.lChange.Size = new System.Drawing.Size(31, 37);
             this.lChange.TabIndex = 6;
@@ -263,7 +263,7 @@
             // 
             this.cIntercept_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cIntercept_ForeColor.Location = new System.Drawing.Point(149, 83);
-            this.cIntercept_ForeColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cIntercept_ForeColor.Margin = new System.Windows.Forms.Padding(2);
             this.cIntercept_ForeColor.Name = "cIntercept_ForeColor";
             this.cIntercept_ForeColor.ShowClose = true;
             this.cIntercept_ForeColor.ShowReset = true;
@@ -276,7 +276,7 @@
             // 
             this.cIntercept_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cIntercept_BackColor.Location = new System.Drawing.Point(44, 83);
-            this.cIntercept_BackColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cIntercept_BackColor.Margin = new System.Windows.Forms.Padding(2);
             this.cIntercept_BackColor.Name = "cIntercept_BackColor";
             this.cIntercept_BackColor.ShowClose = true;
             this.cIntercept_BackColor.ShowReset = true;
@@ -291,7 +291,7 @@
             this.lIntercept.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lIntercept.LocalizationText = "StatisticalData.Intercept";
             this.lIntercept.Location = new System.Drawing.Point(9, 83);
-            this.lIntercept.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lIntercept.Margin = new System.Windows.Forms.Padding(2);
             this.lIntercept.Name = "lIntercept";
             this.lIntercept.Size = new System.Drawing.Size(31, 37);
             this.lIntercept.TabIndex = 3;
@@ -301,7 +301,7 @@
             // 
             this.cRepalce_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cRepalce_ForeColor.Location = new System.Drawing.Point(149, 42);
-            this.cRepalce_ForeColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cRepalce_ForeColor.Margin = new System.Windows.Forms.Padding(2);
             this.cRepalce_ForeColor.Name = "cRepalce_ForeColor";
             this.cRepalce_ForeColor.ShowClose = true;
             this.cRepalce_ForeColor.ShowReset = true;
@@ -316,7 +316,7 @@
             this.lReplace.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lReplace.LocalizationText = "StatisticalData.Replace";
             this.lReplace.Location = new System.Drawing.Point(9, 42);
-            this.lReplace.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lReplace.Margin = new System.Windows.Forms.Padding(2);
             this.lReplace.Name = "lReplace";
             this.lReplace.Size = new System.Drawing.Size(31, 37);
             this.lReplace.TabIndex = 0;
@@ -326,7 +326,7 @@
             // 
             this.cRepalce_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cRepalce_BackColor.Location = new System.Drawing.Point(44, 42);
-            this.cRepalce_BackColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cRepalce_BackColor.Margin = new System.Windows.Forms.Padding(2);
             this.cRepalce_BackColor.Name = "cRepalce_BackColor";
             this.cRepalce_BackColor.ShowClose = true;
             this.cRepalce_BackColor.ShowReset = true;
@@ -359,7 +359,7 @@
             this.rbFilterSet_Sequence.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFilterSet_Sequence.LocalizationText = "SystemSettingsForm.Order";
             this.rbFilterSet_Sequence.Location = new System.Drawing.Point(252, 2);
-            this.rbFilterSet_Sequence.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbFilterSet_Sequence.Margin = new System.Windows.Forms.Padding(2);
             this.rbFilterSet_Sequence.Name = "rbFilterSet_Sequence";
             this.rbFilterSet_Sequence.Size = new System.Drawing.Size(92, 34);
             this.rbFilterSet_Sequence.TabIndex = 2;
@@ -371,7 +371,7 @@
             this.rbFilterSet_Priority.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFilterSet_Priority.LocalizationText = "SystemSettingsForm.Priority";
             this.rbFilterSet_Priority.Location = new System.Drawing.Point(2, 2);
-            this.rbFilterSet_Priority.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbFilterSet_Priority.Margin = new System.Windows.Forms.Padding(2);
             this.rbFilterSet_Priority.Name = "rbFilterSet_Priority";
             this.rbFilterSet_Priority.Size = new System.Drawing.Size(80, 34);
             this.rbFilterSet_Priority.TabIndex = 1;
@@ -406,7 +406,7 @@
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(178, 6);
-            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
@@ -422,7 +422,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(259, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -436,7 +436,7 @@
             this.cbSpeedMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbSpeedMode.LocalizationText = "SystemSettingsForm.SpeedMode";
             this.cbSpeedMode.Location = new System.Drawing.Point(2, 25);
-            this.cbSpeedMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbSpeedMode.Margin = new System.Windows.Forms.Padding(2);
             this.cbSpeedMode.Name = "cbSpeedMode";
             this.cbSpeedMode.Size = new System.Drawing.Size(80, 34);
             this.cbSpeedMode.TabIndex = 6;
@@ -448,7 +448,7 @@
             this.dWorkMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dWorkMode.LocalizationText = "SystemSettingsForm.WorkMode";
             this.dWorkMode.Location = new System.Drawing.Point(2, 2);
-            this.dWorkMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dWorkMode.Margin = new System.Windows.Forms.Padding(2);
             this.dWorkMode.Name = "dWorkMode";
             this.dWorkMode.Orientation = AntdUI.TOrientation.Left;
             this.dWorkMode.Size = new System.Drawing.Size(496, 19);
@@ -461,7 +461,7 @@
             this.dListExecute.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dListExecute.LocalizationText = "SystemSettingsForm.ListMode";
             this.dListExecute.Location = new System.Drawing.Point(2, 158);
-            this.dListExecute.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dListExecute.Margin = new System.Windows.Forms.Padding(2);
             this.dListExecute.Name = "dListExecute";
             this.dListExecute.Orientation = AntdUI.TOrientation.Left;
             this.dListExecute.Size = new System.Drawing.Size(496, 19);
@@ -474,7 +474,7 @@
             this.dFilterSet.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dFilterSet.LocalizationText = "SystemSettingsForm.FilterMode";
             this.dFilterSet.Location = new System.Drawing.Point(2, 238);
-            this.dFilterSet.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dFilterSet.Margin = new System.Windows.Forms.Padding(2);
             this.dFilterSet.Name = "dFilterSet";
             this.dFilterSet.Orientation = AntdUI.TOrientation.Left;
             this.dFilterSet.Size = new System.Drawing.Size(496, 19);
@@ -487,7 +487,7 @@
             this.dFilterActionColor.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dFilterActionColor.LocalizationText = "SystemSettingsForm.FilterAction";
             this.dFilterActionColor.Location = new System.Drawing.Point(2, 318);
-            this.dFilterActionColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dFilterActionColor.Margin = new System.Windows.Forms.Padding(2);
             this.dFilterActionColor.Name = "dFilterActionColor";
             this.dFilterActionColor.Orientation = AntdUI.TOrientation.Left;
             this.dFilterActionColor.Size = new System.Drawing.Size(496, 19);
@@ -518,7 +518,7 @@
             this.rbListExecute_Sequence.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbListExecute_Sequence.LocalizationText = "SystemSettingsForm.Order";
             this.rbListExecute_Sequence.Location = new System.Drawing.Point(252, 2);
-            this.rbListExecute_Sequence.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbListExecute_Sequence.Margin = new System.Windows.Forms.Padding(2);
             this.rbListExecute_Sequence.Name = "rbListExecute_Sequence";
             this.rbListExecute_Sequence.Size = new System.Drawing.Size(92, 34);
             this.rbListExecute_Sequence.TabIndex = 2;
@@ -530,7 +530,7 @@
             this.rbListExecute_Together.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbListExecute_Together.LocalizationText = "SystemSettingsForm.Simultaneously";
             this.rbListExecute_Together.Location = new System.Drawing.Point(2, 2);
-            this.rbListExecute_Together.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rbListExecute_Together.Margin = new System.Windows.Forms.Padding(2);
             this.rbListExecute_Together.Name = "rbListExecute_Together";
             this.rbListExecute_Together.Size = new System.Drawing.Size(80, 34);
             this.rbListExecute_Together.TabIndex = 1;
@@ -553,7 +553,7 @@
             this.Controls.Add(this.tlpSystemSettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SystemSetting";
             this.Size = new System.Drawing.Size(500, 700);
             this.Load += new System.EventHandler(this.SystemSetting_Load);

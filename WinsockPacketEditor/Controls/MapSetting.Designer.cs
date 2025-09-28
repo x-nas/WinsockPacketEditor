@@ -88,7 +88,7 @@
             this.tMapRemote.GapCell = 0;
             this.tMapRemote.Gaps = new System.Drawing.Size(8, 8);
             this.tMapRemote.Location = new System.Drawing.Point(2, 403);
-            this.tMapRemote.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tMapRemote.Margin = new System.Windows.Forms.Padding(2);
             this.tMapRemote.Name = "tMapRemote";
             this.tMapRemote.Size = new System.Drawing.Size(796, 245);
             this.tMapRemote.TabIndex = 11;
@@ -123,7 +123,7 @@
             this.ddMenu_MapRemote.IconRatio = 1F;
             this.ddMenu_MapRemote.IconSvg = "PlusOutlined";
             this.ddMenu_MapRemote.Location = new System.Drawing.Point(766, 2);
-            this.ddMenu_MapRemote.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddMenu_MapRemote.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu_MapRemote.MaxCount = 10;
             this.ddMenu_MapRemote.Name = "ddMenu_MapRemote";
             this.ddMenu_MapRemote.Size = new System.Drawing.Size(32, 37);
@@ -138,7 +138,7 @@
             this.cbEnable_MapRemote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbEnable_MapRemote.LocalizationText = "Enable";
             this.cbEnable_MapRemote.Location = new System.Drawing.Point(2, 2);
-            this.cbEnable_MapRemote.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbEnable_MapRemote.Margin = new System.Windows.Forms.Padding(2);
             this.cbEnable_MapRemote.Name = "cbEnable_MapRemote";
             this.cbEnable_MapRemote.Size = new System.Drawing.Size(104, 37);
             this.cbEnable_MapRemote.TabIndex = 8;
@@ -174,7 +174,7 @@
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(328, 6);
-            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
@@ -190,7 +190,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(409, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -201,10 +201,10 @@
             // dMapLocal
             // 
             this.dMapLocal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dMapLocal.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dMapLocal.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dMapLocal.LocalizationText = "MapSettingsForm.MapLocal";
             this.dMapLocal.Location = new System.Drawing.Point(2, 2);
-            this.dMapLocal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dMapLocal.Margin = new System.Windows.Forms.Padding(2);
             this.dMapLocal.Name = "dMapLocal";
             this.dMapLocal.Orientation = AntdUI.TOrientation.Left;
             this.dMapLocal.Size = new System.Drawing.Size(796, 19);
@@ -214,10 +214,10 @@
             // dMapRemote
             // 
             this.dMapRemote.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dMapRemote.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dMapRemote.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dMapRemote.LocalizationText = "MapSettingsForm.MapRemote";
             this.dMapRemote.Location = new System.Drawing.Point(2, 335);
-            this.dMapRemote.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dMapRemote.Margin = new System.Windows.Forms.Padding(2);
             this.dMapRemote.Name = "dMapRemote";
             this.dMapRemote.Orientation = AntdUI.TOrientation.Left;
             this.dMapRemote.Size = new System.Drawing.Size(796, 19);
@@ -235,7 +235,7 @@
             this.tMapLocal.GapCell = 0;
             this.tMapLocal.Gaps = new System.Drawing.Size(8, 8);
             this.tMapLocal.Location = new System.Drawing.Point(2, 70);
-            this.tMapLocal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tMapLocal.Margin = new System.Windows.Forms.Padding(2);
             this.tMapLocal.Name = "tMapLocal";
             this.tMapLocal.Size = new System.Drawing.Size(796, 245);
             this.tMapLocal.TabIndex = 8;
@@ -270,7 +270,7 @@
             this.ddMenu_MapLocal.IconRatio = 1F;
             this.ddMenu_MapLocal.IconSvg = "PlusOutlined";
             this.ddMenu_MapLocal.Location = new System.Drawing.Point(766, 2);
-            this.ddMenu_MapLocal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddMenu_MapLocal.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu_MapLocal.MaxCount = 10;
             this.ddMenu_MapLocal.Name = "ddMenu_MapLocal";
             this.ddMenu_MapLocal.Size = new System.Drawing.Size(32, 37);
@@ -285,7 +285,7 @@
             this.cbEnable_MapLocal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbEnable_MapLocal.LocalizationText = "Enable";
             this.cbEnable_MapLocal.Location = new System.Drawing.Point(2, 2);
-            this.cbEnable_MapLocal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbEnable_MapLocal.Margin = new System.Windows.Forms.Padding(2);
             this.cbEnable_MapLocal.Name = "cbEnable_MapLocal";
             this.cbEnable_MapLocal.Size = new System.Drawing.Size(104, 37);
             this.cbEnable_MapLocal.TabIndex = 8;
@@ -299,7 +299,7 @@
             this.Controls.Add(this.tlpMapSettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MapSetting";
             this.Size = new System.Drawing.Size(800, 700);
             this.Load += new System.EventHandler(this.MapSetting_Load);

@@ -90,7 +90,7 @@
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(178, 6);
-            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
@@ -106,7 +106,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(259, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -138,7 +138,7 @@
             this.cbIsLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsLimitDevices.LocalizationText = "LimitDevicesForm.LimitDevices";
             this.cbIsLimitDevices.Location = new System.Drawing.Point(2, 2);
-            this.cbIsLimitDevices.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbIsLimitDevices.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsLimitDevices.Name = "cbIsLimitDevices";
             this.cbIsLimitDevices.Size = new System.Drawing.Size(99, 36);
             this.cbIsLimitDevices.TabIndex = 6;
@@ -149,7 +149,7 @@
             // 
             this.nudLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudLimitDevices.Location = new System.Drawing.Point(105, 2);
-            this.nudLimitDevices.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudLimitDevices.Margin = new System.Windows.Forms.Padding(2);
             this.nudLimitDevices.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -177,9 +177,9 @@
             // lAccountCNT
             // 
             this.lAccountCNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lAccountCNT.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lAccountCNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lAccountCNT.Location = new System.Drawing.Point(2, 2);
-            this.lAccountCNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lAccountCNT.Margin = new System.Windows.Forms.Padding(2);
             this.lAccountCNT.Name = "lAccountCNT";
             this.lAccountCNT.Size = new System.Drawing.Size(496, 36);
             this.lAccountCNT.TabIndex = 18;
@@ -193,7 +193,7 @@
             this.Controls.Add(this.tlpLimitDevices);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LimitDevices";
             this.Size = new System.Drawing.Size(500, 700);
             this.Load += new System.EventHandler(this.LimitDevices_Load);

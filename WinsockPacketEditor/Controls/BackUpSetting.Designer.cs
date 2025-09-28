@@ -98,10 +98,10 @@
             // dListInfo
             // 
             this.dListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dListInfo.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dListInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dListInfo.LocalizationText = "BackUpSettingsForm.ListData";
             this.dListInfo.Location = new System.Drawing.Point(2, 324);
-            this.dListInfo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dListInfo.Margin = new System.Windows.Forms.Padding(2);
             this.dListInfo.Name = "dListInfo";
             this.dListInfo.Orientation = AntdUI.TOrientation.Left;
             this.dListInfo.Size = new System.Drawing.Size(496, 19);
@@ -134,7 +134,7 @@
             this.cbBackUp_RobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_RobotList.LocalizationText = "RobotList";
             this.cbBackUp_RobotList.Location = new System.Drawing.Point(2, 40);
-            this.cbBackUp_RobotList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBackUp_RobotList.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_RobotList.Name = "cbBackUp_RobotList";
             this.cbBackUp_RobotList.Size = new System.Drawing.Size(92, 34);
             this.cbBackUp_RobotList.TabIndex = 4;
@@ -147,7 +147,7 @@
             this.cbBackUp_SendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_SendList.LocalizationText = "SendList";
             this.cbBackUp_SendList.Location = new System.Drawing.Point(252, 2);
-            this.cbBackUp_SendList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBackUp_SendList.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_SendList.Name = "cbBackUp_SendList";
             this.cbBackUp_SendList.Size = new System.Drawing.Size(80, 34);
             this.cbBackUp_SendList.TabIndex = 3;
@@ -160,7 +160,7 @@
             this.cbBackUp_FilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_FilterList.LocalizationText = "FilterList";
             this.cbBackUp_FilterList.Location = new System.Drawing.Point(2, 2);
-            this.cbBackUp_FilterList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBackUp_FilterList.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_FilterList.Name = "cbBackUp_FilterList";
             this.cbBackUp_FilterList.Size = new System.Drawing.Size(80, 34);
             this.cbBackUp_FilterList.TabIndex = 2;
@@ -173,7 +173,7 @@
             this.cbBackUp_InjectSet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_InjectSet.LocalizationText = "BackUpSettingsForm.InjectMode.Configuration";
             this.cbBackUp_InjectSet.Location = new System.Drawing.Point(2, 270);
-            this.cbBackUp_InjectSet.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBackUp_InjectSet.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_InjectSet.Name = "cbBackUp_InjectSet";
             this.cbBackUp_InjectSet.Size = new System.Drawing.Size(104, 34);
             this.cbBackUp_InjectSet.TabIndex = 11;
@@ -208,7 +208,7 @@
             this.bImport.IconSvg = "ImportOutlined";
             this.bImport.LocalizationText = "Import";
             this.bImport.Location = new System.Drawing.Point(154, 6);
-            this.bImport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bImport.Margin = new System.Windows.Forms.Padding(2);
             this.bImport.Name = "bImport";
             this.bImport.Size = new System.Drawing.Size(87, 37);
             this.bImport.TabIndex = 0;
@@ -224,7 +224,7 @@
             this.bExport.IconSvg = "ExportOutlined";
             this.bExport.LocalizationText = "Export";
             this.bExport.Location = new System.Drawing.Point(259, 6);
-            this.bExport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExport.Margin = new System.Windows.Forms.Padding(2);
             this.bExport.Name = "bExport";
             this.bExport.Size = new System.Drawing.Size(87, 37);
             this.bExport.TabIndex = 1;
@@ -258,7 +258,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(218, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -269,10 +269,10 @@
             // dSystemConfig
             // 
             this.dSystemConfig.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dSystemConfig.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSystemConfig.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dSystemConfig.LocalizationText = "BackUpSettingsForm.SystemConfig";
             this.dSystemConfig.Location = new System.Drawing.Point(2, 2);
-            this.dSystemConfig.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dSystemConfig.Margin = new System.Windows.Forms.Padding(2);
             this.dSystemConfig.Name = "dSystemConfig";
             this.dSystemConfig.Orientation = AntdUI.TOrientation.Left;
             this.dSystemConfig.Size = new System.Drawing.Size(496, 19);
@@ -308,7 +308,7 @@
             this.cbBackUp_ProxyAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxyAccount.LocalizationText = "BackUpSettingsForm.ProxyAccount";
             this.cbBackUp_ProxyAccount.Location = new System.Drawing.Point(252, 2);
-            this.cbBackUp_ProxyAccount.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBackUp_ProxyAccount.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_ProxyAccount.Name = "cbBackUp_ProxyAccount";
             this.cbBackUp_ProxyAccount.Size = new System.Drawing.Size(80, 34);
             this.cbBackUp_ProxyAccount.TabIndex = 4;
@@ -321,7 +321,7 @@
             this.cbBackUp_ProxyMapping.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxyMapping.LocalizationText = "BackUpSettingsForm.ProxyMapping";
             this.cbBackUp_ProxyMapping.Location = new System.Drawing.Point(2, 40);
-            this.cbBackUp_ProxyMapping.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBackUp_ProxyMapping.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_ProxyMapping.Name = "cbBackUp_ProxyMapping";
             this.cbBackUp_ProxyMapping.Size = new System.Drawing.Size(80, 34);
             this.cbBackUp_ProxyMapping.TabIndex = 2;
@@ -334,7 +334,7 @@
             this.cbBackUp_ProxySet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxySet.LocalizationText = "BackUpSettingsForm.ProxyMode.Configuration";
             this.cbBackUp_ProxySet.Location = new System.Drawing.Point(2, 2);
-            this.cbBackUp_ProxySet.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBackUp_ProxySet.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_ProxySet.Name = "cbBackUp_ProxySet";
             this.cbBackUp_ProxySet.Size = new System.Drawing.Size(104, 34);
             this.cbBackUp_ProxySet.TabIndex = 0;
@@ -343,10 +343,10 @@
             // dProxyMode
             // 
             this.dProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dProxyMode.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dProxyMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dProxyMode.LocalizationText = "BackUpSettingsForm.ProxyMode";
             this.dProxyMode.Location = new System.Drawing.Point(2, 95);
-            this.dProxyMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dProxyMode.Margin = new System.Windows.Forms.Padding(2);
             this.dProxyMode.Name = "dProxyMode";
             this.dProxyMode.Orientation = AntdUI.TOrientation.Left;
             this.dProxyMode.Size = new System.Drawing.Size(496, 19);
@@ -356,10 +356,10 @@
             // dInjectMode
             // 
             this.dInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dInjectMode.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dInjectMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dInjectMode.LocalizationText = "BackUpSettingsForm.InjectMode";
             this.dInjectMode.Location = new System.Drawing.Point(2, 231);
-            this.dInjectMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dInjectMode.Margin = new System.Windows.Forms.Padding(2);
             this.dInjectMode.Name = "dInjectMode";
             this.dInjectMode.Orientation = AntdUI.TOrientation.Left;
             this.dInjectMode.Size = new System.Drawing.Size(496, 19);
@@ -372,7 +372,7 @@
             this.cbBackUp_SystemConfig.Checked = true;
             this.cbBackUp_SystemConfig.LocalizationText = "BackUpSettingsForm.SystemOperation";
             this.cbBackUp_SystemConfig.Location = new System.Drawing.Point(2, 41);
-            this.cbBackUp_SystemConfig.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBackUp_SystemConfig.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_SystemConfig.Name = "cbBackUp_SystemConfig";
             this.cbBackUp_SystemConfig.Size = new System.Drawing.Size(104, 34);
             this.cbBackUp_SystemConfig.TabIndex = 9;
@@ -385,7 +385,7 @@
             this.Controls.Add(this.tlpBackUpSettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "BackUpSetting";
             this.Size = new System.Drawing.Size(500, 700);
             this.Load += new System.EventHandler(this.BackUpSetting_Load);

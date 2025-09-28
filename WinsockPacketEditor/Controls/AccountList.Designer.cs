@@ -67,7 +67,7 @@
             this.tAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tAccountList.Gap = 12;
             this.tAccountList.Location = new System.Drawing.Point(2, 42);
-            this.tAccountList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tAccountList.Margin = new System.Windows.Forms.Padding(2);
             this.tAccountList.Name = "tAccountList";
             this.tAccountList.Size = new System.Drawing.Size(1096, 520);
             this.tAccountList.TabIndex = 1;
@@ -108,7 +108,7 @@
             this.ddMenu.IconRatio = 1F;
             this.ddMenu.IconSvg = "PlusOutlined";
             this.ddMenu.Location = new System.Drawing.Point(1066, 1);
-            this.ddMenu.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ddMenu.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
             this.ddMenu.Size = new System.Drawing.Size(32, 37);
@@ -125,7 +125,7 @@
             this.bReset.IconSvg = "RedoOutlined";
             this.bReset.LocalizationText = "Reset";
             this.bReset.Location = new System.Drawing.Point(419, 1);
-            this.bReset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bReset.Margin = new System.Windows.Forms.Padding(2);
             this.bReset.Name = "bReset";
             this.bReset.Size = new System.Drawing.Size(63, 37);
             this.bReset.TabIndex = 8;
@@ -140,7 +140,7 @@
             this.txtSearchUserName.LocalizationPlaceholderText = "AccountList.SearchAccount";
             this.txtSearchUserName.LocalizationText = "";
             this.txtSearchUserName.Location = new System.Drawing.Point(891, 1);
-            this.txtSearchUserName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtSearchUserName.Margin = new System.Windows.Forms.Padding(2);
             this.txtSearchUserName.Name = "txtSearchUserName";
             this.txtSearchUserName.PlaceholderText = "请输入用户名查询";
             this.txtSearchUserName.PrefixSvg = "SearchOutlined";
@@ -155,7 +155,7 @@
             this.dtpExpiryTime.LocalizationPlaceholderEnd = "DatePicker.PlaceholderE";
             this.dtpExpiryTime.LocalizationPlaceholderStart = "DatePicker.PlaceholderS";
             this.dtpExpiryTime.Location = new System.Drawing.Point(2, 1);
-            this.dtpExpiryTime.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dtpExpiryTime.Margin = new System.Windows.Forms.Padding(2);
             this.dtpExpiryTime.Name = "dtpExpiryTime";
             this.dtpExpiryTime.PlaceholderEnd = "过期结束时间";
             this.dtpExpiryTime.PlaceholderStart = "过期开始时间";
@@ -171,7 +171,7 @@
             this.bSearchExpiryTime.IconSvg = "SearchOutlined";
             this.bSearchExpiryTime.LocalizationText = "Search";
             this.bSearchExpiryTime.Location = new System.Drawing.Point(352, 1);
-            this.bSearchExpiryTime.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSearchExpiryTime.Margin = new System.Windows.Forms.Padding(2);
             this.bSearchExpiryTime.Name = "bSearchExpiryTime";
             this.bSearchExpiryTime.Size = new System.Drawing.Size(63, 37);
             this.bSearchExpiryTime.TabIndex = 7;
@@ -182,9 +182,9 @@
             // pAccountList
             // 
             this.pAccountList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pAccountList.Font = new System.Drawing.Font("微软雅黑", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.pAccountList.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.pAccountList.Location = new System.Drawing.Point(2, 566);
-            this.pAccountList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pAccountList.Margin = new System.Windows.Forms.Padding(2);
             this.pAccountList.Name = "pAccountList";
             this.pAccountList.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.pAccountList.ShowSizeChanger = true;
@@ -200,7 +200,7 @@
             this.Controls.Add(this.tlpAccountList);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "AccountList";
             this.Size = new System.Drawing.Size(1100, 600);
             this.Load += new System.EventHandler(this.AccountList_Load);

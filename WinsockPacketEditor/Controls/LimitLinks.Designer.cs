@@ -90,7 +90,7 @@
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
             this.bSave.Location = new System.Drawing.Point(178, 6);
-            this.bSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
@@ -106,7 +106,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(259, 6);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
@@ -138,7 +138,7 @@
             this.cbIsLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbIsLimitLinks.LocalizationText = "LimitLinksForm.LimitLinks";
             this.cbIsLimitLinks.Location = new System.Drawing.Point(2, 2);
-            this.cbIsLimitLinks.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbIsLimitLinks.Margin = new System.Windows.Forms.Padding(2);
             this.cbIsLimitLinks.Name = "cbIsLimitLinks";
             this.cbIsLimitLinks.Size = new System.Drawing.Size(99, 36);
             this.cbIsLimitLinks.TabIndex = 6;
@@ -149,7 +149,7 @@
             // 
             this.nudLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudLimitLinks.Location = new System.Drawing.Point(105, 2);
-            this.nudLimitLinks.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudLimitLinks.Margin = new System.Windows.Forms.Padding(2);
             this.nudLimitLinks.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -177,9 +177,9 @@
             // lAccountCNT
             // 
             this.lAccountCNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lAccountCNT.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lAccountCNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lAccountCNT.Location = new System.Drawing.Point(2, 2);
-            this.lAccountCNT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.lAccountCNT.Margin = new System.Windows.Forms.Padding(2);
             this.lAccountCNT.Name = "lAccountCNT";
             this.lAccountCNT.Size = new System.Drawing.Size(496, 36);
             this.lAccountCNT.TabIndex = 18;
@@ -193,7 +193,7 @@
             this.Controls.Add(this.tlpLimitLinks);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LimitLinks";
             this.Size = new System.Drawing.Size(500, 700);
             this.Load += new System.EventHandler(this.LimitLinks_Load);
