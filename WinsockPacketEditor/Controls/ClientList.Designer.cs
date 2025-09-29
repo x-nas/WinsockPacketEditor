@@ -50,7 +50,7 @@
             this.tlpClientList.Name = "tlpClientList";
             this.tlpClientList.RowCount = 1;
             this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 486F));
+            this.tlpClientList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpClientList.Size = new System.Drawing.Size(1100, 600);
             this.tlpClientList.TabIndex = 0;
             // 
@@ -59,8 +59,7 @@
             this.splitterClientList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterClientList.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterClientList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterClientList.Location = new System.Drawing.Point(2, 2);
-            this.splitterClientList.Margin = new System.Windows.Forms.Padding(2);
+            this.splitterClientList.Location = new System.Drawing.Point(3, 3);
             this.splitterClientList.Name = "splitterClientList";
             // 
             // splitterClientList.Panel1
@@ -72,11 +71,11 @@
             // 
             this.splitterClientList.Panel2.Controls.Add(this.tAuthList);
             this.splitterClientList.Panel2MinSize = 0;
-            this.splitterClientList.Size = new System.Drawing.Size(1096, 596);
-            this.splitterClientList.SplitterDistance = 270;
+            this.splitterClientList.Size = new System.Drawing.Size(1094, 594);
+            this.splitterClientList.SplitterDistance = 300;
             this.splitterClientList.SplitterSize = 80;
-            this.splitterClientList.SplitterWidth = 10;
-            this.splitterClientList.TabIndex = 2;
+            this.splitterClientList.SplitterWidth = 5;
+            this.splitterClientList.TabIndex = 3;
             // 
             // treeClientList
             // 
@@ -84,8 +83,8 @@
             this.treeClientList.Location = new System.Drawing.Point(0, 0);
             this.treeClientList.Margin = new System.Windows.Forms.Padding(2);
             this.treeClientList.Name = "treeClientList";
-            this.treeClientList.Size = new System.Drawing.Size(270, 596);
-            this.treeClientList.TabIndex = 0;
+            this.treeClientList.Size = new System.Drawing.Size(300, 594);
+            this.treeClientList.TabIndex = 1;
             // 
             // tAuthList
             // 
@@ -98,8 +97,8 @@
             this.tAuthList.Location = new System.Drawing.Point(0, 0);
             this.tAuthList.Margin = new System.Windows.Forms.Padding(2);
             this.tAuthList.Name = "tAuthList";
-            this.tAuthList.Size = new System.Drawing.Size(816, 596);
-            this.tAuthList.TabIndex = 9;
+            this.tAuthList.Size = new System.Drawing.Size(789, 594);
+            this.tAuthList.TabIndex = 10;
             // 
             // ClientList
             // 

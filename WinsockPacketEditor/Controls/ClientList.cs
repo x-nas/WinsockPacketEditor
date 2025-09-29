@@ -18,8 +18,6 @@ namespace WinsockPacketEditor
 
         private void ClientList_Load(object sender, EventArgs e)
         {
-            this.splitterClientList.SplitterWidth = 5;
-
             this.InitTable_AuthList();            
             this.Dark_Changed();
         }

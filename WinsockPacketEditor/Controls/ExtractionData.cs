@@ -24,7 +24,6 @@ namespace WinsockPacketEditor
 
         private void ExtractionData_Load(object sender, EventArgs e)
         {
-            this.splitterExtraction.SplitterWidth = 5;
             this.InitExtraction();
             this.Dark_Changed();
             this.SetExtractionInfo();
