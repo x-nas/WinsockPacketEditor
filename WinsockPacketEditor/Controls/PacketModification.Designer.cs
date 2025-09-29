@@ -51,6 +51,7 @@
             // 
             this.tlpModification.ColumnCount = 1;
             this.tlpModification.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpModification.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpModification.Controls.Add(this.tlpButton, 0, 1);
             this.tlpModification.Controls.Add(this.splitterModification, 0, 0);
             this.tlpModification.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -102,8 +103,7 @@
             this.splitterModification.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterModification.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterModification.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterModification.Location = new System.Drawing.Point(2, 2);
-            this.splitterModification.Margin = new System.Windows.Forms.Padding(2);
+            this.splitterModification.Location = new System.Drawing.Point(3, 3);
             this.splitterModification.Name = "splitterModification";
             this.splitterModification.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -116,11 +116,11 @@
             // 
             this.splitterModification.Panel2.Controls.Add(this.tPacketModification);
             this.splitterModification.Panel2MinSize = 0;
-            this.splitterModification.Size = new System.Drawing.Size(996, 647);
-            this.splitterModification.SplitterDistance = 371;
+            this.splitterModification.Size = new System.Drawing.Size(994, 645);
+            this.splitterModification.SplitterDistance = 400;
             this.splitterModification.SplitterSize = 80;
-            this.splitterModification.SplitterWidth = 10;
-            this.splitterModification.TabIndex = 2;
+            this.splitterModification.SplitterWidth = 5;
+            this.splitterModification.TabIndex = 18;
             // 
             // tlpPacketData
             // 
@@ -138,29 +138,29 @@
             this.tlpPacketData.RowCount = 2;
             this.tlpPacketData.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketData.Size = new System.Drawing.Size(996, 371);
-            this.tlpPacketData.TabIndex = 0;
+            this.tlpPacketData.Size = new System.Drawing.Size(994, 400);
+            this.tlpPacketData.TabIndex = 1;
             // 
             // txtPacketData_New
             // 
             this.txtPacketData_New.AutoScroll = true;
             this.txtPacketData_New.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtPacketData_New.Location = new System.Drawing.Point(500, 38);
+            this.txtPacketData_New.Location = new System.Drawing.Point(499, 38);
             this.txtPacketData_New.Margin = new System.Windows.Forms.Padding(2);
             this.txtPacketData_New.Multiline = true;
             this.txtPacketData_New.Name = "txtPacketData_New";
             this.txtPacketData_New.ReadOnly = true;
-            this.txtPacketData_New.Size = new System.Drawing.Size(494, 331);
+            this.txtPacketData_New.Size = new System.Drawing.Size(493, 360);
             this.txtPacketData_New.TabIndex = 6;
             // 
             // lPacketData_New
             // 
             this.lPacketData_New.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPacketData_New.LocalizationText = "PacketModificationForm.Modified";
-            this.lPacketData_New.Location = new System.Drawing.Point(500, 2);
+            this.lPacketData_New.Location = new System.Drawing.Point(499, 2);
             this.lPacketData_New.Margin = new System.Windows.Forms.Padding(2);
             this.lPacketData_New.Name = "lPacketData_New";
-            this.lPacketData_New.Size = new System.Drawing.Size(494, 32);
+            this.lPacketData_New.Size = new System.Drawing.Size(493, 32);
             this.lPacketData_New.TabIndex = 4;
             this.lPacketData_New.Text = "修改后封包数据";
             this.lPacketData_New.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -172,7 +172,7 @@
             this.lPacketData_Raw.Location = new System.Drawing.Point(2, 2);
             this.lPacketData_Raw.Margin = new System.Windows.Forms.Padding(2);
             this.lPacketData_Raw.Name = "lPacketData_Raw";
-            this.lPacketData_Raw.Size = new System.Drawing.Size(494, 32);
+            this.lPacketData_Raw.Size = new System.Drawing.Size(493, 32);
             this.lPacketData_Raw.TabIndex = 3;
             this.lPacketData_Raw.Text = "原始封包数据";
             this.lPacketData_Raw.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -186,11 +186,12 @@
             this.txtPacketData_Raw.Multiline = true;
             this.txtPacketData_Raw.Name = "txtPacketData_Raw";
             this.txtPacketData_Raw.ReadOnly = true;
-            this.txtPacketData_Raw.Size = new System.Drawing.Size(494, 331);
+            this.txtPacketData_Raw.Size = new System.Drawing.Size(493, 360);
             this.txtPacketData_Raw.TabIndex = 5;
             // 
             // tPacketModification
             // 
+            this.tPacketModification.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
             this.tPacketModification.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tPacketModification.Gap = 8;
             this.tPacketModification.GapCell = 5;
@@ -198,8 +199,8 @@
             this.tPacketModification.Location = new System.Drawing.Point(0, 0);
             this.tPacketModification.Margin = new System.Windows.Forms.Padding(2);
             this.tPacketModification.Name = "tPacketModification";
-            this.tPacketModification.Size = new System.Drawing.Size(996, 266);
-            this.tPacketModification.TabIndex = 0;
+            this.tPacketModification.Size = new System.Drawing.Size(994, 240);
+            this.tPacketModification.TabIndex = 1;
             this.tPacketModification.Text = "table1";
             this.tPacketModification.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tPacketModification_CellButtonClick);
             this.tPacketModification.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tPacketModification_CellDoubleClick);
