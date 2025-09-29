@@ -1878,10 +1878,10 @@ namespace WinsockPacketEditor
                     return "HotKey 10 :";
 
                 case "HotKeyForm.Key11":
-                    return "HotKey 11 :";
+                    return "Execute :";
 
                 case "HotKeyForm.Key12":
-                    return "HotKey 12 :";
+                    return "Stop :";
 
                 case "HotKeyForm.Success":
                     return "HotKey set successfully";

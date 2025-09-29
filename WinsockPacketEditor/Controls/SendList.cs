@@ -246,7 +246,7 @@ namespace WinsockPacketEditor
 
         private void bSendList_Stop_Click(object sender, EventArgs e)
         {
-            Operate.SendConfig.List.bgwSendList.CancelAsync();
+            Operate.SendConfig.List.StopSendList();
         }
 
         private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)

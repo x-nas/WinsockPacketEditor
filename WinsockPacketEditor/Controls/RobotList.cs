@@ -207,7 +207,7 @@ namespace WinsockPacketEditor
 
         private void bRobotList_Stop_Click(object sender, EventArgs e)
         {
-            Operate.RobotConfig.List.bgwRobotList.CancelAsync();
+            Operate.RobotConfig.List.StopRobotList();
         }
 
         private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)

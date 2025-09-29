@@ -465,9 +465,9 @@
             this.lHotKey12.Location = new System.Drawing.Point(2, 482);
             this.lHotKey12.Margin = new System.Windows.Forms.Padding(2);
             this.lHotKey12.Name = "lHotKey12";
-            this.lHotKey12.Size = new System.Drawing.Size(61, 36);
+            this.lHotKey12.Size = new System.Drawing.Size(31, 36);
             this.lHotKey12.TabIndex = 22;
-            this.lHotKey12.Text = "快捷键 12 :";
+            this.lHotKey12.Text = "停止 :";
             // 
             // txtHotKey11
             // 
@@ -492,9 +492,9 @@
             this.lHotKey11.Location = new System.Drawing.Point(2, 442);
             this.lHotKey11.Margin = new System.Windows.Forms.Padding(2);
             this.lHotKey11.Name = "lHotKey11";
-            this.lHotKey11.Size = new System.Drawing.Size(61, 36);
+            this.lHotKey11.Size = new System.Drawing.Size(31, 36);
             this.lHotKey11.TabIndex = 20;
-            this.lHotKey11.Text = "快捷键 11 :";
+            this.lHotKey11.Text = "执行 :";
             // 
             // txtHotKey10
             // 

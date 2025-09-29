@@ -316,7 +316,7 @@ namespace WinsockPacketEditor
 
         private void bSendList_Stop_Click(object sender, EventArgs e)
         {
-            Operate.SendConfig.List.bgwSendList.CancelAsync();
+            Operate.SendConfig.List.StopSendList();
         }
 
         private void bSendList_ResetCount_Click(object sender, EventArgs e)
@@ -496,7 +496,7 @@ namespace WinsockPacketEditor
 
         private void bRobotList_Stop_Click(object sender, EventArgs e)
         {
-            Operate.RobotConfig.List.bgwRobotList.CancelAsync();
+            Operate.RobotConfig.List.StopRobotList();
         }
 
         private void bRobotList_ResetCount_Click(object sender, EventArgs e)

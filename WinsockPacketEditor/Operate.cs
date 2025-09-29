@@ -21,7 +21,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -2396,11 +2395,11 @@ namespace WinsockPacketEditor
                                 break;
 
                             case 9011:
-                                SendConfig.Send.DoSend_ByIndex(10);
+                                SendConfig.List.StartSendList();
                                 break;
 
                             case 9012:
-                                SendConfig.Send.DoSend_ByIndex(11);
+                                SendConfig.List.StopSendList();
                                 break;
                         }
                     }
@@ -2449,11 +2448,11 @@ namespace WinsockPacketEditor
                                 break;
 
                             case 9011:
-                                RobotConfig.Robot.DoRobot_ByIndex(10);
+                                RobotConfig.List.StartRobotList();
                                 break;
 
                             case 9012:
-                                RobotConfig.Robot.DoRobot_ByIndex(11);
+                                RobotConfig.List.StopRobotList();
                                 break;
                         }
                     }
@@ -15468,6 +15467,21 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                public static void StopSendList()
+                {
+                    try
+                    {
+                        if (Operate.SendConfig.List.bgwSendList.IsBusy)
+                        {
+                            Operate.SendConfig.List.bgwSendList.CancelAsync();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(StopSendList), ex.Message);
+                    }
+                }
+
                 public static void SendList_DoWork(object sender, DoWorkEventArgs e)
                 {
                     try
@@ -17062,6 +17076,21 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(StartRobotList), ex.Message);
+                    }
+                }
+
+                public static void StopRobotList()
+                {
+                    try
+                    {
+                        if (Operate.RobotConfig.List.bgwRobotList.IsBusy)
+                        {
+                            Operate.RobotConfig.List.bgwRobotList.CancelAsync();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(StopRobotList), ex.Message);
                     }
                 }
 
