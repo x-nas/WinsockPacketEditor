@@ -31,15 +31,16 @@ namespace WinsockPacketEditor
         private void InjectModeForm_Load(object sender, EventArgs e)
         {
             this.pageHeader.Loading = true;
+            Operate.SystemConfig.InitHotKeys(this.Handle);
+
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {
                 Operate.SystemConfig.InitListExecute();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
-                Operate.SystemConfig.LoadSystemList_FromDB();        
+                Operate.SystemConfig.LoadSystemList_FromDB();                
 
-                this.InitGlobal();                
-                this.InitHotKeys();
+                this.InitGlobal();
                 this.InitFloatButton();
                 this.InitControls();
 
@@ -47,11 +48,8 @@ namespace WinsockPacketEditor
             {
                 this.pageHeader.Loading = false;
             });
-
-            Operate.SystemConfig.MainHandle = this.Handle;
             
-            this.InitForm();
-            
+            this.InitForm();            
             this.Dark_Changed();
 
             this.timerAutoSave.Interval = Operate.SystemConfig.AutoSaveINT;
@@ -297,23 +295,7 @@ namespace WinsockPacketEditor
         public void InitFloatButton()
         {
             Operate.SystemConfig.InitFloatButton(this, this.FloatButton);  
-        }
-
-        private void InitHotKeys()
-        {
-            Operate.SystemConfig.RegisterHotkey_FromText(9001, Operate.SystemConfig.HotKey1);
-            Operate.SystemConfig.RegisterHotkey_FromText(9002, Operate.SystemConfig.HotKey2);
-            Operate.SystemConfig.RegisterHotkey_FromText(9003, Operate.SystemConfig.HotKey3);
-            Operate.SystemConfig.RegisterHotkey_FromText(9004, Operate.SystemConfig.HotKey4);
-            Operate.SystemConfig.RegisterHotkey_FromText(9005, Operate.SystemConfig.HotKey5);
-            Operate.SystemConfig.RegisterHotkey_FromText(9006, Operate.SystemConfig.HotKey6);
-            Operate.SystemConfig.RegisterHotkey_FromText(9007, Operate.SystemConfig.HotKey7);
-            Operate.SystemConfig.RegisterHotkey_FromText(9008, Operate.SystemConfig.HotKey8);
-            Operate.SystemConfig.RegisterHotkey_FromText(9009, Operate.SystemConfig.HotKey9);
-            Operate.SystemConfig.RegisterHotkey_FromText(9010, Operate.SystemConfig.HotKey10);
-            Operate.SystemConfig.RegisterHotkey_FromText(9011, Operate.SystemConfig.HotKey11);
-            Operate.SystemConfig.RegisterHotkey_FromText(9012, Operate.SystemConfig.HotKey12);
-        }
+        }        
 
         #endregion
 
