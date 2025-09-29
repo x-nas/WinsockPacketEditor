@@ -1036,6 +1036,23 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//初始化列表执行
+
+            public static void InitListExecute()
+            {
+                Operate.SendConfig.List.bgwSendList.WorkerSupportsCancellation = true;
+                Operate.SendConfig.List.bgwSendList.WorkerReportsProgress = false;
+                Operate.SendConfig.List.bgwSendList.DoWork -= Operate.SendConfig.List.SendList_DoWork;
+                Operate.SendConfig.List.bgwSendList.DoWork += Operate.SendConfig.List.SendList_DoWork;
+
+                Operate.RobotConfig.List.bgwRobotList.WorkerSupportsCancellation = true;
+                Operate.RobotConfig.List.bgwRobotList.WorkerReportsProgress = false;
+                Operate.RobotConfig.List.bgwRobotList.DoWork -= Operate.RobotConfig.List.RobotList_DoWork;
+                Operate.RobotConfig.List.bgwRobotList.DoWork += Operate.RobotConfig.List.RobotList_DoWork;
+            }
+
+            #endregion
+
             #region//查找树节点
 
             public static TreeItem FindNodeByName(AntdUI.Tree tree, string name)
@@ -15305,6 +15322,7 @@ namespace WinsockPacketEditor
             {
                 public static List<SendExecute> lstSendExecute = new List<SendExecute>();
                 public static BindingList<SendInfo> lstSendInfo = new BindingList<SendInfo>();
+                public static BackgroundWorker bgwSendList = new BackgroundWorker();
 
                 #region//发送列表索引项
 
@@ -15333,6 +15351,88 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(SendToList), ex.Message);
+                    }
+                }
+
+                #endregion                
+
+                #region//执行发送列表
+
+                public static void StartSendList()
+                {
+                    try
+                    {
+                        if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                        {
+                            if (!Operate.SendConfig.List.bgwSendList.IsBusy)
+                            {
+                                Operate.SendConfig.List.lstSendExecute.Clear();
+                                Operate.SendConfig.List.bgwSendList.RunWorkerAsync();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(StartSendList), ex.Message);
+                    }
+                }
+
+                public static void SendList_DoWork(object sender, DoWorkEventArgs e)
+                {
+                    try
+                    {
+                        for (int index = 0; index < Operate.SendConfig.List.lstSendInfo.Count; index++)
+                        {
+                            SendInfo si = Operate.SendConfig.List.lstSendInfo[index];
+                            if (si.IsEnable)
+                            {
+                                SendExecute se = Operate.SendConfig.Send.DoSend(si.SID);
+                                if (se != null)
+                                {
+                                    if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
+                                    {
+                                        Operate.SendConfig.List.lstSendExecute.Add(se);
+                                    }
+                                    else
+                                    {
+                                        while (se.Worker.IsBusy)
+                                        {
+                                            if (bgwSendList.CancellationPending)
+                                            {
+                                                se.StopSend();
+
+                                                e.Cancel = true;
+                                                return;
+                                            }
+
+                                            Thread.Sleep(10);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        while (Operate.SendConfig.List.lstSendExecute.Count > 0)
+                        {
+                            foreach (SendExecute se in Operate.SendConfig.List.lstSendExecute.ToList())
+                            {
+                                if (bgwSendList.CancellationPending)
+                                {
+                                    se.StopSend();
+                                }
+
+                                if (!se.Worker.IsBusy)
+                                {
+                                    Operate.SendConfig.List.lstSendExecute.Remove(se);
+                                }
+                            }
+
+                            Thread.Sleep(100);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SendList_DoWork), ex.Message);
                     }
                 }
 
@@ -16835,6 +16935,7 @@ namespace WinsockPacketEditor
             {
                 public static List<RobotExecute> lstRobotExecute = new List<RobotExecute>();
                 public static BindingList<RobotInfo> lstRobotInfo = new BindingList<RobotInfo>();
+                public static BackgroundWorker bgwRobotList = new BackgroundWorker();
 
                 #region//机器人入列表
 
@@ -16847,6 +16948,87 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(RobotToList), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//执行机器人列表
+
+                public static void StartRobotList()
+                {
+                    try
+                    {
+                        if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                        {
+                            if (!Operate.RobotConfig.List.bgwRobotList.IsBusy)
+                            {
+                                Operate.RobotConfig.List.lstRobotExecute.Clear();
+                                Operate.RobotConfig.List.bgwRobotList.RunWorkerAsync();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(StartRobotList), ex.Message);
+                    }
+                }
+
+                public static void RobotList_DoWork(object sender, DoWorkEventArgs e)
+                {
+                    try
+                    {
+                        foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
+                        {
+                            if (ri.IsEnable)
+                            {
+                                RobotExecute re = Operate.RobotConfig.Robot.DoRobot(ri.RID, null);
+                                if (re != null)
+                                {
+                                    if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
+                                    {
+                                        Operate.RobotConfig.List.lstRobotExecute.Add(re);
+                                    }
+                                    else
+                                    {
+                                        while (re.Worker.IsBusy)
+                                        {
+                                            if (bgwRobotList.CancellationPending)
+                                            {
+                                                re.StopRobot();
+
+                                                e.Cancel = true;
+                                                return;
+                                            }
+
+                                            Thread.Sleep(100);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        while (Operate.RobotConfig.List.lstRobotExecute.Count > 0)
+                        {
+                            foreach (RobotExecute re in Operate.RobotConfig.List.lstRobotExecute.ToList())
+                            {
+                                if (bgwRobotList.CancellationPending)
+                                {
+                                    re.StopRobot();
+                                }
+
+                                if (!re.Worker.IsBusy)
+                                {
+                                    Operate.RobotConfig.List.lstRobotExecute.Remove(re);
+                                }
+                            }
+
+                            Thread.Sleep(100);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(RobotList_DoWork), ex.Message);
                     }
                 }
 

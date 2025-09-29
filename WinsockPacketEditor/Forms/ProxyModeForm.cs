@@ -37,13 +37,14 @@ namespace WinsockPacketEditor
             {
                 Operate.SystemConfig.StartRemoteMGT();
                 Operate.SystemConfig.InitCPUAndMemoryCounter();
+                Operate.SystemConfig.InitListExecute();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();
                 Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
-                
+
                 this.InitProxyServerIP();
                 this.InitGlobal();
                 this.InitFloatButton();

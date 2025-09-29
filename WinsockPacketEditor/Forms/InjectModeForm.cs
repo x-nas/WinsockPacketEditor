@@ -33,6 +33,7 @@ namespace WinsockPacketEditor
             this.pageHeader.Loading = true;
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {
+                Operate.SystemConfig.InitListExecute();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();        

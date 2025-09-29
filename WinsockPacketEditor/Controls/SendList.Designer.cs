@@ -37,7 +37,6 @@
             this.ddMenu = new AntdUI.Dropdown();
             this.bSendList_Stop = new AntdUI.Button();
             this.bSendList_Start = new AntdUI.Button();
-            this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.tlpSendList.SuspendLayout();
             this.tlpSendListButton.SuspendLayout();
             this.SuspendLayout();
@@ -196,12 +195,6 @@
             this.bSendList_Start.Type = AntdUI.TTypeMini.Primary;
             this.bSendList_Start.Click += new System.EventHandler(this.bSendList_Start_Click);
             // 
-            // bgwSendList
-            // 
-            this.bgwSendList.WorkerSupportsCancellation = true;
-            this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
-            this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
-            // 
             // SendList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -227,7 +220,6 @@
         private TableLayoutPanelEx tlpSendListButton;
         private AntdUI.Button bSendList_Stop;
         private AntdUI.Button bSendList_Start;
-        private System.ComponentModel.BackgroundWorker bgwSendList;
         private AntdUI.Dropdown ddMenu;
         private AntdUI.Button bEnableAll;
         private AntdUI.Button bDisableAll;

@@ -280,7 +280,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void tlpSendList_DisableAll_Click(object sender, EventArgs e)
+        private void bSendList_DisableAll_Click(object sender, EventArgs e)
         {
             foreach (SendInfo si in Operate.SendConfig.List.lstSendInfo)
             {
@@ -290,26 +290,47 @@ namespace WinsockPacketEditor
 
         private void bSendList_Execute_Click(object sender, EventArgs e)
         {
+            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+            {
+                if (!Operate.SendConfig.List.bgwSendList.IsBusy)
+                {
+                    this.bSendList_Execute.Enabled = false;
+                    this.bSendList_Stop.Enabled = true;
+                    this.tSendList.Enabled = false;
 
+                    Operate.SendConfig.List.bgwSendList.RunWorkerCompleted -= bgwSendList_RunWorkerCompleted;
+                    Operate.SendConfig.List.bgwSendList.RunWorkerCompleted += bgwSendList_RunWorkerCompleted;
+                    Operate.SendConfig.List.StartSendList();
+                }
+            }
+        }
+
+        private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            Operate.SendConfig.List.bgwSendList.RunWorkerCompleted -= bgwSendList_RunWorkerCompleted;
+
+            this.bSendList_Execute.Enabled = true;
+            this.bSendList_Stop.Enabled = false;
+            this.tSendList.Enabled = true;
         }
 
         private void bSendList_Stop_Click(object sender, EventArgs e)
         {
-
+            Operate.SendConfig.List.bgwSendList.CancelAsync();
         }
 
-        private void tlpSendList_ResetCount_Click(object sender, EventArgs e)
+        private void bSendList_ResetCount_Click(object sender, EventArgs e)
         {
             Operate.SendConfig.List.InitSendList_Count();
         }
 
-        private void tlpSendList_Add_Click(object sender, EventArgs e)
+        private void bSendList_Add_Click(object sender, EventArgs e)
         {
             Operate.SendConfig.Send.AddSend_New();
             this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
         }
 
-        private void tlpSendList_Delete_Click(object sender, EventArgs e)
+        private void bSendList_Delete_Click(object sender, EventArgs e)
         {
             if (Operate.SendConfig.List.lstSendInfo.Count > 0)
             {
@@ -449,12 +470,33 @@ namespace WinsockPacketEditor
 
         private void bRobotList_Execute_Click(object sender, EventArgs e)
         {
+            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+            {
+                if (!Operate.RobotConfig.List.bgwRobotList.IsBusy)
+                {
+                    this.bRobotList_Execute.Enabled = false;
+                    this.bRobotList_Stop.Enabled = true;
+                    this.tRobotList.Enabled = false;
 
+                    Operate.RobotConfig.List.bgwRobotList.RunWorkerCompleted -= bgwRobotList_RunWorkerCompleted;
+                    Operate.RobotConfig.List.bgwRobotList.RunWorkerCompleted += bgwRobotList_RunWorkerCompleted;
+                    Operate.RobotConfig.List.StartRobotList();
+                }
+            }
+        }
+
+        private void bgwRobotList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            Operate.RobotConfig.List.bgwRobotList.RunWorkerCompleted -= bgwRobotList_RunWorkerCompleted;
+
+            this.bRobotList_Execute.Enabled = true;
+            this.bRobotList_Stop.Enabled = false;
+            this.tRobotList.Enabled = true;
         }
 
         private void bRobotList_Stop_Click(object sender, EventArgs e)
         {
-
+            Operate.RobotConfig.List.bgwRobotList.CancelAsync();
         }
 
         private void bRobotList_ResetCount_Click(object sender, EventArgs e)

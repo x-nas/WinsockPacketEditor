@@ -37,7 +37,6 @@
             this.bRobotList_Stop = new AntdUI.Button();
             this.bRobotList_Start = new AntdUI.Button();
             this.tRobotList = new AntdUI.Table();
-            this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
             this.tlpRobotList.SuspendLayout();
             this.tlpRobotListButton.SuspendLayout();
             this.SuspendLayout();
@@ -196,12 +195,6 @@
             this.tRobotList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tRobotList_CellButtonClick);
             this.tRobotList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellDoubleClick);
             // 
-            // bgwRobotList
-            // 
-            this.bgwRobotList.WorkerSupportsCancellation = true;
-            this.bgwRobotList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwRobotList_DoWork);
-            this.bgwRobotList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwRobotList_RunWorkerCompleted);
-            // 
             // RobotList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -227,7 +220,6 @@
         private AntdUI.Button bRobotList_Stop;
         private AntdUI.Button bRobotList_Start;
         private AntdUI.Table tRobotList;
-        private System.ComponentModel.BackgroundWorker bgwRobotList;
         private AntdUI.Dropdown ddMenu;
         private AntdUI.Button bEnableAll;
         private AntdUI.Button bDisableAll;

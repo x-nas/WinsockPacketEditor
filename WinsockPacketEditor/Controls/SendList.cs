@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -226,22 +224,29 @@ namespace WinsockPacketEditor
         {
             if (Operate.SendConfig.List.lstSendInfo.Count > 0)
             {
-                if (!this.bgwSendList.IsBusy)
+                if (!Operate.SendConfig.List.bgwSendList.IsBusy)
                 {
                     this.bSendList_Start.Enabled = false;
                     this.bSendList_Stop.Enabled = true;
                     this.tSendList.Enabled = false;
 
-                    Operate.SendConfig.List.lstSendExecute.Clear();
-
-                    this.bgwSendList.RunWorkerAsync();
+                    Operate.SendConfig.List.bgwSendList.RunWorkerCompleted -= bgwSendList_RunWorkerCompleted;
+                    Operate.SendConfig.List.bgwSendList.RunWorkerCompleted += bgwSendList_RunWorkerCompleted;
+                    Operate.SendConfig.List.StartSendList();
                 }
             }
         }
 
+        private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            this.bSendList_Start.Enabled = true;
+            this.bSendList_Stop.Enabled = false;
+            this.tSendList.Enabled = true;
+        }
+
         private void bSendList_Stop_Click(object sender, EventArgs e)
         {
-            this.bgwSendList.CancelAsync();
+            Operate.SendConfig.List.bgwSendList.CancelAsync();
         }
 
         private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
@@ -409,76 +414,6 @@ namespace WinsockPacketEditor
                     this.tSendList.SelectedIndex = -1;
                 }, Operate.SystemConfig.GetCMS_List()));
             }
-        }
-
-        #endregion
-
-        #region//执行发送列表（异步）
-
-        private void bgwSendList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            try
-            {
-                for (int index = 0; index < Operate.SendConfig.List.lstSendInfo.Count; index++)
-                {
-                    SendInfo si = Operate.SendConfig.List.lstSendInfo[index];
-                    if (si.IsEnable)
-                    {
-                        SendExecute se = Operate.SendConfig.Send.DoSend(si.SID);
-                        if (se != null)
-                        {
-                            if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
-                            {
-                                Operate.SendConfig.List.lstSendExecute.Add(se);
-                            }
-                            else
-                            {
-                                while (se.Worker.IsBusy)
-                                {
-                                    if (this.bgwSendList.CancellationPending)
-                                    {
-                                        se.StopSend();
-
-                                        e.Cancel = true;
-                                        return;
-                                    }
-
-                                    Thread.Sleep(10);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                while (Operate.SendConfig.List.lstSendExecute.Count > 0)
-                {
-                    foreach (SendExecute se in Operate.SendConfig.List.lstSendExecute.ToList())
-                    {
-                        if (this.bgwSendList.CancellationPending)
-                        {
-                            se.StopSend();
-                        }
-
-                        if (!se.Worker.IsBusy)
-                        {
-                            Operate.SendConfig.List.lstSendExecute.Remove(se);
-                        }
-                    }
-
-                    Thread.Sleep(100);
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(bgwSendList_DoWork), ex.Message);
-            }
-        }
-
-        private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            this.bSendList_Start.Enabled = true;
-            this.bSendList_Stop.Enabled = false;
-            this.tSendList.Enabled = true;
         }
 
         #endregion        

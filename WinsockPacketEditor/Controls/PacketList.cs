@@ -13,6 +13,7 @@ namespace WinsockPacketEditor
         private Form form;
         private bool bWakeUp = true;
         private bool SearchFromHead = true;
+        private QuickList cQuickList = null;
         private readonly WinSockHook ws = new WinSockHook();
 
         #region//窗体事件
@@ -30,10 +31,10 @@ namespace WinsockPacketEditor
             this.lWinsockInfo.Text = Operate.ProcessConfig.GetInjectWinsockInfo();
             this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
             this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            this.splitterPacketList.SplitterWidth = 5;
 
             this.InitMenu();
             this.InitTable_PacketList();
+            this.InitControl();
             this.Dark_Changed();
 
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
@@ -87,6 +88,26 @@ namespace WinsockPacketEditor
             });
         }
 
+        private void InitControl()
+        {
+            //QuickList
+            if (this.splitterQuickList.InvokeRequired)
+            {
+                this.splitterQuickList.Invoke(new Action(() =>
+                {
+                    cQuickList = new QuickList(this.form);
+                    cQuickList.Dock = DockStyle.Fill;
+                    this.splitterQuickList.Panel1.Controls.Add(cQuickList);
+                }));
+            }
+            else
+            {
+                cQuickList = new QuickList(this.form);
+                cQuickList.Dock = DockStyle.Fill;
+                this.splitterQuickList.Panel1.Controls.Add(cQuickList);
+            }
+        }
+
         public void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
@@ -95,8 +116,6 @@ namespace WinsockPacketEditor
                 this.tPacketList.ColumnBack = Operate.SystemConfig.Color_40;
                 this.tPacketList.ColumnFore = Color.Silver;
                 this.tPacketList.ForeColor = Color.LimeGreen;
-
-                this.pPacketData.Back = Operate.SystemConfig.Color_40;
                 this.hbPacketData.BackColor = Operate.SystemConfig.Color_40;
                 this.hbPacketData.ForeColor = Color.Silver;
             }
@@ -106,8 +125,6 @@ namespace WinsockPacketEditor
                 this.tPacketList.ColumnBack = Color.White;
                 this.tPacketList.ColumnFore = Color.Black;
                 this.tPacketList.ForeColor = Color.Green;
-
-                this.pPacketData.Back = Color.White;
                 this.hbPacketData.BackColor = Color.White;
                 this.hbPacketData.ForeColor = Color.Black;
             }
@@ -140,7 +157,7 @@ namespace WinsockPacketEditor
 
                         return value;
                     },
-                }.SetFixed(),
+                }.SetFixed().SetWidth("Auto"),
                 new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>

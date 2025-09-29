@@ -464,6 +464,8 @@ namespace WinsockPacketEditor
                             }
                         }                        
                     }
+
+                    this.riSelect.ExecutionCount++;
                 }
             }
             catch (Exception ex)

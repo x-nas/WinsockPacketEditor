@@ -34,7 +34,6 @@ namespace WinsockPacketEditor
             this.InitControl();
             this.Dark_Changed();
 
-            this.splitterProxyList.SplitterWidth = 5;
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
             this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
@@ -133,7 +132,6 @@ namespace WinsockPacketEditor
                 this.tProxyList.ColumnFore = Color.Silver;
                 this.tProxyList.ForeColor = Color.LimeGreen;
 
-                this.pPacketData.Back = Operate.SystemConfig.Color_40;
                 this.hbProxyData.BackColor = Operate.SystemConfig.Color_40;
                 this.hbProxyData.ForeColor = Color.Silver;
             }
@@ -144,7 +142,6 @@ namespace WinsockPacketEditor
                 this.tProxyList.ColumnFore = Color.Black;
                 this.tProxyList.ForeColor = Color.Green;
 
-                this.pPacketData.Back = Color.White;
                 this.hbProxyData.BackColor = Color.White;
                 this.hbProxyData.ForeColor = Color.Black;
             }
@@ -177,7 +174,7 @@ namespace WinsockPacketEditor
 
                         return value;
                     },
-                }.SetFixed(),
+                }.SetFixed().SetWidth("Auto"),
                 new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>

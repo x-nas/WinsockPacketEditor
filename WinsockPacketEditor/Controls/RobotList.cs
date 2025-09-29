@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -187,22 +185,29 @@ namespace WinsockPacketEditor
         {
             if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
             {
-                if (!this.bgwRobotList.IsBusy)
+                if (!Operate.RobotConfig.List.bgwRobotList.IsBusy)
                 {
                     this.bRobotList_Start.Enabled = false;
                     this.bRobotList_Stop.Enabled = true;
                     this.tRobotList.Enabled = false;
 
-                    Operate.RobotConfig.List.lstRobotExecute.Clear();
-
-                    this.bgwRobotList.RunWorkerAsync();
+                    Operate.RobotConfig.List.bgwRobotList.RunWorkerCompleted -= bgwRobotList_RunWorkerCompleted;
+                    Operate.RobotConfig.List.bgwRobotList.RunWorkerCompleted += bgwRobotList_RunWorkerCompleted;
+                    Operate.RobotConfig.List.StartRobotList();
                 }
             }
         }
 
+        private void bgwRobotList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            this.bRobotList_Start.Enabled = true;
+            this.bRobotList_Stop.Enabled = false;
+            this.tRobotList.Enabled = true;
+        }
+
         private void bRobotList_Stop_Click(object sender, EventArgs e)
         {
-            this.bgwRobotList.CancelAsync();
+            Operate.RobotConfig.List.bgwRobotList.CancelAsync();
         }
 
         private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
@@ -370,75 +375,6 @@ namespace WinsockPacketEditor
                     this.tRobotList.SelectedIndex = -1;
                 }, Operate.SystemConfig.GetCMS_List()));
             }
-        }
-
-        #endregion
-
-        #region//执行机器人列表（异步）
-
-        private void bgwRobotList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            try
-            {
-                foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
-                {
-                    if (ri.IsEnable)
-                    {
-                        RobotExecute re = Operate.RobotConfig.Robot.DoRobot(ri.RID, null);
-                        if (re != null)
-                        {
-                            if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
-                            {
-                                Operate.RobotConfig.List.lstRobotExecute.Add(re);
-                            }
-                            else
-                            {
-                                while (re.Worker.IsBusy)
-                                {
-                                    if (this.bgwRobotList.CancellationPending)
-                                    {
-                                        re.StopRobot();
-
-                                        e.Cancel = true;
-                                        return;
-                                    }
-
-                                    Thread.Sleep(100);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                while (Operate.RobotConfig.List.lstRobotExecute.Count > 0)
-                {
-                    foreach (RobotExecute re in Operate.RobotConfig.List.lstRobotExecute.ToList())
-                    {
-                        if (this.bgwRobotList.CancellationPending)
-                        {
-                            re.StopRobot();
-                        }
-
-                        if (!re.Worker.IsBusy)
-                        {
-                            Operate.RobotConfig.List.lstRobotExecute.Remove(re);
-                        }
-                    }
-
-                    Thread.Sleep(100);
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(bgwRobotList_DoWork), ex.Message);
-            }
-        }
-
-        private void bgwRobotList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            this.bRobotList_Start.Enabled = true;
-            this.bRobotList_Stop.Enabled = false;
-            this.tRobotList.Enabled = true;
         }
 
         #endregion        

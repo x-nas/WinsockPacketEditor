@@ -38,6 +38,15 @@
             this.bPacketList_Clear = new AntdUI.Button();
             this.bHookStop = new AntdUI.Button();
             this.bHookStart = new AntdUI.Button();
+            this.tlpProcessInfo = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.lSpeedInfo = new AntdUI.Label();
+            this.lSplit3 = new AntdUI.Label();
+            this.lSplit2 = new AntdUI.Label();
+            this.lSplit1 = new AntdUI.Label();
+            this.lWinsockInfo = new AntdUI.Label();
+            this.lModuleName = new AntdUI.Label();
+            this.lProcessName = new AntdUI.Label();
+            this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.splitterPacketList = new AntdUI.Splitter();
             this.tlpPacketList2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpPacketListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
@@ -77,27 +86,20 @@
             this.lFilterExecute = new AntdUI.Label();
             this.lTotal = new AntdUI.Label();
             this.tPacketList = new AntdUI.Table();
-            this.pPacketData = new AntdUI.Panel();
+            this.splitterQuickList = new AntdUI.Splitter();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
-            this.tlpProcessInfo = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.lSpeedInfo = new AntdUI.Label();
-            this.lSplit3 = new AntdUI.Label();
-            this.lSplit2 = new AntdUI.Label();
-            this.lSplit1 = new AntdUI.Label();
-            this.lWinsockInfo = new AntdUI.Label();
-            this.lModuleName = new AntdUI.Label();
-            this.lProcessName = new AntdUI.Label();
-            this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.tlpPacketList.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tlpProcessInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterPacketList)).BeginInit();
             this.splitterPacketList.Panel1.SuspendLayout();
             this.splitterPacketList.Panel2.SuspendLayout();
             this.splitterPacketList.SuspendLayout();
             this.tlpPacketList2.SuspendLayout();
             this.tlpPacketListInfo.SuspendLayout();
-            this.pPacketData.SuspendLayout();
-            this.tlpProcessInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).BeginInit();
+            this.splitterQuickList.Panel2.SuspendLayout();
+            this.splitterQuickList.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpPacketList
@@ -105,8 +107,8 @@
             this.tlpPacketList.ColumnCount = 1;
             this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpPacketList.Controls.Add(this.tableLayoutPanel2, 0, 0);
-            this.tlpPacketList.Controls.Add(this.splitterPacketList, 0, 1);
             this.tlpPacketList.Controls.Add(this.tlpProcessInfo, 0, 2);
+            this.tlpPacketList.Controls.Add(this.splitterPacketList, 0, 1);
             this.tlpPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpPacketList.Location = new System.Drawing.Point(0, 0);
             this.tlpPacketList.Margin = new System.Windows.Forms.Padding(0);
@@ -287,13 +289,135 @@
             this.bHookStart.Type = AntdUI.TTypeMini.Info;
             this.bHookStart.Click += new System.EventHandler(this.bHookStart_Click);
             // 
+            // tlpProcessInfo
+            // 
+            this.tlpProcessInfo.ColumnCount = 7;
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+            this.tlpProcessInfo.Controls.Add(this.lSpeedInfo, 6, 0);
+            this.tlpProcessInfo.Controls.Add(this.lSplit3, 5, 0);
+            this.tlpProcessInfo.Controls.Add(this.lSplit2, 3, 0);
+            this.tlpProcessInfo.Controls.Add(this.lSplit1, 1, 0);
+            this.tlpProcessInfo.Controls.Add(this.lWinsockInfo, 4, 0);
+            this.tlpProcessInfo.Controls.Add(this.lModuleName, 2, 0);
+            this.tlpProcessInfo.Controls.Add(this.lProcessName, 0, 0);
+            this.tlpProcessInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpProcessInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tlpProcessInfo.Location = new System.Drawing.Point(0, 676);
+            this.tlpProcessInfo.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpProcessInfo.Name = "tlpProcessInfo";
+            this.tlpProcessInfo.RowCount = 1;
+            this.tlpProcessInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpProcessInfo.Size = new System.Drawing.Size(1200, 24);
+            this.tlpProcessInfo.TabIndex = 4;
+            // 
+            // lSpeedInfo
+            // 
+            this.lSpeedInfo.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSpeedInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSpeedInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSpeedInfo.Location = new System.Drawing.Point(270, 2);
+            this.lSpeedInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.lSpeedInfo.Name = "lSpeedInfo";
+            this.lSpeedInfo.Size = new System.Drawing.Size(59, 20);
+            this.lSpeedInfo.TabIndex = 11;
+            this.lSpeedInfo.Text = "SpeedInfo";
+            // 
+            // lSplit3
+            // 
+            this.lSplit3.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSplit3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSplit3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit3.ForeColor = System.Drawing.Color.Silver;
+            this.lSplit3.Location = new System.Drawing.Point(261, 2);
+            this.lSplit3.Margin = new System.Windows.Forms.Padding(2);
+            this.lSplit3.Name = "lSplit3";
+            this.lSplit3.Size = new System.Drawing.Size(5, 20);
+            this.lSplit3.TabIndex = 10;
+            this.lSplit3.Text = "|";
+            this.lSplit3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lSplit2
+            // 
+            this.lSplit2.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSplit2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSplit2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit2.ForeColor = System.Drawing.Color.Silver;
+            this.lSplit2.Location = new System.Drawing.Point(176, 2);
+            this.lSplit2.Margin = new System.Windows.Forms.Padding(2);
+            this.lSplit2.Name = "lSplit2";
+            this.lSplit2.Size = new System.Drawing.Size(5, 20);
+            this.lSplit2.TabIndex = 9;
+            this.lSplit2.Text = "|";
+            this.lSplit2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lSplit1
+            // 
+            this.lSplit1.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSplit1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSplit1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lSplit1.ForeColor = System.Drawing.Color.Silver;
+            this.lSplit1.Location = new System.Drawing.Point(84, 2);
+            this.lSplit1.Margin = new System.Windows.Forms.Padding(2);
+            this.lSplit1.Name = "lSplit1";
+            this.lSplit1.Size = new System.Drawing.Size(5, 20);
+            this.lSplit1.TabIndex = 8;
+            this.lSplit1.Text = "|";
+            this.lSplit1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lWinsockInfo
+            // 
+            this.lWinsockInfo.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lWinsockInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lWinsockInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lWinsockInfo.Location = new System.Drawing.Point(185, 2);
+            this.lWinsockInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.lWinsockInfo.Name = "lWinsockInfo";
+            this.lWinsockInfo.Size = new System.Drawing.Size(72, 20);
+            this.lWinsockInfo.TabIndex = 7;
+            this.lWinsockInfo.Text = "WinsockInfo";
+            // 
+            // lModuleName
+            // 
+            this.lModuleName.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lModuleName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lModuleName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lModuleName.Location = new System.Drawing.Point(93, 2);
+            this.lModuleName.Margin = new System.Windows.Forms.Padding(2);
+            this.lModuleName.Name = "lModuleName";
+            this.lModuleName.Size = new System.Drawing.Size(79, 20);
+            this.lModuleName.TabIndex = 6;
+            this.lModuleName.Text = "ModuleName";
+            // 
+            // lProcessName
+            // 
+            this.lProcessName.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lProcessName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProcessName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lProcessName.Location = new System.Drawing.Point(2, 2);
+            this.lProcessName.Margin = new System.Windows.Forms.Padding(2);
+            this.lProcessName.Name = "lProcessName";
+            this.lProcessName.Size = new System.Drawing.Size(78, 20);
+            this.lProcessName.TabIndex = 5;
+            this.lProcessName.Text = "ProcessName";
+            // 
+            // bgwSearchPacketList
+            // 
+            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
+            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
+            // 
             // splitterPacketList
             // 
             this.splitterPacketList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
             this.splitterPacketList.Cursor = System.Windows.Forms.Cursors.Default;
             this.splitterPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitterPacketList.Location = new System.Drawing.Point(2, 42);
-            this.splitterPacketList.Margin = new System.Windows.Forms.Padding(2);
+            this.splitterPacketList.Location = new System.Drawing.Point(3, 43);
             this.splitterPacketList.Name = "splitterPacketList";
             this.splitterPacketList.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -304,13 +428,13 @@
             // 
             // splitterPacketList.Panel2
             // 
-            this.splitterPacketList.Panel2.Controls.Add(this.pPacketData);
+            this.splitterPacketList.Panel2.Controls.Add(this.splitterQuickList);
             this.splitterPacketList.Panel2MinSize = 0;
-            this.splitterPacketList.Size = new System.Drawing.Size(1196, 632);
-            this.splitterPacketList.SplitterDistance = 440;
+            this.splitterPacketList.Size = new System.Drawing.Size(1194, 630);
+            this.splitterPacketList.SplitterDistance = 450;
             this.splitterPacketList.SplitterSize = 80;
-            this.splitterPacketList.SplitterWidth = 10;
-            this.splitterPacketList.TabIndex = 2;
+            this.splitterPacketList.SplitterWidth = 5;
+            this.splitterPacketList.TabIndex = 7;
             // 
             // tlpPacketList2
             // 
@@ -325,8 +449,8 @@
             this.tlpPacketList2.RowCount = 2;
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketList2.Size = new System.Drawing.Size(1196, 440);
-            this.tlpPacketList2.TabIndex = 0;
+            this.tlpPacketList2.Size = new System.Drawing.Size(1194, 450);
+            this.tlpPacketList2.TabIndex = 1;
             // 
             // tlpPacketListInfo
             // 
@@ -411,7 +535,7 @@
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPacketListInfo.Size = new System.Drawing.Size(1196, 24);
+            this.tlpPacketListInfo.Size = new System.Drawing.Size(1194, 24);
             this.tlpPacketListInfo.TabIndex = 6;
             // 
             // lWSARecvFrom_CNT
@@ -883,7 +1007,7 @@
             this.tPacketList.Margin = new System.Windows.Forms.Padding(0);
             this.tPacketList.MultipleRows = true;
             this.tPacketList.Name = "tPacketList";
-            this.tPacketList.Size = new System.Drawing.Size(1196, 416);
+            this.tPacketList.Size = new System.Drawing.Size(1194, 426);
             this.tPacketList.TabIndex = 1;
             this.tPacketList.VirtualMode = true;
             this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
@@ -891,18 +1015,24 @@
             this.tPacketList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tPacketList_SetRowStyle);
             this.tPacketList.SelectIndexChanged += new System.EventHandler(this.tPacketList_SelectIndexChanged);
             // 
-            // pPacketData
+            // splitterQuickList
             // 
-            this.pPacketData.BorderWidth = 1F;
-            this.pPacketData.Controls.Add(this.hbPacketData);
-            this.pPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pPacketData.Location = new System.Drawing.Point(0, 0);
-            this.pPacketData.Margin = new System.Windows.Forms.Padding(2);
-            this.pPacketData.Name = "pPacketData";
-            this.pPacketData.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pPacketData.Radius = 0;
-            this.pPacketData.Size = new System.Drawing.Size(1196, 182);
-            this.pPacketData.TabIndex = 0;
+            this.splitterQuickList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
+            this.splitterQuickList.Cursor = System.Windows.Forms.Cursors.Default;
+            this.splitterQuickList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitterQuickList.Location = new System.Drawing.Point(0, 0);
+            this.splitterQuickList.Name = "splitterQuickList";
+            this.splitterQuickList.Panel1MinSize = 0;
+            // 
+            // splitterQuickList.Panel2
+            // 
+            this.splitterQuickList.Panel2.Controls.Add(this.hbPacketData);
+            this.splitterQuickList.Panel2MinSize = 0;
+            this.splitterQuickList.Size = new System.Drawing.Size(1194, 175);
+            this.splitterQuickList.SplitterDistance = 329;
+            this.splitterQuickList.SplitterSize = 80;
+            this.splitterQuickList.SplitterWidth = 5;
+            this.splitterQuickList.TabIndex = 2;
             // 
             // hbPacketData
             // 
@@ -911,140 +1041,17 @@
             this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hbPacketData.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hbPacketData.LineInfoVisible = true;
-            this.hbPacketData.Location = new System.Drawing.Point(5, 6);
+            this.hbPacketData.Location = new System.Drawing.Point(0, 0);
             this.hbPacketData.Margin = new System.Windows.Forms.Padding(2);
             this.hbPacketData.Name = "hbPacketData";
             this.hbPacketData.ReadOnly = true;
             this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(1186, 170);
+            this.hbPacketData.Size = new System.Drawing.Size(860, 175);
             this.hbPacketData.StringViewVisible = true;
-            this.hbPacketData.TabIndex = 1;
+            this.hbPacketData.TabIndex = 2;
             this.hbPacketData.VScrollBarVisible = true;
             this.hbPacketData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbPacketData_KeyDown);
             this.hbPacketData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbPacketData_MouseDown);
-            // 
-            // tlpProcessInfo
-            // 
-            this.tlpProcessInfo.ColumnCount = 7;
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProcessInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-            this.tlpProcessInfo.Controls.Add(this.lSpeedInfo, 6, 0);
-            this.tlpProcessInfo.Controls.Add(this.lSplit3, 5, 0);
-            this.tlpProcessInfo.Controls.Add(this.lSplit2, 3, 0);
-            this.tlpProcessInfo.Controls.Add(this.lSplit1, 1, 0);
-            this.tlpProcessInfo.Controls.Add(this.lWinsockInfo, 4, 0);
-            this.tlpProcessInfo.Controls.Add(this.lModuleName, 2, 0);
-            this.tlpProcessInfo.Controls.Add(this.lProcessName, 0, 0);
-            this.tlpProcessInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpProcessInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tlpProcessInfo.Location = new System.Drawing.Point(0, 676);
-            this.tlpProcessInfo.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpProcessInfo.Name = "tlpProcessInfo";
-            this.tlpProcessInfo.RowCount = 1;
-            this.tlpProcessInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProcessInfo.Size = new System.Drawing.Size(1200, 24);
-            this.tlpProcessInfo.TabIndex = 4;
-            // 
-            // lSpeedInfo
-            // 
-            this.lSpeedInfo.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lSpeedInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSpeedInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSpeedInfo.Location = new System.Drawing.Point(270, 2);
-            this.lSpeedInfo.Margin = new System.Windows.Forms.Padding(2);
-            this.lSpeedInfo.Name = "lSpeedInfo";
-            this.lSpeedInfo.Size = new System.Drawing.Size(59, 20);
-            this.lSpeedInfo.TabIndex = 11;
-            this.lSpeedInfo.Text = "SpeedInfo";
-            // 
-            // lSplit3
-            // 
-            this.lSplit3.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lSplit3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSplit3.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit3.Location = new System.Drawing.Point(261, 2);
-            this.lSplit3.Margin = new System.Windows.Forms.Padding(2);
-            this.lSplit3.Name = "lSplit3";
-            this.lSplit3.Size = new System.Drawing.Size(5, 20);
-            this.lSplit3.TabIndex = 10;
-            this.lSplit3.Text = "|";
-            this.lSplit3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lSplit2
-            // 
-            this.lSplit2.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lSplit2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSplit2.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit2.Location = new System.Drawing.Point(176, 2);
-            this.lSplit2.Margin = new System.Windows.Forms.Padding(2);
-            this.lSplit2.Name = "lSplit2";
-            this.lSplit2.Size = new System.Drawing.Size(5, 20);
-            this.lSplit2.TabIndex = 9;
-            this.lSplit2.Text = "|";
-            this.lSplit2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lSplit1
-            // 
-            this.lSplit1.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lSplit1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSplit1.ForeColor = System.Drawing.Color.Silver;
-            this.lSplit1.Location = new System.Drawing.Point(84, 2);
-            this.lSplit1.Margin = new System.Windows.Forms.Padding(2);
-            this.lSplit1.Name = "lSplit1";
-            this.lSplit1.Size = new System.Drawing.Size(5, 20);
-            this.lSplit1.TabIndex = 8;
-            this.lSplit1.Text = "|";
-            this.lSplit1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lWinsockInfo
-            // 
-            this.lWinsockInfo.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lWinsockInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWinsockInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lWinsockInfo.Location = new System.Drawing.Point(185, 2);
-            this.lWinsockInfo.Margin = new System.Windows.Forms.Padding(2);
-            this.lWinsockInfo.Name = "lWinsockInfo";
-            this.lWinsockInfo.Size = new System.Drawing.Size(72, 20);
-            this.lWinsockInfo.TabIndex = 7;
-            this.lWinsockInfo.Text = "WinsockInfo";
-            // 
-            // lModuleName
-            // 
-            this.lModuleName.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lModuleName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lModuleName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lModuleName.Location = new System.Drawing.Point(93, 2);
-            this.lModuleName.Margin = new System.Windows.Forms.Padding(2);
-            this.lModuleName.Name = "lModuleName";
-            this.lModuleName.Size = new System.Drawing.Size(79, 20);
-            this.lModuleName.TabIndex = 6;
-            this.lModuleName.Text = "ModuleName";
-            // 
-            // lProcessName
-            // 
-            this.lProcessName.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lProcessName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lProcessName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lProcessName.Location = new System.Drawing.Point(2, 2);
-            this.lProcessName.Margin = new System.Windows.Forms.Padding(2);
-            this.lProcessName.Name = "lProcessName";
-            this.lProcessName.Size = new System.Drawing.Size(78, 20);
-            this.lProcessName.TabIndex = 5;
-            this.lProcessName.Text = "ProcessName";
-            // 
-            // bgwSearchPacketList
-            // 
-            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
-            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
             // 
             // PacketList
             // 
@@ -1060,6 +1067,8 @@
             this.tlpPacketList.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.tlpProcessInfo.ResumeLayout(false);
+            this.tlpProcessInfo.PerformLayout();
             this.splitterPacketList.Panel1.ResumeLayout(false);
             this.splitterPacketList.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitterPacketList)).EndInit();
@@ -1067,9 +1076,9 @@
             this.tlpPacketList2.ResumeLayout(false);
             this.tlpPacketListInfo.ResumeLayout(false);
             this.tlpPacketListInfo.PerformLayout();
-            this.pPacketData.ResumeLayout(false);
-            this.tlpProcessInfo.ResumeLayout(false);
-            this.tlpProcessInfo.PerformLayout();
+            this.splitterQuickList.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).EndInit();
+            this.splitterQuickList.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1081,6 +1090,20 @@
         private AntdUI.Button bPacketList_Clear;
         private AntdUI.Button bHookStop;
         private AntdUI.Button bHookStart;
+        private TableLayoutPanelEx tlpProcessInfo;
+        private AntdUI.Label lSpeedInfo;
+        private AntdUI.Label lSplit3;
+        private AntdUI.Label lSplit2;
+        private AntdUI.Label lSplit1;
+        private AntdUI.Label lWinsockInfo;
+        private AntdUI.Label lModuleName;
+        private AntdUI.Label lProcessName;
+        private System.ComponentModel.BackgroundWorker bgwSearchPacketList;
+        private AntdUI.Button bSearchPacket;
+        private AntdUI.Dropdown ddMenu;
+        private AntdUI.Checkbox cbPacketList_AutoRoll;
+        private AntdUI.Checkbox cbPacketList_AutoClear;
+        private AntdUI.InputNumber txtPacketList_AutoClear;
         private AntdUI.Splitter splitterPacketList;
         private TableLayoutPanelEx tlpPacketList2;
         private TableLayoutPanelEx tlpPacketListInfo;
@@ -1120,21 +1143,7 @@
         private AntdUI.Label lFilterExecute;
         private AntdUI.Label lTotal;
         private AntdUI.Table tPacketList;
-        private AntdUI.Panel pPacketData;
+        private AntdUI.Splitter splitterQuickList;
         private Be.Windows.Forms.HexBox hbPacketData;
-        private TableLayoutPanelEx tlpProcessInfo;
-        private AntdUI.Label lSpeedInfo;
-        private AntdUI.Label lSplit3;
-        private AntdUI.Label lSplit2;
-        private AntdUI.Label lSplit1;
-        private AntdUI.Label lWinsockInfo;
-        private AntdUI.Label lModuleName;
-        private AntdUI.Label lProcessName;
-        private System.ComponentModel.BackgroundWorker bgwSearchPacketList;
-        private AntdUI.Button bSearchPacket;
-        private AntdUI.Dropdown ddMenu;
-        private AntdUI.Checkbox cbPacketList_AutoRoll;
-        private AntdUI.Checkbox cbPacketList_AutoClear;
-        private AntdUI.InputNumber txtPacketList_AutoClear;
     }
 }
