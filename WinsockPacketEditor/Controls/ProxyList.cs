@@ -1038,7 +1038,7 @@ namespace WinsockPacketEditor
                         Operate.ProxyConfig.Proxy.ProxyServer.Dispose();
                         Operate.ProxyConfig.Proxy.ProxyServer = null;
 
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "启动失败，请尝试调低最大连接数", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "启动 SOCKS5 代理失败", TType.Error)
                         {
                             LocalizationText = "ProxyModeForm.StartSocks5Proxy.Fail"
                         });
