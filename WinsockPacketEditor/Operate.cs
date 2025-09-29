@@ -1124,11 +1124,11 @@ namespace WinsockPacketEditor
 
             #region//查找树节点
 
-            public static TreeItem FindNodeByName(AntdUI.Tree tree, string name)
+            public static TreeItem FindNodeByName(AntdUI.Tree tree, string NodeName, string SubTitle)
             {
                 try
                 {
-                    return FindNodeByName(tree.Items, name);
+                    return FindNodeByName(tree.Items, NodeName, SubTitle);
                 }
                 catch (Exception ex)
                 {
@@ -1138,7 +1138,7 @@ namespace WinsockPacketEditor
                 return null;
             }
 
-            public static TreeItem FindNodeByName(TreeItemCollection items, string name)
+            public static TreeItem FindNodeByName(TreeItemCollection items, string NodeName, string SubTitle)
             {
                 try
                 {
@@ -1149,12 +1149,22 @@ namespace WinsockPacketEditor
 
                     foreach (var item in items)
                     {
-                        if (item.Name == name || item.Text == name)
+                        if (item.Name == NodeName || item.Text == NodeName)
                         {
-                            return item;
+                            if (string.IsNullOrEmpty(SubTitle))
+                            {
+                                return item;
+                            }
+                            else
+                            {
+                                if (item.SubTitle.Equals(SubTitle))
+                                {
+                                    return item;
+                                }
+                            }                                                        
                         }
 
-                        var found = FindNodeByName(item.Sub, name);
+                        var found = FindNodeByName(item.Sub, NodeName, SubTitle);
                         if (found != null)
                         {
                             return found;
@@ -4999,7 +5009,7 @@ namespace WinsockPacketEditor
                         int TargetPort = epServer.Port;
 
                         psSession.DomainType = Operate.ProxyConfig.Proxy.GetDomainType_ByPort(TargetPort);
-                        psSession.ClientAddress = Operate.ProxyConfig.Proxy.GetClientAddress(TargetAddress, TargetPort, psSession.ClientPort);
+                        psSession.ClientAddress = Operate.ProxyConfig.Proxy.GetClientAddress(TargetAddress, TargetPort);
 
                         switch (psSession.CommandType)
                         {
@@ -5503,25 +5513,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
-
-                #region//获取客户端列表名称
-
-                public static string GetClientListName(string ClientIP, string ClientUserName)
-                {
-                    try
-                    {
-                        return string.Format("{0} [{1}]", ClientIP, ClientUserName);
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetClientListName), ex.Message);
-                    }
-
-                    return string.Empty;
-                }
-
-                #endregion
+                #endregion                
 
                 #region//设置系统代理
 
@@ -6311,14 +6303,14 @@ namespace WinsockPacketEditor
 
                 #region//获取客户端地址
 
-                public static string GetClientAddress(string TargetAddress, int TargetPort, int ClientPort)
+                public static string GetClientAddress(string TargetAddress, int TargetPort)
                 {
                     if (string.IsNullOrEmpty(TargetAddress))
                     {
                         return string.Empty;
                     }
 
-                    return $"{TargetAddress}:{TargetPort} [{ClientPort}]";
+                    return $"{TargetAddress}:{TargetPort}";
                 }
 
                 #endregion
@@ -6932,10 +6924,10 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        string ClientUserName = ProxyConfig.Account.GetUserName_ByAccountID(AID);
-                        string RootName = ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
+                        string RootName = ClientIP;
+                        string RootSubTitle = ProxyConfig.Account.GetUserName_ByAccountID(AID);
 
-                        TreeItem tiRoot = SystemConfig.FindNodeByName(tree, RootName);
+                        TreeItem tiRoot = SystemConfig.FindNodeByName(tree, RootName, RootSubTitle);
                         if (tiRoot != null)
                         {
                             return tiRoot.Sub.Count;

@@ -31,8 +31,8 @@ namespace WinsockPacketEditor
                     {
                         return ((DateTime)value).ToString("HH:mm:ss");
                     },
-                }.SetLocalizationTitleID("Table.AuthList.Column."),
-                new AntdUI.Column("AID", "账号", AntdUI.ColumnAlign.Center)
+                }.SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("AID", "账号")
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -127,22 +127,23 @@ namespace WinsockPacketEditor
 
                     if (Session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
                     {
-                        string ClientIP = Session.ClientIP;
-                        string ClientUserName = Operate.ProxyConfig.Account.GetUserName_ByAccountID(Session.AID);
-                        string sRootName = Operate.ProxyConfig.Proxy.GetClientListName(ClientIP, ClientUserName);
+                        string RootName = Session.ClientIP;
+                        string RootSubTitle = Operate.ProxyConfig.Account.GetUserName_ByAccountID(Session.AID);
 
-                        if (string.IsNullOrEmpty(sRootName))
+                        if (string.IsNullOrEmpty(RootName))
                         {
                             return;
                         }
 
-                        AntdUI.TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, sRootName);
+                        AntdUI.TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, RootName, RootSubTitle);
                         if (tiRoot == null)
                         {
-                            tiRoot = new TreeItem(sRootName)
+                            tiRoot = new TreeItem(RootName)
                             {
                                 IconSvg = "DesktopOutlined",
+                                SubTitle = RootSubTitle,
                             };
+
                             this.treeClientList.Items.Add(tiRoot);
                         }
 
@@ -152,10 +153,14 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        AntdUI.TreeItem tiChild = Operate.SystemConfig.FindNodeByName(this.treeClientList, sChildName);
+                        string ChildSubTitle = Session.ClientPort.ToString();
+                        AntdUI.TreeItem tiChild = Operate.SystemConfig.FindNodeByName(this.treeClientList, sChildName, ChildSubTitle);
+
                         if (tiChild == null)
                         {
                             tiChild = new TreeItem(sChildName);
+                            tiChild.SubTitle = ChildSubTitle;
+
                             switch (Session.DomainType)
                             {
                                 case Operate.ProxyConfig.Proxy.DomainType.Http:
@@ -174,6 +179,7 @@ namespace WinsockPacketEditor
                                     tiChild.IconSvg = "CloudUploadOutlined";
                                     break;
                             }
+
                             tiRoot.Sub.Add(tiChild);
                         }
                     }

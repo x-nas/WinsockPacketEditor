@@ -131,7 +131,7 @@ namespace WinsockPacketEditor
                         return ((DateTime)value).ToString("HH:mm:ss");
                     },
                 }.SetLocalizationTitleID("Table.ProxyLog.Column."),
-                new AntdUI.Column("UserName", "账号", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyLog.Column."),
+                new AntdUI.Column("UserName", "账号").SetLocalizationTitleID("Table.ProxyLog.Column."),
                 new AntdUI.Column("LoginIP", "IP地址")
                 {
                     Render = (value, record, rowindex)=>

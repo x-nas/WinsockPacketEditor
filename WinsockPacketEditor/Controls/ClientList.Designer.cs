@@ -80,6 +80,7 @@
             // treeClientList
             // 
             this.treeClientList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeClientList.IconRatio = 0.8F;
             this.treeClientList.Location = new System.Drawing.Point(0, 0);
             this.treeClientList.Margin = new System.Windows.Forms.Padding(2);
             this.treeClientList.Name = "treeClientList";
