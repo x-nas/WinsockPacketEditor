@@ -22,8 +22,6 @@ namespace WinsockPacketEditor
         private void ComparisonText_Load(object sender, EventArgs e)
         {
             this.tabComparisonText.SelectTab(0);
-            this.splitterComparison.SplitterWidth = 5;
-            this.splitterDuplicate.SplitterWidth = 5;
 
             this.InitTable_Comparison();
             this.InitTable_Duplicate();
@@ -259,11 +257,20 @@ namespace WinsockPacketEditor
             }            
         }
 
+        private void bComparison_Clear_Click(object sender, EventArgs e)
+        {
+            this.txtComparison_A.ClearStyle();
+            this.txtComparison_B.ClearStyle();
+            this.txtComparison_A.Clear();
+            this.txtComparison_B.Clear();
+            this.txtComparisonRegex.Clear();
+        }
+
         #endregion
 
         #region//文本查重
 
-        private void txtRegex_TextChanged(object sender, EventArgs e)
+        private void txtDuplicateRegex_TextChanged(object sender, EventArgs e)
         {
             Operate.SystemConfig.FindRegexMatches(this.txtDuplicateRegex.Text, this.txtDuplicate_A, this.txtDuplicate_B);
         }
@@ -305,6 +312,15 @@ namespace WinsockPacketEditor
             }            
         }
 
+        private void bDuplicate_Clear_Click(object sender, EventArgs e)
+        {
+            this.txtDuplicate_A.ClearStyle();
+            this.txtDuplicate_B.ClearStyle();
+            this.txtDuplicate_A.Clear();
+            this.txtDuplicate_B.Clear();
+            this.txtDuplicateRegex.Clear();
+        }
+
         #endregion
 
         #region//跳转到指定位置
@@ -318,29 +334,7 @@ namespace WinsockPacketEditor
             this.txtComparison_B.ScrollToCaret();
         }
 
-        #endregion
-
-        #region//清除
-
-        private void bComparison_Clear_Click(object sender, EventArgs e)
-        {
-            this.txtComparison_A.ClearStyle();
-            this.txtComparison_B.ClearStyle();
-            this.txtComparison_A.Clear();
-            this.txtComparison_B.Clear();
-            this.txtComparisonRegex.Clear();
-        }
-
-        private void bDuplicate_Clear_Click(object sender, EventArgs e)
-        {
-            this.txtDuplicate_A.ClearStyle();
-            this.txtDuplicate_B.ClearStyle();
-            this.txtDuplicate_A.Clear();
-            this.txtDuplicate_B.Clear();
-            this.txtDuplicateRegex.Clear();
-        }
-
-        #endregion
+        #endregion        
 
         #region//暂存文本
 
