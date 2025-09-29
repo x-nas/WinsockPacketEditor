@@ -1,12 +1,13 @@
-﻿using SuperSocket.SocketBase.Protocol;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using SuperSocket.SocketBase.Protocol;
 
 namespace WinsockPacketEditor
 {
     public class Socks5ProxyReceiveFilter : IReceiveFilter<BinaryRequestInfo>
     {        
         private ProxySession m_Session;
+        private const int MAX_BUFFER_SIZE = 1024;
         private byte[] m_Buffer = Array.Empty<byte>();
 
         public int LeftBufferSize { get; set; }
@@ -44,7 +45,7 @@ namespace WinsockPacketEditor
                 return null;
             }
 
-            byte[] combinedData = CombineData(readBuffer, offset, length);
+            byte[] combinedData = Operate.ProxyConfig.Proxy.CombineData(this.m_Buffer, readBuffer, offset, length);
             _ = ProcessCombinedData(combinedData);
 
             return null;
@@ -52,29 +53,18 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//处理 Socks5 代理步骤（异步）
-
-        private byte[] CombineData(byte[] newData, int offset, int length)
-        {
-            if (m_Buffer.Length == 0)
-            {
-                byte[] result = new byte[length];
-                Buffer.BlockCopy(newData, offset, result, 0, length);
-                return result;
-            }
-            else
-            {
-                byte[] result = new byte[m_Buffer.Length + length];
-                Buffer.BlockCopy(m_Buffer, 0, result, 0, m_Buffer.Length);
-                Buffer.BlockCopy(newData, offset, result, m_Buffer.Length, length);
-                return result;
-            }
-        }
+        #region//处理 Socks5 代理步骤（异步）        
 
         private async Task ProcessCombinedData(byte[] combinedData)
         {
             try
             {
+                if (this.m_Session.ProxyStep == Operate.ProxyConfig.Proxy.ProxyStep.Handshake && m_Buffer.Length > MAX_BUFFER_SIZE)
+                {
+                    m_Buffer = Array.Empty<byte>();
+                    return;
+                }
+
                 bool isCompleteRequest = Operate.ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, this.m_Session.ProxyStep);
                 if (isCompleteRequest)
                 {

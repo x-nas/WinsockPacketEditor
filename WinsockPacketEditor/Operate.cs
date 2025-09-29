@@ -5415,6 +5415,27 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//处理断包
+
+                public static byte[] CombineData(byte[] m_Buffer, byte[] newData, int offset, int length)
+                {
+                    if (m_Buffer.Length == 0)
+                    {
+                        byte[] result = new byte[length];
+                        Buffer.BlockCopy(newData, offset, result, 0, length);
+                        return result;
+                    }
+                    else
+                    {
+                        byte[] result = new byte[m_Buffer.Length + length];
+                        Buffer.BlockCopy(m_Buffer, 0, result, 0, m_Buffer.Length);
+                        Buffer.BlockCopy(newData, offset, result, m_Buffer.Length, length);
+                        return result;
+                    }
+                }
+
+                #endregion
+
                 #region//获取客户端列表名称
 
                 public static string GetClientListName(string ClientIP, string ClientUserName)
