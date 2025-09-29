@@ -353,10 +353,10 @@ namespace WinsockPacketEditor
         private void bSearchPacket_Click(object sender, EventArgs e)
         {
             AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new SearchPacket(this.form))
-            {
+            {                
                 Align = AntdUI.TAlignMini.Top,
                 Mask = false,
-                DisplayDelay = 0,
+                DisplayDelay = 0,                
             });
         }
 
@@ -1257,7 +1257,7 @@ namespace WinsockPacketEditor
                 this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
 
                 Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
-                    AntdUI.Localization.Get("ProxyModeForm.ProxyBytesInfo", "请求: {0}  响应: {1}"),
+                    AntdUI.Localization.Get("ProxyModeForm.ProxyBytesInfo", "请求 : {0}  响应 : {1}"),
                     Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request),
                     Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
                 this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
@@ -1268,7 +1268,7 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
 
                 Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
-                    AntdUI.Localization.Get("ProxyModeForm.ProxySpeedInfo", "上行: {0} KB/s  下行: {1} KB/s"),
+                    AntdUI.Localization.Get("ProxyModeForm.ProxySpeedInfo", "上行 : {0} KB/s  下行 : {1} KB/s"),
                     dUplink.ToString("0.00"),
                     dDownlink.ToString("0.00"));
                 this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;

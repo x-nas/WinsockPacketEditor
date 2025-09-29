@@ -75,7 +75,7 @@
             this.txtFind.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFind.LocalizationPlaceholderText = "Input.Regex";
             this.txtFind.Location = new System.Drawing.Point(142, 2);
-            this.txtFind.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtFind.Margin = new System.Windows.Forms.Padding(2);
             this.txtFind.Multiline = true;
             this.txtFind.Name = "txtFind";
             this.txtFind.PlaceholderText = "请输入正则表达式";
@@ -90,7 +90,7 @@
             this.pSearchType.Location = new System.Drawing.Point(4, 5);
             this.pSearchType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pSearchType.Name = "pSearchType";
-            this.pSearchType.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pSearchType.Padding = new System.Windows.Forms.Padding(2);
             this.pSearchType.Size = new System.Drawing.Size(132, 70);
             this.pSearchType.TabIndex = 22;
             this.pSearchType.Text = "panel1";
@@ -168,7 +168,7 @@
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
             this.bExit.Location = new System.Drawing.Point(4, 42);
-            this.bExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 36);
             this.bExit.TabIndex = 9;
@@ -185,7 +185,7 @@
             this.bSearch.IconSvg = "SearchOutlined";
             this.bSearch.LocalizationText = "SearchPacketForm.FindNext";
             this.bSearch.Location = new System.Drawing.Point(4, 2);
-            this.bSearch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.bSearch.Margin = new System.Windows.Forms.Padding(2);
             this.bSearch.Name = "bSearch";
             this.bSearch.Size = new System.Drawing.Size(99, 36);
             this.bSearch.TabIndex = 8;
@@ -201,7 +201,7 @@
             this.pSearchFrom.Location = new System.Drawing.Point(894, 5);
             this.pSearchFrom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pSearchFrom.Name = "pSearchFrom";
-            this.pSearchFrom.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pSearchFrom.Padding = new System.Windows.Forms.Padding(2);
             this.pSearchFrom.Size = new System.Drawing.Size(97, 70);
             this.pSearchFrom.TabIndex = 24;
             // 
@@ -258,7 +258,7 @@
             this.Controls.Add(this.tlpSearchSettings);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SearchPacket";
             this.Size = new System.Drawing.Size(1100, 80);
             this.Load += new System.EventHandler(this.SearchPacket_Load);

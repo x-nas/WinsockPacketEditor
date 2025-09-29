@@ -46,7 +46,6 @@
             this.lWinsockInfo = new AntdUI.Label();
             this.lModuleName = new AntdUI.Label();
             this.lProcessName = new AntdUI.Label();
-            this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.splitterPacketList = new AntdUI.Splitter();
             this.tlpPacketList2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpPacketListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
@@ -88,6 +87,7 @@
             this.tPacketList = new AntdUI.Table();
             this.splitterQuickList = new AntdUI.Splitter();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
+            this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.tlpPacketList.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tlpProcessInfo.SuspendLayout();
@@ -215,6 +215,7 @@
             this.ddMenu.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Placement = AntdUI.TAlignFrom.BR;
             this.ddMenu.Size = new System.Drawing.Size(32, 36);
             this.ddMenu.TabIndex = 13;
             this.ddMenu.Trigger = AntdUI.Trigger.Hover;
@@ -406,11 +407,6 @@
             this.lProcessName.Size = new System.Drawing.Size(78, 20);
             this.lProcessName.TabIndex = 5;
             this.lProcessName.Text = "ProcessName";
-            // 
-            // bgwSearchPacketList
-            // 
-            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
-            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
             // 
             // splitterPacketList
             // 
@@ -1052,6 +1048,11 @@
             this.hbPacketData.VScrollBarVisible = true;
             this.hbPacketData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbPacketData_KeyDown);
             this.hbPacketData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbPacketData_MouseDown);
+            // 
+            // bgwSearchPacketList
+            // 
+            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
+            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
             // 
             // PacketList
             // 

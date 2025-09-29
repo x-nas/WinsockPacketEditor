@@ -9805,7 +9805,7 @@ namespace WinsockPacketEditor
                     {
                         string sTotal_SendBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes);
                         string sTotal_RecvBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes);
-                        string sSpeedInfo = AntdUI.Localization.Get("InjectModeForm.SpeedInfo", "发送: {0}  接收: {1}");
+                        string sSpeedInfo = AntdUI.Localization.Get("InjectModeForm.SpeedInfo", "发送 : {0}  接收 : {1}");
                         sReturn = string.Format(sSpeedInfo, sTotal_SendBytes, sTotal_RecvBytes);
                     }
                     catch (Exception ex)
