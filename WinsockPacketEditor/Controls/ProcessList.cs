@@ -108,7 +108,7 @@ namespace WinsockPacketEditor
 
         private void ShowProcessList()
         {
-            AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+            AntdUI.Spin.open(this.tProcessList, new AntdUI.Spin.Config()
             {
                 Radius = 6,
                 Font = new Font("Microsoft YaHei UI", 9F),
