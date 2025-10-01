@@ -1112,6 +1112,9 @@ namespace WinsockPacketEditor
                 case "AccountList.Add":
                     return "Add Account";
 
+                case "AccountList.BatchAdd":
+                    return "Batch Add Accounts";
+
                 case "AccountList.Import":
                     return "Import Account";
 

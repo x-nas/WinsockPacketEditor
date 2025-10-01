@@ -1463,6 +1463,12 @@ namespace WinsockPacketEditor
             try
             {
                 bool bOK = false;
+
+                this.tFilterNormal.PauseLayout = true;
+                this.tFilterAdvanced_Search.PauseLayout = true;
+                this.tFilterAdvanced_Modify_Head.PauseLayout = true;
+                this.tFilterAdvanced_Modify_Position.PauseLayout = true;
+
                 tTable.Spin(AntdUI.Localization.Get("Loading", "正在加载..."), config =>
                 {
                     this.bSave.Loading = true;
@@ -1493,6 +1499,11 @@ namespace WinsockPacketEditor
                     }
                 }, () =>
                 {
+                    this.tFilterNormal.PauseLayout = false;
+                    this.tFilterAdvanced_Search.PauseLayout = false;
+                    this.tFilterAdvanced_Modify_Head.PauseLayout = false;
+                    this.tFilterAdvanced_Modify_Position.PauseLayout = false;
+
                     if (bOK)
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(this.form, "数据粘贴完毕", TType.Success)
@@ -1518,6 +1529,11 @@ namespace WinsockPacketEditor
         {
             try
             {
+                this.tFilterNormal.PauseLayout = true;
+                this.tFilterAdvanced_Search.PauseLayout = true;
+                this.tFilterAdvanced_Modify_Head.PauseLayout = true;
+                this.tFilterAdvanced_Modify_Position.PauseLayout = true;
+
                 AntdUI.Spin.open(this, new AntdUI.Spin.Config()
                 {
                     Radius = 6,
@@ -1602,7 +1618,10 @@ namespace WinsockPacketEditor
 
                 }, () =>
                 {
-                    //
+                    this.tFilterNormal.PauseLayout = false;
+                    this.tFilterAdvanced_Search.PauseLayout = false;
+                    this.tFilterAdvanced_Modify_Head.PauseLayout = false;
+                    this.tFilterAdvanced_Modify_Position.PauseLayout = false;
                 });
             }
             catch (Exception ex)

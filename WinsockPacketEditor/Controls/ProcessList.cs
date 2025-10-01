@@ -108,6 +108,8 @@ namespace WinsockPacketEditor
 
         private void ShowProcessList()
         {
+            this.tProcessList.PauseLayout = true;
+
             AntdUI.Spin.open(this.tProcessList, new AntdUI.Spin.Config()
             {
                 Radius = 6,
@@ -120,6 +122,7 @@ namespace WinsockPacketEditor
             {
                 this.tProcessList.DataSource = processList;
                 this.tProcessList.SelectedIndex = -1;
+                this.tProcessList.PauseLayout = false;
             });
         }
 

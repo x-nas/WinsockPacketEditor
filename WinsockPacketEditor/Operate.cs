@@ -6664,7 +6664,52 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion                
+                #endregion
+
+                #region//编辑账号
+
+                public static void OpenAccountEdit(Form form, AccountInfo ai)
+                {
+                    var AccountEdit = new AccountEdit(form, ai);
+
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
+                #region//批量创建账号
+
+                public static void BatchAddAccounts(Form form)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountList.BatchAdd", "批量创建账号"), new BatchAccounts(form))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
+                #region//生成随机密码
+
+                private static readonly Random rPW = new Random();
+
+                public static string RandomPassword(int length)
+                {
+                    const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+                    return new string(Enumerable.Repeat(validChars, length)
+                        .Select(s => s[rPW.Next(s.Length)])
+                        .ToArray());
+                }
+
+                #endregion
 
                 #region//获取代理认证列表的信息
 

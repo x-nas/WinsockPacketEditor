@@ -166,6 +166,12 @@ namespace WinsockPacketEditor
                     LocalizationText = "AccountList.Add",
                     IconSvg = "UserAddOutlined",
                 },
+                new AntdUI.SelectItem("批量创建账号")
+                {
+                    Tag = "BatchAdd",
+                    LocalizationText = "AccountList.BatchAdd",
+                    IconSvg = "UsergroupAddOutlined",
+                },
                 new AntdUI.SelectItem("导入账号列表")
                 {
                     Tag = "Import",
@@ -266,13 +272,13 @@ namespace WinsockPacketEditor
             {
                 case "Add":
 
-                    var AccountEdit = new AccountEdit(this.form, null);
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
-                    {
-                        Keyboard = false,
-                        MaskClosable = false,
-                        BtnHeight = 0,
-                    });
+                    Operate.ProxyConfig.Account.OpenAccountEdit(this.form, null);
+
+                    break;
+
+                case "BatchAdd":
+
+                    Operate.ProxyConfig.Account.BatchAddAccounts(this.form);
 
                     break;
 
@@ -310,7 +316,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        this.OpenAccountEdit(ai);
+                        Operate.ProxyConfig.Account.OpenAccountEdit(this.form, ai);
 
                         break;
 
@@ -344,20 +350,9 @@ namespace WinsockPacketEditor
         {
             if (e.Record is AccountInfo ai)
             {
-                this.OpenAccountEdit(ai);
+                Operate.ProxyConfig.Account.OpenAccountEdit(this.form, ai);
             }
-        }
-
-        private void OpenAccountEdit(AccountInfo ai)
-        {
-            var AccountEdit = new AccountEdit(this.form, ai);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
-            {
-                Keyboard = false,
-                MaskClosable = false,
-                BtnHeight = 0,
-            });
-        }
+        }        
 
         #endregion
 
