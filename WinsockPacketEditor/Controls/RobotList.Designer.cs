@@ -137,6 +137,7 @@
             this.ddMenu.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
+            this.ddMenu.Placement = AntdUI.TAlignFrom.BR;
             this.ddMenu.Size = new System.Drawing.Size(32, 36);
             this.ddMenu.TabIndex = 12;
             this.ddMenu.Trigger = AntdUI.Trigger.Hover;

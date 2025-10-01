@@ -126,6 +126,7 @@
             this.ddMenu_MapRemote.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu_MapRemote.MaxCount = 10;
             this.ddMenu_MapRemote.Name = "ddMenu_MapRemote";
+            this.ddMenu_MapRemote.Placement = AntdUI.TAlignFrom.BR;
             this.ddMenu_MapRemote.Size = new System.Drawing.Size(32, 37);
             this.ddMenu_MapRemote.TabIndex = 13;
             this.ddMenu_MapRemote.Trigger = AntdUI.Trigger.Hover;
@@ -273,6 +274,7 @@
             this.ddMenu_MapLocal.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu_MapLocal.MaxCount = 10;
             this.ddMenu_MapLocal.Name = "ddMenu_MapLocal";
+            this.ddMenu_MapLocal.Placement = AntdUI.TAlignFrom.BR;
             this.ddMenu_MapLocal.Size = new System.Drawing.Size(32, 37);
             this.ddMenu_MapLocal.TabIndex = 12;
             this.ddMenu_MapLocal.Trigger = AntdUI.Trigger.Hover;
