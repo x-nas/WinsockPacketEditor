@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Web.Hosting;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -48,7 +47,6 @@ namespace WinsockPacketEditor
         private void InitBatchAccounts()
         {
             tBatchAccounts.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.ColumnCheck("IsCheck").SetFixed(),
                 new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -285,7 +283,30 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
+            try
+            {
+                foreach (AccountInfo ai in this.lstBatchAccounts)
+                {
+                    Operate.ProxyConfig.Account.lstAccountInfo.Add(ai);
+                }
 
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "批量创建账号成功", TType.Success)
+                {
+                    LocalizationText = ""
+                });
+
+                if (this.form is InterfaceInfo.IProxyMode pmForm)
+                {
+                    Operate.ProxyConfig.Account.NeedSave = true;
+                    pmForm.RefreshAccountList();
+                }
+
+                this.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(bSave_Click), ex.Message);
+            }
         }
 
         #endregion

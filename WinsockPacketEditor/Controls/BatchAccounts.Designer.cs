@@ -32,7 +32,7 @@
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tBatchAccounts = new AntdUI.Table();
+            this.splitterBatchAccounts = new AntdUI.Splitter();
             this.tlpBatchInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudLimitLinks = new AntdUI.InputNumber();
             this.dpExpiryTime = new AntdUI.DatePicker();
@@ -47,19 +47,22 @@
             this.nudPasswordLength = new AntdUI.InputNumber();
             this.bPreview = new AntdUI.Button();
             this.cbLimitLinks = new AntdUI.Checkbox();
+            this.tBatchAccounts = new AntdUI.Table();
             this.tlpBatchAccounts.SuspendLayout();
             this.tlpButton.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitterBatchAccounts)).BeginInit();
+            this.splitterBatchAccounts.Panel1.SuspendLayout();
+            this.splitterBatchAccounts.Panel2.SuspendLayout();
+            this.splitterBatchAccounts.SuspendLayout();
             this.tlpBatchInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpBatchAccounts
             // 
-            this.tlpBatchAccounts.ColumnCount = 2;
-            this.tlpBatchAccounts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+            this.tlpBatchAccounts.ColumnCount = 1;
             this.tlpBatchAccounts.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBatchAccounts.Controls.Add(this.tlpButton, 1, 1);
-            this.tlpBatchAccounts.Controls.Add(this.tBatchAccounts, 1, 0);
-            this.tlpBatchAccounts.Controls.Add(this.tlpBatchInfo, 0, 0);
+            this.tlpBatchAccounts.Controls.Add(this.tlpButton, 0, 1);
+            this.tlpBatchAccounts.Controls.Add(this.splitterBatchAccounts, 0, 0);
             this.tlpBatchAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpBatchAccounts.Location = new System.Drawing.Point(0, 0);
             this.tlpBatchAccounts.Margin = new System.Windows.Forms.Padding(0);
@@ -68,7 +71,7 @@
             this.tlpBatchAccounts.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpBatchAccounts.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpBatchAccounts.Size = new System.Drawing.Size(1000, 500);
-            this.tlpBatchAccounts.TabIndex = 0;
+            this.tlpBatchAccounts.TabIndex = 1;
             // 
             // tlpButton
             // 
@@ -81,15 +84,15 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(300, 450);
+            this.tlpButton.Location = new System.Drawing.Point(0, 450);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(700, 50);
-            this.tlpButton.TabIndex = 18;
+            this.tlpButton.Size = new System.Drawing.Size(1000, 50);
+            this.tlpButton.TabIndex = 19;
             // 
             // bSave
             // 
@@ -98,7 +101,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(280, 6);
+            this.bSave.Location = new System.Drawing.Point(430, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -114,7 +117,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(357, 6);
+            this.bExit.Location = new System.Drawing.Point(507, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -123,18 +126,28 @@
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
-            // tBatchAccounts
+            // splitterBatchAccounts
             // 
-            this.tBatchAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tBatchAccounts.Gap = 10;
-            this.tBatchAccounts.GapCell = 5;
-            this.tBatchAccounts.Gaps = new System.Drawing.Size(10, 10);
-            this.tBatchAccounts.Location = new System.Drawing.Point(303, 3);
-            this.tBatchAccounts.Name = "tBatchAccounts";
-            this.tBatchAccounts.Size = new System.Drawing.Size(694, 444);
-            this.tBatchAccounts.TabIndex = 19;
-            this.tBatchAccounts.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tBatchAccounts_CellButtonClick);
-            this.tBatchAccounts.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tBatchAccounts_CellDoubleClick);
+            this.splitterBatchAccounts.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
+            this.splitterBatchAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitterBatchAccounts.Location = new System.Drawing.Point(0, 0);
+            this.splitterBatchAccounts.Margin = new System.Windows.Forms.Padding(0);
+            this.splitterBatchAccounts.Name = "splitterBatchAccounts";
+            // 
+            // splitterBatchAccounts.Panel1
+            // 
+            this.splitterBatchAccounts.Panel1.Controls.Add(this.tlpBatchInfo);
+            this.splitterBatchAccounts.Panel1MinSize = 0;
+            // 
+            // splitterBatchAccounts.Panel2
+            // 
+            this.splitterBatchAccounts.Panel2.Controls.Add(this.tBatchAccounts);
+            this.splitterBatchAccounts.Panel2MinSize = 0;
+            this.splitterBatchAccounts.Size = new System.Drawing.Size(1000, 450);
+            this.splitterBatchAccounts.SplitterDistance = 301;
+            this.splitterBatchAccounts.SplitterSize = 80;
+            this.splitterBatchAccounts.SplitterWidth = 5;
+            this.splitterBatchAccounts.TabIndex = 20;
             // 
             // tlpBatchInfo
             // 
@@ -167,8 +180,8 @@
             this.tlpBatchInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBatchInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBatchInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBatchInfo.Size = new System.Drawing.Size(300, 450);
-            this.tlpBatchInfo.TabIndex = 20;
+            this.tlpBatchInfo.Size = new System.Drawing.Size(301, 450);
+            this.tlpBatchInfo.TabIndex = 21;
             // 
             // nudLimitLinks
             // 
@@ -185,7 +198,7 @@
             0,
             0});
             this.nudLimitLinks.Name = "nudLimitLinks";
-            this.nudLimitLinks.Size = new System.Drawing.Size(189, 35);
+            this.nudLimitLinks.Size = new System.Drawing.Size(190, 35);
             this.nudLimitLinks.TabIndex = 17;
             this.nudLimitLinks.Text = "1";
             this.nudLimitLinks.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -202,7 +215,7 @@
             this.dpExpiryTime.Location = new System.Drawing.Point(108, 167);
             this.dpExpiryTime.MaxDate = new System.DateTime(8888, 12, 31, 0, 0, 0, 0);
             this.dpExpiryTime.Name = "dpExpiryTime";
-            this.dpExpiryTime.Size = new System.Drawing.Size(189, 35);
+            this.dpExpiryTime.Size = new System.Drawing.Size(190, 35);
             this.dpExpiryTime.TabIndex = 16;
             this.dpExpiryTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -232,7 +245,7 @@
             0,
             0});
             this.nudLimitDevices.Name = "nudLimitDevices";
-            this.nudLimitDevices.Size = new System.Drawing.Size(189, 35);
+            this.nudLimitDevices.Size = new System.Drawing.Size(190, 35);
             this.nudLimitDevices.TabIndex = 14;
             this.nudLimitDevices.Text = "1";
             this.nudLimitDevices.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -268,7 +281,7 @@
             0,
             0});
             this.nudAccountNum.Name = "nudAccountNum";
-            this.nudAccountNum.Size = new System.Drawing.Size(189, 35);
+            this.nudAccountNum.Size = new System.Drawing.Size(190, 35);
             this.nudAccountNum.TabIndex = 5;
             this.nudAccountNum.Text = "10";
             this.nudAccountNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -314,7 +327,7 @@
             this.ddlAccountRule.List = true;
             this.ddlAccountRule.Location = new System.Drawing.Point(108, 3);
             this.ddlAccountRule.Name = "ddlAccountRule";
-            this.ddlAccountRule.Size = new System.Drawing.Size(189, 35);
+            this.ddlAccountRule.Size = new System.Drawing.Size(190, 35);
             this.ddlAccountRule.TabIndex = 1;
             this.ddlAccountRule.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -333,7 +346,7 @@
             0,
             0});
             this.nudPasswordLength.Name = "nudPasswordLength";
-            this.nudPasswordLength.Size = new System.Drawing.Size(189, 35);
+            this.nudPasswordLength.Size = new System.Drawing.Size(190, 35);
             this.nudPasswordLength.TabIndex = 3;
             this.nudPasswordLength.Text = "6";
             this.nudPasswordLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -348,7 +361,7 @@
             this.bPreview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bPreview.Location = new System.Drawing.Point(108, 249);
             this.bPreview.Name = "bPreview";
-            this.bPreview.Size = new System.Drawing.Size(189, 35);
+            this.bPreview.Size = new System.Drawing.Size(190, 35);
             this.bPreview.TabIndex = 6;
             this.bPreview.Text = "预览";
             this.bPreview.Type = AntdUI.TTypeMini.Primary;
@@ -365,6 +378,20 @@
             this.cbLimitLinks.Text = "限制链接数 :";
             this.cbLimitLinks.CheckedChanged += new AntdUI.BoolEventHandler(this.cbLimitLinks_CheckedChanged);
             // 
+            // tBatchAccounts
+            // 
+            this.tBatchAccounts.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tBatchAccounts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tBatchAccounts.Gap = 10;
+            this.tBatchAccounts.GapCell = 5;
+            this.tBatchAccounts.Gaps = new System.Drawing.Size(10, 10);
+            this.tBatchAccounts.Location = new System.Drawing.Point(0, 0);
+            this.tBatchAccounts.Name = "tBatchAccounts";
+            this.tBatchAccounts.Size = new System.Drawing.Size(694, 450);
+            this.tBatchAccounts.TabIndex = 20;
+            this.tBatchAccounts.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tBatchAccounts_CellButtonClick);
+            this.tBatchAccounts.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tBatchAccounts_CellDoubleClick);
+            // 
             // BatchAccounts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -379,6 +406,10 @@
             this.tlpBatchAccounts.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
             this.tlpButton.PerformLayout();
+            this.splitterBatchAccounts.Panel1.ResumeLayout(false);
+            this.splitterBatchAccounts.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitterBatchAccounts)).EndInit();
+            this.splitterBatchAccounts.ResumeLayout(false);
             this.tlpBatchInfo.ResumeLayout(false);
             this.tlpBatchInfo.PerformLayout();
             this.ResumeLayout(false);
@@ -391,20 +422,21 @@
         private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private AntdUI.Table tBatchAccounts;
+        private AntdUI.Splitter splitterBatchAccounts;
         private TableLayoutPanelEx tlpBatchInfo;
-        private AntdUI.Label lAccountRule;
-        private AntdUI.Select ddlAccountRule;
-        private AntdUI.InputNumber nudAccountNum;
-        private AntdUI.Label lAccountNum;
-        private AntdUI.Label lPasswordLength;
-        private AntdUI.InputNumber nudPasswordLength;
-        private AntdUI.Button bPreview;
-        private AntdUI.Checkbox cbLimitLinks;
         private AntdUI.InputNumber nudLimitLinks;
         private AntdUI.DatePicker dpExpiryTime;
         private AntdUI.Checkbox cbExpiryTime;
         private AntdUI.InputNumber nudLimitDevices;
         private AntdUI.Checkbox cbLimitDevices;
+        private AntdUI.InputNumber nudAccountNum;
+        private AntdUI.Label lAccountNum;
+        private AntdUI.Label lPasswordLength;
+        private AntdUI.Label lAccountRule;
+        private AntdUI.Select ddlAccountRule;
+        private AntdUI.InputNumber nudPasswordLength;
+        private AntdUI.Button bPreview;
+        private AntdUI.Checkbox cbLimitLinks;
+        private AntdUI.Table tBatchAccounts;
     }
 }
