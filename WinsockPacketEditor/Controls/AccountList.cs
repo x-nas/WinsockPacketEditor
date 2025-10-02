@@ -143,10 +143,12 @@ namespace WinsockPacketEditor
                 dtpExpiryTime.BadgeAction = dates =>
                 {
                     List<AntdUI.DateBadge> dbList = new List<AntdUI.DateBadge>();
+
                     foreach (var kvp in TimeCounts)
                     {
                         dbList.Add(new AntdUI.DateBadge(kvp.Key, kvp.Value));
                     }
+
                     return dbList;
                 };
             }
@@ -273,18 +275,21 @@ namespace WinsockPacketEditor
                 case "Add":
 
                     Operate.ProxyConfig.Account.OpenAccountEdit(this.form, null);
+                    this.InitCalendar_ExpiryTime();
 
                     break;
 
                 case "BatchAdd":
 
                     Operate.ProxyConfig.Account.BatchAddAccounts(this.form);
+                    this.InitCalendar_ExpiryTime();
 
                     break;
 
                 case "Import":
 
                     Operate.ProxyConfig.Account.LoadAccountList_Dialog(this.form);
+                    this.InitCalendar_ExpiryTime();
 
                     break;
 
@@ -302,6 +307,7 @@ namespace WinsockPacketEditor
                     if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
                     {
                         Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, null);
+                        this.InitCalendar_ExpiryTime();
                     }
 
                     break;
@@ -317,6 +323,7 @@ namespace WinsockPacketEditor
                     case "bEdit":
 
                         Operate.ProxyConfig.Account.OpenAccountEdit(this.form, ai);
+                        this.InitCalendar_ExpiryTime();
 
                         break;
 
@@ -340,6 +347,7 @@ namespace WinsockPacketEditor
                         };
 
                         Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, aiList);
+                        this.InitCalendar_ExpiryTime();
 
                         break;
                 }
@@ -351,6 +359,7 @@ namespace WinsockPacketEditor
             if (e.Record is AccountInfo ai)
             {
                 Operate.ProxyConfig.Account.OpenAccountEdit(this.form, ai);
+                this.InitCalendar_ExpiryTime();
             }
         }        
 
@@ -401,6 +410,8 @@ namespace WinsockPacketEditor
                                     MaskClosable = false,
                                     BtnHeight = 0,
                                 });
+
+                                this.InitCalendar_ExpiryTime();
                             }
 
                             break;
@@ -449,6 +460,7 @@ namespace WinsockPacketEditor
                             if (aiList.Count > 0)
                             {
                                 Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, aiList);
+                                this.InitCalendar_ExpiryTime();
                             }
 
                             break;
