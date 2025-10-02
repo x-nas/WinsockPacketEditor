@@ -20,6 +20,7 @@ namespace WinsockPacketEditor
         {
             this.Text = AntdUI.Localization.Get("LeachSetting", "过滤设置");
 
+            this.sIsShow.Checked = !Operate.SystemConfig.CheckNotShow;
             this.cbCheckSocket.Checked = Operate.SystemConfig.CheckSocket;
             this.cbCheckIP.Checked = Operate.SystemConfig.CheckIP;
             this.cbCheckPort.Checked = Operate.SystemConfig.CheckPort;
