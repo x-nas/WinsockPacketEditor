@@ -35,6 +35,8 @@ namespace WinsockPacketEditor
 
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {
+                Operate.SystemConfig.StartRemoteMGT();
+                Operate.SystemConfig.InitCPUAndMemoryCounter();
                 Operate.SystemConfig.InitListExecute();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
@@ -61,6 +63,7 @@ namespace WinsockPacketEditor
 
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Operate.SystemConfig.StopRemoteMGT();
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();

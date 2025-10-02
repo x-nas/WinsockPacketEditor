@@ -39,8 +39,7 @@ namespace WinsockPacketEditor
             {
                 Operate.SystemConfig.StartRemoteMGT();
                 Operate.SystemConfig.InitCPUAndMemoryCounter();
-                Operate.SystemConfig.InitListExecute();
-                
+                Operate.SystemConfig.InitListExecute();                
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();
