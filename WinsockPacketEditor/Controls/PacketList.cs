@@ -426,19 +426,8 @@ namespace WinsockPacketEditor
         {
             if (e.Record is PacketInfo pi)
             {
-                this.OpenPacketEdit(pi);
+                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, pi);
             }
-        }
-
-        private void OpenPacketEdit(PacketInfo pi)
-        {
-            var PacketEdit = new PacketEdit(this.form, pi);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
-            {
-                Keyboard = false,
-                MaskClosable = false,
-                BtnHeight = 0,
-            });
         }
 
         #endregion
@@ -469,7 +458,7 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                this.OpenPacketEdit(piList[0]);
+                                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, piList[0]);
                             }
 
                             break;

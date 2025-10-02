@@ -41,31 +41,24 @@ namespace WinsockPacketEditor
             try
             {
                 this.hbPacketEdit.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-
                 DynamicByteProvider dbp = null;
 
-                switch (Operate.SystemConfig.StartMode)
+                if (this.packetInfo != null)
                 {
-                    case Operate.SystemConfig.SystemMode.Process:
+                    this.nudPacketSocket.Value = this.packetInfo.PacketSocket;
+                    this.nudPacketLength.Value = this.packetInfo.PacketLen;
+                    this.txtPacketTo.Text = this.packetInfo.PacketTo;
 
-                        this.nudPacketSocket.Value = this.packetInfo.PacketSocket;
-                        this.nudPacketLength.Value = this.packetInfo.PacketLen;
-                        this.txtPacketTo.Text = this.packetInfo.PacketTo;
-
-                        dbp = new DynamicByteProvider(this.packetInfo.PacketBuffer);
-
-                        break;
-
-                    case Operate.SystemConfig.SystemMode.Proxy:
-
-                        this.nudPacketSocket.Value = this.proxyInfo.PacketSocket;
-                        this.nudPacketLength.Value = this.proxyInfo.PacketLen;
-                        this.txtPacketTo.Text = this.proxyInfo.ServerAddr;
-
-                        dbp = new DynamicByteProvider(this.proxyInfo.PacketBuffer);
-
-                        break;
+                    dbp = new DynamicByteProvider(this.packetInfo.PacketBuffer);
                 }
+                else if (this.proxyInfo != null)
+                {
+                    this.nudPacketSocket.Value = this.proxyInfo.PacketSocket;
+                    this.nudPacketLength.Value = this.proxyInfo.PacketLen;
+                    this.txtPacketTo.Text = this.proxyInfo.ServerAddr;
+
+                    dbp = new DynamicByteProvider(this.proxyInfo.PacketBuffer);
+                }                    
 
                 dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
                 hbPacketEdit.ByteProvider = dbp;

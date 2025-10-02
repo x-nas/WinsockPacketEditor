@@ -9922,6 +9922,32 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//编辑发送
+
+                public static void OpenPacketEdit(Form form, PacketInfo pi)
+                {
+                    var PacketEdit = new PacketEdit(form, pi);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                public static void OpenPacketEdit(Form form, ProxyInfo pi)
+                {
+                    var PacketEdit = new PacketEdit(form, pi);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
                 #region//获取封包收发速率
 
                 public static string GetPacketSpeedInfo()

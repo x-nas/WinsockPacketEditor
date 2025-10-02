@@ -872,6 +872,9 @@ namespace WinsockPacketEditor
                 case "Table.PacketList.Column.PacketData":
                     return "Data";
 
+                case "Table.PacketList.Column.CellLinks":
+                    return "Operation";
+
                 case "InjectModeForm.SpeedInfo":
                     return "Sent : {0} Received : {1}";
 

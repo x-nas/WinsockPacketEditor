@@ -65,18 +65,18 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("PacketTo", "远端地址").SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("CellLinks", "操作")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellLink[]
+                        {
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
+                        };
+                    },
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.PacketList.Column."),
             };
-
-            if (AntdUI.Config.IsDark)
-            {
-                this.tSendCollection.ColumnFore = Color.Silver;
-                this.tSendCollection.ForeColor = Color.LimeGreen;
-            }
-            else
-            {
-                this.tSendCollection.ColumnFore = Color.Black;
-                this.tSendCollection.ForeColor = Color.Green;
-            }
 
             this.tSendCollection.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSendCollection.Binding(this.SendCollection);
@@ -130,6 +130,9 @@ namespace WinsockPacketEditor
                     this.txtNotes.BackColor =
                     this.tSendCollection.ColumnBack =
                     Operate.SystemConfig.Color_35;
+
+                this.tSendCollection.ColumnFore = Color.Silver;
+                this.tSendCollection.ForeColor = Color.LimeGreen;
             }
             else
             {
@@ -139,6 +142,9 @@ namespace WinsockPacketEditor
                     this.pLoopINT.Back =
                     this.txtNotes.BackColor =
                     this.tSendCollection.ColumnBack = null;
+
+                this.tSendCollection.ColumnFore = Color.Black;
+                this.tSendCollection.ForeColor = Color.Green;
             }
         }
 
@@ -204,6 +210,40 @@ namespace WinsockPacketEditor
         #endregion
 
         #region//发送集 - 菜单
+
+        private void tSendCollection_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is PacketInfo pi)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bEdit":
+
+                        Operate.PacketConfig.Packet.OpenPacketEdit(this.form, pi);
+
+                        break;
+
+                    case "bDelete":
+
+                        List<PacketInfo> piList = new List<PacketInfo>
+                        {
+                            pi,
+                        };
+
+                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
+
+                        break;
+                }
+            }
+        }
+
+        private void tSendCollection_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is PacketInfo pi)
+            {
+                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, pi);
+            }
+        }
 
         private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
@@ -294,22 +334,7 @@ namespace WinsockPacketEditor
                                 Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Bottom, piList);
                             }
 
-                            break;
-
-                        case "cmsEdit":
-
-                            if (piList.Count > 0)
-                            {
-                                var PacketEdit = new PacketEdit(this.form, piList[0]);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
-                            }
-
-                            break;
+                            break;                        
 
                         case "cmsCopy":
 
@@ -336,50 +361,44 @@ namespace WinsockPacketEditor
                 new AntdUI.IContextMenuStripItem[]
                 {
                     new AntdUI.ContextMenuStripItem("置顶", "Ctrl+⬆")
-                {
-                    ID = "cmsTop",
-                    IconSvg = "VerticalAlignTopOutlined",
-                    LocalizationText = "Top",
-                },
+                    {
+                        ID = "cmsTop",
+                        IconSvg = "VerticalAlignTopOutlined",
+                        LocalizationText = "Top",
+                    },
                     new AntdUI.ContextMenuStripItemDivider(),
                     new AntdUI.ContextMenuStripItem("向上移动", "Alt+⬆")
-                {
-                    ID = "cmsUp",
-                    IconSvg = "ArrowUpOutlined",
-                    LocalizationText = "Up",
-                },
+                    {
+                        ID = "cmsUp",
+                        IconSvg = "ArrowUpOutlined",
+                        LocalizationText = "Up",
+                    },
                     new AntdUI.ContextMenuStripItem("向下移动", "Alt+⬇")
-                {
-                    ID = "cmsDown",
-                    IconSvg = "ArrowDownOutlined",
-                    LocalizationText = "Down",
-                },
+                    {
+                        ID = "cmsDown",
+                        IconSvg = "ArrowDownOutlined",
+                        LocalizationText = "Down",
+                    },
                     new AntdUI.ContextMenuStripItemDivider(),
                     new AntdUI.ContextMenuStripItem("置底", "Ctrl+⬇")
-                {
-                    ID = "cmsBottom",
-                    IconSvg = "VerticalAlignBottomOutlined",
-                    LocalizationText = "Bottom",
-                },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("编辑")
-                {
-                    ID = "cmsEdit",
-                    IconSvg = "EditOutlined",
-                    LocalizationText = "Edit",
-                },
+                    {
+                        ID = "cmsBottom",
+                        IconSvg = "VerticalAlignBottomOutlined",
+                        LocalizationText = "Bottom",
+                    },
+                    new AntdUI.ContextMenuStripItemDivider(),                    
                     new AntdUI.ContextMenuStripItem("复制")
-                {
-                    ID = "cmsCopy",
-                    IconSvg = "CopyOutlined",
-                    LocalizationText = "Copy",
-                },
+                    {
+                        ID = "cmsCopy",
+                        IconSvg = "CopyOutlined",
+                        LocalizationText = "Copy",
+                    },
                     new AntdUI.ContextMenuStripItem("删除")
-                {
-                    ID = "cmsDelete",
-                    IconSvg = "CloseOutlined",
-                    LocalizationText = "Delete",
-                },
+                    {
+                        ID = "cmsDelete",
+                        IconSvg = "CloseOutlined",
+                        LocalizationText = "Delete",
+                    },
                 }));
             }
         }
