@@ -37,7 +37,7 @@ namespace WinsockPacketEditor
             {
                 new AntdUI.SelectItem("当前时间 + 序号")
                 {
-                    LocalizationText = "",
+                    LocalizationText = "BatchAccounts.TimeID",
                 },
             });
 

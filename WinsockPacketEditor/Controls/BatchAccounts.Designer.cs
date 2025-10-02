@@ -223,6 +223,7 @@
             // 
             this.cbExpiryTime.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbExpiryTime.LocalizationText = "AccountEditForm.ExpireTime";
             this.cbExpiryTime.Location = new System.Drawing.Point(3, 167);
             this.cbExpiryTime.Name = "cbExpiryTime";
             this.cbExpiryTime.Size = new System.Drawing.Size(87, 35);
@@ -259,6 +260,7 @@
             // 
             this.cbLimitDevices.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbLimitDevices.LocalizationText = "AccountEditForm.LimitDevices";
             this.cbLimitDevices.Location = new System.Drawing.Point(3, 126);
             this.cbLimitDevices.Name = "cbLimitDevices";
             this.cbLimitDevices.Size = new System.Drawing.Size(99, 35);
@@ -295,6 +297,7 @@
             // 
             this.lAccountNum.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lAccountNum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lAccountNum.LocalizationText = "BatchAccounts.GeneratedQuantity";
             this.lAccountNum.Location = new System.Drawing.Point(3, 208);
             this.lAccountNum.Name = "lAccountNum";
             this.lAccountNum.Size = new System.Drawing.Size(55, 35);
@@ -305,6 +308,7 @@
             // 
             this.lPasswordLength.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPasswordLength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPasswordLength.LocalizationText = "BatchAccounts.PasswordLen";
             this.lPasswordLength.Location = new System.Drawing.Point(3, 44);
             this.lPasswordLength.Name = "lPasswordLength";
             this.lPasswordLength.Size = new System.Drawing.Size(55, 35);
@@ -315,6 +319,7 @@
             // 
             this.lAccountRule.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lAccountRule.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lAccountRule.LocalizationText = "BatchAccounts.AccountRule";
             this.lAccountRule.Location = new System.Drawing.Point(3, 3);
             this.lAccountRule.Name = "lAccountRule";
             this.lAccountRule.Size = new System.Drawing.Size(55, 35);
@@ -359,6 +364,7 @@
             // bPreview
             // 
             this.bPreview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bPreview.LocalizationText = "Preview";
             this.bPreview.Location = new System.Drawing.Point(108, 249);
             this.bPreview.Name = "bPreview";
             this.bPreview.Size = new System.Drawing.Size(190, 35);
@@ -371,6 +377,7 @@
             // 
             this.cbLimitLinks.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbLimitLinks.LocalizationText = "AccountEditForm.LimitLinks";
             this.cbLimitLinks.Location = new System.Drawing.Point(3, 85);
             this.cbLimitLinks.Name = "cbLimitLinks";
             this.cbLimitLinks.Size = new System.Drawing.Size(99, 35);

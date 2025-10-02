@@ -393,6 +393,9 @@ namespace WinsockPacketEditor
                 case "MoveBy":
                     return "Move By";
 
+                case "Preview":
+                    return "Preview";
+
                 #endregion
 
                 #region//Operate
@@ -2051,6 +2054,22 @@ namespace WinsockPacketEditor
 
                 case "AccountEditForm.Success":
                     return "Account saved successfully";
+
+                #endregion
+
+                #region//BatchAccounts
+
+                case "BatchAccounts.AccountRule":
+                    return "Account Rule :";
+
+                case "BatchAccounts.PasswordLen":
+                    return "Password Length :";
+
+                case "BatchAccounts.GeneratedQuantity":
+                    return "Generated Quantity :";
+
+                case "BatchAccounts.TimeID":
+                    return "Time + ID";
 
                 #endregion
 
