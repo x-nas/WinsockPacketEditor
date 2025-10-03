@@ -28,6 +28,7 @@ namespace WinsockPacketEditor
             this.LimitLinks_Changed();
             this.LimitDevices_Changed();
             this.ExpiryTime_Changed();
+            this.AccountRule_Changed();
         }
 
         private void InitAccountRule()
@@ -38,6 +39,10 @@ namespace WinsockPacketEditor
                 new AntdUI.SelectItem("当前时间 + 序号")
                 {
                     LocalizationText = "BatchAccounts.TimeID",
+                },
+                new AntdUI.SelectItem("自定义前缀 + 序号")
+                {
+                    LocalizationText = "BatchAccounts.PrefixID",
                 },
             });
 
@@ -165,6 +170,31 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//账号规则
+
+        private void ddlAccountRule_SelectedIndexChanged(object sender, IntEventArgs e)
+        {
+            this.AccountRule_Changed();
+        }
+
+        private void AccountRule_Changed()
+        {
+            if (this.ddlAccountRule.SelectedIndex == 0)
+            {
+                this.txtPrefix.Enabled = false;
+            }
+            else if (this.ddlAccountRule.SelectedIndex == 1)
+            {
+                this.txtPrefix.Enabled = true;
+            }
+            else
+            {
+                this.txtPrefix.Enabled = false;
+            }
+        }
+
+        #endregion
+
         #region//限制链接数
 
         private void cbLimitLinks_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
@@ -246,9 +276,9 @@ namespace WinsockPacketEditor
                         {
                             ai.UserName = AccountHead + i.ToString("D3");
                         }
-                        else
+                        else if (this.ddlAccountRule.SelectedIndex == 1)
                         {
-                            //其他规则
+                            ai.UserName = this.txtPrefix.Text.Trim() + i.ToString("D3");
                         }
 
                         ai.IsLimitLinks = this.cbLimitLinks.Checked;

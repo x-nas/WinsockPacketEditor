@@ -34,6 +34,7 @@
             this.bExit = new AntdUI.Button();
             this.splitterBatchAccounts = new AntdUI.Splitter();
             this.tlpBatchInfo = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.lPrefix = new AntdUI.Label();
             this.nudLimitLinks = new AntdUI.InputNumber();
             this.dpExpiryTime = new AntdUI.DatePicker();
             this.cbExpiryTime = new AntdUI.Checkbox();
@@ -47,6 +48,7 @@
             this.nudPasswordLength = new AntdUI.InputNumber();
             this.bPreview = new AntdUI.Button();
             this.cbLimitLinks = new AntdUI.Checkbox();
+            this.txtPrefix = new AntdUI.Input();
             this.tBatchAccounts = new AntdUI.Table();
             this.tlpBatchAccounts.SuspendLayout();
             this.tlpButton.SuspendLayout();
@@ -154,24 +156,27 @@
             this.tlpBatchInfo.ColumnCount = 2;
             this.tlpBatchInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpBatchInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBatchInfo.Controls.Add(this.nudLimitLinks, 1, 2);
-            this.tlpBatchInfo.Controls.Add(this.dpExpiryTime, 1, 4);
-            this.tlpBatchInfo.Controls.Add(this.cbExpiryTime, 0, 4);
-            this.tlpBatchInfo.Controls.Add(this.nudLimitDevices, 1, 3);
-            this.tlpBatchInfo.Controls.Add(this.cbLimitDevices, 0, 3);
-            this.tlpBatchInfo.Controls.Add(this.nudAccountNum, 1, 5);
-            this.tlpBatchInfo.Controls.Add(this.lAccountNum, 0, 5);
-            this.tlpBatchInfo.Controls.Add(this.lPasswordLength, 0, 1);
+            this.tlpBatchInfo.Controls.Add(this.lPrefix, 0, 1);
+            this.tlpBatchInfo.Controls.Add(this.nudLimitLinks, 1, 3);
+            this.tlpBatchInfo.Controls.Add(this.dpExpiryTime, 1, 5);
+            this.tlpBatchInfo.Controls.Add(this.cbExpiryTime, 0, 5);
+            this.tlpBatchInfo.Controls.Add(this.nudLimitDevices, 1, 4);
+            this.tlpBatchInfo.Controls.Add(this.cbLimitDevices, 0, 4);
+            this.tlpBatchInfo.Controls.Add(this.nudAccountNum, 1, 6);
+            this.tlpBatchInfo.Controls.Add(this.lAccountNum, 0, 6);
+            this.tlpBatchInfo.Controls.Add(this.lPasswordLength, 0, 2);
             this.tlpBatchInfo.Controls.Add(this.lAccountRule, 0, 0);
             this.tlpBatchInfo.Controls.Add(this.ddlAccountRule, 1, 0);
-            this.tlpBatchInfo.Controls.Add(this.nudPasswordLength, 1, 1);
-            this.tlpBatchInfo.Controls.Add(this.bPreview, 1, 6);
-            this.tlpBatchInfo.Controls.Add(this.cbLimitLinks, 0, 2);
+            this.tlpBatchInfo.Controls.Add(this.nudPasswordLength, 1, 2);
+            this.tlpBatchInfo.Controls.Add(this.bPreview, 1, 7);
+            this.tlpBatchInfo.Controls.Add(this.cbLimitLinks, 0, 3);
+            this.tlpBatchInfo.Controls.Add(this.txtPrefix, 1, 1);
             this.tlpBatchInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpBatchInfo.Location = new System.Drawing.Point(0, 0);
             this.tlpBatchInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpBatchInfo.Name = "tlpBatchInfo";
-            this.tlpBatchInfo.RowCount = 8;
+            this.tlpBatchInfo.RowCount = 9;
+            this.tlpBatchInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBatchInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBatchInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBatchInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -183,10 +188,21 @@
             this.tlpBatchInfo.Size = new System.Drawing.Size(301, 450);
             this.tlpBatchInfo.TabIndex = 21;
             // 
+            // lPrefix
+            // 
+            this.lPrefix.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lPrefix.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPrefix.LocalizationText = "BatchAccounts.CustomPrefix";
+            this.lPrefix.Location = new System.Drawing.Point(3, 44);
+            this.lPrefix.Name = "lPrefix";
+            this.lPrefix.Size = new System.Drawing.Size(67, 35);
+            this.lPrefix.TabIndex = 18;
+            this.lPrefix.Text = "自定义前缀 :";
+            // 
             // nudLimitLinks
             // 
             this.nudLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLimitLinks.Location = new System.Drawing.Point(108, 85);
+            this.nudLimitLinks.Location = new System.Drawing.Point(108, 126);
             this.nudLimitLinks.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -212,7 +228,7 @@
             // 
             this.dpExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dpExpiryTime.Format = "yyyy-MM-dd HH:mm:ss";
-            this.dpExpiryTime.Location = new System.Drawing.Point(108, 167);
+            this.dpExpiryTime.Location = new System.Drawing.Point(108, 208);
             this.dpExpiryTime.MaxDate = new System.DateTime(8888, 12, 31, 0, 0, 0, 0);
             this.dpExpiryTime.Name = "dpExpiryTime";
             this.dpExpiryTime.Size = new System.Drawing.Size(190, 35);
@@ -224,7 +240,7 @@
             this.cbExpiryTime.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbExpiryTime.LocalizationText = "AccountEditForm.ExpireTime";
-            this.cbExpiryTime.Location = new System.Drawing.Point(3, 167);
+            this.cbExpiryTime.Location = new System.Drawing.Point(3, 208);
             this.cbExpiryTime.Name = "cbExpiryTime";
             this.cbExpiryTime.Size = new System.Drawing.Size(87, 35);
             this.cbExpiryTime.TabIndex = 15;
@@ -234,7 +250,7 @@
             // nudLimitDevices
             // 
             this.nudLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLimitDevices.Location = new System.Drawing.Point(108, 126);
+            this.nudLimitDevices.Location = new System.Drawing.Point(108, 167);
             this.nudLimitDevices.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -261,7 +277,7 @@
             this.cbLimitDevices.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbLimitDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbLimitDevices.LocalizationText = "AccountEditForm.LimitDevices";
-            this.cbLimitDevices.Location = new System.Drawing.Point(3, 126);
+            this.cbLimitDevices.Location = new System.Drawing.Point(3, 167);
             this.cbLimitDevices.Name = "cbLimitDevices";
             this.cbLimitDevices.Size = new System.Drawing.Size(99, 35);
             this.cbLimitDevices.TabIndex = 13;
@@ -271,7 +287,7 @@
             // nudAccountNum
             // 
             this.nudAccountNum.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudAccountNum.Location = new System.Drawing.Point(108, 208);
+            this.nudAccountNum.Location = new System.Drawing.Point(108, 249);
             this.nudAccountNum.Maximum = new decimal(new int[] {
             999,
             0,
@@ -298,7 +314,7 @@
             this.lAccountNum.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lAccountNum.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lAccountNum.LocalizationText = "BatchAccounts.GeneratedQuantity";
-            this.lAccountNum.Location = new System.Drawing.Point(3, 208);
+            this.lAccountNum.Location = new System.Drawing.Point(3, 249);
             this.lAccountNum.Name = "lAccountNum";
             this.lAccountNum.Size = new System.Drawing.Size(55, 35);
             this.lAccountNum.TabIndex = 4;
@@ -309,7 +325,7 @@
             this.lPasswordLength.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPasswordLength.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lPasswordLength.LocalizationText = "BatchAccounts.PasswordLen";
-            this.lPasswordLength.Location = new System.Drawing.Point(3, 44);
+            this.lPasswordLength.Location = new System.Drawing.Point(3, 85);
             this.lPasswordLength.Name = "lPasswordLength";
             this.lPasswordLength.Size = new System.Drawing.Size(55, 35);
             this.lPasswordLength.TabIndex = 2;
@@ -335,11 +351,12 @@
             this.ddlAccountRule.Size = new System.Drawing.Size(190, 35);
             this.ddlAccountRule.TabIndex = 1;
             this.ddlAccountRule.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ddlAccountRule.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlAccountRule_SelectedIndexChanged);
             // 
             // nudPasswordLength
             // 
             this.nudPasswordLength.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudPasswordLength.Location = new System.Drawing.Point(108, 44);
+            this.nudPasswordLength.Location = new System.Drawing.Point(108, 85);
             this.nudPasswordLength.Maximum = new decimal(new int[] {
             20,
             0,
@@ -365,7 +382,7 @@
             // 
             this.bPreview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bPreview.LocalizationText = "Preview";
-            this.bPreview.Location = new System.Drawing.Point(108, 249);
+            this.bPreview.Location = new System.Drawing.Point(108, 290);
             this.bPreview.Name = "bPreview";
             this.bPreview.Size = new System.Drawing.Size(190, 35);
             this.bPreview.TabIndex = 6;
@@ -378,12 +395,20 @@
             this.cbLimitLinks.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbLimitLinks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbLimitLinks.LocalizationText = "AccountEditForm.LimitLinks";
-            this.cbLimitLinks.Location = new System.Drawing.Point(3, 85);
+            this.cbLimitLinks.Location = new System.Drawing.Point(3, 126);
             this.cbLimitLinks.Name = "cbLimitLinks";
             this.cbLimitLinks.Size = new System.Drawing.Size(99, 35);
             this.cbLimitLinks.TabIndex = 12;
             this.cbLimitLinks.Text = "限制链接数 :";
             this.cbLimitLinks.CheckedChanged += new AntdUI.BoolEventHandler(this.cbLimitLinks_CheckedChanged);
+            // 
+            // txtPrefix
+            // 
+            this.txtPrefix.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtPrefix.Location = new System.Drawing.Point(108, 44);
+            this.txtPrefix.Name = "txtPrefix";
+            this.txtPrefix.Size = new System.Drawing.Size(190, 35);
+            this.txtPrefix.TabIndex = 19;
             // 
             // tBatchAccounts
             // 
@@ -445,5 +470,7 @@
         private AntdUI.Button bPreview;
         private AntdUI.Checkbox cbLimitLinks;
         private AntdUI.Table tBatchAccounts;
+        private AntdUI.Label lPrefix;
+        private AntdUI.Input txtPrefix;
     }
 }

@@ -2071,8 +2071,14 @@ namespace WinsockPacketEditor
                 case "BatchAccounts.GeneratedQuantity":
                     return "Generated Quantity :";
 
+                case "BatchAccounts.CustomPrefix":
+                    return "Custom Prefix :";
+
                 case "BatchAccounts.TimeID":
                     return "Time + ID";
+
+                case "BatchAccounts.PrefixID":
+                    return "Prefix + ID";
 
                 #endregion
 
