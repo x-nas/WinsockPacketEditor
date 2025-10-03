@@ -91,11 +91,11 @@ namespace WinsockPacketEditor
             {
                 int hotKeyId = m.WParam.ToInt32();
 
-                BeginInvoke(new Action(() =>
+                BeginInvoke(new Action(async () =>
                 {
                     try
                     {
-                        Operate.SystemConfig.DoHotKey(hotKeyId);
+                        await Operate.SystemConfig.DoHotKey(hotKeyId);
                     }
                     catch (Exception ex)
                     {

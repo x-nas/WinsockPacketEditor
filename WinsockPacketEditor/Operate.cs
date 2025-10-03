@@ -2356,7 +2356,7 @@ namespace WinsockPacketEditor
 
             #region//执行快捷键
 
-            public static void DoHotKey(int HotKeyID)
+            public static async Task DoHotKey(int HotKeyID)
             {
                 try
                 {
@@ -2365,43 +2365,43 @@ namespace WinsockPacketEditor
                         switch (HotKeyID)
                         {
                             case 9001:
-                                SendConfig.Send.DoSend_ByIndex(0);
+                                await SendConfig.Send.DoSend_ByIndex(0);
                                 break;
 
                             case 9002:
-                                SendConfig.Send.DoSend_ByIndex(1);
+                                await SendConfig.Send.DoSend_ByIndex(1);
                                 break;
 
                             case 9003:
-                                SendConfig.Send.DoSend_ByIndex(2);
+                                await SendConfig.Send.DoSend_ByIndex(2);
                                 break;
 
                             case 9004:
-                                SendConfig.Send.DoSend_ByIndex(3);
+                                await SendConfig.Send.DoSend_ByIndex(3);
                                 break;
 
                             case 9005:
-                                SendConfig.Send.DoSend_ByIndex(4);
+                                await SendConfig.Send.DoSend_ByIndex(4);
                                 break;
 
                             case 9006:
-                                SendConfig.Send.DoSend_ByIndex(5);
+                                await SendConfig.Send.DoSend_ByIndex(5);
                                 break;
 
                             case 9007:
-                                SendConfig.Send.DoSend_ByIndex(6);
+                                await SendConfig.Send.DoSend_ByIndex(6);
                                 break;
 
                             case 9008:
-                                SendConfig.Send.DoSend_ByIndex(7);
+                                await SendConfig.Send.DoSend_ByIndex(7);
                                 break;
 
                             case 9009:
-                                SendConfig.Send.DoSend_ByIndex(8);
+                                await SendConfig.Send.DoSend_ByIndex(8);
                                 break;
 
                             case 9010:
-                                SendConfig.Send.DoSend_ByIndex(9);
+                                await SendConfig.Send.DoSend_ByIndex(9);
                                 break;
 
                             case 9011:
@@ -2418,43 +2418,43 @@ namespace WinsockPacketEditor
                         switch (HotKeyID)
                         {
                             case 9001:
-                                RobotConfig.Robot.DoRobot_ByIndex(0);
+                                await RobotConfig.Robot.DoRobot_ByIndex(0);
                                 break;
 
                             case 9002:
-                                RobotConfig.Robot.DoRobot_ByIndex(1);
+                                await RobotConfig.Robot.DoRobot_ByIndex(1);
                                 break;
 
                             case 9003:
-                                RobotConfig.Robot.DoRobot_ByIndex(2);
+                                await RobotConfig.Robot.DoRobot_ByIndex(2);
                                 break;
 
                             case 9004:
-                                RobotConfig.Robot.DoRobot_ByIndex(3);
+                                await RobotConfig.Robot.DoRobot_ByIndex(3);
                                 break;
 
                             case 9005:
-                                RobotConfig.Robot.DoRobot_ByIndex(4);
+                                await RobotConfig.Robot.DoRobot_ByIndex(4);
                                 break;
 
                             case 9006:
-                                RobotConfig.Robot.DoRobot_ByIndex(5);
+                                await RobotConfig.Robot.DoRobot_ByIndex(5);
                                 break;
 
                             case 9007:
-                                RobotConfig.Robot.DoRobot_ByIndex(6);
+                                await RobotConfig.Robot.DoRobot_ByIndex(6);
                                 break;
 
                             case 9008:
-                                RobotConfig.Robot.DoRobot_ByIndex(7);
+                                await RobotConfig.Robot.DoRobot_ByIndex(7);
                                 break;
 
                             case 9009:
-                                RobotConfig.Robot.DoRobot_ByIndex(8);
+                                await RobotConfig.Robot.DoRobot_ByIndex(8);
                                 break;
 
                             case 9010:
-                                RobotConfig.Robot.DoRobot_ByIndex(9);
+                                await RobotConfig.Robot.DoRobot_ByIndex(9);
                                 break;
 
                             case 9011:
@@ -14917,7 +14917,7 @@ namespace WinsockPacketEditor
                               .GetResult();
                 }
 
-                public static void DoSend_ByIndex(int SendListIndex)
+                public static async Task DoSend_ByIndex(int SendListIndex)
                 {
                     try
                     {
@@ -14927,10 +14927,7 @@ namespace WinsockPacketEditor
                             {
                                 Guid SID = SendConfig.List.lstSendInfo[SendListIndex].SID;
 
-                                Task.Run(() => DoSendAsync(SID))
-                                  .ConfigureAwait(false)
-                                  .GetAwaiter()
-                                  .GetResult();
+                                await DoSendAsync(SID);
                             }                            
                         }
                     }
@@ -17042,7 +17039,7 @@ namespace WinsockPacketEditor
                     return Task.Run(() => DoRobotAsync(RID, parameters)).GetAwaiter().GetResult();
                 }
 
-                public static void DoRobot_ByIndex(int RobotListIndex)
+                public static async Task DoRobot_ByIndex(int RobotListIndex)
                 {
                     try
                     {
@@ -17051,7 +17048,7 @@ namespace WinsockPacketEditor
                             if (RobotConfig.List.lstRobotInfo[RobotListIndex].IsEnable)
                             {
                                 Guid RID = RobotConfig.List.lstRobotInfo[RobotListIndex].RID;
-                                Task.Run(() => DoRobotAsync(RID, null)).GetAwaiter().GetResult();
+                                await DoRobotAsync(RID, null);
                             }                            
                         }
                     }
