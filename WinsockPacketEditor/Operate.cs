@@ -14924,9 +14924,9 @@ namespace WinsockPacketEditor
                 public static SendExecute DoSend(Guid SID)
                 {
                     return Task.Run(() => DoSendAsync(SID))
-                              .ConfigureAwait(false)
-                              .GetAwaiter()
-                              .GetResult();
+                        .ConfigureAwait(false)
+                        .GetAwaiter()
+                        .GetResult();
                 }
 
                 public static async Task DoSend_ByIndex(int SendListIndex)
@@ -17057,7 +17057,10 @@ namespace WinsockPacketEditor
 
                 public static RobotExecute DoRobot(Guid RID, Dictionary<string, object> parameters)
                 {
-                    return Task.Run(() => DoRobotAsync(RID, parameters)).GetAwaiter().GetResult();
+                    return Task.Run(() => DoRobotAsync(RID, parameters))
+                        .ConfigureAwait(false)
+                        .GetAwaiter()
+                        .GetResult();
                 }
 
                 public static async Task DoRobot_ByIndex(int RobotListIndex)
