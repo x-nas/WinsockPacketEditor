@@ -14926,8 +14926,7 @@ namespace WinsockPacketEditor
                             if (SendConfig.List.lstSendInfo[SendListIndex].IsEnable)
                             {
                                 Guid SID = SendConfig.List.lstSendInfo[SendListIndex].SID;
-
-                                await DoSendAsync(SID);
+                                Operate.SendConfig.List.lstSendExecute.Add(await DoSendAsync(SID));
                             }                            
                         }
                     }
@@ -15533,7 +15532,17 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.SendConfig.List.bgwSendList.IsBusy)
                         {
-                            Operate.SendConfig.List.bgwSendList.CancelAsync();
+                            Operate.SendConfig.List.bgwSendList.CancelAsync();                            
+                        }
+
+                        foreach (SendExecute se in Operate.SendConfig.List.lstSendExecute.ToList())
+                        {
+                            if (se.Worker.IsBusy)
+                            {
+                                se.StopSend();                                
+                            }
+
+                            Operate.SendConfig.List.lstSendExecute.Remove(se);
                         }
                     }
                     catch (Exception ex)
