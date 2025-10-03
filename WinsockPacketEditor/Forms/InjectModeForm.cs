@@ -72,17 +72,23 @@ namespace WinsockPacketEditor
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
-            try
+            if (m.Msg == User32.WM_HOTKEY)
             {
-                if (m.Msg == User32.WM_HOTKEY)
+                int hotKeyId = m.WParam.ToInt32();
+
+                BeginInvoke(new Action(() =>
                 {
-                    int HOTKEY_ID = m.WParam.ToInt32(); 
-                    Operate.SystemConfig.DoHotKey(HOTKEY_ID);
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(WndProc), ex.Message);
+                    try
+                    {
+                        Operate.SystemConfig.DoHotKey(hotKeyId);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(WndProc), ex.Message);
+                    }
+                }));
+
+                return;
             }
 
             base.WndProc(ref m);
