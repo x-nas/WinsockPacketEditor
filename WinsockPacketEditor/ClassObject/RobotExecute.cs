@@ -212,14 +212,14 @@ namespace WinsockPacketEditor
                                             Random random = new Random();
                                             iDelay = random.Next(iFrom, iTo + 1);
 
-                                            Operate.SystemConfig.DoSleepAsync(iDelay, this.cts.Token).Wait();
+                                            Operate.SystemConfig.DoSleep(iDelay, this.Worker);
                                         }
                                     }
                                     else
                                     {
                                         if (int.TryParse(sContent, out iDelay))
                                         {
-                                            Operate.SystemConfig.DoSleepAsync(iDelay, this.cts.Token).Wait();
+                                            Operate.SystemConfig.DoSleep(iDelay, this.Worker);
                                         }
                                     }                                    
 

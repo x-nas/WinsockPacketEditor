@@ -2876,11 +2876,23 @@ namespace WinsockPacketEditor
 
             #endregion
 
-            #region//支持取消的等待（异步）
+            #region//支持取消的等待
 
-            public static async Task DoSleepAsync(int MilliSecond, CancellationToken cancellationToken)
+            public static void DoSleep(int MilliSecond, BackgroundWorker Worker)
             {
-                await Task.Delay(MilliSecond, cancellationToken);
+                int elapsed = 0;
+                int interval = 10;
+
+                while (elapsed < MilliSecond)
+                {
+                    if (Worker.CancellationPending)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(Math.Min(interval, MilliSecond - elapsed));
+                    elapsed += interval;
+                }
             }
 
             #endregion
@@ -17057,7 +17069,7 @@ namespace WinsockPacketEditor
                             if (RobotConfig.List.lstRobotInfo[RobotListIndex].IsEnable)
                             {
                                 Guid RID = RobotConfig.List.lstRobotInfo[RobotListIndex].RID;
-                                await DoRobotAsync(RID, null);
+                                Operate.RobotConfig.List.lstRobotExecute.Add(await DoRobotAsync(RID, null));                                
                             }                            
                         }
                     }
@@ -17155,6 +17167,16 @@ namespace WinsockPacketEditor
                         if (Operate.RobotConfig.List.bgwRobotList.IsBusy)
                         {
                             Operate.RobotConfig.List.bgwRobotList.CancelAsync();
+                        }
+
+                        foreach (RobotExecute re in Operate.RobotConfig.List.lstRobotExecute.ToList())
+                        {
+                            if (re.Worker.IsBusy)
+                            {
+                                re.StopRobot();
+                            }
+
+                            Operate.RobotConfig.List.lstRobotExecute.Remove(re);
                         }
                     }
                     catch (Exception ex)

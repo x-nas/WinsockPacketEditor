@@ -157,7 +157,7 @@ namespace WinsockPacketEditor
                                     if (this.LoopINT > 0)
                                     {
                                         Worker.ReportProgress(j);
-                                        Operate.SystemConfig.DoSleepAsync(this.LoopINT, this.cts.Token).Wait();
+                                        Operate.SystemConfig.DoSleep(this.LoopINT, this.Worker);
                                     }
                                 }
                             }
