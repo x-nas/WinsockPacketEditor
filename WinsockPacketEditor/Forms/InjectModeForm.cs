@@ -31,6 +31,18 @@ namespace WinsockPacketEditor
         private void InjectModeForm_Load(object sender, EventArgs e)
         {
             this.pageHeader.Loading = true;
+            Operate.SystemConfig.InvokeAction = action =>
+            {
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(action);
+                }
+                else
+                {
+                    action();
+                }
+            };
+            
             Operate.SystemConfig.InitHotKeys(this.Handle);
 
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>

@@ -82,6 +82,8 @@ namespace WinsockPacketEditor
             public static Color Color_40 = Color.FromArgb(40, 40, 40);
             public static Color Color_250 = Color.FromArgb(250, 250, 250);
 
+            public static Action<Action> InvokeAction { get; set; }
+
             #region//结构定义           
 
             public enum SystemMode
@@ -6446,7 +6448,7 @@ namespace WinsockPacketEditor
                 public static bool IsShow_PacketData = true;
                 public static int Search_Index = -1;                
                 public static ProxyInfo piSelect = null;
-                public static int ClientNumber = 0;
+                public static int ClientNumber = 0;                
 
                 public static readonly ConcurrentDictionary<Guid, ProxyUDP> cdProxyUDP = new ConcurrentDictionary<Guid, ProxyUDP>();
                 public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(5);
@@ -6466,7 +6468,18 @@ namespace WinsockPacketEditor
                             {
                                 Span<byte> bufferSpan = pi.PacketBuffer.AsSpan();
                                 pi.PacketData = PacketConfig.Packet.GetPacketData_Hex(pi.PacketBuffer.AsSpan(), PacketConfig.Packet.PacketData_MaxLen);
-                                ProxyConfig.List.lstProxyInfo.Add(pi);
+
+                                if (Operate.SystemConfig.InvokeAction != null)
+                                {
+                                    Operate.SystemConfig.InvokeAction(() =>
+                                    {
+                                        Operate.ProxyConfig.List.lstProxyInfo.Add(pi);
+                                    });
+                                }
+                                else
+                                {
+                                    Operate.ProxyConfig.List.lstProxyInfo.Add(pi);
+                                }
                             }
                             else
                             {
@@ -6493,7 +6506,7 @@ namespace WinsockPacketEditor
 
                 #region//保存代理列表为Excel（对话框）
 
-                public static void SaveProxyList_Dialog(Form form, AntdUI.Table tTable, string FileName, List<ProxyInfo> piList)
+                public static void SaveProxyList_Dialog(Form form, string FileName, List<ProxyInfo> piList)
                 {
                     try
                     {
@@ -6515,25 +6528,19 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveToExcel.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    bool bOK = false;
-                                    tTable.Spin(AntdUI.Localization.Get("Exporting", "正在导出..."), config =>
+                                    bool bOK = ProxyConfig.List.SaveProxyListToExcel(FilePath, piList);
+                                    if (bOK)
                                     {
-                                        bOK = ProxyConfig.List.SaveProxyListToExcel(FilePath, piList);
-                                    }, () =>
+                                        string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到Excel成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(SaveProxyList_Dialog), Title + ": " + FilePath);
+                                    }
+                                    else
                                     {
-                                        if (bOK)
-                                        {
-                                            string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到Excel成功");
-                                            AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                            Operate.DoLog(nameof(SaveProxyList_Dialog), Title + ": " + FilePath);
-                                        }
-                                        else
-                                        {
-                                            string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到Excel失败");
-                                            string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
-                                            AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                                        }
-                                    });
+                                        string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到Excel失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }
@@ -11012,7 +11019,17 @@ namespace WinsockPacketEditor
                                 Span<byte> bufferSpan = pi.PacketBuffer.AsSpan();
                                 pi.PacketData = PacketConfig.Packet.GetPacketData_Hex(bufferSpan, PacketConfig.Packet.PacketData_MaxLen);
 
-                                PacketConfig.List.lstPacketInfo.Add(pi);
+                                if (Operate.SystemConfig.InvokeAction != null)
+                                {
+                                    Operate.SystemConfig.InvokeAction(() =>
+                                    {
+                                        Operate.PacketConfig.List.lstPacketInfo.Add(pi);
+                                    });
+                                }
+                                else
+                                {
+                                    Operate.PacketConfig.List.lstPacketInfo.Add(pi);
+                                }                                
                             }
                             else
                             {

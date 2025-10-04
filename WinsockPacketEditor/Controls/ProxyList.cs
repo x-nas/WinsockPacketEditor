@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Net;
+using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -22,18 +24,17 @@ namespace WinsockPacketEditor
         public ProxyList(Form form)
         {
             InitializeComponent();
-            this.form = form;
+            this.form = form;            
         }
 
         private void ProxyList_Load(object sender, EventArgs e)
-        {            
-            this.hbProxyData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-
+        {
             this.InitMenu();
             this.InitTable_ProxyList();
             this.InitControl();
             this.Dark_Changed();
 
+            this.hbProxyData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
             this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
@@ -127,20 +128,24 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tProxyList.BackColor = Operate.SystemConfig.Color_40;
-                this.tProxyList.ColumnBack = Operate.SystemConfig.Color_40;
-                this.tProxyList.ColumnFore = Color.Silver;
-                this.tProxyList.ForeColor = Color.LimeGreen;
+                this.dgvProxyList.BackgroundColor = 
+                    this.dgvProxyList.RowsDefaultCellStyle.BackColor = 
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.BackColor = Operate.SystemConfig.Color_40;                
+
+                this.dgvProxyList.ForeColor = Color.LimeGreen;
+                this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor = Color.Silver;                
 
                 this.hbProxyData.BackColor = Operate.SystemConfig.Color_40;
                 this.hbProxyData.ForeColor = Color.Silver;
             }
             else
             {
-                this.tProxyList.BackColor = Color.White;
-                this.tProxyList.ColumnBack = Color.White;
-                this.tProxyList.ColumnFore = Color.Black;
-                this.tProxyList.ForeColor = Color.Green;
+                this.dgvProxyList.BackgroundColor = 
+                    this.dgvProxyList.RowsDefaultCellStyle.BackColor = 
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
+              
+                this.dgvProxyList.ForeColor = Color.Green;
+                this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;                
 
                 this.hbProxyData.BackColor = Color.White;
                 this.hbProxyData.ForeColor = Color.Black;
@@ -161,155 +166,120 @@ namespace WinsockPacketEditor
         #region//初始化表格
 
         private void InitTable_ProxyList()
-        {
-            tProxyList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column(string.Empty, string.Empty, AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is ProxyInfo pi)
-                        {
-                            return new AntdUI.CellImage(Operate.PacketConfig.Packet.GetImg_ByPacketType(pi.PacketType));
-                        }
-
-                        return value;
-                    },
-                }.SetFixed().SetWidth("Auto"),
-                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return (rowindex + 1);
-                    },
-                }.SetFixed().SetLocalizationTitleID("Table.ProxyList.Column.ID"),
-                new AntdUI.Column("ProxyTime", "时间戳", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
-                    },
-                }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)value);
-                    },
-                }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ClientAddr", "客户端地址")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is ProxyInfo pi)
-                        {
-                            return new CellText(value?.ToString() ?? string.Empty)
-                            {
-                                Prefix = Operate.SystemConfig.GetFlagByLocation(pi.ClientLocation),
-                                IconRatio = 1.0F
-                            };
-                        }
-
-                        return value;
-                    },
-                }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ClientLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.ProxyList.Column."),                
-                new AntdUI.Column("ServerDomain", "服务端地址")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is ProxyInfo pi)
-                        {
-                            return new CellText(value?.ToString() ?? string.Empty)
-                            {
-                                Prefix = Operate.SystemConfig.GetFlagByLocation(pi.ServerLocation),
-                                IconRatio = 1.0F
-                            };
-                        }
-
-                        return value;
-                    },
-                }.SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("ServerLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.ProxyList.Column."),
-                new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.ProxyList.Column."),
-            };
-
-            this.tProxyList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tProxyList.Binding(Operate.ProxyConfig.List.lstProxyInfo);
+        {            
+            this.dgvProxyList.AutoGenerateColumns = false;
+            this.dgvProxyList.DataSource = Operate.ProxyConfig.List.lstProxyInfo;
+            this.dgvProxyList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvProxyList, true, null);
+            this.dgvProxyList.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 9, FontStyle.Bold);
         }
 
-        public void SetColumnVisible_ProxyList()
+        private void dgvProxyList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
             {
-                this.tProxyList.Columns[1].Visible = Operate.ProxyConfig.List.IsShow_ID;
-                this.tProxyList.Columns[2].Visible = Operate.ProxyConfig.List.IsShow_ProxyTime;
-                this.tProxyList.Columns[3].Visible = Operate.ProxyConfig.List.IsShow_PacketType;
-                this.tProxyList.Columns[4].Visible = Operate.ProxyConfig.List.IsShow_PacketSocket;
-                this.tProxyList.Columns[5].Visible = Operate.ProxyConfig.List.IsShow_ClientAddr;
-                this.tProxyList.Columns[6].Visible = Operate.ProxyConfig.List.IsShow_ClientLocation;
-                this.tProxyList.Columns[7].Visible = Operate.ProxyConfig.List.IsShow_ServerAddr;
-                this.tProxyList.Columns[8].Visible = Operate.ProxyConfig.List.IsShow_ServerLocation;
-                this.tProxyList.Columns[9].Visible = Operate.ProxyConfig.List.IsShow_PacketLen;
-                this.tProxyList.Columns[10].Visible = Operate.ProxyConfig.List.IsShow_PacketData;
-
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(SetColumnVisible_ProxyList), ex.Message);
-            }
-        }
-
-        private Table.CellStyleInfo tProxyList_SetRowStyle(object sender, TableSetRowStyleEventArgs e)
-        {
-            try
-            {
-                int index = e.RowIndex - 1;
-                if (index > -1 && index < Operate.ProxyConfig.List.lstProxyInfo.Count)
+                if (e.ColumnIndex == dgvProxyList.Columns["cID"].Index)
                 {
-                    ProxyInfo pi = Operate.ProxyConfig.List.lstProxyInfo[index];
-                    if (pi != null)
+                    e.Value = (e.RowIndex + 1).ToString();
+                    e.FormattingApplied = true;
+                }
+                else if (e.ColumnIndex == dgvProxyList.Columns["cTypeImg"].Index)
+                {
+                    if (dgvProxyList.Rows[e.RowIndex].Cells["cPacketType"].Value != null)
                     {
-                        switch (pi.FilterAction)
-                        {
-                            case Operate.FilterConfig.Filter.FilterAction.Replace:
+                        e.Value = Operate.PacketConfig.Packet.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)dgvProxyList.Rows[e.RowIndex].Cells["cPacketType"].Value);
+                        e.FormattingApplied = true;
+                    }
+                }
+                else if (e.ColumnIndex == dgvProxyList.Columns["cProxyTime"].Index)
+                {
+                    e.Value = ((DateTime)dgvProxyList.Rows[e.RowIndex].Cells["cProxyTime"].Value).ToString("HH:mm:ss:fffffff");
+                    e.FormattingApplied = true;
+                }
+                else if (e.ColumnIndex == dgvProxyList.Columns["cPacketType"].Index)
+                {
+                    if (dgvProxyList.Rows[e.RowIndex].Cells["cPacketType"].Value != null)
+                    {
+                        e.Value = Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)dgvProxyList.Rows[e.RowIndex].Cells["cPacketType"].Value);
+                        e.FormattingApplied = true;
+                    }
+                }
+                else if (e.ColumnIndex == dgvProxyList.Columns["cClientImg"].Index)
+                {
+                    if (dgvProxyList.Rows[e.RowIndex].Cells["cClientLocation"].Value != null)
+                    {
+                        e.Value = Operate.SystemConfig.GetFlagByLocation(dgvProxyList.Rows[e.RowIndex].Cells["cClientLocation"].Value.ToString());
+                        e.FormattingApplied = true;
+                    }                    
+                }
+                else if (e.ColumnIndex == dgvProxyList.Columns["cServerImg"].Index)
+                {
+                    if (dgvProxyList.Rows[e.RowIndex].Cells["cServerLocation"].Value != null)
+                    {
+                        e.Value = Operate.SystemConfig.GetFlagByLocation(dgvProxyList.Rows[e.RowIndex].Cells["cServerLocation"].Value.ToString());
+                        e.FormattingApplied = true;
+                    }
+                }
+                else if (e.ColumnIndex == dgvProxyList.Columns["cPacketData"].Index)
+                {
+                    switch (Operate.ProxyConfig.List.lstProxyInfo[e.RowIndex].FilterAction)
+                    {
+                        case Operate.FilterConfig.Filter.FilterAction.Replace:
+                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterReplace_ForeColor;
+                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterReplace_BackColor;
+                            break;
 
-                                return new AntdUI.Table.CellStyleInfo
-                                {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterReplace_ForeColor,
-                                    BackColor = Operate.FilterConfig.Filter.FilterReplace_BackColor,
-                                };
+                        case Operate.FilterConfig.Filter.FilterAction.Intercept:
+                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterIntercept_ForeColor;
+                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterIntercept_BackColor;
+                            break;
 
-                            case Operate.FilterConfig.Filter.FilterAction.Intercept:
-
-                                return new AntdUI.Table.CellStyleInfo
-                                {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterIntercept_ForeColor,
-                                    BackColor = Operate.FilterConfig.Filter.FilterIntercept_BackColor,
-                                };
-
-                            case Operate.FilterConfig.Filter.FilterAction.Change:
-
-                                return new AntdUI.Table.CellStyleInfo
-                                {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterChange_ForeColor,
-                                    BackColor = Operate.FilterConfig.Filter.FilterChange_BackColor,
-                                };
-
-                            default:
-
-                                return null;
-                        }
+                        case Operate.FilterConfig.Filter.FilterAction.Change:
+                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterChange_ForeColor;
+                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterChange_BackColor;
+                            break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(tProxyList_SetRowStyle), ex.Message);
+                Operate.DoLog(nameof(dgvProxyList_CellFormatting), ex.Message);
             }
+        }
 
-            return null;
+        public void SetColumnVisible_ProxyList()
+        {
+            this.dgvProxyList.SuspendLayout();
+
+            AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+            {
+                Radius = 6,
+                Font = new Font("Microsoft YaHei UI", 9F),
+            }, (config) =>
+            {
+                config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+
+                Operate.SystemConfig.InvokeAction?.Invoke(() =>
+                {
+                    this.dgvProxyList.Columns[1].Visible = Operate.ProxyConfig.List.IsShow_ID;
+                    this.dgvProxyList.Columns[2].Visible = Operate.ProxyConfig.List.IsShow_ProxyTime;
+                    this.dgvProxyList.Columns[3].Visible = Operate.ProxyConfig.List.IsShow_PacketType;
+                    this.dgvProxyList.Columns[4].Visible = Operate.ProxyConfig.List.IsShow_PacketSocket;
+                    this.dgvProxyList.Columns[5].Visible = Operate.ProxyConfig.List.IsShow_ClientAddr;
+                    this.dgvProxyList.Columns[6].Visible = Operate.ProxyConfig.List.IsShow_ClientAddr;
+                    this.dgvProxyList.Columns[7].Visible = Operate.ProxyConfig.List.IsShow_ClientLocation;
+                    this.dgvProxyList.Columns[8].Visible = Operate.ProxyConfig.List.IsShow_ServerAddr;
+                    this.dgvProxyList.Columns[9].Visible = Operate.ProxyConfig.List.IsShow_ServerAddr;
+                    this.dgvProxyList.Columns[10].Visible = Operate.ProxyConfig.List.IsShow_ServerLocation;
+                    this.dgvProxyList.Columns[11].Visible = Operate.ProxyConfig.List.IsShow_PacketLen;
+                    this.dgvProxyList.Columns[12].Visible = Operate.ProxyConfig.List.IsShow_PacketData;
+                });
+            }, () =>
+            {
+                Operate.SystemConfig.InvokeAction?.Invoke(() =>
+                {
+                    this.dgvProxyList.ResumeLayout();
+                });
+            });
         }
 
         #endregion
@@ -476,19 +446,19 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void tProxyList_CellDoubleClick(object sender, TableClickEventArgs e)
+        private void dgvProxyList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.Record is ProxyInfo pi)
+            if (e.RowIndex >= 0 && e.RowIndex < Operate.ProxyConfig.List.lstProxyInfo.Count)
             {
-                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, pi);
-            }            
-        }        
+                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, Operate.ProxyConfig.List.lstProxyInfo[e.RowIndex]);
+            }
+        }
 
         #endregion
 
         #region//代理列表 - 右键菜单
 
-        private void tProxyList_CellClick(object sender, TableClickEventArgs e)
+        private void dgvProxyList_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -497,18 +467,16 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                AntdUI.ContextMenuStrip.open(tProxyList, item =>
+                AntdUI.ContextMenuStrip.open(this.dgvProxyList, item =>
                 {
                     List<ProxyInfo> piList = new List<ProxyInfo>();
 
-                    foreach (int SelectIndex in this.tProxyList.SelectedIndexs)
+                    for (int i = 0; i < dgvProxyList.Rows.Count; i++)
                     {
-                        if (SelectIndex == 0)
+                        if (dgvProxyList.Rows[i].Selected)
                         {
-                            break;
+                            piList.Add(Operate.ProxyConfig.List.lstProxyInfo[i]);
                         }
-
-                        piList.Add(Operate.ProxyConfig.List.lstProxyInfo[SelectIndex - 1]);
                     }
 
                     switch (item.ID)
@@ -526,7 +494,14 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                this.tProxyList.CopyData(this.tProxyList.SelectedIndexs);
+                                StringBuilder sb = new StringBuilder();
+                                foreach (ProxyInfo pi in piList)
+                                {
+                                    string hexString = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer);
+                                    sb.AppendLine(hexString);
+                                }
+
+                                Clipboard.SetText(sb.ToString());
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
                                 {
@@ -590,7 +565,7 @@ namespace WinsockPacketEditor
 
                         case "ToExcel":
 
-                            Operate.ProxyConfig.List.SaveProxyList_Dialog(this.form, this.tProxyList, Operate.PacketConfig.Packet.InjectProcess, piList);
+                            Operate.ProxyConfig.List.SaveProxyList_Dialog(this.form, Operate.PacketConfig.Packet.InjectProcess, piList);
 
                             break;
 
@@ -642,20 +617,13 @@ namespace WinsockPacketEditor
 
                         case "SelectAll":
 
-                            int[] IndexALL = new int[Operate.ProxyConfig.List.lstProxyInfo.Count];
-
-                            for (int i = 0; i < IndexALL.Length; i++)
-                            {
-                                IndexALL[i] = i + 1;
-                            }
-
-                            this.tProxyList.SelectedIndexs = IndexALL;
+                            this.dgvProxyList.SelectAll();
 
                             break;
 
                         case "DeSelect":
 
-                            this.tProxyList.SelectedIndex = -1;
+                            this.dgvProxyList.ClearSelection();
 
                             break;
 
@@ -1173,23 +1141,26 @@ namespace WinsockPacketEditor
 
         #region//显示选中的封包数据
 
-        private void tProxyList_SelectIndexChanged(object sender, EventArgs e)
+        private void dgvProxyList_SelectionChanged(object sender, EventArgs e)
         {
             try
             {
-                int selectedIndex = tProxyList.SelectedIndex - 1;
-                if (selectedIndex >= 0 && selectedIndex < Operate.ProxyConfig.List.lstProxyInfo.Count)
+                if (this.dgvProxyList.SelectedRows.Count > 0)
                 {
-                    Operate.ProxyConfig.List.Search_Index = selectedIndex;
-                    Operate.ProxyConfig.List.piSelect = Operate.ProxyConfig.List.lstProxyInfo[selectedIndex];
+                    int selectedIndex = this.dgvProxyList.SelectedRows[0].Index;
+                    if (selectedIndex >= 0 && selectedIndex < Operate.ProxyConfig.List.lstProxyInfo.Count)
+                    {
+                        Operate.ProxyConfig.List.Search_Index = selectedIndex;
+                        Operate.ProxyConfig.List.piSelect = Operate.ProxyConfig.List.lstProxyInfo[selectedIndex];
 
-                    DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
-                    hbProxyData.ByteProvider = dbp;
-                }
+                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
+                        hbProxyData.ByteProvider = dbp;
+                    }
+                }                    
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(tProxyList_SelectIndexChanged), ex.Message);
+                Operate.DoLog(nameof(dgvProxyList_SelectionChanged), ex.Message);
             }
         }
 
@@ -1199,9 +1170,19 @@ namespace WinsockPacketEditor
 
         public void RefreshProxyList()
         {
-            if (Operate.PacketConfig.List.AutoRoll)
+            if (Operate.PacketConfig.List.AutoRoll && this.dgvProxyList.Rows.Count > 0 && dgvProxyList.Height > dgvProxyList.RowTemplate.Height)
             {
-                tProxyList.ScrollBar.ValueY = tProxyList.ScrollBar.MaxY;
+                if (dgvProxyList.InvokeRequired)
+                {
+                    dgvProxyList.Invoke(new Action(() =>
+                    {
+                        dgvProxyList.FirstDisplayedScrollingRowIndex = dgvProxyList.RowCount - 1;
+                    }));
+                }
+                else
+                {
+                    dgvProxyList.FirstDisplayedScrollingRowIndex = dgvProxyList.RowCount - 1;
+                }
             }
 
             if (Operate.PacketConfig.List.AutoClear)
@@ -1335,10 +1316,14 @@ namespace WinsockPacketEditor
                 {
                     if (int.TryParse(e.Result.ToString(), out int iSearchResultIndex))
                     {
-                        if (iSearchResultIndex >= 0)
+                        if (iSearchResultIndex >= 0 && iSearchResultIndex < dgvProxyList.Rows.Count)
                         {
-                            this.tProxyList.SelectedIndex = iSearchResultIndex + 1;
-                            this.tProxyList.ScrollLine(iSearchResultIndex + 1, true);
+                            dgvProxyList.SuspendLayout();
+                            dgvProxyList.FirstDisplayedScrollingRowIndex = iSearchResultIndex;
+                            dgvProxyList.Rows[iSearchResultIndex].Selected = true;
+                            dgvProxyList.CurrentCell = dgvProxyList.Rows[iSearchResultIndex].Cells[0];
+                            dgvProxyList.ResumeLayout();
+
                             this.HexBox_FindNext();
                         }
                         else

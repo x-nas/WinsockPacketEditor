@@ -28,6 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProxyList));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
             this.tlpProxyList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpProxyList_Button = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtPacketList_AutoClear = new AntdUI.InputNumber();
@@ -77,10 +90,22 @@
             this.lProxyTotal_CNT = new AntdUI.Label();
             this.lsplit6 = new AntdUI.Label();
             this.lProxyTotal = new AntdUI.Label();
-            this.tProxyList = new AntdUI.Table();
+            this.dgvProxyList = new System.Windows.Forms.DataGridView();
+            this.cTypeImg = new System.Windows.Forms.DataGridViewImageColumn();
+            this.cID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cProxyTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cClientImg = new System.Windows.Forms.DataGridViewImageColumn();
+            this.cClientAddr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cClientLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cServerImg = new System.Windows.Forms.DataGridViewImageColumn();
+            this.cServerDomain = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cServerLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitterQuickList = new AntdUI.Splitter();
             this.hbProxyData = new Be.Windows.Forms.HexBox();
-            this.bgwSearchProxyList = new System.ComponentModel.BackgroundWorker();
             this.tlpProxyList.SuspendLayout();
             this.tlpProxyList_Button.SuspendLayout();
             this.tlpProxyInfo.SuspendLayout();
@@ -90,10 +115,16 @@
             this.splitterProxyList.SuspendLayout();
             this.tlpProxyList2.SuspendLayout();
             this.tlpPacketListInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProxyList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).BeginInit();
             this.splitterQuickList.Panel2.SuspendLayout();
             this.splitterQuickList.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // bgwSearchProxyList
+            // 
+            this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
+            this.bgwSearchProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchProxyList_RunWorkerCompleted);
             // 
             // tlpProxyList
             // 
@@ -362,7 +393,7 @@
             this.splitterProxyList.Panel2.Controls.Add(this.splitterQuickList);
             this.splitterProxyList.Panel2MinSize = 0;
             this.splitterProxyList.Size = new System.Drawing.Size(1094, 630);
-            this.splitterProxyList.SplitterDistance = 450;
+            this.splitterProxyList.SplitterDistance = 455;
             this.splitterProxyList.SplitterSize = 80;
             this.splitterProxyList.SplitterWidth = 5;
             this.splitterProxyList.TabIndex = 8;
@@ -372,7 +403,7 @@
             this.tlpProxyList2.ColumnCount = 1;
             this.tlpProxyList2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyList2.Controls.Add(this.tlpPacketListInfo, 0, 0);
-            this.tlpProxyList2.Controls.Add(this.tProxyList, 0, 1);
+            this.tlpProxyList2.Controls.Add(this.dgvProxyList, 0, 1);
             this.tlpProxyList2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpProxyList2.Location = new System.Drawing.Point(0, 0);
             this.tlpProxyList2.Margin = new System.Windows.Forms.Padding(0);
@@ -380,7 +411,7 @@
             this.tlpProxyList2.RowCount = 2;
             this.tlpProxyList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyList2.Size = new System.Drawing.Size(1094, 450);
+            this.tlpProxyList2.Size = new System.Drawing.Size(1094, 455);
             this.tlpProxyList2.TabIndex = 1;
             // 
             // tlpPacketListInfo
@@ -877,28 +908,214 @@
             this.lProxyTotal.TabIndex = 5;
             this.lProxyTotal.Text = "代理总数 :";
             // 
-            // tProxyList
+            // dgvProxyList
             // 
-            this.tProxyList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tProxyList.Bordered = true;
-            this.tProxyList.CellImpactHeight = false;
-            this.tProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tProxyList.EmptyHeader = true;
-            this.tProxyList.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tProxyList.Gap = 8;
-            this.tProxyList.GapCell = 0;
-            this.tProxyList.Gaps = new System.Drawing.Size(8, 8);
-            this.tProxyList.Location = new System.Drawing.Point(0, 24);
-            this.tProxyList.Margin = new System.Windows.Forms.Padding(0);
-            this.tProxyList.MultipleRows = true;
-            this.tProxyList.Name = "tProxyList";
-            this.tProxyList.Size = new System.Drawing.Size(1094, 426);
-            this.tProxyList.TabIndex = 1;
-            this.tProxyList.VirtualMode = true;
-            this.tProxyList.CellClick += new AntdUI.Table.ClickEventHandler(this.tProxyList_CellClick);
-            this.tProxyList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tProxyList_CellDoubleClick);
-            this.tProxyList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tProxyList_SetRowStyle);
-            this.tProxyList.SelectIndexChanged += new System.EventHandler(this.tProxyList_SelectIndexChanged);
+            this.dgvProxyList.AllowUserToAddRows = false;
+            this.dgvProxyList.AllowUserToDeleteRows = false;
+            this.dgvProxyList.AllowUserToResizeColumns = false;
+            this.dgvProxyList.AllowUserToResizeRows = false;
+            this.dgvProxyList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvProxyList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dgvProxyList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvProxyList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dgvProxyList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvProxyList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvProxyList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvProxyList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cTypeImg,
+            this.cID,
+            this.cProxyTime,
+            this.cPacketType,
+            this.cPacketSocket,
+            this.cClientImg,
+            this.cClientAddr,
+            this.cClientLocation,
+            this.cServerImg,
+            this.cServerDomain,
+            this.cServerLocation,
+            this.cPacketLen,
+            this.cPacketData});
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(3);
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvProxyList.DefaultCellStyle = dataGridViewCellStyle11;
+            this.dgvProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvProxyList.EnableHeadersVisualStyles = false;
+            this.dgvProxyList.Location = new System.Drawing.Point(3, 27);
+            this.dgvProxyList.Name = "dgvProxyList";
+            this.dgvProxyList.ReadOnly = true;
+            this.dgvProxyList.RowHeadersVisible = false;
+            this.dgvProxyList.RowTemplate.Height = 23;
+            this.dgvProxyList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvProxyList.Size = new System.Drawing.Size(1088, 425);
+            this.dgvProxyList.TabIndex = 7;
+            this.dgvProxyList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProxyList_CellDoubleClick);
+            this.dgvProxyList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvProxyList_CellFormatting);
+            this.dgvProxyList.SelectionChanged += new System.EventHandler(this.dgvProxyList_SelectionChanged);
+            this.dgvProxyList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvProxyList_MouseClick);
+            // 
+            // cTypeImg
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cTypeImg.DefaultCellStyle = dataGridViewCellStyle2;
+            this.cTypeImg.HeaderText = "";
+            this.cTypeImg.Name = "cTypeImg";
+            this.cTypeImg.ReadOnly = true;
+            this.cTypeImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cTypeImg.Width = 7;
+            // 
+            // cID
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cID.DefaultCellStyle = dataGridViewCellStyle3;
+            this.cID.HeaderText = "序号";
+            this.cID.Name = "cID";
+            this.cID.ReadOnly = true;
+            this.cID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cID.Width = 42;
+            // 
+            // cProxyTime
+            // 
+            this.cProxyTime.DataPropertyName = "ProxyTime";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cProxyTime.DefaultCellStyle = dataGridViewCellStyle4;
+            this.cProxyTime.HeaderText = "时间戳";
+            this.cProxyTime.Name = "cProxyTime";
+            this.cProxyTime.ReadOnly = true;
+            this.cProxyTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cProxyTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cProxyTime.Width = 54;
+            // 
+            // cPacketType
+            // 
+            this.cPacketType.DataPropertyName = "PacketType";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketType.DefaultCellStyle = dataGridViewCellStyle5;
+            this.cPacketType.HeaderText = "类别";
+            this.cPacketType.Name = "cPacketType";
+            this.cPacketType.ReadOnly = true;
+            this.cPacketType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketType.Width = 42;
+            // 
+            // cPacketSocket
+            // 
+            this.cPacketSocket.DataPropertyName = "PacketSocket";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketSocket.DefaultCellStyle = dataGridViewCellStyle6;
+            this.cPacketSocket.HeaderText = "套接字";
+            this.cPacketSocket.Name = "cPacketSocket";
+            this.cPacketSocket.ReadOnly = true;
+            this.cPacketSocket.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketSocket.Width = 54;
+            // 
+            // cClientImg
+            // 
+            this.cClientImg.HeaderText = "";
+            this.cClientImg.Name = "cClientImg";
+            this.cClientImg.ReadOnly = true;
+            this.cClientImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cClientImg.Width = 7;
+            // 
+            // cClientAddr
+            // 
+            this.cClientAddr.DataPropertyName = "ClientAddr";
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cClientAddr.DefaultCellStyle = dataGridViewCellStyle7;
+            this.cClientAddr.HeaderText = "客户端地址";
+            this.cClientAddr.Name = "cClientAddr";
+            this.cClientAddr.ReadOnly = true;
+            this.cClientAddr.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cClientAddr.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cClientAddr.Width = 78;
+            // 
+            // cClientLocation
+            // 
+            this.cClientLocation.DataPropertyName = "ClientLocation";
+            this.cClientLocation.HeaderText = "所属地";
+            this.cClientLocation.Name = "cClientLocation";
+            this.cClientLocation.ReadOnly = true;
+            this.cClientLocation.Width = 73;
+            // 
+            // cServerImg
+            // 
+            this.cServerImg.HeaderText = "";
+            this.cServerImg.Name = "cServerImg";
+            this.cServerImg.ReadOnly = true;
+            this.cServerImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cServerImg.Width = 7;
+            // 
+            // cServerDomain
+            // 
+            this.cServerDomain.DataPropertyName = "ServerDomain";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cServerDomain.DefaultCellStyle = dataGridViewCellStyle8;
+            this.cServerDomain.HeaderText = "服务端地址";
+            this.cServerDomain.Name = "cServerDomain";
+            this.cServerDomain.ReadOnly = true;
+            this.cServerDomain.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cServerDomain.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cServerDomain.Width = 78;
+            // 
+            // cServerLocation
+            // 
+            this.cServerLocation.DataPropertyName = "ServerLocation";
+            this.cServerLocation.HeaderText = "所属地";
+            this.cServerLocation.Name = "cServerLocation";
+            this.cServerLocation.ReadOnly = true;
+            this.cServerLocation.Width = 73;
+            // 
+            // cPacketLen
+            // 
+            this.cPacketLen.DataPropertyName = "PacketLen";
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketLen.DefaultCellStyle = dataGridViewCellStyle9;
+            this.cPacketLen.HeaderText = "长度";
+            this.cPacketLen.Name = "cPacketLen";
+            this.cPacketLen.ReadOnly = true;
+            this.cPacketLen.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketLen.Width = 42;
+            // 
+            // cPacketData
+            // 
+            this.cPacketData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cPacketData.DataPropertyName = "PacketData";
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketData.DefaultCellStyle = dataGridViewCellStyle10;
+            this.cPacketData.HeaderText = "数据";
+            this.cPacketData.Name = "cPacketData";
+            this.cPacketData.ReadOnly = true;
+            this.cPacketData.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // splitterQuickList
             // 
@@ -913,7 +1130,7 @@
             // 
             this.splitterQuickList.Panel2.Controls.Add(this.hbProxyData);
             this.splitterQuickList.Panel2MinSize = 0;
-            this.splitterQuickList.Size = new System.Drawing.Size(1094, 175);
+            this.splitterQuickList.Size = new System.Drawing.Size(1094, 170);
             this.splitterQuickList.SplitterDistance = 302;
             this.splitterQuickList.SplitterSize = 80;
             this.splitterQuickList.SplitterWidth = 5;
@@ -931,17 +1148,12 @@
             this.hbProxyData.Name = "hbProxyData";
             this.hbProxyData.ReadOnly = true;
             this.hbProxyData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbProxyData.Size = new System.Drawing.Size(787, 175);
+            this.hbProxyData.Size = new System.Drawing.Size(787, 170);
             this.hbProxyData.StringViewVisible = true;
             this.hbProxyData.TabIndex = 2;
             this.hbProxyData.VScrollBarVisible = true;
             this.hbProxyData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbProxyData_KeyDown);
             this.hbProxyData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbProxyData_MouseDown);
-            // 
-            // bgwSearchProxyList
-            // 
-            this.bgwSearchProxyList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchProxyList_DoWork);
-            this.bgwSearchProxyList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchProxyList_RunWorkerCompleted);
             // 
             // ProxyList
             // 
@@ -966,6 +1178,7 @@
             this.tlpProxyList2.ResumeLayout(false);
             this.tlpPacketListInfo.ResumeLayout(false);
             this.tlpPacketListInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvProxyList)).EndInit();
             this.splitterQuickList.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).EndInit();
             this.splitterQuickList.ResumeLayout(false);
@@ -1025,8 +1238,21 @@
         private AntdUI.Label lProxyTotal_CNT;
         private AntdUI.Label lsplit6;
         private AntdUI.Label lProxyTotal;
-        private AntdUI.Table tProxyList;
         private AntdUI.Splitter splitterQuickList;
         private Be.Windows.Forms.HexBox hbProxyData;
+        private System.Windows.Forms.DataGridView dgvProxyList;
+        private System.Windows.Forms.DataGridViewImageColumn cTypeImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cProxyTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketSocket;
+        private System.Windows.Forms.DataGridViewImageColumn cClientImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cClientAddr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cClientLocation;
+        private System.Windows.Forms.DataGridViewImageColumn cServerImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cServerDomain;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cServerLocation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketLen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketData;
     }
 }

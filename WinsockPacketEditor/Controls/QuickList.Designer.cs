@@ -40,17 +40,6 @@
             this.bFilterList_EnableAll = new AntdUI.Button();
             this.bFilterList_Add = new AntdUI.Button();
             this.bFilterList_Delete = new AntdUI.Button();
-            this.tpSendList = new AntdUI.TabPage();
-            this.tlpSendList = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.tSendList = new AntdUI.Table();
-            this.tlpSendListButton = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.bSendList_Stop = new AntdUI.Button();
-            this.bSendList_Execute = new AntdUI.Button();
-            this.bSendList_ResetCount = new AntdUI.Button();
-            this.bSendList_DisableAll = new AntdUI.Button();
-            this.bSendList_EnableAll = new AntdUI.Button();
-            this.bSendList_Add = new AntdUI.Button();
-            this.bSendList_Delete = new AntdUI.Button();
             this.tpRobotList = new AntdUI.TabPage();
             this.tlpRobotList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tRobotList = new AntdUI.Table();
@@ -62,17 +51,28 @@
             this.bRobotList_EnableAll = new AntdUI.Button();
             this.bRobotList_Add = new AntdUI.Button();
             this.bRobotList_Delete = new AntdUI.Button();
+            this.tpSendList = new AntdUI.TabPage();
+            this.tlpSendList = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tSendList = new AntdUI.Table();
+            this.tlpSendListButton = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.bSendList_Stop = new AntdUI.Button();
+            this.bSendList_Execute = new AntdUI.Button();
+            this.bSendList_ResetCount = new AntdUI.Button();
+            this.bSendList_DisableAll = new AntdUI.Button();
+            this.bSendList_EnableAll = new AntdUI.Button();
+            this.bSendList_Add = new AntdUI.Button();
+            this.bSendList_Delete = new AntdUI.Button();
             this.tlpQuickList.SuspendLayout();
             this.tabQuickList.SuspendLayout();
             this.tpFilterList.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
             this.tlpFilterListButton.SuspendLayout();
-            this.tpSendList.SuspendLayout();
-            this.tlpSendList.SuspendLayout();
-            this.tlpSendListButton.SuspendLayout();
             this.tpRobotList.SuspendLayout();
             this.tlpRobotList.SuspendLayout();
             this.tlpRobotListButton.SuspendLayout();
+            this.tpSendList.SuspendLayout();
+            this.tlpSendList.SuspendLayout();
+            this.tlpSendListButton.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpQuickList
@@ -140,7 +140,6 @@
             // tFilterList
             // 
             this.tFilterList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tFilterList.Bordered = true;
             this.tFilterList.CellImpactHeight = false;
             this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterList.Gap = 8;
@@ -245,170 +244,6 @@
             this.bFilterList_Delete.WaveSize = 0;
             this.bFilterList_Delete.Click += new System.EventHandler(this.bFilterList_Delete_Click);
             // 
-            // tpSendList
-            // 
-            this.tpSendList.Controls.Add(this.tlpSendList);
-            this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpSendList.LocalizationText = "Send";
-            this.tpSendList.Location = new System.Drawing.Point(0, 26);
-            this.tpSendList.Name = "tpSendList";
-            this.tpSendList.Size = new System.Drawing.Size(500, 474);
-            this.tpSendList.TabIndex = 1;
-            this.tpSendList.Text = "发送";
-            // 
-            // tlpSendList
-            // 
-            this.tlpSendList.ColumnCount = 1;
-            this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendList.Controls.Add(this.tSendList, 0, 1);
-            this.tlpSendList.Controls.Add(this.tlpSendListButton, 0, 0);
-            this.tlpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSendList.Location = new System.Drawing.Point(0, 0);
-            this.tlpSendList.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpSendList.Name = "tlpSendList";
-            this.tlpSendList.RowCount = 2;
-            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendList.Size = new System.Drawing.Size(500, 474);
-            this.tlpSendList.TabIndex = 1;
-            // 
-            // tSendList
-            // 
-            this.tSendList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tSendList.Bordered = true;
-            this.tSendList.CellImpactHeight = false;
-            this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tSendList.Gap = 8;
-            this.tSendList.GapCell = 5;
-            this.tSendList.Gaps = new System.Drawing.Size(8, 8);
-            this.tSendList.Location = new System.Drawing.Point(0, 35);
-            this.tSendList.Margin = new System.Windows.Forms.Padding(0);
-            this.tSendList.MultipleRows = true;
-            this.tSendList.Name = "tSendList";
-            this.tSendList.Size = new System.Drawing.Size(500, 439);
-            this.tSendList.SwitchSize = 12;
-            this.tSendList.TabIndex = 1;
-            this.tSendList.VisibleHeader = false;
-            this.tSendList.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellClick);
-            this.tSendList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellDoubleClick);
-            // 
-            // tlpSendListButton
-            // 
-            this.tlpSendListButton.ColumnCount = 7;
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
-            this.tlpSendListButton.Controls.Add(this.bSendList_Stop, 3, 0);
-            this.tlpSendListButton.Controls.Add(this.bSendList_Execute, 2, 0);
-            this.tlpSendListButton.Controls.Add(this.bSendList_ResetCount, 4, 0);
-            this.tlpSendListButton.Controls.Add(this.bSendList_DisableAll, 1, 0);
-            this.tlpSendListButton.Controls.Add(this.bSendList_EnableAll, 0, 0);
-            this.tlpSendListButton.Controls.Add(this.bSendList_Add, 5, 0);
-            this.tlpSendListButton.Controls.Add(this.bSendList_Delete, 6, 0);
-            this.tlpSendListButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSendListButton.Location = new System.Drawing.Point(0, 0);
-            this.tlpSendListButton.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpSendListButton.Name = "tlpSendListButton";
-            this.tlpSendListButton.RowCount = 1;
-            this.tlpSendListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendListButton.Size = new System.Drawing.Size(500, 35);
-            this.tlpSendListButton.TabIndex = 2;
-            // 
-            // bSendList_Stop
-            // 
-            this.bSendList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_Stop.Ghost = true;
-            this.bSendList_Stop.IconRatio = 0.8F;
-            this.bSendList_Stop.IconSvg = "PauseCircleOutlined";
-            this.bSendList_Stop.Location = new System.Drawing.Point(213, 3);
-            this.bSendList_Stop.Name = "bSendList_Stop";
-            this.bSendList_Stop.Size = new System.Drawing.Size(64, 29);
-            this.bSendList_Stop.TabIndex = 6;
-            this.bSendList_Stop.WaveSize = 0;
-            this.bSendList_Stop.Click += new System.EventHandler(this.bSendList_Stop_Click);
-            // 
-            // bSendList_Execute
-            // 
-            this.bSendList_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_Execute.Ghost = true;
-            this.bSendList_Execute.IconRatio = 0.8F;
-            this.bSendList_Execute.IconSvg = "PlayCircleOutlined";
-            this.bSendList_Execute.Location = new System.Drawing.Point(143, 3);
-            this.bSendList_Execute.Name = "bSendList_Execute";
-            this.bSendList_Execute.Size = new System.Drawing.Size(64, 29);
-            this.bSendList_Execute.TabIndex = 5;
-            this.bSendList_Execute.WaveSize = 0;
-            this.bSendList_Execute.Click += new System.EventHandler(this.bSendList_Execute_Click);
-            // 
-            // bSendList_ResetCount
-            // 
-            this.bSendList_ResetCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_ResetCount.Ghost = true;
-            this.bSendList_ResetCount.IconRatio = 0.8F;
-            this.bSendList_ResetCount.IconSvg = "UndoOutlined";
-            this.bSendList_ResetCount.Location = new System.Drawing.Point(283, 3);
-            this.bSendList_ResetCount.Name = "bSendList_ResetCount";
-            this.bSendList_ResetCount.Size = new System.Drawing.Size(64, 29);
-            this.bSendList_ResetCount.TabIndex = 4;
-            this.bSendList_ResetCount.WaveSize = 0;
-            this.bSendList_ResetCount.Click += new System.EventHandler(this.bSendList_ResetCount_Click);
-            // 
-            // bSendList_DisableAll
-            // 
-            this.bSendList_DisableAll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_DisableAll.Ghost = true;
-            this.bSendList_DisableAll.IconRatio = 0.8F;
-            this.bSendList_DisableAll.IconSvg = "CloseSquareOutlined";
-            this.bSendList_DisableAll.Location = new System.Drawing.Point(73, 3);
-            this.bSendList_DisableAll.Name = "bSendList_DisableAll";
-            this.bSendList_DisableAll.Size = new System.Drawing.Size(64, 29);
-            this.bSendList_DisableAll.TabIndex = 3;
-            this.bSendList_DisableAll.WaveSize = 0;
-            this.bSendList_DisableAll.Click += new System.EventHandler(this.bSendList_DisableAll_Click);
-            // 
-            // bSendList_EnableAll
-            // 
-            this.bSendList_EnableAll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_EnableAll.Ghost = true;
-            this.bSendList_EnableAll.IconRatio = 0.8F;
-            this.bSendList_EnableAll.IconSvg = "CheckSquareOutlined";
-            this.bSendList_EnableAll.Location = new System.Drawing.Point(3, 3);
-            this.bSendList_EnableAll.Name = "bSendList_EnableAll";
-            this.bSendList_EnableAll.Size = new System.Drawing.Size(64, 29);
-            this.bSendList_EnableAll.TabIndex = 2;
-            this.bSendList_EnableAll.WaveSize = 0;
-            this.bSendList_EnableAll.Click += new System.EventHandler(this.bSendList_EnableAll_Click);
-            // 
-            // bSendList_Add
-            // 
-            this.bSendList_Add.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_Add.Ghost = true;
-            this.bSendList_Add.IconRatio = 0.8F;
-            this.bSendList_Add.IconSvg = "PlusOutlined";
-            this.bSendList_Add.Location = new System.Drawing.Point(353, 3);
-            this.bSendList_Add.Name = "bSendList_Add";
-            this.bSendList_Add.Size = new System.Drawing.Size(64, 29);
-            this.bSendList_Add.TabIndex = 0;
-            this.bSendList_Add.WaveSize = 0;
-            this.bSendList_Add.Click += new System.EventHandler(this.bSendList_Add_Click);
-            // 
-            // bSendList_Delete
-            // 
-            this.bSendList_Delete.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSendList_Delete.Ghost = true;
-            this.bSendList_Delete.IconRatio = 0.8F;
-            this.bSendList_Delete.IconSvg = "DeleteOutlined";
-            this.bSendList_Delete.Location = new System.Drawing.Point(423, 3);
-            this.bSendList_Delete.Name = "bSendList_Delete";
-            this.bSendList_Delete.Size = new System.Drawing.Size(74, 29);
-            this.bSendList_Delete.TabIndex = 1;
-            this.bSendList_Delete.WaveSize = 0;
-            this.bSendList_Delete.Click += new System.EventHandler(this.bSendList_Delete_Click);
-            // 
             // tpRobotList
             // 
             this.tpRobotList.Controls.Add(this.tlpRobotList);
@@ -439,7 +274,6 @@
             // tRobotList
             // 
             this.tRobotList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tRobotList.Bordered = true;
             this.tRobotList.CellImpactHeight = false;
             this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tRobotList.Gap = 8;
@@ -573,6 +407,169 @@
             this.bRobotList_Delete.WaveSize = 0;
             this.bRobotList_Delete.Click += new System.EventHandler(this.bRobotList_Delete_Click);
             // 
+            // tpSendList
+            // 
+            this.tpSendList.Controls.Add(this.tlpSendList);
+            this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSendList.LocalizationText = "Send";
+            this.tpSendList.Location = new System.Drawing.Point(0, 26);
+            this.tpSendList.Name = "tpSendList";
+            this.tpSendList.Size = new System.Drawing.Size(500, 474);
+            this.tpSendList.TabIndex = 1;
+            this.tpSendList.Text = "发送";
+            // 
+            // tlpSendList
+            // 
+            this.tlpSendList.ColumnCount = 1;
+            this.tlpSendList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendList.Controls.Add(this.tSendList, 0, 1);
+            this.tlpSendList.Controls.Add(this.tlpSendListButton, 0, 0);
+            this.tlpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSendList.Location = new System.Drawing.Point(0, 0);
+            this.tlpSendList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSendList.Name = "tlpSendList";
+            this.tlpSendList.RowCount = 2;
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tlpSendList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendList.Size = new System.Drawing.Size(500, 474);
+            this.tlpSendList.TabIndex = 1;
+            // 
+            // tSendList
+            // 
+            this.tSendList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tSendList.CellImpactHeight = false;
+            this.tSendList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSendList.Gap = 8;
+            this.tSendList.GapCell = 5;
+            this.tSendList.Gaps = new System.Drawing.Size(8, 8);
+            this.tSendList.Location = new System.Drawing.Point(0, 35);
+            this.tSendList.Margin = new System.Windows.Forms.Padding(0);
+            this.tSendList.MultipleRows = true;
+            this.tSendList.Name = "tSendList";
+            this.tSendList.Size = new System.Drawing.Size(500, 439);
+            this.tSendList.SwitchSize = 12;
+            this.tSendList.TabIndex = 1;
+            this.tSendList.VisibleHeader = false;
+            this.tSendList.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellClick);
+            this.tSendList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tSendList_CellDoubleClick);
+            // 
+            // tlpSendListButton
+            // 
+            this.tlpSendListButton.ColumnCount = 7;
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpSendListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
+            this.tlpSendListButton.Controls.Add(this.bSendList_Stop, 3, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_Execute, 2, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_ResetCount, 4, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_DisableAll, 1, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_EnableAll, 0, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_Add, 5, 0);
+            this.tlpSendListButton.Controls.Add(this.bSendList_Delete, 6, 0);
+            this.tlpSendListButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSendListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpSendListButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSendListButton.Name = "tlpSendListButton";
+            this.tlpSendListButton.RowCount = 1;
+            this.tlpSendListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendListButton.Size = new System.Drawing.Size(500, 35);
+            this.tlpSendListButton.TabIndex = 2;
+            // 
+            // bSendList_Stop
+            // 
+            this.bSendList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Stop.Ghost = true;
+            this.bSendList_Stop.IconRatio = 0.8F;
+            this.bSendList_Stop.IconSvg = "PauseCircleOutlined";
+            this.bSendList_Stop.Location = new System.Drawing.Point(213, 3);
+            this.bSendList_Stop.Name = "bSendList_Stop";
+            this.bSendList_Stop.Size = new System.Drawing.Size(64, 29);
+            this.bSendList_Stop.TabIndex = 6;
+            this.bSendList_Stop.WaveSize = 0;
+            this.bSendList_Stop.Click += new System.EventHandler(this.bSendList_Stop_Click);
+            // 
+            // bSendList_Execute
+            // 
+            this.bSendList_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Execute.Ghost = true;
+            this.bSendList_Execute.IconRatio = 0.8F;
+            this.bSendList_Execute.IconSvg = "PlayCircleOutlined";
+            this.bSendList_Execute.Location = new System.Drawing.Point(143, 3);
+            this.bSendList_Execute.Name = "bSendList_Execute";
+            this.bSendList_Execute.Size = new System.Drawing.Size(64, 29);
+            this.bSendList_Execute.TabIndex = 5;
+            this.bSendList_Execute.WaveSize = 0;
+            this.bSendList_Execute.Click += new System.EventHandler(this.bSendList_Execute_Click);
+            // 
+            // bSendList_ResetCount
+            // 
+            this.bSendList_ResetCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_ResetCount.Ghost = true;
+            this.bSendList_ResetCount.IconRatio = 0.8F;
+            this.bSendList_ResetCount.IconSvg = "UndoOutlined";
+            this.bSendList_ResetCount.Location = new System.Drawing.Point(283, 3);
+            this.bSendList_ResetCount.Name = "bSendList_ResetCount";
+            this.bSendList_ResetCount.Size = new System.Drawing.Size(64, 29);
+            this.bSendList_ResetCount.TabIndex = 4;
+            this.bSendList_ResetCount.WaveSize = 0;
+            this.bSendList_ResetCount.Click += new System.EventHandler(this.bSendList_ResetCount_Click);
+            // 
+            // bSendList_DisableAll
+            // 
+            this.bSendList_DisableAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_DisableAll.Ghost = true;
+            this.bSendList_DisableAll.IconRatio = 0.8F;
+            this.bSendList_DisableAll.IconSvg = "CloseSquareOutlined";
+            this.bSendList_DisableAll.Location = new System.Drawing.Point(73, 3);
+            this.bSendList_DisableAll.Name = "bSendList_DisableAll";
+            this.bSendList_DisableAll.Size = new System.Drawing.Size(64, 29);
+            this.bSendList_DisableAll.TabIndex = 3;
+            this.bSendList_DisableAll.WaveSize = 0;
+            this.bSendList_DisableAll.Click += new System.EventHandler(this.bSendList_DisableAll_Click);
+            // 
+            // bSendList_EnableAll
+            // 
+            this.bSendList_EnableAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_EnableAll.Ghost = true;
+            this.bSendList_EnableAll.IconRatio = 0.8F;
+            this.bSendList_EnableAll.IconSvg = "CheckSquareOutlined";
+            this.bSendList_EnableAll.Location = new System.Drawing.Point(3, 3);
+            this.bSendList_EnableAll.Name = "bSendList_EnableAll";
+            this.bSendList_EnableAll.Size = new System.Drawing.Size(64, 29);
+            this.bSendList_EnableAll.TabIndex = 2;
+            this.bSendList_EnableAll.WaveSize = 0;
+            this.bSendList_EnableAll.Click += new System.EventHandler(this.bSendList_EnableAll_Click);
+            // 
+            // bSendList_Add
+            // 
+            this.bSendList_Add.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Add.Ghost = true;
+            this.bSendList_Add.IconRatio = 0.8F;
+            this.bSendList_Add.IconSvg = "PlusOutlined";
+            this.bSendList_Add.Location = new System.Drawing.Point(353, 3);
+            this.bSendList_Add.Name = "bSendList_Add";
+            this.bSendList_Add.Size = new System.Drawing.Size(64, 29);
+            this.bSendList_Add.TabIndex = 0;
+            this.bSendList_Add.WaveSize = 0;
+            this.bSendList_Add.Click += new System.EventHandler(this.bSendList_Add_Click);
+            // 
+            // bSendList_Delete
+            // 
+            this.bSendList_Delete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSendList_Delete.Ghost = true;
+            this.bSendList_Delete.IconRatio = 0.8F;
+            this.bSendList_Delete.IconSvg = "DeleteOutlined";
+            this.bSendList_Delete.Location = new System.Drawing.Point(423, 3);
+            this.bSendList_Delete.Name = "bSendList_Delete";
+            this.bSendList_Delete.Size = new System.Drawing.Size(74, 29);
+            this.bSendList_Delete.TabIndex = 1;
+            this.bSendList_Delete.WaveSize = 0;
+            this.bSendList_Delete.Click += new System.EventHandler(this.bSendList_Delete_Click);
+            // 
             // QuickList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -588,12 +585,12 @@
             this.tpFilterList.ResumeLayout(false);
             this.tlpFilterList.ResumeLayout(false);
             this.tlpFilterListButton.ResumeLayout(false);
-            this.tpSendList.ResumeLayout(false);
-            this.tlpSendList.ResumeLayout(false);
-            this.tlpSendListButton.ResumeLayout(false);
             this.tpRobotList.ResumeLayout(false);
             this.tlpRobotList.ResumeLayout(false);
             this.tlpRobotListButton.ResumeLayout(false);
+            this.tpSendList.ResumeLayout(false);
+            this.tlpSendList.ResumeLayout(false);
+            this.tlpSendListButton.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

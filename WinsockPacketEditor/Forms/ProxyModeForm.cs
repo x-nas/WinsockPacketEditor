@@ -33,6 +33,19 @@ namespace WinsockPacketEditor
         private void ProxyModeForm_Load(object sender, EventArgs e)
         {
             this.pageHeader.Loading = true;
+
+            Operate.SystemConfig.InvokeAction = action =>
+            {
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(action);
+                }
+                else
+                {
+                    action();
+                }
+            };
+            
             Operate.SystemConfig.InitHotKeys(this.Handle);
 
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
@@ -550,14 +563,26 @@ namespace WinsockPacketEditor
             {
                 this.timerProxyList.Stop();
 
-                await Task.Run(() =>
+                var hasProxyData = await Task.Run(() =>
                 {
-                    if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
-                    {
-                        Operate.ProxyConfig.List.ProxyInfo_ToList();
-                        this.cProxyList?.RefreshProxyList();
-                    }
+                    return Operate.ProxyConfig.Queue.qProxyInfo.Count > 0;
+                });
 
+                var hasLogData = await Task.Run(() =>
+                {
+                    return Operate.LogConfig.Queue.cqLogInfo.Count > 0 ||
+                           Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0 ||
+                           Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0;
+                });
+
+                if (hasProxyData)
+                {
+                    Operate.ProxyConfig.List.ProxyInfo_ToList();
+                    this.cProxyList?.RefreshProxyList();
+                }
+
+                if (hasLogData)
+                {
                     if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
                     {
                         Operate.LogConfig.List.LogToList();
@@ -575,7 +600,7 @@ namespace WinsockPacketEditor
                         Operate.LogConfig.List.ProxyLogToList();
                         this.cLogList?.RefreshProxyLog();
                     }
-                });
+                }
             }
             catch (Exception ex)
             {
