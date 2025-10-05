@@ -7935,7 +7935,7 @@ namespace WinsockPacketEditor
                             XElement xeProxyAccount =
                                     new XElement("ProxyAccount",
                                     new XElement("IsEnable", ai.IsEnable.ToString()),
-                                    new XElement("AID", ai.AID.ToString().ToUpper()),
+                                    new XElement("ID", ai.AID.ToString().ToUpper()),
                                     new XElement("UserName", ai.UserName),
                                     new XElement("PassWord", ai.Password),
                                     new XElement("IsOnLine", ai.IsOnLine.ToString()),
