@@ -11419,7 +11419,7 @@ namespace WinsockPacketEditor
 
                 #region//保存封包列表为Excel（对话框）
 
-                public static void SavePacketList_Dialog(Form form, AntdUI.Table tTable, string FileName, List<PacketInfo> piList)
+                public static void SavePacketList_Dialog(Form form, string FileName, List<PacketInfo> piList)
                 {
                     try
                     {
@@ -11441,25 +11441,19 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveToExcel.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    bool bOK = false;
-                                    tTable.Spin(AntdUI.Localization.Get("Exporting", "正在导出..."), config =>
+                                    bool bOK = SavePacketListToExcel(FilePath, piList);
+                                    if (bOK)
                                     {
-                                        bOK = SavePacketListToExcel(FilePath, piList);
-                                    }, () =>
+                                        string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到Excel成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(SavePacketList_Dialog), Title + ": " + FilePath);
+                                    }
+                                    else
                                     {
-                                        if (bOK)
-                                        {
-                                            string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到Excel成功");
-                                            AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
-                                            Operate.DoLog(nameof(SavePacketList_Dialog), Title + ": " + FilePath);
-                                        }
-                                        else
-                                        {
-                                            string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到Excel失败");
-                                            string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
-                                            AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
-                                        }
-                                    });                                    
+                                        string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到Excel失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }

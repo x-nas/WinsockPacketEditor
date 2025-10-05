@@ -855,13 +855,13 @@ namespace WinsockPacketEditor
                     return "Socket";
 
                 case "Table.PacketList.Column.PacketFrom":
-                    return "From";
+                    return "From Address";
 
                 case "Table.PacketList.Column.FromLocation":
                     return "Location";
 
                 case "Table.PacketList.Column.PacketTo":
-                    return "To";
+                    return "To Address";
 
                 case "Table.PacketList.Column.ToLocation":
                     return "Location";

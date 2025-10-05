@@ -52,11 +52,10 @@
             // tlpSearchSettings
             // 
             this.tlpSearchSettings.ColumnCount = 4;
-            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
+            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 105F));
+            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
             this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpSearchSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpSearchSettings.Controls.Add(this.txtFind, 1, 0);
             this.tlpSearchSettings.Controls.Add(this.pSearchType, 0, 0);
             this.tlpSearchSettings.Controls.Add(this.tlpButton, 3, 0);
@@ -74,12 +73,12 @@
             // 
             this.txtFind.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtFind.LocalizationPlaceholderText = "Input.Regex";
-            this.txtFind.Location = new System.Drawing.Point(142, 2);
+            this.txtFind.Location = new System.Drawing.Point(132, 2);
             this.txtFind.Margin = new System.Windows.Forms.Padding(2);
             this.txtFind.Multiline = true;
             this.txtFind.Name = "txtFind";
             this.txtFind.PlaceholderText = "请输入正则表达式";
-            this.txtFind.Size = new System.Drawing.Size(746, 76);
+            this.txtFind.Size = new System.Drawing.Size(731, 76);
             this.txtFind.TabIndex = 25;
             // 
             // pSearchType
@@ -91,7 +90,7 @@
             this.pSearchType.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pSearchType.Name = "pSearchType";
             this.pSearchType.Padding = new System.Windows.Forms.Padding(2);
-            this.pSearchType.Size = new System.Drawing.Size(132, 70);
+            this.pSearchType.Size = new System.Drawing.Size(122, 70);
             this.pSearchType.TabIndex = 22;
             this.pSearchType.Text = "panel1";
             // 
@@ -111,7 +110,7 @@
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchType.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchType.Size = new System.Drawing.Size(126, 64);
+            this.tlpSearchType.Size = new System.Drawing.Size(116, 64);
             this.tlpSearchType.TabIndex = 21;
             // 
             // rbString
@@ -198,11 +197,11 @@
             this.pSearchFrom.BorderWidth = 1F;
             this.pSearchFrom.Controls.Add(this.tlpSearchFrom);
             this.pSearchFrom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pSearchFrom.Location = new System.Drawing.Point(894, 5);
+            this.pSearchFrom.Location = new System.Drawing.Point(869, 5);
             this.pSearchFrom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pSearchFrom.Name = "pSearchFrom";
             this.pSearchFrom.Padding = new System.Windows.Forms.Padding(2);
-            this.pSearchFrom.Size = new System.Drawing.Size(97, 70);
+            this.pSearchFrom.Size = new System.Drawing.Size(122, 70);
             this.pSearchFrom.TabIndex = 24;
             // 
             // tlpSearchFrom
@@ -221,7 +220,7 @@
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSearchFrom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearchFrom.Size = new System.Drawing.Size(91, 64);
+            this.tlpSearchFrom.Size = new System.Drawing.Size(116, 64);
             this.tlpSearchFrom.TabIndex = 22;
             // 
             // rbFromIndex

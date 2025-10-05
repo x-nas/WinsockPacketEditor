@@ -33,6 +33,7 @@ namespace WinsockPacketEditor
             this.InitTable_ProxyList();
             this.InitControl();
             this.Dark_Changed();
+            this.SetColumnName_ProxyList();
 
             this.hbProxyData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;

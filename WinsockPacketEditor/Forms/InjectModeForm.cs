@@ -457,6 +457,7 @@ namespace WinsockPacketEditor
 
                 AntdUI.Localization.SetLanguage(lang);
                 this.Text = "WPE x64 - " + AntdUI.Localization.Get("InjectModeForm", "注入模式");
+                this.cPacketList.SetColumnName_PacketList();
                 this.cComparisonText.SetTextInfo();
                 this.cExtractionData.SetExtractionInfo();
 

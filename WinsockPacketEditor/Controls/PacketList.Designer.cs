@@ -28,6 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PacketList));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpPacketList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tableLayoutPanel2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtPacketList_AutoClear = new AntdUI.InputNumber();
@@ -48,6 +60,20 @@
             this.lProcessName = new AntdUI.Label();
             this.splitterPacketList = new AntdUI.Splitter();
             this.tlpPacketList2 = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.dgvPacketList = new System.Windows.Forms.DataGridView();
+            this.cTypeImg = new System.Windows.Forms.DataGridViewImageColumn();
+            this.cID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFromImg = new System.Windows.Forms.DataGridViewImageColumn();
+            this.cPacketFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFromLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cToImg = new System.Windows.Forms.DataGridViewImageColumn();
+            this.cPacketTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cToLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPacketData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpPacketListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lWSARecvFrom_CNT = new AntdUI.Label();
             this.lWSARecvFrom = new AntdUI.Label();
@@ -84,7 +110,6 @@
             this.lQueue = new AntdUI.Label();
             this.lFilterExecute = new AntdUI.Label();
             this.lTotal = new AntdUI.Label();
-            this.tPacketList = new AntdUI.Table();
             this.splitterQuickList = new AntdUI.Splitter();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
@@ -96,6 +121,7 @@
             this.splitterPacketList.Panel2.SuspendLayout();
             this.splitterPacketList.SuspendLayout();
             this.tlpPacketList2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPacketList)).BeginInit();
             this.tlpPacketListInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).BeginInit();
             this.splitterQuickList.Panel2.SuspendLayout();
@@ -118,7 +144,7 @@
             this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpPacketList.Size = new System.Drawing.Size(1200, 700);
+            this.tlpPacketList.Size = new System.Drawing.Size(1100, 700);
             this.tlpPacketList.TabIndex = 11;
             // 
             // tableLayoutPanel2
@@ -147,7 +173,7 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1200, 40);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1100, 40);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
             // txtPacketList_AutoClear
@@ -211,7 +237,7 @@
             this.ddMenu.Ghost = true;
             this.ddMenu.IconRatio = 1F;
             this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(1166, 2);
+            this.ddMenu.Location = new System.Drawing.Point(1066, 2);
             this.ddMenu.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu.MaxCount = 10;
             this.ddMenu.Name = "ddMenu";
@@ -228,7 +254,7 @@
             this.bSearchPacket.Ghost = true;
             this.bSearchPacket.IconRatio = 1F;
             this.bSearchPacket.IconSvg = "SearchOutlined";
-            this.bSearchPacket.Location = new System.Drawing.Point(1130, 2);
+            this.bSearchPacket.Location = new System.Drawing.Point(1030, 2);
             this.bSearchPacket.Margin = new System.Windows.Forms.Padding(2);
             this.bSearchPacket.Name = "bSearchPacket";
             this.bSearchPacket.Size = new System.Drawing.Size(32, 36);
@@ -315,7 +341,7 @@
             this.tlpProcessInfo.Name = "tlpProcessInfo";
             this.tlpProcessInfo.RowCount = 1;
             this.tlpProcessInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProcessInfo.Size = new System.Drawing.Size(1200, 24);
+            this.tlpProcessInfo.Size = new System.Drawing.Size(1100, 24);
             this.tlpProcessInfo.TabIndex = 4;
             // 
             // lSpeedInfo
@@ -426,7 +452,7 @@
             // 
             this.splitterPacketList.Panel2.Controls.Add(this.splitterQuickList);
             this.splitterPacketList.Panel2MinSize = 0;
-            this.splitterPacketList.Size = new System.Drawing.Size(1194, 630);
+            this.splitterPacketList.Size = new System.Drawing.Size(1094, 630);
             this.splitterPacketList.SplitterDistance = 450;
             this.splitterPacketList.SplitterSize = 80;
             this.splitterPacketList.SplitterWidth = 5;
@@ -436,8 +462,8 @@
             // 
             this.tlpPacketList2.ColumnCount = 1;
             this.tlpPacketList2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpPacketList2.Controls.Add(this.dgvPacketList, 0, 1);
             this.tlpPacketList2.Controls.Add(this.tlpPacketListInfo, 0, 0);
-            this.tlpPacketList2.Controls.Add(this.tPacketList, 0, 1);
             this.tlpPacketList2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpPacketList2.Location = new System.Drawing.Point(0, 0);
             this.tlpPacketList2.Margin = new System.Windows.Forms.Padding(0);
@@ -445,8 +471,218 @@
             this.tlpPacketList2.RowCount = 2;
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpPacketList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketList2.Size = new System.Drawing.Size(1194, 450);
+            this.tlpPacketList2.Size = new System.Drawing.Size(1094, 450);
             this.tlpPacketList2.TabIndex = 1;
+            // 
+            // dgvPacketList
+            // 
+            this.dgvPacketList.AllowUserToAddRows = false;
+            this.dgvPacketList.AllowUserToDeleteRows = false;
+            this.dgvPacketList.AllowUserToResizeColumns = false;
+            this.dgvPacketList.AllowUserToResizeRows = false;
+            this.dgvPacketList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvPacketList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dgvPacketList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvPacketList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dgvPacketList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPacketList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvPacketList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPacketList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cTypeImg,
+            this.cID,
+            this.cPacketTime,
+            this.cPacketType,
+            this.cPacketSocket,
+            this.cFromImg,
+            this.cPacketFrom,
+            this.cFromLocation,
+            this.cToImg,
+            this.cPacketTo,
+            this.cToLocation,
+            this.cPacketLen,
+            this.cPacketData});
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(3);
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPacketList.DefaultCellStyle = dataGridViewCellStyle11;
+            this.dgvPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvPacketList.EnableHeadersVisualStyles = false;
+            this.dgvPacketList.Location = new System.Drawing.Point(0, 24);
+            this.dgvPacketList.Margin = new System.Windows.Forms.Padding(0);
+            this.dgvPacketList.Name = "dgvPacketList";
+            this.dgvPacketList.ReadOnly = true;
+            this.dgvPacketList.RowHeadersVisible = false;
+            this.dgvPacketList.RowTemplate.Height = 23;
+            this.dgvPacketList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvPacketList.Size = new System.Drawing.Size(1094, 426);
+            this.dgvPacketList.TabIndex = 8;
+            this.dgvPacketList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPacketList_CellDoubleClick);
+            this.dgvPacketList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvPacketList_CellFormatting);
+            this.dgvPacketList.SelectionChanged += new System.EventHandler(this.dgvPacketList_SelectionChanged);
+            this.dgvPacketList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvPacketList_MouseClick);
+            // 
+            // cTypeImg
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cTypeImg.DefaultCellStyle = dataGridViewCellStyle2;
+            this.cTypeImg.HeaderText = "";
+            this.cTypeImg.Name = "cTypeImg";
+            this.cTypeImg.ReadOnly = true;
+            this.cTypeImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cTypeImg.Width = 7;
+            // 
+            // cID
+            // 
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cID.DefaultCellStyle = dataGridViewCellStyle3;
+            this.cID.HeaderText = "序号";
+            this.cID.Name = "cID";
+            this.cID.ReadOnly = true;
+            this.cID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cID.Width = 42;
+            // 
+            // cPacketTime
+            // 
+            this.cPacketTime.DataPropertyName = "PacketTime";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketTime.DefaultCellStyle = dataGridViewCellStyle4;
+            this.cPacketTime.HeaderText = "时间戳";
+            this.cPacketTime.Name = "cPacketTime";
+            this.cPacketTime.ReadOnly = true;
+            this.cPacketTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketTime.Width = 54;
+            // 
+            // cPacketType
+            // 
+            this.cPacketType.DataPropertyName = "PacketType";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketType.DefaultCellStyle = dataGridViewCellStyle5;
+            this.cPacketType.HeaderText = "类别";
+            this.cPacketType.Name = "cPacketType";
+            this.cPacketType.ReadOnly = true;
+            this.cPacketType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketType.Width = 42;
+            // 
+            // cPacketSocket
+            // 
+            this.cPacketSocket.DataPropertyName = "PacketSocket";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketSocket.DefaultCellStyle = dataGridViewCellStyle6;
+            this.cPacketSocket.HeaderText = "套接字";
+            this.cPacketSocket.Name = "cPacketSocket";
+            this.cPacketSocket.ReadOnly = true;
+            this.cPacketSocket.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketSocket.Width = 54;
+            // 
+            // cFromImg
+            // 
+            this.cFromImg.HeaderText = "";
+            this.cFromImg.Name = "cFromImg";
+            this.cFromImg.ReadOnly = true;
+            this.cFromImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cFromImg.Width = 7;
+            // 
+            // cPacketFrom
+            // 
+            this.cPacketFrom.DataPropertyName = "PacketFrom";
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketFrom.DefaultCellStyle = dataGridViewCellStyle7;
+            this.cPacketFrom.HeaderText = "本机地址";
+            this.cPacketFrom.Name = "cPacketFrom";
+            this.cPacketFrom.ReadOnly = true;
+            this.cPacketFrom.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketFrom.Width = 66;
+            // 
+            // cFromLocation
+            // 
+            this.cFromLocation.DataPropertyName = "FromLocation";
+            this.cFromLocation.HeaderText = "所属地";
+            this.cFromLocation.Name = "cFromLocation";
+            this.cFromLocation.ReadOnly = true;
+            this.cFromLocation.Width = 73;
+            // 
+            // cToImg
+            // 
+            this.cToImg.HeaderText = "";
+            this.cToImg.Name = "cToImg";
+            this.cToImg.ReadOnly = true;
+            this.cToImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cToImg.Width = 7;
+            // 
+            // cPacketTo
+            // 
+            this.cPacketTo.DataPropertyName = "PacketTo";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketTo.DefaultCellStyle = dataGridViewCellStyle8;
+            this.cPacketTo.HeaderText = "远端地址";
+            this.cPacketTo.Name = "cPacketTo";
+            this.cPacketTo.ReadOnly = true;
+            this.cPacketTo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketTo.Width = 66;
+            // 
+            // cToLocation
+            // 
+            this.cToLocation.DataPropertyName = "ToLocation";
+            this.cToLocation.HeaderText = "所属地";
+            this.cToLocation.Name = "cToLocation";
+            this.cToLocation.ReadOnly = true;
+            this.cToLocation.Width = 73;
+            // 
+            // cPacketLen
+            // 
+            this.cPacketLen.DataPropertyName = "PacketLen";
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketLen.DefaultCellStyle = dataGridViewCellStyle9;
+            this.cPacketLen.HeaderText = "长度";
+            this.cPacketLen.Name = "cPacketLen";
+            this.cPacketLen.ReadOnly = true;
+            this.cPacketLen.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cPacketLen.Width = 42;
+            // 
+            // cPacketData
+            // 
+            this.cPacketData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cPacketData.DataPropertyName = "PacketData";
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketData.DefaultCellStyle = dataGridViewCellStyle10;
+            this.cPacketData.HeaderText = "数据";
+            this.cPacketData.Name = "cPacketData";
+            this.cPacketData.ReadOnly = true;
+            this.cPacketData.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPacketData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tlpPacketListInfo
             // 
@@ -531,7 +767,7 @@
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPacketListInfo.Size = new System.Drawing.Size(1194, 24);
+            this.tlpPacketListInfo.Size = new System.Drawing.Size(1094, 24);
             this.tlpPacketListInfo.TabIndex = 6;
             // 
             // lWSARecvFrom_CNT
@@ -988,29 +1224,6 @@
             this.lTotal.TabIndex = 5;
             this.lTotal.Text = "封包总数 :";
             // 
-            // tPacketList
-            // 
-            this.tPacketList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tPacketList.Bordered = true;
-            this.tPacketList.CellImpactHeight = false;
-            this.tPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tPacketList.EmptyHeader = true;
-            this.tPacketList.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tPacketList.Gap = 8;
-            this.tPacketList.GapCell = 0;
-            this.tPacketList.Gaps = new System.Drawing.Size(8, 8);
-            this.tPacketList.Location = new System.Drawing.Point(0, 24);
-            this.tPacketList.Margin = new System.Windows.Forms.Padding(0);
-            this.tPacketList.MultipleRows = true;
-            this.tPacketList.Name = "tPacketList";
-            this.tPacketList.Size = new System.Drawing.Size(1194, 426);
-            this.tPacketList.TabIndex = 1;
-            this.tPacketList.VirtualMode = true;
-            this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
-            this.tPacketList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellDoubleClick);
-            this.tPacketList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tPacketList_SetRowStyle);
-            this.tPacketList.SelectIndexChanged += new System.EventHandler(this.tPacketList_SelectIndexChanged);
-            // 
             // splitterQuickList
             // 
             this.splitterQuickList.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
@@ -1024,8 +1237,8 @@
             // 
             this.splitterQuickList.Panel2.Controls.Add(this.hbPacketData);
             this.splitterQuickList.Panel2MinSize = 0;
-            this.splitterQuickList.Size = new System.Drawing.Size(1194, 175);
-            this.splitterQuickList.SplitterDistance = 329;
+            this.splitterQuickList.Size = new System.Drawing.Size(1094, 175);
+            this.splitterQuickList.SplitterDistance = 300;
             this.splitterQuickList.SplitterSize = 80;
             this.splitterQuickList.SplitterWidth = 5;
             this.splitterQuickList.TabIndex = 2;
@@ -1042,7 +1255,7 @@
             this.hbPacketData.Name = "hbPacketData";
             this.hbPacketData.ReadOnly = true;
             this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(860, 175);
+            this.hbPacketData.Size = new System.Drawing.Size(789, 175);
             this.hbPacketData.StringViewVisible = true;
             this.hbPacketData.TabIndex = 2;
             this.hbPacketData.VScrollBarVisible = true;
@@ -1063,7 +1276,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PacketList";
-            this.Size = new System.Drawing.Size(1200, 700);
+            this.Size = new System.Drawing.Size(1100, 700);
             this.Load += new System.EventHandler(this.PacketList_Load);
             this.tlpPacketList.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -1075,6 +1288,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitterPacketList)).EndInit();
             this.splitterPacketList.ResumeLayout(false);
             this.tlpPacketList2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPacketList)).EndInit();
             this.tlpPacketListInfo.ResumeLayout(false);
             this.tlpPacketListInfo.PerformLayout();
             this.splitterQuickList.Panel2.ResumeLayout(false);
@@ -1143,8 +1357,21 @@
         private AntdUI.Label lQueue;
         private AntdUI.Label lFilterExecute;
         private AntdUI.Label lTotal;
-        private AntdUI.Table tPacketList;
         private AntdUI.Splitter splitterQuickList;
         private Be.Windows.Forms.HexBox hbPacketData;
+        private System.Windows.Forms.DataGridView dgvPacketList;
+        private System.Windows.Forms.DataGridViewImageColumn cTypeImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketSocket;
+        private System.Windows.Forms.DataGridViewImageColumn cFromImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketFrom;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFromLocation;
+        private System.Windows.Forms.DataGridViewImageColumn cToImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketTo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cToLocation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketLen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketData;
     }
 }

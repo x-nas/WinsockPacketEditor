@@ -1132,7 +1132,7 @@
             this.splitterQuickList.Panel2.Controls.Add(this.hbProxyData);
             this.splitterQuickList.Panel2MinSize = 0;
             this.splitterQuickList.Size = new System.Drawing.Size(1094, 175);
-            this.splitterQuickList.SplitterDistance = 302;
+            this.splitterQuickList.SplitterDistance = 300;
             this.splitterQuickList.SplitterSize = 80;
             this.splitterQuickList.SplitterWidth = 5;
             this.splitterQuickList.TabIndex = 1;
@@ -1149,7 +1149,7 @@
             this.hbProxyData.Name = "hbProxyData";
             this.hbProxyData.ReadOnly = true;
             this.hbProxyData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbProxyData.Size = new System.Drawing.Size(787, 175);
+            this.hbProxyData.Size = new System.Drawing.Size(789, 175);
             this.hbProxyData.StringViewVisible = true;
             this.hbProxyData.TabIndex = 2;
             this.hbProxyData.VScrollBarVisible = true;

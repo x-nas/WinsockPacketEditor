@@ -4,6 +4,8 @@ using EasyHook;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -36,6 +38,7 @@ namespace WinsockPacketEditor
             this.InitTable_PacketList();
             this.InitControl();
             this.Dark_Changed();
+            this.SetColumnName_PacketList();
 
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
             this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
@@ -112,19 +115,25 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tPacketList.BackColor = Operate.SystemConfig.Color_40;
-                this.tPacketList.ColumnBack = Operate.SystemConfig.Color_40;
-                this.tPacketList.ColumnFore = Color.Silver;
-                this.tPacketList.ForeColor = Color.LimeGreen;
+                this.dgvPacketList.BackgroundColor =
+                    this.dgvPacketList.RowsDefaultCellStyle.BackColor =
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.BackColor = Operate.SystemConfig.Color_40;
+
+                this.dgvPacketList.ForeColor = Color.LimeGreen;
+                this.dgvPacketList.ColumnHeadersDefaultCellStyle.ForeColor = Color.Silver;
+
                 this.hbPacketData.BackColor = Operate.SystemConfig.Color_40;
                 this.hbPacketData.ForeColor = Color.Silver;
             }
             else
             {
-                this.tPacketList.BackColor = Color.White;
-                this.tPacketList.ColumnBack = Color.White;
-                this.tPacketList.ColumnFore = Color.Black;
-                this.tPacketList.ForeColor = Color.Green;
+                this.dgvPacketList.BackgroundColor =
+                    this.dgvPacketList.RowsDefaultCellStyle.BackColor =
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
+
+                this.dgvPacketList.ForeColor = Color.Green;
+                this.dgvPacketList.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+
                 this.hbPacketData.BackColor = Color.White;
                 this.hbPacketData.ForeColor = Color.Black;
             }
@@ -145,154 +154,155 @@ namespace WinsockPacketEditor
 
         private void InitTable_PacketList()
         {
-            tPacketList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column(string.Empty, string.Empty, AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is PacketInfo pi)
-                        {
-                            return new AntdUI.CellImage(Operate.PacketConfig.Packet.GetImg_ByPacketType(pi.PacketType));
-                        }
-
-                        return value;
-                    },
-                }.SetFixed().SetWidth("Auto"),
-                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return (rowindex + 1);
-                    },
-                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column.ID"),
-                new AntdUI.Column("PacketTime", "时间戳", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
-                    },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center)
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        return Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)value);
-                    },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketFrom", "本机地址")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is PacketInfo pi)
-                        {
-                            return new CellText(value?.ToString() ?? string.Empty)
-                            {
-                                Prefix = Operate.SystemConfig.GetFlagByLocation(pi.FromLocation),
-                                IconRatio = 1.0F
-                            };
-                        }
-
-                        return value;
-                    },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("FromLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketTo", "远端地址")
-                {
-                    Render = (value, record, rowindex)=>
-                    {
-                        if(record is PacketInfo pi)
-                        {
-                            return new CellText(value?.ToString() ?? string.Empty)
-                            {
-                                Prefix = Operate.SystemConfig.GetFlagByLocation(pi.ToLocation),
-                                IconRatio = 1.0F
-                            };
-                        }
-
-                        return value;
-                    },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("ToLocation", "所属地").SetWidth("100").SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
-            };
-
-            this.tPacketList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tPacketList.Binding(Operate.PacketConfig.List.lstPacketInfo);
+            this.dgvPacketList.AutoGenerateColumns = false;
+            this.dgvPacketList.DataSource = Operate.PacketConfig.List.lstPacketInfo;
+            this.dgvPacketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvPacketList, true, null);
+            this.dgvPacketList.ColumnHeadersDefaultCellStyle.Font = new Font("微软雅黑", 9, FontStyle.Bold);
         }
 
-        public void SetColumnVisible_PacketList()
+        private void dgvPacketList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
             try
             {
-                this.tPacketList.Columns[1].Visible = Operate.PacketConfig.List.IsShow_ID;
-                this.tPacketList.Columns[2].Visible = Operate.PacketConfig.List.IsShow_ProxyTime;
-                this.tPacketList.Columns[3].Visible = Operate.PacketConfig.List.IsShow_PacketType;
-                this.tPacketList.Columns[4].Visible = Operate.PacketConfig.List.IsShow_PacketSocket;
-                this.tPacketList.Columns[5].Visible = Operate.PacketConfig.List.IsShow_ClientAddr;
-                this.tPacketList.Columns[6].Visible = Operate.PacketConfig.List.IsShow_ClientLocation;
-                this.tPacketList.Columns[7].Visible = Operate.PacketConfig.List.IsShow_ServerAddr;
-                this.tPacketList.Columns[8].Visible = Operate.PacketConfig.List.IsShow_ServerLocation;
-                this.tPacketList.Columns[9].Visible = Operate.PacketConfig.List.IsShow_PacketLen;
-                this.tPacketList.Columns[10].Visible = Operate.PacketConfig.List.IsShow_PacketData;
-
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(SetColumnVisible_PacketList), ex.Message);
-            }
-        }
-
-        private Table.CellStyleInfo tPacketList_SetRowStyle(object sender, TableSetRowStyleEventArgs e)
-        {
-            try
-            {
-                int index = e.RowIndex - 1;
-                if (index > -1 && index < Operate.PacketConfig.List.lstPacketInfo.Count)
+                var row = dgvPacketList.Rows[e.RowIndex];
+                if (e.RowIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
                 {
-                    PacketInfo pi = Operate.PacketConfig.List.lstPacketInfo[index];
-                    if (pi != null)
+                    var filterAction = Operate.PacketConfig.List.lstPacketInfo[e.RowIndex].FilterAction;
+                    var colors = Operate.SystemConfig.GetFilterColors(filterAction);
+                    if (colors.HasValue)
                     {
-                        switch (pi.FilterAction)
-                        {
-                            case Operate.FilterConfig.Filter.FilterAction.Replace:
-
-                                return new AntdUI.Table.CellStyleInfo
-                                {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterReplace_ForeColor,
-                                    BackColor = Operate.FilterConfig.Filter.FilterReplace_BackColor,
-                                };
-
-                            case Operate.FilterConfig.Filter.FilterAction.Intercept:
-
-                                return new AntdUI.Table.CellStyleInfo
-                                {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterIntercept_ForeColor,
-                                    BackColor = Operate.FilterConfig.Filter.FilterIntercept_BackColor,
-                                };
-
-                            case Operate.FilterConfig.Filter.FilterAction.Change:
-
-                                return new AntdUI.Table.CellStyleInfo
-                                {
-                                    ForeColor = Operate.FilterConfig.Filter.FilterChange_ForeColor,
-                                    BackColor = Operate.FilterConfig.Filter.FilterChange_BackColor,
-                                };
-
-                            default:
-
-                                return null;
-                        }
+                        row.DefaultCellStyle.ForeColor = colors.Value.ForeColor;
+                        row.DefaultCellStyle.BackColor = colors.Value.BackColor;
                     }
+                }
+
+                switch (e.ColumnIndex)
+                {
+                    case int colIndex when colIndex == dgvPacketList.Columns["cID"].Index:
+                        e.Value = (e.RowIndex + 1).ToString();
+                        e.FormattingApplied = true;
+                        break;
+
+                    case int colIndex when colIndex == dgvPacketList.Columns["cTypeImg"].Index:
+                        var packetTypeCell = row.Cells["cPacketType"];
+                        if (packetTypeCell.Value != null)
+                        {
+                            e.Value = Operate.PacketConfig.Packet.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)packetTypeCell.Value);
+                            e.FormattingApplied = true;
+                        }
+                        break;
+
+                    case int colIndex when colIndex == dgvPacketList.Columns["cPacketTime"].Index:
+                        if (e.Value is DateTime time)
+                        {
+                            e.Value = time.ToString("HH:mm:ss:fffffff");
+                            e.FormattingApplied = true;
+                        }
+                        break;
+
+                    case int colIndex when colIndex == dgvPacketList.Columns["cPacketType"].Index:
+                        if (e.Value != null)
+                        {
+                            e.Value = Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)e.Value);
+                            e.FormattingApplied = true;
+                        }
+                        break;
+
+                    case int colIndex when colIndex == dgvPacketList.Columns["cFromImg"].Index:
+                        var clientLocationCell = row.Cells["cFromLocation"];
+                        if (clientLocationCell.Value != null)
+                        {
+                            e.Value = Operate.SystemConfig.GetFlagByLocation(clientLocationCell.Value.ToString());
+                            e.FormattingApplied = true;
+                        }
+                        break;
+
+                    case int colIndex when colIndex == dgvPacketList.Columns["cToImg"].Index:
+                        var serverLocationCell = row.Cells["cToLocation"];
+                        if (serverLocationCell.Value != null)
+                        {
+                            e.Value = Operate.SystemConfig.GetFlagByLocation(serverLocationCell.Value.ToString());
+                            e.FormattingApplied = true;
+                        }
+                        break;
                 }
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(tPacketList_SetRowStyle), ex.Message);
+                Operate.DoLog(nameof(dgvPacketList_CellFormatting), ex.Message);
             }
+        }
 
-            return null;
+        public void SetColumnVisible_PacketList()
+        {
+            this.dgvPacketList.SuspendLayout();
+
+            AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+            {
+                Radius = 6,
+                Font = new Font("Microsoft YaHei UI", 9F),
+            }, (config) =>
+            {
+                config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+
+                Operate.SystemConfig.InvokeAction?.Invoke(() =>
+                {
+                    this.dgvPacketList.Columns[1].Visible = Operate.PacketConfig.List.IsShow_ID;
+                    this.dgvPacketList.Columns[2].Visible = Operate.PacketConfig.List.IsShow_ProxyTime;
+                    this.dgvPacketList.Columns[3].Visible = Operate.PacketConfig.List.IsShow_PacketType;
+                    this.dgvPacketList.Columns[4].Visible = Operate.PacketConfig.List.IsShow_PacketSocket;
+                    this.dgvPacketList.Columns[5].Visible = Operate.PacketConfig.List.IsShow_ClientAddr;
+                    this.dgvPacketList.Columns[6].Visible = Operate.PacketConfig.List.IsShow_ClientAddr;
+                    this.dgvPacketList.Columns[7].Visible = Operate.PacketConfig.List.IsShow_ClientLocation;
+                    this.dgvPacketList.Columns[8].Visible = Operate.PacketConfig.List.IsShow_ServerAddr;
+                    this.dgvPacketList.Columns[9].Visible = Operate.PacketConfig.List.IsShow_ServerAddr;
+                    this.dgvPacketList.Columns[10].Visible = Operate.PacketConfig.List.IsShow_ServerLocation;
+                    this.dgvPacketList.Columns[11].Visible = Operate.PacketConfig.List.IsShow_PacketLen;
+                    this.dgvPacketList.Columns[12].Visible = Operate.PacketConfig.List.IsShow_PacketData;
+                });
+            }, () =>
+            {
+                Operate.SystemConfig.InvokeAction?.Invoke(() =>
+                {
+                    this.dgvPacketList.ResumeLayout();
+                });
+            });
+        }
+
+        public void SetColumnName_PacketList()
+        {
+            this.dgvPacketList.SuspendLayout();
+
+            AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+            {
+                Radius = 6,
+                Font = new Font("Microsoft YaHei UI", 9F),
+            }, (config) =>
+            {
+                config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+
+                Operate.SystemConfig.InvokeAction?.Invoke(() =>
+                {
+                    this.dgvPacketList.Columns[1].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.ID", "序号");
+                    this.dgvPacketList.Columns[2].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.PacketTime", "时间戳");
+                    this.dgvPacketList.Columns[3].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.PacketType", "类别");
+                    this.dgvPacketList.Columns[4].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.PacketSocket", "套接字");
+                    this.dgvPacketList.Columns[6].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.PacketFrom", "本机地址");
+                    this.dgvPacketList.Columns[7].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.FromLocation", "所属地");
+                    this.dgvPacketList.Columns[9].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.PacketTo", "远端地址");
+                    this.dgvPacketList.Columns[10].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.ToLocation", "所属地");
+                    this.dgvPacketList.Columns[11].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.PacketLen", "长度");
+                    this.dgvPacketList.Columns[12].HeaderText = AntdUI.Localization.Get("Table.PacketList.Column.PacketData", "数据");
+                });
+            }, () =>
+            {
+                Operate.SystemConfig.InvokeAction?.Invoke(() =>
+                {
+                    this.dgvPacketList.ResumeLayout();
+                });
+            });
         }
 
         #endregion
@@ -420,21 +430,21 @@ namespace WinsockPacketEditor
 
                     break;
             }
-        }       
+        }
 
-        private void tPacketList_CellDoubleClick(object sender, TableClickEventArgs e)
+        private void dgvPacketList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.Record is PacketInfo pi)
+            if (e.RowIndex >= 0 && e.RowIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
             {
-                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, pi);
+                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, Operate.PacketConfig.List.lstPacketInfo[e.RowIndex]);
             }
         }
 
         #endregion
 
-        #region//封包列表 - 右键菜单        
+        #region//封包列表 - 右键菜单
 
-        private void tPacketList_CellClick(object sender, TableClickEventArgs e)
+        private void dgvPacketList_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -443,13 +453,16 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                AntdUI.ContextMenuStrip.open(tPacketList, item =>
+                AntdUI.ContextMenuStrip.open(this.dgvPacketList, item =>
                 {
                     List<PacketInfo> piList = new List<PacketInfo>();
 
-                    foreach (int SelectIndex in this.tPacketList.SelectedIndexs)
+                    for (int i = 0; i < dgvPacketList.Rows.Count; i++)
                     {
-                        piList.Add(Operate.PacketConfig.List.lstPacketInfo[SelectIndex - 1]);
+                        if (dgvPacketList.Rows[i].Selected)
+                        {
+                            piList.Add(Operate.PacketConfig.List.lstPacketInfo[i]);
+                        }
                     }
 
                     switch (item.ID)
@@ -467,7 +480,14 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                this.tPacketList.CopyData(this.tPacketList.SelectedIndexs);
+                                StringBuilder sb = new StringBuilder();
+                                foreach (PacketInfo pi in piList)
+                                {
+                                    string hexString = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer);
+                                    sb.AppendLine(hexString);
+                                }
+
+                                Clipboard.SetText(sb.ToString());
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
                                 {
@@ -531,7 +551,7 @@ namespace WinsockPacketEditor
 
                         case "ToExcel":
 
-                            Operate.PacketConfig.List.SavePacketList_Dialog(this.form, this.tPacketList, Operate.PacketConfig.Packet.InjectProcess, piList);
+                            Operate.PacketConfig.List.SavePacketList_Dialog(this.form, Operate.PacketConfig.Packet.InjectProcess, piList);
 
                             break;
 
@@ -546,7 +566,7 @@ namespace WinsockPacketEditor
                                     {
                                         TextA += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
                                     }
-                                    
+
                                     injectForm.SetTextA(TextA);
 
                                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
@@ -583,20 +603,13 @@ namespace WinsockPacketEditor
 
                         case "SelectAll":
 
-                            int[] IndexALL = new int[Operate.PacketConfig.List.lstPacketInfo.Count];
-
-                            for (int i = 0; i < IndexALL.Length; i++)
-                            {
-                                IndexALL[i] = i + 1;
-                            }
-
-                            this.tPacketList.SelectedIndexs = IndexALL;
+                            this.dgvPacketList.SelectAll();
 
                             break;
 
                         case "DeSelect":
 
-                            this.tPacketList.SelectedIndex = -1;
+                            this.dgvPacketList.ClearSelection();
 
                             break;
 
@@ -937,12 +950,17 @@ namespace WinsockPacketEditor
         {
             try
             {
+                this.dgvPacketList.SuspendLayout();
                 Operate.PacketConfig.Queue.ClearPacketQueue();
                 Operate.PacketConfig.List.lstPacketInfo.Clear();
             }
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(CleanUp_PacketList), ex.Message);
+            }
+            finally
+            {
+                this.dgvPacketList.ResumeLayout();
             }
         }
 
@@ -1000,23 +1018,26 @@ namespace WinsockPacketEditor
 
         #region//显示选中的封包数据
 
-        private void tPacketList_SelectIndexChanged(object sender, EventArgs e)
+        private void dgvPacketList_SelectionChanged(object sender, EventArgs e)
         {
             try
             {
-                int selectedIndex = tPacketList.SelectedIndex - 1;
-                if (selectedIndex >= 0 && selectedIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
+                if (this.dgvPacketList.SelectedRows.Count > 0)
                 {
-                    Operate.PacketConfig.List.Search_Index = selectedIndex;
-                    Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstPacketInfo[selectedIndex];
+                    int selectedIndex = this.dgvPacketList.SelectedRows[0].Index;
+                    if (selectedIndex >= 0 && selectedIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
+                    {
+                        Operate.PacketConfig.List.Search_Index = selectedIndex;
+                        Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstPacketInfo[selectedIndex];
 
-                    DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
-                    hbPacketData.ByteProvider = dbp;
+                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
+                        hbPacketData.ByteProvider = dbp;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(tPacketList_SelectIndexChanged), ex.Message);
+                Operate.DoLog(nameof(dgvPacketList_SelectionChanged), ex.Message);
             }
         }
 
@@ -1028,9 +1049,19 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.PacketConfig.List.AutoRoll)
+                if (Operate.PacketConfig.List.AutoRoll && this.dgvPacketList.Rows.Count > 0 && dgvPacketList.Height > dgvPacketList.RowTemplate.Height)
                 {
-                    tPacketList.ScrollBar.ValueY = tPacketList.ScrollBar.MaxY;
+                    if (dgvPacketList.InvokeRequired)
+                    {
+                        dgvPacketList.Invoke(new Action(() =>
+                        {
+                            dgvPacketList.FirstDisplayedScrollingRowIndex = dgvPacketList.RowCount - 1;
+                        }));
+                    }
+                    else
+                    {
+                        dgvPacketList.FirstDisplayedScrollingRowIndex = dgvPacketList.RowCount - 1;
+                    }
                 }
 
                 if (Operate.PacketConfig.List.AutoClear)
@@ -1136,10 +1167,14 @@ namespace WinsockPacketEditor
                 {
                     if (int.TryParse(e.Result.ToString(), out int iSearchResultIndex))
                     {
-                        if (iSearchResultIndex >= 0)
+                        if (iSearchResultIndex >= 0 && iSearchResultIndex < dgvPacketList.Rows.Count)
                         {
-                            this.tPacketList.SelectedIndex = iSearchResultIndex + 1;
-                            this.tPacketList.ScrollLine(iSearchResultIndex + 1, true);
+                            dgvPacketList.SuspendLayout();
+                            dgvPacketList.FirstDisplayedScrollingRowIndex = iSearchResultIndex;
+                            dgvPacketList.Rows[iSearchResultIndex].Selected = true;
+                            dgvPacketList.CurrentCell = dgvPacketList.Rows[iSearchResultIndex].Cells[0];
+                            dgvPacketList.ResumeLayout();
+
                             this.HexBox_FindNext();
                         }
                         else
