@@ -131,10 +131,12 @@ namespace WinsockPacketEditor
             {
                 this.dgvProxyList.BackgroundColor = 
                     this.dgvProxyList.RowsDefaultCellStyle.BackColor = 
-                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.BackColor = Operate.SystemConfig.Color_40;                
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.BackColor =
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionBackColor = Operate.SystemConfig.Color_40;                
 
                 this.dgvProxyList.ForeColor = Color.LimeGreen;
-                this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor = Color.Silver;                
+                this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor =
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Silver;
 
                 this.hbProxyData.BackColor = Operate.SystemConfig.Color_40;
                 this.hbProxyData.ForeColor = Color.Silver;
@@ -143,10 +145,12 @@ namespace WinsockPacketEditor
             {
                 this.dgvProxyList.BackgroundColor = 
                     this.dgvProxyList.RowsDefaultCellStyle.BackColor = 
-                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.BackColor =
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
               
                 this.dgvProxyList.ForeColor = Color.Green;
-                this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;                
+                this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor =
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
 
                 this.hbProxyData.BackColor = Color.White;
                 this.hbProxyData.ForeColor = Color.Black;

@@ -117,10 +117,12 @@ namespace WinsockPacketEditor
             {
                 this.dgvPacketList.BackgroundColor =
                     this.dgvPacketList.RowsDefaultCellStyle.BackColor =
-                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.BackColor = Operate.SystemConfig.Color_40;
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.BackColor =
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.SelectionBackColor = Operate.SystemConfig.Color_40;
 
                 this.dgvPacketList.ForeColor = Color.LimeGreen;
-                this.dgvPacketList.ColumnHeadersDefaultCellStyle.ForeColor = Color.Silver;
+                this.dgvPacketList.ColumnHeadersDefaultCellStyle.ForeColor =
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Silver;
 
                 this.hbPacketData.BackColor = Operate.SystemConfig.Color_40;
                 this.hbPacketData.ForeColor = Color.Silver;
@@ -129,10 +131,12 @@ namespace WinsockPacketEditor
             {
                 this.dgvPacketList.BackgroundColor =
                     this.dgvPacketList.RowsDefaultCellStyle.BackColor =
-                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.BackColor = Color.White;
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.BackColor =
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.White;
 
                 this.dgvPacketList.ForeColor = Color.Green;
-                this.dgvPacketList.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                this.dgvPacketList.ColumnHeadersDefaultCellStyle.ForeColor =
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
 
                 this.hbPacketData.BackColor = Color.White;
                 this.hbPacketData.ForeColor = Color.Black;
