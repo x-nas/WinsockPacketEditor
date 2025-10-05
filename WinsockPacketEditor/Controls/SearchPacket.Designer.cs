@@ -123,7 +123,7 @@
             this.rbString.Location = new System.Drawing.Point(1, 1);
             this.rbString.Margin = new System.Windows.Forms.Padding(1);
             this.rbString.Name = "rbString";
-            this.rbString.Size = new System.Drawing.Size(80, 32);
+            this.rbString.Size = new System.Drawing.Size(80, 28);
             this.rbString.TabIndex = 3;
             this.rbString.Text = "查找文本";
             // 
@@ -133,7 +133,7 @@
             this.rbHex.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbHex.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbHex.LocalizationText = "SearchPacketForm.FindHex";
-            this.rbHex.Location = new System.Drawing.Point(1, 35);
+            this.rbHex.Location = new System.Drawing.Point(1, 31);
             this.rbHex.Margin = new System.Windows.Forms.Padding(1);
             this.rbHex.Name = "rbHex";
             this.rbHex.Size = new System.Drawing.Size(104, 28);
