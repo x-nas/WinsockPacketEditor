@@ -284,6 +284,40 @@ namespace WinsockPacketEditor
             });
         }
 
+        public void SetColumnName_ProxyList()
+        {
+            this.dgvProxyList.SuspendLayout();
+
+            AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+            {
+                Radius = 6,
+                Font = new Font("Microsoft YaHei UI", 9F),
+            }, (config) =>
+            {
+                config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+
+                Operate.SystemConfig.InvokeAction?.Invoke(() =>
+                {
+                    this.dgvProxyList.Columns[1].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.ID", "序号");
+                    this.dgvProxyList.Columns[2].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.ProxyTime", "时间戳");
+                    this.dgvProxyList.Columns[3].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.PacketType", "类别");
+                    this.dgvProxyList.Columns[4].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.PacketSocket", "套接字");
+                    this.dgvProxyList.Columns[6].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.ClientAddr", "客户端地址");
+                    this.dgvProxyList.Columns[7].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.ClientLocation", "所属地");
+                    this.dgvProxyList.Columns[9].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.ServerDomain", "服务端地址");
+                    this.dgvProxyList.Columns[10].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.ServerLocation", "所属地");
+                    this.dgvProxyList.Columns[11].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.PacketLen", "长度");
+                    this.dgvProxyList.Columns[12].HeaderText = AntdUI.Localization.Get("Table.ProxyList.Column.PacketData", "数据");
+                });
+            }, () =>
+            {
+                Operate.SystemConfig.InvokeAction?.Invoke(() =>
+                {
+                    this.dgvProxyList.ResumeLayout();
+                });
+            });            
+        }
+
         #endregion
 
         #region//代理列表 - 菜单

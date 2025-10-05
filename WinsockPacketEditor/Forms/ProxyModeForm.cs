@@ -522,6 +522,7 @@ namespace WinsockPacketEditor
 
                 AntdUI.Localization.SetLanguage(lang);
                 this.Text = "WPE x64 - " + AntdUI.Localization.Get("ProxyModeForm", "代理模式");
+                this.cProxyList?.SetColumnName_ProxyList();
                 this.cComparisonText.SetTextInfo();
                 this.cExtractionData.SetExtractionInfo();
 
