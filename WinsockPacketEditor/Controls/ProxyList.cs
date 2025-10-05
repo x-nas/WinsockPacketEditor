@@ -175,69 +175,71 @@ namespace WinsockPacketEditor
 
         private void dgvProxyList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
             try
             {
-                if (e.ColumnIndex == dgvProxyList.Columns["cID"].Index)
+                var row = dgvProxyList.Rows[e.RowIndex];
+                if (e.RowIndex < Operate.ProxyConfig.List.lstProxyInfo.Count)
                 {
-                    e.Value = (e.RowIndex + 1).ToString();
-                    e.FormattingApplied = true;
-                }
-                else if (e.ColumnIndex == dgvProxyList.Columns["cTypeImg"].Index)
-                {
-                    if (dgvProxyList.Rows[e.RowIndex].Cells["cPacketType"].Value != null)
+                    var filterAction = Operate.ProxyConfig.List.lstProxyInfo[e.RowIndex].FilterAction;
+                    var colors = Operate.SystemConfig.GetFilterColors(filterAction);
+                    if (colors.HasValue)
                     {
-                        e.Value = Operate.PacketConfig.Packet.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)dgvProxyList.Rows[e.RowIndex].Cells["cPacketType"].Value);
-                        e.FormattingApplied = true;
+                        row.DefaultCellStyle.ForeColor = colors.Value.ForeColor;
+                        row.DefaultCellStyle.BackColor = colors.Value.BackColor;
                     }
                 }
-                else if (e.ColumnIndex == dgvProxyList.Columns["cProxyTime"].Index)
-                {
-                    e.Value = ((DateTime)dgvProxyList.Rows[e.RowIndex].Cells["cProxyTime"].Value).ToString("HH:mm:ss:fffffff");
-                    e.FormattingApplied = true;
-                }
-                else if (e.ColumnIndex == dgvProxyList.Columns["cPacketType"].Index)
-                {
-                    if (dgvProxyList.Rows[e.RowIndex].Cells["cPacketType"].Value != null)
-                    {
-                        e.Value = Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)dgvProxyList.Rows[e.RowIndex].Cells["cPacketType"].Value);
-                        e.FormattingApplied = true;
-                    }
-                }
-                else if (e.ColumnIndex == dgvProxyList.Columns["cClientImg"].Index)
-                {
-                    if (dgvProxyList.Rows[e.RowIndex].Cells["cClientLocation"].Value != null)
-                    {
-                        e.Value = Operate.SystemConfig.GetFlagByLocation(dgvProxyList.Rows[e.RowIndex].Cells["cClientLocation"].Value.ToString());
-                        e.FormattingApplied = true;
-                    }                    
-                }
-                else if (e.ColumnIndex == dgvProxyList.Columns["cServerImg"].Index)
-                {
-                    if (dgvProxyList.Rows[e.RowIndex].Cells["cServerLocation"].Value != null)
-                    {
-                        e.Value = Operate.SystemConfig.GetFlagByLocation(dgvProxyList.Rows[e.RowIndex].Cells["cServerLocation"].Value.ToString());
-                        e.FormattingApplied = true;
-                    }
-                }
-                else if (e.ColumnIndex == dgvProxyList.Columns["cPacketData"].Index)
-                {
-                    switch (Operate.ProxyConfig.List.lstProxyInfo[e.RowIndex].FilterAction)
-                    {
-                        case Operate.FilterConfig.Filter.FilterAction.Replace:
-                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterReplace_ForeColor;
-                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterReplace_BackColor;
-                            break;
 
-                        case Operate.FilterConfig.Filter.FilterAction.Intercept:
-                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterIntercept_ForeColor;
-                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterIntercept_BackColor;
-                            break;
+                switch (e.ColumnIndex)
+                {
+                    case int colIndex when colIndex == dgvProxyList.Columns["cID"].Index:
+                        e.Value = (e.RowIndex + 1).ToString();
+                        e.FormattingApplied = true;
+                        break;
 
-                        case Operate.FilterConfig.Filter.FilterAction.Change:
-                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterChange_ForeColor;
-                            this.dgvProxyList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterChange_BackColor;
-                            break;
-                    }
+                    case int colIndex when colIndex == dgvProxyList.Columns["cTypeImg"].Index:
+                        var packetTypeCell = row.Cells["cPacketType"];
+                        if (packetTypeCell.Value != null)
+                        {
+                            e.Value = Operate.PacketConfig.Packet.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)packetTypeCell.Value);
+                            e.FormattingApplied = true;
+                        }
+                        break;
+
+                    case int colIndex when colIndex == dgvProxyList.Columns["cProxyTime"].Index:
+                        if (e.Value is DateTime time)
+                        {
+                            e.Value = time.ToString("HH:mm:ss:fffffff");
+                            e.FormattingApplied = true;
+                        }
+                        break;
+
+                    case int colIndex when colIndex == dgvProxyList.Columns["cPacketType"].Index:
+                        if (e.Value != null)
+                        {
+                            e.Value = Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)e.Value);
+                            e.FormattingApplied = true;
+                        }
+                        break;
+
+                    case int colIndex when colIndex == dgvProxyList.Columns["cClientImg"].Index:
+                        var clientLocationCell = row.Cells["cClientLocation"];
+                        if (clientLocationCell.Value != null)
+                        {
+                            e.Value = Operate.SystemConfig.GetFlagByLocation(clientLocationCell.Value.ToString());
+                            e.FormattingApplied = true;
+                        }
+                        break;
+
+                    case int colIndex when colIndex == dgvProxyList.Columns["cServerImg"].Index:
+                        var serverLocationCell = row.Cells["cServerLocation"];
+                        if (serverLocationCell.Value != null)
+                        {
+                            e.Value = Operate.SystemConfig.GetFlagByLocation(serverLocationCell.Value.ToString());
+                            e.FormattingApplied = true;
+                        }
+                        break;
                 }
             }
             catch (Exception ex)
@@ -1072,12 +1074,17 @@ namespace WinsockPacketEditor
         {
             try
             {
+                this.dgvProxyList.SuspendLayout();
                 Operate.ProxyConfig.Queue.ResetProxyInfoQueue();
                 Operate.ProxyConfig.List.lstProxyInfo.Clear();
             }
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(CleanUp_ProxyList), ex.Message);
+            }
+            finally
+            { 
+                this.dgvProxyList.ResumeLayout();
             }
         }
 

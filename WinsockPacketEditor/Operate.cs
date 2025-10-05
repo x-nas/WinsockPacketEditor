@@ -976,6 +976,28 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//获取列表的文字和背景颜色
+
+            public static (Color ForeColor, Color BackColor)? GetFilterColors(Operate.FilterConfig.Filter.FilterAction filterAction)
+            {
+                switch (filterAction)
+                {
+                    case Operate.FilterConfig.Filter.FilterAction.Replace:
+                        return (Operate.FilterConfig.Filter.FilterReplace_ForeColor,
+                                Operate.FilterConfig.Filter.FilterReplace_BackColor);
+                    case Operate.FilterConfig.Filter.FilterAction.Intercept:
+                        return (Operate.FilterConfig.Filter.FilterIntercept_ForeColor,
+                                Operate.FilterConfig.Filter.FilterIntercept_BackColor);
+                    case Operate.FilterConfig.Filter.FilterAction.Change:
+                        return (Operate.FilterConfig.Filter.FilterChange_ForeColor,
+                                Operate.FilterConfig.Filter.FilterChange_BackColor);
+                    default:
+                        return null;
+                }
+            }
+
+            #endregion
+
             #region//初始化快捷键
 
             public static void InitHotKeys(IntPtr MainHandle)

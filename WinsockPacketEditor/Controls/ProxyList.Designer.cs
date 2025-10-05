@@ -393,7 +393,7 @@
             this.splitterProxyList.Panel2.Controls.Add(this.splitterQuickList);
             this.splitterProxyList.Panel2MinSize = 0;
             this.splitterProxyList.Size = new System.Drawing.Size(1094, 630);
-            this.splitterProxyList.SplitterDistance = 455;
+            this.splitterProxyList.SplitterDistance = 450;
             this.splitterProxyList.SplitterSize = 80;
             this.splitterProxyList.SplitterWidth = 5;
             this.splitterProxyList.TabIndex = 8;
@@ -411,7 +411,7 @@
             this.tlpProxyList2.RowCount = 2;
             this.tlpProxyList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyList2.Size = new System.Drawing.Size(1094, 455);
+            this.tlpProxyList2.Size = new System.Drawing.Size(1094, 450);
             this.tlpProxyList2.TabIndex = 1;
             // 
             // tlpPacketListInfo
@@ -949,13 +949,14 @@
             this.dgvProxyList.DefaultCellStyle = dataGridViewCellStyle11;
             this.dgvProxyList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvProxyList.EnableHeadersVisualStyles = false;
-            this.dgvProxyList.Location = new System.Drawing.Point(3, 27);
+            this.dgvProxyList.Location = new System.Drawing.Point(0, 24);
+            this.dgvProxyList.Margin = new System.Windows.Forms.Padding(0);
             this.dgvProxyList.Name = "dgvProxyList";
             this.dgvProxyList.ReadOnly = true;
             this.dgvProxyList.RowHeadersVisible = false;
             this.dgvProxyList.RowTemplate.Height = 23;
             this.dgvProxyList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProxyList.Size = new System.Drawing.Size(1088, 425);
+            this.dgvProxyList.Size = new System.Drawing.Size(1094, 426);
             this.dgvProxyList.TabIndex = 7;
             this.dgvProxyList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProxyList_CellDoubleClick);
             this.dgvProxyList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvProxyList_CellFormatting);
@@ -1130,7 +1131,7 @@
             // 
             this.splitterQuickList.Panel2.Controls.Add(this.hbProxyData);
             this.splitterQuickList.Panel2MinSize = 0;
-            this.splitterQuickList.Size = new System.Drawing.Size(1094, 170);
+            this.splitterQuickList.Size = new System.Drawing.Size(1094, 175);
             this.splitterQuickList.SplitterDistance = 302;
             this.splitterQuickList.SplitterSize = 80;
             this.splitterQuickList.SplitterWidth = 5;
@@ -1148,7 +1149,7 @@
             this.hbProxyData.Name = "hbProxyData";
             this.hbProxyData.ReadOnly = true;
             this.hbProxyData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbProxyData.Size = new System.Drawing.Size(787, 170);
+            this.hbProxyData.Size = new System.Drawing.Size(787, 175);
             this.hbProxyData.StringViewVisible = true;
             this.hbProxyData.TabIndex = 2;
             this.hbProxyData.VScrollBarVisible = true;
