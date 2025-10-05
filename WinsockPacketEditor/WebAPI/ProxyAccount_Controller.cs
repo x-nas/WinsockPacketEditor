@@ -66,6 +66,7 @@ namespace WinsockPacketEditor
 
                 pai.Password = Operate.SystemConfig.PassWord_Encrypt(pai.Password);
                 bool bOK = Operate.ProxyConfig.Account.AddProxyAccount(
+                    true,
                     Guid.NewGuid(), 
                     pai.IsEnable, 
                     pai.UserName, 

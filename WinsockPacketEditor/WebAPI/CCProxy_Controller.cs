@@ -77,6 +77,7 @@ namespace WinsockPacketEditor
                 pai.LimitDevices = 1;
 
                 return Operate.ProxyConfig.Account.AddProxyAccount(
+                    true,
                     Guid.NewGuid(), 
                     pai.IsEnable, 
                     pai.UserName, 

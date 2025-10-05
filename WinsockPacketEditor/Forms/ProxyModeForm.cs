@@ -93,7 +93,6 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();
-            Operate.ProxyConfig.Account.SaveAccountList_ToDB();
             Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
             Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();            
         }
@@ -761,12 +760,6 @@ namespace WinsockPacketEditor
                 Operate.SystemConfig.SaveSystemList_ToDB();
                 Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
                 Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
-
-                if (Operate.ProxyConfig.Account.NeedSave)
-                {
-                    Operate.ProxyConfig.Account.NeedSave = false;
-                    Operate.ProxyConfig.Account.SaveAccountList_ToDB();
-                }
             }
             catch (Exception ex)
             {

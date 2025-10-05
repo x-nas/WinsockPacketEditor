@@ -55,7 +55,6 @@ namespace WinsockPacketEditor
 
                     if (this.form is InterfaceInfo.IProxyMode pmForm)
                     {
-                        Operate.ProxyConfig.Account.NeedSave = true;
                         pmForm.RefreshAccountList();
                     }
 

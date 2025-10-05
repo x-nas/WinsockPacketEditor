@@ -60,7 +60,13 @@ namespace WinsockPacketEditor
                     },
                 }.SetFixed().SetLocalizationTitleID("Table.AccountList.Column.ID"),
                 new AntdUI.Column("UserName", "用户名").SetLocalizationTitleID("Table.AccountList.Column."),
-                new AntdUI.Column("Password", "密码").SetLocalizationTitleID("Table.AccountList.Column."),
+                new AntdUI.Column("Password", "密码")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return Operate.SystemConfig.PassWord_Decrypt(value.ToString());
+                    },                    
+                }.SetLocalizationTitleID("Table.AccountList.Column."),
                 new AntdUI.Column("LimitLinks", "链接数", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -266,7 +272,7 @@ namespace WinsockPacketEditor
                         {
                             AID = Guid.NewGuid(),
                             IsEnable = true,
-                            Password = Operate.ProxyConfig.Account.RandomPassword(PasswordLength),
+                            Password = Operate.SystemConfig.PassWord_Encrypt(Operate.ProxyConfig.Account.RandomPassword(PasswordLength)),
                             LimitLinks = (int)this.nudLimitLinks.Value,
                             LimitDevices = (int)this.nudLimitDevices.Value,
                             CreateTime = dtNow,
@@ -317,7 +323,7 @@ namespace WinsockPacketEditor
             {
                 foreach (AccountInfo ai in this.lstBatchAccounts)
                 {
-                    Operate.ProxyConfig.Account.lstAccountInfo.Add(ai);
+                    Operate.ProxyConfig.Account.AddProxyAccount(true, ai);
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "批量创建账号成功", TType.Success)
@@ -327,7 +333,6 @@ namespace WinsockPacketEditor
 
                 if (this.form is InterfaceInfo.IProxyMode pmForm)
                 {
-                    Operate.ProxyConfig.Account.NeedSave = true;
                     pmForm.RefreshAccountList();
                 }
 

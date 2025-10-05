@@ -217,6 +217,7 @@ namespace WinsockPacketEditor
                     }
 
                     Operate.ProxyConfig.Account.AddProxyAccount(
+                        true,
                         Guid.NewGuid(),
                         IsEnable,
                         UserName,
@@ -251,7 +252,6 @@ namespace WinsockPacketEditor
 
                 if (this.form is InterfaceInfo.IProxyMode pmForm)
                 {
-                    Operate.ProxyConfig.Account.NeedSave = true;
                     pmForm.RefreshAccountList();
                 }
 
