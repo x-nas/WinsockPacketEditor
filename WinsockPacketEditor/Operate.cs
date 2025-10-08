@@ -81,6 +81,7 @@ namespace WinsockPacketEditor
             public static Color Color_35 = Color.FromArgb(35, 35, 35);
             public static Color Color_40 = Color.FromArgb(40, 40, 40);
             public static Color Color_250 = Color.FromArgb(250, 250, 250);
+            public static AntdUI.FormFloatButton FloatButton = null;
 
             public static Action<Action> InvokeAction { get; set; }
 
@@ -1069,13 +1070,13 @@ namespace WinsockPacketEditor
 
             #region//初始化悬浮按钮
 
-            public static void InitFloatButton(Form form, AntdUI.FormFloatButton FloatButton)
+            public static void InitFloatButton(Form form)
             {
                 if (SystemConfig.IsShow_FloatButton)
                 {
-                    if (FloatButton == null)
+                    if (Operate.SystemConfig.FloatButton == null)
                     {
-                        FloatButton = AntdUI.FloatButton.open(
+                        Operate.SystemConfig.FloatButton = AntdUI.FloatButton.open(
                             new AntdUI.FloatButton.Config(form,
                             new AntdUI.FloatButton.ConfigBtn[]
                             {
@@ -1114,15 +1115,15 @@ namespace WinsockPacketEditor
                     }
                     else
                     {
-                        FloatButton.Show();
+                        Operate.SystemConfig.FloatButton.Show();
                     }
                 }
                 else
                 {
-                    if (FloatButton != null)
+                    if (Operate.SystemConfig.FloatButton != null)
                     {
-                        FloatButton.Close();
-                        FloatButton = null;
+                        Operate.SystemConfig.FloatButton.Close();
+                        Operate.SystemConfig.FloatButton = null;
                     }
                 }
             }

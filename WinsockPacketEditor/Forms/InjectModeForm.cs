@@ -9,7 +9,6 @@ namespace WinsockPacketEditor
     public partial class InjectModeForm : Window, InterfaceInfo.IInjectMode
     {        
         private bool setcolor = false;
-        private AntdUI.FormFloatButton FloatButton = null;
         private PacketList cPacketList = null;
         private FilterList cFilterList = null;
         private SendList cSendList = null;
@@ -315,7 +314,7 @@ namespace WinsockPacketEditor
 
         public void InitFloatButton()
         {
-            Operate.SystemConfig.InitFloatButton(this, this.FloatButton);  
+            Operate.SystemConfig.InitFloatButton(this);  
         }        
 
         #endregion

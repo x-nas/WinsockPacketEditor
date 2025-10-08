@@ -8,8 +8,7 @@ namespace WinsockPacketEditor
 {
     public partial class ProxyModeForm : Window, InterfaceInfo.IProxyMode
     {        
-        private bool setcolor = false;                        
-        private AntdUI.FormFloatButton FloatButton = null;
+        private bool setcolor = false;
         private ProxyList cProxyList = null;
         private ClientList cClientList = null;
         private AccountList cAccountList = null;
@@ -386,7 +385,7 @@ namespace WinsockPacketEditor
 
         public void InitFloatButton()
         {
-            Operate.SystemConfig.InitFloatButton(this, this.FloatButton);
+            Operate.SystemConfig.InitFloatButton(this);
         }        
 
         public void RefreshProxyData()
