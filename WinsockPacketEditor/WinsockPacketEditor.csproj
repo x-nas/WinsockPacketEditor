@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>WinsockPacketEditor.Program</StartupObject>
@@ -693,7 +693,6 @@
     <None Include="Properties\app.manifest" />
     <None Include="supersocket.cmd" />
     <None Include="supersocket.sh" />
-    <None Include="WPE64.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EasyHook32.dll">
