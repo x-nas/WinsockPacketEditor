@@ -1023,6 +1023,9 @@ namespace WinsockPacketEditor
                 case "ProxyModeForm.BackUpSettings":
                     return "BackUp Settings";
 
+                case "ProxyModeForm.RemoteMGTSettings":
+                    return "RemoteMGT Settings";
+
                 case "ProxyModeForm.SystemSettings":
                     return "System Settings";
 

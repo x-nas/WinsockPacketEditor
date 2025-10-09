@@ -46,8 +46,7 @@
             // 
             this.tlpRemoteMGT.ColumnCount = 1;
             this.tlpRemoteMGT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRemoteMGT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-            this.tlpRemoteMGT.Controls.Add(this.tlpButton, 0, 6);
+            this.tlpRemoteMGT.Controls.Add(this.tlpButton, 0, 7);
             this.tlpRemoteMGT.Controls.Add(this.lRemote, 0, 5);
             this.tlpRemoteMGT.Controls.Add(this.cbIsRemote, 0, 0);
             this.tlpRemoteMGT.Controls.Add(this.txtRemote_UserName, 0, 2);
@@ -58,15 +57,16 @@
             this.tlpRemoteMGT.Location = new System.Drawing.Point(0, 0);
             this.tlpRemoteMGT.Margin = new System.Windows.Forms.Padding(0);
             this.tlpRemoteMGT.Name = "tlpRemoteMGT";
-            this.tlpRemoteMGT.RowCount = 7;
+            this.tlpRemoteMGT.RowCount = 8;
+            this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpRemoteMGT.Size = new System.Drawing.Size(230, 300);
+            this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpRemoteMGT.Size = new System.Drawing.Size(350, 700);
             this.tlpRemoteMGT.TabIndex = 0;
             // 
             // tlpButton
@@ -80,14 +80,14 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 251);
+            this.tlpButton.Location = new System.Drawing.Point(0, 650);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(230, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 50);
             this.tlpButton.TabIndex = 18;
             // 
             // bSave
@@ -97,7 +97,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(43, 6);
+            this.bSave.Location = new System.Drawing.Point(103, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -113,7 +113,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(124, 6);
+            this.bExit.Location = new System.Drawing.Point(184, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -131,7 +131,7 @@
             this.lRemote.Location = new System.Drawing.Point(2, 200);
             this.lRemote.Margin = new System.Windows.Forms.Padding(2);
             this.lRemote.Name = "lRemote";
-            this.lRemote.Size = new System.Drawing.Size(226, 49);
+            this.lRemote.Size = new System.Drawing.Size(346, 49);
             this.lRemote.TabIndex = 6;
             this.lRemote.Text = "lRemote";
             this.lRemote.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -158,7 +158,7 @@
             this.txtRemote_UserName.Margin = new System.Windows.Forms.Padding(2);
             this.txtRemote_UserName.Name = "txtRemote_UserName";
             this.txtRemote_UserName.PlaceholderText = "请输入管理员账号";
-            this.txtRemote_UserName.Size = new System.Drawing.Size(226, 36);
+            this.txtRemote_UserName.Size = new System.Drawing.Size(346, 36);
             this.txtRemote_UserName.TabIndex = 1;
             this.txtRemote_UserName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -171,7 +171,7 @@
             this.txtRemote_PassWord.Margin = new System.Windows.Forms.Padding(2);
             this.txtRemote_PassWord.Name = "txtRemote_PassWord";
             this.txtRemote_PassWord.PlaceholderText = "请输入密码";
-            this.txtRemote_PassWord.Size = new System.Drawing.Size(226, 36);
+            this.txtRemote_PassWord.Size = new System.Drawing.Size(346, 36);
             this.txtRemote_PassWord.TabIndex = 2;
             this.txtRemote_PassWord.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtRemote_PassWord.UseSystemPasswordChar = true;
@@ -192,7 +192,7 @@
             0,
             0});
             this.nudRemote_Port.Name = "nudRemote_Port";
-            this.nudRemote_Port.Size = new System.Drawing.Size(226, 36);
+            this.nudRemote_Port.Size = new System.Drawing.Size(346, 36);
             this.nudRemote_Port.TabIndex = 3;
             this.nudRemote_Port.Text = "88";
             this.nudRemote_Port.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -210,7 +210,7 @@
             this.ddlRemoteIP.Location = new System.Drawing.Point(2, 40);
             this.ddlRemoteIP.Margin = new System.Windows.Forms.Padding(2);
             this.ddlRemoteIP.Name = "ddlRemoteIP";
-            this.ddlRemoteIP.Size = new System.Drawing.Size(226, 36);
+            this.ddlRemoteIP.Size = new System.Drawing.Size(346, 36);
             this.ddlRemoteIP.TabIndex = 7;
             this.ddlRemoteIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ddlRemoteIP.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlRemoteIP_SelectedIndexChanged);
@@ -224,7 +224,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "RemoteMGTSetting";
-            this.Size = new System.Drawing.Size(230, 300);
+            this.Size = new System.Drawing.Size(350, 700);
             this.Load += new System.EventHandler(this.RemoteMGTSetting_Load);
             this.tlpRemoteMGT.ResumeLayout(false);
             this.tlpRemoteMGT.PerformLayout();

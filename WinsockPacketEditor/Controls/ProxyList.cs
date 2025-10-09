@@ -96,6 +96,12 @@ namespace WinsockPacketEditor
                     LocalizationText = "ProxyModeForm.BackUpSettings",
                     IconSvg = "DeliveredProcedureOutlined",
                 },
+                new AntdUI.SelectItem("远程管理设置")
+                {
+                    Tag = "RemoteMGTSettings",
+                    LocalizationText = "ProxyModeForm.RemoteMGTSettings",
+                    IconSvg = "CloudServerOutlined",
+                },
                 new AntdUI.SelectItem("系统设置")
                 {
                     Tag = "SystemSettings",
@@ -464,6 +470,18 @@ namespace WinsockPacketEditor
                 case "BackUpSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new BackUpSetting(this.form))
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "RemoteMGTSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new RemoteMGTSetting(this.form))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
