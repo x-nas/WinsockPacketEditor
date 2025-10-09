@@ -2966,6 +2966,7 @@ namespace WinsockPacketEditor
                         new XElement("IsTextRenderingHighQuality", AntdUI.Config.TextRenderingHighQuality),
                         new XElement("IsDark", AntdUI.Config.IsDark),
                         new XElement("DefaultLanguage", AntdUI.Localization.CurrentLanguage),
+                        new XElement("DBPath", DataBase.dbPath),
                         new XElement("LastInjection", SystemConfig.LastInjection),
                         new XElement("StartMode", SystemConfig.StartMode),
                         new XElement("Remote_IsEnable", SystemConfig.IsRemote),
@@ -3048,6 +3049,7 @@ namespace WinsockPacketEditor
                         AntdUI.Config.IsDark = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsDark"]);                        
                         Lang = dtSystemConfig.Rows[0]["DefaultLanguage"].ToString();
 
+                        DataBase.dbPath = dtSystemConfig.Rows[0]["DBPath"].ToString();
                         SystemConfig.LastInjection = dtSystemConfig.Rows[0]["LastInjection"].ToString();
                         SystemConfig.StartMode = Operate.SystemConfig.GetSystemMode_ByString(dtSystemConfig.Rows[0]["StartMode"].ToString());
                         SystemConfig.IsRemote = Convert.ToBoolean(dtSystemConfig.Rows[0]["Remote_IsEnable"]);
@@ -3174,6 +3176,12 @@ namespace WinsockPacketEditor
 
                         AntdUI.Localization.DefaultLanguage = "zh-CN";
                         AntdUI.Localization.SetLanguage(Lang);
+                    }
+
+                    XElement xeDBPath = xeSystemConfig.Element("DBPath");
+                    if (xeDBPath != null)
+                    {
+                        DataBase.dbPath = xeDBPath.Value;
                     }
 
                     XElement xeLastInjection = xeSystemConfig.Element("LastInjection");
@@ -18344,40 +18352,38 @@ namespace WinsockPacketEditor
 
         public static class DataBase
         {
-            private static string dbPath = @"C:\WPE64DB";
-            private static string dbName = SystemConfig.AssemblyVersion + ".db";
+            public static string dbPath = @"C:\WPE64DB";
+            public static string dbName = SystemConfig.AssemblyVersion + ".db";
             private static string conStr = string.Format("Data Source={0}\\{1};Version=3;", dbPath, dbName);
 
             #region//初始化
 
             public static void InitDB()
             {
-                DataBase.InitdbPath();
-
-                DataBase.CreateTable_SystemConfig();
-                DataBase.CreateTable_InjectMode();
-                DataBase.CreateTable_ProxyMode();
-                DataBase.CreateTable_Filter();
-                DataBase.CreateTable_Send();
-                DataBase.CreateTable_Robot();
-                DataBase.CreateTable_ProxyAccount();
-                DataBase.CreateTable_ProxyMapLocal();
-                DataBase.CreateTable_ProxyMapRemote();
-            }
-
-            private static void InitdbPath()
-            {
                 try
                 {
-                    if (!Directory.Exists(dbPath))
+                    if (!Directory.Exists(DataBase.dbPath))
                     {
-                        Directory.CreateDirectory(dbPath);
+                        Directory.CreateDirectory(DataBase.dbPath);
                     }
+
+                    DataBase.CreateTable_SystemConfig();
+                    DataBase.CreateTable_InjectMode();
+                    DataBase.CreateTable_ProxyMode();
+                    DataBase.CreateTable_Filter();
+                    DataBase.CreateTable_Send();
+                    DataBase.CreateTable_Robot();
+                    DataBase.CreateTable_ProxyAccount();
+                    DataBase.CreateTable_ProxyMapLocal();
+                    DataBase.CreateTable_ProxyMapRemote();
+
+                    string DBFilePath = string.Format("{0}\\{1}", dbPath, dbName);
+                    Operate.DoLog(nameof(InitDB), AntdUI.Localization.Get("StartForm.Database.Loaded", "已加载数据库 : ") + DBFilePath);
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(InitdbPath), ex.Message);
-                }
+                    DoLog(nameof(InitDB), ex.Message);
+                }                
             }
 
             #endregion
@@ -18400,6 +18406,7 @@ namespace WinsockPacketEditor
                         sql += "IsTextRenderingHighQuality BOOLEAN DEFAULT 0,";//系统设置 - 启用文本渲染高质量
                         sql += "IsDark BOOLEAN DEFAULT 0,";//系统设置 - 启用深色主题
                         sql += "DefaultLanguage TEXT,";//系统设置 - 默认语言
+                        sql += "DBPath TEXT,";//系统设置 - 数据库路径
                         sql += "LastInjection TEXT,";//系统设置 - 上次注入进程名称
                         sql += "StartMode INTEGER DEFAULT 0,";//系统设置 - 启动模式
                         sql += "Remote_IsEnable BOOLEAN DEFAULT 0,";//系统设置 - 启用远程管理
@@ -18524,6 +18531,7 @@ namespace WinsockPacketEditor
                         sql += "IsTextRenderingHighQuality,";
                         sql += "IsDark,";
                         sql += "DefaultLanguage,";
+                        sql += "DBPath,";
                         sql += "LastInjection,";
                         sql += "StartMode,";
                         sql += "Remote_IsEnable,";
@@ -18578,6 +18586,7 @@ namespace WinsockPacketEditor
                         sql += "@IsTextRenderingHighQuality,";
                         sql += "@IsDark,";
                         sql += "@DefaultLanguage,";
+                        sql += "@DBPath,";
                         sql += "@LastInjection,";
                         sql += "@StartMode,";
                         sql += "@Remote_IsEnable,";
@@ -18635,6 +18644,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@IsTextRenderingHighQuality", AntdUI.Config.TextRenderingHighQuality);
                             cmd.Parameters.AddWithValue("@IsDark", AntdUI.Config.IsDark);
                             cmd.Parameters.AddWithValue("@DefaultLanguage", AntdUI.Localization.CurrentLanguage);
+                            cmd.Parameters.AddWithValue("@DBPath", DataBase.dbPath);
                             cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
                             cmd.Parameters.AddWithValue("@StartMode", SystemConfig.StartMode);
                             cmd.Parameters.AddWithValue("@Remote_IsEnable", SystemConfig.IsRemote);

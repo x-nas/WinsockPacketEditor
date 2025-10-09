@@ -41,10 +41,10 @@
             this.lProxy2 = new AntdUI.Label();
             this.lProxy1 = new AntdUI.Label();
             this.aProxyMode = new AntdUI.Avatar();
-            this.pRemoteMGT = new AntdUI.Panel();
-            this.lRemote2 = new AntdUI.Label();
-            this.lRemote1 = new AntdUI.Label();
-            this.aRemoteMGT = new AntdUI.Avatar();
+            this.pDataBase = new AntdUI.Panel();
+            this.lDataBaseText = new AntdUI.Label();
+            this.lDataBase = new AntdUI.Label();
+            this.aDataBase = new AntdUI.Avatar();
             this.aStartForm = new AntdUI.Avatar();
             this.tlpBackground = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lBG2 = new AntdUI.Label();
@@ -61,7 +61,7 @@
             this.tlpSelectMode.SuspendLayout();
             this.pInjectMode.SuspendLayout();
             this.pProxyMode.SuspendLayout();
-            this.pRemoteMGT.SuspendLayout();
+            this.pDataBase.SuspendLayout();
             this.aStartForm.SuspendLayout();
             this.tlpBackground.SuspendLayout();
             this.tlpStartForm.SuspendLayout();
@@ -132,7 +132,7 @@
             this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
             this.tlpSelectMode.Controls.Add(this.pInjectMode, 2, 0);
             this.tlpSelectMode.Controls.Add(this.pProxyMode, 4, 0);
-            this.tlpSelectMode.Controls.Add(this.pRemoteMGT, 0, 0);
+            this.tlpSelectMode.Controls.Add(this.pDataBase, 0, 0);
             this.tlpSelectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSelectMode.Location = new System.Drawing.Point(21, 180);
             this.tlpSelectMode.Margin = new System.Windows.Forms.Padding(0);
@@ -256,61 +256,61 @@
             this.aProxyMode.Text = "";
             this.aProxyMode.Click += new System.EventHandler(this.aProxyMode_Click);
             // 
-            // pRemoteMGT
+            // pDataBase
             // 
-            this.pRemoteMGT.BorderWidth = 1F;
-            this.pRemoteMGT.Controls.Add(this.lRemote2);
-            this.pRemoteMGT.Controls.Add(this.lRemote1);
-            this.pRemoteMGT.Controls.Add(this.aRemoteMGT);
-            this.pRemoteMGT.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pRemoteMGT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pRemoteMGT.Location = new System.Drawing.Point(2, 2);
-            this.pRemoteMGT.Margin = new System.Windows.Forms.Padding(2);
-            this.pRemoteMGT.Name = "pRemoteMGT";
-            this.pRemoteMGT.Size = new System.Drawing.Size(307, 76);
-            this.pRemoteMGT.TabIndex = 0;
-            this.pRemoteMGT.Click += new System.EventHandler(this.pRemoteMGT_Click);
-            this.pRemoteMGT.MouseEnter += new System.EventHandler(this.pRemoteMGT_MouseEnter);
-            this.pRemoteMGT.MouseLeave += new System.EventHandler(this.pRemoteMGT_MouseLeave);
+            this.pDataBase.BorderWidth = 1F;
+            this.pDataBase.Controls.Add(this.lDataBaseText);
+            this.pDataBase.Controls.Add(this.lDataBase);
+            this.pDataBase.Controls.Add(this.aDataBase);
+            this.pDataBase.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pDataBase.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pDataBase.Location = new System.Drawing.Point(2, 2);
+            this.pDataBase.Margin = new System.Windows.Forms.Padding(2);
+            this.pDataBase.Name = "pDataBase";
+            this.pDataBase.Size = new System.Drawing.Size(307, 76);
+            this.pDataBase.TabIndex = 0;
+            this.pDataBase.Click += new System.EventHandler(this.pDataBase_Click);
+            this.pDataBase.MouseEnter += new System.EventHandler(this.pDataBase_MouseEnter);
+            this.pDataBase.MouseLeave += new System.EventHandler(this.pDataBase_MouseLeave);
             // 
-            // lRemote2
+            // lDataBaseText
             // 
-            this.lRemote2.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lRemote2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRemote2.ForeColor = System.Drawing.Color.Gray;
-            this.lRemote2.LocalizationText = "StartForm.RemoteMGT.Description";
-            this.lRemote2.Location = new System.Drawing.Point(85, 38);
-            this.lRemote2.Margin = new System.Windows.Forms.Padding(2);
-            this.lRemote2.Name = "lRemote2";
-            this.lRemote2.Size = new System.Drawing.Size(168, 16);
-            this.lRemote2.TabIndex = 2;
-            this.lRemote2.Text = "配置远程管理后台的账号和端口";
-            this.lRemote2.Click += new System.EventHandler(this.lRemote2_Click);
+            this.lDataBaseText.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lDataBaseText.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lDataBaseText.ForeColor = System.Drawing.Color.Gray;
+            this.lDataBaseText.LocalizationText = "StartForm.RemoteMGT.Description";
+            this.lDataBaseText.Location = new System.Drawing.Point(85, 38);
+            this.lDataBaseText.Margin = new System.Windows.Forms.Padding(2);
+            this.lDataBaseText.Name = "lDataBaseText";
+            this.lDataBaseText.Size = new System.Drawing.Size(156, 16);
+            this.lDataBaseText.TabIndex = 2;
+            this.lDataBaseText.Text = "设置数据库的存储路径和名称";
+            this.lDataBaseText.Click += new System.EventHandler(this.lDataBaseText_Click);
             // 
-            // lRemote1
+            // lDataBase
             // 
-            this.lRemote1.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lRemote1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRemote1.LocalizationText = "StartForm.RemoteMGT";
-            this.lRemote1.Location = new System.Drawing.Point(85, 19);
-            this.lRemote1.Margin = new System.Windows.Forms.Padding(2);
-            this.lRemote1.Name = "lRemote1";
-            this.lRemote1.Size = new System.Drawing.Size(56, 19);
-            this.lRemote1.TabIndex = 1;
-            this.lRemote1.Text = "远程管理";
-            this.lRemote1.Click += new System.EventHandler(this.lRemote1_Click);
+            this.lDataBase.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lDataBase.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lDataBase.LocalizationText = "StartForm.DataBase";
+            this.lDataBase.Location = new System.Drawing.Point(85, 19);
+            this.lDataBase.Margin = new System.Windows.Forms.Padding(2);
+            this.lDataBase.Name = "lDataBase";
+            this.lDataBase.Size = new System.Drawing.Size(70, 19);
+            this.lDataBase.TabIndex = 1;
+            this.lDataBase.Text = "数据库配置";
+            this.lDataBase.Click += new System.EventHandler(this.lDataBase_Click);
             // 
-            // aRemoteMGT
+            // aDataBase
             // 
-            this.aRemoteMGT.Image = ((System.Drawing.Image)(resources.GetObject("aRemoteMGT.Image")));
-            this.aRemoteMGT.ImageFit = AntdUI.TFit.Fill;
-            this.aRemoteMGT.Location = new System.Drawing.Point(20, 8);
-            this.aRemoteMGT.Margin = new System.Windows.Forms.Padding(2);
-            this.aRemoteMGT.Name = "aRemoteMGT";
-            this.aRemoteMGT.Size = new System.Drawing.Size(50, 58);
-            this.aRemoteMGT.TabIndex = 0;
-            this.aRemoteMGT.Text = "";
-            this.aRemoteMGT.Click += new System.EventHandler(this.aRemoteMGT_Click);
+            this.aDataBase.Image = ((System.Drawing.Image)(resources.GetObject("aDataBase.Image")));
+            this.aDataBase.ImageFit = AntdUI.TFit.Fill;
+            this.aDataBase.Location = new System.Drawing.Point(20, 8);
+            this.aDataBase.Margin = new System.Windows.Forms.Padding(2);
+            this.aDataBase.Name = "aDataBase";
+            this.aDataBase.Size = new System.Drawing.Size(50, 58);
+            this.aDataBase.TabIndex = 0;
+            this.aDataBase.Text = "";
+            this.aDataBase.Click += new System.EventHandler(this.aDataBase_Click);
             // 
             // aStartForm
             // 
@@ -544,8 +544,8 @@
             this.pInjectMode.PerformLayout();
             this.pProxyMode.ResumeLayout(false);
             this.pProxyMode.PerformLayout();
-            this.pRemoteMGT.ResumeLayout(false);
-            this.pRemoteMGT.PerformLayout();
+            this.pDataBase.ResumeLayout(false);
+            this.pDataBase.PerformLayout();
             this.aStartForm.ResumeLayout(false);
             this.tlpBackground.ResumeLayout(false);
             this.tlpStartForm.ResumeLayout(false);
@@ -561,10 +561,10 @@
         private AntdUI.PageHeader pageHeader;
         private AntdUI.Dropdown btn_global;
         private TableLayoutPanelEx tlpSelectMode;
-        private AntdUI.Panel pRemoteMGT;
-        private AntdUI.Label lRemote2;
-        private AntdUI.Label lRemote1;
-        private AntdUI.Avatar aRemoteMGT;
+        private AntdUI.Panel pDataBase;
+        private AntdUI.Label lDataBaseText;
+        private AntdUI.Label lDataBase;
+        private AntdUI.Avatar aDataBase;
         private AntdUI.Avatar aStartForm;
         private TableLayoutPanelEx tlpBackground;
         private AntdUI.Label lBG2;

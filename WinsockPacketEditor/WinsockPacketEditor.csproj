@@ -281,6 +281,12 @@
     <Compile Include="Controls\ComparisonText.Designer.cs">
       <DependentUpon>ComparisonText.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DataBaseSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DataBaseSetting.Designer.cs">
+      <DependentUpon>DataBaseSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EncryptionPassword.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -554,6 +560,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ComparisonText.resx">
       <DependentUpon>ComparisonText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DataBaseSetting.resx">
+      <DependentUpon>DataBaseSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\EncryptionPassword.resx">
       <DependentUpon>EncryptionPassword.cs</DependentUpon>

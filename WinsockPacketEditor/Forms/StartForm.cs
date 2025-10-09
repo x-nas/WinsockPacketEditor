@@ -136,7 +136,7 @@ namespace WinsockPacketEditor.Forms
                 BackColor = Color.FromArgb(30, 30, 30);
                 ForeColor = Color.White;
 
-                this.pRemoteMGT.Back = 
+                this.pDataBase.Back = 
                     this.pInjectMode.Back = 
                     this.pProxyMode.Back = 
                     Color.FromArgb(50, 50, 50);
@@ -146,7 +146,7 @@ namespace WinsockPacketEditor.Forms
                 BackColor = Color.White;
                 ForeColor = Color.Black;
 
-                this.pRemoteMGT.Back =
+                this.pDataBase.Back =
                     this.pInjectMode.Back =
                     this.pProxyMode.Back =
                     Color.Transparent;
@@ -202,42 +202,42 @@ namespace WinsockPacketEditor.Forms
 
         #endregion
 
-        #region//远程管理
+        #region//数据库配置
 
-        private void pRemoteMGT_MouseEnter(object sender, EventArgs e)
+        private void pDataBase_MouseEnter(object sender, EventArgs e)
         {
-            this.SetPanelBack_Enter(this.pRemoteMGT);
+            this.SetPanelBack_Enter(this.pDataBase);
         }
 
-        private void pRemoteMGT_MouseLeave(object sender, EventArgs e)
+        private void pDataBase_MouseLeave(object sender, EventArgs e)
         {
-            this.SetPanelBack_Leave(this.pRemoteMGT);
+            this.SetPanelBack_Leave(this.pDataBase);
         }
 
-        private void pRemoteMGT_Click(object sender, EventArgs e)
+        private void pDataBase_Click(object sender, EventArgs e)
         {
-            this.StartRemoteMGT();
+            this.StartDataBaseSetting();
         }
 
-        private void aRemoteMGT_Click(object sender, EventArgs e)
+        private void aDataBase_Click(object sender, EventArgs e)
         {
-            this.StartRemoteMGT();
+            this.StartDataBaseSetting();
         }
 
-        private void lRemote1_Click(object sender, EventArgs e)
+        private void lDataBase_Click(object sender, EventArgs e)
         {
-            this.StartRemoteMGT();
+            this.StartDataBaseSetting();
         }
 
-        private void lRemote2_Click(object sender, EventArgs e)
+        private void lDataBaseText_Click(object sender, EventArgs e)
         {
-            this.StartRemoteMGT();
+            this.StartDataBaseSetting();
         }
 
-        private void StartRemoteMGT()
+        private void StartDataBaseSetting()
         {
-            var RemoteMGT = new RemoteMGTSetting(this);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("Setting", "设置"), RemoteMGT)
+            var DataBaseSetting = new DataBaseSetting(this);
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("DataBaseSetting", "数据库设置"), DataBaseSetting)
             {
                 Keyboard = false,
                 MaskClosable = false,

@@ -662,10 +662,13 @@ namespace WinsockPacketEditor
                 case "StartForm.InjectMode":
                     return "Inject Mode";
 
-                case "StartForm.RemoteMGT":
-                    return "Remote MGT";
+                case "StartForm.DataBase":
+                    return "DataBase";
 
-                case "StartForm.ProxyMode.Description":
+                case "StartForm.Database.Loaded":
+                    return "Database loaded : ";
+
+                case "StartForm.DataBase.Text":
                     return "Intercept packets by Proxy Server";
 
                 case "StartForm.InjectMode.Description":
@@ -1955,6 +1958,22 @@ namespace WinsockPacketEditor
 
                 case "BackUpSettingsForm.Export.Fail":
                     return "Export system backup failed";
+
+                #endregion
+
+                #region//DataBaseSetting
+
+                case "DataBaseSetting":
+                    return "DataBase Settings";
+
+                case "DataBaseSetting.Success":
+                    return "DataBase settings saved successfully";
+
+                case "DataBaseSetting.DragTitle":
+                    return "Click or drag database files to this area";
+
+                case "DataBaseSetting.DragText":
+                    return "After selected, the file path will be displayed in the upper area";
 
                 #endregion
 
