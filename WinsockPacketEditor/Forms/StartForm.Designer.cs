@@ -284,7 +284,7 @@
             this.lMultipleOpenText.Name = "lMultipleOpenText";
             this.lMultipleOpenText.Size = new System.Drawing.Size(180, 16);
             this.lMultipleOpenText.TabIndex = 2;
-            this.lMultipleOpenText.Text = "配置数据库的存储路径以实现多开";
+            this.lMultipleOpenText.Text = "配置数据库的路径以实现软件多开";
             this.lMultipleOpenText.Click += new System.EventHandler(this.lMultipleOpenText_Click);
             // 
             // lMultipleOpen

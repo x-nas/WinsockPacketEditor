@@ -71,9 +71,9 @@
             this.lNotice.LocalizationText = "MultipleOpenSetting.Notice";
             this.lNotice.Location = new System.Drawing.Point(3, 103);
             this.lNotice.Name = "lNotice";
-            this.lNotice.Size = new System.Drawing.Size(408, 32);
+            this.lNotice.Size = new System.Drawing.Size(408, 48);
             this.lNotice.TabIndex = 21;
-            this.lNotice.Text = "如需多开软件，请在每次选择模式前设置不同的 [ 数据库路径 ]\r\n数据库路径下如果没有当前版本号的文件，则系统会自动创建一个空的数据库";
+            this.lNotice.Text = "如需多开软件，请在每次选择模式前设置不同的 [ 数据库路径 ]\r\n\r\n数据库路径下如果没有当前版本号的文件，则系统会自动创建一个空的数据库";
             this.lNotice.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
             // tlpButton
