@@ -659,23 +659,23 @@ namespace WinsockPacketEditor
                 case "StartForm.ProxyMode":
                     return "Proxy Mode";
 
+                case "StartForm.ProxyMode.Text":
+                    return "Intercept packets by Proxy Server";
+
                 case "StartForm.InjectMode":
                     return "Inject Mode";
 
-                case "StartForm.DataBase":
-                    return "DataBase";
+                case "StartForm.InjectMode.Text":
+                    return "Intercept packets by Inject Process";
+
+                case "StartForm.MultipleOpen":
+                    return "Multiple Open";
+
+                case "StartForm.MultipleOpen.Text":
+                    return "Set DB to achieve multi opening";
 
                 case "StartForm.Database.Loaded":
                     return "Database loaded : ";
-
-                case "StartForm.DataBase.Text":
-                    return "Intercept packets by Proxy Server";
-
-                case "StartForm.InjectMode.Description":
-                    return "Intercept packets by Inject Process";
-
-                case "StartForm.RemoteMGT.Description":
-                    return "Configure Remote Management";
 
                 case "StartForm.LearnMore":
                     return "Learn more";
@@ -1963,17 +1963,20 @@ namespace WinsockPacketEditor
 
                 #region//DataBaseSetting
 
-                case "DataBaseSetting":
-                    return "DataBase Settings";
+                case "MultipleOpenSetting":
+                    return "Multiple Open Setting";
 
-                case "DataBaseSetting.Success":
-                    return "DataBase settings saved successfully";
+                case "MultipleOpenSetting.DBPath":
+                    return "DataBase Path :";
 
-                case "DataBaseSetting.DragTitle":
-                    return "Click or drag database files to this area";
+                case "MultipleOpenSetting.DBName":
+                    return "DataBase Name :";
 
-                case "DataBaseSetting.DragText":
-                    return "After selected, the file path will be displayed in the upper area";
+                case "MultipleOpenSetting.Notice":
+                    return "If you need to open multiple software, please set a different [ DataBase Path ]\r\nbefore each mode selection.\r\n\r\nIf there is no file with the current version number in the database path\r\nthe system will automatically create an empty database";
+
+                case "MultipleOpenSetting.Success":
+                    return "Multiple Open setting saved successfully";
 
                 #endregion
 

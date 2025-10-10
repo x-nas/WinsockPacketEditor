@@ -59,9 +59,9 @@ namespace WinsockPacketEditor
             Operate.DataBase.dbPath = DBPath;
             Operate.DataBase.InitDB();
 
-            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "数据库配置已保存", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "多开设置已保存", TType.Success)
             {
-                LocalizationText = "DataBaseSetting.Success"
+                LocalizationText = "MultipleOpenSetting.Success"
             });
 
             this.Dispose();

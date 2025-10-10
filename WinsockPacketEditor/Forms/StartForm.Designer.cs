@@ -41,10 +41,10 @@
             this.lProxy2 = new AntdUI.Label();
             this.lProxy1 = new AntdUI.Label();
             this.aProxyMode = new AntdUI.Avatar();
-            this.pDataBase = new AntdUI.Panel();
-            this.lDataBaseText = new AntdUI.Label();
-            this.lDataBase = new AntdUI.Label();
-            this.aDataBase = new AntdUI.Avatar();
+            this.pMultipleOpen = new AntdUI.Panel();
+            this.lMultipleOpenText = new AntdUI.Label();
+            this.lMultipleOpen = new AntdUI.Label();
+            this.aMultipleOpen = new AntdUI.Avatar();
             this.aStartForm = new AntdUI.Avatar();
             this.tlpBackground = new WinsockPacketEditor.TableLayoutPanelEx();
             this.lBG2 = new AntdUI.Label();
@@ -61,7 +61,7 @@
             this.tlpSelectMode.SuspendLayout();
             this.pInjectMode.SuspendLayout();
             this.pProxyMode.SuspendLayout();
-            this.pDataBase.SuspendLayout();
+            this.pMultipleOpen.SuspendLayout();
             this.aStartForm.SuspendLayout();
             this.tlpBackground.SuspendLayout();
             this.tlpStartForm.SuspendLayout();
@@ -132,7 +132,7 @@
             this.tlpSelectMode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
             this.tlpSelectMode.Controls.Add(this.pInjectMode, 2, 0);
             this.tlpSelectMode.Controls.Add(this.pProxyMode, 4, 0);
-            this.tlpSelectMode.Controls.Add(this.pDataBase, 0, 0);
+            this.tlpSelectMode.Controls.Add(this.pMultipleOpen, 0, 0);
             this.tlpSelectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSelectMode.Location = new System.Drawing.Point(21, 180);
             this.tlpSelectMode.Margin = new System.Windows.Forms.Padding(0);
@@ -165,7 +165,7 @@
             this.lInject2.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.lInject2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lInject2.ForeColor = System.Drawing.Color.Gray;
-            this.lInject2.LocalizationText = "StartForm.InjectMode.Description";
+            this.lInject2.LocalizationText = "StartForm.InjectMode.Text";
             this.lInject2.Location = new System.Drawing.Point(84, 38);
             this.lInject2.Margin = new System.Windows.Forms.Padding(2);
             this.lInject2.Name = "lInject2";
@@ -222,7 +222,7 @@
             this.lProxy2.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.lProxy2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lProxy2.ForeColor = System.Drawing.Color.Gray;
-            this.lProxy2.LocalizationText = "StartForm.ProxyMode.Description";
+            this.lProxy2.LocalizationText = "StartForm.ProxyMode.Text";
             this.lProxy2.Location = new System.Drawing.Point(85, 38);
             this.lProxy2.Margin = new System.Windows.Forms.Padding(2);
             this.lProxy2.Name = "lProxy2";
@@ -256,61 +256,61 @@
             this.aProxyMode.Text = "";
             this.aProxyMode.Click += new System.EventHandler(this.aProxyMode_Click);
             // 
-            // pDataBase
+            // pMultipleOpen
             // 
-            this.pDataBase.BorderWidth = 1F;
-            this.pDataBase.Controls.Add(this.lDataBaseText);
-            this.pDataBase.Controls.Add(this.lDataBase);
-            this.pDataBase.Controls.Add(this.aDataBase);
-            this.pDataBase.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pDataBase.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pDataBase.Location = new System.Drawing.Point(2, 2);
-            this.pDataBase.Margin = new System.Windows.Forms.Padding(2);
-            this.pDataBase.Name = "pDataBase";
-            this.pDataBase.Size = new System.Drawing.Size(307, 76);
-            this.pDataBase.TabIndex = 0;
-            this.pDataBase.Click += new System.EventHandler(this.pDataBase_Click);
-            this.pDataBase.MouseEnter += new System.EventHandler(this.pDataBase_MouseEnter);
-            this.pDataBase.MouseLeave += new System.EventHandler(this.pDataBase_MouseLeave);
+            this.pMultipleOpen.BorderWidth = 1F;
+            this.pMultipleOpen.Controls.Add(this.lMultipleOpenText);
+            this.pMultipleOpen.Controls.Add(this.lMultipleOpen);
+            this.pMultipleOpen.Controls.Add(this.aMultipleOpen);
+            this.pMultipleOpen.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pMultipleOpen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pMultipleOpen.Location = new System.Drawing.Point(2, 2);
+            this.pMultipleOpen.Margin = new System.Windows.Forms.Padding(2);
+            this.pMultipleOpen.Name = "pMultipleOpen";
+            this.pMultipleOpen.Size = new System.Drawing.Size(307, 76);
+            this.pMultipleOpen.TabIndex = 0;
+            this.pMultipleOpen.Click += new System.EventHandler(this.pMultipleOpen_Click);
+            this.pMultipleOpen.MouseEnter += new System.EventHandler(this.pMultipleOpen_MouseEnter);
+            this.pMultipleOpen.MouseLeave += new System.EventHandler(this.pMultipleOpen_MouseLeave);
             // 
-            // lDataBaseText
+            // lMultipleOpenText
             // 
-            this.lDataBaseText.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lDataBaseText.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lDataBaseText.ForeColor = System.Drawing.Color.Gray;
-            this.lDataBaseText.LocalizationText = "StartForm.RemoteMGT.Description";
-            this.lDataBaseText.Location = new System.Drawing.Point(85, 38);
-            this.lDataBaseText.Margin = new System.Windows.Forms.Padding(2);
-            this.lDataBaseText.Name = "lDataBaseText";
-            this.lDataBaseText.Size = new System.Drawing.Size(156, 16);
-            this.lDataBaseText.TabIndex = 2;
-            this.lDataBaseText.Text = "设置数据库的存储路径和名称";
-            this.lDataBaseText.Click += new System.EventHandler(this.lDataBaseText_Click);
+            this.lMultipleOpenText.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lMultipleOpenText.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lMultipleOpenText.ForeColor = System.Drawing.Color.Gray;
+            this.lMultipleOpenText.LocalizationText = "StartForm.MultipleOpen.Text";
+            this.lMultipleOpenText.Location = new System.Drawing.Point(85, 38);
+            this.lMultipleOpenText.Margin = new System.Windows.Forms.Padding(2);
+            this.lMultipleOpenText.Name = "lMultipleOpenText";
+            this.lMultipleOpenText.Size = new System.Drawing.Size(180, 16);
+            this.lMultipleOpenText.TabIndex = 2;
+            this.lMultipleOpenText.Text = "配置数据库的存储路径以实现多开";
+            this.lMultipleOpenText.Click += new System.EventHandler(this.lMultipleOpenText_Click);
             // 
-            // lDataBase
+            // lMultipleOpen
             // 
-            this.lDataBase.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.lDataBase.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lDataBase.LocalizationText = "StartForm.DataBase";
-            this.lDataBase.Location = new System.Drawing.Point(85, 19);
-            this.lDataBase.Margin = new System.Windows.Forms.Padding(2);
-            this.lDataBase.Name = "lDataBase";
-            this.lDataBase.Size = new System.Drawing.Size(70, 19);
-            this.lDataBase.TabIndex = 1;
-            this.lDataBase.Text = "数据库配置";
-            this.lDataBase.Click += new System.EventHandler(this.lDataBase_Click);
+            this.lMultipleOpen.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lMultipleOpen.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lMultipleOpen.LocalizationText = "StartForm.MultipleOpen";
+            this.lMultipleOpen.Location = new System.Drawing.Point(85, 19);
+            this.lMultipleOpen.Margin = new System.Windows.Forms.Padding(2);
+            this.lMultipleOpen.Name = "lMultipleOpen";
+            this.lMultipleOpen.Size = new System.Drawing.Size(56, 19);
+            this.lMultipleOpen.TabIndex = 1;
+            this.lMultipleOpen.Text = "多开设置";
+            this.lMultipleOpen.Click += new System.EventHandler(this.lMultipleOpen_Click);
             // 
-            // aDataBase
+            // aMultipleOpen
             // 
-            this.aDataBase.Image = ((System.Drawing.Image)(resources.GetObject("aDataBase.Image")));
-            this.aDataBase.ImageFit = AntdUI.TFit.Fill;
-            this.aDataBase.Location = new System.Drawing.Point(20, 8);
-            this.aDataBase.Margin = new System.Windows.Forms.Padding(2);
-            this.aDataBase.Name = "aDataBase";
-            this.aDataBase.Size = new System.Drawing.Size(50, 58);
-            this.aDataBase.TabIndex = 0;
-            this.aDataBase.Text = "";
-            this.aDataBase.Click += new System.EventHandler(this.aDataBase_Click);
+            this.aMultipleOpen.Image = ((System.Drawing.Image)(resources.GetObject("aMultipleOpen.Image")));
+            this.aMultipleOpen.ImageFit = AntdUI.TFit.Fill;
+            this.aMultipleOpen.Location = new System.Drawing.Point(20, 8);
+            this.aMultipleOpen.Margin = new System.Windows.Forms.Padding(2);
+            this.aMultipleOpen.Name = "aMultipleOpen";
+            this.aMultipleOpen.Size = new System.Drawing.Size(50, 58);
+            this.aMultipleOpen.TabIndex = 0;
+            this.aMultipleOpen.Text = "";
+            this.aMultipleOpen.Click += new System.EventHandler(this.aMultipleOpen_Click);
             // 
             // aStartForm
             // 
@@ -544,8 +544,8 @@
             this.pInjectMode.PerformLayout();
             this.pProxyMode.ResumeLayout(false);
             this.pProxyMode.PerformLayout();
-            this.pDataBase.ResumeLayout(false);
-            this.pDataBase.PerformLayout();
+            this.pMultipleOpen.ResumeLayout(false);
+            this.pMultipleOpen.PerformLayout();
             this.aStartForm.ResumeLayout(false);
             this.tlpBackground.ResumeLayout(false);
             this.tlpStartForm.ResumeLayout(false);
@@ -561,10 +561,10 @@
         private AntdUI.PageHeader pageHeader;
         private AntdUI.Dropdown btn_global;
         private TableLayoutPanelEx tlpSelectMode;
-        private AntdUI.Panel pDataBase;
-        private AntdUI.Label lDataBaseText;
-        private AntdUI.Label lDataBase;
-        private AntdUI.Avatar aDataBase;
+        private AntdUI.Panel pMultipleOpen;
+        private AntdUI.Label lMultipleOpenText;
+        private AntdUI.Label lMultipleOpen;
+        private AntdUI.Avatar aMultipleOpen;
         private AntdUI.Avatar aStartForm;
         private TableLayoutPanelEx tlpBackground;
         private AntdUI.Label lBG2;

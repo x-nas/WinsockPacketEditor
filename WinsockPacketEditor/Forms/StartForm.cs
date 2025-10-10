@@ -61,7 +61,6 @@ namespace WinsockPacketEditor.Forms
             if (Operate.SystemConfig.StartMode != Operate.SystemConfig.SystemMode.None)
             {
                 this.DialogResult = DialogResult.OK;
-                this.Close();
             }
         }
 
@@ -136,7 +135,7 @@ namespace WinsockPacketEditor.Forms
                 BackColor = Color.FromArgb(30, 30, 30);
                 ForeColor = Color.White;
 
-                this.pDataBase.Back = 
+                this.pMultipleOpen.Back = 
                     this.pInjectMode.Back = 
                     this.pProxyMode.Back = 
                     Color.FromArgb(50, 50, 50);
@@ -146,7 +145,7 @@ namespace WinsockPacketEditor.Forms
                 BackColor = Color.White;
                 ForeColor = Color.Black;
 
-                this.pDataBase.Back =
+                this.pMultipleOpen.Back =
                     this.pInjectMode.Back =
                     this.pProxyMode.Back =
                     Color.Transparent;
@@ -202,34 +201,34 @@ namespace WinsockPacketEditor.Forms
 
         #endregion
 
-        #region//数据库配置
+        #region//多开设置
 
-        private void pDataBase_MouseEnter(object sender, EventArgs e)
+        private void pMultipleOpen_MouseEnter(object sender, EventArgs e)
         {
-            this.SetPanelBack_Enter(this.pDataBase);
+            this.SetPanelBack_Enter(this.pMultipleOpen);
         }
 
-        private void pDataBase_MouseLeave(object sender, EventArgs e)
+        private void pMultipleOpen_MouseLeave(object sender, EventArgs e)
         {
-            this.SetPanelBack_Leave(this.pDataBase);
+            this.SetPanelBack_Leave(this.pMultipleOpen);
         }
 
-        private void pDataBase_Click(object sender, EventArgs e)
-        {
-            this.StartDataBaseSetting();
-        }
-
-        private void aDataBase_Click(object sender, EventArgs e)
+        private void pMultipleOpen_Click(object sender, EventArgs e)
         {
             this.StartDataBaseSetting();
         }
 
-        private void lDataBase_Click(object sender, EventArgs e)
+        private void aMultipleOpen_Click(object sender, EventArgs e)
         {
             this.StartDataBaseSetting();
         }
 
-        private void lDataBaseText_Click(object sender, EventArgs e)
+        private void lMultipleOpen_Click(object sender, EventArgs e)
+        {
+            this.StartDataBaseSetting();
+        }
+
+        private void lMultipleOpenText_Click(object sender, EventArgs e)
         {
             this.StartDataBaseSetting();
         }
@@ -237,7 +236,7 @@ namespace WinsockPacketEditor.Forms
         private void StartDataBaseSetting()
         {
             var DataBaseSetting = new DataBaseSetting(this);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("DataBaseSetting", "数据库设置"), DataBaseSetting)
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this, AntdUI.Localization.Get("MultipleOpenSetting", "多开设置"), DataBaseSetting)
             {
                 Keyboard = false,
                 MaskClosable = false,
@@ -283,6 +282,7 @@ namespace WinsockPacketEditor.Forms
         {
             Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Proxy;
             this.SelectedStartMode();
+            this.Close();
         }
 
         #endregion

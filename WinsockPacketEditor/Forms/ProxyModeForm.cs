@@ -1,6 +1,5 @@
 ﻿using AntdUI;
 using System;
-using System.Data.Entity;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -77,7 +76,7 @@ namespace WinsockPacketEditor
             this.timerAutoSave.Enabled = true;
             this.tabProxyMode.TabMenuVisible = false;            
             this.mProxyMode.SelectIndex(0, true);
-            this.colorTheme.Value = Operate.SystemConfig.SystemColor;            
+            this.colorTheme.Value = Operate.SystemConfig.SystemColor;
         }
 
         private void ProxyModeForm_FormClosing(object sender, FormClosingEventArgs e)

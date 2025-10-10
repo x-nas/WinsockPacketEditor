@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.tlpDataBaseSetting = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.lNotice = new AntdUI.Label();
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
@@ -38,7 +39,6 @@
             this.txtDataBasePath = new AntdUI.Input();
             this.txtDataBaseVersion = new AntdUI.Input();
             this.bSelectPath = new AntdUI.Button();
-            this.lNotice = new AntdUI.Label();
             this.tlpDataBaseSetting.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpDataBaseInfo.SuspendLayout();
@@ -61,6 +61,20 @@
             this.tlpDataBaseSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpDataBaseSetting.Size = new System.Drawing.Size(500, 250);
             this.tlpDataBaseSetting.TabIndex = 0;
+            // 
+            // lNotice
+            // 
+            this.lNotice.AutoEllipsis = true;
+            this.lNotice.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lNotice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lNotice.ForeColor = System.Drawing.Color.Red;
+            this.lNotice.LocalizationText = "MultipleOpenSetting.Notice";
+            this.lNotice.Location = new System.Drawing.Point(3, 103);
+            this.lNotice.Name = "lNotice";
+            this.lNotice.Size = new System.Drawing.Size(408, 32);
+            this.lNotice.TabIndex = 21;
+            this.lNotice.Text = "如需多开软件，请在每次选择模式前设置不同的 [ 数据库路径 ]\r\n数据库路径下如果没有当前版本号的文件，则系统会自动创建一个空的数据库";
+            this.lNotice.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
             // tlpButton
             // 
@@ -143,6 +157,7 @@
             // 
             this.lDataBaseVersion.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lDataBaseVersion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lDataBaseVersion.LocalizationText = "MultipleOpenSetting.DBName";
             this.lDataBaseVersion.Location = new System.Drawing.Point(3, 55);
             this.lDataBaseVersion.Name = "lDataBaseVersion";
             this.lDataBaseVersion.Size = new System.Drawing.Size(67, 31);
@@ -153,6 +168,7 @@
             // 
             this.lDataBasePath.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lDataBasePath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lDataBasePath.LocalizationText = "MultipleOpenSetting.DBPath";
             this.lDataBasePath.Location = new System.Drawing.Point(3, 13);
             this.lDataBasePath.Name = "lDataBasePath";
             this.lDataBasePath.Size = new System.Drawing.Size(67, 36);
@@ -191,18 +207,6 @@
             this.bSelectPath.TabIndex = 8;
             this.bSelectPath.Type = AntdUI.TTypeMini.Success;
             this.bSelectPath.Click += new System.EventHandler(this.bSelectPath_Click);
-            // 
-            // lNotice
-            // 
-            this.lNotice.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lNotice.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lNotice.ForeColor = System.Drawing.Color.Firebrick;
-            this.lNotice.Location = new System.Drawing.Point(3, 103);
-            this.lNotice.Name = "lNotice";
-            this.lNotice.Size = new System.Drawing.Size(408, 94);
-            this.lNotice.TabIndex = 21;
-            this.lNotice.Text = "如需多开软件，请在每次选择模式前设置不同的 [ 数据库路径 ]\r\n数据库路径下如果没有当前版本号的文件，则系统会自动创建一个空的数据库";
-            this.lNotice.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
             // DataBaseSetting
             // 
