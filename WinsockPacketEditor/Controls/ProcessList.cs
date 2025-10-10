@@ -518,13 +518,15 @@ namespace WinsockPacketEditor
                 string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
                 string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), Operate.SystemConfig.WPE64_DLL);
 
+                var ipParameters = new Operate.SystemConfig.InjectionParameters(Operate.DataBase.dbPath);
+
                 if (Operate.SystemConfig.PID > -1)
                 {
-                    RemoteHooking.Inject(Operate.SystemConfig.PID, injectionLibrary_x86, injectionLibrary_x64, channelName);
+                    RemoteHooking.Inject(Operate.SystemConfig.PID, injectionLibrary_x86, injectionLibrary_x64, channelName, ipParameters);
                 }
                 else
                 {
-                    RemoteHooking.CreateAndInject(Operate.SystemConfig.PATH, string.Empty, 0, injectionLibrary_x86, injectionLibrary_x64, out Operate.SystemConfig.PID, channelName);
+                    RemoteHooking.CreateAndInject(Operate.SystemConfig.PATH, string.Empty, 0, injectionLibrary_x86, injectionLibrary_x64, out Operate.SystemConfig.PID, channelName, ipParameters);
                 }
 
                 Operate.SystemConfig.LastInjection = Operate.SystemConfig.PNAME;

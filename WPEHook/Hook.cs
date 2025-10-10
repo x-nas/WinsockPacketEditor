@@ -1,7 +1,7 @@
 ﻿using EasyHook;
 using System;
-using WinsockPacketEditor;
 using System.Windows.Forms;
+using WinsockPacketEditor;
 
 namespace WPEHook
 {
@@ -14,18 +14,27 @@ namespace WPEHook
             //
         }
 
-        public Hook(RemoteHooking.IContext InContext, string ChannelName)
+        public Hook(RemoteHooking.IContext InContext, string ChannelName, Operate.SystemConfig.InjectionParameters ipParameters)
         {
             //
         }
 
-        public unsafe void Run(RemoteHooking.IContext InContext, string ChannelName)
+        public void Run(RemoteHooking.IContext InContext, string ChannelName, Operate.SystemConfig.InjectionParameters ipParameters)
         {
             try
             {
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
                     User32.SetProcessDPIAware();
+                }
+
+                if (ipParameters != null)
+                {
+                    string DBPath = ipParameters.DataBasePath;
+                    if (!string.IsNullOrEmpty(DBPath))
+                    {
+                        Operate.DataBase.dbPath = DBPath;
+                    }
                 }
 
                 Operate.SystemConfig.LoadSystemConfig_FromDB();

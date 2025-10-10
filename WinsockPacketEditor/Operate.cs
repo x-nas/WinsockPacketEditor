@@ -123,9 +123,30 @@ namespace WinsockPacketEditor
             {
                 Together,
                 Sequence,
-            }            
+            }
 
-            #endregion            
+            #endregion
+
+            #region//注入参数
+
+            [Serializable]
+
+            public class InjectionParameters
+            {
+                public string DataBasePath { get; set; }
+
+                public InjectionParameters()
+                {
+                    //
+                }
+
+                public InjectionParameters(string DBPath)
+                {
+                    DataBasePath = DBPath;
+                }
+            }
+
+            #endregion
 
             #region//程序集特性访问器
 
@@ -3032,6 +3053,8 @@ namespace WinsockPacketEditor
             {
                 try
                 {
+                    Operate.DataBase.InitConStr();
+
                     string Lang = "zh-CN";
                     AntdUI.Localization.DefaultLanguage = Lang;
                     AntdUI.Config.SetEmptyImageSvg(Properties.Resources.icon_empty, Properties.Resources.icon_empty_dark);
@@ -18348,9 +18371,14 @@ namespace WinsockPacketEditor
         {
             public static string dbPath = @"C:\WPE64DB";
             public static string dbName = SystemConfig.AssemblyVersion + ".db";
-            private static string conStr = string.Empty;
+            public static string conStr = string.Empty;
 
             #region//初始化
+
+            public static void InitConStr()
+            {
+                DataBase.conStr = string.Format("Data Source={0}\\{1};Version=3;", DataBase.dbPath, DataBase.dbName);
+            }
 
             public static void InitDB()
             {
@@ -18361,8 +18389,7 @@ namespace WinsockPacketEditor
                         Directory.CreateDirectory(DataBase.dbPath);
                     }
 
-                    DataBase.conStr = string.Format("Data Source={0}\\{1};Version=3;", DataBase.dbPath, DataBase.dbName);
-
+                    DataBase.InitConStr();
                     DataBase.CreateTable_SystemConfig();
                     DataBase.CreateTable_InjectMode();
                     DataBase.CreateTable_ProxyMode();
