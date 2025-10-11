@@ -1029,17 +1029,17 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export);
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                    EncryptionPassword epControl = new EncryptionPassword(SystemConfig.PWType.Export);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, epControl, TType.Info)
                     {
                         Keyboard = false,
                         MaskClosable = false,
                         OnOk = config =>
                         {
-                            Password = eForm.GetPassword();
+                            Password = epControl.GetPassword();
                             if (string.IsNullOrEmpty(Password))
                             {
-                                eForm.EncryptionText_Changed();
+                                epControl.EncryptionText_Changed();
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
                                 {
@@ -1070,17 +1070,17 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Import);
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                    EncryptionPassword epControl = new EncryptionPassword(SystemConfig.PWType.Import);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, epControl, TType.Info)
                     {
                         Keyboard = false,
                         MaskClosable = false,
                         OnOk = config =>
                         {
-                            string sPW = eForm.GetPassword();
+                            string sPW = epControl.GetPassword();
                             if (string.IsNullOrEmpty(sPW))
                             {
-                                eForm.EncryptionText_Changed();
+                                epControl.EncryptionText_Changed();
 
                                 AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
                                 {
