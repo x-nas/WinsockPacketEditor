@@ -1020,6 +1020,47 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//获取输入的密码
+
+            public static (bool DoEncrypt, string Password) GetEncryptPassword(Form form, string Title)
+            {
+                bool DoEncrypt = false;
+                string Password = string.Empty;
+
+                using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
+                        {
+                            Password = eForm.GetPassword();
+                            if (string.IsNullOrEmpty(Password))
+                            {
+                                eForm.EncryptionText_Changed();
+
+                                AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                {
+                                    LocalizationText = "ExportList.Error"
+                                });
+
+                                return false;
+                            }
+                            else
+                            {
+                                DoEncrypt = true;
+                                return true;
+                            }
+                        }
+                    });
+                }                
+
+                return (DoEncrypt, Password);
+            }
+
+            #endregion
+
             #region//初始化快捷键
 
             public static void InitHotKeys(IntPtr MainHandle)
@@ -3927,38 +3968,7 @@ namespace WinsockPacketEditor
                         string FilePath = sfdSaveFile.FileName;
                         if (!string.IsNullOrEmpty(FilePath))
                         {
-                            bool DoEncrypt = false;
-                            string Password = string.Empty;
-
-                            using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
-                            {
-                                string Title = AntdUI.Localization.Get("BackUpSettingsForm.Export", "导出系统备份");
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    OnOk = config =>
-                                    {
-                                        Password = eForm.GetPassword();
-                                        if (string.IsNullOrEmpty(Password))
-                                        {
-                                            eForm.EncryptionText_Changed();
-
-                                            AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                            {
-                                                LocalizationText = "Password.Empty"
-                                            });
-
-                                            return false;
-                                        }
-                                        else
-                                        {
-                                            DoEncrypt = true;
-                                            return true;
-                                        }
-                                    }
-                                });
-                            }
+                            var EncryptPassword = SystemConfig.GetEncryptPassword(form, AntdUI.Localization.Get("BackUpSettingsForm.Export", "导出系统备份"));
 
                             bool bOK = SystemConfig.ExportSystemBackUp(
                                 FilePath,
@@ -3970,8 +3980,8 @@ namespace WinsockPacketEditor
                                 bFilterList,
                                 bSendList,
                                 bRobotList,
-                                DoEncrypt,
-                                Password);
+                                EncryptPassword.DoEncrypt,
+                                EncryptPassword.Password);
 
                             if (bOK)
                             {
@@ -4324,6 +4334,11 @@ namespace WinsockPacketEditor
 
                         ProxyConfig.Account.AccountListClear();
                         ProxyConfig.Account.LoadAccountList_FromXDocument(ProxyAccountList);
+
+                        if (form is InterfaceInfo.IProxyMode pmForm)
+                        {
+                            pmForm.RefreshAccountList();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -7835,7 +7850,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存代理账号列表到文件（对话框）
+                #region//保存代理账号列表到文件（对话框）                
 
                 public static void SaveAccount_Dialog(Form form, string FileName, List<AccountInfo> aiList)
                 {
@@ -7855,40 +7870,9 @@ namespace WinsockPacketEditor
                             string FilePath = sfdSaveFile.FileName;
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                bool DoEncrypt = false;
-                                string Password = string.Empty;
-
-                                using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
-                                {
-                                    string Title = AntdUI.Localization.Get("ExportProxyAccountList", "导出代理账号列表");
-                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
-                                    {
-                                        Keyboard = false,
-                                        MaskClosable = false,
-                                        OnOk = config =>
-                                        {
-                                            Password = eForm.GetPassword();
-                                            if (string.IsNullOrEmpty(Password))
-                                            {
-                                                eForm.EncryptionText_Changed();
-
-                                                AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                                {
-                                                    LocalizationText = "ExportList.Error"
-                                                });
-
-                                                return false;
-                                            }
-                                            else
-                                            {
-                                                DoEncrypt = true;
-                                                return true;
-                                            }
-                                        }
-                                    });
-                                }
-
-                                if (SaveAccountList(FilePath, aiList, DoEncrypt, Password))
+                                var EncryptPassword = SystemConfig.GetEncryptPassword(form, AntdUI.Localization.Get("ExportProxyAccountList", "导出代理账号列表"));
+                           
+                                if (SaveAccountList(FilePath, aiList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                 {
                                     string Title = AntdUI.Localization.Get("InjectModeForm.ExportProxyAccountList.Success", "导出代理账号列表成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -7964,7 +7948,6 @@ namespace WinsockPacketEditor
                                     new XElement("ID", ai.AID.ToString().ToUpper()),
                                     new XElement("UserName", ai.UserName),
                                     new XElement("PassWord", ai.Password),
-                                    new XElement("IsOnLine", ai.IsOnLine.ToString()),
                                     new XElement("IsLimitLinks", ai.IsLimitLinks),
                                     new XElement("LimitLinks", ai.LimitLinks),
                                     new XElement("IsLimitDevices", ai.IsLimitDevices),
@@ -8167,12 +8150,6 @@ namespace WinsockPacketEditor
                             if (xeProxyAccount.Element("PassWord") != null)
                             {
                                 PassWord = xeProxyAccount.Element("PassWord").Value;
-                            }                            
-
-                            bool IsOnLine = false;
-                            if (xeProxyAccount.Element("IsOnLine") != null)
-                            {
-                                IsOnLine = bool.Parse(xeProxyAccount.Element("IsOnLine").Value);
                             }
 
                             bool IsLimitLinks = false;
@@ -9173,40 +9150,9 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    bool DoEncrypt = false;
-                                    string Password = string.Empty;
+                                    var EncryptPassword = SystemConfig.GetEncryptPassword(form, AntdUI.Localization.Get("ExportMapLocal", "导出本地映射"));
 
-                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
-                                    {
-                                        string Title = AntdUI.Localization.Get("ExportMapLocal", "导出本地映射");
-                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
-                                        {
-                                            Keyboard = false,
-                                            MaskClosable = false,
-                                            OnOk = config =>
-                                            {
-                                                Password = eForm.GetPassword();
-                                                if (string.IsNullOrEmpty(Password))
-                                                {
-                                                    eForm.EncryptionText_Changed();
-
-                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                                    {
-                                                        LocalizationText = "ExportList.Error"
-                                                    });
-
-                                                    return false;
-                                                }
-                                                else
-                                                {
-                                                    DoEncrypt = true;
-                                                    return true;
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    if (SaveMapLocal(FilePath, pmlList, DoEncrypt, Password))
+                                    if (SaveMapLocal(FilePath, pmlList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapLocal.Success", "导出本地映射成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -9319,40 +9265,9 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    bool DoEncrypt = false;
-                                    string Password = string.Empty;
+                                    var EncryptPassword = SystemConfig.GetEncryptPassword(form, AntdUI.Localization.Get("ExportMapRemote", "导出远程映射"));
 
-                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
-                                    {
-                                        string Title = AntdUI.Localization.Get("ExportMapRemote", "导出远程映射");
-                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
-                                        {
-                                            Keyboard = false,
-                                            MaskClosable = false,
-                                            OnOk = config =>
-                                            {
-                                                Password = eForm.GetPassword();
-                                                if (string.IsNullOrEmpty(Password))
-                                                {
-                                                    eForm.EncryptionText_Changed();
-
-                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                                    {
-                                                        LocalizationText = "ExportList.Error"
-                                                    });
-
-                                                    return false;
-                                                }
-                                                else
-                                                {
-                                                    DoEncrypt = true;
-                                                    return true;
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    if (SaveMapRemote(FilePath, pmrList, DoEncrypt, Password))
+                                    if (SaveMapRemote(FilePath, pmrList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportMapRemote.Success", "导出远程映射成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -14222,40 +14137,9 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    bool DoEncrypt = false;
-                                    string Password = string.Empty;
+                                    var EncryptPassword = SystemConfig.GetEncryptPassword(form, AntdUI.Localization.Get("ExportFilterList", "导出滤镜列表"));
 
-                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
-                                    {
-                                        string Title = AntdUI.Localization.Get("ExportFilterList", "导出滤镜列表");
-                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
-                                        {
-                                            Keyboard = false,
-                                            MaskClosable = false,
-                                            OnOk = config =>
-                                            {
-                                                Password = eForm.GetPassword();
-                                                if (string.IsNullOrEmpty(Password))
-                                                {
-                                                    eForm.EncryptionText_Changed();
-
-                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                                    {
-                                                        LocalizationText = "ExportList.Error"
-                                                    });
-
-                                                    return false;
-                                                }
-                                                else
-                                                {
-                                                    DoEncrypt = true;
-                                                    return true;
-                                                }                                                    
-                                            }
-                                        });
-                                    }
-
-                                    if (SaveFilterList(FilePath, fiList, DoEncrypt, Password))
+                                    if (SaveFilterList(FilePath, fiList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
                                         string Title = AntdUI.Localization.Get("ExportFilterList.Success", "导出滤镜列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -15247,40 +15131,9 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    bool DoEncrypt = false;
-                                    string Password = string.Empty;
+                                    var EncryptPassword = SystemConfig.GetEncryptPassword(form, AntdUI.Localization.Get("ExportSendCollection", "导出发送集"));
 
-                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
-                                    {
-                                        string Title = AntdUI.Localization.Get("ExportSendCollection", "导出发送集");
-                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
-                                        {
-                                            Keyboard = false,
-                                            MaskClosable = false,
-                                            OnOk = config =>
-                                            {
-                                                Password = eForm.GetPassword();
-                                                if (string.IsNullOrEmpty(Password))
-                                                {
-                                                    eForm.EncryptionText_Changed();
-
-                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                                    {
-                                                        LocalizationText = "ExportList.Error"
-                                                    });
-
-                                                    return false;
-                                                }
-                                                else
-                                                {
-                                                    DoEncrypt = true;
-                                                    return true;
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    if (SaveSendCollection(FilePath, SendCollection, DoEncrypt, Password))
+                                    if (SaveSendCollection(FilePath, SendCollection, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
                                         string Title = AntdUI.Localization.Get("ExportSendCollection.Success", "导出发送集成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -15959,40 +15812,9 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    bool DoEncrypt = false;
-                                    string Password = string.Empty;
+                                    var EncryptPassword = SystemConfig.GetEncryptPassword(form, AntdUI.Localization.Get("ExportSendList", "导出发送列表"));
 
-                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
-                                    {
-                                        string Title = AntdUI.Localization.Get("ExportSendList", "导出发送列表");
-                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
-                                        {
-                                            Keyboard = false,
-                                            MaskClosable = false,
-                                            OnOk = config =>
-                                            {
-                                                Password = eForm.GetPassword();
-                                                if (string.IsNullOrEmpty(Password))
-                                                {
-                                                    eForm.EncryptionText_Changed();
-
-                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                                    {
-                                                        LocalizationText = "ExportList.Error"
-                                                    });
-
-                                                    return false;
-                                                }
-                                                else
-                                                {
-                                                    DoEncrypt = true;
-                                                    return true;
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    if (SaveSendList(FilePath, siList, DoEncrypt, Password))
+                                    if (SaveSendList(FilePath, siList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportSendList.Success", "导出发送列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -17555,40 +17377,9 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    bool DoEncrypt = false;
-                                    string Password = string.Empty;
+                                    var EncryptPassword = SystemConfig.GetEncryptPassword(form, AntdUI.Localization.Get("ExportRobotList", "导出机器人列表"));
 
-                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
-                                    {
-                                        string Title = AntdUI.Localization.Get("ExportRobotList", "导出机器人列表");
-                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
-                                        {
-                                            Keyboard = false,
-                                            MaskClosable = false,
-                                            OnOk = config =>
-                                            {
-                                                Password = eForm.GetPassword();
-                                                if (string.IsNullOrEmpty(Password))
-                                                {
-                                                    eForm.EncryptionText_Changed();
-
-                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
-                                                    {
-                                                        LocalizationText = "ExportList.Error"
-                                                    });
-
-                                                    return false;
-                                                }
-                                                else
-                                                {
-                                                    DoEncrypt = true;
-                                                    return true;
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    if (SaveRobotList(FilePath, riList, DoEncrypt, Password))
+                                    if (SaveRobotList(FilePath, riList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
                                         string Title = AntdUI.Localization.Get("ExportRobotList.Success", "导出机器人列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
