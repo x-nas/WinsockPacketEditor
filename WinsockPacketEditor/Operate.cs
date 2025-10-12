@@ -7955,11 +7955,23 @@ namespace WinsockPacketEditor
 
                         if (aiList == null)
                         {
-                            aiList = ProxyConfig.Account.lstAccountInfo.ToList();
+                            if (ProxyConfig.Account.lstAccountInfo != null)
+                            {
+                                aiList = ProxyConfig.Account.lstAccountInfo.ToList();
+                            }
+                            else
+                            {
+                                aiList = new List<AccountInfo>();
+                            }
                         }
 
                         foreach (AccountInfo ai in aiList)
                         {
+                            if (ai == null)
+                            {
+                                continue;
+                            }
+
                             XElement xeProxyAccount =
                                     new XElement("ProxyAccount",
                                     new XElement("IsEnable", ai.IsEnable.ToString()),
@@ -7975,12 +7987,17 @@ namespace WinsockPacketEditor
                                     new XElement("CreateTime", ai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
                                     );
 
-                            if (ai.AIPInfo.Count > 0)
+                            if (ai.AIPInfo != null && ai.AIPInfo.Count > 0)
                             {
                                 XElement xeAccountIPInfo = new XElement("AccountIPInfo");
 
                                 foreach (AccountIPInfo aii in ai.AIPInfo)
                                 {
+                                    if (aii == null)
+                                    {
+                                        continue;
+                                    }
+
                                     XElement xeIPInfo =
                                         new XElement("IPInfo",
                                         new XElement("LoginTime", aii.LoginTime),
@@ -7990,7 +8007,10 @@ namespace WinsockPacketEditor
                                     xeAccountIPInfo.Add(xeIPInfo);
                                 }
 
-                                xeProxyAccount.Add(xeAccountIPInfo);
+                                if (xeAccountIPInfo.HasElements)
+                                {
+                                    xeProxyAccount.Add(xeAccountIPInfo);
+                                }
                             }
 
                             xeProxyAccountList.Add(xeProxyAccount);
