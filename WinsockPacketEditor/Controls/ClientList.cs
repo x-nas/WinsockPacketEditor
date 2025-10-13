@@ -254,11 +254,11 @@ namespace WinsockPacketEditor
                 Operate.DoLog(nameof(RefreshClientList), ex.Message);
             }
             finally
-            {
-                this.treeClientList.PauseLayout = false;
+            {                
                 Operate.ProxyConfig.List.ClientNumber = this.treeClientList.Items.Count();
-
                 this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
+
+                this.treeClientList.PauseLayout = false;
                 this.tAuthList.PauseLayout = false;                
             }
         }

@@ -30,29 +30,37 @@ namespace WinsockPacketEditor
 
         private void InitTable_Location()
         {
-            tLocation.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("LoginTime", "登录时间").SetLocalizationTitleID("Table.Location.Column."),
-                new AntdUI.Column("LoginIP", "登录IP")
+            try
+            {
+                tLocation.Columns = new AntdUI.ColumnCollection 
                 {
-                    Render = (value, record, rowindex)=>
+                    new AntdUI.Column("LoginTime", "登录时间").SetLocalizationTitleID("Table.Location.Column."),
+                    new AntdUI.Column("LoginIP", "登录IP")
                     {
-                        if(record is AccountIPInfo aii)
+                        Render = (value, record, rowindex)=>
                         {
-                            return new CellText(value?.ToString() ?? string.Empty)
+                            if(record is AccountIPInfo aii)
                             {
-                                Prefix = Operate.SystemConfig.GetFlagByLocation(aii.IPLocation),
-                                IconRatio = 1.0F
-                            };
-                        }
+                                return new CellText(value?.ToString() ?? string.Empty)
+                                {
+                                    Prefix = Operate.SystemConfig.GetFlagByLocation(aii.IPLocation),
+                                    IconRatio = 1.0F
+                                };
+                            }
 
-                        return value;
-                    },
-                }.SetLocalizationTitleID("Table.Location.Column."),
-                new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.Location.Column."),
-            };
+                            return value;
+                        },
+                    }.SetLocalizationTitleID("Table.Location.Column."),
+                    new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.Location.Column."),
+                };
 
-            this.tLocation.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tLocation.Binding(aiSelect.AIPInfo);
+                this.tLocation.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+                this.tLocation.Binding(aiSelect.AIPInfo);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(InitTable_Location), ex.Message);
+            }            
         }
 
         #endregion
