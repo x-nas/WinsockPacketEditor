@@ -1237,7 +1237,7 @@ namespace WinsockPacketEditor
                         IconSvg = "SnippetsOutlined",
                         LocalizationText = "Paste",
                     },
-                    new AntdUI.ContextMenuStripItem("删除")
+                    new AntdUI.ContextMenuStripItem("删除", "Del")
                     {
                         ID = "cmsFilterEdit_Delete",
                         IconSvg = "DeleteOutlined",
@@ -1280,7 +1280,7 @@ namespace WinsockPacketEditor
                         IconSvg = "SnippetsOutlined",
                         LocalizationText = "Paste",
                     },
-                    new AntdUI.ContextMenuStripItem("删除")
+                    new AntdUI.ContextMenuStripItem("删除", "Del")
                     {
                         ID = "cmsFilterEdit_Delete",
                         IconSvg = "DeleteOutlined",
