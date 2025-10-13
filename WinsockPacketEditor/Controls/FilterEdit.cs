@@ -33,7 +33,17 @@ namespace WinsockPacketEditor
             {
                 this.tabFilterEdit.TabMenuVisible = false;
                 this.tabFilterFrom.TabMenuVisible = false;
-                this.tabFilterFunction.TabMenuVisible = false;                
+                this.tabFilterFunction.TabMenuVisible = false;
+
+                this.InitTable_FilterNormal();
+                this.InitTable_FilterAdvanced_Search();
+                this.InitTable_FilterAdvanced_Modify_Head();
+                this.InitTable_FilterAdvanced_Modify_Position();
+                this.InitProgressionPosition();
+                this.InitExcludePosition();
+                this.InitFilterExecuteType();
+                this.ShowFilterData();
+                this.Dark_Changed();
 
                 switch (fiSelect.FMode)
                 {
@@ -154,17 +164,7 @@ namespace WinsockPacketEditor
                 this.cbFilterFunction_TCP_Req.Checked = fiSelect.FFunction.TCP_Req;
                 this.cbFilterFunction_TCP_Resp.Checked = fiSelect.FFunction.TCP_Resp;
                 this.cbFilterFunction_UDP_Req.Checked = fiSelect.FFunction.UDP_Req;
-                this.cbFilterFunction_UDP_Resp.Checked = fiSelect.FFunction.UDP_Resp;
-
-                this.InitTable_FilterNormal();
-                this.InitTable_FilterAdvanced_Search();
-                this.InitTable_FilterAdvanced_Modify_Head();
-                this.InitTable_FilterAdvanced_Modify_Position();
-                this.InitProgressionPosition();
-                this.InitExcludePosition();
-                this.InitFilterExecuteType();
-                this.ShowFilterData();
-                this.Dark_Changed();
+                this.cbFilterFunction_UDP_Resp.Checked = fiSelect.FFunction.UDP_Resp;                
             }
             catch (Exception ex)
             {
