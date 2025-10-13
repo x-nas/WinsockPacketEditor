@@ -13932,13 +13932,16 @@ namespace WinsockPacketEditor
                         {
                             FilterConfig.Filter.FilterAction faDoFilter = FilterConfig.Filter.DoFilter(filters[i], iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
 
+                            Operate.DoLog(nameof(DoFilterList), faDoFilter.ToString());
+
                             if (faDoFilter != Filter.FilterAction.None)
                             {
                                 faReturn = faDoFilter;
 
                                 if (faReturn == Filter.FilterAction.Intercept ||
+                                    faReturn == Filter.FilterAction.Change ||
                                     faReturn == Filter.FilterAction.NoModify_Display ||
-                                    faReturn == Filter.FilterAction.NoModify_NoDisplay ||
+                                    faReturn == Filter.FilterAction.NoModify_NoDisplay ||                                    
                                     FilterConfig.Filter.FilterExecute == FilterConfig.Filter.Execute.Priority)
                                 {
                                     if (bNewBuffer == null)
