@@ -1415,6 +1415,10 @@ namespace WinsockPacketEditor
             {
                 this.PasteToMousePosition(tFilterNormal, dtFilterNormal);
             }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                this.DeleteToMousePosition(tFilterNormal, dtFilterNormal);                
+            }
         }
 
         private void tFilterAdvanced_Search_KeyDown(object sender, KeyEventArgs e)
@@ -1422,6 +1426,10 @@ namespace WinsockPacketEditor
             if (e.Control && e.KeyCode == Keys.V)
             {
                 this.PasteToMousePosition(tFilterAdvanced_Search, dtFilterAdvanced_Search);
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                this.DeleteToMousePosition(tFilterNormal, dtFilterNormal);
             }
         }
 
@@ -1431,6 +1439,10 @@ namespace WinsockPacketEditor
             {
                 this.PasteToMousePosition(tFilterAdvanced_Modify_Head, dtFilterAdvanced_Modify_Head);
             }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                this.DeleteToMousePosition(tFilterNormal, dtFilterNormal);
+            }
         }
 
         private void tFilterAdvanced_Modify_Position_KeyDown(object sender, KeyEventArgs e)
@@ -1439,19 +1451,35 @@ namespace WinsockPacketEditor
             {
                 this.PasteToMousePosition(tFilterAdvanced_Modify_Position, dtFilterAdvanced_Modify_Position);
             }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                this.DeleteToMousePosition(tFilterNormal, dtFilterNormal);
+            }
+        }
+
+        private void DeleteToMousePosition(AntdUI.Table tTable, DataTable dt)
+        {
+            try
+            {
+                if (tTable.FocusedCell != null)
+                {
+                    ((CellText)dt.Rows[tTable.FocusedCell.Row.INDEX - 1][tTable.FocusedColumn.INDEX]).Text = string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(DeleteToMousePosition), ex.Message);
+            }
         }
 
         private void PasteToMousePosition(AntdUI.Table tTable, DataTable dt)
         {
             try
             {
-                Point pMouse = tTable.PointToClient(MousePosition);
-                tTable.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
-
-                if (RIndex > 0 && CIndex > -1)
+                if (tTable.FocusedCell != null)
                 {
                     string sClipboardText = Clipboard.GetText().Trim();
-                    this.PastePacketData(tTable, dt, RIndex - 1, CIndex, sClipboardText);
+                    this.PastePacketData(tTable, dt, tTable.FocusedCell.Row.INDEX - 1, tTable.FocusedColumn.INDEX, sClipboardText);
                 }
             }
             catch (Exception ex)
