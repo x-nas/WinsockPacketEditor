@@ -685,6 +685,7 @@ namespace WinsockPacketEditor
             {
                 this.tabFilterEdit.SelectTab("tpAdvance");
                 this.pFilterModifyFrom.Enabled = true;
+                this.tFilterAdvanced_Modify_Position.ScrollColumn(Operate.FilterConfig.Filter.FilterSize_MaxLen);
             }
         }
 
@@ -706,6 +707,7 @@ namespace WinsockPacketEditor
             else if (rbFilterModifyFrom_Position.Checked)
             {
                 this.tabFilterFrom.SelectTab("tpFromPosition");
+                this.tFilterAdvanced_Modify_Position.ScrollColumn(Operate.FilterConfig.Filter.FilterSize_MaxLen);
             }
         }
 
