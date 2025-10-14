@@ -109,6 +109,10 @@ namespace WinsockPacketEditor
 
                 this.cbFilterAction_Execute.Checked = fiSelect.IsExecute;
                 this.FilterAction_ExecuteChange();
+                this.cbFilterAction_Enable.Checked = fiSelect.IsExecute_Enable;
+                this.FilterAction_EnableChange();
+                this.cbFilterAction_Disable.Checked = fiSelect.IsExecute_Disable;
+                this.FilterAction_DisableChange();
 
                 switch (fiSelect.FEType)
                 {
@@ -129,6 +133,46 @@ namespace WinsockPacketEditor
                         break;
                 }
                 this.FilterAction_ExecuteTypeChanged();
+
+                switch (fiSelect.FEType_Enable)
+                {
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Send:
+                        this.cbbFilterAction_EnableType.SelectedIndex = 0;
+                        break;
+
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Robot:
+                        this.cbbFilterAction_EnableType.SelectedIndex = 1;
+                        break;
+
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Filter:
+                        this.cbbFilterAction_EnableType.SelectedIndex = 2;
+                        break;
+
+                    default:
+                        this.cbbFilterAction_EnableType.SelectedIndex = -1;
+                        break;
+                }
+                this.FilterAction_EnableTypeChanged();
+
+                switch (fiSelect.FEType_Disable)
+                {
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Send:
+                        this.cbbFilterAction_DisableType.SelectedIndex = 0;
+                        break;
+
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Robot:
+                        this.cbbFilterAction_DisableType.SelectedIndex = 1;
+                        break;
+
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Filter:
+                        this.cbbFilterAction_DisableType.SelectedIndex = 2;
+                        break;
+
+                    default:
+                        this.cbbFilterAction_DisableType.SelectedIndex = -1;
+                        break;
+                }
+                this.FilterAction_DisableTypeChanged();
 
                 this.cbFilter_AppointHeader.Checked = fiSelect.AppointHeader;
                 this.txtFilter_HeaderContent.Text = fiSelect.HeaderContent;
@@ -339,57 +383,62 @@ namespace WinsockPacketEditor
             try
             {
                 this.cbbFilterAction_ExecuteType.Items.Clear();
+                this.cbbFilterAction_EnableType.Items.Clear();
+                this.cbbFilterAction_DisableType.Items.Clear();
+
+                SelectItem siSendList = new SelectItem("发送列表")
+                {
+                    LocalizationText = "SendList",
+                };
+
+                SelectItem siRobotList = new SelectItem("机器人列表")
+                {
+                    LocalizationText = "RobotList",
+                };
+
+                SelectItem siFilterList = new SelectItem("滤镜列表")
+                {
+                    LocalizationText = "FilterList",
+                };
 
                 if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                 {
-                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
-                    {
-                        Online = 1,
-                        LocalizationText = "SendList",
-                    });
+                    siSendList.Online = 1;
                 }
                 else
                 {
-                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("发送列表")
-                    {
-                        Enable = false,
-                        LocalizationText = "SendList",
-                    });
+                    siSendList.Enable = false;
                 }
 
                 if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
                 {
-                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
-                    {
-                        Online = 1,
-                        LocalizationText = "RobotList",
-                    });
+                    siRobotList.Online = 1;
                 }
                 else
                 {
-                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("机器人列表")
-                    {
-                        Enable = false,
-                        LocalizationText = "RobotList",
-                    });
+                    siRobotList.Enable = false;
                 }
 
                 if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                 {
-                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("滤镜列表")
-                    {
-                        Online = 1,
-                        LocalizationText = "FilterList",
-                    });
+                    siFilterList.Online = 1;
                 }
                 else
                 {
-                    this.cbbFilterAction_ExecuteType.Items.Add(new SelectItem("滤镜列表")
-                    {
-                        Enable = false,
-                        LocalizationText = "FilterList",
-                    });
+                    siFilterList.Enable = false;
                 }
+
+                this.cbbFilterAction_ExecuteType.Items.Add(siSendList);
+                this.cbbFilterAction_EnableType.Items.Add(siSendList);
+                this.cbbFilterAction_DisableType.Items.Add(siSendList);
+
+                this.cbbFilterAction_ExecuteType.Items.Add(siRobotList);
+                this.cbbFilterAction_EnableType.Items.Add(siRobotList);
+                this.cbbFilterAction_DisableType.Items.Add(siRobotList);
+
+                this.cbbFilterAction_ExecuteType.Items.Add(siFilterList);
+                this.cbbFilterAction_EnableType.Items.Add(siFilterList);
+                this.cbbFilterAction_DisableType.Items.Add(siFilterList);
             }
             catch (Exception ex)
             {
@@ -397,7 +446,7 @@ namespace WinsockPacketEditor
             }            
         }
 
-        private void InitSendInfo()
+        private void InitSendInfo(AntdUI.Select sSendInfo, Guid SelectSID)
         {
             try
             {
@@ -405,9 +454,9 @@ namespace WinsockPacketEditor
                 {
                     var selectItems = Operate.SendConfig.List.lstSendInfo.Select(info => new SelectItem(info.SName, info)).ToArray();
 
-                    this.cbbFilterAction_Execute.Items.Clear();
-                    this.cbbFilterAction_Execute.Items.AddRange(selectItems);
-                    this.cbbFilterAction_Execute.SelectedValue = Operate.SendConfig.Send.GetSend_ByGuid(fiSelect.Execute_SID);
+                    sSendInfo.Items.Clear();
+                    sSendInfo.Items.AddRange(selectItems);
+                    sSendInfo.SelectedValue = Operate.SendConfig.Send.GetSend_ByGuid(SelectSID);
                 }
             }
             catch (Exception ex)
@@ -416,7 +465,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void InitRobotInfo()
+        private void InitRobotInfo(AntdUI.Select sRobotInfo, Guid SelectRID)
         {
             try
             {
@@ -424,9 +473,9 @@ namespace WinsockPacketEditor
                 {
                     var selectItems = Operate.RobotConfig.List.lstRobotInfo.Select(info => new SelectItem(info.RName, info)).ToArray();
 
-                    this.cbbFilterAction_Execute.Items.Clear();
-                    this.cbbFilterAction_Execute.Items.AddRange(selectItems);
-                    this.cbbFilterAction_Execute.SelectedValue = Operate.RobotConfig.Robot.GetRobot_ByGuid(fiSelect.Execute_RID);
+                    sRobotInfo.Items.Clear();
+                    sRobotInfo.Items.AddRange(selectItems);
+                    sRobotInfo.SelectedValue = Operate.RobotConfig.Robot.GetRobot_ByGuid(SelectRID);
                 }
             }
             catch (Exception ex)
@@ -435,22 +484,22 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void InitFilterInfo(Guid excludeFID)
+        private void InitFilterInfo(AntdUI.Select sFilterInfo, Guid SelectFID)
         {
             try
             {
                 if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                 {
                     var query = Operate.FilterConfig.List.lstFilterInfo.AsEnumerable();
-                    query = query.Where(info => info.FID != excludeFID);
+                    query = query.Where(info => info.FID != this.fiSelect.FID);
 
                     var selectItems = query
                         .Select(info => new SelectItem(info.FName, info))
                         .ToArray();
 
-                    this.cbbFilterAction_Execute.Items.Clear();
-                    this.cbbFilterAction_Execute.Items.AddRange(selectItems);
-                    this.cbbFilterAction_Execute.SelectedValue = Operate.FilterConfig.Filter.GetFilter_ByGuid(fiSelect.Execute_FID);
+                    sFilterInfo.Items.Clear();
+                    sFilterInfo.Items.AddRange(selectItems);
+                    sFilterInfo.SelectedValue = Operate.FilterConfig.Filter.GetFilter_ByGuid(SelectFID);
                 }
             }
             catch (Exception ex)
@@ -713,6 +762,90 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//启用
+
+        private void cbFilterAction_Enable_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.FilterAction_EnableChange();
+        }
+
+        private void FilterAction_EnableChange()
+        {
+            this.cbbFilterAction_Enable.Enabled = this.cbbFilterAction_EnableType.Enabled = cbFilterAction_Enable.Checked;
+        }
+
+        private void cbbFilterAction_EnableType_SelectedIndexChanged(object sender, IntEventArgs e)
+        {
+            this.FilterAction_EnableTypeChanged();
+        }
+
+        private void FilterAction_EnableTypeChanged()
+        {
+            try
+            {
+                if (this.cbbFilterAction_EnableType.SelectedIndex == 0)
+                {
+                    this.InitSendInfo(this.cbbFilterAction_Enable, fiSelect.Execute_GUID_Enable);
+                }
+                else if (this.cbbFilterAction_EnableType.SelectedIndex == 1)
+                {
+                    this.InitRobotInfo(this.cbbFilterAction_Enable, fiSelect.Execute_GUID_Enable);
+                }
+                else if (this.cbbFilterAction_EnableType.SelectedIndex == 2)
+                {
+                    this.InitFilterInfo(this.cbbFilterAction_Enable, fiSelect.Execute_GUID_Enable);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(FilterAction_EnableTypeChanged), ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//禁用
+
+        private void cbFilterAction_Disable_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.FilterAction_DisableChange();
+        }
+
+        private void FilterAction_DisableChange()
+        {
+            this.cbbFilterAction_Disable.Enabled = this.cbbFilterAction_DisableType.Enabled = cbFilterAction_Disable.Checked;
+        }
+
+        private void cbbFilterAction_DisableType_SelectedIndexChanged(object sender, IntEventArgs e)
+        {
+            this.FilterAction_DisableTypeChanged();
+        }
+
+        private void FilterAction_DisableTypeChanged()
+        {
+            try
+            {
+                if (this.cbbFilterAction_DisableType.SelectedIndex == 0)
+                {
+                    this.InitSendInfo(this.cbbFilterAction_Disable, fiSelect.Execute_GUID_Disable);
+                }
+                else if (this.cbbFilterAction_DisableType.SelectedIndex == 1)
+                {
+                    this.InitRobotInfo(this.cbbFilterAction_Disable, fiSelect.Execute_GUID_Disable);
+                }
+                else if (this.cbbFilterAction_DisableType.SelectedIndex == 2)
+                {
+                    this.InitFilterInfo(this.cbbFilterAction_Disable, fiSelect.Execute_GUID_Disable);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(FilterAction_DisableTypeChanged), ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//执行
 
         private void cbFilterAction_Execute_CheckedChanged(object sender, BoolEventArgs e)
@@ -736,15 +869,15 @@ namespace WinsockPacketEditor
             {
                 if (this.cbbFilterAction_ExecuteType.SelectedIndex == 0)
                 {
-                    this.InitSendInfo();
+                    this.InitSendInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
                 }
                 else if(this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
                 {
-                    this.InitRobotInfo();
+                    this.InitRobotInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
                 }
                 else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 2)
                 {
-                    this.InitFilterInfo(this.fiSelect.FID);
+                    this.InitFilterInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
                 }
             }
             catch (Exception ex)
@@ -1681,7 +1814,7 @@ namespace WinsockPacketEditor
                 int iProgressionStep_New = 1;
                 int iProgressionCarryNumber_New = 1;
                 int iProgressionCount_New = 0;
-                bool bIsExecute_New, bIsProgressionContinuous_New, bIsProgressionCarry_New;
+                bool bIsExecute_New, bIsExecute_Enable_New, bIsExecute_Disable_New, bIsProgressionContinuous_New, bIsProgressionCarry_New;
                 bool bAppointHeader_New, bAppointSocket_New, bAppointLength_New, bAppointPort_New;
                 StringBuilder sbProgression = new StringBuilder();
                 StringBuilder sbExclude = new StringBuilder();
@@ -1691,13 +1824,17 @@ namespace WinsockPacketEditor
                 Operate.FilterConfig.Filter.FilterMode FilterMode_New;
                 Operate.FilterConfig.Filter.FilterAction FilterAction_New;
                 Operate.FilterConfig.Filter.FilterExecuteType FilterExecuteType_New;
-                Guid Execute_SID_New = Guid.Empty;
-                Guid Execute_RID_New = Guid.Empty;
-                Guid Execute_FID_New = Guid.Empty;
+                Guid Execute_GUID_New = Guid.Empty;
+                Operate.FilterConfig.Filter.FilterExecuteType FilterExecuteType_Enable_New;
+                Guid Execute_GUID_Enable_New = Guid.Empty;
+                Operate.FilterConfig.Filter.FilterExecuteType FilterExecuteType_Disable_New;
+                Guid Execute_GUID_Disable_New = Guid.Empty;
                 Operate.FilterConfig.Filter.FilterFunction FilterFunction_New;
                 Operate.FilterConfig.Filter.FilterStartFrom FilterStartFrom_New;
 
                 bIsExecute_New = this.cbFilterAction_Execute.Checked;
+                bIsExecute_Enable_New = this.cbFilterAction_Enable.Checked;
+                bIsExecute_Disable_New = this.cbFilterAction_Disable.Checked;
                 bAppointHeader_New = this.cbFilter_AppointHeader.Checked;
                 bAppointSocket_New = this.cbFilter_AppointSocket.Checked;
                 bAppointLength_New = this.cbFilter_AppointLength.Checked;
@@ -1750,44 +1887,17 @@ namespace WinsockPacketEditor
                     FilterAction_New = Operate.FilterConfig.Filter.FilterAction.NoModify_Display;
                 }
 
-                if (cbFilterAction_Execute.Checked)
-                {
-                    if (this.cbbFilterAction_ExecuteType.SelectedIndex == 0)
-                    {
-                        FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.Send;
+                var FilterExecute = Operate.FilterConfig.Filter.GetFilterExecuteType(this.cbFilterAction_Execute, this.cbbFilterAction_ExecuteType, this.cbbFilterAction_Execute);
+                FilterExecuteType_New = FilterExecute.feType;
+                Execute_GUID_New = FilterExecute.gGuid;
 
-                        if (cbbFilterAction_Execute.SelectedValue != null)
-                        {
-                            Execute_SID_New = ((SendInfo)cbbFilterAction_Execute.SelectedValue).SID;
-                        }
-                    }
-                    else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
-                    {
-                        FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.Robot;
+                var FilterExecute_Enable = Operate.FilterConfig.Filter.GetFilterExecuteType(this.cbFilterAction_Enable, this.cbbFilterAction_EnableType, this.cbbFilterAction_Enable);
+                FilterExecuteType_Enable_New = FilterExecute_Enable.feType;
+                Execute_GUID_Enable_New = FilterExecute_Enable.gGuid;
 
-                        if (cbbFilterAction_Execute.SelectedValue != null)
-                        {
-                            Execute_RID_New = ((RobotInfo)cbbFilterAction_Execute.SelectedValue).RID;
-                        }
-                    }
-                    else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 2)
-                    {
-                        FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.Filter;
-
-                        if (cbbFilterAction_Execute.SelectedValue != null)
-                        {
-                            Execute_FID_New = ((FilterInfo)cbbFilterAction_Execute.SelectedValue).FID;
-                        }
-                    }
-                    else
-                    {
-                        FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.None;
-                    }
-                }
-                else
-                {
-                    FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.None;
-                }
+                var FilterExecute_Disable = Operate.FilterConfig.Filter.GetFilterExecuteType(this.cbFilterAction_Disable, this.cbbFilterAction_DisableType, this.cbbFilterAction_Disable);
+                FilterExecuteType_Disable_New = FilterExecute_Disable.feType;
+                Execute_GUID_Disable_New = FilterExecute_Disable.gGuid;
 
                 FilterFunction_New.Send = this.cbFilterFunction_Send.Checked;
                 FilterFunction_New.SendTo = this.cbFilterFunction_SendTo.Checked;
@@ -1945,9 +2055,13 @@ namespace WinsockPacketEditor
                     FilterAction_New,
                     bIsExecute_New,
                     FilterExecuteType_New,
-                    Execute_SID_New,
-                    Execute_RID_New,
-                    Execute_FID_New,
+                    Execute_GUID_New,
+                    bIsExecute_Enable_New,
+                    FilterExecuteType_Enable_New,
+                    Execute_GUID_Enable_New,
+                    bIsExecute_Disable_New,
+                    FilterExecuteType_Disable_New,
+                    Execute_GUID_Disable_New,
                     FilterFunction_New,
                     FilterStartFrom_New,
                     bIsProgressionContinuous_New,
@@ -1996,6 +2110,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion        
+        #endregion                
     }
 }
