@@ -18,6 +18,18 @@ namespace WinsockPacketEditor
             this.form = form;
         }
 
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.tabQuickList.BackColor = Operate.SystemConfig.Color_40;
+            }
+            else
+            {
+                this.tabQuickList.BackColor = Color.White;
+            }
+        }
+
         private void QuickList_Load(object sender, EventArgs e)
         {
             this.tabQuickList.SelectedIndex = 0;

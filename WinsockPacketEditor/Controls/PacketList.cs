@@ -147,6 +147,8 @@ namespace WinsockPacketEditor
                 this.hbPacketData.BackColor = Color.White;
                 this.hbPacketData.ForeColor = Color.Black;
             }
+
+            this.cQuickList.Dark_Changed();
         }
 
         public void RefreshPacketData()

@@ -1,6 +1,5 @@
 ﻿using AntdUI;
 using System;
-using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,6 +24,7 @@ namespace WinsockPacketEditor
         public InjectModeForm()
         {            
             InitializeComponent();
+            Theme().Dark(Operate.SystemConfig.Color_30).Light(Operate.SystemConfig.Color_250);
         }
 
         private void InjectModeForm_Load(object sender, EventArgs e)
@@ -394,33 +394,17 @@ namespace WinsockPacketEditor
             AntdUI.Config.IsDark = !AntdUI.Config.IsDark;
 
             this.Dark_Changed();
-            OnSizeChanged(e);
+            Refresh();
         }
 
         private void Dark_Changed()
         {
+            btn_mode.Toggle = AntdUI.Config.IsDark;
+
             if (setcolor)
             {
                 var color = AntdUI.Style.Db.Primary;
                 AntdUI.Style.SetPrimary(color);
-            }
-
-            Dark = AntdUI.Config.IsDark;
-            btn_mode.Toggle = Dark;
-
-            if (Dark)
-            {
-                BackColor = Operate.SystemConfig.Color_30;
-                ForeColor = Color.White;
-
-                this.tabInjectMode.BackColor = Operate.SystemConfig.Color_35;
-            }
-            else
-            {
-                BackColor = Operate.SystemConfig.Color_250;
-                ForeColor = Color.Black;
-
-                this.tabInjectMode.BackColor = Color.White;
             }
 
             this.cPacketList?.Dark_Changed();

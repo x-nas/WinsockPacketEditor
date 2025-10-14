@@ -81,6 +81,8 @@ namespace WinsockPacketEditor
             public static Color Color_30 = Color.FromArgb(30, 30, 30);
             public static Color Color_35 = Color.FromArgb(35, 35, 35);
             public static Color Color_40 = Color.FromArgb(40, 40, 40);
+            public static Color Color_50 = Color.FromArgb(50, 50, 50);
+            public static Color Color_57 = Color.FromArgb(57, 57, 57);
             public static Color Color_250 = Color.FromArgb(250, 250, 250);
             public static AntdUI.FormFloatButton FloatButton = null;
 

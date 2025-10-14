@@ -9,9 +9,9 @@ namespace WinsockPacketEditor.Forms
     public partial class StartForm : BorderlessForm
     {
         private string WebSiteURL = Operate.SystemConfig.WPE64_URL;
-        private Color cEnter_Dark = Color.FromArgb(57, 57, 57);
-        private Color cLeave_Dark = Color.FromArgb(50, 50, 50);
-        private Color cEnter_Light = Color.FromArgb(251, 251, 251);
+        private Color cEnter_Dark = Operate.SystemConfig.Color_57;
+        private Color cLeave_Dark = Operate.SystemConfig.Color_50;
+        private Color cEnter_Light = Operate.SystemConfig.Color_250;
         private Color cLeave_Light = Color.Transparent;
 
         #region//窗体事件
@@ -132,13 +132,13 @@ namespace WinsockPacketEditor.Forms
 
             if (Dark)
             {
-                BackColor = Color.FromArgb(30, 30, 30);
+                BackColor = Operate.SystemConfig.Color_30;
                 ForeColor = Color.White;
 
                 this.pMultipleOpen.Back = 
                     this.pInjectMode.Back = 
-                    this.pProxyMode.Back = 
-                    Color.FromArgb(50, 50, 50);
+                    this.pProxyMode.Back =
+                    Operate.SystemConfig.Color_50;
             }
             else
             {

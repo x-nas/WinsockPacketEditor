@@ -161,6 +161,8 @@ namespace WinsockPacketEditor
                 this.hbProxyData.BackColor = Color.White;
                 this.hbProxyData.ForeColor = Color.Black;
             }
+
+            this.cQuickList.Dark_Changed();
         }
 
         public void RefreshProxyData()
