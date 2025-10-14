@@ -359,6 +359,7 @@ namespace WinsockPacketEditor
                 Align = AntdUI.TAlignMini.Top,
                 Mask = false,
                 DisplayDelay = 0,
+                Padding = 5,
             });
         }
 

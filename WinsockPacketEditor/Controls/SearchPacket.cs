@@ -55,16 +55,13 @@ namespace WinsockPacketEditor
 
         private void txtFind_TextChanged(object sender, EventArgs e)
         {
-            if (this.rbString.Checked)
+            if (this.txtFind.Text.Length > 0)
             {
-                if (this.txtFind.Text.Length > 0)
-                {
-                    this.txtFind.Status = TType.Success;
-                }
-                else
-                {
-                    this.txtFind.Status = TType.Error;
-                }
+                this.txtFind.Status = TType.Success;
+            }
+            else
+            {
+                this.txtFind.Status = TType.Error;
             }
         }
 
