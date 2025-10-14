@@ -123,67 +123,81 @@ namespace WinsockPacketEditor
 
         #region//保存
 
+        private bool CheckRemoteMGT()
+        {
+            try
+            {
+                string Remote_IP = this.ddlRemoteIP.SelectedValue.ToString();
+                ushort Remote_Port = ((ushort)this.nudRemote_Port.Value);
+                string Remote_UserName = this.txtRemote_UserName.Text.Trim();
+                string Remote_PassWord = this.txtRemote_PassWord.Text.Trim();
+
+                if (this.cbIsRemote.Checked)
+                {
+                    if (string.IsNullOrEmpty(Remote_UserName))
+                    {
+                        this.txtRemote_UserName.Status = TType.Error;
+
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "管理员账号为空", TType.Error)
+                        {
+                            LocalizationText = "RemoteMGTSetting.UserName.Empty"
+                        });
+
+                        return false;
+                    }
+                    else
+                    {
+                        this.txtRemote_UserName.Status = TType.Success;
+                    }
+
+                    if (string.IsNullOrEmpty(Remote_PassWord))
+                    {
+                        this.txtRemote_PassWord.Status = TType.Error;
+
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "账号密码为空", TType.Error)
+                        {
+                            LocalizationText = "RemoteMGTSetting.PassWord.Empty"
+                        });
+
+                        return false;
+                    }
+                    else
+                    {
+                        this.txtRemote_PassWord.Status = TType.Success;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(CheckRemoteMGT), ex.Message);
+            }
+            
+            return false;
+        }
+
         private void bSave_Click(object sender, EventArgs e)
         {
-            string Remote_IP = this.ddlRemoteIP.SelectedValue.ToString();
-            ushort Remote_Port = ((ushort)this.nudRemote_Port.Value);
-            string Remote_UserName = this.txtRemote_UserName.Text.Trim();
-            string Remote_PassWord = this.txtRemote_PassWord.Text.Trim();
-
-            if (this.cbIsRemote.Checked)
+            if (this.CheckRemoteMGT())
             {
-                if (string.IsNullOrEmpty(Remote_UserName))
+                Operate.SystemConfig.IsRemote = this.cbIsRemote.Checked;
+                Operate.SystemConfig.Remote_IP = this.ddlRemoteIP.SelectedValue.ToString();
+                Operate.SystemConfig.Remote_Port = ((ushort)this.nudRemote_Port.Value);
+                Operate.SystemConfig.Remote_UserName = this.txtRemote_UserName.Text.Trim();
+                Operate.SystemConfig.Remote_PassWord = this.txtRemote_PassWord.Text.Trim();
+
+                if (Operate.SystemConfig.IsRemote)
                 {
-                    this.txtRemote_UserName.Status = TType.Error;
-
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "管理员账号为空", TType.Error)
-                    {
-                        LocalizationText = "RemoteMGTSetting.UserName.Empty"
-                    });
-
-                    return;
+                    Operate.SystemConfig.StartRemoteMGT(this.form);
                 }
                 else
                 {
-                    this.txtRemote_UserName.Status = TType.Success;
+                    Operate.SystemConfig.StopRemoteMGT(this.form);
                 }
 
-                if (string.IsNullOrEmpty(Remote_PassWord))
-                {
-                    this.txtRemote_PassWord.Status = TType.Error;
-
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "账号密码为空", TType.Error)
-                    {
-                        LocalizationText = "RemoteMGTSetting.PassWord.Empty"
-                    });
-
-                    return;
-                }
-                else
-                {
-                    this.txtRemote_PassWord.Status = TType.Success;
-                }
-
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "远程管理已启用", TType.Success)
-                {
-                    LocalizationText = "RemoteMGTSetting.RemoteEnable"
-                });
+                this.Dispose();
             }
-            else
-            {
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "远程管理已关闭", TType.Error)
-                {
-                    LocalizationText = "RemoteMGTSetting.RemoteDisable"
-                });
-            }
-
-            Operate.SystemConfig.IsRemote = this.cbIsRemote.Checked;
-            Operate.SystemConfig.Remote_IP = Remote_IP;
-            Operate.SystemConfig.Remote_Port = Remote_Port;
-            Operate.SystemConfig.Remote_UserName = Remote_UserName;
-            Operate.SystemConfig.Remote_PassWord = Remote_PassWord;
-
-            this.Dispose();
         }
 
         #endregion

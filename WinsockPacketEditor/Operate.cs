@@ -68,6 +68,7 @@ namespace WinsockPacketEditor
             public static IntPtr MainHandle = IntPtr.Zero;
             public static int SystemSocket = 0;
             public static bool IsRemote = false;
+            public static bool IsRemoteRunning = false;
             public static string Remote_IP, Remote_UserName, Remote_PassWord;
             public static ushort Remote_Port = 88;
             public static IDisposable WebServer;
@@ -1316,11 +1317,11 @@ namespace WinsockPacketEditor
 
             #region//启动远程管理
 
-            public static void StartRemoteMGT()
+            public static void StartRemoteMGT(Form form)
             {
                 try
                 {
-                    if (Operate.SystemConfig.IsRemote)
+                    if (Operate.SystemConfig.IsRemote && !Operate.SystemConfig.IsRemoteRunning)
                     {
                         if (!string.IsNullOrEmpty(Operate.SystemConfig.Remote_IP) &&
                             !string.IsNullOrEmpty(Operate.SystemConfig.Remote_UserName) &&
@@ -1335,10 +1336,14 @@ namespace WinsockPacketEditor
                                 ProxyConfig.Proxy.InitCCProxy_HTML();
 
                                 sLog = string.Format(AntdUI.Localization.Get("MGT.Enabled", "远程管理已启用：{0}"), Remote_URL);
+                                AntdUI.Message.open(new AntdUI.Message.Config(form, sLog, TType.Success));
+
+                                Operate.SystemConfig.IsRemoteRunning = true;
                             }
                             catch
                             {
                                 sLog = string.Format(AntdUI.Localization.Get("MGT.Error", "远程管理启动失败: 请尝试使用管理员权限启动 {0}"), Process.GetCurrentProcess().ProcessName);
+                                AntdUI.Message.open(new AntdUI.Message.Config(form, sLog, TType.Error));
                             }
 
                             Operate.DoLog(nameof(StartRemoteMGT), sLog);
@@ -1351,13 +1356,19 @@ namespace WinsockPacketEditor
                 }
             }
 
-            public static void StopRemoteMGT()
+            public static void StopRemoteMGT(Form form)
             {
                 try
                 {
-                    if (Operate.SystemConfig.WebServer != null)
+                    if (Operate.SystemConfig.WebServer != null && Operate.SystemConfig.IsRemoteRunning)
                     {
                         Operate.SystemConfig.WebServer.Dispose();
+                        Operate.SystemConfig.IsRemoteRunning = false;
+
+                        AntdUI.Message.open(new AntdUI.Message.Config(form, "远程管理已关闭", TType.Error)
+                        {
+                            LocalizationText = "RemoteMGTSetting.RemoteDisable"
+                        });
                     }
                 }
                 catch (Exception ex)
