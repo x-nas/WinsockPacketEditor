@@ -4754,6 +4754,7 @@ namespace WinsockPacketEditor
             public static class Proxy
             {
                 public static ProxyAppServer ProxyServer;
+                public static IPConnectionFilter ipFilter = new IPConnectionFilter();                
                 public static long ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static int FilterProxy_CNT = 0;
@@ -4784,7 +4785,11 @@ namespace WinsockPacketEditor
                 public static QQWryIpSearch ipSearch = new QQWryIpSearch(IPLib);
 
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
-                public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);    
+                public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
+
+                public static bool WhiteListMode = false;
+                public static List<Tuple<long, long>> lstBlackList = new List<Tuple<long, long>>();
+                public static List<Tuple<long, long>> lstWhiteList = new List<Tuple<long, long>>();
 
                 #region//定义结构                
 
@@ -6419,6 +6424,220 @@ namespace WinsockPacketEditor
                     }
 
                     return $"{TargetAddress}:{TargetPort}";
+                }
+
+                #endregion
+
+                #region//解析IP范围
+
+                public static List<Tuple<long, long>> ParseIpRanges(string ipRanges)
+                {
+                    var ranges = new List<Tuple<long, long>>();
+
+                    try
+                    {
+                        var rangeArray = ipRanges.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        foreach (var range in rangeArray)
+                        {
+                            ranges.Add(GenerateIpRange(range.Trim()));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ParseIpRanges), ex.Message);
+                    }
+
+                    return ranges;
+                }
+
+                public static Tuple<long, long> GenerateIpRange(string range)
+                {
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(range))
+                            return null;
+
+                        var ipArray = range.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (ipArray.Length == 1)
+                        {
+                            var ipValue = ConvertIpToLong(ipArray[0]);
+                            return new Tuple<long, long>(ipValue, ipValue);
+                        }
+                        else if (ipArray.Length == 2)
+                        {
+                            var startIp = ConvertIpToLong(ipArray[0]);
+                            var endIp = ConvertIpToLong(ipArray[1]);
+
+                            if (startIp > endIp)
+                                return null;
+
+                            return new Tuple<long, long>(startIp, endIp);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GenerateIpRange), ex.Message);                        
+                    }
+
+                    return null;
+                }
+
+                public static long ConvertIpToLong(string ip)
+                {
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(ip))
+                            return -1;
+
+                        var points = ip.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (points.Length != 4)
+                            return -1;
+
+                        long value = 0;
+                        long unit = 1;
+
+                        for (int i = points.Length - 1; i >= 0; i--)
+                        {
+                            if (!int.TryParse(points[i], out int segment) || segment < 0 || segment > 255)
+                                return -1;
+
+                            value += unit * segment;
+                            unit *= 256;
+                        }
+
+                        return value;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ConvertIpToLong), ex.Message);
+                        return -1;
+                    }
+                }
+
+                public static bool IsIpInRanges(long ipValue, List<Tuple<long, long>> ranges)
+                {
+                    try
+                    {
+                        foreach (var range in ranges)
+                        {
+                            if (ipValue >= range.Item1 && ipValue <= range.Item2)
+                                return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(IsIpInRanges), ex.Message);
+                    }                    
+
+                    return false;
+                }
+
+                public static List<string> ConvertRangesToStrings(List<Tuple<long, long>> ranges)
+                {
+                    var result = new List<string>();
+
+                    try
+                    {
+                        foreach (var range in ranges)
+                        {
+                            if (range.Item1 == range.Item2)
+                            {
+                                result.Add(ConvertLongToIp(range.Item1));
+                            }
+                            else
+                            {
+                                result.Add($"{ConvertLongToIp(range.Item1)}-{ConvertLongToIp(range.Item2)}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ConvertRangesToStrings), ex.Message);
+                    }
+
+                    return result;
+                }
+
+                private static string ConvertLongToIp(long ipValue)
+                {
+                    return $"{(ipValue >> 24) & 0xFF}.{(ipValue >> 16) & 0xFF}.{(ipValue >> 8) & 0xFF}.{ipValue & 0xFF}";
+                }
+
+                #endregion
+
+                #region//白名单操作
+
+                public static List<string> GetWhiteList()
+                {
+                    return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.lstWhiteList);
+                }
+
+                public static void AddToWhiteList(string ipOrRange)
+                {
+                    try
+                    {
+                        var range = GenerateIpRange(ipOrRange);
+                        Operate.ProxyConfig.Proxy.lstWhiteList.Add(range);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddToWhiteList), ex.Message);
+                    }                    
+                }
+
+                public static void RemoveFromWhiteList(string ipOrRange)
+                {
+                    try
+                    {
+                        var rangeToRemove = GenerateIpRange(ipOrRange);
+                        Operate.ProxyConfig.Proxy.lstWhiteList.RemoveAll(r => r.Item1 == rangeToRemove.Item1 && r.Item2 == rangeToRemove.Item2);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(RemoveFromWhiteList), ex.Message);
+                    }                    
+                }
+
+                #endregion
+
+                #region//黑名单操作
+
+                public static List<string> GetBlackList()
+                {
+                    return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.lstBlackList);
+                }
+
+                public static void AddToBlackList(string ipOrRange)
+                {
+                    try
+                    {
+                        var range = GenerateIpRange(ipOrRange);
+                        Operate.ProxyConfig.Proxy.lstBlackList.Add(range);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddToBlackList), ex.Message);
+                    }                    
+                }
+
+                public static void RemoveFromBlackList(string ipOrRange)
+                {
+                    try
+                    {
+                        var rangeToRemove = GenerateIpRange(ipOrRange);
+                        Operate.ProxyConfig.Proxy.lstBlackList.RemoveAll(r => r.Item1 == rangeToRemove.Item1 && r.Item2 == rangeToRemove.Item2);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(RemoveFromBlackList), ex.Message);
+                    }                    
                 }
 
                 #endregion

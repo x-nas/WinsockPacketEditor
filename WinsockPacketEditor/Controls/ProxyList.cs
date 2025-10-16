@@ -17,7 +17,7 @@ namespace WinsockPacketEditor
     {
         private Form form;
         public bool SearchFromHead = true;
-        private QuickList cQuickList = null;
+        private QuickList cQuickList = null;        
 
         #region//窗体事件
 
@@ -953,7 +953,12 @@ namespace WinsockPacketEditor
                 if (Operate.ProxyConfig.Proxy.ProxyServer == null)
                 {
                     Operate.ProxyConfig.Proxy.ProxyServer = new SocksProxyServer();
-                }                
+                }
+
+                if (Operate.ProxyConfig.Proxy.ipFilter != null)
+                {
+                    Operate.ProxyConfig.Proxy.ipFilter.Initialize("IPFilter", Operate.ProxyConfig.Proxy.ProxyServer);
+                }
 
                 if (Operate.ProxyConfig.Proxy.ProxyServer.State != ServerState.Running)
                 {
@@ -1005,7 +1010,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                var config = new ServerConfig
+                ServerConfig config = new ServerConfig
                 {
                     Ip = Operate.ProxyConfig.Proxy.ProxyTCP_IP.ToString(),
                     Port = Operate.ProxyConfig.Proxy.ProxyPort,
@@ -1025,9 +1030,9 @@ namespace WinsockPacketEditor
                     ClearIdleSession = true,
                     ClearIdleSessionInterval = 60,
                     IdleSessionTimeOut = 300,
-                };
+                };                
 
-                if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config))
+                if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config: config, connectionFilters: new List<IConnectionFilter> { Operate.ProxyConfig.Proxy.ipFilter }))
                 {
                     if (Operate.ProxyConfig.Proxy.ProxyServer.Start())
                     {

@@ -219,6 +219,7 @@
     <Compile Include="ClassObject\FontLoader.cs" />
     <Compile Include="ClassObject\InstructionInfo.cs" />
     <Compile Include="ClassObject\InterfaceInfo.cs" />
+    <Compile Include="ClassObject\IPConnectionFilter.cs" />
     <Compile Include="ClassObject\Localizer.cs" />
     <Compile Include="ClassObject\LogInfo.cs" />
     <Compile Include="ClassObject\MapLocal.cs" />
