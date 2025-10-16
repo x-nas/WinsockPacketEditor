@@ -214,6 +214,7 @@
     <Compile Include="ClassObject\AccountIPInfo.cs" />
     <Compile Include="ClassObject\AuthInfo.cs" />
     <Compile Include="ClassObject\BitInfo.cs" />
+    <Compile Include="ClassObject\BlackListInfo.cs" />
     <Compile Include="ClassObject\FilterInfo.cs" />
     <Compile Include="ClassObject\FilterLogInfo.cs" />
     <Compile Include="ClassObject\FontLoader.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="ClassObject\SocksProxyReceiveFilterFactory.cs" />
     <Compile Include="ClassObject\SocksProxyServer.cs" />
     <Compile Include="ClassObject\SocksSwitchReceiveFilter.cs" />
+    <Compile Include="ClassObject\WhiteListInfo.cs" />
     <Compile Include="ClassObject\WinSockHook.cs" />
     <Compile Include="Controls\AccountEdit.cs">
       <SubType>UserControl</SubType>
@@ -323,6 +325,12 @@
     </Compile>
     <Compile Include="Controls\FilterList.Designer.cs">
       <DependentUpon>FilterList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FireWallSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FireWallSetting.Designer.cs">
+      <DependentUpon>FireWallSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\HookSetting.cs">
       <SubType>UserControl</SubType>
@@ -582,6 +590,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FilterList.resx">
       <DependentUpon>FilterList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FireWallSetting.resx">
+      <DependentUpon>FireWallSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\HookSetting.resx">
       <DependentUpon>HookSetting.cs</DependentUpon>

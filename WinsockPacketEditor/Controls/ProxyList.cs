@@ -102,6 +102,12 @@ namespace WinsockPacketEditor
                     LocalizationText = "ProxyModeForm.RemoteMGTSettings",
                     IconSvg = "CloudServerOutlined",
                 },
+                new AntdUI.SelectItem("防火墙设置")
+                {
+                    Tag = "FireWallSettings",
+                    LocalizationText = "ProxyModeForm.FireWallSettings",
+                    IconSvg = "FireOutlined",
+                },
                 new AntdUI.SelectItem("系统设置")
                 {
                     Tag = "SystemSettings",
@@ -485,6 +491,18 @@ namespace WinsockPacketEditor
                 case "RemoteMGTSettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new RemoteMGTSetting(this.form))
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "FireWallSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new FireWallSetting(this.form))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,

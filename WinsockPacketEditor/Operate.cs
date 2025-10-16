@@ -4787,9 +4787,12 @@ namespace WinsockPacketEditor
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
                 public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
 
+                public static bool EnableFireWall = false;
                 public static bool WhiteListMode = false;
-                public static List<Tuple<long, long>> lstBlackList = new List<Tuple<long, long>>();
-                public static List<Tuple<long, long>> lstWhiteList = new List<Tuple<long, long>>();
+                public static BindingList<BlackListInfo> lstBlackList = new BindingList<BlackListInfo>();
+                public static BindingList<WhiteListInfo> lstWhiteList = new BindingList<WhiteListInfo>();
+                public static BindingList<Tuple<long, long>> BlackList = new BindingList<Tuple<long, long>>();
+                public static BindingList<Tuple<long, long>> WhiteList = new BindingList<Tuple<long, long>>();
 
                 #region//定义结构                
 
@@ -6430,9 +6433,9 @@ namespace WinsockPacketEditor
 
                 #region//解析IP范围
 
-                public static List<Tuple<long, long>> ParseIpRanges(string ipRanges)
+                public static BindingList<Tuple<long, long>> ParseIpRanges(string ipRanges)
                 {
-                    var ranges = new List<Tuple<long, long>>();
+                    var ranges = new BindingList<Tuple<long, long>>();
 
                     try
                     {
@@ -6521,7 +6524,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                public static bool IsIpInRanges(long ipValue, List<Tuple<long, long>> ranges)
+                public static bool IsIpInRanges(long ipValue, BindingList<Tuple<long, long>> ranges)
                 {
                     try
                     {
@@ -6539,7 +6542,7 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                public static List<string> ConvertRangesToStrings(List<Tuple<long, long>> ranges)
+                public static List<string> ConvertRangesToStrings(BindingList<Tuple<long, long>> ranges)
                 {
                     var result = new List<string>();
 
@@ -6576,7 +6579,7 @@ namespace WinsockPacketEditor
 
                 public static List<string> GetWhiteList()
                 {
-                    return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.lstWhiteList);
+                    return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.WhiteList);
                 }
 
                 public static void AddToWhiteList(string ipOrRange)
@@ -6584,7 +6587,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         var range = GenerateIpRange(ipOrRange);
-                        Operate.ProxyConfig.Proxy.lstWhiteList.Add(range);
+                        Operate.ProxyConfig.Proxy.WhiteList.Add(range);
                     }
                     catch (Exception ex)
                     {
@@ -6597,12 +6600,21 @@ namespace WinsockPacketEditor
                     try
                     {
                         var rangeToRemove = GenerateIpRange(ipOrRange);
-                        Operate.ProxyConfig.Proxy.lstWhiteList.RemoveAll(r => r.Item1 == rangeToRemove.Item1 && r.Item2 == rangeToRemove.Item2);
+                        if (rangeToRemove.Item1 == -1 && rangeToRemove.Item2 == -1) return;
+
+                        var itemsToRemove = Operate.ProxyConfig.Proxy.WhiteList
+                            .Where(r => r.Item1 == rangeToRemove.Item1 && r.Item2 == rangeToRemove.Item2)
+                            .ToList();
+
+                        foreach (var item in itemsToRemove)
+                        {
+                            Operate.ProxyConfig.Proxy.WhiteList.Remove(item);
+                        }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(RemoveFromWhiteList), ex.Message);
-                    }                    
+                    }
                 }
 
                 #endregion
@@ -6611,7 +6623,7 @@ namespace WinsockPacketEditor
 
                 public static List<string> GetBlackList()
                 {
-                    return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.lstBlackList);
+                    return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.BlackList);
                 }
 
                 public static void AddToBlackList(string ipOrRange)
@@ -6619,7 +6631,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         var range = GenerateIpRange(ipOrRange);
-                        Operate.ProxyConfig.Proxy.lstBlackList.Add(range);
+                        Operate.ProxyConfig.Proxy.BlackList.Add(range);
                     }
                     catch (Exception ex)
                     {
@@ -6632,12 +6644,21 @@ namespace WinsockPacketEditor
                     try
                     {
                         var rangeToRemove = GenerateIpRange(ipOrRange);
-                        Operate.ProxyConfig.Proxy.lstBlackList.RemoveAll(r => r.Item1 == rangeToRemove.Item1 && r.Item2 == rangeToRemove.Item2);
+                        if (rangeToRemove.Item1 == -1 && rangeToRemove.Item2 == -1) return;
+
+                        var itemsToRemove = Operate.ProxyConfig.Proxy.BlackList
+                            .Where(r => r.Item1 == rangeToRemove.Item1 && r.Item2 == rangeToRemove.Item2)
+                            .ToList();
+
+                        foreach (var item in itemsToRemove)
+                        {
+                            Operate.ProxyConfig.Proxy.BlackList.Remove(item);
+                        }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(RemoveFromBlackList), ex.Message);
-                    }                    
+                    }
                 }
 
                 #endregion

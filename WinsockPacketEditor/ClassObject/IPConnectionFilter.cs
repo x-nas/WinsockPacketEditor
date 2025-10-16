@@ -18,14 +18,14 @@ namespace WinsockPacketEditor
                 var blackListRanges = "192.168.137.37";
                 if (!string.IsNullOrEmpty(blackListRanges))
                 {
-                    Operate.ProxyConfig.Proxy.lstBlackList = Operate.ProxyConfig.Proxy.ParseIpRanges(blackListRanges);
+                    Operate.ProxyConfig.Proxy.BlackList = Operate.ProxyConfig.Proxy.ParseIpRanges(blackListRanges);
                 }
 
                 // 从配置中读取白名单
                 var whiteListRanges = "192.168.137.37";
                 if (!string.IsNullOrEmpty(whiteListRanges))
                 {
-                    Operate.ProxyConfig.Proxy.lstWhiteList = Operate.ProxyConfig.Proxy.ParseIpRanges(whiteListRanges);
+                    Operate.ProxyConfig.Proxy.WhiteList = Operate.ProxyConfig.Proxy.ParseIpRanges(whiteListRanges);
                 }
 
                 return true;
@@ -49,11 +49,11 @@ namespace WinsockPacketEditor
 
                 if (Operate.ProxyConfig.Proxy.WhiteListMode)
                 {
-                    bAllow = Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.lstWhiteList);
+                    bAllow = Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.WhiteList);
                 }
                 else
                 {
-                    bAllow = !Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.lstBlackList);
+                    bAllow = !Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.BlackList);
                 }
             }
             catch (Exception ex)
