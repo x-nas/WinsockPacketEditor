@@ -43,25 +43,25 @@ namespace WinsockPacketEditor
                 new AntdUI.SelectItem("新增")
                 {
                     Tag = "Add",
-                    LocalizationText = "MapSettingsForm.MapLocal.Add",
+                    LocalizationText = "FireWallSetting.WhiteList.Add",
                     IconSvg = "DesktopOutlined",
                 },
                 new AntdUI.SelectItem("导入白名单")
                 {
                     Tag = "Import",
-                    LocalizationText = "MapSettingsForm.MapLocal.Import",
+                    LocalizationText = "FireWallSetting.WhiteList.Import",
                     IconSvg = "FolderOpenOutlined",
                 },
                 new AntdUI.SelectItem("导出白名单")
                 {
                     Tag = "Export",
-                    LocalizationText = "MapSettingsForm.MapLocal.Export",
+                    LocalizationText = "FireWallSetting.WhiteList.Export",
                     IconSvg = "DeliveredProcedureOutlined",
                 },
                 new AntdUI.SelectItem("清空白名单")
                 {
                     Tag = "Clear",
-                    LocalizationText = "MapSettingsForm.MapLocal.Clear",
+                    LocalizationText = "FireWallSetting.WhiteList.Clear",
                     IconSvg = "DeleteOutlined",
                 },
             });
@@ -74,25 +74,25 @@ namespace WinsockPacketEditor
                 new AntdUI.SelectItem("新增")
                 {
                     Tag = "Add",
-                    LocalizationText = "MapSettingsForm.MapLocal.Add",
+                    LocalizationText = "FireWallSetting.BlackList.Add",
                     IconSvg = "DesktopOutlined",
                 },
                 new AntdUI.SelectItem("导入黑名单")
                 {
                     Tag = "Import",
-                    LocalizationText = "MapSettingsForm.MapLocal.Import",
+                    LocalizationText = "FireWallSetting.BlackList.Import",
                     IconSvg = "FolderOpenOutlined",
                 },
                 new AntdUI.SelectItem("导出黑名单")
                 {
                     Tag = "Export",
-                    LocalizationText = "MapSettingsForm.MapLocal.Export",
+                    LocalizationText = "FireWallSetting.BlackList.Export",
                     IconSvg = "DeliveredProcedureOutlined",
                 },
                 new AntdUI.SelectItem("清空黑名单")
                 {
                     Tag = "Clear",
-                    LocalizationText = "MapSettingsForm.MapLocal.Clear",
+                    LocalizationText = "FireWallSetting.BlackList.Clear",
                     IconSvg = "DeleteOutlined",
                 },
             });
@@ -115,9 +115,9 @@ namespace WinsockPacketEditor
         private void InitTable_WhiteList()
         {
             tWhiteList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetLocalizationTitleID("Table.WhiteList.Column."),
-                new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.WhiteList.Column."),
-                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("Table.WhiteList.Column."),
+                new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetLocalizationTitleID("FireWallSetting.Column."),
+                new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("FireWallSetting.Column."),
+                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("FireWallSetting.Column."),
                 new AntdUI.Column("CellLinks", "操作")
                 {
                     Render = (value, record, rowindex)=>
@@ -128,7 +128,7 @@ namespace WinsockPacketEditor
                             new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
-                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.WhiteList.Column."),
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("FireWallSetting.Column."),
             };
 
             this.tWhiteList.Binding(Operate.ProxyConfig.Proxy.lstWhiteList);
@@ -137,9 +137,9 @@ namespace WinsockPacketEditor
         private void InitTable_BlackList()
         {
             tBlackList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetLocalizationTitleID("Table.BlackList.Column."),
-                new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.BlackList.Column."),
-                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("Table.BlackList.Column."),
+                new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetLocalizationTitleID("FireWallSetting.Column."),
+                new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("FireWallSetting.Column."),
+                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("FireWallSetting.Column."),
                 new AntdUI.Column("CellLinks", "操作")
                 {
                     Render = (value, record, rowindex)=>
@@ -150,7 +150,7 @@ namespace WinsockPacketEditor
                             new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
-                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.BlackList.Column."),
+                }.SetFixed().SetWidth("auto").SetLocalizationTitleID("FireWallSetting.Column."),
             };
 
             this.tBlackList.Binding(Operate.ProxyConfig.Proxy.lstBlackList);

@@ -176,9 +176,9 @@ namespace WinsockPacketEditor
         {
             if (!this.CheckSave())
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "数据格式错误", TType.Error)
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "IP地址错误", TType.Error)
                 {
-                    LocalizationText = "WhiteListAdd.Error"
+                    LocalizationText = "FireWallSetting.IPAddress.Error"
                 });
 
                 return;
@@ -211,9 +211,9 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.ProxyConfig.Proxy.IsExistsInWhiteList(IPString))
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此 IP 已在白名单", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此IP地址已存在", TType.Error)
                         {
-                            LocalizationText = "WhiteListEdit.Error"
+                            LocalizationText = "FireWallSetting.IPAddress.Exists"
                         });
 
                         return;
@@ -226,9 +226,9 @@ namespace WinsockPacketEditor
             {
                 if (Operate.ProxyConfig.Proxy.IsExistsInWhiteList(IPString))
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此 IP 已在白名单", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此IP地址已存在", TType.Error)
                     {
-                        LocalizationText = "WhiteListEdit.Error"
+                        LocalizationText = "FireWallSetting.IPAddress.Exists"
                     });
 
                     return;
@@ -239,7 +239,7 @@ namespace WinsockPacketEditor
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "白名单保存成功", TType.Success)
             {
-                LocalizationText = "WhiteListEdit.Success"
+                LocalizationText = "FireWallSetting.WhiteList.Save.Success"
             });
 
             this.fwForm.RefreshWhiteList();

@@ -117,6 +117,7 @@
             // 
             this.lBlackList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lBlackList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lBlackList.LocalizationText = "FireWallSetting.BlackList";
             this.lBlackList.Location = new System.Drawing.Point(3, 7);
             this.lBlackList.Name = "lBlackList";
             this.lBlackList.Size = new System.Drawing.Size(60, 35);
@@ -165,6 +166,7 @@
             // 
             this.lWhiteList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWhiteList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lWhiteList.LocalizationText = "FireWallSetting.WhiteList";
             this.lWhiteList.Location = new System.Drawing.Point(3, 7);
             this.lWhiteList.Name = "lWhiteList";
             this.lWhiteList.Size = new System.Drawing.Size(60, 35);
@@ -285,6 +287,7 @@
             // 
             this.rbBlackListMode.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbBlackListMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbBlackListMode.LocalizationText = "FireWallSetting.BlackListMode";
             this.rbBlackListMode.Location = new System.Drawing.Point(211, 9);
             this.rbBlackListMode.Name = "rbBlackListMode";
             this.rbBlackListMode.Size = new System.Drawing.Size(92, 32);
@@ -296,6 +299,7 @@
             this.rbWhiteListMode.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbWhiteListMode.Checked = true;
             this.rbWhiteListMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbWhiteListMode.LocalizationText = "FireWallSetting.WhiteListMode";
             this.rbWhiteListMode.Location = new System.Drawing.Point(113, 9);
             this.rbWhiteListMode.Name = "rbWhiteListMode";
             this.rbWhiteListMode.Size = new System.Drawing.Size(92, 32);
@@ -307,6 +311,7 @@
             this.cbEnableFireWall.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbEnableFireWall.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbEnableFireWall.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cbEnableFireWall.LocalizationText = "FireWallSetting.EnableConnection";
             this.cbEnableFireWall.Location = new System.Drawing.Point(3, 9);
             this.cbEnableFireWall.Name = "cbEnableFireWall";
             this.cbEnableFireWall.Size = new System.Drawing.Size(104, 32);

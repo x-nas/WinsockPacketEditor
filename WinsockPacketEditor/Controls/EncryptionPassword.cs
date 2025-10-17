@@ -22,7 +22,7 @@ namespace WinsockPacketEditor
                     break;
 
                 case Operate.SystemConfig.PWType.Export:
-                    this.lEncryption.Text = AntdUI.Localization.Get("EncryptionPassword.Info", "请输入密码! 如无需输入密码, 直接点击 [ 取消 ] 按钮!");
+                    this.lEncryption.Text = AntdUI.Localization.Get("EncryptionPassword.Info", "请输入密码!\r\n\r\n如无需输入密码, 直接点击 [ 取消 ] 按钮!");
                     break;
             }
         }

@@ -1029,6 +1029,9 @@ namespace WinsockPacketEditor
                 case "ProxyModeForm.RemoteMGTSettings":
                     return "RemoteMGT Settings";
 
+                case "ProxyModeForm.FireWallSettings":
+                    return "FireWall Settings";
+
                 case "ProxyModeForm.SystemSettings":
                     return "System Settings";
 
@@ -1980,6 +1983,127 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//FireWallSetting
+
+                case "FireWallSetting.EnableConnection":
+                    return "Enable connection control";
+
+                case "FireWallSetting.WhiteList":
+                    return "WhiteList";
+
+                case "FireWallSetting.BlackList":
+                    return "BlackList";
+
+                case "FireWallSetting.WhiteListMode":
+                    return "WhiteList Mode";
+
+                case "FireWallSetting.BlackListMode":
+                    return "BlackList Mode";
+
+                case "FireWallSetting.Column.IPAddress":
+                    return "IP Address";
+
+                case "FireWallSetting.Column.IPLocation":
+                    return "IP Location";
+
+                case "FireWallSetting.Column.ExpiryTime":
+                    return "Expiry Time";
+
+                case "FireWallSetting.Column.CellLinks":
+                    return "Operation";
+
+                case "FireWallSetting.WhiteList.Add":
+                    return "Add WhiteList";
+
+                case "FireWallSetting.WhiteList.Import":
+                    return "Import WhiteList";
+
+                case "FireWallSetting.WhiteList.Export":
+                    return "Export WhiteList";
+
+                case "FireWallSetting.WhiteList.Clear":
+                    return "Clear WhiteList";
+
+                case "FireWallSetting.BlackList.Add":
+                    return "Add BlackList";
+
+                case "FireWallSetting.BlackList.Import":
+                    return "Import BlackList";
+
+                case "FireWallSetting.BlackList.Export":
+                    return "Export BlackList";
+
+                case "FireWallSetting.BlackList.Clear":
+                    return "Clear BlackList";
+
+                case "FireWallSetting.Success":
+                    return "Firewall settings saved successfully";
+
+                case "FireWallSetting.SingleIP":
+                    return "Single IP :";
+
+                case "FireWallSetting.IPRange":
+                    return "IP Range :";
+
+                case "FireWallSetting.ExpiryTime":
+                    return "Expiry Time :";
+
+                case "FireWallSetting.WhiteListEdit":
+                    return "WhiteList Edit";
+
+                case "FireWallSetting.BlackListEdit":
+                    return "BlackList Edit";
+
+                case "FireWallSetting.WhiteListFile":
+                    return "WhiteList File";
+
+                case "FireWallSetting.BlackListFile":
+                    return "BlackList File";
+
+                case "FireWallSetting.WhiteListFile.Import":
+                    return "Import WhiteList";
+
+                case "FireWallSetting.BlackListFile.Import":
+                    return "Import BlackList";
+
+                case "FireWallSetting.WhiteListFile.Export":
+                    return "Export WhiteList";
+
+                case "FireWallSetting.BlackListFile.Export":
+                    return "Export BlackList";
+
+                case "FireWallSetting.WhiteListFile.Import.Success":
+                    return "WhiteList import successful";
+
+                case "FireWallSetting.BlackListFile.Import.Success":
+                    return "BlackList import successful";
+
+                case "FireWallSetting.WhiteListFile.Export.Success":
+                    return "WhiteList export successful";
+
+                case "FireWallSetting.BlackListFile.Export.Success":
+                    return "BlackList export successful";
+
+                case "FireWallSetting.WhiteListFile.Export.Fail":
+                    return "Export whitelist failed";
+
+                case "FireWallSetting.BlackListFile.Export.Fail":
+                    return "Export blacklist failed";
+
+                case "FireWallSetting.IPAddress.Error":
+                    return "IP address Error";
+
+                case "FireWallSetting.IPAddress.Exists":
+                    return "This IP address already exists";
+
+                case "FireWallSetting.WhiteList.Save.Success":
+                    return "WhiteList saved successful";
+
+                case "FireWallSetting.BlackList.Save.Success":
+                    return "BlackList saved successful";
+
+                #endregion                
+
                 #region//SystemSettingsForm
 
                 case "SystemSettingsForm":
@@ -2599,7 +2723,7 @@ namespace WinsockPacketEditor
                 #region//EncryptionPassword
 
                 case "EncryptionPassword.Info":
-                    return "Please input password! If you don't need to input password, simply click the [ Cancel ] button!";             
+                    return "Please input password!\r\n\r\n If you don't need to input password, simply click the [ Cancel ] button!";             
 
                 #endregion
 

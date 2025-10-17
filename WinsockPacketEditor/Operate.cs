@@ -6669,7 +6669,7 @@ namespace WinsockPacketEditor
 
                 public static void OpenWhiteListEdit(Form form, FireWallSetting fwForm, WhiteListInfo wli)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "白名单编辑"), new WhiteListEdit(form, fwForm, wli))
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("FireWallSetting.WhiteListEdit", "白名单编辑"), new WhiteListEdit(form, fwForm, wli))
                     {
                         Keyboard = false,
                         MaskClosable = false,
@@ -6685,7 +6685,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "白名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("FireWallSetting.WhiteList", "白名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                         {
                             Icon = TType.Warn,
                             Keyboard = false,
@@ -6713,7 +6713,7 @@ namespace WinsockPacketEditor
 
                 public static void CleanUpWhiteList_Dialog(Form form)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "白名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("FireWallSetting.WhiteList", "白名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                     {
                         Icon = TType.Warn,
                         Keyboard = false,
@@ -6892,7 +6892,7 @@ namespace WinsockPacketEditor
 
                 public static void OpenBlackListEdit(Form form, FireWallSetting fwForm, BlackListInfo bli)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "黑名单编辑"), new BlackListEdit(form, fwForm, bli))
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("FireWallSetting.BlackListEdit", "黑名单编辑"), new BlackListEdit(form, fwForm, bli))
                     {
                         Keyboard = false,
                         MaskClosable = false,
@@ -6908,7 +6908,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "黑名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("FireWallSetting.BlackList", "黑名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                         {
                             Icon = TType.Warn,
                             Keyboard = false,
@@ -6936,7 +6936,7 @@ namespace WinsockPacketEditor
 
                 public static void CleanUpBlackList_Dialog(Form form)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "黑名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("FireWallSetting.BlackList", "黑名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                     {
                         Icon = TType.Warn,
                         Keyboard = false,
@@ -7043,7 +7043,7 @@ namespace WinsockPacketEditor
                         if (ProxyConfig.Proxy.lstWhiteList.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = AntdUI.Localization.Get("WhiteListFile", "白名单文件") + "（*.wl）|*.wl";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("FireWallSetting.WhiteListFile", "白名单文件") + "（*.wl）|*.wl";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -7056,17 +7056,17 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportWhiteList", "导出白名单"));
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("FireWallSetting.WhiteListFile.Export", "导出白名单"));
 
                                     if (SaveWhiteList(FilePath, wliList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportWhiteList.Success", "导出白名单成功");
+                                        string Title = AntdUI.Localization.Get("FireWallSetting.WhiteListFile.Export.Success", "导出白名单成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(nameof(SaveWhiteList_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportWhiteList.Error", "导出白名单失败");
+                                        string Title = AntdUI.Localization.Get("FireWallSetting.WhiteListFile.Export.Fail", "导出白名单失败");
                                         string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
@@ -7155,7 +7155,7 @@ namespace WinsockPacketEditor
                         if (ProxyConfig.Proxy.lstBlackList.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = AntdUI.Localization.Get("BlackListFile", "黑名单文件") + "（*.bl）|*.bl";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("FireWallSetting.BlackListFile", "黑名单文件") + "（*.bl）|*.bl";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -7168,17 +7168,17 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportBlackList", "导出黑名单"));
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("FireWallSetting.BlackListFile.Export", "导出黑名单"));
 
                                     if (SaveBlackList(FilePath, bliList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportBlackList.Success", "导出黑名单成功");
+                                        string Title = AntdUI.Localization.Get("FireWallSetting.BlackListFile.Export.Success", "导出黑名单成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(nameof(SaveBlackList_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportBlackList.Error", "导出黑名单失败");
+                                        string Title = AntdUI.Localization.Get("FireWallSetting.BlackListFile.Export.Fail", "导出黑名单失败");
                                         string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
@@ -7265,7 +7265,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                        ofdLoadFile.Filter = AntdUI.Localization.Get("WhiteListFile", "白名单文件") + "（*.wl）|*.wl";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("FireWallSetting.WhiteListFile", "白名单文件") + "（*.wl）|*.wl";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -7275,7 +7275,7 @@ namespace WinsockPacketEditor
                             {
                                 if (LoadWhiteList(form, FilePath, true))
                                 {
-                                    string Title = AntdUI.Localization.Get("ImportWhiteList.Success", "导入白名单成功");
+                                    string Title = AntdUI.Localization.Get("FireWallSetting.WhiteListFile.Import.Success", "导入白名单成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                     Operate.DoLog(nameof(LoadWhiteList_Dialog), Title + ": " + FilePath);
                                 }
@@ -7301,7 +7301,7 @@ namespace WinsockPacketEditor
                             {
                                 if (LoadFromUser)
                                 {
-                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportWhiteList", "导入白名单"), FilePath);
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("FireWallSetting.WhiteListFile.Import", "导入白名单"), FilePath);
                                 }
                             }
                             else
@@ -7378,7 +7378,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                        ofdLoadFile.Filter = AntdUI.Localization.Get("BlackListFile", "黑名单文件") + "（*.bl）|*.bl";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("FireWallSetting.BlackListFile", "黑名单文件") + "（*.bl）|*.bl";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -7388,7 +7388,7 @@ namespace WinsockPacketEditor
                             {
                                 if (LoadBlackList(form, FilePath, true))
                                 {
-                                    string Title = AntdUI.Localization.Get("ImportBlackList.Success", "导入黑名单成功");
+                                    string Title = AntdUI.Localization.Get("FireWallSetting.BlackListFile.Import.Success", "导入黑名单成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                     Operate.DoLog(nameof(LoadBlackList_Dialog), Title + ": " + FilePath);
                                 }
@@ -7414,7 +7414,7 @@ namespace WinsockPacketEditor
                             {
                                 if (LoadFromUser)
                                 {
-                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportBlackList", "导入黑名单"), FilePath);
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("FireWallSetting.BlackListFile.Import", "导入黑名单"), FilePath);
                                 }
                             }
                             else

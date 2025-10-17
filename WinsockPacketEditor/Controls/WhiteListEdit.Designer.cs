@@ -59,7 +59,7 @@
             this.tlpWhiteList.RowCount = 2;
             this.tlpWhiteList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpWhiteList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpWhiteList.Size = new System.Drawing.Size(450, 200);
+            this.tlpWhiteList.Size = new System.Drawing.Size(500, 200);
             this.tlpWhiteList.TabIndex = 0;
             // 
             // tlpButton
@@ -80,7 +80,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(450, 50);
+            this.tlpButton.Size = new System.Drawing.Size(500, 50);
             this.tlpButton.TabIndex = 5;
             // 
             // bSave
@@ -90,7 +90,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(153, 6);
+            this.bSave.Location = new System.Drawing.Point(178, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -106,7 +106,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(234, 6);
+            this.bExit.Location = new System.Drawing.Point(259, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -140,7 +140,7 @@
             this.tlpWhiteListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWhiteListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpWhiteListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpWhiteListInfo.Size = new System.Drawing.Size(450, 150);
+            this.tlpWhiteListInfo.Size = new System.Drawing.Size(500, 150);
             this.tlpWhiteListInfo.TabIndex = 6;
             // 
             // dtpExpiryTime
@@ -151,14 +151,15 @@
             this.dtpExpiryTime.Margin = new System.Windows.Forms.Padding(2);
             this.dtpExpiryTime.MaxDate = new System.DateTime(8888, 12, 31, 0, 0, 0, 0);
             this.dtpExpiryTime.Name = "dtpExpiryTime";
-            this.dtpExpiryTime.Size = new System.Drawing.Size(171, 34);
+            this.dtpExpiryTime.Size = new System.Drawing.Size(196, 34);
             this.dtpExpiryTime.TabIndex = 23;
+            this.dtpExpiryTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // cbExpiryTime
             // 
             this.cbExpiryTime.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbExpiryTime.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbExpiryTime.LocalizationText = "AccountEditForm.ExpireTime";
+            this.cbExpiryTime.LocalizationText = "FireWallSetting.ExpiryTime";
             this.cbExpiryTime.Location = new System.Drawing.Point(2, 96);
             this.cbExpiryTime.Margin = new System.Windows.Forms.Padding(2);
             this.cbExpiryTime.Name = "cbExpiryTime";
@@ -171,47 +172,55 @@
             // 
             this.rbSingleIP.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbSingleIP.Checked = true;
+            this.rbSingleIP.LocalizationText = "FireWallSetting.SingleIP";
             this.rbSingleIP.Location = new System.Drawing.Point(3, 21);
             this.rbSingleIP.Name = "rbSingleIP";
-            this.rbSingleIP.Size = new System.Drawing.Size(74, 32);
+            this.rbSingleIP.Size = new System.Drawing.Size(77, 32);
             this.rbSingleIP.TabIndex = 0;
-            this.rbSingleIP.Text = "单个IP :";
+            this.rbSingleIP.Text = "单个 IP :";
             this.rbSingleIP.CheckedChanged += new AntdUI.BoolEventHandler(this.rbSingleIP_CheckedChanged);
             // 
             // rbIPRange
             // 
             this.rbIPRange.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.rbIPRange.LocalizationText = "FireWallSetting.IPRange";
             this.rbIPRange.Location = new System.Drawing.Point(3, 59);
             this.rbIPRange.Name = "rbIPRange";
-            this.rbIPRange.Size = new System.Drawing.Size(74, 32);
+            this.rbIPRange.Size = new System.Drawing.Size(77, 32);
             this.rbIPRange.TabIndex = 1;
-            this.rbIPRange.Text = "IP范围 :";
+            this.rbIPRange.Text = "IP 范围 :";
             this.rbIPRange.CheckedChanged += new AntdUI.BoolEventHandler(this.rbIPRange_CheckedChanged);
             // 
             // txtSingleIP
             // 
             this.txtSingleIP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSingleIP.LocalizationPlaceholderText = "";
             this.txtSingleIP.Location = new System.Drawing.Point(94, 21);
             this.txtSingleIP.Name = "txtSingleIP";
-            this.txtSingleIP.Size = new System.Drawing.Size(169, 32);
+            this.txtSingleIP.PlaceholderText = "";
+            this.txtSingleIP.Size = new System.Drawing.Size(194, 32);
             this.txtSingleIP.TabIndex = 2;
             this.txtSingleIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtIPRangeFrom
             // 
             this.txtIPRangeFrom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtIPRangeFrom.LocalizationPlaceholderText = "";
             this.txtIPRangeFrom.Location = new System.Drawing.Point(94, 59);
             this.txtIPRangeFrom.Name = "txtIPRangeFrom";
-            this.txtIPRangeFrom.Size = new System.Drawing.Size(169, 32);
+            this.txtIPRangeFrom.PlaceholderText = "";
+            this.txtIPRangeFrom.Size = new System.Drawing.Size(194, 32);
             this.txtIPRangeFrom.TabIndex = 3;
             this.txtIPRangeFrom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtIPRangeTo
             // 
             this.txtIPRangeTo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtIPRangeTo.Location = new System.Drawing.Point(277, 59);
+            this.txtIPRangeTo.LocalizationPlaceholderText = "";
+            this.txtIPRangeTo.Location = new System.Drawing.Point(302, 59);
             this.txtIPRangeTo.Name = "txtIPRangeTo";
-            this.txtIPRangeTo.Size = new System.Drawing.Size(170, 32);
+            this.txtIPRangeTo.PlaceholderText = "";
+            this.txtIPRangeTo.Size = new System.Drawing.Size(195, 32);
             this.txtIPRangeTo.TabIndex = 4;
             this.txtIPRangeTo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -220,7 +229,7 @@
             this.lDash.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lDash.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lDash.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lDash.Location = new System.Drawing.Point(267, 57);
+            this.lDash.Location = new System.Drawing.Point(292, 57);
             this.lDash.Margin = new System.Windows.Forms.Padding(1);
             this.lDash.Name = "lDash";
             this.lDash.Size = new System.Drawing.Size(6, 36);
@@ -237,7 +246,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "WhiteListEdit";
-            this.Size = new System.Drawing.Size(450, 200);
+            this.Size = new System.Drawing.Size(500, 200);
             this.Load += new System.EventHandler(this.WhiteListAdd_Load);
             this.tlpWhiteList.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
