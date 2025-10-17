@@ -503,6 +503,12 @@
     <Compile Include="Controls\Transcoding.Designer.cs">
       <DependentUpon>Transcoding.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WhiteListAdd.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\WhiteListAdd.Designer.cs">
+      <DependentUpon>WhiteListAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\XORCalculation.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -674,6 +680,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Transcoding.resx">
       <DependentUpon>Transcoding.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\WhiteListAdd.resx">
+      <DependentUpon>WhiteListAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\XORCalculation.resx">
       <DependentUpon>XORCalculation.cs</DependentUpon>

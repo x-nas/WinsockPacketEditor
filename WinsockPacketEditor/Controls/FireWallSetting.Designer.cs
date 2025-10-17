@@ -117,6 +117,7 @@
             this.bBlackList.Size = new System.Drawing.Size(32, 32);
             this.bBlackList.TabIndex = 13;
             this.bBlackList.WaveSize = 0;
+            this.bBlackList.Click += new System.EventHandler(this.bBlackList_Click);
             // 
             // tlpWhiteList
             // 
@@ -150,6 +151,7 @@
             this.bWhiteList.Size = new System.Drawing.Size(32, 32);
             this.bWhiteList.TabIndex = 13;
             this.bWhiteList.WaveSize = 0;
+            this.bWhiteList.Click += new System.EventHandler(this.bWhiteList_Click);
             // 
             // lWhiteList
             // 

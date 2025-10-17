@@ -2314,6 +2314,19 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//判断是否是有效的IPV4字符串
+
+            public static bool IsValidIPv4(string ipString)
+            {
+                if (string.IsNullOrWhiteSpace(ipString))
+                    return false;
+
+                string pattern = @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+                return Regex.IsMatch(ipString, pattern);
+            }
+
+            #endregion
+
             #region//注册快捷键
 
             public static bool RegisterHotkey_FromText(int KeyID, string hkString)
@@ -6582,12 +6595,25 @@ namespace WinsockPacketEditor
                     return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.WhiteList);
                 }
 
-                public static void AddToWhiteList(string ipOrRange)
+                public static async void AddToWhiteList(string ipOrRange)
                 {
                     try
                     {
-                        var range = GenerateIpRange(ipOrRange);
-                        Operate.ProxyConfig.Proxy.WhiteList.Add(range);
+                        if (string.IsNullOrEmpty(ipOrRange))
+                        {
+                            return;
+                        }
+
+                        string IPToCheck = ipOrRange;
+                        if (ipOrRange.Contains("-"))
+                        {
+                            IPToCheck = ipOrRange.Split('-')[0].Trim();
+                        }
+
+                        string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
+                        WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation);
+
+                        Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
                     }
                     catch (Exception ex)
                     {

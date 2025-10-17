@@ -101,6 +101,29 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//新增白名单
+
+        private void bWhiteList_Click(object sender, EventArgs e)
+        {
+            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("", "新增白名单"), new WhiteListAdd(this.form))
+            {
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
+        }
+
+        #endregion
+
+        #region//新增黑名单
+
+        private void bBlackList_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
         #region//保存
 
         private void bSave_Click(object sender, EventArgs e)
@@ -125,6 +148,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion        
+        #endregion
     }
 }
