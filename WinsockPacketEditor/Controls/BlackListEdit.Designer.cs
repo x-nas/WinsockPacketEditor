@@ -1,6 +1,6 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class WhiteListEdit
+    partial class BlackListEdit
     {
         /// <summary> 
         /// 必需的设计器变量。
@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpWhiteList = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpBlackList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.tlpWhiteListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpBlackListInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dtpExpiryTime = new AntdUI.DatePicker();
             this.cbExpiryTime = new AntdUI.Checkbox();
             this.rbSingleIP = new AntdUI.Radio();
@@ -41,26 +41,26 @@
             this.txtIPRangeFrom = new AntdUI.Input();
             this.txtIPRangeTo = new AntdUI.Input();
             this.lDash = new AntdUI.Label();
-            this.tlpWhiteList.SuspendLayout();
+            this.tlpBlackList.SuspendLayout();
             this.tlpButton.SuspendLayout();
-            this.tlpWhiteListInfo.SuspendLayout();
+            this.tlpBlackListInfo.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tlpWhiteList
+            // tlpBlackList
             // 
-            this.tlpWhiteList.ColumnCount = 1;
-            this.tlpWhiteList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpWhiteList.Controls.Add(this.tlpButton, 0, 1);
-            this.tlpWhiteList.Controls.Add(this.tlpWhiteListInfo, 0, 0);
-            this.tlpWhiteList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpWhiteList.Location = new System.Drawing.Point(0, 0);
-            this.tlpWhiteList.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpWhiteList.Name = "tlpWhiteList";
-            this.tlpWhiteList.RowCount = 2;
-            this.tlpWhiteList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpWhiteList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpWhiteList.Size = new System.Drawing.Size(450, 200);
-            this.tlpWhiteList.TabIndex = 0;
+            this.tlpBlackList.ColumnCount = 1;
+            this.tlpBlackList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpBlackList.Controls.Add(this.tlpButton, 0, 1);
+            this.tlpBlackList.Controls.Add(this.tlpBlackListInfo, 0, 0);
+            this.tlpBlackList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpBlackList.Location = new System.Drawing.Point(0, 0);
+            this.tlpBlackList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpBlackList.Name = "tlpBlackList";
+            this.tlpBlackList.RowCount = 2;
+            this.tlpBlackList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpBlackList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpBlackList.Size = new System.Drawing.Size(450, 200);
+            this.tlpBlackList.TabIndex = 1;
             // 
             // tlpButton
             // 
@@ -115,33 +115,33 @@
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
-            // tlpWhiteListInfo
+            // tlpBlackListInfo
             // 
-            this.tlpWhiteListInfo.ColumnCount = 4;
-            this.tlpWhiteListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpWhiteListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpWhiteListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpWhiteListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpWhiteListInfo.Controls.Add(this.dtpExpiryTime, 1, 3);
-            this.tlpWhiteListInfo.Controls.Add(this.cbExpiryTime, 0, 3);
-            this.tlpWhiteListInfo.Controls.Add(this.rbSingleIP, 0, 1);
-            this.tlpWhiteListInfo.Controls.Add(this.rbIPRange, 0, 2);
-            this.tlpWhiteListInfo.Controls.Add(this.txtSingleIP, 1, 1);
-            this.tlpWhiteListInfo.Controls.Add(this.txtIPRangeFrom, 1, 2);
-            this.tlpWhiteListInfo.Controls.Add(this.txtIPRangeTo, 3, 2);
-            this.tlpWhiteListInfo.Controls.Add(this.lDash, 2, 2);
-            this.tlpWhiteListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpWhiteListInfo.Location = new System.Drawing.Point(0, 0);
-            this.tlpWhiteListInfo.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpWhiteListInfo.Name = "tlpWhiteListInfo";
-            this.tlpWhiteListInfo.RowCount = 5;
-            this.tlpWhiteListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpWhiteListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpWhiteListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpWhiteListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpWhiteListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpWhiteListInfo.Size = new System.Drawing.Size(450, 150);
-            this.tlpWhiteListInfo.TabIndex = 6;
+            this.tlpBlackListInfo.ColumnCount = 4;
+            this.tlpBlackListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpBlackListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpBlackListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpBlackListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpBlackListInfo.Controls.Add(this.dtpExpiryTime, 1, 3);
+            this.tlpBlackListInfo.Controls.Add(this.cbExpiryTime, 0, 3);
+            this.tlpBlackListInfo.Controls.Add(this.rbSingleIP, 0, 1);
+            this.tlpBlackListInfo.Controls.Add(this.rbIPRange, 0, 2);
+            this.tlpBlackListInfo.Controls.Add(this.txtSingleIP, 1, 1);
+            this.tlpBlackListInfo.Controls.Add(this.txtIPRangeFrom, 1, 2);
+            this.tlpBlackListInfo.Controls.Add(this.txtIPRangeTo, 3, 2);
+            this.tlpBlackListInfo.Controls.Add(this.lDash, 2, 2);
+            this.tlpBlackListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpBlackListInfo.Location = new System.Drawing.Point(0, 0);
+            this.tlpBlackListInfo.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpBlackListInfo.Name = "tlpBlackListInfo";
+            this.tlpBlackListInfo.RowCount = 5;
+            this.tlpBlackListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpBlackListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpBlackListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpBlackListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpBlackListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpBlackListInfo.Size = new System.Drawing.Size(450, 150);
+            this.tlpBlackListInfo.TabIndex = 6;
             // 
             // dtpExpiryTime
             // 
@@ -152,7 +152,7 @@
             this.dtpExpiryTime.MaxDate = new System.DateTime(8888, 12, 31, 0, 0, 0, 0);
             this.dtpExpiryTime.Name = "dtpExpiryTime";
             this.dtpExpiryTime.Size = new System.Drawing.Size(171, 34);
-            this.dtpExpiryTime.TabIndex = 23;
+            this.dtpExpiryTime.TabIndex = 22;
             // 
             // cbExpiryTime
             // 
@@ -163,7 +163,7 @@
             this.cbExpiryTime.Margin = new System.Windows.Forms.Padding(2);
             this.cbExpiryTime.Name = "cbExpiryTime";
             this.cbExpiryTime.Size = new System.Drawing.Size(87, 34);
-            this.cbExpiryTime.TabIndex = 22;
+            this.cbExpiryTime.TabIndex = 21;
             this.cbExpiryTime.Text = "过期时间 :";
             this.cbExpiryTime.CheckedChanged += new AntdUI.BoolEventHandler(this.cbExpiryTime_CheckedChanged);
             // 
@@ -228,33 +228,33 @@
             this.lDash.Text = "-";
             this.lDash.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // WhiteListEdit
+            // BlackListEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tlpWhiteList);
+            this.Controls.Add(this.tlpBlackList);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "WhiteListEdit";
+            this.Name = "BlackListEdit";
             this.Size = new System.Drawing.Size(450, 200);
-            this.Load += new System.EventHandler(this.WhiteListAdd_Load);
-            this.tlpWhiteList.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.BlackListEdit_Load);
+            this.tlpBlackList.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
             this.tlpButton.PerformLayout();
-            this.tlpWhiteListInfo.ResumeLayout(false);
-            this.tlpWhiteListInfo.PerformLayout();
+            this.tlpBlackListInfo.ResumeLayout(false);
+            this.tlpBlackListInfo.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private TableLayoutPanelEx tlpWhiteList;
+        private TableLayoutPanelEx tlpBlackList;
         private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private TableLayoutPanelEx tlpWhiteListInfo;
+        private TableLayoutPanelEx tlpBlackListInfo;
         private AntdUI.Radio rbSingleIP;
         private AntdUI.Radio rbIPRange;
         private AntdUI.Input txtSingleIP;

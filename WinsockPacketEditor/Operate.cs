@@ -6590,7 +6590,7 @@ namespace WinsockPacketEditor
 
                 #region//新增白名单
 
-                public static async void AddToWhiteList(string ipOrRange)
+                public static async void AddToWhiteList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime)
                 {
                     try
                     {
@@ -6611,7 +6611,7 @@ namespace WinsockPacketEditor
                         }
 
                         string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
-                        WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation);
+                        WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime);
 
                         Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
                     }
@@ -6625,7 +6625,7 @@ namespace WinsockPacketEditor
 
                 #region//更新白名单
 
-                public static async void UpdateWhiteList(WhiteListInfo wli, string ipOrRange)
+                public static async void UpdateWhiteList(WhiteListInfo wli, string ipOrRange, bool IsExpiry, DateTime ExpiryTime)
                 {
                     try
                     {
@@ -6634,17 +6634,19 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        if (wli.IPAddress.Equals(ipOrRange))
+                        if (wli.IPAddress.Equals(ipOrRange) && wli.IsExpiry == IsExpiry && wli.ExpiryTime == ExpiryTime)
                         {
                             return;
                         }
 
-                        if (ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
+                        if (!wli.IPAddress.Equals(ipOrRange) && ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                         {
                             return;
                         }
 
                         wli.IPAddress = ipOrRange;
+                        wli.IsExpiry = IsExpiry;
+                        wli.ExpiryTime = ExpiryTime;
 
                         string IPToCheck = ipOrRange;
                         if (ipOrRange.Contains("-"))
@@ -6811,7 +6813,7 @@ namespace WinsockPacketEditor
 
                 #region//新增黑名单
 
-                public static async void AddToBlackList(string ipOrRange, DateTime ExpiryTime)
+                public static async void AddToBlackList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime)
                 {
                     try
                     {
@@ -6832,7 +6834,7 @@ namespace WinsockPacketEditor
                         }
 
                         string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
-                        BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, ExpiryTime);
+                        BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime);
 
                         Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
                     }
@@ -6846,7 +6848,7 @@ namespace WinsockPacketEditor
 
                 #region//更新黑名单
 
-                public static async void UpdateBlackList(BlackListInfo bli, string ipOrRange, DateTime ExpiryTime)
+                public static async void UpdateBlackList(BlackListInfo bli, string ipOrRange, bool IsExpiry, DateTime ExpiryTime)
                 {
                     try
                     {
@@ -6855,17 +6857,18 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        if (bli.IPAddress.Equals(ipOrRange) && bli.ExpiryTime == ExpiryTime)
+                        if (bli.IPAddress.Equals(ipOrRange) && bli.IsExpiry == IsExpiry && bli.ExpiryTime == ExpiryTime)
                         {
                             return;
                         }
 
-                        if (ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
+                        if (!bli.IPAddress.Equals(ipOrRange) && ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
                         {
                             return;
                         }
 
                         bli.IPAddress = ipOrRange;
+                        bli.IsExpiry = IsExpiry;
                         bli.ExpiryTime = ExpiryTime;
 
                         string IPToCheck = ipOrRange;
@@ -6889,12 +6892,12 @@ namespace WinsockPacketEditor
 
                 public static void OpenBlackListEdit(Form form, FireWallSetting fwForm, BlackListInfo bli)
                 {
-                    //AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "黑名单编辑"), new WhiteListEdit(form, fwForm, wli))
-                    //{
-                    //    Keyboard = false,
-                    //    MaskClosable = false,
-                    //    BtnHeight = 0,
-                    //});
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "黑名单编辑"), new BlackListEdit(form, fwForm, bli))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
                 }
 
                 #endregion
@@ -7123,7 +7126,9 @@ namespace WinsockPacketEditor
                         {
                             XElement xeWhite =
                                 new XElement("White",
-                                new XElement("IPAddress", wli.IPAddress)
+                                new XElement("IPAddress", wli.IPAddress),
+                                new XElement("IsExpiry", wli.IsExpiry),
+                                new XElement("ExpiryTime", wli.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss"))
                                 );
 
                             xeWhiteList.Add(xeWhite);
@@ -7234,6 +7239,7 @@ namespace WinsockPacketEditor
                             XElement xeBlack =
                                 new XElement("Black",
                                 new XElement("IPAddress", bli.IPAddress),
+                                new XElement("IsExpiry", bli.IsExpiry),
                                 new XElement("ExpiryTime", bli.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss"))
                                 );
 
@@ -7342,7 +7348,19 @@ namespace WinsockPacketEditor
                                 IPAddress = xeWhiteList.Element("IPAddress").Value;
                             }
 
-                            ProxyConfig.Proxy.AddToWhiteList(IPAddress);
+                            bool IsExpiry = false;
+                            if (xeWhiteList.Element("IsExpiry") != null)
+                            {
+                                IsExpiry = bool.Parse(xeWhiteList.Element("IsExpiry").Value);
+                            }
+
+                            DateTime ExpiryTime = DateTime.Now;
+                            if (xeWhiteList.Element("ExpiryTime") != null)
+                            {
+                                ExpiryTime = DateTime.Parse(xeWhiteList.Element("ExpiryTime").Value);
+                            }
+
+                            ProxyConfig.Proxy.AddToWhiteList(IPAddress, IsExpiry, ExpiryTime);
                         }
                     }
                     catch (Exception ex)
@@ -7443,13 +7461,19 @@ namespace WinsockPacketEditor
                                 IPAddress = xeBlackList.Element("IPAddress").Value;
                             }
 
+                            bool IsExpiry = false;
+                            if (xeBlackList.Element("IsExpiry") != null)
+                            {
+                                IsExpiry = bool.Parse(xeBlackList.Element("IsExpiry").Value);
+                            }
+
                             DateTime ExpiryTime = DateTime.Now;
                             if (xeBlackList.Element("ExpiryTime") != null)
                             {
                                 ExpiryTime = DateTime.Parse(xeBlackList.Element("ExpiryTime").Value);
                             }
 
-                            ProxyConfig.Proxy.AddToBlackList(IPAddress, ExpiryTime);
+                            ProxyConfig.Proxy.AddToBlackList(IPAddress, IsExpiry, ExpiryTime);
                         }
                     }
                     catch (Exception ex)

@@ -4,52 +4,52 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class WhiteListEdit : UserControl
+    public partial class BlackListEdit : UserControl
     {
         private Form form = null;
         private FireWallSetting fwForm = null;
-        private WhiteListInfo wliSelect = null;
+        private BlackListInfo bliSelect = null;
 
         #region//窗体事件
 
-        public WhiteListEdit(Form form, FireWallSetting fwForm, WhiteListInfo wliSelect)
+        public BlackListEdit(Form form, FireWallSetting fwForm, BlackListInfo bliSelect)
         {
             InitializeComponent();
             this.form = form;
             this.fwForm = fwForm;
-            this.wliSelect = wliSelect;
+            this.bliSelect = bliSelect;
         }
 
-        private void WhiteListAdd_Load(object sender, EventArgs e)
+        private void BlackListEdit_Load(object sender, EventArgs e)
         {
             this.dtpExpiryTime.Value = DateTime.Now;
 
-            if (this.wliSelect != null)
+            if (this.bliSelect != null)
             {
-                if (this.wliSelect.IPAddress.Contains("-"))
+                if (this.bliSelect.IPAddress.Contains("-"))
                 {
                     this.rbIPRange.Checked = true;
-                    string[] IPRange = this.wliSelect.IPAddress.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] IPRange = this.bliSelect.IPAddress.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
                     if (IPRange.Length == 2)
                     {
                         this.txtIPRangeFrom.Text = IPRange[0];
                         this.txtIPRangeTo.Text = IPRange[1];
-                    }
+                    }                    
                 }
                 else
                 {
                     this.rbSingleIP.Checked = true;
-                    this.txtSingleIP.Text = this.wliSelect.IPAddress;
+                    this.txtSingleIP.Text = this.bliSelect.IPAddress;
                 }
 
-                this.cbExpiryTime.Checked = this.wliSelect.IsExpiry;
-                if (this.wliSelect.ExpiryTime > this.dtpExpiryTime.MaxDate)
+                this.cbExpiryTime.Checked = this.bliSelect.IsExpiry;
+                if (this.bliSelect.ExpiryTime > this.dtpExpiryTime.MaxDate)
                 {
                     this.dtpExpiryTime.Value = this.dtpExpiryTime.MaxDate;
                 }
                 else
                 {
-                    this.dtpExpiryTime.Value = wliSelect.ExpiryTime;
+                    this.dtpExpiryTime.Value = bliSelect.ExpiryTime;
                 }
             }
 
@@ -77,7 +77,7 @@ namespace WinsockPacketEditor
             this.txtIPRangeFrom.Enabled = this.txtIPRangeTo.Enabled = this.rbIPRange.Checked;
         }
 
-        #endregion
+        #endregion        
 
         #region//过期时间
 
@@ -168,7 +168,7 @@ namespace WinsockPacketEditor
             return true;
         }
 
-        #endregion
+        #endregion        
 
         #region//保存
 
@@ -205,13 +205,13 @@ namespace WinsockPacketEditor
                 ExpiryTime = this.dtpExpiryTime.MaxDate.Value;
             }
 
-            if (this.wliSelect != null)
+            if (this.bliSelect != null)
             {
-                if (!this.wliSelect.IPAddress.Equals(IPString))
+                if (!this.bliSelect.IPAddress.Equals(IPString))
                 {
-                    if (Operate.ProxyConfig.Proxy.IsExistsInWhiteList(IPString))
+                    if (Operate.ProxyConfig.Proxy.IsExistsInBlackList(IPString))
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此 IP 已在白名单", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此 IP 已在黑名单", TType.Error)
                         {
                             LocalizationText = "WhiteListEdit.Error"
                         });
@@ -220,13 +220,13 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                Operate.ProxyConfig.Proxy.UpdateWhiteList(this.wliSelect, IPString, IsExpiry, ExpiryTime);
+                Operate.ProxyConfig.Proxy.UpdateBlackList(this.bliSelect, IPString, IsExpiry, ExpiryTime);
             }
             else
             {
-                if (Operate.ProxyConfig.Proxy.IsExistsInWhiteList(IPString))
+                if (Operate.ProxyConfig.Proxy.IsExistsInBlackList(IPString))
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此 IP 已在白名单", TType.Error)
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此 IP 已在黑名单", TType.Error)
                     {
                         LocalizationText = "WhiteListEdit.Error"
                     });
@@ -234,15 +234,15 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                Operate.ProxyConfig.Proxy.AddToWhiteList(IPString, IsExpiry, ExpiryTime);
+                Operate.ProxyConfig.Proxy.AddToBlackList(IPString, IsExpiry, ExpiryTime);
             }
 
-            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "白名单保存成功", TType.Success)
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "黑名单保存成功", TType.Success)
             {
                 LocalizationText = "WhiteListEdit.Success"
             });
 
-            this.fwForm.RefreshWhiteList();
+            this.fwForm.RefreshBlackList();
             this.Dispose();
         }
 
@@ -255,6 +255,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion        
+        #endregion
     }
 }

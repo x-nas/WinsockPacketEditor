@@ -272,6 +272,12 @@
     <Compile Include="Controls\BatchAccounts.Designer.cs">
       <DependentUpon>BatchAccounts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BlackListEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BlackListEdit.Designer.cs">
+      <DependentUpon>BlackListEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ClientList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -569,6 +575,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BatchAccounts.resx">
       <DependentUpon>BatchAccounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\BlackListEdit.resx">
+      <DependentUpon>BlackListEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ClientList.resx">
       <DependentUpon>ClientList.cs</DependentUpon>

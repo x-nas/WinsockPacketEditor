@@ -117,6 +117,7 @@ namespace WinsockPacketEditor
             tWhiteList.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetLocalizationTitleID("Table.WhiteList.Column."),
                 new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.WhiteList.Column."),
+                new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("Table.WhiteList.Column."),
                 new AntdUI.Column("CellLinks", "操作")
                 {
                     Render = (value, record, rowindex)=>
@@ -279,7 +280,7 @@ namespace WinsockPacketEditor
 
                 case "Clear":
 
-                    if (Operate.ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                    if (Operate.ProxyConfig.Proxy.lstBlackList.Count > 0)
                     {
                         Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
                     }
