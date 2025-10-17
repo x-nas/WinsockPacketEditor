@@ -20,6 +20,8 @@ namespace WinsockPacketEditor
         {
             this.InitTable_WhiteList();
             this.InitTable_BlackList();
+            this.InitMenu_WhiteList();
+            this.InitMenu_BlackList();
 
             this.cbEnableFireWall.Checked = Operate.ProxyConfig.Proxy.EnableFireWall;
             this.EnableFireWall_Changed();
@@ -32,6 +34,78 @@ namespace WinsockPacketEditor
             {
                 this.rbBlackListMode.Checked = true;
             }
+        }
+
+        private void InitMenu_WhiteList()
+        {
+            this.ddMenu_WhiteList.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("新增")
+                {
+                    Tag = "Add",
+                    LocalizationText = "MapSettingsForm.MapLocal.Add",
+                    IconSvg = "DesktopOutlined",
+                },
+                new AntdUI.SelectItem("导入白名单")
+                {
+                    Tag = "Import",
+                    LocalizationText = "MapSettingsForm.MapLocal.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出白名单")
+                {
+                    Tag = "Export",
+                    LocalizationText = "MapSettingsForm.MapLocal.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空白名单")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "MapSettingsForm.MapLocal.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
+        }
+
+        private void InitMenu_BlackList()
+        {
+            this.ddMenu_BlackList.Items.AddRange(new AntdUI.SelectItem[]
+            {
+                new AntdUI.SelectItem("新增")
+                {
+                    Tag = "Add",
+                    LocalizationText = "MapSettingsForm.MapLocal.Add",
+                    IconSvg = "DesktopOutlined",
+                },
+                new AntdUI.SelectItem("导入黑名单")
+                {
+                    Tag = "Import",
+                    LocalizationText = "MapSettingsForm.MapLocal.Import",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                new AntdUI.SelectItem("导出黑名单")
+                {
+                    Tag = "Export",
+                    LocalizationText = "MapSettingsForm.MapLocal.Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.SelectItem("清空黑名单")
+                {
+                    Tag = "Clear",
+                    LocalizationText = "MapSettingsForm.MapLocal.Clear",
+                    IconSvg = "DeleteOutlined",
+                },
+            });
+        }
+
+        public void RefreshWhiteList()
+        {
+            this.tWhiteList.Refresh();
+        }
+
+        public void RefreshBlackList()
+        {
+            this.tBlackList.Refresh();
         }
 
         #endregion
@@ -49,6 +123,7 @@ namespace WinsockPacketEditor
                     {
                         return new AntdUI.CellLink[]
                         {
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
                             new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
@@ -70,6 +145,7 @@ namespace WinsockPacketEditor
                     {
                         return new AntdUI.CellLink[]
                         {
+                            new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
                             new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
@@ -94,33 +170,87 @@ namespace WinsockPacketEditor
                 this.rbBlackListMode.Enabled = 
                 this.tWhiteList.Enabled =
                 this.tBlackList.Enabled =
-                this.bWhiteList.Enabled =
-                this.bBlackList.Enabled =                
+                this.ddMenu_WhiteList.Enabled =
+                this.ddMenu_BlackList.Enabled =                
                 this.cbEnableFireWall.Checked;
         }
 
         #endregion
 
-        #region//新增白名单
+        #region//白名单 - 菜单
 
-        private void bWhiteList_Click(object sender, EventArgs e)
+        private void ddMenu_WhiteList_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("", "新增白名单"), new WhiteListAdd(this.form))
+            this.ddMenu_WhiteList.SelectedValue = null;
+
+            switch (e.Value.ToString())
             {
-                Keyboard = false,
-                MaskClosable = false,
-                BtnHeight = 0,
-            });
+                case "Add":
+
+                    Operate.ProxyConfig.Proxy.OpenWhiteListEdit(this.form, this, null);
+
+                    break;
+
+                case "Import":
+
+                    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
+
+                    break;
+
+                case "Export":
+
+                    //if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
+                    //{
+                    //    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
+                    //}
+
+                    break;
+
+                case "Clear":
+
+                    //if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
+                    //{
+                    //    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
+                    //}
+
+                    break;
+            }
+        }
+
+        private void tWhiteList_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is WhiteListInfo wli)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bEdit":
+
+                        Operate.ProxyConfig.Proxy.OpenWhiteListEdit(this.form, this, wli);
+
+                        break;
+
+                    case "bDelete":
+
+                        //Operate.ProxyConfig.Mapping.DeleteMapLocal_Dialog(this.form, ml);
+
+                        break;
+                }
+            }
+        }
+
+        private void tWhiteList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is WhiteListInfo wli)
+            {
+                Operate.ProxyConfig.Proxy.OpenWhiteListEdit(this.form, this, wli);
+            }
         }
 
         #endregion
 
-        #region//新增黑名单
+        #region//黑名单 - 菜单
 
-        private void bBlackList_Click(object sender, EventArgs e)
-        {
 
-        }
 
         #endregion
 
@@ -148,6 +278,10 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
+
+
         #endregion
+
+        
     }
 }

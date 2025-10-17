@@ -224,13 +224,7 @@ namespace WinsockPacketEditor
             {
                 case "Add":
 
-                    var MapLocalEdit = new MapLocalEdit(this.form, this, null);
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapLocalForm", "本地映射编辑"), MapLocalEdit)
-                    {
-                        Keyboard = false,
-                        MaskClosable = false,
-                        BtnHeight = 0,
-                    });
+                    Operate.ProxyConfig.Mapping.OpenMapLocalEdit(this.form, this, null);
 
                     break;
 
@@ -268,7 +262,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        this.OpenMapLocalEdit(ml);
+                        Operate.ProxyConfig.Mapping.OpenMapLocalEdit(this.form, this, ml);
 
                         break;
 
@@ -285,20 +279,9 @@ namespace WinsockPacketEditor
         {
             if (e.Record is MapLocal ml)
             {
-                this.OpenMapLocalEdit(ml);
+                Operate.ProxyConfig.Mapping.OpenMapLocalEdit(this.form, this, ml);
             }
-        }
-
-        private void OpenMapLocalEdit(MapLocal ml)
-        {
-            var MapLocalEdit = new MapLocalEdit(this.form, this, ml);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapLocalForm", "本地映射编辑"), MapLocalEdit)
-            {
-                Keyboard = false,
-                MaskClosable = false,
-                BtnHeight = 0,
-            });
-        }
+        }        
 
         #endregion
 
@@ -362,13 +345,7 @@ namespace WinsockPacketEditor
             {
                 case "Add":
 
-                    var MapRemoteEdit = new MapRemoteEdit(this.form, this, null);
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapRemoteForm", "远程映射编辑"), MapRemoteEdit)
-                    {
-                        Keyboard = false,
-                        MaskClosable = false,
-                        BtnHeight = 0,
-                    });
+                    Operate.ProxyConfig.Mapping.OpenMapRemoteEdit(this.form, this, null);
 
                     break;
 
@@ -406,7 +383,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        this.OpenMapRemoteEdit(mr);
+                        Operate.ProxyConfig.Mapping.OpenMapRemoteEdit(this.form, this, mr);
 
                         break;
 
@@ -423,19 +400,8 @@ namespace WinsockPacketEditor
         {
             if (e.Record is MapRemote mr)
             {
-                this.OpenMapRemoteEdit(mr);
+                Operate.ProxyConfig.Mapping.OpenMapRemoteEdit(this.form, this, mr);
             }
-        }
-
-        private void OpenMapRemoteEdit(MapRemote mr)
-        {
-            var MapRemoteEdit = new MapRemoteEdit(this.form, this, mr);
-            AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("MapRemoteForm", "远程映射编辑"), MapRemoteEdit)
-            {
-                Keyboard = false,
-                MaskClosable = false,
-                BtnHeight = 0,
-            });
         }
 
         #endregion

@@ -30,10 +30,10 @@
         {
             this.tlpFireWallSetting = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tableLayoutPanelEx1 = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.ddMenu_BlackList = new AntdUI.Dropdown();
             this.lBlackList = new AntdUI.Label();
-            this.bBlackList = new AntdUI.Button();
             this.tlpWhiteList = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.bWhiteList = new AntdUI.Button();
+            this.ddMenu_WhiteList = new AntdUI.Dropdown();
             this.lWhiteList = new AntdUI.Label();
             this.tBlackList = new AntdUI.Table();
             this.tWhiteList = new AntdUI.Table();
@@ -82,8 +82,8 @@
             this.tableLayoutPanelEx1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelEx1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanelEx1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelEx1.Controls.Add(this.ddMenu_BlackList, 2, 1);
             this.tableLayoutPanelEx1.Controls.Add(this.lBlackList, 0, 1);
-            this.tableLayoutPanelEx1.Controls.Add(this.bBlackList, 2, 1);
             this.tableLayoutPanelEx1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelEx1.Location = new System.Drawing.Point(0, 350);
             this.tableLayoutPanelEx1.Margin = new System.Windows.Forms.Padding(0);
@@ -95,29 +95,32 @@
             this.tableLayoutPanelEx1.Size = new System.Drawing.Size(700, 50);
             this.tableLayoutPanelEx1.TabIndex = 15;
             // 
+            // ddMenu_BlackList
+            // 
+            this.ddMenu_BlackList.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu_BlackList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu_BlackList.Ghost = true;
+            this.ddMenu_BlackList.IconRatio = 1F;
+            this.ddMenu_BlackList.IconSvg = "PlusOutlined";
+            this.ddMenu_BlackList.Location = new System.Drawing.Point(666, 6);
+            this.ddMenu_BlackList.Margin = new System.Windows.Forms.Padding(2);
+            this.ddMenu_BlackList.MaxCount = 10;
+            this.ddMenu_BlackList.Name = "ddMenu_BlackList";
+            this.ddMenu_BlackList.Placement = AntdUI.TAlignFrom.BR;
+            this.ddMenu_BlackList.Size = new System.Drawing.Size(32, 37);
+            this.ddMenu_BlackList.TabIndex = 16;
+            this.ddMenu_BlackList.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu_BlackList.WaveSize = 0;
+            // 
             // lBlackList
             // 
             this.lBlackList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lBlackList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lBlackList.Location = new System.Drawing.Point(3, 9);
+            this.lBlackList.Location = new System.Drawing.Point(3, 7);
             this.lBlackList.Name = "lBlackList";
-            this.lBlackList.Size = new System.Drawing.Size(60, 32);
+            this.lBlackList.Size = new System.Drawing.Size(60, 35);
             this.lBlackList.TabIndex = 15;
             this.lBlackList.Text = "黑名单列表";
-            // 
-            // bBlackList
-            // 
-            this.bBlackList.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.bBlackList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bBlackList.Ghost = true;
-            this.bBlackList.IconRatio = 1F;
-            this.bBlackList.IconSvg = "PlusOutlined";
-            this.bBlackList.Location = new System.Drawing.Point(665, 9);
-            this.bBlackList.Name = "bBlackList";
-            this.bBlackList.Size = new System.Drawing.Size(32, 32);
-            this.bBlackList.TabIndex = 13;
-            this.bBlackList.WaveSize = 0;
-            this.bBlackList.Click += new System.EventHandler(this.bBlackList_Click);
             // 
             // tlpWhiteList
             // 
@@ -126,7 +129,7 @@
             this.tlpWhiteList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpWhiteList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpWhiteList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpWhiteList.Controls.Add(this.bWhiteList, 2, 1);
+            this.tlpWhiteList.Controls.Add(this.ddMenu_WhiteList, 2, 1);
             this.tlpWhiteList.Controls.Add(this.lWhiteList, 0, 1);
             this.tlpWhiteList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpWhiteList.Location = new System.Drawing.Point(0, 50);
@@ -139,27 +142,31 @@
             this.tlpWhiteList.Size = new System.Drawing.Size(700, 50);
             this.tlpWhiteList.TabIndex = 13;
             // 
-            // bWhiteList
+            // ddMenu_WhiteList
             // 
-            this.bWhiteList.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.bWhiteList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bWhiteList.Ghost = true;
-            this.bWhiteList.IconRatio = 1F;
-            this.bWhiteList.IconSvg = "PlusOutlined";
-            this.bWhiteList.Location = new System.Drawing.Point(665, 9);
-            this.bWhiteList.Name = "bWhiteList";
-            this.bWhiteList.Size = new System.Drawing.Size(32, 32);
-            this.bWhiteList.TabIndex = 13;
-            this.bWhiteList.WaveSize = 0;
-            this.bWhiteList.Click += new System.EventHandler(this.bWhiteList_Click);
+            this.ddMenu_WhiteList.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.ddMenu_WhiteList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddMenu_WhiteList.Ghost = true;
+            this.ddMenu_WhiteList.IconRatio = 1F;
+            this.ddMenu_WhiteList.IconSvg = "PlusOutlined";
+            this.ddMenu_WhiteList.Location = new System.Drawing.Point(666, 6);
+            this.ddMenu_WhiteList.Margin = new System.Windows.Forms.Padding(2);
+            this.ddMenu_WhiteList.MaxCount = 10;
+            this.ddMenu_WhiteList.Name = "ddMenu_WhiteList";
+            this.ddMenu_WhiteList.Placement = AntdUI.TAlignFrom.BR;
+            this.ddMenu_WhiteList.Size = new System.Drawing.Size(32, 37);
+            this.ddMenu_WhiteList.TabIndex = 15;
+            this.ddMenu_WhiteList.Trigger = AntdUI.Trigger.Hover;
+            this.ddMenu_WhiteList.WaveSize = 0;
+            this.ddMenu_WhiteList.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_WhiteList_SelectedValueChanged);
             // 
             // lWhiteList
             // 
             this.lWhiteList.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWhiteList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lWhiteList.Location = new System.Drawing.Point(3, 9);
+            this.lWhiteList.Location = new System.Drawing.Point(3, 7);
             this.lWhiteList.Name = "lWhiteList";
-            this.lWhiteList.Size = new System.Drawing.Size(60, 32);
+            this.lWhiteList.Size = new System.Drawing.Size(60, 35);
             this.lWhiteList.TabIndex = 14;
             this.lWhiteList.Text = "白名单列表";
             // 
@@ -194,6 +201,8 @@
             this.tWhiteList.Name = "tWhiteList";
             this.tWhiteList.Size = new System.Drawing.Size(696, 246);
             this.tWhiteList.TabIndex = 9;
+            this.tWhiteList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tWhiteList_CellButtonClick);
+            this.tWhiteList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tWhiteList_CellDoubleClick);
             // 
             // tlpButton
             // 
@@ -335,14 +344,14 @@
         private AntdUI.Table tBlackList;
         private AntdUI.Table tWhiteList;
         private TableLayoutPanelEx tlpWhiteList;
-        private AntdUI.Button bWhiteList;
         private TableLayoutPanelEx tableLayoutPanelEx1;
-        private AntdUI.Button bBlackList;
         private TableLayoutPanelEx tlpEnableFireWall;
         private AntdUI.Radio rbBlackListMode;
         private AntdUI.Radio rbWhiteListMode;
         private AntdUI.Checkbox cbEnableFireWall;
         private AntdUI.Label lWhiteList;
         private AntdUI.Label lBlackList;
+        private AntdUI.Dropdown ddMenu_WhiteList;
+        private AntdUI.Dropdown ddMenu_BlackList;
     }
 }

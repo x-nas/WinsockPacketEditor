@@ -4,20 +4,43 @@ using System.Windows.Forms;
 
 namespace WinsockPacketEditor
 {
-    public partial class WhiteListAdd : UserControl
+    public partial class WhiteListEdit : UserControl
     {
         private Form form = null;
+        private FireWallSetting fwForm = null;
+        private WhiteListInfo wliSelect = null;
 
         #region//窗体事件
 
-        public WhiteListAdd(Form form)
+        public WhiteListEdit(Form form, FireWallSetting fwForm, WhiteListInfo wliSelect)
         {
             InitializeComponent();
             this.form = form;
+            this.fwForm = fwForm;
+            this.wliSelect = wliSelect;
         }
 
         private void WhiteListAdd_Load(object sender, EventArgs e)
         {
+            if (this.wliSelect != null)
+            {
+                if (this.wliSelect.IPAddress.Contains("-"))
+                {
+                    this.rbIPRange.Checked = true;
+                    string[] IPRange = this.wliSelect.IPAddress.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (IPRange.Length == 2)
+                    {
+                        this.txtIPRangeFrom.Text = IPRange[0];
+                        this.txtIPRangeTo.Text = IPRange[1];
+                    }
+                }
+                else
+                { 
+                    this.rbSingleIP.Checked = true;
+                    this.txtSingleIP.Text = this.wliSelect.IPAddress;
+                }
+            }
+
             this.IPType_Changed();
         }
 
@@ -144,7 +167,21 @@ namespace WinsockPacketEditor
                 IPString = this.txtIPRangeFrom.Text.Trim() + "-" + this.txtIPRangeTo.Text.Trim();
             }
 
-            Operate.ProxyConfig.Proxy.AddToWhiteList(IPString);
+            if (this.wliSelect != null)
+            {
+                Operate.ProxyConfig.Proxy.UpdateWhiteList(this.wliSelect, IPString);
+            }
+            else
+            {
+                Operate.ProxyConfig.Proxy.AddToWhiteList(IPString);
+            }
+
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "白名单保存成功", TType.Success)
+            {
+                LocalizationText = "WhiteListEdit.Success"
+            });
+
+            this.fwForm.RefreshWhiteList();
             this.Dispose();
         }
 
@@ -157,8 +194,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion
-
-        
+        #endregion        
     }
 }

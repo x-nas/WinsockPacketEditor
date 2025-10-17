@@ -6588,12 +6588,21 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//白名单操作
+                #region//编辑白名单
 
-                public static List<string> GetWhiteList()
+                public static void OpenWhiteListEdit(Form form, FireWallSetting fwForm, WhiteListInfo wli)
                 {
-                    return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.WhiteList);
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "白名单编辑"), new WhiteListEdit(form, fwForm, wli))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
                 }
+
+                #endregion
+
+                #region//白名单操作
 
                 public static async void AddToWhiteList(string ipOrRange)
                 {
@@ -6619,6 +6628,32 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(AddToWhiteList), ex.Message);
                     }                    
+                }
+
+                public static async void UpdateWhiteList(WhiteListInfo wli, string ipOrRange)
+                {
+                    try
+                    {
+                        if (wli == null || string.IsNullOrEmpty(ipOrRange))
+                        {
+                            return;
+                        }
+
+                        wli.IPAddress = ipOrRange;
+
+                        string IPToCheck = ipOrRange;
+                        if (ipOrRange.Contains("-"))
+                        {
+                            IPToCheck = ipOrRange.Split('-')[0].Trim();
+                        }
+
+                        string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
+                        wli.IPLocation = IPLocation;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateWhiteList), ex.Message);
+                    }
                 }
 
                 public static void RemoveFromWhiteList(string ipOrRange)
@@ -8891,6 +8926,34 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(AddMapRemote), ex.Message);
                     }
+                }
+
+                #endregion
+
+                #region//编辑本地映射
+
+                public static void OpenMapLocalEdit(Form form, MapSetting msForm, MapLocal ml)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "本地映射编辑"), new MapLocalEdit(form, msForm, ml))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
+                #region//编辑远程映射
+
+                public static void OpenMapRemoteEdit(Form form, MapSetting msForm, MapRemote mr)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapRemoteForm", "远程映射编辑"), new MapRemoteEdit(form, msForm, mr))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
                 }
 
                 #endregion

@@ -1,6 +1,6 @@
 ﻿namespace WinsockPacketEditor
 {
-    partial class WhiteListAdd
+    partial class WhiteListEdit
     {
         /// <summary> 
         /// 必需的设计器变量。
