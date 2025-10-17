@@ -6442,151 +6442,7 @@ namespace WinsockPacketEditor
                     return $"{TargetAddress}:{TargetPort}";
                 }
 
-                #endregion
-
-                #region//解析IP范围
-
-                public static BindingList<Tuple<long, long>> ParseIpRanges(string ipRanges)
-                {
-                    var ranges = new BindingList<Tuple<long, long>>();
-
-                    try
-                    {
-                        var rangeArray = ipRanges.Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-                        foreach (var range in rangeArray)
-                        {
-                            ranges.Add(GenerateIpRange(range.Trim()));
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ParseIpRanges), ex.Message);
-                    }
-
-                    return ranges;
-                }
-
-                public static Tuple<long, long> GenerateIpRange(string range)
-                {
-                    try
-                    {
-                        if (string.IsNullOrWhiteSpace(range))
-                            return null;
-
-                        var ipArray = range.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-
-                        if (ipArray.Length == 1)
-                        {
-                            var ipValue = ConvertIpToLong(ipArray[0]);
-                            return new Tuple<long, long>(ipValue, ipValue);
-                        }
-                        else if (ipArray.Length == 2)
-                        {
-                            var startIp = ConvertIpToLong(ipArray[0]);
-                            var endIp = ConvertIpToLong(ipArray[1]);
-
-                            if (startIp > endIp)
-                                return null;
-
-                            return new Tuple<long, long>(startIp, endIp);
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GenerateIpRange), ex.Message);                        
-                    }
-
-                    return null;
-                }
-
-                public static long ConvertIpToLong(string ip)
-                {
-                    try
-                    {
-                        if (string.IsNullOrWhiteSpace(ip))
-                            return -1;
-
-                        var points = ip.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-
-                        if (points.Length != 4)
-                            return -1;
-
-                        long value = 0;
-                        long unit = 1;
-
-                        for (int i = points.Length - 1; i >= 0; i--)
-                        {
-                            if (!int.TryParse(points[i], out int segment) || segment < 0 || segment > 255)
-                                return -1;
-
-                            value += unit * segment;
-                            unit *= 256;
-                        }
-
-                        return value;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ConvertIpToLong), ex.Message);
-                        return -1;
-                    }
-                }
-
-                public static bool IsIpInRanges(long ipValue, BindingList<Tuple<long, long>> ranges)
-                {
-                    try
-                    {
-                        foreach (var range in ranges)
-                        {
-                            if (ipValue >= range.Item1 && ipValue <= range.Item2)
-                                return true;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(IsIpInRanges), ex.Message);
-                    }                    
-
-                    return false;
-                }
-
-                public static List<string> ConvertRangesToStrings(BindingList<Tuple<long, long>> ranges)
-                {
-                    var result = new List<string>();
-
-                    try
-                    {
-                        foreach (var range in ranges)
-                        {
-                            if (range.Item1 == range.Item2)
-                            {
-                                result.Add(ConvertLongToIp(range.Item1));
-                            }
-                            else
-                            {
-                                result.Add($"{ConvertLongToIp(range.Item1)}-{ConvertLongToIp(range.Item2)}");
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ConvertRangesToStrings), ex.Message);
-                    }
-
-                    return result;
-                }
-
-                private static string ConvertLongToIp(long ipValue)
-                {
-                    return $"{(ipValue >> 24) & 0xFF}.{(ipValue >> 16) & 0xFF}.{(ipValue >> 8) & 0xFF}.{ipValue & 0xFF}";
-                }
-
-                #endregion
+                #endregion                
 
                 #region//新增白名单
 
@@ -6728,7 +6584,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//检测是否在白名单内
+                #region//检测是否已存在此IP（白名单）
 
                 public static bool IsExistsInWhiteList(string ipOrRange)
                 {
@@ -6951,7 +6807,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//检测是否在黑名单内
+                #region//检测是否已存在此IP（黑名单）
 
                 public static bool IsExistsInBlackList(string ipOrRange)
                 {
@@ -7033,6 +6889,102 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion                                
+
+                #region//解析防火墙的IP范围
+
+                public static long ConvertIpToLong(string ip)
+                {
+                    if (string.IsNullOrWhiteSpace(ip))
+                        return -1;
+
+                    if (IPAddress.TryParse(ip, out IPAddress address) &&
+                        address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        byte[] bytes = address.GetAddressBytes();
+
+                        return ((long)bytes[0] << 24) |
+                               ((long)bytes[1] << 16) |
+                               ((long)bytes[2] << 8) |
+                               bytes[3];
+                    }
+
+                    return -1;
+                }
+
+                public static (long Start, long End)? ParseCidr(string cidr)
+                {
+                    try
+                    {
+                        var parts = cidr.Split('/');
+                        if (parts.Length != 2) return null;
+
+                        long baseIp = ConvertIpToLong(parts[0]);
+                        int prefixLength = int.Parse(parts[1]);
+
+                        if (prefixLength < 0 || prefixLength > 32) return null;
+
+                        long mask = (0xFFFFFFFFL << (32 - prefixLength)) & 0xFFFFFFFFL;
+                        long start = baseIp & mask;
+                        long end = start + (1L << (32 - prefixLength)) - 1;
+
+                        return (start, end);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ParseCidr), ex.Message);
+                        return null;
+                    }
+                }
+
+                public static bool IsIpInRanges(long ipValue, BindingList<WhiteListInfo> lstWhiteList)
+                {
+                    if (lstWhiteList == null)
+                        return false;
+
+                    try
+                    {
+                        foreach (WhiteListInfo wli in lstWhiteList)
+                        {
+                            if (wli != null && !wli.IsExpiry && wli.ExpiryTime > DateTime.Now)
+                            {
+                                if (wli.ContainsIp(ipValue))
+                                    return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(IsIpInRanges), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static bool IsIpInRanges(long ipValue, BindingList<BlackListInfo> lstBlackList)
+                {
+                    if (lstBlackList == null)
+                        return false;
+
+                    try
+                    {
+                        foreach (BlackListInfo bli in lstBlackList)
+                        {
+                            if (bli != null && !bli.IsExpiry && bli.ExpiryTime > DateTime.Now)
+                            {
+                                if (bli.ContainsIp(ipValue))
+                                    return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(IsIpInRanges), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
 
                 #region//保存白名单到文件（对话框）
 
@@ -7482,51 +7434,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
-
-                #region//黑名单操作
-
-                public static List<string> GetBlackList()
-                {
-                    return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.BlackList);
-                }
-
-                public static void AddToBlackList2(string ipOrRange)
-                {
-                    try
-                    {
-                        var range = GenerateIpRange(ipOrRange);
-                        Operate.ProxyConfig.Proxy.BlackList.Add(range);
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AddToBlackList), ex.Message);
-                    }
-                }
-
-                public static void RemoveFromBlackList(string ipOrRange)
-                {
-                    try
-                    {
-                        var rangeToRemove = GenerateIpRange(ipOrRange);
-                        if (rangeToRemove.Item1 == -1 && rangeToRemove.Item2 == -1) return;
-
-                        var itemsToRemove = Operate.ProxyConfig.Proxy.BlackList
-                            .Where(r => r.Item1 == rangeToRemove.Item1 && r.Item2 == rangeToRemove.Item2)
-                            .ToList();
-
-                        foreach (var item in itemsToRemove)
-                        {
-                            Operate.ProxyConfig.Proxy.BlackList.Remove(item);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(RemoveFromBlackList), ex.Message);
-                    }
-                }
-
-                #endregion
+                #endregion                
             }
 
             #endregion
