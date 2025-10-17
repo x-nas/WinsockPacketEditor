@@ -250,7 +250,72 @@ namespace WinsockPacketEditor
 
         #region//黑名单 - 菜单
 
+        private void ddMenu_BlackList_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        {
+            this.ddMenu_BlackList.SelectedValue = null;
 
+            switch (e.Value.ToString())
+            {
+                case "Add":
+
+                    Operate.ProxyConfig.Proxy.OpenBlackListEdit(this.form, this, null);
+
+                    break;
+
+                case "Import":
+
+                    Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
+
+                    break;
+
+                case "Export":
+
+                    if (Operate.ProxyConfig.Proxy.lstBlackList.Count > 0)
+                    {
+                        Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
+                    }
+
+                    break;
+
+                case "Clear":
+
+                    if (Operate.ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                    {
+                        Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
+                    }
+
+                    break;
+            }
+        }
+
+        private void tBlackList_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is BlackListInfo bli)
+            {
+                switch (e.Btn.Id)
+                {
+                    case "bEdit":
+
+                        Operate.ProxyConfig.Proxy.OpenBlackListEdit(this.form, this, bli);
+
+                        break;
+
+                    case "bDelete":
+
+                        Operate.ProxyConfig.Proxy.DeleteBlackList_Dialog(this.form, bli);
+
+                        break;
+                }
+            }
+        }
+
+        private void tBlackList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is BlackListInfo bli)
+            {
+                Operate.ProxyConfig.Proxy.OpenBlackListEdit(this.form, this, bli);
+            }
+        }
 
         #endregion
 
@@ -278,10 +343,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-
-
-        #endregion
-
-        
+        #endregion        
     }
 }

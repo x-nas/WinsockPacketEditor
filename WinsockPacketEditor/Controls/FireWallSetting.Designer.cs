@@ -111,6 +111,7 @@
             this.ddMenu_BlackList.TabIndex = 16;
             this.ddMenu_BlackList.Trigger = AntdUI.Trigger.Hover;
             this.ddMenu_BlackList.WaveSize = 0;
+            this.ddMenu_BlackList.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_BlackList_SelectedValueChanged);
             // 
             // lBlackList
             // 
@@ -185,6 +186,8 @@
             this.tBlackList.Name = "tBlackList";
             this.tBlackList.Size = new System.Drawing.Size(696, 246);
             this.tBlackList.TabIndex = 10;
+            this.tBlackList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tBlackList_CellButtonClick);
+            this.tBlackList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tBlackList_CellDoubleClick);
             // 
             // tWhiteList
             // 
