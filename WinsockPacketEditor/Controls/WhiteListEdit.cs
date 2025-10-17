@@ -169,10 +169,33 @@ namespace WinsockPacketEditor
 
             if (this.wliSelect != null)
             {
+                if (!this.wliSelect.IPAddress.Equals(IPString))
+                {
+                    if (Operate.ProxyConfig.Proxy.IsExistsInWhiteList(IPString))
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此 IP 已在白名单", TType.Error)
+                        {
+                            LocalizationText = "WhiteListEdit.Error"
+                        });
+
+                        return;
+                    }
+                }
+
                 Operate.ProxyConfig.Proxy.UpdateWhiteList(this.wliSelect, IPString);
             }
             else
             {
+                if (Operate.ProxyConfig.Proxy.IsExistsInWhiteList(IPString))
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "此 IP 已在白名单", TType.Error)
+                    {
+                        LocalizationText = "WhiteListEdit.Error"
+                    });
+
+                    return;
+                }
+
                 Operate.ProxyConfig.Proxy.AddToWhiteList(IPString);
             }
 

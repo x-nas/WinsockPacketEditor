@@ -193,25 +193,25 @@ namespace WinsockPacketEditor
 
                 case "Import":
 
-                    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
+                    Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
 
                     break;
 
                 case "Export":
 
-                    //if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
-                    //{
-                    //    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
-                    //}
+                    if (Operate.ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                    {
+                        Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
+                    }
 
                     break;
 
                 case "Clear":
 
-                    //if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
-                    //{
-                    //    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
-                    //}
+                    if (Operate.ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                    {
+                        Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
+                    }
 
                     break;
             }
@@ -231,7 +231,7 @@ namespace WinsockPacketEditor
 
                     case "bDelete":
 
-                        //Operate.ProxyConfig.Mapping.DeleteMapLocal_Dialog(this.form, ml);
+                        Operate.ProxyConfig.Proxy.DeleteWhiteList_Dialog(this.form, wli);
 
                         break;
                 }

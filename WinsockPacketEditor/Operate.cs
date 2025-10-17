@@ -6588,27 +6588,18 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//编辑白名单
-
-                public static void OpenWhiteListEdit(Form form, FireWallSetting fwForm, WhiteListInfo wli)
-                {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "白名单编辑"), new WhiteListEdit(form, fwForm, wli))
-                    {
-                        Keyboard = false,
-                        MaskClosable = false,
-                        BtnHeight = 0,
-                    });
-                }
-
-                #endregion
-
-                #region//白名单操作
+                #region//新增白名单
 
                 public static async void AddToWhiteList(string ipOrRange)
                 {
                     try
                     {
                         if (string.IsNullOrEmpty(ipOrRange))
+                        {
+                            return;
+                        }
+
+                        if (ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                         {
                             return;
                         }
@@ -6627,14 +6618,28 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(AddToWhiteList), ex.Message);
-                    }                    
+                    }
                 }
+
+                #endregion
+
+                #region//更新白名单
 
                 public static async void UpdateWhiteList(WhiteListInfo wli, string ipOrRange)
                 {
                     try
                     {
                         if (wli == null || string.IsNullOrEmpty(ipOrRange))
+                        {
+                            return;
+                        }
+
+                        if (wli.IPAddress.Equals(ipOrRange))
+                        {
+                            return;
+                        }
+
+                        if (ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                         {
                             return;
                         }
@@ -6656,25 +6661,800 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                public static void RemoveFromWhiteList(string ipOrRange)
+                #endregion
+
+                #region//编辑白名单
+
+                public static void OpenWhiteListEdit(Form form, FireWallSetting fwForm, WhiteListInfo wli)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "白名单编辑"), new WhiteListEdit(form, fwForm, wli))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
+                #region//删除白名单（对话框）
+
+                public static void DeleteWhiteList_Dialog(Form form, WhiteListInfo wli)
                 {
                     try
                     {
-                        var rangeToRemove = GenerateIpRange(ipOrRange);
-                        if (rangeToRemove.Item1 == -1 && rangeToRemove.Item2 == -1) return;
-
-                        var itemsToRemove = Operate.ProxyConfig.Proxy.WhiteList
-                            .Where(r => r.Item1 == rangeToRemove.Item1 && r.Item2 == rangeToRemove.Item2)
-                            .ToList();
-
-                        foreach (var item in itemsToRemove)
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "白名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                         {
-                            Operate.ProxyConfig.Proxy.WhiteList.Remove(item);
+                            Icon = TType.Warn,
+                            Keyboard = false,
+                            MaskClosable = false,
+                            OnOk = config =>
+                            {
+                                if (wli != null)
+                                {
+                                    ProxyConfig.Proxy.lstWhiteList.Remove(wli);
+                                }
+
+                                return true;
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteWhiteList_Dialog), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//清空白名单（对话框）
+
+                public static void CleanUpWhiteList_Dialog(Form form)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "白名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    {
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
+                        {
+                            ProxyConfig.Proxy.lstWhiteList.Clear();
+                            return true;
+                        }
+                    });
+                }
+
+                #endregion
+
+                #region//检测是否在白名单内
+
+                public static bool IsExistsInWhiteList(string ipOrRange)
+                {
+                    return Operate.ProxyConfig.Proxy.lstWhiteList
+                        .Any(wli => wli.IPAddress.Equals(ipOrRange, StringComparison.OrdinalIgnoreCase));
+                }
+
+                #endregion
+
+                #region//白名单的列表操作
+
+                public static void UpdateWhiteList_ByListAction(Form form, SystemConfig.ListAction listAction, WhiteListInfo wli)
+                {
+                    try
+                    {
+                        int iIndex = 0;
+
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                ProxyConfig.Proxy.lstWhiteList.Remove(wli);
+                                ProxyConfig.Proxy.lstWhiteList.Insert(0, wli);
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                iIndex = ProxyConfig.Proxy.lstWhiteList.IndexOf(wli);
+                                if (iIndex > 0)
+                                {
+                                    ProxyConfig.Proxy.lstWhiteList.Remove(wli);
+                                    ProxyConfig.Proxy.lstWhiteList.Insert(iIndex - 1, wli);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                iIndex = ProxyConfig.Proxy.lstWhiteList.IndexOf(wli);
+                                if (iIndex > -1 && iIndex < ProxyConfig.Proxy.lstWhiteList.Count - 1)
+                                {
+                                    ProxyConfig.Proxy.lstWhiteList.Remove(wli);
+                                    ProxyConfig.Proxy.lstWhiteList.Insert(iIndex + 1, wli);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                ProxyConfig.Proxy.lstWhiteList.Remove(wli);
+                                ProxyConfig.Proxy.lstWhiteList.Add(wli);
+
+                                break;
+
+                            case SystemConfig.ListAction.Import:
+
+                                ProxyConfig.Proxy.LoadWhiteList_Dialog(form);
+
+                                break;
+
+                            case SystemConfig.ListAction.Export:
+
+                                ProxyConfig.Proxy.SaveWhiteList_Dialog(form, string.Empty, ProxyConfig.Proxy.lstWhiteList);
+
+                                break;
+
+                            case SystemConfig.ListAction.CleanUp:
+
+                                ProxyConfig.Proxy.CleanUpWhiteList_Dialog(form);
+
+                                break;
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(RemoveFromWhiteList), ex.Message);
+                        Operate.DoLog(nameof(UpdateWhiteList_ByListAction), ex.Message);
+                    }
+                }
+
+                #endregion                
+
+                #region//新增黑名单
+
+                public static async void AddToBlackList(string ipOrRange, DateTime ExpiryTime)
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(ipOrRange))
+                        {
+                            return;
+                        }
+
+                        if (ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
+                        {
+                            return;
+                        }
+
+                        string IPToCheck = ipOrRange;
+                        if (ipOrRange.Contains("-"))
+                        {
+                            IPToCheck = ipOrRange.Split('-')[0].Trim();
+                        }
+
+                        string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
+                        BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, ExpiryTime);
+
+                        Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddToBlackList), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//更新黑名单
+
+                public static async void UpdateBlackList(BlackListInfo bli, string ipOrRange, DateTime ExpiryTime)
+                {
+                    try
+                    {
+                        if (bli == null || string.IsNullOrEmpty(ipOrRange) || ExpiryTime == null)
+                        {
+                            return;
+                        }
+
+                        if (bli.IPAddress.Equals(ipOrRange) && bli.ExpiryTime == ExpiryTime)
+                        {
+                            return;
+                        }
+
+                        if (ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
+                        {
+                            return;
+                        }
+
+                        bli.IPAddress = ipOrRange;
+                        bli.ExpiryTime = ExpiryTime;
+
+                        string IPToCheck = ipOrRange;
+                        if (ipOrRange.Contains("-"))
+                        {
+                            IPToCheck = ipOrRange.Split('-')[0].Trim();
+                        }
+
+                        string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
+                        bli.IPLocation = IPLocation;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateBlackList), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//编辑黑名单
+
+                public static void OpenBlackListEdit(Form form, FireWallSetting fwForm, BlackListInfo bli)
+                {
+                    //AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapLocalForm", "黑名单编辑"), new WhiteListEdit(form, fwForm, wli))
+                    //{
+                    //    Keyboard = false,
+                    //    MaskClosable = false,
+                    //    BtnHeight = 0,
+                    //});
+                }
+
+                #endregion
+
+                #region//删除黑名单（对话框）
+
+                public static void DeleteBlackList_Dialog(Form form, BlackListInfo bli)
+                {
+                    try
+                    {
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "黑名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                        {
+                            Icon = TType.Warn,
+                            Keyboard = false,
+                            MaskClosable = false,
+                            OnOk = config =>
+                            {
+                                if (bli != null)
+                                {
+                                    ProxyConfig.Proxy.lstBlackList.Remove(bli);
+                                }
+
+                                return true;
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteBlackList_Dialog), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//清空黑名单（对话框）
+
+                public static void CleanUpBlackList_Dialog(Form form)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.MapLocal", "黑名单"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    {
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
+                        {
+                            ProxyConfig.Proxy.lstBlackList.Clear();
+                            return true;
+                        }
+                    });
+                }
+
+                #endregion
+
+                #region//检测是否在黑名单内
+
+                public static bool IsExistsInBlackList(string ipOrRange)
+                {
+                    return Operate.ProxyConfig.Proxy.lstBlackList
+                        .Any(bli => bli.IPAddress.Equals(ipOrRange, StringComparison.OrdinalIgnoreCase));
+                }
+
+                #endregion
+
+                #region//黑名单的列表操作
+
+                public static void UpdateBlackList_ByListAction(Form form, SystemConfig.ListAction listAction, BlackListInfo bli)
+                {
+                    try
+                    {
+                        int iIndex = 0;
+
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                ProxyConfig.Proxy.lstBlackList.Remove(bli);
+                                ProxyConfig.Proxy.lstBlackList.Insert(0, bli);
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                iIndex = ProxyConfig.Proxy.lstBlackList.IndexOf(bli);
+                                if (iIndex > 0)
+                                {
+                                    ProxyConfig.Proxy.lstBlackList.Remove(bli);
+                                    ProxyConfig.Proxy.lstBlackList.Insert(iIndex - 1, bli);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                iIndex = ProxyConfig.Proxy.lstBlackList.IndexOf(bli);
+                                if (iIndex > -1 && iIndex < ProxyConfig.Proxy.lstBlackList.Count - 1)
+                                {
+                                    ProxyConfig.Proxy.lstBlackList.Remove(bli);
+                                    ProxyConfig.Proxy.lstBlackList.Insert(iIndex + 1, bli);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                ProxyConfig.Proxy.lstBlackList.Remove(bli);
+                                ProxyConfig.Proxy.lstBlackList.Add(bli);
+
+                                break;
+
+                            case SystemConfig.ListAction.Import:
+
+                                ProxyConfig.Proxy.LoadBlackList_Dialog(form);
+
+                                break;
+
+                            case SystemConfig.ListAction.Export:
+
+                                ProxyConfig.Proxy.SaveBlackList_Dialog(form, string.Empty, ProxyConfig.Proxy.lstBlackList);
+
+                                break;
+
+                            case SystemConfig.ListAction.CleanUp:
+
+                                ProxyConfig.Proxy.CleanUpBlackList_Dialog(form);
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateBlackList_ByListAction), ex.Message);
+                    }
+                }
+
+                #endregion                                
+
+                #region//保存白名单到文件（对话框）
+
+                public static void SaveWhiteList_Dialog(Form form, string FileName, BindingList<WhiteListInfo> wliList)
+                {
+                    try
+                    {
+                        if (ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                        {
+                            SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("WhiteListFile", "白名单文件") + "（*.wl）|*.wl";
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveFile.FileName = FileName;
+                            }
+
+                            sfdSaveFile.RestoreDirectory = true;
+                            if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveFile.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportWhiteList", "导出白名单"));
+
+                                    if (SaveWhiteList(FilePath, wliList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportWhiteList.Success", "导出白名单成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(SaveWhiteList_Dialog), Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportWhiteList.Error", "导出白名单失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveWhiteList_Dialog), ex.Message);
+                    }
+                }
+
+                private static bool SaveWhiteList(string FilePath, BindingList<WhiteListInfo> wliList, bool DoEncrypt, string Password)
+                {
+                    try
+                    {
+                        XDocument xdoc = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+
+                        XElement xeWhiteList = ProxyConfig.Proxy.GetWhiteList_XML(wliList);
+                        if (xeWhiteList == null)
+                        {
+                            return false;
+                        }
+
+                        xdoc.Add(xeWhiteList);
+                        xdoc.Save(FilePath);
+
+                        if (DoEncrypt)
+                        {
+                            if (!string.IsNullOrEmpty(Password))
+                            {
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveWhiteList), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static XElement GetWhiteList_XML(BindingList<WhiteListInfo> wliList)
+                {
+                    try
+                    {
+                        XElement xeWhiteList = new XElement("WhiteList");
+
+                        foreach (WhiteListInfo wli in wliList)
+                        {
+                            XElement xeWhite =
+                                new XElement("White",
+                                new XElement("IPAddress", wli.IPAddress)
+                                );
+
+                            xeWhiteList.Add(xeWhite);
+                        }
+
+                        return xeWhiteList;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetWhiteList_XML), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//保存黑名单到文件（对话框）
+
+                public static void SaveBlackList_Dialog(Form form, string FileName, BindingList<BlackListInfo> bliList)
+                {
+                    try
+                    {
+                        if (ProxyConfig.Proxy.lstBlackList.Count > 0)
+                        {
+                            SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("BlackListFile", "黑名单文件") + "（*.bl）|*.bl";
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveFile.FileName = FileName;
+                            }
+
+                            sfdSaveFile.RestoreDirectory = true;
+                            if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveFile.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportBlackList", "导出黑名单"));
+
+                                    if (SaveBlackList(FilePath, bliList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportBlackList.Success", "导出黑名单成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(SaveBlackList_Dialog), Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportBlackList.Error", "导出黑名单失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveBlackList_Dialog), ex.Message);
+                    }
+                }
+
+                private static bool SaveBlackList(string FilePath, BindingList<BlackListInfo> bliList, bool DoEncrypt, string Password)
+                {
+                    try
+                    {
+                        XDocument xdoc = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+
+                        XElement xeBlackList = ProxyConfig.Proxy.GetBlackList_XML(bliList);
+                        if (xeBlackList == null)
+                        {
+                            return false;
+                        }
+
+                        xdoc.Add(xeBlackList);
+                        xdoc.Save(FilePath);
+
+                        if (DoEncrypt)
+                        {
+                            if (!string.IsNullOrEmpty(Password))
+                            {
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveBlackList), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static XElement GetBlackList_XML(BindingList<BlackListInfo> bliList)
+                {
+                    try
+                    {
+                        XElement xeBlackList = new XElement("BlackList");
+
+                        foreach (BlackListInfo bli in bliList)
+                        {
+                            XElement xeBlack =
+                                new XElement("Black",
+                                new XElement("IPAddress", bli.IPAddress),
+                                new XElement("ExpiryTime", bli.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss"))
+                                );
+
+                            xeBlackList.Add(xeBlack);
+                        }
+
+                        return xeBlackList;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetBlackList_XML), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//从文件加载白名单（对话框）
+
+                public static void LoadWhiteList_Dialog(Form form)
+                {
+                    try
+                    {
+                        OpenFileDialog ofdLoadFile = new OpenFileDialog();
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("WhiteListFile", "白名单文件") + "（*.wl）|*.wl";
+                        ofdLoadFile.RestoreDirectory = true;
+
+                        if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                        {
+                            string FilePath = ofdLoadFile.FileName;
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                if (LoadWhiteList(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("ImportWhiteList.Success", "导入白名单成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(nameof(LoadWhiteList_Dialog), Title + ": " + FilePath);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadWhiteList_Dialog), ex.Message);
+                    }
+                }
+
+                private static bool LoadWhiteList(Form form, string FilePath, bool LoadFromUser)
+                {
+                    try
+                    {
+                        if (File.Exists(FilePath))
+                        {
+                            XDocument xdoc = null;
+
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
+                            if (bEncrypt)
+                            {
+                                if (LoadFromUser)
+                                {
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportWhiteList", "导入白名单"), FilePath);
+                                }
+                            }
+                            else
+                            {
+                                xdoc = XDocument.Load(FilePath);
+                            }
+
+                            if (xdoc == null)
+                            {
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
+                                if (LoadFromUser)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
+                                }
+                                else
+                                {
+                                    Operate.DoLog(nameof(LoadWhiteList), sError);
+                                }
+
+                                return false;
+                            }
+
+                            LoadWhiteList_FromXDocument(xdoc);
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadWhiteList), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static void LoadWhiteList_FromXDocument(XDocument xdoc)
+                {
+                    try
+                    {
+                        foreach (XElement xeWhiteList in xdoc.Root.Elements())
+                        {
+                            string IPAddress = string.Empty;
+                            if (xeWhiteList.Element("IPAddress") != null)
+                            {
+                                IPAddress = xeWhiteList.Element("IPAddress").Value;
+                            }
+
+                            ProxyConfig.Proxy.AddToWhiteList(IPAddress);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadWhiteList_FromXDocument), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//从文件加载黑名单（对话框）
+
+                public static void LoadBlackList_Dialog(Form form)
+                {
+                    try
+                    {
+                        OpenFileDialog ofdLoadFile = new OpenFileDialog();
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("BlackListFile", "黑名单文件") + "（*.bl）|*.bl";
+                        ofdLoadFile.RestoreDirectory = true;
+
+                        if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                        {
+                            string FilePath = ofdLoadFile.FileName;
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                if (LoadBlackList(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("ImportBlackList.Success", "导入黑名单成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(nameof(LoadBlackList_Dialog), Title + ": " + FilePath);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadBlackList_Dialog), ex.Message);
+                    }
+                }
+
+                private static bool LoadBlackList(Form form, string FilePath, bool LoadFromUser)
+                {
+                    try
+                    {
+                        if (File.Exists(FilePath))
+                        {
+                            XDocument xdoc = null;
+
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
+                            if (bEncrypt)
+                            {
+                                if (LoadFromUser)
+                                {
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportBlackList", "导入黑名单"), FilePath);
+                                }
+                            }
+                            else
+                            {
+                                xdoc = XDocument.Load(FilePath);
+                            }
+
+                            if (xdoc == null)
+                            {
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
+                                if (LoadFromUser)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
+                                }
+                                else
+                                {
+                                    Operate.DoLog(nameof(LoadBlackList), sError);
+                                }
+
+                                return false;
+                            }
+
+                            LoadBlackList_FromXDocument(xdoc);
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadBlackList), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static void LoadBlackList_FromXDocument(XDocument xdoc)
+                {
+                    try
+                    {
+                        foreach (XElement xeBlackList in xdoc.Root.Elements())
+                        {
+                            string IPAddress = string.Empty;
+                            if (xeBlackList.Element("IPAddress") != null)
+                            {
+                                IPAddress = xeBlackList.Element("IPAddress").Value;
+                            }
+
+                            DateTime ExpiryTime = DateTime.Now;
+                            if (xeBlackList.Element("ExpiryTime") != null)
+                            {
+                                ExpiryTime = DateTime.Parse(xeBlackList.Element("ExpiryTime").Value);
+                            }
+
+                            ProxyConfig.Proxy.AddToBlackList(IPAddress, ExpiryTime);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadBlackList_FromXDocument), ex.Message);
                     }
                 }
 
@@ -6687,7 +7467,7 @@ namespace WinsockPacketEditor
                     return ConvertRangesToStrings(Operate.ProxyConfig.Proxy.BlackList);
                 }
 
-                public static void AddToBlackList(string ipOrRange)
+                public static void AddToBlackList2(string ipOrRange)
                 {
                     try
                     {
@@ -6697,7 +7477,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(AddToBlackList), ex.Message);
-                    }                    
+                    }
                 }
 
                 public static void RemoveFromBlackList(string ipOrRange)
@@ -8988,7 +9768,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//删除远程代理映射
+                #region//删除远程代理映射（对话框）
 
                 public static void DeleteMapRemote_Dialog(Form form, MapRemote mr)
                 {
