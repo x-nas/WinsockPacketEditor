@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Drawing;
@@ -3814,6 +3815,8 @@ namespace WinsockPacketEditor
                         new XElement("Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth),
                         new XElement("ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName),
                         new XElement("ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord),
+                        new XElement("EnableFireWall", ProxyConfig.Proxy.EnableFireWall),
+                        new XElement("WhiteListMode", ProxyConfig.Proxy.WhiteListMode),
                         new XElement("SpeedMode", ProxyConfig.Proxy.SpeedMode)
                         );
 
@@ -3855,6 +3858,8 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.Enable_ExternalProxy_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy_Auth"]);
                         ProxyConfig.Proxy.ExternalProxy_UserName = ProxyMode.Rows[0]["ExternalProxy_UserName"].ToString();
                         ProxyConfig.Proxy.ExternalProxy_PassWord = ProxyMode.Rows[0]["ExternalProxy_PassWord"].ToString();
+                        ProxyConfig.Proxy.EnableFireWall = Convert.ToBoolean(ProxyMode.Rows[0]["EnableFireWall"]);
+                        ProxyConfig.Proxy.WhiteListMode = Convert.ToBoolean(ProxyMode.Rows[0]["WhiteListMode"]);
                         ProxyConfig.Proxy.SpeedMode = Convert.ToBoolean(ProxyMode.Rows[0]["SpeedMode"]);
                     }
                 }
@@ -3956,6 +3961,18 @@ namespace WinsockPacketEditor
                     if (ExternalProxy_PassWord != null)
                     {
                         ProxyConfig.Proxy.ExternalProxy_PassWord = ExternalProxy_PassWord.Value;
+                    }
+
+                    XElement EnableFireWall = xeProxyMode.Element("EnableFireWall");
+                    if (EnableFireWall != null)
+                    {
+                        ProxyConfig.Proxy.EnableFireWall = Convert.ToBoolean(EnableFireWall.Value);
+                    }
+
+                    XElement WhiteListMode = xeProxyMode.Element("WhiteListMode");
+                    if (WhiteListMode != null)
+                    {
+                        ProxyConfig.Proxy.WhiteListMode = Convert.ToBoolean(WhiteListMode.Value);
                     }
 
                     XElement SpeedMode = xeProxyMode.Element("SpeedMode");
@@ -4805,8 +4822,6 @@ namespace WinsockPacketEditor
                 public static bool WhiteListMode = false;
                 public static BindingList<BlackListInfo> lstBlackList = new BindingList<BlackListInfo>();
                 public static BindingList<WhiteListInfo> lstWhiteList = new BindingList<WhiteListInfo>();
-                public static BindingList<Tuple<long, long>> BlackList = new BindingList<Tuple<long, long>>();
-                public static BindingList<Tuple<long, long>> WhiteList = new BindingList<Tuple<long, long>>();
 
                 #region//定义结构                
 
@@ -6447,7 +6462,7 @@ namespace WinsockPacketEditor
 
                 #region//新增白名单
 
-                public static async void AddToWhiteList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime)
+                public static async void AddToWhiteList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
                 {
                     try
                     {
@@ -6468,7 +6483,7 @@ namespace WinsockPacketEditor
                         }
 
                         string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
-                        WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime);
+                        WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
                         Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
                     }
@@ -6670,7 +6685,7 @@ namespace WinsockPacketEditor
 
                 #region//新增黑名单
 
-                public static async void AddToBlackList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime)
+                public static async void AddToBlackList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
                 {
                     try
                     {
@@ -6691,7 +6706,7 @@ namespace WinsockPacketEditor
                         }
 
                         string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
-                        BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime);
+                        BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
                         Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
                     }
@@ -6988,6 +7003,102 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//保存白名单到数据库
+
+                public static void SaveWhiteList_ToDB()
+                {
+                    try
+                    {
+                        DataBase.DeleteTable_WhiteList();
+                        DataBase.InsertTable_WhiteList();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveWhiteList_ToDB), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region //保存黑名单到数据库
+
+                public static void SaveBlackList_ToDB()
+                {
+                    try
+                    {
+                        DataBase.DeleteTable_BlackList();
+                        DataBase.InsertTable_BlackList();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveBlackList_ToDB), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//从数据库加载白名单（异步）
+
+                public static async void LoadWhiteList_FromDB()
+                {
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            DataTable dtWhiteList = DataBase.SelectTable_WhiteList();
+
+                            foreach (DataRow dataRow in dtWhiteList.Rows)
+                            {
+                                string IPAddress = dataRow["IPAddress"].ToString();
+                                long StartIP = long.Parse(dataRow["StartIP"].ToString());
+                                long EndIP = long.Parse(dataRow["EndIP"].ToString());
+                                bool IsExpiry = bool.Parse(dataRow["IsExpiry"].ToString());
+                                DateTime ExpiryTime = DateTime.Parse(dataRow["ExpiryTime"].ToString());
+                                DateTime CreateTime = DateTime.Parse(dataRow["CreateTime"].ToString());
+
+                                ProxyConfig.Proxy.AddToWhiteList(IPAddress, IsExpiry, ExpiryTime, CreateTime);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Operate.DoLog(nameof(LoadWhiteList_FromDB), ex.Message);
+                        }
+                    });
+                }
+
+                #endregion                
+
+                #region //从数据库加载黑名单（异步）
+
+                public static async void LoadBlackList_FromDB()
+                {
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            DataTable dtBlackList = DataBase.SelectTable_BlackList();
+
+                            foreach (DataRow dataRow in dtBlackList.Rows)
+                            {
+                                string IPAddress = dataRow["IPAddress"].ToString();
+                                long StartIP = long.Parse(dataRow["StartIP"].ToString());
+                                long EndIP = long.Parse(dataRow["EndIP"].ToString());
+                                bool IsExpiry = bool.Parse(dataRow["IsExpiry"].ToString());
+                                DateTime ExpiryTime = DateTime.Parse(dataRow["ExpiryTime"].ToString());
+                                DateTime CreateTime = DateTime.Parse(dataRow["CreateTime"].ToString());
+
+                                ProxyConfig.Proxy.AddToBlackList(IPAddress, IsExpiry, ExpiryTime, CreateTime);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Operate.DoLog(nameof(LoadBlackList_FromDB), ex.Message);
+                        }
+                    });
+                }
+
+                #endregion
+
                 #region//保存白名单到文件（对话框）
 
                 public static void SaveWhiteList_Dialog(Form form, string FileName, BindingList<WhiteListInfo> wliList)
@@ -7082,7 +7193,8 @@ namespace WinsockPacketEditor
                                 new XElement("White",
                                 new XElement("IPAddress", wli.IPAddress),
                                 new XElement("IsExpiry", wli.IsExpiry),
-                                new XElement("ExpiryTime", wli.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss"))
+                                new XElement("ExpiryTime", wli.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
+                                new XElement("CreateTime", wli.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
                                 );
 
                             xeWhiteList.Add(xeWhite);
@@ -7194,7 +7306,8 @@ namespace WinsockPacketEditor
                                 new XElement("Black",
                                 new XElement("IPAddress", bli.IPAddress),
                                 new XElement("IsExpiry", bli.IsExpiry),
-                                new XElement("ExpiryTime", bli.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss"))
+                                new XElement("ExpiryTime", bli.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
+                                new XElement("CreateTime", bli.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
                                 );
 
                             xeBlackList.Add(xeBlack);
@@ -7314,7 +7427,13 @@ namespace WinsockPacketEditor
                                 ExpiryTime = DateTime.Parse(xeWhiteList.Element("ExpiryTime").Value);
                             }
 
-                            ProxyConfig.Proxy.AddToWhiteList(IPAddress, IsExpiry, ExpiryTime);
+                            DateTime CreateTime = DateTime.Now;
+                            if (xeWhiteList.Element("CreateTime") != null)
+                            {
+                                CreateTime = DateTime.Parse(xeWhiteList.Element("CreateTime").Value);
+                            }
+
+                            ProxyConfig.Proxy.AddToWhiteList(IPAddress, IsExpiry, ExpiryTime, CreateTime);
                         }
                     }
                     catch (Exception ex)
@@ -7427,7 +7546,13 @@ namespace WinsockPacketEditor
                                 ExpiryTime = DateTime.Parse(xeBlackList.Element("ExpiryTime").Value);
                             }
 
-                            ProxyConfig.Proxy.AddToBlackList(IPAddress, IsExpiry, ExpiryTime);
+                            DateTime CreateTime = DateTime.Now;
+                            if (xeBlackList.Element("CreateTime") != null)
+                            {
+                                CreateTime = DateTime.Parse(xeBlackList.Element("CreateTime").Value);
+                            }
+
+                            ProxyConfig.Proxy.AddToBlackList(IPAddress, IsExpiry, ExpiryTime, CreateTime);
                         }
                     }
                     catch (Exception ex)
@@ -19325,7 +19450,9 @@ namespace WinsockPacketEditor
                     DataBase.CreateTable_Robot();
                     DataBase.CreateTable_ProxyAccount();
                     DataBase.CreateTable_ProxyMapLocal();
-                    DataBase.CreateTable_ProxyMapRemote();                    
+                    DataBase.CreateTable_ProxyMapRemote();
+                    DataBase.CreateTable_WhiteList();
+                    DataBase.CreateTable_BlackList();
                 }
                 catch (Exception ex)
                 {
@@ -19863,6 +19990,8 @@ namespace WinsockPacketEditor
                         sql += "Enable_ExternalProxy_Auth BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理认证
                         sql += "ExternalProxy_UserName TEXT,";//代理模式 - 外部代理用户名
                         sql += "ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
+                        sql += "EnableFireWall BOOLEAN DEFAULT 0,";//代理模式 - 启用防火墙
+                        sql += "WhiteListMode BOOLEAN DEFAULT 0,";//代理模式 - 是否白名单模式
                         sql += "SpeedMode BOOLEAN DEFAULT 0";//代理模式 - 极速模式
                         sql += ");";
 
@@ -19951,6 +20080,8 @@ namespace WinsockPacketEditor
                         sql += "Enable_ExternalProxy_Auth,";
                         sql += "ExternalProxy_UserName,";
                         sql += "ExternalProxy_PassWord,";
+                        sql += "EnableFireWall,";
+                        sql += "WhiteListMode,";
                         sql += "SpeedMode";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
@@ -19969,6 +20100,8 @@ namespace WinsockPacketEditor
                         sql += "@Enable_ExternalProxy_Auth,";
                         sql += "@ExternalProxy_UserName,";
                         sql += "@ExternalProxy_PassWord,";
+                        sql += "@EnableFireWall,";
+                        sql += "@WhiteListMode,";
                         sql += "@SpeedMode";
                         sql += ");";
 
@@ -19990,6 +20123,8 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth);
                             cmd.Parameters.AddWithValue("@ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName);
                             cmd.Parameters.AddWithValue("@ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord);
+                            cmd.Parameters.AddWithValue("@EnableFireWall", ProxyConfig.Proxy.EnableFireWall);
+                            cmd.Parameters.AddWithValue("@WhiteListMode", ProxyConfig.Proxy.WhiteListMode);
                             cmd.Parameters.AddWithValue("@SpeedMode", ProxyConfig.Proxy.SpeedMode);
 
                             conn.Open();
@@ -21249,6 +21384,268 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(InsertTable_ProxyMapRemote), ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//白名单
+
+            private static bool CreateTable_WhiteList()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS WhiteList (";
+                        sql += "IPAddress TEXT NOT NULL UNIQUE,";
+                        sql += "StartIP INTEGER DEFAULT 0,";
+                        sql += "EndIP INTEGER DEFAULT 0,";
+                        sql += "IsExpiry BOOLEAN DEFAULT 0,";
+                        sql += "ExpiryTime TIMESTAMP,";
+                        sql += "CreateTime TIMESTAMP";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CreateTable_WhiteList), ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_WhiteList()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM WhiteList;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_WhiteList), ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_WhiteList()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM WhiteList;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_WhiteList), ex.Message);
+                }
+            }
+
+            public static void InsertTable_WhiteList()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sql = "INSERT INTO WhiteList (" +
+                                        "IPAddress, StartIP, EndIP, IsExpiry, ExpiryTime, CreateTime" +
+                                        ") VALUES (" +
+                                        "@IPAddress, @StartIP, @EndIP, @IsExpiry, @ExpiryTime, @CreateTime" +
+                                        ");";
+
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                            {
+                                cmd.Parameters.Add(new SQLiteParameter("@IPAddress", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@StartIP", DbType.Int64));
+                                cmd.Parameters.Add(new SQLiteParameter("@EndIP", DbType.Int64));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
+                                cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
+                                cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+
+                                foreach (WhiteListInfo wli in Operate.ProxyConfig.Proxy.lstWhiteList)
+                                {
+                                    cmd.Parameters["@IPAddress"].Value = wli.IPAddress;
+                                    cmd.Parameters["@StartIP"].Value = wli.StartIP;
+                                    cmd.Parameters["@EndIP"].Value = wli.EndIP;
+                                    cmd.Parameters["@IsExpiry"].Value = wli.IsExpiry;
+                                    cmd.Parameters["@ExpiryTime"].Value = wli.ExpiryTime;
+                                    cmd.Parameters["@CreateTime"].Value = wli.CreateTime;
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_WhiteList), ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region //黑名单
+
+            private static bool CreateTable_BlackList()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS BlackList (";
+                        sql += "IPAddress TEXT NOT NULL UNIQUE,";
+                        sql += "StartIP INTEGER DEFAULT 0,";
+                        sql += "EndIP INTEGER DEFAULT 0,";
+                        sql += "IsExpiry BOOLEAN DEFAULT 0,";
+                        sql += "ExpiryTime TIMESTAMP,";
+                        sql += "CreateTime TIMESTAMP";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CreateTable_BlackList), ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_BlackList()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM BlackList;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_BlackList), ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_BlackList()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM BlackList;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_BlackList), ex.Message);
+                }
+            }
+
+            public static void InsertTable_BlackList()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sql = "INSERT INTO BlackList (" +
+                                        "IPAddress, StartIP, EndIP, IsExpiry, ExpiryTime, CreateTime" +
+                                        ") VALUES (" +
+                                        "@IPAddress, @StartIP, @EndIP, @IsExpiry, @ExpiryTime, @CreateTime" +
+                                        ");";
+
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                            {
+                                cmd.Parameters.Add(new SQLiteParameter("@IPAddress", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@StartIP", DbType.Int64));
+                                cmd.Parameters.Add(new SQLiteParameter("@EndIP", DbType.Int64));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
+                                cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
+                                cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+
+                                foreach (BlackListInfo bli in Operate.ProxyConfig.Proxy.lstBlackList)
+                                {
+                                    cmd.Parameters["@IPAddress"].Value = bli.IPAddress;
+                                    cmd.Parameters["@StartIP"].Value = bli.StartIP;
+                                    cmd.Parameters["@EndIP"].Value = bli.EndIP;
+                                    cmd.Parameters["@IsExpiry"].Value = bli.IsExpiry;
+                                    cmd.Parameters["@ExpiryTime"].Value = bli.ExpiryTime;
+                                    cmd.Parameters["@CreateTime"].Value = bli.CreateTime;
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_BlackList), ex.Message);
                 }
             }
 

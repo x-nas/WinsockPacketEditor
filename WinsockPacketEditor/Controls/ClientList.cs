@@ -281,7 +281,7 @@ namespace WinsockPacketEditor
 
         private void AddToWhiteList_ByDateTime(string IPAddress, bool IsExpiry, DateTime ExpiryTime)
         {
-            Operate.ProxyConfig.Proxy.AddToWhiteList(IPAddress, false, Operate.SystemConfig.MaxDateTime);
+            Operate.ProxyConfig.Proxy.AddToWhiteList(IPAddress, false, Operate.SystemConfig.MaxDateTime, DateTime.Now);
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, IPAddress + " " + "已加入到白名单", TType.Success)
             {
@@ -291,7 +291,7 @@ namespace WinsockPacketEditor
 
         private void AddToBlackList_ByDateTime(string IPAddress, bool IsExpiry, DateTime ExpiryTime)
         {
-            Operate.ProxyConfig.Proxy.AddToBlackList(IPAddress, IsExpiry, ExpiryTime);
+            Operate.ProxyConfig.Proxy.AddToBlackList(IPAddress, IsExpiry, ExpiryTime, DateTime.Now);
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, IPAddress + " " + "已加入到黑名单", TType.Success)
             {

@@ -58,6 +58,8 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
+                Operate.ProxyConfig.Proxy.LoadWhiteList_FromDB();
+                Operate.ProxyConfig.Proxy.LoadBlackList_FromDB();
 
                 this.InitProxyServerIP();
                 this.InitGlobal();
@@ -93,7 +95,9 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.SaveProxyMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();
             Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
-            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();            
+            Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
+            Operate.ProxyConfig.Proxy.SaveWhiteList_ToDB();
+            Operate.ProxyConfig.Proxy.SaveBlackList_ToDB();
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)

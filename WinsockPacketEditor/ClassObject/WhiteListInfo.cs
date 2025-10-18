@@ -20,28 +20,28 @@ namespace WinsockPacketEditor
             }
         }
 
-        long _startIp;
+        long _StartIP;
 
-        public long StartIp
+        public long StartIP
         {
-            get => _startIp;
+            get => _StartIP;
             set
             {
-                if (_startIp == value) return;
-                _startIp = value;
+                if (_StartIP == value) return;
+                _StartIP = value;
                 OnPropertyChanged();
             }
         }
 
-        long _endIp;
+        long _EndIP;
 
-        public long EndIp
+        public long EndIP
         {
-            get => _endIp;
+            get => _EndIP;
             set
             {
-                if (_endIp == value) return;
-                _endIp = value;
+                if (_EndIP == value) return;
+                _EndIP = value;
                 OnPropertyChanged();
             }
         }
@@ -99,14 +99,37 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//创建时间
+
+        DateTime _CreateTime;
+
+        public DateTime CreateTime
+        {
+            get => _CreateTime;
+            set
+            {
+                if (_CreateTime == value) return;
+                _CreateTime = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//WhiteListInfo
 
-        public WhiteListInfo(string IPAddress, string IPLocation, bool IsExpiry, DateTime ExpiryTime)
+        public WhiteListInfo(
+            string IPAddress, 
+            string IPLocation, 
+            bool IsExpiry, 
+            DateTime ExpiryTime, 
+            DateTime CreateTime)
         {
-            this.IPAddress = IPAddress;
-            this.IPLocation = IPLocation;
-            this.IsExpiry = IsExpiry;
-            this.ExpiryTime = ExpiryTime;
+            this._IPAddress = IPAddress;
+            this._IPLocation = IPLocation;
+            this._IsExpiry = IsExpiry;
+            this._ExpiryTime = ExpiryTime;
+            this._CreateTime = CreateTime;
 
             this.ParseIpRange(IPAddress);
         }
@@ -117,7 +140,7 @@ namespace WinsockPacketEditor
 
         public bool ContainsIp(long ipValue)
         {
-            return this.StartIp != -1 && this.EndIp != -1 && ipValue >= this.StartIp && ipValue <= this.EndIp;
+            return this._StartIP != -1 && this._EndIP != -1 && ipValue >= this._StartIP && ipValue <= this._EndIP;
         }
 
         #endregion
@@ -134,8 +157,8 @@ namespace WinsockPacketEditor
                     var parts = ipAddress.Split('-');
                     if (parts.Length == 2)
                     {
-                        this.StartIp = Operate.ProxyConfig.Proxy.ConvertIpToLong(parts[0].Trim());
-                        this.EndIp = Operate.ProxyConfig.Proxy.ConvertIpToLong(parts[1].Trim());
+                        this._StartIP = Operate.ProxyConfig.Proxy.ConvertIpToLong(parts[0].Trim());
+                        this._EndIP = Operate.ProxyConfig.Proxy.ConvertIpToLong(parts[1].Trim());
                     }
                 }
                 else if (ipAddress.Contains("/"))
@@ -144,22 +167,22 @@ namespace WinsockPacketEditor
                     var cidrResult = Operate.ProxyConfig.Proxy.ParseCidr(ipAddress);
                     if (cidrResult != null)
                     {
-                        this.StartIp = cidrResult.Value.Start;
-                        this.EndIp = cidrResult.Value.End;
+                        this._StartIP = cidrResult.Value.Start;
+                        this._EndIP = cidrResult.Value.End;
                     }
                 }
                 else
                 {
                     // 单个IP
                     long ipLong = Operate.ProxyConfig.Proxy.ConvertIpToLong(ipAddress.Trim());
-                    this.StartIp = ipLong;
-                    this.EndIp = ipLong;
+                    this._StartIP = ipLong;
+                    this._EndIP = ipLong;
                 }
             }
             catch (Exception ex)
             {
-                this.StartIp = -1;
-                this.EndIp = -1;
+                this._StartIP = -1;
+                this._EndIP = -1;
 
                 Operate.DoLog(nameof(ParseIpRange), ex.Message);
             }

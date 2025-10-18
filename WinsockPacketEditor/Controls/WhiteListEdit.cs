@@ -234,7 +234,7 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                Operate.ProxyConfig.Proxy.AddToWhiteList(IPString, IsExpiry, ExpiryTime);
+                Operate.ProxyConfig.Proxy.AddToWhiteList(IPString, IsExpiry, ExpiryTime, DateTime.Now);
             }
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "白名单保存成功", TType.Success)

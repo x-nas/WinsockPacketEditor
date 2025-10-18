@@ -234,7 +234,7 @@ namespace WinsockPacketEditor
                     return;
                 }
 
-                Operate.ProxyConfig.Proxy.AddToBlackList(IPString, IsExpiry, ExpiryTime);
+                Operate.ProxyConfig.Proxy.AddToBlackList(IPString, IsExpiry, ExpiryTime, DateTime.Now);
             }
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "黑名单保存成功", TType.Success)
