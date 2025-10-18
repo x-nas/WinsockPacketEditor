@@ -1,7 +1,6 @@
 ﻿using SuperSocket.SocketBase;
 using System;
 using System.Net;
-using static WinsockPacketEditor.Operate.ProxyConfig;
 
 namespace WinsockPacketEditor
 {
