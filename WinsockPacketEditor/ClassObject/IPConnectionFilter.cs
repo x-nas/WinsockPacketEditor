@@ -8,6 +8,8 @@ namespace WinsockPacketEditor
     {
         public string Name { get; private set; }
 
+        #region//初始化
+
         public bool Initialize(string name, IAppServer appServer)
         {
             try
@@ -22,6 +24,10 @@ namespace WinsockPacketEditor
 
             return false;            
         }
+
+        #endregion
+
+        #region//防火墙过滤
 
         public bool AllowConnect(IPEndPoint remoteAddress)
         {
@@ -40,12 +46,7 @@ namespace WinsockPacketEditor
                     }
                     else
                     {
-                        bAllow = !Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.lstBlackList);
-                        if (!bAllow)
-                        {
-                            string msg = string.Format(AntdUI.Localization.Get("FireWallSetting.BlackList.Blocking", "黑名单拦截 : [ {0} ]"), ip);
-                            Operate.DoLog(nameof(AllowConnect), msg);
-                        }
+                        bAllow = !Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.lstBlackList);                        
                     }
                 }                
             }
@@ -56,5 +57,7 @@ namespace WinsockPacketEditor
 
             return bAllow;
         }
+
+        #endregion
     }
 }

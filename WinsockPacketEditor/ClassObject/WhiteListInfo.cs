@@ -65,6 +65,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//生效次数
+
+        long _EffectCount;
+
+        public long EffectCount
+        {
+            get => _EffectCount;
+            set
+            {
+                if (_EffectCount == value) return;
+                _EffectCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//是否过期
 
         bool _IsExpiry;
@@ -127,11 +144,14 @@ namespace WinsockPacketEditor
         {
             this._IPAddress = IPAddress;
             this._IPLocation = IPLocation;
+            this._EffectCount = 0;
             this._IsExpiry = IsExpiry;
             this._ExpiryTime = ExpiryTime;
             this._CreateTime = CreateTime;
 
-            this.ParseIpRange(IPAddress);
+            var ParseResult = Operate.ProxyConfig.Proxy.ParseIpRange(IPAddress);
+            this._StartIP = ParseResult.StartIP;
+            this._EndIP = ParseResult.EndIP;
         }
 
         #endregion
@@ -143,51 +163,6 @@ namespace WinsockPacketEditor
             return this._StartIP != -1 && this._EndIP != -1 && ipValue >= this._StartIP && ipValue <= this._EndIP;
         }
 
-        #endregion
-
-        #region//ParseIpRange
-
-        private void ParseIpRange(string ipAddress)
-        {
-            try
-            {
-                // 支持单个IP和IP范围（如：192.168.1.1 或 192.168.1.1-192.168.1.100）
-                if (ipAddress.Contains("-"))
-                {
-                    var parts = ipAddress.Split('-');
-                    if (parts.Length == 2)
-                    {
-                        this._StartIP = Operate.ProxyConfig.Proxy.ConvertIpToLong(parts[0].Trim());
-                        this._EndIP = Operate.ProxyConfig.Proxy.ConvertIpToLong(parts[1].Trim());
-                    }
-                }
-                else if (ipAddress.Contains("/"))
-                {
-                    // 支持CIDR格式（如：192.168.1.0/24）
-                    var cidrResult = Operate.ProxyConfig.Proxy.ParseCidr(ipAddress);
-                    if (cidrResult != null)
-                    {
-                        this._StartIP = cidrResult.Value.Start;
-                        this._EndIP = cidrResult.Value.End;
-                    }
-                }
-                else
-                {
-                    // 单个IP
-                    long ipLong = Operate.ProxyConfig.Proxy.ConvertIpToLong(ipAddress.Trim());
-                    this._StartIP = ipLong;
-                    this._EndIP = ipLong;
-                }
-            }
-            catch (Exception ex)
-            {
-                this._StartIP = -1;
-                this._EndIP = -1;
-
-                Operate.DoLog(nameof(ParseIpRange), ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
     }
 }

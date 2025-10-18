@@ -115,8 +115,9 @@ namespace WinsockPacketEditor
         private void InitTable_WhiteList()
         {
             tWhiteList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetLocalizationTitleID("FireWallSetting.Column."),
+                new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetSortOrder().SetLocalizationTitleID("FireWallSetting.Column."),
                 new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("FireWallSetting.Column."),
+                new AntdUI.Column("EffectCount", "生效", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("FireWallSetting.Column."),
                 new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("FireWallSetting.Column."),
                 new AntdUI.Column("CellLinks", "操作")
                 {
@@ -137,8 +138,9 @@ namespace WinsockPacketEditor
         private void InitTable_BlackList()
         {
             tBlackList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetLocalizationTitleID("FireWallSetting.Column."),
+                new AntdUI.Column("IPAddress", "IP地址").SetFixed().SetSortOrder().SetLocalizationTitleID("FireWallSetting.Column."),
                 new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("FireWallSetting.Column."),
+                new AntdUI.Column("EffectCount", "生效", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("FireWallSetting.Column."),
                 new AntdUI.Column("ExpiryTime", "过期时间").SetSortOrder().SetLocalizationTitleID("FireWallSetting.Column."),
                 new AntdUI.Column("CellLinks", "操作")
                 {

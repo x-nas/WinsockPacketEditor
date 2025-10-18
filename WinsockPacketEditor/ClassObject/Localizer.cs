@@ -2009,6 +2009,9 @@ namespace WinsockPacketEditor
                 case "FireWallSetting.Column.IPLocation":
                     return "IP Location";
 
+                case "FireWallSetting.Column.EffectCount":
+                    return "Effect";
+
                 case "FireWallSetting.Column.ExpiryTime":
                     return "Expiry Time";
 

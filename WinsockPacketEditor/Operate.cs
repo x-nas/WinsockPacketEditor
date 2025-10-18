@@ -6908,6 +6908,50 @@ namespace WinsockPacketEditor
 
                 #region//解析防火墙的IP范围
 
+                public static (long StartIP, long EndIP) ParseIpRange(string ipAddress)
+                {
+                    try
+                    {
+                        long startIP = -1;
+                        long endIP = -1;
+
+                        // 支持单个IP和IP范围（如：192.168.1.1 或 192.168.1.1-192.168.1.100）
+                        if (ipAddress.Contains("-"))
+                        {
+                            var parts = ipAddress.Split('-');
+                            if (parts.Length == 2)
+                            {
+                                startIP = Operate.ProxyConfig.Proxy.ConvertIpToLong(parts[0].Trim());
+                                endIP = Operate.ProxyConfig.Proxy.ConvertIpToLong(parts[1].Trim());
+                            }
+                        }
+                        else if (ipAddress.Contains("/"))
+                        {
+                            // 支持CIDR格式（如：192.168.1.0/24）
+                            var cidrResult = Operate.ProxyConfig.Proxy.ParseCidr(ipAddress);
+                            if (cidrResult != null)
+                            {
+                                startIP = cidrResult.Value.Start;
+                                endIP = cidrResult.Value.End;
+                            }
+                        }
+                        else
+                        {
+                            // 单个IP
+                            long ipLong = Operate.ProxyConfig.Proxy.ConvertIpToLong(ipAddress.Trim());
+                            startIP = ipLong;
+                            endIP = ipLong;
+                        }
+
+                        return (startIP, endIP);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ParseIpRange), ex.Message);
+                        return (-1, -1);
+                    }
+                }
+
                 public static long ConvertIpToLong(string ip)
                 {
                     if (string.IsNullOrWhiteSpace(ip))
@@ -6966,7 +7010,13 @@ namespace WinsockPacketEditor
                         {
                             if (wli?.ContainsIp(ipValue) == true)
                             {
-                                return !wli.IsExpiry || wli.ExpiryTime > DateTime.Now;
+                                bool bIPIn = !wli.IsExpiry || wli.ExpiryTime > DateTime.Now;
+                                if (bIPIn)
+                                { 
+                                    wli.EffectCount += 1;
+                                }
+
+                                return bIPIn;
                             }
                         }
                     }
@@ -6989,7 +7039,13 @@ namespace WinsockPacketEditor
                         {
                             if (bli?.ContainsIp(ipValue) == true)
                             {
-                                return !bli.IsExpiry || bli.ExpiryTime > DateTime.Now;
+                                bool bIPIn = !bli.IsExpiry || bli.ExpiryTime > DateTime.Now;
+                                if (bIPIn)
+                                {
+                                    bli.EffectCount += 1;
+                                }
+
+                                return bIPIn;
                             }
                         }
                     }
