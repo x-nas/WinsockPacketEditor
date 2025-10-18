@@ -523,8 +523,8 @@ namespace WinsockPacketEditor
                 case "ProcessInfo":
                     return "{0} Handle: {1}";
 
-                case "SOCKS.Unsupported":
-                    return "Unsupported SOCKS protocol: {0} [ {1} ]";
+                case "SOCKS.Unsupport":
+                    return "Unsupported Socks protocol: {0} [ {1} ]";
 
                 case "Command.Unsupported":
                     return "{0} - Unsupported command: {1}";
@@ -2006,6 +2006,9 @@ namespace WinsockPacketEditor
                 case "FireWallSetting.Rules":
                     return "FireWall Rules";
 
+                case "FireWallSetting.Rules.Success":
+                    return "Firewall rules saved successfully";
+
                 case "FireWallSetting.Column.IPAddress":
                     return "IP Address";
 
@@ -2122,6 +2125,12 @@ namespace WinsockPacketEditor
 
                 case "FireWallSetting.BlackList.Permanent":
                     return "Permanent";
+
+                case "FireWallSetting.AutoBlock.UnSupport":
+                    return "Auto block (30 Mins) - Unsupported Socks protocol";
+
+                case "FireWallSetting.AutoClear.Expiry":
+                    return "Auto clear - Expired IP addresses";
 
                 #endregion                
 

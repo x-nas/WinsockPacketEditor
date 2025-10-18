@@ -185,7 +185,12 @@ namespace WinsockPacketEditor
 
         private void bRules_Click(object sender, EventArgs e)
         {
-
+            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("FireWallSetting.Rules", "防火墙规则"), new FireWallRules(this.form))
+            {
+                Keyboard = false,
+                MaskClosable = false,
+                BtnHeight = 0,
+            });
         }
 
         #endregion

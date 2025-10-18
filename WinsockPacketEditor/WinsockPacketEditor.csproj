@@ -332,6 +332,12 @@
     <Compile Include="Controls\FilterList.Designer.cs">
       <DependentUpon>FilterList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FireWallRules.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FireWallRules.Designer.cs">
+      <DependentUpon>FireWallRules.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FireWallSetting.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -605,6 +611,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FilterList.resx">
       <DependentUpon>FilterList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FireWallRules.resx">
+      <DependentUpon>FireWallRules.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\FireWallSetting.resx">
       <DependentUpon>FireWallSetting.cs</DependentUpon>

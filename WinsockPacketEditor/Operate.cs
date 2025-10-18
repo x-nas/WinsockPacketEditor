@@ -3817,6 +3817,9 @@ namespace WinsockPacketEditor
                         new XElement("ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord),
                         new XElement("EnableFireWall", ProxyConfig.Proxy.EnableFireWall),
                         new XElement("WhiteListMode", ProxyConfig.Proxy.WhiteListMode),
+                        new XElement("FireWall_AutoBlock_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport),
+                        new XElement("FireWall_AutoBlock_Minutes", ProxyConfig.Proxy.FireWall_AutoBlock_Minutes),
+                        new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry),
                         new XElement("SpeedMode", ProxyConfig.Proxy.SpeedMode)
                         );
 
@@ -3860,6 +3863,9 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.ExternalProxy_PassWord = ProxyMode.Rows[0]["ExternalProxy_PassWord"].ToString();
                         ProxyConfig.Proxy.EnableFireWall = Convert.ToBoolean(ProxyMode.Rows[0]["EnableFireWall"]);
                         ProxyConfig.Proxy.WhiteListMode = Convert.ToBoolean(ProxyMode.Rows[0]["WhiteListMode"]);
+                        ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoBlock_UnSupport"]);
+                        ProxyConfig.Proxy.FireWall_AutoBlock_Minutes = Convert.ToInt32(ProxyMode.Rows[0]["FireWall_AutoBlock_Minutes"].ToString());
+                        ProxyConfig.Proxy.FireWall_AutoClear_Expiry = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoClear_Expiry"]);
                         ProxyConfig.Proxy.SpeedMode = Convert.ToBoolean(ProxyMode.Rows[0]["SpeedMode"]);
                     }
                 }
@@ -3973,6 +3979,24 @@ namespace WinsockPacketEditor
                     if (WhiteListMode != null)
                     {
                         ProxyConfig.Proxy.WhiteListMode = Convert.ToBoolean(WhiteListMode.Value);
+                    }
+
+                    XElement FireWall_AutoBlock_UnSupport = xeProxyMode.Element("FireWall_AutoBlock_UnSupport");
+                    if (FireWall_AutoBlock_UnSupport != null)
+                    {
+                        ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = Convert.ToBoolean(FireWall_AutoBlock_UnSupport.Value);
+                    }
+
+                    XElement FireWall_AutoBlock_Minutes = xeProxyMode.Element("FireWall_AutoBlock_Minutes");
+                    if (FireWall_AutoBlock_Minutes != null)
+                    {
+                        ProxyConfig.Proxy.FireWall_AutoBlock_Minutes = int.Parse(FireWall_AutoBlock_Minutes.Value);
+                    }
+
+                    XElement FireWall_AutoClear_Expiry = xeProxyMode.Element("FireWall_AutoClear_Expiry");
+                    if (FireWall_AutoClear_Expiry != null)
+                    {
+                        ProxyConfig.Proxy.FireWall_AutoClear_Expiry = Convert.ToBoolean(FireWall_AutoClear_Expiry.Value);
                     }
 
                     XElement SpeedMode = xeProxyMode.Element("SpeedMode");
@@ -4820,6 +4844,9 @@ namespace WinsockPacketEditor
 
                 public static bool EnableFireWall = false;
                 public static bool WhiteListMode = false;
+                public static bool FireWall_AutoBlock_UnSupport = false;
+                public static int FireWall_AutoBlock_Minutes = 30;
+                public static bool FireWall_AutoClear_Expiry = false;
                 public static BindingList<BlackListInfo> lstBlackList = new BindingList<BlackListInfo>();
                 public static BindingList<WhiteListInfo> lstWhiteList = new BindingList<WhiteListInfo>();
 
@@ -6462,6 +6489,8 @@ namespace WinsockPacketEditor
 
                 #region//新增白名单
 
+                private static readonly object _whiteListLock = new object();
+
                 public static async void AddToWhiteList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
                 {
                     try
@@ -6471,9 +6500,12 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        if (ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
+                        lock (_whiteListLock)
                         {
-                            return;
+                            if (ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
+                            {
+                                return;
+                            }
                         }
 
                         string IPToCheck = ipOrRange;
@@ -6485,7 +6517,13 @@ namespace WinsockPacketEditor
                         string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
                         WhiteListInfo wli = new WhiteListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
-                        Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
+                        lock (_whiteListLock)
+                        {
+                            if (!ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
+                            {
+                                Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -6685,6 +6723,8 @@ namespace WinsockPacketEditor
 
                 #region//新增黑名单
 
+                private static readonly object _blackListLock = new object();
+
                 public static async void AddToBlackList(string ipOrRange, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
                 {
                     try
@@ -6694,9 +6734,12 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        if (ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
+                        lock (_blackListLock)
                         {
-                            return;
+                            if (ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
+                            {
+                                return;
+                            }
                         }
 
                         string IPToCheck = ipOrRange;
@@ -6708,7 +6751,13 @@ namespace WinsockPacketEditor
                         string IPLocation = await SystemConfig.GetIPLocation(IPToCheck);
                         BlackListInfo bli = new BlackListInfo(ipOrRange, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
-                        Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
+                        lock (_blackListLock)
+                        {
+                            if (!ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
+                            {
+                                Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -7006,17 +7055,25 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        foreach (WhiteListInfo wli in WhiteList)
-                        {
-                            if (wli?.ContainsIp(ipValue) == true)
-                            {
-                                bool bIPIn = !wli.IsExpiry || wli.ExpiryTime > DateTime.Now;
-                                if (bIPIn)
-                                { 
-                                    wli.EffectCount += 1;
-                                }
+                        var matchedItem = WhiteList.FirstOrDefault(wli => wli?.ContainsIp(ipValue) == true);
 
-                                return bIPIn;
+                        if (matchedItem != null)
+                        {
+                            bool isNotExpired = !matchedItem.IsExpiry || matchedItem.ExpiryTime > DateTime.Now;
+
+                            if (isNotExpired)
+                            {
+                                matchedItem.EffectCount += 1;
+                                return true;
+                            }
+                            else
+                            {
+                                if (Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry)
+                                {
+                                    WhiteList.Remove(matchedItem);
+                                }
+                                
+                                return false;
                             }
                         }
                     }
@@ -7035,17 +7092,25 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        foreach (BlackListInfo bli in BlackList)
-                        {
-                            if (bli?.ContainsIp(ipValue) == true)
-                            {
-                                bool bIPIn = !bli.IsExpiry || bli.ExpiryTime > DateTime.Now;
-                                if (bIPIn)
-                                {
-                                    bli.EffectCount += 1;
-                                }
+                        var matchedItem = BlackList.FirstOrDefault(bli => bli?.ContainsIp(ipValue) == true);
 
-                                return bIPIn;
+                        if (matchedItem != null)
+                        {
+                            bool isNotExpired = !matchedItem.IsExpiry || matchedItem.ExpiryTime > DateTime.Now;
+
+                            if (isNotExpired)
+                            {
+                                matchedItem.EffectCount += 1;
+                                return true;
+                            }
+                            else
+                            {
+                                if (Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry)
+                                {
+                                    BlackList.Remove(matchedItem);
+                                }
+                                
+                                return false;
                             }
                         }
                     }
@@ -7977,9 +8042,7 @@ namespace WinsockPacketEditor
 
                 public static void OpenAccountEdit(Form form, AccountInfo ai)
                 {
-                    var AccountEdit = new AccountEdit(form, ai);
-
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), AccountEdit)
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountEditForm", "账号编辑"), new AccountEdit(form, ai))
                     {
                         Keyboard = false,
                         MaskClosable = false,
@@ -20048,6 +20111,9 @@ namespace WinsockPacketEditor
                         sql += "ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
                         sql += "EnableFireWall BOOLEAN DEFAULT 0,";//代理模式 - 启用防火墙
                         sql += "WhiteListMode BOOLEAN DEFAULT 0,";//代理模式 - 是否白名单模式
+                        sql += "FireWall_AutoBlock_UnSupport BOOLEAN DEFAULT 0,";//代理模式 - 自动屏蔽不支持的协议
+                        sql += "FireWall_AutoBlock_Minutes INTEGER DEFAULT 30,";//代理模式 - 自动屏蔽时间
+                        sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0,";//代理模式 - 自动清理过期的规则
                         sql += "SpeedMode BOOLEAN DEFAULT 0";//代理模式 - 极速模式
                         sql += ");";
 
@@ -20138,6 +20204,9 @@ namespace WinsockPacketEditor
                         sql += "ExternalProxy_PassWord,";
                         sql += "EnableFireWall,";
                         sql += "WhiteListMode,";
+                        sql += "FireWall_AutoBlock_UnSupport,";
+                        sql += "FireWall_AutoBlock_Minutes,";
+                        sql += "FireWall_AutoClear_Expiry,";
                         sql += "SpeedMode";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
@@ -20158,6 +20227,9 @@ namespace WinsockPacketEditor
                         sql += "@ExternalProxy_PassWord,";
                         sql += "@EnableFireWall,";
                         sql += "@WhiteListMode,";
+                        sql += "@FireWall_AutoBlock_UnSupport,";
+                        sql += "@FireWall_AutoBlock_Minutes,";
+                        sql += "@FireWall_AutoClear_Expiry,";
                         sql += "@SpeedMode";
                         sql += ");";
 
@@ -20181,6 +20253,9 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord);
                             cmd.Parameters.AddWithValue("@EnableFireWall", ProxyConfig.Proxy.EnableFireWall);
                             cmd.Parameters.AddWithValue("@WhiteListMode", ProxyConfig.Proxy.WhiteListMode);
+                            cmd.Parameters.AddWithValue("@FireWall_AutoBlock_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport);
+                            cmd.Parameters.AddWithValue("@FireWall_AutoBlock_Minutes", ProxyConfig.Proxy.FireWall_AutoBlock_Minutes);
+                            cmd.Parameters.AddWithValue("@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
                             cmd.Parameters.AddWithValue("@SpeedMode", ProxyConfig.Proxy.SpeedMode);
 
                             conn.Open();

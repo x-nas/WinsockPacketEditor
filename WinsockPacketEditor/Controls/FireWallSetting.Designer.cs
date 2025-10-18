@@ -288,43 +288,43 @@
             // 
             // rbBlackListMode
             // 
-            this.rbBlackListMode.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.rbBlackListMode.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbBlackListMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbBlackListMode.LocalizationText = "FireWallSetting.BlackListMode";
             this.rbBlackListMode.Location = new System.Drawing.Point(199, 7);
             this.rbBlackListMode.Name = "rbBlackListMode";
-            this.rbBlackListMode.Size = new System.Drawing.Size(92, 32);
+            this.rbBlackListMode.Size = new System.Drawing.Size(92, 36);
             this.rbBlackListMode.TabIndex = 17;
             this.rbBlackListMode.Text = "黑名单模式";
             // 
             // rbWhiteListMode
             // 
-            this.rbWhiteListMode.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.rbWhiteListMode.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.rbWhiteListMode.Checked = true;
             this.rbWhiteListMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbWhiteListMode.LocalizationText = "FireWallSetting.WhiteListMode";
             this.rbWhiteListMode.Location = new System.Drawing.Point(101, 7);
             this.rbWhiteListMode.Name = "rbWhiteListMode";
-            this.rbWhiteListMode.Size = new System.Drawing.Size(92, 32);
+            this.rbWhiteListMode.Size = new System.Drawing.Size(92, 36);
             this.rbWhiteListMode.TabIndex = 16;
             this.rbWhiteListMode.Text = "白名单模式";
             // 
             // cbEnableFireWall
             // 
-            this.cbEnableFireWall.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbEnableFireWall.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbEnableFireWall.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbEnableFireWall.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cbEnableFireWall.LocalizationText = "FireWallSetting.EnableFireWall";
             this.cbEnableFireWall.Location = new System.Drawing.Point(3, 7);
             this.cbEnableFireWall.Name = "cbEnableFireWall";
-            this.cbEnableFireWall.Size = new System.Drawing.Size(92, 32);
+            this.cbEnableFireWall.Size = new System.Drawing.Size(92, 36);
             this.cbEnableFireWall.TabIndex = 15;
             this.cbEnableFireWall.Text = "启用防火墙";
             this.cbEnableFireWall.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnableFireWall_CheckedChanged);
             // 
             // bRules
             // 
-            this.bRules.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bRules.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bRules.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRules.LocalizationText = "FireWallSetting.Rules";
             this.bRules.Location = new System.Drawing.Point(297, 7);
