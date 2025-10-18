@@ -403,6 +403,9 @@ namespace WinsockPacketEditor
                 case "DeSelect":
                     return "DeSelect";
 
+                case "TopMost":
+                    return "TopMost";
+
                 case "PacketModification":
                     return "View Packet Modification";
 

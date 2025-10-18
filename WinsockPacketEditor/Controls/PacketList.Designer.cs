@@ -42,6 +42,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpPacketList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tableLayoutPanel2 = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.cbTopMost = new AntdUI.Checkbox();
             this.txtPacketList_AutoClear = new AntdUI.InputNumber();
             this.cbPacketList_AutoClear = new AntdUI.Checkbox();
             this.cbPacketList_AutoRoll = new AntdUI.Checkbox();
@@ -149,21 +150,23 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 9;
+            this.tableLayoutPanel2.ColumnCount = 10;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 84F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Controls.Add(this.cbTopMost, 6, 0);
             this.tableLayoutPanel2.Controls.Add(this.txtPacketList_AutoClear, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.cbPacketList_AutoClear, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.cbPacketList_AutoRoll, 5, 0);
-            this.tableLayoutPanel2.Controls.Add(this.ddMenu, 8, 0);
-            this.tableLayoutPanel2.Controls.Add(this.bSearchPacket, 7, 0);
+            this.tableLayoutPanel2.Controls.Add(this.ddMenu, 9, 0);
+            this.tableLayoutPanel2.Controls.Add(this.bSearchPacket, 8, 0);
             this.tableLayoutPanel2.Controls.Add(this.bPacketList_Clear, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.bHookStop, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.bHookStart, 0, 0);
@@ -175,6 +178,19 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(1100, 40);
             this.tableLayoutPanel2.TabIndex = 6;
+            // 
+            // cbTopMost
+            // 
+            this.cbTopMost.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbTopMost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbTopMost.LocalizationText = "TopMost";
+            this.cbTopMost.Location = new System.Drawing.Point(451, 2);
+            this.cbTopMost.Margin = new System.Windows.Forms.Padding(2);
+            this.cbTopMost.Name = "cbTopMost";
+            this.cbTopMost.Size = new System.Drawing.Size(104, 36);
+            this.cbTopMost.TabIndex = 19;
+            this.cbTopMost.Text = "窗口保持最前";
+            this.cbTopMost.CheckedChanged += new AntdUI.BoolEventHandler(this.cbTopMost_CheckedChanged);
             // 
             // txtPacketList_AutoClear
             // 
@@ -193,7 +209,7 @@
             0});
             this.txtPacketList_AutoClear.Name = "txtPacketList_AutoClear";
             this.txtPacketList_AutoClear.SelectionStart = 1;
-            this.txtPacketList_AutoClear.Size = new System.Drawing.Size(80, 36);
+            this.txtPacketList_AutoClear.Size = new System.Drawing.Size(76, 36);
             this.txtPacketList_AutoClear.TabIndex = 16;
             this.txtPacketList_AutoClear.Text = "5000";
             this.txtPacketList_AutoClear.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -222,7 +238,7 @@
             this.cbPacketList_AutoRoll.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbPacketList_AutoRoll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbPacketList_AutoRoll.LocalizationText = "ListSettingsForm.AutoRoll";
-            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(371, 2);
+            this.cbPacketList_AutoRoll.Location = new System.Drawing.Point(367, 2);
             this.cbPacketList_AutoRoll.Margin = new System.Windows.Forms.Padding(2);
             this.cbPacketList_AutoRoll.Name = "cbPacketList_AutoRoll";
             this.cbPacketList_AutoRoll.Size = new System.Drawing.Size(80, 36);
@@ -1373,5 +1389,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cToLocation;
         private System.Windows.Forms.DataGridViewTextBoxColumn cPacketLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cPacketData;
+        private AntdUI.Checkbox cbTopMost;
     }
 }

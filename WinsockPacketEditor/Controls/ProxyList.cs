@@ -1442,5 +1442,14 @@ namespace WinsockPacketEditor
         }
 
         #endregion        
+
+        #region//窗口保持最前
+
+        private void cbTopMost_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.form.TopMost = this.cbTopMost.Checked;
+        }
+
+        #endregion
     }
 }
