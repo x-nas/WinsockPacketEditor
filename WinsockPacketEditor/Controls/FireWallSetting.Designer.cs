@@ -44,6 +44,7 @@
             this.rbBlackListMode = new AntdUI.Radio();
             this.rbWhiteListMode = new AntdUI.Radio();
             this.cbEnableFireWall = new AntdUI.Checkbox();
+            this.bRules = new AntdUI.Button();
             this.tlpFireWallSetting.SuspendLayout();
             this.tableLayoutPanelEx1.SuspendLayout();
             this.tlpWhiteList.SuspendLayout();
@@ -264,7 +265,8 @@
             // 
             // tlpEnableFireWall
             // 
-            this.tlpEnableFireWall.ColumnCount = 4;
+            this.tlpEnableFireWall.ColumnCount = 5;
+            this.tlpEnableFireWall.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpEnableFireWall.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpEnableFireWall.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpEnableFireWall.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -272,6 +274,7 @@
             this.tlpEnableFireWall.Controls.Add(this.rbBlackListMode, 2, 1);
             this.tlpEnableFireWall.Controls.Add(this.rbWhiteListMode, 1, 1);
             this.tlpEnableFireWall.Controls.Add(this.cbEnableFireWall, 0, 1);
+            this.tlpEnableFireWall.Controls.Add(this.bRules, 3, 1);
             this.tlpEnableFireWall.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpEnableFireWall.Location = new System.Drawing.Point(0, 0);
             this.tlpEnableFireWall.Margin = new System.Windows.Forms.Padding(0);
@@ -288,7 +291,7 @@
             this.rbBlackListMode.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.rbBlackListMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbBlackListMode.LocalizationText = "FireWallSetting.BlackListMode";
-            this.rbBlackListMode.Location = new System.Drawing.Point(211, 9);
+            this.rbBlackListMode.Location = new System.Drawing.Point(199, 7);
             this.rbBlackListMode.Name = "rbBlackListMode";
             this.rbBlackListMode.Size = new System.Drawing.Size(92, 32);
             this.rbBlackListMode.TabIndex = 17;
@@ -300,7 +303,7 @@
             this.rbWhiteListMode.Checked = true;
             this.rbWhiteListMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbWhiteListMode.LocalizationText = "FireWallSetting.WhiteListMode";
-            this.rbWhiteListMode.Location = new System.Drawing.Point(113, 9);
+            this.rbWhiteListMode.Location = new System.Drawing.Point(101, 7);
             this.rbWhiteListMode.Name = "rbWhiteListMode";
             this.rbWhiteListMode.Size = new System.Drawing.Size(92, 32);
             this.rbWhiteListMode.TabIndex = 16;
@@ -311,13 +314,26 @@
             this.cbEnableFireWall.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbEnableFireWall.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbEnableFireWall.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbEnableFireWall.LocalizationText = "FireWallSetting.EnableConnection";
-            this.cbEnableFireWall.Location = new System.Drawing.Point(3, 9);
+            this.cbEnableFireWall.LocalizationText = "FireWallSetting.EnableFireWall";
+            this.cbEnableFireWall.Location = new System.Drawing.Point(3, 7);
             this.cbEnableFireWall.Name = "cbEnableFireWall";
-            this.cbEnableFireWall.Size = new System.Drawing.Size(104, 32);
+            this.cbEnableFireWall.Size = new System.Drawing.Size(92, 32);
             this.cbEnableFireWall.TabIndex = 15;
-            this.cbEnableFireWall.Text = "启用连接控制";
+            this.cbEnableFireWall.Text = "启用防火墙";
             this.cbEnableFireWall.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnableFireWall_CheckedChanged);
+            // 
+            // bRules
+            // 
+            this.bRules.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bRules.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRules.LocalizationText = "FireWallSetting.Rules";
+            this.bRules.Location = new System.Drawing.Point(297, 7);
+            this.bRules.Name = "bRules";
+            this.bRules.Size = new System.Drawing.Size(84, 36);
+            this.bRules.TabIndex = 18;
+            this.bRules.Text = "防火墙规则";
+            this.bRules.Type = AntdUI.TTypeMini.Warn;
+            this.bRules.Click += new System.EventHandler(this.bRules_Click);
             // 
             // FireWallSetting
             // 
@@ -361,5 +377,6 @@
         private AntdUI.Label lBlackList;
         private AntdUI.Dropdown ddMenu_WhiteList;
         private AntdUI.Dropdown ddMenu_BlackList;
+        private AntdUI.Button bRules;
     }
 }

@@ -1964,7 +1964,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//DataBaseSetting
+                #region//MultipleOpenSetting
 
                 case "MultipleOpenSetting":
                     return "Multiple Open Setting";
@@ -1985,8 +1985,8 @@ namespace WinsockPacketEditor
 
                 #region//FireWallSetting
 
-                case "FireWallSetting.EnableConnection":
-                    return "Enable connection control";
+                case "FireWallSetting.EnableFireWall":
+                    return "Enable FireWall";
 
                 case "FireWallSetting.WhiteList":
                     return "WhiteList";
@@ -2002,6 +2002,9 @@ namespace WinsockPacketEditor
 
                 case "FireWallSetting.BlackListMode":
                     return "BlackList Mode";
+
+                case "FireWallSetting.Rules":
+                    return "FireWall Rules";
 
                 case "FireWallSetting.Column.IPAddress":
                     return "IP Address";
@@ -2019,7 +2022,7 @@ namespace WinsockPacketEditor
                     return "Operation";
 
                 case "FireWallSetting.WhiteList.Add":
-                    return "Add WhiteList";
+                    return "Add to WhiteList";
 
                 case "FireWallSetting.WhiteList.Import":
                     return "Import WhiteList";
@@ -2031,7 +2034,7 @@ namespace WinsockPacketEditor
                     return "Clear WhiteList";
 
                 case "FireWallSetting.BlackList.Add":
-                    return "Add BlackList";
+                    return "Add to BlackList";
 
                 case "FireWallSetting.BlackList.Import":
                     return "Import BlackList";
@@ -2107,6 +2110,18 @@ namespace WinsockPacketEditor
 
                 case "FireWallSetting.BlackList.Save.Success":
                     return "BlackList saved successful";
+
+                case "FireWallSetting.BlackList.1Hour":
+                    return "Block for 1 hour";
+
+                case "FireWallSetting.BlackList.1Day":
+                    return "Block for 1 day";
+
+                case "FireWallSetting.BlackList.30Day":
+                    return "Block for 30 days";
+
+                case "FireWallSetting.BlackList.Permanent":
+                    return "Permanent";
 
                 #endregion                
 

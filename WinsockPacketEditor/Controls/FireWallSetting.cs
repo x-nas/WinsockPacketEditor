@@ -160,7 +160,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//启用连接控制
+        #region//启用防火墙
 
         private void cbEnableFireWall_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
         {
@@ -171,11 +171,21 @@ namespace WinsockPacketEditor
         { 
             this.rbWhiteListMode.Enabled = 
                 this.rbBlackListMode.Enabled = 
+                this.bRules.Enabled =
                 this.tWhiteList.Enabled =
                 this.tBlackList.Enabled =
                 this.ddMenu_WhiteList.Enabled =
                 this.ddMenu_BlackList.Enabled =                
                 this.cbEnableFireWall.Checked;
+        }
+
+        #endregion
+
+        #region//防火墙规则
+
+        private void bRules_Click(object sender, EventArgs e)
+        {
+
         }
 
         #endregion

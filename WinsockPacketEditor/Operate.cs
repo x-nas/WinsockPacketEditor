@@ -4018,7 +4018,7 @@ namespace WinsockPacketEditor
                     RobotConfig.List.LoadRobotList_FromDB();
 
                     string DBFilePath = string.Format("{0}\\{1}", DataBase.dbPath, DataBase.dbName);
-                    Operate.DoLog(nameof(LoadSystemConfig_FromDB), AntdUI.Localization.Get("StartForm.Database.Loaded", "已加载数据库 : ") + DBFilePath);
+                    Operate.DoLog(nameof(LoadSystemList_FromDB), AntdUI.Localization.Get("StartForm.Database.Loaded", "已加载数据库 : ") + DBFilePath);
                 }
                 catch (Exception ex)
                 {
@@ -8378,7 +8378,7 @@ namespace WinsockPacketEditor
                     {
                         ID = "WhiteList_Permanent",
                         IconSvg = "EyeOutlined",
-                        LocalizationText = "WhiteList.Add",
+                        LocalizationText = "FireWallSetting.WhiteList.Add",
                     });
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
@@ -8387,31 +8387,31 @@ namespace WinsockPacketEditor
                     {
                         ID = "BlackList",
                         IconSvg = "EyeInvisibleOutlined",
-                        LocalizationText = "BlackList.Add",
+                        LocalizationText = "FireWallSetting.BlackList.Add",
                         Sub = new AntdUI.IContextMenuStripItem[]
                         {
                             new AntdUI.ContextMenuStripItem("屏蔽 1 小时")
                             {
                                 ID = "BlackList_1Hour",
-                                LocalizationText = "AccountList.ExpiryTime",
+                                LocalizationText = "FireWallSetting.BlackList.1Hour",
                             },
                             new AntdUI.ContextMenuStripItemDivider(),
                             new AntdUI.ContextMenuStripItem("屏蔽 1 天")
                             {
                                 ID = "BlackList_1Day",
-                                LocalizationText = "AccountList.LimitLinks",
+                                LocalizationText = "FireWallSetting.BlackList.1Day",
                             },
                             new AntdUI.ContextMenuStripItemDivider(),
                             new AntdUI.ContextMenuStripItem("屏蔽 30 天")
                             {
                                 ID = "BlackList_30Day",
-                                LocalizationText = "AccountList.LimitLinks",
+                                LocalizationText = "FireWallSetting.BlackList.30Day",
                             },
                             new AntdUI.ContextMenuStripItemDivider(),
                             new AntdUI.ContextMenuStripItem("永久屏蔽")
                             {
                                 ID = "BlackList_Permanent",                                
-                                LocalizationText = "AccountList.LimitDevices",
+                                LocalizationText = "FireWallSetting.BlackList.Permanent",
                             },
                         },
                     });

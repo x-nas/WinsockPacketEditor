@@ -285,7 +285,7 @@ namespace WinsockPacketEditor
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, IPAddress + " " + "已加入到白名单", TType.Success)
             {
-                LocalizationText = IPAddress + " " + "FireWallSetting.WhiteList.Save.Success"
+                LocalizationText = IPAddress + " " + "FireWallSetting.WhiteList.Add"
             });
         }
 
@@ -295,7 +295,7 @@ namespace WinsockPacketEditor
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, IPAddress + " " + "已加入到黑名单", TType.Success)
             {
-                LocalizationText = IPAddress + " " + "FireWallSetting.WhiteList.Save.Success"
+                LocalizationText = IPAddress + " " + "FireWallSetting.BlackList.Add"
             });
         }
 
