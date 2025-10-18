@@ -317,6 +317,15 @@ namespace WinsockPacketEditor
             });
         }
 
+        private void dgvPacketList_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+            e.Cancel = true;
+
+            string Error = $"数据错误 - 行: {e.RowIndex}, 列: {e.ColumnIndex}, 错误: {e.Exception.Message}";
+            Operate.DoLog(nameof(dgvPacketList_DataError), Error);
+        }
+
         #endregion
 
         #region//封包列表 - 菜单
@@ -1231,6 +1240,6 @@ namespace WinsockPacketEditor
             this.form.TopMost = this.cbTopMost.Checked;
         }
 
-        #endregion
+        #endregion        
     }
 }

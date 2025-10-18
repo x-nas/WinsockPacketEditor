@@ -974,6 +974,7 @@
             this.dgvProxyList.TabIndex = 7;
             this.dgvProxyList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProxyList_CellDoubleClick);
             this.dgvProxyList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvProxyList_CellFormatting);
+            this.dgvProxyList.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvProxyList_DataError);
             this.dgvProxyList.SelectionChanged += new System.EventHandler(this.dgvProxyList_SelectionChanged);
             this.dgvProxyList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvProxyList_MouseClick);
             // 

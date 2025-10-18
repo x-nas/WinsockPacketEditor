@@ -542,6 +542,7 @@
             this.dgvPacketList.TabIndex = 8;
             this.dgvPacketList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPacketList_CellDoubleClick);
             this.dgvPacketList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvPacketList_CellFormatting);
+            this.dgvPacketList.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvPacketList_DataError);
             this.dgvPacketList.SelectionChanged += new System.EventHandler(this.dgvPacketList_SelectionChanged);
             this.dgvPacketList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvPacketList_MouseClick);
             // 

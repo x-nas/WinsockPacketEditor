@@ -337,6 +337,15 @@ namespace WinsockPacketEditor
             });            
         }
 
+        private void dgvProxyList_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+            e.Cancel = true;
+
+            string Error = $"数据错误 - 行: {e.RowIndex}, 列: {e.ColumnIndex}, 错误: {e.Exception.Message}";
+            Operate.DoLog(nameof(dgvProxyList_DataError), Error);
+        }
+
         #endregion
 
         #region//代理列表 - 菜单
@@ -1450,6 +1459,6 @@ namespace WinsockPacketEditor
             this.form.TopMost = this.cbTopMost.Checked;
         }
 
-        #endregion
+        #endregion        
     }
 }
