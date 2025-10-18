@@ -9,11 +9,14 @@ namespace WinsockPacketEditor
 {
     public partial class ClientList : UserControl
     {
+        private Form form = null;
+
         #region//窗体事件
 
-        public ClientList()
+        public ClientList(Form form)
         {
             InitializeComponent();
+            this.form = form;
         }
 
         private void ClientList_Load(object sender, EventArgs e)
@@ -270,6 +273,85 @@ namespace WinsockPacketEditor
         public void RefreshAuthList()
         {
             this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
+        }
+
+        #endregion
+
+        #region//认证列表 - 右键菜单
+
+        private void AddToWhiteList_ByDateTime(string IPAddress, bool IsExpiry, DateTime ExpiryTime)
+        {
+            Operate.ProxyConfig.Proxy.AddToWhiteList(IPAddress, false, Operate.SystemConfig.MaxDateTime);
+
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, IPAddress + " " + "已加入到白名单", TType.Success)
+            {
+                LocalizationText = IPAddress + " " + "FireWallSetting.WhiteList.Save.Success"
+            });
+        }
+
+        private void AddToBlackList_ByDateTime(string IPAddress, bool IsExpiry, DateTime ExpiryTime)
+        {
+            Operate.ProxyConfig.Proxy.AddToBlackList(IPAddress, IsExpiry, ExpiryTime);
+
+            AntdUI.Message.open(new AntdUI.Message.Config(this.form, IPAddress + " " + "已加入到黑名单", TType.Success)
+            {
+                LocalizationText = IPAddress + " " + "FireWallSetting.WhiteList.Save.Success"
+            });
+        }
+
+        private void tAuthList_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.ProxyConfig.Account.cdAuthInfo.Values.Count == 0)
+                {
+                    return;
+                }
+
+                int SelectedIndex = this.tAuthList.SelectedIndex;
+                if (SelectedIndex == -1 || SelectedIndex > Operate.ProxyConfig.Account.cdAuthInfo.Count)
+                {
+                    return;
+                }
+
+                string AuthIP = Operate.ProxyConfig.Account.cdAuthInfo.Values.ElementAt(SelectedIndex - 1).AuthIP;
+
+                AntdUI.ContextMenuStrip.open(tAuthList, item =>
+                {
+                    switch (item.ID)
+                    {
+                        case "WhiteList_Permanent":
+
+                            this.AddToWhiteList_ByDateTime(AuthIP, false, Operate.SystemConfig.MaxDateTime);
+
+                            break;
+
+                        case "BlackList_1Hour":
+
+                            this.AddToBlackList_ByDateTime(AuthIP, true, DateTime.Now.AddHours(1));
+
+                            break;
+
+                        case "BlackList_1Day":
+
+                            this.AddToBlackList_ByDateTime(AuthIP, true, DateTime.Now.AddDays(1));
+
+                            break;
+
+                        case "BlackList_30Day":
+
+                            this.AddToBlackList_ByDateTime(AuthIP, true, DateTime.Now.AddDays(30));
+
+                            break;
+
+                        case "BlackList_Permanent":
+
+                            this.AddToBlackList_ByDateTime(AuthIP, false, Operate.SystemConfig.MaxDateTime);
+
+                            break;
+                    }
+                }, Operate.ProxyConfig.Account.GetCMS_AuthList());
+            }
         }
 
         #endregion

@@ -100,6 +100,7 @@
             this.tAuthList.Name = "tAuthList";
             this.tAuthList.Size = new System.Drawing.Size(789, 594);
             this.tAuthList.TabIndex = 10;
+            this.tAuthList.CellClick += new AntdUI.Table.ClickEventHandler(this.tAuthList_CellClick);
             // 
             // ClientList
             // 

@@ -85,6 +85,7 @@ namespace WinsockPacketEditor
             public static Color Color_57 = Color.FromArgb(57, 57, 57);
             public static Color Color_250 = Color.FromArgb(250, 250, 250);
             public static AntdUI.FormFloatButton FloatButton = null;
+            public static DateTime MaxDateTime = DateTime.Parse("8888/12/31");
 
             public static Action<Action> InvokeAction { get; set; }
 
@@ -8185,6 +8186,59 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion                
+
+                #region//获取认证列表的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_AuthList()
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("加入白名单")
+                    {
+                        ID = "WhiteList_Permanent",
+                        IconSvg = "EyeOutlined",
+                        LocalizationText = "WhiteList.Add",
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("加入黑名单")
+                    {
+                        ID = "BlackList",
+                        IconSvg = "EyeInvisibleOutlined",
+                        LocalizationText = "BlackList.Add",
+                        Sub = new AntdUI.IContextMenuStripItem[]
+                        {
+                            new AntdUI.ContextMenuStripItem("屏蔽 1 小时")
+                            {
+                                ID = "BlackList_1Hour",
+                                LocalizationText = "AccountList.ExpiryTime",
+                            },
+                            new AntdUI.ContextMenuStripItemDivider(),
+                            new AntdUI.ContextMenuStripItem("屏蔽 1 天")
+                            {
+                                ID = "BlackList_1Day",
+                                LocalizationText = "AccountList.LimitLinks",
+                            },
+                            new AntdUI.ContextMenuStripItemDivider(),
+                            new AntdUI.ContextMenuStripItem("屏蔽 30 天")
+                            {
+                                ID = "BlackList_30Day",
+                                LocalizationText = "AccountList.LimitLinks",
+                            },
+                            new AntdUI.ContextMenuStripItemDivider(),
+                            new AntdUI.ContextMenuStripItem("永久屏蔽")
+                            {
+                                ID = "BlackList_Permanent",                                
+                                LocalizationText = "AccountList.LimitDevices",
+                            },
+                        },
+                    });
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
 
                 #region//记录代理账号的IP地址（异步）
 

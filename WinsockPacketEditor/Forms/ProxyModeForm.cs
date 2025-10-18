@@ -144,14 +144,14 @@ namespace WinsockPacketEditor
             {
                 this.tpClientList.Invoke(new Action(() =>
                 {
-                    cClientList = new ClientList();
+                    cClientList = new ClientList(this);
                     cClientList.Dock = DockStyle.Fill;
                     this.tpClientList.Controls.Add(cClientList);
                 }));
             }
             else
             {
-                cClientList = new ClientList();
+                cClientList = new ClientList(this);
                 cClientList.Dock = DockStyle.Fill;
                 this.tpClientList.Controls.Add(cClientList);
             }
