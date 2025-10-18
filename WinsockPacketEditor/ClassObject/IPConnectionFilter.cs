@@ -1,6 +1,7 @@
 ﻿using SuperSocket.SocketBase;
 using System;
 using System.Net;
+using static WinsockPacketEditor.Operate.ProxyConfig;
 
 namespace WinsockPacketEditor
 {
@@ -29,17 +30,25 @@ namespace WinsockPacketEditor
 
             try
             {
-                var ip = remoteAddress.Address.ToString();
-                var ipValue = Operate.ProxyConfig.Proxy.ConvertIpToLong(ip);
+                if (Operate.ProxyConfig.Proxy.EnableFireWall)
+                {
+                    var ip = remoteAddress.Address.ToString();
+                    var ipValue = Operate.ProxyConfig.Proxy.ConvertIpToLong(ip);
 
-                if (Operate.ProxyConfig.Proxy.WhiteListMode)
-                {
-                    bAllow = Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.lstWhiteList);
-                }
-                else
-                {
-                    bAllow = !Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.lstBlackList);
-                }
+                    if (Operate.ProxyConfig.Proxy.WhiteListMode)
+                    {
+                        bAllow = Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.lstWhiteList);
+                    }
+                    else
+                    {
+                        bAllow = !Operate.ProxyConfig.Proxy.IsIpInRanges(ipValue, Operate.ProxyConfig.Proxy.lstBlackList);
+                        if (!bAllow)
+                        {
+                            string msg = string.Format(AntdUI.Localization.Get("FireWallSetting.BlackList.Blocking", "黑名单拦截 : [ {0} ]"), ip);
+                            Operate.DoLog(nameof(AllowConnect), msg);
+                        }
+                    }
+                }                
             }
             catch (Exception ex)
             {

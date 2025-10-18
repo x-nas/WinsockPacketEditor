@@ -1048,9 +1048,14 @@ namespace WinsockPacketEditor
                     ClearIdleSession = true,
                     ClearIdleSessionInterval = 60,
                     IdleSessionTimeOut = 300,
-                };                
+                };
 
-                if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config: config, connectionFilters: new List<IConnectionFilter> { Operate.ProxyConfig.Proxy.ipFilter }))
+                List<IConnectionFilter> connectionFilters = new List<IConnectionFilter> 
+                {
+                    Operate.ProxyConfig.Proxy.ipFilter 
+                };            
+
+                if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config: config, connectionFilters: connectionFilters))
                 {
                     if (Operate.ProxyConfig.Proxy.ProxyServer.Start())
                     {

@@ -1994,6 +1994,9 @@ namespace WinsockPacketEditor
                 case "FireWallSetting.BlackList":
                     return "BlackList";
 
+                case "FireWallSetting.BlackList.Blocking":
+                    return "BlackList blocking : [ {0} ]";
+
                 case "FireWallSetting.WhiteListMode":
                     return "WhiteList Mode";
 

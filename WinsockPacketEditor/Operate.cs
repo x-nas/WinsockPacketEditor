@@ -6897,16 +6897,18 @@ namespace WinsockPacketEditor
                     if (string.IsNullOrWhiteSpace(ip))
                         return -1;
 
-                    if (IPAddress.TryParse(ip, out IPAddress address) &&
-                        address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    try
                     {
-                        byte[] bytes = address.GetAddressBytes();
-
-                        return ((long)bytes[0] << 24) |
-                               ((long)bytes[1] << 16) |
-                               ((long)bytes[2] << 8) |
-                               bytes[3];
+                        if (IPAddress.TryParse(ip, out IPAddress address) && address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            byte[] bytes = address.GetAddressBytes();
+                            return ((long)bytes[0] << 24) | ((long)bytes[1] << 16) | ((long)bytes[2] << 8) | bytes[3];
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ConvertIpToLong), ex.Message);
+                    }                    
 
                     return -1;
                 }
@@ -6931,24 +6933,24 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ParseCidr), ex.Message);
-                        return null;
+                        Operate.DoLog(nameof(ParseCidr), ex.Message);                        
                     }
+
+                    return null;
                 }
 
-                public static bool IsIpInRanges(long ipValue, BindingList<WhiteListInfo> lstWhiteList)
+                public static bool IsIpInRanges(long ipValue, BindingList<WhiteListInfo> WhiteList)
                 {
-                    if (lstWhiteList == null)
+                    if (WhiteList == null || WhiteList.Count == 0)
                         return false;
 
                     try
                     {
-                        foreach (WhiteListInfo wli in lstWhiteList)
+                        foreach (WhiteListInfo wli in WhiteList)
                         {
-                            if (wli != null && !wli.IsExpiry && wli.ExpiryTime > DateTime.Now)
+                            if (wli?.ContainsIp(ipValue) == true)
                             {
-                                if (wli.ContainsIp(ipValue))
-                                    return true;
+                                return !wli.IsExpiry || wli.ExpiryTime > DateTime.Now;
                             }
                         }
                     }
@@ -6960,19 +6962,18 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                public static bool IsIpInRanges(long ipValue, BindingList<BlackListInfo> lstBlackList)
+                public static bool IsIpInRanges(long ipValue, BindingList<BlackListInfo> BlackList)
                 {
-                    if (lstBlackList == null)
+                    if (BlackList == null || BlackList.Count == 0)
                         return false;
 
                     try
                     {
-                        foreach (BlackListInfo bli in lstBlackList)
+                        foreach (BlackListInfo bli in BlackList)
                         {
-                            if (bli != null && !bli.IsExpiry && bli.ExpiryTime > DateTime.Now)
+                            if (bli?.ContainsIp(ipValue) == true)
                             {
-                                if (bli.ContainsIp(ipValue))
-                                    return true;
+                                return !bli.IsExpiry || bli.ExpiryTime > DateTime.Now;
                             }
                         }
                     }
