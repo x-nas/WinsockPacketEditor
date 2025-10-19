@@ -238,15 +238,13 @@ namespace WinsockPacketEditor
                             }
 
                             bool bOK = false;
-                            switch (Operate.SystemConfig.StartMode)
+                            if (this.form is InterfaceInfo.IInjectMode)
                             {
-                                case Operate.SystemConfig.SystemMode.Process:
-                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.packetInfo, bBufferToFilter);
-                                    break;
-
-                                case Operate.SystemConfig.SystemMode.Proxy:
-                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(this.proxyInfo, bBufferToFilter);
-                                    break;
+                                bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.packetInfo, bBufferToFilter);
+                            }
+                            else if (this.form is InterfaceInfo.IProxyMode)
+                            {
+                                bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(this.proxyInfo, bBufferToFilter);
                             }
 
                             if (bOK)
@@ -323,41 +321,35 @@ namespace WinsockPacketEditor
                                     }
 
                                     bool bAddOK = false;
-                                    switch (Operate.SystemConfig.StartMode)
+                                    if (this.form is InterfaceInfo.IInjectMode)
                                     {
-                                        case Operate.SystemConfig.SystemMode.Process:
+                                        List<PacketInfo> lstPacketInfo = new List<PacketInfo>();
+                                        PacketInfo packetInfo = new PacketInfo();
+                                        packetInfo.PacketSocket = this.packetInfo.PacketSocket;
+                                        packetInfo.PacketType = this.packetInfo.PacketType;
+                                        packetInfo.PacketFrom = this.packetInfo.PacketFrom;
+                                        packetInfo.PacketTo = this.packetInfo.PacketTo;
+                                        packetInfo.PacketBuffer = bBuffer;
+                                        packetInfo.PacketLen = bBuffer.Length;
+                                        packetInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen);
+                                        lstPacketInfo.Add(packetInfo);
 
-                                            List<PacketInfo> lstPacketInfo = new List<PacketInfo>();
-                                            PacketInfo packetInfo = new PacketInfo();
-                                            packetInfo.PacketSocket = this.packetInfo.PacketSocket;
-                                            packetInfo.PacketType = this.packetInfo.PacketType;
-                                            packetInfo.PacketFrom = this.packetInfo.PacketFrom;
-                                            packetInfo.PacketTo = this.packetInfo.PacketTo;
-                                            packetInfo.PacketBuffer = bBuffer;
-                                            packetInfo.PacketLen = bBuffer.Length;
-                                            packetInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen);
-                                            lstPacketInfo.Add(packetInfo);
+                                        bAddOK = Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, lstPacketInfo);
+                                    }
+                                    else if (this.form is InterfaceInfo.IProxyMode)
+                                    {
+                                        List<ProxyInfo> lstProxyInfo = new List<ProxyInfo>();
+                                        ProxyInfo proxyInfo = new ProxyInfo();
+                                        proxyInfo.PacketSocket = this.proxyInfo.PacketSocket;
+                                        proxyInfo.PacketType = this.proxyInfo.PacketType;
+                                        proxyInfo.ClientAddr = this.proxyInfo.ClientAddr;
+                                        proxyInfo.ServerAddr = this.proxyInfo.ServerAddr;
+                                        proxyInfo.PacketBuffer = bBuffer;
+                                        proxyInfo.PacketLen = bBuffer.Length;
+                                        proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen);
+                                        lstProxyInfo.Add(proxyInfo);
 
-                                            bAddOK = Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, lstPacketInfo);
-
-                                            break;
-
-                                        case Operate.SystemConfig.SystemMode.Proxy:
-
-                                            List<ProxyInfo> lstProxyInfo = new List<ProxyInfo>();
-                                            ProxyInfo proxyInfo = new ProxyInfo();
-                                            proxyInfo.PacketSocket = this.proxyInfo.PacketSocket;
-                                            proxyInfo.PacketType = this.proxyInfo.PacketType;
-                                            proxyInfo.ClientAddr = this.proxyInfo.ClientAddr;
-                                            proxyInfo.ServerAddr = this.proxyInfo.ServerAddr;
-                                            proxyInfo.PacketBuffer = bBuffer;
-                                            proxyInfo.PacketLen = bBuffer.Length;
-                                            proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen);
-                                            lstProxyInfo.Add(proxyInfo);
-
-                                            bAddOK = Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, lstProxyInfo);
-
-                                            break;
+                                        bAddOK = Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, lstProxyInfo);
                                     }
 
                                     if (bAddOK)
@@ -440,15 +432,13 @@ namespace WinsockPacketEditor
                     int iSendCount = 0;
                     while (!bgwSendPacket.CancellationPending)
                     {
-                        switch (Operate.SystemConfig.StartMode)
+                        if (this.form is InterfaceInfo.IInjectMode)
                         {
-                            case Operate.SystemConfig.SystemMode.Process:
-                                this.DoSendPacket(this.SendSocket, this.packetInfo.PacketFrom, this.packetInfo.PacketTo, bBuff, iSendCount, this.packetInfo.PacketType);
-                                break;
-
-                            case Operate.SystemConfig.SystemMode.Proxy:
-                                this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, iSendCount, this.proxyInfo.PacketType);
-                                break;
+                            this.DoSendPacket(this.SendSocket, this.packetInfo.PacketFrom, this.packetInfo.PacketTo, bBuff, iSendCount, this.packetInfo.PacketType);
+                        }
+                        else if (this.form is InterfaceInfo.IProxyMode)
+                        {
+                            this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, iSendCount, this.proxyInfo.PacketType);
                         }
 
                         iSendCount++;
@@ -470,15 +460,13 @@ namespace WinsockPacketEditor
                         }
                         else
                         {
-                            switch (Operate.SystemConfig.StartMode)
+                            if (this.form is InterfaceInfo.IInjectMode)
                             {
-                                case Operate.SystemConfig.SystemMode.Process:
-                                    this.DoSendPacket(this.SendSocket, this.packetInfo.PacketFrom, this.packetInfo.PacketTo, bBuff, i, this.packetInfo.PacketType);
-                                    break;
-
-                                case Operate.SystemConfig.SystemMode.Proxy:
-                                    this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, i, this.proxyInfo.PacketType);
-                                    break;
+                                this.DoSendPacket(this.SendSocket, this.packetInfo.PacketFrom, this.packetInfo.PacketTo, bBuff, i, this.packetInfo.PacketType);
+                            }
+                            else if (this.form is InterfaceInfo.IProxyMode)
+                            {
+                                this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, i, this.proxyInfo.PacketType);
                             }
 
                             if (this.SendINT > 0)
@@ -613,33 +601,22 @@ namespace WinsockPacketEditor
                         dbp.ApplyChanges();
                         byte[] bNewBuff = dbp.Bytes.ToArray();
 
-                        switch (Operate.SystemConfig.StartMode)
-                        {
-                            case Operate.SystemConfig.SystemMode.Process:
-
-                                this.packetInfo.PacketSocket = ((int)this.nudPacketSocket.Value);
-                                this.packetInfo.PacketBuffer = bNewBuff;
-                                this.packetInfo.PacketLen = bNewBuff.Length;
-                                this.packetInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
-
-                                break;
-
-                            case Operate.SystemConfig.SystemMode.Proxy:
-
-                                this.proxyInfo.PacketSocket = ((int)this.nudPacketSocket.Value);
-                                this.proxyInfo.PacketBuffer = bNewBuff;
-                                this.proxyInfo.PacketLen = bNewBuff.Length;
-                                this.proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
-
-                                break;
-                        }                        
-
                         if (this.form is InterfaceInfo.IInjectMode injectForm)
                         {
+                            this.packetInfo.PacketSocket = ((int)this.nudPacketSocket.Value);
+                            this.packetInfo.PacketBuffer = bNewBuff;
+                            this.packetInfo.PacketLen = bNewBuff.Length;
+                            this.packetInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
+
                             injectForm.RefreshPacketData();
                         }
                         else if (this.form is InterfaceInfo.IProxyMode proxyForm)
                         {
+                            this.proxyInfo.PacketSocket = ((int)this.nudPacketSocket.Value);
+                            this.proxyInfo.PacketBuffer = bNewBuff;
+                            this.proxyInfo.PacketLen = bNewBuff.Length;
+                            this.proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
+
                             proxyForm.RefreshProxyData();
                         }
 

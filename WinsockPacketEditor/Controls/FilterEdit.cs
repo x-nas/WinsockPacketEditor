@@ -91,19 +91,13 @@ namespace WinsockPacketEditor
                 }
                 this.FilterModifyFromChange();
 
-                switch (Operate.SystemConfig.StartMode)
+                if (this.form is InterfaceInfo.IInjectMode)
                 {
-                    case Operate.SystemConfig.SystemMode.Process:
-
-                        this.tabFilterFunction.SelectTab("tpInjectMode");
-
-                        break;
-
-                    case Operate.SystemConfig.SystemMode.Proxy:
-
-                        this.tabFilterFunction.SelectTab("tpProxyMode");
-
-                        break;
+                    this.tabFilterFunction.SelectTab("tpInjectMode");
+                }
+                else if (this.form is InterfaceInfo.IProxyMode)
+                {
+                    this.tabFilterFunction.SelectTab("tpProxyMode");
                 }
 
                 this.cbFilterAction_Execute.Checked = fiSelect.IsExecute;

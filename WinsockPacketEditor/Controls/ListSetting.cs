@@ -21,40 +21,34 @@ namespace WinsockPacketEditor
             this.Text = AntdUI.Localization.Get("ListSettingsForm", "列表设置");
             this.tabListSettings.TabMenuVisible = false;
 
-            switch (Operate.SystemConfig.StartMode)
+            if (this.form is InterfaceInfo.IInjectMode)
             {
-                case Operate.SystemConfig.SystemMode.Process:
+                this.tabListSettings.SelectTab(0);
 
-                    this.tabListSettings.SelectTab(0);
+                this.cbIsShow_ProxyTime_Inject.Checked = Operate.PacketConfig.List.IsShow_ProxyTime;
+                this.cbIsShow_PacketSocket_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketSocket;
+                this.cbIsShow_PacketType_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketType;
+                this.cbIsShow_ClientAddr_Inject.Checked = Operate.PacketConfig.List.IsShow_ClientAddr;
+                this.cbIsShow_ClientLocation_Inject.Checked = Operate.PacketConfig.List.IsShow_ClientLocation;
+                this.cbIsShow_ServerAddr_Inject.Checked = Operate.PacketConfig.List.IsShow_ServerAddr;
+                this.cbIsShow_ServerLocation_Inject.Checked = Operate.PacketConfig.List.IsShow_ServerLocation;
+                this.cbIsShow_PacketLen_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketLen;
+                this.cbIsShow_PacketData_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketData;
+            }
+            else if (this.form is InterfaceInfo.IProxyMode)
+            {
+                this.tabListSettings.SelectTab(1);
 
-                    this.cbIsShow_ProxyTime_Inject.Checked = Operate.PacketConfig.List.IsShow_ProxyTime;
-                    this.cbIsShow_PacketSocket_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketSocket;
-                    this.cbIsShow_PacketType_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketType;
-                    this.cbIsShow_ClientAddr_Inject.Checked = Operate.PacketConfig.List.IsShow_ClientAddr;
-                    this.cbIsShow_ClientLocation_Inject.Checked = Operate.PacketConfig.List.IsShow_ClientLocation;
-                    this.cbIsShow_ServerAddr_Inject.Checked = Operate.PacketConfig.List.IsShow_ServerAddr;
-                    this.cbIsShow_ServerLocation_Inject.Checked = Operate.PacketConfig.List.IsShow_ServerLocation;
-                    this.cbIsShow_PacketLen_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketLen;
-                    this.cbIsShow_PacketData_Inject.Checked = Operate.PacketConfig.List.IsShow_PacketData;
-
-                    break;
-
-                case Operate.SystemConfig.SystemMode.Proxy:
-
-                    this.tabListSettings.SelectTab(1);
-
-                    this.cbIsShow_ID_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ID;
-                    this.cbIsShow_ProxyTime_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ProxyTime;
-                    this.cbIsShow_PacketSocket_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketSocket;
-                    this.cbIsShow_PacketType_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketType;
-                    this.cbIsShow_ClientAddr_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ClientAddr;
-                    this.cbIsShow_ClientLocation_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ClientLocation;
-                    this.cbIsShow_ServerAddr_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ServerAddr;
-                    this.cbIsShow_ServerLocation_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ServerLocation;
-                    this.cbIsShow_PacketLen_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketLen;
-                    this.cbIsShow_PacketData_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketData;
-
-                    break;
+                this.cbIsShow_ID_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ID;
+                this.cbIsShow_ProxyTime_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ProxyTime;
+                this.cbIsShow_PacketSocket_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketSocket;
+                this.cbIsShow_PacketType_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketType;
+                this.cbIsShow_ClientAddr_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ClientAddr;
+                this.cbIsShow_ClientLocation_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ClientLocation;
+                this.cbIsShow_ServerAddr_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ServerAddr;
+                this.cbIsShow_ServerLocation_Proxy.Checked = Operate.ProxyConfig.List.IsShow_ServerLocation;
+                this.cbIsShow_PacketLen_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketLen;
+                this.cbIsShow_PacketData_Proxy.Checked = Operate.ProxyConfig.List.IsShow_PacketData;
             }
         }
 
@@ -66,45 +60,34 @@ namespace WinsockPacketEditor
         {
             try
             {
-                switch (Operate.SystemConfig.StartMode)
-                {
-                    case Operate.SystemConfig.SystemMode.Process:
-
-                        Operate.PacketConfig.List.IsShow_ID = this.cbIsShow_ID_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_PacketType = this.cbIsShow_PacketType_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_ClientAddr = this.cbIsShow_ClientAddr_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_ClientLocation = this.cbIsShow_ClientLocation_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_ServerAddr = this.cbIsShow_ServerAddr_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_ServerLocation = this.cbIsShow_ServerLocation_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Inject.Checked;
-                        Operate.PacketConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Inject.Checked;
-
-                        break;
-
-                    case Operate.SystemConfig.SystemMode.Proxy:
-
-                        Operate.ProxyConfig.List.IsShow_ID = this.cbIsShow_ID_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_PacketType = this.cbIsShow_PacketType_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_ClientAddr = this.cbIsShow_ClientAddr_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_ClientLocation = this.cbIsShow_ClientLocation_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_ServerAddr = this.cbIsShow_ServerAddr_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_ServerLocation = this.cbIsShow_ServerLocation_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Proxy.Checked;
-                        Operate.ProxyConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Proxy.Checked;
-
-                        break;
-                }
-
                 if (this.form is InterfaceInfo.IInjectMode injectForm)
                 {
+                    Operate.PacketConfig.List.IsShow_ID = this.cbIsShow_ID_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_PacketType = this.cbIsShow_PacketType_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_ClientAddr = this.cbIsShow_ClientAddr_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_ClientLocation = this.cbIsShow_ClientLocation_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_ServerAddr = this.cbIsShow_ServerAddr_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_ServerLocation = this.cbIsShow_ServerLocation_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Inject.Checked;
+                    Operate.PacketConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Inject.Checked;
+
                     injectForm.SetColumnVisible_PacketList();
                 }
                 else if (this.form is InterfaceInfo.IProxyMode proxyForm)
                 {
+                    Operate.ProxyConfig.List.IsShow_ID = this.cbIsShow_ID_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_ProxyTime = this.cbIsShow_ProxyTime_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_PacketSocket = this.cbIsShow_PacketSocket_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_PacketType = this.cbIsShow_PacketType_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_ClientAddr = this.cbIsShow_ClientAddr_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_ClientLocation = this.cbIsShow_ClientLocation_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_ServerAddr = this.cbIsShow_ServerAddr_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_ServerLocation = this.cbIsShow_ServerLocation_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_PacketLen = this.cbIsShow_PacketLen_Proxy.Checked;
+                    Operate.ProxyConfig.List.IsShow_PacketData = this.cbIsShow_PacketData_Proxy.Checked;
+
                     proxyForm.SetColumnVisible_ProxyList();
                 }
 

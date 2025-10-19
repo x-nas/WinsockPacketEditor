@@ -33,35 +33,29 @@ namespace WinsockPacketEditor
         {
             try
             {
-                switch (Operate.SystemConfig.StartMode)
+                if (this.form is InterfaceInfo.IInjectMode)
                 {
-                    case Operate.SystemConfig.SystemMode.Process:                        
+                    if (this.packetInfo.RawBuffer.Length > 0)
+                    {
+                        this.txtPacketData_Raw.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.RawBuffer);
+                    }
 
-                        if (this.packetInfo.RawBuffer.Length > 0)
-                        {
-                            this.txtPacketData_Raw.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.RawBuffer);
-                        }
+                    if (this.packetInfo.PacketBuffer.Length > 0)
+                    {
+                        this.txtPacketData_New.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.PacketBuffer);
+                    }
+                }
+                else if (this.form is InterfaceInfo.IProxyMode)
+                {
+                    if (this.proxyInfo.RawBuffer.Length > 0)
+                    {
+                        this.txtPacketData_Raw.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.RawBuffer);
+                    }
 
-                        if (this.packetInfo.PacketBuffer.Length > 0)
-                        {
-                            this.txtPacketData_New.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.packetInfo.PacketBuffer);
-                        }
-
-                        break;
-
-                    case Operate.SystemConfig.SystemMode.Proxy:                        
-
-                        if (this.proxyInfo.RawBuffer.Length > 0)
-                        {
-                            this.txtPacketData_Raw.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.RawBuffer);
-                        }
-
-                        if (this.proxyInfo.PacketBuffer.Length > 0)
-                        {
-                            this.txtPacketData_New.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.PacketBuffer);
-                        }
-
-                        break;
+                    if (this.proxyInfo.PacketBuffer.Length > 0)
+                    {
+                        this.txtPacketData_New.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.proxyInfo.PacketBuffer);
+                    }
                 }
 
                 this.InitTable_Comparison();
@@ -158,21 +152,15 @@ namespace WinsockPacketEditor
             string RawInfo = AntdUI.Localization.Get("PacketModificationForm.Raw", "原始封包数据 ( 长度 {0} )");
             string ModifiedInfo = AntdUI.Localization.Get("PacketModificationForm.Modified", "修改后封包数据 ( 长度 {0} )");
 
-            switch (Operate.SystemConfig.StartMode)
+            if (this.form is InterfaceInfo.IInjectMode)
             {
-                case Operate.SystemConfig.SystemMode.Process:
-
-                    this.lPacketData_Raw.Text = string.Format(RawInfo, this.packetInfo.RawBuffer.Length);
-                    this.lPacketData_New.Text = string.Format(ModifiedInfo, this.packetInfo.PacketBuffer.Length);
-
-                    break;
-
-                case Operate.SystemConfig.SystemMode.Proxy:
-
-                    this.lPacketData_Raw.Text = string.Format(RawInfo, this.proxyInfo.RawBuffer.Length);
-                    this.lPacketData_New.Text = string.Format(ModifiedInfo, this.proxyInfo.PacketBuffer.Length);
-
-                    break;
+                this.lPacketData_Raw.Text = string.Format(RawInfo, this.packetInfo.RawBuffer.Length);
+                this.lPacketData_New.Text = string.Format(ModifiedInfo, this.packetInfo.PacketBuffer.Length);
+            }
+            else if (this.form is InterfaceInfo.IProxyMode)
+            {
+                this.lPacketData_Raw.Text = string.Format(RawInfo, this.proxyInfo.RawBuffer.Length);
+                this.lPacketData_New.Text = string.Format(ModifiedInfo, this.proxyInfo.PacketBuffer.Length);
             }
         }
 

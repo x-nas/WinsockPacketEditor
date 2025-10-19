@@ -21,15 +21,13 @@ namespace WinsockPacketEditor
             this.Text = AntdUI.Localization.Get("HookSettingsForm", "拦截设置");
             this.tabHookSettings.TabMenuVisible = false;
 
-            switch (Operate.SystemConfig.StartMode)
+            if (this.form is InterfaceInfo.IInjectMode)
             {
-                case Operate.SystemConfig.SystemMode.Process:
-                    this.tabHookSettings.SelectTab("tpInjectMode");
-                    break;
-
-                case Operate.SystemConfig.SystemMode.Proxy:
-                    this.tabHookSettings.SelectTab("tpProxyMode");
-                    break;
+                this.tabHookSettings.SelectTab("tpInjectMode");
+            }
+            else if (this.form is InterfaceInfo.IProxyMode)
+            {
+                this.tabHookSettings.SelectTab("tpProxyMode");
             }
 
             this.cbHookWS1_Send.Checked = Operate.PacketConfig.Packet.HookWS1_Send;
