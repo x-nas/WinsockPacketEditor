@@ -77,8 +77,8 @@ namespace WinsockPacketEditor
             public static PerformanceCounter cpuCounter;
             public static bool IsShow_FloatButton = true;
             public static Execute ListExecute = Execute.Sequence;
-            public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
-            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+            public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData, CheckType;
+            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value, CheckType_Value;
             public static Color SystemColor = Color.FromArgb(22, 119, 255);
             public static Color Color_30 = Color.FromArgb(30, 30, 30);
             public static Color Color_35 = Color.FromArgb(35, 35, 35);
@@ -11720,6 +11720,16 @@ namespace WinsockPacketEditor
                                 return false;
                             }
                         }
+
+                        //封包类别
+                        if (SystemConfig.CheckType)
+                        {
+                            bool bIsFilter = IsFilter_ByType(pi.PacketType);
+                            if (SystemConfig.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -11937,6 +11947,42 @@ namespace WinsockPacketEditor
                                         return true;
                                     }
                                 }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(IsFilter_BySize), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//检测封包类别
+
+                public static bool IsFilter_ByType(PacketConfig.Packet.PacketType ptType)
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(SystemConfig.CheckType_Value))
+                        {
+                            return false;
+                        }
+
+                        string[] TypeArray = SystemConfig.CheckType_Value.Split(';');
+
+                        foreach (string Type in TypeArray)
+                        {
+                            if (string.IsNullOrEmpty(Type))
+                            {
+                                continue;
+                            }
+
+                            if (ptType.ToString().ToUpper().Equals(Type.ToUpper()))
+                            {
+                                return true;
                             }
                         }
                     }

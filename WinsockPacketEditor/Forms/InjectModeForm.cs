@@ -25,6 +25,7 @@ namespace WinsockPacketEditor
         {            
             InitializeComponent();
             Theme().Dark(Operate.SystemConfig.Color_30).Light(Operate.SystemConfig.Color_250);
+            Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Process;
         }
 
         private void InjectModeForm_Load(object sender, EventArgs e)

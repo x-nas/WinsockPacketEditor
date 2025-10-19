@@ -24,9 +24,10 @@ namespace WinsockPacketEditor
         #region//窗体事件
 
         public ProxyModeForm()
-        {
+        {            
             InitializeComponent();
             Theme().Dark(Operate.SystemConfig.Color_30).Light(Operate.SystemConfig.Color_250);
+            Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Proxy;
         }
 
         private void ProxyModeForm_Load(object sender, EventArgs e)
