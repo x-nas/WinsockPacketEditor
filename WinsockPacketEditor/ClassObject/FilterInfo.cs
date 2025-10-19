@@ -278,108 +278,6 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//是否执行启用
-
-        bool _IsExecute_Enable;
-
-        public bool IsExecute_Enable
-        {
-            get => _IsExecute_Enable;
-            set
-            {
-                if (_IsExecute_Enable == value) return;
-                _IsExecute_Enable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
-
-        #region//启用执行类型
-
-        Operate.FilterConfig.Filter.FilterExecuteType _FEType_Enable;
-
-        public Operate.FilterConfig.Filter.FilterExecuteType FEType_Enable
-        {
-            get => _FEType_Enable;
-            set
-            {
-                if (_FEType_Enable == value) return;
-                _FEType_Enable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion        
-
-        #region//启用执行序号
-
-        Guid _Execute_GUID_Enable;
-
-        public Guid Execute_GUID_Enable
-        {
-            get => _Execute_GUID_Enable;
-            set
-            {
-                if (_Execute_GUID_Enable == value) return;
-                _Execute_GUID_Enable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion        
-
-        #region//是否执行禁用
-
-        bool _IsExecute_Disable;
-
-        public bool IsExecute_Disable
-        {
-            get => _IsExecute_Disable;
-            set
-            {
-                if (_IsExecute_Disable == value) return;
-                _IsExecute_Disable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
-
-        #region//禁用执行类型
-
-        Operate.FilterConfig.Filter.FilterExecuteType _FEType_Disable;
-
-        public Operate.FilterConfig.Filter.FilterExecuteType FEType_Disable
-        {
-            get => _FEType_Disable;
-            set
-            {
-                if (_FEType_Disable == value) return;
-                _FEType_Disable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion        
-
-        #region//禁用执行序号
-
-        Guid _Execute_GUID_Disable;
-
-        public Guid Execute_GUID_Disable
-        {
-            get => _Execute_GUID_Disable;
-            set
-            {
-                if (_Execute_GUID_Disable == value) return;
-                _Execute_GUID_Disable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion        
-
         #region//作用类别
 
         Operate.FilterConfig.Filter.FilterFunction _FFunction;
@@ -602,12 +500,6 @@ namespace WinsockPacketEditor
             bool IsExecute,
             Operate.FilterConfig.Filter.FilterExecuteType FEType,
             Guid Execute_GUID,
-            bool IsExecute_Enable,
-            Operate.FilterConfig.Filter.FilterExecuteType FEType_Enable,
-            Guid Execute_GUID_Enable,
-            bool IsExecute_Disable,
-            Operate.FilterConfig.Filter.FilterExecuteType FEType_Disable,
-            Guid Execute_GUID_Disable,
             Operate.FilterConfig.Filter.FilterFunction FFunction, 
             Operate.FilterConfig.Filter.FilterStartFrom FStartFrom,
             bool IsProgressionDone,
@@ -637,12 +529,6 @@ namespace WinsockPacketEditor
             this._IsExecute = IsExecute;
             this._FEType = FEType;
             this._Execute_GUID = Execute_GUID;
-            this._IsExecute_Enable = IsExecute_Enable;
-            this._FEType_Enable = FEType_Enable;
-            this._Execute_GUID_Enable = Execute_GUID_Enable;
-            this._IsExecute_Disable = IsExecute_Disable;
-            this._FEType_Disable = FEType_Disable;
-            this._Execute_GUID_Disable = Execute_GUID_Disable;
             this._FFunction = FFunction;
             this._FStartFrom = FStartFrom;
             this._IsProgressionDone = IsProgressionDone;

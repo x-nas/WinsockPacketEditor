@@ -13020,12 +13020,6 @@ namespace WinsockPacketEditor
                             false,
                             FilterExecuteType.None,
                             Guid.Empty,
-                            false,
-                            FilterExecuteType.None,
-                            Guid.Empty,
-                            false,
-                            FilterExecuteType.None,
-                            Guid.Empty,
                             FilterFunction, 
                             FilterStartFrom, 
                             false, 
@@ -13079,12 +13073,6 @@ namespace WinsockPacketEditor
                                 string.Empty, 
                                 FilterMode, 
                                 FilterAction, 
-                                false,
-                                FilterExecuteType.None,
-                                Guid.Empty,
-                                false,
-                                FilterExecuteType.None,
-                                Guid.Empty,
                                 false,
                                 FilterExecuteType.None,
                                 Guid.Empty,
@@ -13149,12 +13137,6 @@ namespace WinsockPacketEditor
                                 false,
                                 FilterExecuteType.None,
                                 Guid.Empty,
-                                false,
-                                FilterExecuteType.None,
-                                Guid.Empty,
-                                false,
-                                FilterExecuteType.None,
-                                Guid.Empty,
                                 FilterFunction,
                                 FilterStartFrom,
                                 false,
@@ -13196,12 +13178,6 @@ namespace WinsockPacketEditor
                     bool IsExecute,
                     Operate.FilterConfig.Filter.FilterExecuteType FEType,
                     Guid Execute_GUID,
-                    bool IsExecute_Enable,
-                    Operate.FilterConfig.Filter.FilterExecuteType FEType_Enable,
-                    Guid Execute_GUID_Enable,
-                    bool IsExecute_Disable,
-                    Operate.FilterConfig.Filter.FilterExecuteType FEType_Disable,
-                    Guid Execute_GUID_Disable,
                     FilterConfig.Filter.FilterFunction FilterFunction,
                     FilterConfig.Filter.FilterStartFrom FilterStartFrom,
                     bool IsProgressionDone,
@@ -13236,12 +13212,6 @@ namespace WinsockPacketEditor
                             IsExecute,
                             FEType,
                             Execute_GUID,
-                            IsExecute_Enable,
-                            FEType_Enable,
-                            Execute_GUID_Enable,
-                            IsExecute_Disable,
-                            FEType_Disable,
-                            Execute_GUID_Disable,
                             FilterFunction,
                             FilterStartFrom,
                             IsProgressionDone,
@@ -13284,12 +13254,6 @@ namespace WinsockPacketEditor
                     bool IsExecute,
                     Operate.FilterConfig.Filter.FilterExecuteType FEType,
                     Guid Execute_GUID,
-                    bool IsExecute_Enable,
-                    Operate.FilterConfig.Filter.FilterExecuteType FEType_Enable,
-                    Guid Execute_GUID_Enable,
-                    bool IsExecute_Disable,
-                    Operate.FilterConfig.Filter.FilterExecuteType FEType_Disable,
-                    Guid Execute_GUID_Disable,
                     FilterConfig.Filter.FilterFunction FilterFunction,
                     FilterConfig.Filter.FilterStartFrom FilterStartFrom,
                     bool IsProgressionContinuous,
@@ -13320,12 +13284,6 @@ namespace WinsockPacketEditor
                             fi.IsExecute = IsExecute;
                             fi.FEType = FEType;
                             fi.Execute_GUID = Execute_GUID;
-                            fi.IsExecute_Enable = IsExecute_Enable;
-                            fi.FEType_Enable = FEType_Enable;
-                            fi.Execute_GUID_Enable = Execute_GUID_Enable;
-                            fi.IsExecute_Disable = IsExecute_Disable;
-                            fi.FEType_Disable = FEType_Disable;
-                            fi.Execute_GUID_Disable = Execute_GUID_Disable;
                             fi.FFunction = FilterFunction;
                             fi.FStartFrom = FilterStartFrom;
                             fi.IsProgressionContinuous = IsProgressionContinuous;
@@ -13402,12 +13360,6 @@ namespace WinsockPacketEditor
                         bool IsExecute = fi.IsExecute;
                         FilterConfig.Filter.FilterExecuteType FEType = fi.FEType;
                         Guid Execute_GUID = fi.Execute_GUID;
-                        bool IsExecute_Enable = fi.IsExecute_Enable;
-                        FilterConfig.Filter.FilterExecuteType FEType_Enable = fi.FEType_Enable;
-                        Guid Execute_GUID_Enable = fi.Execute_GUID_Enable;
-                        bool IsExecute_Disable = fi.IsExecute_Disable;
-                        FilterConfig.Filter.FilterExecuteType FEType_Disable = fi.FEType_Disable;
-                        Guid Execute_GUID_Disable = fi.Execute_GUID_Disable;
                         FilterConfig.Filter.FilterFunction FFunction = fi.FFunction;
                         FilterConfig.Filter.FilterStartFrom FStartFrom = fi.FStartFrom;
                         bool IsProgressionDone = false;
@@ -13438,12 +13390,6 @@ namespace WinsockPacketEditor
                             IsExecute,
                             FEType,
                             Execute_GUID,
-                            IsExecute_Enable,
-                            FEType_Enable,
-                            Execute_GUID_Enable,
-                            IsExecute_Disable,
-                            FEType_Disable,
-                            Execute_GUID_Disable,
                             FFunction,
                             FStartFrom,
                             IsProgressionDone,
@@ -14602,42 +14548,6 @@ namespace WinsockPacketEditor
                                 break;
                         }
 
-                        if (fi.IsExecute_Enable)
-                        {
-                            switch (fi.FEType_Enable)
-                            {
-                                case FilterConfig.Filter.FilterExecuteType.Send:
-                                    SendConfig.Send.SetIsEnable_ByGUID(fi.Execute_GUID_Enable, true);
-                                    break;
-
-                                case FilterConfig.Filter.FilterExecuteType.Robot:
-                                    RobotConfig.Robot.SetIsEnable_ByGUID(fi.Execute_GUID_Enable, true);
-                                    break;
-
-                                case Filter.FilterExecuteType.Filter:
-                                    FilterConfig.Filter.SetIsEnable_ByGUID(fi.Execute_GUID_Enable, true);
-                                    break;
-                            }
-                        }
-
-                        if (fi.IsExecute_Disable)
-                        {
-                            switch (fi.FEType_Disable)
-                            {
-                                case FilterConfig.Filter.FilterExecuteType.Send:
-                                    SendConfig.Send.SetIsEnable_ByGUID(fi.Execute_GUID_Disable, false);
-                                    break;
-
-                                case FilterConfig.Filter.FilterExecuteType.Robot:
-                                    RobotConfig.Robot.SetIsEnable_ByGUID(fi.Execute_GUID_Disable, false);
-                                    break;
-
-                                case Filter.FilterExecuteType.Filter:
-                                    FilterConfig.Filter.SetIsEnable_ByGUID(fi.Execute_GUID_Disable, false);
-                                    break;
-                            }
-                        }
-
                         if (fi.IsExecute)
                         {
                             switch (fi.FEType)
@@ -15556,12 +15466,6 @@ namespace WinsockPacketEditor
                             bool IsExecute = Convert.ToBoolean(dataRow["IsExecute"]);
                             FilterConfig.Filter.FilterExecuteType FilterExecuteType = FilterConfig.Filter.GetFilterExecuteType_ByString(dataRow["ExecuteType"].ToString());
                             Guid Execute_GUID = Guid.Parse(dataRow["ExecuteGUID"].ToString());
-                            bool IsExecute_Enable = Convert.ToBoolean(dataRow["IsExecute_Enable"]);
-                            FilterConfig.Filter.FilterExecuteType FilterExecuteType_Enable = FilterConfig.Filter.GetFilterExecuteType_ByString(dataRow["ExecuteType_Enable"].ToString());
-                            Guid Execute_GUID_Enable = Guid.Parse(dataRow["ExecuteGUID_Enable"].ToString());
-                            bool IsExecute_Disable = Convert.ToBoolean(dataRow["IsExecute_Disable"]);
-                            FilterConfig.Filter.FilterExecuteType FilterExecuteType_Disable = FilterConfig.Filter.GetFilterExecuteType_ByString(dataRow["ExecuteType_Disable"].ToString());
-                            Guid Execute_GUID_Disable = Guid.Parse(dataRow["ExecuteGUID_Disable"].ToString());
                             FilterConfig.Filter.FilterFunction FilterFunction = FilterConfig.Filter.GetFilterFunction_ByString(dataRow["Function"].ToString());
                             FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.GetFilterStartFrom_ByString(dataRow["StartFrom"].ToString());
                             bool IsProgressionDone = false;
@@ -15592,12 +15496,6 @@ namespace WinsockPacketEditor
                                 IsExecute,
                                 FilterExecuteType,
                                 Execute_GUID,
-                                IsExecute_Enable,
-                                FilterExecuteType_Enable,
-                                Execute_GUID_Enable,
-                                IsExecute_Disable,
-                                FilterExecuteType_Disable,
-                                Execute_GUID_Disable,
                                 FilterFunction,
                                 FilterStartFrom,
                                 IsProgressionDone,
@@ -15733,12 +15631,6 @@ namespace WinsockPacketEditor
                                 new XElement("IsExecute", fi.IsExecute.ToString()),
                                 new XElement("ExecuteType", fi.FEType),
                                 new XElement("ExecuteGUID", fi.Execute_GUID.ToString().ToUpper()),
-                                new XElement("IsExecute_Enable", fi.IsExecute_Enable.ToString()),
-                                new XElement("ExecuteType_Enable", fi.FEType_Enable),
-                                new XElement("ExecuteGUID_Enable", fi.Execute_GUID_Enable.ToString().ToUpper()),
-                                new XElement("IsExecute_Disable", fi.IsExecute_Disable.ToString()),
-                                new XElement("ExecuteType_Disable", fi.FEType_Disable),
-                                new XElement("ExecuteGUID_Disable", fi.Execute_GUID_Disable.ToString().ToUpper()),
                                 new XElement("Function", FilterConfig.Filter.GetFilterFunctionString(fi.FFunction)),
                                 new XElement("StartFrom", fi.FStartFrom),
                                 new XElement("IsProgressionContinuous", fi.IsProgressionContinuous.ToString()),
@@ -15947,42 +15839,6 @@ namespace WinsockPacketEditor
                                 Guid.TryParse(xeFilter.Element("ExecuteGUID").Value, out Execute_GUID);
                             }
 
-                            bool bIsExecute_Enable = false;
-                            if (xeFilter.Element("IsExecute_Enable") != null)
-                            {
-                                bIsExecute_Enable = bool.Parse(xeFilter.Element("IsExecute_Enable").Value);
-                            }
-
-                            FilterConfig.Filter.FilterExecuteType FilterExecuteType_Enable = new FilterConfig.Filter.FilterExecuteType();
-                            if (xeFilter.Element("ExecuteType_Enable") != null)
-                            {
-                                FilterExecuteType_Enable = FilterConfig.Filter.GetFilterExecuteType_ByString(xeFilter.Element("ExecuteType_Enable").Value);
-                            }
-
-                            Guid Execute_GUID_Enable = Guid.Empty;
-                            if (xeFilter.Element("ExecuteGUID_Enable") != null)
-                            {
-                                Guid.TryParse(xeFilter.Element("ExecuteGUID_Enable").Value, out Execute_GUID_Enable);
-                            }
-
-                            bool bIsExecute_Disable = false;
-                            if (xeFilter.Element("IsExecute_Disable") != null)
-                            {
-                                bIsExecute_Disable = bool.Parse(xeFilter.Element("IsExecute_Disable").Value);
-                            }
-
-                            FilterConfig.Filter.FilterExecuteType FilterExecuteType_Disable = new FilterConfig.Filter.FilterExecuteType();
-                            if (xeFilter.Element("ExecuteType_Disable") != null)
-                            {
-                                FilterExecuteType_Disable = FilterConfig.Filter.GetFilterExecuteType_ByString(xeFilter.Element("ExecuteType_Disable").Value);
-                            }
-
-                            Guid Execute_GUID_Disable = Guid.Empty;
-                            if (xeFilter.Element("ExecuteGUID_Disable") != null)
-                            {
-                                Guid.TryParse(xeFilter.Element("ExecuteGUID_Disable").Value, out Execute_GUID_Disable);
-                            }
-
                             FilterConfig.Filter.FilterFunction FilterFunction = new FilterConfig.Filter.FilterFunction();
                             if (xeFilter.Element("Function") != null)
                             {
@@ -16064,12 +15920,6 @@ namespace WinsockPacketEditor
                                 bIsExecute,
                                 FilterExecuteType,
                                 Execute_GUID,
-                                bIsExecute_Enable,
-                                FilterExecuteType_Enable,
-                                Execute_GUID_Enable,
-                                bIsExecute_Disable,
-                                FilterExecuteType_Disable,
-                                Execute_GUID_Disable,
                                 FilterFunction,
                                 FilterStartFrom,
                                 IsProgressionDone,
@@ -20424,12 +20274,6 @@ namespace WinsockPacketEditor
                         sql += "IsExecute BOOLEAN DEFAULT 0,";
                         sql += "ExecuteType INTEGER DEFAULT 0,";
                         sql += "ExecuteGUID TEXT NOT NULL,";
-                        sql += "IsExecute_Enable BOOLEAN DEFAULT 0,";
-                        sql += "ExecuteType_Enable INTEGER DEFAULT 0,";
-                        sql += "ExecuteGUID_Enable TEXT NOT NULL,";
-                        sql += "IsExecute_Disable BOOLEAN DEFAULT 0,";
-                        sql += "ExecuteType_Disable INTEGER DEFAULT 0,";
-                        sql += "ExecuteGUID_Disable TEXT NOT NULL,";
                         sql += "Function TEXT NOT NULL,";
                         sql += "StartFrom INTEGER DEFAULT 0,";
                         sql += "IsProgressionContinuous BOOLEAN DEFAULT 0,";
@@ -20527,12 +20371,6 @@ namespace WinsockPacketEditor
                         sql += "IsExecute,";
                         sql += "ExecuteType,";
                         sql += "ExecuteGUID,";
-                        sql += "IsExecute_Enable,";
-                        sql += "ExecuteType_Enable,";
-                        sql += "ExecuteGUID_Enable,";
-                        sql += "IsExecute_Disable,";
-                        sql += "ExecuteType_Disable,";
-                        sql += "ExecuteGUID_Disable,";
                         sql += "Function,";
                         sql += "StartFrom,";
                         sql += "IsProgressionContinuous,";
@@ -20560,12 +20398,6 @@ namespace WinsockPacketEditor
                         sql += "@IsExecute,";
                         sql += "@ExecuteType,";
                         sql += "@ExecuteGUID,";
-                        sql += "@IsExecute_Enable,";
-                        sql += "@ExecuteType_Enable,";
-                        sql += "@ExecuteGUID_Enable,";
-                        sql += "@IsExecute_Disable,";
-                        sql += "@ExecuteType_Disable,";
-                        sql += "@ExecuteGUID_Disable,";
                         sql += "@Function,";
                         sql += "@StartFrom,";
                         sql += "@IsProgressionContinuous,";
@@ -20596,12 +20428,6 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@IsExecute", sfi.IsExecute);
                             cmd.Parameters.AddWithValue("@ExecuteType", sfi.FEType);
                             cmd.Parameters.AddWithValue("@ExecuteGUID", sfi.Execute_GUID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsExecute_Enable", sfi.IsExecute_Enable);
-                            cmd.Parameters.AddWithValue("@ExecuteType_Enable", sfi.FEType_Enable);
-                            cmd.Parameters.AddWithValue("@ExecuteGUID_Enable", sfi.Execute_GUID_Enable.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsExecute_Disable", sfi.IsExecute_Disable);
-                            cmd.Parameters.AddWithValue("@ExecuteType_Disable", sfi.FEType_Disable);
-                            cmd.Parameters.AddWithValue("@ExecuteGUID_Disable", sfi.Execute_GUID_Disable.ToString().ToUpper());
                             cmd.Parameters.AddWithValue("@Function", FilterConfig.Filter.GetFilterFunctionString(sfi.FFunction));
                             cmd.Parameters.AddWithValue("@StartFrom", sfi.FStartFrom);
                             cmd.Parameters.AddWithValue("@IsProgressionContinuous", sfi.IsProgressionContinuous);

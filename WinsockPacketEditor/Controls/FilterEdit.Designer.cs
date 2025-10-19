@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.Tabs.StyleLine styleLine2 = new AntdUI.Tabs.StyleLine();
-            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
-            AntdUI.Tabs.StyleLine styleLine3 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine4 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine5 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine6 = new AntdUI.Tabs.StyleLine();
             this.tlpFilterEdit = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
@@ -91,12 +91,6 @@
             this.pFilterAction = new AntdUI.Panel();
             this.tlpFilterAction = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpFilterAction2 = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.cbbFilterAction_Disable = new AntdUI.Select();
-            this.cbbFilterAction_DisableType = new AntdUI.Select();
-            this.cbFilterAction_Disable = new AntdUI.Checkbox();
-            this.cbbFilterAction_Enable = new AntdUI.Select();
-            this.cbbFilterAction_EnableType = new AntdUI.Select();
-            this.cbFilterAction_Enable = new AntdUI.Checkbox();
             this.rbFilterAction_Replace = new AntdUI.Radio();
             this.rbFilterAction_Change = new AntdUI.Radio();
             this.rbFilterAction_NoModify_Display = new AntdUI.Radio();
@@ -257,7 +251,7 @@
             this.tabFilterEdit.Pages.Add(this.tpNormal);
             this.tabFilterEdit.Pages.Add(this.tpAdvance);
             this.tabFilterEdit.Size = new System.Drawing.Size(1096, 202);
-            this.tabFilterEdit.Style = styleLine2;
+            this.tabFilterEdit.Style = styleLine4;
             this.tabFilterEdit.TabIndex = 0;
             // 
             // tpNormal
@@ -377,7 +371,7 @@
             this.tabFilterFrom.Pages.Add(this.tpFromPosition);
             this.tabFilterFrom.SelectedIndex = 1;
             this.tabFilterFrom.Size = new System.Drawing.Size(1092, 83);
-            this.tabFilterFrom.Style = styleLine1;
+            this.tabFilterFrom.Style = styleLine5;
             this.tabFilterFrom.TabIndex = 2;
             this.tabFilterFrom.Text = "tabs1";
             // 
@@ -844,7 +838,7 @@
             // 
             this.tabFilterFunction.Controls.Add(this.tpInjectMode);
             this.tabFilterFunction.Controls.Add(this.tpProxyMode);
-            this.tabFilterFunction.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabFilterFunction.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabFilterFunction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterFunction.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabFilterFunction.Location = new System.Drawing.Point(2, 30);
@@ -853,7 +847,7 @@
             this.tabFilterFunction.Pages.Add(this.tpInjectMode);
             this.tabFilterFunction.Pages.Add(this.tpProxyMode);
             this.tabFilterFunction.Size = new System.Drawing.Size(318, 204);
-            this.tabFilterFunction.Style = styleLine3;
+            this.tabFilterFunction.Style = styleLine6;
             this.tabFilterFunction.TabIndex = 1;
             this.tabFilterFunction.Text = "tabs1";
             // 
@@ -1107,126 +1101,27 @@
             // 
             this.tlpFilterAction2.ColumnCount = 3;
             this.tlpFilterAction2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpFilterAction2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tlpFilterAction2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterAction2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpFilterAction2.Controls.Add(this.cbbFilterAction_Disable, 2, 3);
-            this.tlpFilterAction2.Controls.Add(this.cbbFilterAction_DisableType, 1, 3);
-            this.tlpFilterAction2.Controls.Add(this.cbFilterAction_Disable, 0, 3);
-            this.tlpFilterAction2.Controls.Add(this.cbbFilterAction_Enable, 2, 2);
-            this.tlpFilterAction2.Controls.Add(this.cbbFilterAction_EnableType, 1, 2);
-            this.tlpFilterAction2.Controls.Add(this.cbFilterAction_Enable, 0, 2);
             this.tlpFilterAction2.Controls.Add(this.rbFilterAction_Replace, 0, 0);
             this.tlpFilterAction2.Controls.Add(this.rbFilterAction_Change, 1, 0);
             this.tlpFilterAction2.Controls.Add(this.rbFilterAction_NoModify_Display, 2, 0);
             this.tlpFilterAction2.Controls.Add(this.rbFilterAction_Intercept, 0, 1);
             this.tlpFilterAction2.Controls.Add(this.rbFilterAction_NoModify_NoDisplay, 2, 1);
-            this.tlpFilterAction2.Controls.Add(this.cbFilterAction_Execute, 0, 4);
-            this.tlpFilterAction2.Controls.Add(this.cbbFilterAction_ExecuteType, 1, 4);
-            this.tlpFilterAction2.Controls.Add(this.cbbFilterAction_Execute, 2, 4);
+            this.tlpFilterAction2.Controls.Add(this.cbFilterAction_Execute, 0, 2);
+            this.tlpFilterAction2.Controls.Add(this.cbbFilterAction_ExecuteType, 1, 2);
+            this.tlpFilterAction2.Controls.Add(this.cbbFilterAction_Execute, 2, 2);
             this.tlpFilterAction2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFilterAction2.Location = new System.Drawing.Point(0, 28);
             this.tlpFilterAction2.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFilterAction2.Name = "tlpFilterAction2";
-            this.tlpFilterAction2.RowCount = 6;
-            this.tlpFilterAction2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpFilterAction2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpFilterAction2.RowCount = 4;
             this.tlpFilterAction2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterAction2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterAction2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterAction2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterAction2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFilterAction2.Size = new System.Drawing.Size(377, 208);
             this.tlpFilterAction2.TabIndex = 5;
-            // 
-            // cbbFilterAction_Disable
-            // 
-            this.cbbFilterAction_Disable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbbFilterAction_Disable.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbbFilterAction_Disable.List = true;
-            this.cbbFilterAction_Disable.ListAutoWidth = true;
-            this.cbbFilterAction_Disable.LocalizationPlaceholderText = "PleaseSelect";
-            this.cbbFilterAction_Disable.Location = new System.Drawing.Point(238, 110);
-            this.cbbFilterAction_Disable.Margin = new System.Windows.Forms.Padding(2);
-            this.cbbFilterAction_Disable.Name = "cbbFilterAction_Disable";
-            this.cbbFilterAction_Disable.PlaceholderText = "请选择";
-            this.cbbFilterAction_Disable.Size = new System.Drawing.Size(137, 32);
-            this.cbbFilterAction_Disable.TabIndex = 37;
-            this.cbbFilterAction_Disable.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // cbbFilterAction_DisableType
-            // 
-            this.cbbFilterAction_DisableType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbbFilterAction_DisableType.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbbFilterAction_DisableType.List = true;
-            this.cbbFilterAction_DisableType.ListAutoWidth = true;
-            this.cbbFilterAction_DisableType.LocalizationPlaceholderText = "";
-            this.cbbFilterAction_DisableType.Location = new System.Drawing.Point(62, 110);
-            this.cbbFilterAction_DisableType.Margin = new System.Windows.Forms.Padding(2);
-            this.cbbFilterAction_DisableType.Name = "cbbFilterAction_DisableType";
-            this.cbbFilterAction_DisableType.PlaceholderText = "";
-            this.cbbFilterAction_DisableType.Size = new System.Drawing.Size(172, 32);
-            this.cbbFilterAction_DisableType.TabIndex = 36;
-            this.cbbFilterAction_DisableType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.cbbFilterAction_DisableType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.cbbFilterAction_DisableType_SelectedIndexChanged);
-            // 
-            // cbFilterAction_Disable
-            // 
-            this.cbFilterAction_Disable.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbFilterAction_Disable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbFilterAction_Disable.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbFilterAction_Disable.LocalizationText = "Execute";
-            this.cbFilterAction_Disable.Location = new System.Drawing.Point(2, 110);
-            this.cbFilterAction_Disable.Margin = new System.Windows.Forms.Padding(2);
-            this.cbFilterAction_Disable.Name = "cbFilterAction_Disable";
-            this.cbFilterAction_Disable.Size = new System.Drawing.Size(56, 32);
-            this.cbFilterAction_Disable.TabIndex = 35;
-            this.cbFilterAction_Disable.Text = "禁用";
-            this.cbFilterAction_Disable.CheckedChanged += new AntdUI.BoolEventHandler(this.cbFilterAction_Disable_CheckedChanged);
-            // 
-            // cbbFilterAction_Enable
-            // 
-            this.cbbFilterAction_Enable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbbFilterAction_Enable.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbbFilterAction_Enable.List = true;
-            this.cbbFilterAction_Enable.ListAutoWidth = true;
-            this.cbbFilterAction_Enable.LocalizationPlaceholderText = "PleaseSelect";
-            this.cbbFilterAction_Enable.Location = new System.Drawing.Point(238, 74);
-            this.cbbFilterAction_Enable.Margin = new System.Windows.Forms.Padding(2);
-            this.cbbFilterAction_Enable.Name = "cbbFilterAction_Enable";
-            this.cbbFilterAction_Enable.PlaceholderText = "请选择";
-            this.cbbFilterAction_Enable.Size = new System.Drawing.Size(137, 32);
-            this.cbbFilterAction_Enable.TabIndex = 34;
-            this.cbbFilterAction_Enable.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // cbbFilterAction_EnableType
-            // 
-            this.cbbFilterAction_EnableType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbbFilterAction_EnableType.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbbFilterAction_EnableType.List = true;
-            this.cbbFilterAction_EnableType.ListAutoWidth = true;
-            this.cbbFilterAction_EnableType.LocalizationPlaceholderText = "";
-            this.cbbFilterAction_EnableType.Location = new System.Drawing.Point(62, 74);
-            this.cbbFilterAction_EnableType.Margin = new System.Windows.Forms.Padding(2);
-            this.cbbFilterAction_EnableType.Name = "cbbFilterAction_EnableType";
-            this.cbbFilterAction_EnableType.PlaceholderText = "";
-            this.cbbFilterAction_EnableType.Size = new System.Drawing.Size(172, 32);
-            this.cbbFilterAction_EnableType.TabIndex = 33;
-            this.cbbFilterAction_EnableType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.cbbFilterAction_EnableType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.cbbFilterAction_EnableType_SelectedIndexChanged);
-            // 
-            // cbFilterAction_Enable
-            // 
-            this.cbFilterAction_Enable.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbFilterAction_Enable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbFilterAction_Enable.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbFilterAction_Enable.LocalizationText = "Execute";
-            this.cbFilterAction_Enable.Location = new System.Drawing.Point(2, 74);
-            this.cbFilterAction_Enable.Margin = new System.Windows.Forms.Padding(2);
-            this.cbFilterAction_Enable.Name = "cbFilterAction_Enable";
-            this.cbFilterAction_Enable.Size = new System.Drawing.Size(56, 32);
-            this.cbFilterAction_Enable.TabIndex = 32;
-            this.cbFilterAction_Enable.Text = "启用";
-            this.cbFilterAction_Enable.CheckedChanged += new AntdUI.BoolEventHandler(this.cbFilterAction_Enable_CheckedChanged);
             // 
             // rbFilterAction_Replace
             // 
@@ -1260,7 +1155,7 @@
             this.rbFilterAction_NoModify_Display.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFilterAction_NoModify_Display.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbFilterAction_NoModify_Display.LocalizationText = "FilterEditForm.NoModifyDisplay";
-            this.rbFilterAction_NoModify_Display.Location = new System.Drawing.Point(238, 2);
+            this.rbFilterAction_NoModify_Display.Location = new System.Drawing.Point(182, 2);
             this.rbFilterAction_NoModify_Display.Margin = new System.Windows.Forms.Padding(2);
             this.rbFilterAction_NoModify_Display.Name = "rbFilterAction_NoModify_Display";
             this.rbFilterAction_NoModify_Display.Size = new System.Drawing.Size(117, 32);
@@ -1286,7 +1181,7 @@
             this.rbFilterAction_NoModify_NoDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rbFilterAction_NoModify_NoDisplay.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbFilterAction_NoModify_NoDisplay.LocalizationText = "FilterEditForm.NoModifyNoDisplay";
-            this.rbFilterAction_NoModify_NoDisplay.Location = new System.Drawing.Point(238, 38);
+            this.rbFilterAction_NoModify_NoDisplay.Location = new System.Drawing.Point(182, 38);
             this.rbFilterAction_NoModify_NoDisplay.Margin = new System.Windows.Forms.Padding(2);
             this.rbFilterAction_NoModify_NoDisplay.Name = "rbFilterAction_NoModify_NoDisplay";
             this.rbFilterAction_NoModify_NoDisplay.Size = new System.Drawing.Size(117, 32);
@@ -1299,7 +1194,7 @@
             this.cbFilterAction_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbFilterAction_Execute.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cbFilterAction_Execute.LocalizationText = "Execute";
-            this.cbFilterAction_Execute.Location = new System.Drawing.Point(2, 146);
+            this.cbFilterAction_Execute.Location = new System.Drawing.Point(2, 74);
             this.cbFilterAction_Execute.Margin = new System.Windows.Forms.Padding(2);
             this.cbFilterAction_Execute.Name = "cbFilterAction_Execute";
             this.cbFilterAction_Execute.Size = new System.Drawing.Size(56, 32);
@@ -1313,12 +1208,12 @@
             this.cbbFilterAction_ExecuteType.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.cbbFilterAction_ExecuteType.List = true;
             this.cbbFilterAction_ExecuteType.ListAutoWidth = true;
-            this.cbbFilterAction_ExecuteType.LocalizationPlaceholderText = "";
-            this.cbbFilterAction_ExecuteType.Location = new System.Drawing.Point(62, 146);
+            this.cbbFilterAction_ExecuteType.LocalizationPlaceholderText = "PleaseSelect";
+            this.cbbFilterAction_ExecuteType.Location = new System.Drawing.Point(62, 74);
             this.cbbFilterAction_ExecuteType.Margin = new System.Windows.Forms.Padding(2);
             this.cbbFilterAction_ExecuteType.Name = "cbbFilterAction_ExecuteType";
-            this.cbbFilterAction_ExecuteType.PlaceholderText = "";
-            this.cbbFilterAction_ExecuteType.Size = new System.Drawing.Size(172, 32);
+            this.cbbFilterAction_ExecuteType.PlaceholderText = "请选择";
+            this.cbbFilterAction_ExecuteType.Size = new System.Drawing.Size(116, 32);
             this.cbbFilterAction_ExecuteType.TabIndex = 29;
             this.cbbFilterAction_ExecuteType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.cbbFilterAction_ExecuteType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.cbbFilterAction_ExecuteType_SelectedIndexChanged);
@@ -1330,11 +1225,11 @@
             this.cbbFilterAction_Execute.List = true;
             this.cbbFilterAction_Execute.ListAutoWidth = true;
             this.cbbFilterAction_Execute.LocalizationPlaceholderText = "PleaseSelect";
-            this.cbbFilterAction_Execute.Location = new System.Drawing.Point(238, 146);
+            this.cbbFilterAction_Execute.Location = new System.Drawing.Point(182, 74);
             this.cbbFilterAction_Execute.Margin = new System.Windows.Forms.Padding(2);
             this.cbbFilterAction_Execute.Name = "cbbFilterAction_Execute";
             this.cbbFilterAction_Execute.PlaceholderText = "请选择";
-            this.cbbFilterAction_Execute.Size = new System.Drawing.Size(137, 32);
+            this.cbbFilterAction_Execute.Size = new System.Drawing.Size(193, 32);
             this.cbbFilterAction_Execute.TabIndex = 30;
             this.cbbFilterAction_Execute.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -1830,11 +1725,5 @@
         private TableLayoutPanelEx tlpFilterName;
         private AntdUI.Divider dFilterName;
         private AntdUI.Input txtFilterName;
-        private AntdUI.Select cbbFilterAction_Disable;
-        private AntdUI.Select cbbFilterAction_DisableType;
-        private AntdUI.Checkbox cbFilterAction_Disable;
-        private AntdUI.Select cbbFilterAction_Enable;
-        private AntdUI.Select cbbFilterAction_EnableType;
-        private AntdUI.Checkbox cbFilterAction_Enable;
     }
 }
