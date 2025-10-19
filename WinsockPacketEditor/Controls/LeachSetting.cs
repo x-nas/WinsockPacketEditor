@@ -19,6 +19,16 @@ namespace WinsockPacketEditor
         private void LeachSetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("LeachSetting", "过滤设置");
+            this.tabPacketType.TabMenuVisible = false;
+
+            if (this.form is InterfaceInfo.IInjectMode)
+            {
+                this.tabPacketType.SelectTab("tpInject");
+            }
+            else if (this.form is InterfaceInfo.IProxyMode)
+            {
+                this.tabPacketType.SelectTab("tpProxy");
+            }
 
             this.sIsShow.Checked = !Operate.SystemConfig.CheckNotShow;
             this.cbCheckSocket.Checked = Operate.SystemConfig.CheckSocket;
@@ -33,6 +43,14 @@ namespace WinsockPacketEditor
             this.txtCheckPort.Text = Operate.SystemConfig.CheckPort_Value;
             this.txtCheckHead.Text = Operate.SystemConfig.CheckHead_Value;
             this.txtCheckData.Text = Operate.SystemConfig.CheckData_Value;
+
+            this.CheckSocket_Changed();
+            this.CheckLen_Changed();
+            this.CheckIP_Changed();
+            this.CheckPort_Changed();
+            this.CheckHead_Changed();
+            this.CheckData_Changed();
+            this.CheckType_Changed();
         }
 
         #endregion        
@@ -44,28 +62,9 @@ namespace WinsockPacketEditor
             this.CheckSocket_Changed();
         }
 
-        private void txtCheckSocket_TextChanged(object sender, EventArgs e)
-        {
-            this.CheckSocket_Changed();
-        }
-
         private void CheckSocket_Changed()
         {
-            if (this.cbCheckSocket.Checked)
-            {
-                if (string.IsNullOrEmpty(this.txtCheckSocket.Text.Trim()))
-                {
-                    this.txtCheckSocket.Status = TType.Error;
-                }
-                else
-                {
-                    this.txtCheckSocket.Status = TType.Success;
-                }
-            }
-            else
-            {
-                this.txtCheckSocket.Status = TType.None;
-            }
+            this.txtCheckSocket.Enabled = this.cbCheckSocket.Checked;
         }
 
         #endregion
@@ -77,28 +76,9 @@ namespace WinsockPacketEditor
             this.CheckLen_Changed();
         }
 
-        private void txtCheckLen_TextChanged(object sender, EventArgs e)
-        {
-            this.CheckLen_Changed();
-        }
-
         private void CheckLen_Changed()
         {
-            if (this.cbCheckLen.Checked)
-            {
-                if (string.IsNullOrEmpty(this.txtCheckLen.Text.Trim()))
-                {
-                    this.txtCheckLen.Status = TType.Error;
-                }
-                else
-                {
-                    this.txtCheckLen.Status = TType.Success;
-                }
-            }
-            else
-            {
-                this.txtCheckLen.Status = TType.None;
-            }
+            this.txtCheckLen.Enabled = this.cbCheckLen.Checked;
         }
 
         #endregion
@@ -110,28 +90,9 @@ namespace WinsockPacketEditor
             this.CheckIP_Changed();
         }
 
-        private void txtCheckIP_TextChanged(object sender, EventArgs e)
-        {
-            this.CheckIP_Changed();
-        }
-
         private void CheckIP_Changed()
         {
-            if (this.cbCheckIP.Checked)
-            {
-                if (string.IsNullOrEmpty(this.txtCheckIP.Text.Trim()))
-                {
-                    this.txtCheckIP.Status = TType.Error;
-                }
-                else
-                {
-                    this.txtCheckIP.Status = TType.Success;
-                }
-            }
-            else
-            {
-                this.txtCheckIP.Status = TType.None;
-            }
+            this.txtCheckIP.Enabled = this.cbCheckIP.Checked;
         }
 
         #endregion
@@ -143,28 +104,9 @@ namespace WinsockPacketEditor
             this.CheckPort_Changed();
         }
 
-        private void txtCheckPort_TextChanged(object sender, EventArgs e)
-        {
-            this.CheckPort_Changed();
-        }
-
         private void CheckPort_Changed()
         {
-            if (this.cbCheckPort.Checked)
-            {
-                if (string.IsNullOrEmpty(this.txtCheckPort.Text.Trim()))
-                {
-                    this.txtCheckPort.Status = TType.Error;
-                }
-                else
-                {
-                    this.txtCheckPort.Status = TType.Success;
-                }
-            }
-            else
-            {
-                this.txtCheckPort.Status = TType.None;
-            }
+            this.txtCheckPort.Enabled = this.cbCheckPort.Checked;
         }
 
         #endregion
@@ -176,28 +118,9 @@ namespace WinsockPacketEditor
             this.CheckHead_Changed();
         }
 
-        private void txtCheckHead_TextChanged(object sender, EventArgs e)
-        {
-            this.CheckHead_Changed();
-        }
-
         private void CheckHead_Changed()
         {
-            if (this.cbCheckHead.Checked)
-            {
-                if (string.IsNullOrEmpty(this.txtCheckHead.Text.Trim()))
-                {
-                    this.txtCheckHead.Status = TType.Error;
-                }
-                else
-                {
-                    this.txtCheckHead.Status = TType.Success;
-                }
-            }
-            else
-            {
-                this.txtCheckHead.Status = TType.None;
-            }
+            this.txtCheckHead.Enabled = this.cbCheckHead.Checked;
         }
 
         #endregion
@@ -209,28 +132,23 @@ namespace WinsockPacketEditor
             this.CheckData_Changed();
         }
 
-        private void txtCheckData_TextChanged(object sender, EventArgs e)
-        {
-            this.CheckData_Changed();
-        }
-
         private void CheckData_Changed()
         {
-            if (this.cbCheckData.Checked)
-            {
-                if (string.IsNullOrEmpty(this.txtCheckData.Text.Trim()))
-                {
-                    this.txtCheckData.Status = TType.Error;
-                }
-                else
-                {
-                    this.txtCheckData.Status = TType.Success;
-                }
-            }
-            else
-            {
-                this.txtCheckData.Status = TType.None;
-            }
+            this.txtCheckData.Enabled = this.cbCheckData.Checked;
+        }
+
+        #endregion
+
+        #region//指定类别
+
+        private void cbCheckType_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.CheckType_Changed();
+        }
+
+        private void CheckType_Changed()
+        {
+            this.tlpInject.Enabled = this.tlpProxy.Enabled = this.cbCheckType.Checked;
         }
 
         #endregion
@@ -285,6 +203,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion
+        #endregion        
     }
 }
