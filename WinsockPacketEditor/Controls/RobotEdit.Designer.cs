@@ -63,6 +63,15 @@
             this.bInsert_SendList = new AntdUI.Button();
             this.ciControlINST = new AntdUI.CollapseItem();
             this.tlpControlINST = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.pSwitch = new AntdUI.Panel();
+            this.tlpSwitch = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.dSwitch = new AntdUI.Divider();
+            this.tlpSwitch2 = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.cbbSwitchInfo = new AntdUI.Select();
+            this.cbbSwitchType = new AntdUI.Select();
+            this.rbSwitch_Disable = new AntdUI.Radio();
+            this.bSwitch = new AntdUI.Button();
+            this.rbSwitch_Enable = new AntdUI.Radio();
             this.pLoop = new AntdUI.Panel();
             this.tlpLoop = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dLoop = new AntdUI.Divider();
@@ -107,7 +116,7 @@
             this.tlpMouseINST = new WinsockPacketEditor.TableLayoutPanelEx();
             this.pMouseMove = new AntdUI.Panel();
             this.tlpMouseMove = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.divider8 = new AntdUI.Divider();
+            this.dMouseMove = new AntdUI.Divider();
             this.tlpMouseMove2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudMouseMove_X = new AntdUI.InputNumber();
             this.rbMoveBy = new AntdUI.Radio();
@@ -151,6 +160,9 @@
             this.tlpSendList.SuspendLayout();
             this.ciControlINST.SuspendLayout();
             this.tlpControlINST.SuspendLayout();
+            this.pSwitch.SuspendLayout();
+            this.tlpSwitch.SuspendLayout();
+            this.tlpSwitch2.SuspendLayout();
             this.pLoop.SuspendLayout();
             this.tlpLoop.SuspendLayout();
             this.tlpLoop2.SuspendLayout();
@@ -704,9 +716,10 @@
             // ciControlINST
             // 
             this.ciControlINST.Controls.Add(this.tlpControlINST);
+            this.ciControlINST.Expand = true;
             this.ciControlINST.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ciControlINST.LocalizationText = "RobotEditForm.{id}";
-            this.ciControlINST.Location = new System.Drawing.Point(-526, -418);
+            this.ciControlINST.Location = new System.Drawing.Point(10, 93);
             this.ciControlINST.Margin = new System.Windows.Forms.Padding(2);
             this.ciControlINST.Name = "ciControlINST";
             this.ciControlINST.Size = new System.Drawing.Size(526, 418);
@@ -717,29 +730,166 @@
             // 
             this.tlpControlINST.ColumnCount = 1;
             this.tlpControlINST.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpControlINST.Controls.Add(this.pSwitch, 0, 2);
             this.tlpControlINST.Controls.Add(this.pLoop, 0, 1);
             this.tlpControlINST.Controls.Add(this.pDelay, 0, 0);
             this.tlpControlINST.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpControlINST.Location = new System.Drawing.Point(0, 0);
             this.tlpControlINST.Margin = new System.Windows.Forms.Padding(0);
             this.tlpControlINST.Name = "tlpControlINST";
-            this.tlpControlINST.RowCount = 3;
-            this.tlpControlINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 113F));
-            this.tlpControlINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.tlpControlINST.RowCount = 4;
+            this.tlpControlINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 115F));
+            this.tlpControlINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpControlINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tlpControlINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpControlINST.Size = new System.Drawing.Size(526, 418);
             this.tlpControlINST.TabIndex = 0;
+            // 
+            // pSwitch
+            // 
+            this.pSwitch.BorderWidth = 2F;
+            this.pSwitch.Controls.Add(this.tlpSwitch);
+            this.pSwitch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pSwitch.Location = new System.Drawing.Point(2, 197);
+            this.pSwitch.Margin = new System.Windows.Forms.Padding(2);
+            this.pSwitch.Name = "pSwitch";
+            this.pSwitch.Radius = 10;
+            this.pSwitch.Size = new System.Drawing.Size(522, 76);
+            this.pSwitch.TabIndex = 16;
+            // 
+            // tlpSwitch
+            // 
+            this.tlpSwitch.BackColor = System.Drawing.Color.Transparent;
+            this.tlpSwitch.ColumnCount = 1;
+            this.tlpSwitch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSwitch.Controls.Add(this.dSwitch, 0, 0);
+            this.tlpSwitch.Controls.Add(this.tlpSwitch2, 0, 1);
+            this.tlpSwitch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSwitch.Location = new System.Drawing.Point(2, 2);
+            this.tlpSwitch.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSwitch.Name = "tlpSwitch";
+            this.tlpSwitch.RowCount = 3;
+            this.tlpSwitch.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSwitch.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSwitch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSwitch.Size = new System.Drawing.Size(518, 72);
+            this.tlpSwitch.TabIndex = 0;
+            // 
+            // dSwitch
+            // 
+            this.dSwitch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dSwitch.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSwitch.LocalizationText = "RobotEditForm.ControlINST.Switch";
+            this.dSwitch.Location = new System.Drawing.Point(2, 2);
+            this.dSwitch.Margin = new System.Windows.Forms.Padding(2);
+            this.dSwitch.Name = "dSwitch";
+            this.dSwitch.Orientation = AntdUI.TOrientation.Left;
+            this.dSwitch.Size = new System.Drawing.Size(514, 20);
+            this.dSwitch.TabIndex = 0;
+            this.dSwitch.Text = "开关";
+            // 
+            // tlpSwitch2
+            // 
+            this.tlpSwitch2.ColumnCount = 5;
+            this.tlpSwitch2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSwitch2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSwitch2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
+            this.tlpSwitch2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSwitch2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpSwitch2.Controls.Add(this.cbbSwitchInfo, 3, 0);
+            this.tlpSwitch2.Controls.Add(this.cbbSwitchType, 2, 0);
+            this.tlpSwitch2.Controls.Add(this.rbSwitch_Disable, 1, 0);
+            this.tlpSwitch2.Controls.Add(this.bSwitch, 4, 0);
+            this.tlpSwitch2.Controls.Add(this.rbSwitch_Enable, 0, 0);
+            this.tlpSwitch2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSwitch2.Location = new System.Drawing.Point(0, 24);
+            this.tlpSwitch2.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSwitch2.Name = "tlpSwitch2";
+            this.tlpSwitch2.RowCount = 2;
+            this.tlpSwitch2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSwitch2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSwitch2.Size = new System.Drawing.Size(518, 40);
+            this.tlpSwitch2.TabIndex = 1;
+            // 
+            // cbbSwitchInfo
+            // 
+            this.cbbSwitchInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbbSwitchInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cbbSwitchInfo.List = true;
+            this.cbbSwitchInfo.ListAutoWidth = true;
+            this.cbbSwitchInfo.LocalizationPlaceholderText = "PleaseSelect";
+            this.cbbSwitchInfo.Location = new System.Drawing.Point(256, 2);
+            this.cbbSwitchInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.cbbSwitchInfo.Name = "cbbSwitchInfo";
+            this.cbbSwitchInfo.PlaceholderText = "请选择";
+            this.cbbSwitchInfo.Size = new System.Drawing.Size(220, 36);
+            this.cbbSwitchInfo.TabIndex = 35;
+            this.cbbSwitchInfo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // cbbSwitchType
+            // 
+            this.cbbSwitchType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbbSwitchType.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cbbSwitchType.List = true;
+            this.cbbSwitchType.ListAutoWidth = true;
+            this.cbbSwitchType.LocalizationPlaceholderText = "PleaseSelect";
+            this.cbbSwitchType.Location = new System.Drawing.Point(126, 2);
+            this.cbbSwitchType.Margin = new System.Windows.Forms.Padding(2);
+            this.cbbSwitchType.Name = "cbbSwitchType";
+            this.cbbSwitchType.PlaceholderText = "请选择";
+            this.cbbSwitchType.Size = new System.Drawing.Size(126, 36);
+            this.cbbSwitchType.TabIndex = 34;
+            this.cbbSwitchType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.cbbSwitchType.SelectedIndexChanged += new AntdUI.IntEventHandler(this.cbbSwitchType_SelectedIndexChanged);
+            // 
+            // rbSwitch_Disable
+            // 
+            this.rbSwitch_Disable.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.rbSwitch_Disable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbSwitch_Disable.LocalizationText = "Disable";
+            this.rbSwitch_Disable.Location = new System.Drawing.Point(65, 3);
+            this.rbSwitch_Disable.Name = "rbSwitch_Disable";
+            this.rbSwitch_Disable.Size = new System.Drawing.Size(56, 34);
+            this.rbSwitch_Disable.TabIndex = 4;
+            this.rbSwitch_Disable.Text = "禁用";
+            // 
+            // bSwitch
+            // 
+            this.bSwitch.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.bSwitch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSwitch.IconPosition = AntdUI.TAlignMini.Right;
+            this.bSwitch.IconSvg = "ArrowRightOutlined";
+            this.bSwitch.LocalizationText = "";
+            this.bSwitch.Location = new System.Drawing.Point(480, 2);
+            this.bSwitch.Margin = new System.Windows.Forms.Padding(2);
+            this.bSwitch.Name = "bSwitch";
+            this.bSwitch.Size = new System.Drawing.Size(36, 36);
+            this.bSwitch.TabIndex = 2;
+            this.bSwitch.Type = AntdUI.TTypeMini.Primary;
+            this.bSwitch.Click += new System.EventHandler(this.bSwitch_Click);
+            // 
+            // rbSwitch_Enable
+            // 
+            this.rbSwitch_Enable.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.rbSwitch_Enable.Checked = true;
+            this.rbSwitch_Enable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rbSwitch_Enable.LocalizationText = "Enable";
+            this.rbSwitch_Enable.Location = new System.Drawing.Point(3, 3);
+            this.rbSwitch_Enable.Name = "rbSwitch_Enable";
+            this.rbSwitch_Enable.Size = new System.Drawing.Size(56, 34);
+            this.rbSwitch_Enable.TabIndex = 3;
+            this.rbSwitch_Enable.Text = "启用";
             // 
             // pLoop
             // 
             this.pLoop.BorderWidth = 2F;
             this.pLoop.Controls.Add(this.tlpLoop);
             this.pLoop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pLoop.Location = new System.Drawing.Point(2, 115);
+            this.pLoop.Location = new System.Drawing.Point(2, 117);
             this.pLoop.Margin = new System.Windows.Forms.Padding(2);
             this.pLoop.Name = "pLoop";
             this.pLoop.Radius = 10;
-            this.pLoop.Size = new System.Drawing.Size(522, 77);
+            this.pLoop.Size = new System.Drawing.Size(522, 76);
             this.pLoop.TabIndex = 15;
             // 
             // tlpLoop
@@ -757,7 +907,7 @@
             this.tlpLoop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoop.Size = new System.Drawing.Size(518, 73);
+            this.tlpLoop.Size = new System.Drawing.Size(518, 72);
             this.tlpLoop.TabIndex = 0;
             // 
             // dLoop
@@ -861,7 +1011,7 @@
             this.pDelay.Margin = new System.Windows.Forms.Padding(2);
             this.pDelay.Name = "pDelay";
             this.pDelay.Radius = 10;
-            this.pDelay.Size = new System.Drawing.Size(522, 109);
+            this.pDelay.Size = new System.Drawing.Size(522, 111);
             this.pDelay.TabIndex = 14;
             // 
             // tlpDelay
@@ -879,7 +1029,7 @@
             this.tlpDelay.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpDelay.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpDelay.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDelay.Size = new System.Drawing.Size(518, 105);
+            this.tlpDelay.Size = new System.Drawing.Size(518, 107);
             this.tlpDelay.TabIndex = 0;
             // 
             // tlpDelay2
@@ -1067,9 +1217,9 @@
             this.tlpKeyboardINST.Margin = new System.Windows.Forms.Padding(0);
             this.tlpKeyboardINST.Name = "tlpKeyboardINST";
             this.tlpKeyboardINST.RowCount = 4;
-            this.tlpKeyboardINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 113F));
-            this.tlpKeyboardINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-            this.tlpKeyboardINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+            this.tlpKeyboardINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 115F));
+            this.tlpKeyboardINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpKeyboardINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tlpKeyboardINST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpKeyboardINST.Size = new System.Drawing.Size(526, 418);
             this.tlpKeyboardINST.TabIndex = 1;
@@ -1079,11 +1229,11 @@
             this.pText.BorderWidth = 2F;
             this.pText.Controls.Add(this.tlpText);
             this.pText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pText.Location = new System.Drawing.Point(2, 196);
+            this.pText.Location = new System.Drawing.Point(2, 197);
             this.pText.Margin = new System.Windows.Forms.Padding(2);
             this.pText.Name = "pText";
             this.pText.Radius = 10;
-            this.pText.Size = new System.Drawing.Size(522, 77);
+            this.pText.Size = new System.Drawing.Size(522, 76);
             this.pText.TabIndex = 16;
             // 
             // tlpText
@@ -1101,7 +1251,7 @@
             this.tlpText.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpText.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpText.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpText.Size = new System.Drawing.Size(518, 73);
+            this.tlpText.Size = new System.Drawing.Size(518, 72);
             this.tlpText.TabIndex = 0;
             // 
             // dText
@@ -1163,11 +1313,11 @@
             this.pKeyCombination.BorderWidth = 2F;
             this.pKeyCombination.Controls.Add(this.tlpKeyCombination);
             this.pKeyCombination.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pKeyCombination.Location = new System.Drawing.Point(2, 115);
+            this.pKeyCombination.Location = new System.Drawing.Point(2, 117);
             this.pKeyCombination.Margin = new System.Windows.Forms.Padding(2);
             this.pKeyCombination.Name = "pKeyCombination";
             this.pKeyCombination.Radius = 10;
-            this.pKeyCombination.Size = new System.Drawing.Size(522, 77);
+            this.pKeyCombination.Size = new System.Drawing.Size(522, 76);
             this.pKeyCombination.TabIndex = 15;
             // 
             // tlpKeyCombination
@@ -1185,7 +1335,7 @@
             this.tlpKeyCombination.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpKeyCombination.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpKeyCombination.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpKeyCombination.Size = new System.Drawing.Size(518, 73);
+            this.tlpKeyCombination.Size = new System.Drawing.Size(518, 72);
             this.tlpKeyCombination.TabIndex = 0;
             // 
             // dKeyCombination
@@ -1255,7 +1405,7 @@
             this.pKeyBoard.Margin = new System.Windows.Forms.Padding(2);
             this.pKeyBoard.Name = "pKeyBoard";
             this.pKeyBoard.Radius = 10;
-            this.pKeyBoard.Size = new System.Drawing.Size(522, 109);
+            this.pKeyBoard.Size = new System.Drawing.Size(522, 111);
             this.pKeyBoard.TabIndex = 14;
             // 
             // tlpKey
@@ -1273,7 +1423,7 @@
             this.tlpKey.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpKey.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpKey.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpKey.Size = new System.Drawing.Size(518, 105);
+            this.tlpKey.Size = new System.Drawing.Size(518, 107);
             this.tlpKey.TabIndex = 0;
             // 
             // tlpKey2
@@ -1424,7 +1574,7 @@
             this.tlpMouseMove.BackColor = System.Drawing.Color.Transparent;
             this.tlpMouseMove.ColumnCount = 1;
             this.tlpMouseMove.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMouseMove.Controls.Add(this.divider8, 0, 0);
+            this.tlpMouseMove.Controls.Add(this.dMouseMove, 0, 0);
             this.tlpMouseMove.Controls.Add(this.tlpMouseMove2, 0, 1);
             this.tlpMouseMove.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMouseMove.Location = new System.Drawing.Point(2, 2);
@@ -1437,17 +1587,17 @@
             this.tlpMouseMove.Size = new System.Drawing.Size(518, 224);
             this.tlpMouseMove.TabIndex = 0;
             // 
-            // divider8
+            // dMouseMove
             // 
-            this.divider8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.divider8.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.divider8.Location = new System.Drawing.Point(2, 2);
-            this.divider8.Margin = new System.Windows.Forms.Padding(2);
-            this.divider8.Name = "divider8";
-            this.divider8.Orientation = AntdUI.TOrientation.Left;
-            this.divider8.Size = new System.Drawing.Size(514, 20);
-            this.divider8.TabIndex = 0;
-            this.divider8.Text = "移动";
+            this.dMouseMove.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dMouseMove.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dMouseMove.Location = new System.Drawing.Point(2, 2);
+            this.dMouseMove.Margin = new System.Windows.Forms.Padding(2);
+            this.dMouseMove.Name = "dMouseMove";
+            this.dMouseMove.Orientation = AntdUI.TOrientation.Left;
+            this.dMouseMove.Size = new System.Drawing.Size(514, 20);
+            this.dMouseMove.TabIndex = 0;
+            this.dMouseMove.Text = "移动";
             // 
             // tlpMouseMove2
             // 
@@ -1900,6 +2050,10 @@
             this.tlpSendList.PerformLayout();
             this.ciControlINST.ResumeLayout(false);
             this.tlpControlINST.ResumeLayout(false);
+            this.pSwitch.ResumeLayout(false);
+            this.tlpSwitch.ResumeLayout(false);
+            this.tlpSwitch2.ResumeLayout(false);
+            this.tlpSwitch2.PerformLayout();
             this.pLoop.ResumeLayout(false);
             this.tlpLoop.ResumeLayout(false);
             this.tlpLoop2.ResumeLayout(false);
@@ -2022,7 +2176,7 @@
         private TableLayoutPanelEx tlpMouseINST;
         private AntdUI.Panel pMouseMove;
         private TableLayoutPanelEx tlpMouseMove;
-        private AntdUI.Divider divider8;
+        private AntdUI.Divider dMouseMove;
         private TableLayoutPanelEx tlpMouseMove2;
         private AntdUI.InputNumber nudMouseMove_X;
         private AntdUI.Radio rbMoveBy;
@@ -2049,5 +2203,14 @@
         private AntdUI.Table tRobotInstruction;
         private AntdUI.Input txtINSTLog;
         private AntdUI.Input txtRobotName;
+        private AntdUI.Panel pSwitch;
+        private TableLayoutPanelEx tlpSwitch;
+        private AntdUI.Divider dSwitch;
+        private TableLayoutPanelEx tlpSwitch2;
+        private AntdUI.Button bSwitch;
+        private AntdUI.Radio rbSwitch_Disable;
+        private AntdUI.Radio rbSwitch_Enable;
+        private AntdUI.Select cbbSwitchType;
+        private AntdUI.Select cbbSwitchInfo;
     }
 }

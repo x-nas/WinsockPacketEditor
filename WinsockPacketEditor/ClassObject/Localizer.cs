@@ -2601,6 +2601,9 @@ namespace WinsockPacketEditor
                 case "RobotEditForm.ControlINST.Loop":
                     return "Loop";
 
+                case "RobotEditForm.ControlINST.Switch":
+                    return "Switch";
+
                 case "RobotEditForm.KeyBoardINST.Key":
                     return "Key :";
 
@@ -2645,6 +2648,9 @@ namespace WinsockPacketEditor
 
                 case "RobotEditForm.INST.Delay":
                     return "Delay";
+
+                case "RobotEditForm.INST.Switch":
+                    return "Switch";
 
                 case "RobotEditForm.INST.LoopBegin":
                     return "Loop Begin";

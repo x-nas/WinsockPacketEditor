@@ -42,6 +42,8 @@ namespace WinsockPacketEditor
 
             this.InitTable_RobotINST();
             this.InitDDL();
+            this.InitSwitchType();
+            this.SwitchType_Changed();
             this.DelayFix_Changed();
             this.DelayRandom_Changed();
             this.Dark_Changed();
@@ -177,7 +179,7 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(nameof(InitDDL), ex.Message);
             }
-        }
+        }        
 
         private void txtRobotName_TextChanged(object sender, System.EventArgs e)
         {
@@ -316,7 +318,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//封包指令 - 延迟
+        #region//控制指令 - 延迟
 
         private void rbDelayFix_CheckedChanged(object sender, BoolEventArgs e)
         {
@@ -367,7 +369,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//封包指令 - 循环
+        #region//控制指令 - 循环
 
         private void bInsert_LoopStart_Click(object sender, EventArgs e)
         {
@@ -378,6 +380,136 @@ namespace WinsockPacketEditor
         private void bInsert_LoopEnd_Click(object sender, EventArgs e)
         {
             this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.LoopEnd, string.Empty);
+        }
+
+        #endregion
+
+        #region//控制指令 - 开关
+
+        private void InitSwitchType()
+        {
+            try
+            {
+                this.cbbSwitchType.Items.Clear();
+
+                SelectItem siSendList = new SelectItem("发送列表")
+                {
+                    LocalizationText = "SendList",
+                };
+
+                SelectItem siRobotList = new SelectItem("机器人列表")
+                {
+                    LocalizationText = "RobotList",
+                };
+
+                SelectItem siFilterList = new SelectItem("滤镜列表")
+                {
+                    LocalizationText = "FilterList",
+                };
+
+                if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                {
+                    siSendList.Online = 1;
+                }
+                else
+                {
+                    siSendList.Enable = false;
+                }
+
+                if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                {
+                    siRobotList.Online = 1;
+                }
+                else
+                {
+                    siRobotList.Enable = false;
+                }
+
+                if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                {
+                    siFilterList.Online = 1;
+                }
+                else
+                {
+                    siFilterList.Enable = false;
+                }
+
+                this.cbbSwitchType.Items.Add(siSendList);
+                this.cbbSwitchType.Items.Add(siRobotList);
+                this.cbbSwitchType.Items.Add(siFilterList);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(InitSwitchType), ex.Message);
+            }
+        }
+
+        private void cbbSwitchType_SelectedIndexChanged(object sender, IntEventArgs e)
+        {
+            this.SwitchType_Changed();
+        }
+
+        private void SwitchType_Changed()
+        {
+            try
+            {
+                if (this.cbbSwitchType.SelectedIndex == 0)
+                {
+                    Operate.SystemConfig.InitSendInfo(this.cbbSwitchInfo, Guid.Empty);
+                }
+                else if (this.cbbSwitchType.SelectedIndex == 1)
+                {
+                    Operate.SystemConfig.InitRobotInfo(this.cbbSwitchInfo, Guid.Empty);
+                }
+                else if (this.cbbSwitchType.SelectedIndex == 2)
+                {
+                    Operate.SystemConfig.InitFilterInfo(this.cbbSwitchInfo, Guid.Empty, Guid.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(cbbSwitchType_SelectedIndexChanged), ex.Message);
+            }
+        }
+
+        private void bSwitch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.cbbSwitchType.SelectedIndex == -1 || this.cbbSwitchInfo.SelectedIndex == -1)
+                {
+                    return;
+                }
+
+                string sContent = string.Empty;
+                if (this.rbSwitch_Enable.Checked)
+                {
+                    sContent = "Enable";
+                }
+                else
+                {
+                    sContent = "Disable";
+                }
+
+                if (this.cbbSwitchType.SelectedIndex == 0 && this.cbbSwitchInfo.SelectedValue != null)
+                {
+                    sContent += "|SendList|" + ((SendInfo)this.cbbSwitchInfo.SelectedValue).SID.ToString().ToUpper();
+                }
+                else if (this.cbbSwitchType.SelectedIndex == 1 && this.cbbSwitchInfo.SelectedValue != null)
+                {
+                    sContent += "|RobotList|" + ((RobotInfo)this.cbbSwitchInfo.SelectedValue).RID.ToString().ToUpper();
+                }
+                else if (this.cbbSwitchType.SelectedIndex == 2 && this.cbbSwitchInfo.SelectedValue != null)
+                {
+                    sContent += "|FilterList|" + ((FilterInfo)this.cbbSwitchInfo.SelectedValue).FID.ToString().ToUpper();
+                }
+
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.Switch, sContent);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(bSwitch_Click), ex.Message);
+            }
         }
 
         #endregion

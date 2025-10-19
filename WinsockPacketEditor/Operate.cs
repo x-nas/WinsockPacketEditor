@@ -1260,6 +1260,72 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//初始化列表数据
+
+            public static void InitSendInfo(AntdUI.Select sSendInfo, Guid SelectSID)
+            {
+                try
+                {
+                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        var selectItems = Operate.SendConfig.List.lstSendInfo.Select(info => new SelectItem(info.SName, info)).ToArray();
+
+                        sSendInfo.Items.Clear();
+                        sSendInfo.Items.AddRange(selectItems);
+                        sSendInfo.SelectedValue = Operate.SendConfig.Send.GetSend_ByGuid(SelectSID);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InitSendInfo), ex.Message);
+                }
+            }
+
+            public static void InitRobotInfo(AntdUI.Select sRobotInfo, Guid SelectRID)
+            {
+                try
+                {
+                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                    {
+                        var selectItems = Operate.RobotConfig.List.lstRobotInfo.Select(info => new SelectItem(info.RName, info)).ToArray();
+
+                        sRobotInfo.Items.Clear();
+                        sRobotInfo.Items.AddRange(selectItems);
+                        sRobotInfo.SelectedValue = Operate.RobotConfig.Robot.GetRobot_ByGuid(SelectRID);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InitRobotInfo), ex.Message);
+                }
+            }
+
+            public static void InitFilterInfo(AntdUI.Select sFilterInfo, Guid SelectFID, Guid ExcludeFID)
+            {
+                try
+                {
+                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                    {
+                        var query = Operate.FilterConfig.List.lstFilterInfo.AsEnumerable();
+                        query = query.Where(info => info.FID != ExcludeFID);
+
+                        var selectItems = query
+                            .Select(info => new SelectItem(info.FName, info))
+                            .ToArray();
+
+                        sFilterInfo.Items.Clear();
+                        sFilterInfo.Items.AddRange(selectItems);
+                        sFilterInfo.SelectedValue = Operate.FilterConfig.Filter.GetFilter_ByGuid(SelectFID);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InitFilterInfo), ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//查找树节点
 
             public static TreeItem FindNodeByName(AntdUI.Tree tree, string NodeName, string SubTitle)
@@ -17577,6 +17643,7 @@ namespace WinsockPacketEditor
                     Mouse = 5,
                     SendPacketList = 6,
                     SetSystemSocket = 7,
+                    Switch = 8,
                 }
 
                 #endregion
@@ -17789,6 +17856,10 @@ namespace WinsockPacketEditor
                                 sReturn = AntdUI.Localization.Get("RobotEditForm.INST.LoopEnd", "循环结束");
                                 break;
 
+                            case Robot.InstructionType.Switch:
+                                sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Switch", "开关");
+                                break;
+
                             case Robot.InstructionType.KeyBoard:
                                 sReturn = AntdUI.Localization.Get("RobotEditForm.INST.KeyBoard", "键盘");
                                 break;
@@ -17840,6 +17911,10 @@ namespace WinsockPacketEditor
 
                             case Robot.InstructionType.LoopEnd:
                                 cReturn = Color.Orchid;
+                                break;
+
+                            case Robot.InstructionType.Switch:
+                                cReturn = Color.DarkOrange;
                                 break;
 
                             case Robot.InstructionType.KeyBoard:
@@ -17928,6 +18003,57 @@ namespace WinsockPacketEditor
                             case Robot.InstructionType.LoopEnd:
 
                                 sReturn = AntdUI.Localization.Get("RobotEditForm.INST.Loop.End", "循环结束");
+
+                                break;
+
+                            case Robot.InstructionType.Switch:
+
+                                if (!string.IsNullOrEmpty(sContent))
+                                {
+                                    if (sContent.Contains("|"))
+                                    {
+                                        string[] slSwitch = sContent.Split('|');
+                                        if (slSwitch.Length == 3)
+                                        {
+                                            if (Guid.TryParse(slSwitch[2], out Guid GID))
+                                            {
+                                                string Switch = string.Empty;
+                                                switch (slSwitch[0])
+                                                {
+                                                    case "Enable":
+                                                        Switch = AntdUI.Localization.Get("Enable", "启用");
+                                                        break;
+
+                                                    case "Disable":
+                                                        Switch = AntdUI.Localization.Get("Disable", "禁用");
+                                                        break;
+                                                }
+
+                                                string SwitchType = string.Empty;
+                                                string SwitchInfo = string.Empty;
+                                                switch (slSwitch[1])
+                                                {
+                                                    case "SendList":
+                                                        SwitchType = AntdUI.Localization.Get("SendList", "发送列表");
+                                                        SwitchInfo = SendConfig.Send.GetSend_ByGuid(GID).SName;                                                        
+                                                        break;
+
+                                                    case "RobotList":
+                                                        SwitchType = AntdUI.Localization.Get("RobotList", "机器人列表");
+                                                        SwitchInfo = RobotConfig.Robot.GetRobot_ByGuid(GID).RName;
+                                                        break;
+
+                                                    case "FilterList":
+                                                        SwitchType = AntdUI.Localization.Get("FilterList", "滤镜列表");
+                                                        SwitchInfo = FilterConfig.Filter.GetFilter_ByGuid(GID).FName;
+                                                        break;
+                                                }
+
+                                                sReturn = string.Format("{0} - {1} [ {2} ]", Switch, SwitchType, SwitchInfo);
+                                            }
+                                        }
+                                    }                                    
+                                }
 
                                 break;
 
