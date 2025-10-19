@@ -1172,8 +1172,8 @@ namespace WinsockPacketEditor
             try
             {
                 this.dgvProxyList.SuspendLayout();
-                Operate.ProxyConfig.Queue.ResetProxyInfoQueue();
-                Operate.ProxyConfig.List.lstProxyInfo.Clear();
+                Operate.ProxyConfig.Queue.ClearProxyInfoQueue();
+                Operate.ProxyConfig.List.ClearProxyInfo();
             }
             catch (Exception ex)
             {

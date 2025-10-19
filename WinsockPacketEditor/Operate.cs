@@ -7928,7 +7928,7 @@ namespace WinsockPacketEditor
 
                 #region//清除队列数据                  
 
-                public static void ResetProxyInfoQueue()
+                public static void ClearProxyInfoQueue()
                 {
                     try
                     {
@@ -7939,7 +7939,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ResetProxyInfoQueue), ex.Message);
+                        Operate.DoLog(nameof(ClearProxyInfoQueue), ex.Message);
                     }
                 }
 
@@ -8009,13 +8009,30 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion                                                
+                #endregion
 
-                #region//清空整个列表
+                #region//清除代理数据列表
 
-                public static void ResetProxyInfoList()
+                public static void ClearProxyInfo()
                 {
-                    ProxyConfig.List.lstProxyInfo.Clear();
+                    try
+                    {
+                        if (Operate.SystemConfig.InvokeAction != null)
+                        {
+                            Operate.SystemConfig.InvokeAction(() =>
+                            {
+                                ProxyConfig.List.lstProxyInfo.Clear();
+                            });
+                        }
+                        else
+                        {
+                            ProxyConfig.List.lstProxyInfo.Clear();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ClearProxyInfo), ex.Message);
+                    }
                 }
 
                 #endregion                
@@ -12509,6 +12526,32 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(PacketToList), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//清除封包列表
+
+                public static void ClearPacketList()
+                {
+                    try
+                    {
+                        if (Operate.SystemConfig.InvokeAction != null)
+                        {
+                            Operate.SystemConfig.InvokeAction(() =>
+                            {
+                                Operate.PacketConfig.List.lstPacketInfo.Clear();
+                            });
+                        }
+                        else
+                        {
+                            Operate.PacketConfig.List.lstPacketInfo.Clear();
+                        }                        
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ClearPacketList), ex.Message);
                     }
                 }
 

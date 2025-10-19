@@ -322,8 +322,7 @@ namespace WinsockPacketEditor
             e.ThrowException = false;
             e.Cancel = true;
 
-            string Error = $"数据错误 - 行: {e.RowIndex}, 列: {e.ColumnIndex}, 错误: {e.Exception.Message}";
-            Operate.DoLog(nameof(dgvPacketList_DataError), Error);
+            Operate.DoLog(nameof(dgvPacketList_DataError), e.Exception.Message);
         }
 
         #endregion
@@ -986,7 +985,7 @@ namespace WinsockPacketEditor
             {
                 this.dgvPacketList.SuspendLayout();
                 Operate.PacketConfig.Queue.ClearPacketQueue();
-                Operate.PacketConfig.List.lstPacketInfo.Clear();
+                Operate.PacketConfig.List.ClearPacketList();
             }
             catch (Exception ex)
             {
