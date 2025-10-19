@@ -215,18 +215,19 @@ namespace WinsockPacketEditor
                     int linksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, clientIP, this.treeClientList);
                     int devicesNumber = Operate.ProxyConfig.Account.GetDevicesNumber_ByAccountID(ai.AID);
 
-                    var key = (ai.AID, ai.AuthIP);
-                    if (Operate.ProxyConfig.Account.cdAuthInfo.TryGetValue(key, out var existingAi))
-                    {
-                        existingAi.LinksNumber = linksNumber;
-                        existingAi.DevicesNumber = devicesNumber;
-
-                        Operate.ProxyConfig.Account.cdAuthInfo.TryUpdate(key, existingAi, existingAi);
-                    }
-
-                    if (linksNumber == 0)
+                    if (linksNumber == 0 || devicesNumber == 0)
                     {
                         AuthInfoToRemove.Add((ai.AID, ai.AuthIP));
+                    }
+                    else
+                    {
+                        var key = (ai.AID, ai.AuthIP);
+                        if (Operate.ProxyConfig.Account.cdAuthInfo.TryGetValue(key, out var existingAi))
+                        {
+                            existingAi.LinksNumber = linksNumber;
+                            existingAi.DevicesNumber = devicesNumber;
+                            Operate.ProxyConfig.Account.cdAuthInfo.TryUpdate(key, existingAi, existingAi);
+                        }
                     }
 
                     if (!accountStatus.ContainsKey(ai.AID))
@@ -262,20 +263,11 @@ namespace WinsockPacketEditor
                 this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
 
                 this.treeClientList.PauseLayout = false;
-                this.tAuthList.PauseLayout = false;                
+                this.tAuthList.PauseLayout = false;
             }
         }
 
-        #endregion
-
-        #region//显示认证列表
-
-        public void RefreshAuthList()
-        {
-            this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
-        }
-
-        #endregion
+        #endregion        
 
         #region//认证列表 - 右键菜单
 

@@ -608,7 +608,6 @@ namespace WinsockPacketEditor
                 {
                     this.cProxyList?.ShowProxyInfo();
                     this.cClientList?.RefreshClientList();
-                    this.cClientList?.RefreshAuthList();
                     this.ShowMenuInfo();
                 });
 

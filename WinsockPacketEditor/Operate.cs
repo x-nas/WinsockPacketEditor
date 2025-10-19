@@ -8517,14 +8517,22 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        string RootName = ClientIP;
-                        string RootSubTitle = ProxyConfig.Account.GetUserName_ByAccountID(AID);
+                        var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
+                        var SessionList = sessions?.ToList() ?? new List<ProxySession>();
 
-                        TreeItem tiRoot = SystemConfig.FindNodeByName(tree, RootName, RootSubTitle);
-                        if (tiRoot != null)
+                        int LinksNumber = 0;
+                        foreach (ProxySession Session in SessionList)
                         {
-                            return tiRoot.Sub.Count;
+                            if (Session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
+                            {
+                                if (Session.AID == AID && Session.ClientIP.Equals(ClientIP))
+                                {
+                                    LinksNumber++;
+                                }
+                            }
                         }
+
+                        return LinksNumber;
                     }
                     catch (Exception ex)
                     {
@@ -8545,13 +8553,29 @@ namespace WinsockPacketEditor
                         if (AID == Guid.Empty)
                             return 0;
 
-                        return ProxyConfig.Account.cdAuthInfo.Count(kvp => kvp.Key.AID == AID);
+                        var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
+                        var SessionList = sessions?.ToList() ?? new List<ProxySession>();
+
+                        List<string> lstIPAddress = new List<string>();
+                        foreach (ProxySession Session in SessionList)
+                        {
+                            if (Session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
+                            {
+                                if (Session.AID == AID)
+                                {
+                                    lstIPAddress.Add(Session.ClientIP);
+                                }
+                            }
+                        }
+
+                        return lstIPAddress.Distinct().Count();
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetDevicesNumber_ByAccountID), ex.Message);
-                        return 0;
+                        DoLog(nameof(GetDevicesNumber_ByAccountID), ex.Message);                        
                     }
+
+                    return 0;
                 }
 
                 #endregion
