@@ -28,30 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             AntdUI.Tabs.StyleLine styleLine2 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             AntdUI.Tabs.StyleLine styleLine3 = new AntdUI.Tabs.StyleLine();
-            this.tabFilterEdit = new AntdUI.Tabs();
-            this.tpNormal = new AntdUI.TabPage();
-            this.tpAdvance = new AntdUI.TabPage();
+            this.tlpFilterEdit = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
+            this.tabFilterEdit = new AntdUI.Tabs();
+            this.tpNormal = new AntdUI.TabPage();
+            this.tlpNormal = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tFilterNormal = new AntdUI.Table();
+            this.tpAdvance = new AntdUI.TabPage();
+            this.tlpAdvance = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tFilterAdvanced_Search = new AntdUI.Table();
             this.tabFilterFrom = new AntdUI.Tabs();
             this.tpFromPosition = new AntdUI.TabPage();
             this.tFilterAdvanced_Modify_Position = new AntdUI.Table();
             this.tpFromHead = new AntdUI.TabPage();
             this.tFilterAdvanced_Modify_Head = new AntdUI.Table();
-            this.pFilterProgression = new AntdUI.Panel();
-            this.pFilterAppoint = new AntdUI.Panel();
-            this.pFilterFunction = new AntdUI.Panel();
-            this.pFilterAction = new AntdUI.Panel();
-            this.tlpFilterEdit = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.tlpNormal = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.tlpAdvance = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpFilterSettings = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.pFilterProgression = new AntdUI.Panel();
             this.tlpFilterProgression2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpFilterProgression = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbProgressionContinuous = new AntdUI.Checkbox();
@@ -61,6 +58,7 @@
             this.label1 = new AntdUI.Label();
             this.label5 = new AntdUI.Label();
             this.dFilterProgression = new AntdUI.Divider();
+            this.pFilterAppoint = new AntdUI.Panel();
             this.tlpFilterAppoint2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpFilterAppoint = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtFilter_LengthContent = new AntdUI.Input();
@@ -70,6 +68,7 @@
             this.txtFilter_SocketContent = new AntdUI.Input();
             this.txtFilter_PortContent = new AntdUI.Input();
             this.dFilterAppoint = new AntdUI.Divider();
+            this.pFilterFunction = new AntdUI.Panel();
             this.tlpFilterFunction = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dFilterFunction = new AntdUI.Divider();
             this.tabFilterFunction = new AntdUI.Tabs();
@@ -89,6 +88,7 @@
             this.cbFilterFunction_UDP_Resp = new AntdUI.Checkbox();
             this.cbFilterFunction_UDP_Req = new AntdUI.Checkbox();
             this.cbFilterFunction_TCP_Resp = new AntdUI.Checkbox();
+            this.pFilterAction = new AntdUI.Panel();
             this.tlpFilterAction = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpFilterAction2 = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbbFilterAction_Disable = new AntdUI.Select();
@@ -128,26 +128,31 @@
             this.tlpFilterName = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dFilterName = new AntdUI.Divider();
             this.txtFilterName = new AntdUI.Input();
+            this.tlpFilterEdit.SuspendLayout();
+            this.tlpButton.SuspendLayout();
             this.tabFilterEdit.SuspendLayout();
             this.tpNormal.SuspendLayout();
+            this.tlpNormal.SuspendLayout();
             this.tpAdvance.SuspendLayout();
+            this.tlpAdvance.SuspendLayout();
             this.tabFilterFrom.SuspendLayout();
             this.tpFromPosition.SuspendLayout();
             this.tpFromHead.SuspendLayout();
+            this.tlpFilterSettings.SuspendLayout();
             this.pFilterProgression.SuspendLayout();
-            this.pFilterAppoint.SuspendLayout();
-            this.pFilterFunction.SuspendLayout();
-            this.pFilterAction.SuspendLayout();
             this.tlpFilterProgression2.SuspendLayout();
             this.tlpFilterProgression.SuspendLayout();
+            this.pFilterAppoint.SuspendLayout();
             this.tlpFilterAppoint2.SuspendLayout();
             this.tlpFilterAppoint.SuspendLayout();
+            this.pFilterFunction.SuspendLayout();
             this.tlpFilterFunction.SuspendLayout();
             this.tabFilterFunction.SuspendLayout();
             this.tpInjectMode.SuspendLayout();
             this.tlpFilterFunction_InjectMode.SuspendLayout();
             this.tpProxyMode.SuspendLayout();
             this.tlpFilterFunction_ProxyMode.SuspendLayout();
+            this.pFilterAction.SuspendLayout();
             this.tlpFilterAction.SuspendLayout();
             this.tlpFilterAction2.SuspendLayout();
             this.tlpFilterFromAndMode.SuspendLayout();
@@ -163,42 +168,45 @@
             this.tlpFilterName.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabFilterEdit
+            // tlpFilterEdit
             // 
-            this.tabFilterEdit.Controls.Add(this.tpNormal);
-            this.tabFilterEdit.Controls.Add(this.tpAdvance);
-            this.tabFilterEdit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.tabFilterEdit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabFilterEdit.Location = new System.Drawing.Point(2, 2);
-            this.tabFilterEdit.Margin = new System.Windows.Forms.Padding(2);
-            this.tabFilterEdit.Name = "tabFilterEdit";
-            this.tabFilterEdit.Pages.Add(this.tpNormal);
-            this.tabFilterEdit.Pages.Add(this.tpAdvance);
-            this.tabFilterEdit.Size = new System.Drawing.Size(1096, 202);
-            this.tabFilterEdit.Style = styleLine1;
-            this.tabFilterEdit.TabIndex = 0;
+            this.tlpFilterEdit.ColumnCount = 1;
+            this.tlpFilterEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+            this.tlpFilterEdit.Controls.Add(this.tlpButton, 0, 2);
+            this.tlpFilterEdit.Controls.Add(this.tabFilterEdit, 0, 0);
+            this.tlpFilterEdit.Controls.Add(this.tlpFilterSettings, 0, 1);
+            this.tlpFilterEdit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilterEdit.Location = new System.Drawing.Point(0, 0);
+            this.tlpFilterEdit.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilterEdit.Name = "tlpFilterEdit";
+            this.tlpFilterEdit.RowCount = 3;
+            this.tlpFilterEdit.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpFilterEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tlpFilterEdit.Size = new System.Drawing.Size(1100, 700);
+            this.tlpFilterEdit.TabIndex = 2;
             // 
-            // tpNormal
+            // tlpButton
             // 
-            this.tpNormal.Controls.Add(this.tlpNormal);
-            this.tpNormal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpNormal.Location = new System.Drawing.Point(0, 24);
-            this.tpNormal.Margin = new System.Windows.Forms.Padding(2);
-            this.tpNormal.Name = "tpNormal";
-            this.tpNormal.Size = new System.Drawing.Size(1096, 178);
-            this.tpNormal.TabIndex = 1;
-            this.tpNormal.Text = "Normal";
-            // 
-            // tpAdvance
-            // 
-            this.tpAdvance.Controls.Add(this.tlpAdvance);
-            this.tpAdvance.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpAdvance.Location = new System.Drawing.Point(0, 24);
-            this.tpAdvance.Margin = new System.Windows.Forms.Padding(2);
-            this.tpAdvance.Name = "tpAdvance";
-            this.tpAdvance.Size = new System.Drawing.Size(1096, 178);
-            this.tpAdvance.TabIndex = 0;
-            this.tpAdvance.Text = "Advance";
+            this.tlpButton.ColumnCount = 5;
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.Controls.Add(this.bSave, 1, 1);
+            this.tlpButton.Controls.Add(this.bExit, 3, 1);
+            this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpButton.Location = new System.Drawing.Point(0, 651);
+            this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpButton.Name = "tlpButton";
+            this.tlpButton.RowCount = 3;
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.Size = new System.Drawing.Size(1100, 49);
+            this.tlpButton.TabIndex = 4;
             // 
             // bSave
             // 
@@ -212,10 +220,10 @@
             this.bSave.LoadingWaveValue = 0.6F;
             this.bSave.LoadingWaveVertical = true;
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(483, 6);
+            this.bSave.Location = new System.Drawing.Point(478, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(58, 37);
+            this.bSave.Size = new System.Drawing.Size(63, 37);
             this.bSave.TabIndex = 0;
             this.bSave.Text = "保存";
             this.bSave.Type = AntdUI.TTypeMini.Info;
@@ -231,11 +239,52 @@
             this.bExit.Location = new System.Drawing.Point(559, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(58, 37);
+            this.bExit.Size = new System.Drawing.Size(63, 37);
             this.bExit.TabIndex = 1;
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
+            // 
+            // tabFilterEdit
+            // 
+            this.tabFilterEdit.Controls.Add(this.tpNormal);
+            this.tabFilterEdit.Controls.Add(this.tpAdvance);
+            this.tabFilterEdit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabFilterEdit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabFilterEdit.Location = new System.Drawing.Point(2, 2);
+            this.tabFilterEdit.Margin = new System.Windows.Forms.Padding(2);
+            this.tabFilterEdit.Name = "tabFilterEdit";
+            this.tabFilterEdit.Pages.Add(this.tpNormal);
+            this.tabFilterEdit.Pages.Add(this.tpAdvance);
+            this.tabFilterEdit.Size = new System.Drawing.Size(1096, 202);
+            this.tabFilterEdit.Style = styleLine2;
+            this.tabFilterEdit.TabIndex = 0;
+            // 
+            // tpNormal
+            // 
+            this.tpNormal.Controls.Add(this.tlpNormal);
+            this.tpNormal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpNormal.Location = new System.Drawing.Point(0, 28);
+            this.tpNormal.Margin = new System.Windows.Forms.Padding(2);
+            this.tpNormal.Name = "tpNormal";
+            this.tpNormal.Size = new System.Drawing.Size(1096, 174);
+            this.tpNormal.TabIndex = 1;
+            this.tpNormal.Text = "Normal";
+            // 
+            // tlpNormal
+            // 
+            this.tlpNormal.ColumnCount = 1;
+            this.tlpNormal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpNormal.Controls.Add(this.tFilterNormal, 0, 0);
+            this.tlpNormal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpNormal.Location = new System.Drawing.Point(0, 0);
+            this.tlpNormal.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpNormal.Name = "tlpNormal";
+            this.tlpNormal.RowCount = 1;
+            this.tlpNormal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpNormal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 202F));
+            this.tlpNormal.Size = new System.Drawing.Size(1096, 174);
+            this.tlpNormal.TabIndex = 0;
             // 
             // tFilterNormal
             // 
@@ -255,12 +304,40 @@
             this.tFilterNormal.Name = "tFilterNormal";
             this.tFilterNormal.RowHeight = 40;
             this.tFilterNormal.RowSelectedBg = System.Drawing.Color.Transparent;
-            this.tFilterNormal.Size = new System.Drawing.Size(1092, 174);
+            this.tFilterNormal.Size = new System.Drawing.Size(1092, 170);
             this.tFilterNormal.TabIndex = 1;
             this.tFilterNormal.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterNormal_CellClick);
             this.tFilterNormal.CellBeginEditInputStyle += new AntdUI.Table.BeginEditInputStyleEventHandler(this.tFilterNormal_CellBeginEditInputStyle);
             this.tFilterNormal.CellEndEdit += new AntdUI.Table.EndEditEventHandler(this.tFilterNormal_CellEndEdit);
             this.tFilterNormal.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tFilterNormal_KeyDown);
+            // 
+            // tpAdvance
+            // 
+            this.tpAdvance.Controls.Add(this.tlpAdvance);
+            this.tpAdvance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpAdvance.Location = new System.Drawing.Point(0, 28);
+            this.tpAdvance.Margin = new System.Windows.Forms.Padding(2);
+            this.tpAdvance.Name = "tpAdvance";
+            this.tpAdvance.Size = new System.Drawing.Size(1096, 174);
+            this.tpAdvance.TabIndex = 0;
+            this.tpAdvance.Text = "Advance";
+            // 
+            // tlpAdvance
+            // 
+            this.tlpAdvance.ColumnCount = 1;
+            this.tlpAdvance.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpAdvance.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+            this.tlpAdvance.Controls.Add(this.tFilterAdvanced_Search, 0, 0);
+            this.tlpAdvance.Controls.Add(this.tabFilterFrom, 0, 1);
+            this.tlpAdvance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpAdvance.Location = new System.Drawing.Point(0, 0);
+            this.tlpAdvance.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpAdvance.Name = "tlpAdvance";
+            this.tlpAdvance.RowCount = 2;
+            this.tlpAdvance.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpAdvance.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpAdvance.Size = new System.Drawing.Size(1096, 174);
+            this.tlpAdvance.TabIndex = 0;
             // 
             // tFilterAdvanced_Search
             // 
@@ -280,7 +357,7 @@
             this.tFilterAdvanced_Search.Name = "tFilterAdvanced_Search";
             this.tFilterAdvanced_Search.RowHeight = 40;
             this.tFilterAdvanced_Search.RowSelectedBg = System.Drawing.Color.Transparent;
-            this.tFilterAdvanced_Search.Size = new System.Drawing.Size(1092, 85);
+            this.tFilterAdvanced_Search.Size = new System.Drawing.Size(1092, 83);
             this.tFilterAdvanced_Search.TabIndex = 1;
             this.tFilterAdvanced_Search.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterAdvanced_Search_CellClick);
             this.tFilterAdvanced_Search.CellBeginEditInputStyle += new AntdUI.Table.BeginEditInputStyleEventHandler(this.tFilterAdvanced_Search_CellBeginEditInputStyle);
@@ -293,14 +370,14 @@
             this.tabFilterFrom.Controls.Add(this.tpFromHead);
             this.tabFilterFrom.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabFilterFrom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabFilterFrom.Location = new System.Drawing.Point(2, 91);
+            this.tabFilterFrom.Location = new System.Drawing.Point(2, 89);
             this.tabFilterFrom.Margin = new System.Windows.Forms.Padding(2);
             this.tabFilterFrom.Name = "tabFilterFrom";
             this.tabFilterFrom.Pages.Add(this.tpFromHead);
             this.tabFilterFrom.Pages.Add(this.tpFromPosition);
             this.tabFilterFrom.SelectedIndex = 1;
-            this.tabFilterFrom.Size = new System.Drawing.Size(1092, 85);
-            this.tabFilterFrom.Style = styleLine2;
+            this.tabFilterFrom.Size = new System.Drawing.Size(1092, 83);
+            this.tabFilterFrom.Style = styleLine1;
             this.tabFilterFrom.TabIndex = 2;
             this.tabFilterFrom.Text = "tabs1";
             // 
@@ -308,10 +385,10 @@
             // 
             this.tpFromPosition.Controls.Add(this.tFilterAdvanced_Modify_Position);
             this.tpFromPosition.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpFromPosition.Location = new System.Drawing.Point(0, 24);
+            this.tpFromPosition.Location = new System.Drawing.Point(0, 28);
             this.tpFromPosition.Margin = new System.Windows.Forms.Padding(2);
             this.tpFromPosition.Name = "tpFromPosition";
-            this.tpFromPosition.Size = new System.Drawing.Size(1092, 61);
+            this.tpFromPosition.Size = new System.Drawing.Size(1092, 55);
             this.tpFromPosition.TabIndex = 1;
             this.tpFromPosition.Text = "Position";
             // 
@@ -333,7 +410,7 @@
             this.tFilterAdvanced_Modify_Position.Name = "tFilterAdvanced_Modify_Position";
             this.tFilterAdvanced_Modify_Position.RowHeight = 40;
             this.tFilterAdvanced_Modify_Position.RowSelectedBg = System.Drawing.Color.Transparent;
-            this.tFilterAdvanced_Modify_Position.Size = new System.Drawing.Size(1092, 61);
+            this.tFilterAdvanced_Modify_Position.Size = new System.Drawing.Size(1092, 55);
             this.tFilterAdvanced_Modify_Position.TabIndex = 2;
             this.tFilterAdvanced_Modify_Position.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterAdvanced_Modify_Position_CellClick);
             this.tFilterAdvanced_Modify_Position.CellBeginEditInputStyle += new AntdUI.Table.BeginEditInputStyleEventHandler(this.tFilterAdvanced_Modify_Position_CellBeginEditInputStyle);
@@ -344,10 +421,10 @@
             // 
             this.tpFromHead.Controls.Add(this.tFilterAdvanced_Modify_Head);
             this.tpFromHead.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpFromHead.Location = new System.Drawing.Point(0, 24);
+            this.tpFromHead.Location = new System.Drawing.Point(0, 28);
             this.tpFromHead.Margin = new System.Windows.Forms.Padding(2);
             this.tpFromHead.Name = "tpFromHead";
-            this.tpFromHead.Size = new System.Drawing.Size(1092, 61);
+            this.tpFromHead.Size = new System.Drawing.Size(1092, 55);
             this.tpFromHead.TabIndex = 0;
             this.tpFromHead.Text = "Head";
             // 
@@ -369,12 +446,35 @@
             this.tFilterAdvanced_Modify_Head.Name = "tFilterAdvanced_Modify_Head";
             this.tFilterAdvanced_Modify_Head.RowHeight = 40;
             this.tFilterAdvanced_Modify_Head.RowSelectedBg = System.Drawing.Color.Transparent;
-            this.tFilterAdvanced_Modify_Head.Size = new System.Drawing.Size(1092, 61);
+            this.tFilterAdvanced_Modify_Head.Size = new System.Drawing.Size(1092, 55);
             this.tFilterAdvanced_Modify_Head.TabIndex = 2;
             this.tFilterAdvanced_Modify_Head.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterAdvanced_Modify_Head_CellClick);
             this.tFilterAdvanced_Modify_Head.CellBeginEditInputStyle += new AntdUI.Table.BeginEditInputStyleEventHandler(this.tFilterAdvanced_Modify_Head_CellBeginEditInputStyle);
             this.tFilterAdvanced_Modify_Head.CellEndEdit += new AntdUI.Table.EndEditEventHandler(this.tFilterAdvanced_Modify_Head_CellEndEdit);
             this.tFilterAdvanced_Modify_Head.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tFilterAdvanced_Modify_Head_KeyDown);
+            // 
+            // tlpFilterSettings
+            // 
+            this.tlpFilterSettings.ColumnCount = 3;
+            this.tlpFilterSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tlpFilterSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tlpFilterSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tlpFilterSettings.Controls.Add(this.pFilterProgression, 2, 1);
+            this.tlpFilterSettings.Controls.Add(this.pFilterAppoint, 0, 1);
+            this.tlpFilterSettings.Controls.Add(this.pFilterFunction, 2, 0);
+            this.tlpFilterSettings.Controls.Add(this.pFilterAction, 0, 0);
+            this.tlpFilterSettings.Controls.Add(this.tlpFilterFromAndMode, 1, 1);
+            this.tlpFilterSettings.Controls.Add(this.tlpFilterNameAndAppoint, 1, 0);
+            this.tlpFilterSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilterSettings.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tlpFilterSettings.Location = new System.Drawing.Point(0, 206);
+            this.tlpFilterSettings.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilterSettings.Name = "tlpFilterSettings";
+            this.tlpFilterSettings.RowCount = 2;
+            this.tlpFilterSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tlpFilterSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
+            this.tlpFilterSettings.Size = new System.Drawing.Size(1100, 445);
+            this.tlpFilterSettings.TabIndex = 1;
             // 
             // pFilterProgression
             // 
@@ -388,126 +488,6 @@
             this.pFilterProgression.Radius = 10;
             this.pFilterProgression.Size = new System.Drawing.Size(326, 197);
             this.pFilterProgression.TabIndex = 10;
-            // 
-            // pFilterAppoint
-            // 
-            this.pFilterAppoint.BorderWidth = 2F;
-            this.pFilterAppoint.Controls.Add(this.tlpFilterAppoint2);
-            this.pFilterAppoint.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pFilterAppoint.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.pFilterAppoint.Location = new System.Drawing.Point(2, 246);
-            this.pFilterAppoint.Margin = new System.Windows.Forms.Padding(2);
-            this.pFilterAppoint.Name = "pFilterAppoint";
-            this.pFilterAppoint.Radius = 10;
-            this.pFilterAppoint.Size = new System.Drawing.Size(381, 197);
-            this.pFilterAppoint.TabIndex = 9;
-            // 
-            // pFilterFunction
-            // 
-            this.pFilterFunction.BorderWidth = 2F;
-            this.pFilterFunction.Controls.Add(this.tlpFilterFunction);
-            this.pFilterFunction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pFilterFunction.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.pFilterFunction.Location = new System.Drawing.Point(772, 2);
-            this.pFilterFunction.Margin = new System.Windows.Forms.Padding(2);
-            this.pFilterFunction.Name = "pFilterFunction";
-            this.pFilterFunction.Radius = 10;
-            this.pFilterFunction.Size = new System.Drawing.Size(326, 240);
-            this.pFilterFunction.TabIndex = 8;
-            // 
-            // pFilterAction
-            // 
-            this.pFilterAction.BorderWidth = 2F;
-            this.pFilterAction.Controls.Add(this.tlpFilterAction);
-            this.pFilterAction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pFilterAction.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.pFilterAction.Location = new System.Drawing.Point(2, 2);
-            this.pFilterAction.Margin = new System.Windows.Forms.Padding(2);
-            this.pFilterAction.Name = "pFilterAction";
-            this.pFilterAction.Radius = 10;
-            this.pFilterAction.Size = new System.Drawing.Size(381, 240);
-            this.pFilterAction.TabIndex = 7;
-            // 
-            // tlpFilterEdit
-            // 
-            this.tlpFilterEdit.ColumnCount = 1;
-            this.tlpFilterEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-            this.tlpFilterEdit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpFilterEdit.Location = new System.Drawing.Point(0, 0);
-            this.tlpFilterEdit.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpFilterEdit.Name = "tlpFilterEdit";
-            this.tlpFilterEdit.RowCount = 3;
-            this.tlpFilterEdit.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpFilterEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpFilterEdit.Size = new System.Drawing.Size(1100, 700);
-            this.tlpFilterEdit.TabIndex = 2;
-            // 
-            // tlpButton
-            // 
-            this.tlpButton.ColumnCount = 5;
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 651);
-            this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpButton.Name = "tlpButton";
-            this.tlpButton.RowCount = 3;
-            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(1100, 49);
-            this.tlpButton.TabIndex = 4;
-            // 
-            // tlpNormal
-            // 
-            this.tlpNormal.ColumnCount = 1;
-            this.tlpNormal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpNormal.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpNormal.Location = new System.Drawing.Point(0, 0);
-            this.tlpNormal.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpNormal.Name = "tlpNormal";
-            this.tlpNormal.RowCount = 1;
-            this.tlpNormal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpNormal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 202F));
-            this.tlpNormal.Size = new System.Drawing.Size(1096, 178);
-            this.tlpNormal.TabIndex = 0;
-            // 
-            // tlpAdvance
-            // 
-            this.tlpAdvance.ColumnCount = 1;
-            this.tlpAdvance.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpAdvance.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-            this.tlpAdvance.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpAdvance.Location = new System.Drawing.Point(0, 0);
-            this.tlpAdvance.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpAdvance.Name = "tlpAdvance";
-            this.tlpAdvance.RowCount = 2;
-            this.tlpAdvance.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpAdvance.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpAdvance.Size = new System.Drawing.Size(1096, 178);
-            this.tlpAdvance.TabIndex = 0;
-            // 
-            // tlpFilterSettings
-            // 
-            this.tlpFilterSettings.ColumnCount = 3;
-            this.tlpFilterSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tlpFilterSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tlpFilterSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tlpFilterSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpFilterSettings.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tlpFilterSettings.Location = new System.Drawing.Point(0, 206);
-            this.tlpFilterSettings.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpFilterSettings.Name = "tlpFilterSettings";
-            this.tlpFilterSettings.RowCount = 2;
-            this.tlpFilterSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
-            this.tlpFilterSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45F));
-            this.tlpFilterSettings.Size = new System.Drawing.Size(1100, 445);
-            this.tlpFilterSettings.TabIndex = 1;
             // 
             // tlpFilterProgression2
             // 
@@ -670,6 +650,19 @@
             this.dFilterProgression.TabIndex = 0;
             this.dFilterProgression.Text = "递进";
             // 
+            // pFilterAppoint
+            // 
+            this.pFilterAppoint.BorderWidth = 2F;
+            this.pFilterAppoint.Controls.Add(this.tlpFilterAppoint2);
+            this.pFilterAppoint.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pFilterAppoint.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.pFilterAppoint.Location = new System.Drawing.Point(2, 246);
+            this.pFilterAppoint.Margin = new System.Windows.Forms.Padding(2);
+            this.pFilterAppoint.Name = "pFilterAppoint";
+            this.pFilterAppoint.Radius = 10;
+            this.pFilterAppoint.Size = new System.Drawing.Size(381, 197);
+            this.pFilterAppoint.TabIndex = 9;
+            // 
             // tlpFilterAppoint2
             // 
             this.tlpFilterAppoint2.BackColor = System.Drawing.Color.Transparent;
@@ -803,6 +796,19 @@
             this.dFilterAppoint.Size = new System.Drawing.Size(373, 24);
             this.dFilterAppoint.TabIndex = 0;
             this.dFilterAppoint.Text = "指定类型";
+            // 
+            // pFilterFunction
+            // 
+            this.pFilterFunction.BorderWidth = 2F;
+            this.pFilterFunction.Controls.Add(this.tlpFilterFunction);
+            this.pFilterFunction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pFilterFunction.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.pFilterFunction.Location = new System.Drawing.Point(772, 2);
+            this.pFilterFunction.Margin = new System.Windows.Forms.Padding(2);
+            this.pFilterFunction.Name = "pFilterFunction";
+            this.pFilterFunction.Radius = 10;
+            this.pFilterFunction.Size = new System.Drawing.Size(326, 240);
+            this.pFilterFunction.TabIndex = 8;
             // 
             // tlpFilterFunction
             // 
@@ -1066,6 +1072,19 @@
             this.cbFilterFunction_TCP_Resp.Size = new System.Drawing.Size(82, 28);
             this.cbFilterFunction_TCP_Resp.TabIndex = 41;
             this.cbFilterFunction_TCP_Resp.Text = "TCP 响应";
+            // 
+            // pFilterAction
+            // 
+            this.pFilterAction.BorderWidth = 2F;
+            this.pFilterAction.Controls.Add(this.tlpFilterAction);
+            this.pFilterAction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pFilterAction.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.pFilterAction.Location = new System.Drawing.Point(2, 2);
+            this.pFilterAction.Margin = new System.Windows.Forms.Padding(2);
+            this.pFilterAction.Name = "pFilterAction";
+            this.pFilterAction.Radius = 10;
+            this.pFilterAction.Size = new System.Drawing.Size(381, 240);
+            this.pFilterAction.TabIndex = 7;
             // 
             // tlpFilterAction
             // 
@@ -1667,22 +1686,27 @@
             this.Name = "FilterEdit";
             this.Size = new System.Drawing.Size(1100, 700);
             this.Load += new System.EventHandler(this.FilterEdit_Load);
+            this.tlpFilterEdit.ResumeLayout(false);
+            this.tlpButton.ResumeLayout(false);
+            this.tlpButton.PerformLayout();
             this.tabFilterEdit.ResumeLayout(false);
             this.tpNormal.ResumeLayout(false);
+            this.tlpNormal.ResumeLayout(false);
             this.tpAdvance.ResumeLayout(false);
+            this.tlpAdvance.ResumeLayout(false);
             this.tabFilterFrom.ResumeLayout(false);
             this.tpFromPosition.ResumeLayout(false);
             this.tpFromHead.ResumeLayout(false);
+            this.tlpFilterSettings.ResumeLayout(false);
             this.pFilterProgression.ResumeLayout(false);
-            this.pFilterAppoint.ResumeLayout(false);
-            this.pFilterFunction.ResumeLayout(false);
-            this.pFilterAction.ResumeLayout(false);
             this.tlpFilterProgression2.ResumeLayout(false);
             this.tlpFilterProgression.ResumeLayout(false);
             this.tlpFilterProgression.PerformLayout();
+            this.pFilterAppoint.ResumeLayout(false);
             this.tlpFilterAppoint2.ResumeLayout(false);
             this.tlpFilterAppoint.ResumeLayout(false);
             this.tlpFilterAppoint.PerformLayout();
+            this.pFilterFunction.ResumeLayout(false);
             this.tlpFilterFunction.ResumeLayout(false);
             this.tabFilterFunction.ResumeLayout(false);
             this.tpInjectMode.ResumeLayout(false);
@@ -1691,6 +1715,7 @@
             this.tpProxyMode.ResumeLayout(false);
             this.tlpFilterFunction_ProxyMode.ResumeLayout(false);
             this.tlpFilterFunction_ProxyMode.PerformLayout();
+            this.pFilterAction.ResumeLayout(false);
             this.tlpFilterAction.ResumeLayout(false);
             this.tlpFilterAction2.ResumeLayout(false);
             this.tlpFilterAction2.PerformLayout();
