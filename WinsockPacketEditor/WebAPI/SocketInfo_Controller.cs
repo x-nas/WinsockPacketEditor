@@ -15,7 +15,7 @@ namespace WinsockPacketEditor
         public IHttpActionResult GetSocketInfo()
         {
             string SocketProcess = Operate.PacketConfig.Packet.InjectProcess;
-            string SocketWorkMode = Operate.SystemConfig.GetWorkModeName(Operate.PacketConfig.Packet.SpeedMode);
+            string SocketWorkMode = Operate.SystemConfig.GetWorkModeName();
             string SocketTotal = Operate.PacketConfig.Packet.TotalPackets.ToString();
             string SocketFilter = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             string SocketCache = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();

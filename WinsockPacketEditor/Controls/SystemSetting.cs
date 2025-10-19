@@ -20,22 +20,7 @@ namespace WinsockPacketEditor
         private void SystemSetting_Load(object sender, EventArgs e)
         {
             this.Text = AntdUI.Localization.Get("SystemSettingsForm", "系统设置");
-
-            switch (Operate.SystemConfig.StartMode)
-            {
-                case Operate.SystemConfig.SystemMode.Process:
-
-                    this.cbSpeedMode.Checked = Operate.PacketConfig.Packet.SpeedMode;
-
-                    break;
-
-                case Operate.SystemConfig.SystemMode.Proxy:
-
-                    this.cbSpeedMode.Checked = Operate.ProxyConfig.Proxy.SpeedMode;
-
-                    break;
-            }
-
+            this.cbSpeedMode.Checked = Operate.SystemConfig.SpeedMode;
             this.switchFloatButton.Checked = Operate.SystemConfig.IsShow_FloatButton;
 
             switch (Operate.SystemConfig.ListExecute)
@@ -98,6 +83,7 @@ namespace WinsockPacketEditor
         {
             try
             {
+                Operate.SystemConfig.SpeedMode = this.cbSpeedMode.Checked;
                 Operate.SystemConfig.IsShow_FloatButton = this.switchFloatButton.Checked;
 
                 if (this.rbListExecute_Together.Checked)
@@ -117,24 +103,13 @@ namespace WinsockPacketEditor
                 {
                     Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Sequence;
                 }
-
-                switch (Operate.SystemConfig.StartMode)
-                {
-                    case Operate.SystemConfig.SystemMode.Process:
-                        Operate.PacketConfig.Packet.SpeedMode = this.cbSpeedMode.Checked;
-                        break;
-
-                    case Operate.SystemConfig.SystemMode.Proxy:
-                        Operate.ProxyConfig.Proxy.SpeedMode = this.cbSpeedMode.Checked;
-                        break;
-                }
-
+                
                 Operate.FilterConfig.Filter.FilterReplace_ForeColor = this.cRepalce_ForeColor.Value;
                 Operate.FilterConfig.Filter.FilterReplace_BackColor = this.cRepalce_BackColor.Value;
                 Operate.FilterConfig.Filter.FilterIntercept_ForeColor = this.cIntercept_ForeColor.Value;
                 Operate.FilterConfig.Filter.FilterIntercept_BackColor = this.cIntercept_BackColor.Value;
                 Operate.FilterConfig.Filter.FilterChange_ForeColor = this.cChange_ForeColor.Value;
-                Operate.FilterConfig.Filter.FilterChange_BackColor = this.cChange_BackColor.Value;
+                Operate.FilterConfig.Filter.FilterChange_BackColor = this.cChange_BackColor.Value;                
 
                 if (this.form is InterfaceInfo.IInjectMode injectForm)
                 {
@@ -143,7 +118,7 @@ namespace WinsockPacketEditor
                 else if (this.form is InterfaceInfo.IProxyMode proxyForm)
                 {
                     proxyForm.InitFloatButton();
-                }
+                }                
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "系统设置保存成功", TType.Success)
                 {

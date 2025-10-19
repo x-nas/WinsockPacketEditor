@@ -65,6 +65,7 @@ namespace WinsockPacketEditor
             public static string HotKey11 = "Ctrl + Alt + F11";
             public static string HotKey12 = "Ctrl + Alt + F12";
             public static SystemMode StartMode = SystemMode.None;
+            public static bool SpeedMode = false;
             public static DateTime StartTime = DateTime.Now;
             public static IntPtr MainHandle = IntPtr.Zero;
             public static int SystemSocket = 0;
@@ -611,13 +612,13 @@ namespace WinsockPacketEditor
 
             #region//获取工作模式名称
 
-            public static string GetWorkModeName(bool IsSpeedMode)
+            public static string GetWorkModeName()
             {
                 string sReturn = string.Empty;
 
                 try
                 {
-                    if (IsSpeedMode)
+                    if (Operate.SystemConfig.SpeedMode)
                     {
                         sReturn = AntdUI.Localization.Get("Speed Mode", "极速模式");
                     }
@@ -3208,6 +3209,7 @@ namespace WinsockPacketEditor
                         new XElement("HotKey11", SystemConfig.HotKey11),
                         new XElement("HotKey12", SystemConfig.HotKey12),
                         new XElement("SystemColor", SystemConfig.SystemColor.ToArgb()),
+                        new XElement("SpeedMode", SystemConfig.SpeedMode),
                         new XElement("FilterReplace_BackColor", FilterConfig.Filter.FilterReplace_BackColor.ToArgb()),
                         new XElement("FilterReplace_ForeColor", FilterConfig.Filter.FilterReplace_ForeColor.ToArgb()),
                         new XElement("FilterIntercept_BackColor", FilterConfig.Filter.FilterIntercept_BackColor.ToArgb()),
@@ -3291,6 +3293,7 @@ namespace WinsockPacketEditor
                         SystemConfig.HotKey11 = dtSystemConfig.Rows[0]["HotKey11"].ToString();
                         SystemConfig.HotKey12 = dtSystemConfig.Rows[0]["HotKey12"].ToString();
                         SystemConfig.SystemColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["SystemColor"]));
+                        SystemConfig.SpeedMode = Convert.ToBoolean(dtSystemConfig.Rows[0]["SpeedMode"]);
                         FilterConfig.Filter.FilterReplace_ForeColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterReplace_ForeColor"]));
                         FilterConfig.Filter.FilterReplace_BackColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterReplace_BackColor"]));
                         FilterConfig.Filter.FilterIntercept_ForeColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterIntercept_ForeColor"]));
@@ -3619,6 +3622,12 @@ namespace WinsockPacketEditor
                         SystemConfig.SystemColor = Color.FromArgb(Convert.ToInt32(SystemColor.Value));
                     }
 
+                    XElement xeSpeedMode = xeSystemConfig.Element("SpeedMode");
+                    if (xeSpeedMode != null)
+                    {
+                        SystemConfig.SpeedMode = Convert.ToBoolean(xeSpeedMode.Value);
+                    }
+
                     XElement FilterReplace_BackColor = xeSystemConfig.Element("FilterReplace_BackColor");
                     if (FilterReplace_BackColor != null)
                     {
@@ -3691,8 +3700,7 @@ namespace WinsockPacketEditor
                         new XElement("HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom),                        
                         new XElement("PacketList_AutoRoll", PacketConfig.List.AutoRoll),
                         new XElement("PacketList_AutoClear", PacketConfig.List.AutoClear),
-                        new XElement("PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value),                        
-                        new XElement("SpeedMode", PacketConfig.Packet.SpeedMode)                        
+                        new XElement("PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value)
                         );
 
                     return xeInjectMode;
@@ -3732,9 +3740,7 @@ namespace WinsockPacketEditor
                         
                         PacketConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoRoll"]);
                         PacketConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoClear"]);
-                        PacketConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["PacketList_AutoClear_Value"]);
-                        
-                        PacketConfig.Packet.SpeedMode = Convert.ToBoolean(InjectMode.Rows[0]["SpeedMode"]);                        
+                        PacketConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["PacketList_AutoClear_Value"]);                  
                     }
                 }
                 catch (Exception ex)
@@ -3835,13 +3841,7 @@ namespace WinsockPacketEditor
                     if (xePacketList_AutoClear_Value != null)
                     {
                         PacketConfig.List.AutoClear_Value = int.Parse(xePacketList_AutoClear_Value.Value);
-                    }                    
-
-                    XElement SpeedMode = xeInjectMode.Element("SpeedMode");
-                    if (SpeedMode != null)
-                    {
-                        PacketConfig.Packet.SpeedMode = Convert.ToBoolean(SpeedMode.Value);
-                    }                    
+                    }              
                 }
                 catch (Exception ex)
                 {
@@ -3885,8 +3885,7 @@ namespace WinsockPacketEditor
                         new XElement("WhiteListMode", ProxyConfig.Proxy.WhiteListMode),
                         new XElement("FireWall_AutoBlock_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport),
                         new XElement("FireWall_AutoBlock_Minutes", ProxyConfig.Proxy.FireWall_AutoBlock_Minutes),
-                        new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry),
-                        new XElement("SpeedMode", ProxyConfig.Proxy.SpeedMode)
+                        new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry)
                         );
 
                     return xeProxyMode;
@@ -3932,7 +3931,6 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoBlock_UnSupport"]);
                         ProxyConfig.Proxy.FireWall_AutoBlock_Minutes = Convert.ToInt32(ProxyMode.Rows[0]["FireWall_AutoBlock_Minutes"].ToString());
                         ProxyConfig.Proxy.FireWall_AutoClear_Expiry = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoClear_Expiry"]);
-                        ProxyConfig.Proxy.SpeedMode = Convert.ToBoolean(ProxyMode.Rows[0]["SpeedMode"]);
                     }
                 }
                 catch (Exception ex)
@@ -4063,12 +4061,6 @@ namespace WinsockPacketEditor
                     if (FireWall_AutoClear_Expiry != null)
                     {
                         ProxyConfig.Proxy.FireWall_AutoClear_Expiry = Convert.ToBoolean(FireWall_AutoClear_Expiry.Value);
-                    }
-
-                    XElement SpeedMode = xeProxyMode.Element("SpeedMode");
-                    if (SpeedMode != null)
-                    {
-                        ProxyConfig.Proxy.SpeedMode = Convert.ToBoolean(SpeedMode.Value);
                     }
                 }
                 catch (Exception ex)
@@ -4880,8 +4872,7 @@ namespace WinsockPacketEditor
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static int FilterProxy_CNT = 0;
                 public static IPAddress[] ProxyServerIP = null;
-                public static IPAddress ProxyTCP_IP = null, ProxyUDP_IP = null;                
-                public static bool SpeedMode = false;                
+                public static IPAddress ProxyTCP_IP = null, ProxyUDP_IP = null;
                 public static bool ProxyIP_Auto = true;
                 public static bool Enable_SystemProxy = false;
                 public static bool Enable_SOCKS5 = true, Enable_Auth = true;
@@ -5290,7 +5281,7 @@ namespace WinsockPacketEditor
                             break;
                     }
 
-                    if (!Operate.ProxyConfig.Proxy.SpeedMode)
+                    if (!Operate.SystemConfig.SpeedMode)
                     {
                         string ProxyIP = (psSession.SocketSession.Client.LocalEndPoint as IPEndPoint).Address.ToString();
                         Operate.DoProxyLog(psSession.AID, psSession.ClientIP, psSession.ServerAddress, ProxyIP);
@@ -7799,7 +7790,7 @@ namespace WinsockPacketEditor
                                     break;
                             }                            
 
-                            if (!ProxyConfig.Proxy.SpeedMode)
+                            if (!SystemConfig.SpeedMode)
                             {
                                 string ClientLocation = await SystemConfig.GetIPLocation(ClientAddr.Split(':')[0]);
                                 string ServerLocation = await SystemConfig.GetIPLocation(ServerAddr.Split(':')[0]);
@@ -11106,7 +11097,6 @@ namespace WinsockPacketEditor
                 public static long TotalPackets = 0;
                 public static long Total_SendBytes = 0;
                 public static long Total_RecvBytes = 0;
-                public static bool SpeedMode;
                 public static byte[] bByteBuff = new byte[0];
                 public static string InjectProcess = string.Empty;
                 public static string SpeedInfo = string.Empty;
@@ -12298,7 +12288,7 @@ namespace WinsockPacketEditor
                     {
                         PacketConfig.Packet.CountPacketInfo(ptPacketType, bBuffByte.Length);
 
-                        if (!PacketConfig.Packet.SpeedMode)
+                        if (!SystemConfig.SpeedMode)
                         {
                             string sPacketIP = PacketConfig.Packet.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
 
@@ -14608,22 +14598,9 @@ namespace WinsockPacketEditor
                             if (tempBuffer != null)
                             {
                                 bNewBuffer = tempBuffer;
-                            }                            
-
-                            bool bSpeedMode = false;
-
-                            switch (Operate.SystemConfig.StartMode)
-                            {
-                                case Operate.SystemConfig.SystemMode.Process:
-                                    bSpeedMode = PacketConfig.Packet.SpeedMode;
-                                    break;
-
-                                case Operate.SystemConfig.SystemMode.Proxy:
-                                    bSpeedMode = ProxyConfig.Proxy.SpeedMode;
-                                    break;
                             }
 
-                            if (!bSpeedMode)
+                            if (!SystemConfig.SpeedMode)
                             {
                                 if (MatchIndex != null && MatchIndex.Count > 0)
                                 {
@@ -19615,12 +19592,13 @@ namespace WinsockPacketEditor
                         sql += "HotKey11 TEXT,";//快捷键11
                         sql += "HotKey12 TEXT,";//快捷键12
                         sql += "SystemColor INTEGER,";//系统主题颜色
+                        sql += "SpeedMode BOOLEAN DEFAULT 0,";//极速模式
                         sql += "FilterReplace_BackColor INTEGER,";//替换背景颜色
                         sql += "FilterReplace_ForeColor INTEGER,";//替换字体颜色
                         sql += "FilterIntercept_BackColor INTEGER,";//拦截背景颜色
                         sql += "FilterIntercept_ForeColor INTEGER,";//拦截字体颜色
                         sql += "FilterChange_BackColor INTEGER,";//换包背景颜色
-                        sql += "FilterChange_ForeColor INTEGER";//换包字体颜色
+                        sql += "FilterChange_ForeColor INTEGER";//换包字体颜色                        
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -19739,12 +19717,13 @@ namespace WinsockPacketEditor
                         sql += "HotKey11,";
                         sql += "HotKey12,";
                         sql += "SystemColor,";
+                        sql += "SpeedMode,";
                         sql += "FilterReplace_BackColor,";
                         sql += "FilterReplace_ForeColor,";
                         sql += "FilterIntercept_BackColor,";
                         sql += "FilterIntercept_ForeColor,";
                         sql += "FilterChange_BackColor,";
-                        sql += "FilterChange_ForeColor";
+                        sql += "FilterChange_ForeColor";                        
                         sql += ") VALUES (";
                         sql += "@IsAnimation,";
                         sql += "@IsShadowEnabled,";
@@ -19793,12 +19772,13 @@ namespace WinsockPacketEditor
                         sql += "@HotKey11,";
                         sql += "@HotKey12,";
                         sql += "@SystemColor,";
+                        sql += "@SpeedMode,";
                         sql += "@FilterReplace_BackColor,";
                         sql += "@FilterReplace_ForeColor,";
                         sql += "@FilterIntercept_BackColor,";
                         sql += "@FilterIntercept_ForeColor,";
                         sql += "@FilterChange_BackColor,";
-                        sql += "@FilterChange_ForeColor";
+                        sql += "@FilterChange_ForeColor";                        
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -19850,6 +19830,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@HotKey11", SystemConfig.HotKey11);
                             cmd.Parameters.AddWithValue("@HotKey12", SystemConfig.HotKey12);
                             cmd.Parameters.AddWithValue("@SystemColor", SystemConfig.SystemColor.ToArgb());
+                            cmd.Parameters.AddWithValue("@SpeedMode", SystemConfig.SpeedMode);
                             cmd.Parameters.AddWithValue("@FilterReplace_BackColor", FilterConfig.Filter.FilterReplace_BackColor.ToArgb());
                             cmd.Parameters.AddWithValue("@FilterReplace_ForeColor", FilterConfig.Filter.FilterReplace_ForeColor.ToArgb());
                             cmd.Parameters.AddWithValue("@FilterIntercept_BackColor", FilterConfig.Filter.FilterIntercept_BackColor.ToArgb());
@@ -19918,8 +19899,7 @@ namespace WinsockPacketEditor
                         sql += "HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//WSA 接收自                        
                         sql += "PacketList_AutoRoll BOOLEAN DEFAULT 0,";//封包列表自动滚动
                         sql += "PacketList_AutoClear BOOLEAN DEFAULT 1,";//封包列表自动清理
-                        sql += "PacketList_AutoClear_Value INTEGER DEFAULT 5000,";//封包列表自动清理数值                        
-                        sql += "SpeedMode BOOLEAN DEFAULT 0";//极速模式                        
+                        sql += "PacketList_AutoClear_Value INTEGER DEFAULT 5000";//封包列表自动清理数值
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -20005,8 +19985,7 @@ namespace WinsockPacketEditor
                         sql += "HookWSA_RecvFrom,";                        
                         sql += "PacketList_AutoRoll,";
                         sql += "PacketList_AutoClear,";
-                        sql += "PacketList_AutoClear_Value,";                        
-                        sql += "SpeedMode";                        
+                        sql += "PacketList_AutoClear_Value";
                         sql += ") VALUES (";
                         sql += "@HookWS1_Send,";
                         sql += "@HookWS1_SendTo,";
@@ -20022,8 +20001,7 @@ namespace WinsockPacketEditor
                         sql += "@HookWSA_RecvFrom,";                        
                         sql += "@PacketList_AutoRoll,";
                         sql += "@PacketList_AutoClear,";
-                        sql += "@PacketList_AutoClear_Value,";                        
-                        sql += "@SpeedMode";                        
+                        sql += "@PacketList_AutoClear_Value";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -20042,8 +20020,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom);                            
                             cmd.Parameters.AddWithValue("@PacketList_AutoRoll", PacketConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@PacketList_AutoClear", PacketConfig.List.AutoClear);
-                            cmd.Parameters.AddWithValue("@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);                            
-                            cmd.Parameters.AddWithValue("@SpeedMode", PacketConfig.Packet.SpeedMode);                            
+                            cmd.Parameters.AddWithValue("@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);  
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -20089,8 +20066,7 @@ namespace WinsockPacketEditor
                         sql += "WhiteListMode BOOLEAN DEFAULT 0,";//代理模式 - 是否白名单模式
                         sql += "FireWall_AutoBlock_UnSupport BOOLEAN DEFAULT 0,";//代理模式 - 自动屏蔽不支持的协议
                         sql += "FireWall_AutoBlock_Minutes INTEGER DEFAULT 30,";//代理模式 - 自动屏蔽时间
-                        sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0,";//代理模式 - 自动清理过期的规则
-                        sql += "SpeedMode BOOLEAN DEFAULT 0";//代理模式 - 极速模式
+                        sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0";//代理模式 - 自动清理过期的规则
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -20182,8 +20158,7 @@ namespace WinsockPacketEditor
                         sql += "WhiteListMode,";
                         sql += "FireWall_AutoBlock_UnSupport,";
                         sql += "FireWall_AutoBlock_Minutes,";
-                        sql += "FireWall_AutoClear_Expiry,";
-                        sql += "SpeedMode";
+                        sql += "FireWall_AutoClear_Expiry";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
                         sql += "@EnableSOCKS5,";
@@ -20205,8 +20180,7 @@ namespace WinsockPacketEditor
                         sql += "@WhiteListMode,";
                         sql += "@FireWall_AutoBlock_UnSupport,";
                         sql += "@FireWall_AutoBlock_Minutes,";
-                        sql += "@FireWall_AutoClear_Expiry,";
-                        sql += "@SpeedMode";
+                        sql += "@FireWall_AutoClear_Expiry";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -20232,7 +20206,6 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@FireWall_AutoBlock_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport);
                             cmd.Parameters.AddWithValue("@FireWall_AutoBlock_Minutes", ProxyConfig.Proxy.FireWall_AutoBlock_Minutes);
                             cmd.Parameters.AddWithValue("@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
-                            cmd.Parameters.AddWithValue("@SpeedMode", ProxyConfig.Proxy.SpeedMode);
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
