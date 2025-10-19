@@ -4118,6 +4118,8 @@ namespace WinsockPacketEditor
                 bool bSystemConfig,
                 bool bProxySet,
                 bool bProxyAccount,
+                bool bWhiteList,
+                bool bBlackList,
                 bool bProxyMapping,
                 bool bInjectionSet,
                 bool bFilterList,
@@ -4147,6 +4149,8 @@ namespace WinsockPacketEditor
                                 bSystemConfig,
                                 bProxySet,
                                 bProxyAccount,
+                                bWhiteList,
+                                bBlackList,
                                 bProxyMapping,
                                 bInjectionSet,
                                 bFilterList,
@@ -4181,6 +4185,8 @@ namespace WinsockPacketEditor
                 bool bSystemConfig,
                 bool bProxySet,
                 bool bProxyAccount,
+                bool bWhiteList,
+                bool bBlackList,
                 bool bProxyMapping,
                 bool bInjectionSet,
                 bool bFilterList,
@@ -4227,6 +4233,32 @@ namespace WinsockPacketEditor
                             if (xeProxyAccount != null)
                             {
                                 xeBackUp.Add(xeProxyAccount);
+                            }
+                        }
+                    }
+
+                    //白名单
+                    if (bWhiteList)
+                    {
+                        if (ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                        {
+                            XElement xeWhiteList = ProxyConfig.Proxy.GetWhiteList_XML(ProxyConfig.Proxy.lstWhiteList);
+                            if (xeWhiteList != null)
+                            {
+                                xeBackUp.Add(xeWhiteList);
+                            }
+                        }
+                    }
+
+                    //黑名单
+                    if (bBlackList)
+                    {
+                        if (ProxyConfig.Proxy.lstBlackList.Count > 0)
+                        {
+                            XElement xeBlackList = ProxyConfig.Proxy.GetBlackList_XML(ProxyConfig.Proxy.lstBlackList);
+                            if (xeBlackList != null)
+                            {
+                                xeBackUp.Add(xeBlackList);
                             }
                         }
                     }
@@ -4488,6 +4520,54 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog("Import ProxyAccountList", ex.Message);
+                }
+
+                #endregion
+
+                #region//白名单
+
+                try
+                {
+                    XElement xeWhiteList = xdoc.Root.Element("WhiteList");
+                    if (xeWhiteList != null)
+                    {
+                        XDocument WhiteList = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+                        WhiteList.Add(xeWhiteList);
+
+                        ProxyConfig.Proxy.CleanUpWhiteList();
+                        ProxyConfig.Proxy.LoadWhiteList_FromXDocument(WhiteList);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import WhiteList", ex.Message);
+                }
+
+                #endregion
+
+                #region//黑名单
+
+                try
+                {
+                    XElement xeBlackList = xdoc.Root.Element("BlackList");
+                    if (xeBlackList != null)
+                    {
+                        XDocument BlackList = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+                        BlackList.Add(xeBlackList);
+
+                        ProxyConfig.Proxy.CleanUpBlackList();
+                        ProxyConfig.Proxy.LoadBlackList_FromXDocument(BlackList);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("Import BlackList", ex.Message);
                 }
 
                 #endregion
@@ -6687,10 +6767,22 @@ namespace WinsockPacketEditor
                         MaskClosable = false,
                         OnOk = config =>
                         {
-                            ProxyConfig.Proxy.lstWhiteList.Clear();
+                            ProxyConfig.Proxy.CleanUpWhiteList();
                             return true;
                         }
                     });
+                }
+
+                public static void CleanUpWhiteList()
+                {
+                    try
+                    {
+                        ProxyConfig.Proxy.lstWhiteList.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(CleanUpWhiteList), ex.Message);
+                    }
                 }
 
                 #endregion
@@ -6921,10 +7013,22 @@ namespace WinsockPacketEditor
                         MaskClosable = false,
                         OnOk = config =>
                         {
-                            ProxyConfig.Proxy.lstBlackList.Clear();
+                            ProxyConfig.Proxy.CleanUpBlackList();
                             return true;
                         }
                     });
+                }
+
+                public static void CleanUpBlackList()
+                {
+                    try
+                    {
+                        ProxyConfig.Proxy.lstBlackList.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(CleanUpBlackList), ex.Message);
+                    }
                 }
 
                 #endregion

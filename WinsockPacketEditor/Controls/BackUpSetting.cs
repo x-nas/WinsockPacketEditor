@@ -41,6 +41,8 @@ namespace WinsockPacketEditor
                 bool SystemConfig = this.cbBackUp_SystemConfig.Checked;
                 bool ProxySet = this.cbBackUp_ProxySet.Checked;
                 bool ProxyAccount = this.cbBackUp_ProxyAccount.Checked;
+                bool WhiteList = this.cbBackUp_WhiteList.Checked;
+                bool BlackList = this.cbBackUp_BlackList.Checked;
                 bool ProxyMapping = this.cbBackUp_ProxyMapping.Checked;
                 bool InjectionSet = this.cbBackUp_InjectSet.Checked;
                 bool FilterList = this.cbBackUp_FilterList.Checked;
@@ -53,6 +55,8 @@ namespace WinsockPacketEditor
                     SystemConfig,
                     ProxySet,
                     ProxyAccount,
+                    WhiteList,
+                    BlackList,
                     ProxyMapping,
                     InjectionSet,
                     FilterList,

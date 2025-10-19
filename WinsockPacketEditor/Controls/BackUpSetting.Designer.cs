@@ -48,6 +48,8 @@
             this.dProxyMode = new AntdUI.Divider();
             this.dInjectMode = new AntdUI.Divider();
             this.cbBackUp_SystemConfig = new AntdUI.Checkbox();
+            this.cbBackUp_WhiteList = new AntdUI.Checkbox();
+            this.cbBackUp_BlackList = new AntdUI.Checkbox();
             this.tlpBackUpSettings.SuspendLayout();
             this.tlpListInfo.SuspendLayout();
             this.tlpButton2.SuspendLayout();
@@ -59,7 +61,6 @@
             // 
             this.tlpBackUpSettings.ColumnCount = 1;
             this.tlpBackUpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBackUpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpBackUpSettings.Controls.Add(this.dListInfo, 0, 12);
             this.tlpBackUpSettings.Controls.Add(this.tlpListInfo, 0, 14);
             this.tlpBackUpSettings.Controls.Add(this.cbBackUp_InjectSet, 0, 10);
@@ -76,22 +77,22 @@
             this.tlpBackUpSettings.Name = "tlpBackUpSettings";
             this.tlpBackUpSettings.RowCount = 17;
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpBackUpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpBackUpSettings.Size = new System.Drawing.Size(350, 700);
             this.tlpBackUpSettings.TabIndex = 1;
             // 
@@ -100,7 +101,7 @@
             this.dListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dListInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dListInfo.LocalizationText = "BackUpSettingsForm.ListData";
-            this.dListInfo.Location = new System.Drawing.Point(2, 324);
+            this.dListInfo.Location = new System.Drawing.Point(2, 357);
             this.dListInfo.Margin = new System.Windows.Forms.Padding(2);
             this.dListInfo.Name = "dListInfo";
             this.dListInfo.Orientation = AntdUI.TOrientation.Left;
@@ -117,14 +118,14 @@
             this.tlpListInfo.Controls.Add(this.cbBackUp_SendList, 1, 0);
             this.tlpListInfo.Controls.Add(this.cbBackUp_FilterList, 0, 0);
             this.tlpListInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpListInfo.Location = new System.Drawing.Point(0, 361);
+            this.tlpListInfo.Location = new System.Drawing.Point(0, 393);
             this.tlpListInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpListInfo.Name = "tlpListInfo";
             this.tlpListInfo.RowCount = 3;
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpListInfo.Size = new System.Drawing.Size(350, 241);
+            this.tlpListInfo.Size = new System.Drawing.Size(350, 207);
             this.tlpListInfo.TabIndex = 12;
             // 
             // cbBackUp_RobotList
@@ -172,7 +173,7 @@
             this.cbBackUp_InjectSet.Checked = true;
             this.cbBackUp_InjectSet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_InjectSet.LocalizationText = "BackUpSettingsForm.InjectMode.Configuration";
-            this.cbBackUp_InjectSet.Location = new System.Drawing.Point(2, 270);
+            this.cbBackUp_InjectSet.Location = new System.Drawing.Point(2, 304);
             this.cbBackUp_InjectSet.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_InjectSet.Name = "cbBackUp_InjectSet";
             this.cbBackUp_InjectSet.Size = new System.Drawing.Size(104, 34);
@@ -190,14 +191,14 @@
             this.tlpButton2.Controls.Add(this.bImport, 1, 1);
             this.tlpButton2.Controls.Add(this.bExport, 3, 1);
             this.tlpButton2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton2.Location = new System.Drawing.Point(0, 602);
+            this.tlpButton2.Location = new System.Drawing.Point(0, 600);
             this.tlpButton2.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton2.Name = "tlpButton2";
             this.tlpButton2.RowCount = 3;
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton2.Size = new System.Drawing.Size(350, 49);
+            this.tlpButton2.Size = new System.Drawing.Size(350, 50);
             this.tlpButton2.TabIndex = 6;
             // 
             // bImport
@@ -240,14 +241,14 @@
             this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.Controls.Add(this.bExit, 1, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 651);
+            this.tlpButton.Location = new System.Drawing.Point(0, 650);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(350, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 50);
             this.tlpButton.TabIndex = 5;
             // 
             // bExit
@@ -284,21 +285,21 @@
             this.tlpBackUpContent.ColumnCount = 2;
             this.tlpBackUpContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpBackUpContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpBackUpContent.Controls.Add(this.cbBackUp_BlackList, 1, 1);
+            this.tlpBackUpContent.Controls.Add(this.cbBackUp_WhiteList, 0, 1);
             this.tlpBackUpContent.Controls.Add(this.cbBackUp_ProxyAccount, 1, 0);
-            this.tlpBackUpContent.Controls.Add(this.cbBackUp_ProxyMapping, 0, 1);
+            this.tlpBackUpContent.Controls.Add(this.cbBackUp_ProxyMapping, 0, 2);
             this.tlpBackUpContent.Controls.Add(this.cbBackUp_ProxySet, 0, 0);
             this.tlpBackUpContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpBackUpContent.Location = new System.Drawing.Point(0, 132);
+            this.tlpBackUpContent.Location = new System.Drawing.Point(0, 129);
             this.tlpBackUpContent.Margin = new System.Windows.Forms.Padding(0);
             this.tlpBackUpContent.Name = "tlpBackUpContent";
-            this.tlpBackUpContent.RowCount = 6;
-            this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpBackUpContent.RowCount = 4;
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBackUpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBackUpContent.Size = new System.Drawing.Size(350, 81);
+            this.tlpBackUpContent.Size = new System.Drawing.Size(350, 120);
             this.tlpBackUpContent.TabIndex = 1;
             // 
             // cbBackUp_ProxyAccount
@@ -320,7 +321,7 @@
             this.cbBackUp_ProxyMapping.Checked = true;
             this.cbBackUp_ProxyMapping.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbBackUp_ProxyMapping.LocalizationText = "BackUpSettingsForm.ProxyMapping";
-            this.cbBackUp_ProxyMapping.Location = new System.Drawing.Point(2, 40);
+            this.cbBackUp_ProxyMapping.Location = new System.Drawing.Point(2, 78);
             this.cbBackUp_ProxyMapping.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_ProxyMapping.Name = "cbBackUp_ProxyMapping";
             this.cbBackUp_ProxyMapping.Size = new System.Drawing.Size(80, 34);
@@ -345,7 +346,7 @@
             this.dProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dProxyMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dProxyMode.LocalizationText = "BackUpSettingsForm.ProxyMode";
-            this.dProxyMode.Location = new System.Drawing.Point(2, 95);
+            this.dProxyMode.Location = new System.Drawing.Point(2, 93);
             this.dProxyMode.Margin = new System.Windows.Forms.Padding(2);
             this.dProxyMode.Name = "dProxyMode";
             this.dProxyMode.Orientation = AntdUI.TOrientation.Left;
@@ -358,7 +359,7 @@
             this.dInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dInjectMode.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dInjectMode.LocalizationText = "BackUpSettingsForm.InjectMode";
-            this.dInjectMode.Location = new System.Drawing.Point(2, 231);
+            this.dInjectMode.Location = new System.Drawing.Point(2, 266);
             this.dInjectMode.Margin = new System.Windows.Forms.Padding(2);
             this.dInjectMode.Name = "dInjectMode";
             this.dInjectMode.Orientation = AntdUI.TOrientation.Left;
@@ -371,12 +372,38 @@
             this.cbBackUp_SystemConfig.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbBackUp_SystemConfig.Checked = true;
             this.cbBackUp_SystemConfig.LocalizationText = "BackUpSettingsForm.SystemOperation";
-            this.cbBackUp_SystemConfig.Location = new System.Drawing.Point(2, 41);
+            this.cbBackUp_SystemConfig.Location = new System.Drawing.Point(2, 40);
             this.cbBackUp_SystemConfig.Margin = new System.Windows.Forms.Padding(2);
             this.cbBackUp_SystemConfig.Name = "cbBackUp_SystemConfig";
             this.cbBackUp_SystemConfig.Size = new System.Drawing.Size(104, 34);
             this.cbBackUp_SystemConfig.TabIndex = 9;
             this.cbBackUp_SystemConfig.Text = "系统运行配置";
+            // 
+            // cbBackUp_WhiteList
+            // 
+            this.cbBackUp_WhiteList.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbBackUp_WhiteList.Checked = true;
+            this.cbBackUp_WhiteList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_WhiteList.LocalizationText = "BackUpSettingsForm.ProxyAccount";
+            this.cbBackUp_WhiteList.Location = new System.Drawing.Point(2, 40);
+            this.cbBackUp_WhiteList.Margin = new System.Windows.Forms.Padding(2);
+            this.cbBackUp_WhiteList.Name = "cbBackUp_WhiteList";
+            this.cbBackUp_WhiteList.Size = new System.Drawing.Size(68, 34);
+            this.cbBackUp_WhiteList.TabIndex = 5;
+            this.cbBackUp_WhiteList.Text = "白名单";
+            // 
+            // cbBackUp_BlackList
+            // 
+            this.cbBackUp_BlackList.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbBackUp_BlackList.Checked = true;
+            this.cbBackUp_BlackList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbBackUp_BlackList.LocalizationText = "BackUpSettingsForm.ProxyAccount";
+            this.cbBackUp_BlackList.Location = new System.Drawing.Point(177, 40);
+            this.cbBackUp_BlackList.Margin = new System.Windows.Forms.Padding(2);
+            this.cbBackUp_BlackList.Name = "cbBackUp_BlackList";
+            this.cbBackUp_BlackList.Size = new System.Drawing.Size(68, 34);
+            this.cbBackUp_BlackList.TabIndex = 6;
+            this.cbBackUp_BlackList.Text = "黑名单";
             // 
             // BackUpSetting
             // 
@@ -425,5 +452,7 @@
         private AntdUI.Divider dProxyMode;
         private AntdUI.Divider dInjectMode;
         private AntdUI.Checkbox cbBackUp_SystemConfig;
+        private AntdUI.Checkbox cbBackUp_BlackList;
+        private AntdUI.Checkbox cbBackUp_WhiteList;
     }
 }
