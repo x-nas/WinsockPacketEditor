@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 using WindowsInput.Native;
+using static WinsockPacketEditor.Operate;
 
 namespace WinsockPacketEditor
 {
@@ -263,6 +264,50 @@ namespace WinsockPacketEditor
                                             else
                                             {
                                                 sLoopStart.Pop();
+                                            }
+                                        }
+                                    }
+
+                                    break;
+
+                                case Operate.RobotConfig.Robot.InstructionType.Switch:
+
+                                    if (!string.IsNullOrEmpty(sContent))
+                                    {
+                                        if (sContent.Contains("|"))
+                                        {
+                                            string[] slSwitch = sContent.Split('|');
+                                            if (slSwitch.Length == 3)
+                                            {
+                                                if (Guid.TryParse(slSwitch[2], out Guid GID))
+                                                {
+                                                    bool Switch = false;
+                                                    switch (slSwitch[0])
+                                                    {
+                                                        case "Enable":
+                                                            Switch = true;
+                                                            break;
+
+                                                        case "Disable":
+                                                            Switch = false;
+                                                            break;
+                                                    }
+
+                                                    switch (slSwitch[1])
+                                                    {
+                                                        case "SendList":
+                                                            Operate.SendConfig.Send.SetIsEnable_ByGUID(GID, Switch);
+                                                            break;
+
+                                                        case "RobotList":
+                                                            Operate.RobotConfig.Robot.SetIsEnable_ByGUID(GID, Switch);
+                                                            break;
+
+                                                        case "FilterList":
+                                                            Operate.FilterConfig.Filter.SetIsEnable_ByGUID(GID, Switch);
+                                                            break;
+                                                    }
+                                                }
                                             }
                                         }
                                     }
