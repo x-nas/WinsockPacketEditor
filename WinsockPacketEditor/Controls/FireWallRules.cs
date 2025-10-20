@@ -18,9 +18,10 @@ namespace WinsockPacketEditor
 
         private void FireWallRules_Load(object sender, EventArgs e)
         {
-            this.cbAutoBlock_UnSupport.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport;
-            this.cbAutoClear_Expiry.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry;
             this.nudAutoBlock_UnSupport.Value = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_Minutes;
+            this.cbAutoBlock_UnSupport.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport;
+            this.cbAutoBlock_AuthFail.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail;
+            this.cbAutoClear_Expiry.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry;
         }
 
         #endregion
@@ -29,9 +30,10 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = this.cbAutoBlock_UnSupport.Checked;
-            Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry = this.cbAutoClear_Expiry.Checked;
             Operate.ProxyConfig.Proxy.FireWall_AutoBlock_Minutes = ((int)this.nudAutoBlock_UnSupport.Value);
+            Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = this.cbAutoBlock_UnSupport.Checked;
+            Operate.ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail = this.cbAutoBlock_AuthFail.Checked;
+            Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry = this.cbAutoClear_Expiry.Checked;            
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "防火墙规则保存成功", TType.Success)
             {

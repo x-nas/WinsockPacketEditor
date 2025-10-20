@@ -3873,6 +3873,7 @@ namespace WinsockPacketEditor
                         new XElement("EnableFireWall", ProxyConfig.Proxy.EnableFireWall),
                         new XElement("WhiteListMode", ProxyConfig.Proxy.WhiteListMode),
                         new XElement("FireWall_AutoBlock_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport),
+                        new XElement("FireWall_AutoBlock_AuthFail", ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail),
                         new XElement("FireWall_AutoBlock_Minutes", ProxyConfig.Proxy.FireWall_AutoBlock_Minutes),
                         new XElement("FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry)
                         );
@@ -3918,6 +3919,7 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.EnableFireWall = Convert.ToBoolean(ProxyMode.Rows[0]["EnableFireWall"]);
                         ProxyConfig.Proxy.WhiteListMode = Convert.ToBoolean(ProxyMode.Rows[0]["WhiteListMode"]);
                         ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoBlock_UnSupport"]);
+                        ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoBlock_AuthFail"]);
                         ProxyConfig.Proxy.FireWall_AutoBlock_Minutes = Convert.ToInt32(ProxyMode.Rows[0]["FireWall_AutoBlock_Minutes"].ToString());
                         ProxyConfig.Proxy.FireWall_AutoClear_Expiry = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoClear_Expiry"]);
                     }
@@ -4038,6 +4040,12 @@ namespace WinsockPacketEditor
                     if (FireWall_AutoBlock_UnSupport != null)
                     {
                         ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = Convert.ToBoolean(FireWall_AutoBlock_UnSupport.Value);
+                    }
+
+                    XElement FireWall_AutoBlock_AuthFail = xeProxyMode.Element("FireWall_AutoBlock_AuthFail");
+                    if (FireWall_AutoBlock_AuthFail != null)
+                    {
+                        ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail = Convert.ToBoolean(FireWall_AutoBlock_AuthFail.Value);
                     }
 
                     XElement FireWall_AutoBlock_Minutes = xeProxyMode.Element("FireWall_AutoBlock_Minutes");
@@ -4971,6 +4979,7 @@ namespace WinsockPacketEditor
                 public static bool EnableFireWall = false;
                 public static bool WhiteListMode = false;
                 public static bool FireWall_AutoBlock_UnSupport = false;
+                public static bool FireWall_AutoBlock_AuthFail = false;
                 public static int FireWall_AutoBlock_Minutes = 30;
                 public static bool FireWall_AutoClear_Expiry = false;
                 public static BindingList<BlackListInfo> lstBlackList = new BindingList<BlackListInfo>();
@@ -5232,6 +5241,16 @@ namespace WinsockPacketEditor
                             {
                                 bAuth[1] = (byte)0x01;
                                 psSession.TrySend(bAuth, 0, bAuth.Length);
+
+                                if (Operate.ProxyConfig.Proxy.EnableFireWall && Operate.ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail)
+                                {
+                                    Operate.ProxyConfig.Proxy.AddToBlackList(
+                                        psSession.ClientIP,
+                                        true,
+                                        DateTime.Now.AddMinutes(Operate.ProxyConfig.Proxy.FireWall_AutoBlock_Minutes),
+                                        DateTime.Now);
+                                }
+
                                 return;
                             }
 
@@ -20191,6 +20210,7 @@ namespace WinsockPacketEditor
                         sql += "EnableFireWall BOOLEAN DEFAULT 0,";//代理模式 - 启用防火墙
                         sql += "WhiteListMode BOOLEAN DEFAULT 0,";//代理模式 - 是否白名单模式
                         sql += "FireWall_AutoBlock_UnSupport BOOLEAN DEFAULT 0,";//代理模式 - 自动屏蔽不支持的协议
+                        sql += "FireWall_AutoBlock_AuthFail BOOLEAN DEFAULT 0,";//代理模式 - 自动屏蔽认证失败的IP
                         sql += "FireWall_AutoBlock_Minutes INTEGER DEFAULT 30,";//代理模式 - 自动屏蔽时间
                         sql += "FireWall_AutoClear_Expiry BOOLEAN DEFAULT 0";//代理模式 - 自动清理过期的规则
                         sql += ");";
@@ -20283,6 +20303,7 @@ namespace WinsockPacketEditor
                         sql += "EnableFireWall,";
                         sql += "WhiteListMode,";
                         sql += "FireWall_AutoBlock_UnSupport,";
+                        sql += "FireWall_AutoBlock_AuthFail,";
                         sql += "FireWall_AutoBlock_Minutes,";
                         sql += "FireWall_AutoClear_Expiry";
                         sql += ") VALUES (";
@@ -20305,6 +20326,7 @@ namespace WinsockPacketEditor
                         sql += "@EnableFireWall,";
                         sql += "@WhiteListMode,";
                         sql += "@FireWall_AutoBlock_UnSupport,";
+                        sql += "@FireWall_AutoBlock_AuthFail,";
                         sql += "@FireWall_AutoBlock_Minutes,";
                         sql += "@FireWall_AutoClear_Expiry";
                         sql += ");";
@@ -20330,6 +20352,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@EnableFireWall", ProxyConfig.Proxy.EnableFireWall);
                             cmd.Parameters.AddWithValue("@WhiteListMode", ProxyConfig.Proxy.WhiteListMode);
                             cmd.Parameters.AddWithValue("@FireWall_AutoBlock_UnSupport", ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport);
+                            cmd.Parameters.AddWithValue("@FireWall_AutoBlock_AuthFail", ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail);
                             cmd.Parameters.AddWithValue("@FireWall_AutoBlock_Minutes", ProxyConfig.Proxy.FireWall_AutoBlock_Minutes);
                             cmd.Parameters.AddWithValue("@FireWall_AutoClear_Expiry", ProxyConfig.Proxy.FireWall_AutoClear_Expiry);
 
