@@ -403,6 +403,15 @@ namespace WinsockPacketEditor
 
                 #region//Operate
 
+                case "BetaVersion":
+                    return "This is a beta version";
+
+                case "BetaVersionContent":
+                    return "\r\nThe beta version may have unknown bugs, please use it with caution! \r\n\r\nIf you need to use the official version, please download the latest version from the official website.";
+
+                case "GotIt":
+                    return "Got it";
+
                 case "DeSelect":
                     return "DeSelect";
 

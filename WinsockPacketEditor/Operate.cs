@@ -40,6 +40,7 @@ namespace WinsockPacketEditor
 
         public static class SystemConfig
         {
+            public static bool IsBeta = true;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
             public static string PNAME = string.Empty;
@@ -134,6 +135,29 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//测试版提示
+
+            public static void ShowBetaMessage(Form form)
+            {
+                if (Operate.SystemConfig.IsBeta)
+                {
+                    string sTitle = AntdUI.Localization.Get("BetaVersion", "这是一个测试版程序");
+                    string sContent = AntdUI.Localization.Get("BetaVersionContent", "\r\n测试版程序可能存在未知的 Bug，请谨慎使用！\r\n\r\n如需使用正式版，请至官网下载最新发布的程序。");
+
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, sTitle, sContent, AntdUI.TType.Warn)
+                    {
+                        OnButtonStyle = (id, btn) =>
+                        {
+                            btn.BackExtend = "135, #6253E1, #04BEFE";
+                        },
+                        CancelText = null,
+                        OkText = AntdUI.Localization.Get("GotIt", "知道了"),
+                    });
+                }
+            }
+
+            #endregion
+
             #region//注入参数
 
             [Serializable]
@@ -179,7 +203,14 @@ namespace WinsockPacketEditor
                 get
                 {
                     Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                    return $"{version.Major}.{version.Minor}.{version.Build}";
+
+                    string sReturn = $"{version.Major}.{version.Minor}.{version.Build}";
+                    if (Operate.SystemConfig.IsBeta)
+                    { 
+                        sReturn += " Beta";
+                    }
+
+                    return sReturn;
                 }
             }
 

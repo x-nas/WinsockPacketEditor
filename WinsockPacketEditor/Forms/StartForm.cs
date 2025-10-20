@@ -18,6 +18,7 @@ namespace WinsockPacketEditor
 
         public StartForm()
         {
+            Operate.SystemConfig.ShowBetaMessage(this);
             InitializeComponent();
         }
 
@@ -28,7 +29,7 @@ namespace WinsockPacketEditor
 
             this.InitGlobal();
             this.GetWebSiteURL();
-            this.Dark_Changed();
+            this.Dark_Changed();            
         }
 
         private void StartForm_FormClosing(object sender, FormClosingEventArgs e)
