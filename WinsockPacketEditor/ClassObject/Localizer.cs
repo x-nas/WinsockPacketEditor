@@ -2150,11 +2150,20 @@ namespace WinsockPacketEditor
                 case "FireWallSetting.BlackList.Permanent":
                     return "Permanent";
 
+                case "FireWallSetting.AutoBlock":
+                    return "Auto Block :";
+
+                case "FireWallSetting.AutoClear":
+                    return "Auto Clear :";
+
                 case "FireWallSetting.AutoBlock.UnSupport":
-                    return "Auto block - Unsupported Socks protocol";
+                    return "Unsupported Socks protocol";
+
+                case "FireWallSetting.AutoBlock.AuthFail":
+                    return "Authentication failed IP addresses";
 
                 case "FireWallSetting.AutoClear.Expiry":
-                    return "Auto clear - Expired IP addresses";
+                    return "Expired IP addresses";
 
                 #endregion                
 
