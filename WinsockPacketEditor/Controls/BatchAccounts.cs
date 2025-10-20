@@ -332,7 +332,7 @@ namespace WinsockPacketEditor
                     {
                         case "ToExcel":
 
-                            Operate.ProxyConfig.Account.SaveBatchAccounts_Dialog(this.form, Operate.PacketConfig.Packet.InjectProcess, this.lstBatchAccounts);
+                            Operate.ProxyConfig.Account.SaveBatchAccounts_Dialog(this.form, DateTime.Now.ToString("yyyy-MM-dd"), this.lstBatchAccounts);
 
                             break;
                     }
