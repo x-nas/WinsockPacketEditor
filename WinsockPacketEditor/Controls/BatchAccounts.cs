@@ -315,6 +315,33 @@ namespace WinsockPacketEditor
 
         #endregion        
 
+        #region//右键菜单
+
+        private void tBatchAccounts_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (this.lstBatchAccounts.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(this.tBatchAccounts, item =>
+                {
+                    switch (item.ID)
+                    {
+                        case "ToExcel":
+
+                            Operate.ProxyConfig.Account.SaveBatchAccounts_Dialog(this.form, Operate.PacketConfig.Packet.InjectProcess, this.lstBatchAccounts);
+
+                            break;
+                    }
+                }, Operate.ProxyConfig.Account.GetCMS_BatchAccounts());
+            }
+        }
+
+        #endregion
+
         #region//保存
 
         private void bSave_Click(object sender, EventArgs e)

@@ -9235,6 +9235,24 @@ namespace WinsockPacketEditor
 
                 #endregion                
 
+                #region//获取批量创建账号的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_BatchAccounts()
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+                    
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("导出到Excel")
+                    {
+                        ID = "ToExcel",
+                        IconSvg = "FileExcelOutlined",
+                        LocalizationText = "SaveToExcel",
+                    });
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
+
                 #region//获取认证列表的右键菜单
 
                 public static AntdUI.IContextMenuStripItem[] GetCMS_AuthList()
@@ -9287,6 +9305,90 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion               
+
+                #region//保存批量创建的账号到Excel（对话框）
+
+                public static void SaveBatchAccounts_Dialog(Form form, string FileName, BindingList<AccountInfo> aiList)
+                {
+                    try
+                    {
+                        if (aiList.Count > 0)
+                        {
+                            int SaveCount = aiList.Count;
+
+                            SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
+                            sfdSaveToExcel.Filter = AntdUI.Localization.Get("ExcelFile", "Excel 文件") + "Excel (*.xls)|*.xls";
+                            sfdSaveToExcel.RestoreDirectory = true;
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveToExcel.FileName = FileName;
+                            }
+
+                            if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveToExcel.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    bool bOK = ProxyConfig.Account.SaveBatchAccountsToExcel(FilePath, aiList);
+                                    if (bOK)
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportToExcel.Success", "导出到Excel成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(SaveBatchAccounts_Dialog), Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportToExcel.Error", "导出到Excel失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveBatchAccounts_Dialog), ex.Message);
+                    }
+                }
+
+                private static bool SaveBatchAccountsToExcel(string filePath, BindingList<AccountInfo> aiList)
+                {
+                    try
+                    {
+                        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                        using (var writer = new StreamWriter(stream, Encoding.Default))
+                        {
+                            writer.WriteLine(AntdUI.Localization.Get("ExcelColumn.BatchAccounts", "账号\t密码\t到期时间\t"));
+
+                            foreach (AccountInfo ai in aiList)
+                            {
+                                try
+                                {
+                                    var lineBuilder = new StringBuilder();
+                                    lineBuilder.Append(ai.UserName).Append('\t');
+                                    lineBuilder.Append(Operate.SystemConfig.PassWord_Decrypt(ai.Password)).Append('\t');
+                                    lineBuilder.Append(ai.ExpiryTime).Append('\t');
+                                    writer.WriteLine(lineBuilder.ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex.Message);
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex.Message);
+                        return false;
+                    }
+                }
+
+                #endregion
 
                 #region//从数据库加载账号IP信息
 

@@ -423,6 +423,7 @@
             this.tBatchAccounts.TabIndex = 20;
             this.tBatchAccounts.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tBatchAccounts_CellButtonClick);
             this.tBatchAccounts.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tBatchAccounts_CellDoubleClick);
+            this.tBatchAccounts.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tBatchAccounts_MouseClick);
             // 
             // BatchAccounts
             // 

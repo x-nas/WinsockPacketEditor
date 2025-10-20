@@ -484,6 +484,9 @@ namespace WinsockPacketEditor
                 case "ExcelColumn.Packet":
                     return "Time\tType\tSocket\tFrom\tTo\tLength\tData\t";
 
+                case "ExcelColumn.BatchAccounts":
+                    return "Username\tPassword\tExpiry Time\t";
+
                 case "SystemBackupFile":
                     return "System backup file";
 
