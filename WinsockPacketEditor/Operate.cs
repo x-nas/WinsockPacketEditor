@@ -6280,85 +6280,7 @@ namespace WinsockPacketEditor
                     return Encoding.UTF8.GetBytes(response);
                 }
 
-                #endregion
-
-                #region//是否显示代理数据（过滤条件）
-
-                public static bool IsShowProxy_ByFilter(ProxyInfo pi)
-                {
-                    try
-                    {
-                        //套接字
-                        if (SystemConfig.CheckSocket)
-                        {
-                            bool bIsFilter = PacketConfig.Packet.IsFilter_BySocket(pi.PacketSocket);
-                            if (SystemConfig.CheckNotShow == bIsFilter)
-                            {
-                                return false;
-                            }
-                        }
-
-                        //IP地址
-                        if (SystemConfig.CheckIP)
-                        {
-                            bool bIsFilter_From = PacketConfig.Packet.IsFilter_ByIP(pi.ClientAddr);
-                            bool bIsFilter_To = PacketConfig.Packet.IsFilter_ByIP(pi.ServerAddr);
-                            if (SystemConfig.CheckNotShow == (bIsFilter_From || bIsFilter_To))
-                            {
-                                return false;
-                            }
-                        }
-
-                        //端口号
-                        if (SystemConfig.CheckPort)
-                        {
-                            bool bIsFilter_From = PacketConfig.Packet.IsFilter_ByPort(pi.ClientAddr);
-                            bool bIsFilter_To = PacketConfig.Packet.IsFilter_ByPort(pi.ServerAddr);
-                            if (SystemConfig.CheckNotShow == (bIsFilter_From || bIsFilter_To))
-                            {
-                                return false;
-                            }
-                        }
-
-                        //指定包头
-                        if (SystemConfig.CheckHead)
-                        {
-                            bool bIsFilter = PacketConfig.Packet.IsFilter_ByHead(pi.PacketBuffer);
-                            if (SystemConfig.CheckNotShow == bIsFilter)
-                            {
-                                return false;
-                            }
-                        }
-
-                        //封包内容
-                        if (SystemConfig.CheckData)
-                        {
-                            bool bIsFilter = PacketConfig.Packet.IsFilter_ByPacket(pi.PacketBuffer);
-                            if (SystemConfig.CheckNotShow == bIsFilter)
-                            {
-                                return false;
-                            }
-                        }
-
-                        //封包大小
-                        if (SystemConfig.CheckLen)
-                        {
-                            bool bIsFilter = PacketConfig.Packet.IsFilter_BySize(pi.PacketLen);
-                            if (SystemConfig.CheckNotShow == bIsFilter)
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(IsShowProxy_ByFilter), ex.Message);
-                    }
-
-                    return true;
-                }             
-
-                #endregion
+                #endregion                
 
                 #region// 获取 Content-Type 类型
 
@@ -7996,7 +7918,7 @@ namespace WinsockPacketEditor
                     {
                         if (ProxyConfig.Queue.qProxyInfo.TryDequeue(out ProxyInfo pi))
                         {
-                            bool bIsShow = ProxyConfig.Proxy.IsShowProxy_ByFilter(pi);
+                            bool bIsShow = PacketConfig.Packet.IsShowProxy_ByFilter(pi);
                             if (bIsShow)
                             {
                                 Span<byte> bufferSpan = pi.PacketBuffer.AsSpan();
@@ -11674,12 +11596,42 @@ namespace WinsockPacketEditor
 
                 public static bool IsShowPacket_ByFilter(PacketInfo pi)
                 {
+                    return IsShowByFilter(
+                        pi.PacketSocket,
+                        pi.PacketFrom,
+                        pi.PacketTo,
+                        pi.PacketBuffer,
+                        pi.PacketLen,
+                        pi.PacketType
+                    );
+                }
+
+                public static bool IsShowProxy_ByFilter(ProxyInfo pi)
+                {
+                    return IsShowByFilter(
+                        pi.PacketSocket,
+                        pi.ClientAddr,
+                        pi.ServerAddr,
+                        pi.PacketBuffer,
+                        pi.PacketLen,
+                        pi.PacketType
+                    );
+                }
+
+                private static bool IsShowByFilter(
+                    int packetSocket, 
+                    string fromAddr, 
+                    string toAddr,
+                    byte[] packetBuffer, 
+                    int packetLen, 
+                    PacketConfig.Packet.PacketType packetType)
+                {
                     try
                     {
                         //套接字
                         if (SystemConfig.CheckSocket)
                         {
-                            bool bIsFilter = IsFilter_BySocket(pi.PacketSocket);
+                            bool bIsFilter = IsFilter_BySocket(packetSocket);
                             if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
@@ -11689,8 +11641,8 @@ namespace WinsockPacketEditor
                         //IP地址
                         if (SystemConfig.CheckIP)
                         {
-                            bool bIsFilter_From = IsFilter_ByIP(pi.PacketFrom);
-                            bool bIsFilter_To = IsFilter_ByIP(pi.PacketTo);
+                            bool bIsFilter_From = IsFilter_ByIP(fromAddr);
+                            bool bIsFilter_To = IsFilter_ByIP(toAddr);
                             if (SystemConfig.CheckNotShow == (bIsFilter_From || bIsFilter_To))
                             {
                                 return false;
@@ -11700,8 +11652,8 @@ namespace WinsockPacketEditor
                         //端口号
                         if (SystemConfig.CheckPort)
                         {
-                            bool bIsFilter_From = IsFilter_ByPort(pi.PacketFrom);
-                            bool bIsFilter_To = IsFilter_ByPort(pi.PacketTo);
+                            bool bIsFilter_From = IsFilter_ByPort(fromAddr);
+                            bool bIsFilter_To = IsFilter_ByPort(toAddr);
                             if (SystemConfig.CheckNotShow == (bIsFilter_From || bIsFilter_To))
                             {
                                 return false;
@@ -11711,7 +11663,7 @@ namespace WinsockPacketEditor
                         //指定包头
                         if (SystemConfig.CheckHead)
                         {
-                            bool bIsFilter = IsFilter_ByHead(pi.PacketBuffer);
+                            bool bIsFilter = IsFilter_ByHead(packetBuffer);
                             if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
@@ -11721,7 +11673,7 @@ namespace WinsockPacketEditor
                         //封包内容
                         if (SystemConfig.CheckData)
                         {
-                            bool bIsFilter = IsFilter_ByPacket(pi.PacketBuffer);
+                            bool bIsFilter = IsFilter_ByPacket(packetBuffer);
                             if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
@@ -11731,7 +11683,7 @@ namespace WinsockPacketEditor
                         //封包大小
                         if (SystemConfig.CheckLen)
                         {
-                            bool bIsFilter = IsFilter_BySize(pi.PacketLen);
+                            bool bIsFilter = IsFilter_BySize(packetLen);
                             if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
@@ -11741,7 +11693,7 @@ namespace WinsockPacketEditor
                         //封包类别
                         if (SystemConfig.CheckType)
                         {
-                            bool bIsFilter = FilterConfig.Filter.CheckFilterFunction_ByPacketType(pi.PacketType, Operate.SystemConfig.CheckType_Value);
+                            bool bIsFilter = FilterConfig.Filter.CheckFilterFunction_ByPacketType(packetType, Operate.SystemConfig.CheckType_Value);
                             if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
@@ -11750,7 +11702,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsShowPacket_ByFilter), ex.Message);
+                        Operate.DoLog(nameof(IsShowByFilter), ex.Message);
                     }
 
                     return true;

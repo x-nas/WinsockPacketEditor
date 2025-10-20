@@ -746,6 +746,8 @@ namespace WinsockPacketEditor
                 Operate.SystemConfig.SaveSystemList_ToDB();
                 Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
                 Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
+                Operate.ProxyConfig.Proxy.SaveWhiteList_ToDB();
+                Operate.ProxyConfig.Proxy.SaveBlackList_ToDB();
             }
             catch (Exception ex)
             {
