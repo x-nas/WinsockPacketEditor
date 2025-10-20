@@ -78,7 +78,8 @@ namespace WinsockPacketEditor
             public static bool IsShow_FloatButton = true;
             public static Execute ListExecute = Execute.Sequence;
             public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData, CheckType;
-            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value, CheckType_Value;
+            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+            public static FilterConfig.Filter.FilterFunction CheckType_Value;
             public static Color SystemColor = Color.FromArgb(22, 119, 255);
             public static Color Color_30 = Color.FromArgb(30, 30, 30);
             public static Color Color_35 = Color.FromArgb(35, 35, 35);
@@ -3195,6 +3196,8 @@ namespace WinsockPacketEditor
                         new XElement("CheckData_Value", SystemConfig.CheckData_Value),
                         new XElement("CheckSize", SystemConfig.CheckLen),
                         new XElement("CheckLength_Value", SystemConfig.CheckLength_Value),
+                        new XElement("CheckType", SystemConfig.CheckType),
+                        new XElement("CheckType_Value", FilterConfig.Filter.GetFilterFunctionString(SystemConfig.CheckType_Value)),
                         new XElement("HotKeyType", SystemConfig.HotKeyType),
                         new XElement("HotKey1", SystemConfig.HotKey1),
                         new XElement("HotKey2", SystemConfig.HotKey2),
@@ -3279,6 +3282,8 @@ namespace WinsockPacketEditor
                         SystemConfig.CheckData_Value = dtSystemConfig.Rows[0]["CheckData_Value"].ToString();
                         SystemConfig.CheckLen = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckSize"]);
                         SystemConfig.CheckLength_Value = dtSystemConfig.Rows[0]["CheckLength_Value"].ToString();
+                        SystemConfig.CheckType = Convert.ToBoolean(dtSystemConfig.Rows[0]["CheckType"]);
+                        SystemConfig.CheckType_Value = FilterConfig.Filter.GetFilterFunction_ByString(dtSystemConfig.Rows[0]["CheckType_Value"].ToString());
                         SystemConfig.HotKeyType = Convert.ToInt32(dtSystemConfig.Rows[0]["HotKeyType"]);
                         SystemConfig.HotKey1 = dtSystemConfig.Rows[0]["HotKey1"].ToString();
                         SystemConfig.HotKey2 = dtSystemConfig.Rows[0]["HotKey2"].ToString();
@@ -3536,6 +3541,18 @@ namespace WinsockPacketEditor
                     if (CheckLength_Value != null)
                     {
                         SystemConfig.CheckLength_Value = CheckLength_Value.Value;
+                    }
+
+                    XElement CheckType = xeSystemConfig.Element("CheckType");
+                    if (CheckType != null)
+                    {
+                        SystemConfig.CheckType = Convert.ToBoolean(CheckType.Value);
+                    }
+
+                    XElement CheckType_Value = xeSystemConfig.Element("CheckType_Value");
+                    if (CheckType_Value != null)
+                    {
+                        SystemConfig.CheckType_Value = FilterConfig.Filter.GetFilterFunction_ByString(CheckType_Value.Value);
                     }
 
                     XElement HotKeyType = xeSystemConfig.Element("HotKeyType");
@@ -11724,7 +11741,7 @@ namespace WinsockPacketEditor
                         //封包类别
                         if (SystemConfig.CheckType)
                         {
-                            bool bIsFilter = IsFilter_ByType(pi.PacketType);
+                            bool bIsFilter = FilterConfig.Filter.CheckFilterFunction_ByPacketType(pi.PacketType, Operate.SystemConfig.CheckType_Value);
                             if (SystemConfig.CheckNotShow == bIsFilter)
                             {
                                 return false;
@@ -11958,43 +11975,7 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                #endregion
-
-                #region//检测封包类别
-
-                public static bool IsFilter_ByType(PacketConfig.Packet.PacketType ptType)
-                {
-                    try
-                    {
-                        if (string.IsNullOrEmpty(SystemConfig.CheckType_Value))
-                        {
-                            return false;
-                        }
-
-                        string[] TypeArray = SystemConfig.CheckType_Value.Split(';');
-
-                        foreach (string Type in TypeArray)
-                        {
-                            if (string.IsNullOrEmpty(Type))
-                            {
-                                continue;
-                            }
-
-                            if (ptType.ToString().ToUpper().Equals(Type.ToUpper()))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(IsFilter_BySize), ex.Message);
-                    }
-
-                    return false;
-                }
-
-                #endregion
+                #endregion                
 
                 #endregion
 
@@ -14049,7 +14030,7 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//检查滤镜作用类别
+                #region//检查封包类别
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 public static unsafe bool CheckFilterFunction_ByPacketType(PacketConfig.Packet.PacketType ptType, in FilterFunction ffFunction)
@@ -19795,6 +19776,8 @@ namespace WinsockPacketEditor
                         sql += "CheckData_Value TEXT,";//过滤数据内容
                         sql += "CheckSize BOOLEAN DEFAULT 0,";//过滤长度
                         sql += "CheckLength_Value TEXT,";//过滤长度内容
+                        sql += "CheckType BOOLEAN DEFAULT 0,";//过滤封包类别
+                        sql += "CheckType_Value TEXT,";//过滤封包类别内容
                         sql += "HotKeyType INTEGER DEFAULT 0,";//快捷键类型
                         sql += "HotKey1 TEXT,";//快捷键1
                         sql += "HotKey2 TEXT,";//快捷键2
@@ -19920,6 +19903,8 @@ namespace WinsockPacketEditor
                         sql += "CheckData_Value,";
                         sql += "CheckSize,";
                         sql += "CheckLength_Value,";
+                        sql += "CheckType,";
+                        sql += "CheckType_Value,";
                         sql += "HotKeyType,";
                         sql += "HotKey1,";
                         sql += "HotKey2,";
@@ -19975,6 +19960,8 @@ namespace WinsockPacketEditor
                         sql += "@CheckData_Value,";
                         sql += "@CheckSize,";
                         sql += "@CheckLength_Value,";
+                        sql += "@CheckType,";
+                        sql += "@CheckType_Value,";
                         sql += "@HotKeyType,";
                         sql += "@HotKey1,";
                         sql += "@HotKey2,";
@@ -20033,6 +20020,8 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@CheckData_Value", SystemConfig.CheckData_Value);
                             cmd.Parameters.AddWithValue("@CheckSize", SystemConfig.CheckLen);
                             cmd.Parameters.AddWithValue("@CheckLength_Value", SystemConfig.CheckLength_Value);
+                            cmd.Parameters.AddWithValue("@CheckType", SystemConfig.CheckType);
+                            cmd.Parameters.AddWithValue("@CheckType_Value", FilterConfig.Filter.GetFilterFunctionString(SystemConfig.CheckType_Value));
                             cmd.Parameters.AddWithValue("@HotKeyType", SystemConfig.HotKeyType);
                             cmd.Parameters.AddWithValue("@HotKey1", SystemConfig.HotKey1);
                             cmd.Parameters.AddWithValue("@HotKey2", SystemConfig.HotKey2);

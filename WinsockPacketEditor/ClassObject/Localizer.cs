@@ -1597,8 +1597,8 @@ namespace WinsockPacketEditor
                 case "LeachSetting":
                     return "Leach Setting";
 
-                case "LeachSetting.IsShow":
-                    return "Show or Not";
+                case "LeachSetting.LeachMethod":
+                    return "Leach method :";
 
                 case "LeachSetting.Length":
                     return "For example: 0-99;100";
@@ -1608,6 +1608,12 @@ namespace WinsockPacketEditor
 
                 case "LeachSetting.Success":
                     return "Filter Settings Success";
+
+                case "LeachSetting.OnlyDisplay":
+                    return "Only Display";
+
+                case "LeachSetting.NotDisplay":
+                    return "Not Display";
 
                 #endregion
 

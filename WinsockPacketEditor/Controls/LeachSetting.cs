@@ -18,39 +18,67 @@ namespace WinsockPacketEditor
 
         private void LeachSetting_Load(object sender, EventArgs e)
         {
-            this.Text = AntdUI.Localization.Get("LeachSetting", "过滤设置");
-            this.tabPacketType.TabMenuVisible = false;
-
-            if (this.form is InterfaceInfo.IInjectMode)
+            try
             {
-                this.tabPacketType.SelectTab("tpInject");
+                this.Text = AntdUI.Localization.Get("LeachSetting", "过滤设置");
+                this.tabPacketType.TabMenuVisible = false;
+
+                if (this.form is InterfaceInfo.IInjectMode)
+                {
+                    this.tabPacketType.SelectTab("tpInject");
+                }
+                else if (this.form is InterfaceInfo.IProxyMode)
+                {
+                    this.tabPacketType.SelectTab("tpProxy");
+                }
+
+                if (Operate.SystemConfig.CheckNotShow)
+                {
+                    this.rbNotDisplay.Checked = true;
+                }
+                else
+                {
+                    this.rbOnlyDisplay.Checked = true;
+                }
+
+                this.cbCheckSocket.Checked = Operate.SystemConfig.CheckSocket;
+                this.cbCheckIP.Checked = Operate.SystemConfig.CheckIP;
+                this.cbCheckPort.Checked = Operate.SystemConfig.CheckPort;
+                this.cbCheckHead.Checked = Operate.SystemConfig.CheckHead;
+                this.cbCheckData.Checked = Operate.SystemConfig.CheckData;
+                this.cbCheckLen.Checked = Operate.SystemConfig.CheckLen;
+                this.txtCheckSocket.Text = Operate.SystemConfig.CheckSocket_Value;
+                this.txtCheckLen.Text = Operate.SystemConfig.CheckLength_Value;
+                this.txtCheckIP.Text = Operate.SystemConfig.CheckIP_Value;
+                this.txtCheckPort.Text = Operate.SystemConfig.CheckPort_Value;
+                this.txtCheckHead.Text = Operate.SystemConfig.CheckHead_Value;
+                this.txtCheckData.Text = Operate.SystemConfig.CheckData_Value;
+                this.cbCheckType.Checked = Operate.SystemConfig.CheckType;
+                this.cbSend.Checked = Operate.SystemConfig.CheckType_Value.Send;
+                this.cbSendTo.Checked = Operate.SystemConfig.CheckType_Value.SendTo;
+                this.cbRecv.Checked = Operate.SystemConfig.CheckType_Value.Recv;
+                this.cbRecvFrom.Checked = Operate.SystemConfig.CheckType_Value.RecvFrom;
+                this.cbWSASend.Checked = Operate.SystemConfig.CheckType_Value.WSASend;
+                this.cbWSASendTo.Checked = Operate.SystemConfig.CheckType_Value.WSASendTo;
+                this.cbWSARecv.Checked = Operate.SystemConfig.CheckType_Value.WSARecv;
+                this.cbWSARecvFrom.Checked = Operate.SystemConfig.CheckType_Value.WSARecvFrom;
+                this.cbTCP_Req.Checked = Operate.SystemConfig.CheckType_Value.TCP_Req;
+                this.cbUDP_Req.Checked = Operate.SystemConfig.CheckType_Value.UDP_Req;
+                this.cbTCP_Resp.Checked = Operate.SystemConfig.CheckType_Value.TCP_Resp;
+                this.cbUDP_Resp.Checked = Operate.SystemConfig.CheckType_Value.UDP_Resp;
+
+                this.CheckSocket_Changed();
+                this.CheckLen_Changed();
+                this.CheckIP_Changed();
+                this.CheckPort_Changed();
+                this.CheckHead_Changed();
+                this.CheckData_Changed();
+                this.CheckType_Changed();
             }
-            else if (this.form is InterfaceInfo.IProxyMode)
+            catch (Exception ex)
             {
-                this.tabPacketType.SelectTab("tpProxy");
-            }
-
-            this.sIsShow.Checked = !Operate.SystemConfig.CheckNotShow;
-            this.cbCheckSocket.Checked = Operate.SystemConfig.CheckSocket;
-            this.cbCheckIP.Checked = Operate.SystemConfig.CheckIP;
-            this.cbCheckPort.Checked = Operate.SystemConfig.CheckPort;
-            this.cbCheckHead.Checked = Operate.SystemConfig.CheckHead;
-            this.cbCheckData.Checked = Operate.SystemConfig.CheckData;
-            this.cbCheckLen.Checked = Operate.SystemConfig.CheckLen;
-            this.txtCheckSocket.Text = Operate.SystemConfig.CheckSocket_Value;
-            this.txtCheckLen.Text = Operate.SystemConfig.CheckLength_Value;
-            this.txtCheckIP.Text = Operate.SystemConfig.CheckIP_Value;
-            this.txtCheckPort.Text = Operate.SystemConfig.CheckPort_Value;
-            this.txtCheckHead.Text = Operate.SystemConfig.CheckHead_Value;
-            this.txtCheckData.Text = Operate.SystemConfig.CheckData_Value;
-
-            this.CheckSocket_Changed();
-            this.CheckLen_Changed();
-            this.CheckIP_Changed();
-            this.CheckPort_Changed();
-            this.CheckHead_Changed();
-            this.CheckData_Changed();
-            this.CheckType_Changed();
+                Operate.DoLog(nameof(LeachSetting_Load), ex.Message);
+            }            
         }
 
         #endregion        
@@ -153,16 +181,67 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//保存
+        #region//检查保存设置
 
-        private void bSave_Click(object sender, EventArgs e)
+        private bool CheckSaveSetting()
         {
-            if (this.cbCheckSocket.Checked && string.IsNullOrEmpty(this.txtCheckSocket.Text.Trim()) ||
+            try
+            {
+                if (this.cbCheckSocket.Checked && string.IsNullOrEmpty(this.txtCheckSocket.Text.Trim()) ||
                 this.cbCheckLen.Checked && string.IsNullOrEmpty(this.txtCheckLen.Text.Trim()) ||
                 this.cbCheckIP.Checked && string.IsNullOrEmpty(this.txtCheckIP.Text.Trim()) ||
                 this.cbCheckPort.Checked && string.IsNullOrEmpty(this.txtCheckPort.Text.Trim()) ||
                 this.cbCheckHead.Checked && string.IsNullOrEmpty(this.txtCheckHead.Text.Trim()) ||
                 this.cbCheckData.Checked && string.IsNullOrEmpty(this.txtCheckData.Text.Trim()))
+                {
+                    return false;
+                }
+
+                if (this.cbCheckType.Checked)
+                {
+                    if (this.form is InterfaceInfo.IInjectMode)
+                    {
+                        if (this.cbSend.Checked == false &&
+                            this.cbSendTo.Checked == false &&
+                            this.cbRecv.Checked == false &&
+                            this.cbRecvFrom.Checked == false &&
+                            this.cbWSASend.Checked == false &&
+                            this.cbWSASendTo.Checked == false &&
+                            this.cbWSARecv.Checked == false &&
+                            this.cbWSARecvFrom.Checked == false)
+                        {
+                            return false;
+                        }
+                    }
+                    else if (this.form is InterfaceInfo.IProxyMode)
+                    {
+                        if (this.cbTCP_Req.Checked == false &&
+                            this.cbUDP_Req.Checked == false &&
+                            this.cbTCP_Resp.Checked == false &&
+                            this.cbUDP_Resp.Checked == false)
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(CheckSaveSetting), ex.Message);
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region//保存
+
+        private void bSave_Click(object sender, EventArgs e)
+        {
+            if (!this.CheckSaveSetting())
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "过滤设置为空", TType.Error)
                 {
@@ -172,7 +251,7 @@ namespace WinsockPacketEditor
                 return;
             }
 
-            Operate.SystemConfig.CheckNotShow = !sIsShow.Checked;
+            Operate.SystemConfig.CheckNotShow = this.rbNotDisplay.Checked;
             Operate.SystemConfig.CheckSocket = cbCheckSocket.Checked;
             Operate.SystemConfig.CheckIP = cbCheckIP.Checked;
             Operate.SystemConfig.CheckPort = cbCheckPort.Checked;
@@ -185,6 +264,20 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.CheckPort_Value = this.txtCheckPort.Text.Trim();
             Operate.SystemConfig.CheckHead_Value = this.txtCheckHead.Text.Trim();
             Operate.SystemConfig.CheckData_Value = this.txtCheckData.Text.Trim();
+
+            Operate.SystemConfig.CheckType = this.cbCheckType.Checked;
+            Operate.SystemConfig.CheckType_Value.Send = this.cbSend.Checked;
+            Operate.SystemConfig.CheckType_Value.SendTo = this.cbSendTo.Checked;
+            Operate.SystemConfig.CheckType_Value.Recv = this.cbRecv.Checked;
+            Operate.SystemConfig.CheckType_Value.RecvFrom = this.cbRecvFrom.Checked;
+            Operate.SystemConfig.CheckType_Value.WSASend = this.cbWSASend.Checked;
+            Operate.SystemConfig.CheckType_Value.WSASendTo = this.cbWSASendTo.Checked;
+            Operate.SystemConfig.CheckType_Value.WSARecv = this.cbWSARecv.Checked;
+            Operate.SystemConfig.CheckType_Value.WSARecvFrom = this.cbWSARecvFrom.Checked;
+            Operate.SystemConfig.CheckType_Value.TCP_Req = this.cbTCP_Req.Checked;
+            Operate.SystemConfig.CheckType_Value.UDP_Req = this.cbUDP_Req.Checked;
+            Operate.SystemConfig.CheckType_Value.TCP_Resp = this.cbTCP_Resp.Checked;
+            Operate.SystemConfig.CheckType_Value.UDP_Resp = this.cbUDP_Resp.Checked;
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "过滤设置保存成功", TType.Success)
             {
