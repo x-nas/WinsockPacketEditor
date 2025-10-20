@@ -11476,10 +11476,10 @@ namespace WinsockPacketEditor
                     public static string WSARecvEx => AntdUI.Localization.Get("HookSettingsForm.WSARecv", "WSA接收");
                     public static string WSASendTo => AntdUI.Localization.Get("HookSettingsForm.WSASendTo", "WSA发送到");
                     public static string WSARecvFrom => AntdUI.Localization.Get("HookSettingsForm.WSARecvFrom", "WSA接收自");
-                    public static string TCP_Req => AntdUI.Localization.Get("", "TCP");
-                    public static string UDP_Req => AntdUI.Localization.Get("", "UDP");
-                    public static string TCP_Resp => AntdUI.Localization.Get("", "TCP");
-                    public static string UDP_Resp => AntdUI.Localization.Get("", "UDP");
+                    public static string TCP_Req => AntdUI.Localization.Get("HookSettingsForm.TCP_Req", "TCP 请求");
+                    public static string UDP_Req => AntdUI.Localization.Get("HookSettingsForm.UDP_Req", "UDP 请求");
+                    public static string TCP_Resp => AntdUI.Localization.Get("HookSettingsForm.TCP_Resp", "TCP 响应");
+                    public static string UDP_Resp => AntdUI.Localization.Get("HookSettingsForm.UDP_Resp", "UDP 响应");
                 }
 
                 public static string GetName_ByPacketType(PacketType socketType)

@@ -1658,6 +1658,18 @@ namespace WinsockPacketEditor
                 case "HookSettingsForm.WSARecvFrom":
                     return "WSARecvFrom";
 
+                case "HookSettingsForm.TCP_Req":
+                    return "TCP Req";
+
+                case "HookSettingsForm.UDP_Req":
+                    return "UDP Req";
+
+                case "HookSettingsForm.TCP_Resp":
+                    return "TCP Res";
+
+                case "HookSettingsForm.UDP_Resp":
+                    return "UDP Res";
+
                 case "HookSettingsForm.TCP":
                     return "TCP Protocol";
 
