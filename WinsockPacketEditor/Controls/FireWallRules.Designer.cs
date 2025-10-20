@@ -33,23 +33,27 @@
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
+            this.tlpAutoBlock_UnSupport = new WinsockPacketEditor.TableLayoutPanelEx();
             this.cbAutoBlock_UnSupport = new AntdUI.Checkbox();
+            this.nudAutoBlock_UnSupport = new AntdUI.InputNumber();
             this.tlpFireWallRules.SuspendLayout();
             this.tlpButton.SuspendLayout();
+            this.tlpAutoBlock_UnSupport.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpFireWallRules
             // 
             this.tlpFireWallRules.ColumnCount = 1;
             this.tlpFireWallRules.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFireWallRules.Controls.Add(this.cbAutoClear_Expiry, 0, 1);
-            this.tlpFireWallRules.Controls.Add(this.tlpButton, 0, 3);
-            this.tlpFireWallRules.Controls.Add(this.cbAutoBlock_UnSupport, 0, 0);
+            this.tlpFireWallRules.Controls.Add(this.cbAutoClear_Expiry, 0, 2);
+            this.tlpFireWallRules.Controls.Add(this.tlpButton, 0, 4);
+            this.tlpFireWallRules.Controls.Add(this.tlpAutoBlock_UnSupport, 0, 0);
             this.tlpFireWallRules.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFireWallRules.Location = new System.Drawing.Point(0, 0);
             this.tlpFireWallRules.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFireWallRules.Name = "tlpFireWallRules";
-            this.tlpFireWallRules.RowCount = 4;
+            this.tlpFireWallRules.RowCount = 5;
+            this.tlpFireWallRules.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpFireWallRules.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFireWallRules.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFireWallRules.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -61,7 +65,7 @@
             // 
             this.cbAutoClear_Expiry.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbAutoClear_Expiry.LocalizationText = "FireWallSetting.AutoClear.Expiry";
-            this.cbAutoClear_Expiry.Location = new System.Drawing.Point(3, 41);
+            this.cbAutoClear_Expiry.Location = new System.Drawing.Point(3, 53);
             this.cbAutoClear_Expiry.Name = "cbAutoClear_Expiry";
             this.cbAutoClear_Expiry.Size = new System.Drawing.Size(183, 32);
             this.cbAutoClear_Expiry.TabIndex = 7;
@@ -120,15 +124,61 @@
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
+            // tlpAutoBlock_UnSupport
+            // 
+            this.tlpAutoBlock_UnSupport.ColumnCount = 3;
+            this.tlpAutoBlock_UnSupport.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAutoBlock_UnSupport.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpAutoBlock_UnSupport.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpAutoBlock_UnSupport.Controls.Add(this.cbAutoBlock_UnSupport, 0, 1);
+            this.tlpAutoBlock_UnSupport.Controls.Add(this.nudAutoBlock_UnSupport, 1, 1);
+            this.tlpAutoBlock_UnSupport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpAutoBlock_UnSupport.Location = new System.Drawing.Point(0, 0);
+            this.tlpAutoBlock_UnSupport.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpAutoBlock_UnSupport.Name = "tlpAutoBlock_UnSupport";
+            this.tlpAutoBlock_UnSupport.RowCount = 3;
+            this.tlpAutoBlock_UnSupport.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpAutoBlock_UnSupport.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpAutoBlock_UnSupport.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpAutoBlock_UnSupport.Size = new System.Drawing.Size(400, 50);
+            this.tlpAutoBlock_UnSupport.TabIndex = 8;
+            // 
             // cbAutoBlock_UnSupport
             // 
             this.cbAutoBlock_UnSupport.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbAutoBlock_UnSupport.LocalizationText = "FireWallSetting.AutoBlock.UnSupport";
-            this.cbAutoBlock_UnSupport.Location = new System.Drawing.Point(3, 3);
+            this.cbAutoBlock_UnSupport.Location = new System.Drawing.Point(3, 9);
             this.cbAutoBlock_UnSupport.Name = "cbAutoBlock_UnSupport";
-            this.cbAutoBlock_UnSupport.Size = new System.Drawing.Size(261, 32);
-            this.cbAutoBlock_UnSupport.TabIndex = 6;
-            this.cbAutoBlock_UnSupport.Text = "自动屏蔽 ( 30分钟 ) - 不支持的 Socks 协议";
+            this.cbAutoBlock_UnSupport.Size = new System.Drawing.Size(205, 32);
+            this.cbAutoBlock_UnSupport.TabIndex = 7;
+            this.cbAutoBlock_UnSupport.Text = "自动屏蔽 - 不支持的 Socks 协议";
+            // 
+            // nudAutoBlock_UnSupport
+            // 
+            this.nudAutoBlock_UnSupport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudAutoBlock_UnSupport.LocalizationSuffixText = "Minutes";
+            this.nudAutoBlock_UnSupport.Location = new System.Drawing.Point(214, 9);
+            this.nudAutoBlock_UnSupport.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudAutoBlock_UnSupport.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAutoBlock_UnSupport.Name = "nudAutoBlock_UnSupport";
+            this.nudAutoBlock_UnSupport.Size = new System.Drawing.Size(100, 32);
+            this.nudAutoBlock_UnSupport.SuffixText = "分钟";
+            this.nudAutoBlock_UnSupport.TabIndex = 8;
+            this.nudAutoBlock_UnSupport.Text = "30";
+            this.nudAutoBlock_UnSupport.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudAutoBlock_UnSupport.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
             // 
             // FireWallRules
             // 
@@ -145,6 +195,8 @@
             this.tlpFireWallRules.PerformLayout();
             this.tlpButton.ResumeLayout(false);
             this.tlpButton.PerformLayout();
+            this.tlpAutoBlock_UnSupport.ResumeLayout(false);
+            this.tlpAutoBlock_UnSupport.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -155,7 +207,9 @@
         private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
-        private AntdUI.Checkbox cbAutoBlock_UnSupport;
         private AntdUI.Checkbox cbAutoClear_Expiry;
+        private TableLayoutPanelEx tlpAutoBlock_UnSupport;
+        private AntdUI.Checkbox cbAutoBlock_UnSupport;
+        private AntdUI.InputNumber nudAutoBlock_UnSupport;
     }
 }

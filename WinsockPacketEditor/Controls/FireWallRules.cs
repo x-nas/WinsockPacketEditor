@@ -20,6 +20,7 @@ namespace WinsockPacketEditor
         {
             this.cbAutoBlock_UnSupport.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport;
             this.cbAutoClear_Expiry.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry;
+            this.nudAutoBlock_UnSupport.Value = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_Minutes;
         }
 
         #endregion
@@ -30,6 +31,7 @@ namespace WinsockPacketEditor
         {
             Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = this.cbAutoBlock_UnSupport.Checked;
             Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry = this.cbAutoClear_Expiry.Checked;
+            Operate.ProxyConfig.Proxy.FireWall_AutoBlock_Minutes = ((int)this.nudAutoBlock_UnSupport.Value);
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "防火墙规则保存成功", TType.Success)
             {

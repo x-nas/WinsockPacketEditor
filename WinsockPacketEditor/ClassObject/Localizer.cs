@@ -396,6 +396,9 @@ namespace WinsockPacketEditor
                 case "Preview":
                     return "Preview";
 
+                case "Minutes":
+                    return "Mins";
+
                 #endregion
 
                 #region//Operate
@@ -2148,7 +2151,7 @@ namespace WinsockPacketEditor
                     return "Permanent";
 
                 case "FireWallSetting.AutoBlock.UnSupport":
-                    return "Auto block (30 Mins) - Unsupported Socks protocol";
+                    return "Auto block - Unsupported Socks protocol";
 
                 case "FireWallSetting.AutoClear.Expiry":
                     return "Auto clear - Expired IP addresses";
