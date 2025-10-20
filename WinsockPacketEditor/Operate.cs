@@ -64,7 +64,7 @@ namespace WinsockPacketEditor
             public static string HotKey10 = "Ctrl + Alt + F10";
             public static string HotKey11 = "Ctrl + Alt + F11";
             public static string HotKey12 = "Ctrl + Alt + F12";
-            public static SystemMode StartMode = SystemMode.None;
+            public static SystemMode SelectMode = SystemMode.None;
             public static bool SpeedMode = false;
             public static DateTime StartTime = DateTime.Now;
             public static IntPtr MainHandle = IntPtr.Zero;
@@ -97,7 +97,7 @@ namespace WinsockPacketEditor
             public enum SystemMode
             {
                 None = 0,
-                Process = 1,
+                Inject = 1,
                 Proxy = 2,
             }
 
@@ -340,27 +340,7 @@ namespace WinsockPacketEditor
                 return leReturn;
             }
 
-            #endregion          
-
-            #region//获取启动模式
-
-            public static SystemMode GetSystemMode_ByString(string smMode)
-            {
-                SystemMode systemMode = SystemMode.None;
-
-                try
-                {
-                    systemMode = (SystemMode)Enum.Parse(typeof(SystemMode), smMode);
-                }
-                catch (Exception ex)
-                {
-                    DoLog(nameof(GetSystemMode_ByString), ex.Message);
-                }
-
-                return systemMode;
-            }
-
-            #endregion
+            #endregion                      
 
             #region//获取本机的本地IP地址
 
@@ -591,13 +571,13 @@ namespace WinsockPacketEditor
 
                 try
                 {
-                    switch (Operate.SystemConfig.StartMode)
+                    switch (Operate.SystemConfig.SelectMode)
                     {
                         case Operate.SystemConfig.SystemMode.Proxy:
                             sReturn = AntdUI.Localization.Get("Proxy Mode", "代理模式");
                             break;
 
-                        case Operate.SystemConfig.SystemMode.Process:
+                        case Operate.SystemConfig.SystemMode.Inject:
                             sReturn = AntdUI.Localization.Get("Inject Mode", "注入模式");
                             break;
                     }
@@ -3171,7 +3151,6 @@ namespace WinsockPacketEditor
                         new XElement("IsDark", AntdUI.Config.IsDark),
                         new XElement("DefaultLanguage", AntdUI.Localization.CurrentLanguage),
                         new XElement("LastInjection", SystemConfig.LastInjection),
-                        new XElement("StartMode", SystemConfig.StartMode),
                         new XElement("Remote_IsEnable", SystemConfig.IsRemote),
                         new XElement("Remote_UserName", SystemConfig.Remote_UserName),
                         new XElement("Remote_PassWord", SystemConfig.Remote_PassWord),
@@ -3257,7 +3236,6 @@ namespace WinsockPacketEditor
                         AntdUI.Config.IsDark = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsDark"]);                        
                         Lang = dtSystemConfig.Rows[0]["DefaultLanguage"].ToString();
                         SystemConfig.LastInjection = dtSystemConfig.Rows[0]["LastInjection"].ToString();
-                        SystemConfig.StartMode = Operate.SystemConfig.GetSystemMode_ByString(dtSystemConfig.Rows[0]["StartMode"].ToString());
                         SystemConfig.IsRemote = Convert.ToBoolean(dtSystemConfig.Rows[0]["Remote_IsEnable"]);
                         SystemConfig.Remote_UserName = dtSystemConfig.Rows[0]["Remote_UserName"].ToString();
                         SystemConfig.Remote_PassWord = dtSystemConfig.Rows[0]["Remote_PassWord"].ToString();
@@ -3391,12 +3369,6 @@ namespace WinsockPacketEditor
                     if (xeLastInjection != null)
                     {
                         SystemConfig.LastInjection = xeLastInjection.Value;
-                    }
-
-                    XElement xeStartMode = xeSystemConfig.Element("StartMode");
-                    if (xeStartMode != null)
-                    {
-                        SystemConfig.StartMode = GetSystemMode_ByString(xeStartMode.Value);
                     }
 
                     XElement xeIsRemote = xeSystemConfig.Element("Remote_IsEnable");
@@ -19703,7 +19675,6 @@ namespace WinsockPacketEditor
                         sql += "IsDark BOOLEAN DEFAULT 0,";//系统设置 - 启用深色主题
                         sql += "DefaultLanguage TEXT,";//系统设置 - 默认语言
                         sql += "LastInjection TEXT,";//系统设置 - 上次注入进程名称
-                        sql += "StartMode INTEGER DEFAULT 0,";//系统设置 - 启动模式
                         sql += "Remote_IsEnable BOOLEAN DEFAULT 0,";//系统设置 - 启用远程管理
                         sql += "Remote_UserName TEXT,";//系统设置 - 远程管理账号
                         sql += "Remote_PassWord TEXT,";//系统设置 - 远程管理密码
@@ -19830,7 +19801,6 @@ namespace WinsockPacketEditor
                         sql += "IsDark,";
                         sql += "DefaultLanguage,";
                         sql += "LastInjection,";
-                        sql += "StartMode,";
                         sql += "Remote_IsEnable,";
                         sql += "Remote_UserName,";
                         sql += "Remote_PassWord,";
@@ -19887,7 +19857,6 @@ namespace WinsockPacketEditor
                         sql += "@IsDark,";
                         sql += "@DefaultLanguage,";
                         sql += "@LastInjection,";
-                        sql += "@StartMode,";
                         sql += "@Remote_IsEnable,";
                         sql += "@Remote_UserName,";
                         sql += "@Remote_PassWord,";
@@ -19947,7 +19916,6 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@IsDark", AntdUI.Config.IsDark);
                             cmd.Parameters.AddWithValue("@DefaultLanguage", AntdUI.Localization.CurrentLanguage);
                             cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
-                            cmd.Parameters.AddWithValue("@StartMode", SystemConfig.StartMode);
                             cmd.Parameters.AddWithValue("@Remote_IsEnable", SystemConfig.IsRemote);
                             cmd.Parameters.AddWithValue("@Remote_UserName", SystemConfig.Remote_UserName);
                             cmd.Parameters.AddWithValue("@Remote_PassWord", SystemConfig.Remote_PassWord);

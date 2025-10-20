@@ -530,9 +530,9 @@ namespace WinsockPacketEditor
                 }
 
                 Operate.SystemConfig.LastInjection = Operate.SystemConfig.PNAME;
-                Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Process;
                 Operate.SystemConfig.SaveSystemConfig_LastInjection_ToDB();
 
+                Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.Inject;
                 this.Dispose();
             }
             catch (Exception ex)

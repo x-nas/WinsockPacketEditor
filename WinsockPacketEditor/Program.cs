@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using WinsockPacketEditor.Forms;
 
 namespace WinsockPacketEditor
 {
@@ -33,7 +32,7 @@ namespace WinsockPacketEditor
                     StartForm sfForm = new StartForm();
                     if (sfForm.ShowDialog() == DialogResult.OK)
                     {
-                        if (Operate.SystemConfig.StartMode == Operate.SystemConfig.SystemMode.Proxy)
+                        if (Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Proxy)
                         {
                             Application.Run(new ProxyModeForm());
                         }

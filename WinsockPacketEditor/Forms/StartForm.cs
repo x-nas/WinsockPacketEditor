@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace WinsockPacketEditor.Forms
+namespace WinsockPacketEditor
 {
     public partial class StartForm : BorderlessForm
     {
@@ -24,7 +24,7 @@ namespace WinsockPacketEditor.Forms
         private void StartForm_Load(object sender, EventArgs e)
         {
             this.Text = "WPE x64 - " + AntdUI.Localization.Get("StartForm", "首页");
-            Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.None;
+            Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.None;
 
             this.InitGlobal();
             this.GetWebSiteURL();
@@ -58,7 +58,7 @@ namespace WinsockPacketEditor.Forms
 
         private void SelectedStartMode()
         {
-            if (Operate.SystemConfig.StartMode != Operate.SystemConfig.SystemMode.None)
+            if (Operate.SystemConfig.SelectMode != Operate.SystemConfig.SystemMode.None)
             {
                 this.DialogResult = DialogResult.OK;
             }
@@ -280,7 +280,7 @@ namespace WinsockPacketEditor.Forms
 
         private void StartProxyMode()
         {
-            Operate.SystemConfig.StartMode = Operate.SystemConfig.SystemMode.Proxy;
+            Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.Proxy;
             this.SelectedStartMode();
             this.Close();
         }

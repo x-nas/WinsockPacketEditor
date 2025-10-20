@@ -1,4 +1,4 @@
-﻿namespace WinsockPacketEditor.Forms
+﻿namespace WinsockPacketEditor
 {
     partial class StartForm
     {
