@@ -8070,6 +8070,647 @@ namespace WinsockPacketEditor
                 public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
                 public static ConcurrentDictionary<(Guid AID, string AuthIP), AuthInfo> cdAuthInfo = new ConcurrentDictionary<(Guid, string), AuthInfo>();
 
+                #region//新增代理账号
+
+                public static void AddProxyAccount(bool SaveToDB, AccountInfo ai)
+                {
+                    try
+                    {
+                        if (!ProxyConfig.Account.CheckProxyAccount_Exist(ai.UserName))
+                        {
+                            ProxyConfig.Account.ProxyAccountToList(ai);
+
+                            if (SaveToDB)
+                            {
+                                DataBase.InsertTable_ProxyAccount(ai);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddProxyAccount), ex.Message);
+                    }
+                }
+
+                public static bool AddProxyAccount(
+                    bool SaveToDB,
+                    Guid AID,
+                    bool IsEnable,
+                    string UserName,
+                    string PassWord,
+                    BindingList<AccountIPInfo> AIPInfo,
+                    bool IsLimitLinks,
+                    int LimitLinks,
+                    bool IsLimitDevices,
+                    int LimitDevices,
+                    bool IsExpiry,
+                    DateTime ExpiryTime,
+                    DateTime CreateTime)
+                {
+                    try
+                    {
+                        if (AID != Guid.Empty && !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(PassWord))
+                        {
+                            if (!ProxyConfig.Account.CheckProxyAccount_Exist(UserName))
+                            {
+                                AccountInfo ai = new AccountInfo(
+                                    AID,
+                                    IsEnable,
+                                    UserName,
+                                    PassWord,
+                                    AIPInfo,
+                                    IsLimitLinks,
+                                    LimitLinks,
+                                    IsLimitDevices,
+                                    LimitDevices,
+                                    IsExpiry,
+                                    ExpiryTime,
+                                    CreateTime);
+
+                                ProxyConfig.Account.ProxyAccountToList(ai);
+
+                                if (SaveToDB)
+                                {
+                                    DataBase.InsertTable_ProxyAccount(ai);
+                                }
+
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddProxyAccount), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//新增代理账号IP信息
+
+                public static async void AddAccountIPInfo(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP)
+                {
+                    try
+                    {
+                        string IPLocation = await SystemConfig.GetIPLocation(LoginIP);
+
+                        AccountIPInfo aii = new AccountIPInfo(LoginTime, LoginIP, IPLocation);
+                        AIPInfo.Add(aii);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddAccountIPInfo), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//更新代理账号            
+
+                public static bool UpdateProxyAccount_ByAccountID(
+                    Guid AID,
+                    bool IsEnable,
+                    string PassWord,
+                    bool IsLimitLinks,
+                    int LimitLinks,
+                    bool IsLimitDevices,
+                    int LimitDevices,
+                    bool IsExpiry,
+                    DateTime ExpiryTime)
+                {
+                    try
+                    {
+                        if (AID != null)
+                        {
+                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
+
+                            if (ai != null)
+                            {
+                                ai.IsEnable = IsEnable;
+
+                                if (!string.IsNullOrEmpty(PassWord))
+                                {
+                                    ai.Password = PassWord;
+                                }
+
+                                ai.IsLimitLinks = IsLimitLinks;
+                                ai.LimitLinks = LimitLinks;
+                                ai.IsExpiry = IsExpiry;
+                                ai.IsLimitDevices = IsLimitDevices;
+                                ai.LimitDevices = LimitDevices;
+                                ai.ExpiryTime = ExpiryTime;
+
+                                DataBase.UpdateTable_ProxyAccount(ai);
+
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateProxyAccount_ByAccountID), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static bool UpdateProxyAccount_ByCCProxy(
+                    string UserName,
+                    bool IsEnable,
+                    string PassWord,
+                    bool IsLimitLinks,
+                    int LimitLinks,
+                    bool IsExpiry,
+                    DateTime ExpiryTime)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(UserName))
+                        {
+                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.UserName == UserName);
+
+                            if (ai != null)
+                            {
+                                ai.IsEnable = IsEnable;
+
+                                if (!string.IsNullOrEmpty(PassWord))
+                                {
+                                    ai.Password = PassWord;
+                                }
+
+                                ai.IsLimitLinks = IsLimitLinks;
+                                ai.LimitLinks = LimitLinks;
+                                ai.IsExpiry = IsExpiry;
+                                ai.ExpiryTime = ExpiryTime;
+
+                                DataBase.UpdateTable_ProxyAccount(ai);
+
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateProxyAccount_ByCCProxy), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//删除代理账号（对话框）                
+
+                public static void DeleteAccount_Dialog(Form form, List<AccountInfo> aiList)
+                {
+                    try
+                    {
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountList", "账号列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                        {
+                            Icon = TType.Warn,
+                            Keyboard = false,
+                            MaskClosable = false,
+                            OnOk = config =>
+                            {
+                                if (aiList == null)
+                                {
+                                    ProxyConfig.Account.AccountListClear();
+                                }
+                                else
+                                {
+                                    foreach (AccountInfo ai in aiList)
+                                    {
+                                        ProxyConfig.Account.lstAccountInfo.Remove(ai);
+                                        DataBase.DeleteTable_ProxyAccount(ai.AID);
+                                    }
+                                }
+
+                                if (form is InterfaceInfo.IProxyMode pmForm)
+                                {
+                                    pmForm.RefreshAccountList();
+                                }
+
+                                return true;
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteAccount_Dialog), ex.Message);
+                    }
+                }
+
+                public static bool DeleteProxyAccount_ByAccountID(Guid AID)
+                {
+                    try
+                    {
+                        if (AID != null)
+                        {
+                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
+
+                            if (ai != null)
+                            {
+                                ProxyConfig.Account.lstAccountInfo.Remove(ai);
+                                DataBase.DeleteTable_ProxyAccount(ai.AID);
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteProxyAccount_ByAccountID), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static bool DeleteProxyAccount_ByUserName(string UserName)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(UserName))
+                        {
+                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.UserName == UserName);
+
+                            if (ai != null)
+                            {
+                                ProxyConfig.Account.lstAccountInfo.Remove(ai);
+                                DataBase.DeleteTable_ProxyAccount(ai.AID);
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteProxyAccount_ByUserName), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                public static void AccountListClear()
+                {
+                    try
+                    {
+                        ProxyConfig.Account.lstAccountInfo.Clear();
+                        DataBase.DeleteTable_ProxyAccount();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AccountListClear), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//查找代理账号
+
+                public static string GetUserName_ByAccountID(Guid AID)
+                {
+                    try
+                    {
+                        if (AID != null)
+                        {
+                            AccountInfo pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
+
+                            if (pai != null)
+                            {
+                                return pai.UserName;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetUserName_ByAccountID), ex.Message);
+                    }
+
+                    return string.Empty;
+                }
+
+                public static AccountInfo GetProxyAccount_ByAccountID(Guid AID)
+                {
+                    try
+                    {
+                        if (AID != null)
+                        {
+                            AccountInfo pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
+
+                            if (pai != null)
+                            {
+                                return pai;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyAccount_ByAccountID), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                public static BindingList<AccountInfo> GetAccount_ByUserName(string UserName)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(UserName))
+                        {
+                            BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                                (ProxyConfig.Account.lstAccountInfo.Where(account => account.UserName.Contains(UserName)).ToList());
+
+                            return pai;
+                        }
+                        else
+                        {
+                            return ProxyConfig.Account.lstAccountInfo;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetAccount_ByUserName), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsEnable(bool IsEnable)
+                {
+                    try
+                    {
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsEnable == IsEnable).ToList());
+
+                        return pai;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsEnable), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsOnLine(bool IsOnLine)
+                {
+                    try
+                    {
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsOnLine == IsOnLine).ToList());
+
+                        return pai;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsOnLine), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsExpiry(bool IsExpiry)
+                {
+                    try
+                    {
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsExpiry == IsExpiry).ToList());
+
+                        return pai;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsExpiry), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsLimitLinks(bool IsLimitLinks)
+                {
+                    try
+                    {
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsLimitLinks == IsLimitLinks).ToList());
+
+                        return pai;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitLinks), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                public static BindingList<AccountInfo> GetProxyAccount_ByIsLimitDevices(bool IsLimitDevices)
+                {
+                    try
+                    {
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsLimitDevices == IsLimitDevices).ToList());
+
+                        return pai;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitDevices), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                public static BindingList<AccountInfo> GetProxyAccount_ByExpireTime(DateTime dtFrom, DateTime dtTo)
+                {
+                    try
+                    {
+                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
+                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.ExpiryTime >= dtFrom && account.ExpiryTime <= dtTo).ToList());
+
+                        return pai;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetProxyAccount_ByExpireTime), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//代理账号入列表
+
+                public static void ProxyAccountToList(AccountInfo ai)
+                {
+                    try
+                    {
+                        if (Operate.SystemConfig.InvokeAction != null)
+                        {
+                            Operate.SystemConfig.InvokeAction(() =>
+                            {
+                                ProxyConfig.Account.lstAccountInfo.Add(ai);
+                            });
+                        }
+                        else
+                        {
+                            ProxyConfig.Account.lstAccountInfo.Add(ai);
+                        }                        
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ProxyAccountToList), ex.Message);
+                    }
+                }
+
+                #endregion                
+
+                #region//调整过期时间
+
+                public static void AdjustExpiryTime(List<AccountInfo> aiList, int AddType, int AddHours)
+                {
+                    try
+                    {
+                        if (aiList.Count > 0)
+                        {
+                            DateTime dtExpiryTime = DateTime.Now;
+
+                            foreach (AccountInfo ai in aiList)
+                            {
+                                switch (AddType)
+                                {
+                                    case 0:
+                                        dtExpiryTime = ai.ExpiryTime.AddHours(AddHours);
+                                        break;
+
+                                    case 1:
+                                        if (ai.ExpiryTime >= DateTime.Now)
+                                        {
+                                            dtExpiryTime = ai.ExpiryTime.AddHours(AddHours);
+                                        }
+                                        else
+                                        {
+                                            dtExpiryTime = DateTime.Now.AddHours(AddHours);
+                                        }
+                                        break;
+                                }
+
+                                ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
+                                    ai.AID,
+                                    ai.IsEnable,
+                                    ai.Password,
+                                    ai.IsLimitLinks,
+                                    ai.LimitLinks,
+                                    ai.IsLimitDevices,
+                                    ai.LimitDevices,
+                                    ai.IsExpiry,
+                                    dtExpiryTime);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AdjustExpiryTime), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//调整链接数
+
+                public static void AdjustLimitLinks(List<AccountInfo> aiList, bool IsLimitLinks, int LimitLinks)
+                {
+                    try
+                    {
+                        if (aiList.Count > 0)
+                        {
+                            foreach (AccountInfo ai in aiList)
+                            {
+                                ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
+                                    ai.AID,
+                                    ai.IsEnable,
+                                    ai.Password,
+                                    IsLimitLinks,
+                                    LimitLinks,
+                                    ai.IsLimitDevices,
+                                    ai.LimitDevices,
+                                    ai.IsExpiry,
+                                    ai.ExpiryTime);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AdjustLimitLinks), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//调整设备数
+
+                public static void AdjustLimitDevices(List<AccountInfo> aiList, bool IsLimitDevices, int LimitDevices)
+                {
+                    try
+                    {
+                        if (aiList.Count > 0)
+                        {
+                            foreach (AccountInfo ai in aiList)
+                            {
+                                ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
+                                    ai.AID,
+                                    ai.IsEnable,
+                                    ai.Password,
+                                    ai.IsLimitLinks,
+                                    ai.LimitLinks,
+                                    IsLimitDevices,
+                                    LimitDevices,
+                                    ai.IsExpiry,
+                                    ai.ExpiryTime);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AdjustLimitDevices), ex.Message);
+                    }
+                }
+
+                #endregion                
+
+                #region//记录代理账号的IP地址（异步）
+
+                public static async Task IPInfo_ToAccount(Guid AccountID, string IPAddress)
+                {
+                    try
+                    {
+                        if (AccountID != Guid.Empty && !string.IsNullOrEmpty(IPAddress))
+                        {
+                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AccountID);
+                            if (ai != null)
+                            {
+                                AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
+                                if (aii == null)
+                                {
+                                    string IPLocation = await SystemConfig.GetIPLocation(IPAddress);
+                                    aii = new AccountIPInfo(DateTime.Now, IPAddress, IPLocation);
+                                    ai.AIPInfo.Add(aii);
+                                }
+                                else
+                                {
+                                    aii.LoginTime = DateTime.Now;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(nameof(IPInfo_ToAccount), ex.Message);
+                    }
+                }
+
+                #endregion
+
                 #region//代理认证入列表（异步）
 
                 public static async Task AuthInfo_ToList(Guid AID, string AuthIP, bool AuthResult)
@@ -8614,638 +9255,7 @@ namespace WinsockPacketEditor
                     return menuItems.ToArray();
                 }
 
-                #endregion
-
-                #region//记录代理账号的IP地址（异步）
-
-                public static async Task IPInfo_ToAccount(Guid AccountID, string IPAddress)
-                {
-                    try
-                    {
-                        if (AccountID != Guid.Empty && !string.IsNullOrEmpty(IPAddress))
-                        {
-                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AccountID);
-                            if (ai != null)
-                            {
-                                AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
-                                if (aii == null)
-                                {
-                                    string IPLocation = await SystemConfig.GetIPLocation(IPAddress);
-                                    aii = new AccountIPInfo(DateTime.Now, IPAddress, IPLocation);
-                                    ai.AIPInfo.Add(aii);
-                                }
-                                else
-                                {
-                                    aii.LoginTime = DateTime.Now;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(IPInfo_ToAccount), ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//新增代理账号
-
-                public static void AddProxyAccount(bool SaveToDB, AccountInfo ai)
-                {
-                    try
-                    {
-                        if (!ProxyConfig.Account.CheckProxyAccount_Exist(ai.UserName))
-                        {
-                            ProxyConfig.Account.ProxyAccountToList(ai);
-
-                            if (SaveToDB)
-                            {
-                                DataBase.InsertTable_ProxyAccount(ai);
-                            }
-                        }                            
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AddProxyAccount), ex.Message);
-                    }                    
-                }
-
-                public static bool AddProxyAccount(
-                    bool SaveToDB,
-                    Guid AID,
-                    bool IsEnable,
-                    string UserName,
-                    string PassWord,
-                    BindingList<AccountIPInfo> AIPInfo,
-                    bool IsLimitLinks,
-                    int LimitLinks,
-                    bool IsLimitDevices,
-                    int LimitDevices,
-                    bool IsExpiry,
-                    DateTime ExpiryTime,
-                    DateTime CreateTime)
-                {
-                    try
-                    {
-                        if (AID != Guid.Empty && !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(PassWord))
-                        {
-                            if (!ProxyConfig.Account.CheckProxyAccount_Exist(UserName))
-                            {
-                                AccountInfo ai = new AccountInfo(
-                                    AID,
-                                    IsEnable,
-                                    UserName,
-                                    PassWord,
-                                    AIPInfo,
-                                    IsLimitLinks,
-                                    LimitLinks,
-                                    IsLimitDevices,
-                                    LimitDevices,
-                                    IsExpiry,
-                                    ExpiryTime,
-                                    CreateTime);
-
-                                ProxyConfig.Account.ProxyAccountToList(ai);
-
-                                if (SaveToDB)
-                                {
-                                    DataBase.InsertTable_ProxyAccount(ai);
-                                }                                
-
-                                return true;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AddProxyAccount), ex.Message);
-                    }
-
-                    return false;
-                }
-
-                #endregion
-
-                #region//新增代理账号IP信息
-
-                public static async void AddAccountIPInfo(BindingList<AccountIPInfo> AIPInfo, DateTime LoginTime, string LoginIP)
-                {
-                    try
-                    {
-                        string IPLocation = await SystemConfig.GetIPLocation(LoginIP);
-
-                        AccountIPInfo aii = new AccountIPInfo(LoginTime, LoginIP, IPLocation);
-                        AIPInfo.Add(aii);
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AddAccountIPInfo), ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//更新代理账号            
-
-                public static bool UpdateProxyAccount_ByAccountID(
-                    Guid AID,
-                    bool IsEnable,
-                    string PassWord,
-                    bool IsLimitLinks,
-                    int LimitLinks,
-                    bool IsLimitDevices,
-                    int LimitDevices,
-                    bool IsExpiry,
-                    DateTime ExpiryTime)
-                {
-                    try
-                    {
-                        if (AID != null)
-                        {
-                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
-
-                            if (ai != null)
-                            {
-                                ai.IsEnable = IsEnable;
-
-                                if (!string.IsNullOrEmpty(PassWord))
-                                {
-                                    ai.Password = PassWord;
-                                }
-
-                                ai.IsLimitLinks = IsLimitLinks;
-                                ai.LimitLinks = LimitLinks;
-                                ai.IsExpiry = IsExpiry;
-                                ai.IsLimitDevices = IsLimitDevices;
-                                ai.LimitDevices = LimitDevices;
-                                ai.ExpiryTime = ExpiryTime;
-
-                                DataBase.UpdateTable_ProxyAccount(ai);
-
-                                return true;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(UpdateProxyAccount_ByAccountID), ex.Message);
-                    }
-
-                    return false;
-                }
-
-                public static bool UpdateProxyAccount_ByCCProxy(
-                    string UserName,
-                    bool IsEnable,
-                    string PassWord,
-                    bool IsLimitLinks,
-                    int LimitLinks,
-                    bool IsExpiry,
-                    DateTime ExpiryTime)
-                {
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(UserName))
-                        {
-                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.UserName == UserName);
-
-                            if (ai != null)
-                            {
-                                ai.IsEnable = IsEnable;
-
-                                if (!string.IsNullOrEmpty(PassWord))
-                                {
-                                    ai.Password = PassWord;
-                                }
-
-                                ai.IsLimitLinks = IsLimitLinks;
-                                ai.LimitLinks = LimitLinks;
-                                ai.IsExpiry = IsExpiry;
-                                ai.ExpiryTime = ExpiryTime;
-
-                                DataBase.UpdateTable_ProxyAccount(ai);
-
-                                return true;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(UpdateProxyAccount_ByCCProxy), ex.Message);
-                    }
-
-                    return false;
-                }
-
-                #endregion
-
-                #region//删除代理账号（对话框）                
-
-                public static void DeleteAccount_Dialog(Form form, List<AccountInfo> aiList)
-                {
-                    try
-                    {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountList", "账号列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
-                        {
-                            Icon = TType.Warn,
-                            Keyboard = false,
-                            MaskClosable = false,
-                            OnOk = config =>
-                            {
-                                if (aiList == null)
-                                {
-                                    ProxyConfig.Account.AccountListClear();                                    
-                                }
-                                else
-                                {
-                                    foreach (AccountInfo ai in aiList)
-                                    {
-                                        ProxyConfig.Account.lstAccountInfo.Remove(ai);
-                                        DataBase.DeleteTable_ProxyAccount(ai.AID);
-                                    }
-                                }
-
-                                if (form is InterfaceInfo.IProxyMode pmForm)
-                                {
-                                    pmForm.RefreshAccountList();
-                                }
-
-                                return true;
-                            }
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(DeleteAccount_Dialog), ex.Message);
-                    }
-                }
-
-                public static bool DeleteProxyAccount_ByAccountID(Guid AID)
-                {
-                    try
-                    {
-                        if (AID != null)
-                        {
-                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
-
-                            if (ai != null)
-                            {
-                                ProxyConfig.Account.lstAccountInfo.Remove(ai);
-                                DataBase.DeleteTable_ProxyAccount(ai.AID);
-                                return true;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(DeleteProxyAccount_ByAccountID), ex.Message);
-                    }
-
-                    return false;
-                }
-
-                public static bool DeleteProxyAccount_ByUserName(string UserName)
-                {
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(UserName))
-                        {
-                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.UserName == UserName);
-
-                            if (ai != null)
-                            {
-                                ProxyConfig.Account.lstAccountInfo.Remove(ai);
-                                DataBase.DeleteTable_ProxyAccount(ai.AID);
-                                return true;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(DeleteProxyAccount_ByUserName), ex.Message);
-                    }
-
-                    return false;
-                }
-
-                public static void AccountListClear()
-                {
-                    try
-                    {
-                        ProxyConfig.Account.lstAccountInfo.Clear();
-                        DataBase.DeleteTable_ProxyAccount();
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AccountListClear), ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//查找代理账号
-
-                public static string GetUserName_ByAccountID(Guid AID)
-                {
-                    try
-                    {
-                        if (AID != null)
-                        {
-                            AccountInfo pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
-
-                            if (pai != null)
-                            {
-                                return pai.UserName;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetUserName_ByAccountID), ex.Message);
-                    }
-
-                    return string.Empty;
-                }
-
-                public static AccountInfo GetProxyAccount_ByAccountID(Guid AID)
-                {
-                    try
-                    {
-                        if (AID != null)
-                        {
-                            AccountInfo pai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(account => account.AID == AID);
-
-                            if (pai != null)
-                            {
-                                return pai;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByAccountID), ex.Message);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetAccount_ByUserName(string UserName)
-                {
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(UserName))
-                        {
-                            BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                                (ProxyConfig.Account.lstAccountInfo.Where(account => account.UserName.Contains(UserName)).ToList());
-
-                            return pai;
-                        }
-                        else
-                        {
-                            return ProxyConfig.Account.lstAccountInfo;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetAccount_ByUserName), ex.Message);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsEnable(bool IsEnable)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsEnable == IsEnable).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsEnable), ex.Message);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsOnLine(bool IsOnLine)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsOnLine == IsOnLine).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsOnLine), ex.Message);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsExpiry(bool IsExpiry)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsExpiry == IsExpiry).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsExpiry), ex.Message);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsLimitLinks(bool IsLimitLinks)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsLimitLinks == IsLimitLinks).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitLinks), ex.Message);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByIsLimitDevices(bool IsLimitDevices)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.IsLimitDevices == IsLimitDevices).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitDevices), ex.Message);
-                    }
-
-                    return null;
-                }
-
-                public static BindingList<AccountInfo> GetProxyAccount_ByExpireTime(DateTime dtFrom, DateTime dtTo)
-                {
-                    try
-                    {
-                        BindingList<AccountInfo> pai = new BindingList<AccountInfo>
-                            (ProxyConfig.Account.lstAccountInfo.Where(account => account.ExpiryTime >= dtFrom && account.ExpiryTime <= dtTo).ToList());
-
-                        return pai;
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetProxyAccount_ByExpireTime), ex.Message);
-                    }
-
-                    return null;
-                }
-
-                #endregion
-
-                #region//代理账号入列表
-
-                public static void ProxyAccountToList(AccountInfo ai)
-                {
-                    try
-                    {
-                        ProxyConfig.Account.lstAccountInfo.Add(ai);
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(ProxyAccountToList), ex.Message);
-                    }
-                }
-
-                #endregion                
-
-                #region//调整过期时间
-
-                public static void AdjustExpiryTime(List<AccountInfo> aiList, int AddType, int AddHours)
-                {
-                    try
-                    {
-                        if (aiList.Count > 0)
-                        {
-                            DateTime dtExpiryTime = DateTime.Now;
-
-                            foreach (AccountInfo ai in aiList)
-                            {
-                                switch (AddType)
-                                {
-                                    case 0:
-                                        dtExpiryTime = ai.ExpiryTime.AddHours(AddHours);
-                                        break;
-
-                                    case 1:
-                                        if (ai.ExpiryTime >= DateTime.Now)
-                                        {
-                                            dtExpiryTime = ai.ExpiryTime.AddHours(AddHours);
-                                        }
-                                        else
-                                        {
-                                            dtExpiryTime = DateTime.Now.AddHours(AddHours);
-                                        }
-                                        break;
-                                }
-
-                                ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
-                                    ai.AID, 
-                                    ai.IsEnable,
-                                    ai.Password,
-                                    ai.IsLimitLinks,
-                                    ai.LimitLinks,
-                                    ai.IsLimitDevices,
-                                    ai.LimitDevices,
-                                    ai.IsExpiry,
-                                    dtExpiryTime);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AdjustExpiryTime), ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//调整链接数
-
-                public static void AdjustLimitLinks(List<AccountInfo> aiList, bool IsLimitLinks, int LimitLinks)
-                {
-                    try
-                    {
-                        if (aiList.Count > 0)
-                        {
-                            foreach (AccountInfo ai in aiList)
-                            {
-                                ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
-                                    ai.AID,
-                                    ai.IsEnable,
-                                    ai.Password,
-                                    IsLimitLinks,
-                                    LimitLinks,
-                                    ai.IsLimitDevices,
-                                    ai.LimitDevices,
-                                    ai.IsExpiry,
-                                    ai.ExpiryTime);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AdjustLimitLinks), ex.Message);
-                    }
-                }
-
-                #endregion
-
-                #region//调整设备数
-
-                public static void AdjustLimitDevices(List<AccountInfo> aiList, bool IsLimitDevices, int LimitDevices)
-                {
-                    try
-                    {
-                        if (aiList.Count > 0)
-                        {
-                            foreach (AccountInfo ai in aiList)
-                            {
-                                ProxyConfig.Account.UpdateProxyAccount_ByAccountID(
-                                    ai.AID,
-                                    ai.IsEnable,
-                                    ai.Password,
-                                    ai.IsLimitLinks,
-                                    ai.LimitLinks,
-                                    IsLimitDevices,
-                                    LimitDevices,
-                                    ai.IsExpiry,
-                                    ai.ExpiryTime);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AdjustLimitDevices), ex.Message);
-                    }
-                }
-
-                #endregion                
+                #endregion               
 
                 #region//从数据库加载账号IP信息
 
