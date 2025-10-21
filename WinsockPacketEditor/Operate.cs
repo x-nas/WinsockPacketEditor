@@ -5309,9 +5309,7 @@ namespace WinsockPacketEditor
 
                             if (isAllowed)
                             {
-                                Operate.ProxyConfig.Account.SetOnline_ByAccountID(AccountID, true);
                                 await Operate.ProxyConfig.Account.IPInfo_ToAccount(AccountID, psSession.ClientIP);
-                                await Operate.ProxyConfig.Account.AuthInfo_ToList(AccountID, psSession.ClientIP, true);
 
                                 psSession.AID = AccountID;
                                 psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
@@ -8119,7 +8117,7 @@ namespace WinsockPacketEditor
                 public static string CCProxy_HTML = string.Empty;
 
                 public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
-                public static ConcurrentDictionary<(Guid AID, string AuthIP), AuthInfo> cdAuthInfo = new ConcurrentDictionary<(Guid, string), AuthInfo>();
+                public static BindingList<AuthInfo> lstAuthInfo = new BindingList<AuthInfo>();
 
                 #region//新增代理账号
 
@@ -8762,79 +8760,97 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
-
-                #region//代理认证入列表（异步）
-
-                public static async Task AuthInfo_ToList(Guid AID, string AuthIP, bool AuthResult)
-                {
-                    try
-                    {
-                        if (AID == Guid.Empty) return;
-                        if (string.IsNullOrEmpty(AuthIP)) return;
-
-                        var key = (AID, AuthIP);
-                        string IPLocation = await SystemConfig.GetIPLocation(AuthIP).ConfigureAwait(false);
-
-                        cdAuthInfo.AddOrUpdate(
-                            key,
-                            _ => new AuthInfo(AID, AuthIP, IPLocation, AuthResult, DateTime.Now),
-                            (_, existing) =>
-                            {
-                                return existing;
-                            });
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(AuthInfo_ToList), ex.Message);
-                    }
-                }
-
-                #endregion
+                #endregion                
 
                 #region//查找代理认证
 
-                public static AuthInfo GetProxyAuthInfo(Guid AID, string IPAddress)
+                public static AuthInfo FindAuthInfo(Guid AID, string ClientIP)
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(IPAddress) || AID == Guid.Empty)
-                        {
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(ClientIP))
                             return null;
-                        }
 
-                        if (ProxyConfig.Account.cdAuthInfo.TryGetValue((AID, IPAddress), out var authInfo))
-                        {
-                            return authInfo;
-                        }
+                        if (Operate.ProxyConfig.Account.lstAuthInfo == null)
+                            return null;
+
+                        return Operate.ProxyConfig.Account.lstAuthInfo
+                            .FirstOrDefault(a => a.AID == AID && a.AuthIP == ClientIP);
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetProxyAuthInfo), ex.Message);                        
+                        Operate.DoLog(nameof(FindAuthInfo), ex.Message);
+                        return null;
                     }
-
-                    return null;
                 }
 
-                #endregion
+                #endregion                
 
-                #region//删除代理认证
+                #region//更新代理认证列表（异步）
 
-                public static void DeleteProxyAuthInfo_ByAIDAndIP(Guid AID, string IPAddress)
+                public static async Task UpdateAuthList()
                 {
                     try
                     {
-                        if (string.IsNullOrEmpty(IPAddress) || AID == Guid.Empty)
+                        var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
+                        var SessionList = sessions?.ToList() ?? new List<ProxySession>();
+
+                        var groupedSessions = SessionList
+                            .Where(session => session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
+                            .GroupBy(session => new { session.AID, session.ClientIP })
+                            .ToList();
+
+                        var devicesByAccount = SessionList
+                            .Where(session => session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind && session.AID != Guid.Empty)
+                            .GroupBy(session => session.AID)
+                            .ToDictionary(
+                                g => g.Key,
+                                g => g.Select(s => s.ClientIP).Distinct().Count()
+                            );
+
+                        var currentActiveAIDs = groupedSessions.Select(g => g.Key.AID).Distinct().ToHashSet();
+
+                        Operate.ProxyConfig.Account.lstAuthInfo.Clear();
+
+                        var locationTasks = groupedSessions.Select(async group =>
                         {
-                            return;
+                            DateTime AuthTime = group.Min(session => session.StartTime);
+                            Guid AID = group.Key.AID;
+                            string AuthIP = group.Key.ClientIP;
+
+                            string IPLocation = await SystemConfig.GetIPLocation(AuthIP);
+                            int LinksNumber = group.Count();
+                            int DevicesNumber = devicesByAccount.ContainsKey(AID) ? devicesByAccount[AID] : 0;
+
+                            return new { AID, AuthIP, IPLocation, AuthTime, LinksNumber, DevicesNumber };
+                        }).ToList();
+
+                        var results = await Task.WhenAll(locationTasks);
+
+                        foreach (var result in results)
+                        {
+                            AuthInfo ai = new AuthInfo(result.AID, result.AuthIP, result.IPLocation, true, result.AuthTime);
+                            ai.LinksNumber = result.LinksNumber;
+                            ai.DevicesNumber = result.DevicesNumber;
+
+                            Operate.ProxyConfig.Account.lstAuthInfo.Add(ai);
                         }
 
-                        var key = (AID, IPAddress);
-                        ProxyConfig.Account.cdAuthInfo.TryRemove(key, out _);
+                        foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo.ToList())
+                        {
+                            if (currentActiveAIDs.Contains(ai.AID))
+                            {
+                                Operate.ProxyConfig.Account.SetOnline_ByAccountID(ai.AID, true);
+                            }
+                            else
+                            {
+                                Operate.ProxyConfig.Account.SetOnline_ByAccountID(ai.AID, false);
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteProxyAuthInfo_ByAIDAndIP), ex.Message);
+                        Operate.DoLog(nameof(UpdateAuthList), ex.Message);
                     }
                 }
 
@@ -8879,38 +8895,6 @@ namespace WinsockPacketEditor
                     return new string(Enumerable.Repeat(validChars, length)
                         .Select(s => s[rPW.Next(s.Length)])
                         .ToArray());
-                }
-
-                #endregion
-
-                #region//获取代理认证列表的信息
-
-                public static int GetLinksCount_FromAuthList()
-                {
-                    try
-                    {
-                        return ProxyConfig.Account.cdAuthInfo.Values.Sum(proxy => proxy.LinksNumber);
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(GetLinksCount_FromAuthList), ex.Message);
-                        return 0;
-                    }
-                }
-
-                public static int GetDevicesCount_FromAuthList()
-                {
-                    try
-                    {
-                        return ProxyConfig.Account.cdAuthInfo.Values
-                            .GroupBy(proxy => proxy.AID)
-                            .Sum(group => group.First().DevicesNumber);
-                    }
-                    catch (Exception ex)
-                    {
-                        DoLog(nameof(GetDevicesCount_FromAuthList), ex.Message);
-                        return 0;
-                    }
                 }
 
                 #endregion                
@@ -8998,32 +8982,23 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (AID != null && AID != Guid.Empty)
-                        {
-                            AccountInfo paiAccount = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
-                            AuthInfo paiAuth = ProxyConfig.Account.GetProxyAuthInfo(AID, IPAddress);
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(IPAddress))
+                            return false;
 
-                            if (paiAccount != null && paiAuth != null)
-                            {
-                                if (paiAccount.IsLimitLinks)
-                                {
-                                    int LimitLinks = paiAccount.LimitLinks;
-                                    int LinksNumber = paiAuth.LinksNumber;
+                        AccountInfo paiAccount = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
+                        if (paiAccount == null || !paiAccount.IsLimitLinks)
+                            return false;
 
-                                    if (LinksNumber >= LimitLinks)
-                                    {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
+                        int limitLinks = paiAccount.LimitLinks;
+                        int currentLinks = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(AID, IPAddress);
+
+                        return currentLinks >= limitLinks;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(CheckLimitLinks), ex.Message);
+                        return false;
                     }
-
-                    return false;
                 }
 
                 #endregion
@@ -9034,46 +9009,30 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (AID != null && AID != Guid.Empty)
-                        {
-                            AccountInfo paiAccount = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
-                            if (paiAccount != null)
-                            {
-                                if (paiAccount.IsLimitDevices)
-                                {
-                                    int DevicesNumber = ProxyConfig.Account.GetDevicesNumber_ByAccountID(AID);
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(ClientIP))
+                            return false;
 
-                                    if (DevicesNumber < paiAccount.LimitDevices)
-                                    {
-                                        return false;
-                                    }
-                                    else if (DevicesNumber == paiAccount.LimitDevices)
-                                    {
-                                        AuthInfo pai = ProxyConfig.Account.GetProxyAuthInfo(AID, ClientIP);
+                        AccountInfo ai = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);                   
+                        if (ai == null || !ai.IsLimitDevices)
+                            return false;
 
-                                        if (pai != null)
-                                        {
-                                            return false;
-                                        }
-                                        else
-                                        {
-                                            return true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
+                        int currentDevices = ProxyConfig.Account.GetDevicesNumber_ByAccountID(AID);
+                        int limitDevices = ai.LimitDevices;
+
+                        if (currentDevices < limitDevices)
+                            return false;
+
+                        if (currentDevices > limitDevices)
+                            return true;
+
+                        AuthInfo existingAuth = ProxyConfig.Account.FindAuthInfo(AID, ClientIP);
+                        return existingAuth == null;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(CheckLimitDevices), ex.Message);
+                        return false;
                     }
-
-                    return false;
                 }
 
                 #endregion
@@ -9084,21 +9043,15 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AccountInfo pai = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
-                        if (pai != null)
+                        AccountInfo ai = ProxyConfig.Account.GetProxyAccount_ByAccountID(AID);
+                        if (ai != null)
                         {
-                            if (IsOnline)
+                            if (ai.IsOnLine == IsOnline)
                             {
-                                pai.IsOnLine = true;
+                                return;
                             }
-                            else
-                            {
-                                int DevicesNumber = GetDevicesNumber_ByAccountID(AID);
-                                if (DevicesNumber == 0)
-                                {
-                                    pai.IsOnLine = false;
-                                }
-                            }
+
+                            ai.IsOnLine = IsOnline;
                         }
                     }
                     catch (Exception ex)
@@ -9137,38 +9090,31 @@ namespace WinsockPacketEditor
 
                 #region//获取代理账号的链接数
 
-                public static int GetLinksNumber_ByAccountID(Guid AID, string ClientIP, AntdUI.Tree tree)
+                public static int GetLinksNumber_ByAccountID(Guid AID, string ClientIP)
                 {
                     try
                     {
-                        var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
-                        var SessionList = sessions?.ToList() ?? new List<ProxySession>();
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(ClientIP))
+                            return 0;
 
-                        int LinksNumber = 0;
-                        foreach (ProxySession Session in SessionList)
-                        {
-                            if (Session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
-                            {
-                                if (Session.AID == AID && Session.ClientIP.Equals(ClientIP))
-                                {
-                                    LinksNumber++;
-                                }
-                            }
-                        }
+                        if (Operate.ProxyConfig.Account.lstAuthInfo == null)
+                            return 0;
 
-                        return LinksNumber;
+                        var authInfo = Operate.ProxyConfig.Account.lstAuthInfo
+                            .FirstOrDefault(a => a.AID == AID && a.AuthIP == ClientIP);
+
+                        return authInfo?.LinksNumber ?? 0;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(GetLinksNumber_ByAccountID), ex.Message);
+                        return 0;
                     }
-
-                    return 0;
                 }
 
                 #endregion
 
-                #region//获取代理账号登录的设备数
+                #region//获取代理账号的设备数
 
                 public static int GetDevicesNumber_ByAccountID(Guid AID)
                 {
@@ -9177,29 +9123,19 @@ namespace WinsockPacketEditor
                         if (AID == Guid.Empty)
                             return 0;
 
-                        var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
-                        var SessionList = sessions?.ToList() ?? new List<ProxySession>();
+                        if (Operate.ProxyConfig.Account.lstAuthInfo == null)
+                            return 0;
 
-                        List<string> lstIPAddress = new List<string>();
-                        foreach (ProxySession Session in SessionList)
-                        {
-                            if (Session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
-                            {
-                                if (Session.AID == AID)
-                                {
-                                    lstIPAddress.Add(Session.ClientIP);
-                                }
-                            }
-                        }
+                        var authInfo = Operate.ProxyConfig.Account.lstAuthInfo
+                            .FirstOrDefault(a => a.AID == AID);
 
-                        return lstIPAddress.Distinct().Count();
+                        return authInfo?.DevicesNumber ?? 0;
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetDevicesNumber_ByAccountID), ex.Message);                        
+                        Operate.DoLog(nameof(GetDevicesNumber_ByAccountID), ex.Message);
+                        return 0;
                     }
-
-                    return 0;
                 }
 
                 #endregion

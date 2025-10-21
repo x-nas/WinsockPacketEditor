@@ -48,7 +48,7 @@ namespace WinsockPacketEditor
 
         public IEnumerable<AuthInfo> GetProxyAuthList()
         {
-            return Operate.ProxyConfig.Account.cdAuthInfo.Values;
+            return Operate.ProxyConfig.Account.lstAuthInfo;
         }
 
         #endregion

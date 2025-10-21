@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -77,7 +78,8 @@ namespace WinsockPacketEditor
                 }.SetLocalizationTitleID("Table.AuthList.Column."),
             };
 
-            this.tAuthList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));            
+            this.tAuthList.ColumnFont = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tAuthList.Binding(Operate.ProxyConfig.Account.lstAuthInfo);
         }        
 
         public void Dark_Changed()
@@ -96,25 +98,17 @@ namespace WinsockPacketEditor
                 this.tAuthList.BackColor = Color.White;
                 this.tAuthList.ColumnBack = null;                    
             }
-        }                  
+        }
 
         #endregion
 
-        #region//显示客户端列表
+        #region//更新客户端列表
 
-        public void RefreshClientList()
+        private void UpdateClientList()
         {
             try
-            {
-                if (Operate.ProxyConfig.Proxy.ProxyServer == null)
-                {
-                    return;
-                }
-
+            {                
                 this.treeClientList.PauseLayout = true;
-                this.tAuthList.PauseLayout = true;
-
-                #region //更新客户端列表
 
                 foreach (var rootItem in treeClientList.Items)
                 {
@@ -131,7 +125,7 @@ namespace WinsockPacketEditor
                         string RootName = Session.ClientIP;
                         string RootSubTitle = Operate.ProxyConfig.Account.GetUserName_ByAccountID(Session.AID);
 
-                        if (string.IsNullOrEmpty(RootName))
+                        if (string.IsNullOrEmpty(RootName) || string.IsNullOrEmpty(RootSubTitle))
                         {
                             continue;
                         }
@@ -197,61 +191,39 @@ namespace WinsockPacketEditor
 
                 foreach (var item in TreeItemToRemove)
                 {
-                    item.Remove();
+                    if (item != null)
+                    {
+                        item.Remove();
+                    }                    
                 }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(UpdateClientList), ex.Message);
+            }
+            finally
+            { 
+                this.treeClientList.PauseLayout = false;
+            }
+        }
 
-                #endregion
+        #endregion
 
-                #region//更新认证列表
+        #region//刷新列表       
 
-                var AuthInfoToRemove = new List<(Guid AID, string AuthIP)>();
-                var accountStatus = new Dictionary<Guid, bool>();
-
-                foreach (AuthInfo ai in Operate.ProxyConfig.Account.cdAuthInfo.Values.ToList())
+        public async Task RefreshClientList()
+        {
+            try
+            {
+                if (Operate.ProxyConfig.Proxy.ProxyServer == null)
                 {
-                    if (ai == null) continue;
-
-                    string clientIP = ai.AuthIP?.ToString() ?? string.Empty;
-                    int linksNumber = Operate.ProxyConfig.Account.GetLinksNumber_ByAccountID(ai.AID, clientIP, this.treeClientList);
-                    int devicesNumber = Operate.ProxyConfig.Account.GetDevicesNumber_ByAccountID(ai.AID);
-
-                    if (linksNumber == 0 || devicesNumber == 0)
-                    {
-                        AuthInfoToRemove.Add((ai.AID, ai.AuthIP));
-                    }
-                    else
-                    {
-                        var key = (ai.AID, ai.AuthIP);
-                        if (Operate.ProxyConfig.Account.cdAuthInfo.TryGetValue(key, out var existingAi))
-                        {
-                            existingAi.LinksNumber = linksNumber;
-                            existingAi.DevicesNumber = devicesNumber;
-                            Operate.ProxyConfig.Account.cdAuthInfo.TryUpdate(key, existingAi, existingAi);
-                        }
-                    }
-
-                    if (!accountStatus.ContainsKey(ai.AID))
-                    {
-                        accountStatus[ai.AID] = false;
-                    }
-
-                    if (linksNumber > 0)
-                    {
-                        accountStatus[ai.AID] = true;
-                    }
+                    return;
                 }
+                
+                this.tAuthList.PauseLayout = true;
 
-                foreach (var item in AuthInfoToRemove)
-                {
-                    Operate.ProxyConfig.Account.DeleteProxyAuthInfo_ByAIDAndIP(item.AID, item.AuthIP);
-                }
-
-                foreach (var account in accountStatus)
-                {
-                    Operate.ProxyConfig.Account.SetOnline_ByAccountID(account.Key, account.Value);
-                }
-
-                #endregion                
+                this.UpdateClientList();
+                await Operate.ProxyConfig.Account.UpdateAuthList();
             }
             catch (Exception ex)
             {
@@ -260,14 +232,11 @@ namespace WinsockPacketEditor
             finally
             {                
                 Operate.ProxyConfig.List.ClientNumber = this.treeClientList.Items.Count();
-                this.tAuthList.DataSource = Operate.ProxyConfig.Account.cdAuthInfo.Values;
-
-                this.treeClientList.PauseLayout = false;
                 this.tAuthList.PauseLayout = false;
             }
         }
 
-        #endregion        
+        #endregion
 
         #region//认证列表 - 右键菜单
 
@@ -295,18 +264,18 @@ namespace WinsockPacketEditor
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (Operate.ProxyConfig.Account.cdAuthInfo.Values.Count == 0)
+                if (Operate.ProxyConfig.Account.lstAuthInfo.Count == 0)
                 {
                     return;
                 }
 
                 int SelectedIndex = this.tAuthList.SelectedIndex;
-                if (SelectedIndex == -1 || SelectedIndex > Operate.ProxyConfig.Account.cdAuthInfo.Count)
+                if (SelectedIndex == -1 || SelectedIndex > Operate.ProxyConfig.Account.lstAuthInfo.Count)
                 {
                     return;
                 }
 
-                string AuthIP = Operate.ProxyConfig.Account.cdAuthInfo.Values.ElementAt(SelectedIndex - 1).AuthIP;
+                string AuthIP = Operate.ProxyConfig.Account.lstAuthInfo.ElementAt(SelectedIndex - 1).AuthIP;
 
                 AntdUI.ContextMenuStrip.open(tAuthList, item =>
                 {
