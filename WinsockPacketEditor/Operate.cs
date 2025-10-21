@@ -6619,7 +6619,17 @@ namespace WinsockPacketEditor
                         {
                             if (!ProxyConfig.Proxy.IsExistsInWhiteList(ipOrRange))
                             {
-                                Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
+                                if (Operate.SystemConfig.InvokeAction != null)
+                                {
+                                    Operate.SystemConfig.InvokeAction(() =>
+                                    {
+                                        Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
+                                    });
+                                }
+                                else
+                                {
+                                    Operate.ProxyConfig.Proxy.lstWhiteList.Add(wli);
+                                }                                
                             }
                         }
                     }
@@ -6865,7 +6875,17 @@ namespace WinsockPacketEditor
                         {
                             if (!ProxyConfig.Proxy.IsExistsInBlackList(ipOrRange))
                             {
-                                Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
+                                if (Operate.SystemConfig.InvokeAction != null)
+                                {
+                                    Operate.SystemConfig.InvokeAction(() =>
+                                    {
+                                        Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
+                                    });
+                                }
+                                else
+                                {
+                                    Operate.ProxyConfig.Proxy.lstBlackList.Add(bli);
+                                }                                
                             }
                         }
                     }
@@ -8711,26 +8731,28 @@ namespace WinsockPacketEditor
 
                 #region//记录代理账号的IP地址（异步）
 
-                public static async Task IPInfo_ToAccount(Guid AccountID, string IPAddress)
+                public static async Task IPInfo_ToAccount(Guid AID, string IPAddress)
                 {
                     try
                     {
-                        if (AccountID != Guid.Empty && !string.IsNullOrEmpty(IPAddress))
+                        if (AID == null || AID == Guid.Empty || string.IsNullOrEmpty(IPAddress))
                         {
-                            AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AccountID);
-                            if (ai != null)
+                            return;
+                        }
+
+                        AccountInfo ai = ProxyConfig.Account.lstAccountInfo.FirstOrDefault(item => item.AID == AID);
+                        if (ai != null)
+                        {
+                            AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
+                            if (aii == null)
                             {
-                                AccountIPInfo aii = ai.AIPInfo.FirstOrDefault(item => item.LoginIP == IPAddress);
-                                if (aii == null)
-                                {
-                                    string IPLocation = await SystemConfig.GetIPLocation(IPAddress);
-                                    aii = new AccountIPInfo(DateTime.Now, IPAddress, IPLocation);
-                                    ai.AIPInfo.Add(aii);
-                                }
-                                else
-                                {
-                                    aii.LoginTime = DateTime.Now;
-                                }
+                                string IPLocation = await SystemConfig.GetIPLocation(IPAddress);
+                                aii = new AccountIPInfo(DateTime.Now, IPAddress, IPLocation);
+                                ai.AIPInfo.Add(aii);
+                            }
+                            else
+                            {
+                                aii.LoginTime = DateTime.Now;
                             }
                         }
                     }
