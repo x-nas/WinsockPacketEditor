@@ -71,7 +71,6 @@ namespace WinsockPacketEditor
             public static IntPtr MainHandle = IntPtr.Zero;
             public static int SystemSocket = 0;
             public static bool IsRemote = false;
-            public static bool IsRemoteRunning = false;
             public static string Remote_IP, Remote_UserName, Remote_PassWord;
             public static ushort Remote_Port = 88;
             public static IDisposable WebServer;
@@ -1411,8 +1410,10 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    if (Operate.SystemConfig.IsRemote && !Operate.SystemConfig.IsRemoteRunning)
+                    if (Operate.SystemConfig.IsRemote)
                     {
+                        Operate.SystemConfig.StopRemoteMGT(form);
+
                         if (!string.IsNullOrEmpty(Operate.SystemConfig.Remote_IP) &&
                             !string.IsNullOrEmpty(Operate.SystemConfig.Remote_UserName) &&
                             !string.IsNullOrEmpty(Operate.SystemConfig.Remote_PassWord))
@@ -1427,8 +1428,6 @@ namespace WinsockPacketEditor
 
                                 sLog = string.Format(AntdUI.Localization.Get("MGT.Enabled", "远程管理已启用：{0}"), Remote_URL);
                                 AntdUI.Message.open(new AntdUI.Message.Config(form, sLog, TType.Success));
-
-                                Operate.SystemConfig.IsRemoteRunning = true;
                             }
                             catch
                             {
@@ -1450,10 +1449,9 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    if (Operate.SystemConfig.WebServer != null && Operate.SystemConfig.IsRemoteRunning)
+                    if (Operate.SystemConfig.WebServer != null)
                     {
                         Operate.SystemConfig.WebServer.Dispose();
-                        Operate.SystemConfig.IsRemoteRunning = false;
 
                         AntdUI.Message.open(new AntdUI.Message.Config(form, "远程管理已关闭", TType.Error)
                         {
