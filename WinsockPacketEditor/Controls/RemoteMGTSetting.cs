@@ -90,8 +90,9 @@ namespace WinsockPacketEditor
                 {
                     string RemoteIP = this.ddlRemoteIP.SelectedValue.ToString();
                     string RemotePort = this.nudRemote_Port.Value.ToString();
+                    string RemoteURL = Operate.SystemConfig.GetRemoteMGT_URL(RemoteIP, RemotePort);
 
-                    this.lRemote.Text = Operate.SystemConfig.GetRemoteMGT_URL(RemoteIP, RemotePort);
+                    this.lRemote.Text = "<a href='" + RemoteURL + "'>" + RemoteURL + "</a>";
                 }
             }
             catch (Exception ex)

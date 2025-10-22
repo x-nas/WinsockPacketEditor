@@ -28,16 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            AntdUI.HyperlinkLabel.LinkAppearance linkAppearance1 = new AntdUI.HyperlinkLabel.LinkAppearance();
+            AntdUI.HyperlinkLabel.LinkAppearance linkAppearance2 = new AntdUI.HyperlinkLabel.LinkAppearance();
             this.tlpRemoteMGT = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.lRemote = new AntdUI.Label();
             this.cbIsRemote = new AntdUI.Checkbox();
             this.txtRemote_UserName = new AntdUI.Input();
             this.txtRemote_PassWord = new AntdUI.Input();
             this.nudRemote_Port = new AntdUI.InputNumber();
             this.ddlRemoteIP = new AntdUI.Select();
+            this.lRemote = new AntdUI.HyperlinkLabel();
             this.tlpRemoteMGT.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.SuspendLayout();
@@ -47,12 +49,12 @@
             this.tlpRemoteMGT.ColumnCount = 1;
             this.tlpRemoteMGT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRemoteMGT.Controls.Add(this.tlpButton, 0, 7);
-            this.tlpRemoteMGT.Controls.Add(this.lRemote, 0, 5);
             this.tlpRemoteMGT.Controls.Add(this.cbIsRemote, 0, 0);
             this.tlpRemoteMGT.Controls.Add(this.txtRemote_UserName, 0, 2);
             this.tlpRemoteMGT.Controls.Add(this.txtRemote_PassWord, 0, 3);
             this.tlpRemoteMGT.Controls.Add(this.nudRemote_Port, 0, 4);
             this.tlpRemoteMGT.Controls.Add(this.ddlRemoteIP, 0, 1);
+            this.tlpRemoteMGT.Controls.Add(this.lRemote, 0, 5);
             this.tlpRemoteMGT.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpRemoteMGT.Location = new System.Drawing.Point(0, 0);
             this.tlpRemoteMGT.Margin = new System.Windows.Forms.Padding(0);
@@ -66,6 +68,7 @@
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpRemoteMGT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpRemoteMGT.Size = new System.Drawing.Size(350, 700);
             this.tlpRemoteMGT.TabIndex = 0;
             // 
@@ -121,20 +124,6 @@
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
-            // 
-            // lRemote
-            // 
-            this.lRemote.ColorScheme = AntdUI.TAMode.Light;
-            this.lRemote.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRemote.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lRemote.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lRemote.Location = new System.Drawing.Point(2, 200);
-            this.lRemote.Margin = new System.Windows.Forms.Padding(2);
-            this.lRemote.Name = "lRemote";
-            this.lRemote.Size = new System.Drawing.Size(346, 49);
-            this.lRemote.TabIndex = 6;
-            this.lRemote.Text = "lRemote";
-            this.lRemote.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbIsRemote
             // 
@@ -215,6 +204,19 @@
             this.ddlRemoteIP.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ddlRemoteIP.SelectedIndexChanged += new AntdUI.IntEventHandler(this.ddlRemoteIP_SelectedIndexChanged);
             // 
+            // lRemote
+            // 
+            this.lRemote.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lRemote.HoverStyle = linkAppearance1;
+            this.lRemote.LinkAutoNavigation = true;
+            this.lRemote.Location = new System.Drawing.Point(3, 201);
+            this.lRemote.Name = "lRemote";
+            this.lRemote.NormalStyle = linkAppearance2;
+            this.lRemote.Size = new System.Drawing.Size(344, 50);
+            this.lRemote.TabIndex = 19;
+            this.lRemote.Text = "lRemote";
+            this.lRemote.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // RemoteMGTSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -242,9 +244,9 @@
         private AntdUI.Input txtRemote_PassWord;
         private AntdUI.InputNumber nudRemote_Port;
         private AntdUI.Select ddlRemoteIP;
-        private AntdUI.Label lRemote;
         private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
+        private AntdUI.HyperlinkLabel lRemote;
     }
 }
