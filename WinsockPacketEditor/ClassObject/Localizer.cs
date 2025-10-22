@@ -303,6 +303,9 @@ namespace WinsockPacketEditor
                 case "PacketContent":
                     return "Packet Content";
 
+                case "PacketType":
+                    return "Packet Type";
+
                 case "Request":
                     return "Request";
 
@@ -1629,6 +1632,27 @@ namespace WinsockPacketEditor
 
                 case "LeachSetting.NotDisplay":
                     return "Not Display";
+
+                case "LeachSetting.AppointSocket":
+                    return "Socket :";
+
+                case "LeachSetting.AppointLength":
+                    return "Length :";
+
+                case "LeachSetting.AppointIPAddress":
+                    return "IP Address :";
+
+                case "LeachSetting.AppointPort":
+                    return "Port :";
+
+                case "LeachSetting.AppointPacketHead":
+                    return "Packet Head :";
+
+                case "LeachSetting.AppointPacketContent":
+                    return "Packet Content :";
+
+                case "LeachSetting.AppointPacketType":
+                    return "Packet Type :";
 
                 #endregion
 

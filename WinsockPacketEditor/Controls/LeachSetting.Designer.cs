@@ -92,7 +92,7 @@
             this.tlpFLeachSettings.RowCount = 2;
             this.tlpFLeachSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFLeachSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpFLeachSettings.Size = new System.Drawing.Size(350, 700);
+            this.tlpFLeachSettings.Size = new System.Drawing.Size(400, 700);
             this.tlpFLeachSettings.TabIndex = 2;
             // 
             // tlpContent
@@ -130,14 +130,14 @@
             this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpContent.Size = new System.Drawing.Size(350, 650);
+            this.tlpContent.Size = new System.Drawing.Size(400, 650);
             this.tlpContent.TabIndex = 1;
             // 
             // cbCheckType
             // 
             this.cbCheckType.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbCheckType.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cbCheckType.LocalizationText = "PacketType";
+            this.cbCheckType.LocalizationText = "LeachSetting.AppointPacketType";
             this.cbCheckType.Location = new System.Drawing.Point(2, 297);
             this.cbCheckType.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckType.Name = "cbCheckType";
@@ -155,14 +155,14 @@
             this.txtCheckData.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckData.Name = "txtCheckData";
             this.txtCheckData.PlaceholderText = "十六进制带空格，支持 ; 分隔符";
-            this.txtCheckData.Size = new System.Drawing.Size(255, 36);
+            this.txtCheckData.Size = new System.Drawing.Size(305, 36);
             this.txtCheckData.TabIndex = 11;
             // 
             // cbCheckData
             // 
             this.cbCheckData.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbCheckData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbCheckData.LocalizationText = "PacketContent";
+            this.cbCheckData.LocalizationText = "LeachSetting.AppointPacketContent";
             this.cbCheckData.Location = new System.Drawing.Point(2, 257);
             this.cbCheckData.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckData.Name = "cbCheckData";
@@ -180,14 +180,14 @@
             this.txtCheckHead.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckHead.Name = "txtCheckHead";
             this.txtCheckHead.PlaceholderText = "十六进制带空格，支持 ; 分隔符";
-            this.txtCheckHead.Size = new System.Drawing.Size(255, 36);
+            this.txtCheckHead.Size = new System.Drawing.Size(305, 36);
             this.txtCheckHead.TabIndex = 9;
             // 
             // cbCheckHead
             // 
             this.cbCheckHead.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbCheckHead.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbCheckHead.LocalizationText = "PacketHead";
+            this.cbCheckHead.LocalizationText = "LeachSetting.AppointPacketHead";
             this.cbCheckHead.Location = new System.Drawing.Point(2, 217);
             this.cbCheckHead.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckHead.Name = "cbCheckHead";
@@ -205,14 +205,14 @@
             this.txtCheckPort.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckPort.Name = "txtCheckPort";
             this.txtCheckPort.PlaceholderText = "支持 ; 分隔符";
-            this.txtCheckPort.Size = new System.Drawing.Size(255, 36);
+            this.txtCheckPort.Size = new System.Drawing.Size(305, 36);
             this.txtCheckPort.TabIndex = 7;
             // 
             // cbCheckPort
             // 
             this.cbCheckPort.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbCheckPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbCheckPort.LocalizationText = "Port";
+            this.cbCheckPort.LocalizationText = "LeachSetting.AppointPort";
             this.cbCheckPort.Location = new System.Drawing.Point(2, 177);
             this.cbCheckPort.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckPort.Name = "cbCheckPort";
@@ -230,14 +230,14 @@
             this.txtCheckIP.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckIP.Name = "txtCheckIP";
             this.txtCheckIP.PlaceholderText = "支持 ; 分隔符";
-            this.txtCheckIP.Size = new System.Drawing.Size(255, 36);
+            this.txtCheckIP.Size = new System.Drawing.Size(305, 36);
             this.txtCheckIP.TabIndex = 5;
             // 
             // cbCheckIP
             // 
             this.cbCheckIP.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbCheckIP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbCheckIP.LocalizationText = "IPAddress";
+            this.cbCheckIP.LocalizationText = "LeachSetting.AppointIPAddress";
             this.cbCheckIP.Location = new System.Drawing.Point(2, 137);
             this.cbCheckIP.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckIP.Name = "cbCheckIP";
@@ -255,14 +255,14 @@
             this.txtCheckLen.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckLen.Name = "txtCheckLen";
             this.txtCheckLen.PlaceholderText = "例如：0-99;100";
-            this.txtCheckLen.Size = new System.Drawing.Size(255, 36);
+            this.txtCheckLen.Size = new System.Drawing.Size(305, 36);
             this.txtCheckLen.TabIndex = 3;
             // 
             // cbCheckLen
             // 
             this.cbCheckLen.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbCheckLen.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbCheckLen.LocalizationText = "Length";
+            this.cbCheckLen.LocalizationText = "LeachSetting.AppointLength";
             this.cbCheckLen.Location = new System.Drawing.Point(2, 97);
             this.cbCheckLen.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckLen.Name = "cbCheckLen";
@@ -275,7 +275,7 @@
             // 
             this.cbCheckSocket.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbCheckSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbCheckSocket.LocalizationText = "Socket";
+            this.cbCheckSocket.LocalizationText = "LeachSetting.AppointSocket";
             this.cbCheckSocket.Location = new System.Drawing.Point(2, 57);
             this.cbCheckSocket.Margin = new System.Windows.Forms.Padding(2);
             this.cbCheckSocket.Name = "cbCheckSocket";
@@ -293,7 +293,7 @@
             this.txtCheckSocket.Margin = new System.Windows.Forms.Padding(2);
             this.txtCheckSocket.Name = "txtCheckSocket";
             this.txtCheckSocket.PlaceholderText = "支持 ; 分隔符";
-            this.txtCheckSocket.Size = new System.Drawing.Size(255, 36);
+            this.txtCheckSocket.Size = new System.Drawing.Size(305, 36);
             this.txtCheckSocket.TabIndex = 12;
             // 
             // lIsShow
@@ -319,7 +319,7 @@
             this.tabPacketType.Name = "tabPacketType";
             this.tabPacketType.Pages.Add(this.tpInject);
             this.tabPacketType.Pages.Add(this.tpProxy);
-            this.tabPacketType.Size = new System.Drawing.Size(253, 349);
+            this.tabPacketType.Size = new System.Drawing.Size(303, 349);
             this.tabPacketType.Style = styleLine1;
             this.tabPacketType.TabIndex = 16;
             // 
@@ -329,7 +329,7 @@
             this.tpInject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpInject.Location = new System.Drawing.Point(0, 30);
             this.tpInject.Name = "tpInject";
-            this.tpInject.Size = new System.Drawing.Size(253, 319);
+            this.tpInject.Size = new System.Drawing.Size(303, 319);
             this.tpInject.TabIndex = 0;
             this.tpInject.Text = "Inject";
             // 
@@ -356,7 +356,7 @@
             this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpInject.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpInject.Size = new System.Drawing.Size(253, 319);
+            this.tlpInject.Size = new System.Drawing.Size(303, 319);
             this.tlpInject.TabIndex = 5;
             // 
             // cbSend
@@ -376,7 +376,7 @@
             this.cbWSARecvFrom.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbWSARecvFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbWSARecvFrom.LocalizationText = "WSARecvFrom";
-            this.cbWSARecvFrom.Location = new System.Drawing.Point(128, 106);
+            this.cbWSARecvFrom.Location = new System.Drawing.Point(153, 106);
             this.cbWSARecvFrom.Margin = new System.Windows.Forms.Padding(2);
             this.cbWSARecvFrom.Name = "cbWSARecvFrom";
             this.cbWSARecvFrom.Size = new System.Drawing.Size(100, 32);
@@ -400,7 +400,7 @@
             this.cbWSARecv.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbWSARecv.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbWSARecv.LocalizationText = "WSARecv";
-            this.cbWSARecv.Location = new System.Drawing.Point(128, 70);
+            this.cbWSARecv.Location = new System.Drawing.Point(153, 70);
             this.cbWSARecv.Margin = new System.Windows.Forms.Padding(2);
             this.cbWSARecv.Name = "cbWSARecv";
             this.cbWSARecv.Size = new System.Drawing.Size(88, 32);
@@ -424,7 +424,7 @@
             this.cbWSASendTo.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbWSASendTo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbWSASendTo.LocalizationText = "WSASendTo";
-            this.cbWSASendTo.Location = new System.Drawing.Point(128, 34);
+            this.cbWSASendTo.Location = new System.Drawing.Point(153, 34);
             this.cbWSASendTo.Margin = new System.Windows.Forms.Padding(2);
             this.cbWSASendTo.Name = "cbWSASendTo";
             this.cbWSASendTo.Size = new System.Drawing.Size(100, 32);
@@ -448,7 +448,7 @@
             this.cbWSASend.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbWSASend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbWSASend.LocalizationText = "WSASend";
-            this.cbWSASend.Location = new System.Drawing.Point(128, 2);
+            this.cbWSASend.Location = new System.Drawing.Point(153, 2);
             this.cbWSASend.Margin = new System.Windows.Forms.Padding(2);
             this.cbWSASend.Name = "cbWSASend";
             this.cbWSASend.Size = new System.Drawing.Size(88, 28);
@@ -461,7 +461,7 @@
             this.tpProxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpProxy.Location = new System.Drawing.Point(0, 30);
             this.tpProxy.Name = "tpProxy";
-            this.tpProxy.Size = new System.Drawing.Size(253, 319);
+            this.tpProxy.Size = new System.Drawing.Size(303, 319);
             this.tpProxy.TabIndex = 1;
             this.tpProxy.Text = "Proxy";
             // 
@@ -482,7 +482,7 @@
             this.tlpProxy.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxy.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxy.Size = new System.Drawing.Size(253, 319);
+            this.tlpProxy.Size = new System.Drawing.Size(303, 319);
             this.tlpProxy.TabIndex = 5;
             // 
             // cbTCP_Req
@@ -502,7 +502,7 @@
             this.cbUDP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbUDP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbUDP_Resp.LocalizationText = "UDPResp";
-            this.cbUDP_Resp.Location = new System.Drawing.Point(128, 34);
+            this.cbUDP_Resp.Location = new System.Drawing.Point(153, 34);
             this.cbUDP_Resp.Margin = new System.Windows.Forms.Padding(2);
             this.cbUDP_Resp.Name = "cbUDP_Resp";
             this.cbUDP_Resp.Size = new System.Drawing.Size(85, 28);
@@ -514,7 +514,7 @@
             this.cbUDP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbUDP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbUDP_Req.LocalizationText = "UDPReq";
-            this.cbUDP_Req.Location = new System.Drawing.Point(128, 2);
+            this.cbUDP_Req.Location = new System.Drawing.Point(153, 2);
             this.cbUDP_Req.Margin = new System.Windows.Forms.Padding(2);
             this.cbUDP_Req.Name = "cbUDP_Req";
             this.cbUDP_Req.Size = new System.Drawing.Size(85, 28);
@@ -549,7 +549,7 @@
             this.tlpLeachMethod.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpLeachMethod.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLeachMethod.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpLeachMethod.Size = new System.Drawing.Size(259, 40);
+            this.tlpLeachMethod.Size = new System.Drawing.Size(309, 40);
             this.tlpLeachMethod.TabIndex = 17;
             // 
             // rbNotDisplay
@@ -592,7 +592,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(350, 50);
+            this.tlpButton.Size = new System.Drawing.Size(400, 50);
             this.tlpButton.TabIndex = 2;
             // 
             // bSave
@@ -602,7 +602,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(103, 6);
+            this.bSave.Location = new System.Drawing.Point(128, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -618,7 +618,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(184, 6);
+            this.bExit.Location = new System.Drawing.Point(209, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -636,7 +636,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "LeachSetting";
-            this.Size = new System.Drawing.Size(350, 700);
+            this.Size = new System.Drawing.Size(400, 700);
             this.Load += new System.EventHandler(this.LeachSetting_Load);
             this.tlpFLeachSettings.ResumeLayout(false);
             this.tlpContent.ResumeLayout(false);
