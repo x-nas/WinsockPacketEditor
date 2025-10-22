@@ -51,6 +51,8 @@ namespace WinsockPacketEditor
             this.cIntercept_BackColor.Value = Operate.FilterConfig.Filter.FilterIntercept_BackColor;
             this.cChange_ForeColor.Value = Operate.FilterConfig.Filter.FilterChange_ForeColor;
             this.cChange_BackColor.Value = Operate.FilterConfig.Filter.FilterChange_BackColor;
+            this.cDisplay_ForeColor.Value = Operate.FilterConfig.Filter.FilterDisplay_ForeColor;
+            this.cDisplay_BackColor.Value = Operate.FilterConfig.Filter.FilterDisplay_BackColor;
         }
 
         #endregion
@@ -73,6 +75,12 @@ namespace WinsockPacketEditor
         {
             this.cChange_ForeColor.Value = Color.Black;
             this.cChange_BackColor.Value = Color.DodgerBlue;
+        }
+
+        private void bDisplayReset_Click(object sender, EventArgs e)
+        {
+            this.cDisplay_ForeColor.Value = Color.Black;
+            this.cDisplay_BackColor.Value = Color.LightGreen;
         }
 
         #endregion
@@ -109,7 +117,9 @@ namespace WinsockPacketEditor
                 Operate.FilterConfig.Filter.FilterIntercept_ForeColor = this.cIntercept_ForeColor.Value;
                 Operate.FilterConfig.Filter.FilterIntercept_BackColor = this.cIntercept_BackColor.Value;
                 Operate.FilterConfig.Filter.FilterChange_ForeColor = this.cChange_ForeColor.Value;
-                Operate.FilterConfig.Filter.FilterChange_BackColor = this.cChange_BackColor.Value;                
+                Operate.FilterConfig.Filter.FilterChange_BackColor = this.cChange_BackColor.Value;
+                Operate.FilterConfig.Filter.FilterDisplay_ForeColor = this.cDisplay_ForeColor.Value;
+                Operate.FilterConfig.Filter.FilterDisplay_BackColor = this.cDisplay_BackColor.Value;
 
                 if (this.form is InterfaceInfo.IInjectMode injectForm)
                 {

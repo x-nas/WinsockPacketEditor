@@ -31,6 +31,10 @@
             this.tlpSystemSettings = new WinsockPacketEditor.TableLayoutPanelEx();
             this.dFloatButton = new AntdUI.Divider();
             this.tlpFilterActionColor = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.bDisplayReset = new AntdUI.Button();
+            this.cDisplay_ForeColor = new AntdUI.ColorPicker();
+            this.cDisplay_BackColor = new AntdUI.ColorPicker();
+            this.lDisplay = new AntdUI.Label();
             this.bChangeReset = new AntdUI.Button();
             this.bInterceptReset = new AntdUI.Button();
             this.bReplaceReset = new AntdUI.Button();
@@ -128,6 +132,10 @@
             this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpFilterActionColor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterActionColor.Controls.Add(this.bDisplayReset, 5, 4);
+            this.tlpFilterActionColor.Controls.Add(this.cDisplay_ForeColor, 3, 4);
+            this.tlpFilterActionColor.Controls.Add(this.cDisplay_BackColor, 2, 4);
+            this.tlpFilterActionColor.Controls.Add(this.lDisplay, 1, 4);
             this.tlpFilterActionColor.Controls.Add(this.bChangeReset, 5, 3);
             this.tlpFilterActionColor.Controls.Add(this.bInterceptReset, 5, 2);
             this.tlpFilterActionColor.Controls.Add(this.bReplaceReset, 5, 1);
@@ -146,7 +154,8 @@
             this.tlpFilterActionColor.Location = new System.Drawing.Point(0, 339);
             this.tlpFilterActionColor.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFilterActionColor.Name = "tlpFilterActionColor";
-            this.tlpFilterActionColor.RowCount = 5;
+            this.tlpFilterActionColor.RowCount = 6;
+            this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterActionColor.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -155,12 +164,64 @@
             this.tlpFilterActionColor.Size = new System.Drawing.Size(350, 312);
             this.tlpFilterActionColor.TabIndex = 18;
             // 
+            // bDisplayReset
+            // 
+            this.bDisplayReset.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bDisplayReset.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bDisplayReset.LocalizationText = "Reset";
+            this.bDisplayReset.Location = new System.Drawing.Point(280, 165);
+            this.bDisplayReset.Margin = new System.Windows.Forms.Padding(2);
+            this.bDisplayReset.Name = "bDisplayReset";
+            this.bDisplayReset.Size = new System.Drawing.Size(48, 37);
+            this.bDisplayReset.TabIndex = 58;
+            this.bDisplayReset.Text = "还原";
+            this.bDisplayReset.Type = AntdUI.TTypeMini.Success;
+            this.bDisplayReset.Click += new System.EventHandler(this.bDisplayReset_Click);
+            // 
+            // cDisplay_ForeColor
+            // 
+            this.cDisplay_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cDisplay_ForeColor.Location = new System.Drawing.Point(161, 165);
+            this.cDisplay_ForeColor.Margin = new System.Windows.Forms.Padding(2);
+            this.cDisplay_ForeColor.Name = "cDisplay_ForeColor";
+            this.cDisplay_ForeColor.ShowClose = true;
+            this.cDisplay_ForeColor.ShowReset = true;
+            this.cDisplay_ForeColor.ShowText = true;
+            this.cDisplay_ForeColor.Size = new System.Drawing.Size(101, 37);
+            this.cDisplay_ForeColor.TabIndex = 57;
+            this.cDisplay_ForeColor.Value = System.Drawing.Color.Black;
+            // 
+            // cDisplay_BackColor
+            // 
+            this.cDisplay_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cDisplay_BackColor.Location = new System.Drawing.Point(56, 165);
+            this.cDisplay_BackColor.Margin = new System.Windows.Forms.Padding(2);
+            this.cDisplay_BackColor.Name = "cDisplay_BackColor";
+            this.cDisplay_BackColor.ShowClose = true;
+            this.cDisplay_BackColor.ShowReset = true;
+            this.cDisplay_BackColor.ShowText = true;
+            this.cDisplay_BackColor.Size = new System.Drawing.Size(101, 37);
+            this.cDisplay_BackColor.TabIndex = 56;
+            this.cDisplay_BackColor.Value = System.Drawing.Color.LightGreen;
+            // 
+            // lDisplay
+            // 
+            this.lDisplay.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lDisplay.LocalizationText = "StatisticalData.Display";
+            this.lDisplay.Location = new System.Drawing.Point(9, 165);
+            this.lDisplay.Margin = new System.Windows.Forms.Padding(2);
+            this.lDisplay.Name = "lDisplay";
+            this.lDisplay.Size = new System.Drawing.Size(43, 37);
+            this.lDisplay.TabIndex = 55;
+            this.lDisplay.Text = "只显示 :";
+            // 
             // bChangeReset
             // 
             this.bChangeReset.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bChangeReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bChangeReset.LocalizationText = "Reset";
-            this.bChangeReset.Location = new System.Drawing.Point(268, 124);
+            this.bChangeReset.Location = new System.Drawing.Point(280, 124);
             this.bChangeReset.Margin = new System.Windows.Forms.Padding(2);
             this.bChangeReset.Name = "bChangeReset";
             this.bChangeReset.Size = new System.Drawing.Size(48, 37);
@@ -174,7 +235,7 @@
             this.bInterceptReset.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bInterceptReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bInterceptReset.LocalizationText = "Reset";
-            this.bInterceptReset.Location = new System.Drawing.Point(268, 83);
+            this.bInterceptReset.Location = new System.Drawing.Point(280, 83);
             this.bInterceptReset.Margin = new System.Windows.Forms.Padding(2);
             this.bInterceptReset.Name = "bInterceptReset";
             this.bInterceptReset.Size = new System.Drawing.Size(48, 37);
@@ -188,7 +249,7 @@
             this.bReplaceReset.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bReplaceReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bReplaceReset.LocalizationText = "Reset";
-            this.bReplaceReset.Location = new System.Drawing.Point(268, 42);
+            this.bReplaceReset.Location = new System.Drawing.Point(280, 42);
             this.bReplaceReset.Margin = new System.Windows.Forms.Padding(2);
             this.bReplaceReset.Name = "bReplaceReset";
             this.bReplaceReset.Size = new System.Drawing.Size(48, 37);
@@ -201,7 +262,7 @@
             // 
             this.lForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lForeColor.LocalizationText = "SystemSettingsForm.ForeColor";
-            this.lForeColor.Location = new System.Drawing.Point(149, 2);
+            this.lForeColor.Location = new System.Drawing.Point(161, 2);
             this.lForeColor.Margin = new System.Windows.Forms.Padding(2);
             this.lForeColor.Name = "lForeColor";
             this.lForeColor.Size = new System.Drawing.Size(101, 36);
@@ -213,7 +274,7 @@
             // 
             this.lBackColor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lBackColor.LocalizationText = "SystemSettingsForm.BackColor";
-            this.lBackColor.Location = new System.Drawing.Point(44, 2);
+            this.lBackColor.Location = new System.Drawing.Point(56, 2);
             this.lBackColor.Margin = new System.Windows.Forms.Padding(2);
             this.lBackColor.Name = "lBackColor";
             this.lBackColor.Size = new System.Drawing.Size(101, 36);
@@ -224,7 +285,7 @@
             // cChange_ForeColor
             // 
             this.cChange_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cChange_ForeColor.Location = new System.Drawing.Point(149, 124);
+            this.cChange_ForeColor.Location = new System.Drawing.Point(161, 124);
             this.cChange_ForeColor.Margin = new System.Windows.Forms.Padding(2);
             this.cChange_ForeColor.Name = "cChange_ForeColor";
             this.cChange_ForeColor.ShowClose = true;
@@ -237,7 +298,7 @@
             // cChange_BackColor
             // 
             this.cChange_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cChange_BackColor.Location = new System.Drawing.Point(44, 124);
+            this.cChange_BackColor.Location = new System.Drawing.Point(56, 124);
             this.cChange_BackColor.Margin = new System.Windows.Forms.Padding(2);
             this.cChange_BackColor.Name = "cChange_BackColor";
             this.cChange_BackColor.ShowClose = true;
@@ -262,7 +323,7 @@
             // cIntercept_ForeColor
             // 
             this.cIntercept_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cIntercept_ForeColor.Location = new System.Drawing.Point(149, 83);
+            this.cIntercept_ForeColor.Location = new System.Drawing.Point(161, 83);
             this.cIntercept_ForeColor.Margin = new System.Windows.Forms.Padding(2);
             this.cIntercept_ForeColor.Name = "cIntercept_ForeColor";
             this.cIntercept_ForeColor.ShowClose = true;
@@ -275,7 +336,7 @@
             // cIntercept_BackColor
             // 
             this.cIntercept_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cIntercept_BackColor.Location = new System.Drawing.Point(44, 83);
+            this.cIntercept_BackColor.Location = new System.Drawing.Point(56, 83);
             this.cIntercept_BackColor.Margin = new System.Windows.Forms.Padding(2);
             this.cIntercept_BackColor.Name = "cIntercept_BackColor";
             this.cIntercept_BackColor.ShowClose = true;
@@ -300,7 +361,7 @@
             // cRepalce_ForeColor
             // 
             this.cRepalce_ForeColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cRepalce_ForeColor.Location = new System.Drawing.Point(149, 42);
+            this.cRepalce_ForeColor.Location = new System.Drawing.Point(161, 42);
             this.cRepalce_ForeColor.Margin = new System.Windows.Forms.Padding(2);
             this.cRepalce_ForeColor.Name = "cRepalce_ForeColor";
             this.cRepalce_ForeColor.ShowClose = true;
@@ -325,7 +386,7 @@
             // cRepalce_BackColor
             // 
             this.cRepalce_BackColor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cRepalce_BackColor.Location = new System.Drawing.Point(44, 42);
+            this.cRepalce_BackColor.Location = new System.Drawing.Point(56, 42);
             this.cRepalce_BackColor.Margin = new System.Windows.Forms.Padding(2);
             this.cRepalce_BackColor.Name = "cRepalce_BackColor";
             this.cRepalce_BackColor.ShowClose = true;
@@ -606,5 +667,9 @@
         private AntdUI.Button bChangeReset;
         private AntdUI.Button bInterceptReset;
         private AntdUI.Button bReplaceReset;
+        private AntdUI.Button bDisplayReset;
+        private AntdUI.ColorPicker cDisplay_ForeColor;
+        private AntdUI.ColorPicker cDisplay_BackColor;
+        private AntdUI.Label lDisplay;
     }
 }

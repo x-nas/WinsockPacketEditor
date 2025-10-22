@@ -40,7 +40,7 @@ namespace WinsockPacketEditor
 
         public static class SystemConfig
         {
-            public static bool IsBeta = true;
+            public static bool IsBeta = false;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
             public static string PNAME = string.Empty;
@@ -1025,12 +1025,19 @@ namespace WinsockPacketEditor
                     case Operate.FilterConfig.Filter.FilterAction.Replace:
                         return (Operate.FilterConfig.Filter.FilterReplace_ForeColor,
                                 Operate.FilterConfig.Filter.FilterReplace_BackColor);
+
                     case Operate.FilterConfig.Filter.FilterAction.Intercept:
                         return (Operate.FilterConfig.Filter.FilterIntercept_ForeColor,
                                 Operate.FilterConfig.Filter.FilterIntercept_BackColor);
+
                     case Operate.FilterConfig.Filter.FilterAction.Change:
                         return (Operate.FilterConfig.Filter.FilterChange_ForeColor,
                                 Operate.FilterConfig.Filter.FilterChange_BackColor);
+
+                    case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
+                        return (Operate.FilterConfig.Filter.FilterDisplay_ForeColor,
+                                Operate.FilterConfig.Filter.FilterDisplay_BackColor);
+
                     default:
                         return null;
                 }
@@ -3228,7 +3235,9 @@ namespace WinsockPacketEditor
                         new XElement("FilterIntercept_BackColor", FilterConfig.Filter.FilterIntercept_BackColor.ToArgb()),
                         new XElement("FilterIntercept_ForeColor", FilterConfig.Filter.FilterIntercept_ForeColor.ToArgb()),
                         new XElement("FilterChange_BackColor", FilterConfig.Filter.FilterChange_BackColor.ToArgb()),
-                        new XElement("FilterChange_ForeColor", FilterConfig.Filter.FilterChange_ForeColor.ToArgb())
+                        new XElement("FilterChange_ForeColor", FilterConfig.Filter.FilterChange_ForeColor.ToArgb()),
+                        new XElement("FilterDisplay_BackColor", FilterConfig.Filter.FilterDisplay_BackColor.ToArgb()),
+                        new XElement("FilterDisplay_ForeColor", FilterConfig.Filter.FilterDisplay_ForeColor.ToArgb())
                         );
 
                     return xeSystemConfig;
@@ -3314,6 +3323,8 @@ namespace WinsockPacketEditor
                         FilterConfig.Filter.FilterIntercept_BackColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterIntercept_BackColor"]));
                         FilterConfig.Filter.FilterChange_ForeColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterChange_ForeColor"]));
                         FilterConfig.Filter.FilterChange_BackColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterChange_BackColor"]));
+                        FilterConfig.Filter.FilterDisplay_ForeColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterDisplay_ForeColor"]));
+                        FilterConfig.Filter.FilterDisplay_BackColor = Color.FromArgb(Convert.ToInt32(dtSystemConfig.Rows[0]["FilterDisplay_BackColor"]));
                     }
                     else
                     {
@@ -3682,6 +3693,18 @@ namespace WinsockPacketEditor
                     if (FilterChange_ForeColor != null)
                     {
                         FilterConfig.Filter.FilterChange_ForeColor = Color.FromArgb(Convert.ToInt32(FilterChange_ForeColor.Value));
+                    }
+
+                    XElement FilterDisplay_BackColor = xeSystemConfig.Element("FilterDisplay_BackColor");
+                    if (FilterDisplay_BackColor != null)
+                    {
+                        FilterConfig.Filter.FilterDisplay_BackColor = Color.FromArgb(Convert.ToInt32(FilterDisplay_BackColor.Value));
+                    }
+
+                    XElement FilterDisplay_ForeColor = xeSystemConfig.Element("FilterDisplay_ForeColor");
+                    if (FilterDisplay_ForeColor != null)
+                    {
+                        FilterConfig.Filter.FilterDisplay_ForeColor = Color.FromArgb(Convert.ToInt32(FilterDisplay_ForeColor.Value));
                     }
                 }
                 catch (Exception ex)
@@ -13121,6 +13144,8 @@ namespace WinsockPacketEditor
                 public static Color FilterIntercept_BackColor = Color.DarkRed;
                 public static Color FilterChange_ForeColor = Color.Black;
                 public static Color FilterChange_BackColor = Color.DodgerBlue;
+                public static Color FilterDisplay_ForeColor = Color.Black;
+                public static Color FilterDisplay_BackColor = Color.LightGreen;
 
                 #region//定义结构
 
@@ -19841,7 +19866,9 @@ namespace WinsockPacketEditor
                         sql += "FilterIntercept_BackColor INTEGER,";//拦截背景颜色
                         sql += "FilterIntercept_ForeColor INTEGER,";//拦截字体颜色
                         sql += "FilterChange_BackColor INTEGER,";//换包背景颜色
-                        sql += "FilterChange_ForeColor INTEGER";//换包字体颜色                        
+                        sql += "FilterChange_ForeColor INTEGER,";//换包字体颜色
+                        sql += "FilterDisplay_BackColor INTEGER,";//只显示背景颜色
+                        sql += "FilterDisplay_ForeColor INTEGER";//只显示字体颜色
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -19967,7 +19994,9 @@ namespace WinsockPacketEditor
                         sql += "FilterIntercept_BackColor,";
                         sql += "FilterIntercept_ForeColor,";
                         sql += "FilterChange_BackColor,";
-                        sql += "FilterChange_ForeColor";                        
+                        sql += "FilterChange_ForeColor,";
+                        sql += "FilterDisplay_BackColor,";
+                        sql += "FilterDisplay_ForeColor";
                         sql += ") VALUES (";
                         sql += "@IsAnimation,";
                         sql += "@IsShadowEnabled,";
@@ -20023,7 +20052,9 @@ namespace WinsockPacketEditor
                         sql += "@FilterIntercept_BackColor,";
                         sql += "@FilterIntercept_ForeColor,";
                         sql += "@FilterChange_BackColor,";
-                        sql += "@FilterChange_ForeColor";                        
+                        sql += "@FilterChange_ForeColor,";
+                        sql += "@FilterDisplay_BackColor,";
+                        sql += "@FilterDisplay_ForeColor";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -20083,7 +20114,9 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@FilterIntercept_ForeColor", FilterConfig.Filter.FilterIntercept_ForeColor.ToArgb());
                             cmd.Parameters.AddWithValue("@FilterChange_BackColor", FilterConfig.Filter.FilterChange_BackColor.ToArgb());
                             cmd.Parameters.AddWithValue("@FilterChange_ForeColor", FilterConfig.Filter.FilterChange_ForeColor.ToArgb());
-
+                            cmd.Parameters.AddWithValue("@FilterDisplay_BackColor", FilterConfig.Filter.FilterDisplay_BackColor.ToArgb());
+                            cmd.Parameters.AddWithValue("@FilterDisplay_ForeColor", FilterConfig.Filter.FilterDisplay_ForeColor.ToArgb());
+                            
                             conn.Open();
                             cmd.ExecuteNonQuery();
                         }
