@@ -185,7 +185,9 @@ namespace WinsockPacketEditor
 
                         break;
 
+                    case 0xFF:
                     default:
+                        this.Close(CloseReason.ProtocolError);
                         return;
                 }
 

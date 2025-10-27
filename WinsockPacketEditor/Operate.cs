@@ -8795,7 +8795,7 @@ namespace WinsockPacketEditor
                         if (Operate.ProxyConfig.Account.lstAuthInfo == null)
                             return null;
 
-                        return Operate.ProxyConfig.Account.lstAuthInfo
+                        return Operate.ProxyConfig.Account.lstAuthInfo.ToList()
                             .FirstOrDefault(a => a.AID == AID && a.AuthIP == ClientIP);
                     }
                     catch (Exception ex)
@@ -9121,7 +9121,8 @@ namespace WinsockPacketEditor
                         if (Operate.ProxyConfig.Account.lstAuthInfo == null)
                             return 0;
 
-                        var authInfo = Operate.ProxyConfig.Account.lstAuthInfo
+                        var authInfoList = Operate.ProxyConfig.Account.lstAuthInfo.ToList();
+                        var authInfo = authInfoList
                             .FirstOrDefault(a => a.AID == AID && a.AuthIP == ClientIP);
 
                         return authInfo?.LinksNumber ?? 0;
@@ -9147,7 +9148,8 @@ namespace WinsockPacketEditor
                         if (Operate.ProxyConfig.Account.lstAuthInfo == null)
                             return 0;
 
-                        var authInfo = Operate.ProxyConfig.Account.lstAuthInfo
+                        var authInfoList = Operate.ProxyConfig.Account.lstAuthInfo.ToList();
+                        var authInfo = authInfoList
                             .FirstOrDefault(a => a.AID == AID);
 
                         return authInfo?.DevicesNumber ?? 0;
