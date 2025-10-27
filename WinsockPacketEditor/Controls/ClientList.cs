@@ -101,18 +101,53 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//计时器
+
+        private async void timerClientList_Tick(object sender, EventArgs e)
+        {
+            this.timerClientList.Stop();
+
+            try
+            {
+                if (Operate.ProxyConfig.Proxy.ProxyServer == null || Operate.ProxyConfig.Proxy.ProxyServer.SessionCount == 0)
+                {
+                    this.treeClientList.Items.Clear();
+                    Operate.ProxyConfig.Account.ClearAuthInfo();
+
+                    return;
+                }
+
+                this.tAuthList.PauseLayout = true;
+
+                this.UpdateClientList();
+                await Operate.ProxyConfig.Account.UpdateAuthList();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(timerClientList_Tick), ex.Message);
+            }
+            finally
+            {
+                Operate.ProxyConfig.List.ClientNumber = this.treeClientList.Items.Count();
+                this.tAuthList.PauseLayout = false;
+                this.timerClientList.Start();
+            }
+        }
+
+        #endregion
+
         #region//更新客户端列表
 
         private void UpdateClientList()
         {
             try
-            {                
+            {
                 this.treeClientList.PauseLayout = true;
 
                 foreach (var rootItem in treeClientList.Items)
                 {
                     rootItem.Sub.Clear();
-                }                
+                }
 
                 var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
                 var SessionList = sessions?.ToList() ?? new List<ProxySession>();
@@ -193,7 +228,7 @@ namespace WinsockPacketEditor
                     if (item != null)
                     {
                         item.Remove();
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -201,40 +236,8 @@ namespace WinsockPacketEditor
                 Operate.DoLog(nameof(UpdateClientList), ex.Message);
             }
             finally
-            { 
+            {
                 this.treeClientList.PauseLayout = false;
-            }
-        }
-
-        #endregion
-
-        #region//计时器
-
-        private async void timerClientList_Tick(object sender, EventArgs e)
-        {
-            this.timerClientList.Stop();
-
-            try
-            {
-                if (Operate.ProxyConfig.Proxy.ProxyServer == null || Operate.ProxyConfig.Proxy.ProxyServer.SessionCount == 0)
-                {
-                    return;
-                }
-
-                this.tAuthList.PauseLayout = true;
-
-                this.UpdateClientList();
-                await Operate.ProxyConfig.Account.UpdateAuthList();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(timerClientList_Tick), ex.Message);
-            }
-            finally
-            {
-                Operate.ProxyConfig.List.ClientNumber = this.treeClientList.Items.Count();
-                this.tAuthList.PauseLayout = false;
-                this.timerClientList.Start();
             }
         }
 

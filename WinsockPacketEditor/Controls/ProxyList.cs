@@ -1055,7 +1055,7 @@ namespace WinsockPacketEditor
                     // 超时设置
                     ClearIdleSession = true,
                     ClearIdleSessionInterval = 60,
-                    IdleSessionTimeOut = 300,
+                    IdleSessionTimeOut = ((int)Operate.ProxyConfig.Proxy.TCPTimeout.TotalSeconds),
                 };
 
                 List<IConnectionFilter> connectionFilters = new List<IConnectionFilter> 

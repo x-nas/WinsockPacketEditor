@@ -4557,7 +4557,7 @@ namespace WinsockPacketEditor
                         };
                         ProxyAccountList.Add(xeProxyAccountList);
 
-                        ProxyConfig.Account.AccountListClear();
+                        ProxyConfig.Account.ClearAccountInfo();
                         ProxyConfig.Account.LoadAccountList_FromXDocument(ProxyAccountList);
 
                         if (form is InterfaceInfo.IProxyMode pmForm)
@@ -5019,15 +5019,9 @@ namespace WinsockPacketEditor
                 public static string ProxyBytesInfo = string.Empty;
                 public static string ProxySpeedInfo = string.Empty;
                 public static bool HookTCP_Req = true, HookTCP_Resp = true, HookUDP_Req = true, HookUDP_Resp = true;
-                private static QQWryOptions IPLib = new QQWryOptions()
-                {
-                    DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "IPLocation", "qqwry.dat")
-                };
-                public static QQWryIpSearch ipSearch = new QQWryIpSearch(IPLib);
-
-                public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
+                public static readonly TimeSpan TCPTimeout = TimeSpan.FromMinutes(3);
+                public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(3);
                 public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
-
                 public static bool EnableFireWall = false;
                 public static bool WhiteListMode = false;
                 public static bool FireWall_AutoBlock_UnSupport = false;
@@ -5036,7 +5030,13 @@ namespace WinsockPacketEditor
                 public static bool FireWall_AutoClear_Expiry = false;
                 public static BindingList<BlackListInfo> lstBlackList = new BindingList<BlackListInfo>();
                 public static BindingList<WhiteListInfo> lstWhiteList = new BindingList<WhiteListInfo>();
-
+                public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
+                public static QQWryIpSearch ipSearch = new QQWryIpSearch(IPLib);
+                private static QQWryOptions IPLib = new QQWryOptions()
+                {
+                    DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "IPLocation", "qqwry.dat")
+                };                
+                
                 #region//定义结构                
 
                 public enum ProxyType
@@ -5303,7 +5303,7 @@ namespace WinsockPacketEditor
                                         DateTime.Now);
                                 }
 
-                                //psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
+                                psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
                                 return;
                             }
 
@@ -5314,7 +5314,7 @@ namespace WinsockPacketEditor
                                 bAuth[1] = (byte)0x01;
                                 psSession.TrySend(bAuth, 0, bAuth.Length);
 
-                                //psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
+                                psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
                                 return;
                             }
 
@@ -5325,7 +5325,7 @@ namespace WinsockPacketEditor
                                 bAuth[1] = (byte)0x01;
                                 psSession.TrySend(bAuth, 0, bAuth.Length);
 
-                                //psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
+                                psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
                                 return;
                             }
 
@@ -5566,7 +5566,7 @@ namespace WinsockPacketEditor
 
                         foreach (var pair in ProxyConfig.List.cdProxyUDP)
                         {
-                            if (now - pair.Value.LastActivityTime > ProxyConfig.List.UDPTimeout)
+                            if (now - pair.Value.LastActivityTime > ProxyConfig.Proxy.UDPTimeout)
                             {
                                 UDPToRemove.Add(pair.Key);
                             }
@@ -7961,11 +7961,8 @@ namespace WinsockPacketEditor
                 public static bool IsShow_PacketData = true;
                 public static int Search_Index = -1;                
                 public static ProxyInfo piSelect = null;
-                public static int ClientNumber = 0;                
-
+                public static int ClientNumber = 0;
                 public static readonly ConcurrentDictionary<Guid, ProxyUDP> cdProxyUDP = new ConcurrentDictionary<Guid, ProxyUDP>();
-                public static readonly TimeSpan UDPTimeout = TimeSpan.FromMinutes(5);
-
                 public static BindingList<ProxyInfo> lstProxyInfo = new BindingList<ProxyInfo>();
 
                 #region//代理数据入列表
@@ -8343,7 +8340,7 @@ namespace WinsockPacketEditor
                             {
                                 if (aiList == null)
                                 {
-                                    ProxyConfig.Account.AccountListClear();
+                                    ProxyConfig.Account.ClearAccountInfo();
                                 }
                                 else
                                 {
@@ -8417,7 +8414,7 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                public static void AccountListClear()
+                public static void ClearAccountInfo()
                 {
                     try
                     {
@@ -8426,7 +8423,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AccountListClear), ex.Message);
+                        Operate.DoLog(nameof(ClearAccountInfo), ex.Message);
                     }
                 }
 
@@ -8869,6 +8866,22 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(UpdateAuthList), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//清空代理认证列表
+
+                public static void ClearAuthInfo()
+                {
+                    try
+                    {
+                        ProxyConfig.Account.lstAuthInfo.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ClearAccountInfo), ex.Message);
                     }
                 }
 
