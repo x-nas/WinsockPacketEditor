@@ -33,12 +33,14 @@
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.tlpFireWallRulesInfo = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.cbAutoWhiteList_AuthSuccess = new AntdUI.Checkbox();
+            this.lAutoWhiteList = new AntdUI.Label();
             this.lAutoClear = new AntdUI.Label();
-            this.nudAutoBlock_UnSupport = new AntdUI.InputNumber();
-            this.cbAutoBlock_UnSupport = new AntdUI.Checkbox();
-            this.cbAutoBlock_AuthFail = new AntdUI.Checkbox();
+            this.nudAutoBlackList_UnSupport = new AntdUI.InputNumber();
+            this.cbAutoBlackList_UnSupport = new AntdUI.Checkbox();
+            this.cbAutoBlackList_AuthFail = new AntdUI.Checkbox();
             this.cbAutoClear_Expiry = new AntdUI.Checkbox();
-            this.lAutoBlock = new AntdUI.Label();
+            this.lAutoBlackList = new AntdUI.Label();
             this.tlpFireWallRules.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpFireWallRulesInfo.SuspendLayout();
@@ -57,7 +59,7 @@
             this.tlpFireWallRules.RowCount = 2;
             this.tlpFireWallRules.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFireWallRules.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpFireWallRules.Size = new System.Drawing.Size(350, 300);
+            this.tlpFireWallRules.Size = new System.Drawing.Size(350, 350);
             this.tlpFireWallRules.TabIndex = 0;
             // 
             // tlpButton
@@ -71,7 +73,7 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 250);
+            this.tlpButton.Location = new System.Drawing.Point(0, 300);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
@@ -118,25 +120,52 @@
             this.tlpFireWallRulesInfo.ColumnCount = 2;
             this.tlpFireWallRulesInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFireWallRulesInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpFireWallRulesInfo.Controls.Add(this.lAutoClear, 0, 3);
-            this.tlpFireWallRulesInfo.Controls.Add(this.nudAutoBlock_UnSupport, 1, 0);
-            this.tlpFireWallRulesInfo.Controls.Add(this.cbAutoBlock_UnSupport, 0, 2);
-            this.tlpFireWallRulesInfo.Controls.Add(this.cbAutoBlock_AuthFail, 0, 1);
-            this.tlpFireWallRulesInfo.Controls.Add(this.cbAutoClear_Expiry, 0, 4);
-            this.tlpFireWallRulesInfo.Controls.Add(this.lAutoBlock, 0, 0);
+            this.tlpFireWallRulesInfo.Controls.Add(this.cbAutoWhiteList_AuthSuccess, 0, 1);
+            this.tlpFireWallRulesInfo.Controls.Add(this.lAutoWhiteList, 0, 0);
+            this.tlpFireWallRulesInfo.Controls.Add(this.lAutoClear, 0, 5);
+            this.tlpFireWallRulesInfo.Controls.Add(this.nudAutoBlackList_UnSupport, 1, 2);
+            this.tlpFireWallRulesInfo.Controls.Add(this.cbAutoBlackList_UnSupport, 0, 4);
+            this.tlpFireWallRulesInfo.Controls.Add(this.cbAutoBlackList_AuthFail, 0, 3);
+            this.tlpFireWallRulesInfo.Controls.Add(this.cbAutoClear_Expiry, 0, 6);
+            this.tlpFireWallRulesInfo.Controls.Add(this.lAutoBlackList, 0, 2);
             this.tlpFireWallRulesInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFireWallRulesInfo.Location = new System.Drawing.Point(0, 0);
             this.tlpFireWallRulesInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFireWallRulesInfo.Name = "tlpFireWallRulesInfo";
-            this.tlpFireWallRulesInfo.RowCount = 6;
+            this.tlpFireWallRulesInfo.RowCount = 8;
+            this.tlpFireWallRulesInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpFireWallRulesInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFireWallRulesInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFireWallRulesInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFireWallRulesInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFireWallRulesInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFireWallRulesInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFireWallRulesInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFireWallRulesInfo.Size = new System.Drawing.Size(350, 250);
+            this.tlpFireWallRulesInfo.Size = new System.Drawing.Size(350, 300);
             this.tlpFireWallRulesInfo.TabIndex = 1;
+            // 
+            // cbAutoWhiteList_AuthSuccess
+            // 
+            this.cbAutoWhiteList_AuthSuccess.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbAutoWhiteList_AuthSuccess.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbAutoWhiteList_AuthSuccess.LocalizationText = "FireWallSetting.AutoWhiteList.AuthSuccess";
+            this.cbAutoWhiteList_AuthSuccess.Location = new System.Drawing.Point(3, 40);
+            this.cbAutoWhiteList_AuthSuccess.Name = "cbAutoWhiteList_AuthSuccess";
+            this.cbAutoWhiteList_AuthSuccess.Size = new System.Drawing.Size(134, 32);
+            this.cbAutoWhiteList_AuthSuccess.TabIndex = 18;
+            this.cbAutoWhiteList_AuthSuccess.Text = "认证成功的 IP 地址";
+            // 
+            // lAutoWhiteList
+            // 
+            this.lAutoWhiteList.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lAutoWhiteList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lAutoWhiteList.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lAutoWhiteList.LocalizationText = "FireWallSetting.AutoWhiteList";
+            this.lAutoWhiteList.Location = new System.Drawing.Point(3, 3);
+            this.lAutoWhiteList.Name = "lAutoWhiteList";
+            this.lAutoWhiteList.Size = new System.Drawing.Size(92, 31);
+            this.lAutoWhiteList.TabIndex = 16;
+            this.lAutoWhiteList.Text = "自动加入白名单 :";
             // 
             // lAutoClear
             // 
@@ -144,84 +173,84 @@
             this.lAutoClear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lAutoClear.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lAutoClear.LocalizationText = "FireWallSetting.AutoClear";
-            this.lAutoClear.Location = new System.Drawing.Point(3, 116);
+            this.lAutoClear.Location = new System.Drawing.Point(3, 191);
             this.lAutoClear.Name = "lAutoClear";
             this.lAutoClear.Size = new System.Drawing.Size(56, 30);
             this.lAutoClear.TabIndex = 15;
             this.lAutoClear.Text = "自动清理 :";
             // 
-            // nudAutoBlock_UnSupport
+            // nudAutoBlackList_UnSupport
             // 
-            this.nudAutoBlock_UnSupport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudAutoBlock_UnSupport.LocalizationSuffixText = "Minutes";
-            this.nudAutoBlock_UnSupport.Location = new System.Drawing.Point(231, 1);
-            this.nudAutoBlock_UnSupport.Margin = new System.Windows.Forms.Padding(1);
-            this.nudAutoBlock_UnSupport.Maximum = new decimal(new int[] {
+            this.nudAutoBlackList_UnSupport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudAutoBlackList_UnSupport.LocalizationSuffixText = "Minutes";
+            this.nudAutoBlackList_UnSupport.Location = new System.Drawing.Point(231, 76);
+            this.nudAutoBlackList_UnSupport.Margin = new System.Windows.Forms.Padding(1);
+            this.nudAutoBlackList_UnSupport.Maximum = new decimal(new int[] {
             99999,
             0,
             0,
             0});
-            this.nudAutoBlock_UnSupport.Minimum = new decimal(new int[] {
+            this.nudAutoBlackList_UnSupport.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.nudAutoBlock_UnSupport.Name = "nudAutoBlock_UnSupport";
-            this.nudAutoBlock_UnSupport.PrefixText = "";
-            this.nudAutoBlock_UnSupport.Size = new System.Drawing.Size(118, 35);
-            this.nudAutoBlock_UnSupport.SuffixText = "分钟";
-            this.nudAutoBlock_UnSupport.TabIndex = 13;
-            this.nudAutoBlock_UnSupport.Text = "30";
-            this.nudAutoBlock_UnSupport.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.nudAutoBlock_UnSupport.Value = new decimal(new int[] {
+            this.nudAutoBlackList_UnSupport.Name = "nudAutoBlackList_UnSupport";
+            this.nudAutoBlackList_UnSupport.PrefixText = "";
+            this.nudAutoBlackList_UnSupport.Size = new System.Drawing.Size(118, 35);
+            this.nudAutoBlackList_UnSupport.SuffixText = "分钟";
+            this.nudAutoBlackList_UnSupport.TabIndex = 13;
+            this.nudAutoBlackList_UnSupport.Text = "30";
+            this.nudAutoBlackList_UnSupport.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudAutoBlackList_UnSupport.Value = new decimal(new int[] {
             30,
             0,
             0,
             0});
             // 
-            // cbAutoBlock_UnSupport
+            // cbAutoBlackList_UnSupport
             // 
-            this.cbAutoBlock_UnSupport.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbAutoBlock_UnSupport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbAutoBlock_UnSupport.LocalizationText = "FireWallSetting.AutoBlock.UnSupport";
-            this.cbAutoBlock_UnSupport.Location = new System.Drawing.Point(3, 78);
-            this.cbAutoBlock_UnSupport.Name = "cbAutoBlock_UnSupport";
-            this.cbAutoBlock_UnSupport.Size = new System.Drawing.Size(144, 32);
-            this.cbAutoBlock_UnSupport.TabIndex = 11;
-            this.cbAutoBlock_UnSupport.Text = "不支持的 Socks 协议";
+            this.cbAutoBlackList_UnSupport.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbAutoBlackList_UnSupport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbAutoBlackList_UnSupport.LocalizationText = "FireWallSetting.AutoBlackList.UnSupport";
+            this.cbAutoBlackList_UnSupport.Location = new System.Drawing.Point(3, 153);
+            this.cbAutoBlackList_UnSupport.Name = "cbAutoBlackList_UnSupport";
+            this.cbAutoBlackList_UnSupport.Size = new System.Drawing.Size(144, 32);
+            this.cbAutoBlackList_UnSupport.TabIndex = 11;
+            this.cbAutoBlackList_UnSupport.Text = "不支持的 Socks 协议";
             // 
-            // cbAutoBlock_AuthFail
+            // cbAutoBlackList_AuthFail
             // 
-            this.cbAutoBlock_AuthFail.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbAutoBlock_AuthFail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbAutoBlock_AuthFail.LocalizationText = "FireWallSetting.AutoBlock.AuthFail";
-            this.cbAutoBlock_AuthFail.Location = new System.Drawing.Point(3, 40);
-            this.cbAutoBlock_AuthFail.Name = "cbAutoBlock_AuthFail";
-            this.cbAutoBlock_AuthFail.Size = new System.Drawing.Size(134, 32);
-            this.cbAutoBlock_AuthFail.TabIndex = 9;
-            this.cbAutoBlock_AuthFail.Text = "认证失败的 IP 地址";
+            this.cbAutoBlackList_AuthFail.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbAutoBlackList_AuthFail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbAutoBlackList_AuthFail.LocalizationText = "FireWallSetting.AutoBlackList.AuthFail";
+            this.cbAutoBlackList_AuthFail.Location = new System.Drawing.Point(3, 115);
+            this.cbAutoBlackList_AuthFail.Name = "cbAutoBlackList_AuthFail";
+            this.cbAutoBlackList_AuthFail.Size = new System.Drawing.Size(134, 32);
+            this.cbAutoBlackList_AuthFail.TabIndex = 9;
+            this.cbAutoBlackList_AuthFail.Text = "认证失败的 IP 地址";
             // 
             // cbAutoClear_Expiry
             // 
             this.cbAutoClear_Expiry.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.cbAutoClear_Expiry.LocalizationText = "FireWallSetting.AutoClear.Expiry";
-            this.cbAutoClear_Expiry.Location = new System.Drawing.Point(3, 152);
+            this.cbAutoClear_Expiry.Location = new System.Drawing.Point(3, 227);
             this.cbAutoClear_Expiry.Name = "cbAutoClear_Expiry";
             this.cbAutoClear_Expiry.Size = new System.Drawing.Size(122, 32);
             this.cbAutoClear_Expiry.TabIndex = 7;
             this.cbAutoClear_Expiry.Text = "已过期的 IP 地址";
             // 
-            // lAutoBlock
+            // lAutoBlackList
             // 
-            this.lAutoBlock.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lAutoBlock.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lAutoBlock.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lAutoBlock.LocalizationText = "FireWallSetting.AutoBlock";
-            this.lAutoBlock.Location = new System.Drawing.Point(3, 3);
-            this.lAutoBlock.Name = "lAutoBlock";
-            this.lAutoBlock.Size = new System.Drawing.Size(56, 31);
-            this.lAutoBlock.TabIndex = 14;
-            this.lAutoBlock.Text = "自动屏蔽 :";
+            this.lAutoBlackList.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lAutoBlackList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lAutoBlackList.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lAutoBlackList.LocalizationText = "FireWallSetting.AutoBlackList";
+            this.lAutoBlackList.Location = new System.Drawing.Point(3, 78);
+            this.lAutoBlackList.Name = "lAutoBlackList";
+            this.lAutoBlackList.Size = new System.Drawing.Size(92, 31);
+            this.lAutoBlackList.TabIndex = 14;
+            this.lAutoBlackList.Text = "自动加入黑名单 :";
             // 
             // FireWallRules
             // 
@@ -232,7 +261,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FireWallRules";
-            this.Size = new System.Drawing.Size(350, 300);
+            this.Size = new System.Drawing.Size(350, 350);
             this.Load += new System.EventHandler(this.FireWallRules_Load);
             this.tlpFireWallRules.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
@@ -247,14 +276,16 @@
 
         private TableLayoutPanelEx tlpFireWallRules;
         private TableLayoutPanelEx tlpFireWallRulesInfo;
-        private AntdUI.InputNumber nudAutoBlock_UnSupport;
-        private AntdUI.Checkbox cbAutoBlock_UnSupport;
-        private AntdUI.Checkbox cbAutoBlock_AuthFail;
+        private AntdUI.InputNumber nudAutoBlackList_UnSupport;
+        private AntdUI.Checkbox cbAutoBlackList_UnSupport;
+        private AntdUI.Checkbox cbAutoBlackList_AuthFail;
         private AntdUI.Checkbox cbAutoClear_Expiry;
-        private AntdUI.Label lAutoBlock;
+        private AntdUI.Label lAutoBlackList;
         private TableLayoutPanelEx tlpButton;
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
         private AntdUI.Label lAutoClear;
+        private AntdUI.Label lAutoWhiteList;
+        private AntdUI.Checkbox cbAutoWhiteList_AuthSuccess;
     }
 }

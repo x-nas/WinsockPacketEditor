@@ -2186,16 +2186,22 @@ namespace WinsockPacketEditor
                 case "FireWallSetting.BlackList.Permanent":
                     return "Permanent";
 
-                case "FireWallSetting.AutoBlock":
-                    return "Auto Block :";
+                case "FireWallSetting.AutoWhiteList":
+                    return "Auto WhiteList :";
+
+                case "FireWallSetting.AutoWhiteList.AuthSuccess":
+                    return "Authentication Successfully IP addresses";
+
+                case "FireWallSetting.AutoBlackList":
+                    return "Auto BlackList :";
 
                 case "FireWallSetting.AutoClear":
                     return "Auto Clear :";
 
-                case "FireWallSetting.AutoBlock.UnSupport":
+                case "FireWallSetting.AutoBlackList.UnSupport":
                     return "Unsupported Socks protocol";
 
-                case "FireWallSetting.AutoBlock.AuthFail":
+                case "FireWallSetting.AutoBlackList.AuthFail":
                     return "Authentication failed IP addresses";
 
                 case "FireWallSetting.AutoClear.Expiry":

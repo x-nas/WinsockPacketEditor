@@ -18,9 +18,10 @@ namespace WinsockPacketEditor
 
         private void FireWallRules_Load(object sender, EventArgs e)
         {
-            this.nudAutoBlock_UnSupport.Value = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_Minutes;
-            this.cbAutoBlock_UnSupport.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport;
-            this.cbAutoBlock_AuthFail.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail;
+            this.cbAutoWhiteList_AuthSuccess.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess;
+            this.nudAutoBlackList_UnSupport.Value = Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes;
+            this.cbAutoBlackList_UnSupport.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport;
+            this.cbAutoBlackList_AuthFail.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_AuthFail;
             this.cbAutoClear_Expiry.Checked = Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry;
         }
 
@@ -30,9 +31,10 @@ namespace WinsockPacketEditor
 
         private void bSave_Click(object sender, EventArgs e)
         {
-            Operate.ProxyConfig.Proxy.FireWall_AutoBlock_Minutes = ((int)this.nudAutoBlock_UnSupport.Value);
-            Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport = this.cbAutoBlock_UnSupport.Checked;
-            Operate.ProxyConfig.Proxy.FireWall_AutoBlock_AuthFail = this.cbAutoBlock_AuthFail.Checked;
+            Operate.ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess = this.cbAutoWhiteList_AuthSuccess.Checked;
+            Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes = ((int)this.nudAutoBlackList_UnSupport.Value);
+            Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport = this.cbAutoBlackList_UnSupport.Checked;
+            Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_AuthFail = this.cbAutoBlackList_AuthFail.Checked;
             Operate.ProxyConfig.Proxy.FireWall_AutoClear_Expiry = this.cbAutoClear_Expiry.Checked;            
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "防火墙规则保存成功", TType.Success)

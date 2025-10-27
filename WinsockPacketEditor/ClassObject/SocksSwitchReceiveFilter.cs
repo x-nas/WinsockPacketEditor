@@ -30,12 +30,12 @@ namespace WinsockPacketEditor
                     left = 0;
                     State = FilterState.Error;
 
-                    if (Operate.ProxyConfig.Proxy.EnableFireWall && Operate.ProxyConfig.Proxy.FireWall_AutoBlock_UnSupport)
+                    if (Operate.ProxyConfig.Proxy.EnableFireWall && Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_UnSupport)
                     {
                         Operate.ProxyConfig.Proxy.AddToBlackList(
                             session.ClientIP, 
                             true, 
-                            DateTime.Now.AddMinutes(Operate.ProxyConfig.Proxy.FireWall_AutoBlock_Minutes), 
+                            DateTime.Now.AddMinutes(Operate.ProxyConfig.Proxy.FireWall_AutoBlackList_Minutes), 
                             DateTime.Now);
                     }
 

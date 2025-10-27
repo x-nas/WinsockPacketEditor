@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            AntdUI.Tabs.StyleLine styleLine4 = new AntdUI.Tabs.StyleLine();
-            AntdUI.Tabs.StyleLine styleLine5 = new AntdUI.Tabs.StyleLine();
-            AntdUI.Tabs.StyleLine styleLine6 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine2 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
+            AntdUI.Tabs.StyleLine styleLine3 = new AntdUI.Tabs.StyleLine();
             this.tlpFilterEdit = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
@@ -241,8 +241,8 @@
             // 
             // tabFilterEdit
             // 
-            this.tabFilterEdit.Controls.Add(this.tpNormal);
             this.tabFilterEdit.Controls.Add(this.tpAdvance);
+            this.tabFilterEdit.Controls.Add(this.tpNormal);
             this.tabFilterEdit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabFilterEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterEdit.Location = new System.Drawing.Point(2, 2);
@@ -250,8 +250,9 @@
             this.tabFilterEdit.Name = "tabFilterEdit";
             this.tabFilterEdit.Pages.Add(this.tpNormal);
             this.tabFilterEdit.Pages.Add(this.tpAdvance);
+            this.tabFilterEdit.SelectedIndex = 1;
             this.tabFilterEdit.Size = new System.Drawing.Size(1096, 202);
-            this.tabFilterEdit.Style = styleLine4;
+            this.tabFilterEdit.Style = styleLine2;
             this.tabFilterEdit.TabIndex = 0;
             // 
             // tpNormal
@@ -288,7 +289,7 @@
             this.tFilterNormal.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterNormal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterNormal.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterNormal.EditMode = AntdUI.TEditMode.DoubleClick;
+            this.tFilterNormal.EditMode = AntdUI.TEditMode.Click;
             this.tFilterNormal.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterNormal.Gap = 8;
             this.tFilterNormal.GapCell = 0;
@@ -312,6 +313,7 @@
             this.tpAdvance.Location = new System.Drawing.Point(0, 28);
             this.tpAdvance.Margin = new System.Windows.Forms.Padding(2);
             this.tpAdvance.Name = "tpAdvance";
+            this.tpAdvance.Showed = true;
             this.tpAdvance.Size = new System.Drawing.Size(1096, 174);
             this.tpAdvance.TabIndex = 0;
             this.tpAdvance.Text = "Advance";
@@ -341,7 +343,7 @@
             this.tFilterAdvanced_Search.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Search.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Search.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Search.EditMode = AntdUI.TEditMode.DoubleClick;
+            this.tFilterAdvanced_Search.EditMode = AntdUI.TEditMode.Click;
             this.tFilterAdvanced_Search.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Search.Gap = 8;
             this.tFilterAdvanced_Search.GapCell = 0;
@@ -360,18 +362,17 @@
             // 
             // tabFilterFrom
             // 
-            this.tabFilterFrom.Controls.Add(this.tpFromPosition);
             this.tabFilterFrom.Controls.Add(this.tpFromHead);
-            this.tabFilterFrom.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabFilterFrom.Controls.Add(this.tpFromPosition);
+            this.tabFilterFrom.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabFilterFrom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabFilterFrom.Location = new System.Drawing.Point(2, 89);
             this.tabFilterFrom.Margin = new System.Windows.Forms.Padding(2);
             this.tabFilterFrom.Name = "tabFilterFrom";
             this.tabFilterFrom.Pages.Add(this.tpFromHead);
             this.tabFilterFrom.Pages.Add(this.tpFromPosition);
-            this.tabFilterFrom.SelectedIndex = 1;
             this.tabFilterFrom.Size = new System.Drawing.Size(1092, 83);
-            this.tabFilterFrom.Style = styleLine5;
+            this.tabFilterFrom.Style = styleLine1;
             this.tabFilterFrom.TabIndex = 2;
             this.tabFilterFrom.Text = "tabs1";
             // 
@@ -394,7 +395,7 @@
             this.tFilterAdvanced_Modify_Position.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Position.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Modify_Position.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Modify_Position.EditMode = AntdUI.TEditMode.DoubleClick;
+            this.tFilterAdvanced_Modify_Position.EditMode = AntdUI.TEditMode.Click;
             this.tFilterAdvanced_Modify_Position.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Modify_Position.Gap = 8;
             this.tFilterAdvanced_Modify_Position.GapCell = 0;
@@ -418,6 +419,7 @@
             this.tpFromHead.Location = new System.Drawing.Point(0, 28);
             this.tpFromHead.Margin = new System.Windows.Forms.Padding(2);
             this.tpFromHead.Name = "tpFromHead";
+            this.tpFromHead.Showed = true;
             this.tpFromHead.Size = new System.Drawing.Size(1092, 55);
             this.tpFromHead.TabIndex = 0;
             this.tpFromHead.Text = "Head";
@@ -430,7 +432,7 @@
             this.tFilterAdvanced_Modify_Head.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tFilterAdvanced_Modify_Head.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tFilterAdvanced_Modify_Head.EditInputStyle = AntdUI.TEditInputStyle.Full;
-            this.tFilterAdvanced_Modify_Head.EditMode = AntdUI.TEditMode.DoubleClick;
+            this.tFilterAdvanced_Modify_Head.EditMode = AntdUI.TEditMode.Click;
             this.tFilterAdvanced_Modify_Head.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tFilterAdvanced_Modify_Head.Gap = 8;
             this.tFilterAdvanced_Modify_Head.GapCell = 0;
@@ -847,7 +849,7 @@
             this.tabFilterFunction.Pages.Add(this.tpInjectMode);
             this.tabFilterFunction.Pages.Add(this.tpProxyMode);
             this.tabFilterFunction.Size = new System.Drawing.Size(318, 204);
-            this.tabFilterFunction.Style = styleLine6;
+            this.tabFilterFunction.Style = styleLine3;
             this.tabFilterFunction.TabIndex = 1;
             this.tabFilterFunction.Text = "tabs1";
             // 
@@ -858,6 +860,7 @@
             this.tpInjectMode.Location = new System.Drawing.Point(0, 28);
             this.tpInjectMode.Margin = new System.Windows.Forms.Padding(2);
             this.tpInjectMode.Name = "tpInjectMode";
+            this.tpInjectMode.Showed = true;
             this.tpInjectMode.Size = new System.Drawing.Size(318, 176);
             this.tpInjectMode.TabIndex = 1;
             this.tpInjectMode.Text = "注入模式";
