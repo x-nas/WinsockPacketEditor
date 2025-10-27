@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -120,7 +121,7 @@ namespace WinsockPacketEditor
                 this.tAuthList.PauseLayout = true;
 
                 this.UpdateClientList();
-                await Operate.ProxyConfig.Account.UpdateAuthList();
+                await UpdateAuthList();
             }
             catch (Exception ex)
             {
@@ -238,6 +239,80 @@ namespace WinsockPacketEditor
             finally
             {
                 this.treeClientList.PauseLayout = false;
+            }
+        }
+
+        #endregion
+
+        #region//更新代理认证列表（异步）
+
+        private async Task UpdateAuthList()
+        {
+            try
+            {
+                var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
+                var SessionList = sessions?.ToList() ?? new List<ProxySession>();
+
+                var groupedSessions = SessionList
+                    .Where(session => session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
+                    .GroupBy(session => new { session.AID, session.ClientIP })
+                    .ToList();
+
+                var devicesByAccount = SessionList
+                    .Where(session => session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind && session.AID != Guid.Empty)
+                    .GroupBy(session => session.AID)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Select(s => s.ClientIP).Distinct().Count()
+                    );
+
+                var currentActiveAIDs = groupedSessions.Select(g => g.Key.AID).Distinct().ToHashSet();
+
+                var locationTasks = groupedSessions.Select(async group =>
+                {
+                    DateTime AuthTime = group.Min(session => session.StartTime);
+                    Guid AID = group.Key.AID;
+                    string AuthIP = group.Key.ClientIP;
+
+                    string IPLocation = await Operate.SystemConfig.GetIPLocation(AuthIP);
+                    int LinksNumber = group.Count();
+                    int DevicesNumber = devicesByAccount.ContainsKey(AID) ? devicesByAccount[AID] : 0;
+
+                    return new { AID, AuthIP, IPLocation, AuthTime, LinksNumber, DevicesNumber };
+                }).ToList();
+
+                var results = await Task.WhenAll(locationTasks);
+
+                var newAuthInfo = new List<AuthInfo>();
+                foreach (var result in results)
+                {
+                    AuthInfo ai = new AuthInfo(result.AID, result.AuthIP, result.IPLocation, true, result.AuthTime);
+                    ai.LinksNumber = result.LinksNumber;
+                    ai.DevicesNumber = result.DevicesNumber;
+                    newAuthInfo.Add(ai);
+                }
+
+                Operate.ProxyConfig.Account.ClearAuthInfo();
+                foreach (var item in newAuthInfo)
+                {
+                    Operate.ProxyConfig.Account.lstAuthInfo.Add(item);
+                }
+
+                foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo.ToList())
+                {
+                    if (currentActiveAIDs.Contains(ai.AID))
+                    {
+                        Operate.ProxyConfig.Account.SetOnline_ByAccountID(ai.AID, true);
+                    }
+                    else
+                    {
+                        Operate.ProxyConfig.Account.SetOnline_ByAccountID(ai.AID, false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(UpdateAuthList), ex.Message);
             }
         }
 
