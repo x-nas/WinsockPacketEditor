@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             AntdUI.Tabs.StyleCard styleCard1 = new AntdUI.Tabs.StyleCard();
             this.tlpLogList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tlpLogList_Button = new WinsockPacketEditor.TableLayoutPanelEx();
@@ -41,6 +42,7 @@
             this.tFilterLog = new AntdUI.Table();
             this.tpSystemLog = new AntdUI.TabPage();
             this.tSystemLog = new AntdUI.Table();
+            this.timerLogList = new System.Windows.Forms.Timer(this.components);
             this.tlpLogList.SuspendLayout();
             this.tlpLogList_Button.SuspendLayout();
             this.tabLogList.SuspendLayout();
@@ -142,9 +144,9 @@
             // tabLogList
             // 
             this.tabLogList.Controls.Add(this.tpProxyLog);
-            this.tabLogList.Controls.Add(this.tpFilterLog);
             this.tabLogList.Controls.Add(this.tpSystemLog);
-            this.tabLogList.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabLogList.Controls.Add(this.tpFilterLog);
+            this.tabLogList.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabLogList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabLogList.Gap = 20;
             this.tabLogList.Location = new System.Drawing.Point(2, 42);
@@ -167,6 +169,7 @@
             this.tpProxyLog.Location = new System.Drawing.Point(0, 38);
             this.tpProxyLog.Margin = new System.Windows.Forms.Padding(2);
             this.tpProxyLog.Name = "tpProxyLog";
+            this.tpProxyLog.Showed = true;
             this.tpProxyLog.Size = new System.Drawing.Size(1096, 718);
             this.tpProxyLog.TabIndex = 2;
             this.tpProxyLog.Text = "代理日志";
@@ -242,6 +245,12 @@
             this.tSystemLog.Text = "table1";
             this.tSystemLog.CellClick += new AntdUI.Table.ClickEventHandler(this.tSystemLog_CellClick);
             // 
+            // timerLogList
+            // 
+            this.timerLogList.Enabled = true;
+            this.timerLogList.Interval = 1000;
+            this.timerLogList.Tick += new System.EventHandler(this.timerLogList_Tick);
+            // 
             // LogList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -278,5 +287,6 @@
         private AntdUI.InputNumber txtLogList_AutoClear;
         private AntdUI.Checkbox cbLogList_AutoClear;
         private AntdUI.Checkbox cbLogList_AutoRoll;
+        private System.Windows.Forms.Timer timerLogList;
     }
 }

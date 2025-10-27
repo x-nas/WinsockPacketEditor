@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -113,7 +112,7 @@ namespace WinsockPacketEditor
                 foreach (var rootItem in treeClientList.Items)
                 {
                     rootItem.Sub.Clear();
-                }
+                }                
 
                 var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
                 var SessionList = sessions?.ToList() ?? new List<ProxySession>();
@@ -209,17 +208,19 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//刷新列表       
+        #region//计时器
 
-        public async Task RefreshClientList()
+        private async void timerClientList_Tick(object sender, EventArgs e)
         {
+            this.timerClientList.Stop();
+
             try
             {
-                if (Operate.ProxyConfig.Proxy.ProxyServer == null)
+                if (Operate.ProxyConfig.Proxy.ProxyServer == null || Operate.ProxyConfig.Proxy.ProxyServer.SessionCount == 0)
                 {
                     return;
                 }
-                
+
                 this.tAuthList.PauseLayout = true;
 
                 this.UpdateClientList();
@@ -227,12 +228,13 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(RefreshClientList), ex.Message);
+                Operate.DoLog(nameof(timerClientList_Tick), ex.Message);
             }
             finally
-            {                
+            {
                 Operate.ProxyConfig.List.ClientNumber = this.treeClientList.Items.Count();
                 this.tAuthList.PauseLayout = false;
+                this.timerClientList.Start();
             }
         }
 
@@ -315,6 +317,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

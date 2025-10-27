@@ -5287,7 +5287,7 @@ namespace WinsockPacketEditor
                             byte[] bAuth = new byte[2];
                             bAuth[0] = 0x01;
 
-                            // 第一步：先验证账号密码（异步）
+                            // 第一步：先验证账号密码
                             var (bAuthOK, AccountID) = Operate.ProxyConfig.Account.CheckUserNameAndPassWord(sUserName, sPassWord);
                             if (!bAuthOK)
                             {
@@ -5303,39 +5303,36 @@ namespace WinsockPacketEditor
                                         DateTime.Now);
                                 }
 
+                                //psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
                                 return;
                             }
 
-                            // 第二步：验证通过后检查连接数限制（异步）
+                            // 第二步：验证通过后检查连接数限制
                             bool isOverLinks = Operate.ProxyConfig.Account.CheckLimitLinks(AccountID, psSession.ClientIP);
                             if (isOverLinks)
                             {
                                 bAuth[1] = (byte)0x01;
                                 psSession.TrySend(bAuth, 0, bAuth.Length);
+
+                                //psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
                                 return;
                             }
 
-                            // 第三步：检查设备数限制（异步）
+                            // 第三步：检查设备数限制
                             bool isOverDevices = Operate.ProxyConfig.Account.CheckLimitDevices(AccountID, psSession.ClientIP);
                             if (isOverDevices)
                             {
                                 bAuth[1] = (byte)0x01;
                                 psSession.TrySend(bAuth, 0, bAuth.Length);
+
+                                //psSession.Close(SuperSocket.SocketBase.CloseReason.ServerClosing);
                                 return;
                             }
 
-                            // 最终判断是否允许登录
-                            bool isAllowed = bAuthOK && !isOverLinks && !isOverDevices;
-                            bAuth[1] = isAllowed ? (byte)0x00 : (byte)0x01;
-
-                            if (isAllowed)
-                            {
-                                await Operate.ProxyConfig.Account.IPInfo_ToAccount(AccountID, psSession.ClientIP);
-
-                                psSession.AID = AccountID;
-                                psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
-                            }
-
+                            // 最终允许登录
+                            await Operate.ProxyConfig.Account.IPInfo_ToAccount(AccountID, psSession.ClientIP);
+                            psSession.AID = AccountID;
+                            psSession.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.Command;
                             psSession.TrySend(bAuth, 0, bAuth.Length);
                         }
                     }

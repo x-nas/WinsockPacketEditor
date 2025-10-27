@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -114,6 +115,8 @@
             this.splitterQuickList = new AntdUI.Splitter();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
+            this.timerPacketList = new System.Windows.Forms.Timer(this.components);
+            this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.tlpPacketList.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tlpProcessInfo.SuspendLayout();
@@ -1284,6 +1287,18 @@
             this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
             this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
             // 
+            // timerPacketList
+            // 
+            this.timerPacketList.Enabled = true;
+            this.timerPacketList.Interval = 10;
+            this.timerPacketList.Tick += new System.EventHandler(this.timerPacketList_Tick);
+            // 
+            // timerPacketListInfo
+            // 
+            this.timerPacketListInfo.Enabled = true;
+            this.timerPacketListInfo.Interval = 1000;
+            this.timerPacketListInfo.Tick += new System.EventHandler(this.timerPacketListInfo_Tick);
+            // 
             // PacketList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1391,5 +1406,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cPacketLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cPacketData;
         private AntdUI.Checkbox cbTopMost;
+        private System.Windows.Forms.Timer timerPacketList;
+        private System.Windows.Forms.Timer timerPacketListInfo;
     }
 }

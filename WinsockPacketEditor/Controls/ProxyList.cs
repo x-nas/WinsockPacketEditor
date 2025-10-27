@@ -1268,44 +1268,59 @@ namespace WinsockPacketEditor
         }
 
         #endregion
+        
+        #region//计时器 - 显示代理列表
 
-        #region//显示代理列表
-
-        public void RefreshProxyList()
+        private void timerProxyList_Tick(object sender, EventArgs e)
         {
-            if (Operate.PacketConfig.List.AutoRoll && this.dgvProxyList.Rows.Count > 0 && dgvProxyList.Height > dgvProxyList.RowTemplate.Height)
+            try
             {
-                if (dgvProxyList.InvokeRequired)
+                this.timerProxyList.Stop();
+
+                if (Operate.PacketConfig.List.AutoRoll && this.dgvProxyList.Rows.Count > 0 && dgvProxyList.Height > dgvProxyList.RowTemplate.Height)
                 {
-                    dgvProxyList.Invoke(new Action(() =>
+                    if (dgvProxyList.InvokeRequired)
+                    {
+                        dgvProxyList.Invoke(new Action(() =>
+                        {
+                            dgvProxyList.FirstDisplayedScrollingRowIndex = dgvProxyList.RowCount - 1;
+                        }));
+                    }
+                    else
                     {
                         dgvProxyList.FirstDisplayedScrollingRowIndex = dgvProxyList.RowCount - 1;
-                    }));
+                    }
                 }
-                else
+
+                if (Operate.PacketConfig.List.AutoClear)
                 {
-                    dgvProxyList.FirstDisplayedScrollingRowIndex = dgvProxyList.RowCount - 1;
+                    if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.PacketConfig.List.AutoClear_Value)
+                    {
+                        this.CleanUp_ProxyList();
+                        this.CleanUp_HexBox();
+                    }
                 }
             }
-
-            if (Operate.PacketConfig.List.AutoClear)
+            catch (Exception ex)
             {
-                if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.PacketConfig.List.AutoClear_Value)
-                {
-                    this.CleanUp_ProxyList();
-                    this.CleanUp_HexBox();
-                }
+                Operate.DoLog(nameof(timerProxyList_Tick), ex.Message);
+            }
+            finally
+            {
+                this.timerProxyList.Start();
             }
         }
 
         #endregion
 
-        #region//显示代理信息
+        #region//计时器 - 更新代理统计信息
 
-        public void ShowProxyInfo()
+        private void timerProxyListInfo_Tick(object sender, EventArgs e)
         {
             try
             {
+                this.timerProxyListInfo.Stop();
+
                 long ProxyTotal_CNT =
                     Operate.ProxyConfig.Proxy.TCP_Req_CNT +
                     Operate.ProxyConfig.Proxy.TCP_Resp_CNT +
@@ -1319,7 +1334,7 @@ namespace WinsockPacketEditor
                 this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
                 this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
                 this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
-                this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();                
+                this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();
                 this.lProxyTCP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyServer?.SessionCount.ToString() ?? "0";
                 this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.cdProxyUDP.Count.ToString();
 
@@ -1348,11 +1363,15 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ShowProxyInfo), ex.Message);
+                Operate.DoLog(nameof(timerProxyListInfo_Tick), ex.Message);
+            }
+            finally
+            {
+                this.timerProxyListInfo.Start();
             }
         }
 
-        #endregion        
+        #endregion
 
         #region//查找封包（异步）
 

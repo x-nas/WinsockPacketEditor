@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -107,6 +108,8 @@
             this.cPacketData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitterQuickList = new AntdUI.Splitter();
             this.hbProxyData = new Be.Windows.Forms.HexBox();
+            this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
+            this.timerProxyList = new System.Windows.Forms.Timer(this.components);
             this.tlpProxyList.SuspendLayout();
             this.tlpProxyList_Button.SuspendLayout();
             this.tlpProxyInfo.SuspendLayout();
@@ -1171,6 +1174,18 @@
             this.hbProxyData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbProxyData_KeyDown);
             this.hbProxyData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbProxyData_MouseDown);
             // 
+            // timerProxyListInfo
+            // 
+            this.timerProxyListInfo.Enabled = true;
+            this.timerProxyListInfo.Interval = 1000;
+            this.timerProxyListInfo.Tick += new System.EventHandler(this.timerProxyListInfo_Tick);
+            // 
+            // timerProxyList
+            // 
+            this.timerProxyList.Enabled = true;
+            this.timerProxyList.Interval = 10;
+            this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
+            // 
             // ProxyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1271,5 +1286,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cPacketLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cPacketData;
         private AntdUI.Checkbox cbTopMost;
+        private System.Windows.Forms.Timer timerProxyListInfo;
+        private System.Windows.Forms.Timer timerProxyList;
     }
 }

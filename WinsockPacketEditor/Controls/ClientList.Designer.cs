@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tlpClientList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.splitterClientList = new AntdUI.Splitter();
             this.treeClientList = new AntdUI.Tree();
             this.tAuthList = new AntdUI.Table();
+            this.timerClientList = new System.Windows.Forms.Timer(this.components);
             this.tlpClientList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterClientList)).BeginInit();
             this.splitterClientList.Panel1.SuspendLayout();
@@ -102,6 +104,12 @@
             this.tAuthList.TabIndex = 10;
             this.tAuthList.CellClick += new AntdUI.Table.ClickEventHandler(this.tAuthList_CellClick);
             // 
+            // timerClientList
+            // 
+            this.timerClientList.Enabled = true;
+            this.timerClientList.Interval = 1000;
+            this.timerClientList.Tick += new System.EventHandler(this.timerClientList_Tick);
+            // 
             // ClientList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -127,5 +135,6 @@
         private AntdUI.Splitter splitterClientList;
         private AntdUI.Tree treeClientList;
         private AntdUI.Table tAuthList;
+        private System.Windows.Forms.Timer timerClientList;
     }
 }

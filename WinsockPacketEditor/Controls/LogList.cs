@@ -175,54 +175,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        public void RefreshSystemLog()
-        {
-            if (Operate.LogConfig.List.AutoRoll)
-            {
-                tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
-            }
-
-            if (Operate.LogConfig.List.AutoClear)
-            {
-                if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                {
-                    this.CleanUp_SystemLog();
-                }
-            }
-        }
-
-        public void RefreshFilterLog()
-        {
-            if (Operate.LogConfig.List.AutoRoll)
-            {
-                tFilterLog.ScrollBar.ValueY = tFilterLog.ScrollBar.MaxY;
-            }
-
-            if (Operate.LogConfig.List.AutoClear)
-            {
-                if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                {
-                    this.CleanUp_FilterLog();
-                }
-            }
-        }
-
-        public void RefreshProxyLog()
-        {
-            if (Operate.LogConfig.List.AutoRoll)
-            {
-                tProxyLog.ScrollBar.ValueY = tProxyLog.ScrollBar.MaxY;
-            }
-
-            if (Operate.LogConfig.List.AutoClear)
-            {
-                if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
-                {
-                    this.CleanUp_ProxyLog();
-                }
-            }
-        }
-
         public void CleanUp_SystemLog()
         {
             Operate.LogConfig.Queue.ClearLogQueue();
@@ -284,6 +236,51 @@ namespace WinsockPacketEditor
         }
 
         #endregion        
+
+        #region//计时器
+
+        private void timerLogList_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                this.timerLogList.Stop();
+
+                if (Operate.LogConfig.List.AutoRoll)
+                {
+                    tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
+                    tFilterLog.ScrollBar.ValueY = tFilterLog.ScrollBar.MaxY;
+                    tProxyLog.ScrollBar.ValueY = tProxyLog.ScrollBar.MaxY;
+                }
+
+                if (Operate.LogConfig.List.AutoClear)
+                {
+                    if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                    {
+                        this.CleanUp_SystemLog();
+                    }
+
+                    if (Operate.LogConfig.List.lstFilterLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                    {
+                        this.CleanUp_FilterLog();
+                    }
+
+                    if (Operate.LogConfig.List.lstProxyLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
+                    {
+                        this.CleanUp_ProxyLog();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(timerLogList_Tick), ex.Message);
+            }
+            finally
+            {
+                this.timerLogList.Start();
+            }
+        }
+
+        #endregion
 
         #region//系统日志列表 - 右键菜单
 

@@ -1049,39 +1049,14 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示选中的封包数据
+        #region//计时器 - 显示封包列表
 
-        private void dgvPacketList_SelectionChanged(object sender, EventArgs e)
+        private void timerPacketList_Tick(object sender, EventArgs e)
         {
             try
             {
-                if (this.dgvPacketList.SelectedRows.Count > 0)
-                {
-                    int selectedIndex = this.dgvPacketList.SelectedRows[0].Index;
-                    if (selectedIndex >= 0 && selectedIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
-                    {
-                        Operate.PacketConfig.List.Search_Index = selectedIndex;
-                        Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstPacketInfo[selectedIndex];
+                this.timerPacketList.Stop();
 
-                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
-                        hbPacketData.ByteProvider = dbp;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(dgvPacketList_SelectionChanged), ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示封包列表
-
-        public void RefreshPacketList()
-        {
-            try
-            {
                 if (Operate.PacketConfig.List.AutoRoll && this.dgvPacketList.Rows.Count > 0 && dgvPacketList.Height > dgvPacketList.RowTemplate.Height)
                 {
                     if (dgvPacketList.InvokeRequired)
@@ -1108,32 +1083,76 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(RefreshPacketList), ex.Message);
+                Operate.DoLog(nameof(timerPacketList_Tick), ex.Message);
+            }
+            finally
+            {
+                this.timerPacketList.Start();
             }
         }
 
         #endregion
 
-        #region//显示注入信息
+        #region//计时器 - 显示封包列表信息
 
-        public void ShowInjectInfo()
+        private void timerPacketListInfo_Tick(object sender, EventArgs e)
         {
-            this.lTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
-            this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
-            this.lQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
-            this.lFilterPacket_CNT.Text = Operate.PacketConfig.Packet.FilterPacket_CNT.ToString();
-            this.lSend_CNT.Text = Operate.PacketConfig.Packet.Send_CNT.ToString();
-            this.lRecv_CNT.Text = Operate.PacketConfig.Packet.Recv_CNT.ToString();
-            this.lSendTo_CNT.Text = Operate.PacketConfig.Packet.SendTo_CNT.ToString();
-            this.lRecvFrom_CNT.Text = Operate.PacketConfig.Packet.RecvFrom_CNT.ToString();
-            this.lWSASend_CNT.Text = Operate.PacketConfig.Packet.WSASend_CNT.ToString();
-            this.lWSARecv_CNT.Text = Operate.PacketConfig.Packet.WSARecv_CNT.ToString();
-            this.lWSASendTo_CNT.Text = Operate.PacketConfig.Packet.WSASendTo_CNT.ToString();
-            this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Packet.WSARecvFrom_CNT.ToString();
-            this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
+            try
+            {
+                this.timerPacketListInfo.Stop();
+
+                this.lTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
+                this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
+                this.lQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
+                this.lFilterPacket_CNT.Text = Operate.PacketConfig.Packet.FilterPacket_CNT.ToString();
+                this.lSend_CNT.Text = Operate.PacketConfig.Packet.Send_CNT.ToString();
+                this.lRecv_CNT.Text = Operate.PacketConfig.Packet.Recv_CNT.ToString();
+                this.lSendTo_CNT.Text = Operate.PacketConfig.Packet.SendTo_CNT.ToString();
+                this.lRecvFrom_CNT.Text = Operate.PacketConfig.Packet.RecvFrom_CNT.ToString();
+                this.lWSASend_CNT.Text = Operate.PacketConfig.Packet.WSASend_CNT.ToString();
+                this.lWSARecv_CNT.Text = Operate.PacketConfig.Packet.WSARecv_CNT.ToString();
+                this.lWSASendTo_CNT.Text = Operate.PacketConfig.Packet.WSASendTo_CNT.ToString();
+                this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Packet.WSARecvFrom_CNT.ToString();
+                this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(timerPacketListInfo_Tick), ex.Message);
+            }
+            finally
+            {
+                this.timerPacketListInfo.Start();
+            }
         }
 
         #endregion
+
+        #region//显示选中的封包数据
+
+        private void dgvPacketList_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.dgvPacketList.SelectedRows.Count > 0)
+                {
+                    int selectedIndex = this.dgvPacketList.SelectedRows[0].Index;
+                    if (selectedIndex >= 0 && selectedIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
+                    {
+                        Operate.PacketConfig.List.Search_Index = selectedIndex;
+                        Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstPacketInfo[selectedIndex];
+
+                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
+                        hbPacketData.ByteProvider = dbp;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(dgvPacketList_SelectionChanged), ex.Message);
+            }
+        }
+
+        #endregion        
 
         #region//查找封包（异步）
 
@@ -1239,6 +1258,6 @@ namespace WinsockPacketEditor
             this.form.TopMost = this.cbTopMost.Checked;
         }
 
-        #endregion        
+        #endregion
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AntdUI;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -542,120 +541,6 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//计时器
-
-        private async void timerProxyList_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                this.timerProxyList.Stop();
-
-                var hasProxyData = await Task.Run(() =>
-                {
-                    return Operate.ProxyConfig.Queue.qProxyInfo.Count > 0;
-                });
-
-                var hasLogData = await Task.Run(() =>
-                {
-                    return Operate.LogConfig.Queue.cqLogInfo.Count > 0 ||
-                           Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0 ||
-                           Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0;
-                });
-
-                if (hasProxyData)
-                {
-                    Operate.ProxyConfig.List.ProxyInfo_ToList();
-                    this.cProxyList?.RefreshProxyList();
-                }
-
-                if (hasLogData)
-                {
-                    if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
-                    {
-                        Operate.LogConfig.List.LogToList();
-                        this.cLogList?.RefreshSystemLog();
-                    }
-
-                    if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
-                    {
-                        Operate.LogConfig.List.FilterLogToList();
-                        this.cLogList?.RefreshFilterLog();
-                    }
-
-                    if (Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0)
-                    {
-                        Operate.LogConfig.List.ProxyLogToList();
-                        this.cLogList?.RefreshProxyLog();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(timerProxyList_Tick), ex.Message);
-            }
-            finally
-            {
-                this.timerProxyList.Start();
-            }
-        }
-
-        private async void timerProxyListInfo_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                this.timerProxyListInfo.Stop();
-
-                await Task.Run(() =>
-                {
-                    this.cProxyList?.ShowProxyInfo();
-                    this.cClientList?.RefreshClientList();
-                    this.ShowMenuInfo();
-                });
-
-                await Operate.ProxyConfig.Proxy.CheckUDPTimeOutAsync();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(timerProxyListInfo_Tick), ex.Message);
-            }
-            finally
-            {
-                this.timerProxyListInfo.Start();
-            }
-        }
-
-        private void timerAutoSave_Tick(object sender, EventArgs e)
-        {
-            if (!this.bgwAutoSave.IsBusy)
-            { 
-                this.bgwAutoSave.RunWorkerAsync();
-            }
-        }
-
-        #endregion        
-
-        #region//显示菜单信息
-
-        private void ShowMenuInfo()
-        {
-            try
-            {
-                this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
-                this.mProxyMode.Items[1].Badge = Operate.ProxyConfig.List.ClientNumber.ToString();
-                this.mProxyMode.Items[2].Badge = Operate.ProxyConfig.Account.lstAccountInfo.Count.ToString();
-                this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
-                this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
-                this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
-                this.mProxyMode.Items[11].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(ShowMenuInfo), ex.Message);
-            }
-        }
-
-        #endregion        
-
         #region//导航菜单
 
         private void bMenuCollapse_Click(object sender, EventArgs e)
@@ -707,7 +592,7 @@ namespace WinsockPacketEditor
                     break;
 
                 case "miStatistical":
-                    this.tabProxyMode.SelectTab("tpStatistical");                    
+                    this.tabProxyMode.SelectTab("tpStatistical");
                     break;
 
                 case "miComparison":
@@ -733,6 +618,86 @@ namespace WinsockPacketEditor
         }
 
         #endregion      
+
+        #region//计时器 - 数据列表
+
+        private void timerProxyList_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                this.timerProxyList.Stop();
+
+                if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
+                {
+                    Operate.ProxyConfig.List.ProxyInfo_ToList();
+                }
+
+                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
+                {
+                    Operate.LogConfig.List.LogToList();
+                }
+
+                if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
+                {
+                    Operate.LogConfig.List.FilterLogToList();
+                }
+
+                if (Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0)
+                {
+                    Operate.LogConfig.List.ProxyLogToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(timerProxyList_Tick), ex.Message);
+            }
+            finally
+            {
+                this.timerProxyList.Start();
+            }
+        }
+
+        #endregion
+
+        #region//计时器 - 列表信息
+
+        private void timerProxyListInfo_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                this.timerProxyListInfo.Stop();
+
+                this.mProxyMode.Items[0].Badge = Operate.ProxyConfig.List.lstProxyInfo.Count.ToString();
+                this.mProxyMode.Items[1].Badge = Operate.ProxyConfig.List.ClientNumber.ToString();
+                this.mProxyMode.Items[2].Badge = Operate.ProxyConfig.Account.lstAccountInfo.Count.ToString();
+                this.mProxyMode.Items[3].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
+                this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
+                this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
+                this.mProxyMode.Items[11].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(timerProxyListInfo_Tick), ex.Message);
+            }
+            finally
+            {
+                this.timerProxyListInfo.Start();
+            }
+        }
+
+        #endregion
+
+        #region//计时器 - 自动保存
+
+        private void timerAutoSave_Tick(object sender, EventArgs e)
+        {
+            if (!this.bgwAutoSave.IsBusy)
+            { 
+                this.bgwAutoSave.RunWorkerAsync();
+            }
+        }
+
+        #endregion
 
         #region//自动保存（异步）
 

@@ -1,6 +1,5 @@
 ﻿using AntdUI;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -545,34 +544,28 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//计时器
+        #region//计时器 - 数据列表
 
-        private async void timerPacketList_Tick(object sender, EventArgs e)
+        private void timerPacketList_Tick(object sender, EventArgs e)
         {
             try
             {
                 this.timerPacketList.Stop();
 
-                await Task.Run(() =>
+                if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
                 {
-                    if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
-                    {
-                        Operate.PacketConfig.List.PacketToList();
-                        this.cPacketList?.RefreshPacketList();
-                    }
+                    Operate.PacketConfig.List.PacketToList();
+                }
 
-                    if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
-                    {
-                        Operate.LogConfig.List.LogToList();
-                        this.cLogList?.RefreshSystemLog();
-                    }
+                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
+                {
+                    Operate.LogConfig.List.LogToList();
+                }
 
-                    if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
-                    {
-                        Operate.LogConfig.List.FilterLogToList();
-                        this.cLogList?.RefreshFilterLog();
-                    }
-                });
+                if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
+                {
+                    Operate.LogConfig.List.FilterLogToList();
+                }
             }
             catch (Exception ex)
             {
@@ -584,17 +577,21 @@ namespace WinsockPacketEditor
             }
         }
 
-        private async void timerPacketListInfo_Tick(object sender, EventArgs e)
+        #endregion
+
+        #region//计时器 - 列表信息
+
+        private void timerPacketListInfo_Tick(object sender, EventArgs e)
         {
             try
             {
                 this.timerPacketListInfo.Stop();
 
-                await Task.Run(() =>
-                {
-                    this.cPacketList?.ShowInjectInfo();
-                    this.ShowMenuInfo();                   
-                });
+                this.mInjectMode.Items[0].Badge = Operate.PacketConfig.List.lstPacketInfo.Count.ToString();
+                this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
+                this.mInjectMode.Items[2].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
+                this.mInjectMode.Items[3].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
+                this.mInjectMode.Items[9].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
             }
             catch (Exception ex)
             {
@@ -606,6 +603,10 @@ namespace WinsockPacketEditor
             }      
         }
 
+        #endregion
+
+        #region//计时器 - 自动保存
+
         private void timerAutoSave_Tick(object sender, EventArgs e)
         {
             if (!this.bgwAutoSave.IsBusy)
@@ -614,21 +615,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
-
-        #region//显示菜单信息
-
-        private void ShowMenuInfo()
-        {
-            this.mInjectMode.Items[0].Badge = Operate.PacketConfig.List.lstPacketInfo.Count.ToString();
-            this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
-            this.mInjectMode.Items[2].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
-            this.mInjectMode.Items[3].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
-            this.mInjectMode.Items[9].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
-        }
-
-
-        #endregion
+        #endregion        
 
         #region//自动保存（异步）
 
