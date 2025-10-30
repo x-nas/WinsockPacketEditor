@@ -54,6 +54,12 @@ namespace WinsockPacketEditor
                     LocalizationText = "ProxyModeForm.ProxySettings",
                     IconSvg = "ShareAltOutlined",
                 },
+                new AntdUI.SelectItem("进程设置")
+                {
+                    Tag = "ProcessSettings",
+                    LocalizationText = "ProxyModeForm.ProcessSettings",
+                    IconSvg = "ProfileOutlined",
+                },
                 new AntdUI.SelectItem("过滤设置")
                 {
                     Tag = "LeachSettings",
@@ -403,6 +409,18 @@ namespace WinsockPacketEditor
                 case "ProxySettings":
 
                     AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new ProxySetting(this.form))
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+
+                    break;
+
+                case "ProcessSettings":
+
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this.form, new ProcessSetting(this.form))
                     {
                         Align = AntdUI.TAlignMini.Right,
                         Mask = true,
@@ -979,6 +997,8 @@ namespace WinsockPacketEditor
                 if (Operate.ProxyConfig.Proxy.ProxyServer == null)
                 {
                     Operate.ProxyConfig.Proxy.ProxyServer = new SocksProxyServer();
+
+                    this.InitHttpProxy();
                 }
 
                 if (Operate.ProxyConfig.Proxy.ipFilter != null)
@@ -988,7 +1008,7 @@ namespace WinsockPacketEditor
 
                 if (Operate.ProxyConfig.Proxy.ProxyServer.State != ServerState.Running)
                 {
-                    return this.InitSocks5ProxyServer();
+                    return this.InitSocks5Proxy();
                 }
             }
             catch (Exception ex)
@@ -1032,7 +1052,7 @@ namespace WinsockPacketEditor
             return false;
         }
 
-        private bool InitSocks5ProxyServer()
+        private bool InitSocks5Proxy()
         {
             try
             {
@@ -1073,17 +1093,17 @@ namespace WinsockPacketEditor
                         });
 
                         string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址 : TCP [ {0} ] UDP [ {1} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
-                        Operate.DoLog(nameof(InitSocks5ProxyServer), sProxyIP);
+                        Operate.DoLog(nameof(InitSocks5Proxy), sProxyIP);
 
                         if (Operate.ProxyConfig.Proxy.Enable_Auth)
                         {
-                            Operate.DoLog(nameof(InitSocks5ProxyServer), AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用代理服务身份认证"));
+                            Operate.DoLog(nameof(InitSocks5Proxy), AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用代理服务身份认证"));
                         }
 
                         if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
                         {
                             string sLog = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServer.EXTProxy", "已启用外部代理 [ {0}:{1} ]"), Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                            Operate.DoLog(nameof(InitSocks5ProxyServer), sLog);
+                            Operate.DoLog(nameof(InitSocks5Proxy), sLog);
                         }
 
                         return true;
@@ -1113,10 +1133,41 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitSocks5ProxyServer), ex.Message);
+                Operate.DoLog(nameof(InitSocks5Proxy), ex.Message);
                 return false;
             }            
-        }        
+        }
+
+        private void InitHttpProxy()
+        {
+            try
+            {
+                Operate.ProxyConfig.Proxy.syNet.BindPort(1088);
+                Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);                               
+
+                if (Operate.ProxyConfig.Proxy.syNet.Start())
+                {
+                    Operate.DoLog(nameof(InitHttpProxy), "syNet 启动成功");
+                }
+                else
+                {
+                    Operate.DoLog(nameof(InitHttpProxy), Operate.ProxyConfig.Proxy.syNet.GetError());
+                }
+
+                if (Operate.ProxyConfig.Proxy.syNet.InstallCertificate())
+                {
+                    Operate.DoLog(nameof(InitHttpProxy), "syNet 证书安装成功");
+                }
+                else
+                {
+                    Operate.DoLog(nameof(InitHttpProxy), Operate.ProxyConfig.Proxy.syNet.GetError());
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(InitHttpProxy), ex.Message);
+            }
+        }
 
         #endregion
 

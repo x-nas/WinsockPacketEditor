@@ -240,6 +240,7 @@
     <Compile Include="ClassObject\SocksProxyReceiveFilterFactory.cs" />
     <Compile Include="ClassObject\SocksProxyServer.cs" />
     <Compile Include="ClassObject\SocksSwitchReceiveFilter.cs" />
+    <Compile Include="ClassObject\SunnyNetCallback.cs" />
     <Compile Include="ClassObject\WhiteListInfo.cs" />
     <Compile Include="ClassObject\WinSockHook.cs" />
     <Compile Include="Controls\AccountEdit.cs">
@@ -431,6 +432,12 @@
     <Compile Include="Controls\ProcessList.Designer.cs">
       <DependentUpon>ProcessList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ProcessSetting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProcessSetting.Designer.cs">
+      <DependentUpon>ProcessSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ProxyList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -561,6 +568,32 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SunnyNetlibray\CertManager.cs" />
+    <Compile Include="SunnyNetlibray\Event\HTTPEvent.cs" />
+    <Compile Include="SunnyNetlibray\Event\TCPClientEvent.cs" />
+    <Compile Include="SunnyNetlibray\Event\TCPEvent.cs" />
+    <Compile Include="SunnyNetlibray\Event\UDPEvent.cs" />
+    <Compile Include="SunnyNetlibray\Event\WebsocketClientEvent.cs" />
+    <Compile Include="SunnyNetlibray\Event\WebSocketEvent.cs" />
+    <Compile Include="SunnyNetlibray\HTTPClient.cs" />
+    <Compile Include="SunnyNetlibray\interface\RedisClient.cs" />
+    <Compile Include="SunnyNetlibray\interface\SunnyNet.cs" />
+    <Compile Include="SunnyNetlibray\interface\TCPClient.cs" />
+    <Compile Include="SunnyNetlibray\interface\WebsocketClient.cs" />
+    <Compile Include="SunnyNetlibray\Internal\api.cs" />
+    <Compile Include="SunnyNetlibray\Internal\Bridge.cs" />
+    <Compile Include="SunnyNetlibray\Internal\Const.cs" />
+    <Compile Include="SunnyNetlibray\Internal\Tool.cs" />
+    <Compile Include="SunnyNetlibray\KeyTable.cs" />
+    <Compile Include="SunnyNetlibray\Queue.cs" />
+    <Compile Include="SunnyNetlibray\RedisClient.cs" />
+    <Compile Include="SunnyNetlibray\SunnyNet.cs" />
+    <Compile Include="SunnyNetlibray\TCPClient.cs" />
+    <Compile Include="SunnyNetlibray\Tools\Compress.cs" />
+    <Compile Include="SunnyNetlibray\Tools\TCPTools.cs" />
+    <Compile Include="SunnyNetlibray\Tools\UDPTools.cs" />
+    <Compile Include="SunnyNetlibray\Tools\WebSocketTools.cs" />
+    <Compile Include="SunnyNetlibray\WSClient.cs" />
     <Compile Include="WebAPI\CCProxy_Controller.cs" />
     <Compile Include="WebAPI\ProxyAccount_Controller.cs" />
     <Compile Include="WebAPI\ProxyInfo_Controller.cs" />
@@ -659,6 +692,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProcessList.resx">
       <DependentUpon>ProcessList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProcessSetting.resx">
+      <DependentUpon>ProcessSetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ProxyList.resx">
       <DependentUpon>ProxyList.cs</DependentUpon>
@@ -1033,6 +1069,12 @@
     <None Include="Resources\zm.png" />
     <None Include="Resources\zw.png" />
     <None Include="Resources\Flag_Local.png" />
+    <Content Include="SunnyNet.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SunnyNet64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

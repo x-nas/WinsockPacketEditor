@@ -5008,6 +5008,10 @@ namespace WinsockPacketEditor
             public static class Proxy
             {
                 public static ProxyAppServer ProxyServer;
+                public static SunnyNetlibray.SunnyNet syNet = new SunnyNetlibray.SunnyNet();
+                public static SunnyNetCallback syCallBack = new SunnyNetCallback();
+                public static bool IsLoadDriver = false;
+                public static List<AntdUI.TransferItem> lstSelectProcess = new List<AntdUI.TransferItem>();
                 public static IPConnectionFilter ipFilter = new IPConnectionFilter();                
                 public static long ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
@@ -11333,6 +11337,10 @@ namespace WinsockPacketEditor
                     UDP_Req = 14,
                     TCP_Resp = 15,
                     UDP_Resp = 16,
+                    HTTP_Req = 17,
+                    HTTP_Resp = 18,
+                    HTTPS_Req = 19,
+                    HTTPS_Resp = 20,
                 }
 
                 public enum IPType
@@ -11560,6 +11568,10 @@ namespace WinsockPacketEditor
                     public static string UDP_Req => AntdUI.Localization.Get("HookSettingsForm.UDP_Req", "UDP 请求");
                     public static string TCP_Resp => AntdUI.Localization.Get("HookSettingsForm.TCP_Resp", "TCP 响应");
                     public static string UDP_Resp => AntdUI.Localization.Get("HookSettingsForm.UDP_Resp", "UDP 响应");
+                    public static string HTTP_Req => AntdUI.Localization.Get("HookSettingsForm.HTTP_Req", "HTTP 请求");
+                    public static string HTTP_Resp => AntdUI.Localization.Get("HookSettingsForm.HTTP_Resp", "HTTP 响应");
+                    public static string HTTPS_Req => AntdUI.Localization.Get("HookSettingsForm.HTTPS_Req", "HTTPS 请求");
+                    public static string HTTPS_Resp => AntdUI.Localization.Get("HookSettingsForm.HTTPS_Resp", "HTTPS 响应");
                 }
 
                 public static string GetName_ByPacketType(PacketType socketType)
@@ -11619,6 +11631,18 @@ namespace WinsockPacketEditor
                             case PacketType.UDP_Resp:
                                 return PacketTypeNames.UDP_Resp;
 
+                            case PacketType.HTTP_Req:
+                                return PacketTypeNames.HTTP_Req;
+
+                            case PacketType.HTTP_Resp:
+                                return PacketTypeNames.HTTP_Resp;
+
+                            case PacketType.HTTPS_Req:
+                                return PacketTypeNames.HTTPS_Req;
+
+                            case PacketType.HTTPS_Resp:
+                                return PacketTypeNames.HTTPS_Resp;
+
                             default:
                                 return string.Empty;
                         }
@@ -11648,6 +11672,8 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSASendTo:
                             case PacketConfig.Packet.PacketType.TCP_Req:
                             case PacketConfig.Packet.PacketType.UDP_Req:
+                            case PacketConfig.Packet.PacketType.HTTP_Req:
+                            case PacketConfig.Packet.PacketType.HTTPS_Req:
                                 return Properties.Resources.Send;
 
                             case PacketConfig.Packet.PacketType.WS1_Recv:
@@ -11659,6 +11685,8 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.WSARecvFrom:
                             case PacketConfig.Packet.PacketType.TCP_Resp:
                             case PacketConfig.Packet.PacketType.UDP_Resp:
+                            case PacketConfig.Packet.PacketType.HTTP_Resp:
+                            case PacketConfig.Packet.PacketType.HTTPS_Resp:
                                 return Properties.Resources.Recv;
                         }
                     }

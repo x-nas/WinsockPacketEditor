@@ -310,7 +310,7 @@
             this.ddMenu.IconSvg = "PlusOutlined";
             this.ddMenu.Location = new System.Drawing.Point(1066, 2);
             this.ddMenu.Margin = new System.Windows.Forms.Padding(2);
-            this.ddMenu.MaxCount = 11;
+            this.ddMenu.MaxCount = 12;
             this.ddMenu.Name = "ddMenu";
             this.ddMenu.Placement = AntdUI.TAlignFrom.BR;
             this.ddMenu.Size = new System.Drawing.Size(32, 36);
