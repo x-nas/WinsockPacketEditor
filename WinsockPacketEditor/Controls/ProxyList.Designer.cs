@@ -107,7 +107,6 @@
             this.cPacketLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cPacketData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitterQuickList = new AntdUI.Splitter();
-            this.hbProxyData = new Be.Windows.Forms.HexBox();
             this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
             this.timerProxyList = new System.Windows.Forms.Timer(this.components);
             this.tlpProxyList.SuspendLayout();
@@ -121,7 +120,6 @@
             this.tlpPacketListInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProxyList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).BeginInit();
-            this.splitterQuickList.Panel2.SuspendLayout();
             this.splitterQuickList.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1144,35 +1142,12 @@
             this.splitterQuickList.Location = new System.Drawing.Point(0, 0);
             this.splitterQuickList.Name = "splitterQuickList";
             this.splitterQuickList.Panel1MinSize = 0;
-            // 
-            // splitterQuickList.Panel2
-            // 
-            this.splitterQuickList.Panel2.Controls.Add(this.hbProxyData);
             this.splitterQuickList.Panel2MinSize = 0;
             this.splitterQuickList.Size = new System.Drawing.Size(1094, 175);
             this.splitterQuickList.SplitterDistance = 300;
             this.splitterQuickList.SplitterSize = 80;
             this.splitterQuickList.SplitterWidth = 5;
             this.splitterQuickList.TabIndex = 1;
-            // 
-            // hbProxyData
-            // 
-            this.hbProxyData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.hbProxyData.ColumnInfoVisible = true;
-            this.hbProxyData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbProxyData.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hbProxyData.LineInfoVisible = true;
-            this.hbProxyData.Location = new System.Drawing.Point(0, 0);
-            this.hbProxyData.Margin = new System.Windows.Forms.Padding(2);
-            this.hbProxyData.Name = "hbProxyData";
-            this.hbProxyData.ReadOnly = true;
-            this.hbProxyData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbProxyData.Size = new System.Drawing.Size(789, 175);
-            this.hbProxyData.StringViewVisible = true;
-            this.hbProxyData.TabIndex = 2;
-            this.hbProxyData.VScrollBarVisible = true;
-            this.hbProxyData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbProxyData_KeyDown);
-            this.hbProxyData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbProxyData_MouseDown);
             // 
             // timerProxyListInfo
             // 
@@ -1210,7 +1185,6 @@
             this.tlpPacketListInfo.ResumeLayout(false);
             this.tlpPacketListInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProxyList)).EndInit();
-            this.splitterQuickList.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).EndInit();
             this.splitterQuickList.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1270,7 +1244,6 @@
         private AntdUI.Label lsplit6;
         private AntdUI.Label lProxyTotal;
         private AntdUI.Splitter splitterQuickList;
-        private Be.Windows.Forms.HexBox hbProxyData;
         private System.Windows.Forms.DataGridView dgvProxyList;
         private System.Windows.Forms.DataGridViewImageColumn cTypeImg;
         private System.Windows.Forms.DataGridViewTextBoxColumn cID;

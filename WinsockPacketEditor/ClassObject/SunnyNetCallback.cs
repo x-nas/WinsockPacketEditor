@@ -15,15 +15,15 @@ namespace WinsockPacketEditor
             {
                 case HTTPEvent.EventType_HTTP_Request:
 
-                    Operate.ProxyConfig.Proxy.DomainType dtRequest = Operate.ProxyConfig.Proxy.DomainType.Http;
+                    Operate.ProxyConfig.Proxy.DomainType dtRequest = Operate.ProxyConfig.Proxy.DomainType.HTTP;
                     Operate.PacketConfig.Packet.PacketType ptRequest = Operate.PacketConfig.Packet.PacketType.HTTP_Req;
                     if (Conn.URL().StartsWith("https://"))
                     {
-                        dtRequest = Operate.ProxyConfig.Proxy.DomainType.Https;
+                        dtRequest = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
                         ptRequest = Operate.PacketConfig.Packet.PacketType.HTTPS_Req;
                     }
 
-                    //Operate.DoLog(nameof(OnHttpCallback), Conn.Request().Body().String());
+                    Operate.DoLog(nameof(OnHttpCallback), Conn.Request().Body().String());
 
                     _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
@@ -41,15 +41,15 @@ namespace WinsockPacketEditor
                     break;
                 case HTTPEvent.EventType_HTTP_Response:
 
-                    Operate.ProxyConfig.Proxy.DomainType dtResponse = Operate.ProxyConfig.Proxy.DomainType.Http;
+                    Operate.ProxyConfig.Proxy.DomainType dtResponse = Operate.ProxyConfig.Proxy.DomainType.HTTP;
                     Operate.PacketConfig.Packet.PacketType ptResponse = Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
                     if (Conn.URL().StartsWith("https://"))
                     {
-                        dtResponse = Operate.ProxyConfig.Proxy.DomainType.Https;
+                        dtResponse = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
                         ptResponse = Operate.PacketConfig.Packet.PacketType.HTTPS_Resp;
                     }
 
-                    //Operate.DoLog(nameof(OnHttpCallback), Conn.Response().Body().String());
+                    Operate.DoLog(nameof(OnHttpCallback), Conn.Response().Body().String());
 
                     _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,

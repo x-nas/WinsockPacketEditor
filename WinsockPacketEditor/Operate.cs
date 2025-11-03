@@ -5091,8 +5091,8 @@ namespace WinsockPacketEditor
                 public enum DomainType : byte
                 {
                     Socket = 0,
-                    Http = 1,
-                    Https = 2,
+                    HTTP = 1,
+                    HTTPS = 2,
                     External = 3,
                 }
 
@@ -5434,11 +5434,11 @@ namespace WinsockPacketEditor
                             psSession.ConnectToEXTProxyServer(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port, bData);
                             break;
 
-                        case Operate.ProxyConfig.Proxy.DomainType.Http:
+                        case Operate.ProxyConfig.Proxy.DomainType.HTTP:
                             await HandleHttpConnect(psSession, targetIP, targetPort, targetAddress);
                             break;
 
-                        case Operate.ProxyConfig.Proxy.DomainType.Https:
+                        case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
                         case Operate.ProxyConfig.Proxy.DomainType.Socket:
                             psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
                             psSession.ConnectToTarget(targetIP, targetPort);
@@ -5629,7 +5629,7 @@ namespace WinsockPacketEditor
                         {
                             switch (psSession.DomainType)
                             {
-                                case Operate.ProxyConfig.Proxy.DomainType.Http:
+                                case Operate.ProxyConfig.Proxy.DomainType.HTTP:
 
                                     if (Operate.ProxyConfig.Mapping.Enable_MapLocal || Operate.ProxyConfig.Mapping.Enable_MapRemote)
                                     {
@@ -5734,7 +5734,7 @@ namespace WinsockPacketEditor
 
                                     break;
 
-                                case Operate.ProxyConfig.Proxy.DomainType.Https:
+                                case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
                                 case Operate.ProxyConfig.Proxy.DomainType.Socket:
                                 case Operate.ProxyConfig.Proxy.DomainType.External:
 
@@ -6576,11 +6576,11 @@ namespace WinsockPacketEditor
 
                         if (Port == 80 || Port == 8080)
                         {
-                            return Operate.ProxyConfig.Proxy.DomainType.Http;
+                            return Operate.ProxyConfig.Proxy.DomainType.HTTP;
                         }
                         else if (Port == 443 || Port == 8443)
                         {
-                            return Operate.ProxyConfig.Proxy.DomainType.Https;
+                            return Operate.ProxyConfig.Proxy.DomainType.HTTPS;
                         }
                     }
                     catch (Exception ex)

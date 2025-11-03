@@ -138,6 +138,9 @@
     <Reference Include="QQWry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\QQWry.1.3.1\lib\net45\QQWry.dll</HintPath>
     </Reference>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    </Reference>
     <Reference Include="SuperSocket.Common, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Common.dll</HintPath>
     </Reference>
@@ -407,6 +410,12 @@
     </Compile>
     <Compile Include="Controls\MapSetting.Designer.cs">
       <DependentUpon>MapSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PacketData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PacketData.Designer.cs">
+      <DependentUpon>PacketData.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PacketEdit.cs">
       <SubType>UserControl</SubType>
@@ -680,6 +689,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\MapSetting.resx">
       <DependentUpon>MapSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PacketData.resx">
+      <DependentUpon>PacketData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PacketEdit.resx">
       <DependentUpon>PacketEdit.cs</DependentUpon>

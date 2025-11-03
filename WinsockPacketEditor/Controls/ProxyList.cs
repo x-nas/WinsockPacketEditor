@@ -1,5 +1,4 @@
 ﻿using AntdUI;
-using Be.Windows.Forms;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
 using System;
@@ -17,7 +16,8 @@ namespace WinsockPacketEditor
     {
         private Form form;
         public bool SearchFromHead = true;
-        private QuickList cQuickList = null;        
+        private QuickList cQuickList = null;
+        private PacketData controlPacketData = null;
 
         #region//窗体事件
 
@@ -33,9 +33,8 @@ namespace WinsockPacketEditor
             this.InitTable_ProxyList();
             this.InitControl();
             this.Dark_Changed();
-            this.SetColumnName_ProxyList();
-
-            this.hbProxyData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.SetColumnName_ProxyList();            
+            
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
             this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
@@ -125,6 +124,23 @@ namespace WinsockPacketEditor
 
         private void InitControl()
         {
+            //PacketData
+            if (this.splitterQuickList.InvokeRequired)
+            {
+                this.splitterQuickList.Invoke(new Action(() =>
+                {
+                    controlPacketData = new PacketData(this.form);
+                    controlPacketData.Dock = DockStyle.Fill;
+                    this.splitterQuickList.Panel2.Controls.Add(controlPacketData);
+                }));
+            }
+            else
+            {
+                controlPacketData = new PacketData(this.form);
+                controlPacketData.Dock = DockStyle.Fill;
+                this.splitterQuickList.Panel2.Controls.Add(controlPacketData);
+            }
+
             //QuickList
             if (this.splitterQuickList.InvokeRequired)
             {
@@ -154,10 +170,7 @@ namespace WinsockPacketEditor
 
                 this.dgvProxyList.ForeColor = Color.LimeGreen;
                 this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor =
-                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Silver;
-
-                this.hbProxyData.BackColor = Operate.SystemConfig.Color_40;
-                this.hbProxyData.ForeColor = Color.Silver;
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Silver;                
             }
             else
             {
@@ -168,22 +181,16 @@ namespace WinsockPacketEditor
               
                 this.dgvProxyList.ForeColor = Color.Green;
                 this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor =
-                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
-
-                this.hbProxyData.BackColor = Color.White;
-                this.hbProxyData.ForeColor = Color.Black;
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;                
             }
 
-            this.cQuickList.Dark_Changed();
+            this.controlPacketData?.Dark_Changed();
+            this.cQuickList?.Dark_Changed();
         }
 
         public void RefreshProxyData()
-        {
-            if (Operate.ProxyConfig.List.piSelect != null)
-            {
-                DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
-                hbProxyData.ByteProvider = dbp;
-            }
+        { 
+            this.controlPacketData?.RefreshPacketData();
         }
 
         #endregion
@@ -376,7 +383,7 @@ namespace WinsockPacketEditor
         {
             this.CleanUp_ProxyList();
             this.CleanUp_ProxyListInfo();
-            this.CleanUp_HexBox();
+            this.controlPacketData?.CleanUp_PacketData();
 
             if (this.form is InterfaceInfo.IProxyMode proxyForm)
             {
@@ -764,224 +771,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
-
-        #region//代理数据 - 右键菜单
-
-        private void hbProxyData_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.C && this.hbProxyData.CanCopy())
-            {
-                e.Handled = true;
-                this.hbProxyData.CopyHex();
-
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
-                {
-                    LocalizationText = "CopyToClipboard"
-                });
-            }
-        }
-
-        private void hbProxyData_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                DynamicByteProvider dbp = hbProxyData.ByteProvider as DynamicByteProvider;
-                if (dbp == null || dbp.Bytes.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbProxyData, (item) =>
-                {
-                    switch (item.ID)
-                    {
-                        case "Edit":
-
-                            if (Operate.PacketConfig.List.piSelect != null)
-                            {
-                                var PacketEdit = new PacketEdit(this.form, Operate.ProxyConfig.List.piSelect);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
-                            }
-
-                            break;
-
-                        case "ToFilterList":
-
-                            if (Operate.ProxyConfig.List.piSelect != null)
-                            {
-                                bool bOK = false;
-                                if (this.hbProxyData.CanCopy())
-                                {
-                                    this.hbProxyData.CopyHex();
-                                    byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
-                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(Operate.ProxyConfig.List.piSelect, bBufferCopy);
-                                }
-                                else
-                                {
-                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(Operate.ProxyConfig.List.piSelect, dbp.Bytes.ToArray());
-                                }
-
-                                if (bOK)
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到滤镜列表", TType.Success)
-                                    {
-                                        LocalizationText = "ToFilterList.Success"
-                                    });
-                                }
-                                else
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表出错", TType.Error)
-                                    {
-                                        LocalizationText = "ToFilterList.Error"
-                                    });
-                                }
-                            }
-
-                            break;
-
-                        case "Copy_Text":
-
-                            this.hbProxyData.Copy();
-
-                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
-                            {
-                                LocalizationText = "CopyToClipboard"
-                            });
-
-                            break;
-
-                        case "Copy_Hex":
-
-                            this.hbProxyData.CopyHex();
-
-                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
-                            {
-                                LocalizationText = "CopyToClipboard"
-                            });
-
-                            break;
-
-                        case "ToTextA":
-
-                            string StringA = string.Empty;
-                            if (this.hbProxyData.CanCopy())
-                            {
-                                this.hbProxyData.CopyHex();
-                                StringA = Clipboard.GetText();
-                            }
-                            else
-                            {
-                                StringA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
-                            }
-
-                            if (this.form is InterfaceInfo.IProxyMode proxyFormA)
-                            {
-                                proxyFormA.SetTextA(StringA);
-
-                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
-                                {
-                                    LocalizationText = "ToTextA"
-                                });
-                            }
-
-                            break;
-
-                        case "ToTextB":
-
-                            string StringB = string.Empty;
-                            if (this.hbProxyData.CanCopy())
-                            {
-                                this.hbProxyData.CopyHex();
-                                StringB = Clipboard.GetText();
-                            }
-                            else
-                            {
-                                StringB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
-                            }
-
-                            if (this.form is InterfaceInfo.IProxyMode proxyFormB)
-                            {
-                                proxyFormB.SetTextB(StringB);
-
-                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本B", TType.Success)
-                                {
-                                    LocalizationText = "ToTextB"
-                                });
-                            }
-
-                            break;
-
-                        case "SelectAll":
-
-                            this.hbProxyData.SelectAll();
-
-                            break;
-
-                        default:
-
-                            if (Operate.ProxyConfig.List.piSelect == null)
-                            {
-                                return;
-                            }
-
-                            if (Guid.TryParse(item.ID, out Guid SID))
-                            {
-                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
-                                if (si != null)
-                                {
-                                    byte[] bBuffer = null;
-                                    if (this.hbProxyData.CanCopy())
-                                    {
-                                        this.hbProxyData.CopyHex();
-                                        bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
-                                    }
-                                    else
-                                    {
-                                        bBuffer = dbp.Bytes.ToArray();
-                                    }
-
-                                    List<ProxyInfo> piList = new List<ProxyInfo>
-                                    {
-                                        new ProxyInfo
-                                        {
-                                            PacketSocket = Operate.ProxyConfig.List.piSelect.PacketSocket,
-                                            PacketType = Operate.ProxyConfig.List.piSelect.PacketType,
-                                            ClientAddr = Operate.ProxyConfig.List.piSelect.ClientAddr,
-                                            ServerAddr = Operate.ProxyConfig.List.piSelect.ServerAddr,
-                                            PacketBuffer = bBuffer,
-                                            PacketLen = bBuffer.Length,
-                                            PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen),
-                                        }
-                                    };
-
-                                    if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
-                                    {
-                                        string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到: {0}"), item.Text);
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
-                                    }
-                                    else
-                                    {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
-                                        {
-                                            LocalizationText = "ToSendList.Error"
-                                        });
-                                    }
-                                }
-                            }
-
-                            break;
-                    }
-                }, Operate.PacketConfig.Packet.GetCMS_PacketData(this.hbProxyData)));
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//开始代理
 
@@ -1233,28 +1023,7 @@ namespace WinsockPacketEditor
             { 
                 this.dgvProxyList.ResumeLayout();
             }
-        }
-
-        private void CleanUp_HexBox()
-        {
-            if (hbProxyData.InvokeRequired)
-            {
-                hbProxyData.Invoke(new Action(CleanUp_HexBox));
-                return;
-            }
-
-            if (hbProxyData.ByteProvider != null)
-            {
-                IDisposable byteProvider = hbProxyData.ByteProvider as IDisposable;
-
-                if (byteProvider != null)
-                {
-                    byteProvider.Dispose();
-                }
-
-                hbProxyData.ByteProvider = null;
-            }
-        }
+        }        
 
         #endregion
 
@@ -1307,8 +1076,7 @@ namespace WinsockPacketEditor
                         Operate.ProxyConfig.List.Search_Index = selectedIndex;
                         Operate.ProxyConfig.List.piSelect = Operate.ProxyConfig.List.lstProxyInfo[selectedIndex];
 
-                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
-                        hbProxyData.ByteProvider = dbp;
+                        this.controlPacketData?.RefreshPacketData();
                     }
                 }                    
             }
@@ -1348,7 +1116,7 @@ namespace WinsockPacketEditor
                     if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.PacketConfig.List.AutoClear_Value)
                     {
                         this.CleanUp_ProxyList();
-                        this.CleanUp_HexBox();
+                        this.controlPacketData?.CleanUp_PacketData();
                     }
                 }
             }
@@ -1433,33 +1201,7 @@ namespace WinsockPacketEditor
                 this.SearchFromHead = FromHead;
                 this.bgwSearchProxyList.RunWorkerAsync();
             }
-        }
-
-        public void HexBox_FindNext()
-        {
-            try
-            {
-                if (Operate.PacketConfig.List.FindOptions.IsValid)
-                {
-                    if (Operate.PacketConfig.List.FindOptions.Type == FindType.Hex && Operate.PacketConfig.List.FindOptions.Hex.Length == 0)
-                    {
-                        return;
-                    }
-
-                    long res = this.hbProxyData.Find(Operate.PacketConfig.List.FindOptions);
-
-                    if (res == -1)
-                    {
-                        Operate.ProxyConfig.List.Search_Index += 1;
-                        this.SearchProxyList(this.SearchFromHead);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(HexBox_FindNext), ex.Message);
-            }
-        }
+        }        
 
         private void bgwSearchProxyList_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -1497,7 +1239,7 @@ namespace WinsockPacketEditor
                             dgvProxyList.CurrentCell = dgvProxyList.Rows[iSearchResultIndex].Cells[0];
                             dgvProxyList.ResumeLayout();
 
-                            this.HexBox_FindNext();
+                            this.controlPacketData?.HexBox_FindNext();
                         }
                         else
                         {

@@ -193,11 +193,11 @@ namespace WinsockPacketEditor
 
                             switch (Session.DomainType)
                             {
-                                case Operate.ProxyConfig.Proxy.DomainType.Http:
+                                case Operate.ProxyConfig.Proxy.DomainType.HTTP:
                                     tiChild.IconSvg = "IeOutlined";
                                     break;
 
-                                case Operate.ProxyConfig.Proxy.DomainType.Https:
+                                case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
                                     tiChild.IconSvg = "LockOutlined";
                                     break;
 
