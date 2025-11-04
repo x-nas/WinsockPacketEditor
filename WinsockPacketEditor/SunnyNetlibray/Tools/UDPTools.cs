@@ -1,6 +1,6 @@
 ﻿using SunnyNetlibray.Internal;
 
-namespace SunnyNetlibray.Event.Tools
+namespace SunnyNetlibray.Tools
 {
     public class UDPTools
     {

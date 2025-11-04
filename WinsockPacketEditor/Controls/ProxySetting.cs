@@ -26,8 +26,10 @@ namespace WinsockPacketEditor
                 this.Text = AntdUI.Localization.Get("ProxySettingsForm", "代理设置");
                 this.cbProxyIP_Auto.Checked = Operate.ProxyConfig.Proxy.ProxyIP_Auto;
                 this.cbEnable_SOCKS5.Checked = Operate.ProxyConfig.Proxy.Enable_SOCKS5;
-                this.nudSOCKS5Port.Value = Operate.ProxyConfig.Proxy.ProxyPort;
+                this.nudSOCKS5Port.Value = Operate.ProxyConfig.Proxy.SOCKS5_Port;
                 this.cbEnable_Auth.Checked = Operate.ProxyConfig.Proxy.Enable_Auth;
+                this.cbEnable_HTTP.Checked = Operate.ProxyConfig.Proxy.Enable_HTTP;                
+                this.nudHTTPPort.Value = Operate.ProxyConfig.Proxy.HTTP_Port;                
                 this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
                 this.txtMaxConnectionNumber.Value = Operate.ProxyConfig.Proxy.MaxConnectionNumber;
 
@@ -60,6 +62,7 @@ namespace WinsockPacketEditor
                 this.ProxyIP_Appoint_Changed();
                 this.EnableSOCKS5_Changed();
                 this.Enable_Auth_Changed();
+                this.Enable_HTTP_Changed();
             }
             catch (Exception ex)
             {
@@ -83,7 +86,7 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//代理类型
+        #region//SOCKS 代理
 
         private void cbEnable_SOCKS5_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
         {
@@ -96,6 +99,20 @@ namespace WinsockPacketEditor
         }
 
         #endregion        
+
+        #region//HTTP 代理
+
+        private void cbEnable_HTTP_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.Enable_HTTP_Changed();
+        }
+
+        private void Enable_HTTP_Changed()
+        {
+            this.nudHTTPPort.Enabled = this.cbEnable_HTTP.Checked;
+        }
+
+        #endregion
 
         #region//代理认证
 
@@ -157,12 +174,27 @@ namespace WinsockPacketEditor
                     return;
                 }
 
+                if (this.cbEnable_HTTP.Checked)
+                {
+                    if (this.nudSOCKS5Port.Value == this.nudHTTPPort.Value)
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "SOCKS 和 HTTP 端口不能相同", TType.Error)
+                        {
+                            LocalizationText = "ProxySettingsForm.ProxyType.Error"
+                        });
+
+                        return;
+                    }                    
+                }
+
                 Operate.ProxyConfig.Proxy.ProxyIP_Auto = this.cbProxyIP_Auto.Checked;
                 Operate.ProxyConfig.Proxy.Enable_SOCKS5 = this.cbEnable_SOCKS5.Checked;
                 Operate.ProxyConfig.Proxy.ProxyIP = this.ddlProxyIP_Appoint.SelectedValue.ToString();
-                Operate.ProxyConfig.Proxy.ProxyPort = ((ushort)this.nudSOCKS5Port.Value);
+                Operate.ProxyConfig.Proxy.SOCKS5_Port = ((ushort)this.nudSOCKS5Port.Value);
                 Operate.ProxyConfig.Proxy.Enable_Auth = this.cbEnable_Auth.Checked;
                 Operate.ProxyConfig.Proxy.MaxConnectionNumber = ((int)this.txtMaxConnectionNumber.Value);
+                Operate.ProxyConfig.Proxy.Enable_HTTP = this.cbEnable_HTTP.Checked;                
+                Operate.ProxyConfig.Proxy.HTTP_Port = ((ushort)this.nudHTTPPort.Value);
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理设置保存成功", TType.Success)
                 {

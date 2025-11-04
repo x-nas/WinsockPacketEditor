@@ -15,54 +15,54 @@ namespace WinsockPacketEditor
             {
                 case HTTPEvent.EventType_HTTP_Request:
 
-                    Operate.ProxyConfig.Proxy.DomainType dtRequest = Operate.ProxyConfig.Proxy.DomainType.HTTP;
-                    Operate.PacketConfig.Packet.PacketType ptRequest = Operate.PacketConfig.Packet.PacketType.HTTP_Req;
-                    if (Conn.URL().StartsWith("https://"))
-                    {
-                        dtRequest = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
-                        ptRequest = Operate.PacketConfig.Packet.PacketType.HTTPS_Req;
-                    }
+                    //Operate.ProxyConfig.Proxy.DomainType dtRequest = Operate.ProxyConfig.Proxy.DomainType.HTTP;
+                    //Operate.PacketConfig.Packet.PacketType ptRequest = Operate.PacketConfig.Packet.PacketType.HTTP_Req;
+                    //if (Conn.URL().StartsWith("https://"))
+                    //{
+                    //    dtRequest = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
+                    //    ptRequest = Operate.PacketConfig.Packet.PacketType.HTTPS_Req;
+                    //}
 
-                    Operate.DoLog(nameof(OnHttpCallback), Conn.Request().Body().String());
+                    //Operate.DoLog(nameof(OnHttpCallback), Conn.Request().Body().String());
 
-                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                            DateTime.Now,
-                            Operate.FilterConfig.Filter.FilterAction.None,
-                            Conn.Request().BodyLen(),
-                            0,
-                            ptRequest,
-                            Conn.ClientIP(),
-                            Conn.Response().ServerAddress(),
-                            Conn.URL(),
-                            dtRequest,
-                            Conn.Request().Body().Bytes,
-                            Conn.Request().Body().Bytes);
+                    //_ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                    //        DateTime.Now,
+                    //        Operate.FilterConfig.Filter.FilterAction.None,
+                    //        Conn.Request().BodyLen(),
+                    //        0,
+                    //        ptRequest,
+                    //        Conn.ClientIP(),
+                    //        Conn.Response().ServerAddress(),
+                    //        Conn.URL(),
+                    //        dtRequest,
+                    //        Conn.Request().Body().Bytes,
+                    //        Conn.Request().Body().Bytes);
 
                     break;
                 case HTTPEvent.EventType_HTTP_Response:
 
-                    Operate.ProxyConfig.Proxy.DomainType dtResponse = Operate.ProxyConfig.Proxy.DomainType.HTTP;
-                    Operate.PacketConfig.Packet.PacketType ptResponse = Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
-                    if (Conn.URL().StartsWith("https://"))
-                    {
-                        dtResponse = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
-                        ptResponse = Operate.PacketConfig.Packet.PacketType.HTTPS_Resp;
-                    }
+                    //Operate.ProxyConfig.Proxy.DomainType dtResponse = Operate.ProxyConfig.Proxy.DomainType.HTTP;
+                    //Operate.PacketConfig.Packet.PacketType ptResponse = Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
+                    //if (Conn.URL().StartsWith("https://"))
+                    //{
+                    //    dtResponse = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
+                    //    ptResponse = Operate.PacketConfig.Packet.PacketType.HTTPS_Resp;
+                    //}
 
-                    Operate.DoLog(nameof(OnHttpCallback), Conn.Response().Body().String());
+                    //Operate.DoLog(nameof(OnHttpCallback), Conn.Response().Body().String());
 
-                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                            DateTime.Now,
-                            Operate.FilterConfig.Filter.FilterAction.None,
-                            Conn.Response().Body().Length,
-                            0,
-                            ptResponse,
-                            Conn.ClientIP(),
-                            Conn.Response().ServerAddress(),
-                            Conn.URL(),
-                            dtResponse,
-                            Conn.Response().Body().Bytes,
-                            Conn.Response().Body().Bytes);
+                    //_ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                    //        DateTime.Now,
+                    //        Operate.FilterConfig.Filter.FilterAction.None,
+                    //        Conn.Response().Body().Length,
+                    //        0,
+                    //        ptResponse,
+                    //        Conn.ClientIP(),
+                    //        Conn.Response().ServerAddress(),
+                    //        Conn.URL(),
+                    //        dtResponse,
+                    //        Conn.Response().Body().Bytes,
+                    //        Conn.Response().Body().Bytes);
 
                     break;
                 case HTTPEvent.EventType_HTTP_Error:
@@ -87,6 +87,7 @@ namespace WinsockPacketEditor
                     break;
                 case TCPEvent.EventType_TCP_Send:
                     Debug.WriteLine("TCP 发送消息:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr() + ",发送:" + Conn.Body().Length + " / byte");
+
 
                     _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
@@ -130,6 +131,7 @@ namespace WinsockPacketEditor
             //你可以记录保存 Conn.TheologyID() 唯一ID,使用以下函数,在回调函数以外的任意位置发送数据
             //SunnyNet.Tools.UDPTools.SendMessage() 
 
+
             string ClientIP = GetUDPIPString(Conn.LocalAddr());
             string ServerIP = GetUDPIPString(Conn.RemoteAddr());
 
@@ -137,6 +139,7 @@ namespace WinsockPacketEditor
             {
                 case UDPEvent.EventType_UDP_Send:
                     Debug.WriteLine("UDP 发送消息:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr() + ",发送:" + Conn.Body().Length + " / byte");
+
 
                     _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
@@ -180,6 +183,7 @@ namespace WinsockPacketEditor
             //你可以记录保存 Conn.TheologyID() 唯一ID,使用以下函数,在回调函数以外的任意位置发送数据、关闭会话
             //SunnyNet.Tools.WebSocketTools.SendMessage()
             //SunnyNet.Tools.WebSocketTools.Close()
+
             switch (Conn.Type())
             {
                 case WebSocketEvent.EventType_Websocket_OK:

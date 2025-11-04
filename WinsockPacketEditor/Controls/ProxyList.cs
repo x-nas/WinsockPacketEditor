@@ -784,22 +784,8 @@ namespace WinsockPacketEditor
                     return false;
                 }
 
-                if (Operate.ProxyConfig.Proxy.ProxyServer == null)
-                {
-                    Operate.ProxyConfig.Proxy.ProxyServer = new SocksProxyServer();
-
-                    this.InitHttpProxy();
-                }
-
-                if (Operate.ProxyConfig.Proxy.ipFilter != null)
-                {
-                    Operate.ProxyConfig.Proxy.ipFilter.Initialize("IPFilter", Operate.ProxyConfig.Proxy.ProxyServer);
-                }
-
-                if (Operate.ProxyConfig.Proxy.ProxyServer.State != ServerState.Running)
-                {
-                    return this.InitSocks5Proxy();
-                }
+                this.InitSocks5Proxy();
+                this.InitHttpProxy();
             }
             catch (Exception ex)
             {
@@ -846,80 +832,95 @@ namespace WinsockPacketEditor
         {
             try
             {
-                ServerConfig config = new ServerConfig
+                if (Operate.ProxyConfig.Proxy.ProxyServer == null)
                 {
-                    Ip = Operate.ProxyConfig.Proxy.ProxyTCP_IP.ToString(),
-                    Port = Operate.ProxyConfig.Proxy.ProxyPort,
-                    Name = "Socks5ProxyServer",
-                    Mode = SocketMode.Tcp,
+                    Operate.ProxyConfig.Proxy.ProxyServer = new SocksProxyServer();
+                }
 
-                    // 连接限制
-                    MaxConnectionNumber = Operate.ProxyConfig.Proxy.MaxConnectionNumber,
-                    ListenBacklog = 1000,
-
-                    // 缓冲区设置
-                    ReceiveBufferSize = 65535,
-                    MaxRequestLength = 1024 * 1024 * 10,
-                    SendingQueueSize = 100,
-
-                    // 超时设置
-                    ClearIdleSession = true,
-                    ClearIdleSessionInterval = 60,
-                    IdleSessionTimeOut = ((int)Operate.ProxyConfig.Proxy.TCPTimeout.TotalSeconds),
-                };
-
-                List<IConnectionFilter> connectionFilters = new List<IConnectionFilter> 
+                if (Operate.ProxyConfig.Proxy.ipFilter != null)
                 {
-                    Operate.ProxyConfig.Proxy.ipFilter 
-                };            
+                    Operate.ProxyConfig.Proxy.ipFilter.Initialize("IPFilter", Operate.ProxyConfig.Proxy.ProxyServer);
+                }
 
-                if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config: config, connectionFilters: connectionFilters))
+                if (Operate.ProxyConfig.Proxy.ProxyServer.State != ServerState.Running)
                 {
-                    if (Operate.ProxyConfig.Proxy.ProxyServer.Start())
+                    ServerConfig config = new ServerConfig
                     {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "开始 SOCKS5 代理", TType.Success)
-                        {
-                            LocalizationText = "ProxyModeForm.StartSocks5Proxy"
-                        });
+                        Ip = Operate.ProxyConfig.Proxy.ProxyTCP_IP.ToString(),
+                        Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
+                        Name = "Socks5ProxyServer",
+                        Mode = SocketMode.Tcp,
 
-                        string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "代理服务器IP地址 : TCP [ {0} ] UDP [ {1} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP);
-                        Operate.DoLog(nameof(InitSocks5Proxy), sProxyIP);
+                        // 连接限制
+                        MaxConnectionNumber = Operate.ProxyConfig.Proxy.MaxConnectionNumber,
+                        ListenBacklog = 1000,
 
-                        if (Operate.ProxyConfig.Proxy.Enable_Auth)
+                        // 缓冲区设置
+                        ReceiveBufferSize = 65535,
+                        MaxRequestLength = 1024 * 1024 * 10,
+                        SendingQueueSize = 100,
+
+                        // 超时设置
+                        ClearIdleSession = true,
+                        ClearIdleSessionInterval = 60,
+                        IdleSessionTimeOut = ((int)Operate.ProxyConfig.Proxy.TCPTimeout.TotalSeconds),
+                    };
+
+                    List<IConnectionFilter> connectionFilters = new List<IConnectionFilter>
+                    {
+                        Operate.ProxyConfig.Proxy.ipFilter
+                    };
+
+                    if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config: config, connectionFilters: connectionFilters))
+                    {
+                        if (Operate.ProxyConfig.Proxy.ProxyServer.Start())
                         {
-                            Operate.DoLog(nameof(InitSocks5Proxy), AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用代理服务身份认证"));
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "开始 SOCKS5 代理", TType.Success)
+                            {
+                                LocalizationText = "ProxyModeForm.StartSocks5Proxy"
+                            });
+
+                            string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "SOCKS5 代理服务器地址 : TCP [ {0}:{2} ] UDP [ {1}:{2} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP, Operate.ProxyConfig.Proxy.SOCKS5_Port);
+                            Operate.DoLog(nameof(InitSocks5Proxy), sProxyIP);
+
+                            if (Operate.ProxyConfig.Proxy.Enable_Auth)
+                            {
+                                Operate.DoLog(nameof(InitSocks5Proxy), AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用 SOCKS5 代理服务身份认证"));
+                            }
+
+                            if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
+                            {
+                                string sLog = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServer.EXTProxy", "已启用外部代理 [ {0}:{1} ]"), Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
+                                Operate.DoLog(nameof(InitSocks5Proxy), sLog);
+                            }
+
+                            return true;
                         }
-
-                        if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
+                        else
                         {
-                            string sLog = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServer.EXTProxy", "已启用外部代理 [ {0}:{1} ]"), Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                            Operate.DoLog(nameof(InitSocks5Proxy), sLog);
-                        }
+                            Operate.ProxyConfig.Proxy.ProxyServer.Dispose();
+                            Operate.ProxyConfig.Proxy.ProxyServer = null;
 
-                        return true;
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "启动 SOCKS5 代理失败", TType.Error)
+                            {
+                                LocalizationText = "ProxyModeForm.StartSocks5Proxy.Fail"
+                            });
+
+                            return false;
+                        }
                     }
                     else
                     {
-                        Operate.ProxyConfig.Proxy.ProxyServer.Dispose();
-                        Operate.ProxyConfig.Proxy.ProxyServer = null;
-
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "启动 SOCKS5 代理失败", TType.Error)
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "设置 SOCKS5 代理失败", TType.Error)
                         {
-                            LocalizationText = "ProxyModeForm.StartSocks5Proxy.Fail"
+                            LocalizationText = "ProxyModeForm.SetupSocks5Proxy.Fail"
                         });
 
                         return false;
                     }
                 }
-                else
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "设置 SOCKS5 代理失败", TType.Error)
-                    {
-                        LocalizationText = "ProxyModeForm.SetupSocks5Proxy.Fail"
-                    });
 
-                    return false;
-                }
+                return true;
             }
             catch (Exception ex)
             {
@@ -932,12 +933,43 @@ namespace WinsockPacketEditor
         {
             try
             {
-                Operate.ProxyConfig.Proxy.syNet.BindPort(1088);
-                Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);                               
+                if (!Operate.ProxyConfig.Proxy.Enable_HTTP)
+                {
+                    return;
+                }
+
+                Operate.ProxyConfig.Proxy.syNet.BindPort(Operate.ProxyConfig.Proxy.HTTP_Port);
+                //Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);
+
+                Operate.ProxyConfig.Proxy.syNet.MustTcp(true);
+
+                string MustTCP = string.Empty;
+                if (Operate.ProxyConfig.Proxy.Enable_Auth)
+                {
+                    MustTCP = string.Format("socket5://{0}:{1}@{2}:{3}",
+                        Operate.ProxyConfig.Proxy.MustTCP_UserName,
+                        Operate.ProxyConfig.Proxy.MustTCP_PassWord,
+                        Operate.ProxyConfig.Proxy.ProxyUDP_IP,
+                        Operate.ProxyConfig.Proxy.SOCKS5_Port);
+                }
+                else
+                {
+                    MustTCP = string.Format("socket5://{0}:{1}",
+                        Operate.ProxyConfig.Proxy.ProxyUDP_IP,
+                        Operate.ProxyConfig.Proxy.SOCKS5_Port);
+                }
+
+                Operate.ProxyConfig.Proxy.syNet.SetGlobalProxy(MustTCP);
 
                 if (Operate.ProxyConfig.Proxy.syNet.Start())
                 {
-                    Operate.DoLog(nameof(InitHttpProxy), "syNet 启动成功");
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "开始 HTTP 代理", TType.Success)
+                    {
+                        LocalizationText = "ProxyModeForm.StartHTTPProxy"
+                    });
+
+                    string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "HTTP 代理服务器地址 : {0}:{1}"), Operate.ProxyConfig.Proxy.ProxyUDP_IP, Operate.ProxyConfig.Proxy.HTTP_Port);
+                    Operate.DoLog(nameof(InitHttpProxy), sProxyIP);
                 }
                 else
                 {
@@ -946,7 +978,7 @@ namespace WinsockPacketEditor
 
                 if (Operate.ProxyConfig.Proxy.syNet.InstallCertificate())
                 {
-                    Operate.DoLog(nameof(InitHttpProxy), "syNet 证书安装成功");
+                    Operate.DoLog(nameof(InitHttpProxy), "SSL 证书安装成功");
                 }
                 else
                 {
@@ -977,6 +1009,17 @@ namespace WinsockPacketEditor
                     {
                         LocalizationText = "ProxyModeForm.StopProxy"
                     });
+                }
+
+                if (Operate.ProxyConfig.Proxy.syNet != null && Operate.ProxyConfig.Proxy.Enable_HTTP)
+                {
+                    if (Operate.ProxyConfig.Proxy.syNet.Stop())
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "停止 HTTP 代理", TType.Warn)
+                        {
+                            LocalizationText = "ProxyModeForm.StopProxy"
+                        });
+                    }
                 }
             }
             catch (Exception ex)

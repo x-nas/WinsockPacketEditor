@@ -1567,16 +1567,16 @@ namespace WinsockPacketEditor
                     return "Proxy Settings";
 
                 case "ProxySettingsForm.Port":
-                    return "Port:";
+                    return "Port :";
 
                 case "ProxySettingsForm.ProxyServerIP":
                     return "Proxy Server IP";
 
-                case "ProxySettingsForm.ProxyType":
-                    return "Proxy Type";
+                case "ProxySettingsForm.SOCKSProxy":
+                    return "SOCKS Proxy";
 
-                case "ProxySettingsForm.ProxyAuth":
-                    return "Proxy Authentication";
+                case "ProxySettingsForm.HTTPProxy":
+                    return "HTTP Proxy";
 
                 case "ProxySettingsForm.SystemProxy":
                     return "System Proxy";

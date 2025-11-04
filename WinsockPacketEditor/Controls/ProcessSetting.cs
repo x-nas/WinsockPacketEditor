@@ -36,6 +36,14 @@ namespace WinsockPacketEditor
                     this.bUninstallDriver.Enabled = false;
                 }
 
+                this.cbMustTCP_Auth.Checked = Operate.ProxyConfig.Proxy.MustTCP_Auth;
+                this.MustTCP_Auth_Changed();
+
+                this.txtMustTCP_IP.Text = Operate.ProxyConfig.Proxy.MustTCP_IP;
+                this.txtMustTCP_Port.Value = Operate.ProxyConfig.Proxy.MustTCP_Port;
+                this.txtMustTCP_UserName.Text = Operate.ProxyConfig.Proxy.MustTCP_UserName;
+                this.txtMustTCP_PassWord.Text = Operate.ProxyConfig.Proxy.MustTCP_PassWord;
+
                 this.transferProcessList.SourceTitle = AntdUI.Localization.Get("ProcessSetting.SourceTitle", "进程列表");
                 this.transferProcessList.TargetTitle = AntdUI.Localization.Get("ProcessSetting.TargetTitle", "拦截列表");                
             }
@@ -107,12 +115,94 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//需要认证
+
+        private void cbMustTCP_Auth_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.MustTCP_Auth_Changed();
+        }
+
+        private void MustTCP_Auth_Changed()
+        {
+            this.txtMustTCP_UserName.Enabled = this.txtMustTCP_PassWord.Enabled = this.cbMustTCP_Auth.Checked;
+        }
+
+        #endregion
+
+        #region//刷新进程
+
+        private void bRefresh_Click(object sender, EventArgs e)
+        {
+            this.InitProcessList();
+        }
+
+        #endregion
+
+        #region//数据完整性检查
+
+        private bool CheckSetting()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(this.txtMustTCP_IP.Text.Trim()))
+                {
+                    this.txtMustTCP_IP.Status = TType.Error;
+                    return false;
+                }
+                else
+                {
+                    this.txtMustTCP_IP.Status = TType.Success;
+                }
+
+                if (this.cbMustTCP_Auth.Checked)
+                {
+                    if (string.IsNullOrEmpty(this.txtMustTCP_UserName.Text.Trim()))
+                    {
+                        this.txtMustTCP_UserName.Status = TType.Error;
+                        return false;
+                    }
+                    else
+                    {
+                        this.txtMustTCP_UserName.Status = TType.Success;
+                    }
+
+                    if (string.IsNullOrEmpty(this.txtMustTCP_PassWord.Text.Trim()))
+                    {
+                        this.txtMustTCP_PassWord.Status = TType.Error;
+                        return false;
+                    }
+                    else
+                    {
+                        this.txtMustTCP_PassWord.Status = TType.Success;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(CheckSetting), ex.Message);
+            }
+
+            return false;
+        }
+
+        #endregion
+
         #region//保存
 
         private void bSave_Click(object sender, EventArgs e)
         {
             try
             {
+                if (!this.CheckSetting())
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "保存失败，请检查数据设置", TType.Error)
+                    {
+                        LocalizationText = "ProcessSetting.LoadDriver.Error"
+                    });
+
+                    return;
+                }
+
                 if (!Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {                    
                     if (this.rbProxifier.Checked)
@@ -144,6 +234,12 @@ namespace WinsockPacketEditor
                             Operate.ProxyConfig.Proxy.syNet.AddProcessPid(pi.ProcessID);
                         }
                     }
+
+                    Operate.ProxyConfig.Proxy.MustTCP_Auth = this.cbMustTCP_Auth.Checked;
+                    Operate.ProxyConfig.Proxy.MustTCP_IP = this.txtMustTCP_IP.Text.Trim();
+                    Operate.ProxyConfig.Proxy.MustTCP_Port = ((ushort)this.txtMustTCP_Port.Value);
+                    Operate.ProxyConfig.Proxy.MustTCP_UserName = this.txtMustTCP_UserName.Text.Trim();
+                    Operate.ProxyConfig.Proxy.MustTCP_PassWord = this.txtMustTCP_PassWord.Text.Trim();
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "进程设置保存成功", TType.Success)
                     {
