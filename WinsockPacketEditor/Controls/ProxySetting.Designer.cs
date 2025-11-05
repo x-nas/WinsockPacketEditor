@@ -129,7 +129,6 @@
             this.tlpHTTPProxy.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpHTTPProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpHTTPProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpHTTPProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpHTTPProxy.Size = new System.Drawing.Size(350, 50);
             this.tlpHTTPProxy.TabIndex = 12;
             // 
@@ -159,6 +158,7 @@
             // cbEnable_HTTP
             // 
             this.cbEnable_HTTP.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbEnable_HTTP.Checked = true;
             this.cbEnable_HTTP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbEnable_HTTP.Location = new System.Drawing.Point(2, 2);
             this.cbEnable_HTTP.Margin = new System.Windows.Forms.Padding(2);

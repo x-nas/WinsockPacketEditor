@@ -3943,8 +3943,10 @@ namespace WinsockPacketEditor
                         new XElement("ProxyMode",
                         new XElement("ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto),
                         new XElement("Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5),
+                        new XElement("Enable_HTTP", ProxyConfig.Proxy.Enable_HTTP),
                         new XElement("ProxyIP", ProxyConfig.Proxy.ProxyIP),
-                        new XElement("SOCKS5_Port", ProxyConfig.Proxy.SOCKS5_Port),                        
+                        new XElement("SOCKS5_Port", ProxyConfig.Proxy.SOCKS5_Port),
+                        new XElement("HTTP_Port", ProxyConfig.Proxy.HTTP_Port),
                         new XElement("Enable_Auth", ProxyConfig.Proxy.Enable_Auth),
                         new XElement("MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber),
                         new XElement("Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal),
@@ -3957,6 +3959,13 @@ namespace WinsockPacketEditor
                         new XElement("Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth),
                         new XElement("ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName),
                         new XElement("ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord),
+                        new XElement("MustTCP_IP", ProxyConfig.Proxy.MustTCP_IP),
+                        new XElement("MustTCP_Port", ProxyConfig.Proxy.MustTCP_Port),
+                        new XElement("MustTCP_Auth", ProxyConfig.Proxy.MustTCP_Auth),
+                        new XElement("MustTCP_UserName", ProxyConfig.Proxy.MustTCP_UserName),
+                        new XElement("MustTCP_PassWord", ProxyConfig.Proxy.MustTCP_PassWord),
+                        new XElement("MustTCP_AppointPort", ProxyConfig.Proxy.MustTCP_AppointPort),
+                        new XElement("MustTCP_AppointPortContent", ProxyConfig.Proxy.MustTCP_AppointPortContent),
                         new XElement("EnableFireWall", ProxyConfig.Proxy.EnableFireWall),
                         new XElement("WhiteListMode", ProxyConfig.Proxy.WhiteListMode),
                         new XElement("FireWall_AutoWhiteList_AuthSuccess", ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess),
@@ -3989,9 +3998,11 @@ namespace WinsockPacketEditor
                     if (ProxyMode.Rows.Count > 0)
                     {
                         ProxyConfig.Proxy.ProxyIP_Auto = Convert.ToBoolean(ProxyMode.Rows[0]["ProxyIP_Auto"]);
-                        ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(ProxyMode.Rows[0]["EnableSOCKS5"]);
+                        ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_SOCKS5"]);
+                        ProxyConfig.Proxy.Enable_HTTP = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_HTTP"]);
                         ProxyConfig.Proxy.ProxyIP = ProxyMode.Rows[0]["ProxyIP"].ToString();
-                        ProxyConfig.Proxy.SOCKS5_Port = ushort.Parse(ProxyMode.Rows[0]["SOCKS5_Port"].ToString());                        
+                        ProxyConfig.Proxy.SOCKS5_Port = ushort.Parse(ProxyMode.Rows[0]["SOCKS5_Port"].ToString());
+                        ProxyConfig.Proxy.HTTP_Port = ushort.Parse(ProxyMode.Rows[0]["HTTP_Port"].ToString());
                         ProxyConfig.Proxy.Enable_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["EnableAuth"]);
                         ProxyConfig.Proxy.MaxConnectionNumber = Convert.ToInt32(ProxyMode.Rows[0]["MaxConnectionNumber"].ToString());
                         ProxyConfig.Mapping.Enable_MapLocal = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_MapLocal"]);
@@ -4004,6 +4015,13 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.Enable_ExternalProxy_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy_Auth"]);
                         ProxyConfig.Proxy.ExternalProxy_UserName = ProxyMode.Rows[0]["ExternalProxy_UserName"].ToString();
                         ProxyConfig.Proxy.ExternalProxy_PassWord = ProxyMode.Rows[0]["ExternalProxy_PassWord"].ToString();
+                        ProxyConfig.Proxy.MustTCP_IP = ProxyMode.Rows[0]["MustTCP_IP"].ToString();
+                        ProxyConfig.Proxy.MustTCP_Port = ushort.Parse(ProxyMode.Rows[0]["MustTCP_Port"].ToString());
+                        ProxyConfig.Proxy.MustTCP_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["MustTCP_Auth"]);
+                        ProxyConfig.Proxy.MustTCP_UserName = ProxyMode.Rows[0]["MustTCP_UserName"].ToString();
+                        ProxyConfig.Proxy.MustTCP_PassWord = ProxyMode.Rows[0]["MustTCP_PassWord"].ToString();
+                        ProxyConfig.Proxy.MustTCP_AppointPort = Convert.ToBoolean(ProxyMode.Rows[0]["MustTCP_AppointPort"]);
+                        ProxyConfig.Proxy.MustTCP_AppointPortContent = ProxyMode.Rows[0]["MustTCP_AppointPortContent"].ToString();
                         ProxyConfig.Proxy.EnableFireWall = Convert.ToBoolean(ProxyMode.Rows[0]["EnableFireWall"]);
                         ProxyConfig.Proxy.WhiteListMode = Convert.ToBoolean(ProxyMode.Rows[0]["WhiteListMode"]);
                         ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess = Convert.ToBoolean(ProxyMode.Rows[0]["FireWall_AutoWhiteList_AuthSuccess"]);
@@ -4035,6 +4053,12 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.Enable_SOCKS5 = Convert.ToBoolean(Enable_SOCKS5.Value);
                     }
 
+                    XElement Enable_HTTP = xeProxyMode.Element("Enable_HTTP");
+                    if (Enable_HTTP != null)
+                    {
+                        ProxyConfig.Proxy.Enable_HTTP = Convert.ToBoolean(Enable_HTTP.Value);
+                    }
+
                     XElement ProxyIP = xeProxyMode.Element("ProxyIP");
                     if (ProxyIP != null)
                     {
@@ -4045,6 +4069,12 @@ namespace WinsockPacketEditor
                     if (SOCKS5_Port != null)
                     {
                         ProxyConfig.Proxy.SOCKS5_Port = ushort.Parse(SOCKS5_Port.Value);
+                    }
+
+                    XElement HTTP_Port = xeProxyMode.Element("HTTP_Port");
+                    if (HTTP_Port != null)
+                    {
+                        ProxyConfig.Proxy.HTTP_Port = ushort.Parse(HTTP_Port.Value);
                     }
 
                     XElement Enable_Auth = xeProxyMode.Element("Enable_Auth");
@@ -4111,6 +4141,48 @@ namespace WinsockPacketEditor
                     if (ExternalProxy_PassWord != null)
                     {
                         ProxyConfig.Proxy.ExternalProxy_PassWord = ExternalProxy_PassWord.Value;
+                    }
+
+                    XElement MustTCP_IP = xeProxyMode.Element("MustTCP_IP");
+                    if (MustTCP_IP != null)
+                    {
+                        ProxyConfig.Proxy.MustTCP_IP = MustTCP_IP.Value;
+                    }
+
+                    XElement MustTCP_Port = xeProxyMode.Element("MustTCP_Port");
+                    if (MustTCP_Port != null)
+                    {
+                        ProxyConfig.Proxy.MustTCP_Port = ushort.Parse(MustTCP_Port.Value);
+                    }
+
+                    XElement MustTCP_Auth = xeProxyMode.Element("MustTCP_Auth");
+                    if (MustTCP_Auth != null)
+                    {
+                        ProxyConfig.Proxy.MustTCP_Auth = Convert.ToBoolean(MustTCP_Auth.Value);
+                    }
+
+                    XElement MustTCP_UserName = xeProxyMode.Element("MustTCP_UserName");
+                    if (MustTCP_UserName != null)
+                    {
+                        ProxyConfig.Proxy.MustTCP_UserName = MustTCP_UserName.Value;
+                    }
+
+                    XElement MustTCP_PassWord = xeProxyMode.Element("MustTCP_PassWord");
+                    if (MustTCP_PassWord != null)
+                    {
+                        ProxyConfig.Proxy.MustTCP_PassWord = MustTCP_PassWord.Value;
+                    }
+
+                    XElement MustTCP_AppointPort = xeProxyMode.Element("MustTCP_AppointPort");
+                    if (MustTCP_AppointPort != null)
+                    {
+                        ProxyConfig.Proxy.MustTCP_AppointPort = Convert.ToBoolean(MustTCP_AppointPort.Value);
+                    }
+
+                    XElement MustTCP_AppointPortContent = xeProxyMode.Element("MustTCP_AppointPortContent");
+                    if (MustTCP_AppointPortContent != null)
+                    {
+                        ProxyConfig.Proxy.MustTCP_AppointPortContent = MustTCP_AppointPortContent.Value;
                     }
 
                     XElement EnableFireWall = xeProxyMode.Element("EnableFireWall");
@@ -5053,7 +5125,7 @@ namespace WinsockPacketEditor
                 public static bool ProxyIP_Auto = true;
                 public static bool Enable_SystemProxy = false;
                 public static bool Enable_SOCKS5 = true, Enable_Auth = true;
-                public static bool Enable_HTTP = false, MustTCP_AppointPort = false, MustTCP_Auth = false;
+                public static bool Enable_HTTP = true, MustTCP_AppointPort = false, MustTCP_Auth = false;
                 public static string MustTCP_IP = "127.0.0.1";
                 public static ushort MustTCP_Port = 1080;
                 public static string MustTCP_AppointPortContent = string.Empty, MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
@@ -20402,9 +20474,11 @@ namespace WinsockPacketEditor
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS ProxyMode (";
                         sql += "ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP                        
-                        sql += "EnableSOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
+                        sql += "Enable_SOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
+                        sql += "Enable_HTTP BOOLEAN DEFAULT 1,";//代理模式 - 启用HTTP代理
                         sql += "ProxyIP TEXT,";//代理模式 - 代理IP
-                        sql += "SOCKS5_Port INTEGER DEFAULT 1080,";//代理模式 - SOCKS5端口                        
+                        sql += "SOCKS5_Port INTEGER DEFAULT 1080,";//代理模式 - SOCKS5代理端口                        
+                        sql += "HTTP_Port INTEGER DEFAULT 1080,";//代理模式 - HTTP代理端口
                         sql += "EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证
                         sql += "MaxConnectionNumber INTEGER DEFAULT 5000,";//代理模式 - 最大连接数
                         sql += "Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
@@ -20417,6 +20491,13 @@ namespace WinsockPacketEditor
                         sql += "Enable_ExternalProxy_Auth BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理认证
                         sql += "ExternalProxy_UserName TEXT,";//代理模式 - 外部代理用户名
                         sql += "ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
+                        sql += "MustTCP_IP TEXT,";//代理模式 - 进程转代理IP
+                        sql += "MustTCP_Port INTEGER DEFAULT 1081,";//代理模式 - 进程转代理端口
+                        sql += "MustTCP_Auth BOOLEAN DEFAULT 0,";//代理模式 - 进程转代理认证
+                        sql += "MustTCP_UserName TEXT,";//代理模式 - 进程转代理用户名
+                        sql += "MustTCP_PassWord TEXT,";//代理模式 - 进程转代理密码
+                        sql += "MustTCP_AppointPort BOOLEAN DEFAULT 0,";//代理模式 - 进程转代理指定端口
+                        sql += "MustTCP_AppointPortContent TEXT,";//代理模式 - 进程转代理指定端口
                         sql += "EnableFireWall BOOLEAN DEFAULT 0,";//代理模式 - 启用防火墙
                         sql += "WhiteListMode BOOLEAN DEFAULT 0,";//代理模式 - 是否白名单模式
                         sql += "FireWall_AutoWhiteList_AuthSuccess BOOLEAN DEFAULT 0,";//代理模式 - 自动添加认证成功的IP到白名单
@@ -20496,9 +20577,11 @@ namespace WinsockPacketEditor
                     {
                         string sql = "INSERT INTO ProxyMode (";
                         sql += "ProxyIP_Auto,";
-                        sql += "EnableSOCKS5,";
+                        sql += "Enable_SOCKS5,";
+                        sql += "Enable_HTTP,";
                         sql += "ProxyIP,";
-                        sql += "SOCKS5_Port,";                        
+                        sql += "SOCKS5_Port,";
+                        sql += "HTTP_Port,";
                         sql += "EnableAuth,";
                         sql += "MaxConnectionNumber,";
                         sql += "Enable_MapLocal,";
@@ -20511,6 +20594,13 @@ namespace WinsockPacketEditor
                         sql += "Enable_ExternalProxy_Auth,";
                         sql += "ExternalProxy_UserName,";
                         sql += "ExternalProxy_PassWord,";
+                        sql += "MustTCP_IP,";
+                        sql += "MustTCP_Port,";
+                        sql += "MustTCP_Auth,";
+                        sql += "MustTCP_UserName,";
+                        sql += "MustTCP_PassWord,";
+                        sql += "MustTCP_AppointPort,";
+                        sql += "MustTCP_AppointPortContent,";
                         sql += "EnableFireWall,";
                         sql += "WhiteListMode,";
                         sql += "FireWall_AutoWhiteList_AuthSuccess,";
@@ -20520,9 +20610,11 @@ namespace WinsockPacketEditor
                         sql += "FireWall_AutoClear_Expiry";
                         sql += ") VALUES (";
                         sql += "@ProxyIP_Auto,";
-                        sql += "@EnableSOCKS5,";
+                        sql += "@Enable_SOCKS5,";
+                        sql += "@Enable_HTTP,";
                         sql += "@ProxyIP,";
-                        sql += "@SOCKS5_Port,";                        
+                        sql += "@SOCKS5_Port,";
+                        sql += "@HTTP_Port,";
                         sql += "@EnableAuth,";
                         sql += "@MaxConnectionNumber,";
                         sql += "@Enable_MapLocal,";
@@ -20535,6 +20627,13 @@ namespace WinsockPacketEditor
                         sql += "@Enable_ExternalProxy_Auth,";
                         sql += "@ExternalProxy_UserName,";
                         sql += "@ExternalProxy_PassWord,";
+                        sql += "@MustTCP_IP,";
+                        sql += "@MustTCP_Port,";
+                        sql += "@MustTCP_Auth,";
+                        sql += "@MustTCP_UserName,";
+                        sql += "@MustTCP_PassWord,";
+                        sql += "@MustTCP_AppointPort,";
+                        sql += "@MustTCP_AppointPortContent,";
                         sql += "@EnableFireWall,";
                         sql += "@WhiteListMode,";
                         sql += "@FireWall_AutoWhiteList_AuthSuccess,";
@@ -20547,9 +20646,11 @@ namespace WinsockPacketEditor
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
                             cmd.Parameters.AddWithValue("@ProxyIP_Auto", ProxyConfig.Proxy.ProxyIP_Auto);
-                            cmd.Parameters.AddWithValue("@EnableSOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
+                            cmd.Parameters.AddWithValue("@Enable_SOCKS5", ProxyConfig.Proxy.Enable_SOCKS5);
+                            cmd.Parameters.AddWithValue("@Enable_HTTP", ProxyConfig.Proxy.Enable_HTTP);
                             cmd.Parameters.AddWithValue("@ProxyIP", ProxyConfig.Proxy.ProxyIP);
-                            cmd.Parameters.AddWithValue("@SOCKS5_Port", ProxyConfig.Proxy.SOCKS5_Port);                            
+                            cmd.Parameters.AddWithValue("@SOCKS5_Port", ProxyConfig.Proxy.SOCKS5_Port);
+                            cmd.Parameters.AddWithValue("@HTTP_Port", ProxyConfig.Proxy.HTTP_Port);
                             cmd.Parameters.AddWithValue("@EnableAuth", ProxyConfig.Proxy.Enable_Auth);
                             cmd.Parameters.AddWithValue("@MaxConnectionNumber", ProxyConfig.Proxy.MaxConnectionNumber);
                             cmd.Parameters.AddWithValue("@Enable_MapLocal", ProxyConfig.Mapping.Enable_MapLocal);
@@ -20562,6 +20663,13 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth);
                             cmd.Parameters.AddWithValue("@ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName);
                             cmd.Parameters.AddWithValue("@ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord);
+                            cmd.Parameters.AddWithValue("@MustTCP_IP", ProxyConfig.Proxy.MustTCP_IP);
+                            cmd.Parameters.AddWithValue("@MustTCP_Port", ProxyConfig.Proxy.MustTCP_Port);
+                            cmd.Parameters.AddWithValue("@MustTCP_Auth", ProxyConfig.Proxy.MustTCP_Auth);
+                            cmd.Parameters.AddWithValue("@MustTCP_UserName", ProxyConfig.Proxy.MustTCP_UserName);
+                            cmd.Parameters.AddWithValue("@MustTCP_PassWord", ProxyConfig.Proxy.MustTCP_PassWord);
+                            cmd.Parameters.AddWithValue("@MustTCP_AppointPort", ProxyConfig.Proxy.MustTCP_AppointPort);
+                            cmd.Parameters.AddWithValue("@MustTCP_AppointPortContent", ProxyConfig.Proxy.MustTCP_AppointPortContent);
                             cmd.Parameters.AddWithValue("@EnableFireWall", ProxyConfig.Proxy.EnableFireWall);
                             cmd.Parameters.AddWithValue("@WhiteListMode", ProxyConfig.Proxy.WhiteListMode);
                             cmd.Parameters.AddWithValue("@FireWall_AutoWhiteList_AuthSuccess", ProxyConfig.Proxy.FireWall_AutoWhiteList_AuthSuccess);

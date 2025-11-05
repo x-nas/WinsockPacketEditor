@@ -1,6 +1,5 @@
 ﻿using SunnyNetlibray.Event;
 using System;
-using System.Diagnostics;
 
 namespace WinsockPacketEditor
 {
@@ -12,17 +11,20 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Conn.Type() == HTTPEvent.EventType_HTTP_Request)
+                if (Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {
-                    string ConnPort = "80";
-                    if (Conn.URL().ToUpper().StartsWith("HTTPS://"))
+                    if (Conn.Type() == HTTPEvent.EventType_HTTP_Request)
                     {
-                        ConnPort = "443";
-                    }
+                        string ConnPort = "80";
+                        if (Conn.URL().ToUpper().StartsWith("HTTPS://"))
+                        {
+                            ConnPort = "443";
+                        }
 
-                    if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
-                    {
-                        Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                        if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
+                        {
+                            Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                        }
                     }
                 }
             }
@@ -40,15 +42,18 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Conn.Type() == TCPEvent.EventType_TCP_About)
+                if (Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {
-                    string ConnPort = Conn.RemoteAddr().Split(':')[1];
-
-                    if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                    if (Conn.Type() == TCPEvent.EventType_TCP_About)
                     {
-                        Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                        string ConnPort = Conn.RemoteAddr().Split(':')[1];
+
+                        if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                        {
+                            Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                        }
                     }
-                }
+                }                    
             }
             catch (Exception ex)
             {
@@ -62,14 +67,16 @@ namespace WinsockPacketEditor
 
         public void OnUdpCallback(UDPEvent Conn)
         {
-            string ClientIP = Operate.SystemConfig.GetUDPIPString(Conn.LocalAddr());
-            string ServerIP = Operate.SystemConfig.GetUDPIPString(Conn.RemoteAddr());
-
-            switch (Conn.Type())
+            try
             {
-                case UDPEvent.EventType_UDP_Send:
+                string ClientIP = Operate.SystemConfig.GetUDPIPString(Conn.LocalAddr());
+                string ServerIP = Operate.SystemConfig.GetUDPIPString(Conn.RemoteAddr());
 
-                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                switch (Conn.Type())
+                {
+                    case UDPEvent.EventType_UDP_Send:
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             Operate.FilterConfig.Filter.FilterAction.None,
                             Conn.Body().Length,
@@ -82,11 +89,11 @@ namespace WinsockPacketEditor
                             Conn.Body().Bytes,
                             Conn.Body().Bytes);
 
-                    break;
+                        break;
 
-                case UDPEvent.EventType_UDP_Receive:
+                    case UDPEvent.EventType_UDP_Receive:
 
-                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             Operate.FilterConfig.Filter.FilterAction.None,
                             Conn.Body().Length,
@@ -99,12 +106,17 @@ namespace WinsockPacketEditor
                             Conn.Body().Bytes,
                             Conn.Body().Bytes);
 
-                    break;
+                        break;
 
-                case UDPEvent.EventType_UDP_Closed:
+                    case UDPEvent.EventType_UDP_Closed:
 
-                    break;
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(OnUdpCallback), ex.Message);
+            }            
         }
 
         #endregion
@@ -113,25 +125,7 @@ namespace WinsockPacketEditor
 
         public void OnWebSocketCallback(WebSocketEvent Conn)
         {
-            //你可以记录保存 Conn.TheologyID() 唯一ID,使用以下函数,在回调函数以外的任意位置发送数据、关闭会话
-            //SunnyNet.Tools.WebSocketTools.SendMessage()
-            //SunnyNet.Tools.WebSocketTools.Close()
-
-            switch (Conn.Type())
-            {
-                case WebSocketEvent.EventType_Websocket_OK:
-                    Debug.WriteLine("WebSocket 连接成功:" + Conn.URL());
-                    break;
-                case WebSocketEvent.EventType_Websocket_Send:
-                    Debug.WriteLine("WebSocket 发送消息:" + Conn.URL() + " -> " + ",发送:" + Conn.Body().Length + " / byte  ->wsMeassageType:" + Conn.MessageType());
-                    break;
-                case WebSocketEvent.EventType_Websocket_Receive:
-                    Debug.WriteLine("WebSocket 收到数据:" + Conn.URL() + " -> " + ",接收:" + Conn.Body().Length + " / byte ->wsMeassageType:" + Conn.MessageType());
-                    break;
-                case WebSocketEvent.EventType_Websocket_Close:
-                    Debug.WriteLine("WebSocket 连接关闭:" + Conn.URL());
-                    break;
-            }
+            //不做处理
         }
 
         #endregion

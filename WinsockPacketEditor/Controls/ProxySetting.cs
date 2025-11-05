@@ -156,11 +156,11 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
+        #endregion
 
-        #region//保存
+        #region//检查保存设置
 
-        private void bSave_Click(object sender, EventArgs e)
+        private bool CheckSetting()
         {
             try
             {
@@ -171,7 +171,7 @@ namespace WinsockPacketEditor
                         LocalizationText = "ProxySettingsForm.ProxyType.Error"
                     });
 
-                    return;
+                    return false;
                 }
 
                 if (this.cbEnable_HTTP.Checked)
@@ -183,9 +183,32 @@ namespace WinsockPacketEditor
                             LocalizationText = "ProxySettingsForm.ProxyType.Error"
                         });
 
-                        return;
-                    }                    
+                        return false;
+                    }
                 }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(CheckSetting), ex.Message);
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region//保存
+
+        private void bSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!this.CheckSetting())
+                {
+                    return;
+                }                
 
                 Operate.ProxyConfig.Proxy.ProxyIP_Auto = this.cbProxyIP_Auto.Checked;
                 Operate.ProxyConfig.Proxy.Enable_SOCKS5 = this.cbEnable_SOCKS5.Checked;
