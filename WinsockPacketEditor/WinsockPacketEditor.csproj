@@ -769,9 +769,7 @@
       <DependentUpon>ProxyModeForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <Content Include="Config\log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Config\log4net.config" />
     <None Include="Config\log4net.unix.config" />
     <None Include="IPLocation\qqwry.dat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
