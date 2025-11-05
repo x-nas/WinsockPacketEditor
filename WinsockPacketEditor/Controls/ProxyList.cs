@@ -782,10 +782,9 @@ namespace WinsockPacketEditor
                 if (!this.InitProxyServer())
                 { 
                     return false;
-                }
+                }                
 
-                this.InitSocks5Proxy();
-                this.InitHttpProxy();
+                return this.InitSocks5Proxy() && this.InitHttpProxy();
             }
             catch (Exception ex)
             {
@@ -929,37 +928,18 @@ namespace WinsockPacketEditor
             }            
         }
 
-        private void InitHttpProxy()
+        private bool InitHttpProxy()
         {
             try
             {
                 if (!Operate.ProxyConfig.Proxy.Enable_HTTP)
                 {
-                    return;
+                    return true;
                 }
 
                 Operate.ProxyConfig.Proxy.syNet.BindPort(Operate.ProxyConfig.Proxy.HTTP_Port);
-                //Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);
-
                 Operate.ProxyConfig.Proxy.syNet.MustTcp(true);
-
-                string MustTCP = string.Empty;
-                if (Operate.ProxyConfig.Proxy.Enable_Auth)
-                {
-                    MustTCP = string.Format("socket5://{0}:{1}@{2}:{3}",
-                        Operate.ProxyConfig.Proxy.MustTCP_UserName,
-                        Operate.ProxyConfig.Proxy.MustTCP_PassWord,
-                        Operate.ProxyConfig.Proxy.ProxyUDP_IP,
-                        Operate.ProxyConfig.Proxy.SOCKS5_Port);
-                }
-                else
-                {
-                    MustTCP = string.Format("socket5://{0}:{1}",
-                        Operate.ProxyConfig.Proxy.ProxyUDP_IP,
-                        Operate.ProxyConfig.Proxy.SOCKS5_Port);
-                }
-
-                Operate.ProxyConfig.Proxy.syNet.SetGlobalProxy(MustTCP);
+                //Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);
 
                 if (Operate.ProxyConfig.Proxy.syNet.Start())
                 {
@@ -984,11 +964,15 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(InitHttpProxy), Operate.ProxyConfig.Proxy.syNet.GetError());
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(InitHttpProxy), ex.Message);
             }
+
+            return false;
         }
 
         #endregion

@@ -35,7 +35,7 @@
             this.bExit = new AntdUI.Button();
             this.dEXTProxy = new AntdUI.Divider();
             this.tlpServerInfo = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.txtExternalProxy_Port = new AntdUI.InputNumber();
+            this.nudExternalProxy_Port = new AntdUI.InputNumber();
             this.bExternalProxy_Detection = new AntdUI.Button();
             this.txtExternalProxy_PassWord = new AntdUI.Input();
             this.txtExternalProxy_UserName = new AntdUI.Input();
@@ -157,7 +157,7 @@
             this.tlpServerInfo.ColumnCount = 2;
             this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpServerInfo.Controls.Add(this.txtExternalProxy_Port, 1, 1);
+            this.tlpServerInfo.Controls.Add(this.nudExternalProxy_Port, 1, 1);
             this.tlpServerInfo.Controls.Add(this.bExternalProxy_Detection, 0, 0);
             this.tlpServerInfo.Controls.Add(this.txtExternalProxy_PassWord, 1, 6);
             this.tlpServerInfo.Controls.Add(this.txtExternalProxy_UserName, 1, 5);
@@ -182,30 +182,30 @@
             this.tlpServerInfo.Size = new System.Drawing.Size(350, 486);
             this.tlpServerInfo.TabIndex = 7;
             // 
-            // txtExternalProxy_Port
+            // nudExternalProxy_Port
             // 
-            this.txtExternalProxy_Port.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtExternalProxy_Port.LocalizationPrefixText = "EXTProxySettingsForm.Port";
-            this.txtExternalProxy_Port.Location = new System.Drawing.Point(93, 43);
-            this.txtExternalProxy_Port.Margin = new System.Windows.Forms.Padding(2);
-            this.txtExternalProxy_Port.Maximum = new decimal(new int[] {
+            this.nudExternalProxy_Port.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudExternalProxy_Port.LocalizationPrefixText = "EXTProxySettingsForm.Port";
+            this.nudExternalProxy_Port.Location = new System.Drawing.Point(93, 43);
+            this.nudExternalProxy_Port.Margin = new System.Windows.Forms.Padding(2);
+            this.nudExternalProxy_Port.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
-            this.txtExternalProxy_Port.Minimum = new decimal(new int[] {
+            this.nudExternalProxy_Port.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.txtExternalProxy_Port.Name = "txtExternalProxy_Port";
-            this.txtExternalProxy_Port.PlaceholderText = "请输入端口号";
-            this.txtExternalProxy_Port.PrefixText = "端口 :";
-            this.txtExternalProxy_Port.SelectionStart = 1;
-            this.txtExternalProxy_Port.Size = new System.Drawing.Size(255, 36);
-            this.txtExternalProxy_Port.TabIndex = 25;
-            this.txtExternalProxy_Port.Text = "8889";
-            this.txtExternalProxy_Port.Value = new decimal(new int[] {
+            this.nudExternalProxy_Port.Name = "nudExternalProxy_Port";
+            this.nudExternalProxy_Port.PlaceholderText = "请输入端口号";
+            this.nudExternalProxy_Port.PrefixText = "端口 :";
+            this.nudExternalProxy_Port.SelectionStart = 1;
+            this.nudExternalProxy_Port.Size = new System.Drawing.Size(255, 36);
+            this.nudExternalProxy_Port.TabIndex = 25;
+            this.nudExternalProxy_Port.Text = "8889";
+            this.nudExternalProxy_Port.Value = new decimal(new int[] {
             8889,
             0,
             0,
@@ -345,7 +345,7 @@
         private AntdUI.Button bExit;
         private AntdUI.Divider dEXTProxy;
         private TableLayoutPanelEx tlpServerInfo;
-        private AntdUI.InputNumber txtExternalProxy_Port;
+        private AntdUI.InputNumber nudExternalProxy_Port;
         private AntdUI.Button bExternalProxy_Detection;
         private AntdUI.Input txtExternalProxy_PassWord;
         private AntdUI.Input txtExternalProxy_UserName;

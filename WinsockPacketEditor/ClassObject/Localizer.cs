@@ -670,6 +670,12 @@ namespace WinsockPacketEditor
                 case "StoreText":
                     return "Store Text";
 
+                case "UninstallDriver":
+                    return "Uninstall Driver";
+
+                case "UninstallDriver.Alert":
+                    return "Uninstalling the driver will immediately restart the computer.\r\nDo not uninstall unless necessary!";
+
                 #endregion
 
                 #region//StartForm
@@ -1911,6 +1917,30 @@ namespace WinsockPacketEditor
 
                 case "EXTProxySettingsForm.Success":
                     return "EXTProxy settings saved successfully";
+
+                case "EXTProxySettingsForm.Setting.Error":
+                    return "External proxy setting error";
+
+                case "EXTProxySettingsForm.Connect.TimeOut":
+                    return "External proxy connection timeout";
+
+                case "EXTProxySettingsForm.HandShake.TimeOut":
+                    return "External proxy handshake timeout";
+
+                case "EXTProxySettingsForm.UnSupport":
+                    return "External proxy does not support socks";
+
+                case "EXTProxySettingsForm.NeedAuth":
+                    return "External proxy need authentication";
+
+                case "EXTProxySettingsForm.AuthFail":
+                    return "External proxy authentication failed";
+
+                case "EXTProxySettingsForm.AuthUnSupport":
+                    return "External proxy does not support this authentication";
+
+                case "EXTProxySettingsForm.Connect.Refuses":
+                    return "External proxy refuses connection";
 
                 #endregion
 

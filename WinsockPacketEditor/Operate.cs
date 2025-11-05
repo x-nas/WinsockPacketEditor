@@ -5011,6 +5011,7 @@ namespace WinsockPacketEditor
                 public static SunnyNetlibray.SunnyNet syNet = new SunnyNetlibray.SunnyNet();
                 public static SunnyNetCallback syCallBack = new SunnyNetCallback();
                 public static bool IsLoadDriver = false;
+                public static int DriverType = 1;
                 public static List<AntdUI.TransferItem> lstSelectProcess = new List<AntdUI.TransferItem>();
                 public static IPConnectionFilter ipFilter = new IPConnectionFilter();                
                 public static long ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
@@ -5021,10 +5022,10 @@ namespace WinsockPacketEditor
                 public static bool ProxyIP_Auto = true;
                 public static bool Enable_SystemProxy = false;
                 public static bool Enable_SOCKS5 = true, Enable_Auth = true;
-                public static bool Enable_HTTP = false, MustTCP_Auth = false;
+                public static bool Enable_HTTP = false, MustTCP_AppointPort = false, MustTCP_Auth = false;
                 public static string MustTCP_IP = "127.0.0.1";
                 public static ushort MustTCP_Port = 1080;
-                public static string MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
+                public static string MustTCP_AppointPortContent = string.Empty, MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
                 public static bool Enable_ExternalProxy = false, Enable_ExternalProxy_AppointPort = false, Enable_ExternalProxy_Auth = false;                
                 public static string ExternalProxy_IP = "127.0.0.1";
                 public static ushort ExternalProxy_Port = 8889;
@@ -6135,7 +6136,7 @@ namespace WinsockPacketEditor
                         {
                             AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理设置错误", TType.Error)
                             {
-                                LocalizationText = "SystemSettingsForm.Success"
+                                LocalizationText = "EXTProxySettingsForm.Setting.Error"
                             });
 
                             return false;
@@ -6149,13 +6150,16 @@ namespace WinsockPacketEditor
 
                             if (await Task.WhenAny(connectTask, timeoutTask) == timeoutTask)
                             {
-                                AntdUI.Message.open(new AntdUI.Message.Config(form, "连接超时", TType.Error)
+                                AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理连接超时", TType.Error)
                                 {
-                                    LocalizationText = "SystemSettingsForm.Success"
+                                    LocalizationText = "EXTProxySettingsForm.Connect.TimeOut"
                                 });
 
                                 return false;
                             }
+
+                            proxySocket.ReceiveTimeout = 5000;
+                            proxySocket.SendTimeout = 5000;
 
                             //SOCKS5 握手
                             byte[] handshakeRequest = null;
@@ -6170,13 +6174,26 @@ namespace WinsockPacketEditor
                             await proxySocket.SendAsync(new ArraySegment<byte>(handshakeRequest), SocketFlags.None);
 
                             byte[] handshakeResponse = new byte[2];
-                            int received = await proxySocket.ReceiveAsync(new ArraySegment<byte>(handshakeResponse), SocketFlags.None);
+                            var receiveTask = proxySocket.ReceiveAsync(new ArraySegment<byte>(handshakeResponse), SocketFlags.None);
+                            var receiveTimeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
+
+                            if (await Task.WhenAny(receiveTask, receiveTimeoutTask) == receiveTimeoutTask)
+                            {
+                                AntdUI.Message.open(new AntdUI.Message.Config(form, "握手响应超时", TType.Error)
+                                {
+                                    LocalizationText = "EXTProxySettingsForm.HandShake.TimeOut"
+                                });
+
+                                return false;
+                            }
+
+                            int received = await receiveTask;
 
                             if (handshakeResponse[0] != 0x05)
                             {
-                                AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理不支持SOCKS", TType.Error)
+                                AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理不支持 SOCKS", TType.Error)
                                 {
-                                    LocalizationText = "SystemSettingsForm.Success"
+                                    LocalizationText = "EXTProxySettingsForm.UnSupport"
                                 });
 
                                 return false;
@@ -6194,7 +6211,7 @@ namespace WinsockPacketEditor
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理要求认证", TType.Warn)
                                         {
-                                            LocalizationText = "SystemSettingsForm.Success"
+                                            LocalizationText = "EXTProxySettingsForm.NeedAuth"
                                         });
 
                                         return false;
@@ -6218,7 +6235,7 @@ namespace WinsockPacketEditor
                                     {
                                         AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理认证失败", TType.Error)
                                         {
-                                            LocalizationText = "SystemSettingsForm.Success"
+                                            LocalizationText = "EXTProxySettingsForm.AuthFail"
                                         });
 
                                         return false;
@@ -6228,7 +6245,7 @@ namespace WinsockPacketEditor
                                 default:
                                     AntdUI.Message.open(new AntdUI.Message.Config(form, "不支持的认证方式", TType.Warn)
                                     {
-                                        LocalizationText = "SystemSettingsForm.Success"
+                                        LocalizationText = "EXTProxySettingsForm.AuthUnSupport"
                                     });
 
                                     return false;
@@ -6241,7 +6258,7 @@ namespace WinsockPacketEditor
                     {
                         AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理拒绝连接", TType.Error)
                         {
-                            LocalizationText = "SystemSettingsForm.Success"
+                            LocalizationText = "EXTProxySettingsForm.Connect.Refuses"
                         });
 
                         return false;

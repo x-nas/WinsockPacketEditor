@@ -22,7 +22,7 @@ namespace WinsockPacketEditor
 
             this.cbEnable_ExternalProxy.Checked = Operate.ProxyConfig.Proxy.Enable_ExternalProxy;
             this.txtExternalProxy_IP.Text = Operate.ProxyConfig.Proxy.ExternalProxy_IP;
-            this.txtExternalProxy_Port.Text = Operate.ProxyConfig.Proxy.ExternalProxy_Port.ToString();
+            this.nudExternalProxy_Port.Value = Operate.ProxyConfig.Proxy.ExternalProxy_Port;
             this.cbExternalProxy_AppointPort.Checked = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort;
             this.txtExternalProxy_AppointPort.Text = Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort;
             this.cbExternalProxy_EnableAuth.Checked = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth;
@@ -239,13 +239,13 @@ namespace WinsockPacketEditor
 
             this.bExternalProxy_Detection.Loading = true;
 
-            string EXTIP = this.txtExternalProxy_IP.Text.Trim();
-            ushort EXTPort = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
-            bool EXTAuth = this.cbExternalProxy_EnableAuth.Checked;
-            string EXTUsername = this.txtExternalProxy_UserName.Text.Trim();
-            string EXTPassword = this.txtExternalProxy_PassWord.Text.Trim();
-
-            bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(this.form, EXTIP, EXTPort, EXTAuth, EXTUsername, EXTPassword);
+            bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(
+                this.form,
+                this.txtExternalProxy_IP.Text.Trim(),
+                ((ushort)this.nudExternalProxy_Port.Value),
+                this.cbExternalProxy_EnableAuth.Checked,
+                this.txtExternalProxy_UserName.Text.Trim(),
+                this.txtExternalProxy_PassWord.Text.Trim());
 
             if (Result)
             {
@@ -271,7 +271,7 @@ namespace WinsockPacketEditor
 
             Operate.ProxyConfig.Proxy.Enable_ExternalProxy = this.cbEnable_ExternalProxy.Checked;
             Operate.ProxyConfig.Proxy.ExternalProxy_IP = this.txtExternalProxy_IP.Text.Trim();
-            Operate.ProxyConfig.Proxy.ExternalProxy_Port = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
+            Operate.ProxyConfig.Proxy.ExternalProxy_Port = ((ushort)this.nudExternalProxy_Port.Value);
             Operate.ProxyConfig.Proxy.Enable_ExternalProxy_AppointPort = this.cbExternalProxy_AppointPort.Checked;
             Operate.ProxyConfig.Proxy.ExternalProxy_AppointPort = this.txtExternalProxy_AppointPort.Text.Trim();
             Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth = this.cbExternalProxy_EnableAuth.Checked;

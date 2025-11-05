@@ -25,27 +25,37 @@ namespace WinsockPacketEditor
             {
                 this.InitProcessList();
 
-                if (Operate.ProxyConfig.Proxy.IsLoadDriver)
-                {                    
-                    this.tlpLoadDriver.Enabled = false;
-                    this.bUninstallDriver.Enabled = true;
-                }
-                else
-                {                    
-                    this.tlpLoadDriver.Enabled = true;
-                    this.bUninstallDriver.Enabled = false;
+                switch (Operate.ProxyConfig.Proxy.DriverType)
+                {
+                    case 0:
+                        this.rbProxifier.Checked = true;
+                        break;
+                    
+                    case 1:
+                        this.rbNFAPI.Checked = true;
+                        break; 
+                    
+                    case 2:
+                        this.rbWinDivert.Checked = true;
+                        break;                    
                 }
 
-                this.cbMustTCP_Auth.Checked = Operate.ProxyConfig.Proxy.MustTCP_Auth;
-                this.MustTCP_Auth_Changed();
-
-                this.txtMustTCP_IP.Text = Operate.ProxyConfig.Proxy.MustTCP_IP;
-                this.txtMustTCP_Port.Value = Operate.ProxyConfig.Proxy.MustTCP_Port;
-                this.txtMustTCP_UserName.Text = Operate.ProxyConfig.Proxy.MustTCP_UserName;
-                this.txtMustTCP_PassWord.Text = Operate.ProxyConfig.Proxy.MustTCP_PassWord;
+                this.rbNFAPI.Enabled = this.rbProxifier.Enabled = this.rbWinDivert.Enabled = !Operate.ProxyConfig.Proxy.IsLoadDriver;
+                this.bUninstallDriver.Enabled = Operate.ProxyConfig.Proxy.IsLoadDriver;
 
                 this.transferProcessList.SourceTitle = AntdUI.Localization.Get("ProcessSetting.SourceTitle", "进程列表");
-                this.transferProcessList.TargetTitle = AntdUI.Localization.Get("ProcessSetting.TargetTitle", "拦截列表");                
+                this.transferProcessList.TargetTitle = AntdUI.Localization.Get("ProcessSetting.TargetTitle", "拦截列表");
+
+                this.txtMustTCP_IP.Text = Operate.ProxyConfig.Proxy.MustTCP_IP;
+                this.nudMustTCP_Port.Value = Operate.ProxyConfig.Proxy.MustTCP_Port;
+                this.cbMustTCP_AppointPort.Checked = Operate.ProxyConfig.Proxy.MustTCP_AppointPort;
+                this.txtMustTCP_AppointPort.Text = Operate.ProxyConfig.Proxy.MustTCP_AppointPortContent;
+                this.txtMustTCP_UserName.Text = Operate.ProxyConfig.Proxy.MustTCP_UserName;
+                this.txtMustTCP_PassWord.Text = Operate.ProxyConfig.Proxy.MustTCP_PassWord;
+                this.cbMustTCP_Auth.Checked = Operate.ProxyConfig.Proxy.MustTCP_Auth;
+
+                this.MustTCP_Auth_Changed();
+                this.MustTCP_AppointPort_Changed();
             }
             catch (Exception ex)
             {
@@ -106,11 +116,67 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//检测
+
+        private async void bMustTCP_Detection_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!this.CheckSetting())
+                {
+                    return;
+                }
+
+                this.bMustTCP_Detection.Loading = true;
+
+                bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(
+                    this.form,
+                    this.txtMustTCP_IP.Text.Trim(),
+                    ((ushort)this.nudMustTCP_Port.Value),
+                    this.cbMustTCP_Auth.Checked,
+                    this.txtMustTCP_UserName.Text.Trim(),
+                    this.txtMustTCP_PassWord.Text.Trim());
+
+                if (Result)
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理服务器连接成功", TType.Success)
+                    {
+                        LocalizationText = "EXTProxySettingsForm.Connection"
+                    });
+                }
+
+                this.bMustTCP_Detection.Loading = false;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(bMustTCP_Detection_Click), ex.Message);
+            }            
+        }
+
+        #endregion
+
         #region//卸载驱动
 
         private void bUninstallDriver_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("UninstallDriver", "卸载驱动"), "\r\n" + AntdUI.Localization.Get("UninstallDriver.Alert", "卸载驱动会立即重启电脑，若非必要请勿卸载!") + "\r\n\r\n")
+                {
+                    Icon = TType.Warn,
+                    Keyboard = false,
+                    MaskClosable = false,
+                    OnOk = config =>
+                    {
+                        Operate.ProxyConfig.Proxy.syNet.UnDriver();
+                        return true;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(bUninstallDriver_Click), ex.Message);
+            }
         }
 
         #endregion
@@ -125,6 +191,20 @@ namespace WinsockPacketEditor
         private void MustTCP_Auth_Changed()
         {
             this.txtMustTCP_UserName.Enabled = this.txtMustTCP_PassWord.Enabled = this.cbMustTCP_Auth.Checked;
+        }
+
+        #endregion
+
+        #region//指定端口
+
+        private void cbMustTCP_AppointPort_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.MustTCP_AppointPort_Changed();
+        }
+
+        private void MustTCP_AppointPort_Changed()
+        {
+            this.txtMustTCP_AppointPort.Enabled = this.cbMustTCP_AppointPort.Checked;
         }
 
         #endregion
@@ -176,6 +256,8 @@ namespace WinsockPacketEditor
                         this.txtMustTCP_PassWord.Status = TType.Success;
                     }
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -203,50 +285,75 @@ namespace WinsockPacketEditor
                     return;
                 }
 
+                Operate.ProxyConfig.Proxy.MustTCP_IP = this.txtMustTCP_IP.Text.Trim();
+                Operate.ProxyConfig.Proxy.MustTCP_Port = ((ushort)this.nudMustTCP_Port.Value);
+                Operate.ProxyConfig.Proxy.MustTCP_AppointPort = this.cbMustTCP_AppointPort.Checked;
+                Operate.ProxyConfig.Proxy.MustTCP_AppointPortContent = this.txtMustTCP_AppointPort.Text.Trim();
+                Operate.ProxyConfig.Proxy.MustTCP_Auth = this.cbMustTCP_Auth.Checked;
+                Operate.ProxyConfig.Proxy.MustTCP_UserName = this.txtMustTCP_UserName.Text.Trim();
+                Operate.ProxyConfig.Proxy.MustTCP_PassWord = this.txtMustTCP_PassWord.Text.Trim();
+
                 if (!Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {                    
                     if (this.rbProxifier.Checked)
                     {
-                        Operate.ProxyConfig.Proxy.IsLoadDriver = Operate.ProxyConfig.Proxy.syNet.LoadDriver(0);
+                        Operate.ProxyConfig.Proxy.DriverType = 0;                        
                     }
                     else if (this.rbNFAPI.Checked)
                     {
-                        Operate.ProxyConfig.Proxy.IsLoadDriver = Operate.ProxyConfig.Proxy.syNet.LoadDriver(1);
+                        Operate.ProxyConfig.Proxy.DriverType = 1;
                     }
                     else
                     {
-                        Operate.ProxyConfig.Proxy.IsLoadDriver = Operate.ProxyConfig.Proxy.syNet.LoadDriver(2);
-                    }                    
+                        Operate.ProxyConfig.Proxy.DriverType = 2;
+                    }
+
+                    Operate.ProxyConfig.Proxy.IsLoadDriver = Operate.ProxyConfig.Proxy.syNet.LoadDriver(Operate.ProxyConfig.Proxy.DriverType);
                 }
 
                 if (Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {
-                    var targetItems = this.transferProcessList.GetTargetItems();
-                    Operate.ProxyConfig.Proxy.lstSelectProcess = targetItems.Count > 0
-                        ? targetItems
-                        : new List<TransferItem>();
+                    Operate.ProxyConfig.Proxy.syNet.CancelGlobalProxy();
 
-                    Operate.ProxyConfig.Proxy.syNet.RemoveAllProcesses();
-                    foreach (TransferItem item in Operate.ProxyConfig.Proxy.lstSelectProcess)
+                    string MustTCP = string.Empty;
+                    if (Operate.ProxyConfig.Proxy.MustTCP_Auth)
                     {
-                        if (item.Value is ProcessInfo pi)
-                        {
-                            Operate.ProxyConfig.Proxy.syNet.AddProcessPid(pi.ProcessID);
-                        }
+                        MustTCP = string.Format("socket5://{0}:{1}@{2}:{3}",
+                            Operate.ProxyConfig.Proxy.MustTCP_UserName,
+                            Operate.ProxyConfig.Proxy.MustTCP_PassWord,
+                            Operate.ProxyConfig.Proxy.MustTCP_IP,
+                            Operate.ProxyConfig.Proxy.MustTCP_Port);
+                    }
+                    else
+                    {
+                        MustTCP = string.Format("socket5://{0}:{1}",
+                            Operate.ProxyConfig.Proxy.MustTCP_IP,
+                            Operate.ProxyConfig.Proxy.MustTCP_Port);
                     }
 
-                    Operate.ProxyConfig.Proxy.MustTCP_Auth = this.cbMustTCP_Auth.Checked;
-                    Operate.ProxyConfig.Proxy.MustTCP_IP = this.txtMustTCP_IP.Text.Trim();
-                    Operate.ProxyConfig.Proxy.MustTCP_Port = ((ushort)this.txtMustTCP_Port.Value);
-                    Operate.ProxyConfig.Proxy.MustTCP_UserName = this.txtMustTCP_UserName.Text.Trim();
-                    Operate.ProxyConfig.Proxy.MustTCP_PassWord = this.txtMustTCP_PassWord.Text.Trim();
-
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "进程设置保存成功", TType.Success)
+                    if (Operate.ProxyConfig.Proxy.syNet.SetGlobalProxy(MustTCP))
                     {
-                        LocalizationText = "ProcessSetting.Success"
-                    });
+                        var targetItems = this.transferProcessList.GetTargetItems();
+                        Operate.ProxyConfig.Proxy.lstSelectProcess = targetItems.Count > 0
+                            ? targetItems
+                            : new List<TransferItem>();
 
-                    this.Dispose();
+                        Operate.ProxyConfig.Proxy.syNet.RemoveAllProcesses();
+                        foreach (TransferItem item in Operate.ProxyConfig.Proxy.lstSelectProcess)
+                        {
+                            if (item.Value is ProcessInfo pi)
+                            {
+                                Operate.ProxyConfig.Proxy.syNet.AddProcessPid(pi.ProcessID);
+                            }
+                        }
+
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "进程设置保存成功", TType.Success)
+                        {
+                            LocalizationText = "ProcessSetting.Success"
+                        });
+
+                        this.Dispose();
+                    }
                 }
                 else
                 {
