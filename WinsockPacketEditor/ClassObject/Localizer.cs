@@ -2864,7 +2864,23 @@ namespace WinsockPacketEditor
                 #region//EncryptionPassword
 
                 case "EncryptionPassword.Info":
-                    return "Please input password!\r\n\r\n If you don't need to input password, simply click the [ Cancel ] button!";             
+                    return "Please input password!\r\n\r\n If you don't need to input password, simply click the [ Cancel ] button!";
+
+                #endregion
+
+                #region//ProcessSetting
+
+                case "ProcessSetting.NFAPI":
+                    return "Limit 1000000 TCP connections and UDP sockets.\r\nAfter exceeding this limit, a restart is required to continue";
+
+                case "ProcessSetting.Proxifier":
+                    return "Not supporting UDP, not supporting 32-bit operating systems";
+
+                case "ProcessSetting.WinDivert":
+                    return "Cannot intercept 127.0.0.1 data";
+
+                case "ProcessSetting.Save.Reminder":
+                    return "When saving, the TCP connection established by the target process will be disconnected.\r\nIf data cannot be intercepted, please restart the target process and try again!";
 
                 #endregion
 

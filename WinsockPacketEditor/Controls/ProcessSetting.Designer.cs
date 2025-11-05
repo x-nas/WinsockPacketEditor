@@ -41,6 +41,8 @@
             this.rbProxifier = new AntdUI.Radio();
             this.transferProcessList = new AntdUI.Transfer();
             this.tlpMustTCP = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.txtMustTCP_AppointPort = new AntdUI.Input();
+            this.cbMustTCP_AppointPort = new AntdUI.Checkbox();
             this.txtMustTCP_PassWord = new AntdUI.Input();
             this.txtMustTCP_UserName = new AntdUI.Input();
             this.cbMustTCP_Auth = new AntdUI.Checkbox();
@@ -48,8 +50,8 @@
             this.nudMustTCP_Port = new AntdUI.InputNumber();
             this.txtMustTCP_IP = new AntdUI.Input();
             this.lMustTCP = new AntdUI.Label();
-            this.cbMustTCP_AppointPort = new AntdUI.Checkbox();
-            this.txtMustTCP_AppointPort = new AntdUI.Input();
+            this.ttcLoadDriver = new AntdUI.TooltipComponent();
+            this.lSaveReminder = new AntdUI.Label();
             this.tlpProcessSetting.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpLoadDriver.SuspendLayout();
@@ -60,7 +62,8 @@
             // 
             this.tlpProcessSetting.ColumnCount = 1;
             this.tlpProcessSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProcessSetting.Controls.Add(this.tlpButton, 0, 3);
+            this.tlpProcessSetting.Controls.Add(this.lSaveReminder, 0, 4);
+            this.tlpProcessSetting.Controls.Add(this.tlpButton, 0, 5);
             this.tlpProcessSetting.Controls.Add(this.tlpLoadDriver, 0, 0);
             this.tlpProcessSetting.Controls.Add(this.transferProcessList, 0, 2);
             this.tlpProcessSetting.Controls.Add(this.tlpMustTCP, 0, 1);
@@ -68,10 +71,12 @@
             this.tlpProcessSetting.Location = new System.Drawing.Point(0, 0);
             this.tlpProcessSetting.Margin = new System.Windows.Forms.Padding(0);
             this.tlpProcessSetting.Name = "tlpProcessSetting";
-            this.tlpProcessSetting.RowCount = 4;
+            this.tlpProcessSetting.RowCount = 6;
             this.tlpProcessSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpProcessSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpProcessSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130F));
             this.tlpProcessSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpProcessSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.tlpProcessSetting.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProcessSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpProcessSetting.Size = new System.Drawing.Size(700, 700);
             this.tlpProcessSetting.TabIndex = 0;
@@ -196,6 +201,7 @@
             this.rbWinDivert.Size = new System.Drawing.Size(90, 36);
             this.rbWinDivert.TabIndex = 3;
             this.rbWinDivert.Text = "WinDivert";
+            this.ttcLoadDriver.SetTip(this.rbWinDivert, "");
             // 
             // rbNFAPI
             // 
@@ -207,6 +213,7 @@
             this.rbNFAPI.Size = new System.Drawing.Size(71, 36);
             this.rbNFAPI.TabIndex = 2;
             this.rbNFAPI.Text = "NF API";
+            this.ttcLoadDriver.SetTip(this.rbNFAPI, "");
             // 
             // label1
             // 
@@ -227,29 +234,30 @@
             this.rbProxifier.Size = new System.Drawing.Size(80, 36);
             this.rbProxifier.TabIndex = 1;
             this.rbProxifier.Text = "Proxifier";
+            this.ttcLoadDriver.SetTip(this.rbProxifier, "");
             // 
             // transferProcessList
             // 
             this.transferProcessList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.transferProcessList.Location = new System.Drawing.Point(3, 203);
+            this.transferProcessList.Location = new System.Drawing.Point(3, 183);
             this.transferProcessList.Name = "transferProcessList";
-            this.transferProcessList.Size = new System.Drawing.Size(694, 444);
+            this.transferProcessList.Size = new System.Drawing.Size(694, 427);
             this.transferProcessList.TabIndex = 7;
             this.transferProcessList.Text = "transfer1";
             // 
             // tlpMustTCP
             // 
-            this.tlpMustTCP.ColumnCount = 4;
+            this.tlpMustTCP.ColumnCount = 3;
             this.tlpMustTCP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpMustTCP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpMustTCP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpMustTCP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpMustTCP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMustTCP.Controls.Add(this.txtMustTCP_AppointPort, 1, 1);
             this.tlpMustTCP.Controls.Add(this.cbMustTCP_AppointPort, 0, 1);
             this.tlpMustTCP.Controls.Add(this.txtMustTCP_PassWord, 2, 2);
             this.tlpMustTCP.Controls.Add(this.txtMustTCP_UserName, 1, 2);
             this.tlpMustTCP.Controls.Add(this.cbMustTCP_Auth, 0, 2);
-            this.tlpMustTCP.Controls.Add(this.bMustTCP_Detection, 3, 0);
+            this.tlpMustTCP.Controls.Add(this.bMustTCP_Detection, 2, 1);
             this.tlpMustTCP.Controls.Add(this.nudMustTCP_Port, 2, 0);
             this.tlpMustTCP.Controls.Add(this.txtMustTCP_IP, 1, 0);
             this.tlpMustTCP.Controls.Add(this.lMustTCP, 0, 0);
@@ -262,20 +270,46 @@
             this.tlpMustTCP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMustTCP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMustTCP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMustTCP.Size = new System.Drawing.Size(700, 150);
+            this.tlpMustTCP.Size = new System.Drawing.Size(700, 130);
             this.tlpMustTCP.TabIndex = 8;
+            // 
+            // txtMustTCP_AppointPort
+            // 
+            this.txtMustTCP_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtMustTCP_AppointPort.LocalizationPlaceholderText = "EXTProxySettingsForm.PortExample";
+            this.txtMustTCP_AppointPort.LocalizationPrefixText = "EXTProxySettingsForm.Port";
+            this.txtMustTCP_AppointPort.Location = new System.Drawing.Point(93, 43);
+            this.txtMustTCP_AppointPort.Margin = new System.Windows.Forms.Padding(2);
+            this.txtMustTCP_AppointPort.Name = "txtMustTCP_AppointPort";
+            this.txtMustTCP_AppointPort.PlaceholderText = "比如 80,443";
+            this.txtMustTCP_AppointPort.PrefixText = "端口 :";
+            this.txtMustTCP_AppointPort.Size = new System.Drawing.Size(300, 37);
+            this.txtMustTCP_AppointPort.TabIndex = 34;
+            // 
+            // cbMustTCP_AppointPort
+            // 
+            this.cbMustTCP_AppointPort.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbMustTCP_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbMustTCP_AppointPort.LocalizationText = "EXTProxySettingsForm.SpecifyPort";
+            this.cbMustTCP_AppointPort.Location = new System.Drawing.Point(2, 43);
+            this.cbMustTCP_AppointPort.Margin = new System.Windows.Forms.Padding(2);
+            this.cbMustTCP_AppointPort.Name = "cbMustTCP_AppointPort";
+            this.cbMustTCP_AppointPort.Size = new System.Drawing.Size(87, 37);
+            this.cbMustTCP_AppointPort.TabIndex = 33;
+            this.cbMustTCP_AppointPort.Text = "指定端口 :";
+            this.cbMustTCP_AppointPort.CheckedChanged += new AntdUI.BoolEventHandler(this.cbMustTCP_AppointPort_CheckedChanged);
             // 
             // txtMustTCP_PassWord
             // 
             this.txtMustTCP_PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtMustTCP_PassWord.LocalizationPlaceholderText = "EXTProxySettingsForm.InputPassword";
             this.txtMustTCP_PassWord.LocalizationPrefixText = "EXTProxySettingsForm.Password";
-            this.txtMustTCP_PassWord.Location = new System.Drawing.Point(364, 83);
+            this.txtMustTCP_PassWord.Location = new System.Drawing.Point(397, 84);
             this.txtMustTCP_PassWord.Margin = new System.Windows.Forms.Padding(2);
             this.txtMustTCP_PassWord.Name = "txtMustTCP_PassWord";
             this.txtMustTCP_PassWord.PlaceholderText = "请输入密码";
             this.txtMustTCP_PassWord.PrefixText = "密码 :";
-            this.txtMustTCP_PassWord.Size = new System.Drawing.Size(267, 36);
+            this.txtMustTCP_PassWord.Size = new System.Drawing.Size(301, 36);
             this.txtMustTCP_PassWord.TabIndex = 31;
             // 
             // txtMustTCP_UserName
@@ -283,12 +317,12 @@
             this.txtMustTCP_UserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtMustTCP_UserName.LocalizationPlaceholderText = "EXTProxySettingsForm.InputUsername";
             this.txtMustTCP_UserName.LocalizationPrefixText = "EXTProxySettingsForm.Username";
-            this.txtMustTCP_UserName.Location = new System.Drawing.Point(93, 83);
+            this.txtMustTCP_UserName.Location = new System.Drawing.Point(93, 84);
             this.txtMustTCP_UserName.Margin = new System.Windows.Forms.Padding(2);
             this.txtMustTCP_UserName.Name = "txtMustTCP_UserName";
             this.txtMustTCP_UserName.PlaceholderText = "请输入账号";
             this.txtMustTCP_UserName.PrefixText = "账号 :";
-            this.txtMustTCP_UserName.Size = new System.Drawing.Size(267, 36);
+            this.txtMustTCP_UserName.Size = new System.Drawing.Size(300, 36);
             this.txtMustTCP_UserName.TabIndex = 30;
             // 
             // cbMustTCP_Auth
@@ -296,7 +330,7 @@
             this.cbMustTCP_Auth.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbMustTCP_Auth.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbMustTCP_Auth.LocalizationText = "EXTProxySettingsForm.RequireAuth";
-            this.cbMustTCP_Auth.Location = new System.Drawing.Point(2, 83);
+            this.cbMustTCP_Auth.Location = new System.Drawing.Point(2, 84);
             this.cbMustTCP_Auth.Margin = new System.Windows.Forms.Padding(2);
             this.cbMustTCP_Auth.Name = "cbMustTCP_Auth";
             this.cbMustTCP_Auth.Size = new System.Drawing.Size(87, 36);
@@ -316,12 +350,12 @@
             this.bMustTCP_Detection.LoadingWaveValue = 0.6F;
             this.bMustTCP_Detection.LoadingWaveVertical = true;
             this.bMustTCP_Detection.LocalizationText = "Detection";
-            this.bMustTCP_Detection.Location = new System.Drawing.Point(635, 2);
+            this.bMustTCP_Detection.Location = new System.Drawing.Point(397, 43);
             this.bMustTCP_Detection.Margin = new System.Windows.Forms.Padding(2);
             this.bMustTCP_Detection.Name = "bMustTCP_Detection";
-            this.bMustTCP_Detection.Size = new System.Drawing.Size(63, 37);
+            this.bMustTCP_Detection.Size = new System.Drawing.Size(87, 37);
             this.bMustTCP_Detection.TabIndex = 27;
-            this.bMustTCP_Detection.Text = "检测";
+            this.bMustTCP_Detection.Text = "检测代理";
             this.bMustTCP_Detection.Type = AntdUI.TTypeMini.Info;
             this.bMustTCP_Detection.Click += new System.EventHandler(this.bMustTCP_Detection_Click);
             // 
@@ -329,7 +363,7 @@
             // 
             this.nudMustTCP_Port.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nudMustTCP_Port.LocalizationPrefixText = "EXTProxySettingsForm.Port";
-            this.nudMustTCP_Port.Location = new System.Drawing.Point(364, 2);
+            this.nudMustTCP_Port.Location = new System.Drawing.Point(397, 2);
             this.nudMustTCP_Port.Margin = new System.Windows.Forms.Padding(2);
             this.nudMustTCP_Port.Maximum = new decimal(new int[] {
             65535,
@@ -345,7 +379,7 @@
             this.nudMustTCP_Port.PlaceholderText = "请输入端口号";
             this.nudMustTCP_Port.PrefixText = "端口 :";
             this.nudMustTCP_Port.SelectionStart = 1;
-            this.nudMustTCP_Port.Size = new System.Drawing.Size(267, 37);
+            this.nudMustTCP_Port.Size = new System.Drawing.Size(301, 37);
             this.nudMustTCP_Port.TabIndex = 26;
             this.nudMustTCP_Port.Text = "1080";
             this.nudMustTCP_Port.Value = new decimal(new int[] {
@@ -363,7 +397,7 @@
             this.txtMustTCP_IP.Name = "txtMustTCP_IP";
             this.txtMustTCP_IP.PlaceholderText = "请输入IP地址";
             this.txtMustTCP_IP.PrefixText = "Socket5: //";
-            this.txtMustTCP_IP.Size = new System.Drawing.Size(267, 37);
+            this.txtMustTCP_IP.Size = new System.Drawing.Size(300, 37);
             this.txtMustTCP_IP.TabIndex = 2;
             // 
             // lMustTCP
@@ -376,31 +410,18 @@
             this.lMustTCP.Text = "强制转代理 :";
             this.lMustTCP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // cbMustTCP_AppointPort
+            // lSaveReminder
             // 
-            this.cbMustTCP_AppointPort.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbMustTCP_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbMustTCP_AppointPort.LocalizationText = "EXTProxySettingsForm.SpecifyPort";
-            this.cbMustTCP_AppointPort.Location = new System.Drawing.Point(2, 43);
-            this.cbMustTCP_AppointPort.Margin = new System.Windows.Forms.Padding(2);
-            this.cbMustTCP_AppointPort.Name = "cbMustTCP_AppointPort";
-            this.cbMustTCP_AppointPort.Size = new System.Drawing.Size(87, 36);
-            this.cbMustTCP_AppointPort.TabIndex = 33;
-            this.cbMustTCP_AppointPort.Text = "指定端口 :";
-            this.cbMustTCP_AppointPort.CheckedChanged += new AntdUI.BoolEventHandler(this.cbMustTCP_AppointPort_CheckedChanged);
-            // 
-            // txtMustTCP_AppointPort
-            // 
-            this.txtMustTCP_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtMustTCP_AppointPort.LocalizationPlaceholderText = "EXTProxySettingsForm.PortExample";
-            this.txtMustTCP_AppointPort.LocalizationPrefixText = "EXTProxySettingsForm.Port";
-            this.txtMustTCP_AppointPort.Location = new System.Drawing.Point(93, 43);
-            this.txtMustTCP_AppointPort.Margin = new System.Windows.Forms.Padding(2);
-            this.txtMustTCP_AppointPort.Name = "txtMustTCP_AppointPort";
-            this.txtMustTCP_AppointPort.PlaceholderText = "比如 80,443";
-            this.txtMustTCP_AppointPort.PrefixText = "端口 :";
-            this.txtMustTCP_AppointPort.Size = new System.Drawing.Size(267, 36);
-            this.txtMustTCP_AppointPort.TabIndex = 34;
+            this.lSaveReminder.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lSaveReminder.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.lSaveReminder.ForeColor = System.Drawing.Color.Red;
+            this.lSaveReminder.LocalizationText = "ProcessSetting.Save.Reminder";
+            this.lSaveReminder.Location = new System.Drawing.Point(123, 631);
+            this.lSaveReminder.Name = "lSaveReminder";
+            this.lSaveReminder.Size = new System.Drawing.Size(454, 16);
+            this.lSaveReminder.TabIndex = 11;
+            this.lSaveReminder.Text = "保存时，会断开目标进程已建立的 TCP 连接，若无法拦截数据，请重启目标进程再试!";
+            this.lSaveReminder.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ProcessSetting
             // 
@@ -413,6 +434,7 @@
             this.Size = new System.Drawing.Size(700, 700);
             this.Load += new System.EventHandler(this.ProcessSetting_Load);
             this.tlpProcessSetting.ResumeLayout(false);
+            this.tlpProcessSetting.PerformLayout();
             this.tlpButton.ResumeLayout(false);
             this.tlpButton.PerformLayout();
             this.tlpLoadDriver.ResumeLayout(false);
@@ -447,5 +469,7 @@
         private AntdUI.Button bRefresh;
         private AntdUI.Checkbox cbMustTCP_AppointPort;
         private AntdUI.Input txtMustTCP_AppointPort;
+        private AntdUI.TooltipComponent ttcLoadDriver;
+        private AntdUI.Label lSaveReminder;
     }
 }
