@@ -2413,6 +2413,37 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//获取 UDP 的 IP 字符串
+
+            public static string GetUDPIPString(string UDPString)
+            {
+                return Regex.Replace(UDPString, @"[\[\]]", "");
+            }
+
+            #endregion
+
+            #region//获取强制转代理的字符串
+
+            public static string GetMustTCP()
+            {
+                if (Operate.ProxyConfig.Proxy.MustTCP_Auth)
+                {
+                    return string.Format("socket5://{0}:{1}@{2}:{3}",
+                        Operate.ProxyConfig.Proxy.MustTCP_UserName,
+                        Operate.ProxyConfig.Proxy.MustTCP_PassWord,
+                        Operate.ProxyConfig.Proxy.MustTCP_IP,
+                        Operate.ProxyConfig.Proxy.MustTCP_Port);
+                }
+                else
+                {
+                    return string.Format("socket5://{0}:{1}",
+                        Operate.ProxyConfig.Proxy.MustTCP_IP,
+                        Operate.ProxyConfig.Proxy.MustTCP_Port);
+                }
+            }
+
+            #endregion
+
             #region//注册快捷键
 
             public static bool RegisterHotkey_FromText(int KeyID, string hkString)
@@ -6650,7 +6681,37 @@ namespace WinsockPacketEditor
                     return $"{TargetAddress}:{TargetPort}";
                 }
 
-                #endregion                
+                #endregion
+
+                #region//判断是否强制转代理
+
+                public static bool IsMustTCP_ByPort(string ConnPort)
+                {
+                    try
+                    {
+                        if (!Operate.ProxyConfig.Proxy.MustTCP_AppointPort)
+                        {
+                            return true;
+                        }
+
+                        if (string.IsNullOrEmpty(ConnPort) || string.IsNullOrEmpty(Operate.ProxyConfig.Proxy.MustTCP_AppointPortContent))
+                        {
+                            return false;
+                        }
+
+                        HashSet<string> portSet = new HashSet<string>(Operate.ProxyConfig.Proxy.MustTCP_AppointPortContent.Split(','));
+
+                        return portSet.Contains(ConnPort);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(IsMustTCP_ByPort), ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
 
                 #region//新增白名单
 

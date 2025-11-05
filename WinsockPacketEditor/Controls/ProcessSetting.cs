@@ -313,47 +313,26 @@ namespace WinsockPacketEditor
 
                 if (Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {
-                    Operate.ProxyConfig.Proxy.syNet.CancelGlobalProxy();
+                    var targetItems = this.transferProcessList.GetTargetItems();
+                    Operate.ProxyConfig.Proxy.lstSelectProcess = targetItems.Count > 0
+                        ? targetItems
+                        : new List<TransferItem>();
 
-                    string MustTCP = string.Empty;
-                    if (Operate.ProxyConfig.Proxy.MustTCP_Auth)
+                    Operate.ProxyConfig.Proxy.syNet.RemoveAllProcesses();
+                    foreach (TransferItem item in Operate.ProxyConfig.Proxy.lstSelectProcess)
                     {
-                        MustTCP = string.Format("socket5://{0}:{1}@{2}:{3}",
-                            Operate.ProxyConfig.Proxy.MustTCP_UserName,
-                            Operate.ProxyConfig.Proxy.MustTCP_PassWord,
-                            Operate.ProxyConfig.Proxy.MustTCP_IP,
-                            Operate.ProxyConfig.Proxy.MustTCP_Port);
-                    }
-                    else
-                    {
-                        MustTCP = string.Format("socket5://{0}:{1}",
-                            Operate.ProxyConfig.Proxy.MustTCP_IP,
-                            Operate.ProxyConfig.Proxy.MustTCP_Port);
-                    }
-
-                    if (Operate.ProxyConfig.Proxy.syNet.SetGlobalProxy(MustTCP))
-                    {
-                        var targetItems = this.transferProcessList.GetTargetItems();
-                        Operate.ProxyConfig.Proxy.lstSelectProcess = targetItems.Count > 0
-                            ? targetItems
-                            : new List<TransferItem>();
-
-                        Operate.ProxyConfig.Proxy.syNet.RemoveAllProcesses();
-                        foreach (TransferItem item in Operate.ProxyConfig.Proxy.lstSelectProcess)
+                        if (item.Value is ProcessInfo pi)
                         {
-                            if (item.Value is ProcessInfo pi)
-                            {
-                                Operate.ProxyConfig.Proxy.syNet.AddProcessPid(pi.ProcessID);
-                            }
+                            Operate.ProxyConfig.Proxy.syNet.AddProcessPid(pi.ProcessID);
                         }
-
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "进程设置保存成功", TType.Success)
-                        {
-                            LocalizationText = "ProcessSetting.Success"
-                        });
-
-                        this.Dispose();
                     }
+
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "进程设置保存成功", TType.Success)
+                    {
+                        LocalizationText = "ProcessSetting.Success"
+                    });
+
+                    this.Dispose();
                 }
                 else
                 {

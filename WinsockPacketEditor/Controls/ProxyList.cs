@@ -879,7 +879,7 @@ namespace WinsockPacketEditor
                                 LocalizationText = "ProxyModeForm.StartSocks5Proxy"
                             });
 
-                            string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "SOCKS5 代理服务器地址 : TCP [ {0}:{2} ] UDP [ {1}:{2} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP, Operate.ProxyConfig.Proxy.SOCKS5_Port);
+                            string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "SOCKS5 代理地址 : TCP [ {0}:{2} ] UDP [ {1}:{2} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP, Operate.ProxyConfig.Proxy.SOCKS5_Port);
                             Operate.DoLog(nameof(InitSocks5Proxy), sProxyIP);
 
                             if (Operate.ProxyConfig.Proxy.Enable_Auth)
@@ -937,9 +937,8 @@ namespace WinsockPacketEditor
                     return true;
                 }
 
-                Operate.ProxyConfig.Proxy.syNet.BindPort(Operate.ProxyConfig.Proxy.HTTP_Port);
-                Operate.ProxyConfig.Proxy.syNet.MustTcp(true);
-                //Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);
+                Operate.ProxyConfig.Proxy.syNet.BindPort(Operate.ProxyConfig.Proxy.HTTP_Port);                
+                Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);
 
                 if (Operate.ProxyConfig.Proxy.syNet.Start())
                 {
@@ -948,7 +947,7 @@ namespace WinsockPacketEditor
                         LocalizationText = "ProxyModeForm.StartHTTPProxy"
                     });
 
-                    string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "HTTP 代理服务器地址 : {0}:{1}"), Operate.ProxyConfig.Proxy.ProxyUDP_IP, Operate.ProxyConfig.Proxy.HTTP_Port);
+                    string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "HTTP 代理地址 : {0}:{1}"), Operate.ProxyConfig.Proxy.ProxyUDP_IP, Operate.ProxyConfig.Proxy.HTTP_Port);
                     Operate.DoLog(nameof(InitHttpProxy), sProxyIP);
                 }
                 else

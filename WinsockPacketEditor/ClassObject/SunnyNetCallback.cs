@@ -1,145 +1,73 @@
 ﻿using SunnyNetlibray.Event;
 using System;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 namespace WinsockPacketEditor
 {
     public class SunnyNetCallback : SunnyNetlibray.Internal.SunnyNet
     {
+        #region//OnHttpCallback
+
         public void OnHttpCallback(HTTPEvent Conn)
         {
-            
-
-            switch (Conn.Type())
+            try
             {
-                case HTTPEvent.EventType_HTTP_Request:
+                if (Conn.Type() == HTTPEvent.EventType_HTTP_Request)
+                {
+                    string ConnPort = "80";
+                    if (Conn.URL().ToUpper().StartsWith("HTTPS://"))
+                    {
+                        ConnPort = "443";
+                    }
 
-                    //Operate.ProxyConfig.Proxy.DomainType dtRequest = Operate.ProxyConfig.Proxy.DomainType.HTTP;
-                    //Operate.PacketConfig.Packet.PacketType ptRequest = Operate.PacketConfig.Packet.PacketType.HTTP_Req;
-                    //if (Conn.URL().StartsWith("https://"))
-                    //{
-                    //    dtRequest = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
-                    //    ptRequest = Operate.PacketConfig.Packet.PacketType.HTTPS_Req;
-                    //}
-
-                    //Operate.DoLog(nameof(OnHttpCallback), Conn.Request().Body().String());
-
-                    //_ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                    //        DateTime.Now,
-                    //        Operate.FilterConfig.Filter.FilterAction.None,
-                    //        Conn.Request().BodyLen(),
-                    //        0,
-                    //        ptRequest,
-                    //        Conn.ClientIP(),
-                    //        Conn.Response().ServerAddress(),
-                    //        Conn.URL(),
-                    //        dtRequest,
-                    //        Conn.Request().Body().Bytes,
-                    //        Conn.Request().Body().Bytes);
-
-                    break;
-                case HTTPEvent.EventType_HTTP_Response:
-
-                    //Operate.ProxyConfig.Proxy.DomainType dtResponse = Operate.ProxyConfig.Proxy.DomainType.HTTP;
-                    //Operate.PacketConfig.Packet.PacketType ptResponse = Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
-                    //if (Conn.URL().StartsWith("https://"))
-                    //{
-                    //    dtResponse = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
-                    //    ptResponse = Operate.PacketConfig.Packet.PacketType.HTTPS_Resp;
-                    //}
-
-                    //Operate.DoLog(nameof(OnHttpCallback), Conn.Response().Body().String());
-
-                    //_ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                    //        DateTime.Now,
-                    //        Operate.FilterConfig.Filter.FilterAction.None,
-                    //        Conn.Response().Body().Length,
-                    //        0,
-                    //        ptResponse,
-                    //        Conn.ClientIP(),
-                    //        Conn.Response().ServerAddress(),
-                    //        Conn.URL(),
-                    //        dtResponse,
-                    //        Conn.Response().Body().Bytes,
-                    //        Conn.Response().Body().Bytes);
-
-                    break;
-                case HTTPEvent.EventType_HTTP_Error:
-                    Debug.WriteLine("请求错误:" + Conn.URL() + " ->> " + Conn.Error());
-                    break;
+                    if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
+                    {
+                        Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(OnHttpCallback), ex.Message);
+            }            
         }
+
+        #endregion
+
+        #region//OnTcpCallback
 
         public void OnTcpCallback(TCPEvent Conn)
         {
-            //你可以记录保存 Conn.TheologyID() 唯一ID,使用以下函数,在回调函数以外的任意位置发送数据
-            //SunnyNet.Tools.TCPTools.SendMessage()
-            //SunnyNet.Tools.TCPTools.Close()
-
-            switch (Conn.Type())
+            try
             {
-                case TCPEvent.EventType_TCP_About:
-                    Debug.WriteLine("TCP 即将连接:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr());
-                    break;
-                case TCPEvent.EventType_TCP_OK:
-                    Debug.WriteLine("TCP 连接成功:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr());
-                    break;
-                case TCPEvent.EventType_TCP_Send:
-                    Debug.WriteLine("TCP 发送消息:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr() + ",发送:" + Conn.Body().Length + " / byte");
+                if (Conn.Type() == TCPEvent.EventType_TCP_About)
+                {
+                    string ConnPort = Conn.RemoteAddr().Split(':')[1];
 
-
-                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                            DateTime.Now,
-                            Operate.FilterConfig.Filter.FilterAction.None,
-                            Conn.Body().Length,
-                            0,
-                            Operate.PacketConfig.Packet.PacketType.TCP_Req,
-                            Conn.LocalAddr(),
-                            Conn.RemoteAddr(),
-                            Conn.RemoteAddr(),
-                            Operate.ProxyConfig.Proxy.DomainType.Socket,
-                            Conn.Body().Bytes,
-                            Conn.Body().Bytes);
-
-                    break;
-                case TCPEvent.EventType_TCP_Receive:
-                    Debug.WriteLine("TCP 收到数据:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr() + ",接收:" + Conn.Body().Length + " / byte");
-
-                    _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                            DateTime.Now,
-                            Operate.FilterConfig.Filter.FilterAction.None,
-                            Conn.Body().Length,
-                            0,
-                            Operate.PacketConfig.Packet.PacketType.TCP_Resp,
-                            Conn.LocalAddr(),
-                            Conn.RemoteAddr(),
-                            Conn.RemoteAddr(),
-                            Operate.ProxyConfig.Proxy.DomainType.Socket,
-                            Conn.Body().Bytes,
-                            Conn.Body().Bytes);
-
-                    break;
-                case TCPEvent.EventType_TCP_Close:
-                    Debug.WriteLine("TCP 连接关闭:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr());
-                    break;
+                    if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                    {
+                        Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(OnTcpCallback), ex.Message);
+            }            
         }
+
+        #endregion
+
+        #region//OnUdpCallback
 
         public void OnUdpCallback(UDPEvent Conn)
         {
-            //你可以记录保存 Conn.TheologyID() 唯一ID,使用以下函数,在回调函数以外的任意位置发送数据
-            //SunnyNet.Tools.UDPTools.SendMessage() 
-
-
-            string ClientIP = GetUDPIPString(Conn.LocalAddr());
-            string ServerIP = GetUDPIPString(Conn.RemoteAddr());
+            string ClientIP = Operate.SystemConfig.GetUDPIPString(Conn.LocalAddr());
+            string ServerIP = Operate.SystemConfig.GetUDPIPString(Conn.RemoteAddr());
 
             switch (Conn.Type())
             {
                 case UDPEvent.EventType_UDP_Send:
-                    Debug.WriteLine("UDP 发送消息:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr() + ",发送:" + Conn.Body().Length + " / byte");
-
 
                     _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
@@ -155,8 +83,8 @@ namespace WinsockPacketEditor
                             Conn.Body().Bytes);
 
                     break;
+
                 case UDPEvent.EventType_UDP_Receive:
-                    Debug.WriteLine("UDP 收到数据:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr() + ",接收:" + Conn.Body().Length + " / byte");
 
                     _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
@@ -172,11 +100,16 @@ namespace WinsockPacketEditor
                             Conn.Body().Bytes);
 
                     break;
+
                 case UDPEvent.EventType_UDP_Closed:
-                    Debug.WriteLine("UDP 连接关闭:" + Conn.LocalAddr() + " -> " + Conn.RemoteAddr());
+
                     break;
             }
         }
+
+        #endregion
+
+        #region//OnWebSocketCallback
 
         public void OnWebSocketCallback(WebSocketEvent Conn)
         {
@@ -201,20 +134,24 @@ namespace WinsockPacketEditor
             }
         }
 
+        #endregion
+
+        #region//OnScriptCodeSaveCallback
+
         public void OnScriptCodeSaveCallback(long SunnyNetContext, SunnyNetlibray.Internal.EventValue scriptCode)
         {
-            Debug.WriteLine(scriptCode.String() + "\r\n脚本编辑按下了保存按钮！");
+            //不做处理
         }
+
+        #endregion
+
+        #region//OnScriptLogCallback
 
         public void OnScriptLogCallback(long SunnyNetContext, SunnyNetlibray.Internal.EventValue logInfo)
         {
-            Debug.WriteLine(" 脚本日志：" + logInfo.String());
-            Debug.WriteLine(" 脚本日志1：" + logInfo.Length);
+            //不做处理
         }
 
-        public string GetUDPIPString(string UDPString)
-        {
-            return Regex.Replace(UDPString, @"[\[\]]", "");
-        }
+        #endregion
     }
 }
