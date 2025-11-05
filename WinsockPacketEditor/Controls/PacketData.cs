@@ -78,7 +78,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        public void HexBox_FindNext()
+        public bool HexBox_FindNext()
         {
             try
             {
@@ -86,22 +86,24 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.PacketConfig.List.FindOptions.Type == FindType.Hex && Operate.PacketConfig.List.FindOptions.Hex.Length == 0)
                     {
-                        return;
+                        return false;
                     }
 
                     long res = this.hbPacketData.Find(Operate.PacketConfig.List.FindOptions);
-
                     if (res == -1)
                     {
-                        Operate.ProxyConfig.List.Search_Index += 1;
-                        //this.SearchProxyList(this.SearchFromHead);
+                        return false;                        
                     }
+
+                    return true;
                 }
             }
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(HexBox_FindNext), ex.Message);
             }
+
+            return false;
         }
 
         #region//封包数据 - 右键菜单

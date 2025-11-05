@@ -1265,7 +1265,12 @@ namespace WinsockPacketEditor
                             dgvProxyList.CurrentCell = dgvProxyList.Rows[iSearchResultIndex].Cells[0];
                             dgvProxyList.ResumeLayout();
 
-                            this.controlPacketData?.HexBox_FindNext();
+                            bool bFindNext = this.controlPacketData?.HexBox_FindNext() ?? false;
+                            if (!bFindNext)
+                            {
+                                Operate.ProxyConfig.List.Search_Index += 1;
+                                this.SearchProxyList(this.SearchFromHead);
+                            }
                         }
                         else
                         {
