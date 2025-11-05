@@ -281,7 +281,7 @@ namespace WinsockPacketEditor
                 {
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "保存失败，请检查数据设置", TType.Error)
                     {
-                        LocalizationText = "ProcessSetting.LoadDriver.Error"
+                        LocalizationText = "ProcessSetting.Save.Error"
                     });
 
                     return;
@@ -331,7 +331,7 @@ namespace WinsockPacketEditor
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "进程设置保存成功", TType.Success)
                     {
-                        LocalizationText = "ProcessSetting.Success"
+                        LocalizationText = "ProcessSetting.Save.Success"
                     });
 
                     this.Dispose();

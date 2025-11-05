@@ -160,6 +160,7 @@
             this.cbEnable_HTTP.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbEnable_HTTP.Checked = true;
             this.cbEnable_HTTP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbEnable_HTTP.LocalizationText = "ProxySettingsForm.EnableHTTP";
             this.cbEnable_HTTP.Location = new System.Drawing.Point(2, 2);
             this.cbEnable_HTTP.Margin = new System.Windows.Forms.Padding(2);
             this.cbEnable_HTTP.Name = "cbEnable_HTTP";
@@ -172,7 +173,7 @@
             // 
             this.dHTTPProxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dHTTPProxy.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dHTTPProxy.LocalizationText = "ProxySettingsForm.ProxyAuth";
+            this.dHTTPProxy.LocalizationText = "ProxySettingsForm.HTTPProxy";
             this.dHTTPProxy.Location = new System.Drawing.Point(2, 248);
             this.dHTTPProxy.Margin = new System.Windows.Forms.Padding(2);
             this.dHTTPProxy.Name = "dHTTPProxy";
@@ -245,6 +246,7 @@
             this.cbEnable_SOCKS5.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbEnable_SOCKS5.Checked = true;
             this.cbEnable_SOCKS5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbEnable_SOCKS5.LocalizationText = "ProxySettingsForm.EnableSOCKS5";
             this.cbEnable_SOCKS5.Location = new System.Drawing.Point(2, 2);
             this.cbEnable_SOCKS5.Margin = new System.Windows.Forms.Padding(2);
             this.cbEnable_SOCKS5.Name = "cbEnable_SOCKS5";

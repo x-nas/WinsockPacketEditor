@@ -38,7 +38,7 @@
             this.bUninstallDriver = new AntdUI.Button();
             this.rbWinDivert = new AntdUI.Radio();
             this.rbNFAPI = new AntdUI.Radio();
-            this.label1 = new AntdUI.Label();
+            this.lSelectDriver = new AntdUI.Label();
             this.rbProxifier = new AntdUI.Radio();
             this.transferProcessList = new AntdUI.Transfer();
             this.tlpMustTCP = new WinsockPacketEditor.TableLayoutPanelEx();
@@ -124,7 +124,7 @@
             this.bRefresh.BackExtend = "135, #6253E1, #04BEFE";
             this.bRefresh.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bRefresh.IconSvg = "RedoOutlined";
-            this.bRefresh.LocalizationText = "Save";
+            this.bRefresh.LocalizationText = "ProcessSetting.Refresh";
             this.bRefresh.Location = new System.Drawing.Point(224, 10);
             this.bRefresh.Margin = new System.Windows.Forms.Padding(2);
             this.bRefresh.Name = "bRefresh";
@@ -178,7 +178,7 @@
             this.tlpLoadDriver.Controls.Add(this.bUninstallDriver, 4, 0);
             this.tlpLoadDriver.Controls.Add(this.rbWinDivert, 3, 0);
             this.tlpLoadDriver.Controls.Add(this.rbNFAPI, 1, 0);
-            this.tlpLoadDriver.Controls.Add(this.label1, 0, 0);
+            this.tlpLoadDriver.Controls.Add(this.lSelectDriver, 0, 0);
             this.tlpLoadDriver.Controls.Add(this.rbProxifier, 2, 0);
             this.tlpLoadDriver.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpLoadDriver.Location = new System.Drawing.Point(0, 0);
@@ -198,6 +198,7 @@
             this.bUninstallDriver.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.bUninstallDriver.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bUninstallDriver.IconSvg = "UndoOutlined";
+            this.bUninstallDriver.LocalizationText = "ProcessSetting.UninstallDriver";
             this.bUninstallDriver.Location = new System.Drawing.Point(344, 3);
             this.bUninstallDriver.Name = "bUninstallDriver";
             this.bUninstallDriver.Size = new System.Drawing.Size(87, 36);
@@ -229,15 +230,16 @@
             this.rbNFAPI.Text = "NFAPI";
             this.ttcLoadDriver.SetTip(this.rbNFAPI, "");
             // 
-            // label1
+            // lSelectDriver
             // 
-            this.label1.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 36);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "选择驱动类型 :";
+            this.lSelectDriver.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSelectDriver.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSelectDriver.LocalizationText = "ProcessSetting.SelectDriver";
+            this.lSelectDriver.Location = new System.Drawing.Point(3, 3);
+            this.lSelectDriver.Name = "lSelectDriver";
+            this.lSelectDriver.Size = new System.Drawing.Size(79, 36);
+            this.lSelectDriver.TabIndex = 0;
+            this.lSelectDriver.Text = "选择驱动类型 :";
             // 
             // rbProxifier
             // 
@@ -343,7 +345,7 @@
             // 
             this.cbMustTCP_Auth.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbMustTCP_Auth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbMustTCP_Auth.LocalizationText = "EXTProxySettingsForm.RequireAuth";
+            this.cbMustTCP_Auth.LocalizationText = "ProcessSetting.RequireAuth";
             this.cbMustTCP_Auth.Location = new System.Drawing.Point(2, 43);
             this.cbMustTCP_Auth.Margin = new System.Windows.Forms.Padding(2);
             this.cbMustTCP_Auth.Name = "cbMustTCP_Auth";
@@ -417,6 +419,7 @@
             // lMustTCP
             // 
             this.lMustTCP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lMustTCP.LocalizationText = "ProcessSetting.MustTCP";
             this.lMustTCP.Location = new System.Drawing.Point(3, 3);
             this.lMustTCP.Name = "lMustTCP";
             this.lMustTCP.Size = new System.Drawing.Size(85, 35);
@@ -453,7 +456,7 @@
         private AntdUI.Button bSave;
         private AntdUI.Button bExit;
         private TableLayoutPanelEx tlpLoadDriver;
-        private AntdUI.Label label1;
+        private AntdUI.Label lSelectDriver;
         private AntdUI.Radio rbProxifier;
         private AntdUI.Radio rbWinDivert;
         private AntdUI.Radio rbNFAPI;

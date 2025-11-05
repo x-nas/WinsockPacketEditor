@@ -1032,6 +1032,9 @@ namespace WinsockPacketEditor
                 case "ProxyModeForm.ProxySettings":
                     return "Proxy Settings";
 
+                case "ProxyModeForm.ProcessSettings":
+                    return "Process Settings";
+
                 case "ProxyModeForm.LeachSettings":
                     return "Leach Settings";
 
@@ -1594,10 +1597,16 @@ namespace WinsockPacketEditor
                     return "Buffer Size";
 
                 case "ProxySettingsForm.ProxyIPAuto":
-                    return "Auto Detection";
+                    return "Auto Detection :";
+
+                case "ProxySettingsForm.EnableSOCKS5":
+                    return "Enable SOCKS5 :";
+
+                case "ProxySettingsForm.EnableHTTP":
+                    return "Enable HTTP :";
 
                 case "ProxySettingsForm.EnableAuth":
-                    return "Enable";
+                    return "Enable Auth :";
 
                 case "ProxySettingsForm.UNPW":
                     return "Username / Password";
@@ -1874,19 +1883,19 @@ namespace WinsockPacketEditor
                     return "Please enter IP or Domain";
 
                 case "EXTProxySettingsForm.SpecifyPort":
-                    return "Specify Port";
+                    return "Specify Port :";
 
                 case "EXTProxySettingsForm.Port":
-                    return "Port:";
+                    return "Port :";
 
                 case "EXTProxySettingsForm.RequireAuth":
-                    return "Require Authentication";
+                    return "Require Auth :";
 
                 case "EXTProxySettingsForm.Username":
-                    return "Username:";
+                    return "Username :";
 
                 case "EXTProxySettingsForm.Password":
-                    return "Password:";
+                    return "Password :";
 
                 case "EXTProxySettingsForm.InputUsername":
                     return "Input Username";
@@ -2870,6 +2879,27 @@ namespace WinsockPacketEditor
 
                 #region//ProcessSetting
 
+                case "ProcessSetting.SelectDriver":
+                    return "Select Driver :";
+
+                case "ProcessSetting.UninstallDriver":
+                    return "Uninstall";
+
+                case "ProcessSetting.Refresh":
+                    return "Refresh";
+
+                case "ProcessSetting.MustTCP":
+                    return "Forced proxy :";
+
+                case "ProcessSetting.RequireAuth":
+                    return "Require Auth :";
+
+                case "ProcessSetting.SourceTitle":
+                    return "Process List";
+
+                case "ProcessSetting.TargetTitle":
+                    return "Intercept List";
+
                 case "ProcessSetting.NFAPI":
                     return "Limit 1000000 TCP connections and UDP sockets.\r\nAfter exceeding this limit, a restart is required to continue";
 
@@ -2881,6 +2911,15 @@ namespace WinsockPacketEditor
 
                 case "ProcessSetting.Save.Reminder":
                     return "HTTP proxy needs to be started before intercepting process data\r\nWhen saving, the TCP connection established by the target process will be disconnected.\r\nIf data cannot be intercepted, please restart the target process and try again!";
+
+                case "ProcessSetting.Save.Success":
+                    return "Process settings saved successfully";
+
+                case "ProcessSetting.Save.Error":
+                    return "Save failed, please check data settings";
+
+                case "ProcessSetting.LoadDriver.Error":
+                    return "Failed to load driver, please check if it is running with admin privileges";
 
                 #endregion
 
