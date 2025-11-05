@@ -11,6 +11,8 @@ namespace WinsockPacketEditor
     {
         private Form form = null;
 
+        #region//窗体事件
+
         public PacketData(Form form)
         {
             InitializeComponent();
@@ -42,25 +44,50 @@ namespace WinsockPacketEditor
 
         public void RefreshPacketData()
         {
-            if (Operate.ProxyConfig.List.piSelect != null)
+            if (this.form is InterfaceInfo.IInjectMode)
             {
-                if (Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
-                    Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
-                    Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
-                    Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
+                if (Operate.PacketConfig.List.piSelect != null)
                 {
-                    this.tabPacketData.SelectTab("tpHTTP");
+                    if (Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
+                        Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
+                        Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
+                        Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
+                    {
+                        this.tabPacketData.SelectTab("tpHTTP");
 
-                    this.scintillaPacketData.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.ProxyConfig.List.piSelect.PacketBuffer);
-                }
-                else
-                {
-                    this.tabPacketData.SelectTab("tpSocket");
+                        this.scintillaPacketData.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.PacketConfig.List.piSelect.PacketBuffer);
+                    }
+                    else
+                    {
+                        this.tabPacketData.SelectTab("tpSocket");
 
-                    DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
-                    hbPacketData.ByteProvider = dbp;
+                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
+                        hbPacketData.ByteProvider = dbp;
+                    }
                 }
             }
+            else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+            {
+                if (Operate.ProxyConfig.List.piSelect != null)
+                {
+                    if (Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
+                        Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
+                        Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
+                        Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
+                    {
+                        this.tabPacketData.SelectTab("tpHTTP");
+
+                        this.scintillaPacketData.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.ProxyConfig.List.piSelect.PacketBuffer);
+                    }
+                    else
+                    {
+                        this.tabPacketData.SelectTab("tpSocket");
+
+                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
+                        hbPacketData.ByteProvider = dbp;
+                    }
+                }
+            }            
         }
 
         public void CleanUp_PacketData()
@@ -106,6 +133,8 @@ namespace WinsockPacketEditor
             return false;
         }
 
+        #endregion
+
         #region//封包数据 - 右键菜单
 
         private void hbPacketData_KeyDown(object sender, KeyEventArgs e)
@@ -138,50 +167,101 @@ namespace WinsockPacketEditor
                     {
                         case "Edit":
 
-                            if (Operate.PacketConfig.List.piSelect != null)
+                            if (this.form is InterfaceInfo.IInjectMode)
                             {
-                                var PacketEdit = new PacketEdit(this.form, Operate.ProxyConfig.List.piSelect);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
+                                if (Operate.PacketConfig.List.piSelect != null)
                                 {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
+                                    var PacketEdit = new PacketEdit(this.form, Operate.PacketConfig.List.piSelect);
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
+                                    {
+                                        Keyboard = false,
+                                        MaskClosable = false,
+                                        BtnHeight = 0,
+                                    });
+                                }
                             }
+                            else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                            {
+                                if (Operate.ProxyConfig.List.piSelect != null)
+                                {
+                                    var PacketEdit = new PacketEdit(this.form, Operate.ProxyConfig.List.piSelect);
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketEditForm", "封包编辑"), PacketEdit)
+                                    {
+                                        Keyboard = false,
+                                        MaskClosable = false,
+                                        BtnHeight = 0,
+                                    });
+                                }
+                            }                            
 
                             break;
 
                         case "ToFilterList":
 
-                            if (Operate.ProxyConfig.List.piSelect != null)
+                            if (this.form is InterfaceInfo.IInjectMode)
                             {
-                                bool bOK = false;
-                                if (this.hbPacketData.CanCopy())
+                                if (Operate.PacketConfig.List.piSelect != null)
                                 {
-                                    this.hbPacketData.CopyHex();
-                                    byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
-                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(Operate.ProxyConfig.List.piSelect, bBufferCopy);
-                                }
-                                else
-                                {
-                                    bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(Operate.ProxyConfig.List.piSelect, dbp.Bytes.ToArray());
-                                }
+                                    bool bOK = false;
+                                    if (this.hbPacketData.CanCopy())
+                                    {
+                                        this.hbPacketData.CopyHex();
+                                        byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                        bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.piSelect, bBufferCopy);
+                                    }
+                                    else
+                                    {
+                                        bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.piSelect, dbp.Bytes.ToArray());
+                                    }
 
-                                if (bOK)
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到滤镜列表", TType.Success)
+                                    if (bOK)
                                     {
-                                        LocalizationText = "ToFilterList.Success"
-                                    });
-                                }
-                                else
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表出错", TType.Error)
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到滤镜列表", TType.Success)
+                                        {
+                                            LocalizationText = "ToFilterList.Success"
+                                        });
+                                    }
+                                    else
                                     {
-                                        LocalizationText = "ToFilterList.Error"
-                                    });
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表出错", TType.Error)
+                                        {
+                                            LocalizationText = "ToFilterList.Error"
+                                        });
+                                    }
                                 }
                             }
+                            else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                            {
+                                if (Operate.ProxyConfig.List.piSelect != null)
+                                {
+                                    bool bOK = false;
+                                    if (this.hbPacketData.CanCopy())
+                                    {
+                                        this.hbPacketData.CopyHex();
+                                        byte[] bBufferCopy = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                        bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(Operate.ProxyConfig.List.piSelect, bBufferCopy);
+                                    }
+                                    else
+                                    {
+                                        bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(Operate.ProxyConfig.List.piSelect, dbp.Bytes.ToArray());
+                                    }
+
+                                    if (bOK)
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到滤镜列表", TType.Success)
+                                        {
+                                            LocalizationText = "ToFilterList.Success"
+                                        });
+                                    }
+                                    else
+                                    {
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表出错", TType.Error)
+                                        {
+                                            LocalizationText = "ToFilterList.Error"
+                                        });
+                                    }
+                                }
+                            }                            
 
                             break;
 
@@ -220,15 +300,19 @@ namespace WinsockPacketEditor
                                 StringA = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
                             }
 
-                            if (this.form is InterfaceInfo.IProxyMode proxyFormA)
+                            if (this.form is InterfaceInfo.IInjectMode injectFormA)
                             {
-                                proxyFormA.SetTextA(StringA);
-
-                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
-                                {
-                                    LocalizationText = "ToTextA"
-                                });
+                                injectFormA.SetTextA(StringA);
                             }
+                            else if (this.form is InterfaceInfo.IProxyMode proxyFormA)
+                            {
+                                proxyFormA.SetTextA(StringA);                                
+                            }
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
+                            {
+                                LocalizationText = "ToTextA"
+                            });
 
                             break;
 
@@ -245,15 +329,19 @@ namespace WinsockPacketEditor
                                 StringB = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, dbp.Bytes.ToArray());
                             }
 
-                            if (this.form is InterfaceInfo.IProxyMode proxyFormB)
+                            if (this.form is InterfaceInfo.IInjectMode injectFormB)
+                            {
+                                injectFormB.SetTextB(StringB);
+                            }
+                            else if (this.form is InterfaceInfo.IProxyMode proxyFormB)
                             {
                                 proxyFormB.SetTextB(StringB);
-
-                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本B", TType.Success)
-                                {
-                                    LocalizationText = "ToTextB"
-                                });
                             }
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本B", TType.Success)
+                            {
+                                LocalizationText = "ToTextB"
+                            });
 
                             break;
 
@@ -265,55 +353,112 @@ namespace WinsockPacketEditor
 
                         default:
 
-                            if (Operate.ProxyConfig.List.piSelect == null)
+                            if (this.form is InterfaceInfo.IInjectMode)
                             {
-                                return;
-                            }
-
-                            if (Guid.TryParse(item.ID, out Guid SID))
-                            {
-                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
-                                if (si != null)
+                                if (Operate.PacketConfig.List.piSelect == null)
                                 {
-                                    byte[] bBuffer = null;
-                                    if (this.hbPacketData.CanCopy())
-                                    {
-                                        this.hbPacketData.CopyHex();
-                                        bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
-                                    }
-                                    else
-                                    {
-                                        bBuffer = dbp.Bytes.ToArray();
-                                    }
+                                    return;
+                                }
 
-                                    List<ProxyInfo> piList = new List<ProxyInfo>
+                                if (Guid.TryParse(item.ID, out Guid SID))
+                                {
+                                    SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                    if (si != null)
                                     {
-                                        new ProxyInfo
+                                        byte[] bBuffer = null;
+                                        if (this.hbPacketData.CanCopy())
                                         {
-                                            PacketSocket = Operate.ProxyConfig.List.piSelect.PacketSocket,
-                                            PacketType = Operate.ProxyConfig.List.piSelect.PacketType,
-                                            ClientAddr = Operate.ProxyConfig.List.piSelect.ClientAddr,
-                                            ServerAddr = Operate.ProxyConfig.List.piSelect.ServerAddr,
-                                            PacketBuffer = bBuffer,
-                                            PacketLen = bBuffer.Length,
-                                            PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen),
+                                            this.hbPacketData.CopyHex();
+                                            bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
                                         }
-                                    };
-
-                                    if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
-                                    {
-                                        string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到: {0}"), item.Text);
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
-                                    }
-                                    else
-                                    {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
+                                        else
                                         {
-                                            LocalizationText = "ToSendList.Error"
-                                        });
+                                            bBuffer = dbp.Bytes.ToArray();
+                                        }
+
+                                        List<PacketInfo> piList = new List<PacketInfo>
+                                        {
+                                            new PacketInfo
+                                            {
+                                                PacketSocket = Operate.PacketConfig.List.piSelect.PacketSocket,
+                                                PacketType = Operate.PacketConfig.List.piSelect.PacketType,
+                                                PacketFrom = Operate.PacketConfig.List.piSelect.PacketFrom,
+                                                PacketTo = Operate.PacketConfig.List.piSelect.PacketTo,
+                                                PacketBuffer = bBuffer,
+                                                PacketLen = bBuffer.Length,
+                                                PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen),
+                                            }
+                                        };
+
+                                        if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到 " + item.Text, TType.Success)
+                                            {
+                                                LocalizationText = "ToSendList.Success"
+                                            });
+                                        }
+                                        else
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
+                                            {
+                                                LocalizationText = "ToSendList.Error"
+                                            });
+                                        }
                                     }
                                 }
                             }
+                            else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                            {
+                                if (Operate.ProxyConfig.List.piSelect == null)
+                                {
+                                    return;
+                                }
+
+                                if (Guid.TryParse(item.ID, out Guid SID))
+                                {
+                                    SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                    if (si != null)
+                                    {
+                                        byte[] bBuffer = null;
+                                        if (this.hbPacketData.CanCopy())
+                                        {
+                                            this.hbPacketData.CopyHex();
+                                            bBuffer = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                        }
+                                        else
+                                        {
+                                            bBuffer = dbp.Bytes.ToArray();
+                                        }
+
+                                        List<ProxyInfo> piList = new List<ProxyInfo>
+                                        {
+                                            new ProxyInfo
+                                            {
+                                                PacketSocket = Operate.ProxyConfig.List.piSelect.PacketSocket,
+                                                PacketType = Operate.ProxyConfig.List.piSelect.PacketType,
+                                                ClientAddr = Operate.ProxyConfig.List.piSelect.ClientAddr,
+                                                ServerAddr = Operate.ProxyConfig.List.piSelect.ServerAddr,
+                                                PacketBuffer = bBuffer,
+                                                PacketLen = bBuffer.Length,
+                                                PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bBuffer, Operate.PacketConfig.Packet.PacketData_MaxLen),
+                                            }
+                                        };
+
+                                        if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
+                                        {
+                                            string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到: {0}"), item.Text);
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                        }
+                                        else
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
+                                            {
+                                                LocalizationText = "ToSendList.Error"
+                                            });
+                                        }
+                                    }
+                                }
+                            }                            
 
                             break;
                     }

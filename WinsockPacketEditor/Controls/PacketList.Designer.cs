@@ -113,7 +113,6 @@
             this.lFilterExecute = new AntdUI.Label();
             this.lTotal = new AntdUI.Label();
             this.splitterQuickList = new AntdUI.Splitter();
-            this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.timerPacketList = new System.Windows.Forms.Timer(this.components);
             this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
@@ -128,7 +127,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvPacketList)).BeginInit();
             this.tlpPacketListInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).BeginInit();
-            this.splitterQuickList.Panel2.SuspendLayout();
             this.splitterQuickList.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1252,35 +1250,12 @@
             this.splitterQuickList.Location = new System.Drawing.Point(0, 0);
             this.splitterQuickList.Name = "splitterQuickList";
             this.splitterQuickList.Panel1MinSize = 0;
-            // 
-            // splitterQuickList.Panel2
-            // 
-            this.splitterQuickList.Panel2.Controls.Add(this.hbPacketData);
             this.splitterQuickList.Panel2MinSize = 0;
             this.splitterQuickList.Size = new System.Drawing.Size(1094, 175);
             this.splitterQuickList.SplitterDistance = 300;
             this.splitterQuickList.SplitterSize = 80;
             this.splitterQuickList.SplitterWidth = 5;
             this.splitterQuickList.TabIndex = 2;
-            // 
-            // hbPacketData
-            // 
-            this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.hbPacketData.ColumnInfoVisible = true;
-            this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hbPacketData.LineInfoVisible = true;
-            this.hbPacketData.Location = new System.Drawing.Point(0, 0);
-            this.hbPacketData.Margin = new System.Windows.Forms.Padding(2);
-            this.hbPacketData.Name = "hbPacketData";
-            this.hbPacketData.ReadOnly = true;
-            this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(789, 175);
-            this.hbPacketData.StringViewVisible = true;
-            this.hbPacketData.TabIndex = 2;
-            this.hbPacketData.VScrollBarVisible = true;
-            this.hbPacketData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbPacketData_KeyDown);
-            this.hbPacketData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbPacketData_MouseDown);
             // 
             // bgwSearchPacketList
             // 
@@ -1323,7 +1298,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvPacketList)).EndInit();
             this.tlpPacketListInfo.ResumeLayout(false);
             this.tlpPacketListInfo.PerformLayout();
-            this.splitterQuickList.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitterQuickList)).EndInit();
             this.splitterQuickList.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1390,7 +1364,6 @@
         private AntdUI.Label lFilterExecute;
         private AntdUI.Label lTotal;
         private AntdUI.Splitter splitterQuickList;
-        private Be.Windows.Forms.HexBox hbPacketData;
         private System.Windows.Forms.DataGridView dgvPacketList;
         private System.Windows.Forms.DataGridViewImageColumn cTypeImg;
         private System.Windows.Forms.DataGridViewTextBoxColumn cID;
