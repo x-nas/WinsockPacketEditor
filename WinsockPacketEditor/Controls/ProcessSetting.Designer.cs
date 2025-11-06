@@ -52,9 +52,9 @@
             this.lMustTCP = new AntdUI.Label();
             this.tlpSelectProcess = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tProcessName = new AntdUI.Table();
-            this.label2 = new AntdUI.Label();
+            this.lProcessName = new AntdUI.Label();
             this.tProcessID = new AntdUI.Table();
-            this.label1 = new AntdUI.Label();
+            this.lProcessID = new AntdUI.Label();
             this.ttcLoadDriver = new AntdUI.TooltipComponent();
             this.tlpProcessSetting.SuspendLayout();
             this.tlpButton.SuspendLayout();
@@ -429,9 +429,9 @@
             this.tlpSelectProcess.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpSelectProcess.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpSelectProcess.Controls.Add(this.tProcessName, 1, 1);
-            this.tlpSelectProcess.Controls.Add(this.label2, 1, 0);
+            this.tlpSelectProcess.Controls.Add(this.lProcessName, 1, 0);
             this.tlpSelectProcess.Controls.Add(this.tProcessID, 0, 1);
-            this.tlpSelectProcess.Controls.Add(this.label1, 0, 0);
+            this.tlpSelectProcess.Controls.Add(this.lProcessID, 0, 0);
             this.tlpSelectProcess.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSelectProcess.Location = new System.Drawing.Point(0, 180);
             this.tlpSelectProcess.Margin = new System.Windows.Forms.Padding(0);
@@ -460,14 +460,15 @@
             this.tProcessName.TabIndex = 16;
             this.tProcessName.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tProcessName_CellDoubleClick);
             // 
-            // label2
+            // lProcessName
             // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(353, 3);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(344, 23);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "按 [ 进程名称 ] 拦截 ( 双击可删除名称 )";
+            this.lProcessName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProcessName.LocalizationText = "ProcessSetting.ProcessName";
+            this.lProcessName.Location = new System.Drawing.Point(353, 3);
+            this.lProcessName.Name = "lProcessName";
+            this.lProcessName.Size = new System.Drawing.Size(344, 23);
+            this.lProcessName.TabIndex = 15;
+            this.lProcessName.Text = "按 [ 进程名称 ] 拦截 ( 双击可删除名称 )";
             // 
             // tProcessID
             // 
@@ -487,14 +488,15 @@
             this.tProcessID.TabIndex = 13;
             this.tProcessID.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tProcessID_CellDoubleClick);
             // 
-            // label1
+            // lProcessID
             // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(344, 23);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "按 [ 进程编号 ] 拦截 ( 双击添加到名称 )";
+            this.lProcessID.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lProcessID.LocalizationText = "ProcessSetting.ProcessID";
+            this.lProcessID.Location = new System.Drawing.Point(3, 3);
+            this.lProcessID.Name = "lProcessID";
+            this.lProcessID.Size = new System.Drawing.Size(344, 23);
+            this.lProcessID.TabIndex = 14;
+            this.lProcessID.Text = "按 [ 进程编号 ] 拦截 ( 双击添加到名称 )";
             // 
             // ProcessSetting
             // 
@@ -546,8 +548,8 @@
         private AntdUI.Label lSaveReminder;
         private TableLayoutPanelEx tlpSelectProcess;
         private AntdUI.Table tProcessID;
-        private AntdUI.Label label2;
-        private AntdUI.Label label1;
+        private AntdUI.Label lProcessName;
+        private AntdUI.Label lProcessID;
         private AntdUI.Table tProcessName;
     }
 }

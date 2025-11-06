@@ -670,6 +670,9 @@ namespace WinsockPacketEditor
                 case "StoreText":
                     return "Store Text";
 
+                case "DeleteAccounts":
+                    return "Sure to delete {0} accounts?";
+
                 case "UninstallDriver":
                     return "Uninstall Driver";
 
@@ -773,6 +776,9 @@ namespace WinsockPacketEditor
                     return "";
 
                 case "Table.ProcessList.Column.ProcessName":
+                    return "Process Name";
+
+                case "Table.ProcessList.Column.ModuleName":
                     return "Process Name";
 
                 case "Table.ProcessList.Column.ProcessID":
@@ -2894,11 +2900,11 @@ namespace WinsockPacketEditor
                 case "ProcessSetting.RequireAuth":
                     return "Require Auth :";
 
-                case "ProcessSetting.SourceTitle":
-                    return "Process List";
+                case "ProcessSetting.ProcessID":
+                    return "Intercept by [ Process ID ] ( DClick to add to name )";
 
-                case "ProcessSetting.TargetTitle":
-                    return "Intercept List";
+                case "ProcessSetting.ProcessName":
+                    return "Intercept by [ Process Name ] ( DClick to delete name )";
 
                 case "ProcessSetting.NFAPI":
                     return "Limit 1000000 TCP connections and UDP sockets.\r\nAfter exceeding this limit, a restart is required to continue";

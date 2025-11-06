@@ -8527,7 +8527,10 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountList", "账号列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                        int DelCount = aiList != null ? aiList.Count : ProxyConfig.Account.lstAccountInfo.Count;
+                        string Content = string.Format(AntdUI.Localization.Get("DeleteAccounts", "确定删除 {0} 个账号吗?"), DelCount);
+
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AccountList", "账号列表"), "\r\n" + Content + "\r\n\r\n")
                         {
                             Icon = TType.Warn,
                             Keyboard = false,
