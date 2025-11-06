@@ -133,7 +133,7 @@ namespace WinsockPacketEditor
         {
             this.tProcessID.PauseLayout = true;
 
-            AntdUI.Spin.open(this.tProcessID, new AntdUI.Spin.Config()
+            AntdUI.Spin.open(this, new AntdUI.Spin.Config()
             {
                 Radius = 6,
                 Font = new Font("Microsoft YaHei UI", 9F),
