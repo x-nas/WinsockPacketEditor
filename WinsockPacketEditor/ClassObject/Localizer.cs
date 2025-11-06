@@ -673,6 +673,9 @@ namespace WinsockPacketEditor
                 case "DeleteAccounts":
                     return "Sure to delete {0} accounts?";
 
+                case "InstallCertificate.Success":
+                    return "WPE64 certificate installation successful";
+
                 case "UninstallDriver":
                     return "Uninstall Driver";
 

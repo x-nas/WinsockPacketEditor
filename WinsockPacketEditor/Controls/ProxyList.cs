@@ -971,7 +971,7 @@ namespace WinsockPacketEditor
 
                 if (Operate.ProxyConfig.Proxy.syNet.InstallCertificate())
                 {
-                    Operate.DoLog(nameof(InitHttpProxy), "WPE64 证书安装成功");
+                    Operate.DoLog(nameof(InitHttpProxy), AntdUI.Localization.Get("InstallCertificate.Success", "WPE64 证书安装成功"));
                 }
 
                 return true;
