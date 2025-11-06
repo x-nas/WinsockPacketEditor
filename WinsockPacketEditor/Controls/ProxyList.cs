@@ -364,19 +364,31 @@ namespace WinsockPacketEditor
 
         private void bProxyStart_Click(object sender, EventArgs e)
         {
-            if (this.Start_Proxy())
+            bool bStart = false;
+            AntdUI.Spin.open(this, new AntdUI.Spin.Config()
             {
-                this.bProxyStart.Enabled = false;
-                this.bProxyStop.Enabled = true;
-            }
+                Radius = 6,
+                Font = new Font("Microsoft YaHei UI", 9F),
+            }, (config) =>
+            {
+                config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+                bStart = this.Start_Proxy();
+            }, () =>
+            {
+                if (bStart)
+                {
+                    this.bProxyStart.Enabled = false;
+                    this.bProxyStop.Enabled = true;
+                }
+            });            
         }
 
         private void bProxyStop_Click(object sender, EventArgs e)
         {
+            this.Stop_Proxy();
+
             this.bProxyStart.Enabled = true;
             this.bProxyStop.Enabled = false;
-
-            this.Stop_Proxy();
         }
 
         private void bProxyList_Clear_Click(object sender, EventArgs e)

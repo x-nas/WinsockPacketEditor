@@ -11,7 +11,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.ProxyConfig.Proxy.IsLoadDriver)
+                if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {
                     if (Conn.Type() == HTTPEvent.EventType_HTTP_Request)
                     {
@@ -42,7 +42,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.ProxyConfig.Proxy.IsLoadDriver)
+                if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {
                     if (Conn.Type() == TCPEvent.EventType_TCP_About)
                     {

@@ -49,16 +49,16 @@ namespace WinsockPacketEditor
 
                 this.rbNFAPI.Enabled = this.rbProxifier.Enabled = this.rbWinDivert.Enabled = !Operate.ProxyConfig.Proxy.IsLoadDriver;
                 this.bUninstallDriver.Enabled = Operate.ProxyConfig.Proxy.IsLoadDriver;
+                this.cbMustTCP.Checked = Operate.ProxyConfig.Proxy.MustTCP;
                 this.txtMustTCP_IP.Text = Operate.ProxyConfig.Proxy.MustTCP_IP;
                 this.nudMustTCP_Port.Value = Operate.ProxyConfig.Proxy.MustTCP_Port;
                 this.cbMustTCP_AppointPort.Checked = Operate.ProxyConfig.Proxy.MustTCP_AppointPort;
                 this.txtMustTCP_AppointPort.Text = Operate.ProxyConfig.Proxy.MustTCP_AppointPortContent;
                 this.txtMustTCP_UserName.Text = Operate.ProxyConfig.Proxy.MustTCP_UserName;
                 this.txtMustTCP_PassWord.Text = Operate.ProxyConfig.Proxy.MustTCP_PassWord;
-                this.cbMustTCP_Auth.Checked = Operate.ProxyConfig.Proxy.MustTCP_Auth;               
+                this.cbMustTCP_Auth.Checked = Operate.ProxyConfig.Proxy.MustTCP_Auth;
 
-                this.MustTCP_Auth_Changed();
-                this.MustTCP_AppointPort_Changed();                
+                this.MustTCP_Changed();
             }
             catch (Exception ex)
             {
@@ -227,6 +227,28 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//强制转代理
+
+        private void cbMustTCP_CheckedChanged(object sender, BoolEventArgs e)
+        {
+            this.MustTCP_Changed();
+        }
+
+        private void MustTCP_Changed()
+        {
+            this.txtMustTCP_IP.Enabled =
+                this.nudMustTCP_Port.Enabled =
+                this.cbMustTCP_Auth.Enabled =
+                this.cbMustTCP_AppointPort.Enabled =
+                this.bMustTCP_Detection.Enabled =
+                this.cbMustTCP.Checked;
+
+            this.MustTCP_Auth_Changed();
+            this.MustTCP_AppointPort_Changed();
+        }
+
+        #endregion
+
         #region//需要认证
 
         private void cbMustTCP_Auth_CheckedChanged(object sender, BoolEventArgs e)
@@ -236,7 +258,9 @@ namespace WinsockPacketEditor
 
         private void MustTCP_Auth_Changed()
         {
-            this.txtMustTCP_UserName.Enabled = this.txtMustTCP_PassWord.Enabled = this.cbMustTCP_Auth.Checked;
+            this.txtMustTCP_UserName.Enabled = 
+                this.txtMustTCP_PassWord.Enabled = 
+                this.cbMustTCP_Auth.Checked && this.cbMustTCP.Checked;
         }
 
         #endregion
@@ -250,7 +274,8 @@ namespace WinsockPacketEditor
 
         private void MustTCP_AppointPort_Changed()
         {
-            this.txtMustTCP_AppointPort.Enabled = this.cbMustTCP_AppointPort.Checked;
+            this.txtMustTCP_AppointPort.Enabled = 
+                this.cbMustTCP_AppointPort.Checked && this.cbMustTCP.Checked;
         }
 
         #endregion
@@ -355,6 +380,7 @@ namespace WinsockPacketEditor
                     return;
                 }
 
+                Operate.ProxyConfig.Proxy.MustTCP = this.cbMustTCP.Checked;
                 Operate.ProxyConfig.Proxy.MustTCP_IP = this.txtMustTCP_IP.Text.Trim();
                 Operate.ProxyConfig.Proxy.MustTCP_Port = ((ushort)this.nudMustTCP_Port.Value);
                 Operate.ProxyConfig.Proxy.MustTCP_AppointPort = this.cbMustTCP_AppointPort.Checked;
@@ -436,6 +462,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion
+        #endregion        
     }
 }

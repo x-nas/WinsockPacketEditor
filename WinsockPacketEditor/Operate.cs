@@ -3959,6 +3959,7 @@ namespace WinsockPacketEditor
                         new XElement("Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth),
                         new XElement("ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName),
                         new XElement("ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord),
+                        new XElement("MustTCP", ProxyConfig.Proxy.MustTCP),
                         new XElement("MustTCP_IP", ProxyConfig.Proxy.MustTCP_IP),
                         new XElement("MustTCP_Port", ProxyConfig.Proxy.MustTCP_Port),
                         new XElement("MustTCP_Auth", ProxyConfig.Proxy.MustTCP_Auth),
@@ -4015,6 +4016,7 @@ namespace WinsockPacketEditor
                         ProxyConfig.Proxy.Enable_ExternalProxy_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["Enable_ExternalProxy_Auth"]);
                         ProxyConfig.Proxy.ExternalProxy_UserName = ProxyMode.Rows[0]["ExternalProxy_UserName"].ToString();
                         ProxyConfig.Proxy.ExternalProxy_PassWord = ProxyMode.Rows[0]["ExternalProxy_PassWord"].ToString();
+                        ProxyConfig.Proxy.MustTCP = Convert.ToBoolean(ProxyMode.Rows[0]["MustTCP"]);
                         ProxyConfig.Proxy.MustTCP_IP = ProxyMode.Rows[0]["MustTCP_IP"].ToString();
                         ProxyConfig.Proxy.MustTCP_Port = ushort.Parse(ProxyMode.Rows[0]["MustTCP_Port"].ToString());
                         ProxyConfig.Proxy.MustTCP_Auth = Convert.ToBoolean(ProxyMode.Rows[0]["MustTCP_Auth"]);
@@ -4141,6 +4143,12 @@ namespace WinsockPacketEditor
                     if (ExternalProxy_PassWord != null)
                     {
                         ProxyConfig.Proxy.ExternalProxy_PassWord = ExternalProxy_PassWord.Value;
+                    }
+
+                    XElement MustTCP = xeProxyMode.Element("MustTCP");
+                    if (MustTCP != null)
+                    {
+                        ProxyConfig.Proxy.MustTCP = Convert.ToBoolean(MustTCP.Value);
                     }
 
                     XElement MustTCP_IP = xeProxyMode.Element("MustTCP_IP");
@@ -5139,6 +5147,7 @@ namespace WinsockPacketEditor
                 public static bool Enable_SystemProxy = false;
                 public static bool Enable_SOCKS5 = true, Enable_Auth = true;
                 public static bool Enable_HTTP = true, MustTCP_AppointPort = false, MustTCP_Auth = false;
+                public static bool MustTCP = true;
                 public static string MustTCP_IP = "127.0.0.1";
                 public static ushort MustTCP_Port = 1080;
                 public static string MustTCP_AppointPortContent = string.Empty, MustTCP_UserName = string.Empty, MustTCP_PassWord = string.Empty;
@@ -20507,6 +20516,7 @@ namespace WinsockPacketEditor
                         sql += "Enable_ExternalProxy_Auth BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理认证
                         sql += "ExternalProxy_UserName TEXT,";//代理模式 - 外部代理用户名
                         sql += "ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
+                        sql += "MustTCP BOOLEAN DEFAULT 1,";//代理模式 - 启用进程转代理
                         sql += "MustTCP_IP TEXT,";//代理模式 - 进程转代理IP
                         sql += "MustTCP_Port INTEGER DEFAULT 1081,";//代理模式 - 进程转代理端口
                         sql += "MustTCP_Auth BOOLEAN DEFAULT 0,";//代理模式 - 进程转代理认证
@@ -20610,6 +20620,7 @@ namespace WinsockPacketEditor
                         sql += "Enable_ExternalProxy_Auth,";
                         sql += "ExternalProxy_UserName,";
                         sql += "ExternalProxy_PassWord,";
+                        sql += "MustTCP,";
                         sql += "MustTCP_IP,";
                         sql += "MustTCP_Port,";
                         sql += "MustTCP_Auth,";
@@ -20643,6 +20654,7 @@ namespace WinsockPacketEditor
                         sql += "@Enable_ExternalProxy_Auth,";
                         sql += "@ExternalProxy_UserName,";
                         sql += "@ExternalProxy_PassWord,";
+                        sql += "@MustTCP,";
                         sql += "@MustTCP_IP,";
                         sql += "@MustTCP_Port,";
                         sql += "@MustTCP_Auth,";
@@ -20679,6 +20691,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@Enable_ExternalProxy_Auth", ProxyConfig.Proxy.Enable_ExternalProxy_Auth);
                             cmd.Parameters.AddWithValue("@ExternalProxy_UserName", ProxyConfig.Proxy.ExternalProxy_UserName);
                             cmd.Parameters.AddWithValue("@ExternalProxy_PassWord", ProxyConfig.Proxy.ExternalProxy_PassWord);
+                            cmd.Parameters.AddWithValue("@MustTCP", ProxyConfig.Proxy.MustTCP);
                             cmd.Parameters.AddWithValue("@MustTCP_IP", ProxyConfig.Proxy.MustTCP_IP);
                             cmd.Parameters.AddWithValue("@MustTCP_Port", ProxyConfig.Proxy.MustTCP_Port);
                             cmd.Parameters.AddWithValue("@MustTCP_Auth", ProxyConfig.Proxy.MustTCP_Auth);
