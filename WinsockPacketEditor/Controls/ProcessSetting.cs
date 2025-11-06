@@ -9,7 +9,7 @@ namespace WinsockPacketEditor
     public partial class ProcessSetting : UserControl
     {
         private Form form = null;
-        private List<ProcessInfo> lstProcessInfo = new List<ProcessInfo>();
+        private List<ProcessInfo> lstProcessID = new List<ProcessInfo>();
 
         #region//窗体事件
 
@@ -24,7 +24,8 @@ namespace WinsockPacketEditor
             try
             {
                 this.Dark_Changed();
-                this.InitProcessList();
+                this.InitProcessID();
+                this.InitProcessName();
                 this.ShowProcessList();
 
                 switch (Operate.ProxyConfig.Proxy.DriverType)
@@ -65,9 +66,9 @@ namespace WinsockPacketEditor
             }                        
         }
 
-        private void InitProcessList()
+        private void InitProcessID()
         {
-            tProcessList.Columns = new AntdUI.ColumnCollection {
+            tProcessID.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.ColumnCheck("IsCheck").SetFixed(),
                 new AntdUI.Column("ICO", string.Empty, AntdUI.ColumnAlign.Center)
                 {
@@ -78,48 +79,73 @@ namespace WinsockPacketEditor
                             Size = new Size(35, 35),
                         };
                     },
-                }.SetLocalizationTitleID("Table.ProcessList.Column."),
-                new AntdUI.Column("ProcessName", "进程名称").SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
+                }.SetLocalizationTitleID("Table.ProcessList.Column."),                
                 new AntdUI.Column("ProcessID", "进程编号").SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
-                new AntdUI.Column("ProcessPath", "路径").SetLocalizationTitleID("Table.ProcessList.Column."),
+                new AntdUI.Column("ProcessName", "进程名称").SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
             };
+        }
+
+        private void InitProcessName()
+        {
+            tProcessName.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.LogList.Column.ID"),
+                new AntdUI.Column("ICO", string.Empty, AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return new AntdUI.CellImage((Image)value)
+                        {
+                            Size = new Size(35, 35),
+                        };
+                    },
+                }.SetLocalizationTitleID("Table.ProcessList.Column."),
+                new AntdUI.Column("ModuleName", "进程名称").SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
+            };
+
+            this.tProcessName.Binding(Operate.ProxyConfig.Proxy.lstSelectProcessName);
         }
 
         public void Dark_Changed()
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tProcessList.BackColor = Operate.SystemConfig.Color_40;
-                this.tProcessList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tProcessID.BackColor = Operate.SystemConfig.Color_40;
+                this.tProcessID.ColumnBack = Operate.SystemConfig.Color_40;
             }
             else
             {
-                this.tProcessList.BackColor = Color.White;
-                this.tProcessList.ColumnBack = null;
+                this.tProcessID.BackColor = Color.White;
+                this.tProcessID.ColumnBack = null;
             }
         }
 
         #endregion
 
-        #region//显示所有进程
+        #region//显示进程列表
 
         private void ShowProcessList()
         {
-            this.tProcessList.PauseLayout = true;
+            this.tProcessID.PauseLayout = true;
 
-            AntdUI.Spin.open(this.tProcessList, new AntdUI.Spin.Config()
+            AntdUI.Spin.open(this.tProcessID, new AntdUI.Spin.Config()
             {
                 Radius = 6,
                 Font = new Font("Microsoft YaHei UI", 9F),
             }, (config) =>
             {
                 config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
-                this.lstProcessInfo = Operate.ProcessConfig.GetProcessList();
+                this.lstProcessID = Operate.ProcessConfig.GetProcessList();
             }, () =>
             {
-                if (Operate.ProxyConfig.Proxy.lstSelectProcessID.Count > 0 && this.lstProcessInfo.Count > 0)
+                if (Operate.ProxyConfig.Proxy.lstSelectProcessID.Count > 0 && this.lstProcessID.Count > 0)
                 {
-                    foreach (ProcessInfo pi in this.lstProcessInfo)
+                    foreach (ProcessInfo pi in this.lstProcessID)
                     {
                         if (Operate.ProxyConfig.Proxy.lstSelectProcessID.Contains(pi.ProcessID))
                         {
@@ -128,9 +154,9 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                this.tProcessList.DataSource = this.lstProcessInfo;
-                this.tProcessList.SelectedIndex = -1;
-                this.tProcessList.PauseLayout = false;
+                this.tProcessID.DataSource = this.lstProcessID;
+                this.tProcessID.SelectedIndex = -1;
+                this.tProcessID.PauseLayout = false;
             });
         }
 
@@ -238,6 +264,30 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//添加名称
+
+        private void tProcessID_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is ProcessInfo pi)
+            {
+                Operate.ProxyConfig.Proxy.lstSelectProcessName.Add(pi);
+            }
+        }
+
+        #endregion
+
+        #region//删除名称
+
+        private void tProcessName_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Record is ProcessInfo pi)
+            {
+                Operate.ProxyConfig.Proxy.lstSelectProcessName.Remove(pi);
+            }
+        }
+
+        #endregion
+
         #region//数据完整性检查
 
         private bool CheckSetting()
@@ -334,16 +384,27 @@ namespace WinsockPacketEditor
                 if (Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {
                     Operate.ProxyConfig.Proxy.lstSelectProcessID.Clear();
-                    Operate.ProxyConfig.Proxy.syNet.RemoveAllProcesses();
-
-                    foreach (ProcessInfo pi in this.lstProcessInfo)
+                    foreach (ProcessInfo pi in this.lstProcessID)
                     {
                         if (pi.IsCheck)
                         {
-                            Operate.ProxyConfig.Proxy.lstSelectProcessID.Add(pi.ProcessID);
-                            Operate.ProxyConfig.Proxy.syNet.AddProcessPid(pi.ProcessID);
+                            Operate.ProxyConfig.Proxy.lstSelectProcessID.Add(pi.ProcessID);                            
                         }                        
                     }
+
+                    Operate.ProxyConfig.Proxy.syNet.RemoveAllProcesses();
+                    foreach (int ProcessID in Operate.ProxyConfig.Proxy.lstSelectProcessID)
+                    {
+                        Operate.ProxyConfig.Proxy.syNet.AddProcessPid(ProcessID);
+                    }
+
+                    foreach (ProcessInfo pi in Operate.ProxyConfig.Proxy.lstSelectProcessName)
+                    {
+                        if (!string.IsNullOrEmpty(pi.ModuleName))
+                        {
+                            Operate.ProxyConfig.Proxy.syNet.AddProcessName(pi.ModuleName);
+                        }                        
+                    }                    
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "进程设置保存成功", TType.Success)
                     {
@@ -375,6 +436,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion        
+        #endregion
     }
 }

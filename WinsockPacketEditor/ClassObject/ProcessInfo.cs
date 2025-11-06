@@ -72,6 +72,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//模块名称
+
+        string _ModuleName;
+
+        public string ModuleName
+        {
+            get => _ModuleName;
+            set
+            {
+                if (_ModuleName == value) return;
+                _ModuleName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//进程路径
 
         string _ProcessPath;
@@ -91,11 +108,12 @@ namespace WinsockPacketEditor
 
         #region//ProcessInfo
 
-        public ProcessInfo(Image ico, string processName, int processID, string processPath)
+        public ProcessInfo(Image ico, string processName, int processID, string ModuleName, string processPath)
         {
             this._ICO = ico;
             this._ProcessName = processName;
             this._ProcessID = processID;
+            this._ModuleName = ModuleName;
             this._ProcessPath = processPath;
         }
 

@@ -50,23 +50,28 @@
             this.nudMustTCP_Port = new AntdUI.InputNumber();
             this.txtMustTCP_IP = new AntdUI.Input();
             this.lMustTCP = new AntdUI.Label();
+            this.tlpSelectProcess = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tProcessName = new AntdUI.Table();
+            this.label2 = new AntdUI.Label();
+            this.tProcessID = new AntdUI.Table();
+            this.label1 = new AntdUI.Label();
             this.ttcLoadDriver = new AntdUI.TooltipComponent();
-            this.tProcessList = new AntdUI.Table();
             this.tlpProcessSetting.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpLoadDriver.SuspendLayout();
             this.tlpMustTCP.SuspendLayout();
+            this.tlpSelectProcess.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpProcessSetting
             // 
             this.tlpProcessSetting.ColumnCount = 1;
             this.tlpProcessSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProcessSetting.Controls.Add(this.tProcessList, 0, 2);
             this.tlpProcessSetting.Controls.Add(this.lSaveReminder, 0, 4);
             this.tlpProcessSetting.Controls.Add(this.tlpButton, 0, 5);
             this.tlpProcessSetting.Controls.Add(this.tlpLoadDriver, 0, 0);
             this.tlpProcessSetting.Controls.Add(this.tlpMustTCP, 0, 1);
+            this.tlpProcessSetting.Controls.Add(this.tlpSelectProcess, 0, 2);
             this.tlpProcessSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpProcessSetting.Location = new System.Drawing.Point(0, 0);
             this.tlpProcessSetting.Margin = new System.Windows.Forms.Padding(0);
@@ -418,23 +423,78 @@
             this.lMustTCP.Text = "强制转代理 :";
             this.lMustTCP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // tProcessList
+            // tlpSelectProcess
             // 
-            this.tProcessList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tProcessList.CellImpactHeight = false;
-            this.tProcessList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tProcessList.Empty = false;
-            this.tProcessList.EmptyHeader = true;
-            this.tProcessList.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tProcessList.Gap = 8;
-            this.tProcessList.GapCell = 0;
-            this.tProcessList.Gaps = new System.Drawing.Size(8, 8);
-            this.tProcessList.Location = new System.Drawing.Point(2, 182);
-            this.tProcessList.Margin = new System.Windows.Forms.Padding(2);
-            this.tProcessList.Name = "tProcessList";
-            this.tProcessList.Radius = 6;
-            this.tProcessList.Size = new System.Drawing.Size(696, 413);
-            this.tProcessList.TabIndex = 12;
+            this.tlpSelectProcess.ColumnCount = 2;
+            this.tlpSelectProcess.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpSelectProcess.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpSelectProcess.Controls.Add(this.tProcessName, 1, 1);
+            this.tlpSelectProcess.Controls.Add(this.label2, 1, 0);
+            this.tlpSelectProcess.Controls.Add(this.tProcessID, 0, 1);
+            this.tlpSelectProcess.Controls.Add(this.label1, 0, 0);
+            this.tlpSelectProcess.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSelectProcess.Location = new System.Drawing.Point(0, 180);
+            this.tlpSelectProcess.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSelectProcess.Name = "tlpSelectProcess";
+            this.tlpSelectProcess.RowCount = 2;
+            this.tlpSelectProcess.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSelectProcess.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSelectProcess.Size = new System.Drawing.Size(700, 417);
+            this.tlpSelectProcess.TabIndex = 12;
+            // 
+            // tProcessName
+            // 
+            this.tProcessName.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tProcessName.CellImpactHeight = false;
+            this.tProcessName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tProcessName.EmptyHeader = true;
+            this.tProcessName.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tProcessName.Gap = 8;
+            this.tProcessName.GapCell = 0;
+            this.tProcessName.Gaps = new System.Drawing.Size(8, 8);
+            this.tProcessName.Location = new System.Drawing.Point(352, 31);
+            this.tProcessName.Margin = new System.Windows.Forms.Padding(2);
+            this.tProcessName.Name = "tProcessName";
+            this.tProcessName.Radius = 6;
+            this.tProcessName.Size = new System.Drawing.Size(346, 384);
+            this.tProcessName.TabIndex = 16;
+            this.tProcessName.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tProcessName_CellDoubleClick);
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Location = new System.Drawing.Point(353, 3);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(344, 23);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "按 [ 进程名称 ] 拦截 ( 双击可删除名称 )";
+            // 
+            // tProcessID
+            // 
+            this.tProcessID.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tProcessID.CellImpactHeight = false;
+            this.tProcessID.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tProcessID.EmptyHeader = true;
+            this.tProcessID.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tProcessID.Gap = 8;
+            this.tProcessID.GapCell = 0;
+            this.tProcessID.Gaps = new System.Drawing.Size(8, 8);
+            this.tProcessID.Location = new System.Drawing.Point(2, 31);
+            this.tProcessID.Margin = new System.Windows.Forms.Padding(2);
+            this.tProcessID.Name = "tProcessID";
+            this.tProcessID.Radius = 6;
+            this.tProcessID.Size = new System.Drawing.Size(346, 384);
+            this.tProcessID.TabIndex = 13;
+            this.tProcessID.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tProcessID_CellDoubleClick);
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(344, 23);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "按 [ 进程编号 ] 拦截 ( 双击添加到名称 )";
             // 
             // ProcessSetting
             // 
@@ -454,6 +514,7 @@
             this.tlpLoadDriver.PerformLayout();
             this.tlpMustTCP.ResumeLayout(false);
             this.tlpMustTCP.PerformLayout();
+            this.tlpSelectProcess.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -483,6 +544,10 @@
         private AntdUI.Input txtMustTCP_AppointPort;
         private AntdUI.TooltipComponent ttcLoadDriver;
         private AntdUI.Label lSaveReminder;
-        private AntdUI.Table tProcessList;
+        private TableLayoutPanelEx tlpSelectProcess;
+        private AntdUI.Table tProcessID;
+        private AntdUI.Label label2;
+        private AntdUI.Label label1;
+        private AntdUI.Table tProcessName;
     }
 }
