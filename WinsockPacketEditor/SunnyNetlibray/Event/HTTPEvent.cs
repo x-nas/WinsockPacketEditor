@@ -546,7 +546,7 @@ namespace SunnyNetlibray.Event
         /// <returns>服务器响应 IP 地址。</returns>
         public string ServerAddress()
         {
-            return Bridge.GetResponseServerAddress(MessageId);
+            return Bridge.GetResponseStatus(MessageId);
         }
 
         /// <summary>

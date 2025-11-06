@@ -1,9 +1,8 @@
-﻿
-using SunnyNetlibray;
+﻿using SunnyNetlibray;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static SunnyNetlibray.Internal.api;
+
 namespace SunnyNetlibray.Internal
 {
     internal class api
@@ -14,7 +13,7 @@ namespace SunnyNetlibray.Internal
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr GetProcAddress(IntPtr hModule, string lpProcName);
 
-        private static string LibraryName = Environment.Is64BitProcess ? "SunnyNet64.dll" : "SunnyNet.dll";
+        private static string LibraryName = Environment.Is64BitProcess ? "x64\\SunnyNet64.dll" : "x86\\SunnyNet.dll";       
         static IntPtr Handle = LoadLibrary(LibraryName);
 
         private static IntPtr GetFunction(string func)

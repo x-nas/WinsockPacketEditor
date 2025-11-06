@@ -86,7 +86,7 @@ namespace SunnyNetlibray
             _HeartbeatCallback = callback;
             if (callback == null)
             {
-                Bridge.WebsocketHeartbeat(context, 0, new IntPtr(0));
+                Bridge.WebsocketHeartbeat(context, 0, (IntPtr)0);
                 return;
             }
             funcCall2 = new WsDefaultHeartbeatCallback(DefaultWsHeartbeatCallback);

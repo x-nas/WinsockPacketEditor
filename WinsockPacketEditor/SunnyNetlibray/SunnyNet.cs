@@ -1,8 +1,8 @@
-﻿using System;
-using SunnyNetlibray.Event;
+﻿using SunnyNetlibray.Event;
 using SunnyNetlibray.Internal;
 using System.Runtime.InteropServices;
 using SunnyNetInternal = SunnyNetlibray.Internal.SunnyNet;
+using System;
 
 namespace SunnyNetlibray
 {
@@ -244,7 +244,7 @@ namespace SunnyNetlibray
         public bool InstallCertificate()
         {
             string err = Bridge.SunnyNetInstallCert(_sunnyNetContext);
-            return err.Contains("添加到存储") || err.Contains("已经在存储中") || err.Contains("already in store");
+            return err.Contains("添加到存储") || err.Contains("已经在存储中");
         }
 
         /// <summary>

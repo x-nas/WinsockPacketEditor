@@ -609,6 +609,9 @@
     <Compile Include="WebAPI\SocketInfo_Controller.cs" />
     <Compile Include="WebAPI\Socket_Web.cs" />
     <Compile Include="WebAPI\SystemInfo_Controller.cs" />
+    <Content Include="x86\SunnyNet.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Controls\AccountEdit.resx">
       <DependentUpon>AccountEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -1079,12 +1082,6 @@
     <None Include="Resources\zm.png" />
     <None Include="Resources\zw.png" />
     <None Include="Resources\Flag_Local.png" />
-    <Content Include="SunnyNet.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SunnyNet64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1156,6 +1153,9 @@
     </Content>
     <Content Include="wpe.ico" />
     <Content Include="x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\SunnyNet64.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\SQLite.Interop.dll">

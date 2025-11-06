@@ -632,7 +632,7 @@ namespace SunnyNetlibray.Internal
         public static bool SetTcpAgent(long MessageId, string ProxyUrl, int outTime = 30000)
         {
             IntPtr i1 = Tool.StringToIntptr(ProxyUrl);
-            bool res = api.Sunny_SetTcpAgent(new IntPtr(MessageId), i1, new IntPtr(outTime));
+            bool res = api.Sunny_SetTcpAgent(new IntPtr(MessageId), i1, (IntPtr)outTime);
             Tool.PtrFree(i1);
             return res;
         }
