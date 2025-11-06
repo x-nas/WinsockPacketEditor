@@ -11,22 +11,25 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                if (Conn.GetUser().Equals("驱动程序"))
                 {
-                    if (Conn.Type() == HTTPEvent.EventType_HTTP_Request)
+                    if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                     {
-                        string ConnPort = "80";
-                        if (Conn.URL().ToUpper().StartsWith("HTTPS://"))
+                        if (Conn.Type() == HTTPEvent.EventType_HTTP_Request)
                         {
-                            ConnPort = "443";
-                        }
+                            string ConnPort = "80";
+                            if (Conn.URL().ToUpper().StartsWith("HTTPS://"))
+                            {
+                                ConnPort = "443";
+                            }
 
-                        if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
-                        {
-                            Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
+                            {
+                                Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                            }
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -42,18 +45,21 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                if (Conn.GetUser().Equals("驱动程序"))
                 {
-                    if (Conn.Type() == TCPEvent.EventType_TCP_About)
+                    if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                     {
-                        string ConnPort = Conn.RemoteAddr().Split(':')[1];
-
-                        if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                        if (Conn.Type() == TCPEvent.EventType_TCP_About)
                         {
-                            Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                            string ConnPort = Conn.RemoteAddr().Split(':')[1];
+
+                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                            {
+                                Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                            }
                         }
                     }
-                }                    
+                }                                        
             }
             catch (Exception ex)
             {
