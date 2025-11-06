@@ -5,6 +5,23 @@ namespace WinsockPacketEditor
 {
     public class ProcessInfo : NotifyProperty
     {
+        #region//是否选中
+
+        bool _IsCheck = false;
+
+        public bool IsCheck
+        {
+            get => _IsCheck;
+            set
+            {
+                if (_IsCheck == value) return;
+                _IsCheck = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//进程图标
 
         Image _ICO;

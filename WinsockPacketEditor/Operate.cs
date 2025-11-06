@@ -5115,8 +5115,8 @@ namespace WinsockPacketEditor
                 public static SunnyNetCallback syCallBack = new SunnyNetCallback();
                 public static bool IsLoadDriver = false;
                 public static int DriverType = 1;
-                public static List<AntdUI.TransferItem> lstSelectProcess = new List<AntdUI.TransferItem>();
-                public static IPConnectionFilter ipFilter = new IPConnectionFilter();                
+                public static IPConnectionFilter ipFilter = new IPConnectionFilter();
+                public static List<int> lstSelectProcessID = new List<int>();
                 public static long ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static int FilterProxy_CNT = 0;

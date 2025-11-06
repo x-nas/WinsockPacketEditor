@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -10,6 +9,7 @@ namespace WinsockPacketEditor
     public partial class ProcessSetting : UserControl
     {
         private Form form = null;
+        private List<ProcessInfo> lstProcessInfo = new List<ProcessInfo>();
 
         #region//窗体事件
 
@@ -23,7 +23,9 @@ namespace WinsockPacketEditor
         {
             try
             {
+                this.Dark_Changed();
                 this.InitProcessList();
+                this.ShowProcessList();
 
                 switch (Operate.ProxyConfig.Proxy.DriverType)
                 {
@@ -40,8 +42,6 @@ namespace WinsockPacketEditor
                         break;                    
                 }
 
-                this.transferProcessList.SourceTitle = AntdUI.Localization.Get("ProcessSetting.SourceTitle", "进程列表");
-                this.transferProcessList.TargetTitle = AntdUI.Localization.Get("ProcessSetting.TargetTitle", "拦截列表");
                 this.ttcLoadDriver.SetTip(this.rbNFAPI, AntdUI.Localization.Get("ProcessSetting.NFAPI", "限制 1000000 个 TCP 连接和 UDP 套接字\r\n超过此限制后，需要重启才能继续拦截"));
                 this.ttcLoadDriver.SetTip(this.rbProxifier, AntdUI.Localization.Get("ProcessSetting.Proxifier", "不支持 UDP, 不支持32位操作系统"));
                 this.ttcLoadDriver.SetTip(this.rbWinDivert, AntdUI.Localization.Get("ProcessSetting.WinDivert", "不支持拦截 127.0.0.1 数据"));
@@ -57,7 +57,7 @@ namespace WinsockPacketEditor
                 this.cbMustTCP_Auth.Checked = Operate.ProxyConfig.Proxy.MustTCP_Auth;               
 
                 this.MustTCP_Auth_Changed();
-                this.MustTCP_AppointPort_Changed();
+                this.MustTCP_AppointPort_Changed();                
             }
             catch (Exception ex)
             {
@@ -65,55 +65,73 @@ namespace WinsockPacketEditor
             }                        
         }
 
-        #endregion
-
-        #region//初始化进程列表
-
         private void InitProcessList()
         {
-            try
-            {
-                List<AntdUI.TransferItem> lstProcess = new List<AntdUI.TransferItem>();
-
-                AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+            tProcessList.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.ColumnCheck("IsCheck").SetFixed(),
+                new AntdUI.Column("ICO", string.Empty, AntdUI.ColumnAlign.Center)
                 {
-                    Radius = 6,
-                    Font = new Font("Microsoft YaHei UI", 9F),
-                }, (config) =>
-                {
-                    config.Text = AntdUI.Localization.Get("Loading", "正在加载...");                    
-                    var processList = Operate.ProcessConfig.GetProcessList();
-
-                    foreach (var process in processList)
+                    Render = (value, record, rowindex)=>
                     {
-                        AntdUI.TransferItem tiProcess = new AntdUI.TransferItem()
+                        return new AntdUI.CellImage((Image)value)
                         {
-                            Text = string.Format("{0} [{1}]", process.ProcessName, process.ProcessID),
-                            Value = process
+                            Size = new Size(35, 35),
                         };
+                    },
+                }.SetLocalizationTitleID("Table.ProcessList.Column."),
+                new AntdUI.Column("ProcessName", "进程名称").SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
+                new AntdUI.Column("ProcessID", "进程编号").SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
+                new AntdUI.Column("ProcessPath", "路径").SetLocalizationTitleID("Table.ProcessList.Column."),
+            };
+        }
 
-                        lstProcess.Add(tiProcess);
-
-                        if (Operate.ProxyConfig.Proxy.lstSelectProcess.Count > 0)
-                        {
-                            var existingItem = Operate.ProxyConfig.Proxy.lstSelectProcess.FirstOrDefault(x => x.Text == tiProcess.Text);
-                            if (existingItem != null)
-                            {
-                                tiProcess.IsTarget = true;
-                            }
-                        }                        
-                    }
-                    
-                }, () =>
-                {
-                    this.transferProcessList.Items = lstProcess;
-                    this.transferProcessList.Reload();
-                });
-            }
-            catch (Exception ex)
+        public void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
             {
-                Operate.DoLog(nameof(InitProcessList), ex.Message);
+                this.tProcessList.BackColor = Operate.SystemConfig.Color_40;
+                this.tProcessList.ColumnBack = Operate.SystemConfig.Color_40;
             }
+            else
+            {
+                this.tProcessList.BackColor = Color.White;
+                this.tProcessList.ColumnBack = null;
+            }
+        }
+
+        #endregion
+
+        #region//显示所有进程
+
+        private void ShowProcessList()
+        {
+            this.tProcessList.PauseLayout = true;
+
+            AntdUI.Spin.open(this.tProcessList, new AntdUI.Spin.Config()
+            {
+                Radius = 6,
+                Font = new Font("Microsoft YaHei UI", 9F),
+            }, (config) =>
+            {
+                config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+                this.lstProcessInfo = Operate.ProcessConfig.GetProcessList();
+            }, () =>
+            {
+                if (Operate.ProxyConfig.Proxy.lstSelectProcessID.Count > 0 && this.lstProcessInfo.Count > 0)
+                {
+                    foreach (ProcessInfo pi in this.lstProcessInfo)
+                    {
+                        if (Operate.ProxyConfig.Proxy.lstSelectProcessID.Contains(pi.ProcessID))
+                        {
+                            pi.IsCheck = true;
+                        }
+                    }
+                }
+
+                this.tProcessList.DataSource = this.lstProcessInfo;
+                this.tProcessList.SelectedIndex = -1;
+                this.tProcessList.PauseLayout = false;
+            });
         }
 
         #endregion
@@ -215,7 +233,7 @@ namespace WinsockPacketEditor
 
         private void bRefresh_Click(object sender, EventArgs e)
         {
-            this.InitProcessList();
+            this.ShowProcessList();
         }
 
         #endregion
@@ -315,18 +333,16 @@ namespace WinsockPacketEditor
 
                 if (Operate.ProxyConfig.Proxy.IsLoadDriver)
                 {
-                    var targetItems = this.transferProcessList.GetTargetItems();
-                    Operate.ProxyConfig.Proxy.lstSelectProcess = targetItems.Count > 0
-                        ? targetItems
-                        : new List<TransferItem>();
-
+                    Operate.ProxyConfig.Proxy.lstSelectProcessID.Clear();
                     Operate.ProxyConfig.Proxy.syNet.RemoveAllProcesses();
-                    foreach (TransferItem item in Operate.ProxyConfig.Proxy.lstSelectProcess)
+
+                    foreach (ProcessInfo pi in this.lstProcessInfo)
                     {
-                        if (item.Value is ProcessInfo pi)
+                        if (pi.IsCheck)
                         {
+                            Operate.ProxyConfig.Proxy.lstSelectProcessID.Add(pi.ProcessID);
                             Operate.ProxyConfig.Proxy.syNet.AddProcessPid(pi.ProcessID);
-                        }
+                        }                        
                     }
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "进程设置保存成功", TType.Success)

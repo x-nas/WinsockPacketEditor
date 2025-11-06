@@ -40,7 +40,6 @@
             this.rbNFAPI = new AntdUI.Radio();
             this.lSelectDriver = new AntdUI.Label();
             this.rbProxifier = new AntdUI.Radio();
-            this.transferProcessList = new AntdUI.Transfer();
             this.tlpMustTCP = new WinsockPacketEditor.TableLayoutPanelEx();
             this.txtMustTCP_AppointPort = new AntdUI.Input();
             this.cbMustTCP_AppointPort = new AntdUI.Checkbox();
@@ -52,6 +51,7 @@
             this.txtMustTCP_IP = new AntdUI.Input();
             this.lMustTCP = new AntdUI.Label();
             this.ttcLoadDriver = new AntdUI.TooltipComponent();
+            this.tProcessList = new AntdUI.Table();
             this.tlpProcessSetting.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpLoadDriver.SuspendLayout();
@@ -62,10 +62,10 @@
             // 
             this.tlpProcessSetting.ColumnCount = 1;
             this.tlpProcessSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpProcessSetting.Controls.Add(this.tProcessList, 0, 2);
             this.tlpProcessSetting.Controls.Add(this.lSaveReminder, 0, 4);
             this.tlpProcessSetting.Controls.Add(this.tlpButton, 0, 5);
             this.tlpProcessSetting.Controls.Add(this.tlpLoadDriver, 0, 0);
-            this.tlpProcessSetting.Controls.Add(this.transferProcessList, 0, 2);
             this.tlpProcessSetting.Controls.Add(this.tlpMustTCP, 0, 1);
             this.tlpProcessSetting.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpProcessSetting.Location = new System.Drawing.Point(0, 0);
@@ -252,15 +252,6 @@
             this.rbProxifier.Text = "Proxifier";
             this.ttcLoadDriver.SetTip(this.rbProxifier, "");
             // 
-            // transferProcessList
-            // 
-            this.transferProcessList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.transferProcessList.Location = new System.Drawing.Point(3, 183);
-            this.transferProcessList.Name = "transferProcessList";
-            this.transferProcessList.Size = new System.Drawing.Size(694, 411);
-            this.transferProcessList.TabIndex = 7;
-            this.transferProcessList.Text = "transfer1";
-            // 
             // tlpMustTCP
             // 
             this.tlpMustTCP.ColumnCount = 3;
@@ -427,6 +418,24 @@
             this.lMustTCP.Text = "强制转代理 :";
             this.lMustTCP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // tProcessList
+            // 
+            this.tProcessList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tProcessList.CellImpactHeight = false;
+            this.tProcessList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tProcessList.Empty = false;
+            this.tProcessList.EmptyHeader = true;
+            this.tProcessList.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tProcessList.Gap = 8;
+            this.tProcessList.GapCell = 0;
+            this.tProcessList.Gaps = new System.Drawing.Size(8, 8);
+            this.tProcessList.Location = new System.Drawing.Point(2, 182);
+            this.tProcessList.Margin = new System.Windows.Forms.Padding(2);
+            this.tProcessList.Name = "tProcessList";
+            this.tProcessList.Radius = 6;
+            this.tProcessList.Size = new System.Drawing.Size(696, 413);
+            this.tProcessList.TabIndex = 12;
+            // 
             // ProcessSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -460,7 +469,6 @@
         private AntdUI.Radio rbProxifier;
         private AntdUI.Radio rbWinDivert;
         private AntdUI.Radio rbNFAPI;
-        private AntdUI.Transfer transferProcessList;
         private AntdUI.Button bUninstallDriver;
         private TableLayoutPanelEx tlpMustTCP;
         private AntdUI.Label lMustTCP;
@@ -475,5 +483,6 @@
         private AntdUI.Input txtMustTCP_AppointPort;
         private AntdUI.TooltipComponent ttcLoadDriver;
         private AntdUI.Label lSaveReminder;
+        private AntdUI.Table tProcessList;
     }
 }
