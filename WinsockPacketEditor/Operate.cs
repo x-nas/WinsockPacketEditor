@@ -5123,6 +5123,7 @@ namespace WinsockPacketEditor
             {
                 public static ProxyAppServer ProxyServer = null;
                 public static SunnyNetlibray.SunnyNet syNet = new SunnyNetlibray.SunnyNet();
+                public static SunnyNetlibray.CertManager syCert = new SunnyNetlibray.CertManager();
                 public static SunnyNetCallback syCallBack = new SunnyNetCallback();
                 public static bool IsLoadDriver = false;
                 public static int DriverType = 1;

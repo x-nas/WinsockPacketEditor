@@ -954,14 +954,24 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(InitHttpProxy), Operate.ProxyConfig.Proxy.syNet.GetError());
                 }
+                               
+                bool bCreateCert = Operate.ProxyConfig.Proxy.syCert.CreateCertificate(
+                    "WPE64", 
+                    country: "CN", 
+                    organization: "wpe64.com",
+                    department: "wpe64.com",
+                    province: "ShangHai",
+                    city: "ShangHai",
+                    expirationDays: 3650);
+
+                if (bCreateCert)
+                {
+                    Operate.ProxyConfig.Proxy.syNet.SetCustomCACertificate(Operate.ProxyConfig.Proxy.syCert);
+                }
 
                 if (Operate.ProxyConfig.Proxy.syNet.InstallCertificate())
                 {
-                    Operate.DoLog(nameof(InitHttpProxy), "SSL 证书安装成功");
-                }
-                else
-                {
-                    Operate.DoLog(nameof(InitHttpProxy), Operate.ProxyConfig.Proxy.syNet.GetError());
+                    Operate.DoLog(nameof(InitHttpProxy), "WPE64 证书安装成功");
                 }
 
                 return true;
