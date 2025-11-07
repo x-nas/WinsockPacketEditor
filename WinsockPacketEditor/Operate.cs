@@ -2444,6 +2444,17 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//获取一个随机十六进制字节
+
+            private static readonly Random rdHex = new Random();
+
+            public static byte GetRandomHexByte()
+            {
+                return (byte)rdHex.Next(256);
+            }
+
+            #endregion
+
             #region//注册快捷键
 
             public static bool RegisterHotkey_FromText(int KeyID, string hkString)
@@ -4935,13 +4946,13 @@ namespace WinsockPacketEditor
                 {
                     return Icon.ExtractAssociatedIcon(filePath)?.ToBitmap();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    DoLog(nameof(IconFromFile), ex.Message);
+                    //
                 }
 
                 return new Icon(SystemIcons.Application, 256, 256).ToBitmap();
-            }
+            }           
 
             private static string GetFilePath(Process process)
             {
@@ -15174,16 +15185,20 @@ namespace WinsockPacketEditor
                 #region//执行替换（普通滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public static bool Replace_Normal(FilterInfo sfi, Span<byte> bufferSpan)
+
+                public static bool Replace_Normal(FilterInfo fi, Span<byte> bufferSpan)
                 {
-                    if (string.IsNullOrEmpty(sfi.FSearch))
+                    if (string.IsNullOrEmpty(fi.FSearch))
                         return false;
 
-                    bool hasModifications = !string.IsNullOrEmpty(sfi.FModify);
-                    bool hasProgressions = !string.IsNullOrEmpty(sfi.ProgressionPosition);
+                    bool hasModifications = !string.IsNullOrEmpty(fi.FModify);
+                    bool hasProgressions = !string.IsNullOrEmpty(fi.ProgressionPosition);
+                    bool hasRandoms = !string.IsNullOrEmpty(fi.RandomPosition);
 
-                    if (!hasModifications && !hasProgressions)
+                    if (!hasModifications && !hasProgressions && !hasRandoms)
+                    {
                         return false;
+                    }                        
 
                     try
                     {
@@ -15191,12 +15206,17 @@ namespace WinsockPacketEditor
 
                         if (hasModifications)
                         {
-                            result |= FilterConfig.Filter.ProcessModifications(sfi, bufferSpan);
+                            result |= FilterConfig.Filter.ProcessModifications(fi, bufferSpan);
                         }
 
                         if (hasProgressions)
                         {
-                            result |= FilterConfig.Filter.ProcessProgressions(sfi, bufferSpan);
+                            result |= FilterConfig.Filter.ProcessProgressions(fi, bufferSpan);
+                        }
+
+                        if (hasRandoms)
+                        {
+                            result |= FilterConfig.Filter.ProcessRandoms(fi, bufferSpan);
                         }
 
                         return result;
@@ -15209,10 +15229,11 @@ namespace WinsockPacketEditor
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static bool ProcessModifications(FilterInfo sfi, Span<byte> bufferSpan)
+
+                private static bool ProcessModifications(FilterInfo fi, Span<byte> bufferSpan)
                 {
                     bool modified = false;
-                    string[] modifications = sfi.FModify.Split(',');
+                    string[] modifications = fi.FModify.Split(',');
 
                     foreach (string modification in modifications)
                     {
@@ -15237,12 +15258,13 @@ namespace WinsockPacketEditor
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static bool ProcessProgressions(FilterInfo sfi, Span<byte> bufferSpan)
+
+                private static bool ProcessProgressions(FilterInfo fi, Span<byte> bufferSpan)
                 {
                     bool modified = false;
                     int carryCount = 0;
-                    int step = (int)sfi.ProgressionStep;
-                    string[] positions = sfi.ProgressionPosition.Split(',');
+                    int step = (int)fi.ProgressionStep;
+                    string[] positions = fi.ProgressionPosition.Split(',');
 
                     foreach (string position in positions)
                     {
@@ -15255,14 +15277,14 @@ namespace WinsockPacketEditor
                         }
 
                         byte currentValue = bufferSpan[index];
-                        byte newValue = SystemConfig.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
+                        byte newValue = SystemConfig.GetStepByte(currentValue, step * (fi.ProgressionCount + 1), out carryCount);
                         bufferSpan[index] = newValue;
                         modified = true;
-                        sfi.IsProgressionDone = true;
+                        fi.IsProgressionDone = true;
 
-                        if (sfi.IsProgressionCarry && carryCount > 0)
+                        if (fi.IsProgressionCarry && carryCount > 0)
                         {
-                            for (int i = 0; i < sfi.ProgressionCarryNumber; i++)
+                            for (int i = 0; i < fi.ProgressionCarryNumber; i++)
                             {
                                 int prevIndex = index - (i + 1);
                                 if (prevIndex < 0)
@@ -15282,35 +15304,70 @@ namespace WinsockPacketEditor
                     return modified;
                 }
 
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
+                private static bool ProcessRandoms(FilterInfo fi, Span<byte> bufferSpan)
+                {
+                    bool modified = false;
+                    string[] positions = fi.RandomPosition.Split(',');
+
+                    foreach (string position in positions)
+                    {
+                        if (string.IsNullOrEmpty(position) ||
+                            !int.TryParse(position, out int index) ||
+                            index < 0 ||
+                            index >= bufferSpan.Length)
+                        {
+                            continue;
+                        }
+
+                        byte currentValue = bufferSpan[index];
+                        byte newValue = SystemConfig.GetRandomHexByte();
+                        bufferSpan[index] = newValue;
+                        modified = true;
+                    }
+
+                    return modified;
+                }
+
                 #endregion
 
                 #region//执行替换（高级滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public static bool Replace_Advanced(FilterInfo sfi, int matchIndex, Span<byte> bufferSpan)
+
+                public static bool Replace_Advanced(FilterInfo fi, int matchIndex, Span<byte> bufferSpan)
                 {
-                    if (string.IsNullOrEmpty(sfi.FSearch))
+                    if (string.IsNullOrEmpty(fi.FSearch))
                         return false;
 
-                    bool hasModifications = !string.IsNullOrEmpty(sfi.FModify);
-                    bool hasProgressions = !string.IsNullOrEmpty(sfi.ProgressionPosition);
+                    bool hasModifications = !string.IsNullOrEmpty(fi.FModify);
+                    bool hasProgressions = !string.IsNullOrEmpty(fi.ProgressionPosition);
+                    bool hasRandoms = !string.IsNullOrEmpty(fi.RandomPosition);
 
-                    if (!hasModifications && !hasProgressions)
+                    if (!hasModifications && !hasProgressions && !hasRandoms)
+                    {
                         return false;
+                    }
 
                     try
                     {
                         bool result = false;
-                        var startFrom = sfi.FStartFrom;
+                        var startFrom = fi.FStartFrom;
 
                         if (hasModifications)
                         {
-                            result |= ProcessAdvancedModifications(sfi, matchIndex, bufferSpan, startFrom);
+                            result |= FilterConfig.Filter.ProcessAdvancedModifications(fi, matchIndex, bufferSpan, startFrom);
                         }
 
                         if (hasProgressions)
                         {
-                            result |= ProcessAdvancedProgressions(sfi, matchIndex, bufferSpan, startFrom);
+                            result |= FilterConfig.Filter.ProcessAdvancedProgressions(fi, matchIndex, bufferSpan, startFrom);
+                        }
+
+                        if (hasRandoms)
+                        {
+                            result |= FilterConfig.Filter.ProcessAdvancedRandoms(fi, matchIndex, bufferSpan, startFrom);
                         }
 
                         return result;
@@ -15323,14 +15380,15 @@ namespace WinsockPacketEditor
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 private static bool ProcessAdvancedModifications(
-                    FilterInfo sfi,
+                    FilterInfo fi,
                     int matchIndex,
                     Span<byte> bufferSpan,
                     FilterConfig.Filter.FilterStartFrom startFrom)
                 {
                     bool modified = false;
-                    string[] modifications = sfi.FModify.Split(',');
+                    string[] modifications = fi.FModify.Split(',');
 
                     foreach (string modification in modifications)
                     {
@@ -15366,16 +15424,17 @@ namespace WinsockPacketEditor
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 private static bool ProcessAdvancedProgressions(
-                    FilterInfo sfi,
+                    FilterInfo fi,
                     int matchIndex,
                     Span<byte> bufferSpan,
                     FilterConfig.Filter.FilterStartFrom startFrom)
                 {
                     bool modified = false;
                     int carryCount = 0;
-                    int step = (int)sfi.ProgressionStep;
-                    string[] positions = sfi.ProgressionPosition.Split(',');
+                    int step = (int)fi.ProgressionStep;
+                    string[] positions = fi.ProgressionPosition.Split(',');
 
                     foreach (string position in positions)
                     {
@@ -15391,14 +15450,14 @@ namespace WinsockPacketEditor
                             continue;
 
                         byte currentValue = bufferSpan[index];
-                        byte newValue = SystemConfig.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
+                        byte newValue = SystemConfig.GetStepByte(currentValue, step * (fi.ProgressionCount + 1), out carryCount);
                         bufferSpan[index] = newValue;
                         modified = true;
-                        sfi.IsProgressionDone = true;
+                        fi.IsProgressionDone = true;
 
-                        if (sfi.IsProgressionCarry && carryCount > 0)
+                        if (fi.IsProgressionCarry && carryCount > 0)
                         {
-                            HandleCarryOver(sfi, bufferSpan, index, ref carryCount);
+                            HandleCarryOver(fi, bufferSpan, index, ref carryCount);
                         }
                     }
 
@@ -15406,9 +15465,43 @@ namespace WinsockPacketEditor
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static void HandleCarryOver(FilterInfo sfi, Span<byte> bufferSpan, int index, ref int carryCount)
+
+                private static bool ProcessAdvancedRandoms(
+                    FilterInfo fi,
+                    int matchIndex,
+                    Span<byte> bufferSpan,
+                    FilterConfig.Filter.FilterStartFrom startFrom)
                 {
-                    for (int i = 0; i < sfi.ProgressionCarryNumber && carryCount > 0; i++)
+                    bool modified = false;
+                    string[] positions = fi.RandomPosition.Split(',');
+
+                    foreach (string position in positions)
+                    {
+                        if (string.IsNullOrEmpty(position) || !int.TryParse(position, out int index))
+                            continue;
+
+                        if (startFrom == FilterConfig.Filter.FilterStartFrom.Position)
+                        {
+                            index += matchIndex;
+                        }
+
+                        if (index < 0 || index >= bufferSpan.Length)
+                            continue;
+
+                        byte currentValue = bufferSpan[index];
+                        byte newValue = SystemConfig.GetRandomHexByte();
+                        bufferSpan[index] = newValue;
+                        modified = true;
+                    }
+
+                    return modified;
+                }
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
+                private static void HandleCarryOver(FilterInfo fi, Span<byte> bufferSpan, int index, ref int carryCount)
+                {
+                    for (int i = 0; i < fi.ProgressionCarryNumber && carryCount > 0; i++)
                     {
                         int prevIndex = index - (i + 1);
                         if (prevIndex < 0)
