@@ -521,6 +521,40 @@ namespace WinsockPacketEditor.Properties {
         }
         
         /// <summary>
+        ///   查找类似 -----BEGIN CERTIFICATE-----
+        ///MIIDxDCCAqygAwIBAgIRAIf2ANuMpaWwEskuAGzy3vEwDQYJKoZIhvcNAQELBQAw
+        ///azELMAkGA1UEBhMCQ04xETAPBgNVBAgTCFNoYW5nSGFpMREwDwYDVQQHEwhTaGFu
+        ///Z0hhaTESMBAGA1UEChMJd3BlNjQuY29tMRIwEAYDVQQLEwl3cGU2NC5jb20xDjAM
+        ///BgNVBAMTBVdQRTY0MCAXDTI1MTEwNzA3NDgyNFoYDzIxMjUxMDE0MDc0ODI0WjBr
+        ///MQswCQYDVQQGEwJDTjERMA8GA1UECBMIU2hhbmdIYWkxETAPBgNVBAcTCFNoYW5n
+        ///SGFpMRIwEAYDVQQKEwl3cGU2NC5jb20xEjAQBgNVBAsTCXdwZTY0LmNvbTEOMAwG
+        ///A1UEAxMFV1BFNjQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCzUw/2
+        ///raiRAWqEgPbL3VBmsVYM7 [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string Cert_Ca {
+            get {
+                return ResourceManager.GetString("Cert_Ca", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 -----BEGIN RSA PRIVATE KEY-----
+        ///MIIEowIBAAKCAQEAs1MP9q2okQFqhID2y91QZrFWDO9kuw5IxxX/RuOBU29fmJp1
+        ///OmtspfAgWSXWL2tc0r15GTA56sL6C0dD4YW+t5BJnU9wkhuibbMw0bufZDtlN191
+        ///1XWQWyfjTL4RTby2kPOd+zWuejMsXfc6R4VJszbGAmULwHIinLptsrDf8aWvvd33
+        ///jCv/6Z+e5vvtFgP1kV6k2PYrmGI+Udt9mrX2sYUjEmWPEO1ZJKLgPUatFcNSOF3K
+        ////npzSHArwXsQwGCFXQKL4VwDQxuZIQqfa1LLtlQ13F8pY7He1GKYw079Zi8DXllk
+        ///en79NosQMqjD8MpmsnqbdCcqmcPhaPzVTbipvQIDAQABAoIBAA2+fQe8EaJjiGV1
+        ///ePTxFnt4dg7xvje0BZH0tqcZQs1BSQNqOzfqCd7CA8ixZLQnt2qTiReMIbRDk2SP
+        ///5rz/QjnRfkLnVspsA [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string Cert_Key {
+            get {
+                return ResourceManager.GetString("Cert_Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Bitmap cf {

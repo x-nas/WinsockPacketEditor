@@ -949,7 +949,7 @@ namespace WinsockPacketEditor
                     return true;
                 }
 
-                Operate.ProxyConfig.Proxy.syNet.BindPort(Operate.ProxyConfig.Proxy.HTTP_Port);                
+                Operate.ProxyConfig.Proxy.syNet.BindPort(Operate.ProxyConfig.Proxy.HTTP_Port);
                 Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);
 
                 if (Operate.ProxyConfig.Proxy.syNet.Start())
@@ -966,17 +966,8 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(InitHttpProxy), Operate.ProxyConfig.Proxy.syNet.GetError());
                 }
-                               
-                bool bCreateCert = Operate.ProxyConfig.Proxy.syCert.CreateCertificate(
-                    "WPE64", 
-                    country: "CN", 
-                    organization: "wpe64.com",
-                    department: "wpe64.com",
-                    province: "ShangHai",
-                    city: "ShangHai",
-                    expirationDays: 3650);
 
-                if (bCreateCert)
+                if (Operate.ProxyConfig.Proxy.syCert.LoadX509Certificate(Properties.Resources.Cert_Ca, Properties.Resources.Cert_Key))
                 {
                     Operate.ProxyConfig.Proxy.syNet.SetCustomCACertificate(Operate.ProxyConfig.Proxy.syCert);
                 }
@@ -1323,6 +1314,6 @@ namespace WinsockPacketEditor
             this.form.TopMost = this.cbTopMost.Checked;
         }
 
-        #endregion        
+        #endregion
     }
 }

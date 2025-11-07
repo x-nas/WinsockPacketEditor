@@ -10,26 +10,90 @@ namespace WinsockPacketEditor
         public void OnHttpCallback(HTTPEvent Conn)
         {
             try
-            {
-                if (Conn.GetUser().Equals("驱动程序"))
-                {
-                    if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
-                    {
-                        if (Conn.Type() == HTTPEvent.EventType_HTTP_Request)
-                        {
-                            string ConnPort = "80";
-                            if (Conn.URL().ToUpper().StartsWith("HTTPS://"))
-                            {
-                                ConnPort = "443";
-                            }
+            {                
+                Operate.ProxyConfig.Proxy.DomainType dtType = Operate.ProxyConfig.Proxy.DomainType.HTTP;
 
-                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
+                if (Conn.URL().ToUpper().StartsWith("HTTPS"))
+                {                    
+                    dtType = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
+                }
+
+                switch (Conn.Type())
+                {
+                    case HTTPEvent.EventType_HTTP_Request:
+
+                        string ConnPort = "80";
+                        Operate.PacketConfig.Packet.PacketType ptRequest = Operate.PacketConfig.Packet.PacketType.HTTP_Req;
+                        
+                        if (dtType == Operate.ProxyConfig.Proxy.DomainType.HTTPS)
+                        {
+                            ConnPort = "443";
+                            ptRequest = Operate.PacketConfig.Packet.PacketType.HTTPS_Req;
+                        }
+
+                        if (Conn.GetUser().Equals("驱动程序"))
+                        {
+                            if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                             {
-                                Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                                if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
+                                {
+                                    Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                                    return;
+                                }
                             }
                         }
-                    }
-                }                
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            Conn.Request().BodyLen(),
+                            0,
+                            ptRequest,
+                            Conn.ClientIP(),
+                            Conn.Response().ServerAddress(),
+                            Conn.URL(),
+                            dtType,
+                            Conn.Request().Body().Bytes,
+                            Conn.Request().Body().Bytes);
+
+                        break;
+
+                    case HTTPEvent.EventType_HTTP_Response:
+
+                        Operate.PacketConfig.Packet.PacketType ptResponse = Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
+                        
+                        if (dtType == Operate.ProxyConfig.Proxy.DomainType.HTTPS)
+                        {
+                            ptResponse = Operate.PacketConfig.Packet.PacketType.HTTPS_Resp;
+                        }
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            Conn.Response().Body().Length,
+                            0,
+                            ptResponse,
+                            Conn.ClientIP(),
+                            Conn.Response().ServerAddress(),
+                            Conn.URL(),
+                            dtType,
+                            Conn.Response().Body().Bytes,
+                            Conn.Response().Body().Bytes);
+
+                        break;
+
+                    case HTTPEvent.EventType_HTTP_Error:
+
+                        string sError = Conn.Error();
+                        if (sError.StartsWith("[SunnyNet]"))
+                        {
+                            sError = sError.Remove(0, 10);
+                        }
+
+                        Operate.DoLog(nameof(OnHttpCallback), sError);
+
+                        break;
+                }
             }
             catch (Exception ex)
             {
@@ -56,6 +120,7 @@ namespace WinsockPacketEditor
                             if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
                             {
                                 Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                                return;
                             }
                         }
                     }
