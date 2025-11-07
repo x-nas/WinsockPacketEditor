@@ -378,6 +378,15 @@ namespace WinsockPacketEditor
                 case "Paste.Success":
                     return "Pasting Completed";
 
+                case "Copy.Success":
+                    return "Copy Completed";
+
+                case "Cut.Success":
+                    return "Cut Completed";
+
+                case "Delete.Success":
+                    return "Delete Completed";
+
                 case "Times":
                     return "Times";
 
@@ -2593,8 +2602,11 @@ namespace WinsockPacketEditor
                 case "FilterEditForm.Appoint.Progression.Enable":
                     return "Enable Progression";
 
-                case "FilterEditForm.Appoint.Progression.Disable":
-                    return "Disable Progression";
+                case "FilterEditForm.Appoint.Random.Enable":
+                    return "Enable Random";
+
+                case "FilterEditForm.Appoint.Disable":
+                    return "Disable";
 
                 case "FilterEditForm.Appoint.Exclude.Enable":
                     return "Enable Exclude";

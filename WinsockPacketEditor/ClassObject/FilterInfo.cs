@@ -447,6 +447,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//随机位置
+
+        string _RandomPosition;
+
+        public string RandomPosition
+        {
+            get => _RandomPosition;
+            set
+            {
+                if (_RandomPosition == value) return;
+                _RandomPosition = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//搜索内容
 
         string _FSearch;
@@ -510,6 +527,7 @@ namespace WinsockPacketEditor
             string ProgressionPosition,
             int ProgressionCount,
             string ExcludePosition,
+            string RandomPosition,
             string FSearch, 
             string FModify) 
         {
@@ -539,6 +557,7 @@ namespace WinsockPacketEditor
             this._ProgressionPosition = ProgressionPosition;
             this._ProgressionCount = ProgressionCount;
             this._ExcludePosition = ExcludePosition;
+            this._RandomPosition = RandomPosition;
             this._FSearch = FSearch;          
             this._FModify = FModify;            
             this._ExecutionCount = 0;            

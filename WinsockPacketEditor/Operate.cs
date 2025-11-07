@@ -13319,6 +13319,9 @@ namespace WinsockPacketEditor
                 public static Color FilterChange_BackColor = Color.DodgerBlue;
                 public static Color FilterDisplay_ForeColor = Color.Black;
                 public static Color FilterDisplay_BackColor = Color.LightGreen;
+                public static Color FilterProgression_Color = Color.DarkRed;
+                public static Color FilterRandom_Color = Color.DodgerBlue;
+                public static Color FilterExclude_Color = Color.Violet;
 
                 #region//定义结构
 
@@ -13460,6 +13463,7 @@ namespace WinsockPacketEditor
                             string.Empty, 
                             0, 
                             string.Empty,
+                            string.Empty,
                             string.Empty, 
                             string.Empty);
                     }
@@ -13480,34 +13484,25 @@ namespace WinsockPacketEditor
                                 bBuffer = pi.PacketBuffer;
                             }
 
-                            Guid FID = Guid.NewGuid();
-                            string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + bBuffer.Length + "]";
-                            PacketConfig.Packet.PacketType ptType = pi.PacketType;
-                            FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
-                            FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.FilterAction.Replace;
-                            FilterConfig.Filter.FilterFunction FilterFunction = FilterConfig.Filter.GetFilterFunction_ByPacketType(ptType);
-                            FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
-                            string sFSearch = FilterConfig.Filter.GetFilterString_ByBytes(bBuffer);
-
                             FilterConfig.Filter.AddFilter(
-                                false, 
-                                FID, 
-                                sFName, 
-                                false, 
-                                string.Empty, 
+                                false,
+                                Guid.NewGuid(),
+                                Process.GetCurrentProcess().ProcessName.Trim() + " [" + bBuffer.Length + "]", 
                                 false, 
                                 string.Empty, 
                                 false, 
                                 string.Empty, 
                                 false, 
                                 string.Empty, 
-                                FilterMode, 
-                                FilterAction, 
+                                false, 
+                                string.Empty,
+                                FilterConfig.Filter.FilterMode.Normal,
+                                FilterConfig.Filter.FilterAction.Replace, 
                                 false,
                                 FilterExecuteType.None,
                                 Guid.Empty,
-                                FilterFunction, 
-                                FilterStartFrom, 
+                                FilterConfig.Filter.GetFilterFunction_ByPacketType(pi.PacketType),
+                                FilterConfig.Filter.FilterStartFrom.Head, 
                                 false, 
                                 false, 
                                 1, 
@@ -13516,7 +13511,8 @@ namespace WinsockPacketEditor
                                 string.Empty, 
                                 0, 
                                 string.Empty,
-                                sFSearch, 
+                                string.Empty,
+                                FilterConfig.Filter.GetFilterString_ByBytes(bBuffer), 
                                 string.Empty);
 
                             return true;
@@ -13577,6 +13573,7 @@ namespace WinsockPacketEditor
                                 string.Empty,
                                 0,
                                 string.Empty,
+                                string.Empty,
                                 sFSearch,
                                 string.Empty);
 
@@ -13618,6 +13615,7 @@ namespace WinsockPacketEditor
                     string ProgressionPosition,
                     int ProgressionCount,
                     string ExcludePosition,
+                    string RandomPosition,
                     string FSearch,
                     string FModify)
                 {
@@ -13652,6 +13650,7 @@ namespace WinsockPacketEditor
                             ProgressionPosition,
                             ProgressionCount,
                             ExcludePosition,
+                            RandomPosition,
                             FSearch,
                             FModify);
 
@@ -13693,6 +13692,7 @@ namespace WinsockPacketEditor
                     string ProgressionPosition,
                     int ProgressionCount,
                     string ExcludePosition,
+                    string RandomPosition,
                     string FSearch,
                     string FModify)
                 {
@@ -13723,6 +13723,7 @@ namespace WinsockPacketEditor
                             fi.ProgressionPosition = ProgressionPosition;
                             fi.ProgressionCount = ProgressionCount;
                             fi.ExcludePosition = ExcludePosition;
+                            fi.RandomPosition = RandomPosition;
                             fi.FSearch = FSearch;
                             fi.FModify = FModify;
                         }
@@ -13774,64 +13775,36 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        bool IsEnable = false;
-                        Guid FID = Guid.NewGuid();
-                        string FName = string.Format(AntdUI.Localization.Get("CopyName", "{0} - 副本"), fi.FName);
-                        bool bAppointHeader = fi.AppointHeader;
-                        string HeaderContent = fi.HeaderContent;
-                        bool bAppointSocket = fi.AppointSocket;
-                        string SocketContent = fi.SocketContent;
-                        bool bAppointLength = fi.AppointLength;
-                        string LengthContent = fi.LengthContent;
-                        bool bAppointPort = fi.AppointPort;
-                        string PortContent = fi.PortContent;
-                        FilterConfig.Filter.FilterMode FMode = fi.FMode;
-                        FilterConfig.Filter.FilterAction FAction = fi.FAction;
-                        bool IsExecute = fi.IsExecute;
-                        FilterConfig.Filter.FilterExecuteType FEType = fi.FEType;
-                        Guid Execute_GUID = fi.Execute_GUID;
-                        FilterConfig.Filter.FilterFunction FFunction = fi.FFunction;
-                        FilterConfig.Filter.FilterStartFrom FStartFrom = fi.FStartFrom;
-                        bool IsProgressionDone = false;
-                        bool IsProgressionContinuous = fi.IsProgressionContinuous;
-                        int ProgressionStep = fi.ProgressionStep;
-                        bool IsProgressionCarry = fi.IsProgressionCarry;
-                        int ProgressionCarryNumber = fi.ProgressionCarryNumber;
-                        string ProgressionPosition = fi.ProgressionPosition;
-                        int ProgressionCount = 0;
-                        string ExcludePosition = fi.ExcludePosition;
-                        string FSearch = fi.FSearch;
-                        string FModify = fi.FModify;
-
                         FilterConfig.Filter.AddFilter(
-                            IsEnable,
-                            FID,
-                            FName,
-                            bAppointHeader,
-                            HeaderContent,
-                            bAppointSocket,
-                            SocketContent,
-                            bAppointLength,
-                            LengthContent,
-                            bAppointPort,
-                            PortContent,
-                            FMode,
-                            FAction,
-                            IsExecute,
-                            FEType,
-                            Execute_GUID,
-                            FFunction,
-                            FStartFrom,
-                            IsProgressionDone,
-                            IsProgressionContinuous,
-                            ProgressionStep,
-                            IsProgressionCarry,
-                            ProgressionCarryNumber,
-                            ProgressionPosition,
-                            ProgressionCount,
-                            ExcludePosition,
-                            FSearch,
-                            FModify);
+                            false,
+                            Guid.NewGuid(),
+                            string.Format(AntdUI.Localization.Get("CopyName", "{0} - 副本"), fi.FName),
+                            fi.AppointHeader,
+                            fi.HeaderContent,
+                            fi.AppointSocket,
+                            fi.SocketContent,
+                            fi.AppointLength,
+                            fi.LengthContent,
+                            fi.AppointPort,
+                            fi.PortContent,
+                            fi.FMode,
+                            fi.FAction,
+                            fi.IsExecute,
+                            fi.FEType,
+                            fi.Execute_GUID,
+                            fi.FFunction,
+                            fi.FStartFrom,
+                            false,
+                            fi.IsProgressionContinuous,
+                            fi.ProgressionStep,
+                            fi.IsProgressionCarry,
+                            fi.ProgressionCarryNumber,
+                            fi.ProgressionPosition,
+                            0,
+                            fi.ExcludePosition,
+                            fi.RandomPosition,
+                            fi.FSearch,
+                            fi.FModify);
                     }
                     catch (Exception ex)
                     {
@@ -15867,64 +15840,36 @@ namespace WinsockPacketEditor
 
                         foreach (DataRow dataRow in dtFilter.Rows)
                         {
-                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
-                            Guid FID = Guid.Parse(dataRow["GUID"].ToString());
-                            string FName = dataRow["Name"].ToString();
-                            bool AppointHeader = Convert.ToBoolean(dataRow["AppointHeader"]);
-                            string FHeaderContent = dataRow["HeaderContent"].ToString();
-                            bool AppointSocket = Convert.ToBoolean(dataRow["AppointSocket"]);
-                            string FSocketContent = dataRow["SocketContent"].ToString();
-                            bool AppointLength = Convert.ToBoolean(dataRow["AppointLength"]);
-                            string FLengthContent = dataRow["LengthContent"].ToString();
-                            bool AppointPort = Convert.ToBoolean(dataRow["AppointPort"]);
-                            string FPortContent = dataRow["PortContent"].ToString();
-                            FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.GetFilterMode_ByString(dataRow["Mode"].ToString());
-                            FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.GetFilterAction_ByString(dataRow["Action"].ToString());
-                            bool IsExecute = Convert.ToBoolean(dataRow["IsExecute"]);
-                            FilterConfig.Filter.FilterExecuteType FilterExecuteType = FilterConfig.Filter.GetFilterExecuteType_ByString(dataRow["ExecuteType"].ToString());
-                            Guid Execute_GUID = Guid.Parse(dataRow["ExecuteGUID"].ToString());
-                            FilterConfig.Filter.FilterFunction FilterFunction = FilterConfig.Filter.GetFilterFunction_ByString(dataRow["Function"].ToString());
-                            FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.GetFilterStartFrom_ByString(dataRow["StartFrom"].ToString());
-                            bool IsProgressionDone = false;
-                            bool IsProgressionContinuous = Convert.ToBoolean(dataRow["IsProgressionContinuous"]);
-                            int FProgressionStep = Convert.ToInt32(dataRow["ProgressionStep"]);
-                            bool IsProgressionCarry = Convert.ToBoolean(dataRow["IsProgressionCarry"]);
-                            int ProgressionCarryNumber = Convert.ToInt32(dataRow["ProgressionCarryNumber"]);
-                            string FProgressionPosition = dataRow["ProgressionPosition"].ToString();
-                            int ProgressionCount = 0;
-                            string FExcludePosition = dataRow["ExcludePosition"].ToString();
-                            string FSearch = dataRow["Search"].ToString();
-                            string FModify = dataRow["Modify"].ToString();
-
                             FilterConfig.Filter.AddFilter(
-                                IsEnable,
-                                FID,
-                                FName,
-                                AppointHeader,
-                                FHeaderContent,
-                                AppointSocket,
-                                FSocketContent,
-                                AppointLength,
-                                FLengthContent,
-                                AppointPort,
-                                FPortContent,
-                                FilterMode,
-                                FilterAction,
-                                IsExecute,
-                                FilterExecuteType,
-                                Execute_GUID,
-                                FilterFunction,
-                                FilterStartFrom,
-                                IsProgressionDone,
-                                IsProgressionContinuous,
-                                FProgressionStep,
-                                IsProgressionCarry,
-                                ProgressionCarryNumber,
-                                FProgressionPosition,
-                                ProgressionCount,
-                                FExcludePosition,
-                                FSearch,
-                                FModify);
+                                Convert.ToBoolean(dataRow["IsEnable"]),
+                                Guid.Parse(dataRow["GUID"].ToString()),
+                                dataRow["Name"].ToString(),
+                                Convert.ToBoolean(dataRow["AppointHeader"]),
+                                dataRow["HeaderContent"].ToString(),
+                                Convert.ToBoolean(dataRow["AppointSocket"]),
+                                dataRow["SocketContent"].ToString(),
+                                Convert.ToBoolean(dataRow["AppointLength"]),
+                                dataRow["LengthContent"].ToString(),
+                                Convert.ToBoolean(dataRow["AppointPort"]),
+                                dataRow["PortContent"].ToString(),
+                                FilterConfig.Filter.GetFilterMode_ByString(dataRow["Mode"].ToString()),
+                                FilterConfig.Filter.GetFilterAction_ByString(dataRow["Action"].ToString()),
+                                Convert.ToBoolean(dataRow["IsExecute"]),
+                                FilterConfig.Filter.GetFilterExecuteType_ByString(dataRow["ExecuteType"].ToString()),
+                                Guid.Parse(dataRow["ExecuteGUID"].ToString()),
+                                FilterConfig.Filter.GetFilterFunction_ByString(dataRow["Function"].ToString()),
+                                FilterConfig.Filter.GetFilterStartFrom_ByString(dataRow["StartFrom"].ToString()),
+                                false,
+                                Convert.ToBoolean(dataRow["IsProgressionContinuous"]),
+                                Convert.ToInt32(dataRow["ProgressionStep"]),
+                                Convert.ToBoolean(dataRow["IsProgressionCarry"]),
+                                Convert.ToInt32(dataRow["ProgressionCarryNumber"]),
+                                dataRow["ProgressionPosition"].ToString(),
+                                0,
+                                dataRow["ExcludePosition"].ToString(),
+                                dataRow["RandomPosition"].ToString(),
+                                dataRow["Search"].ToString(),
+                                dataRow["Modify"].ToString());
                         }
                     }
                     catch (Exception ex)
@@ -16056,6 +16001,7 @@ namespace WinsockPacketEditor
                                 new XElement("ProgressionCarryNumber", fi.ProgressionCarryNumber),
                                 new XElement("ProgressionPosition", fi.ProgressionPosition),
                                 new XElement("ExcludePosition", fi.ExcludePosition),
+                                new XElement("RandomPosition", fi.RandomPosition),
                                 new XElement("Search", fi.FSearch),
                                 new XElement("Modify", fi.FModify)
                                 );
@@ -16308,6 +16254,12 @@ namespace WinsockPacketEditor
                                 sFExcludePosition = xeFilter.Element("ExcludePosition").Value;
                             }
 
+                            string RandomPosition = string.Empty;
+                            if (xeFilter.Element("RandomPosition") != null)
+                            {
+                                RandomPosition = xeFilter.Element("RandomPosition").Value;
+                            }
+
                             string sFSearch = string.Empty;
                             if (xeFilter.Element("Search") != null)
                             {
@@ -16347,6 +16299,7 @@ namespace WinsockPacketEditor
                                 sFProgressionPosition,
                                 iProgressionCount,
                                 sFExcludePosition,
+                                RandomPosition,
                                 sFSearch,
                                 sFModify);
                         }
@@ -20755,6 +20708,7 @@ namespace WinsockPacketEditor
                         sql += "ProgressionCarryNumber INTEGER DEFAULT 1,";
                         sql += "ProgressionPosition TEXT,";
                         sql += "ExcludePosition TEXT,";
+                        sql += "RandomPosition TEXT,";
                         sql += "Search TEXT,";
                         sql += "Modify TEXT";
                         sql += ");";
@@ -20821,7 +20775,7 @@ namespace WinsockPacketEditor
                 }
             }
 
-            public static void InsertTable_Filter(FilterInfo sfi)
+            public static void InsertTable_Filter(FilterInfo fi)
             {
                 try
                 {
@@ -20852,6 +20806,7 @@ namespace WinsockPacketEditor
                         sql += "ProgressionCarryNumber,";
                         sql += "ProgressionPosition,";
                         sql += "ExcludePosition,";
+                        sql += "RandomPosition,";
                         sql += "Search,";
                         sql += "Modify";
                         sql += ") VALUES (";
@@ -20879,38 +20834,40 @@ namespace WinsockPacketEditor
                         sql += "@ProgressionCarryNumber,";
                         sql += "@ProgressionPosition,";
                         sql += "@ExcludePosition,";
+                        sql += "@RandomPosition,";
                         sql += "@Search,";
                         sql += "@Modify";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@GUID", sfi.FID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", sfi.IsEnable);
-                            cmd.Parameters.AddWithValue("@Name", sfi.FName);
-                            cmd.Parameters.AddWithValue("@AppointHeader", sfi.AppointHeader);
-                            cmd.Parameters.AddWithValue("@HeaderContent", sfi.HeaderContent);
-                            cmd.Parameters.AddWithValue("@AppointSocket", sfi.AppointSocket);
-                            cmd.Parameters.AddWithValue("@SocketContent", sfi.SocketContent);
-                            cmd.Parameters.AddWithValue("@AppointLength", sfi.AppointLength);
-                            cmd.Parameters.AddWithValue("@LengthContent", sfi.LengthContent);
-                            cmd.Parameters.AddWithValue("@AppointPort", sfi.AppointPort);
-                            cmd.Parameters.AddWithValue("@PortContent", sfi.PortContent);
-                            cmd.Parameters.AddWithValue("@Mode", sfi.FMode);
-                            cmd.Parameters.AddWithValue("@Action", sfi.FAction);
-                            cmd.Parameters.AddWithValue("@IsExecute", sfi.IsExecute);
-                            cmd.Parameters.AddWithValue("@ExecuteType", sfi.FEType);
-                            cmd.Parameters.AddWithValue("@ExecuteGUID", sfi.Execute_GUID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@Function", FilterConfig.Filter.GetFilterFunctionString(sfi.FFunction));
-                            cmd.Parameters.AddWithValue("@StartFrom", sfi.FStartFrom);
-                            cmd.Parameters.AddWithValue("@IsProgressionContinuous", sfi.IsProgressionContinuous);
-                            cmd.Parameters.AddWithValue("@ProgressionStep", sfi.ProgressionStep);
-                            cmd.Parameters.AddWithValue("@IsProgressionCarry", sfi.IsProgressionCarry);
-                            cmd.Parameters.AddWithValue("@ProgressionCarryNumber", sfi.ProgressionCarryNumber);
-                            cmd.Parameters.AddWithValue("@ProgressionPosition", sfi.ProgressionPosition);
-                            cmd.Parameters.AddWithValue("@ExcludePosition", sfi.ExcludePosition);
-                            cmd.Parameters.AddWithValue("@Search", sfi.FSearch);
-                            cmd.Parameters.AddWithValue("@Modify", sfi.FModify);
+                            cmd.Parameters.AddWithValue("@GUID", fi.FID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", fi.IsEnable);
+                            cmd.Parameters.AddWithValue("@Name", fi.FName);
+                            cmd.Parameters.AddWithValue("@AppointHeader", fi.AppointHeader);
+                            cmd.Parameters.AddWithValue("@HeaderContent", fi.HeaderContent);
+                            cmd.Parameters.AddWithValue("@AppointSocket", fi.AppointSocket);
+                            cmd.Parameters.AddWithValue("@SocketContent", fi.SocketContent);
+                            cmd.Parameters.AddWithValue("@AppointLength", fi.AppointLength);
+                            cmd.Parameters.AddWithValue("@LengthContent", fi.LengthContent);
+                            cmd.Parameters.AddWithValue("@AppointPort", fi.AppointPort);
+                            cmd.Parameters.AddWithValue("@PortContent", fi.PortContent);
+                            cmd.Parameters.AddWithValue("@Mode", fi.FMode);
+                            cmd.Parameters.AddWithValue("@Action", fi.FAction);
+                            cmd.Parameters.AddWithValue("@IsExecute", fi.IsExecute);
+                            cmd.Parameters.AddWithValue("@ExecuteType", fi.FEType);
+                            cmd.Parameters.AddWithValue("@ExecuteGUID", fi.Execute_GUID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@Function", FilterConfig.Filter.GetFilterFunctionString(fi.FFunction));
+                            cmd.Parameters.AddWithValue("@StartFrom", fi.FStartFrom);
+                            cmd.Parameters.AddWithValue("@IsProgressionContinuous",fi.IsProgressionContinuous);
+                            cmd.Parameters.AddWithValue("@ProgressionStep", fi.ProgressionStep);
+                            cmd.Parameters.AddWithValue("@IsProgressionCarry", fi.IsProgressionCarry);
+                            cmd.Parameters.AddWithValue("@ProgressionCarryNumber", fi.ProgressionCarryNumber);
+                            cmd.Parameters.AddWithValue("@ProgressionPosition", fi.ProgressionPosition);
+                            cmd.Parameters.AddWithValue("@ExcludePosition", fi.ExcludePosition);
+                            cmd.Parameters.AddWithValue("@RandomPosition", fi.RandomPosition);
+                            cmd.Parameters.AddWithValue("@Search", fi.FSearch);
+                            cmd.Parameters.AddWithValue("@Modify", fi.FModify);
 
                             conn.Open();
                             cmd.ExecuteNonQuery();
