@@ -2448,9 +2448,16 @@ namespace WinsockPacketEditor
 
             private static readonly Random rdHex = new Random();
 
-            public static byte GetRandomHexByte()
+            public static byte GetRandomHexByte(byte excludeByte)
             {
-                return (byte)rdHex.Next(256);
+                byte result;
+
+                do
+                {
+                    result = (byte)rdHex.Next(256);
+                } while (result == excludeByte);
+
+                return result;
             }
 
             #endregion
@@ -15321,9 +15328,9 @@ namespace WinsockPacketEditor
                             continue;
                         }
 
-                        byte currentValue = bufferSpan[index];
-                        byte newValue = SystemConfig.GetRandomHexByte();
+                        byte newValue = SystemConfig.GetRandomHexByte(bufferSpan[index]);
                         bufferSpan[index] = newValue;
+
                         modified = true;
                     }
 
@@ -15488,9 +15495,9 @@ namespace WinsockPacketEditor
                         if (index < 0 || index >= bufferSpan.Length)
                             continue;
 
-                        byte currentValue = bufferSpan[index];
-                        byte newValue = SystemConfig.GetRandomHexByte();
+                        byte newValue = SystemConfig.GetRandomHexByte(bufferSpan[index]);
                         bufferSpan[index] = newValue;
+
                         modified = true;
                     }
 
