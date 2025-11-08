@@ -90,6 +90,23 @@ namespace WinsockPacketEditor
 
         #endregion        
 
+        #region//流量统计
+
+        long _TrafficStatistics;
+
+        public long TrafficStatistics
+        {
+            get => _TrafficStatistics;
+            set
+            {
+                if (_TrafficStatistics == value) return;
+                _TrafficStatistics = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion        
+
         #region//是否认证成功
 
         bool _AuthResult;
@@ -133,10 +150,11 @@ namespace WinsockPacketEditor
             this._IPLocation = IPLocation;
             this._LinksNumber = 0;
             this._DevicesNumber = 0;
+            this._TrafficStatistics = 0;
             this._AuthResult = AuthResult;
             this._AuthTime = AuthTime;
         }
 
-        #endregion
+        #endregion        
     }
 }

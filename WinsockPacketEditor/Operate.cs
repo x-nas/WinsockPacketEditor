@@ -1490,84 +1490,37 @@ namespace WinsockPacketEditor
 
             #region//格式化速率字符串
 
-            public static string GetDisplayBytes(long size)
+            public static string GetDisplayBytes(long size, bool concise)
             {
-                string sReturn = string.Empty;
+                if (size < 0) return "0 Bytes";
 
                 try
                 {
-                    const long multi = 1024;
-                    long kb = multi;
-                    long mb = kb * multi;
-                    long gb = mb * multi;
-                    long tb = gb * multi;
+                    string[] sizes = { "Bytes", "KB", "MB", "GB", "TB" };
+                    int order = 0;
+                    double num = size;
 
-                    const string BYTES = "Bytes";
-                    const string KB = "KB";
-                    const string MB = "MB";
-                    const string GB = "GB";
-                    const string TB = "TB";
+                    while (num >= 1024 && order < sizes.Length - 1)
+                    {
+                        order++;
+                        num /= 1024;
+                    }
 
-                    if (size < kb)
+                    if (concise)
                     {
-                        sReturn = string.Format("{0} {1}", size, BYTES);
-                    }
-                    else if (size < mb)
-                    {
-                        sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, kb), KB, ConvertBytesDisplay(size));
-                    }
-                    else if (size < gb)
-                    {
-                        sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, mb), MB, ConvertBytesDisplay(size));
-                    }
-                    else if (size < tb)
-                    {
-                        sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, gb), GB, ConvertBytesDisplay(size));
+                        return $"{num:0.#} {sizes[order]}";
                     }
                     else
                     {
-                        sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, tb), TB, ConvertBytesDisplay(size));
+                        string formattedBytes = size.ToString("###,###,###,###,###", CultureInfo.CurrentCulture);
+                        return $"{num:0.#} {sizes[order]} ({formattedBytes} Bytes)";
                     }
                 }
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(GetDisplayBytes), ex.Message);
+                    return concise ? "0 Bytes" : "0 Bytes (0 Bytes)";
                 }
-
-                return sReturn;
-            }
-
-            private static string ConvertBytesDisplay(long size)
-            {
-                string sReturn = string.Empty;
-
-                try
-                {
-                    sReturn = size.ToString("###,###,###,###,###", CultureInfo.CurrentCulture);
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(ConvertBytesDisplay), ex.Message);
-                }
-
-                return sReturn;
-            }
-
-            private static string ConvertToOneDigit(long size, long quan)
-            {
-                string sReturn = string.Empty;
-
-                try
-                {
-                    double quotient = (double)size / (double)quan;
-                    sReturn = quotient.ToString("0.#", CultureInfo.CurrentCulture);
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog(nameof(ConvertToOneDigit), ex.Message);
-                }
-
-                return sReturn;
             }
 
             #endregion
@@ -5898,6 +5851,8 @@ namespace WinsockPacketEditor
                             {
                                 psSession.TargetSocket.Send(bData);
                             }
+
+                            Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bData.Length);
                         }
                     }
                     catch (Exception ex)
@@ -5969,6 +5924,7 @@ namespace WinsockPacketEditor
                                         psSession.SendUdpData(pu.ClientSocket, bRequestData, targetEndPoint);
                                     }
 
+                                    Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bRequestData.Length);
                                     pu.UpdateActivity();
                                 }
                             }
@@ -6023,6 +5979,7 @@ namespace WinsockPacketEditor
                                 psSession.SendUdpData(pu.ClientSocket, bResponseData, pu.ClientEndPoint);
                             }
 
+                            Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bResponseData.Length);
                             pu.UpdateActivity();
                         }
 
@@ -8357,6 +8314,7 @@ namespace WinsockPacketEditor
 
                 public static BindingList<AccountInfo> lstAccountInfo = new BindingList<AccountInfo>();
                 public static BindingList<AuthInfo> lstAuthInfo = new BindingList<AuthInfo>();
+                public static ConcurrentDictionary<(Guid AID, string ClientIP), long> TrafficStats = new ConcurrentDictionary<(Guid AID, string ClientIP), long>();
 
                 #region//新增代理账号
 
@@ -9013,7 +8971,7 @@ namespace WinsockPacketEditor
                         if (AID == Guid.Empty || string.IsNullOrEmpty(ClientIP))
                             return null;
 
-                        if (Operate.ProxyConfig.Account.lstAuthInfo == null)
+                        if (Operate.ProxyConfig.Account.lstAuthInfo == null || Operate.ProxyConfig.Account.lstAuthInfo.Count == 0)
                             return null;
 
                         return Operate.ProxyConfig.Account.lstAuthInfo.ToList()
@@ -9026,7 +8984,7 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion                                
+                #endregion                
 
                 #region//清空代理认证列表
 
@@ -9040,6 +8998,52 @@ namespace WinsockPacketEditor
                     {
                         Operate.DoLog(nameof(ClearAccountInfo), ex.Message);
                     }
+                }
+
+                #endregion
+
+                #region//新增代理认证流量
+
+                public static void AddTraffic(Guid AID, string ClientIP, int packetSize)
+                {
+                    try
+                    {
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(ClientIP) || packetSize <= 0)
+                        {
+                            return;
+                        }
+
+                        var key = (AID, ClientIP);
+                        Operate.ProxyConfig.Account.TrafficStats.AddOrUpdate(key, packetSize, (_, currentValue) => currentValue + packetSize);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddTraffic), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//获取代理认证的流量统计
+
+                public static long GetTraffic(Guid AID, string ClientIP)
+                {
+                    try
+                    {
+                        if (AID == Guid.Empty || string.IsNullOrEmpty(ClientIP))
+                        {
+                            return 0;
+                        }
+
+                        var key = (AID, ClientIP);
+                        return Operate.ProxyConfig.Account.TrafficStats.TryGetValue(key, out var value) ? value : 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetTraffic), ex.Message);
+                    }
+
+                    return 0;
                 }
 
                 #endregion
@@ -11710,8 +11714,8 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        string sTotal_SendBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes);
-                        string sTotal_RecvBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes);
+                        string sTotal_SendBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes, false);
+                        string sTotal_RecvBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes, false);
                         string sSpeedInfo = AntdUI.Localization.Get("InjectModeForm.SpeedInfo", "发送 : {0}  接收 : {1}");
                         sReturn = string.Format(sSpeedInfo, sTotal_SendBytes, sTotal_RecvBytes);
                     }

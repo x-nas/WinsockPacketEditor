@@ -1204,8 +1204,8 @@ namespace WinsockPacketEditor
 
                 Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
                     AntdUI.Localization.Get("ProxyModeForm.ProxyBytesInfo", "请求 : {0}  响应 : {1}"),
-                    Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request),
-                    Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response));
+                    Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request, false),
+                    Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response, false));
                 this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
 
                 decimal dUplink = (decimal)Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;

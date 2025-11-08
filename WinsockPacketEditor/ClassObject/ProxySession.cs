@@ -217,7 +217,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//发送和接收 TCP 数据
+        #region//处理 TCP 响应数据
 
         private void StartReceivingFromTarget()
         {
@@ -271,6 +271,8 @@ namespace WinsockPacketEditor
                         {
                             this.TrySend(bData, 0, bData.Length);
                         }
+
+                        Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, bData.Length);
                     }
 
                     this.StartReceivingFromTarget();
@@ -468,6 +470,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

@@ -62,6 +62,13 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("IPLocation", "所属地").SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("LinksNumber", "链接数", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("DevicesNumber", "设备数", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("TrafficStatistics", "流量统计", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return Operate.SystemConfig.GetDisplayBytes((long)value, true);
+                    },
+                }.SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AuthResult", "认证结果", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -289,6 +296,7 @@ namespace WinsockPacketEditor
                     AuthInfo ai = new AuthInfo(result.AID, result.AuthIP, result.IPLocation, true, result.AuthTime);
                     ai.LinksNumber = result.LinksNumber;
                     ai.DevicesNumber = result.DevicesNumber;
+                    ai.TrafficStatistics = Operate.ProxyConfig.Account.GetTraffic(result.AID, result.AuthIP);
                     newAuthInfo.Add(ai);
                 }
 

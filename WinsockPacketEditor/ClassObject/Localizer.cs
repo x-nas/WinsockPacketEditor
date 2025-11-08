@@ -1156,6 +1156,9 @@ namespace WinsockPacketEditor
                 case "Table.AuthList.Column.DevicesNumber":
                     return "Devices";
 
+                case "Table.AuthList.Column.TrafficStatistics":
+                    return "Traffic";
+
                 case "Table.AuthList.Column.AuthResult":
                     return "Auth Result";                
 
