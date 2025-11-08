@@ -54,7 +54,8 @@ namespace WinsockPacketEditor
                             Conn.URL(),
                             dtType,
                             Conn.Request().Body().Bytes,
-                            Conn.Request().Body().Bytes);
+                            Conn.Request().Body().Bytes,
+                            Conn.Request().Body().String());
 
                         break;
 
@@ -78,7 +79,8 @@ namespace WinsockPacketEditor
                             Conn.URL(),
                             dtType,
                             Conn.Response().Body().Bytes,
-                            Conn.Response().Body().Bytes);
+                            Conn.Response().Body().Bytes,
+                            Conn.Response().Body().String());
 
                         break;
 
@@ -158,7 +160,8 @@ namespace WinsockPacketEditor
                             ServerIP,
                             Operate.ProxyConfig.Proxy.DomainType.Socket,
                             Conn.Body().Bytes,
-                            Conn.Body().Bytes);
+                            Conn.Body().Bytes,
+                            null);
 
                         break;
 
@@ -175,7 +178,8 @@ namespace WinsockPacketEditor
                             ServerIP,
                             Operate.ProxyConfig.Proxy.DomainType.Socket,
                             Conn.Body().Bytes,
-                            Conn.Body().Bytes);
+                            Conn.Body().Bytes,
+                            null);
 
                         break;
 

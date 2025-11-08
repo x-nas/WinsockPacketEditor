@@ -192,7 +192,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//封包内容（十六进制）
+        #region//封包内容
 
         string _PacketData;
 
@@ -260,10 +260,11 @@ namespace WinsockPacketEditor
             string ServerLocation,
             string ServerDomain, 
             Operate.ProxyConfig.Proxy.DomainType DomainType,
-            byte[] pRawBuffer,
-            byte[] pBuffer,
-            int pLen,
-            Operate.FilterConfig.Filter.FilterAction pAction)
+            byte[] RawBuffer,
+            byte[] PacketBuffer,
+            string PacketData,
+            int PacketLen,
+            Operate.FilterConfig.Filter.FilterAction FilterAction)
         {          
             this._ProxyTime = ProxyTime;
             this._PacketSocket = PacketSocket;
@@ -274,10 +275,11 @@ namespace WinsockPacketEditor
             this._ServerLocation = ServerLocation;
             this._ServerDomain = ServerDomain;
             this._DomainType = DomainType;
-            this._RawBuffer = pRawBuffer;
-            this._PacketBuffer = pBuffer;
-            this._PacketLen = pLen;
-            this._FilterAction = pAction;
+            this._RawBuffer = RawBuffer;
+            this._PacketBuffer = PacketBuffer;
+            this._PacketData = PacketData;
+            this._PacketLen = PacketLen;
+            this._FilterAction = FilterAction;
         }
 
         #endregion

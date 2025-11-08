@@ -42,6 +42,10 @@ namespace WinsockPacketEditor
             }
         }
 
+        #endregion
+
+        #region//显示选中的封包数据
+
         public void RefreshPacketData()
         {
             if (this.form is InterfaceInfo.IInjectMode)
@@ -55,7 +59,7 @@ namespace WinsockPacketEditor
                     {
                         this.tabPacketData.SelectTab("tpHTTP");
 
-                        this.scintillaPacketData.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.PacketConfig.List.piSelect.PacketBuffer);
+                        this.scintillaPacketData.Text = Operate.PacketConfig.List.piSelect.PacketData;
                     }
                     else
                     {
@@ -77,7 +81,7 @@ namespace WinsockPacketEditor
                     {
                         this.tabPacketData.SelectTab("tpHTTP");
 
-                        this.scintillaPacketData.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Operate.ProxyConfig.List.piSelect.PacketBuffer);
+                        this.scintillaPacketData.Text = Operate.ProxyConfig.List.piSelect.PacketData;
                     }
                     else
                     {
@@ -87,23 +91,12 @@ namespace WinsockPacketEditor
                         hbPacketData.ByteProvider = dbp;
                     }
                 }
-            }            
-        }
-
-        public void CleanUp_PacketData()
-        {
-            if (hbPacketData.ByteProvider != null)
-            {
-                IDisposable byteProvider = hbPacketData.ByteProvider as IDisposable;
-
-                if (byteProvider != null)
-                {
-                    byteProvider.Dispose();
-                }
-
-                hbPacketData.ByteProvider = null;
             }
         }
+
+        #endregion
+
+        #region//查找封包数据
 
         public bool HexBox_FindNext()
         {
@@ -119,7 +112,7 @@ namespace WinsockPacketEditor
                     long res = this.hbPacketData.Find(Operate.PacketConfig.List.FindOptions);
                     if (res == -1)
                     {
-                        return false;                        
+                        return false;
                     }
 
                     return true;
@@ -131,6 +124,25 @@ namespace WinsockPacketEditor
             }
 
             return false;
+        }
+
+        #endregion
+
+        #region//清除数据
+
+        public void CleanUp_PacketData()
+        {
+            if (hbPacketData.ByteProvider != null)
+            {
+                IDisposable byteProvider = hbPacketData.ByteProvider as IDisposable;
+
+                if (byteProvider != null)
+                {
+                    byteProvider.Dispose();
+                }
+
+                hbPacketData.ByteProvider = null;
+            }
         }
 
         #endregion

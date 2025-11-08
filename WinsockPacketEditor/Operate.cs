@@ -8036,7 +8036,8 @@ namespace WinsockPacketEditor
                     string ServerDomain,
                     ProxyConfig.Proxy.DomainType DomainType,
                     byte[] bRawBuffer,
-                    byte[] bBuffer)
+                    byte[] bBuffer,
+                    string PacketData)
                 {
                     if (filterAction == Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay)
                         return Task.CompletedTask;
@@ -8089,6 +8090,11 @@ namespace WinsockPacketEditor
 
                             if (!SystemConfig.SpeedMode)
                             {
+                                if (string.IsNullOrEmpty(PacketData))
+                                {
+                                    PacketData = PacketConfig.Packet.GetPacketData_Hex(bBuffer, PacketConfig.Packet.PacketData_MaxLen);
+                                }
+
                                 string ClientLocation = await SystemConfig.GetIPLocation(ClientAddr.Split(':')[0]);
                                 string ServerLocation = await SystemConfig.GetIPLocation(ServerAddr.Split(':')[0]);
 
@@ -8104,6 +8110,7 @@ namespace WinsockPacketEditor
                                     DomainType,
                                     bRawBuffer,
                                     bBuffer,
+                                    PacketData,
                                     bBuffer.Length,
                                     filterAction);
 
@@ -8171,10 +8178,7 @@ namespace WinsockPacketEditor
                         {
                             bool bIsShow = PacketConfig.Packet.IsShowProxy_ByFilter(pi);
                             if (bIsShow)
-                            {
-                                Span<byte> bufferSpan = pi.PacketBuffer.AsSpan();
-                                pi.PacketData = PacketConfig.Packet.GetPacketData_Hex(pi.PacketBuffer.AsSpan(), PacketConfig.Packet.PacketData_MaxLen);
-
+                            {                                
                                 if (Operate.SystemConfig.InvokeAction != null)
                                 {
                                     Operate.SystemConfig.InvokeAction(() =>
@@ -10340,7 +10344,8 @@ namespace WinsockPacketEditor
                             psSession.ServerAddress,
                             psSession.DomainType,
                             bData,
-                            bData);
+                            bData,
+                            null);
                     }
                     catch (Exception ex)
                     {
@@ -15162,7 +15167,8 @@ namespace WinsockPacketEditor
                             psSession.ServerAddress,
                             psSession.DomainType,
                             bRawBuffer,
-                            bNewBuffer);
+                            bNewBuffer,
+                            null);
                     }
                     catch (Exception ex)
                     {
@@ -15224,7 +15230,8 @@ namespace WinsockPacketEditor
                             ServerAddr,
                             Operate.ProxyConfig.Proxy.DomainType.External,
                             bRawBuffer,
-                            bNewBuffer);
+                            bNewBuffer,
+                            null);
                     }
                     catch (Exception ex)
                     {
