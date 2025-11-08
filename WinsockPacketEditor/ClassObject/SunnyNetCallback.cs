@@ -110,7 +110,7 @@ namespace WinsockPacketEditor
                             sError = sError.Remove(0, 10);
                         }
 
-                        Operate.DoLog(nameof(OnHttpCallback), sError);
+                        //Operate.DoLog(nameof(OnHttpCallback), sError);
 
                         break;
                 }

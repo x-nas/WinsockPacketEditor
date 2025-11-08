@@ -31,9 +31,9 @@
             AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             this.tabPacketData = new AntdUI.Tabs();
             this.tpText = new AntdUI.TabPage();
+            this.txtText = new AntdUI.Input();
             this.tpHex = new AntdUI.TabPage();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
-            this.txtText = new AntdUI.Input();
             this.tabPacketData.SuspendLayout();
             this.tpText.SuspendLayout();
             this.tpHex.SuspendLayout();
@@ -43,7 +43,7 @@
             // 
             this.tabPacketData.Controls.Add(this.tpText);
             this.tabPacketData.Controls.Add(this.tpHex);
-            this.tabPacketData.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabPacketData.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPacketData.Location = new System.Drawing.Point(0, 0);
             this.tabPacketData.Margin = new System.Windows.Forms.Padding(0);
@@ -66,6 +66,22 @@
             this.tpText.Size = new System.Drawing.Size(800, 276);
             this.tpText.TabIndex = 1;
             this.tpText.Text = "tpText";
+            // 
+            // txtText
+            // 
+            this.txtText.AutoScroll = true;
+            this.txtText.BorderWidth = 0F;
+            this.txtText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtText.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtText.Location = new System.Drawing.Point(0, 0);
+            this.txtText.Margin = new System.Windows.Forms.Padding(0);
+            this.txtText.Multiline = true;
+            this.txtText.Name = "txtText";
+            this.txtText.Radius = 0;
+            this.txtText.ReadOnly = true;
+            this.txtText.Size = new System.Drawing.Size(800, 276);
+            this.txtText.TabIndex = 1;
+            this.txtText.WaveSize = 0;
             // 
             // tpHex
             // 
@@ -95,21 +111,6 @@
             this.hbPacketData.VScrollBarVisible = true;
             this.hbPacketData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbPacketData_KeyDown);
             this.hbPacketData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbPacketData_MouseDown);
-            // 
-            // txtText
-            // 
-            this.txtText.AutoScroll = true;
-            this.txtText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtText.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtText.Location = new System.Drawing.Point(0, 0);
-            this.txtText.Margin = new System.Windows.Forms.Padding(0);
-            this.txtText.Multiline = true;
-            this.txtText.Name = "txtText";
-            this.txtText.Radius = 0;
-            this.txtText.ReadOnly = true;
-            this.txtText.Size = new System.Drawing.Size(800, 276);
-            this.txtText.TabIndex = 1;
-            this.txtText.WaveSize = 0;
             // 
             // PacketData
             // 
