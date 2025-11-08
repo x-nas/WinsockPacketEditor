@@ -1183,13 +1183,17 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.Proxy.TCP_Req_CNT +
                     Operate.ProxyConfig.Proxy.TCP_Resp_CNT +
                     Operate.ProxyConfig.Proxy.UDP_Req_CNT +
-                    Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
+                    Operate.ProxyConfig.Proxy.UDP_Resp_CNT +
+                    Operate.ProxyConfig.Proxy.HTTP_Req_CNT +
+                    Operate.ProxyConfig.Proxy.HTTP_Resp_CNT;
 
                 this.lProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
                 this.lTCP_Req_CNT.Text = Operate.ProxyConfig.Proxy.TCP_Req_CNT.ToString();
                 this.lTCP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.TCP_Resp_CNT.ToString();
                 this.lUDP_Req_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Req_CNT.ToString();
                 this.lUDP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.UDP_Resp_CNT.ToString();
+                this.lHTTP_Req_CNT.Text = Operate.ProxyConfig.Proxy.HTTP_Req_CNT.ToString();
+                this.lHTTP_Resp_CNT.Text = Operate.ProxyConfig.Proxy.HTTP_Resp_CNT.ToString();
                 this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
                 this.lProxyQueue_CNT.Text = Operate.ProxyConfig.Queue.qProxyInfo.Count.ToString();
                 this.lFilterProxy_CNT.Text = Operate.ProxyConfig.Proxy.FilterProxy_CNT.ToString();

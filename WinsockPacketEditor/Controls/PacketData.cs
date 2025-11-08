@@ -22,7 +22,6 @@ namespace WinsockPacketEditor
         private void PacketData_Load(object sender, EventArgs e)
         {
             this.tabPacketData.TabMenuVisible = false;
-            this.tabPacketData.SelectTab("tpSocket");
             this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
 
             this.Dark_Changed();
@@ -48,50 +47,63 @@ namespace WinsockPacketEditor
 
         public void RefreshPacketData()
         {
-            if (this.form is InterfaceInfo.IInjectMode)
+            try
             {
-                if (Operate.PacketConfig.List.piSelect != null)
+                if (this.form is InterfaceInfo.IInjectMode)
                 {
-                    if (Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
-                        Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
-                        Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
-                        Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
+                    if (Operate.PacketConfig.List.piSelect != null)
                     {
-                        this.tabPacketData.SelectTab("tpHTTP");
+                        if (Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
+                            Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
+                            Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
+                            Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
+                        {
+                            this.tabPacketData.SelectTab("tpText");
 
-                        this.scintillaPacketData.Text = Operate.PacketConfig.List.piSelect.PacketData;
+                            this.txtText.SuspendLayout();
+                            this.txtText.Clear();
+                            this.txtText.Text = Operate.PacketConfig.List.piSelect.PacketData;
+                            this.txtText.ResumeLayout();
+                        }
+                        else
+                        {
+                            this.tabPacketData.SelectTab("tpHex");
+
+                            DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
+                            this.hbPacketData.ByteProvider = dbp;
+                        }
                     }
-                    else
+                }
+                else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                {
+                    if (Operate.ProxyConfig.List.piSelect != null)
                     {
-                        this.tabPacketData.SelectTab("tpSocket");
+                        if (Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
+                            Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
+                            Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
+                            Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
+                        {
+                            this.tabPacketData.SelectTab("tpText");
 
-                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
-                        hbPacketData.ByteProvider = dbp;
+                            this.txtText.SuspendLayout();
+                            this.txtText.Clear();
+                            this.txtText.Text = Operate.ProxyConfig.List.piSelect.PacketData;
+                            this.txtText.ResumeLayout();
+                        }
+                        else
+                        {
+                            this.tabPacketData.SelectTab("tpHex");
+
+                            DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
+                            this.hbPacketData.ByteProvider = dbp;
+                        }
                     }
                 }
             }
-            else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+            catch (Exception ex)
             {
-                if (Operate.ProxyConfig.List.piSelect != null)
-                {
-                    if (Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
-                        Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
-                        Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
-                        Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
-                    {
-                        this.tabPacketData.SelectTab("tpHTTP");
-
-                        this.scintillaPacketData.Text = Operate.ProxyConfig.List.piSelect.PacketData;
-                    }
-                    else
-                    {
-                        this.tabPacketData.SelectTab("tpSocket");
-
-                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.ProxyConfig.List.piSelect.PacketBuffer);
-                        hbPacketData.ByteProvider = dbp;
-                    }
-                }
-            }
+                Operate.DoLog(nameof(RefreshPacketData), ex.Message);
+            }            
         }
 
         #endregion

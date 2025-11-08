@@ -30,43 +30,52 @@
         {
             AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             this.tabPacketData = new AntdUI.Tabs();
-            this.tpSocket = new AntdUI.TabPage();
+            this.tpText = new AntdUI.TabPage();
+            this.tpHex = new AntdUI.TabPage();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
-            this.tpHTTP = new AntdUI.TabPage();
-            this.tlpHTTP = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.scintillaPacketData = new ScintillaNET.Scintilla();
+            this.txtText = new AntdUI.Input();
             this.tabPacketData.SuspendLayout();
-            this.tpSocket.SuspendLayout();
-            this.tpHTTP.SuspendLayout();
-            this.tlpHTTP.SuspendLayout();
+            this.tpText.SuspendLayout();
+            this.tpHex.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPacketData
             // 
-            this.tabPacketData.Controls.Add(this.tpHTTP);
-            this.tabPacketData.Controls.Add(this.tpSocket);
-            this.tabPacketData.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabPacketData.Controls.Add(this.tpText);
+            this.tabPacketData.Controls.Add(this.tpHex);
+            this.tabPacketData.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPacketData.Location = new System.Drawing.Point(0, 0);
             this.tabPacketData.Margin = new System.Windows.Forms.Padding(0);
             this.tabPacketData.Name = "tabPacketData";
-            this.tabPacketData.Pages.Add(this.tpSocket);
-            this.tabPacketData.Pages.Add(this.tpHTTP);
+            this.tabPacketData.Pages.Add(this.tpHex);
+            this.tabPacketData.Pages.Add(this.tpText);
             this.tabPacketData.SelectedIndex = 1;
             this.tabPacketData.Size = new System.Drawing.Size(800, 300);
             this.tabPacketData.Style = styleLine1;
             this.tabPacketData.TabIndex = 0;
             this.tabPacketData.Text = "tabs1";
             // 
-            // tpSocket
+            // tpText
             // 
-            this.tpSocket.Controls.Add(this.hbPacketData);
-            this.tpSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpSocket.Location = new System.Drawing.Point(0, 24);
-            this.tpSocket.Name = "tpSocket";
-            this.tpSocket.Size = new System.Drawing.Size(800, 276);
-            this.tpSocket.TabIndex = 0;
-            this.tpSocket.Text = "tpSocket";
+            this.tpText.Controls.Add(this.txtText);
+            this.tpText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpText.Location = new System.Drawing.Point(0, 24);
+            this.tpText.Name = "tpText";
+            this.tpText.Showed = true;
+            this.tpText.Size = new System.Drawing.Size(800, 276);
+            this.tpText.TabIndex = 1;
+            this.tpText.Text = "tpText";
+            // 
+            // tpHex
+            // 
+            this.tpHex.Controls.Add(this.hbPacketData);
+            this.tpHex.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpHex.Location = new System.Drawing.Point(0, 24);
+            this.tpHex.Name = "tpHex";
+            this.tpHex.Size = new System.Drawing.Size(800, 276);
+            this.tpHex.TabIndex = 0;
+            this.tpHex.Text = "tpHex";
             // 
             // hbPacketData
             // 
@@ -87,42 +96,20 @@
             this.hbPacketData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbPacketData_KeyDown);
             this.hbPacketData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbPacketData_MouseDown);
             // 
-            // tpHTTP
+            // txtText
             // 
-            this.tpHTTP.Controls.Add(this.tlpHTTP);
-            this.tpHTTP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpHTTP.Location = new System.Drawing.Point(0, 24);
-            this.tpHTTP.Name = "tpHTTP";
-            this.tpHTTP.Showed = true;
-            this.tpHTTP.Size = new System.Drawing.Size(800, 276);
-            this.tpHTTP.TabIndex = 1;
-            this.tpHTTP.Text = "tpHTTP";
-            // 
-            // tlpHTTP
-            // 
-            this.tlpHTTP.ColumnCount = 1;
-            this.tlpHTTP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpHTTP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpHTTP.Controls.Add(this.scintillaPacketData, 0, 0);
-            this.tlpHTTP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpHTTP.Location = new System.Drawing.Point(0, 0);
-            this.tlpHTTP.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpHTTP.Name = "tlpHTTP";
-            this.tlpHTTP.RowCount = 1;
-            this.tlpHTTP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpHTTP.Size = new System.Drawing.Size(800, 276);
-            this.tlpHTTP.TabIndex = 0;
-            // 
-            // scintillaPacketData
-            // 
-            this.scintillaPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.scintillaPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scintillaPacketData.HScrollBar = false;
-            this.scintillaPacketData.Location = new System.Drawing.Point(0, 0);
-            this.scintillaPacketData.Margin = new System.Windows.Forms.Padding(0);
-            this.scintillaPacketData.Name = "scintillaPacketData";
-            this.scintillaPacketData.Size = new System.Drawing.Size(800, 276);
-            this.scintillaPacketData.TabIndex = 0;
+            this.txtText.AutoScroll = true;
+            this.txtText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtText.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtText.Location = new System.Drawing.Point(0, 0);
+            this.txtText.Margin = new System.Windows.Forms.Padding(0);
+            this.txtText.Multiline = true;
+            this.txtText.Name = "txtText";
+            this.txtText.Radius = 0;
+            this.txtText.ReadOnly = true;
+            this.txtText.Size = new System.Drawing.Size(800, 276);
+            this.txtText.TabIndex = 1;
+            this.txtText.WaveSize = 0;
             // 
             // PacketData
             // 
@@ -135,9 +122,8 @@
             this.Size = new System.Drawing.Size(800, 300);
             this.Load += new System.EventHandler(this.PacketData_Load);
             this.tabPacketData.ResumeLayout(false);
-            this.tpSocket.ResumeLayout(false);
-            this.tpHTTP.ResumeLayout(false);
-            this.tlpHTTP.ResumeLayout(false);
+            this.tpText.ResumeLayout(false);
+            this.tpHex.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -145,10 +131,9 @@
         #endregion
 
         private AntdUI.Tabs tabPacketData;
-        private AntdUI.TabPage tpSocket;
-        private AntdUI.TabPage tpHTTP;
+        private AntdUI.TabPage tpHex;
+        private AntdUI.TabPage tpText;
         private Be.Windows.Forms.HexBox hbPacketData;
-        private TableLayoutPanelEx tlpHTTP;
-        private ScintillaNET.Scintilla scintillaPacketData;
+        private AntdUI.Input txtText;
     }
 }

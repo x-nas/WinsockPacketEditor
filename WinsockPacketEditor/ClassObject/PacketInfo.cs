@@ -158,7 +158,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//封包内容（十六进制）
+        #region//封包内容
 
         string _PacketData;
 
@@ -217,29 +217,31 @@ namespace WinsockPacketEditor
         }
 
         public PacketInfo(
-            DateTime pTime, 
-            int pSocket, 
-            Operate.PacketConfig.Packet.PacketType pType, 
-            string pFrom,
-            string pFromLocation,
-            string pTo,
-            string pToLocation,
-            byte[] pRawBuffer, 
-            byte[] pBuffer, 
-            int pLen, 
-            Operate.FilterConfig.Filter.FilterAction pAction)
+            DateTime PacketTime, 
+            int PacketSocket, 
+            Operate.PacketConfig.Packet.PacketType PacketType, 
+            string PacketFrom,
+            string FromLocation,
+            string PacketTo,
+            string ToLocation,
+            byte[] RawBuffer, 
+            byte[] PacketBuffer, 
+            string PacketData,
+            int PacketLen, 
+            Operate.FilterConfig.Filter.FilterAction FilterAction)
         {  
-            this._PacketTime = pTime;            
-            this._PacketSocket = pSocket;          
-            this._PacketType = pType;
-            this._PacketFrom = pFrom;
-            this._FromLocation = pFromLocation;
-            this._PacketTo = pTo;
-            this._ToLocation = pToLocation;
-            this._RawBuffer = pRawBuffer;
-            this._PacketBuffer = pBuffer;
-            this._PacketLen = pLen;
-            this._FilterAction = pAction;
+            this._PacketTime = PacketTime;            
+            this._PacketSocket = PacketSocket;          
+            this._PacketType = PacketType;
+            this._PacketFrom = PacketFrom;
+            this._FromLocation = FromLocation;
+            this._PacketTo = PacketTo;
+            this._ToLocation = ToLocation;
+            this._RawBuffer = RawBuffer;
+            this._PacketBuffer = PacketBuffer;
+            this._PacketData = PacketData;
+            this._PacketLen = PacketLen;
+            this._FilterAction = FilterAction;
         }
 
         #endregion        

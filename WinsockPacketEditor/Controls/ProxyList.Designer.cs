@@ -109,6 +109,12 @@
             this.splitterQuickList = new AntdUI.Splitter();
             this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
             this.timerProxyList = new System.Windows.Forms.Timer(this.components);
+            this.lHTTP_Req = new AntdUI.Label();
+            this.lHTTP_Req_CNT = new AntdUI.Label();
+            this.label3 = new AntdUI.Label();
+            this.label4 = new AntdUI.Label();
+            this.lHTTP_Resp = new AntdUI.Label();
+            this.lHTTP_Resp_CNT = new AntdUI.Label();
             this.tlpProxyList.SuspendLayout();
             this.tlpProxyList_Button.SuspendLayout();
             this.tlpProxyInfo.SuspendLayout();
@@ -144,7 +150,7 @@
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpProxyList.Size = new System.Drawing.Size(1100, 700);
+            this.tlpProxyList.Size = new System.Drawing.Size(1200, 700);
             this.tlpProxyList.TabIndex = 11;
             // 
             // tlpProxyList_Button
@@ -175,7 +181,7 @@
             this.tlpProxyList_Button.Name = "tlpProxyList_Button";
             this.tlpProxyList_Button.RowCount = 1;
             this.tlpProxyList_Button.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyList_Button.Size = new System.Drawing.Size(1100, 40);
+            this.tlpProxyList_Button.Size = new System.Drawing.Size(1200, 40);
             this.tlpProxyList_Button.TabIndex = 7;
             // 
             // cbTopMost
@@ -306,7 +312,7 @@
             this.ddMenu.Ghost = true;
             this.ddMenu.IconRatio = 1F;
             this.ddMenu.IconSvg = "PlusOutlined";
-            this.ddMenu.Location = new System.Drawing.Point(1066, 2);
+            this.ddMenu.Location = new System.Drawing.Point(1166, 2);
             this.ddMenu.Margin = new System.Windows.Forms.Padding(2);
             this.ddMenu.MaxCount = 12;
             this.ddMenu.Name = "ddMenu";
@@ -323,7 +329,7 @@
             this.bSearchPacket.Ghost = true;
             this.bSearchPacket.IconRatio = 1F;
             this.bSearchPacket.IconSvg = "SearchOutlined";
-            this.bSearchPacket.Location = new System.Drawing.Point(1030, 2);
+            this.bSearchPacket.Location = new System.Drawing.Point(1130, 2);
             this.bSearchPacket.Margin = new System.Windows.Forms.Padding(2);
             this.bSearchPacket.Name = "bSearchPacket";
             this.bSearchPacket.Size = new System.Drawing.Size(32, 36);
@@ -348,7 +354,7 @@
             this.tlpProxyInfo.Name = "tlpProxyInfo";
             this.tlpProxyInfo.RowCount = 1;
             this.tlpProxyInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyInfo.Size = new System.Drawing.Size(1100, 24);
+            this.tlpProxyInfo.Size = new System.Drawing.Size(1200, 24);
             this.tlpProxyInfo.TabIndex = 4;
             // 
             // lTotalBytes
@@ -407,7 +413,7 @@
             // 
             this.splitterProxyList.Panel2.Controls.Add(this.splitterQuickList);
             this.splitterProxyList.Panel2MinSize = 0;
-            this.splitterProxyList.Size = new System.Drawing.Size(1094, 630);
+            this.splitterProxyList.Size = new System.Drawing.Size(1194, 630);
             this.splitterProxyList.SplitterDistance = 450;
             this.splitterProxyList.SplitterSize = 80;
             this.splitterProxyList.SplitterWidth = 5;
@@ -426,12 +432,18 @@
             this.tlpProxyList2.RowCount = 2;
             this.tlpProxyList2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxyList2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpProxyList2.Size = new System.Drawing.Size(1094, 450);
+            this.tlpProxyList2.Size = new System.Drawing.Size(1194, 450);
             this.tlpProxyList2.TabIndex = 1;
             // 
             // tlpPacketListInfo
             // 
-            this.tlpPacketListInfo.ColumnCount = 33;
+            this.tlpPacketListInfo.ColumnCount = 39;
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -465,6 +477,12 @@
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpPacketListInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpPacketListInfo.Controls.Add(this.lHTTP_Resp_CNT, 37, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lHTTP_Resp, 36, 0);
+            this.tlpPacketListInfo.Controls.Add(this.label4, 32, 0);
+            this.tlpPacketListInfo.Controls.Add(this.label3, 35, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lHTTP_Req_CNT, 34, 0);
+            this.tlpPacketListInfo.Controls.Add(this.lHTTP_Req, 33, 0);
             this.tlpPacketListInfo.Controls.Add(this.lSplit16, 11, 0);
             this.tlpPacketListInfo.Controls.Add(this.lFilterProxy_CNT, 10, 0);
             this.tlpPacketListInfo.Controls.Add(this.lFilterProxy, 9, 0);
@@ -505,7 +523,7 @@
             this.tlpPacketListInfo.RowCount = 2;
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tlpPacketListInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketListInfo.Size = new System.Drawing.Size(1094, 24);
+            this.tlpPacketListInfo.Size = new System.Drawing.Size(1194, 24);
             this.tlpPacketListInfo.TabIndex = 6;
             // 
             // lSplit16
@@ -971,7 +989,7 @@
             this.dgvProxyList.RowHeadersVisible = false;
             this.dgvProxyList.RowTemplate.Height = 23;
             this.dgvProxyList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvProxyList.Size = new System.Drawing.Size(1094, 426);
+            this.dgvProxyList.Size = new System.Drawing.Size(1194, 426);
             this.dgvProxyList.TabIndex = 7;
             this.dgvProxyList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProxyList_CellDoubleClick);
             this.dgvProxyList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvProxyList_CellFormatting);
@@ -1143,8 +1161,8 @@
             this.splitterQuickList.Name = "splitterQuickList";
             this.splitterQuickList.Panel1MinSize = 0;
             this.splitterQuickList.Panel2MinSize = 0;
-            this.splitterQuickList.Size = new System.Drawing.Size(1094, 175);
-            this.splitterQuickList.SplitterDistance = 300;
+            this.splitterQuickList.Size = new System.Drawing.Size(1194, 175);
+            this.splitterQuickList.SplitterDistance = 327;
             this.splitterQuickList.SplitterSize = 80;
             this.splitterQuickList.SplitterWidth = 5;
             this.splitterQuickList.TabIndex = 1;
@@ -1161,6 +1179,84 @@
             this.timerProxyList.Interval = 10;
             this.timerProxyList.Tick += new System.EventHandler(this.timerProxyList_Tick);
             // 
+            // lHTTP_Req
+            // 
+            this.lHTTP_Req.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lHTTP_Req.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lHTTP_Req.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lHTTP_Req.LocalizationText = "ProxyModeForm.UDPReq";
+            this.lHTTP_Req.Location = new System.Drawing.Point(892, 2);
+            this.lHTTP_Req.Margin = new System.Windows.Forms.Padding(2);
+            this.lHTTP_Req.Name = "lHTTP_Req";
+            this.lHTTP_Req.Size = new System.Drawing.Size(65, 20);
+            this.lHTTP_Req.TabIndex = 48;
+            this.lHTTP_Req.Text = "HTTP 请求 :";
+            // 
+            // lHTTP_Req_CNT
+            // 
+            this.lHTTP_Req_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lHTTP_Req_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lHTTP_Req_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lHTTP_Req_CNT.Location = new System.Drawing.Point(961, 2);
+            this.lHTTP_Req_CNT.Margin = new System.Windows.Forms.Padding(2);
+            this.lHTTP_Req_CNT.Name = "lHTTP_Req_CNT";
+            this.lHTTP_Req_CNT.Size = new System.Drawing.Size(8, 20);
+            this.lHTTP_Req_CNT.TabIndex = 49;
+            this.lHTTP_Req_CNT.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.ForeColor = System.Drawing.Color.Silver;
+            this.label3.Location = new System.Drawing.Point(973, 2);
+            this.label3.Margin = new System.Windows.Forms.Padding(2);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(5, 20);
+            this.label3.TabIndex = 50;
+            this.label3.Text = "|";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label4.ForeColor = System.Drawing.Color.Silver;
+            this.label4.Location = new System.Drawing.Point(883, 2);
+            this.label4.Margin = new System.Windows.Forms.Padding(2);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(5, 20);
+            this.label4.TabIndex = 51;
+            this.label4.Text = "|";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lHTTP_Resp
+            // 
+            this.lHTTP_Resp.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lHTTP_Resp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lHTTP_Resp.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lHTTP_Resp.LocalizationText = "ProxyModeForm.UDPReq";
+            this.lHTTP_Resp.Location = new System.Drawing.Point(982, 2);
+            this.lHTTP_Resp.Margin = new System.Windows.Forms.Padding(2);
+            this.lHTTP_Resp.Name = "lHTTP_Resp";
+            this.lHTTP_Resp.Size = new System.Drawing.Size(65, 20);
+            this.lHTTP_Resp.TabIndex = 52;
+            this.lHTTP_Resp.Text = "HTTP 响应 :";
+            // 
+            // lHTTP_Resp_CNT
+            // 
+            this.lHTTP_Resp_CNT.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lHTTP_Resp_CNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lHTTP_Resp_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lHTTP_Resp_CNT.Location = new System.Drawing.Point(1051, 2);
+            this.lHTTP_Resp_CNT.Margin = new System.Windows.Forms.Padding(2);
+            this.lHTTP_Resp_CNT.Name = "lHTTP_Resp_CNT";
+            this.lHTTP_Resp_CNT.Size = new System.Drawing.Size(8, 20);
+            this.lHTTP_Resp_CNT.TabIndex = 53;
+            this.lHTTP_Resp_CNT.Text = "0";
+            // 
             // ProxyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1170,7 +1266,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ProxyList";
-            this.Size = new System.Drawing.Size(1100, 700);
+            this.Size = new System.Drawing.Size(1200, 700);
             this.Load += new System.EventHandler(this.ProxyList_Load);
             this.tlpProxyList.ResumeLayout(false);
             this.tlpProxyList_Button.ResumeLayout(false);
@@ -1261,5 +1357,11 @@
         private AntdUI.Checkbox cbTopMost;
         private System.Windows.Forms.Timer timerProxyListInfo;
         private System.Windows.Forms.Timer timerProxyList;
+        private AntdUI.Label lHTTP_Resp_CNT;
+        private AntdUI.Label lHTTP_Resp;
+        private AntdUI.Label label4;
+        private AntdUI.Label label3;
+        private AntdUI.Label lHTTP_Req_CNT;
+        private AntdUI.Label lHTTP_Req;
     }
 }

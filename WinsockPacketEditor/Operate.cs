@@ -5109,7 +5109,7 @@ namespace WinsockPacketEditor
                 public static IPConnectionFilter ipFilter = new IPConnectionFilter();
                 public static List<int> lstSelectProcessID = new List<int>();
                 public static BindingList<ProcessInfo> lstSelectProcessName = new BindingList<ProcessInfo>();
-                public static long ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT;
+                public static long ProxyTotal_CNT, TCP_Req_CNT, UDP_Req_CNT, TCP_Resp_CNT, UDP_Resp_CNT, HTTP_Req_CNT, HTTP_Resp_CNT;
                 public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
                 public static int FilterProxy_CNT = 0;
                 public static IPAddress[] ProxyServerIP = null;
@@ -8077,12 +8077,14 @@ namespace WinsockPacketEditor
 
                                 case PacketConfig.Packet.PacketType.HTTP_Req:
                                 case PacketConfig.Packet.PacketType.HTTPS_Req:
+                                    ProxyConfig.Proxy.HTTP_Req_CNT++;
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bBuffer.Length);
                                     break;
 
                                 case PacketConfig.Packet.PacketType.HTTP_Resp:
                                 case PacketConfig.Packet.PacketType.HTTPS_Resp:
+                                    ProxyConfig.Proxy.HTTP_Resp_CNT++;
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
                                     break;
@@ -12755,10 +12757,11 @@ namespace WinsockPacketEditor
 
                 #region//封包入队列            
 
-                public static async void PacketToQueue(
+                public static async void PacketInfo_ToQueue(
                     int iSocket,
                     byte[] bRawBuff,
                     byte[] bBuffByte,
+                    string PacketData,
                     PacketConfig.Packet.PacketType ptPacketType,
                     PacketConfig.Packet.SockAddr sAddr,
                     FilterConfig.Filter.FilterAction pAction,
@@ -12780,6 +12783,11 @@ namespace WinsockPacketEditor
                                 string sFromLocation = await SystemConfig.GetIPLocation(sIPFrom.Split(':')[0]);
                                 string sToLocation = await SystemConfig.GetIPLocation(sIPTo.Split(':')[0]);
 
+                                if (string.IsNullOrEmpty(PacketData))
+                                {
+                                    PacketData = PacketConfig.Packet.GetPacketData_Hex(bBuffByte, PacketConfig.Packet.PacketData_MaxLen);
+                                }
+
                                 PacketInfo pi = new PacketInfo(
                                     PacketTime, 
                                     iSocket, 
@@ -12789,7 +12797,8 @@ namespace WinsockPacketEditor
                                     sIPTo, 
                                     sToLocation,
                                     bRawBuff, 
-                                    bBuffByte, 
+                                    bBuffByte,
+                                    PacketData,
                                     bBuffByte.Length, 
                                     pAction);
 
@@ -12799,7 +12808,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(PacketToQueue), ex.Message);
+                        Operate.DoLog(nameof(PacketInfo_ToQueue), ex.Message);
                     }
                 }
 
@@ -12861,9 +12870,6 @@ namespace WinsockPacketEditor
                             bool bIsShow = PacketConfig.Packet.IsShowPacket_ByFilter(pi);
                             if (bIsShow)
                             {
-                                Span<byte> bufferSpan = pi.PacketBuffer.AsSpan();
-                                pi.PacketData = PacketConfig.Packet.GetPacketData_Hex(bufferSpan, PacketConfig.Packet.PacketData_MaxLen);
-
                                 if (Operate.SystemConfig.InvokeAction != null)
                                 {
                                     Operate.SystemConfig.InvokeAction(() =>
@@ -15709,7 +15715,15 @@ namespace WinsockPacketEditor
                     {
                         try
                         {
-                            Operate.PacketConfig.Queue.PacketToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, filterAction, packetTime);
+                            Operate.PacketConfig.Queue.PacketInfo_ToQueue(
+                                socket, 
+                                bRawBuffer, 
+                                bBuffer,
+                                PacketConfig.Packet.GetPacketData_Hex(bBuffer, PacketConfig.Packet.PacketData_MaxLen),
+                                ptType, 
+                                sockaddr, 
+                                filterAction, 
+                                packetTime);
                         }
                         catch (Exception ex)
                         {

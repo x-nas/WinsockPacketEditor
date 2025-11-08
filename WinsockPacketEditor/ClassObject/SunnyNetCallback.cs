@@ -43,19 +43,28 @@ namespace WinsockPacketEditor
                             }
                         }
 
+                        string sRequest = string.Format("{0} {1} {2}\r\n{3}", Conn.Method(), Conn.URL(), Conn.Request().GetProto(), Conn.Request().GetAllHeader());
+                        if (Conn.Request().BodyLen() > 0)
+                        {
+                            sRequest += Conn.Request().Body().String();
+                        }
+                        sRequest = sRequest.Trim();
+
+                        byte[] bRequest = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sRequest);
+
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             Operate.FilterConfig.Filter.FilterAction.None,
-                            Conn.Request().BodyLen(),
+                            bRequest.Length,
                             0,
                             ptRequest,
                             Conn.ClientIP(),
                             Conn.Response().ServerAddress(),
                             Conn.URL(),
                             dtType,
-                            Conn.Request().Body().Bytes,
-                            Conn.Request().Body().Bytes,
-                            Conn.Request().Body().String());
+                            bRequest,
+                            bRequest,
+                            sRequest);
 
                         break;
 
@@ -68,19 +77,28 @@ namespace WinsockPacketEditor
                             ptResponse = Operate.PacketConfig.Packet.PacketType.HTTPS_Resp;
                         }
 
+                        string sResponse = string.Format("{0} {1}\r\n{2}", Conn.Response().GetProto(), Conn.Response().StatusText(), Conn.Response().GetAllHeader());
+                        if (Conn.Response().BodyLen() > 0)
+                        {
+                            sResponse += "\r\n" + Conn.Response().BodyAuto().String();
+                        }
+                        sResponse = sResponse.Trim();
+
+                        byte[] bResponse = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sResponse);
+
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             Operate.FilterConfig.Filter.FilterAction.None,
-                            Conn.Response().Body().Length,
+                            bResponse.Length,
                             0,
                             ptResponse,
                             Conn.ClientIP(),
                             Conn.Response().ServerAddress(),
                             Conn.URL(),
                             dtType,
-                            Conn.Response().Body().Bytes,
-                            Conn.Response().Body().Bytes,
-                            Conn.Response().Body().String());
+                            bResponse,
+                            bResponse,
+                            sResponse);
 
                         break;
 
