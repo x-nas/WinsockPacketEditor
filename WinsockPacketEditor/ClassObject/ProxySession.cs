@@ -266,13 +266,12 @@ namespace WinsockPacketEditor
                         if (Operate.ProxyConfig.Proxy.HookTCP_Resp)
                         {
                             Operate.FilterConfig.Filter.DoFilter_TCP(this, bData.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
+                            Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, bData.Length);
                         }
                         else
                         {
                             this.TrySend(bData, 0, bData.Length);
                         }
-
-                        Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, bData.Length);
                     }
 
                     this.StartReceivingFromTarget();

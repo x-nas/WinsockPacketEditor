@@ -121,6 +121,7 @@ namespace WinsockPacketEditor
                 {
                     this.treeClientList.Items.Clear();
                     Operate.ProxyConfig.Account.ClearAuthInfo();
+                    Operate.ProxyConfig.Account.SetAllAccounts_OffLine();
 
                     return;
                 }

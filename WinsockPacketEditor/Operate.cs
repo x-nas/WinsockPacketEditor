@@ -5846,13 +5846,12 @@ namespace WinsockPacketEditor
                             if (Operate.ProxyConfig.Proxy.HookTCP_Req)
                             {
                                 Operate.FilterConfig.Filter.DoFilter_TCP(psSession, bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
+                                Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bData.Length);
                             }
                             else
                             {
                                 psSession.TargetSocket.Send(bData);
-                            }
-
-                            Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bData.Length);
+                            }                            
                         }
                     }
                     catch (Exception ex)
@@ -5911,20 +5910,16 @@ namespace WinsockPacketEditor
                                 Span<byte> bRequestData = Operate.ProxyConfig.Proxy.GetUDPData_ByAddressType(addressType, bData);
                                 if (!bRequestData.IsEmpty)
                                 {
-                                    Operate.ProxyConfig.Proxy.UDP_Req_CNT++;
-                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Request, bRequestData.Length);
-                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bRequestData.Length);
-
                                     if (Operate.ProxyConfig.Proxy.HookUDP_Req)
                                     {
                                         Operate.FilterConfig.Filter.DoFilter_UDP(psSession, pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
+                                        Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bRequestData.Length);
                                     }
                                     else
                                     {
                                         psSession.SendUdpData(pu.ClientSocket, bRequestData, targetEndPoint);
                                     }
-
-                                    Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bRequestData.Length);
+                                    
                                     pu.UpdateActivity();
                                 }
                             }
@@ -5966,20 +5961,16 @@ namespace WinsockPacketEditor
 
                         if (!bResponseData.IsEmpty)
                         {
-                            Operate.ProxyConfig.Proxy.UDP_Resp_CNT++;
-                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.Total_Response, bResponseData.Length);
-                            Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bResponseData.Length);
-
                             if (Operate.ProxyConfig.Proxy.HookUDP_Resp)
                             {
                                 Operate.FilterConfig.Filter.DoFilter_UDP(psSession, pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
+                                Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bResponseData.Length);
                             }
                             else
                             {
                                 psSession.SendUdpData(pu.ClientSocket, bResponseData, pu.ClientEndPoint);
                             }
-
-                            Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bResponseData.Length);
+                            
                             pu.UpdateActivity();
                         }
 
@@ -8070,6 +8061,30 @@ namespace WinsockPacketEditor
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
                                     break;
+
+                                case PacketConfig.Packet.PacketType.UDP_Req:
+                                    ProxyConfig.Proxy.UDP_Req_CNT++;
+                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bBuffer.Length);
+                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bBuffer.Length);
+                                    break;
+
+                                case PacketConfig.Packet.PacketType.UDP_Resp:
+                                    ProxyConfig.Proxy.UDP_Resp_CNT++;
+                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
+                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
+                                    break;
+
+                                case PacketConfig.Packet.PacketType.HTTP_Req:
+                                case PacketConfig.Packet.PacketType.HTTPS_Req:
+                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Request, bBuffer.Length);
+                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Uplink, bBuffer.Length);
+                                    break;
+
+                                case PacketConfig.Packet.PacketType.HTTP_Resp:
+                                case PacketConfig.Packet.PacketType.HTTPS_Resp:
+                                    Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
+                                    Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
+                                    break;
                             }                            
 
                             if (!SystemConfig.SpeedMode)
@@ -9249,6 +9264,32 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(SetOnline_ByAccountID), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//设置所有代理账号为离线
+
+                public static void SetAllAccounts_OffLine()
+                {
+                    try
+                    {
+                        var onlineAccounts = Operate.ProxyConfig.Account.lstAccountInfo?
+                            .Where(ai => ai != null && ai.IsOnLine)
+                            .ToList();
+
+                        if (onlineAccounts?.Count > 0)
+                        {
+                            foreach (var ai in onlineAccounts)
+                            {
+                                ai.IsOnLine = false;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SetAllAccounts_OffLine), ex.Message);
                     }
                 }
 
