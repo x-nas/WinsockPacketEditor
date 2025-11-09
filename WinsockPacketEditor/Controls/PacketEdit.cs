@@ -19,21 +19,28 @@ namespace WinsockPacketEditor
         private int SendSocket = 0;
         private int SendCNT = 0;
         private int SendINT = 0;
+        private long TheologyID = 0;
+        private long WebSocketType = 0;
+        private Operate.PacketConfig.Packet.PacketType ptType;
 
         #region//窗体事件
 
         public PacketEdit(Form form, PacketInfo packetInfo)
         {
             InitializeComponent();
-            this.packetInfo = packetInfo;
             this.form = form;
+            this.packetInfo = packetInfo;
+            this.ptType = packetInfo.PacketType;            
         }
 
         public PacketEdit(Form form, ProxyInfo proxyInfo)
         {
             InitializeComponent();
-            this.proxyInfo = proxyInfo;
             this.form = form;
+            this.proxyInfo = proxyInfo;
+            this.ptType = proxyInfo.PacketType;
+            this.TheologyID = proxyInfo.TheologyID;
+            this.WebSocketType = proxyInfo.WebSocketType;            
         }
 
         private void PacketEdit_Load(object sender, EventArgs e)
@@ -151,16 +158,6 @@ namespace WinsockPacketEditor
 
         private bool CheckSendPacket()
         {
-            if ((int)this.nudPacketSocket.Value == 0)
-            {
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "套接字设置错误", TType.Error)
-                {
-                    LocalizationText = "PacketEditForm.Socket.Error"
-                });
-
-                return false;
-            }
-
             if (hbPacketEdit.ByteProvider.Length == 0)
             {
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "封包数据为空", TType.Error)
@@ -462,11 +459,11 @@ namespace WinsockPacketEditor
                         {
                             if (this.form is InterfaceInfo.IInjectMode)
                             {
-                                this.DoSendPacket(this.SendSocket, this.packetInfo.PacketFrom, this.packetInfo.PacketTo, bBuff, i, this.packetInfo.PacketType);
+                                this.DoSendPacket(this.SendSocket, this.packetInfo.PacketFrom, this.packetInfo.PacketTo, bBuff, i, this.ptType);
                             }
                             else if (this.form is InterfaceInfo.IProxyMode)
                             {
-                                this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, i, this.proxyInfo.PacketType);
+                                this.DoSendPacket(this.SendSocket, this.proxyInfo.ClientAddr, this.proxyInfo.ServerAddr, bBuff, i, this.ptType);
                             }
 
                             if (this.SendINT > 0)
@@ -550,7 +547,51 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                bool bSendOK = bSendOK = Operate.PacketConfig.Packet.SendPacket(iSocket, ptType, sIPFrom, sIPTo, bSendBuff);
+                bool bSendOK = false;
+
+                if (iSocket == 0)
+                {
+                    switch (this.ptType)
+                    {
+                        case Operate.PacketConfig.Packet.PacketType.HTTP_Req:
+                        case Operate.PacketConfig.Packet.PacketType.HTTPS_Req:
+                        case Operate.PacketConfig.Packet.PacketType.HTTP_Resp:
+                        case Operate.PacketConfig.Packet.PacketType.HTTPS_Resp:
+
+                            bSendOK = false;
+
+                            break;
+
+                        case Operate.PacketConfig.Packet.PacketType.TCP_Req:
+                            bSendOK = SunnyNetlibray.Tools.TCPTools.SendMessage(SunnyNetlibray.Tools.TCPTools.SendToServer, this.TheologyID, bSendBuff);
+                            break;
+
+                        case Operate.PacketConfig.Packet.PacketType.TCP_Resp:
+                            bSendOK = SunnyNetlibray.Tools.TCPTools.SendMessage(SunnyNetlibray.Tools.TCPTools.SendToClient, this.TheologyID, bSendBuff);
+                            break;
+
+                        case Operate.PacketConfig.Packet.PacketType.UDP_Req:
+                            bSendOK = SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToServer, this.TheologyID, bSendBuff);
+                            break;
+
+                        case Operate.PacketConfig.Packet.PacketType.UDP_Resp:
+                            bSendOK = SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToClient, this.TheologyID, bSendBuff);
+                            break;
+
+                        case Operate.PacketConfig.Packet.PacketType.WebSocket_Req:
+                            bSendOK = SunnyNetlibray.Tools.WebSocketTools.SendMessage(SunnyNetlibray.Tools.WebSocketTools.SendToServer, this.TheologyID, this.WebSocketType, bSendBuff);
+                            break;
+
+                        case Operate.PacketConfig.Packet.PacketType.WebSocket_Resp:
+                            bSendOK = SunnyNetlibray.Tools.WebSocketTools.SendMessage(SunnyNetlibray.Tools.WebSocketTools.SendToClient, this.TheologyID, this.WebSocketType, bSendBuff);
+                            break;
+                    }
+                }
+                else
+                {
+                    bSendOK = Operate.PacketConfig.Packet.SendPacket(iSocket, ptType, sIPFrom, sIPTo, bSendBuff);
+                }  
+                
                 if (bSendOK)
                 {
                     this.Send_Success++;

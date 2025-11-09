@@ -39,6 +39,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//唯一编号
+
+        long _TheologyID;
+
+        public long TheologyID
+        {
+            get => _TheologyID;
+            set
+            {
+                if (_TheologyID == value) return;
+                _TheologyID = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//封包类型
 
         Operate.PacketConfig.Packet.PacketType _PacketType;
@@ -55,6 +72,23 @@ namespace WinsockPacketEditor
         }
 
         #endregion                
+
+        #region//WebSocket类型
+
+        long _WebSocketType;
+
+        public long WebSocketType
+        {
+            get => _WebSocketType;
+            set
+            {
+                if (_WebSocketType == value) return;
+                _WebSocketType = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         #region//客户端地址
 
@@ -253,7 +287,9 @@ namespace WinsockPacketEditor
         public ProxyInfo(
             DateTime ProxyTime,
             int PacketSocket,
+            long TheologyID,
             Operate.PacketConfig.Packet.PacketType PacketType,
+            long WebSocketType,
             string ClientAddr,
             string ClientLocation,
             string ServerAddr,
@@ -268,7 +304,9 @@ namespace WinsockPacketEditor
         {          
             this._ProxyTime = ProxyTime;
             this._PacketSocket = PacketSocket;
+            this._TheologyID = TheologyID;
             this._PacketType = PacketType;
+            this._WebSocketType = WebSocketType;
             this._ClientAddr = ClientAddr;
             this._ClientLocation = ClientLocation;
             this._ServerAddr = ServerAddr;

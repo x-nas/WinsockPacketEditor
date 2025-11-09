@@ -57,7 +57,9 @@ namespace WinsockPacketEditor
                             Operate.FilterConfig.Filter.FilterAction.None,
                             bRequest.Length,
                             0,
+                            0,
                             ptRequest,
+                            0,
                             Conn.ClientIP(),
                             Conn.Response().ServerAddress(),
                             Conn.URL(),
@@ -91,7 +93,9 @@ namespace WinsockPacketEditor
                             Operate.FilterConfig.Filter.FilterAction.None,
                             bResponse.Length,
                             0,
+                            0,
                             ptResponse,
+                            0,
                             Conn.ClientIP(),
                             Conn.Response().ServerAddress(),
                             Conn.URL(),
@@ -129,22 +133,74 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Conn.GetUser().Equals("驱动程序"))
-                {
-                    if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
-                    {
-                        if (Conn.Type() == TCPEvent.EventType_TCP_About)
-                        {
-                            string ConnPort = Conn.RemoteAddr().Split(':')[1];
+                Operate.ProxyConfig.Proxy.DomainType dtType = Operate.ProxyConfig.Proxy.DomainType.Socket;
 
-                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                switch (Conn.Type())
+                {
+                    case TCPEvent.EventType_TCP_About:
+
+                        if (Conn.GetUser().Equals("驱动程序"))
+                        {
+                            if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                             {
-                                Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
-                                return;
+                                string ConnPort = Conn.RemoteAddr().Split(':')[1];
+
+                                if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                                {
+                                    Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                                    return;
+                                }
                             }
                         }
-                    }
-                }                                        
+
+                        break;
+
+                    case TCPEvent.EventType_TCP_OK:
+                        break;
+
+                    case TCPEvent.EventType_TCP_Send:
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            Conn.Body().Length,
+                            0,
+                            Conn.TheologyID(),
+                            Operate.PacketConfig.Packet.PacketType.TCP_Req,
+                            0,
+                            Conn.LocalAddr(),
+                            Conn.RemoteAddr(),
+                            Conn.RemoteAddr(),
+                            dtType,
+                            Conn.Body().Bytes,
+                            Conn.Body().Bytes,
+                            null);
+
+                        break;
+
+                    case TCPEvent.EventType_TCP_Receive:
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            Conn.Body().Length,
+                            0,
+                            Conn.TheologyID(),
+                            Operate.PacketConfig.Packet.PacketType.TCP_Resp,
+                            0,
+                            Conn.LocalAddr(),
+                            Conn.RemoteAddr(),
+                            Conn.RemoteAddr(),
+                            dtType,
+                            Conn.Body().Bytes,
+                            Conn.Body().Bytes,
+                            null);
+
+                        break;
+
+                    case TCPEvent.EventType_TCP_Close:
+                        break;
+                }                                                        
             }
             catch (Exception ex)
             {
@@ -172,7 +228,9 @@ namespace WinsockPacketEditor
                             Operate.FilterConfig.Filter.FilterAction.None,
                             Conn.Body().Length,
                             0,
+                            Conn.TheologyID(),
                             Operate.PacketConfig.Packet.PacketType.UDP_Req,
+                            0,
                             ClientIP,
                             ServerIP,
                             ServerIP,
@@ -190,7 +248,9 @@ namespace WinsockPacketEditor
                             Operate.FilterConfig.Filter.FilterAction.None,
                             Conn.Body().Length,
                             0,
+                            Conn.TheologyID(),
                             Operate.PacketConfig.Packet.PacketType.UDP_Resp,
+                            0,
                             ClientIP,
                             ServerIP,
                             ServerIP,
@@ -202,7 +262,6 @@ namespace WinsockPacketEditor
                         break;
 
                     case UDPEvent.EventType_UDP_Closed:
-
                         break;
                 }
             }

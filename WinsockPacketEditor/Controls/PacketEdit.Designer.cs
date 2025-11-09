@@ -833,21 +833,15 @@
             this.nudPacketSocket.Location = new System.Drawing.Point(75, 4);
             this.nudPacketSocket.Margin = new System.Windows.Forms.Padding(2);
             this.nudPacketSocket.Minimum = new decimal(new int[] {
-            1,
+            0,
             0,
             0,
             0});
             this.nudPacketSocket.Name = "nudPacketSocket";
-            this.nudPacketSocket.SelectionStart = 1;
             this.nudPacketSocket.Size = new System.Drawing.Size(276, 32);
             this.nudPacketSocket.TabIndex = 42;
-            this.nudPacketSocket.Text = "1";
+            this.nudPacketSocket.Text = "0";
             this.nudPacketSocket.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.nudPacketSocket.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // lPacketSocket
             // 
