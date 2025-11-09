@@ -160,6 +160,14 @@ namespace WinsockPacketEditor
 
                     case TCPEvent.EventType_TCP_Send:
 
+                        if (Conn.GetUser().Equals("驱动程序"))
+                        {
+                            if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                            {
+                                return;
+                            }
+                        }
+
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,
                             Operate.FilterConfig.Filter.FilterAction.None,
@@ -179,6 +187,14 @@ namespace WinsockPacketEditor
                         break;
 
                     case TCPEvent.EventType_TCP_Receive:
+
+                        if (Conn.GetUser().Equals("驱动程序"))
+                        {
+                            if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                            {
+                                return;
+                            }
+                        }
 
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
                             DateTime.Now,

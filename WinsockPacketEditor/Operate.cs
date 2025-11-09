@@ -4,6 +4,7 @@ using DiffPlex.DiffBuilder.Model;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using QQWry;
+using SuperSocket.Common;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -5846,7 +5847,7 @@ namespace WinsockPacketEditor
 
                             if (Operate.ProxyConfig.Proxy.HookTCP_Req)
                             {
-                                Operate.FilterConfig.Filter.DoFilter_TCP(psSession, bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
+                                Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(psSession, bData, Operate.PacketConfig.Packet.PacketType.TCP_Req);
                                 Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bData.Length);
                             }
                             else
@@ -5913,7 +5914,7 @@ namespace WinsockPacketEditor
                                 {
                                     if (Operate.ProxyConfig.Proxy.HookUDP_Req)
                                     {
-                                        Operate.FilterConfig.Filter.DoFilter_UDP(psSession, pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
+                                        Operate.FilterConfig.Filter.DoFilter_SOCKS_UDP(psSession, pu, targetEndPoint, bRequestData, Operate.PacketConfig.Packet.PacketType.UDP_Req);
                                         Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bRequestData.Length);
                                     }
                                     else
@@ -5964,7 +5965,7 @@ namespace WinsockPacketEditor
                         {
                             if (Operate.ProxyConfig.Proxy.HookUDP_Resp)
                             {
-                                Operate.FilterConfig.Filter.DoFilter_UDP(psSession, pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
+                                Operate.FilterConfig.Filter.DoFilter_SOCKS_UDP(psSession, pu, epRemote, bResponseData, Operate.PacketConfig.Packet.PacketType.UDP_Resp);
                                 Operate.ProxyConfig.Account.AddTraffic(psSession.AID, psSession.ClientIP, bResponseData.Length);
                             }
                             else
@@ -15129,9 +15130,9 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//执行滤镜 - 代理模式
+                #region//执行滤镜 - SOCKS 代理模式
 
-                public static void DoFilter_TCP(ProxySession psSession, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
+                public static void DoFilter_SOCKS_TCP(ProxySession psSession, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
                 {
                     try
                     {
@@ -15199,11 +15200,11 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoFilter_TCP), ex.Message);
+                        Operate.DoLog(nameof(DoFilter_SOCKS_TCP), ex.Message);
                     }
                 }
 
-                public static void DoFilter_UDP(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
+                public static void DoFilter_SOCKS_UDP(ProxySession psSession, ProxyUDP pu, IPEndPoint epRemote, Span<byte> bData, Operate.PacketConfig.Packet.PacketType ptType)
                 {
                     try
                     {
@@ -15264,11 +15265,11 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoFilter_UDP), ex.Message);
+                        Operate.DoLog(nameof(DoFilter_SOCKS_UDP), ex.Message);
                     }
                 }
 
-                #endregion
+                #endregion                
 
                 #region//执行替换（普通滤镜）
 

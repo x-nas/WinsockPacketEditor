@@ -41,6 +41,7 @@
             this.lSelectDriver = new AntdUI.Label();
             this.rbProxifier = new AntdUI.Radio();
             this.tlpMustTCP = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.cbMustTCP = new AntdUI.Checkbox();
             this.txtMustTCP_AppointPort = new AntdUI.Input();
             this.cbMustTCP_AppointPort = new AntdUI.Checkbox();
             this.txtMustTCP_PassWord = new AntdUI.Input();
@@ -55,7 +56,6 @@
             this.tProcessID = new AntdUI.Table();
             this.lProcessID = new AntdUI.Label();
             this.ttcLoadDriver = new AntdUI.TooltipComponent();
-            this.cbMustTCP = new AntdUI.Checkbox();
             this.tlpProcessSetting.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpLoadDriver.SuspendLayout();
@@ -93,11 +93,12 @@
             this.lSaveReminder.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.lSaveReminder.ForeColor = System.Drawing.Color.Red;
             this.lSaveReminder.LocalizationText = "ProcessSetting.Save.Reminder";
-            this.lSaveReminder.Location = new System.Drawing.Point(123, 615);
+            this.lSaveReminder.Location = new System.Drawing.Point(77, 615);
             this.lSaveReminder.Name = "lSaveReminder";
-            this.lSaveReminder.Size = new System.Drawing.Size(454, 32);
+            this.lSaveReminder.Size = new System.Drawing.Size(546, 32);
             this.lSaveReminder.TabIndex = 11;
-            this.lSaveReminder.Text = "需要启动 HTTP 代理后，才可以拦截进程的数据\r\n保存时，会断开目标进程已建立的 TCP 连接，若无法拦截数据，请重启目标进程再试!";
+            this.lSaveReminder.Text = "需要启用 [ HTTP 代理 ] 后，才可以拦截进程的数据! 需要启用 [ 强制转代理 ] 后, 才可以使用滤镜功能!\r\n保存时，会断开目标进程已建立的 TCP " +
+    "连接，若无法拦截数据，请重启目标进程再试!";
             this.lSaveReminder.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tlpButton
@@ -284,6 +285,19 @@
             this.tlpMustTCP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMustTCP.Size = new System.Drawing.Size(700, 130);
             this.tlpMustTCP.TabIndex = 8;
+            // 
+            // cbMustTCP
+            // 
+            this.cbMustTCP.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.cbMustTCP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbMustTCP.LocalizationText = "ProcessSetting.MustTCP";
+            this.cbMustTCP.Location = new System.Drawing.Point(2, 2);
+            this.cbMustTCP.Margin = new System.Windows.Forms.Padding(2);
+            this.cbMustTCP.Name = "cbMustTCP";
+            this.cbMustTCP.Size = new System.Drawing.Size(99, 37);
+            this.cbMustTCP.TabIndex = 35;
+            this.cbMustTCP.Text = "强制转代理 :";
+            this.cbMustTCP.CheckedChanged += new AntdUI.BoolEventHandler(this.cbMustTCP_CheckedChanged);
             // 
             // txtMustTCP_AppointPort
             // 
@@ -486,19 +500,6 @@
             this.lProcessID.Size = new System.Drawing.Size(344, 23);
             this.lProcessID.TabIndex = 14;
             this.lProcessID.Text = "按 [ 进程编号 ] 拦截 ( 双击添加到名称 )";
-            // 
-            // cbMustTCP
-            // 
-            this.cbMustTCP.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbMustTCP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbMustTCP.LocalizationText = "ProcessSetting.MustTCP";
-            this.cbMustTCP.Location = new System.Drawing.Point(2, 2);
-            this.cbMustTCP.Margin = new System.Windows.Forms.Padding(2);
-            this.cbMustTCP.Name = "cbMustTCP";
-            this.cbMustTCP.Size = new System.Drawing.Size(99, 37);
-            this.cbMustTCP.TabIndex = 35;
-            this.cbMustTCP.Text = "强制转代理 :";
-            this.cbMustTCP.CheckedChanged += new AntdUI.BoolEventHandler(this.cbMustTCP_CheckedChanged);
             // 
             // ProcessSetting
             // 

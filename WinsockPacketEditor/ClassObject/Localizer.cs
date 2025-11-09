@@ -2952,7 +2952,7 @@ namespace WinsockPacketEditor
                     return "Cannot intercept 127.0.0.1 data";
 
                 case "ProcessSetting.Save.Reminder":
-                    return "HTTP proxy needs to be started before intercepting process data\r\nWhen saving, the TCP connection established by the target process will be disconnected.\r\nIf data cannot be intercepted, please restart the target process and try again!";
+                    return "[HTTP Proxy] needs to be enabled in order to intercept process data!\r\n[Forced proxy] needs to be enabled in order to use the filter function!\r\nWhen saving, the TCP connection established by the target process will be disconnected.\r\nIf data cannot be intercepted, please restart the target process and try again!";
 
                 case "ProcessSetting.Save.Success":
                     return "Process settings saved successfully";

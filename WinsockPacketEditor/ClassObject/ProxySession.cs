@@ -265,7 +265,7 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.ProxyConfig.Proxy.HookTCP_Resp)
                         {
-                            Operate.FilterConfig.Filter.DoFilter_TCP(this, bData.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
+                            Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(this, bData.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
                             Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, bData.Length);
                         }
                         else
