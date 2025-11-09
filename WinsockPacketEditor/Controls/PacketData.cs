@@ -53,25 +53,10 @@ namespace WinsockPacketEditor
                 {
                     if (Operate.PacketConfig.List.piSelect != null)
                     {
-                        if (Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
-                            Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
-                            Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
-                            Operate.PacketConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
-                        {
-                            this.tabPacketData.SelectTab("tpText");
+                        this.tabPacketData.SelectTab("tpHex");
 
-                            this.txtText.SuspendLayout();
-                            this.txtText.Clear();
-                            this.txtText.Text = Operate.PacketConfig.List.piSelect.PacketData;
-                            this.txtText.ResumeLayout();
-                        }
-                        else
-                        {
-                            this.tabPacketData.SelectTab("tpHex");
-
-                            DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
-                            this.hbPacketData.ByteProvider = dbp;
-                        }
+                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
+                        this.hbPacketData.ByteProvider = dbp;
                     }
                 }
                 else if (this.form is InterfaceInfo.IProxyMode proxyForm)
@@ -84,11 +69,7 @@ namespace WinsockPacketEditor
                             Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
                         {
                             this.tabPacketData.SelectTab("tpText");
-
-                            this.txtText.SuspendLayout();
-                            this.txtText.Clear();
-                            this.txtText.Text = Operate.ProxyConfig.List.piSelect.PacketData;
-                            this.txtText.ResumeLayout();
+                            this.ShowText(Operate.ProxyConfig.List.piSelect.PacketData);                            
                         }
                         else
                         {
@@ -103,6 +84,33 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(RefreshPacketData), ex.Message);
+            }            
+        }
+
+        private void ShowText(string PacketData)
+        {
+            try
+            {
+                this.txtText.SuspendLayout();
+                this.txtText.Clear();
+
+                AntdUI.Spin.open(this.form, new AntdUI.Spin.Config()
+                {
+                    Radius = 6,
+                    Font = new Font("Microsoft YaHei UI", 9F),
+                }, (config) =>
+                {
+                    config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+                    this.txtText.Text = PacketData;
+
+                }, () =>
+                {
+                    this.txtText.ResumeLayout();
+                });
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(ShowText), ex.Message);
             }            
         }
 

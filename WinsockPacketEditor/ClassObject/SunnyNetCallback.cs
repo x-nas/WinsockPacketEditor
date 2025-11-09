@@ -277,7 +277,81 @@ namespace WinsockPacketEditor
 
         public void OnWebSocketCallback(WebSocketEvent Conn)
         {
-            //不做处理
+            try
+            {
+                Operate.ProxyConfig.Proxy.DomainType dtType = Operate.ProxyConfig.Proxy.DomainType.WebSocket;
+
+                switch (Conn.Type())
+                {
+                    case WebSocketEvent.EventType_Websocket_OK:
+                        break;
+
+                    case WebSocketEvent.EventType_Websocket_Send:
+
+                        string sRequest = string.Format("{0} {1}", Conn.Method(), Conn.URL());
+                        if (Conn.Body().Length > 0)
+                        {
+                            sRequest += Conn.Body().String();
+                        }
+                        sRequest = sRequest.Trim();
+
+                        byte[] bRequest = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sRequest);
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            Conn.Body().Length,
+                            0,
+                            Conn.TheologyID(),
+                            Operate.PacketConfig.Packet.PacketType.WebSocket_Req,
+                            Conn.MessageType(),
+                            string.Empty,
+                            string.Empty,
+                            Conn.URL(),
+                            dtType,
+                            bRequest,
+                            bRequest,
+                            sRequest);
+
+                        break;
+
+                    case WebSocketEvent.EventType_Websocket_Receive:
+
+                        string sResponse = string.Format("{0} {1}", Conn.Method(), Conn.URL());
+                        if (Conn.Body().Length > 0)
+                        {
+                            sResponse += Conn.Body().String();
+                        }
+                        sResponse = sResponse.Trim();
+
+                        byte[] bResponse = Operate.SystemConfig.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sResponse);
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            Conn.Body().Length,
+                            0,
+                            Conn.TheologyID(),
+                            Operate.PacketConfig.Packet.PacketType.WebSocket_Resp,
+                            Conn.MessageType(),
+                            string.Empty,
+                            string.Empty,
+                            Conn.URL(),
+                            dtType,
+                            bResponse,
+                            bResponse,
+                            sResponse);
+
+                        break;
+
+                    case WebSocketEvent.EventType_Websocket_Close:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(OnWebSocketCallback), ex.Message);
+            }            
         }
 
         #endregion

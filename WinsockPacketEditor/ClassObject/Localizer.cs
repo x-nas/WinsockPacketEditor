@@ -1745,6 +1745,24 @@ namespace WinsockPacketEditor
                 case "HookSettingsForm.UDP_Resp":
                     return "UDP Res";
 
+                case "HookSettingsForm.HTTP_Req":
+                    return "HTTP Req";
+
+                case "HookSettingsForm.HTTP_Resp":
+                    return "HTTP Res";
+
+                case "HookSettingsForm.HTTPS_Req":
+                    return "HTTPS Req";
+
+                case "HookSettingsForm.HTTPS_Resp":
+                    return "HTTPS Res";
+
+                case "HookSettingsForm.WebSocket_Req":
+                    return "WebSocket Req";
+
+                case "HookSettingsForm.WebSocket_Resp":
+                    return "WebSocket Res";
+
                 case "HookSettingsForm.TCP":
                     return "TCP Protocol";
 

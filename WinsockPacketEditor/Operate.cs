@@ -5196,6 +5196,7 @@ namespace WinsockPacketEditor
                     HTTP = 1,
                     HTTPS = 2,
                     External = 3,
+                    WebSocket = 4,
                 }
 
                 public enum MapProtocol : byte
@@ -11830,6 +11831,8 @@ namespace WinsockPacketEditor
                     public static string HTTP_Resp => AntdUI.Localization.Get("HookSettingsForm.HTTP_Resp", "HTTP 响应");
                     public static string HTTPS_Req => AntdUI.Localization.Get("HookSettingsForm.HTTPS_Req", "HTTPS 请求");
                     public static string HTTPS_Resp => AntdUI.Localization.Get("HookSettingsForm.HTTPS_Resp", "HTTPS 响应");
+                    public static string WebSocket_Req => AntdUI.Localization.Get("HookSettingsForm.WebSocket_Req", "WebSocket 请求");
+                    public static string WebSocket_Resp => AntdUI.Localization.Get("HookSettingsForm.WebSocket_Resp", "WebSocket 响应");
                 }
 
                 public static string GetName_ByPacketType(PacketType socketType)
@@ -11901,6 +11904,12 @@ namespace WinsockPacketEditor
                             case PacketType.HTTPS_Resp:
                                 return PacketTypeNames.HTTPS_Resp;
 
+                            case PacketType.WebSocket_Req:
+                                return PacketTypeNames.WebSocket_Req;
+
+                            case PacketType.WebSocket_Resp:
+                                return PacketTypeNames.WebSocket_Resp;
+
                             default:
                                 return string.Empty;
                         }
@@ -11932,6 +11941,7 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.UDP_Req:
                             case PacketConfig.Packet.PacketType.HTTP_Req:
                             case PacketConfig.Packet.PacketType.HTTPS_Req:
+                            case PacketConfig.Packet.PacketType.WebSocket_Req:
                                 return Properties.Resources.Send;
 
                             case PacketConfig.Packet.PacketType.WS1_Recv:
@@ -11945,6 +11955,7 @@ namespace WinsockPacketEditor
                             case PacketConfig.Packet.PacketType.UDP_Resp:
                             case PacketConfig.Packet.PacketType.HTTP_Resp:
                             case PacketConfig.Packet.PacketType.HTTPS_Resp:
+                            case PacketConfig.Packet.PacketType.WebSocket_Resp:
                                 return Properties.Resources.Recv;
                         }
                     }
