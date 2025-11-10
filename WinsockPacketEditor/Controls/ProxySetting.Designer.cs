@@ -33,6 +33,8 @@
             this.tlpHTTPProxy = new WinsockPacketEditor.TableLayoutPanelEx();
             this.nudHTTPPort = new AntdUI.InputNumber();
             this.cbEnable_HTTP = new AntdUI.Checkbox();
+            this.ddlCertType = new AntdUI.Select();
+            this.bExportCert = new AntdUI.Button();
             this.dHTTPProxy = new AntdUI.Divider();
             this.dSystemProxy = new AntdUI.Divider();
             this.tlpSOCKSProxy = new WinsockPacketEditor.TableLayoutPanelEx();
@@ -87,7 +89,7 @@
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
-            this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpProxySettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
@@ -106,7 +108,7 @@
             this.dMaxConnection.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dMaxConnection.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dMaxConnection.LocalizationText = "ProxySettingsForm.MaxConnection";
-            this.dMaxConnection.Location = new System.Drawing.Point(2, 432);
+            this.dMaxConnection.Location = new System.Drawing.Point(2, 472);
             this.dMaxConnection.Margin = new System.Windows.Forms.Padding(2);
             this.dMaxConnection.Name = "dMaxConnection";
             this.dMaxConnection.Orientation = AntdUI.TOrientation.Left;
@@ -121,15 +123,17 @@
             this.tlpHTTPProxy.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpHTTPProxy.Controls.Add(this.nudHTTPPort, 1, 0);
             this.tlpHTTPProxy.Controls.Add(this.cbEnable_HTTP, 0, 0);
+            this.tlpHTTPProxy.Controls.Add(this.ddlCertType, 1, 1);
+            this.tlpHTTPProxy.Controls.Add(this.bExportCert, 0, 1);
             this.tlpHTTPProxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpHTTPProxy.Location = new System.Drawing.Point(0, 284);
             this.tlpHTTPProxy.Margin = new System.Windows.Forms.Padding(0);
             this.tlpHTTPProxy.Name = "tlpHTTPProxy";
-            this.tlpHTTPProxy.RowCount = 2;
+            this.tlpHTTPProxy.RowCount = 3;
+            this.tlpHTTPProxy.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpHTTPProxy.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpHTTPProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpHTTPProxy.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpHTTPProxy.Size = new System.Drawing.Size(350, 50);
+            this.tlpHTTPProxy.Size = new System.Drawing.Size(350, 90);
             this.tlpHTTPProxy.TabIndex = 12;
             // 
             // nudHTTPPort
@@ -169,6 +173,30 @@
             this.cbEnable_HTTP.Text = "启用 HTTP 代理 :";
             this.cbEnable_HTTP.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_HTTP_CheckedChanged);
             // 
+            // ddlCertType
+            // 
+            this.ddlCertType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ddlCertType.List = true;
+            this.ddlCertType.Location = new System.Drawing.Point(130, 40);
+            this.ddlCertType.Margin = new System.Windows.Forms.Padding(2);
+            this.ddlCertType.Name = "ddlCertType";
+            this.ddlCertType.Size = new System.Drawing.Size(218, 38);
+            this.ddlCertType.TabIndex = 4;
+            // 
+            // bExportCert
+            // 
+            this.bExportCert.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.bExportCert.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bExportCert.IconSvg = "SafetyCertificateOutlined";
+            this.bExportCert.LocalizationText = "ExportCertFile";
+            this.bExportCert.Location = new System.Drawing.Point(3, 41);
+            this.bExportCert.Name = "bExportCert";
+            this.bExportCert.Size = new System.Drawing.Size(87, 36);
+            this.bExportCert.TabIndex = 5;
+            this.bExportCert.Text = "导出证书";
+            this.bExportCert.Type = AntdUI.TTypeMini.Warn;
+            this.bExportCert.Click += new System.EventHandler(this.bExportCert_Click);
+            // 
             // dHTTPProxy
             // 
             this.dHTTPProxy.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -187,7 +215,7 @@
             this.dSystemProxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dSystemProxy.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dSystemProxy.LocalizationText = "ProxySettingsForm.SystemProxy";
-            this.dSystemProxy.Location = new System.Drawing.Point(2, 351);
+            this.dSystemProxy.Location = new System.Drawing.Point(2, 391);
             this.dSystemProxy.Margin = new System.Windows.Forms.Padding(2);
             this.dSystemProxy.Name = "dSystemProxy";
             this.dSystemProxy.Orientation = AntdUI.TOrientation.Left;
@@ -403,7 +431,7 @@
             // switchSystemProxy
             // 
             this.switchSystemProxy.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.switchSystemProxy.Location = new System.Drawing.Point(4, 389);
+            this.switchSystemProxy.Location = new System.Drawing.Point(4, 429);
             this.switchSystemProxy.Margin = new System.Windows.Forms.Padding(4, 2, 2, 2);
             this.switchSystemProxy.Name = "switchSystemProxy";
             this.switchSystemProxy.Size = new System.Drawing.Size(35, 24);
@@ -413,7 +441,7 @@
             // txtMaxConnectionNumber
             // 
             this.txtMaxConnectionNumber.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtMaxConnectionNumber.Location = new System.Drawing.Point(2, 470);
+            this.txtMaxConnectionNumber.Location = new System.Drawing.Point(2, 510);
             this.txtMaxConnectionNumber.Margin = new System.Windows.Forms.Padding(2);
             this.txtMaxConnectionNumber.Maximum = new decimal(new int[] {
             65535,
@@ -483,5 +511,7 @@
         private AntdUI.Checkbox cbEnable_Auth;
         private AntdUI.InputNumber nudHTTPPort;
         private AntdUI.Checkbox cbEnable_HTTP;
+        private AntdUI.Select ddlCertType;
+        private AntdUI.Button bExportCert;
     }
 }

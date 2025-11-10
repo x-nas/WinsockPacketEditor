@@ -6775,6 +6775,202 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//导出证书到文件（对话框）
+
+                public static void SaveCertToFile_Dialog(Form form, int CerType, string FileName)
+                {
+                    try
+                    {
+                        SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                        sfdSaveFile.FileName = FileName;
+                        sfdSaveFile.RestoreDirectory = true;
+
+                        switch (CerType)
+                        {
+                            case 0:
+                            case 1:
+                                sfdSaveFile.Filter = AntdUI.Localization.Get("CerFile", "CER 文件") + "（*.cer）|*.cer";
+                                break;
+
+                            case 2:
+                            case 3:
+                                sfdSaveFile.Filter = AntdUI.Localization.Get("CrtFile", "CRT 文件") + "（*.crt）|*.crt";
+                                break;
+
+                            case 4:
+                                sfdSaveFile.Filter = AntdUI.Localization.Get("PemFile", "PEM 文件") + "（*.pem）|*.pem";
+                                break;
+
+                            case 5:
+                                sfdSaveFile.Filter = AntdUI.Localization.Get("AndroidFile", "安卓证书 文件") + "（*.0）|*.0";
+                                break;
+                        }
+
+                        if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                        {
+                            string FilePath = sfdSaveFile.FileName;
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                bool bExport = false;
+
+                                switch (CerType)
+                                {
+                                    case 0:
+                                        bExport = ProxyConfig.Proxy.ExportPemToCerFile(Properties.Resources.Cert_Ca, FilePath, false);
+                                        break;
+
+                                    case 1:
+                                        bExport = ProxyConfig.Proxy.ExportPemToCerFile(Properties.Resources.Cert_Ca, FilePath, true);
+                                        break;
+
+                                    case 2:
+                                        bExport = ProxyConfig.Proxy.ExportPemToCrtFile(Properties.Resources.Cert_Ca, FilePath, false);
+                                        break;
+
+                                    case 3:
+                                        bExport = ProxyConfig.Proxy.ExportPemToCrtFile(Properties.Resources.Cert_Ca, FilePath, true);
+                                        break;
+
+                                    case 4:
+                                        bExport = ProxyConfig.Proxy.ExportPemToPemFile(Properties.Resources.Cert_Ca, FilePath);
+                                        break;
+
+                                    case 5:
+                                        bExport = ProxyConfig.Proxy.ExportPemToAndroidFile(Properties.Resources.Cert_Ca, FilePath);
+                                        break;
+                                }
+
+                                if (bExport)
+                                {
+                                    string Title = AntdUI.Localization.Get("ExportCertFile.Success", "导出证书成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(nameof(SaveCertToFile_Dialog), Title + ": " + FilePath);
+                                }
+                                else
+                                {
+                                    string Title = AntdUI.Localization.Get("ExportCertFile.Error", "导出证书失败");
+                                    string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                    AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveCertToFile_Dialog), ex.Message);
+                    }
+                }
+
+                #endregion
+
+                #region//导出 Cer 证书
+
+                public static bool ExportPemToCerFile(string pemContent, string outputFilePath, bool useBase64Encoding)
+                {
+                    try
+                    {
+                        if (useBase64Encoding)
+                        {
+                            File.WriteAllText(outputFilePath, pemContent);
+                        }
+                        else
+                        {
+                            string base64Data = ProxyConfig.Proxy.CleanPemContent(pemContent);
+                            byte[] certData = Convert.FromBase64String(base64Data);
+
+                            File.WriteAllBytes(outputFilePath, certData);
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ExportPemToCerFile), ex.Message);
+                        return false;
+                    }
+                }
+
+                private static string CleanPemContent(string pemContent)
+                {
+                    return pemContent
+                        .Replace("-----BEGIN CERTIFICATE-----", "")
+                        .Replace("-----END CERTIFICATE-----", "")
+                        .Replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                        .Replace("-----END RSA PRIVATE KEY-----", "")
+                        .Replace("-----BEGIN PRIVATE KEY-----", "")
+                        .Replace("-----END PRIVATE KEY-----", "")
+                        .Replace("\n", "")
+                        .Replace("\r", "")
+                        .Trim();
+                }
+
+                #endregion
+
+                #region//导出 Crt 证书
+
+                public static bool ExportPemToCrtFile(string pemContent, string outputFilePath, bool useBase64Encoding)
+                {
+                    try
+                    {
+                        if (useBase64Encoding)
+                        {
+                            File.WriteAllText(outputFilePath, pemContent);
+                        }
+                        else
+                        {
+                            string base64Data = ProxyConfig.Proxy.CleanPemContent(pemContent);
+                            byte[] certData = Convert.FromBase64String(base64Data);
+
+                            File.WriteAllBytes(outputFilePath, certData);
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ExportPemToCrtFile), ex.Message);
+                        return false;
+                    }
+                }
+
+                #endregion
+
+                #region//导出 Pem 证书
+
+                public static bool ExportPemToPemFile(string pemContent, string outputFilePath)
+                {
+                    try
+                    {
+                        File.WriteAllText(outputFilePath, pemContent);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ExportPemToPemFile), ex.Message);
+                        return false;
+                    }
+                }
+
+                #endregion
+
+                #region//导出 Android 证书
+
+                public static bool ExportPemToAndroidFile(string pemContent, string outputFilePath)
+                {
+                    try
+                    {
+                        File.WriteAllText(outputFilePath, pemContent);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ExportPemToAndroidFile), ex.Message);
+                        return false;
+                    }
+                }
+
+                #endregion
+
                 #region//新增白名单
 
                 private static readonly object _whiteListLock = new object();

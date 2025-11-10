@@ -691,6 +691,45 @@ namespace WinsockPacketEditor
                 case "UninstallDriver.Alert":
                     return "Uninstalling the driver will immediately restart the computer.\r\nDo not uninstall unless necessary!";
 
+                case "CerFile":
+                    return "CER File";
+
+                case "CerFile.Binary":
+                    return "Cer File ( Binary )";
+
+                case "CerFile.Base64":
+                    return "Cer File ( Base64 )";
+
+                case "CrtFile":
+                    return "CRT File";
+
+                case "CrtFile.Binary":
+                    return "Crt File ( Binary )";
+
+                case "CrtFile.Base64":
+                    return "Crt File ( Base64 )";
+
+                case "PemFile":
+                    return "PEM File";
+
+                case "PemFile.Base64":
+                    return "Pem File ( Base64 )";
+
+                case "AndroidFile":
+                    return "Android File";
+
+                case "AndroidFile.Hash":
+                    return "Android File ( 9a7ae4b0.0 )";
+
+                case "ExportCertFile":
+                    return "Export Cert";
+
+                case "ExportCertFile.Success":
+                    return "Successfully exported certificate file";
+
+                case "ExportCertFile.Error":
+                    return "Export certificate file failed";
+
                 #endregion
 
                 #region//StartForm

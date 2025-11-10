@@ -33,6 +33,24 @@ namespace WinsockPacketEditor
                 this.switchSystemProxy.Checked = Operate.ProxyConfig.Proxy.Enable_SystemProxy;
                 this.txtMaxConnectionNumber.Value = Operate.ProxyConfig.Proxy.MaxConnectionNumber;
 
+                this.InitProxyIP();
+                this.InitAuthType();
+                this.InitCertType();
+                this.ProxyIP_Appoint_Changed();
+                this.EnableSOCKS5_Changed();
+                this.Enable_Auth_Changed();
+                this.Enable_HTTP_Changed();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(ProxySetting_Load), ex.Message);
+            }
+        }
+
+        private void InitProxyIP()
+        {
+            try
+            {
                 if (Operate.ProxyConfig.Proxy.ProxyServerIP == null)
                 {
                     Operate.ProxyConfig.Proxy.ProxyServerIP = Operate.SystemConfig.GetLocalIPAddress();
@@ -50,7 +68,17 @@ namespace WinsockPacketEditor
                 {
                     this.ddlProxyIP_Appoint.SelectedIndex = 0;
                 }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(InitProxyIP), ex.Message);
+            }            
+        }
 
+        private void InitAuthType()
+        {
+            try
+            {
                 this.ddlAuthType.Items.Clear();
                 this.ddlAuthType.Items.Add(AntdUI.Localization.Get("ProxySettingsForm.UNPW", "用户名 / 密码"));
 
@@ -58,16 +86,34 @@ namespace WinsockPacketEditor
                 {
                     this.ddlAuthType.SelectedIndex = 0;
                 }
-
-                this.ProxyIP_Appoint_Changed();
-                this.EnableSOCKS5_Changed();
-                this.Enable_Auth_Changed();
-                this.Enable_HTTP_Changed();
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ProxySetting_Load), ex.Message);
+                Operate.DoLog(nameof(InitAuthType), ex.Message);
+            }            
+        }
+
+        private void InitCertType()
+        {
+            try
+            {
+                this.ddlCertType.Items.Clear();
+                this.ddlCertType.Items.Add(AntdUI.Localization.Get("CerFile.Binary", "Cer 证书 ( 二进制格式 )"));
+                this.ddlCertType.Items.Add(AntdUI.Localization.Get("CerFile.Base64", "Cer 证书 ( 文本格式 )"));
+                this.ddlCertType.Items.Add(AntdUI.Localization.Get("CrtFile.Binary", "Crt 证书 ( 二进制格式 )"));
+                this.ddlCertType.Items.Add(AntdUI.Localization.Get("CrtFile.Base64", "Crt 证书 ( 文本格式 )"));
+                this.ddlCertType.Items.Add(AntdUI.Localization.Get("PemFile.Base64", "Pem 证书 ( 文本格式 )"));
+                this.ddlCertType.Items.Add(AntdUI.Localization.Get("AndroidFile.Hash", "安卓系统 证书 ( 9a7ae4b0.0 )"));
+
+                if (this.ddlCertType.Items.Count > 0)
+                {
+                    this.ddlCertType.SelectedIndex = 0;
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(InitCertType), ex.Message);
+            }            
         }
 
         #endregion
@@ -158,6 +204,34 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//导出证书
+
+        private void bExportCert_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int CerType = this.ddlCertType.SelectedIndex;
+                string CertName = string.Empty;
+
+                if (CerType == 5)
+                {
+                    CertName = "9a7ae4b0";
+                }
+                else
+                {
+                    CertName = "WPE64";
+                }
+
+                Operate.ProxyConfig.Proxy.SaveCertToFile_Dialog(this.form, CerType, CertName);
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(bExportCert_Click), ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//检查保存设置
 
         private bool CheckSetting()
@@ -241,6 +315,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion
+        #endregion        
     }
 }
