@@ -10,37 +10,33 @@ namespace WinsockPacketEditor
         public void OnHttpCallback(HTTPEvent Conn)
         {
             try
-            {                
+            {
+                string ConnPort = "80";
                 Operate.ProxyConfig.Proxy.DomainType dtType = Operate.ProxyConfig.Proxy.DomainType.HTTP;
 
                 if (Conn.URL().ToUpper().StartsWith("HTTPS"))
-                {                    
+                {
+                    ConnPort = "443";
                     dtType = Operate.ProxyConfig.Proxy.DomainType.HTTPS;
                 }
 
                 switch (Conn.Type())
                 {
-                    case HTTPEvent.EventType_HTTP_Request:
+                    case HTTPEvent.EventType_HTTP_Request:                        
 
-                        string ConnPort = "80";
-                        Operate.PacketConfig.Packet.PacketType ptRequest = Operate.PacketConfig.Packet.PacketType.HTTP_Req;
-                        
-                        if (dtType == Operate.ProxyConfig.Proxy.DomainType.HTTPS)
+                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                         {
-                            ConnPort = "443";
-                            ptRequest = Operate.PacketConfig.Packet.PacketType.HTTPS_Req;
+                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
+                            {
+                                Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                                return;
+                            }
                         }
 
-                        if (Conn.GetUser().Equals("驱动程序"))
+                        Operate.PacketConfig.Packet.PacketType ptRequest = Operate.PacketConfig.Packet.PacketType.HTTP_Req;
+                        if (dtType == Operate.ProxyConfig.Proxy.DomainType.HTTPS)
                         {
-                            if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
-                            {
-                                if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
-                                {
-                                    Conn.Request().SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
-                                    return;
-                                }
-                            }
+                            ptRequest = Operate.PacketConfig.Packet.PacketType.HTTPS_Req;
                         }
 
                         string sRequest = string.Format("{0} {1} {2}\r\n{3}", Conn.Method(), Conn.URL(), Conn.Request().GetProto(), Conn.Request().GetAllHeader());
@@ -72,8 +68,15 @@ namespace WinsockPacketEditor
 
                     case HTTPEvent.EventType_HTTP_Response:
 
-                        Operate.PacketConfig.Packet.PacketType ptResponse = Operate.PacketConfig.Packet.PacketType.HTTP_Resp;
-                        
+                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                        {
+                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort))
+                            {
+                                return;
+                            }
+                        }
+
+                        Operate.PacketConfig.Packet.PacketType ptResponse = Operate.PacketConfig.Packet.PacketType.HTTP_Resp;                        
                         if (dtType == Operate.ProxyConfig.Proxy.DomainType.HTTPS)
                         {
                             ptResponse = Operate.PacketConfig.Packet.PacketType.HTTPS_Resp;
@@ -139,17 +142,14 @@ namespace WinsockPacketEditor
                 {
                     case TCPEvent.EventType_TCP_About:
 
-                        if (Conn.GetUser().Equals("驱动程序"))
+                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                         {
-                            if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
-                            {
-                                string ConnPort = Conn.RemoteAddr().Split(':')[1];
+                            string ConnPort = Conn.RemoteAddr().Split(':')[1];
 
-                                if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
-                                {
-                                    Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
-                                    return;
-                                }
+                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                            {
+                                Conn.SetProxy(Operate.SystemConfig.GetMustTCP(), 5000);
+                                return;
                             }
                         }
 
@@ -160,12 +160,9 @@ namespace WinsockPacketEditor
 
                     case TCPEvent.EventType_TCP_Send:
 
-                        if (Conn.GetUser().Equals("驱动程序"))
+                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                         {
-                            if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
-                            {
-                                return;
-                            }
+                            return;
                         }
 
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
@@ -188,12 +185,9 @@ namespace WinsockPacketEditor
 
                     case TCPEvent.EventType_TCP_Receive:
 
-                        if (Conn.GetUser().Equals("驱动程序"))
+                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
                         {
-                            if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
-                            {
-                                return;
-                            }
+                            return;
                         }
 
                         _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
@@ -226,10 +220,12 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//OnUdpCallback
+        #region//OnUdpCallback        
 
         public void OnUdpCallback(UDPEvent Conn)
         {
+            long TheologyID = Conn.TheologyID();
+
             try
             {
                 string ClientIP = Operate.SystemConfig.GetUDPIPString(Conn.LocalAddr());
@@ -239,42 +235,23 @@ namespace WinsockPacketEditor
                 {
                     case UDPEvent.EventType_UDP_Send:
 
-                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                            DateTime.Now,
-                            Operate.FilterConfig.Filter.FilterAction.None,
-                            Conn.Body().Length,
-                            0,
-                            Conn.TheologyID(),
-                            Operate.PacketConfig.Packet.PacketType.UDP_Req,
-                            0,
-                            ClientIP,
-                            ServerIP,
-                            ServerIP,
-                            Operate.ProxyConfig.Proxy.DomainType.Socket,
-                            Conn.Body().Bytes,
-                            Conn.Body().Bytes,
-                            null);
+                        if (Operate.ProxyConfig.Proxy.MustTCP && Operate.ProxyConfig.Proxy.IsLoadDriver)
+                        {
+                            string ConnPort = Conn.RemoteAddr().Split(':')[1];
+
+                            if (Operate.ProxyConfig.Proxy.IsMustTCP_ByPort(ConnPort.ToString()))
+                            {
+                                byte[] bSendData = Conn.Body().Bytes;
+                                Conn.Body(null);
+
+                                Operate.ProxyConfig.Proxy.SetUDPProxy(Conn, bSendData);
+                                return;
+                            }
+                        }
 
                         break;
 
                     case UDPEvent.EventType_UDP_Receive:
-
-                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
-                            DateTime.Now,
-                            Operate.FilterConfig.Filter.FilterAction.None,
-                            Conn.Body().Length,
-                            0,
-                            Conn.TheologyID(),
-                            Operate.PacketConfig.Packet.PacketType.UDP_Resp,
-                            0,
-                            ClientIP,
-                            ServerIP,
-                            ServerIP,
-                            Operate.ProxyConfig.Proxy.DomainType.Socket,
-                            Conn.Body().Bytes,
-                            Conn.Body().Bytes,
-                            null);
-
                         break;
 
                     case UDPEvent.EventType_UDP_Closed:
@@ -284,8 +261,8 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(OnUdpCallback), ex.Message);
-            }            
-        }
+            }
+        }        
 
         #endregion
 

@@ -124,7 +124,7 @@ namespace WinsockPacketEditor
 
                 Operate.DoLog(nameof(ConnectToEXTProxyServer), ex.Message);
             }
-        }
+        }        
 
         private void OnEXTProxyServerConnected(IAsyncResult ar)
         {

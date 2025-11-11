@@ -4,6 +4,7 @@ using DiffPlex.DiffBuilder.Model;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using QQWry;
+using SunnyNetlibray.Event;
 using SuperSocket.Common;
 using System;
 using System.Buffers;
@@ -5151,7 +5152,7 @@ namespace WinsockPacketEditor
                 public static BindingList<BlackListInfo> lstBlackList = new BindingList<BlackListInfo>();
                 public static BindingList<WhiteListInfo> lstWhiteList = new BindingList<WhiteListInfo>();
                 public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
-                
+                public static ConcurrentDictionary<IPEndPoint, long> udpEndPointToTheologyId = new ConcurrentDictionary<IPEndPoint, long>();
                 private static QQWryOptions IPLib = new QQWryOptions()
                 {
                     DbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "IPLocation", "qqwry.dat")
@@ -5511,7 +5512,7 @@ namespace WinsockPacketEditor
                         switch (psSession.CommandType)
                         {
                             case Operate.ProxyConfig.Proxy.CommandType.Connect:
-                                await HandleConnectCommandAsync(psSession, bData, TargetIP, TargetPort, TargetAddress);
+                                await Operate.ProxyConfig.Proxy.HandleConnectCommandAsync(psSession, bData, TargetIP, TargetPort, TargetAddress);
                                 break;
 
                             case Operate.ProxyConfig.Proxy.CommandType.UDP:
@@ -5519,7 +5520,7 @@ namespace WinsockPacketEditor
                                 break;
 
                             default:
-                                HandleUnsupportedCommand(psSession);
+                                Operate.ProxyConfig.Proxy.HandleUnsupportedCommand(psSession);
                                 break;
                         }
                     }
@@ -5539,7 +5540,7 @@ namespace WinsockPacketEditor
                             break;
 
                         case Operate.ProxyConfig.Proxy.DomainType.HTTP:
-                            await HandleHttpConnect(psSession, targetIP, targetPort, targetAddress);
+                            await Operate.ProxyConfig.Proxy.HandleHttpConnect(psSession, targetIP, targetPort, targetAddress);
                             break;
 
                         case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
@@ -6358,47 +6359,6 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion
-
-                #region//获取 SOCKS5 认证格式的封包
-
-                public static byte[] CreateSOCKS5AuthPacket(string username, string password)
-                {
-                    // 验证输入参数
-                    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || username.Length > 255 || password.Length > 255)
-                    {
-                        return null;
-                    }
-
-                    // 计算所需缓冲区大小
-                    // 1 (VER) + 1 (ULEN) + username + 1 (PLEN) + password
-                    int packetSize = 1 + 1 + username.Length + 1 + password.Length;
-
-                    // 创建字节数组
-                    byte[] packet = new byte[packetSize];
-                    int offset = 0;
-
-                    // 版本号 (0x01)
-                    packet[offset++] = 0x01;
-
-                    // 用户名长度 (1字节)
-                    packet[offset++] = (byte)username.Length;
-
-                    // 用户名 (UTF8编码)
-                    byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
-                    Buffer.BlockCopy(usernameBytes, 0, packet, offset, usernameBytes.Length);
-                    offset += usernameBytes.Length;
-
-                    // 密码长度 (1字节)
-                    packet[offset++] = (byte)password.Length;
-
-                    // 密码 (UTF8编码)
-                    byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-                    Buffer.BlockCopy(passwordBytes, 0, packet, offset, passwordBytes.Length);
-
-                    return packet;
-                }
-
                 #endregion                
 
                 #region//初始化 CCProxy 模板
@@ -6460,6 +6420,490 @@ namespace WinsockPacketEditor
                         "Connection: close\r\n\r\n";
 
                     return Encoding.UTF8.GetBytes(response);
+                }
+
+                #endregion
+
+                #region//设置 UDP 使用代理
+
+                public static async void SetUDPProxy(UDPEvent Conn, byte[] bSendData)
+                {
+                    IPEndPoint targetEndPoint = Operate.ProxyConfig.Proxy.ParseIPEndPoint(Conn.RemoteAddr());
+                    if (targetEndPoint == null)
+                    {
+                        return;
+                    }
+                    Operate.ProxyConfig.Proxy.udpEndPointToTheologyId[targetEndPoint] = Conn.TheologyID();
+
+                    try
+                    {
+                        byte[] bCommand = new byte[]
+                        {
+                            0x05, // SOCKS version 5
+                            0x03, // UDP ASSOCIATE command
+                            0x00, // Reserved
+                            0x01, // IPv4 address type
+                            0x00, 0x00, 0x00, 0x00, // IP address (0.0.0.0)
+                            0x00, 0x00 // Port (0 = any port)
+                        };
+
+                        var Establish = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
+                            Operate.ProxyConfig.Proxy.MustTCP_Auth,
+                            Operate.ProxyConfig.Proxy.MustTCP_IP,
+                            Operate.ProxyConfig.Proxy.MustTCP_Port,
+                            Operate.ProxyConfig.Proxy.MustTCP_UserName,
+                            Operate.ProxyConfig.Proxy.MustTCP_PassWord,
+                            bCommand);
+
+                        if (!Establish.Success)
+                        {
+                            return;
+                        }
+
+                        IPEndPoint udpProxyEndPoint = Operate.ProxyConfig.Proxy.ParseEstablishResponse(Establish.Response);
+                        if (udpProxyEndPoint == null)
+                        {
+                            return;
+                        }
+                        
+                        bool sendSuccess = await Operate.ProxyConfig.Proxy.SendUdpDataToProxy(bSendData, targetEndPoint, udpProxyEndPoint);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SetUDPProxy), ex.Message);
+                        ProxyConfig.Proxy.CleanupUdpAssociation(targetEndPoint);
+                    }
+                }
+
+                #endregion
+
+                #region//解析 UDP 中继的 IP 地址
+
+                public static IPEndPoint ParseIPEndPoint(string RemoteAddr)
+                {
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(RemoteAddr))
+                        {
+                            return null;
+                        }
+
+                        if (RemoteAddr.StartsWith("[") && RemoteAddr.Contains("]:"))
+                        {
+                            int bracketEnd = RemoteAddr.IndexOf(']');
+                            if (bracketEnd > 1)
+                            {
+                                string ipString = RemoteAddr.Substring(1, bracketEnd - 1);
+                                string portString = RemoteAddr.Substring(bracketEnd + 2);
+
+                                if (IPAddress.TryParse(ipString, out IPAddress ipAddress) && int.TryParse(portString, out int port) && port >= 0 && port <= 65535)
+                                {
+                                    return new IPEndPoint(ipAddress, port);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            int lastColon = RemoteAddr.LastIndexOf(':');
+                            if (lastColon > 0)
+                            {
+                                string ipString = RemoteAddr.Substring(0, lastColon);
+                                string portString = RemoteAddr.Substring(lastColon + 1);
+
+                                if (IPAddress.TryParse(ipString, out IPAddress ipAddress) &&
+                                    int.TryParse(portString, out int port) && port >= 0 && port <= 65535)
+                                {
+                                    return new IPEndPoint(ipAddress, port);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ParseIPEndPoint), ex.Message);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//建立与代理服务器的链接
+
+                public static async Task<(bool Success, byte[] Response)> EstablishSocksProxyServer(
+                    bool ProxyServerAuth,
+                    string ProxyServerIP,
+                    int ProxyServerPort,
+                    string Auth_Username,
+                    string Auth_Password,
+                    byte[] bCommand)
+                {
+                    try
+                    {
+                        using (Socket proxySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                        {
+                            IPEndPoint proxyEndPoint = new IPEndPoint(IPAddress.Parse(ProxyServerIP), ProxyServerPort);
+                            await proxySocket.ConnectAsync(proxyEndPoint);
+
+                            //Socks5 握手
+                            byte[] handshakeRequest = null;
+                            if (ProxyServerAuth)
+                            {
+                                handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
+                            }
+                            else
+                            {
+                                handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
+                            }
+                            await proxySocket.SendAsync(new ArraySegment<byte>(handshakeRequest), SocketFlags.None);
+
+                            byte[] handshakeResponse = new byte[2];
+                            int handshakeResponseReceived = await proxySocket.ReceiveAsync(new ArraySegment<byte>(handshakeResponse), SocketFlags.None);
+
+                            if (handshakeResponseReceived < 2 || handshakeResponse[1] != 0x00)
+                            {
+                                return (false, null);
+                            }
+
+                            //身份认证
+                            switch (handshakeResponse[1])
+                            {
+                                case 0x00:
+                                    break;
+
+                                case 0x02:
+
+                                    if (!ProxyServerAuth)
+                                    {
+                                        return (false, null);
+                                    }
+
+                                    byte[] AuthRequest = Operate.ProxyConfig.Proxy.CreateSOCKS5AuthPacket(Auth_Username, Auth_Password);
+                                    if (AuthRequest == null)
+                                    {
+                                        return (false, null);
+                                    }
+                                    await proxySocket.SendAsync(new ArraySegment<byte>(AuthRequest), SocketFlags.None);
+
+                                    byte[] AuthResponse = new byte[2];
+                                    int AuthResponseReceived = await proxySocket.ReceiveAsync(new ArraySegment<byte>(AuthResponse), SocketFlags.None);
+
+                                    if (AuthResponseReceived < 2 || AuthResponse[1] != 0x00)
+                                    {
+                                        return (false, null);
+                                    }
+
+                                    break;
+
+                                case 0xFF:
+                                default:
+                                    return (false, null);
+                            }
+
+                            //命令过程
+                            await proxySocket.SendAsync(new ArraySegment<byte>(bCommand), SocketFlags.None);
+
+                            byte[] commandResponse = new byte[256];
+                            int commandResponseReceived = await proxySocket.ReceiveAsync(new ArraySegment<byte>(commandResponse), SocketFlags.None);
+
+                            if (commandResponseReceived < 10 || commandResponse[1] != 0x00)
+                            {
+                                return (false, null);
+                            }
+
+                            return (true, commandResponse);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(EstablishSocksProxyServer), ex.Message);
+                        return (false, null);
+                    }
+                }
+
+                #endregion
+
+                #region//解析代理服务器的响应
+
+                public static IPEndPoint ParseEstablishResponse(byte[] response)
+                {
+                    try
+                    {
+                        byte addressType = response[3];
+                        IPAddress bindAddress;
+                        ushort bindPort;
+
+                        if (addressType == 0x01) // IPv4
+                        {
+                            bindAddress = new IPAddress(new ArraySegment<byte>(response, 4, 4).ToArray());
+                            bindPort = (ushort)((response[8] << 8) | response[9]);
+                        }
+                        else if (addressType == 0x03) // Domain name
+                        {
+                            byte domainLength = response[4];
+                            string domain = Encoding.ASCII.GetString(response, 5, domainLength);
+
+                            bindAddress = IPAddress.Parse("127.0.0.1");
+                            bindPort = (ushort)((response[5 + domainLength] << 8) | response[6 + domainLength]);
+                        }
+                        else if (addressType == 0x04) // IPv6
+                        {
+                            bindAddress = new IPAddress(new ArraySegment<byte>(response, 4, 16).ToArray());
+                            bindPort = (ushort)((response[20] << 8) | response[21]);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+
+                        return new IPEndPoint(bindAddress, bindPort);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ParseEstablishResponse), ex.Message);
+                        return null;
+                    }
+                }
+
+                #endregion
+
+                #region//创建 UDP 中继请求
+
+                public static byte[] CreatSocks5UdpRequest(byte[] originalData, IPEndPoint targetEndPoint)
+                {
+                    try
+                    {
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            // SOCKS5 UDP 请求头
+                            ms.Write(new byte[] { 0x00, 0x00, 0x00 }, 0, 3); // RSV, FRAG
+
+                            // 地址类型
+                            if (targetEndPoint.AddressFamily == AddressFamily.InterNetwork)
+                            {
+                                ms.WriteByte(0x01); // IPv4
+                                byte[] ipBytes = targetEndPoint.Address.GetAddressBytes();
+                                ms.Write(ipBytes, 0, ipBytes.Length);
+                            }
+                            else if (targetEndPoint.AddressFamily == AddressFamily.InterNetworkV6)
+                            {
+                                ms.WriteByte(0x04); // IPv6
+                                byte[] ipBytes = targetEndPoint.Address.GetAddressBytes();
+                                ms.Write(ipBytes, 0, ipBytes.Length);
+                            }
+                            else
+                            {
+                                return null;
+                            }
+
+                            // 目标端口 (network byte order)
+                            byte[] portBytes = BitConverter.GetBytes((ushort)targetEndPoint.Port);
+                            if (BitConverter.IsLittleEndian)
+                            {
+                                Array.Reverse(portBytes);
+                            }
+                            ms.Write(portBytes, 0, 2);
+                            ms.Write(originalData, 0, originalData.Length);
+
+                            return ms.ToArray();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(CreatSocks5UdpRequest), ex.Message);
+                        return null;
+                    }
+                }
+
+                #endregion
+
+                #region//解析 UDP 中继响应
+
+                public static (byte[] data, IPEndPoint endPoint) ParseSocks5UdpResponse(byte[] response, int length)
+                {
+                    if (length < 10)
+                    {
+                        return (null, null);
+                    }
+
+                    try
+                    {
+                        int offset = 3;
+                        byte addressType = response[offset++];
+
+                        IPAddress targetIp;
+                        ushort targetPort;
+
+                        if (addressType == 0x01) // IPv4
+                        {
+                            if (offset + 6 > length) return (null, null);
+                            targetIp = new IPAddress(new ArraySegment<byte>(response, offset, 4).ToArray());
+                            offset += 4;
+                        }
+                        else if (addressType == 0x04) // IPv6
+                        {
+                            if (offset + 18 > length) return (null, null);
+                            targetIp = new IPAddress(new ArraySegment<byte>(response, offset, 16).ToArray());
+                            offset += 16;
+                        }
+                        else
+                        {
+                            return (null, null);
+                        }
+
+                        // 读取端口
+                        targetPort = (ushort)((response[offset] << 8) | response[offset + 1]);
+                        offset += 2;
+
+                        // 数据部分
+                        byte[] data = new byte[length - offset];
+                        Array.Copy(response, offset, data, 0, data.Length);
+
+                        IPEndPoint endPoint = new IPEndPoint(targetIp, targetPort);
+
+                        return (data, endPoint);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ParseSocks5UdpResponse), ex.Message);
+                        return (null, null);
+                    }
+                }
+
+                #endregion
+
+                #region//查找 UDP 中继关联
+
+                private static long FindTheologyIdByEndPoint(IPEndPoint targetEndPoint)
+                {
+                    if (targetEndPoint == null) return 0;
+
+                    if (Operate.ProxyConfig.Proxy.udpEndPointToTheologyId.TryGetValue(targetEndPoint, out long theologyId))
+                    {
+                        return theologyId;
+                    }
+
+                    return 0;
+                }
+
+                #endregion
+
+                #region//清理 UDP 中继关联
+
+                public static void CleanupUdpAssociation(IPEndPoint endPoint)
+                {
+                    Operate.ProxyConfig.Proxy.udpEndPointToTheologyId.TryRemove(endPoint, out _);
+                }
+
+                #endregion
+
+                #region//获取 SOCKS5 认证格式的封包
+
+                public static byte[] CreateSOCKS5AuthPacket(string username, string password)
+                {
+                    // 验证输入参数
+                    if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || username.Length > 255 || password.Length > 255)
+                    {
+                        return null;
+                    }
+
+                    // 计算所需缓冲区大小
+                    // 1 (VER) + 1 (ULEN) + username + 1 (PLEN) + password
+                    int packetSize = 1 + 1 + username.Length + 1 + password.Length;
+
+                    // 创建字节数组
+                    byte[] packet = new byte[packetSize];
+                    int offset = 0;
+
+                    // 版本号 (0x01)
+                    packet[offset++] = 0x01;
+
+                    // 用户名长度 (1字节)
+                    packet[offset++] = (byte)username.Length;
+
+                    // 用户名 (UTF8编码)
+                    byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
+                    Buffer.BlockCopy(usernameBytes, 0, packet, offset, usernameBytes.Length);
+                    offset += usernameBytes.Length;
+
+                    // 密码长度 (1字节)
+                    packet[offset++] = (byte)password.Length;
+
+                    // 密码 (UTF8编码)
+                    byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                    Buffer.BlockCopy(passwordBytes, 0, packet, offset, passwordBytes.Length);
+
+                    return packet;
+                }
+
+                #endregion                
+
+                #region//发送 UDP 数据到代理服务器
+
+                public static async Task<bool> SendUdpDataToProxy(byte[] bSendData, IPEndPoint targetEndPoint, IPEndPoint udpProxyEndPoint)
+                {
+                    try
+                    {
+                        using (UdpClient udpClient = new UdpClient(0))
+                        {
+                            byte[] UdpRequestData = Operate.ProxyConfig.Proxy.CreatSocks5UdpRequest(bSendData, targetEndPoint);
+                            if (UdpRequestData == null)
+                            {
+                                return false;
+                            }
+
+                            int bytesSent = await udpClient.SendAsync(UdpRequestData, UdpRequestData.Length, udpProxyEndPoint);
+
+                            _ = Task.Run(() => ReceiveUdpResponses(udpClient, udpProxyEndPoint));
+
+                            return bytesSent == UdpRequestData.Length;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SendUdpDataToProxy), ex.Message);
+                        return false;
+                    }
+                }
+
+                #endregion
+
+                #region//异步接收 UDP 中继的响应
+
+                public static async void ReceiveUdpResponses(UdpClient udpClient, IPEndPoint udpProxyEndPoint)
+                {
+                    try
+                    {
+                        while (true)
+                        {
+                            UdpReceiveResult result = await udpClient.ReceiveAsync();
+
+                            IPEndPoint remoteEndPoint = result.RemoteEndPoint;
+                            byte[] buffer = result.Buffer;
+
+                            if (remoteEndPoint.Address.Equals(udpProxyEndPoint.Address) && remoteEndPoint.Port == udpProxyEndPoint.Port)
+                            {
+                                var (data, targetEndPoint) = Operate.ProxyConfig.Proxy.ParseSocks5UdpResponse(buffer, buffer.Length);
+                                if (data != null && data.Length > 0)
+                                {
+                                    long theologyId = Operate.ProxyConfig.Proxy.FindTheologyIdByEndPoint(targetEndPoint);
+                                    if (theologyId != 0)
+                                    {
+                                        SunnyNetlibray.Tools.UDPTools.SendMessage(SunnyNetlibray.Tools.UDPTools.SendToClient, theologyId, data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        // UdpClient 已关闭，正常退出
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ReceiveUdpResponses), ex.Message);
+                    }
                 }
 
                 #endregion                
