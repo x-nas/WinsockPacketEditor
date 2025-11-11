@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.Net.Sockets;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -228,7 +229,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//检测
+        #region//检测外部代理服务器
 
         private async void bExternalProxy_Detection_Click(object sender, EventArgs e)
         {
@@ -239,21 +240,29 @@ namespace WinsockPacketEditor
 
             this.bExternalProxy_Detection.Loading = true;
 
-            bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(
-                this.form,
-                this.txtExternalProxy_IP.Text.Trim(),
-                ((ushort)this.nudExternalProxy_Port.Value),
-                this.cbExternalProxy_EnableAuth.Checked,
-                this.txtExternalProxy_UserName.Text.Trim(),
-                this.txtExternalProxy_PassWord.Text.Trim());
-
-            if (Result)
+            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
-                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "外部代理服务器连接成功", TType.Success)
+                var Result = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
+                    socket,
+                    this.cbExternalProxy_EnableAuth.Checked,
+                    this.txtExternalProxy_IP.Text.Trim(),
+                    ((ushort)this.nudExternalProxy_Port.Value),
+                    this.txtExternalProxy_UserName.Text.Trim(),
+                    this.txtExternalProxy_PassWord.Text.Trim(),
+                    null);
+
+                if (Result.Success)
                 {
-                    LocalizationText = "EXTProxySettingsForm.Connection"
-                });
-            }
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理服务器连接成功", TType.Success)
+                    {
+                        LocalizationText = "EXTProxySettingsForm.Connection"
+                    });
+                }
+                else
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, Result.Error, TType.Error));
+                }
+            }            
 
             this.bExternalProxy_Detection.Loading = false;
         }

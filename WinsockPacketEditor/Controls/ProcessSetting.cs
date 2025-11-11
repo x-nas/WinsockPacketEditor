@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Net.Sockets;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -162,7 +163,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//检测
+        #region//检测转代理服务器
 
         private async void bMustTCP_Detection_Click(object sender, EventArgs e)
         {
@@ -175,21 +176,29 @@ namespace WinsockPacketEditor
 
                 this.bMustTCP_Detection.Loading = true;
 
-                bool Result = await Operate.ProxyConfig.Proxy.DetectionExternalProxy(
-                    this.form,
-                    this.txtMustTCP_IP.Text.Trim(),
-                    ((ushort)this.nudMustTCP_Port.Value),
-                    this.cbMustTCP_Auth.Checked,
-                    this.txtMustTCP_UserName.Text.Trim(),
-                    this.txtMustTCP_PassWord.Text.Trim());
-
-                if (Result)
+                using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
                 {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理服务器连接成功", TType.Success)
+                    var Result = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
+                        socket,
+                        this.cbMustTCP_Auth.Checked,
+                        this.txtMustTCP_IP.Text.Trim(),
+                        ((ushort)this.nudMustTCP_Port.Value),
+                        this.txtMustTCP_UserName.Text.Trim(),
+                        this.txtMustTCP_PassWord.Text.Trim(),
+                        null);
+
+                    if (Result.Success)
                     {
-                        LocalizationText = "EXTProxySettingsForm.Connection"
-                    });
-                }
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理服务器连接成功", TType.Success)
+                        {
+                            LocalizationText = "EXTProxySettingsForm.Connection"
+                        });
+                    }
+                    else
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, Result.Error, TType.Error));
+                    }
+                }                    
 
                 this.bMustTCP_Detection.Loading = false;
             }

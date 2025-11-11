@@ -93,7 +93,7 @@ namespace WinsockPacketEditor
 
         #region//登录信息
 
-        BindingList<AccountIPInfo> _AIPInfo;
+        BindingList<AccountIPInfo> _AIPInfo = new BindingList<AccountIPInfo>();
 
         public BindingList<AccountIPInfo> AIPInfo
         {

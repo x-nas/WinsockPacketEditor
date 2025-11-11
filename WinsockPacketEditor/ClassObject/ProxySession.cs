@@ -4,6 +4,7 @@ using System;
 using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace WinsockPacketEditor
 {
@@ -60,37 +61,24 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//连接远程服务器
+        #region//连接远程服务器（异步）
 
-        public void ConnectToTarget(string TargetIP, int TargetPort)
-        {
-            try
-            {
-                this.TargetSocket.BeginConnect(TargetIP, TargetPort, new AsyncCallback(OnTargetConnected), null);
-            }
-            catch (Exception ex)
-            {
-                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
-                this.Close(CloseReason.SocketError);
-
-                Operate.DoLog(nameof(ConnectToTarget), ex.Message);
-            }
-        }
-        
-        private void OnTargetConnected(IAsyncResult ar)
+        public async Task ConnectToTarget(string TargetIP, int TargetPort)
         {
             try
             {
                 Socket targetSocket = this.TargetSocket;
-                if (targetSocket == null || !targetSocket.Connected)
+                if (targetSocket == null)
                 {
+                    Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
+                    this.Close(CloseReason.SocketError);
                     return;
                 }
 
-                targetSocket.EndConnect(ar);
+                await targetSocket.ConnectAsync(TargetIP, TargetPort);
 
-                this.ServerIP = (targetSocket.RemoteEndPoint as IPEndPoint)?.Address.ToString();
-                this.ServerPort = (targetSocket.RemoteEndPoint as IPEndPoint)?.Port ?? 0;
+                this.ServerIP = TargetIP;
+                this.ServerPort = TargetPort;
 
                 Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
                 this.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
@@ -103,104 +91,37 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
-                Operate.DoLog(nameof(OnTargetConnected), ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//连接外部代理服务器
-
-        public void ConnectToEXTProxyServer(string TargetIP, int TargetPort, byte[] bData)
-        {
-            try
-            {
-                this.TargetSocket.BeginConnect(TargetIP, TargetPort, new AsyncCallback(OnEXTProxyServerConnected), bData);
-            }
-            catch (Exception ex)
-            {
-                Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
-
-                Operate.DoLog(nameof(ConnectToEXTProxyServer), ex.Message);
+                Operate.DoLog(nameof(ConnectToTarget), ex.Message);
             }
         }        
 
-        private void OnEXTProxyServerConnected(IAsyncResult ar)
-        {
-            byte[] bData = (byte[])ar.AsyncState;
+        #endregion
 
+        #region//连接外部代理服务器（异步）
+
+        public async Task ConnectToEXTProxyServer(byte[] bData)
+        {
             try
             {
-                this.TargetSocket.EndConnect(ar);
+                this.ServerIP = Operate.ProxyConfig.Proxy.ExternalProxy_IP;
+                this.ServerPort = Operate.ProxyConfig.Proxy.ExternalProxy_Port;
 
-                this.ServerIP = (this.TargetSocket.RemoteEndPoint as IPEndPoint).Address.ToString();
-                this.ServerPort = (this.TargetSocket.RemoteEndPoint as IPEndPoint).Port;
+                var Establish = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
+                    this.TargetSocket,
+                    Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth,
+                    Operate.ProxyConfig.Proxy.ExternalProxy_IP,
+                    Operate.ProxyConfig.Proxy.ExternalProxy_Port,
+                    Operate.ProxyConfig.Proxy.ExternalProxy_UserName,
+                    Operate.ProxyConfig.Proxy.ExternalProxy_PassWord,
+                    bData);
 
-                byte[] handshakeRequest = null;
-                if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
+                if (!Establish.Success || Establish.Response[1] != 0x00)
                 {
-                    handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
-                }
-                else
-                {
-                    handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
-                }
-                this.TargetSocket.Send(handshakeRequest);
-
-                byte[] handshakeResponse = new byte[2];
-                this.TargetSocket.Receive(handshakeResponse);
-
-                if (handshakeResponse[0] != 0x05)
-                {
-                    return;
-                }
-
-                switch (handshakeResponse[1])
-                {
-                    case 0x00:
-                        break;
-
-                    case 0x02:
-
-                        if (!Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth)
-                        {
-                            return;
-                        }
-
-                        byte[] AuthRequest = Operate.ProxyConfig.Proxy.CreateSOCKS5AuthPacket(Operate.ProxyConfig.Proxy.ExternalProxy_UserName, Operate.ProxyConfig.Proxy.ExternalProxy_PassWord);
-                        if (AuthRequest == null)
-                        {
-                            return;
-                        }
-                        this.TargetSocket.Send(AuthRequest);
-
-                        byte[] AuthResponse = new byte[2];
-                        this.TargetSocket.Receive(AuthResponse);
-
-                        if (AuthResponse[1] != 0x00)
-                        {
-                            return;
-                        }
-
-                        break;
-
-                    case 0xFF:
-                    default:
-                        this.Close(CloseReason.ProtocolError);
-                        return;
-                }
-
-                this.TargetSocket.Send(bData);
-
-                byte[] connectResponse = new byte[10];
-                this.TargetSocket.Receive(connectResponse);
-
-                if (connectResponse[1] != 0x00)
-                {
+                    this.Close(CloseReason.ServerClosing);
                     Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Fault);
                     return;
-                }
+                }                
 
                 Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Success);
                 this.ProxyStep = Operate.ProxyConfig.Proxy.ProxyStep.ForwardData;
@@ -210,10 +131,9 @@ namespace WinsockPacketEditor
             {
                 Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
-
-                Operate.DoLog(nameof(OnEXTProxyServerConnected), ex.Message);
+                Operate.DoLog(nameof(ConnectToEXTProxyServer), ex.Message);
             }
-        }
+        }        
 
         #endregion
 

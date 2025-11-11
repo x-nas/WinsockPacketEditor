@@ -5536,7 +5536,7 @@ namespace WinsockPacketEditor
                     {
                         case Operate.ProxyConfig.Proxy.DomainType.External:
                             psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                            psSession.ConnectToEXTProxyServer(Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port, bData);
+                            await psSession.ConnectToEXTProxyServer(bData);
                             break;
 
                         case Operate.ProxyConfig.Proxy.DomainType.HTTP:
@@ -5546,7 +5546,7 @@ namespace WinsockPacketEditor
                         case Operate.ProxyConfig.Proxy.DomainType.HTTPS:
                         case Operate.ProxyConfig.Proxy.DomainType.Socket:
                             psSession.ServerAddress = Operate.ProxyConfig.Proxy.GetServerAddress(targetAddress, targetPort);
-                            psSession.ConnectToTarget(targetIP, targetPort);
+                            await psSession.ConnectToTarget(targetIP, targetPort);
                             break;
                     }
 
@@ -5603,13 +5603,13 @@ namespace WinsockPacketEditor
 
                             if (remoteRule != null)
                             {
-                                psSession.ConnectToTarget(remoteRule.HostTo, remoteRule.PortTo);
+                                await psSession.ConnectToTarget(remoteRule.HostTo, remoteRule.PortTo);
                                 return;
                             }
                         }
                     }
 
-                    psSession.ConnectToTarget(targetIP, targetPort);
+                    await psSession.ConnectToTarget(targetIP, targetPort);
                 }
 
                 public static void HandleUnsupportedCommand(ProxySession psSession)
@@ -5691,14 +5691,18 @@ namespace WinsockPacketEditor
                     return null;
                 }
 
-                public static async Task CheckUDPTimeOutAsync()
+                #endregion
+
+                #region//清理超时的 UDP 监听端口
+
+                public static void CloseUDPTimeOut()
                 {
                     try
                     {
                         var now = DateTime.Now;
                         var UDPToRemove = new List<Guid>();
 
-                        foreach (var pair in ProxyConfig.List.cdProxyUDP)
+                        foreach (var pair in ProxyConfig.List.cdProxyUDP.ToList())
                         {
                             if (now - pair.Value.LastActivityTime > ProxyConfig.Proxy.UDPTimeout)
                             {
@@ -5706,19 +5710,17 @@ namespace WinsockPacketEditor
                             }
                         }
 
-                        var closeTasks = UDPToRemove.Select(async UDP =>
+                        foreach (var udpId in UDPToRemove)
                         {
-                            if (ProxyConfig.List.cdProxyUDP.TryRemove(UDP, out var udpInstance))
+                            if (ProxyConfig.List.cdProxyUDP.TryRemove(udpId, out var udpInstance))
                             {
-                                await Task.Run(() => udpInstance.Close());
+                                udpInstance.Close();
                             }
-                        });
-
-                        await Task.WhenAll(closeTasks).ConfigureAwait(false);
+                        }
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(CheckUDPTimeOutAsync), ex.Message);
+                        DoLog(nameof(CloseUDPTimeOut), ex.Message);
                     }
                 }
 
@@ -5873,7 +5875,6 @@ namespace WinsockPacketEditor
                     try
                     {
                         ProxyUDP pu = Operate.ProxyConfig.Proxy.CreateNewUDP(psSession.SessionID);
-
                         if (pu == null)
                         {
                             return;
@@ -6217,148 +6218,6 @@ namespace WinsockPacketEditor
                     return bReturn;
                 }
 
-                #endregion
-
-                #region//检测外部代理服务器
-
-                public static async Task<bool> DetectionExternalProxy(Form form, string EXTIP, ushort EXTPort, bool EXTAuth, string EXTUsername, string EXTPassword)
-                {
-                    try
-                    {
-                        IPEndPoint ExternalProxyEP = await ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(EXTIP, EXTPort);
-                        if (ExternalProxyEP == null)
-                        {
-                            AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理设置错误", TType.Error)
-                            {
-                                LocalizationText = "EXTProxySettingsForm.Setting.Error"
-                            });
-
-                            return false;
-                        }
-
-                        using (Socket proxySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-                        {
-                            // 设置连接超时
-                            var connectTask = proxySocket.ConnectAsync(ExternalProxyEP);
-                            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
-
-                            if (await Task.WhenAny(connectTask, timeoutTask) == timeoutTask)
-                            {
-                                AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理连接超时", TType.Error)
-                                {
-                                    LocalizationText = "EXTProxySettingsForm.Connect.TimeOut"
-                                });
-
-                                return false;
-                            }
-
-                            proxySocket.ReceiveTimeout = 5000;
-                            proxySocket.SendTimeout = 5000;
-
-                            //SOCKS5 握手
-                            byte[] handshakeRequest = null;
-                            if (EXTAuth)
-                            {
-                                handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
-                            }
-                            else
-                            {
-                                handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
-                            }
-                            await proxySocket.SendAsync(new ArraySegment<byte>(handshakeRequest), SocketFlags.None);
-
-                            byte[] handshakeResponse = new byte[2];
-                            var receiveTask = proxySocket.ReceiveAsync(new ArraySegment<byte>(handshakeResponse), SocketFlags.None);
-                            var receiveTimeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
-
-                            if (await Task.WhenAny(receiveTask, receiveTimeoutTask) == receiveTimeoutTask)
-                            {
-                                AntdUI.Message.open(new AntdUI.Message.Config(form, "握手响应超时", TType.Error)
-                                {
-                                    LocalizationText = "EXTProxySettingsForm.HandShake.TimeOut"
-                                });
-
-                                return false;
-                            }
-
-                            int received = await receiveTask;
-
-                            if (handshakeResponse[0] != 0x05)
-                            {
-                                AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理不支持 SOCKS", TType.Error)
-                                {
-                                    LocalizationText = "EXTProxySettingsForm.UnSupport"
-                                });
-
-                                return false;
-                            }
-
-                            switch (handshakeResponse[1])
-                            {
-                                case 0x00:
-                                    // 无需认证
-                                    break;
-
-                                case 0x02:
-                                    // 需要用户名/密码认证
-                                    if (!EXTAuth)
-                                    {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理要求认证", TType.Warn)
-                                        {
-                                            LocalizationText = "EXTProxySettingsForm.NeedAuth"
-                                        });
-
-                                        return false;
-                                    }
-
-                                    byte[] AuthRequest = ProxyConfig.Proxy.CreateSOCKS5AuthPacket(EXTUsername, EXTPassword);
-                                    if (AuthRequest == null)
-                                    {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理认证失败", TType.Error)
-                                        {
-                                            LocalizationText = "SystemSettingsForm.Success"
-                                        });
-
-                                        return false;
-                                    }
-                                    await proxySocket.SendAsync(new ArraySegment<byte>(AuthRequest), SocketFlags.None);
-
-                                    byte[] AuthResponse = new byte[2];
-                                    await proxySocket.ReceiveAsync(new ArraySegment<byte>(AuthResponse), SocketFlags.None);
-                                    if (AuthResponse[1] != 0x00)
-                                    {
-                                        AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理认证失败", TType.Error)
-                                        {
-                                            LocalizationText = "EXTProxySettingsForm.AuthFail"
-                                        });
-
-                                        return false;
-                                    }
-                                    break;
-
-                                default:
-                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "不支持的认证方式", TType.Warn)
-                                    {
-                                        LocalizationText = "EXTProxySettingsForm.AuthUnSupport"
-                                    });
-
-                                    return false;
-                            }
-
-                            return true;
-                        }
-                    }
-                    catch
-                    {
-                        AntdUI.Message.open(new AntdUI.Message.Config(form, "外部代理拒绝连接", TType.Error)
-                        {
-                            LocalizationText = "EXTProxySettingsForm.Connect.Refuses"
-                        });
-
-                        return false;
-                    }
-                }
-
                 #endregion                
 
                 #region//初始化 CCProxy 模板
@@ -6437,37 +6296,40 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        byte[] bCommand = new byte[]
+                        using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
                         {
-                            0x05, // SOCKS version 5
-                            0x03, // UDP ASSOCIATE command
-                            0x00, // Reserved
-                            0x01, // IPv4 address type
-                            0x00, 0x00, 0x00, 0x00, // IP address (0.0.0.0)
-                            0x00, 0x00 // Port (0 = any port)
-                        };
+                            byte[] bCommand = new byte[]
+                            {
+                                0x05, // SOCKS version 5
+                                0x03, // UDP ASSOCIATE command
+                                0x00, // Reserved
+                                0x01, // IPv4 address type
+                                0x00, 0x00, 0x00, 0x00, // IP address (0.0.0.0)
+                                0x00, 0x00 // Port (0 = any port)
+                            };
 
-                        var Establish = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
-                            Operate.ProxyConfig.Proxy.MustTCP_Auth,
-                            Operate.ProxyConfig.Proxy.MustTCP_IP,
-                            Operate.ProxyConfig.Proxy.MustTCP_Port,
-                            Operate.ProxyConfig.Proxy.MustTCP_UserName,
-                            Operate.ProxyConfig.Proxy.MustTCP_PassWord,
-                            bCommand);
+                            var Establish = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
+                                socket,
+                                Operate.ProxyConfig.Proxy.MustTCP_Auth,
+                                Operate.ProxyConfig.Proxy.MustTCP_IP,
+                                Operate.ProxyConfig.Proxy.MustTCP_Port,
+                                Operate.ProxyConfig.Proxy.MustTCP_UserName,
+                                Operate.ProxyConfig.Proxy.MustTCP_PassWord,
+                                bCommand);
 
-                        if (!Establish.Success)
-                        {
-                            return;
+                            if (!Establish.Success)
+                            {
+                                return;
+                            }
+
+                            IPEndPoint udpProxyEndPoint = Operate.ProxyConfig.Proxy.ParseEstablishResponse(Establish.Response);
+                            if (udpProxyEndPoint == null)
+                            {
+                                return;
+                            }
+
+                            bool sendSuccess = await Operate.ProxyConfig.Proxy.SendUdpDataToProxy(bSendData, targetEndPoint, udpProxyEndPoint);
                         }
-
-                        IPEndPoint udpProxyEndPoint = Operate.ProxyConfig.Proxy.ParseEstablishResponse(Establish.Response);
-                        if (udpProxyEndPoint == null)
-                        {
-                            return;
-                        }
-                        
-                        bool sendSuccess = await Operate.ProxyConfig.Proxy.SendUdpDataToProxy(bSendData, targetEndPoint, udpProxyEndPoint);
-
                     }
                     catch (Exception ex)
                     {
@@ -6531,94 +6393,126 @@ namespace WinsockPacketEditor
 
                 #region//建立与代理服务器的链接
 
-                public static async Task<(bool Success, byte[] Response)> EstablishSocksProxyServer(
+                public static async Task<(bool Success, string Error, byte[] Response)> EstablishSocksProxyServer(
+                    Socket proxySocket,
                     bool ProxyServerAuth,
                     string ProxyServerIP,
-                    int ProxyServerPort,
+                    ushort ProxyServerPort,
                     string Auth_Username,
                     string Auth_Password,
                     byte[] bCommand)
                 {
+                    string sError = string.Empty;
+
                     try
                     {
-                        using (Socket proxySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                        IPEndPoint proxyEndPoint = await ProxyConfig.Proxy.GetIPEndPoint_ByAddressString(ProxyServerIP, ProxyServerPort);
+                        if (proxyEndPoint == null)
                         {
-                            IPEndPoint proxyEndPoint = new IPEndPoint(IPAddress.Parse(ProxyServerIP), ProxyServerPort);
-                            await proxySocket.ConnectAsync(proxyEndPoint);
-
-                            //Socks5 握手
-                            byte[] handshakeRequest = null;
-                            if (ProxyServerAuth)
-                            {
-                                handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
-                            }
-                            else
-                            {
-                                handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
-                            }
-                            await proxySocket.SendAsync(new ArraySegment<byte>(handshakeRequest), SocketFlags.None);
-
-                            byte[] handshakeResponse = new byte[2];
-                            int handshakeResponseReceived = await proxySocket.ReceiveAsync(new ArraySegment<byte>(handshakeResponse), SocketFlags.None);
-
-                            if (handshakeResponseReceived < 2 || handshakeResponse[1] != 0x00)
-                            {
-                                return (false, null);
-                            }
-
-                            //身份认证
-                            switch (handshakeResponse[1])
-                            {
-                                case 0x00:
-                                    break;
-
-                                case 0x02:
-
-                                    if (!ProxyServerAuth)
-                                    {
-                                        return (false, null);
-                                    }
-
-                                    byte[] AuthRequest = Operate.ProxyConfig.Proxy.CreateSOCKS5AuthPacket(Auth_Username, Auth_Password);
-                                    if (AuthRequest == null)
-                                    {
-                                        return (false, null);
-                                    }
-                                    await proxySocket.SendAsync(new ArraySegment<byte>(AuthRequest), SocketFlags.None);
-
-                                    byte[] AuthResponse = new byte[2];
-                                    int AuthResponseReceived = await proxySocket.ReceiveAsync(new ArraySegment<byte>(AuthResponse), SocketFlags.None);
-
-                                    if (AuthResponseReceived < 2 || AuthResponse[1] != 0x00)
-                                    {
-                                        return (false, null);
-                                    }
-
-                                    break;
-
-                                case 0xFF:
-                                default:
-                                    return (false, null);
-                            }
-
-                            //命令过程
-                            await proxySocket.SendAsync(new ArraySegment<byte>(bCommand), SocketFlags.None);
-
-                            byte[] commandResponse = new byte[256];
-                            int commandResponseReceived = await proxySocket.ReceiveAsync(new ArraySegment<byte>(commandResponse), SocketFlags.None);
-
-                            if (commandResponseReceived < 10 || commandResponse[1] != 0x00)
-                            {
-                                return (false, null);
-                            }
-
-                            return (true, commandResponse);
+                            sError = AntdUI.Localization.Get("EXTProxySettingsForm.Setting.Error", "代理服务器设置错误");
+                            return (false, sError, null);
                         }
+
+                        if (proxySocket == null)
+                        {
+                            proxySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        }
+
+                        // 设置连接超时
+                        var connectTask = proxySocket.ConnectAsync(proxyEndPoint);
+                        var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
+
+                        if (await Task.WhenAny(connectTask, timeoutTask) == timeoutTask)
+                        {
+                            sError = AntdUI.Localization.Get("EXTProxySettingsForm.Connect.TimeOut", "代理服务器连接超时");
+                            return (false, sError, null);
+                        }
+
+                        //Socks5 握手
+                        byte[] handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
+                        await proxySocket.SendAsync(new ArraySegment<byte>(handshakeRequest), SocketFlags.None);
+
+                        byte[] handshakeResponse = new byte[2];
+                        var receiveTask = proxySocket.ReceiveAsync(new ArraySegment<byte>(handshakeResponse), SocketFlags.None);
+                        var receiveTimeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
+
+                        if (await Task.WhenAny(receiveTask, receiveTimeoutTask) == receiveTimeoutTask)
+                        {
+                            sError = AntdUI.Localization.Get("EXTProxySettingsForm.UnSupport", "代理服务器不支持的 Socks 协议");
+                            return (false, sError, null);
+                        }
+
+                        int received = await receiveTask;
+                        if (received < 2 || handshakeResponse[0] != 0x05)
+                        {
+                            sError = AntdUI.Localization.Get("EXTProxySettingsForm.UnSupport", "代理服务器不支持的 Socks 协议");
+                            return (false, sError, null);
+                        }
+
+                        //身份认证
+                        switch (handshakeResponse[1])
+                        {
+                            case 0x00:
+                                //无需身份认证
+                                break;
+
+                            case 0x02:
+                                //需要账号密码认证
+                                if (!ProxyServerAuth)
+                                {
+                                    sError = AntdUI.Localization.Get("EXTProxySettingsForm.NeedAuth", "代理服务器要求认证");
+                                    return (false, sError, null);
+                                }
+
+                                byte[] AuthRequest = Operate.ProxyConfig.Proxy.CreateSOCKS5AuthPacket(Auth_Username, Auth_Password);
+                                if (AuthRequest == null)
+                                {
+                                    sError = AntdUI.Localization.Get("EXTProxySettingsForm.AuthFail", "代理服务器认证失败");
+                                    return (false, sError, null);
+                                }
+                                await proxySocket.SendAsync(new ArraySegment<byte>(AuthRequest), SocketFlags.None);
+
+                                byte[] AuthResponse = new byte[2];
+                                int AuthResponseReceived = await proxySocket.ReceiveAsync(new ArraySegment<byte>(AuthResponse), SocketFlags.None);
+
+                                if (AuthResponseReceived < 2 || AuthResponse[1] != 0x00)
+                                {
+                                    sError = AntdUI.Localization.Get("EXTProxySettingsForm.AuthFail", "代理服务器认证失败");
+                                    return (false, sError, null);
+                                }
+
+                                break;
+
+                            case 0xFF:
+                            default:
+                                sError = AntdUI.Localization.Get("EXTProxySettingsForm.AuthUnSupport", "不支持的认证方式");
+                                return (false, sError, null);
+                        }
+
+                        //命令过程
+                        if (bCommand == null || bCommand.Length == 0)
+                        {
+                            return (true, string.Empty, null);
+                        }
+
+                        await proxySocket.SendAsync(new ArraySegment<byte>(bCommand), SocketFlags.None);
+
+                        byte[] commandResponse = new byte[256];
+                        int commandResponseReceived = await proxySocket.ReceiveAsync(new ArraySegment<byte>(commandResponse), SocketFlags.None);
+
+                        if (commandResponseReceived < 10 || commandResponse[1] != 0x00)
+                        {
+                            sError = AntdUI.Localization.Get("EXTProxySettingsForm.Connect.Fail", "连接目标服务器失败");
+                            return (false, sError, null);
+                        }
+
+                        return (true, string.Empty, commandResponse);
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(EstablishSocksProxyServer), ex.Message);
-                        return (false, null);
+                        string Msg = ex.Message;
+                        sError = AntdUI.Localization.Get("EXTProxySettingsForm.Connect.Refuses", "代理服务器拒绝连接");
+                        return (false, sError, null);
                     }
                 }
 

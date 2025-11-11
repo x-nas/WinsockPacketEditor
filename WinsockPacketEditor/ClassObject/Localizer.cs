@@ -2000,34 +2000,37 @@ namespace WinsockPacketEditor
                     return "Password Empty";
 
                 case "EXTProxySettingsForm.Connection":
-                    return "EXTProxy connection successful";
+                    return "ProxyServer connection successful";
 
                 case "EXTProxySettingsForm.Success":
-                    return "EXTProxy settings saved successfully";
+                    return "ProxyServer settings saved successfully";
 
                 case "EXTProxySettingsForm.Setting.Error":
-                    return "External proxy setting error";
+                    return "ProxyServer setting error";
 
                 case "EXTProxySettingsForm.Connect.TimeOut":
-                    return "External proxy connection timeout";
+                    return "ProxyServer connection timeout";
 
-                case "EXTProxySettingsForm.HandShake.TimeOut":
-                    return "External proxy handshake timeout";
+                case "EXTProxySettingsForm.Auth.UnSupport":
+                    return "Unsupported authentication method";
 
                 case "EXTProxySettingsForm.UnSupport":
-                    return "External proxy does not support socks";
+                    return "ProxyServer does not support socks";
 
                 case "EXTProxySettingsForm.NeedAuth":
-                    return "External proxy need authentication";
+                    return "ProxyServer need authentication";
 
                 case "EXTProxySettingsForm.AuthFail":
-                    return "External proxy authentication failed";
+                    return "ProxyServer authentication failed";
 
                 case "EXTProxySettingsForm.AuthUnSupport":
-                    return "External proxy does not support this authentication";
+                    return "ProxyServer does not support this authentication";
+
+                case "EXTProxySettingsForm.Connect.Fail":
+                    return "Failed to connect to the target server";
 
                 case "EXTProxySettingsForm.Connect.Refuses":
-                    return "External proxy refuses connection";
+                    return "ProxyServer refuses connection";
 
                 #endregion
 

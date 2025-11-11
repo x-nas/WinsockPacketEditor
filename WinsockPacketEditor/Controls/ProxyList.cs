@@ -1222,6 +1222,8 @@ namespace WinsockPacketEditor
                     dUplink.ToString("0.00"),
                     dDownlink.ToString("0.00"));
                 this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
+
+                Operate.ProxyConfig.Proxy.CloseUDPTimeOut();
             }
             catch (Exception ex)
             {
