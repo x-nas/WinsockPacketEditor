@@ -64,7 +64,7 @@ namespace WinsockPacketEditor
                     if (Operate.ProxyConfig.List.piSelect != null)
                     {
                         if (Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Req ||
-                            Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp ||
+                            Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTP_Resp ||
                             Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Req ||
                             Operate.ProxyConfig.List.piSelect.PacketType == Operate.PacketConfig.Packet.PacketType.HTTPS_Resp)
                         {
@@ -152,17 +152,26 @@ namespace WinsockPacketEditor
 
         public void CleanUp_PacketData()
         {
-            if (hbPacketData.ByteProvider != null)
+            try
             {
-                IDisposable byteProvider = hbPacketData.ByteProvider as IDisposable;
+                this.txtText.Clear();
 
-                if (byteProvider != null)
+                if (hbPacketData.ByteProvider != null)
                 {
-                    byteProvider.Dispose();
-                }
+                    IDisposable byteProvider = hbPacketData.ByteProvider as IDisposable;
 
-                hbPacketData.ByteProvider = null;
+                    if (byteProvider != null)
+                    {
+                        byteProvider.Dispose();
+                    }
+
+                    hbPacketData.ByteProvider = null;
+                }
             }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(CleanUp_PacketData), ex.Message);
+            }            
         }
 
         #endregion

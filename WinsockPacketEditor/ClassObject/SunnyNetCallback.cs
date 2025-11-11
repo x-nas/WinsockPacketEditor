@@ -228,6 +228,8 @@ namespace WinsockPacketEditor
 
             try
             {
+                Operate.ProxyConfig.Proxy.DomainType dtType = Operate.ProxyConfig.Proxy.DomainType.Socket;
+
                 string ClientIP = Operate.SystemConfig.GetUDPIPString(Conn.LocalAddr());
                 string ServerIP = Operate.SystemConfig.GetUDPIPString(Conn.RemoteAddr());
 
@@ -249,9 +251,42 @@ namespace WinsockPacketEditor
                             }
                         }
 
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            Conn.Body().Length,
+                            0,
+                            Conn.TheologyID(),
+                            Operate.PacketConfig.Packet.PacketType.UDP_Req,
+                            0,
+                            ClientIP,
+                            ServerIP,
+                            ServerIP,
+                            dtType,
+                            Conn.Body().Bytes,
+                            Conn.Body().Bytes,
+                            null);
+
                         break;
 
                     case UDPEvent.EventType_UDP_Receive:
+
+                        _ = Operate.ProxyConfig.Queue.ProxyInfo_ToQueue(
+                            DateTime.Now,
+                            Operate.FilterConfig.Filter.FilterAction.None,
+                            Conn.Body().Length,
+                            0,
+                            Conn.TheologyID(),
+                            Operate.PacketConfig.Packet.PacketType.UDP_Resp,
+                            0,
+                            ClientIP,
+                            ServerIP,
+                            ServerIP,
+                            dtType,
+                            Conn.Body().Bytes,
+                            Conn.Body().Bytes,
+                            null);
+
                         break;
 
                     case UDPEvent.EventType_UDP_Closed:
