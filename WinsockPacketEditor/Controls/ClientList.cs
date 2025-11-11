@@ -69,6 +69,18 @@ namespace WinsockPacketEditor
                         return Operate.SystemConfig.GetDisplayBytes((long)value, true);
                     },
                 }.SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
+                new AntdUI.Column("OnLineTime", "在线 (分钟)", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is AuthInfo ai)
+                        {
+                            return ((int)DateTime.Now.Subtract(ai.AuthTime).TotalMinutes);
+                        }
+
+                        return null;
+                    },
+                }.SetSortOrder().SetLocalizationTitleID("Table.AuthList.Column."),
                 new AntdUI.Column("AuthResult", "认证结果", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>

@@ -1198,6 +1198,9 @@ namespace WinsockPacketEditor
                 case "Table.AuthList.Column.TrafficStatistics":
                     return "Traffic";
 
+                case "Table.AuthList.Column.OnLineTime":
+                    return "OnLine (Mins)";
+
                 case "Table.AuthList.Column.AuthResult":
                     return "Auth Result";                
 
