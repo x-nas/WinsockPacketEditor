@@ -666,6 +666,7 @@
             this.txtSendName.LocalizationPlaceholderText = "Input.Text";
             this.txtSendName.Location = new System.Drawing.Point(2, 30);
             this.txtSendName.Margin = new System.Windows.Forms.Padding(2);
+            this.txtSendName.MaxLength = 20;
             this.txtSendName.Name = "txtSendName";
             this.txtSendName.PlaceholderText = "请输入字符";
             this.txtSendName.Size = new System.Drawing.Size(263, 32);

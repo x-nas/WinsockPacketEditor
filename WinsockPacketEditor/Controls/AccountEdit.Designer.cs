@@ -181,6 +181,7 @@
             this.txtUserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtUserName.Location = new System.Drawing.Point(123, 2);
             this.txtUserName.Margin = new System.Windows.Forms.Padding(2);
+            this.txtUserName.MaxLength = 20;
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(206, 36);
             this.txtUserName.TabIndex = 12;
@@ -191,6 +192,7 @@
             this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPassword.Location = new System.Drawing.Point(123, 42);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(2);
+            this.txtPassword.MaxLength = 20;
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(206, 36);
             this.txtPassword.TabIndex = 13;

@@ -2011,6 +2011,7 @@
             this.txtRobotName.LocalizationPrefixText = "RobotEditForm.RName";
             this.txtRobotName.Location = new System.Drawing.Point(2, 613);
             this.txtRobotName.Margin = new System.Windows.Forms.Padding(2);
+            this.txtRobotName.MaxLength = 20;
             this.txtRobotName.Name = "txtRobotName";
             this.txtRobotName.PlaceholderText = "请输入字符";
             this.txtRobotName.PrefixText = "机器人名称:";
