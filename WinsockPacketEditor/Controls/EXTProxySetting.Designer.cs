@@ -74,7 +74,6 @@
             // cbEnable_ExternalProxy
             // 
             this.cbEnable_ExternalProxy.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbEnable_ExternalProxy.Checked = true;
             this.cbEnable_ExternalProxy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbEnable_ExternalProxy.LocalizationText = "Enable";
             this.cbEnable_ExternalProxy.Location = new System.Drawing.Point(2, 41);
@@ -226,9 +225,9 @@
             this.bExternalProxy_Detection.Location = new System.Drawing.Point(2, 2);
             this.bExternalProxy_Detection.Margin = new System.Windows.Forms.Padding(2);
             this.bExternalProxy_Detection.Name = "bExternalProxy_Detection";
-            this.bExternalProxy_Detection.Size = new System.Drawing.Size(63, 37);
+            this.bExternalProxy_Detection.Size = new System.Drawing.Size(87, 37);
             this.bExternalProxy_Detection.TabIndex = 24;
-            this.bExternalProxy_Detection.Text = "检测";
+            this.bExternalProxy_Detection.Text = "检测代理";
             this.bExternalProxy_Detection.Type = AntdUI.TTypeMini.Info;
             this.bExternalProxy_Detection.Click += new System.EventHandler(this.bExternalProxy_Detection_Click);
             // 
@@ -263,7 +262,6 @@
             // cbExternalProxy_EnableAuth
             // 
             this.cbExternalProxy_EnableAuth.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbExternalProxy_EnableAuth.Checked = true;
             this.cbExternalProxy_EnableAuth.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbExternalProxy_EnableAuth.LocalizationText = "EXTProxySettingsForm.RequireAuth";
             this.cbExternalProxy_EnableAuth.Location = new System.Drawing.Point(2, 155);
@@ -277,7 +275,6 @@
             // cbExternalProxy_AppointPort
             // 
             this.cbExternalProxy_AppointPort.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.cbExternalProxy_AppointPort.Checked = true;
             this.cbExternalProxy_AppointPort.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbExternalProxy_AppointPort.LocalizationText = "EXTProxySettingsForm.SpecifyPort";
             this.cbExternalProxy_AppointPort.Location = new System.Drawing.Point(2, 99);
