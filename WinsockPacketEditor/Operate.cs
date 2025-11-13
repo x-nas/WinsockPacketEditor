@@ -1,7 +1,6 @@
 ﻿using AntdUI;
 using Be.Windows.Forms;
 using DiffPlex.DiffBuilder.Model;
-using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using QQWry;
@@ -141,21 +140,28 @@ namespace WinsockPacketEditor
 
             public static void ShowBetaMessage(Form form)
             {
-                if (Operate.SystemConfig.IsBeta)
+                try
                 {
-                    string sTitle = AntdUI.Localization.Get("BetaVersion", "这是一个测试版程序");
-                    string sContent = AntdUI.Localization.Get("BetaVersionContent", "\r\n测试版程序可能存在未知的 Bug，请谨慎使用！\r\n\r\n如需使用正式版，请至官网下载最新发布的程序。");
-
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, sTitle, sContent, AntdUI.TType.Warn)
+                    if (Operate.SystemConfig.IsBeta)
                     {
-                        OnButtonStyle = (id, btn) =>
+                        string sTitle = AntdUI.Localization.Get("BetaVersion", "这是一个测试版程序");
+                        string sContent = AntdUI.Localization.Get("BetaVersionContent", "\r\n测试版程序可能存在未知的 Bug，请谨慎使用！\r\n\r\n如需使用正式版，请至官网下载最新发布的程序。");
+
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, sTitle, sContent, AntdUI.TType.Warn)
                         {
-                            btn.BackExtend = "135, #6253E1, #04BEFE";
-                        },
-                        CancelText = null,
-                        OkText = AntdUI.Localization.Get("GotIt", "知道了"),
-                    });
+                            OnButtonStyle = (id, btn) =>
+                            {
+                                btn.BackExtend = "135, #6253E1, #04BEFE";
+                            },
+                            CancelText = null,
+                            OkText = AntdUI.Localization.Get("GotIt", "知道了"),
+                        });
+                    }                    
                 }
+                catch (Exception ex)
+                {                    
+                    Operate.DoLog(nameof(ShowBetaMessage), ex);
+                }                
             }
 
             #endregion
@@ -312,7 +318,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(InitCPUAndMemoryCounter), ex.Message);
+                        Operate.DoLog(nameof(InitCPUAndMemoryCounter), ex);
                     }
                 });
             }
@@ -347,7 +353,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetCPUAndMemory), ex.Message);
+                    Operate.DoLog(nameof(GetCPUAndMemory), ex);
                 }
 
                 return sReturn;
@@ -367,7 +373,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(GetListExecute_ByString), ex.Message);
+                    DoLog(nameof(GetListExecute_ByString), ex);
                 }
 
                 return leReturn;
@@ -588,7 +594,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetBoolFromChineseString), ex.Message);
+                    Operate.DoLog(nameof(GetBoolFromChineseString), ex);
                 }
 
                 return bReturn;
@@ -617,7 +623,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetSystemModeName), ex.Message);
+                    Operate.DoLog(nameof(GetSystemModeName), ex);
                 }
                 return sReturn;
             }
@@ -643,7 +649,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetWorkModeName), ex.Message);
+                    Operate.DoLog(nameof(GetWorkModeName), ex);
                 }
                 return sReturn;
             }
@@ -979,7 +985,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(GetFlagByLocation), ex.Message);
+                    DoLog(nameof(GetFlagByLocation), ex);
                 }
 
                 return GetDefaultPng();
@@ -1085,7 +1091,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetEncryptExport), ex.Message);
+                    Operate.DoLog(nameof(GetEncryptExport), ex);
                 }                
 
                 return (DoEncrypt, Password);
@@ -1126,7 +1132,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetEncryptImport), ex.Message);
+                    Operate.DoLog(nameof(GetEncryptImport), ex);
                 }                
 
                 return xdReturn;
@@ -1299,7 +1305,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InitSendInfo), ex.Message);
+                    Operate.DoLog(nameof(InitSendInfo), ex);
                 }
             }
 
@@ -1318,7 +1324,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InitRobotInfo), ex.Message);
+                    Operate.DoLog(nameof(InitRobotInfo), ex);
                 }
             }
 
@@ -1342,7 +1348,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InitFilterInfo), ex.Message);
+                    Operate.DoLog(nameof(InitFilterInfo), ex);
                 }
             }
 
@@ -1358,7 +1364,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(FindNodeByName), ex.Message);
+                    Operate.DoLog(nameof(FindNodeByName), ex);
                 }
                 
                 return null;
@@ -1399,7 +1405,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(FindNodeByName), ex.Message);
+                    Operate.DoLog(nameof(FindNodeByName), ex);
                 }                
 
                 return null;
@@ -1444,7 +1450,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(StartRemoteMGT), ex.Message);
+                    Operate.DoLog(nameof(StartRemoteMGT), ex);
                 }
             }
 
@@ -1464,7 +1470,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(StopRemoteMGT), ex.Message);
+                    Operate.DoLog(nameof(StopRemoteMGT), ex);
                 }
             }
 
@@ -1483,7 +1489,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetRemoteMGT_URL), ex.Message);
+                    Operate.DoLog(nameof(GetRemoteMGT_URL), ex);
                 }
 
                 return string.Empty;
@@ -1521,7 +1527,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetDisplayBytes), ex.Message);
+                    Operate.DoLog(nameof(GetDisplayBytes), ex);
                     return concise ? "0 Bytes" : "0 Bytes (0 Bytes)";
                 }
             }
@@ -1565,7 +1571,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetAESKeyFromString), ex.Message);
+                    Operate.DoLog(nameof(GetAESKeyFromString), ex);
                 }
 
                 return bReturn;
@@ -1597,7 +1603,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(EncryptXMLFile), ex.Message);
+                    Operate.DoLog(nameof(EncryptXMLFile), ex);
                 }
             }
 
@@ -1634,7 +1640,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DecryptXMLFile), ex.Message);
+                    Operate.DoLog(nameof(DecryptXMLFile), ex);
                 }
 
                 return xdReturn;
@@ -1769,7 +1775,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(PassWord_Encrypt), ex.Message);
+                    DoLog(nameof(PassWord_Encrypt), ex);
                 }
 
                 return string.Empty;
@@ -1808,7 +1814,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(PassWord_Decrypt), ex.Message);
+                    DoLog(nameof(PassWord_Decrypt), ex);
                 }
 
                 return string.Empty;
@@ -1830,7 +1836,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SortDictionaryByKey), ex.Message);
+                    Operate.DoLog(nameof(SortDictionaryByKey), ex);
                 }
 
                 return dReturn;
@@ -1848,7 +1854,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SortDictionaryByValue), ex.Message);
+                    Operate.DoLog(nameof(SortDictionaryByValue), ex);
                 }
 
                 return dReturn;
@@ -1901,7 +1907,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(StringToBytes), ex.Message);
+                    Operate.DoLog(nameof(StringToBytes), ex);
                 }
 
                 return bReturn;
@@ -2049,7 +2055,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(BytesToString), ex.Message);
+                    Operate.DoLog(nameof(BytesToString), ex);
                 }
 
                 return sReturn;
@@ -2128,7 +2134,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(Base64_Encoding), ex.Message);
+                    Operate.DoLog(nameof(Base64_Encoding), ex);
                 }
 
                 return sReturn;
@@ -2168,7 +2174,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ByteArrayToInt16BigEndian), ex.Message);
+                    Operate.DoLog(nameof(ByteArrayToInt16BigEndian), ex);
                 }
 
                 return uReturn;
@@ -2191,7 +2197,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(StringToBool), ex.Message);
+                    Operate.DoLog(nameof(StringToBool), ex);
                 }
                 return bReturn;
             }
@@ -2215,7 +2221,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(StringToDateTime), ex.Message);
+                    Operate.DoLog(nameof(StringToDateTime), ex);
                 }
 
                 return dtReturn;
@@ -2259,7 +2265,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ConvertFILTString), ex.Message);
+                    Operate.DoLog(nameof(ConvertFILTString), ex);
                 }
 
                 return Return;
@@ -2281,7 +2287,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(IsHexString), ex.Message);
+                    Operate.DoLog(nameof(IsHexString), ex);
                 }
 
                 return bReturn;
@@ -2325,7 +2331,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(VerifyHexCharWithWildcard), ex.Message);
+                    Operate.DoLog(nameof(VerifyHexCharWithWildcard), ex);
                 }
             }
 
@@ -2437,7 +2443,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(RegisterHotkey_FromText), ex.Message);
+                    Operate.DoLog(nameof(RegisterHotkey_FromText), ex);
                 }
 
                 return false;
@@ -2486,7 +2492,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(RegisterRecordedHotkey), ex.Message);
+                    Operate.DoLog(nameof(RegisterRecordedHotkey), ex);
                 }
 
                 return false;
@@ -2539,7 +2545,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ParseHotkeyString), ex.Message);
+                    Operate.DoLog(nameof(ParseHotkeyString), ex);
                 }
 
                 return result;
@@ -2583,7 +2589,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ConvertHotkeyToString), ex.Message);
+                    Operate.DoLog(nameof(ConvertHotkeyToString), ex);
                 }
 
                 return result;
@@ -2719,7 +2725,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DoHotKey), ex.Message);
+                    Operate.DoLog(nameof(DoHotKey), ex);
                 }
             }
 
@@ -2788,7 +2794,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CompareText), ex.Message);
+                    Operate.DoLog(nameof(CompareText), ex);
                 }
 
                 return differences;
@@ -2864,7 +2870,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ComparePackets), ex.Message);
+                    Operate.DoLog(nameof(ComparePackets), ex);
                 }
 
                 return (string.Empty, string.Empty, new List<DuplicateInfo>());
@@ -2948,7 +2954,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(AnalyzeContinuousDuplicates), ex.Message);
+                    Operate.DoLog(nameof(AnalyzeContinuousDuplicates), ex);
                 }
 
                 return null;
@@ -3157,7 +3163,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(SaveSystemConfig_LastInjection_ToDB), ex.Message);
+                    DoLog(nameof(SaveSystemConfig_LastInjection_ToDB), ex);
                 }
             }
 
@@ -3174,7 +3180,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(SaveSystemConfig_ToDB), ex.Message);
+                    DoLog(nameof(SaveSystemConfig_ToDB), ex);
                 }
             }
 
@@ -3247,7 +3253,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(GetSystemConfig_XML), ex.Message);
+                    DoLog(nameof(GetSystemConfig_XML), ex);
                 }
 
                 return null;
@@ -3353,7 +3359,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(LoadSystemConfig_FromDB), ex.Message);
+                    DoLog(nameof(LoadSystemConfig_FromDB), ex);
                 }
             }
 
@@ -3716,7 +3722,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(SetSystemConfig_FromXML), ex.Message);
+                    DoLog(nameof(SetSystemConfig_FromXML), ex);
                 }
             }
 
@@ -3757,7 +3763,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(GetInjectMode_XML), ex.Message);
+                    DoLog(nameof(GetInjectMode_XML), ex);
                 }
 
                 return null;
@@ -3795,7 +3801,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(LoadInjectMode_FromDB), ex.Message);
+                    DoLog(nameof(LoadInjectMode_FromDB), ex);
                 }
             }            
 
@@ -3895,7 +3901,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(SetInjectMode_FromXML), ex.Message);
+                    DoLog(nameof(SetInjectMode_FromXML), ex);
                 }
             }
 
@@ -3954,7 +3960,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(GetProxyMode_XML), ex.Message);
+                    DoLog(nameof(GetProxyMode_XML), ex);
                 }
 
                 return null;
@@ -4009,7 +4015,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(LoadProxyMode_FromDB), ex.Message);
+                    DoLog(nameof(LoadProxyMode_FromDB), ex);
                 }
             }
 
@@ -4211,7 +4217,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(SetProxyMode_FromXML), ex.Message);
+                    DoLog(nameof(SetProxyMode_FromXML), ex);
                 }
             }
 
@@ -4229,7 +4235,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(LoadSystemList_FromDB), ex.Message);
+                    DoLog(nameof(LoadSystemList_FromDB), ex);
                 }                
             }
 
@@ -4250,7 +4256,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(LoadSystemList_FromDB), ex.Message);
+                    DoLog(nameof(LoadSystemList_FromDB), ex);
                 }
             }
 
@@ -4322,7 +4328,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ExportSystemBackUp_Dialog), ex.Message);
+                    Operate.DoLog(nameof(ExportSystemBackUp_Dialog), ex);
                 }
             }
 
@@ -4487,7 +4493,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ExportSystemBackUp), ex.Message);
+                    Operate.DoLog(nameof(ExportSystemBackUp), ex);
                 }
 
                 return false;
@@ -4521,7 +4527,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ImportSystemBackUp_Dialog), ex.Message);
+                    Operate.DoLog(nameof(ImportSystemBackUp_Dialog), ex);
                 }
             }
 
@@ -4567,7 +4573,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(ImportSystemBackUp), ex.Message);
+                    Operate.DoLog(nameof(ImportSystemBackUp), ex);
                 }
 
                 return false;
@@ -4602,7 +4608,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import SystemConfig", ex.Message);
+                    Operate.DoLog("Import SystemConfig", ex);
                 }
 
                 #endregion
@@ -4619,7 +4625,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import ProxyMode", ex.Message);
+                    Operate.DoLog("Import ProxyMode", ex);
                 }
 
                 #endregion
@@ -4636,7 +4642,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import InjectMode", ex.Message);
+                    Operate.DoLog("Import InjectMode", ex);
                 }
 
                 #endregion
@@ -4665,7 +4671,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import ProxyAccountList", ex.Message);
+                    Operate.DoLog("Import ProxyAccountList", ex);
                 }
 
                 #endregion
@@ -4689,7 +4695,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import WhiteList", ex.Message);
+                    Operate.DoLog("Import WhiteList", ex);
                 }
 
                 #endregion
@@ -4713,7 +4719,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import BlackList", ex.Message);
+                    Operate.DoLog("Import BlackList", ex);
                 }
 
                 #endregion
@@ -4750,7 +4756,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import ProxyAccountList", ex.Message);
+                    Operate.DoLog("Import ProxyAccountList", ex);
                 }
 
                 #endregion
@@ -4774,7 +4780,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import FilterList", ex.Message);
+                    Operate.DoLog("Import FilterList", ex);
                 }
 
                 #endregion
@@ -4798,7 +4804,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import SendList", ex.Message);
+                    Operate.DoLog("Import SendList", ex);
                 }
 
                 #endregion
@@ -4822,7 +4828,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog("Import RobotList", ex.Message);
+                    Operate.DoLog("Import RobotList", ex);
                 }
 
                 #endregion
@@ -4872,7 +4878,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(GetProcessList), ex.Message);
+                    DoLog(nameof(GetProcessList), ex);
                 }
 
                 return piReturn;
@@ -4985,7 +4991,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetInjectProcessName), ex.Message);
+                    Operate.DoLog(nameof(GetInjectProcessName), ex);
                 }
 
                 return sReturn;
@@ -5028,7 +5034,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetInjectModuleName), ex.Message);
+                    Operate.DoLog(nameof(GetInjectModuleName), ex);
                 }
 
                 return sReturn;
@@ -5084,7 +5090,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(GetInjectWinsockInfo), ex.Message);
+                    Operate.DoLog(nameof(GetInjectWinsockInfo), ex);
                 }
 
                 return sReturn;
@@ -5379,7 +5385,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(Handshake), ex.Message);
+                        Operate.DoLog(nameof(Handshake), ex);
                     }
                 }
 
@@ -5473,7 +5479,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AuthUserName), ex.Message);
+                        Operate.DoLog(nameof(AuthUserName), ex);
                     }
                 }
 
@@ -5527,7 +5533,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(Command), ex.Message);
+                        Operate.DoLog(nameof(Command), ex);
                     }
                 }
 
@@ -5565,7 +5571,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(HandleConnectCommand), ex.Message);
+                        Operate.DoLog(nameof(HandleConnectCommand), ex);
                     }                    
                 }
 
@@ -5627,7 +5633,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(HandleHttpConnect), ex.Message);
+                        Operate.DoLog(nameof(HandleHttpConnect), ex);
                     }                    
                 }
 
@@ -5642,7 +5648,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(HandleUnsupportedCommand), ex.Message);
+                        Operate.DoLog(nameof(HandleUnsupportedCommand), ex);
                     }                    
                 }
 
@@ -5687,7 +5693,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SendCommandResponse), ex.Message);
+                        Operate.DoLog(nameof(SendCommandResponse), ex);
                     }
                 }
 
@@ -5711,7 +5717,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(CreateNewUDP), ex.Message);
+                        DoLog(nameof(CreateNewUDP), ex);
                     }
 
                     return null;
@@ -5746,7 +5752,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(CloseUDPTimeOut), ex.Message);
+                        DoLog(nameof(CloseUDPTimeOut), ex);
                     }
                 }
 
@@ -5887,7 +5893,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ForwardData), ex.Message);
+                        Operate.DoLog(nameof(ForwardData), ex);
                         psSession.Close(SuperSocket.SocketBase.CloseReason.SocketError);
                     }
                 }
@@ -5957,7 +5963,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ProcessUdpRequest), ex.Message);
+                        Operate.DoLog(nameof(ProcessUdpRequest), ex);
                     }
                 }
 
@@ -6008,7 +6014,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ProcessUdpResponse), ex.Message);
+                        Operate.DoLog(nameof(ProcessUdpResponse), ex);
                     }
                 }
 
@@ -6066,7 +6072,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(EnableSystemProxy), ex.Message);
+                        DoLog(nameof(EnableSystemProxy), ex);
                         return false;
                     }
                 }
@@ -6094,7 +6100,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(DisableSystemProxy), ex.Message);
+                        DoLog(nameof(DisableSystemProxy), ex);
                         return false;
                     }
                 }
@@ -6238,7 +6244,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(CheckDataIsMatchProxyStep), ex.Message);
+                        DoLog(nameof(CheckDataIsMatchProxyStep), ex);
                     }
 
                     return bReturn;
@@ -6286,7 +6292,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(ParseHttpHeaders), ex.Message);
+                        DoLog(nameof(ParseHttpHeaders), ex);
                     }
 
                     return headers;
@@ -6359,7 +6365,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SetUDPProxy), ex.Message);
+                        Operate.DoLog(nameof(SetUDPProxy), ex);
                         ProxyConfig.Proxy.CleanupUdpAssociation(targetEndPoint);
                     }
                 }
@@ -6409,7 +6415,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ParseIPEndPoint), ex.Message);
+                        Operate.DoLog(nameof(ParseIPEndPoint), ex);
                     }
 
                     return null;
@@ -6534,9 +6540,8 @@ namespace WinsockPacketEditor
 
                         return (true, string.Empty, commandResponse);
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        string Msg = ex.Message;
                         sError = AntdUI.Localization.Get("EXTProxySettingsForm.Connect.Refuses", "代理服务器拒绝连接");
                         return (false, sError, null);
                     }
@@ -6581,7 +6586,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ParseEstablishResponse), ex.Message);
+                        Operate.DoLog(nameof(ParseEstablishResponse), ex);
                         return null;
                     }
                 }
@@ -6631,7 +6636,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CreatSocks5UdpRequest), ex.Message);
+                        Operate.DoLog(nameof(CreatSocks5UdpRequest), ex);
                         return null;
                     }
                 }
@@ -6686,7 +6691,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ParseSocks5UdpResponse), ex.Message);
+                        Operate.DoLog(nameof(ParseSocks5UdpResponse), ex);
                         return (null, null);
                     }
                 }
@@ -6782,7 +6787,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SendUdpDataToProxy), ex.Message);
+                        Operate.DoLog(nameof(SendUdpDataToProxy), ex);
                         return false;
                     }
                 }
@@ -6822,7 +6827,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ReceiveUdpResponses), ex.Message);
+                        Operate.DoLog(nameof(ReceiveUdpResponses), ex);
                     }
                 }
 
@@ -6868,7 +6873,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetContentType), ex.Message);
+                        DoLog(nameof(GetContentType), ex);
                     }
 
                     return "application/octet-stream";
@@ -6887,7 +6892,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetIPEndPoint_ByAddressString), ex.Message);
+                        DoLog(nameof(GetIPEndPoint_ByAddressString), ex);
                     }
 
                     return null;
@@ -6937,7 +6942,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetIPEndPoint_ByAddressType), ex.Message);
+                        DoLog(nameof(GetIPEndPoint_ByAddressType), ex);
                     }
 
                     return (endPoint, addressString);
@@ -6984,7 +6989,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(ResolveAddress), ex.Message);
+                        DoLog(nameof(ResolveAddress), ex);
                     }
 
                     return null;
@@ -7023,7 +7028,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetUDPData_ByAddressType), ex.Message);
+                        DoLog(nameof(GetUDPData_ByAddressType), ex);
                         return Span<byte>.Empty;
                     }
                 }
@@ -7064,7 +7069,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetDomainType_ByPort), ex.Message);
+                        DoLog(nameof(GetDomainType_ByPort), ex);
                     }
 
                     return Operate.ProxyConfig.Proxy.DomainType.Socket;
@@ -7087,7 +7092,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetServerAddress), ex.Message);                        
+                        Operate.DoLog(nameof(GetServerAddress), ex);                        
                     }
 
                     return string.Empty;
@@ -7131,7 +7136,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsMustTCP_ByPort), ex.Message);
+                        Operate.DoLog(nameof(IsMustTCP_ByPort), ex);
                     }
 
                     return false;
@@ -7221,7 +7226,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveCertToFile_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveCertToFile_Dialog), ex);
                     }
                 }
 
@@ -7249,7 +7254,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ExportPemToCerFile), ex.Message);
+                        Operate.DoLog(nameof(ExportPemToCerFile), ex);
                         return false;
                     }
                 }
@@ -7292,7 +7297,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ExportPemToCrtFile), ex.Message);
+                        Operate.DoLog(nameof(ExportPemToCrtFile), ex);
                         return false;
                     }
                 }
@@ -7310,7 +7315,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ExportPemToPemFile), ex.Message);
+                        Operate.DoLog(nameof(ExportPemToPemFile), ex);
                         return false;
                     }
                 }
@@ -7328,7 +7333,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ExportPemToAndroidFile), ex.Message);
+                        Operate.DoLog(nameof(ExportPemToAndroidFile), ex);
                         return false;
                     }
                 }
@@ -7385,7 +7390,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddToWhiteList), ex.Message);
+                        Operate.DoLog(nameof(AddToWhiteList), ex);
                     }
                 }
 
@@ -7427,7 +7432,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateWhiteList), ex.Message);
+                        Operate.DoLog(nameof(UpdateWhiteList), ex);
                     }
                 }
 
@@ -7471,7 +7476,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteWhiteList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(DeleteWhiteList_Dialog), ex);
                     }
                 }
 
@@ -7502,7 +7507,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CleanUpWhiteList), ex.Message);
+                        Operate.DoLog(nameof(CleanUpWhiteList), ex);
                     }
                 }
 
@@ -7585,7 +7590,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateWhiteList_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateWhiteList_ByListAction), ex);
                     }
                 }
 
@@ -7641,7 +7646,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddToBlackList), ex.Message);
+                        Operate.DoLog(nameof(AddToBlackList), ex);
                     }
                 }
 
@@ -7683,7 +7688,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateBlackList), ex.Message);
+                        Operate.DoLog(nameof(UpdateBlackList), ex);
                     }
                 }
 
@@ -7727,7 +7732,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteBlackList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(DeleteBlackList_Dialog), ex);
                     }
                 }
 
@@ -7758,7 +7763,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CleanUpBlackList), ex.Message);
+                        Operate.DoLog(nameof(CleanUpBlackList), ex);
                     }
                 }
 
@@ -7841,7 +7846,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateBlackList_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateBlackList_ByListAction), ex);
                     }
                 }
 
@@ -7888,7 +7893,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ParseIpRange), ex.Message);
+                        Operate.DoLog(nameof(ParseIpRange), ex);
                         return (-1, -1);
                     }
                 }
@@ -7908,7 +7913,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ConvertIpToLong), ex.Message);
+                        Operate.DoLog(nameof(ConvertIpToLong), ex);
                     }                    
 
                     return -1;
@@ -7934,7 +7939,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ParseCidr), ex.Message);                        
+                        Operate.DoLog(nameof(ParseCidr), ex);                        
                     }
 
                     return null;
@@ -7971,7 +7976,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsIpInRanges), ex.Message);
+                        Operate.DoLog(nameof(IsIpInRanges), ex);
                     }
 
                     return false;
@@ -8008,7 +8013,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsIpInRanges), ex.Message);
+                        Operate.DoLog(nameof(IsIpInRanges), ex);
                     }
 
                     return false;
@@ -8027,7 +8032,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveWhiteList_ToDB), ex.Message);
+                        Operate.DoLog(nameof(SaveWhiteList_ToDB), ex);
                     }
                 }
 
@@ -8044,7 +8049,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveBlackList_ToDB), ex.Message);
+                        Operate.DoLog(nameof(SaveBlackList_ToDB), ex);
                     }
                 }
 
@@ -8074,7 +8079,7 @@ namespace WinsockPacketEditor
                         }
                         catch (Exception ex)
                         {
-                            Operate.DoLog(nameof(LoadWhiteList_FromDB), ex.Message);
+                            Operate.DoLog(nameof(LoadWhiteList_FromDB), ex);
                         }
                     });
                 }
@@ -8105,7 +8110,7 @@ namespace WinsockPacketEditor
                         }
                         catch (Exception ex)
                         {
-                            Operate.DoLog(nameof(LoadBlackList_FromDB), ex.Message);
+                            Operate.DoLog(nameof(LoadBlackList_FromDB), ex);
                         }
                     });
                 }
@@ -8154,7 +8159,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveWhiteList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveWhiteList_Dialog), ex);
                     }
                 }
 
@@ -8188,7 +8193,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveWhiteList), ex.Message);
+                        Operate.DoLog(nameof(SaveWhiteList), ex);
                     }
 
                     return false;
@@ -8217,7 +8222,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetWhiteList_XML), ex.Message);
+                        Operate.DoLog(nameof(GetWhiteList_XML), ex);
                     }
 
                     return null;
@@ -8267,7 +8272,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveBlackList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveBlackList_Dialog), ex);
                     }
                 }
 
@@ -8301,7 +8306,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveBlackList), ex.Message);
+                        Operate.DoLog(nameof(SaveBlackList), ex);
                     }
 
                     return false;
@@ -8330,7 +8335,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetBlackList_XML), ex.Message);
+                        Operate.DoLog(nameof(GetBlackList_XML), ex);
                     }
 
                     return null;
@@ -8364,7 +8369,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadWhiteList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadWhiteList_Dialog), ex);
                     }
                 }
 
@@ -8410,7 +8415,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadWhiteList), ex.Message);
+                        Operate.DoLog(nameof(LoadWhiteList), ex);
                     }
 
                     return false;
@@ -8451,7 +8456,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadWhiteList_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadWhiteList_FromXDocument), ex);
                     }
                 }
 
@@ -8483,7 +8488,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadBlackList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadBlackList_Dialog), ex);
                     }
                 }
 
@@ -8529,7 +8534,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadBlackList), ex.Message);
+                        Operate.DoLog(nameof(LoadBlackList), ex);
                     }
 
                     return false;
@@ -8570,7 +8575,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadBlackList_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadBlackList_FromXDocument), ex);
                     }
                 }
 
@@ -8687,7 +8692,7 @@ namespace WinsockPacketEditor
                         }
                         catch (Exception ex)
                         {
-                            Operate.DoLog(nameof(ProxyInfo_ToQueue), ex.Message);
+                            Operate.DoLog(nameof(ProxyInfo_ToQueue), ex);
                         }
                     });                    
                 }
@@ -8707,7 +8712,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ClearProxyInfoQueue), ex.Message);
+                        Operate.DoLog(nameof(ClearProxyInfoQueue), ex);
                     }
                 }
 
@@ -8767,7 +8772,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ProxyInfo_ToList), ex.Message);
+                        Operate.DoLog(nameof(ProxyInfo_ToList), ex);
                     }
                 }
 
@@ -8793,7 +8798,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ClearProxyInfo), ex.Message);
+                        Operate.DoLog(nameof(ClearProxyInfo), ex);
                     }
                 }
 
@@ -8842,7 +8847,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveProxyList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveProxyList_Dialog), ex);
                     }
                 }
 
@@ -8874,7 +8879,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(nameof(SaveProxyListToExcel), ex.Message);
+                                    Operate.DoLog(nameof(SaveProxyListToExcel), ex);
                                 }
                             }
                         }
@@ -8883,7 +8888,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveProxyListToExcel), ex.Message);
+                        Operate.DoLog(nameof(SaveProxyListToExcel), ex);
                         return false;
                     }
                 }
@@ -8921,7 +8926,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddProxyAccount), ex.Message);
+                        Operate.DoLog(nameof(AddProxyAccount), ex);
                     }
                 }
 
@@ -8973,7 +8978,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddProxyAccount), ex.Message);
+                        Operate.DoLog(nameof(AddProxyAccount), ex);
                     }
 
                     return false;
@@ -8994,7 +8999,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddAccountIPInfo), ex.Message);
+                        Operate.DoLog(nameof(AddAccountIPInfo), ex);
                     }
                 }
 
@@ -9043,7 +9048,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateProxyAccount_ByAccountID), ex.Message);
+                        Operate.DoLog(nameof(UpdateProxyAccount_ByAccountID), ex);
                     }
 
                     return false;
@@ -9086,7 +9091,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateProxyAccount_ByCCProxy), ex.Message);
+                        Operate.DoLog(nameof(UpdateProxyAccount_ByCCProxy), ex);
                     }
 
                     return false;
@@ -9134,7 +9139,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteAccount_Dialog), ex.Message);
+                        Operate.DoLog(nameof(DeleteAccount_Dialog), ex);
                     }
                 }
 
@@ -9156,7 +9161,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteProxyAccount_ByAccountID), ex.Message);
+                        Operate.DoLog(nameof(DeleteProxyAccount_ByAccountID), ex);
                     }
 
                     return false;
@@ -9180,7 +9185,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteProxyAccount_ByUserName), ex.Message);
+                        Operate.DoLog(nameof(DeleteProxyAccount_ByUserName), ex);
                     }
 
                     return false;
@@ -9195,7 +9200,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ClearAccountInfo), ex.Message);
+                        Operate.DoLog(nameof(ClearAccountInfo), ex);
                     }
                 }
 
@@ -9219,7 +9224,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetUserName_ByAccountID), ex.Message);
+                        Operate.DoLog(nameof(GetUserName_ByAccountID), ex);
                     }
 
                     return string.Empty;
@@ -9241,7 +9246,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetProxyAccount_ByAccountID), ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByAccountID), ex);
                     }
 
                     return null;
@@ -9265,7 +9270,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetAccount_ByUserName), ex.Message);
+                        Operate.DoLog(nameof(GetAccount_ByUserName), ex);
                     }
 
                     return null;
@@ -9282,7 +9287,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsEnable), ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsEnable), ex);
                     }
 
                     return null;
@@ -9299,7 +9304,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsOnLine), ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsOnLine), ex);
                     }
 
                     return null;
@@ -9316,7 +9321,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsExpiry), ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsExpiry), ex);
                     }
 
                     return null;
@@ -9333,7 +9338,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitLinks), ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitLinks), ex);
                     }
 
                     return null;
@@ -9350,7 +9355,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitDevices), ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByIsLimitDevices), ex);
                     }
 
                     return null;
@@ -9367,7 +9372,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetProxyAccount_ByExpireTime), ex.Message);
+                        Operate.DoLog(nameof(GetProxyAccount_ByExpireTime), ex);
                     }
 
                     return null;
@@ -9395,7 +9400,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ProxyAccountToList), ex.Message);
+                        Operate.DoLog(nameof(ProxyAccountToList), ex);
                     }
                 }
 
@@ -9446,7 +9451,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AdjustExpiryTime), ex.Message);
+                        Operate.DoLog(nameof(AdjustExpiryTime), ex);
                     }
                 }
 
@@ -9477,7 +9482,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AdjustLimitLinks), ex.Message);
+                        Operate.DoLog(nameof(AdjustLimitLinks), ex);
                     }
                 }
 
@@ -9508,7 +9513,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AdjustLimitDevices), ex.Message);
+                        Operate.DoLog(nameof(AdjustLimitDevices), ex);
                     }
                 }
 
@@ -9543,7 +9548,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(IPInfo_ToAccount), ex.Message);
+                        DoLog(nameof(IPInfo_ToAccount), ex);
                     }
                 }
 
@@ -9566,7 +9571,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(FindAuthInfo), ex.Message);
+                        Operate.DoLog(nameof(FindAuthInfo), ex);
                         return null;
                     }
                 }
@@ -9583,7 +9588,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ClearAccountInfo), ex.Message);
+                        Operate.DoLog(nameof(ClearAccountInfo), ex);
                     }
                 }
 
@@ -9605,7 +9610,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddTraffic), ex.Message);
+                        Operate.DoLog(nameof(AddTraffic), ex);
                     }
                 }
 
@@ -9627,7 +9632,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetTraffic), ex.Message);
+                        Operate.DoLog(nameof(GetTraffic), ex);
                     }
 
                     return 0;
@@ -9693,7 +9698,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsValidAdmin), ex.Message);
+                        Operate.DoLog(nameof(IsValidAdmin), ex);
                     }
 
                     return bReturn;
@@ -9717,7 +9722,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckProxyAccount_Exist), ex.Message);
+                        Operate.DoLog(nameof(CheckProxyAccount_Exist), ex);
                     }
 
                     return false;
@@ -9747,7 +9752,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckUserNameAndPassWord), ex.Message);
+                        Operate.DoLog(nameof(CheckUserNameAndPassWord), ex);
                     }
 
                     return (false, Guid.Empty);
@@ -9775,7 +9780,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckLimitLinks), ex.Message);
+                        Operate.DoLog(nameof(CheckLimitLinks), ex);
                         return false;
                     }
                 }
@@ -9809,7 +9814,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckLimitDevices), ex.Message);
+                        Operate.DoLog(nameof(CheckLimitDevices), ex);
                         return false;
                     }
                 }
@@ -9835,7 +9840,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SetOnline_ByAccountID), ex.Message);
+                        Operate.DoLog(nameof(SetOnline_ByAccountID), ex);
                     }
                 }
 
@@ -9861,7 +9866,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SetAllAccounts_OffLine), ex.Message);
+                        Operate.DoLog(nameof(SetAllAccounts_OffLine), ex);
                     }
                 }
 
@@ -9885,7 +9890,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetOnLineProxyAccountCount), ex.Message);
+                        DoLog(nameof(GetOnLineProxyAccountCount), ex);
                     }
 
                     return iReturn;
@@ -9913,7 +9918,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetLinksNumber_ByAccountID), ex.Message);
+                        Operate.DoLog(nameof(GetLinksNumber_ByAccountID), ex);
                         return 0;
                     }
                 }
@@ -9940,7 +9945,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetDevicesNumber_ByAccountID), ex.Message);
+                        Operate.DoLog(nameof(GetDevicesNumber_ByAccountID), ex);
                         return 0;
                     }
                 }
@@ -10114,7 +10119,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveBatchAccounts_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveBatchAccounts_Dialog), ex);
                     }
                 }
 
@@ -10139,7 +10144,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex.Message);
+                                    Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex);
                                 }
                             }
                         }
@@ -10148,7 +10153,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex.Message);
+                        Operate.DoLog(nameof(SaveBatchAccountsToExcel), ex);
                         return false;
                     }
                 }
@@ -10170,7 +10175,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadAccountIPInfo_FromDB), ex.Message);
+                        Operate.DoLog(nameof(LoadAccountIPInfo_FromDB), ex);
                     }
 
                     return dtReturn;
@@ -10227,7 +10232,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadProxyAccountList_FromDB), ex.Message);
+                        Operate.DoLog(nameof(LoadProxyAccountList_FromDB), ex);
                     }
                 }
 
@@ -10272,7 +10277,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveAccount_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveAccount_Dialog), ex);
                     }
                 }
 
@@ -10306,7 +10311,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveAccountList), ex.Message);
+                        Operate.DoLog(nameof(SaveAccountList), ex);
                     }
 
                     return false;
@@ -10385,7 +10390,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetAccountList_XML), ex.Message);
+                        Operate.DoLog(nameof(GetAccountList_XML), ex);
                     }
 
                     return null;
@@ -10428,7 +10433,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadAccountList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadAccountList_Dialog), ex);
                     }
                 }
 
@@ -10491,7 +10496,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadAccountList), ex.Message);
+                        Operate.DoLog(nameof(LoadAccountList), ex);
                     }
 
                     return false;
@@ -10615,7 +10620,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadAccountList_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadAccountList_FromXDocument), ex);
                     }
                 }
 
@@ -10689,7 +10694,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadAccountList_FromInIFile), ex.Message);
+                        Operate.DoLog(nameof(LoadAccountList_FromInIFile), ex);
                     }
                 }
 
@@ -10741,7 +10746,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddAccount_FromIniFile), ex.Message);
+                        Operate.DoLog(nameof(AddAccount_FromIniFile), ex);
                     }
                 }
 
@@ -10771,7 +10776,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetMapProtocol_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetMapProtocol_ByString), ex);
                     }
 
                     return MProtocol;
@@ -10876,7 +10881,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(ModifyRequestHostAndPath), ex.Message);
+                        DoLog(nameof(ModifyRequestHostAndPath), ex);
                         return Encoding.UTF8.GetBytes(originalRequest);
                     }
                 }
@@ -10919,7 +10924,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(MappingData_ToQueue), ex.Message);
+                        Operate.DoLog(nameof(MappingData_ToQueue), ex);
                     }
                 }
 
@@ -10939,7 +10944,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddMapLocal), ex.Message);
+                        Operate.DoLog(nameof(AddMapLocal), ex);
                     }
                 }
 
@@ -10978,7 +10983,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddMapRemote), ex.Message);
+                        Operate.DoLog(nameof(AddMapRemote), ex);
                     }
                 }
 
@@ -11036,7 +11041,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteMapLocal_Dialog), ex.Message);
+                        Operate.DoLog(nameof(DeleteMapLocal_Dialog), ex);
                     }
                 }
 
@@ -11066,7 +11071,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteMapRemote_Dialog), ex.Message);
+                        Operate.DoLog(nameof(DeleteMapRemote_Dialog), ex);
                     }
                 }
 
@@ -11097,7 +11102,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(MapLocalClear), ex.Message);
+                        Operate.DoLog(nameof(MapLocalClear), ex);
                     }
                 }
 
@@ -11128,7 +11133,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(MapRemoteClear), ex.Message);
+                        Operate.DoLog(nameof(MapRemoteClear), ex);
                     }
                 }
 
@@ -11151,7 +11156,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateMapLocal), ex.Message);
+                        Operate.DoLog(nameof(UpdateMapLocal), ex);
                     }
                 }
 
@@ -11186,7 +11191,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateMapRemote), ex.Message);
+                        Operate.DoLog(nameof(UpdateMapRemote), ex);
                     }
                 }
 
@@ -11207,7 +11212,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetMapLocal), ex.Message);
+                        Operate.DoLog(nameof(GetMapLocal), ex);
                     }
 
                     return null;
@@ -11345,7 +11350,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateMapLocal_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateMapLocal_ByListAction), ex);
                     }
                 }
 
@@ -11418,7 +11423,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateMapRemote_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateMapRemote_ByListAction), ex);
                     }
                 }
 
@@ -11435,7 +11440,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveMapLocal_ToDB), ex.Message);
+                        Operate.DoLog(nameof(SaveMapLocal_ToDB), ex);
                     }
                 }
 
@@ -11452,7 +11457,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveMapRemote_ToDB), ex.Message);
+                        Operate.DoLog(nameof(SaveMapRemote_ToDB), ex);
                     }
                 }
 
@@ -11482,7 +11487,7 @@ namespace WinsockPacketEditor
                         }
                         catch (Exception ex)
                         {
-                            Operate.DoLog(nameof(LoadProxyMapLocal_FromDB), ex.Message);
+                            Operate.DoLog(nameof(LoadProxyMapLocal_FromDB), ex);
                         }
                     });
                 }
@@ -11527,7 +11532,7 @@ namespace WinsockPacketEditor
                         }
                         catch (Exception ex)
                         {
-                            Operate.DoLog(nameof(LoadProxyMapRemote_FromDB), ex.Message);
+                            Operate.DoLog(nameof(LoadProxyMapRemote_FromDB), ex);
                         }
                     });
                 }
@@ -11576,7 +11581,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveMapLocal_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveMapLocal_Dialog), ex);
                     }
                 }
 
@@ -11610,7 +11615,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveMapLocal), ex.Message);
+                        Operate.DoLog(nameof(SaveMapLocal), ex);
                     }
 
                     return false;
@@ -11641,7 +11646,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetMapLocal_XML), ex.Message);
+                        Operate.DoLog(nameof(GetMapLocal_XML), ex);
                     }
 
                     return null;
@@ -11691,7 +11696,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveMapRemote_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveMapRemote_Dialog), ex);
                     }
                 }
 
@@ -11725,7 +11730,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveMapRemote), ex.Message);
+                        Operate.DoLog(nameof(SaveMapRemote), ex);
                     }
 
                     return false;
@@ -11759,7 +11764,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetMapRemote_XML), ex.Message);
+                        Operate.DoLog(nameof(GetMapRemote_XML), ex);
                     }
 
                     return null;
@@ -11793,7 +11798,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadMapLocal_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadMapLocal_Dialog), ex);
                     }
                 }
 
@@ -11839,7 +11844,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadMapLocal), ex.Message);
+                        Operate.DoLog(nameof(LoadMapLocal), ex);
                     }
 
                     return false;
@@ -11892,7 +11897,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadMapLocal_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadMapLocal_FromXDocument), ex);
                     }
                 }
 
@@ -11924,7 +11929,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadMapRemote_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadMapRemote_Dialog), ex);
                     }
                 }
 
@@ -11970,7 +11975,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadMapRemote), ex.Message);
+                        Operate.DoLog(nameof(LoadMapRemote), ex);
                     }
 
                     return false;
@@ -12050,7 +12055,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadMapRemote_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadMapRemote_FromXDocument), ex);
                     }
                 }
 
@@ -12283,7 +12288,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SendPacket), ex.Message);
+                        Operate.DoLog(nameof(SendPacket), ex);
                     }
                     finally
                     {
@@ -12339,7 +12344,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(GetPacketSpeedInfo), ex.Message);
+                        DoLog(nameof(GetPacketSpeedInfo), ex);
                     }
 
                     return sReturn;
@@ -12359,7 +12364,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetPacketType_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetPacketType_ByString), ex);
                     }
 
                     return ptReturn;
@@ -12477,7 +12482,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetName_ByPacketType), ex.Message);
+                        Operate.DoLog(nameof(GetName_ByPacketType), ex);
                         return string.Empty;
                     }
                 }
@@ -12522,7 +12527,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetImg_ByPacketType), ex.Message);
+                        Operate.DoLog(nameof(GetImg_ByPacketType), ex);
                     }
 
                     return null;
@@ -12640,7 +12645,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsShowByFilter), ex.Message);
+                        Operate.DoLog(nameof(IsShowByFilter), ex);
                     }
 
                     return true;
@@ -12670,7 +12675,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsFilter_BySocket), ex.Message);
+                        Operate.DoLog(nameof(IsFilter_BySocket), ex);
                     }
 
                     return false;
@@ -12696,7 +12701,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsFilter_ByIP), ex.Message);
+                        Operate.DoLog(nameof(IsFilter_ByIP), ex);
                     }
 
                     return false;
@@ -12722,7 +12727,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsFilter_ByPort), ex.Message);
+                        Operate.DoLog(nameof(IsFilter_ByPort), ex);
                     }
 
                     return false;
@@ -12772,7 +12777,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsFilter_ByHead), ex.Message);
+                        Operate.DoLog(nameof(IsFilter_ByHead), ex);
                     }
 
                     return false;
@@ -12806,7 +12811,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsFilter_ByPacket), ex.Message);
+                        Operate.DoLog(nameof(IsFilter_ByPacket), ex);
                     }
 
                     return false;
@@ -12859,7 +12864,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(IsFilter_BySize), ex.Message);
+                        Operate.DoLog(nameof(IsFilter_BySize), ex);
                     }
 
                     return false;
@@ -12891,7 +12896,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetPacketData_Hex), ex.Message);
+                        Operate.DoLog(nameof(GetPacketData_Hex), ex);
                     }
 
                     return sReturn;
@@ -13158,7 +13163,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetIPString_BySocketAddr), ex.Message);
+                        Operate.DoLog(nameof(GetIPString_BySocketAddr), ex);
                     }
 
                     return string.Empty;
@@ -13179,7 +13184,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetIP_BySockAddr), ex.Message);
+                        Operate.DoLog(nameof(GetIP_BySockAddr), ex);
                     }
 
                     return sReturn;
@@ -13210,7 +13215,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetIP_BySocket), ex.Message);
+                        Operate.DoLog(nameof(GetIP_BySocket), ex);
                     }
 
                     return sReturn;
@@ -13240,7 +13245,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetSocketAddr_ByIPString), ex.Message);
+                        Operate.DoLog(nameof(GetSocketAddr_ByIPString), ex);
                     }
 
                     return saReturn;
@@ -13309,7 +13314,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CountPacketInfo), ex.Message);
+                        Operate.DoLog(nameof(CountPacketInfo), ex);
                     }
                 }
 
@@ -13388,7 +13393,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(PacketInfo_ToQueue), ex.Message);
+                        Operate.DoLog(nameof(PacketInfo_ToQueue), ex);
                     }
                 }
 
@@ -13407,7 +13412,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ClearPacketQueue), ex.Message);
+                        Operate.DoLog(nameof(ClearPacketQueue), ex);
                     }
                 }
 
@@ -13470,7 +13475,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(PacketToList), ex.Message);
+                        Operate.DoLog(nameof(PacketToList), ex);
                     }
                 }
 
@@ -13496,7 +13501,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ClearPacketList), ex.Message);
+                        Operate.DoLog(nameof(ClearPacketList), ex);
                     }
                 }
 
@@ -13603,7 +13608,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SearchForList), ex.Message);
+                        Operate.DoLog(nameof(SearchForList), ex);
                     }
 
                     return iResult;
@@ -13663,7 +13668,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(StatisticalSocketList_ByPacketLen), ex.Message);
+                        Operate.DoLog(nameof(StatisticalSocketList_ByPacketLen), ex);
                     }
 
                     return dtReturn;
@@ -13705,7 +13710,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(StatisticalSocketList_ByPacketSocket), ex.Message);
+                        Operate.DoLog(nameof(StatisticalSocketList_ByPacketSocket), ex);
                     }
 
                     return dtReturn;
@@ -13846,7 +13851,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SendSocketList_BySelect), ex.Message);
+                        Operate.DoLog(nameof(SendSocketList_BySelect), ex);
                     }
                 }
 
@@ -13895,7 +13900,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SavePacketList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SavePacketList_Dialog), ex);
                     }
                 }
 
@@ -13927,7 +13932,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(nameof(SavePacketListToExcel), ex.Message);
+                                    Operate.DoLog(nameof(SavePacketListToExcel), ex);
                                 }
                             }
                         }
@@ -13936,7 +13941,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SavePacketListToExcel), ex.Message);
+                        Operate.DoLog(nameof(SavePacketListToExcel), ex);
                         return false;
                     }
                 }
@@ -14123,7 +14128,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddFilter_New), ex.Message);
+                        Operate.DoLog(nameof(AddFilter_New), ex);
                     }
                 }
 
@@ -14174,7 +14179,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddFilter_ByPacketInfo), ex.Message);
+                        Operate.DoLog(nameof(AddFilter_ByPacketInfo), ex);
                     }
 
                     return false;
@@ -14236,7 +14241,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddFilter_ByProxyInfo), ex.Message);
+                        Operate.DoLog(nameof(AddFilter_ByProxyInfo), ex);
                     }
 
                     return false;
@@ -14313,7 +14318,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddFilter), ex.Message);
+                        Operate.DoLog(nameof(AddFilter), ex);
                     }
                 }
 
@@ -14384,7 +14389,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateFilter), ex.Message);
+                        Operate.DoLog(nameof(UpdateFilter), ex);
                     }
                 }
 
@@ -14417,7 +14422,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteFilter_Dialog), ex.Message);
+                        Operate.DoLog(nameof(DeleteFilter_Dialog), ex);
                     }
                 }
 
@@ -14462,7 +14467,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CopyFilter), ex.Message);
+                        Operate.DoLog(nameof(CopyFilter), ex);
                     }
                 }
 
@@ -14502,7 +14507,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetFilter_ByGuid), ex.Message);
+                        Operate.DoLog(nameof(GetFilter_ByGuid), ex);
                     }
 
                     return null;
@@ -14524,7 +14529,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SetIsEnable_ByGUID), ex.Message);
+                        Operate.DoLog(nameof(SetIsEnable_ByGUID), ex);
                     }
                 }
 
@@ -14543,7 +14548,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         FMode = FilterConfig.Filter.FilterMode.Normal;
-                        Operate.DoLog(nameof(GetFilterMode_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetFilterMode_ByString), ex);
                     }
 
                     return FMode;
@@ -14560,7 +14565,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         FAction = FilterConfig.Filter.FilterAction.Replace;
-                        Operate.DoLog(nameof(GetFilterAction_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetFilterAction_ByString), ex);
                     }
 
                     return FAction;
@@ -14576,7 +14581,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetFilterExecuteType_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetFilterExecuteType_ByString), ex);
                     }
 
                     return FEType;
@@ -14616,7 +14621,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetFilterFunction_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetFilterFunction_ByString), ex);
                     }
 
                     return FFunction;
@@ -14633,7 +14638,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         FStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
-                        Operate.DoLog(nameof(GetFilterStartFrom_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetFilterStartFrom_ByString), ex);
                     }
 
                     return FStartFrom;
@@ -14660,7 +14665,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         sReturn = "";
-                        Operate.DoLog(nameof(GetFilterString_ByBytes), ex.Message);
+                        Operate.DoLog(nameof(GetFilterString_ByBytes), ex);
                     }
 
                     return sReturn;
@@ -14697,7 +14702,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetName_ByFilterAction), ex.Message);
+                        Operate.DoLog(nameof(GetName_ByFilterAction), ex);
                         return string.Empty;
                     }
                 }
@@ -14727,7 +14732,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetFilterFunctionString), ex.Message);
+                        Operate.DoLog(nameof(GetFilterFunctionString), ex);
                     }
 
                     return sReturn;
@@ -14859,7 +14864,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetFilterFunction_ByPacketType), ex.Message);
+                        Operate.DoLog(nameof(GetFilterFunction_ByPacketType), ex);
                     }
 
                     return ffReturn;
@@ -14963,7 +14968,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointSocket), ex.Message);                        
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointSocket), ex);                        
                     }
 
                     return false;
@@ -15014,7 +15019,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointLength), ex.Message);
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointLength), ex);
                         return false;
                     }
                 }
@@ -15049,7 +15054,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointPort), ex.Message);
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointPort), ex);
                         return false;
                     }
                 }
@@ -15151,7 +15156,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointHeader), ex.Message);
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointHeader), ex);
                     }
 
                     return false;
@@ -15197,7 +15202,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ParseExcludePositions), ex.Message);
+                        Operate.DoLog(nameof(ParseExcludePositions), ex);
                     }
 
                     return positions;
@@ -15343,7 +15348,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckFilter_IsMatch_Normal), ex.Message);
+                        Operate.DoLog(nameof(CheckFilter_IsMatch_Normal), ex);
                         return false;
                     }
 
@@ -15447,7 +15452,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckFilter_IsMatch_Advanced), ex.Message);
+                        Operate.DoLog(nameof(CheckFilter_IsMatch_Advanced), ex);
                     }
 
                     return result;
@@ -15682,7 +15687,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoFilter), ex.Message);
+                        Operate.DoLog(nameof(DoFilter), ex);
                     }
 
                     return faReturn;
@@ -15760,7 +15765,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoFilter_SOCKS_TCP), ex.Message);
+                        Operate.DoLog(nameof(DoFilter_SOCKS_TCP), ex);
                     }
                 }
 
@@ -15825,7 +15830,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoFilter_SOCKS_UDP), ex.Message);
+                        Operate.DoLog(nameof(DoFilter_SOCKS_UDP), ex);
                     }
                 }
 
@@ -15872,7 +15877,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(Replace_Normal), ex.Message);
+                        Operate.DoLog(nameof(Replace_Normal), ex);
                         return false;
                     }
                 }
@@ -16023,7 +16028,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(Replace_Advanced), ex.Message);
+                        Operate.DoLog(nameof(Replace_Advanced), ex);
                         return false;
                     }
                 }
@@ -16192,7 +16197,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(ChangePacket_Filter), ex.Message);
+                        Operate.DoLog(nameof(ChangePacket_Filter), ex);
                         return Array.Empty<byte>();
                     }
                 }
@@ -16311,7 +16316,7 @@ namespace WinsockPacketEditor
                         }
                         catch (Exception ex)
                         {
-                            Operate.DoLog(nameof(ProcessingHookResultAsync), ex.Message);
+                            Operate.DoLog(nameof(ProcessingHookResultAsync), ex);
                         }
                     });
                 }
@@ -16338,7 +16343,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(FilterToList), ex.Message);
+                        Operate.DoLog(nameof(FilterToList), ex);
                     }
                 }
 
@@ -16358,7 +16363,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(InitFilterList_Count), ex.Message);
+                        Operate.DoLog(nameof(InitFilterList_Count), ex);
                     }
                 }
 
@@ -16389,7 +16394,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(FilterListClear), ex.Message);
+                        Operate.DoLog(nameof(FilterListClear), ex);
                     }
                 }
 
@@ -16408,7 +16413,7 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         FLExecute = FilterConfig.Filter.Execute.Priority;
-                        Operate.DoLog(nameof(GetFilterListExecute_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetFilterListExecute_ByString), ex);
                     }
 
                     return FLExecute;
@@ -16499,7 +16504,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateFilterList_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateFilterList_ByListAction), ex);
                     }
                 }
 
@@ -16546,7 +16551,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoFilterList), ex.Message);
+                        Operate.DoLog(nameof(DoFilterList), ex);
                     }
 
                     if (bNewBuffer == null)
@@ -16574,7 +16579,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveFilterList_ToDB), ex.Message);
+                        Operate.DoLog(nameof(SaveFilterList_ToDB), ex);
                     }
                 }
 
@@ -16624,7 +16629,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadFilterList_FromDB), ex.Message);
+                        Operate.DoLog(nameof(LoadFilterList_FromDB), ex);
                     }
                 }
 
@@ -16672,7 +16677,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveFilterList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveFilterList_Dialog), ex);
                     }
                 }
 
@@ -16706,7 +16711,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveFilterList), ex.Message);
+                        Operate.DoLog(nameof(SaveFilterList), ex);
                     }
 
                     return false;
@@ -16763,7 +16768,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetFilterList_XML), ex.Message);
+                        Operate.DoLog(nameof(GetFilterList_XML), ex);
                     }
 
                     return null;
@@ -16797,7 +16802,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadFilterList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadFilterList_Dialog), ex);
                     }
                 }
 
@@ -16844,7 +16849,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadFilterList), ex.Message);
+                        Operate.DoLog(nameof(LoadFilterList), ex);
                     }
 
                     return false;
@@ -17056,7 +17061,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadFilterList_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadFilterList_FromXDocument), ex);
                     }
                 }
 
@@ -17096,7 +17101,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddSend_New), ex.Message);
+                        Operate.DoLog(nameof(AddSend_New), ex);
                     }
                 }
 
@@ -17112,7 +17117,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddSend), ex.Message);
+                        Operate.DoLog(nameof(AddSend), ex);
                     }
                 }
 
@@ -17142,7 +17147,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddSendCollection_ByPacketInfo), ex.Message);
+                        Operate.DoLog(nameof(AddSendCollection_ByPacketInfo), ex);
                     }
 
                     return false;
@@ -17170,7 +17175,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddSendCollection_ByProxyInfo), ex.Message);
+                        Operate.DoLog(nameof(AddSendCollection_ByProxyInfo), ex);
                     }
 
                     return false;
@@ -17192,7 +17197,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddSendCollection), ex.Message);
+                        Operate.DoLog(nameof(AddSendCollection), ex);
                     }
                 }
 
@@ -17216,7 +17221,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateSend), ex.Message);
+                        Operate.DoLog(nameof(UpdateSend), ex);
                     }
                 }
 
@@ -17241,7 +17246,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CopySend), ex.Message);
+                        Operate.DoLog(nameof(CopySend), ex);
                     }
                 }
 
@@ -17274,7 +17279,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteSend_Dialog), ex.Message);
+                        Operate.DoLog(nameof(DeleteSend_Dialog), ex);
                     }
                 }
 
@@ -17314,7 +17319,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetSend_ByGuid), ex.Message);
+                        Operate.DoLog(nameof(GetSend_ByGuid), ex);
                     }
 
                     return null;
@@ -17343,7 +17348,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetSendName_ByGuid), ex.Message);
+                        Operate.DoLog(nameof(GetSendName_ByGuid), ex);
                     }
 
                     return sReturn;
@@ -17372,7 +17377,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetSendCollection_ByGuid), ex.Message);
+                        Operate.DoLog(nameof(GetSendCollection_ByGuid), ex);
                     }
 
                     return sscReturn;
@@ -17405,7 +17410,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoSend_ByIndex), ex.Message);
+                        Operate.DoLog(nameof(DoSend_ByIndex), ex);
                     }
                 }
 
@@ -17434,7 +17439,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoSendAsync), ex.Message);
+                        Operate.DoLog(nameof(DoSendAsync), ex);
                     }
 
                     return seReturn;
@@ -17456,7 +17461,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SetIsEnable_ByGUID), ex.Message);
+                        Operate.DoLog(nameof(SetIsEnable_ByGUID), ex);
                     }
                 }
 
@@ -17583,7 +17588,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateSendCollection_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateSendCollection_ByListAction), ex);
                     }
                 }
 
@@ -17631,7 +17636,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveSendCollection_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveSendCollection_Dialog), ex);
                     }
                 }
 
@@ -17653,7 +17658,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveSendCollection), ex.Message);
+                        Operate.DoLog(nameof(SaveSendCollection), ex);
                     }
 
                     return false;
@@ -17691,7 +17696,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveSendCollection_ToXDocument), ex.Message);
+                        Operate.DoLog(nameof(SaveSendCollection_ToXDocument), ex);
                     }
                 }
 
@@ -17723,7 +17728,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadSendCollection_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadSendCollection_Dialog), ex);
                     }
                 }
 
@@ -17769,7 +17774,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadSendCollection), ex.Message);
+                        Operate.DoLog(nameof(LoadSendCollection), ex);
                     }
                     return false;
                 }
@@ -17871,7 +17876,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadSendCollection_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadSendCollection_FromXDocument), ex);
                     }
                 }
 
@@ -17914,7 +17919,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SendToList), ex.Message);
+                        Operate.DoLog(nameof(SendToList), ex);
                     }
                 }
 
@@ -17937,7 +17942,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(StartSendList), ex.Message);
+                        Operate.DoLog(nameof(StartSendList), ex);
                     }
                 }
 
@@ -17962,7 +17967,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(StopSendList), ex.Message);
+                        Operate.DoLog(nameof(StopSendList), ex);
                     }
                 }
 
@@ -18021,7 +18026,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SendList_DoWork), ex.Message);
+                        Operate.DoLog(nameof(SendList_DoWork), ex);
                     }
                 }
 
@@ -18042,7 +18047,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(InitSendList_Count), ex.Message);
+                        Operate.DoLog(nameof(InitSendList_Count), ex);
                     }
                 }
 
@@ -18129,7 +18134,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateSendList_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateSendList_ByListAction), ex);
                     }
                 }
 
@@ -18195,7 +18200,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveSendList_ToDB), ex.Message);
+                        Operate.DoLog(nameof(SaveSendList_ToDB), ex);
                     }
                 }
 
@@ -18236,7 +18241,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadSendList_FromDB), ex.Message);
+                        Operate.DoLog(nameof(LoadSendList_FromDB), ex);
                     }
                 }
 
@@ -18284,7 +18289,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveSendList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveSendList_Dialog), ex);
                     }
                 }
 
@@ -18318,7 +18323,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveSendList), ex.Message);
+                        Operate.DoLog(nameof(SaveSendList), ex);
                     }
 
                     return false;
@@ -18377,7 +18382,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetSendList_XML), ex.Message);
+                        Operate.DoLog(nameof(GetSendList_XML), ex);
                     }
 
                     return null;
@@ -18411,7 +18416,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadSendList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadSendList_Dialog), ex);
                     }
                 }
 
@@ -18457,7 +18462,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadSendList), ex.Message);
+                        Operate.DoLog(nameof(LoadSendList), ex);
                     }
 
                     return false;
@@ -18556,7 +18561,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadSendList_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadSendList_FromXDocument), ex);
                     }
                 }
 
@@ -18634,7 +18639,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddRobot_New), ex.Message);
+                        Operate.DoLog(nameof(AddRobot_New), ex);
                     }
                 }
 
@@ -18650,7 +18655,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddRobot), ex.Message);
+                        Operate.DoLog(nameof(AddRobot), ex);
                     }
                 }
 
@@ -18670,7 +18675,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateRobot), ex.Message);
+                        Operate.DoLog(nameof(UpdateRobot), ex);
                     }
                 }
 
@@ -18691,7 +18696,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CopyRobot), ex.Message);
+                        Operate.DoLog(nameof(CopyRobot), ex);
                     }
                 }
 
@@ -18724,7 +18729,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DeleteRobot_Dialog), ex.Message);
+                        Operate.DoLog(nameof(DeleteRobot_Dialog), ex);
                     }
                 }
 
@@ -18764,7 +18769,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetRobot_ByGuid), ex.Message);
+                        Operate.DoLog(nameof(GetRobot_ByGuid), ex);
                     }
 
                     return null;
@@ -18786,7 +18791,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SetIsEnable_ByGUID), ex.Message);
+                        Operate.DoLog(nameof(SetIsEnable_ByGUID), ex);
                     }
                 }
 
@@ -18841,7 +18846,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetName_ByInstructionType), ex.Message);
+                        Operate.DoLog(nameof(GetName_ByInstructionType), ex);
                     }
 
                     return sReturn;
@@ -18898,7 +18903,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetColor_ByInstructionType), ex.Message);
+                        Operate.DoLog(nameof(GetColor_ByInstructionType), ex);
                     }
 
                     return cReturn;
@@ -19124,7 +19129,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetContentString_ByInstructionType), ex.Message);
+                        Operate.DoLog(nameof(GetContentString_ByInstructionType), ex);
                     }
 
                     return sReturn;
@@ -19144,7 +19149,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetInstructionType_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetInstructionType_ByString), ex);
                     }
 
                     return instructionType;
@@ -19164,7 +19169,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetKeyBoardType_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetKeyBoardType_ByString), ex);
                     }
 
                     return kbType;
@@ -19184,7 +19189,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetMouseType_ByString), ex.Message);
+                        Operate.DoLog(nameof(GetMouseType_ByString), ex);
                     }
 
                     return mType;
@@ -19206,7 +19211,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(AddRobotInstruction), ex.Message);
+                        Operate.DoLog(nameof(AddRobotInstruction), ex);
                     }
                 }
 
@@ -19355,7 +19360,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateInstruction_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateInstruction_ByListAction), ex);
                     }
                 }
 
@@ -19469,7 +19474,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckRobotInstruction), ex.Message);
+                        Operate.DoLog(nameof(CheckRobotInstruction), ex);
                     }
 
                     return iReturn;
@@ -19502,7 +19507,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoRobot_ByIndex), ex.Message);
+                        Operate.DoLog(nameof(DoRobot_ByIndex), ex);
                     }
                 }
 
@@ -19531,7 +19536,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(DoRobotAsync), ex.Message);
+                        Operate.DoLog(nameof(DoRobotAsync), ex);
                     }
 
                     return reReturn;
@@ -19560,7 +19565,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(RobotToList), ex.Message);
+                        Operate.DoLog(nameof(RobotToList), ex);
                     }
                 }
 
@@ -19583,7 +19588,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(StartRobotList), ex.Message);
+                        Operate.DoLog(nameof(StartRobotList), ex);
                     }
                 }
 
@@ -19608,7 +19613,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(StopRobotList), ex.Message);
+                        Operate.DoLog(nameof(StopRobotList), ex);
                     }
                 }
 
@@ -19666,7 +19671,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(RobotList_DoWork), ex.Message);
+                        Operate.DoLog(nameof(RobotList_DoWork), ex);
                     }
                 }
 
@@ -19685,7 +19690,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(InitRobotList_Count), ex.Message);
+                        Operate.DoLog(nameof(InitRobotList_Count), ex);
                     }
                 }
 
@@ -19796,7 +19801,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(UpdateRobotList_ByListAction), ex.Message);
+                        Operate.DoLog(nameof(UpdateRobotList_ByListAction), ex);
                     }
                 }
 
@@ -19817,7 +19822,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveRobotList_ToDB), ex.Message);
+                        Operate.DoLog(nameof(SaveRobotList_ToDB), ex);
                     }
                 }
 
@@ -19852,7 +19857,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadRobotList_FromDB), ex.Message);
+                        Operate.DoLog(nameof(LoadRobotList_FromDB), ex);
                     }
                 }
 
@@ -19901,7 +19906,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveRobotList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveRobotList_Dialog), ex);
                     }
                 }
 
@@ -19935,7 +19940,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveRobotList), ex.Message);
+                        Operate.DoLog(nameof(SaveRobotList), ex);
                     }
 
                     return false;
@@ -19984,7 +19989,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(GetRobotList_XML), ex.Message);
+                        Operate.DoLog(nameof(GetRobotList_XML), ex);
                     }
 
                     return null;
@@ -20020,7 +20025,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadRobotList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(LoadRobotList_Dialog), ex);
                     }
                 }
 
@@ -20066,7 +20071,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadRobotList), ex.Message);
+                        Operate.DoLog(nameof(LoadRobotList), ex);
                     }
 
                     return false;
@@ -20112,7 +20117,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadRobotList_FromXDocument), ex.Message);
+                        Operate.DoLog(nameof(LoadRobotList_FromXDocument), ex);
                     }
                 }
 
@@ -20352,7 +20357,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveLogList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveLogList_Dialog), ex);
                     }
                 }
 
@@ -20380,7 +20385,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(nameof(SaveLogListToExcel), ex.Message);
+                                    Operate.DoLog(nameof(SaveLogListToExcel), ex);
                                 }
                             }
                         }
@@ -20389,7 +20394,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(SaveLogListToExcel), ex.Message);
+                        DoLog(nameof(SaveLogListToExcel), ex);
                         return false;
                     }
                 }
@@ -20445,7 +20450,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveFilterLogList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveFilterLogList_Dialog), ex);
                     }
                 }
 
@@ -20476,7 +20481,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(nameof(SaveFilterLogListToExcel), ex.Message);
+                                    Operate.DoLog(nameof(SaveFilterLogListToExcel), ex);
                                 }
                             }
                         }
@@ -20485,7 +20490,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(SaveFilterLogListToExcel), ex.Message);
+                        DoLog(nameof(SaveFilterLogListToExcel), ex);
                         return false;
                     }
                 }
@@ -20541,7 +20546,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveProxyLogList_Dialog), ex.Message);
+                        Operate.DoLog(nameof(SaveProxyLogList_Dialog), ex);
                     }
                 }
 
@@ -20570,7 +20575,7 @@ namespace WinsockPacketEditor
                                 }
                                 catch (Exception ex)
                                 {
-                                    Operate.DoLog(nameof(SaveProxyLogListToExcel), ex.Message);
+                                    Operate.DoLog(nameof(SaveProxyLogListToExcel), ex);
                                 }
                             }
                         }
@@ -20579,7 +20584,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        DoLog(nameof(SaveProxyLogListToExcel), ex.Message);
+                        DoLog(nameof(SaveProxyLogListToExcel), ex);
                         return false;
                     }
                 }
@@ -20592,11 +20597,16 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//记录日志        
+        #region//记录日志
 
         public static async void DoLog(string sFuncName, string sLogContent)
         {
             await LogConfig.Queue.LogToQueueAsync(sFuncName, sLogContent);
+        }
+
+        public static async void DoLog(string sFuncName, Exception ex)
+        {
+            await LogConfig.Queue.LogToQueueAsync(sFuncName, ex.ToString());
         }
 
         public static async void DoFilterLog(
@@ -20626,7 +20636,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(DoProxyLog), ex.Message);
+                Operate.DoLog(nameof(DoProxyLog), ex);
             }            
         }
 
@@ -20671,7 +20681,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(InitDB), ex.Message);
+                    DoLog(nameof(InitDB), ex);
                 }                
             }
 
@@ -20758,7 +20768,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_SystemConfig), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_SystemConfig), ex);
                 }
 
                 return bReturn;
@@ -20782,7 +20792,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_SystemConfig), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_SystemConfig), ex);
                 }
 
                 return dtReturn;
@@ -20805,7 +20815,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_SystemConfig), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_SystemConfig), ex);
                 }
             }
 
@@ -21000,7 +21010,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_SystemConfig), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_SystemConfig), ex);
                 }
             }
 
@@ -21023,7 +21033,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(UpdateTable_SystemConfig_LastInjection), ex.Message);
+                    Operate.DoLog(nameof(UpdateTable_SystemConfig_LastInjection), ex);
                 }
             }
 
@@ -21068,7 +21078,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_InjectMode), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_InjectMode), ex);
                 }
 
                 return bReturn;
@@ -21092,7 +21102,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_InjectMode), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_InjectMode), ex);
                 }
 
                 return dtReturn;
@@ -21115,7 +21125,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_InjectMode), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_InjectMode), ex);
                 }
             }
 
@@ -21184,7 +21194,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_InjectMode), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_InjectMode), ex);
                 }
             }
 
@@ -21247,7 +21257,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_ProxyMode), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_ProxyMode), ex);
                 }
 
                 return bReturn;
@@ -21271,7 +21281,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_ProxyMode), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyMode), ex);
                 }
 
                 return dtReturn;
@@ -21294,7 +21304,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_ProxyMode), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyMode), ex);
                 }
             }
 
@@ -21417,7 +21427,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_ProxyMode), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_ProxyMode), ex);
                 }
             }
 
@@ -21474,7 +21484,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_Filter), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_Filter), ex);
                 }
 
                 return bReturn;
@@ -21498,7 +21508,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_Filter), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_Filter), ex);
                 }
 
                 return dtReturn;
@@ -21521,7 +21531,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_Filter), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_Filter), ex);
                 }
             }
 
@@ -21626,7 +21636,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_Filter), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_Filter), ex);
                 }
             }
 
@@ -21673,7 +21683,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_Send), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_Send), ex);
                 }
 
                 return bReturn;
@@ -21697,7 +21707,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_Send), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_Send), ex);
                 }
 
                 return dtReturn;
@@ -21724,7 +21734,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_SendCollection), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_SendCollection), ex);
                 }
 
                 return dtReturn;
@@ -21748,7 +21758,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_Send), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_Send), ex);
                 }
             }
 
@@ -21823,7 +21833,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_Send), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_Send), ex);
                 }
             }
 
@@ -21863,7 +21873,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_Robot), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_Robot), ex);
                 }
 
                 return bReturn;
@@ -21887,7 +21897,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_Robot), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_Robot), ex);
                 }
 
                 return dtReturn;
@@ -21914,7 +21924,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_RobotInstruction), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_RobotInstruction), ex);
                 }
 
                 return dtReturn;
@@ -21938,7 +21948,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_Robot), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_Robot), ex);
                 }
             }
 
@@ -21992,7 +22002,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_Robot), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_Robot), ex);
                 }
             }
 
@@ -22041,7 +22051,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_ProxyAccount), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_ProxyAccount), ex);
                 }
 
                 return bReturn;
@@ -22065,7 +22075,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_ProxyAccount), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyAccount), ex);
                 }
 
                 return dtReturn;
@@ -22092,7 +22102,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_ProxyAccountIPInfo), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyAccountIPInfo), ex);
                 }
 
                 return dtReturn;
@@ -22147,7 +22157,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_ProxyAccount), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyAccount), ex);
                 }
 
                 return bReturn;
@@ -22186,7 +22196,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_ProxyAccount), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyAccount), ex);
                 }
 
                 return bReturn;
@@ -22301,7 +22311,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_ProxyAccount), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_ProxyAccount), ex);
                 }
 
                 return bReturn;
@@ -22371,7 +22381,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(UpdateTable_ProxyAccount), ex.Message);
+                    Operate.DoLog(nameof(UpdateTable_ProxyAccount), ex);
                 }
 
                 return bReturn;
@@ -22409,7 +22419,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_ProxyMapLocal), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_ProxyMapLocal), ex);
                 }
 
                 return bReturn;
@@ -22433,7 +22443,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_ProxyMapLocal), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyMapLocal), ex);
                 }
 
                 return dtReturn;
@@ -22456,7 +22466,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_ProxyMapLocal), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyMapLocal), ex);
                 }
             }
 
@@ -22504,7 +22514,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_ProxyMapLocal), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_ProxyMapLocal), ex);
                 }
             }
 
@@ -22543,7 +22553,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_ProxyMapRemote), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_ProxyMapRemote), ex);
                 }
 
                 return bReturn;
@@ -22567,7 +22577,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_ProxyMapRemote), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_ProxyMapRemote), ex);
                 }
 
                 return dtReturn;
@@ -22590,7 +22600,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_ProxyMapRemote), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_ProxyMapRemote), ex);
                 }
             }
 
@@ -22646,7 +22656,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_ProxyMapRemote), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_ProxyMapRemote), ex);
                 }
             }
 
@@ -22682,7 +22692,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_WhiteList), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_WhiteList), ex);
                 }
 
                 return bReturn;
@@ -22706,7 +22716,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_WhiteList), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_WhiteList), ex);
                 }
 
                 return dtReturn;
@@ -22729,7 +22739,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_WhiteList), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_WhiteList), ex);
                 }
             }
 
@@ -22777,7 +22787,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_WhiteList), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_WhiteList), ex);
                 }
             }
 
@@ -22813,7 +22823,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(CreateTable_BlackList), ex.Message);
+                    Operate.DoLog(nameof(CreateTable_BlackList), ex);
                 }
 
                 return bReturn;
@@ -22837,7 +22847,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(SelectTable_BlackList), ex.Message);
+                    Operate.DoLog(nameof(SelectTable_BlackList), ex);
                 }
 
                 return dtReturn;
@@ -22860,7 +22870,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_BlackList), ex.Message);
+                    Operate.DoLog(nameof(DeleteTable_BlackList), ex);
                 }
             }
 
@@ -22908,7 +22918,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(InsertTable_BlackList), ex.Message);
+                    Operate.DoLog(nameof(InsertTable_BlackList), ex);
                 }
             }
 

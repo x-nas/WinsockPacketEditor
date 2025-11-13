@@ -154,7 +154,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitCalendar_ExpiryTime), ex.Message);
+                Operate.DoLog(nameof(InitCalendar_ExpiryTime), ex);
             }
         }
 
@@ -216,7 +216,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(GetPageData), ex.Message);
+                Operate.DoLog(nameof(GetPageData), ex);
             }
 
             return list;
@@ -493,7 +493,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSearchExpiryTime_Click), ex.Message);
+                Operate.DoLog(nameof(bSearchExpiryTime_Click), ex);
             }
         }
 

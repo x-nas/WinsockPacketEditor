@@ -45,7 +45,7 @@ namespace WPEHook
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Run), ex.Message);
+                Operate.DoLog(nameof(Run), ex);
             }
         }
 

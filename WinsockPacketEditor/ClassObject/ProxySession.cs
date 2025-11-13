@@ -50,7 +50,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(OnSessionStarted), ex.Message);
+                Operate.DoLog(nameof(OnSessionStarted), ex);
             }
         }
 
@@ -92,7 +92,7 @@ namespace WinsockPacketEditor
             {
                 Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
-                Operate.DoLog(nameof(ConnectToTarget), ex.Message);
+                Operate.DoLog(nameof(ConnectToTarget), ex);
             }
         }        
 
@@ -131,7 +131,7 @@ namespace WinsockPacketEditor
             {
                 Operate.ProxyConfig.Proxy.SendCommandResponse(this, ProtocolType.Tcp, Operate.ProxyConfig.Proxy.CommandResponse.Unreachable);
                 this.Close(CloseReason.SocketError);
-                Operate.DoLog(nameof(ConnectToEXTProxyServer), ex.Message);
+                Operate.DoLog(nameof(ConnectToEXTProxyServer), ex);
             }
         }        
 
@@ -162,7 +162,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 this.Close(CloseReason.SocketError);
-                Operate.DoLog(nameof(StartReceivingFromTarget), ex.Message);
+                Operate.DoLog(nameof(StartReceivingFromTarget), ex);
             }
         }
 
@@ -212,7 +212,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 this.Close(CloseReason.SocketError);
-                Operate.DoLog(nameof(OnTargetDataReceived), ex.Message);
+                Operate.DoLog(nameof(OnTargetDataReceived), ex);
             }
         }
 
@@ -268,7 +268,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(StartUdpReceive), ex.Message);
+                Operate.DoLog(nameof(StartUdpReceive), ex);
             }
         }
 
@@ -326,7 +326,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ProcessUdpReceive), ex.Message);
+                Operate.DoLog(nameof(ProcessUdpReceive), ex);
 
                 this.ReturnUdpSocketEventArgs(e);
 
@@ -368,7 +368,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Close(CloseReason.SocketError);
-                Operate.DoLog(nameof(HandleUnknownRequest), ex.Message);
+                Operate.DoLog(nameof(HandleUnknownRequest), ex);
             }
         }
 

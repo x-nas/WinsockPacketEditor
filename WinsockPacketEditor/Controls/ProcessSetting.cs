@@ -63,7 +63,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ProcessSetting_Load), ex.Message);
+                Operate.DoLog(nameof(ProcessSetting_Load), ex);
             }                        
         }
 
@@ -204,7 +204,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bMustTCP_Detection_Click), ex.Message);
+                Operate.DoLog(nameof(bMustTCP_Detection_Click), ex);
             }            
         }
 
@@ -230,7 +230,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bUninstallDriver_Click), ex.Message);
+                Operate.DoLog(nameof(bUninstallDriver_Click), ex);
             }
         }
 
@@ -365,7 +365,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CheckSetting), ex.Message);
+                Operate.DoLog(nameof(CheckSetting), ex);
             }
 
             return false;
@@ -458,7 +458,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSave_Click), ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex);
             }            
         }
 

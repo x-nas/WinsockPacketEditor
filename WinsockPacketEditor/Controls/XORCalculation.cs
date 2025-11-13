@@ -150,7 +150,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bXOR_Click), ex.Message);
+                Operate.DoLog(nameof(bXOR_Click), ex);
             }
         }
 

@@ -43,7 +43,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ProxySetting_Load), ex.Message);
+                Operate.DoLog(nameof(ProxySetting_Load), ex);
             }
         }
 
@@ -71,7 +71,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitProxyIP), ex.Message);
+                Operate.DoLog(nameof(InitProxyIP), ex);
             }            
         }
 
@@ -89,7 +89,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitAuthType), ex.Message);
+                Operate.DoLog(nameof(InitAuthType), ex);
             }            
         }
 
@@ -112,7 +112,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitCertType), ex.Message);
+                Operate.DoLog(nameof(InitCertType), ex);
             }            
         }
 
@@ -198,7 +198,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(EnableSystemProxy_Changed), ex.Message);
+                Operate.DoLog(nameof(EnableSystemProxy_Changed), ex);
             }
         }
 
@@ -226,7 +226,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bExportCert_Click), ex.Message);
+                Operate.DoLog(nameof(bExportCert_Click), ex);
             }
         }
 
@@ -265,7 +265,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CheckSetting), ex.Message);
+                Operate.DoLog(nameof(CheckSetting), ex);
             }
 
             return false;
@@ -302,7 +302,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSave_Click), ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex);
             }
         }
 

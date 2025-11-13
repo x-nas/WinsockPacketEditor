@@ -62,7 +62,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bEncoding_Click), ex.Message);
+                Operate.DoLog(nameof(bEncoding_Click), ex);
             }
         }
 
@@ -95,7 +95,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bDecoding_Click), ex.Message);
+                Operate.DoLog(nameof(bDecoding_Click), ex);
             }
         }
 

@@ -233,7 +233,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSelectForm_Click), ex.Message);
+                Operate.DoLog(nameof(bSelectForm_Click), ex);
                 this.UnHook();
             }
         }
@@ -295,7 +295,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(MouseHook), ex.Message);
+                Operate.DoLog(nameof(MouseHook), ex);
             }
 
             return IntPtr.Zero;
@@ -322,7 +322,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(KeyBoardHook), ex.Message);
+                Operate.DoLog(nameof(KeyBoardHook), ex);
             }
 
             return User32.CallNextHookEx(ipKeyHook, nCode, wParam, lParam);
@@ -394,7 +394,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ShowProcessToolTip), ex.Message);
+                Operate.DoLog(nameof(ShowProcessToolTip), ex);
             }
             finally
             {
@@ -421,7 +421,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(TooltipTimer_Tick), ex.Message);
+                Operate.DoLog(nameof(TooltipTimer_Tick), ex);
             }            
         }
 
@@ -453,7 +453,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(UnHook), ex.Message);
+                Operate.DoLog(nameof(UnHook), ex);
             }
         }
 
@@ -537,7 +537,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("ProcessList.InjectError", "注入失败"), "\r\n" + ex.Message + "\r\n\r\n")
+                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("ProcessList.InjectError", "注入失败"), "\r\n" + ex + "\r\n\r\n")
                 {
                     Icon = TType.Error,
                     CloseIcon = true,

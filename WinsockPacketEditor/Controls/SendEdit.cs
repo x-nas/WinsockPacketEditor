@@ -203,7 +203,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Worker_RunWorkerCompleted), ex.Message);
+                Operate.DoLog(nameof(Worker_RunWorkerCompleted), ex);
             }
         }
 
@@ -446,7 +446,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bExecute_Click), ex.Message);
+                Operate.DoLog(nameof(bExecute_Click), ex);
             }
         }
 
@@ -489,7 +489,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSave_Click), ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex);
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "发送保存失败", TType.Error)
                 {
@@ -531,7 +531,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(SaveSend), ex.Message);
+                Operate.DoLog(nameof(SaveSend), ex);
             }
 
             return false;

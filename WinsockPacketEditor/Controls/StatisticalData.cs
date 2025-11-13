@@ -141,7 +141,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bStatistical_Filter_Click), ex.Message);
+                Operate.DoLog(nameof(bStatistical_Filter_Click), ex);
             }
         }
 
@@ -200,7 +200,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bgwStatistical_DoWork), ex.Message);
+                Operate.DoLog(nameof(bgwStatistical_DoWork), ex);
             }
         }
 
@@ -212,7 +212,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bgwStatistical_RunWorkerCompleted), ex.Message);
+                Operate.DoLog(nameof(bgwStatistical_RunWorkerCompleted), ex);
             }
         }
 

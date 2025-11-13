@@ -91,7 +91,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(AddProxyAccount), ex.Message);
+                Operate.DoLog(nameof(AddProxyAccount), ex);
             }
 
             return BadRequest(AntdUI.Localization.Get("AddAccount.Error", "添加账号失败"));

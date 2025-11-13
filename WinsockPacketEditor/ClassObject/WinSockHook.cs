@@ -119,7 +119,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(StartHook), ex.Message);
+                Operate.DoLog(nameof(StartHook), ex);
             }
         }
 
@@ -219,7 +219,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(StopHook), ex.Message);
+                Operate.DoLog(nameof(StopHook), ex);
             }
         }
 
@@ -236,7 +236,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ExitHook), ex.Message);
+                Operate.DoLog(nameof(ExitHook), ex);
             }
         }
 
@@ -288,7 +288,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Send_Hook), ex.Message);
+                Operate.DoLog(nameof(Send_Hook), ex);
             }
 
             return res;
@@ -350,7 +350,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Recv_Hook), ex.Message);
+                Operate.DoLog(nameof(Recv_Hook), ex);
             }
 
             return res;
@@ -406,7 +406,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(SendTo_Hook), ex.Message);
+                Operate.DoLog(nameof(SendTo_Hook), ex);
             }
 
             return res;
@@ -466,7 +466,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(RecvFrom_Hook), ex.Message);
+                Operate.DoLog(nameof(RecvFrom_Hook), ex);
             }
 
             return res;
@@ -664,7 +664,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(WSASend_Hook), ex.Message);
+                Operate.DoLog(nameof(WSASend_Hook), ex);
             }
 
             return res;
@@ -807,7 +807,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(WSARecv_Hook), ex.Message);
+                Operate.DoLog(nameof(WSARecv_Hook), ex);
             }
 
             return res;
@@ -1011,7 +1011,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(WSASendTo_Hook), ex.Message);
+                Operate.DoLog(nameof(WSASendTo_Hook), ex);
             }
 
             return res;
@@ -1156,7 +1156,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(WSARecvFrom_Hook), ex.Message);
+                Operate.DoLog(nameof(WSARecvFrom_Hook), ex);
             }
 
             return res;

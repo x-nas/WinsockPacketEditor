@@ -33,7 +33,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(RemoteMGTSetting_Load), ex.Message);
+                Operate.DoLog(nameof(RemoteMGTSetting_Load), ex);
             }                        
         }
 
@@ -68,7 +68,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitRemoteIP), ex.Message);
+                Operate.DoLog(nameof(InitRemoteIP), ex);
             }            
         }
 
@@ -97,7 +97,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(SetRemoteMGT_URL), ex.Message);
+                Operate.DoLog(nameof(SetRemoteMGT_URL), ex);
             }                       
         }
 
@@ -172,7 +172,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CheckRemoteMGT), ex.Message);
+                Operate.DoLog(nameof(CheckRemoteMGT), ex);
             }
             
             return false;

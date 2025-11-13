@@ -250,7 +250,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(dgvPacketList_CellFormatting), ex.Message);
+                Operate.DoLog(nameof(dgvPacketList_CellFormatting), ex);
             }
         }
 
@@ -709,7 +709,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Start_Hook), ex.Message);
+                Operate.DoLog(nameof(Start_Hook), ex);
             }
         }
 
@@ -730,7 +730,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Stop_Hook), ex.Message);
+                Operate.DoLog(nameof(Stop_Hook), ex);
             }
         }
 
@@ -763,7 +763,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CleanUp_PacketListInfo), ex.Message);
+                Operate.DoLog(nameof(CleanUp_PacketListInfo), ex);
             }
         }
 
@@ -777,7 +777,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CleanUp_PacketList), ex.Message);
+                Operate.DoLog(nameof(CleanUp_PacketList), ex);
             }
             finally
             {
@@ -856,7 +856,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(timerPacketList_Tick), ex.Message);
+                Operate.DoLog(nameof(timerPacketList_Tick), ex);
             }
             finally
             {
@@ -890,7 +890,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(timerPacketListInfo_Tick), ex.Message);
+                Operate.DoLog(nameof(timerPacketListInfo_Tick), ex);
             }
             finally
             {
@@ -920,7 +920,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(dgvPacketList_SelectionChanged), ex.Message);
+                Operate.DoLog(nameof(dgvPacketList_SelectionChanged), ex);
             }
         }
 
@@ -953,7 +953,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bgwSearchPacketList_DoWork), ex.Message);
+                Operate.DoLog(nameof(bgwSearchPacketList_DoWork), ex);
             }
         }
 
@@ -996,7 +996,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bgwSearchPacketList_RunWorkerCompleted), ex.Message);
+                Operate.DoLog(nameof(bgwSearchPacketList_RunWorkerCompleted), ex);
             }
         }
 

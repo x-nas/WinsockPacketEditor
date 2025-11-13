@@ -19,7 +19,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Initialize), ex.Message);
+                Operate.DoLog(nameof(Initialize), ex);
             }
 
             return false;            
@@ -52,7 +52,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(AllowConnect), ex.Message);
+                Operate.DoLog(nameof(AllowConnect), ex);
             }            
 
             return bAllow;

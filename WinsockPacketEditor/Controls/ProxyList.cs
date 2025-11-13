@@ -29,18 +29,25 @@ namespace WinsockPacketEditor
 
         private void ProxyList_Load(object sender, EventArgs e)
         {
-            this.InitMenu();
-            this.InitTable_ProxyList();
-            this.InitControl();
-            this.Dark_Changed();
-            this.SetColumnName_ProxyList();            
-            
-            this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
-            this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
-            this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
-            this.PacketList_AutoClear_Changed();
+            try
+            {
+                this.InitMenu();
+                this.InitTable_ProxyList();
+                this.InitControl();
+                this.Dark_Changed();
+                this.SetColumnName_ProxyList();
 
-            Operate.DoLog(nameof(ProxyList_Load), Operate.ProcessConfig.GetInjectProcessName());
+                this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
+                this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
+                this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
+                this.PacketList_AutoClear_Changed();
+
+                Operate.DoLog(nameof(ProxyList_Load), Operate.ProcessConfig.GetInjectProcessName());
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(ProxyList_Load), ex);
+            }            
         }
 
         private void InitMenu()
@@ -276,7 +283,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(dgvProxyList_CellFormatting), ex.Message);
+                Operate.DoLog(nameof(dgvProxyList_CellFormatting), ex);
             }
         }
 
@@ -800,7 +807,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Start_Proxy), ex.Message);
+                Operate.DoLog(nameof(Start_Proxy), ex);
             }
 
             return false;
@@ -833,7 +840,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitProxyServer), ex.Message);
+                Operate.DoLog(nameof(InitProxyServer), ex);
             }
 
             return false;
@@ -935,7 +942,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitSocks5Proxy), ex.Message);
+                Operate.DoLog(nameof(InitSocks5Proxy), ex);
                 return false;
             }            
         }
@@ -981,7 +988,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitHttpProxy), ex.Message);
+                Operate.DoLog(nameof(InitHttpProxy), ex);
             }
 
             return false;
@@ -1020,7 +1027,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Stop_Proxy), ex.Message);
+                Operate.DoLog(nameof(Stop_Proxy), ex);
             }
         }
 
@@ -1056,7 +1063,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CleanUp_ProxyList), ex.Message);
+                Operate.DoLog(nameof(CleanUp_ProxyList), ex);
             }
             finally
             { 
@@ -1121,7 +1128,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(dgvProxyList_SelectionChanged), ex.Message);
+                Operate.DoLog(nameof(dgvProxyList_SelectionChanged), ex);
             }
         }
 
@@ -1161,7 +1168,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(timerProxyList_Tick), ex.Message);
+                Operate.DoLog(nameof(timerProxyList_Tick), ex);
             }
             finally
             {
@@ -1227,7 +1234,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(timerProxyListInfo_Tick), ex.Message);
+                Operate.DoLog(nameof(timerProxyListInfo_Tick), ex);
             }
             finally
             {
@@ -1264,7 +1271,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bgwSearchProxyList_DoWork), ex.Message);
+                Operate.DoLog(nameof(bgwSearchProxyList_DoWork), ex);
             }
         }
 
@@ -1307,7 +1314,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bgwSearchProxyList_RunWorkerCompleted), ex.Message);
+                Operate.DoLog(nameof(bgwSearchProxyList_RunWorkerCompleted), ex);
             }
         }
 

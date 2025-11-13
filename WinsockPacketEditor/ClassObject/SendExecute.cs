@@ -70,7 +70,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(StartSend), ex.Message);
+                Operate.DoLog(nameof(StartSend), ex);
             }
         }
 
@@ -94,7 +94,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(StopSend), ex.Message);
+                Operate.DoLog(nameof(StopSend), ex);
             }
         }
 
@@ -167,7 +167,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Send_DoWork), ex.Message);
+                Operate.DoLog(nameof(Send_DoWork), ex);
             }
         }
 
@@ -207,7 +207,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Send_RunCompleted), ex.Message);
+                Operate.DoLog(nameof(Send_RunCompleted), ex);
             }
         }
 

@@ -43,7 +43,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(QueryUserAll), ex.Message);
+                Operate.DoLog(nameof(QueryUserAll), ex);
             }
 
             return sReturn;
@@ -93,7 +93,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(AddUser), ex.Message);
+                Operate.DoLog(nameof(AddUser), ex);
                 return false;
             }
         }
@@ -139,7 +139,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(UserUpdate), ex.Message);
+                Operate.DoLog(nameof(UserUpdate), ex);
                 return false;
             }            
         }

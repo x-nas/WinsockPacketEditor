@@ -177,7 +177,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitDDL), ex.Message);
+                Operate.DoLog(nameof(InitDDL), ex);
             }
         }        
 
@@ -250,7 +250,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(AddInstruction), ex.Message);
+                Operate.DoLog(nameof(AddInstruction), ex);
             }
         }
 
@@ -270,7 +270,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_SendList_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_SendList_Click), ex);
             }
         }
 
@@ -311,7 +311,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_SYSSocket_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_SYSSocket_Click), ex);
             }
         }
 
@@ -363,7 +363,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_Delay_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_Delay_Click), ex);
             }
         }
 
@@ -440,7 +440,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitSwitchType), ex.Message);
+                Operate.DoLog(nameof(InitSwitchType), ex);
             }
         }
 
@@ -468,7 +468,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(cbbSwitchType_SelectedIndexChanged), ex.Message);
+                Operate.DoLog(nameof(cbbSwitchType_SelectedIndexChanged), ex);
             }
         }
 
@@ -508,7 +508,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSwitch_Click), ex.Message);
+                Operate.DoLog(nameof(bSwitch_Click), ex);
             }
         }
 
@@ -546,7 +546,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_KeyBoard_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_KeyBoard_Click), ex);
             }
         }
 
@@ -560,7 +560,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(txtKey_KeyDown), ex.Message);
+                Operate.DoLog(nameof(txtKey_KeyDown), ex);
             }
         }
 
@@ -584,7 +584,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_KeyCombination_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_KeyCombination_Click), ex);
             }
         }
 
@@ -607,7 +607,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_Text_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_Text_Click), ex);
             }
         }
 
@@ -661,7 +661,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_MouseKey_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_MouseKey_Click), ex);
             }
         }
 
@@ -690,7 +690,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_MouseWheel_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_MouseWheel_Click), ex);
             }
         }
 
@@ -717,7 +717,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bInsert_MouseMove_Click), ex.Message);
+                Operate.DoLog(nameof(bInsert_MouseMove_Click), ex);
             }
         }
 
@@ -833,7 +833,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bExecute_Click), ex.Message);
+                Operate.DoLog(nameof(bExecute_Click), ex);
             }
         }
 
@@ -874,7 +874,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Worker_RunWorkerCompleted), ex.Message);
+                Operate.DoLog(nameof(Worker_RunWorkerCompleted), ex);
             }
         }
 
@@ -929,7 +929,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSave_Click), ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex);
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "机器人保存失败", TType.Error)
                 {
@@ -971,7 +971,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(SaveRobot), ex.Message);
+                Operate.DoLog(nameof(SaveRobot), ex);
             }
 
             return false;

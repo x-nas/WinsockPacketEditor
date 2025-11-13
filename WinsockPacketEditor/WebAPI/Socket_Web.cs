@@ -276,7 +276,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Configuration), ex.Message);
+                Operate.DoLog(nameof(Configuration), ex);
             }
         }
     }

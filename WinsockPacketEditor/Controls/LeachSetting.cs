@@ -77,7 +77,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(LeachSetting_Load), ex.Message);
+                Operate.DoLog(nameof(LeachSetting_Load), ex);
             }            
         }
 
@@ -229,7 +229,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CheckSaveSetting), ex.Message);
+                Operate.DoLog(nameof(CheckSaveSetting), ex);
             }
 
             return false;

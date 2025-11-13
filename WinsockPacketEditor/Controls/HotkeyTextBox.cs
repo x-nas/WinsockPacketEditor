@@ -49,7 +49,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(HotkeyTextBox_KeyDown), ex.Message);
+                Operate.DoLog(nameof(HotkeyTextBox_KeyDown), ex);
             }
         }
 
@@ -74,7 +74,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(HotkeyTextBox_KeyUp), ex.Message);
+                Operate.DoLog(nameof(HotkeyTextBox_KeyUp), ex);
             }
         }
     }

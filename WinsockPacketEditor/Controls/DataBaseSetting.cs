@@ -38,7 +38,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSelectPath_Click), ex.Message);
+                Operate.DoLog(nameof(bSelectPath_Click), ex);
             }
         }
 

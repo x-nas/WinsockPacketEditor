@@ -59,7 +59,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitTable_Location), ex.Message);
+                Operate.DoLog(nameof(InitTable_Location), ex);
             }            
         }
 

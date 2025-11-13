@@ -401,7 +401,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(udExtraction_DragChanged), ex.Message);
+                Operate.DoLog(nameof(udExtraction_DragChanged), ex);
             }
         }
 
@@ -522,7 +522,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(LoadAccountList_FromXDocument), ex.Message);
+                Operate.DoLog(nameof(LoadAccountList_FromXDocument), ex);
             }
 
             return lstAccount;
@@ -576,7 +576,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bExtraction_Click), ex.Message);
+                Operate.DoLog(nameof(bExtraction_Click), ex);
             }
         }
 

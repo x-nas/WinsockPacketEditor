@@ -124,7 +124,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(OnHttpCallback), ex.Message);
+                Operate.DoLog(nameof(OnHttpCallback), ex);
             }            
         }
 
@@ -214,7 +214,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(OnTcpCallback), ex.Message);
+                Operate.DoLog(nameof(OnTcpCallback), ex);
             }            
         }
 
@@ -295,7 +295,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(OnUdpCallback), ex.Message);
+                Operate.DoLog(nameof(OnUdpCallback), ex);
             }
         }        
 
@@ -378,7 +378,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(OnWebSocketCallback), ex.Message);
+                Operate.DoLog(nameof(OnWebSocketCallback), ex);
             }            
         }
 

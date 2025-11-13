@@ -145,7 +145,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(timerClientList_Tick), ex.Message);
+                Operate.DoLog(nameof(timerClientList_Tick), ex);
             }
             finally
             {
@@ -254,7 +254,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(UpdateClientList), ex.Message);
+                Operate.DoLog(nameof(UpdateClientList), ex);
             }
             finally
             {
@@ -333,7 +333,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(UpdateAuthList), ex.Message);
+                Operate.DoLog(nameof(UpdateAuthList), ex);
             }
         }
 

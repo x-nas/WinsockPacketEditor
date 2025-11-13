@@ -37,7 +37,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(RequestProxyBuffer), ex.Message);
+                Operate.DoLog(nameof(RequestProxyBuffer), ex);
                 return Array.Empty<byte>();
             }
         }

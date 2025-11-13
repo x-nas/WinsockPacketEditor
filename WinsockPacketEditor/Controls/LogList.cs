@@ -272,7 +272,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(timerLogList_Tick), ex.Message);
+                Operate.DoLog(nameof(timerLogList_Tick), ex);
             }
             finally
             {

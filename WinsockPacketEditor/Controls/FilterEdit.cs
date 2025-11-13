@@ -162,7 +162,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(FilterEdit_Load), ex.Message);
+                Operate.DoLog(nameof(FilterEdit_Load), ex);
             }
         }
 
@@ -213,7 +213,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitTable_FilterNormal), ex.Message);
+                Operate.DoLog(nameof(InitTable_FilterNormal), ex);
             }            
         }
 
@@ -249,7 +249,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitTable_FilterAdvanced_Search), ex.Message);
+                Operate.DoLog(nameof(InitTable_FilterAdvanced_Search), ex);
             }            
         }
 
@@ -285,7 +285,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitTable_FilterAdvanced_Modify_Head), ex.Message);
+                Operate.DoLog(nameof(InitTable_FilterAdvanced_Modify_Head), ex);
             }            
         }
 
@@ -324,7 +324,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitTable_FilterAdvanced_Modify_Position), ex.Message);
+                Operate.DoLog(nameof(InitTable_FilterAdvanced_Modify_Position), ex);
             }            
         }
 
@@ -382,7 +382,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitFilterExecuteType), ex.Message);
+                Operate.DoLog(nameof(InitFilterExecuteType), ex);
             }            
         }
 
@@ -435,7 +435,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitProgressionPosition), ex.Message);
+                Operate.DoLog(nameof(InitProgressionPosition), ex);
             }
         }
 
@@ -474,7 +474,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitExcludePosition), ex.Message);
+                Operate.DoLog(nameof(InitExcludePosition), ex);
             }
         }
 
@@ -527,7 +527,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(InitRandomPosition), ex.Message);
+                Operate.DoLog(nameof(InitRandomPosition), ex);
             }
         }
 
@@ -729,7 +729,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(FilterAction_ExecuteTypeChanged), ex.Message);
+                Operate.DoLog(nameof(FilterAction_ExecuteTypeChanged), ex);
             }
         }
 
@@ -1071,7 +1071,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CheckFilterIsValid), ex.Message);
+                Operate.DoLog(nameof(CheckFilterIsValid), ex);
             }
 
             return bReturn;
@@ -1474,7 +1474,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(DeleteToMousePosition), ex.Message);
+                Operate.DoLog(nameof(DeleteToMousePosition), ex);
             }
         }
 
@@ -1490,7 +1490,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(PasteToMousePosition), ex.Message);
+                Operate.DoLog(nameof(PasteToMousePosition), ex);
             }
         }
 
@@ -1553,7 +1553,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(PastePacketData), ex.Message);
+                Operate.DoLog(nameof(PastePacketData), ex);
             }
         }
 
@@ -1662,7 +1662,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ShowFilterData), ex.Message);
+                Operate.DoLog(nameof(ShowFilterData), ex);
             }
         }
 
@@ -1960,7 +1960,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSave_Click), ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex);
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "滤镜保存失败", TType.Error)
                 {

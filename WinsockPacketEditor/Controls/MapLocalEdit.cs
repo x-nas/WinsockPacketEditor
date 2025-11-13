@@ -47,7 +47,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(MapLocalEdit_Load), ex.Message);
+                Operate.DoLog(nameof(MapLocalEdit_Load), ex);
             }            
         }
 
@@ -156,7 +156,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSave_Click), ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex);
             }
         }
 

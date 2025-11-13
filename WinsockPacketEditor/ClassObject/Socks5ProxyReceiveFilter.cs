@@ -78,7 +78,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ProcessCombinedData), ex.Message);
+                Operate.DoLog(nameof(ProcessCombinedData), ex);
                 m_Buffer = Array.Empty<byte>();
             }
         }        
@@ -108,7 +108,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(HandleSocks5Request), ex.Message);
+                Operate.DoLog(nameof(HandleSocks5Request), ex);
             }
         }
 

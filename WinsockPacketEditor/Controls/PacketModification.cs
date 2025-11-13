@@ -80,7 +80,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(PacketModification_Load), ex.Message);
+                Operate.DoLog(nameof(PacketModification_Load), ex);
             }
         }
 

@@ -84,7 +84,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(StartRobot), ex.Message);
+                Operate.DoLog(nameof(StartRobot), ex);
             }
         }
 
@@ -108,7 +108,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(StopRobot), ex.Message);
+                Operate.DoLog(nameof(StopRobot), ex);
             }
         }
 
@@ -515,7 +515,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Robot_DoWork), ex.Message);
+                Operate.DoLog(nameof(Robot_DoWork), ex);
             }
         }
 
@@ -554,7 +554,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(Robot_RunCompleted), ex.Message);
+                Operate.DoLog(nameof(Robot_RunCompleted), ex);
             }
         }
 
@@ -573,7 +573,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(GetParameter), ex.Message);
+                Operate.DoLog(nameof(GetParameter), ex);
             }            
 
             return null;
@@ -597,7 +597,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(GetParameter), ex.Message);
+                Operate.DoLog(nameof(GetParameter), ex);
             }
             
             return defaultValue;

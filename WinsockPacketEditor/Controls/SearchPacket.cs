@@ -37,7 +37,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(SearchPacket_Load), ex.Message);
+                Operate.DoLog(nameof(SearchPacket_Load), ex);
             }
         }
 
@@ -115,7 +115,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSearch_Click), ex.Message);
+                Operate.DoLog(nameof(bSearch_Click), ex);
             }            
         }
 

@@ -309,7 +309,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bPreview_Click), ex.Message);
+                Operate.DoLog(nameof(bPreview_Click), ex);
             }            
         }
 
@@ -367,7 +367,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bSave_Click), ex.Message);
+                Operate.DoLog(nameof(bSave_Click), ex);
             }
         }
 

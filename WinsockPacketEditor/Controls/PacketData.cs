@@ -83,7 +83,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(RefreshPacketData), ex.Message);
+                Operate.DoLog(nameof(RefreshPacketData), ex);
             }            
         }
 
@@ -110,7 +110,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(ShowText), ex.Message);
+                Operate.DoLog(nameof(ShowText), ex);
             }            
         }
 
@@ -140,7 +140,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(HexBox_FindNext), ex.Message);
+                Operate.DoLog(nameof(HexBox_FindNext), ex);
             }
 
             return false;
@@ -170,7 +170,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CleanUp_PacketData), ex.Message);
+                Operate.DoLog(nameof(CleanUp_PacketData), ex);
             }            
         }
 

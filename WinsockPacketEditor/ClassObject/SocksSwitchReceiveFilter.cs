@@ -48,7 +48,7 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 left = 0;
-                Operate.DoLog(nameof(Filter), ex.Message);
+                Operate.DoLog(nameof(Filter), ex);
             }            
 
             return null;

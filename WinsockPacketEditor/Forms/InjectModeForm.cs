@@ -95,7 +95,7 @@ namespace WinsockPacketEditor
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(WndProc), ex.Message);
+                        Operate.DoLog(nameof(WndProc), ex);
                     }
                 }));
 
@@ -569,7 +569,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(timerPacketList_Tick), ex.Message);
+                Operate.DoLog(nameof(timerPacketList_Tick), ex);
             }
             finally
             {
@@ -595,7 +595,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(timerPacketListInfo_Tick), ex.Message);
+                Operate.DoLog(nameof(timerPacketListInfo_Tick), ex);
             }
             finally
             {
@@ -630,7 +630,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(bgwAutoSave_DoWork), ex.Message);
+                Operate.DoLog(nameof(bgwAutoSave_DoWork), ex);
             }
         }
 

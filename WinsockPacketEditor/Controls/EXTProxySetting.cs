@@ -220,7 +220,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Operate.DoLog(nameof(CheckExternalProxySet), ex.Message);
+                Operate.DoLog(nameof(CheckExternalProxySet), ex);
                 return false;
             }
 
