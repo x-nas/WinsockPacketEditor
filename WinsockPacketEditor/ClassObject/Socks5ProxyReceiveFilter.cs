@@ -107,7 +107,7 @@ namespace WinsockPacketEditor
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.ForwardData:
-                        Operate.ProxyConfig.Proxy.ProcessForwardDataWithUnpacking(this.m_Session, bData, ref this.m_ForwardBuffer);
+                        Operate.ProxyConfig.Proxy.ProcessForwardData(this.m_Session, bData, ref this.m_ForwardBuffer);
                         break;
                 }
             }

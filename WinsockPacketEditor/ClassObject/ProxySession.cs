@@ -45,7 +45,7 @@ namespace WinsockPacketEditor
                 this.ClientIP = this.RemoteEndPoint.Address.ToString();
                 this.ClientPort = this.RemoteEndPoint.Port;
 
-                this.bBuffer = AppServer.RequestProxyBuffer();
+                this.bBuffer = Operate.ProxyConfig.Proxy.RequestProxyBuffer(Operate.ProxyConfig.Proxy.ProxyReceiveBufferSize);
                 this.TargetSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
             catch (Exception ex)
@@ -181,25 +181,33 @@ namespace WinsockPacketEditor
                 {
                     byte[] bData = this.bBuffer.AsSpan(0, bytesRead).ToArray();
 
-                    if (this.CommandType == Operate.ProxyConfig.Proxy.CommandType.Connect)
+                    if (this.CommandType != Operate.ProxyConfig.Proxy.CommandType.Connect)
                     {
-                        if (Operate.ProxyConfig.Proxy.HookTCP_Resp)
-                        {
-                            byte[][] packets = Operate.ProxyConfig.Proxy.ProcessResponseDataWithUnpacking(bData);
+                        return;
+                    }
 
-                            foreach (byte[] packet in packets)
+                    if (!Operate.ProxyConfig.Proxy.HookTCP_Resp)
+                    {
+                        this.TrySend(bData, 0, bData.Length);
+                        return;
+                    }
+
+                    if (Operate.ProxyConfig.Proxy.Enable_UnPack)
+                    {
+                        byte[][] packets = Operate.ProxyConfig.Proxy.ProcessResponseData(bData);
+                        foreach (byte[] packet in packets)
+                        {
+                            if (packet.Length > 0)
                             {
-                                if (packet.Length > 0)
-                                {
-                                    Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(this, packet.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
-                                    Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, packet.Length);
-                                }
+                                Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(this, packet.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
+                                Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, packet.Length);
                             }
                         }
-                        else
-                        {
-                            this.TrySend(bData, 0, bData.Length);
-                        }
+                    }
+                    else
+                    {
+                        Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(this, bData.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
+                        Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, bData.Length);
                     }
 
                     this.StartReceivingFromTarget();
@@ -388,7 +396,7 @@ namespace WinsockPacketEditor
         {
             if (this.bBuffer != null)
             { 
-                AppServer.PushProxyBuffer(this.bBuffer);
+                Operate.ProxyConfig.Proxy.PushProxyBuffer(this.bBuffer);
             }
 
             if (this.TargetSocket != null)
