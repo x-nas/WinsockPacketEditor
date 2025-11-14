@@ -22,7 +22,7 @@ namespace WinsockPacketEditor
         public Operate.ProxyConfig.Proxy.ProxyStep ProxyStep;
         public Operate.ProxyConfig.Proxy.CommandType CommandType;
         public Operate.ProxyConfig.Proxy.AddressType AddressType;
-        public Operate.ProxyConfig.Proxy.DomainType DomainType;        
+        public Operate.ProxyConfig.Proxy.DomainType DomainType;
 
         public Operate.ProxyConfig.Proxy.ProxyType ProxyType { get; internal set; }
 
@@ -185,8 +185,16 @@ namespace WinsockPacketEditor
                     {
                         if (Operate.ProxyConfig.Proxy.HookTCP_Resp)
                         {
-                            Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(this, bData.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
-                            Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, bData.Length);
+                            byte[][] packets = Operate.ProxyConfig.Proxy.ProcessResponseDataWithUnpacking(bData);
+
+                            foreach (byte[] packet in packets)
+                            {
+                                if (packet.Length > 0)
+                                {
+                                    Operate.FilterConfig.Filter.DoFilter_SOCKS_TCP(this, packet.AsSpan(), Operate.PacketConfig.Packet.PacketType.TCP_Resp);
+                                    Operate.ProxyConfig.Account.AddTraffic(this.AID, this.ClientIP, packet.Length);
+                                }
+                            }
                         }
                         else
                         {

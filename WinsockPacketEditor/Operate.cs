@@ -6024,22 +6024,175 @@ namespace WinsockPacketEditor
 
                 public static byte[] CombineData(byte[] m_Buffer, byte[] newData, int offset, int length)
                 {
-                    if (m_Buffer.Length == 0)
+                    try
                     {
-                        byte[] result = new byte[length];
-                        Buffer.BlockCopy(newData, offset, result, 0, length);
-                        return result;
+                        byte[] bReturn = null;
+
+                        if (m_Buffer == null || m_Buffer.Length == 0)
+                        {
+                            bReturn = new byte[length];
+                            Buffer.BlockCopy(newData, offset, bReturn, 0, length);
+                            return bReturn;
+                        }
+
+                        if (newData == null || newData.Length == 0)
+                        {
+                            bReturn = new byte[m_Buffer.Length];
+                            Buffer.BlockCopy(m_Buffer, 0, bReturn, 0, m_Buffer.Length);
+                            return bReturn;
+                        }
+
+                        bReturn = new byte[m_Buffer.Length + length];
+                        Buffer.BlockCopy(m_Buffer, 0, bReturn, 0, m_Buffer.Length);
+                        Buffer.BlockCopy(newData, offset, bReturn, m_Buffer.Length, length);
+                        return bReturn;
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        byte[] result = new byte[m_Buffer.Length + length];
-                        Buffer.BlockCopy(m_Buffer, 0, result, 0, m_Buffer.Length);
-                        Buffer.BlockCopy(newData, offset, result, m_Buffer.Length, length);
-                        return result;
+                        Operate.DoLog(nameof(CombineData), ex);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//处理拆包
+
+                public static void ProcessForwardDataWithUnpacking(ProxySession m_Session, byte[] receivedData, ref byte[] m_ForwardBuffer)
+                {
+                    try
+                    {
+                        byte[] dataToProcess = Operate.ProxyConfig.Proxy.CombineData(m_ForwardBuffer, receivedData, 0, receivedData.Length);
+                        if (dataToProcess == null || dataToProcess.Length == 0)
+                        {
+                            return;
+                        }                            
+
+                        int processedLength = 0;
+
+                        while (processedLength < dataToProcess.Length)
+                        {
+                            if (dataToProcess.Length - processedLength < 5)
+                            {
+                                m_ForwardBuffer = new byte[dataToProcess.Length - processedLength];
+                                Buffer.BlockCopy(dataToProcess, processedLength, m_ForwardBuffer, 0, m_ForwardBuffer.Length);
+                                break;
+                            }
+
+                            if (dataToProcess[processedLength] == 0x01 &&
+                                dataToProcess[processedLength + 1] == 0x00 &&
+                                dataToProcess[processedLength + 2] == 0x00)
+                            {
+                                int packetLength = (dataToProcess[processedLength + 3] << 8) | dataToProcess[processedLength + 4];
+
+                                if (dataToProcess.Length - processedLength >= packetLength)
+                                {
+                                    byte[] completePacket = new byte[packetLength];
+                                    Buffer.BlockCopy(dataToProcess, processedLength, completePacket, 0, packetLength);
+
+                                    Operate.ProxyConfig.Proxy.ForwardData(m_Session, completePacket);
+
+                                    processedLength += packetLength;
+                                    if (processedLength == dataToProcess.Length)
+                                    {
+                                        m_ForwardBuffer = Array.Empty<byte>();
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    m_ForwardBuffer = new byte[dataToProcess.Length - processedLength];
+                                    Buffer.BlockCopy(dataToProcess, processedLength, m_ForwardBuffer, 0, m_ForwardBuffer.Length);
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                byte[] remainingData = new byte[dataToProcess.Length - processedLength];
+                                Buffer.BlockCopy(dataToProcess, processedLength, remainingData, 0, remainingData.Length);
+                                Operate.ProxyConfig.Proxy.ForwardData(m_Session, remainingData);
+
+                                m_ForwardBuffer = Array.Empty<byte>();
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ProcessForwardDataWithUnpacking), ex);
+                        m_ForwardBuffer = Array.Empty<byte>();
                     }
                 }
 
-                #endregion                
+                public static byte[][] ProcessResponseDataWithUnpacking(byte[] receivedData)
+                {
+                    try
+                    {
+                        List<byte[]> resultPackets = new List<byte[]>();
+
+                        if (receivedData == null || receivedData.Length == 0)
+                            return resultPackets.ToArray();
+
+                        int processedLength = 0;
+
+                        while (processedLength < receivedData.Length)
+                        {
+                            if (receivedData.Length - processedLength < 5)
+                            {
+                                byte[] remainingData = new byte[receivedData.Length - processedLength];
+                                Buffer.BlockCopy(receivedData, processedLength, remainingData, 0, remainingData.Length);
+                                resultPackets.Add(remainingData);
+                                break;
+                            }
+
+                            if (receivedData[processedLength] == 0x01 &&
+                                receivedData[processedLength + 1] == 0x00 &&
+                                receivedData[processedLength + 2] == 0x00)
+                            {
+                                int packetLength = (receivedData[processedLength + 3] << 8) | receivedData[processedLength + 4];
+
+                                if (receivedData.Length - processedLength >= packetLength)
+                                {
+                                    byte[] completePacket = new byte[packetLength];
+                                    Buffer.BlockCopy(receivedData, processedLength, completePacket, 0, packetLength);
+
+                                    resultPackets.Add(completePacket);
+
+                                    processedLength += packetLength;
+
+                                    if (processedLength == receivedData.Length)
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    byte[] remainingData = new byte[receivedData.Length - processedLength];
+                                    Buffer.BlockCopy(receivedData, processedLength, remainingData, 0, remainingData.Length);
+                                    resultPackets.Add(remainingData);
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                byte[] remainingData = new byte[receivedData.Length - processedLength];
+                                Buffer.BlockCopy(receivedData, processedLength, remainingData, 0, remainingData.Length);
+                                resultPackets.Add(remainingData);
+                                break;
+                            }
+                        }
+
+                        return resultPackets.ToArray();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ProcessResponseDataWithUnpacking), ex);
+                        return new byte[][] { receivedData };
+                    }
+                }
+
+                #endregion
 
                 #region//设置系统代理
 

@@ -9,6 +9,7 @@ namespace WinsockPacketEditor
         private ProxySession m_Session;
         private const int MAX_BUFFER_SIZE = 1024;
         private byte[] m_Buffer = Array.Empty<byte>();
+        private byte[] m_ForwardBuffer = Array.Empty<byte>();
 
         public int LeftBufferSize { get; set; }
 
@@ -27,10 +28,11 @@ namespace WinsockPacketEditor
 
         public void Reset()
         {
-            State = FilterState.Normal;
-            LeftBufferSize = 0;
-            NextReceiveFilter = null;
-            m_Buffer = Array.Empty<byte>();
+            this.State = FilterState.Normal;
+            this.LeftBufferSize = 0;
+            this.NextReceiveFilter = null;
+            this.m_Buffer = Array.Empty<byte>();
+            this.m_ForwardBuffer = Array.Empty<byte>();
         }
 
         #endregion
@@ -40,13 +42,16 @@ namespace WinsockPacketEditor
         public BinaryRequestInfo Filter(byte[] readBuffer, int offset, int length, bool toBeCopied, out int rest)
         {
             rest = 0;
-            if (length <= 0)
+            if (readBuffer == null || length <= 0)
             {
                 return null;
             }
 
             byte[] combinedData = Operate.ProxyConfig.Proxy.CombineData(this.m_Buffer, readBuffer, offset, length);
-            _ = ProcessCombinedData(combinedData);
+            if (combinedData != null)
+            {
+                _ = this.ProcessCombinedData(combinedData);
+            }            
 
             return null;
         }
@@ -68,7 +73,7 @@ namespace WinsockPacketEditor
                 bool isCompleteRequest = Operate.ProxyConfig.Proxy.CheckDataIsMatchProxyStep(combinedData, this.m_Session.ProxyStep);
                 if (isCompleteRequest)
                 {
-                    await HandleSocks5Request(combinedData);
+                    await this.HandleSocks5Request(combinedData);
                     m_Buffer = Array.Empty<byte>();
                 }
                 else
@@ -102,7 +107,7 @@ namespace WinsockPacketEditor
                         break;
 
                     case Operate.ProxyConfig.Proxy.ProxyStep.ForwardData:
-                        Operate.ProxyConfig.Proxy.ForwardData(this.m_Session, bData);
+                        Operate.ProxyConfig.Proxy.ProcessForwardDataWithUnpacking(this.m_Session, bData, ref this.m_ForwardBuffer);
                         break;
                 }
             }
