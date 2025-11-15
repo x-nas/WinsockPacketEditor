@@ -213,8 +213,10 @@
     <Compile Include="ClassObject\AccountInfo.cs" />
     <Compile Include="ClassObject\AccountIPInfo.cs" />
     <Compile Include="ClassObject\AuthInfo.cs" />
+    <Compile Include="ClassObject\AutoStoresInfo.cs" />
     <Compile Include="ClassObject\BitInfo.cs" />
     <Compile Include="ClassObject\BlackListInfo.cs" />
+    <Compile Include="ClassObject\DataInfo.cs" />
     <Compile Include="ClassObject\FilterInfo.cs" />
     <Compile Include="ClassObject\FilterLogInfo.cs" />
     <Compile Include="ClassObject\FontLoader.cs" />
@@ -241,6 +243,7 @@
     <Compile Include="ClassObject\SocksProxyServer.cs" />
     <Compile Include="ClassObject\SocksSwitchReceiveFilter.cs" />
     <Compile Include="ClassObject\SunnyNetCallback.cs" />
+    <Compile Include="ClassObject\WareHouseInfo.cs" />
     <Compile Include="ClassObject\WhiteListInfo.cs" />
     <Compile Include="ClassObject\WinSockHook.cs" />
     <Compile Include="Controls\AccountEdit.cs">
@@ -260,6 +263,18 @@
     </Compile>
     <Compile Include="Controls\AccountLocation.Designer.cs">
       <DependentUpon>AccountLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AutoStoresEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AutoStoresEdit.Designer.cs">
+      <DependentUpon>AutoStoresEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AutoStoresList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AutoStoresList.Designer.cs">
+      <DependentUpon>AutoStoresList.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\BackUpSetting.cs">
       <SubType>UserControl</SubType>
@@ -528,6 +543,18 @@
     <Compile Include="Controls\Transcoding.Designer.cs">
       <DependentUpon>Transcoding.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WareHouseEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\WareHouseEdit.Designer.cs">
+      <DependentUpon>WareHouseEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WareHouseList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\WareHouseList.Designer.cs">
+      <DependentUpon>WareHouseList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WhiteListEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -617,6 +644,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\AccountLocation.resx">
       <DependentUpon>AccountLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AutoStoresEdit.resx">
+      <DependentUpon>AutoStoresEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AutoStoresList.resx">
+      <DependentUpon>AutoStoresList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\BackUpSetting.resx">
       <DependentUpon>BackUpSetting.cs</DependentUpon>
@@ -746,6 +779,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Transcoding.resx">
       <DependentUpon>Transcoding.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\WareHouseEdit.resx">
+      <DependentUpon>WareHouseEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\WareHouseList.resx">
+      <DependentUpon>WareHouseList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\WhiteListEdit.resx">
       <DependentUpon>WhiteListEdit.cs</DependentUpon>

@@ -12,10 +12,10 @@ namespace WinsockPacketEditor
 
         #region//窗体事件
 
-        public SendList(Form _form)
+        public SendList(Form form)
         {
             InitializeComponent();
-            this.form = _form;
+            this.form = form;
         }
 
         private void SendList_Load(object sender, EventArgs e)

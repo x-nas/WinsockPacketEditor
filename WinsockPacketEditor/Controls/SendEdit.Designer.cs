@@ -81,7 +81,6 @@
             // 
             this.tlpSendEdit.ColumnCount = 1;
             this.tlpSendEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tlpSendEdit.Controls.Add(this.tlpButton, 0, 4);
             this.tlpSendEdit.Controls.Add(this.tlpSendCollectionInfo, 0, 0);
             this.tlpSendEdit.Controls.Add(this.tSendCollection, 0, 1);
@@ -92,11 +91,11 @@
             this.tlpSendEdit.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendEdit.Name = "tlpSendEdit";
             this.tlpSendEdit.RowCount = 5;
-            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpSendEdit.Size = new System.Drawing.Size(1100, 700);
             this.tlpSendEdit.TabIndex = 1;
             // 
@@ -117,14 +116,14 @@
             this.tlpButton.Controls.Add(this.bSave, 5, 1);
             this.tlpButton.Controls.Add(this.bExit, 7, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 651);
+            this.tlpButton.Location = new System.Drawing.Point(0, 650);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(1100, 49);
+            this.tlpButton.Size = new System.Drawing.Size(1100, 50);
             this.tlpButton.TabIndex = 10;
             // 
             // bStop
@@ -238,7 +237,7 @@
             this.tlpSendCollectionInfo.RowCount = 2;
             this.tlpSendCollectionInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendCollectionInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendCollectionInfo.Size = new System.Drawing.Size(1100, 40);
+            this.tlpSendCollectionInfo.Size = new System.Drawing.Size(1100, 45);
             this.tlpSendCollectionInfo.TabIndex = 6;
             // 
             // ddMenu
@@ -377,11 +376,11 @@
             this.tSendCollection.Gap = 10;
             this.tSendCollection.GapCell = 5;
             this.tSendCollection.Gaps = new System.Drawing.Size(10, 10);
-            this.tSendCollection.Location = new System.Drawing.Point(2, 42);
+            this.tSendCollection.Location = new System.Drawing.Point(2, 47);
             this.tSendCollection.Margin = new System.Windows.Forms.Padding(2);
             this.tSendCollection.MultipleRows = true;
             this.tSendCollection.Name = "tSendCollection";
-            this.tSendCollection.Size = new System.Drawing.Size(1096, 445);
+            this.tSendCollection.Size = new System.Drawing.Size(1096, 441);
             this.tSendCollection.TabIndex = 7;
             this.tSendCollection.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendCollection_CellClick);
             this.tSendCollection.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tSendCollection_CellButtonClick);
@@ -396,7 +395,7 @@
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.PlaceholderText = "备注信息";
-            this.txtNotes.Size = new System.Drawing.Size(1096, 77);
+            this.txtNotes.Size = new System.Drawing.Size(1096, 76);
             this.txtNotes.TabIndex = 8;
             // 
             // tlpSendCollectionSettings
@@ -411,12 +410,12 @@
             this.tlpSendCollectionSettings.Controls.Add(this.pSendSocket, 1, 0);
             this.tlpSendCollectionSettings.Controls.Add(this.pSendName, 0, 0);
             this.tlpSendCollectionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSendCollectionSettings.Location = new System.Drawing.Point(0, 489);
+            this.tlpSendCollectionSettings.Location = new System.Drawing.Point(0, 490);
             this.tlpSendCollectionSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendCollectionSettings.Name = "tlpSendCollectionSettings";
             this.tlpSendCollectionSettings.RowCount = 1;
             this.tlpSendCollectionSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendCollectionSettings.Size = new System.Drawing.Size(1100, 81);
+            this.tlpSendCollectionSettings.Size = new System.Drawing.Size(1100, 80);
             this.tlpSendCollectionSettings.TabIndex = 9;
             // 
             // pLoopINT
@@ -428,7 +427,7 @@
             this.pLoopINT.Margin = new System.Windows.Forms.Padding(2);
             this.pLoopINT.Name = "pLoopINT";
             this.pLoopINT.Radius = 10;
-            this.pLoopINT.Size = new System.Drawing.Size(271, 77);
+            this.pLoopINT.Size = new System.Drawing.Size(271, 76);
             this.pLoopINT.TabIndex = 13;
             // 
             // tlpLoopINT
@@ -446,7 +445,7 @@
             this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoopINT.Size = new System.Drawing.Size(267, 73);
+            this.tlpLoopINT.Size = new System.Drawing.Size(267, 72);
             this.tlpLoopINT.TabIndex = 0;
             // 
             // nudLoopINT
@@ -499,7 +498,7 @@
             this.pLoopCNT.Margin = new System.Windows.Forms.Padding(2);
             this.pLoopCNT.Name = "pLoopCNT";
             this.pLoopCNT.Radius = 10;
-            this.pLoopCNT.Size = new System.Drawing.Size(271, 77);
+            this.pLoopCNT.Size = new System.Drawing.Size(271, 76);
             this.pLoopCNT.TabIndex = 12;
             // 
             // tlpLoopCNT
@@ -517,7 +516,7 @@
             this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoopCNT.Size = new System.Drawing.Size(267, 73);
+            this.tlpLoopCNT.Size = new System.Drawing.Size(267, 72);
             this.tlpLoopCNT.TabIndex = 0;
             // 
             // dLoopCNT
@@ -571,7 +570,7 @@
             this.pSendSocket.Margin = new System.Windows.Forms.Padding(2);
             this.pSendSocket.Name = "pSendSocket";
             this.pSendSocket.Radius = 10;
-            this.pSendSocket.Size = new System.Drawing.Size(271, 77);
+            this.pSendSocket.Size = new System.Drawing.Size(271, 76);
             this.pSendSocket.TabIndex = 11;
             // 
             // tlpSendSocket
@@ -589,7 +588,7 @@
             this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendSocket.Size = new System.Drawing.Size(267, 73);
+            this.tlpSendSocket.Size = new System.Drawing.Size(267, 72);
             this.tlpSendSocket.TabIndex = 0;
             // 
             // dSendSocket
@@ -626,7 +625,7 @@
             this.pSendName.Margin = new System.Windows.Forms.Padding(2);
             this.pSendName.Name = "pSendName";
             this.pSendName.Radius = 10;
-            this.pSendName.Size = new System.Drawing.Size(271, 77);
+            this.pSendName.Size = new System.Drawing.Size(271, 76);
             this.pSendName.TabIndex = 10;
             // 
             // tlpSendName
@@ -644,7 +643,7 @@
             this.tlpSendName.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendName.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSendName.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendName.Size = new System.Drawing.Size(267, 73);
+            this.tlpSendName.Size = new System.Drawing.Size(267, 72);
             this.tlpSendName.TabIndex = 0;
             // 
             // dSendName

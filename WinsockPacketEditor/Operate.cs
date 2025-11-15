@@ -1352,6 +1352,25 @@ namespace WinsockPacketEditor
                 }
             }
 
+            public static void InitWareHouseInfo(AntdUI.Select sSendInfo, Guid SelectWID)
+            {
+                try
+                {
+                    if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                    {
+                        var selectItems = Operate.WareHouseConfig.List.lstWareHouseInfo.Select(info => new SelectItem(info.WName, info)).ToArray();
+
+                        sSendInfo.Items.Clear();
+                        sSendInfo.Items.AddRange(selectItems);
+                        sSendInfo.SelectedValue = Operate.WareHouseConfig.WareHouse.GetWareHouse_ByGuid(SelectWID);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InitWareHouseInfo), ex);
+                }
+            }
+
             #endregion
 
             #region//查找树节点
@@ -9021,8 +9040,8 @@ namespace WinsockPacketEditor
                     {
                         if (ProxyConfig.Queue.qProxyInfo.TryDequeue(out ProxyInfo pi))
                         {
-                            bool bIsShow = PacketConfig.Packet.IsShowProxy_ByFilter(pi);
-                            if (bIsShow)
+                            //入列表
+                            if (PacketConfig.Packet.IsShowProxy_ByFilter(pi))
                             {                                
                                 if (Operate.SystemConfig.InvokeAction != null)
                                 {
@@ -9039,7 +9058,30 @@ namespace WinsockPacketEditor
                             else
                             {
                                 ProxyConfig.Proxy.FilterProxy_CNT++;
-                            }                            
+                            }
+
+                            //入仓库
+                            if (Operate.WareHouseConfig.WareHouse.Enable_AutoStores)
+                            {
+                                var packetBuffer = pi.PacketBuffer;
+                                var autoStoresList = Operate.WareHouseConfig.List.lstAutoStoresInfo;
+
+                                foreach (AutoStoresInfo asi in autoStoresList)
+                                {
+                                    if (asi.IsEnable)
+                                    {
+                                        bool IsMatch = Operate.FilterConfig.Filter.CheckPacket_IsMatch_AppointHeader(packetBuffer, asi.PacketHead);
+                                        if (IsMatch)
+                                        {
+                                            WareHouseInfo whi = Operate.WareHouseConfig.WareHouse.GetWareHouse_ByGuid(asi.WID);
+                                            if (whi != null)
+                                            {
+                                                Operate.WareHouseConfig.WareHouse.AddStores(whi.Stores, packetBuffer);
+                                            }
+                                        }
+                                    }                                    
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -15410,6 +15452,7 @@ namespace WinsockPacketEditor
                 #region//检查是否匹配指定包头
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 public static bool CheckPacket_IsMatch_AppointHeader(ReadOnlySpan<byte> bufferSpan, string headerContent)
                 {
                     if (string.IsNullOrEmpty(headerContent))
@@ -20397,6 +20440,1032 @@ namespace WinsockPacketEditor
             }
 
             #endregion
+        }
+
+        #endregion
+
+        #region//仓库配置
+
+        public static class WareHouseConfig
+        {
+            public static class WareHouse
+            {
+                public static bool Enable_AutoStores = false;
+
+                #region//新增仓库
+
+                public static void AddWareHouse_New()
+                {
+                    try
+                    {
+                        Guid WID = Guid.NewGuid();
+                        int WNum = WareHouseConfig.List.lstWareHouseInfo.Count + 1;
+                        string WName = string.Format(AntdUI.Localization.Get("WareHouseList.NewWareHouse", "仓库 {0}"), WNum.ToString());
+                        BindingList<DataInfo> Stores = new BindingList<DataInfo>();
+
+                        WareHouseConfig.WareHouse.AddWareHouse(WID, WName, Stores);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddWareHouse_New), ex);
+                    }
+                }
+
+                public static void AddWareHouse(Guid WID, string WName, BindingList<DataInfo> Stores)
+                {
+                    try
+                    {
+                        if (WID != Guid.Empty && !string.IsNullOrEmpty(WName))
+                        {
+                            WareHouseInfo whi = new WareHouseInfo(WID, WName, Stores);
+                            WareHouseConfig.List.WareHouseToList(whi);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddWareHouse), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//复制仓库
+
+                public static void CopyWareHouse(WareHouseInfo whi)
+                {
+                    try
+                    {
+                        Guid WID = Guid.NewGuid();
+                        string WName_Copy = string.Format(AntdUI.Localization.Get("CopyName", "{0} - 副本"), whi.WName);
+                        BindingList<DataInfo> Stores_Copy = new BindingList<DataInfo>(whi.Stores.ToList());
+
+                        WareHouseConfig.WareHouse.AddWareHouse(WID, WName_Copy, Stores_Copy);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(CopyWareHouse), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//编辑仓库
+
+                public static void OpenWareHouseEdit(Form form, WareHouseInfo whi)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WareHouseEdit", "编辑"), new WareHouseEdit(form, whi))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
+                #region//删除仓库（对话框）
+
+                public static void DeleteWareHouse_Dialog(Form form, List<WareHouseInfo> whiList)
+                {
+                    try
+                    {
+                        if (whiList.Count > 0)
+                        {
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WareHouseList", "仓库列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    foreach (WareHouseInfo whi in whiList)
+                                    {
+                                        WareHouseConfig.List.lstWareHouseInfo.Remove(whi);
+                                    }
+
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteWareHouse_Dialog), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//获取仓库名称
+
+                public static string GetWareHouseName_ByGuid(Guid WID)
+                {
+                    try
+                    {
+                        if (WID != null && WID != Guid.Empty)
+                        {
+                            WareHouseInfo wsi = WareHouseConfig.WareHouse.GetWareHouse_ByGuid(WID);
+                            if (wsi != null)
+                            {
+                                return wsi.WName;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetWareHouseName_ByGuid), ex);
+                    }
+
+                    return string.Empty;
+                }
+
+                #endregion
+
+                #region//获取仓库
+
+                public static WareHouseInfo GetWareHouse_ByGuid(Guid WID)
+                {
+                    try
+                    {
+                        if (WID != null && WID != Guid.Empty)
+                        {
+                            foreach (WareHouseInfo whi in WareHouseConfig.List.lstWareHouseInfo)
+                            {
+                                if (whi.WID == WID)
+                                {
+                                    return whi;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetWareHouse_ByGuid), ex);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//新增仓储数据                
+
+                public static void AddStores(BindingList<DataInfo> Stores, byte[] PacketBuffer)
+                {
+                    try
+                    {
+                        DataInfo di = new DataInfo(PacketBuffer);
+                        Stores.Add(di);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddStores), ex);
+                    }
+                }
+
+                #endregion                
+
+                #region//新增自动入库
+
+                public static void AddAutoStores(bool IsEnable, string PacketHead, Guid WID)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(PacketHead) && WID != null && WID != Guid.Empty)
+                        {
+                            AutoStoresInfo asi = new AutoStoresInfo(IsEnable, PacketHead, WID);
+                            WareHouseConfig.List.lstAutoStoresInfo.Add(asi);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddAutoStores), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//编辑自动入库
+
+                public static void OpenAutoStoresEdit(Form form, AutoStoresList aslForm, AutoStoresInfo asiSelect)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AutoStoresEdit", "自动入库编辑"), new AutoStoresEdit(form, aslForm, asiSelect))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                #endregion
+
+                #region//更新自动入库
+
+                public static void UpdateAutoStores(AutoStoresInfo asi, string PacketHead, Guid gWID)
+                {
+                    try
+                    {
+                        if (asi != null && !string.IsNullOrEmpty(PacketHead) && gWID != Guid.Empty)
+                        {
+                            asi.PacketHead = PacketHead;
+                            asi.WID = gWID;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateAutoStores), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//删除自动入库（对话框）
+
+                public static void DeleteAutoStores_Dialog(Form form, AutoStoresInfo asi)
+                {
+                    try
+                    {
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AutoStoresList", "自动入库"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                        {
+                            Icon = TType.Warn,
+                            Keyboard = false,
+                            MaskClosable = false,
+                            OnOk = config =>
+                            {
+                                if (asi != null)
+                                {
+                                    WareHouseConfig.List.lstAutoStoresInfo.Remove(asi);
+                                }
+
+                                return true;
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteAutoStores_Dialog), ex);
+                    }
+                }
+
+                #endregion
+            }
+
+            public static class List
+            {
+                public static BindingList<WareHouseInfo> lstWareHouseInfo = new BindingList<WareHouseInfo>();
+                public static BindingList<AutoStoresInfo> lstAutoStoresInfo = new BindingList<AutoStoresInfo>();
+
+                #region//仓库入列表
+
+                public static void WareHouseToList(WareHouseInfo whi)
+                {
+                    try
+                    {
+                        WareHouseConfig.List.lstWareHouseInfo.Add(whi);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(WareHouseToList), ex);
+                    }
+                }
+
+                #endregion                
+
+                #region//清空仓库列表（对话框）
+
+                public static void CleanUpWareHouseList_Dialog(Form form)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WareHouseList", "仓库列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    {
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
+                        {
+                            WareHouseConfig.List.WareHouseListClear();
+                            return true;
+                        }
+                    });
+                }
+
+                public static void WareHouseListClear()
+                {
+                    WareHouseConfig.List.lstWareHouseInfo.Clear();
+                }
+
+                #endregion
+
+                #region//清空自动入库（对话框）
+
+                public static void CleanUpAutoStores_Dialog(Form form)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.AutoStores", "自动入库"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    {
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
+                        {
+                            WareHouseConfig.List.AutoStoresClear();
+                            return true;
+                        }
+                    });
+                }
+
+                public static void AutoStoresClear()
+                {
+                    try
+                    {
+                        WareHouseConfig.List.lstAutoStoresInfo.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AutoStoresClear), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//仓库列表的列表操作
+
+                public static void UpdateWareHouseList_ByListAction(Form form, SystemConfig.ListAction listAction, List<WareHouseInfo> whiList)
+                {
+                    try
+                    {
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                foreach (WareHouseInfo whi in whiList)
+                                {
+                                    WareHouseConfig.List.lstWareHouseInfo.Remove(whi);
+                                    WareHouseConfig.List.lstWareHouseInfo.Insert(0, whi);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                foreach (WareHouseInfo whi in whiList)
+                                {
+                                    int iIndex = WareHouseConfig.List.lstWareHouseInfo.IndexOf(whi);
+                                    if (iIndex > 0)
+                                    {
+                                        WareHouseConfig.List.lstWareHouseInfo.Remove(whi);
+                                        WareHouseConfig.List.lstWareHouseInfo.Insert(iIndex - 1, whi);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                foreach (WareHouseInfo whi in whiList)
+                                {
+                                    int iIndex = WareHouseConfig.List.lstWareHouseInfo.IndexOf(whi);
+                                    if (iIndex > -1 && iIndex < WareHouseConfig.List.lstWareHouseInfo.Count - 1)
+                                    {
+                                        WareHouseConfig.List.lstWareHouseInfo.Remove(whi);
+                                        WareHouseConfig.List.lstWareHouseInfo.Insert(iIndex + 1, whi);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                foreach (WareHouseInfo whi in whiList)
+                                {
+                                    WareHouseConfig.List.lstWareHouseInfo.Remove(whi);
+                                    WareHouseConfig.List.lstWareHouseInfo.Add(whi);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Copy:
+
+                                foreach (WareHouseInfo whi in whiList)
+                                {
+                                    WareHouseConfig.WareHouse.CopyWareHouse(whi);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Export:
+
+                                string WName = whiList[0].WName;
+                                WareHouseConfig.List.SaveWareHouseList_Dialog(form, WName, whiList);
+
+                                break;
+
+                            case SystemConfig.ListAction.Delete:
+
+                                WareHouseConfig.WareHouse.DeleteWareHouse_Dialog(form, whiList);
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateWareHouseList_ByListAction), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//自动入库的列表操作
+
+                public static void UpdateAutoStores_ByListAction(Form form, SystemConfig.ListAction listAction, AutoStoresInfo asi)
+                {
+                    try
+                    {
+                        int iIndex = 0;
+
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                WareHouseConfig.List.lstAutoStoresInfo.Remove(asi);
+                                WareHouseConfig.List.lstAutoStoresInfo.Insert(0, asi);
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                iIndex = WareHouseConfig.List.lstAutoStoresInfo.IndexOf(asi);
+                                if (iIndex > 0)
+                                {
+                                    WareHouseConfig.List.lstAutoStoresInfo.Remove(asi);
+                                    WareHouseConfig.List.lstAutoStoresInfo.Insert(iIndex - 1, asi);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                iIndex = WareHouseConfig.List.lstAutoStoresInfo.IndexOf(asi);
+                                if (iIndex > -1 && iIndex < WareHouseConfig.List.lstAutoStoresInfo.Count - 1)
+                                {
+                                    WareHouseConfig.List.lstAutoStoresInfo.Remove(asi);
+                                    WareHouseConfig.List.lstAutoStoresInfo.Insert(iIndex + 1, asi);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                WareHouseConfig.List.lstAutoStoresInfo.Remove(asi);
+                                WareHouseConfig.List.lstAutoStoresInfo.Add(asi);
+
+                                break;
+
+                            case SystemConfig.ListAction.Import:
+
+                                WareHouseConfig.List.LoadAutoStores_Dialog(form);
+
+                                break;
+
+                            case SystemConfig.ListAction.Export:
+
+                                WareHouseConfig.List.SaveAutoStores_Dialog(form, string.Empty, WareHouseConfig.List.lstAutoStoresInfo);
+
+                                break;
+
+                            case SystemConfig.ListAction.CleanUp:
+
+                                WareHouseConfig.List.CleanUpAutoStores_Dialog(form);
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateAutoStores_ByListAction), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//获取自动入库的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_AutoStores()
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+⬆")
+                    {
+                        ID = "Top",
+                        IconSvg = "VerticalAlignTopOutlined",
+                        LocalizationText = "Top",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+⬆")
+                    {
+                        ID = "Up",
+                        IconSvg = "ArrowUpOutlined",
+                        LocalizationText = "Up",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+⬇")
+                    {
+                        ID = "Down",
+                        IconSvg = "ArrowDownOutlined",
+                        LocalizationText = "Down",
+                    });
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+⬇")
+                    {
+                        ID = "Bottom",
+                        IconSvg = "VerticalAlignBottomOutlined",
+                        LocalizationText = "Bottom",
+                    });
+
+                    return menuItems.ToArray();
+                }
+
+                #endregion
+
+                #region//保存仓库列表到文件（对话框）
+
+                public static void SaveWareHouseList_Dialog(Form form, string FileName, List<WareHouseInfo> whiList)
+                {
+                    try
+                    {
+                        if (WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                        {
+                            SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("WareHouseListFile", "仓库列表文件") + "（*.whp）|*.whp";
+                            sfdSaveFile.RestoreDirectory = true;
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveFile.FileName = FileName;
+                            }
+
+                            if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveFile.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportWareHouseList", "导出仓库列表"));
+
+                                    if (WareHouseConfig.List.SaveWareHouseList(FilePath, whiList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportWareHouseList.Success", "导出仓库列表成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(SaveWareHouseList_Dialog), Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportWareHouseList.Error", "导出仓库列表失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveWareHouseList_Dialog), ex);
+                    }
+                }
+
+                private static bool SaveWareHouseList(string FilePath, List<WareHouseInfo> whiList, bool DoEncrypt, string Password)
+                {
+                    try
+                    {
+                        XDocument xdoc = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+
+                        XElement xeRoot = WareHouseConfig.List.GetWareHouseList_XML(whiList);
+                        if (xeRoot == null)
+                        {
+                            return false;
+                        }
+
+                        xdoc.Add(xeRoot);
+                        xdoc.Save(FilePath);
+
+                        if (DoEncrypt)
+                        {
+                            if (!string.IsNullOrEmpty(Password))
+                            {
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveWareHouseList), ex);
+                    }
+
+                    return false;
+                }
+
+                public static XElement GetWareHouseList_XML(List<WareHouseInfo> whiList)
+                {
+                    try
+                    {
+                        XElement xeRoot = new XElement("WareHouseList");
+
+                        if (whiList == null)
+                        {
+                            whiList = Operate.WareHouseConfig.List.lstWareHouseInfo.ToList();
+                        }
+
+                        foreach (WareHouseInfo whi in whiList)
+                        {
+                            XElement xeWareHouse =
+                                new XElement("WareHouse",
+                                new XElement("ID", whi.WID.ToString().ToUpper()),
+                                new XElement("Name", whi.WName)
+                                );
+
+                            if (whi.Stores.Count > 0)
+                            {
+                                XElement xeStores = new XElement("Stores");
+
+                                foreach (DataInfo di in whi.Stores)
+                                {
+                                    XElement xeData =
+                                        new XElement("Data",
+                                        new XElement("PacketData", Operate.SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, di.PacketBuffer))
+                                        );
+
+                                    xeStores.Add(xeData);
+                                }
+
+                                xeWareHouse.Add(xeStores);
+                            }
+
+                            xeRoot.Add(xeWareHouse);
+                        }
+
+                        return xeRoot;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetWareHouseList_XML), ex);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//从文件加载仓库列表（对话框）
+
+                public static void LoadWareHouseList_Dialog(Form form)
+                {
+                    try
+                    {
+                        OpenFileDialog ofdLoadFile = new OpenFileDialog();
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("WareHouseListFile", "仓库列表文件") + "（*.whp）|*.whp";
+                        ofdLoadFile.RestoreDirectory = true;
+
+                        if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                        {
+                            string FilePath = ofdLoadFile.FileName;
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                if (WareHouseConfig.List.LoadWareHouseList(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("ImportWareHouseList.Success", "导入仓库列表成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(nameof(LoadWareHouseList_Dialog), Title + ": " + FilePath);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadWareHouseList_Dialog), ex);
+                    }
+                }
+
+                private static bool LoadWareHouseList(Form form, string FilePath, bool LoadFromUser)
+                {
+                    try
+                    {
+                        if (File.Exists(FilePath))
+                        {
+                            XDocument xdoc = null;
+
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
+                            if (bEncrypt)
+                            {
+                                if (LoadFromUser)
+                                {
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportWareHouseList", "导入仓库列表"), FilePath);
+                                }
+                            }
+                            else
+                            {
+                                xdoc = XDocument.Load(FilePath);
+                            }
+
+                            if (xdoc == null)
+                            {
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
+                                if (LoadFromUser)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
+                                }
+                                else
+                                {
+                                    Operate.DoLog(nameof(LoadWareHouseList), sError);
+                                }
+
+                                return false;
+                            }
+
+                            WareHouseConfig.List.LoadWareHouseList_FromXDocument(xdoc);
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadWareHouseList), ex);
+                    }
+
+                    return false;
+                }
+
+                public static void LoadWareHouseList_FromXDocument(XDocument xdoc)
+                {
+                    try
+                    {
+                        foreach (XElement xeWareHouse in xdoc.Root.Elements())
+                        {
+                            Guid WID = Guid.Empty;
+                            if (xeWareHouse.Element("ID") == null || !Guid.TryParse(xeWareHouse.Element("ID").Value, out WID) || WareHouseConfig.WareHouse.GetWareHouse_ByGuid(WID) != null)
+                            {
+                                WID = Guid.NewGuid();
+                            }
+
+                            string WName = string.Empty;
+                            if (xeWareHouse.Element("Name") != null)
+                            {
+                                WName = xeWareHouse.Element("Name").Value;
+                            }
+
+                            BindingList<DataInfo> Stores = new BindingList<DataInfo>();
+
+                            if (xeWareHouse.Element("Stores") != null)
+                            {
+                                foreach (XElement xeData in xeWareHouse.Element("Stores").Elements())
+                                {
+                                    string PacketData = string.Empty;
+                                    if (xeData.Element("PacketData") != null)
+                                    {
+                                        PacketData = xeData.Element("PacketData").Value;
+                                    }
+
+                                    WareHouseConfig.WareHouse.AddStores(Stores, Operate.SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, PacketData));
+                                }
+                            }
+
+                            WareHouseConfig.WareHouse.AddWareHouse(WID, WName, Stores);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadWareHouseList_FromXDocument), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//保存自动入库到文件（对话框）
+
+                public static void SaveAutoStores_Dialog(Form form, string FileName, BindingList<AutoStoresInfo> asiList)
+                {
+                    try
+                    {
+                        if (WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
+                        {
+                            SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("AutoStoresFile", "自动入库文件") + "（*.pas）|*.pas";
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveFile.FileName = FileName;
+                            }
+
+                            sfdSaveFile.RestoreDirectory = true;
+                            if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveFile.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportAutoStores", "导出自动入库"));
+
+                                    if (WareHouseConfig.List.SaveAutoStores(FilePath, asiList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportAutoStores.Success", "导出自动入库成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(SaveAutoStores_Dialog), Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportAutoStores.Error", "导出自动入库失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveAutoStores_Dialog), ex);
+                    }
+                }
+
+                private static bool SaveAutoStores(string FilePath, BindingList<AutoStoresInfo> asiList, bool DoEncrypt, string Password)
+                {
+                    try
+                    {
+                        XDocument xdoc = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+
+                        XElement xeAutoStores = WareHouseConfig.List.GetAutoStores_XML(asiList);
+                        if (xeAutoStores == null)
+                        {
+                            return false;
+                        }
+
+                        xdoc.Add(xeAutoStores);
+                        xdoc.Save(FilePath);
+
+                        if (DoEncrypt)
+                        {
+                            if (!string.IsNullOrEmpty(Password))
+                            {
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveAutoStores), ex);
+                    }
+
+                    return false;
+                }
+
+                public static XElement GetAutoStores_XML(BindingList<AutoStoresInfo> asiList)
+                {
+                    try
+                    {
+                        XElement xeAutoStores = new XElement("AutoStores");
+
+                        foreach (AutoStoresInfo asi in asiList)
+                        {
+                            XElement xeRule =
+                                new XElement("Rule",
+                                new XElement("IsEnable", asi.IsEnable),
+                                new XElement("PacketHead", asi.PacketHead),
+                                new XElement("WID", asi.WID.ToString().ToUpper())
+                                );
+
+                            xeAutoStores.Add(xeRule);
+                        }
+
+                        return xeAutoStores;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetAutoStores_XML), ex);
+                    }
+
+                    return null;
+                }
+
+                #endregion
+
+                #region//从文件加载自动入库（对话框）
+
+                public static void LoadAutoStores_Dialog(Form form)
+                {
+                    try
+                    {
+                        OpenFileDialog ofdLoadFile = new OpenFileDialog();
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("AutoStoresFile", "自动入库文件") + "（*.pas）|*.pas";
+                        ofdLoadFile.RestoreDirectory = true;
+
+                        if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                        {
+                            string FilePath = ofdLoadFile.FileName;
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                if (WareHouseConfig.List.LoadAutoStores(form, FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("ImportAutoStores.Success", "导入自动入库成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(nameof(LoadAutoStores_Dialog), Title + ": " + FilePath);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadAutoStores_Dialog), ex);
+                    }
+                }
+
+                private static bool LoadAutoStores(Form form, string FilePath, bool LoadFromUser)
+                {
+                    try
+                    {
+                        if (File.Exists(FilePath))
+                        {
+                            XDocument xdoc = null;
+
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
+                            if (bEncrypt)
+                            {
+                                if (LoadFromUser)
+                                {
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportAutoStores", "导入自动入库"), FilePath);
+                                }
+                            }
+                            else
+                            {
+                                xdoc = XDocument.Load(FilePath);
+                            }
+
+                            if (xdoc == null)
+                            {
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
+                                if (LoadFromUser)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
+                                }
+                                else
+                                {
+                                    Operate.DoLog(nameof(LoadAutoStores), sError);
+                                }
+
+                                return false;
+                            }
+
+                            WareHouseConfig.List.LoadAutoStores_FromXDocument(xdoc);
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadAutoStores), ex);
+                    }
+
+                    return false;
+                }
+
+                public static void LoadAutoStores_FromXDocument(XDocument xdoc)
+                {
+                    try
+                    {
+                        foreach (XElement xeAutoStores in xdoc.Root.Elements())
+                        {
+                            bool IsEnable = false;
+                            if (xeAutoStores.Element("IsEnable") != null)
+                            {
+                                IsEnable = bool.Parse(xeAutoStores.Element("IsEnable").Value);
+                            }
+
+                            string PacketHead = string.Empty;
+                            if (xeAutoStores.Element("PacketHead") != null)
+                            {
+                                PacketHead = xeAutoStores.Element("PacketHead").Value;
+                            }
+
+                            Guid WID = Guid.Empty;
+                            if (xeAutoStores.Element("WID") != null)
+                            {
+                                Guid.TryParse(xeAutoStores.Element("WID").Value, out WID);
+                            }
+
+                            WareHouseConfig.WareHouse.AddAutoStores(IsEnable, PacketHead, WID);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadAutoStores_FromXDocument), ex);
+                    }
+                }
+
+                #endregion
+
+            }
         }
 
         #endregion
