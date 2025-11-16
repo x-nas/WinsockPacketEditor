@@ -505,18 +505,18 @@ namespace WinsockPacketEditor
                     LocalizationText = "Bottom",
                 });
                 menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
-                menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
-                {
-                    ID = "Copy",
-                    IconSvg = "CopyOutlined",
-                    LocalizationText = "Copy",
-                });
-                menuItems.Add(new AntdUI.ContextMenuStripItem("导出到文件")
+                menuItems.Add(new AntdUI.ContextMenuStripItem("导出")
                 {
                     ID = "Export",
                     IconSvg = "DeliveredProcedureOutlined",
                     LocalizationText = "Export",
                 });
+                menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
+                {
+                    ID = "Copy",
+                    IconSvg = "CopyOutlined",
+                    LocalizationText = "Copy",
+                });                
                 menuItems.Add(new AntdUI.ContextMenuStripItem("删除")
                 {
                     ID = "Delete",
@@ -1896,7 +1896,7 @@ namespace WinsockPacketEditor
                             break;
 
                         case Operate.PacketConfig.Packet.EncodingFormat.Hex:
-                            bReturn = SystemConfig.Hex_To_Bytes(sString);
+                            bReturn = SystemConfig.HexToBytes(sString.AsSpan());
                             break;
 
                         case Operate.PacketConfig.Packet.EncodingFormat.GBK:
@@ -1935,6 +1935,31 @@ namespace WinsockPacketEditor
             #endregion
 
             #region//byte[]转字符串
+
+            private static readonly char[] HexChars = 
+            {
+                '0', '1', '2', '3', '4', '5', '6', '7',
+                '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+            };
+
+            public static string ToHexString(ReadOnlySpan<byte> buffer)
+            {
+                if (buffer.IsEmpty) return string.Empty;
+
+                char[] chars = new char[buffer.Length * 3 - 1];
+                int charIndex = 0;
+
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    if (i > 0) chars[charIndex++] = ' ';
+
+                    byte b = buffer[i];
+                    chars[charIndex++] = HexChars[(b >> 4) & 0x0F];
+                    chars[charIndex++] = HexChars[b & 0x0F];
+                }
+
+                return new string(chars);
+            }
 
             public static string BytesToString(Operate.PacketConfig.Packet.EncodingFormat efFormat, ReadOnlySpan<byte> buffer)
             {
@@ -2034,12 +2059,7 @@ namespace WinsockPacketEditor
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.Hex:
-                                StringBuilder sbHex = new StringBuilder();
-                                foreach (byte b in buffer)
-                                {
-                                    sbHex.Append(b.ToString("X2")).Append(" ");
-                                }
-                                sReturn = sbHex.ToString().Trim();
+                                sReturn = Operate.SystemConfig.ToHexString(buffer);
                                 break;
 
                             case Operate.PacketConfig.Packet.EncodingFormat.GBK:
@@ -2084,33 +2104,52 @@ namespace WinsockPacketEditor
 
             #region//十六进制字符串转byte[]
 
-            private static byte[] Hex_To_Bytes(string hexString)
+            public static byte[] HexToBytes(ReadOnlySpan<char> hexString)
             {
-                try
-                {
-                    hexString = hexString.Replace(" ", "").Replace("-", "").Replace(":", "");
-
-                    if (string.IsNullOrEmpty(hexString) || hexString.Length % 2 != 0)
-                    {
-                        return Array.Empty<byte>();
-                    }
-
-                    byte[] returnBytes = new byte[hexString.Length / 2];
-                    ReadOnlySpan<char> hexSpan = hexString.AsSpan();
-
-                    for (int i = 0; i < returnBytes.Length; i++)
-                    {
-                        int index = i * 2;
-                        string byteStr = hexSpan.Slice(index, 2).ToString();
-                        returnBytes[i] = Convert.ToByte(byteStr, 16);
-                    }
-
-                    return returnBytes;
-                }
-                catch
-                {
+                if (hexString.IsEmpty)
                     return Array.Empty<byte>();
+
+                Span<char> clean = stackalloc char[hexString.Length];
+                int cleanIndex = 0;
+
+                foreach (char c in hexString)
+                {
+                    if (c != ' ' && c != '-' && c != ':')
+                    {
+                        clean[cleanIndex++] = c;
+                    }
                 }
+
+                if (cleanIndex == 0 || cleanIndex % 2 != 0)
+                    return Array.Empty<byte>();
+
+                byte[] returnBytes = new byte[cleanIndex / 2];
+
+                for (int i = 0; i < returnBytes.Length; i++)
+                {
+                    int index = i * 2;
+                    byte high = SystemConfig.CharToByte(clean[index]);
+                    byte low = SystemConfig.CharToByte(clean[index + 1]);
+
+                    if (high == 0xFF || low == 0xFF)
+                        return Array.Empty<byte>();
+
+                    returnBytes[i] = (byte)((high << 4) | low);
+                }
+
+                return returnBytes;
+            }
+
+            private static byte CharToByte(char c)
+            {
+                if (c >= '0' && c <= '9')
+                    return (byte)(c - '0');
+                else if (c >= 'A' && c <= 'F')
+                    return (byte)(c - 'A' + 10);
+                else if (c >= 'a' && c <= 'f')
+                    return (byte)(c - 'a' + 10);
+                else
+                    return 0xFF;
             }
 
             #endregion
@@ -20448,6 +20487,8 @@ namespace WinsockPacketEditor
 
         public static class WareHouseConfig
         {
+            #region//仓库
+
             public static class WareHouse
             {
                 public static bool Enable_AutoStores = false;
@@ -20614,7 +20655,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        DataInfo di = new DataInfo(PacketBuffer);
+                        DataInfo di = new DataInfo(false, PacketBuffer, PacketBuffer.Length);
                         Stores.Add(di);
                     }
                     catch (Exception ex)
@@ -20709,6 +20750,10 @@ namespace WinsockPacketEditor
 
                 #endregion
             }
+
+            #endregion
+
+            #region//仓库列表
 
             public static class List
             {
@@ -20868,6 +20913,127 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(UpdateWareHouseList_ByListAction), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//仓储数据的列表操作
+
+                public static void UpdateStores_ByListAction(Form form, BindingList<DataInfo> Stores, SystemConfig.ListAction listAction, List<DataInfo> diList)
+                {
+                    try
+                    {
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                foreach (DataInfo di in diList)
+                                {
+                                    Stores.Remove(di);
+                                    Stores.Insert(0, di);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                foreach (DataInfo di in diList)
+                                {
+                                    int iIndex = Stores.IndexOf(di);
+                                    if (iIndex > 0)
+                                    {
+                                        Stores.Remove(di);
+                                        Stores.Insert(iIndex - 1, di);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                foreach (DataInfo di in diList)
+                                {
+                                    int iIndex = Stores.IndexOf(di);
+                                    if (iIndex > -1 && iIndex < Stores.Count - 1)
+                                    {
+                                        Stores.Remove(di);
+                                        Stores.Insert(iIndex + 1, di);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                foreach (DataInfo di in diList)
+                                {
+                                    Stores.Remove(di);
+                                    Stores.Add(di);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Copy:
+
+                                foreach (DataInfo di in diList)
+                                {
+                                    WareHouseConfig.WareHouse.AddStores(Stores, di.PacketBuffer);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Delete:
+
+                                foreach (DataInfo di in diList)
+                                {
+                                    Stores.Remove(di);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Export:
+
+                                if (diList != null)
+                                {
+                                    WareHouseConfig.List.SaveStores_Dialog(form, string.Empty, diList);
+                                }
+                                else
+                                {
+                                    WareHouseConfig.List.SaveStores_Dialog(form, string.Empty, Stores.ToList());
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Import:
+
+                                WareHouseConfig.List.LoadStores_Dialog(form, Stores);
+
+                                break;
+
+                            case SystemConfig.ListAction.CleanUp:
+
+                                if (Stores.Count > 0)
+                                {
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("Stores", "仓储数据"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                                    {
+                                        Icon = TType.Warn,
+                                        Keyboard = false,
+                                        MaskClosable = false,
+                                        OnOk = config =>
+                                        {
+                                            Stores.Clear();
+                                            return true;
+                                        }
+                                    });
+                                }
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateStores_ByListAction), ex);
                     }
                 }
 
@@ -21219,13 +21385,10 @@ namespace WinsockPacketEditor
                             {
                                 foreach (XElement xeData in xeWareHouse.Element("Stores").Elements())
                                 {
-                                    string PacketData = string.Empty;
                                     if (xeData.Element("PacketData") != null)
                                     {
-                                        PacketData = xeData.Element("PacketData").Value;
+                                        WareHouseConfig.WareHouse.AddStores(Stores, Operate.SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, xeData.Element("PacketData").Value));
                                     }
-
-                                    WareHouseConfig.WareHouse.AddStores(Stores, Operate.SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, PacketData));
                                 }
                             }
 
@@ -21235,6 +21398,223 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(LoadWareHouseList_FromXDocument), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//保存仓储数据到文件（对话框）
+
+                public static void SaveStores_Dialog(Form form, string FileName, List<DataInfo> diList)
+                {
+                    try
+                    {
+                        if (diList.Count > 0)
+                        {
+                            SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("StoresFile", "仓储数据文件") + "（*.whs）|*.whs";
+
+                            if (!string.IsNullOrEmpty(FileName))
+                            {
+                                sfdSaveFile.FileName = FileName;
+                            }
+
+                            sfdSaveFile.RestoreDirectory = true;
+                            if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                            {
+                                string FilePath = sfdSaveFile.FileName;
+                                if (!string.IsNullOrEmpty(FilePath))
+                                {
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportStores", "导出仓储数据"));
+
+                                    if (Operate.WareHouseConfig.List.SaveStores(FilePath, diList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportStores.Success", "导出仓储数据成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(SaveStores_Dialog), Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportStores.Error", "导出仓储数据失败");
+                                        string Content = AntdUI.Localization.Get("CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveStores_Dialog), ex);
+                    }
+                }
+
+                public static bool SaveStores(string FilePath, List<DataInfo> diList, bool DoEncrypt, string Password)
+                {
+                    try
+                    {
+                        Operate.WareHouseConfig.List.SaveStores_ToXDocument(FilePath, diList);
+
+                        if (DoEncrypt)
+                        {
+                            if (!string.IsNullOrEmpty(Password))
+                            {
+                                SystemConfig.EncryptXMLFile(FilePath, Password);
+                            }
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveStores), ex);
+                    }
+
+                    return false;
+                }
+
+                private static void SaveStores_ToXDocument(string FilePath, List<DataInfo> diList)
+                {
+                    try
+                    {
+                        XDocument xdoc = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+
+                        XElement xeRoot = new XElement("Stores");
+                        xdoc.Add(xeRoot);
+
+                        foreach (DataInfo di in diList)
+                        {
+                            string PacketData = Operate.SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, di.PacketBuffer);
+
+                            XElement xeData =
+                                new XElement("Data",
+                                new XElement("PacketData", PacketData));
+
+                            xeRoot.Add(xeData);
+                        }
+
+                        xdoc.Save(FilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveStores_ToXDocument), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//从文件加载仓储数据（对话框）
+
+                public static void LoadStores_Dialog(Form form, BindingList<DataInfo> diList)
+                {
+                    try
+                    {
+                        OpenFileDialog ofdLoadFile = new OpenFileDialog();
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("StoresFile", "仓储数据文件") + "（*.whs）|*.whs";
+                        ofdLoadFile.RestoreDirectory = true;
+
+                        if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                        {
+                            string FilePath = ofdLoadFile.FileName;
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                bool bOK = false;
+                               
+                                AntdUI.Spin.open(form, new AntdUI.Spin.Config()
+                                {
+                                    Radius = 6,
+                                    Font = new Font("Microsoft YaHei UI", 9F),
+                                }, (config) =>
+                                {
+                                    config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+                                    bOK = WareHouseConfig.List.LoadStores(form, FilePath, diList, true);
+                                }, () =>
+                                {
+                                    if (bOK)
+                                    {
+                                        string Title = AntdUI.Localization.Get("ImportStores.Success", "导入仓储数据成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(nameof(LoadStores_Dialog), Title + ": " + FilePath);
+                                    }
+                                });                                
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadStores_Dialog), ex);
+                    }
+                }
+
+                public static bool LoadStores(Form form, string FilePath, BindingList<DataInfo> diList, bool LoadFromUser)
+                {
+                    try
+                    {
+                        if (File.Exists(FilePath))
+                        {
+                            XDocument xdoc = null;
+
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
+                            if (bEncrypt)
+                            {
+                                if (LoadFromUser)
+                                {
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportStores", "导入仓储数据"), FilePath);
+                                }
+                            }
+                            else
+                            {
+                                xdoc = XDocument.Load(FilePath);
+                            }
+
+                            if (xdoc == null)
+                            {
+                                string sError = AntdUI.Localization.Get("Password.Incorrect", "导入失败: 密码错误");
+                                if (LoadFromUser)
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(form, sError, TType.Error));
+                                }
+                                else
+                                {
+                                    Operate.DoLog(nameof(LoadStores), sError);
+                                }
+
+                                return false;
+                            }
+
+                            WareHouseConfig.List.LoadStores_FromXDocument(xdoc, diList);
+
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadStores), ex);
+                    }
+
+                    return false;
+                }
+
+                private static void LoadStores_FromXDocument(XDocument xdoc, BindingList<DataInfo> diList)
+                {
+                    try
+                    {
+                        XElement xeRoot = xdoc.Root;
+
+                        foreach (XElement xeData in xeRoot.Elements())
+                        {
+                            if (xeData.Element("PacketData") != null)
+                            {
+                                WareHouseConfig.WareHouse.AddStores(diList, Operate.SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.Hex, xeData.Element("PacketData").Value));
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadStores_FromXDocument), ex);
                     }
                 }
 
@@ -21464,8 +21844,9 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion
-
             }
+
+            #endregion
         }
 
         #endregion

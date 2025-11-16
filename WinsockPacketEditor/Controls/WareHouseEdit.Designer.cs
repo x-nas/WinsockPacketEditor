@@ -73,19 +73,20 @@
             this.tStores.Gaps = new System.Drawing.Size(10, 10);
             this.tStores.Location = new System.Drawing.Point(2, 47);
             this.tStores.Margin = new System.Windows.Forms.Padding(2);
-            this.tStores.MultipleRows = true;
             this.tStores.Name = "tStores";
             this.tStores.Size = new System.Drawing.Size(1096, 601);
             this.tStores.TabIndex = 19;
+            this.tStores.VirtualMode = true;
+            this.tStores.CellClick += new AntdUI.Table.ClickEventHandler(this.tStores_CellClick);
             // 
             // tlpWareHouseEditInfo
             // 
-            this.tlpWareHouseEditInfo.ColumnCount = 4;
+            this.tlpWareHouseEditInfo.ColumnCount = 3;
             this.tlpWareHouseEditInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpWareHouseEditInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tlpWareHouseEditInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpWareHouseEditInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpWareHouseEditInfo.Controls.Add(this.ddMenu, 3, 0);
+            this.tlpWareHouseEditInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpWareHouseEditInfo.Controls.Add(this.ddMenu, 2, 0);
             this.tlpWareHouseEditInfo.Controls.Add(this.lWName, 0, 0);
             this.tlpWareHouseEditInfo.Controls.Add(this.txtWName, 1, 0);
             this.tlpWareHouseEditInfo.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -116,6 +117,7 @@
             this.ddMenu.TabIndex = 18;
             this.ddMenu.Trigger = AntdUI.Trigger.Hover;
             this.ddMenu.WaveSize = 0;
+            this.ddMenu.SelectedValueChanged += new AntdUI.ObjectNEventHandler(this.ddMenu_SelectedValueChanged);
             // 
             // lWName
             // 
@@ -132,8 +134,9 @@
             this.txtWName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtWName.Location = new System.Drawing.Point(63, 2);
             this.txtWName.Margin = new System.Windows.Forms.Padding(2);
+            this.txtWName.MaxLength = 100;
             this.txtWName.Name = "txtWName";
-            this.txtWName.Size = new System.Drawing.Size(296, 37);
+            this.txtWName.Size = new System.Drawing.Size(999, 37);
             this.txtWName.TabIndex = 20;
             // 
             // tlpButton

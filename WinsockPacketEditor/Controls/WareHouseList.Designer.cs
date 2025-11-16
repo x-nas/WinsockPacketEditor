@@ -69,6 +69,7 @@
             this.tWareHouseList.Size = new System.Drawing.Size(1096, 656);
             this.tWareHouseList.SwitchSize = 12;
             this.tWareHouseList.TabIndex = 1;
+            this.tWareHouseList.CellClick += new AntdUI.Table.ClickEventHandler(this.tWareHouseList_CellClick);
             this.tWareHouseList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tWareHouseList_CellButtonClick);
             this.tWareHouseList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tWareHouseList_CellDoubleClick);
             // 

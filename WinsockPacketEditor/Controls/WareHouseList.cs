@@ -29,7 +29,7 @@ namespace WinsockPacketEditor
             tWareHouseList.Columns = new AntdUI.ColumnCollection
             {
                 new AntdUI.Column("WName", "仓库名称").SetLocalizationTitleID("Table.WareHouseList.Column."),
-                new AntdUI.Column("Stores", "封包数量", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("Stores", "仓储数量", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -199,8 +199,97 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        
+        #region//仓库列表 - 右键菜单
 
-        
+        private void tWareHouseList_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tWareHouseList, (item) =>
+                {
+                    List<WareHouseInfo> whiList = new List<WareHouseInfo>();
+                    foreach (int SelectIndex in this.tWareHouseList.SelectedIndexs)
+                    {
+                        whiList.Add(Operate.WareHouseConfig.List.lstWareHouseInfo[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "Top":
+
+                            if (whiList.Count > 0)
+                            {
+                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, whiList);
+                            }
+
+                            break;
+
+                        case "Up":
+
+                            if (whiList.Count > 0)
+                            {
+                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, whiList);
+                            }
+
+                            break;
+
+                        case "Down":
+
+                            if (whiList.Count > 0)
+                            {
+                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, whiList);
+                            }
+
+                            break;
+
+                        case "Bottom":
+
+                            if (whiList.Count > 0)
+                            {
+                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, whiList);
+                            }
+
+                            break;
+
+                        case "Copy":
+
+                            if (whiList.Count > 0)
+                            {
+                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, whiList);
+                                this.tWareHouseList.ScrollBar.ValueY = tWareHouseList.ScrollBar.MaxY;
+                            }
+
+                            break;
+
+                        case "Export":
+
+                            if (whiList.Count > 0)
+                            {
+                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, whiList);
+                            }
+
+                            break;
+
+                        case "Delete":
+
+                            if (whiList.Count > 0)
+                            {
+                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, whiList);
+                            }
+
+                            break;
+                    }
+
+                    this.tWareHouseList.SelectedIndex = -1;
+                }, Operate.SystemConfig.GetCMS_List()));
+            }
+        }
+
+        #endregion
     }
 }
