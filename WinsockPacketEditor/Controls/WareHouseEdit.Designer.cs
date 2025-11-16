@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.tlpWareHouseEdit = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.tStores = new AntdUI.Table();
             this.tlpWareHouseEditInfo = new WinsockPacketEditor.TableLayoutPanelEx();
             this.ddMenu = new AntdUI.Dropdown();
             this.lWName = new AntdUI.Label();
@@ -37,18 +36,25 @@
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
+            this.splitterPacketData = new AntdUI.Splitter();
+            this.tStores = new AntdUI.Table();
+            this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.tlpWareHouseEdit.SuspendLayout();
             this.tlpWareHouseEditInfo.SuspendLayout();
             this.tlpButton.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitterPacketData)).BeginInit();
+            this.splitterPacketData.Panel1.SuspendLayout();
+            this.splitterPacketData.Panel2.SuspendLayout();
+            this.splitterPacketData.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpWareHouseEdit
             // 
             this.tlpWareHouseEdit.ColumnCount = 1;
             this.tlpWareHouseEdit.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpWareHouseEdit.Controls.Add(this.tStores, 0, 1);
             this.tlpWareHouseEdit.Controls.Add(this.tlpWareHouseEditInfo, 0, 0);
             this.tlpWareHouseEdit.Controls.Add(this.tlpButton, 0, 2);
+            this.tlpWareHouseEdit.Controls.Add(this.splitterPacketData, 0, 1);
             this.tlpWareHouseEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpWareHouseEdit.Location = new System.Drawing.Point(0, 0);
             this.tlpWareHouseEdit.Margin = new System.Windows.Forms.Padding(0);
@@ -59,25 +65,6 @@
             this.tlpWareHouseEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpWareHouseEdit.Size = new System.Drawing.Size(1100, 700);
             this.tlpWareHouseEdit.TabIndex = 0;
-            // 
-            // tStores
-            // 
-            this.tStores.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tStores.Bordered = true;
-            this.tStores.CellImpactHeight = false;
-            this.tStores.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tStores.EmptyHeader = true;
-            this.tStores.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tStores.Gap = 10;
-            this.tStores.GapCell = 5;
-            this.tStores.Gaps = new System.Drawing.Size(10, 10);
-            this.tStores.Location = new System.Drawing.Point(2, 47);
-            this.tStores.Margin = new System.Windows.Forms.Padding(2);
-            this.tStores.Name = "tStores";
-            this.tStores.Size = new System.Drawing.Size(1096, 601);
-            this.tStores.TabIndex = 19;
-            this.tStores.VirtualMode = true;
-            this.tStores.CellClick += new AntdUI.Table.ClickEventHandler(this.tStores_CellClick);
             // 
             // tlpWareHouseEditInfo
             // 
@@ -153,10 +140,10 @@
             this.tlpButton.Location = new System.Drawing.Point(0, 650);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
-            this.tlpButton.RowCount = 3;
-            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.RowCount = 2;
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpButton.Size = new System.Drawing.Size(1100, 50);
             this.tlpButton.TabIndex = 17;
             // 
@@ -167,7 +154,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(478, 6);
+            this.bSave.Location = new System.Drawing.Point(478, 11);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -183,7 +170,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(559, 6);
+            this.bExit.Location = new System.Drawing.Point(559, 11);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -191,6 +178,67 @@
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
+            // 
+            // splitterPacketData
+            // 
+            this.splitterPacketData.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel1;
+            this.splitterPacketData.Cursor = System.Windows.Forms.Cursors.Default;
+            this.splitterPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitterPacketData.Location = new System.Drawing.Point(0, 45);
+            this.splitterPacketData.Margin = new System.Windows.Forms.Padding(0);
+            this.splitterPacketData.Name = "splitterPacketData";
+            this.splitterPacketData.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitterPacketData.Panel1
+            // 
+            this.splitterPacketData.Panel1.Controls.Add(this.tStores);
+            this.splitterPacketData.Panel1MinSize = 0;
+            // 
+            // splitterPacketData.Panel2
+            // 
+            this.splitterPacketData.Panel2.Controls.Add(this.hbPacketData);
+            this.splitterPacketData.Panel2.Padding = new System.Windows.Forms.Padding(3);
+            this.splitterPacketData.Panel2MinSize = 0;
+            this.splitterPacketData.Size = new System.Drawing.Size(1100, 605);
+            this.splitterPacketData.SplitterDistance = 446;
+            this.splitterPacketData.SplitterSize = 80;
+            this.splitterPacketData.SplitterWidth = 5;
+            this.splitterPacketData.TabIndex = 19;
+            // 
+            // tStores
+            // 
+            this.tStores.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tStores.CellImpactHeight = false;
+            this.tStores.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tStores.EmptyHeader = true;
+            this.tStores.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tStores.Gap = 10;
+            this.tStores.GapCell = 5;
+            this.tStores.Gaps = new System.Drawing.Size(10, 10);
+            this.tStores.Location = new System.Drawing.Point(0, 0);
+            this.tStores.Name = "tStores";
+            this.tStores.Size = new System.Drawing.Size(1100, 446);
+            this.tStores.TabIndex = 20;
+            this.tStores.VirtualMode = true;
+            this.tStores.CellClick += new AntdUI.Table.ClickEventHandler(this.tStores_CellClick);
+            this.tStores.SelectIndexChanged += new System.EventHandler(this.tStores_SelectIndexChanged);
+            // 
+            // hbPacketData
+            // 
+            this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.hbPacketData.ColumnInfoVisible = true;
+            this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbPacketData.LineInfoVisible = true;
+            this.hbPacketData.Location = new System.Drawing.Point(3, 3);
+            this.hbPacketData.Margin = new System.Windows.Forms.Padding(0);
+            this.hbPacketData.Name = "hbPacketData";
+            this.hbPacketData.ReadOnly = true;
+            this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbPacketData.Size = new System.Drawing.Size(1094, 148);
+            this.hbPacketData.StringViewVisible = true;
+            this.hbPacketData.TabIndex = 5;
+            this.hbPacketData.VScrollBarVisible = true;
             // 
             // WareHouseEdit
             // 
@@ -208,6 +256,10 @@
             this.tlpWareHouseEditInfo.PerformLayout();
             this.tlpButton.ResumeLayout(false);
             this.tlpButton.PerformLayout();
+            this.splitterPacketData.Panel1.ResumeLayout(false);
+            this.splitterPacketData.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitterPacketData)).EndInit();
+            this.splitterPacketData.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -222,6 +274,8 @@
         private AntdUI.Dropdown ddMenu;
         private AntdUI.Label lWName;
         private AntdUI.Input txtWName;
+        private AntdUI.Splitter splitterPacketData;
         private AntdUI.Table tStores;
+        private Be.Windows.Forms.HexBox hbPacketData;
     }
 }

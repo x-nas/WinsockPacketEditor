@@ -104,24 +104,34 @@ namespace WinsockPacketEditor
                 this.cbFilterAction_Execute.Checked = fiSelect.IsExecute;
                 this.FilterAction_ExecuteChange();
 
+                int iIndex = -1;
                 switch (fiSelect.FEType)
                 {
                     case Operate.FilterConfig.Filter.FilterExecuteType.Send:
-                        this.cbbFilterAction_ExecuteType.SelectedIndex = 0;
+                        iIndex = 0;
                         break;
 
                     case Operate.FilterConfig.Filter.FilterExecuteType.Robot:
-                        this.cbbFilterAction_ExecuteType.SelectedIndex = 1;
+                        iIndex = 1;
                         break;
 
                     case Operate.FilterConfig.Filter.FilterExecuteType.Filter:
-                        this.cbbFilterAction_ExecuteType.SelectedIndex = 2;
+                        iIndex = 2;
                         break;
 
-                    default:
-                        this.cbbFilterAction_ExecuteType.SelectedIndex = -1;
-                        break;
+                    case Operate.FilterConfig.Filter.FilterExecuteType.WareHouse:
+                        iIndex = 3;
+                        break;                    
                 }
+
+                if (iIndex > -1 && this.cbbFilterAction_ExecuteType.Items[iIndex] is SelectItem siItem)
+                {
+                    if (siItem.Enable)
+                    {
+                        this.cbbFilterAction_ExecuteType.SelectedIndex = iIndex;
+                    }
+                }
+
                 this.FilterAction_ExecuteTypeChanged();
 
                 this.cbFilter_AppointHeader.Checked = fiSelect.AppointHeader;
@@ -349,12 +359,18 @@ namespace WinsockPacketEditor
                     LocalizationText = "FilterList",
                 };
 
+                SelectItem siWareHouseList = new SelectItem("封包入库")
+                {
+                    LocalizationText = "ToWareHouse",
+                };
+
                 if (Operate.SendConfig.List.lstSendInfo.Count > 0)
                 {
                     siSendList.Online = 1;
                 }
                 else
                 {
+                    siSendList.Online = 0;
                     siSendList.Enable = false;
                 }
 
@@ -364,6 +380,7 @@ namespace WinsockPacketEditor
                 }
                 else
                 {
+                    siRobotList.Online = 0;
                     siRobotList.Enable = false;
                 }
 
@@ -373,12 +390,24 @@ namespace WinsockPacketEditor
                 }
                 else
                 {
+                    siFilterList.Online = 0;
                     siFilterList.Enable = false;
+                }
+
+                if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                {
+                    siWareHouseList.Online = 1;
+                }
+                else
+                {
+                    siWareHouseList.Online = 0;
+                    siWareHouseList.Enable = false;
                 }
 
                 this.cbbFilterAction_ExecuteType.Items.Add(siSendList);
                 this.cbbFilterAction_ExecuteType.Items.Add(siRobotList);
                 this.cbbFilterAction_ExecuteType.Items.Add(siFilterList);
+                this.cbbFilterAction_ExecuteType.Items.Add(siWareHouseList);
             }
             catch (Exception ex)
             {
@@ -725,6 +754,10 @@ namespace WinsockPacketEditor
                 else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 2)
                 {
                     Operate.SystemConfig.InitFilterInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID, this.fiSelect.FID);
+                }
+                else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 3)
+                {
+                    Operate.SystemConfig.InitWareHouseInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
                 }
             }
             catch (Exception ex)

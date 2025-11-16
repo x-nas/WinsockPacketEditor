@@ -14096,7 +14096,7 @@ namespace WinsockPacketEditor
                     if (SendConfig.List.lstSendInfo.Count > 0)
                     {
                         menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送")
-                        {
+                        {                            
                             ID = "ToSend",
                             IconSvg = "PlaySquareOutlined",
                             LocalizationText = "ToSend",
@@ -14106,7 +14106,7 @@ namespace WinsockPacketEditor
                     else
                     {
                         menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送")
-                        {
+                        {                            
                             Enabled = false,
                             ID = "ToSend",
                             IconSvg = "PlaySquareOutlined",
@@ -14386,6 +14386,7 @@ namespace WinsockPacketEditor
                     Robot,
                     None,
                     Filter,
+                    WareHouse,
                 }
 
                 public enum FilterStartFrom
@@ -15148,6 +15149,15 @@ namespace WinsockPacketEditor
                             if (sFilterExecuteInfo.SelectedValue != null)
                             {
                                 gGuid = ((FilterInfo)sFilterExecuteInfo.SelectedValue).FID;
+                            }
+                        }
+                        else if (sFilterExecuteType.SelectedIndex == 3)
+                        {
+                            feType = Operate.FilterConfig.Filter.FilterExecuteType.WareHouse;
+
+                            if (sFilterExecuteInfo.SelectedValue != null)
+                            {
+                                gGuid = ((WareHouseInfo)sFilterExecuteInfo.SelectedValue).WID;
                             }
                         }
                     }
@@ -15985,7 +15995,7 @@ namespace WinsockPacketEditor
                                 break;
                         }
 
-                        if (fi.IsExecute)
+                        if (fi.IsExecute && fi.Execute_GUID != null && fi.Execute_GUID != Guid.Empty)
                         {
                             switch (fi.FEType)
                             {
@@ -15994,23 +16004,47 @@ namespace WinsockPacketEditor
                                     SendConfig.Send.DoSend(fi.Execute_GUID);
 
                                     break;
+
                                 case FilterConfig.Filter.FilterExecuteType.Robot:
 
                                     Dictionary<string, object> parameters = new Dictionary<string, object>
-                                        {
-                                            { "FilterSocket", iSocket }
-                                        };
+                                    {
+                                        { 
+                                            "FilterSocket", 
+                                            iSocket 
+                                        }
+                                    };
 
                                     RobotConfig.Robot.DoRobot(fi.Execute_GUID, parameters);
+
                                     break;
 
-                                case Filter.FilterExecuteType.Filter:
+                                case FilterConfig.Filter.FilterExecuteType.Filter:
 
                                     FilterInfo fiExecute = FilterConfig.Filter.GetFilter_ByGuid(fi.Execute_GUID);
                                     FilterConfig.Filter.DoFilter(fiExecute, iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
 
                                     break;
+
+                                case FilterConfig.Filter.FilterExecuteType.WareHouse:
+
+                                    WareHouseInfo whi = WareHouseConfig.WareHouse.GetWareHouse_ByGuid(fi.Execute_GUID);
+                                    if (whi != null)
+                                    {
+                                        if (tempBuffer == null)
+                                        {
+                                            WareHouseConfig.WareHouse.AddStores(whi.Stores, bufferSpan.ToArray());
+                                        }
+                                        else
+                                        {
+                                            WareHouseConfig.WareHouse.AddStores(whi.Stores, tempBuffer);
+                                        }
+                                    }                                   
+
+                                    break;
                             }
+
+                            bDoFilter = true;
                         }
 
                         if (bDoFilter)
@@ -16040,6 +16074,7 @@ namespace WinsockPacketEditor
                                     Interlocked.Increment(ref FilterConfig.Filter.FilterNoDisplay_CNT);
                                     break;
                             }
+
                             Interlocked.Increment(ref FilterConfig.Filter.FilterExecute_CNT);
 
                             if (tempBuffer != null)

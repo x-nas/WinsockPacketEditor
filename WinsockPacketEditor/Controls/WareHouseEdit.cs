@@ -1,8 +1,10 @@
 ﻿using AntdUI;
+using Be.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -24,12 +26,18 @@ namespace WinsockPacketEditor
 
         private void WareHouseEdit_Load(object sender, System.EventArgs e)
         {
+            this.hbPacketData.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             this.txtWName.Text = this.whiSelect.WName;
             this.Stores = whiSelect.Stores;
 
             this.InitMenu();
             this.InitTable_Stores();
             this.Dark_Changed();
+
+            if (this.Stores.Count > 0)
+            { 
+                this.tStores.SelectedIndex = 1;
+            }
         }
 
         private void Dark_Changed()
@@ -39,12 +47,18 @@ namespace WinsockPacketEditor
                 this.tStores.ColumnBack = Operate.SystemConfig.Color_35;
                 this.tStores.ColumnFore = Color.Silver;
                 this.tStores.ForeColor = Color.LimeGreen;
+
+                this.hbPacketData.BackColor = Operate.SystemConfig.Color_40;
+                this.hbPacketData.ForeColor = Color.Silver;
             }
             else
             {
                 this.tStores.ColumnBack = null;
                 this.tStores.ColumnFore = Color.Black;
                 this.tStores.ForeColor = Color.Green;
+
+                this.hbPacketData.BackColor = Color.White;
+                this.hbPacketData.ForeColor = Color.Black;
             }
         }        
 
@@ -64,7 +78,7 @@ namespace WinsockPacketEditor
                 {
                     Render = (value, record, rowindex)=>
                     {
-                        return Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, (byte[])value);
+                        return Operate.PacketConfig.Packet.GetPacketData_Hex((byte[])value, Operate.PacketConfig.Packet.PacketData_MaxLen);
                     },
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
             };
@@ -234,6 +248,27 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//显示选中的封包数据
+
+        private void tStores_SelectIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int selectedIndex = this.tStores.SelectedIndex - 1;
+                if (selectedIndex >= 0 && selectedIndex < this.Stores.Count)
+                {
+                    DynamicByteProvider dbp = new DynamicByteProvider(this.Stores[selectedIndex].PacketBuffer);
+                    this.hbPacketData.ByteProvider = dbp;
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//保存
 
         private void bSave_Click(object sender, System.EventArgs e)
@@ -275,6 +310,6 @@ namespace WinsockPacketEditor
             this.Dispose();
         }
 
-        #endregion
+        #endregion        
     }
 }

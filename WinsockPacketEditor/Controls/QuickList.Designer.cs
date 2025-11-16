@@ -31,6 +31,12 @@
             AntdUI.Tabs.StyleCard styleCard1 = new AntdUI.Tabs.StyleCard();
             this.tlpQuickList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tabQuickList = new AntdUI.Tabs();
+            this.tpWareHouseList = new AntdUI.TabPage();
+            this.tlpWareHouseList = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tWareHouseList = new AntdUI.Table();
+            this.tlpWareHouseListButton = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.bWareHouseList_Add = new AntdUI.Button();
+            this.bWareHouseList_Delete = new AntdUI.Button();
             this.tpFilterList = new AntdUI.TabPage();
             this.tlpFilterList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tFilterList = new AntdUI.Table();
@@ -40,17 +46,6 @@
             this.bFilterList_EnableAll = new AntdUI.Button();
             this.bFilterList_Add = new AntdUI.Button();
             this.bFilterList_Delete = new AntdUI.Button();
-            this.tpRobotList = new AntdUI.TabPage();
-            this.tlpRobotList = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.tRobotList = new AntdUI.Table();
-            this.tlpRobotListButton = new WinsockPacketEditor.TableLayoutPanelEx();
-            this.bRobotList_Stop = new AntdUI.Button();
-            this.bRobotList_Execute = new AntdUI.Button();
-            this.bRobotList_ResetCount = new AntdUI.Button();
-            this.bRobotList_DisableAll = new AntdUI.Button();
-            this.bRobotList_EnableAll = new AntdUI.Button();
-            this.bRobotList_Add = new AntdUI.Button();
-            this.bRobotList_Delete = new AntdUI.Button();
             this.tpSendList = new AntdUI.TabPage();
             this.tlpSendList = new WinsockPacketEditor.TableLayoutPanelEx();
             this.tSendList = new AntdUI.Table();
@@ -62,17 +57,31 @@
             this.bSendList_EnableAll = new AntdUI.Button();
             this.bSendList_Add = new AntdUI.Button();
             this.bSendList_Delete = new AntdUI.Button();
+            this.tpRobotList = new AntdUI.TabPage();
+            this.tlpRobotList = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.tRobotList = new AntdUI.Table();
+            this.tlpRobotListButton = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.bRobotList_Stop = new AntdUI.Button();
+            this.bRobotList_Execute = new AntdUI.Button();
+            this.bRobotList_ResetCount = new AntdUI.Button();
+            this.bRobotList_DisableAll = new AntdUI.Button();
+            this.bRobotList_EnableAll = new AntdUI.Button();
+            this.bRobotList_Add = new AntdUI.Button();
+            this.bRobotList_Delete = new AntdUI.Button();
             this.tlpQuickList.SuspendLayout();
             this.tabQuickList.SuspendLayout();
+            this.tpWareHouseList.SuspendLayout();
+            this.tlpWareHouseList.SuspendLayout();
+            this.tlpWareHouseListButton.SuspendLayout();
             this.tpFilterList.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
             this.tlpFilterListButton.SuspendLayout();
-            this.tpRobotList.SuspendLayout();
-            this.tlpRobotList.SuspendLayout();
-            this.tlpRobotListButton.SuspendLayout();
             this.tpSendList.SuspendLayout();
             this.tlpSendList.SuspendLayout();
             this.tlpSendListButton.SuspendLayout();
+            this.tpRobotList.SuspendLayout();
+            this.tlpRobotList.SuspendLayout();
+            this.tlpRobotListButton.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpQuickList
@@ -92,9 +101,10 @@
             // 
             // tabQuickList
             // 
+            this.tabQuickList.Controls.Add(this.tpWareHouseList);
             this.tabQuickList.Controls.Add(this.tpRobotList);
-            this.tabQuickList.Controls.Add(this.tpSendList);
             this.tabQuickList.Controls.Add(this.tpFilterList);
+            this.tabQuickList.Controls.Add(this.tpSendList);
             this.tabQuickList.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabQuickList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabQuickList.Gap = 10;
@@ -104,11 +114,103 @@
             this.tabQuickList.Pages.Add(this.tpFilterList);
             this.tabQuickList.Pages.Add(this.tpSendList);
             this.tabQuickList.Pages.Add(this.tpRobotList);
-            this.tabQuickList.SelectedIndex = 2;
+            this.tabQuickList.Pages.Add(this.tpWareHouseList);
+            this.tabQuickList.SelectedIndex = 3;
             this.tabQuickList.Size = new System.Drawing.Size(500, 500);
             this.tabQuickList.Style = styleCard1;
             this.tabQuickList.TabIndex = 0;
             this.tabQuickList.Type = AntdUI.TabType.Card;
+            // 
+            // tpWareHouseList
+            // 
+            this.tpWareHouseList.Controls.Add(this.tlpWareHouseList);
+            this.tpWareHouseList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpWareHouseList.Location = new System.Drawing.Point(0, 26);
+            this.tpWareHouseList.Name = "tpWareHouseList";
+            this.tpWareHouseList.Showed = true;
+            this.tpWareHouseList.Size = new System.Drawing.Size(500, 474);
+            this.tpWareHouseList.TabIndex = 3;
+            this.tpWareHouseList.Text = "仓库";
+            // 
+            // tlpWareHouseList
+            // 
+            this.tlpWareHouseList.ColumnCount = 1;
+            this.tlpWareHouseList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpWareHouseList.Controls.Add(this.tWareHouseList, 0, 1);
+            this.tlpWareHouseList.Controls.Add(this.tlpWareHouseListButton, 0, 0);
+            this.tlpWareHouseList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpWareHouseList.Location = new System.Drawing.Point(0, 0);
+            this.tlpWareHouseList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpWareHouseList.Name = "tlpWareHouseList";
+            this.tlpWareHouseList.RowCount = 2;
+            this.tlpWareHouseList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tlpWareHouseList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpWareHouseList.Size = new System.Drawing.Size(500, 474);
+            this.tlpWareHouseList.TabIndex = 1;
+            // 
+            // tWareHouseList
+            // 
+            this.tWareHouseList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tWareHouseList.CellImpactHeight = false;
+            this.tWareHouseList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tWareHouseList.Gap = 8;
+            this.tWareHouseList.GapCell = 5;
+            this.tWareHouseList.Gaps = new System.Drawing.Size(8, 8);
+            this.tWareHouseList.Location = new System.Drawing.Point(0, 35);
+            this.tWareHouseList.Margin = new System.Windows.Forms.Padding(0);
+            this.tWareHouseList.MultipleRows = true;
+            this.tWareHouseList.Name = "tWareHouseList";
+            this.tWareHouseList.Size = new System.Drawing.Size(500, 439);
+            this.tWareHouseList.SwitchSize = 12;
+            this.tWareHouseList.TabIndex = 1;
+            this.tWareHouseList.VisibleHeader = false;
+            this.tWareHouseList.CellClick += new AntdUI.Table.ClickEventHandler(this.tWareHouseList_CellClick);
+            this.tWareHouseList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tWareHouseList_CellDoubleClick);
+            // 
+            // tlpWareHouseListButton
+            // 
+            this.tlpWareHouseListButton.ColumnCount = 2;
+            this.tlpWareHouseListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpWareHouseListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpWareHouseListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpWareHouseListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpWareHouseListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpWareHouseListButton.Controls.Add(this.bWareHouseList_Add, 0, 0);
+            this.tlpWareHouseListButton.Controls.Add(this.bWareHouseList_Delete, 1, 0);
+            this.tlpWareHouseListButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpWareHouseListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpWareHouseListButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpWareHouseListButton.Name = "tlpWareHouseListButton";
+            this.tlpWareHouseListButton.RowCount = 1;
+            this.tlpWareHouseListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpWareHouseListButton.Size = new System.Drawing.Size(500, 35);
+            this.tlpWareHouseListButton.TabIndex = 2;
+            // 
+            // bWareHouseList_Add
+            // 
+            this.bWareHouseList_Add.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bWareHouseList_Add.Ghost = true;
+            this.bWareHouseList_Add.IconRatio = 0.8F;
+            this.bWareHouseList_Add.IconSvg = "PlusOutlined";
+            this.bWareHouseList_Add.Location = new System.Drawing.Point(3, 3);
+            this.bWareHouseList_Add.Name = "bWareHouseList_Add";
+            this.bWareHouseList_Add.Size = new System.Drawing.Size(244, 29);
+            this.bWareHouseList_Add.TabIndex = 0;
+            this.bWareHouseList_Add.WaveSize = 0;
+            this.bWareHouseList_Add.Click += new System.EventHandler(this.bWareHouseList_Add_Click);
+            // 
+            // bWareHouseList_Delete
+            // 
+            this.bWareHouseList_Delete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bWareHouseList_Delete.Ghost = true;
+            this.bWareHouseList_Delete.IconRatio = 0.8F;
+            this.bWareHouseList_Delete.IconSvg = "DeleteOutlined";
+            this.bWareHouseList_Delete.Location = new System.Drawing.Point(253, 3);
+            this.bWareHouseList_Delete.Name = "bWareHouseList_Delete";
+            this.bWareHouseList_Delete.Size = new System.Drawing.Size(244, 29);
+            this.bWareHouseList_Delete.TabIndex = 1;
+            this.bWareHouseList_Delete.WaveSize = 0;
+            this.bWareHouseList_Delete.Click += new System.EventHandler(this.bWareHouseList_Delete_Click);
             // 
             // tpFilterList
             // 
@@ -243,169 +345,6 @@
             this.bFilterList_Delete.TabIndex = 1;
             this.bFilterList_Delete.WaveSize = 0;
             this.bFilterList_Delete.Click += new System.EventHandler(this.bFilterList_Delete_Click);
-            // 
-            // tpRobotList
-            // 
-            this.tpRobotList.Controls.Add(this.tlpRobotList);
-            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpRobotList.LocalizationText = "Robot";
-            this.tpRobotList.Location = new System.Drawing.Point(0, 26);
-            this.tpRobotList.Name = "tpRobotList";
-            this.tpRobotList.Size = new System.Drawing.Size(500, 474);
-            this.tpRobotList.TabIndex = 2;
-            this.tpRobotList.Text = "机器人";
-            // 
-            // tlpRobotList
-            // 
-            this.tlpRobotList.ColumnCount = 1;
-            this.tlpRobotList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRobotList.Controls.Add(this.tRobotList, 0, 1);
-            this.tlpRobotList.Controls.Add(this.tlpRobotListButton, 0, 0);
-            this.tlpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpRobotList.Location = new System.Drawing.Point(0, 0);
-            this.tlpRobotList.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpRobotList.Name = "tlpRobotList";
-            this.tlpRobotList.RowCount = 2;
-            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRobotList.Size = new System.Drawing.Size(500, 474);
-            this.tlpRobotList.TabIndex = 2;
-            // 
-            // tRobotList
-            // 
-            this.tRobotList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tRobotList.CellImpactHeight = false;
-            this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tRobotList.Gap = 8;
-            this.tRobotList.GapCell = 5;
-            this.tRobotList.Gaps = new System.Drawing.Size(8, 8);
-            this.tRobotList.Location = new System.Drawing.Point(0, 35);
-            this.tRobotList.Margin = new System.Windows.Forms.Padding(0);
-            this.tRobotList.MultipleRows = true;
-            this.tRobotList.Name = "tRobotList";
-            this.tRobotList.Size = new System.Drawing.Size(500, 439);
-            this.tRobotList.SwitchSize = 12;
-            this.tRobotList.TabIndex = 1;
-            this.tRobotList.VisibleHeader = false;
-            this.tRobotList.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellClick);
-            this.tRobotList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellDoubleClick);
-            // 
-            // tlpRobotListButton
-            // 
-            this.tlpRobotListButton.ColumnCount = 7;
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
-            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 3, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_Execute, 2, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_ResetCount, 4, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_DisableAll, 1, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_EnableAll, 0, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_Add, 5, 0);
-            this.tlpRobotListButton.Controls.Add(this.bRobotList_Delete, 6, 0);
-            this.tlpRobotListButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpRobotListButton.Location = new System.Drawing.Point(0, 0);
-            this.tlpRobotListButton.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpRobotListButton.Name = "tlpRobotListButton";
-            this.tlpRobotListButton.RowCount = 1;
-            this.tlpRobotListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpRobotListButton.Size = new System.Drawing.Size(500, 35);
-            this.tlpRobotListButton.TabIndex = 2;
-            // 
-            // bRobotList_Stop
-            // 
-            this.bRobotList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bRobotList_Stop.Ghost = true;
-            this.bRobotList_Stop.IconRatio = 0.8F;
-            this.bRobotList_Stop.IconSvg = "PauseCircleOutlined";
-            this.bRobotList_Stop.Location = new System.Drawing.Point(213, 3);
-            this.bRobotList_Stop.Name = "bRobotList_Stop";
-            this.bRobotList_Stop.Size = new System.Drawing.Size(64, 29);
-            this.bRobotList_Stop.TabIndex = 6;
-            this.bRobotList_Stop.WaveSize = 0;
-            this.bRobotList_Stop.Click += new System.EventHandler(this.bRobotList_Stop_Click);
-            // 
-            // bRobotList_Execute
-            // 
-            this.bRobotList_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bRobotList_Execute.Ghost = true;
-            this.bRobotList_Execute.IconRatio = 0.8F;
-            this.bRobotList_Execute.IconSvg = "PlayCircleOutlined";
-            this.bRobotList_Execute.Location = new System.Drawing.Point(143, 3);
-            this.bRobotList_Execute.Name = "bRobotList_Execute";
-            this.bRobotList_Execute.Size = new System.Drawing.Size(64, 29);
-            this.bRobotList_Execute.TabIndex = 5;
-            this.bRobotList_Execute.WaveSize = 0;
-            this.bRobotList_Execute.Click += new System.EventHandler(this.bRobotList_Execute_Click);
-            // 
-            // bRobotList_ResetCount
-            // 
-            this.bRobotList_ResetCount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bRobotList_ResetCount.Ghost = true;
-            this.bRobotList_ResetCount.IconRatio = 0.8F;
-            this.bRobotList_ResetCount.IconSvg = "UndoOutlined";
-            this.bRobotList_ResetCount.Location = new System.Drawing.Point(283, 3);
-            this.bRobotList_ResetCount.Name = "bRobotList_ResetCount";
-            this.bRobotList_ResetCount.Size = new System.Drawing.Size(64, 29);
-            this.bRobotList_ResetCount.TabIndex = 4;
-            this.bRobotList_ResetCount.WaveSize = 0;
-            this.bRobotList_ResetCount.Click += new System.EventHandler(this.bRobotList_ResetCount_Click);
-            // 
-            // bRobotList_DisableAll
-            // 
-            this.bRobotList_DisableAll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bRobotList_DisableAll.Ghost = true;
-            this.bRobotList_DisableAll.IconRatio = 0.8F;
-            this.bRobotList_DisableAll.IconSvg = "CloseSquareOutlined";
-            this.bRobotList_DisableAll.Location = new System.Drawing.Point(73, 3);
-            this.bRobotList_DisableAll.Name = "bRobotList_DisableAll";
-            this.bRobotList_DisableAll.Size = new System.Drawing.Size(64, 29);
-            this.bRobotList_DisableAll.TabIndex = 3;
-            this.bRobotList_DisableAll.WaveSize = 0;
-            this.bRobotList_DisableAll.Click += new System.EventHandler(this.bRobotList_DisableAll_Click);
-            // 
-            // bRobotList_EnableAll
-            // 
-            this.bRobotList_EnableAll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bRobotList_EnableAll.Ghost = true;
-            this.bRobotList_EnableAll.IconRatio = 0.8F;
-            this.bRobotList_EnableAll.IconSvg = "CheckSquareOutlined";
-            this.bRobotList_EnableAll.Location = new System.Drawing.Point(3, 3);
-            this.bRobotList_EnableAll.Name = "bRobotList_EnableAll";
-            this.bRobotList_EnableAll.Size = new System.Drawing.Size(64, 29);
-            this.bRobotList_EnableAll.TabIndex = 2;
-            this.bRobotList_EnableAll.WaveSize = 0;
-            this.bRobotList_EnableAll.Click += new System.EventHandler(this.bRobotList_EnableAll_Click);
-            // 
-            // bRobotList_Add
-            // 
-            this.bRobotList_Add.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bRobotList_Add.Ghost = true;
-            this.bRobotList_Add.IconRatio = 0.8F;
-            this.bRobotList_Add.IconSvg = "PlusOutlined";
-            this.bRobotList_Add.Location = new System.Drawing.Point(353, 3);
-            this.bRobotList_Add.Name = "bRobotList_Add";
-            this.bRobotList_Add.Size = new System.Drawing.Size(64, 29);
-            this.bRobotList_Add.TabIndex = 0;
-            this.bRobotList_Add.WaveSize = 0;
-            this.bRobotList_Add.Click += new System.EventHandler(this.bRobotList_Add_Click);
-            // 
-            // bRobotList_Delete
-            // 
-            this.bRobotList_Delete.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bRobotList_Delete.Ghost = true;
-            this.bRobotList_Delete.IconRatio = 0.8F;
-            this.bRobotList_Delete.IconSvg = "DeleteOutlined";
-            this.bRobotList_Delete.Location = new System.Drawing.Point(423, 3);
-            this.bRobotList_Delete.Name = "bRobotList_Delete";
-            this.bRobotList_Delete.Size = new System.Drawing.Size(74, 29);
-            this.bRobotList_Delete.TabIndex = 1;
-            this.bRobotList_Delete.WaveSize = 0;
-            this.bRobotList_Delete.Click += new System.EventHandler(this.bRobotList_Delete_Click);
             // 
             // tpSendList
             // 
@@ -570,6 +509,169 @@
             this.bSendList_Delete.WaveSize = 0;
             this.bSendList_Delete.Click += new System.EventHandler(this.bSendList_Delete_Click);
             // 
+            // tpRobotList
+            // 
+            this.tpRobotList.Controls.Add(this.tlpRobotList);
+            this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpRobotList.LocalizationText = "Robot";
+            this.tpRobotList.Location = new System.Drawing.Point(0, 26);
+            this.tpRobotList.Name = "tpRobotList";
+            this.tpRobotList.Size = new System.Drawing.Size(500, 474);
+            this.tpRobotList.TabIndex = 2;
+            this.tpRobotList.Text = "机器人";
+            // 
+            // tlpRobotList
+            // 
+            this.tlpRobotList.ColumnCount = 1;
+            this.tlpRobotList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotList.Controls.Add(this.tRobotList, 0, 1);
+            this.tlpRobotList.Controls.Add(this.tlpRobotListButton, 0, 0);
+            this.tlpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpRobotList.Location = new System.Drawing.Point(0, 0);
+            this.tlpRobotList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpRobotList.Name = "tlpRobotList";
+            this.tlpRobotList.RowCount = 2;
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tlpRobotList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotList.Size = new System.Drawing.Size(500, 474);
+            this.tlpRobotList.TabIndex = 2;
+            // 
+            // tRobotList
+            // 
+            this.tRobotList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tRobotList.CellImpactHeight = false;
+            this.tRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tRobotList.Gap = 8;
+            this.tRobotList.GapCell = 5;
+            this.tRobotList.Gaps = new System.Drawing.Size(8, 8);
+            this.tRobotList.Location = new System.Drawing.Point(0, 35);
+            this.tRobotList.Margin = new System.Windows.Forms.Padding(0);
+            this.tRobotList.MultipleRows = true;
+            this.tRobotList.Name = "tRobotList";
+            this.tRobotList.Size = new System.Drawing.Size(500, 439);
+            this.tRobotList.SwitchSize = 12;
+            this.tRobotList.TabIndex = 1;
+            this.tRobotList.VisibleHeader = false;
+            this.tRobotList.CellClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellClick);
+            this.tRobotList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tRobotList_CellDoubleClick);
+            // 
+            // tlpRobotListButton
+            // 
+            this.tlpRobotListButton.ColumnCount = 7;
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tlpRobotListButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16F));
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Stop, 3, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Execute, 2, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_ResetCount, 4, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_DisableAll, 1, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_EnableAll, 0, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Add, 5, 0);
+            this.tlpRobotListButton.Controls.Add(this.bRobotList_Delete, 6, 0);
+            this.tlpRobotListButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpRobotListButton.Location = new System.Drawing.Point(0, 0);
+            this.tlpRobotListButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpRobotListButton.Name = "tlpRobotListButton";
+            this.tlpRobotListButton.RowCount = 1;
+            this.tlpRobotListButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpRobotListButton.Size = new System.Drawing.Size(500, 35);
+            this.tlpRobotListButton.TabIndex = 2;
+            // 
+            // bRobotList_Stop
+            // 
+            this.bRobotList_Stop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_Stop.Ghost = true;
+            this.bRobotList_Stop.IconRatio = 0.8F;
+            this.bRobotList_Stop.IconSvg = "PauseCircleOutlined";
+            this.bRobotList_Stop.Location = new System.Drawing.Point(213, 3);
+            this.bRobotList_Stop.Name = "bRobotList_Stop";
+            this.bRobotList_Stop.Size = new System.Drawing.Size(64, 29);
+            this.bRobotList_Stop.TabIndex = 6;
+            this.bRobotList_Stop.WaveSize = 0;
+            this.bRobotList_Stop.Click += new System.EventHandler(this.bRobotList_Stop_Click);
+            // 
+            // bRobotList_Execute
+            // 
+            this.bRobotList_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_Execute.Ghost = true;
+            this.bRobotList_Execute.IconRatio = 0.8F;
+            this.bRobotList_Execute.IconSvg = "PlayCircleOutlined";
+            this.bRobotList_Execute.Location = new System.Drawing.Point(143, 3);
+            this.bRobotList_Execute.Name = "bRobotList_Execute";
+            this.bRobotList_Execute.Size = new System.Drawing.Size(64, 29);
+            this.bRobotList_Execute.TabIndex = 5;
+            this.bRobotList_Execute.WaveSize = 0;
+            this.bRobotList_Execute.Click += new System.EventHandler(this.bRobotList_Execute_Click);
+            // 
+            // bRobotList_ResetCount
+            // 
+            this.bRobotList_ResetCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_ResetCount.Ghost = true;
+            this.bRobotList_ResetCount.IconRatio = 0.8F;
+            this.bRobotList_ResetCount.IconSvg = "UndoOutlined";
+            this.bRobotList_ResetCount.Location = new System.Drawing.Point(283, 3);
+            this.bRobotList_ResetCount.Name = "bRobotList_ResetCount";
+            this.bRobotList_ResetCount.Size = new System.Drawing.Size(64, 29);
+            this.bRobotList_ResetCount.TabIndex = 4;
+            this.bRobotList_ResetCount.WaveSize = 0;
+            this.bRobotList_ResetCount.Click += new System.EventHandler(this.bRobotList_ResetCount_Click);
+            // 
+            // bRobotList_DisableAll
+            // 
+            this.bRobotList_DisableAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_DisableAll.Ghost = true;
+            this.bRobotList_DisableAll.IconRatio = 0.8F;
+            this.bRobotList_DisableAll.IconSvg = "CloseSquareOutlined";
+            this.bRobotList_DisableAll.Location = new System.Drawing.Point(73, 3);
+            this.bRobotList_DisableAll.Name = "bRobotList_DisableAll";
+            this.bRobotList_DisableAll.Size = new System.Drawing.Size(64, 29);
+            this.bRobotList_DisableAll.TabIndex = 3;
+            this.bRobotList_DisableAll.WaveSize = 0;
+            this.bRobotList_DisableAll.Click += new System.EventHandler(this.bRobotList_DisableAll_Click);
+            // 
+            // bRobotList_EnableAll
+            // 
+            this.bRobotList_EnableAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_EnableAll.Ghost = true;
+            this.bRobotList_EnableAll.IconRatio = 0.8F;
+            this.bRobotList_EnableAll.IconSvg = "CheckSquareOutlined";
+            this.bRobotList_EnableAll.Location = new System.Drawing.Point(3, 3);
+            this.bRobotList_EnableAll.Name = "bRobotList_EnableAll";
+            this.bRobotList_EnableAll.Size = new System.Drawing.Size(64, 29);
+            this.bRobotList_EnableAll.TabIndex = 2;
+            this.bRobotList_EnableAll.WaveSize = 0;
+            this.bRobotList_EnableAll.Click += new System.EventHandler(this.bRobotList_EnableAll_Click);
+            // 
+            // bRobotList_Add
+            // 
+            this.bRobotList_Add.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_Add.Ghost = true;
+            this.bRobotList_Add.IconRatio = 0.8F;
+            this.bRobotList_Add.IconSvg = "PlusOutlined";
+            this.bRobotList_Add.Location = new System.Drawing.Point(353, 3);
+            this.bRobotList_Add.Name = "bRobotList_Add";
+            this.bRobotList_Add.Size = new System.Drawing.Size(64, 29);
+            this.bRobotList_Add.TabIndex = 0;
+            this.bRobotList_Add.WaveSize = 0;
+            this.bRobotList_Add.Click += new System.EventHandler(this.bRobotList_Add_Click);
+            // 
+            // bRobotList_Delete
+            // 
+            this.bRobotList_Delete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bRobotList_Delete.Ghost = true;
+            this.bRobotList_Delete.IconRatio = 0.8F;
+            this.bRobotList_Delete.IconSvg = "DeleteOutlined";
+            this.bRobotList_Delete.Location = new System.Drawing.Point(423, 3);
+            this.bRobotList_Delete.Name = "bRobotList_Delete";
+            this.bRobotList_Delete.Size = new System.Drawing.Size(74, 29);
+            this.bRobotList_Delete.TabIndex = 1;
+            this.bRobotList_Delete.WaveSize = 0;
+            this.bRobotList_Delete.Click += new System.EventHandler(this.bRobotList_Delete_Click);
+            // 
             // QuickList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -582,15 +684,18 @@
             this.Load += new System.EventHandler(this.QuickList_Load);
             this.tlpQuickList.ResumeLayout(false);
             this.tabQuickList.ResumeLayout(false);
+            this.tpWareHouseList.ResumeLayout(false);
+            this.tlpWareHouseList.ResumeLayout(false);
+            this.tlpWareHouseListButton.ResumeLayout(false);
             this.tpFilterList.ResumeLayout(false);
             this.tlpFilterList.ResumeLayout(false);
             this.tlpFilterListButton.ResumeLayout(false);
-            this.tpRobotList.ResumeLayout(false);
-            this.tlpRobotList.ResumeLayout(false);
-            this.tlpRobotListButton.ResumeLayout(false);
             this.tpSendList.ResumeLayout(false);
             this.tlpSendList.ResumeLayout(false);
             this.tlpSendListButton.ResumeLayout(false);
+            this.tpRobotList.ResumeLayout(false);
+            this.tlpRobotList.ResumeLayout(false);
+            this.tlpRobotListButton.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -630,5 +735,11 @@
         private AntdUI.Button bRobotList_EnableAll;
         private AntdUI.Button bRobotList_Add;
         private AntdUI.Button bRobotList_Delete;
+        private AntdUI.TabPage tpWareHouseList;
+        private TableLayoutPanelEx tlpWareHouseList;
+        private AntdUI.Table tWareHouseList;
+        private TableLayoutPanelEx tlpWareHouseListButton;
+        private AntdUI.Button bWareHouseList_Add;
+        private AntdUI.Button bWareHouseList_Delete;
     }
 }
