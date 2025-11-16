@@ -433,14 +433,12 @@ namespace WinsockPacketEditor
 
                                         if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
                                         {
-                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到 " + item.Text, TType.Success)
-                                            {
-                                                LocalizationText = "ToSendList.Success"
-                                            });
+                                            string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到: {0}"), item.Text);
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
                                         }
                                         else
                                         {
-                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送出错", TType.Error)
                                             {
                                                 LocalizationText = "ToSendList.Error"
                                             });
@@ -492,7 +490,7 @@ namespace WinsockPacketEditor
                                         }
                                         else
                                         {
-                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送出错", TType.Error)
                                             {
                                                 LocalizationText = "ToSendList.Error"
                                             });

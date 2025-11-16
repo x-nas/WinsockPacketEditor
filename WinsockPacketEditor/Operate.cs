@@ -13274,22 +13274,22 @@ namespace WinsockPacketEditor
 
                     if (SendConfig.List.lstSendInfo.Count > 0)
                     {
-                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送")
                         {
-                            ID = "ToSendList",
+                            ID = "ToSend",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "ToSendList",
-                            Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
+                            LocalizationText = "ToSend",
+                            Sub = Operate.SendConfig.List.GetCMS_ToSend(),
                         });
                     }
                     else
                     {
-                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送")
                         {
                             Enabled = false,
-                            ID = "ToSendList",
+                            ID = "ToSend",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "ToSendList",
+                            LocalizationText = "ToSend",
                         });
                     }
 
@@ -13365,22 +13365,22 @@ namespace WinsockPacketEditor
 
                     if (SendConfig.List.lstSendInfo.Count > 0)
                     {
-                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送")
                         {
-                            ID = "ToSendList",
+                            ID = "ToSend",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "ToSendList",
-                            Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
+                            LocalizationText = "ToSend",
+                            Sub = Operate.SendConfig.List.GetCMS_ToSend(),
                         });
                     }
                     else
                     {
-                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送")
                         {
                             Enabled = false,
-                            ID = "ToSendList",
+                            ID = "ToSend",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "ToSendList",
+                            LocalizationText = "ToSend",
                         });
                     }
 
@@ -14095,22 +14095,22 @@ namespace WinsockPacketEditor
 
                     if (SendConfig.List.lstSendInfo.Count > 0)
                     {
-                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送")
                         {
-                            ID = "ToSendList",
+                            ID = "ToSend",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "ToSendList",
-                            Sub = Operate.SendConfig.List.GetCMS_ToSendList(),
+                            LocalizationText = "ToSend",
+                            Sub = Operate.SendConfig.List.GetCMS_ToSend(),
                         });
                     }
                     else
                     {
-                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送列表")
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到发送")
                         {
                             Enabled = false,
-                            ID = "ToSendList",
+                            ID = "ToSend",
                             IconSvg = "PlaySquareOutlined",
-                            LocalizationText = "ToSendList",                            
+                            LocalizationText = "ToSend",                            
                         });
                     }
 
@@ -14120,6 +14120,27 @@ namespace WinsockPacketEditor
                         IconSvg = "FunnelPlotOutlined",
                         LocalizationText = "ToFilterList",
                     });
+
+                    if (WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                    {
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到仓库")
+                        {
+                            ID = "ToWareHouse",
+                            IconSvg = "BankOutlined",
+                            LocalizationText = "ToWareHouse",
+                            Sub = Operate.WareHouseConfig.List.GetCMS_ToWareHouse(),
+                        });
+                    }
+                    else
+                    {
+                        menuItems.Add(new AntdUI.ContextMenuStripItem("添加到仓库")
+                        {
+                            Enabled = false,
+                            ID = "ToWareHouse",
+                            IconSvg = "BankOutlined",
+                            LocalizationText = "ToWareHouse",
+                        });
+                    }
 
                     menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
 
@@ -18494,9 +18515,9 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//获取添加到发送列表的右键菜单
+                #region//获取添加到发送的右键菜单
 
-                public static AntdUI.IContextMenuStripItem[] GetCMS_ToSendList()
+                public static AntdUI.IContextMenuStripItem[] GetCMS_ToSend()
                 {
                     AntdUI.IContextMenuStripItem[] imsReturn = new AntdUI.IContextMenuStripItem[Operate.SendConfig.List.lstSendInfo.Count];
                     if (Operate.SendConfig.List.lstSendInfo.Count > 0)
@@ -18506,6 +18527,7 @@ namespace WinsockPacketEditor
                             imsReturn[i] = new AntdUI.ContextMenuStripItem(Operate.SendConfig.List.lstSendInfo[i].SName)
                             {
                                 ID = Operate.SendConfig.List.lstSendInfo[i].SID.ToString().ToUpper(),
+                                Tag = "ToSend",
                             };
                         }
                     }
@@ -20664,6 +20686,34 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                public static bool AddStores_ByProxyInfo(Guid WID, List<ProxyInfo> piList)
+                {
+                    try
+                    {
+                        if (WID != null && WID != Guid.Empty && piList.Count > 0)
+                        {
+                            foreach (WareHouseInfo whi in WareHouseConfig.List.lstWareHouseInfo)
+                            {
+                                if (whi.WID == WID)
+                                {
+                                    foreach (ProxyInfo pi in piList)
+                                    {
+                                        WareHouseConfig.WareHouse.AddStores(whi.Stores, pi.PacketBuffer);
+                                    }
+                                }
+                            }
+
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddStores_ByProxyInfo), ex);
+                    }
+
+                    return false;
+                }
+
                 #endregion                
 
                 #region//新增自动入库
@@ -21146,6 +21196,28 @@ namespace WinsockPacketEditor
                     });
 
                     return menuItems.ToArray();
+                }
+
+                #endregion
+
+                #region//获取添加到仓库的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_ToWareHouse()
+                {
+                    AntdUI.IContextMenuStripItem[] imsReturn = new AntdUI.IContextMenuStripItem[Operate.WareHouseConfig.List.lstWareHouseInfo.Count];
+                    if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                    {
+                        for (int i = 0; i < imsReturn.Length; i++)
+                        {
+                            imsReturn[i] = new AntdUI.ContextMenuStripItem(Operate.WareHouseConfig.List.lstWareHouseInfo[i].WName)
+                            {
+                                Tag = "ToWareHouse",
+                                ID = Operate.WareHouseConfig.List.lstWareHouseInfo[i].WID.ToString().ToUpper(),
+                            };
+                        }
+                    }
+
+                    return imsReturn;
                 }
 
                 #endregion

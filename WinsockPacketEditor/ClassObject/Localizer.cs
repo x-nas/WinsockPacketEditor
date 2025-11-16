@@ -436,14 +436,17 @@ namespace WinsockPacketEditor
                 case "SetSSocket":
                     return "Set System Socket";
 
-                case "ToSendList":
-                    return "Add to Send List";
+                case "ToSend":
+                    return "Add to Send";
 
                 case "ToFilterList":
                     return "Add to Filter List";
 
+                case "ToWareHouse":
+                    return "Add to WareHouse";
+
                 case "ToSendList.Success":
-                    return "Added to: {0}";
+                    return "Added to : {0}";
 
                 case "ToSendList.Error":
                     return "Error Adding";
