@@ -4320,6 +4320,7 @@ namespace WinsockPacketEditor
                     FilterConfig.List.SaveFilterList_ToDB();
                     SendConfig.List.SaveSendList_ToDB();
                     RobotConfig.List.SaveRobotList_ToDB();
+                    WareHouseConfig.List.SaveWareHouseList_ToDB();
                 }
                 catch (Exception ex)
                 {
@@ -4338,6 +4339,7 @@ namespace WinsockPacketEditor
                     FilterConfig.List.LoadFilterList_FromDB();
                     SendConfig.List.LoadSendList_FromDB();
                     RobotConfig.List.LoadRobotList_FromDB();
+                    WareHouseConfig.List.LoadWareHouseList_FromDB();
 
                     string DBFilePath = string.Format("{0}\\{1}", DataBase.dbPath, DataBase.dbName);
                     Operate.DoLog(nameof(LoadSystemList_FromDB), AntdUI.Localization.Get("StartForm.Database.Loaded", "已加载数据库 : ") + DBFilePath);
@@ -11846,78 +11848,72 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//从数据库加载本地代理映射（异步）
+                #region//从数据库加载本地代理映射
 
-                public static async void LoadProxyMapLocal_FromDB()
+                public static void LoadProxyMapLocal_FromDB()
                 {
-                    await Task.Run(() =>
+                    try
                     {
-                        try
-                        {
-                            DataTable dtProxyMapLocal = DataBase.SelectTable_ProxyMapLocal();
+                        DataTable dtProxyMapLocal = DataBase.SelectTable_ProxyMapLocal();
 
-                            foreach (DataRow dataRow in dtProxyMapLocal.Rows)
-                            {
-                                bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
-                                ProxyConfig.Proxy.MapProtocol ProtocolType = ProxyConfig.Mapping.GetMapProtocol_ByString(dataRow["ProtocolType"].ToString());
-                                string Host = dataRow["Host"].ToString();
-                                int Port = int.Parse(dataRow["Port"].ToString());
-                                string RemotePath = dataRow["RemotePath"].ToString();
-                                string LocalPath = dataRow["LocalPath"].ToString();
-
-                                ProxyConfig.Mapping.AddMapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
-                            }
-                        }
-                        catch (Exception ex)
+                        foreach (DataRow dataRow in dtProxyMapLocal.Rows)
                         {
-                            Operate.DoLog(nameof(LoadProxyMapLocal_FromDB), ex);
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                            ProxyConfig.Proxy.MapProtocol ProtocolType = ProxyConfig.Mapping.GetMapProtocol_ByString(dataRow["ProtocolType"].ToString());
+                            string Host = dataRow["Host"].ToString();
+                            int Port = int.Parse(dataRow["Port"].ToString());
+                            string RemotePath = dataRow["RemotePath"].ToString();
+                            string LocalPath = dataRow["LocalPath"].ToString();
+
+                            ProxyConfig.Mapping.AddMapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
                         }
-                    });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadProxyMapLocal_FromDB), ex);
+                    }
                 }
 
                 #endregion
 
-                #region//从数据库加载远程代理映射（异步）
+                #region//从数据库加载远程代理映射
 
-                public static async void LoadProxyMapRemote_FromDB()
+                public static void LoadProxyMapRemote_FromDB()
                 {
-                    await Task.Run(() =>
+                    try
                     {
-                        try
+                        DataTable dtProxyMapRemote = DataBase.SelectTable_ProxyMapRemote();
+
+                        foreach (DataRow dataRow in dtProxyMapRemote.Rows)
                         {
-                            DataTable dtProxyMapRemote = DataBase.SelectTable_ProxyMapRemote();
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
 
-                            foreach (DataRow dataRow in dtProxyMapRemote.Rows)
-                            {
-                                bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                            ProxyConfig.Proxy.MapProtocol ProtocolType_From = ProxyConfig.Mapping.GetMapProtocol_ByString(dataRow["ProtocolType_From"].ToString());
+                            string Host_From = dataRow["Host_From"].ToString();
+                            int Port_From = int.Parse(dataRow["Port_From"].ToString());
+                            string Path_From = dataRow["Path_From"].ToString();
 
-                                ProxyConfig.Proxy.MapProtocol ProtocolType_From = ProxyConfig.Mapping.GetMapProtocol_ByString(dataRow["ProtocolType_From"].ToString());
-                                string Host_From = dataRow["Host_From"].ToString();
-                                int Port_From = int.Parse(dataRow["Port_From"].ToString());
-                                string Path_From = dataRow["Path_From"].ToString();
+                            ProxyConfig.Proxy.MapProtocol ProtocolType_To = ProxyConfig.Mapping.GetMapProtocol_ByString(dataRow["ProtocolType_To"].ToString());
+                            string Host_To = dataRow["Host_To"].ToString();
+                            int Port_To = int.Parse(dataRow["Port_To"].ToString());
+                            string Path_To = dataRow["Path_To"].ToString();
 
-                                ProxyConfig.Proxy.MapProtocol ProtocolType_To = ProxyConfig.Mapping.GetMapProtocol_ByString(dataRow["ProtocolType_To"].ToString());
-                                string Host_To = dataRow["Host_To"].ToString();
-                                int Port_To = int.Parse(dataRow["Port_To"].ToString());
-                                string Path_To = dataRow["Path_To"].ToString();
-
-                                ProxyConfig.Mapping.AddMapRemote(
-                                    IsEnable,
-                                    ProtocolType_From,
-                                    Host_From,
-                                    Port_From,
-                                    Path_From,
-                                    ProtocolType_To,
-                                    Host_To,
-                                    Port_To,
-                                    Path_To);
-                            }
+                            ProxyConfig.Mapping.AddMapRemote(
+                                IsEnable,
+                                ProtocolType_From,
+                                Host_From,
+                                Port_From,
+                                Path_From,
+                                ProtocolType_To,
+                                Host_To,
+                                Port_To,
+                                Path_To);
                         }
-                        catch (Exception ex)
-                        {
-                            Operate.DoLog(nameof(LoadProxyMapRemote_FromDB), ex);
-                        }
-                    });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadProxyMapRemote_FromDB), ex);
+                    }
                 }
 
                 #endregion
@@ -20751,6 +20747,34 @@ namespace WinsockPacketEditor
                     }
                 }
 
+                public static bool AddStores_ByPacketInfo(Guid WID, List<PacketInfo> piList)
+                {
+                    try
+                    {
+                        if (WID != null && WID != Guid.Empty && piList.Count > 0)
+                        {
+                            foreach (WareHouseInfo whi in WareHouseConfig.List.lstWareHouseInfo)
+                            {
+                                if (whi.WID == WID)
+                                {
+                                    foreach (PacketInfo pi in piList)
+                                    {
+                                        WareHouseConfig.WareHouse.AddStores(whi.Stores, pi.PacketBuffer);
+                                    }
+                                }
+                            }
+
+                            return true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddStores_ByPacketInfo), ex);
+                    }
+
+                    return false;
+                }
+
                 public static bool AddStores_ByProxyInfo(Guid WID, List<ProxyInfo> piList)
                 {
                     try
@@ -20860,6 +20884,55 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(DeleteAutoStores_Dialog), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//保存自动入库到数据库
+
+                public static void SaveAutoStores_ToDB()
+                {
+                    try
+                    {
+                        DataBase.DeleteTable_AutoStores();
+
+                        if (WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
+                        { 
+                            foreach (AutoStoresInfo asi in WareHouseConfig.List.lstAutoStoresInfo)
+                            {
+                                DataBase.InsertTable_AutoStores(asi);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveAutoStores_ToDB), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//从数据库加载自动入库
+
+                public static void LoadAutoStores_FromDB()
+                {
+                    try
+                    {
+                        DataTable dtAutoStores = DataBase.SelectTable_AutoStores();
+
+                        foreach (DataRow dataRow in dtAutoStores.Rows)
+                        {
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                            string PacketHead = dataRow["PacketHead"].ToString();
+                            Guid WID = Guid.Parse(dataRow["WID"].ToString());
+
+                            WareHouseConfig.WareHouse.AddAutoStores(IsEnable, PacketHead, WID);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadAutoStores_FromDB), ex);
                     }
                 }
 
@@ -21981,6 +22054,59 @@ namespace WinsockPacketEditor
                 }
 
                 #endregion
+
+                #region//保存仓库列表到数据库
+
+                public static void SaveWareHouseList_ToDB()
+                {
+                    try
+                    {
+                        DataBase.DeleteTable_WareHouse();
+
+                        foreach (WareHouseInfo whi in WareHouseConfig.List.lstWareHouseInfo)
+                        {
+                            DataBase.InsertTable_WareHouse(whi);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveWareHouseList_ToDB), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//从数据库加载仓库列表
+
+                public static void LoadWareHouseList_FromDB()
+                {
+                    try
+                    {
+                        DataTable dtWareHouse = DataBase.SelectTable_WareHouse();
+                        foreach (DataRow dataRow in dtWareHouse.Rows)
+                        {
+                            Guid WID = Guid.Parse(dataRow["GUID"].ToString());
+                            string WName = dataRow["Name"].ToString();
+                            BindingList<DataInfo> Stores = new BindingList<DataInfo>();
+
+                            DataTable dtStores = DataBase.SelectTable_WareHouseData(WID);
+                            foreach (DataRow row in dtStores.Rows)
+                            {
+                                byte[] PacketBuffer = (byte[])row["Buffer"];
+
+                                WareHouseConfig.WareHouse.AddStores(Stores, PacketBuffer);
+                            }
+
+                            WareHouseConfig.WareHouse.AddWareHouse(WID, WName, Stores);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadWareHouseList_FromDB), ex);
+                    }
+                }
+
+                #endregion
             }
 
             #endregion
@@ -22532,6 +22658,8 @@ namespace WinsockPacketEditor
                     DataBase.CreateTable_Filter();
                     DataBase.CreateTable_Send();
                     DataBase.CreateTable_Robot();
+                    DataBase.CreateTable_WareHouse();
+                    DataBase.CreateTable_AutoStores();
                     DataBase.CreateTable_ProxyAccount();
                     DataBase.CreateTable_ProxyMapLocal();
                     DataBase.CreateTable_ProxyMapRemote();
@@ -23875,6 +24003,538 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(InsertTable_Robot), ex);
                 }
+            }
+
+            #endregion
+
+            #region//仓库列表
+
+            private static bool CreateTable_WareHouse()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS WareHouse (";
+                        sql += "GUID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "Name TEXT NOT NULL";
+                        sql += ");";
+
+                        sql += "CREATE TABLE IF NOT EXISTS WareHouseData (";
+                        sql += "GUID TEXT NOT NULL,";
+                        sql += "Buffer BLOB,";
+                        sql += "FOREIGN KEY (GUID) REFERENCES WareHouse(GUID)";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CreateTable_WareHouse), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_WareHouse()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM WareHouse;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_WareHouse), ex);
+                }
+
+                return dtReturn;
+            }
+
+            public static DataTable SelectTable_WareHouseData(Guid guid)
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM WareHouseData WHERE GUID = @GUID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@GUID", guid.ToString().ToUpper());
+
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_WareHouseData), ex);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_WareHouse()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM WareHouseData;";
+                        sql += "DELETE FROM WareHouse;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_WareHouse), ex);
+                }
+            }
+
+            public static bool DeleteTable_WareHouse(Guid guid)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sqlData = "DELETE FROM WareHouseData WHERE GUID = @GUID;";
+                            string sqlWareHouse = "DELETE FROM WareHouse WHERE GUID = @GUID;";
+
+                            using (SQLiteCommand cmdData = new SQLiteCommand(sqlData, conn, transaction))
+                            using (SQLiteCommand cmdWareHouse = new SQLiteCommand(sqlWareHouse, conn, transaction))
+                            {
+                                cmdData.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmdWareHouse.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+
+                                string guidStr = guid.ToString().ToUpper();
+                                cmdData.Parameters["@GUID"].Value = guidStr;
+                                cmdWareHouse.Parameters["@GUID"].Value = guidStr;
+
+                                cmdData.ExecuteNonQuery();
+
+                                int rowsAffected = cmdWareHouse.ExecuteNonQuery();
+                                if (rowsAffected > 0)
+                                {
+                                    transaction.Commit();
+                                    bReturn = true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_WareHouse), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool InsertTable_WareHouse(WareHouseInfo whi)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sqlCheck = @"SELECT COUNT(1) FROM WareHouse WHERE GUID = @GUID;";
+
+                            string sqlWareHouse = @"
+                                INSERT INTO WareHouse (
+                                    GUID, Name
+                                ) VALUES (
+                                    @GUID, @Name
+                                );";
+
+                            string sqlData = @"
+                                INSERT INTO WareHouseData (
+                                    GUID, Buffer
+                                ) VALUES (
+                                    @GUID, @Buffer
+                                );";
+
+                            using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, transaction))
+                            using (SQLiteCommand cmdWareHouse = new SQLiteCommand(sqlWareHouse, conn, transaction))
+                            using (SQLiteCommand cmdData = new SQLiteCommand(sqlData, conn, transaction))
+                            {
+                                cmdCheck.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+
+                                string guid = whi.WID.ToString().ToUpper();
+                                cmdCheck.Parameters["@GUID"].Value = guid;
+
+                                long existingCount = (long)cmdCheck.ExecuteScalar();
+                                if (existingCount > 0)
+                                {
+                                    transaction.Rollback();
+                                    return false;
+                                }
+
+                                cmdWareHouse.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmdWareHouse.Parameters.Add(new SQLiteParameter("@Name", DbType.String));
+
+                                cmdData.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmdData.Parameters.Add(new SQLiteParameter("@Buffer", DbType.Binary));
+
+                                cmdWareHouse.Parameters["@GUID"].Value = guid;
+                                cmdWareHouse.Parameters["@Name"].Value = whi.WName;
+
+                                int rowsAffected = cmdWareHouse.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    if (whi.Stores != null && whi.Stores.Count > 0)
+                                    {
+                                        foreach (DataInfo di in whi.Stores)
+                                        {
+                                            cmdData.Parameters["@GUID"].Value = guid;
+                                            cmdData.Parameters["@Buffer"].Value = di.PacketBuffer;
+
+                                            cmdData.ExecuteNonQuery();
+                                        }
+                                    }
+
+                                    transaction.Commit();
+                                    bReturn = true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_WareHouse), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool UpdateTable_WareHouse(WareHouseInfo whi)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sqlWareHouse = @"
+                                UPDATE WareHouse 
+                                SET Name = @Name
+                                WHERE GUID = @GUID;";
+
+                            string sqlDeleteData = @"
+                                DELETE FROM WareHouseData 
+                                WHERE GUID = @GUID;";
+
+                            string sqlInsertData = @"
+                                INSERT INTO WareHouseData (
+                                    GUID, Buffer
+                                ) VALUES (
+                                    @GUID, @Buffer
+                                );";
+
+                            using (SQLiteCommand cmdWareHouse = new SQLiteCommand(sqlWareHouse, conn, transaction))
+                            using (SQLiteCommand cmdDeleteData = new SQLiteCommand(sqlDeleteData, conn, transaction))
+                            using (SQLiteCommand cmdInsertData = new SQLiteCommand(sqlInsertData, conn, transaction))
+                            {
+                                cmdWareHouse.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmdWareHouse.Parameters.Add(new SQLiteParameter("@Name", DbType.String));
+
+                                cmdDeleteData.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+
+                                cmdInsertData.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmdInsertData.Parameters.Add(new SQLiteParameter("@Buffer", DbType.Binary));
+
+                                string guid = whi.WID.ToString().ToUpper();
+
+                                cmdWareHouse.Parameters["@GUID"].Value = guid;
+                                cmdWareHouse.Parameters["@Name"].Value = whi.WName;
+
+                                cmdDeleteData.Parameters["@GUID"].Value = guid;
+
+                                // 更新仓库基本信息
+                                int rowsAffected = cmdWareHouse.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    // 删除原有数据
+                                    cmdDeleteData.ExecuteNonQuery();
+
+                                    // 插入新数据
+                                    if (whi.Stores != null && whi.Stores.Count > 0)
+                                    {
+                                        foreach (DataInfo di in whi.Stores)
+                                        {
+                                            cmdInsertData.Parameters["@GUID"].Value = guid;
+                                            cmdInsertData.Parameters["@Buffer"].Value = di.PacketBuffer;
+
+                                            cmdInsertData.ExecuteNonQuery();
+                                        }
+                                    }
+
+                                    transaction.Commit();
+                                    bReturn = true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(UpdateTable_WareHouse), ex);
+                }
+
+                return bReturn;
+            }
+
+            #endregion
+
+            #region//自动入库配置
+
+            private static bool CreateTable_AutoStores()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS AutoStores (";
+                        sql += "IsEnable BOOLEAN DEFAULT 0,";
+                        sql += "PacketHead TEXT NOT NULL PRIMARY KEY,";
+                        sql += "WID TEXT NOT NULL";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CreateTable_AutoStores), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_AutoStores()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM AutoStores;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_AutoStores), ex);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_AutoStores()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM AutoStores;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_AutoStores), ex);
+                }
+            }
+
+            public static bool InsertTable_AutoStores(AutoStoresInfo asi)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sqlCheck = @"SELECT COUNT(1) FROM AutoStores WHERE PacketHead = @PacketHead;";
+
+                            string sqlInsert = @"
+                                INSERT INTO AutoStores (
+                                    IsEnable, PacketHead, WID
+                                ) VALUES (
+                                    @IsEnable, @PacketHead, @WID
+                                );";
+
+                            using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, transaction))
+                            using (SQLiteCommand cmdInsert = new SQLiteCommand(sqlInsert, conn, transaction))
+                            {
+                                cmdCheck.Parameters.Add(new SQLiteParameter("@PacketHead", DbType.String));
+                                cmdCheck.Parameters["@PacketHead"].Value = asi.PacketHead;
+
+                                long existingCount = (long)cmdCheck.ExecuteScalar();
+                                if (existingCount > 0)
+                                {
+                                    transaction.Rollback();
+                                    return false;
+                                }
+
+                                cmdInsert.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
+                                cmdInsert.Parameters.Add(new SQLiteParameter("@PacketHead", DbType.String));
+                                cmdInsert.Parameters.Add(new SQLiteParameter("@WID", DbType.String));
+
+                                cmdInsert.Parameters["@IsEnable"].Value = asi.IsEnable;
+                                cmdInsert.Parameters["@PacketHead"].Value = asi.PacketHead;
+                                cmdInsert.Parameters["@WID"].Value = asi.WID.ToString().ToUpper();
+
+                                int rowsAffected = cmdInsert.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    transaction.Commit();
+                                    bReturn = true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_AutoStores), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool UpdateTable_AutoStores(AutoStoresInfo asi)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sqlUpdate = @"
+                                UPDATE AutoStores 
+                                SET 
+                                    IsEnable = @IsEnable,
+                                    WID = @WID
+                                WHERE PacketHead = @PacketHead;";
+
+                            using (SQLiteCommand cmdUpdate = new SQLiteCommand(sqlUpdate, conn, transaction))
+                            {
+                                cmdUpdate.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
+                                cmdUpdate.Parameters.Add(new SQLiteParameter("@WID", DbType.String));
+                                cmdUpdate.Parameters.Add(new SQLiteParameter("@PacketHead", DbType.String));
+
+                                cmdUpdate.Parameters["@IsEnable"].Value = asi.IsEnable;
+                                cmdUpdate.Parameters["@WID"].Value = asi.WID.ToString().ToUpper();
+                                cmdUpdate.Parameters["@PacketHead"].Value = asi.PacketHead;
+
+                                int rowsAffected = cmdUpdate.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    transaction.Commit();
+                                    bReturn = true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(UpdateTable_AutoStores), ex);
+                }
+
+                return bReturn;
             }
 
             #endregion

@@ -39,6 +39,7 @@
             AntdUI.MenuItem menuItem8 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem9 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem10 = new AntdUI.MenuItem();
+            AntdUI.MenuItem menuItem11 = new AntdUI.MenuItem();
             AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InjectModeForm));
             this.pageHeader = new AntdUI.PageHeader();
@@ -64,6 +65,7 @@
             this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
             this.bgwAutoSave = new System.ComponentModel.BackgroundWorker();
+            this.tpWareHouseList = new AntdUI.TabPage();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -81,7 +83,7 @@
             this.pageHeader.FullBox = true;
             this.pageHeader.Icon = global::WinsockPacketEditor.Properties.Resources.wpe;
             this.pageHeader.Location = new System.Drawing.Point(0, 0);
-            this.pageHeader.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pageHeader.Margin = new System.Windows.Forms.Padding(2);
             this.pageHeader.Name = "pageHeader";
             this.pageHeader.ShowButton = true;
             this.pageHeader.ShowIcon = true;
@@ -94,9 +96,9 @@
             // 
             this.colorTheme.Dock = System.Windows.Forms.DockStyle.Right;
             this.colorTheme.Location = new System.Drawing.Point(1125, 0);
-            this.colorTheme.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.colorTheme.Margin = new System.Windows.Forms.Padding(2);
             this.colorTheme.Name = "colorTheme";
-            this.colorTheme.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.colorTheme.Padding = new System.Windows.Forms.Padding(4);
             this.colorTheme.ShowClose = true;
             this.colorTheme.ShowReset = true;
             this.colorTheme.Size = new System.Drawing.Size(28, 30);
@@ -110,7 +112,7 @@
             this.btn_mode.Ghost = true;
             this.btn_mode.IconSvg = "SunOutlined";
             this.btn_mode.Location = new System.Drawing.Point(1153, 0);
-            this.btn_mode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btn_mode.Margin = new System.Windows.Forms.Padding(2);
             this.btn_mode.Name = "btn_mode";
             this.btn_mode.Radius = 0;
             this.btn_mode.Size = new System.Drawing.Size(35, 30);
@@ -126,7 +128,7 @@
             this.btn_global.Ghost = true;
             this.btn_global.IconSvg = "GlobalOutlined";
             this.btn_global.Location = new System.Drawing.Point(1188, 0);
-            this.btn_global.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btn_global.Margin = new System.Windows.Forms.Padding(2);
             this.btn_global.Name = "btn_global";
             this.btn_global.Placement = AntdUI.TAlignFrom.BR;
             this.btn_global.Radius = 0;
@@ -141,7 +143,7 @@
             this.btn_setting.Ghost = true;
             this.btn_setting.IconSvg = "SettingOutlined";
             this.btn_setting.Location = new System.Drawing.Point(1223, 0);
-            this.btn_setting.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btn_setting.Margin = new System.Windows.Forms.Padding(2);
             this.btn_setting.Name = "btn_setting";
             this.btn_setting.Radius = 0;
             this.btn_setting.Size = new System.Drawing.Size(35, 30);
@@ -191,31 +193,35 @@
             menuItem4.ID = "miRobotList";
             menuItem4.LocalizationText = "InjectModeForm.{id}";
             menuItem4.Text = "机器人列表";
-            menuItem5.IconSvg = "PieChartOutlined";
-            menuItem5.ID = "miStatistical";
+            menuItem5.IconSvg = "BankOutlined";
+            menuItem5.ID = "miWareHouseList";
             menuItem5.LocalizationText = "InjectModeForm.{id}";
-            menuItem5.Text = "统计数据";
-            menuItem6.IconSvg = "DiffOutlined";
-            menuItem6.ID = "miComparison";
+            menuItem5.Text = "仓库列表";
+            menuItem6.IconSvg = "PieChartOutlined";
+            menuItem6.ID = "miStatistical";
             menuItem6.LocalizationText = "InjectModeForm.{id}";
-            menuItem6.Text = "文本对比";
-            menuItem7.IconSvg = "BuildOutlined";
-            menuItem7.ID = "miXOR";
+            menuItem6.Text = "统计数据";
+            menuItem7.IconSvg = "DiffOutlined";
+            menuItem7.ID = "miComparison";
             menuItem7.LocalizationText = "InjectModeForm.{id}";
-            menuItem7.Text = "异或计算";
-            menuItem8.IconSvg = "InteractionOutlined";
-            menuItem8.ID = "miTranscoding";
+            menuItem7.Text = "文本对比";
+            menuItem8.IconSvg = "BuildOutlined";
+            menuItem8.ID = "miXOR";
             menuItem8.LocalizationText = "InjectModeForm.{id}";
-            menuItem8.Text = "编码转换";
-            menuItem9.IconSvg = "DeliveredProcedureOutlined";
-            menuItem9.ID = "miExtraction";
+            menuItem8.Text = "异或计算";
+            menuItem9.IconSvg = "InteractionOutlined";
+            menuItem9.ID = "miTranscoding";
             menuItem9.LocalizationText = "InjectModeForm.{id}";
-            menuItem9.Text = "数据提取";
-            menuItem10.Badge = "";
-            menuItem10.IconSvg = "ExceptionOutlined";
-            menuItem10.ID = "miSystemLog";
+            menuItem9.Text = "编码转换";
+            menuItem10.IconSvg = "DeliveredProcedureOutlined";
+            menuItem10.ID = "miExtraction";
             menuItem10.LocalizationText = "InjectModeForm.{id}";
-            menuItem10.Text = "系统日志";
+            menuItem10.Text = "数据提取";
+            menuItem11.Badge = "";
+            menuItem11.IconSvg = "ExceptionOutlined";
+            menuItem11.ID = "miSystemLog";
+            menuItem11.LocalizationText = "InjectModeForm.{id}";
+            menuItem11.Text = "系统日志";
             this.mInjectMode.Items.Add(menuItem1);
             this.mInjectMode.Items.Add(menuItem2);
             this.mInjectMode.Items.Add(menuItem3);
@@ -226,8 +232,9 @@
             this.mInjectMode.Items.Add(menuItem8);
             this.mInjectMode.Items.Add(menuItem9);
             this.mInjectMode.Items.Add(menuItem10);
+            this.mInjectMode.Items.Add(menuItem11);
             this.mInjectMode.Location = new System.Drawing.Point(2, 36);
-            this.mInjectMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.mInjectMode.Margin = new System.Windows.Forms.Padding(2);
             this.mInjectMode.Name = "mInjectMode";
             this.mInjectMode.Padding = new System.Windows.Forms.Padding(0, 0, 7, 0);
             this.mInjectMode.Size = new System.Drawing.Size(115, 732);
@@ -254,21 +261,23 @@
             this.tabInjectMode.Controls.Add(this.tpFilterList);
             this.tabInjectMode.Controls.Add(this.tpSendList);
             this.tabInjectMode.Controls.Add(this.tpRobotList);
+            this.tabInjectMode.Controls.Add(this.tpWareHouseList);
             this.tabInjectMode.Controls.Add(this.tpStatistical);
             this.tabInjectMode.Controls.Add(this.tpComparison);
             this.tabInjectMode.Controls.Add(this.tpXOR);
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(119, 30);
-            this.tabInjectMode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabInjectMode.Margin = new System.Windows.Forms.Padding(2);
             this.tabInjectMode.Name = "tabInjectMode";
             this.tabInjectMode.Pages.Add(this.tpPacketList);
             this.tabInjectMode.Pages.Add(this.tpFilterList);
             this.tabInjectMode.Pages.Add(this.tpSendList);
             this.tabInjectMode.Pages.Add(this.tpRobotList);
+            this.tabInjectMode.Pages.Add(this.tpWareHouseList);
             this.tabInjectMode.Pages.Add(this.tpStatistical);
             this.tabInjectMode.Pages.Add(this.tpComparison);
             this.tabInjectMode.Pages.Add(this.tpXOR);
@@ -284,8 +293,9 @@
             // 
             this.tpPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpPacketList.Location = new System.Drawing.Point(0, 28);
-            this.tpPacketList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpPacketList.Margin = new System.Windows.Forms.Padding(2);
             this.tpPacketList.Name = "tpPacketList";
+            this.tpPacketList.Showed = true;
             this.tpPacketList.Size = new System.Drawing.Size(1331, 742);
             this.tpPacketList.TabIndex = 0;
             this.tpPacketList.Text = "封包列表";
@@ -294,7 +304,7 @@
             // 
             this.tpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpFilterList.Location = new System.Drawing.Point(0, 28);
-            this.tpFilterList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpFilterList.Margin = new System.Windows.Forms.Padding(2);
             this.tpFilterList.Name = "tpFilterList";
             this.tpFilterList.Size = new System.Drawing.Size(1331, 742);
             this.tpFilterList.TabIndex = 7;
@@ -304,7 +314,7 @@
             // 
             this.tpSendList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpSendList.Location = new System.Drawing.Point(0, 28);
-            this.tpSendList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpSendList.Margin = new System.Windows.Forms.Padding(2);
             this.tpSendList.Name = "tpSendList";
             this.tpSendList.Size = new System.Drawing.Size(1331, 742);
             this.tpSendList.TabIndex = 8;
@@ -314,7 +324,7 @@
             // 
             this.tpRobotList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpRobotList.Location = new System.Drawing.Point(0, 28);
-            this.tpRobotList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpRobotList.Margin = new System.Windows.Forms.Padding(2);
             this.tpRobotList.Name = "tpRobotList";
             this.tpRobotList.Size = new System.Drawing.Size(1331, 742);
             this.tpRobotList.TabIndex = 9;
@@ -324,7 +334,7 @@
             // 
             this.tpStatistical.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpStatistical.Location = new System.Drawing.Point(0, 28);
-            this.tpStatistical.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpStatistical.Margin = new System.Windows.Forms.Padding(2);
             this.tpStatistical.Name = "tpStatistical";
             this.tpStatistical.Size = new System.Drawing.Size(1331, 742);
             this.tpStatistical.TabIndex = 1;
@@ -334,7 +344,7 @@
             // 
             this.tpComparison.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpComparison.Location = new System.Drawing.Point(0, 28);
-            this.tpComparison.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpComparison.Margin = new System.Windows.Forms.Padding(2);
             this.tpComparison.Name = "tpComparison";
             this.tpComparison.Size = new System.Drawing.Size(1331, 742);
             this.tpComparison.TabIndex = 2;
@@ -344,7 +354,7 @@
             // 
             this.tpXOR.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpXOR.Location = new System.Drawing.Point(0, 28);
-            this.tpXOR.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpXOR.Margin = new System.Windows.Forms.Padding(2);
             this.tpXOR.Name = "tpXOR";
             this.tpXOR.Size = new System.Drawing.Size(1331, 742);
             this.tpXOR.TabIndex = 3;
@@ -354,7 +364,7 @@
             // 
             this.tpTranscoding.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpTranscoding.Location = new System.Drawing.Point(0, 28);
-            this.tpTranscoding.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpTranscoding.Margin = new System.Windows.Forms.Padding(2);
             this.tpTranscoding.Name = "tpTranscoding";
             this.tpTranscoding.Size = new System.Drawing.Size(1331, 742);
             this.tpTranscoding.TabIndex = 4;
@@ -364,7 +374,7 @@
             // 
             this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpExtraction.Location = new System.Drawing.Point(0, 28);
-            this.tpExtraction.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpExtraction.Margin = new System.Windows.Forms.Padding(2);
             this.tpExtraction.Name = "tpExtraction";
             this.tpExtraction.Size = new System.Drawing.Size(1331, 742);
             this.tpExtraction.TabIndex = 5;
@@ -374,7 +384,7 @@
             // 
             this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpSystemLog.Location = new System.Drawing.Point(0, 28);
-            this.tpSystemLog.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tpSystemLog.Margin = new System.Windows.Forms.Padding(2);
             this.tpSystemLog.Name = "tpSystemLog";
             this.tpSystemLog.Size = new System.Drawing.Size(1331, 742);
             this.tpSystemLog.TabIndex = 6;
@@ -401,6 +411,15 @@
             // 
             this.bgwAutoSave.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAutoSave_DoWork);
             // 
+            // tpWareHouseList
+            // 
+            this.tpWareHouseList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpWareHouseList.Location = new System.Drawing.Point(0, 28);
+            this.tpWareHouseList.Name = "tpWareHouseList";
+            this.tpWareHouseList.Size = new System.Drawing.Size(1331, 742);
+            this.tpWareHouseList.TabIndex = 10;
+            this.tpWareHouseList.Text = "仓库列表";
+            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -411,7 +430,7 @@
             this.Controls.Add(this.pageHeader);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(467, 331);
             this.Name = "InjectModeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -450,5 +469,6 @@
         private AntdUI.TabPage tpFilterList;
         private AntdUI.TabPage tpSendList;
         private AntdUI.TabPage tpRobotList;
+        private AntdUI.TabPage tpWareHouseList;
     }
 }

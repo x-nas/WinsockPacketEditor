@@ -11,6 +11,7 @@ namespace WinsockPacketEditor
         private FilterList cFilterList = null;
         private SendList cSendList = null;
         private RobotList cRobotList = null;
+        private WareHouseList cWareHouseList = null;
         private LogList cLogList = null;
         private StatisticalData cStatisticalData = null;
         private ComparisonText cComparisonText = null;
@@ -51,7 +52,8 @@ namespace WinsockPacketEditor
                 Operate.SystemConfig.InitListExecute();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
-                Operate.SystemConfig.LoadSystemList_FromDB();                
+                Operate.SystemConfig.LoadSystemList_FromDB();
+                Operate.WareHouseConfig.WareHouse.LoadAutoStores_FromDB();
 
                 this.InitGlobal();
                 this.InitFloatButton();
@@ -79,6 +81,7 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();
+            Operate.WareHouseConfig.WareHouse.SaveAutoStores_ToDB();
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
@@ -173,6 +176,23 @@ namespace WinsockPacketEditor
                 cRobotList = new RobotList(this);
                 cRobotList.Dock = DockStyle.Fill;
                 this.tpRobotList.Controls.Add(cRobotList);
+            }
+
+            //WareHouseList
+            if (this.tpWareHouseList.InvokeRequired)
+            {
+                this.tpWareHouseList.Invoke(new Action(() =>
+                {
+                    cWareHouseList = new WareHouseList(this);
+                    cWareHouseList.Dock = DockStyle.Fill;
+                    this.tpWareHouseList.Controls.Add(cWareHouseList);
+                }));
+            }
+            else
+            {
+                cWareHouseList = new WareHouseList(this);
+                cWareHouseList.Dock = DockStyle.Fill;
+                this.tpWareHouseList.Controls.Add(cWareHouseList);
             }
 
             //LogList
@@ -351,6 +371,11 @@ namespace WinsockPacketEditor
             this.cRobotList?.RefreshRobotList();
         }
 
+        public void RefreshWareHouseList()
+        {
+            this.cWareHouseList?.RefreshWareHouseList();
+        }
+
         public void CleanUp_LogList()
         {
             this.cLogList?.CleanUp_LogList();
@@ -411,6 +436,7 @@ namespace WinsockPacketEditor
             this.cFilterList?.Dark_Changed();
             this.cSendList?.Dark_Changed();
             this.cRobotList?.Dark_Changed();
+            this.cWareHouseList?.Dark_Changed();
             this.cStatisticalData?.Dark_Changed();
             this.cComparisonText?.Dark_Changed();
             this.cXORCalculation?.Dark_Changed();
@@ -591,7 +617,10 @@ namespace WinsockPacketEditor
                 this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
                 this.mInjectMode.Items[2].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
                 this.mInjectMode.Items[3].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
-                this.mInjectMode.Items[9].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+                this.mInjectMode.Items[4].Badge = Operate.WareHouseConfig.List.lstWareHouseInfo.Count.ToString();
+                this.mInjectMode.Items[10].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+
+                this.RefreshWareHouseList();
             }
             catch (Exception ex)
             {

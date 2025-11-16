@@ -657,26 +657,54 @@ namespace WinsockPacketEditor
 
                             if (piList.Count > 0)
                             {
-                                if (Guid.TryParse(item.ID, out Guid SID))
+                                if (item.Tag.ToString().Equals("ToSend"))
                                 {
-                                    SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
-                                    if (si != null && piList.Count > 0)
+                                    if (Guid.TryParse(item.ID, out Guid SID))
                                     {
-                                        if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                        SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                        if (si != null && piList.Count > 0)
                                         {
-                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到 " + item.Text, TType.Success)
+                                            if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
                                             {
-                                                LocalizationText = "ToSendList.Success"
-                                            });
-                                        }
-                                        else
-                                        {
-                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
+                                                string sText = string.Format(AntdUI.Localization.Get("ToSend.Success", "已添加到 : {0}"), item.Text);
+                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                            }
+                                            else
                                             {
-                                                LocalizationText = "ToSendList.Error"
-                                            });
+                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送出错", TType.Error)
+                                                {
+                                                    LocalizationText = "ToSend.Error"
+                                                });
+                                            }
                                         }
                                     }
+
+                                    return;
+                                }
+
+                                if (item.Tag.ToString().Equals("ToWareHouse"))
+                                {
+                                    if (Guid.TryParse(item.ID, out Guid WID))
+                                    {
+                                        WareHouseInfo whi = Operate.WareHouseConfig.WareHouse.GetWareHouse_ByGuid(WID);
+                                        if (whi != null && piList.Count > 0)
+                                        {
+                                            if (Operate.WareHouseConfig.WareHouse.AddStores_ByPacketInfo(WID, piList))
+                                            {
+                                                string sText = string.Format(AntdUI.Localization.Get("ToWareHouse.Success", "已添加到 : {0}"), item.Text);
+                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                            }
+                                            else
+                                            {
+                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到仓库出错", TType.Error)
+                                                {
+                                                    LocalizationText = "ToWareHouse.Error"
+                                                });
+                                            }
+                                        }
+                                    }
+
+                                    return;
                                 }
                             }
 
