@@ -29,6 +29,8 @@ namespace WinsockPacketEditor
             this.cbExternalProxy_EnableAuth.Checked = Operate.ProxyConfig.Proxy.Enable_ExternalProxy_Auth;
             this.txtExternalProxy_UserName.Text = Operate.ProxyConfig.Proxy.ExternalProxy_UserName;
             this.txtExternalProxy_PassWord.Text = Operate.ProxyConfig.Proxy.ExternalProxy_PassWord;
+
+            this.Enable_ExternalProxyChanged();
         }
 
         #endregion
@@ -43,6 +45,8 @@ namespace WinsockPacketEditor
         private void Enable_ExternalProxyChanged()
         {
             this.tlpServerInfo.Enabled = this.cbEnable_ExternalProxy.Checked;
+            this.ExternalProxy_AppointPort_Changed();
+            this.ExternalProxy_EnableAuth_Changed();
         }
 
         private void txtExternalProxy_IP_TextChanged(object sender, EventArgs e)

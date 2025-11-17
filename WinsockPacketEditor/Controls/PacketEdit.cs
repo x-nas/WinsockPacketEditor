@@ -642,22 +642,27 @@ namespace WinsockPacketEditor
                         dbp.ApplyChanges();
                         byte[] bNewBuff = dbp.Bytes.ToArray();
 
-                        if (this.form is InterfaceInfo.IInjectMode injectForm)
+                        if (this.packetInfo != null)
                         {
                             this.packetInfo.PacketSocket = ((int)this.nudPacketSocket.Value);
                             this.packetInfo.PacketBuffer = bNewBuff;
                             this.packetInfo.PacketLen = bNewBuff.Length;
                             this.packetInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
-
-                            injectForm.RefreshPacketData();
                         }
-                        else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                        else if (this.proxyInfo != null)
                         {
                             this.proxyInfo.PacketSocket = ((int)this.nudPacketSocket.Value);
                             this.proxyInfo.PacketBuffer = bNewBuff;
                             this.proxyInfo.PacketLen = bNewBuff.Length;
                             this.proxyInfo.PacketData = Operate.PacketConfig.Packet.GetPacketData_Hex(bNewBuff, Operate.PacketConfig.Packet.PacketData_MaxLen);
+                        }
 
+                        if (this.form is InterfaceInfo.IInjectMode injectForm)
+                        {
+                            injectForm.RefreshPacketData();
+                        }
+                        else if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                        {
                             proxyForm.RefreshProxyData();
                         }
 
