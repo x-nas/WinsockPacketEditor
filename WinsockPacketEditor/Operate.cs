@@ -33,7 +33,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using static WinsockPacketEditor.Operate.PacketConfig;
 
 namespace WinsockPacketEditor
 {
@@ -6199,11 +6198,11 @@ namespace WinsockPacketEditor
                             return;
                         }
 
-                        if (Operate.ProxyConfig.Proxy.TryUnpackData(dataToProcess, 0, out var packets, out int processedLength))
+                        if (Operate.ProxyConfig.Proxy.TryUnpackData(dataToProcess, out var packets, out int processedLength))
                         {
                             foreach (byte[] packet in packets)
                             {
-                                Operate.ProxyConfig.Proxy.ForwardData(m_Session, packet);                                
+                                Operate.ProxyConfig.Proxy.ForwardData(m_Session, packet);
                             }
 
                             if (processedLength < dataToProcess.Length)
@@ -6238,7 +6237,7 @@ namespace WinsockPacketEditor
                         if (receivedData == null || receivedData.Length == 0)
                             return resultPackets.ToArray();
 
-                        if (Operate.ProxyConfig.Proxy.TryUnpackData(receivedData, 0, out var packets, out _))
+                        if (Operate.ProxyConfig.Proxy.TryUnpackData(receivedData, out var packets, out _))
                         {
                             return packets.ToArray();
                         }
@@ -6255,14 +6254,14 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                private static bool TryUnpackData(ReadOnlySpan<byte> data, int startOffset, out List<byte[]> packets, out int processedLength)
+                private static bool TryUnpackData(ReadOnlySpan<byte> data, out List<byte[]> packets, out int processedLength)
                 {
                     packets = new List<byte[]>();
-                    processedLength = startOffset;
+                    processedLength = 0;
 
                     try
                     {
-                        if (data.IsEmpty || startOffset >= data.Length)
+                        if (data.IsEmpty)
                             return false;
 
                         byte[] headerBytes = Operate.ProxyConfig.Proxy.ParseHeaderBytes(Operate.ProxyConfig.Proxy.UnPack_Head);
@@ -6278,18 +6277,17 @@ namespace WinsockPacketEditor
                         int lengthFieldEnd = lengthPositions.End - 1;
                         int lengthFieldLength = lengthFieldEnd - lengthFieldStart + 1;
                         int minPacketSize = headerLength + lengthFieldLength;
-                        int currentOffset = startOffset;
+                        int currentOffset = 0;
+                        bool foundValidPacket = false;
 
                         while (currentOffset < data.Length)
                         {
                             var remaining = data.Slice(currentOffset);
 
-                            if (remaining.Length < minPacketSize)
+                            if (remaining.Length < headerLength)
                             {
-                                byte[] remainingData = remaining.ToArray();
-                                packets.Add(remainingData);
-                                processedLength = data.Length;
-                                break;
+                                processedLength = currentOffset;
+                                return foundValidPacket;
                             }
 
                             bool headerMatch = true;
@@ -6302,45 +6300,44 @@ namespace WinsockPacketEditor
                                 }
                             }
 
-                            if (headerMatch)
+                            if (!headerMatch)
                             {
-                                int packetLength = 0;
-                                for (int i = 0; i < lengthFieldLength; i++)
-                                {
-                                    packetLength = (packetLength << 8) | remaining[lengthFieldStart + i];
-                                }
-
-                                if (remaining.Length >= packetLength)
-                                {
-                                    byte[] completePacket = remaining.Slice(0, packetLength).ToArray();
-                                    packets.Add(completePacket);
-
-                                    currentOffset += packetLength;
-                                    processedLength = currentOffset;
-
-                                    if (currentOffset == data.Length)
-                                    {
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    byte[] remainingData = remaining.ToArray();
-                                    packets.Add(remainingData);
-                                    processedLength = data.Length;
-                                    break;
-                                }
+                                processedLength = currentOffset;
+                                return foundValidPacket;
                             }
-                            else
+
+                            if (remaining.Length < minPacketSize)
                             {
-                                byte[] remainingData = remaining.ToArray();
-                                packets.Add(remainingData);
-                                processedLength = data.Length;
+                                processedLength = currentOffset;
+                                return foundValidPacket;
+                            }
+
+                            int packetLength = 0;
+                            for (int i = 0; i < lengthFieldLength; i++)
+                            {
+                                packetLength = (packetLength << 8) | remaining[lengthFieldStart + i];
+                            }
+
+                            if (remaining.Length < packetLength)
+                            {
+                                processedLength = currentOffset;
+                                return foundValidPacket;
+                            }
+
+                            byte[] completePacket = remaining.Slice(0, packetLength).ToArray();
+                            packets.Add(completePacket);
+                            foundValidPacket = true;
+
+                            currentOffset += packetLength;
+                            processedLength = currentOffset;
+
+                            if (currentOffset >= data.Length)
+                            {
                                 break;
                             }
                         }
 
-                        return true;
+                        return foundValidPacket;
                     }
                     catch (Exception ex)
                     {
@@ -13845,15 +13842,7 @@ namespace WinsockPacketEditor
                                 else
                                 {
                                     Operate.PacketConfig.List.lstPacketInfo.Add(pi);
-                                }
-
-                                byte[] packet = pi.PacketBuffer;
-
-                                int packetLength = (short)((packet[3] << 8) | packet[4]);
-                                if (packetLength != packet.Length)
-                                {
-                                    Operate.DoLog(nameof(PacketToList), packetLength + " | " + packet.Length);
-                                }
+                                }                                
                             }
                             else
                             {
