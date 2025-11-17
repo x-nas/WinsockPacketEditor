@@ -15439,6 +15439,7 @@ namespace WinsockPacketEditor
                 #region//检查是否匹配指定端口
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 public static bool CheckPacket_IsMatch_AppointPort(
                     int iSocket,
                     PacketConfig.Packet.PacketType ptType,
@@ -15451,64 +15452,49 @@ namespace WinsockPacketEditor
                     try
                     {
                         string packetIP = PacketConfig.Packet.GetIPString_BySocketAddr(iSocket, sAddr, ptType);
-                        if (string.IsNullOrEmpty(packetIP))
-                            return false;
+                        string[] ipPortPairs = packetIP.Split('|');
+                        string[] portConditions = portContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        // 获取实际端口号
-                        int actualPort = GetPortFromIPString(packetIP);
-                        if (actualPort == -1)
-                            return false;
-
-                        // 检查端口是否匹配
-                        return CheckPortMatch(portContent, actualPort);
+                        foreach (string ipPortPair in ipPortPairs)
+                        {
+                            if (FilterConfig.Filter.TryParsePort(ipPortPair, out int actualPort) && actualPort != -1)
+                            {
+                                foreach (string condition in portConditions)
+                                {
+                                    if (FilterConfig.Filter.CheckPortMatch(condition.Trim(), actualPort))
+                                    {
+                                        return true;
+                                    }                                        
+                                }
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointPort), ex);
-                        return false;
+                        Operate.DoLog(nameof(CheckPacket_IsMatch_AppointPort), ex);                        
                     }
+
+                    return false;
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static int GetPortFromIPString(string ipString)
-                {
-                    int pipeIndex = ipString.IndexOf('|');
 
-                    if (pipeIndex > 0)
-                    {
-                        // 尝试第一部分
-                        if (TryParsePort(ipString.Substring(0, pipeIndex), out int port))
-                            return port;
-
-                        // 尝试第二部分
-                        if (TryParsePort(ipString.Substring(pipeIndex + 1), out port))
-                            return port;
-                    }
-                    else
-                    {
-                        // 没有管道符，尝试整个字符串
-                        if (TryParsePort(ipString, out int port))
-                            return port;
-                    }
-
-                    return -1;
-                }
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 private static bool TryParsePort(string ipPortPart, out int port)
                 {
-                    int colonIndex = ipPortPart.IndexOf(':');
-                    if (colonIndex > 0)
+                    port = -1;
+
+                    int colonIndex = ipPortPart.LastIndexOf(':');
+                    if (colonIndex > 0 && colonIndex < ipPortPart.Length - 1)
                     {
                         string portStr = ipPortPart.Substring(colonIndex + 1);
                         return int.TryParse(portStr, out port);
                     }
 
-                    port = -1;
                     return false;
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
                 private static bool CheckPortMatch(string portContent, int actualPort)
                 {
                     string[] parts = portContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
@@ -15517,7 +15503,6 @@ namespace WinsockPacketEditor
                     {
                         string trimmedPart = part.Trim();
 
-                        // 检查范围格式 (如 "1000-2000")
                         int dashIndex = trimmedPart.IndexOf('-');
                         if (dashIndex > 0)
                         {
@@ -15533,7 +15518,6 @@ namespace WinsockPacketEditor
                             continue;
                         }
 
-                        // 检查精确匹配
                         if (int.TryParse(trimmedPart, out int port) && actualPort == port)
                         {
                             return true;
