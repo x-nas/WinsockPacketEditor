@@ -542,6 +542,10 @@ namespace WinsockPacketEditor
                     this.tabInjectMode.SelectTab("tpRobotList");
                     break;
 
+                case "miWareHouseList":
+                    this.tabInjectMode.SelectTab("tpWareHouseList");
+                    break;
+
                 case "miStatistical":
                     this.tabInjectMode.SelectTab("tpStatistical");
                     break;
