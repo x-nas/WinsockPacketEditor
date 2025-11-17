@@ -33,6 +33,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static WinsockPacketEditor.Operate.PacketConfig;
 
 namespace WinsockPacketEditor
 {
@@ -6202,7 +6203,7 @@ namespace WinsockPacketEditor
                         {
                             foreach (byte[] packet in packets)
                             {
-                                Operate.ProxyConfig.Proxy.ForwardData(m_Session, packet);
+                                Operate.ProxyConfig.Proxy.ForwardData(m_Session, packet);                                
                             }
 
                             if (processedLength < dataToProcess.Length)
@@ -13844,7 +13845,15 @@ namespace WinsockPacketEditor
                                 else
                                 {
                                     Operate.PacketConfig.List.lstPacketInfo.Add(pi);
-                                }                                
+                                }
+
+                                byte[] packet = pi.PacketBuffer;
+
+                                int packetLength = (short)((packet[3] << 8) | packet[4]);
+                                if (packetLength != packet.Length)
+                                {
+                                    Operate.DoLog(nameof(PacketToList), packetLength + " | " + packet.Length);
+                                }
                             }
                             else
                             {
@@ -21340,6 +21349,51 @@ namespace WinsockPacketEditor
                     }
 
                     return imsReturn;
+                }
+
+                #endregion
+
+                #region//获取仓储数据的右键菜单
+
+                public static AntdUI.IContextMenuStripItem[] GetCMS_StoresData(HexBox hbPacketData)
+                {
+                    List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();                    
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("复制")
+                    {
+                        Enabled = hbPacketData.CanCopy(),
+                        ID = "Copy",
+                        IconSvg = "CopyOutlined",
+                        LocalizationText = "Copy",
+                        Sub = new AntdUI.IContextMenuStripItem[]
+                        {
+                            new AntdUI.ContextMenuStripItem("复制文本")
+                            {
+                                Enabled = hbPacketData.CanCopy(),
+                                ID = "Copy_Text",
+                                IconSvg = "CopyOutlined",
+                                LocalizationText = "CopyText",
+                            },
+                            new AntdUI.ContextMenuStripItem("复制十六进制")
+                            {
+                                Enabled = hbPacketData.CanCopy(),
+                                ID = "Copy_Hex",
+                                IconSvg = "CopyOutlined",
+                                LocalizationText = "CopyHex",
+                            },
+                        },
+                    });
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItemDivider());                    
+
+                    menuItems.Add(new AntdUI.ContextMenuStripItem("全选")
+                    {
+                        ID = "SelectAll",
+                        IconSvg = "ProfileOutlined",
+                        LocalizationText = "SelectAll",
+                    });
+
+                    return menuItems.ToArray();
                 }
 
                 #endregion

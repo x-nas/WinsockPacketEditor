@@ -114,7 +114,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//仓储数据 - 菜单
+        #region//仓储列表 - 菜单
 
         private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
@@ -152,7 +152,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//仓储数据 - 右键菜单
+        #region//仓储列表 - 右键菜单
 
         private void tStores_CellClick(object sender, TableClickEventArgs e)
         {
@@ -248,7 +248,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示选中的封包数据
+        #region//显示选中的仓储数据
 
         private void tStores_SelectIndexChanged(object sender, EventArgs e)
         {
@@ -264,6 +264,76 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//仓储数据 - 右键菜单
+
+        private void hbPacketData_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C && this.hbPacketData.CanCopy())
+            {
+                e.Handled = true;
+                this.hbPacketData.CopyHex();
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                {
+                    LocalizationText = "CopyToClipboard"
+                });
+            }
+        }
+
+        private void hbPacketData_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+                if (dbp == null || dbp.Bytes.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(hbPacketData, (item) =>
+                {
+                    switch (item.ID)
+                    {
+                        case "Copy_Text":
+
+                            this.hbPacketData.Copy();
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                            {
+                                LocalizationText = "CopyToClipboard"
+                            });
+
+                            break;
+
+                        case "Copy_Hex":
+
+                            this.hbPacketData.CopyHex();
+
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                            {
+                                LocalizationText = "CopyToClipboard"
+                            });
+
+                            break;
+
+                        case "SelectAll":
+
+                            this.hbPacketData.SelectAll();
+
+                            break;
+
+                        default:
+
+                            //
+
+                            break;
+                    }
+                }, Operate.WareHouseConfig.List.GetCMS_StoresData(this.hbPacketData)));
             }
         }
 

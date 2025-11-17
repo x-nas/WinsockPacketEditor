@@ -239,6 +239,8 @@
             this.hbPacketData.StringViewVisible = true;
             this.hbPacketData.TabIndex = 5;
             this.hbPacketData.VScrollBarVisible = true;
+            this.hbPacketData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.hbPacketData_KeyDown);
+            this.hbPacketData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.hbPacketData_MouseDown);
             // 
             // WareHouseEdit
             // 
