@@ -20,6 +20,7 @@ namespace WinsockPacketEditor
         private Transcoding cTranscoding = null;
         private ExtractionData cExtractionData = null;
         private LogList cLogList = null;
+        private WPCConfig cWPCConfig = null;
 
         #region//窗体事件
 
@@ -349,6 +350,23 @@ namespace WinsockPacketEditor
                 cLogList.Dock = DockStyle.Fill;
                 this.tpSystemLog.Controls.Add(cLogList);
             }
+
+            //WPCConfig
+            if (this.tpWPCConfig.InvokeRequired)
+            {
+                this.tpSystemLog.Invoke(new Action(() =>
+                {
+                    cWPCConfig = new WPCConfig(this);
+                    cWPCConfig.Dock = DockStyle.Fill;
+                    this.tpWPCConfig.Controls.Add(cWPCConfig);
+                }));
+            }
+            else
+            {
+                cWPCConfig = new WPCConfig(this);
+                cWPCConfig.Dock = DockStyle.Fill;
+                this.tpWPCConfig.Controls.Add(cWPCConfig);
+            }
         }
 
         private void InitForm()
@@ -510,6 +528,7 @@ namespace WinsockPacketEditor
             this.cTranscoding?.Dark_Changed();
             this.cExtractionData?.Dark_Changed();
             this.cLogList?.Dark_Changed();
+            this.cWPCConfig?.Dark_Changed();
         }
 
         #endregion
@@ -641,6 +660,10 @@ namespace WinsockPacketEditor
                     this.tabProxyMode.SelectTab("tpExtraction");
                     break;
 
+                case "miWPCConfig":
+                    this.tabProxyMode.SelectTab("tpWPCConfig");
+                    break;
+
                 case "miSystemLog":
                     this.tabProxyMode.SelectTab("tpSystemLog");
                     break;
@@ -704,7 +727,7 @@ namespace WinsockPacketEditor
                 this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
                 this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
                 this.mProxyMode.Items[6].Badge = Operate.WareHouseConfig.List.lstWareHouseInfo.Count.ToString();
-                this.mProxyMode.Items[12].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
+                this.mProxyMode.Items[13].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
                 
                 this.RefreshWareHouseList();
             }

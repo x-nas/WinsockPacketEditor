@@ -227,6 +227,7 @@
     <Compile Include="ClassObject\LogInfo.cs" />
     <Compile Include="ClassObject\MapLocal.cs" />
     <Compile Include="ClassObject\MapRemote.cs" />
+    <Compile Include="ClassObject\NoticeInfo.cs" />
     <Compile Include="ClassObject\PacketInfo.cs" />
     <Compile Include="ClassObject\ProcessInfo.cs" />
     <Compile Include="ClassObject\ProxyAppServer.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="ClassObject\RobotInfo.cs" />
     <Compile Include="ClassObject\SendExecute.cs" />
     <Compile Include="ClassObject\SendInfo.cs" />
+    <Compile Include="ClassObject\ServerInfo.cs" />
     <Compile Include="ClassObject\Socks5ProxyReceiveFilter.cs" />
     <Compile Include="ClassObject\SocksProxyReceiveFilterFactory.cs" />
     <Compile Include="ClassObject\SocksProxyServer.cs" />
@@ -423,6 +425,12 @@
     <Compile Include="Controls\MapSetting.Designer.cs">
       <DependentUpon>MapSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NoticeEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NoticeEdit.Designer.cs">
+      <DependentUpon>NoticeEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PacketData.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -513,6 +521,12 @@
     <Compile Include="Controls\SendList.Designer.cs">
       <DependentUpon>SendList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ServerEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ServerEdit.Designer.cs">
+      <DependentUpon>ServerEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\StatisticalData.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -560,6 +574,12 @@
     </Compile>
     <Compile Include="Controls\WhiteListEdit.Designer.cs">
       <DependentUpon>WhiteListEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WPCConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\WPCConfig.Designer.cs">
+      <DependentUpon>WPCConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\XORCalculation.cs">
       <SubType>UserControl</SubType>
@@ -629,6 +649,7 @@
     <Compile Include="SunnyNetlibray\WSClient.cs" />
     <Compile Include="WebAPI\CCProxy_Controller.cs" />
     <Compile Include="WebAPI\ProxyAccount_Controller.cs" />
+    <Compile Include="WebAPI\ProxyCap_Controller.cs" />
     <Compile Include="WebAPI\ProxyInfo_Controller.cs" />
     <Compile Include="WebAPI\SocketInfo_Controller.cs" />
     <Compile Include="WebAPI\Socket_Web.cs" />
@@ -723,6 +744,9 @@
     <EmbeddedResource Include="Controls\MapSetting.resx">
       <DependentUpon>MapSetting.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NoticeEdit.resx">
+      <DependentUpon>NoticeEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\PacketData.resx">
       <DependentUpon>PacketData.cs</DependentUpon>
     </EmbeddedResource>
@@ -768,6 +792,9 @@
     <EmbeddedResource Include="Controls\SendList.resx">
       <DependentUpon>SendList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ServerEdit.resx">
+      <DependentUpon>ServerEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\StatisticalData.resx">
       <DependentUpon>StatisticalData.cs</DependentUpon>
     </EmbeddedResource>
@@ -788,6 +815,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\WhiteListEdit.resx">
       <DependentUpon>WhiteListEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\WPCConfig.resx">
+      <DependentUpon>WPCConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\XORCalculation.resx">
       <DependentUpon>XORCalculation.cs</DependentUpon>

@@ -13,6 +13,12 @@ namespace WinsockPacketEditor
         {
             try
             {
+                if (!Operate.SystemConfig.IsAdministrator())
+                {
+                    Operate.SystemConfig.RestartAsAdmin();
+                    return;
+                }
+
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
                     User32.SetProcessDPIAware();
@@ -22,45 +28,15 @@ namespace WinsockPacketEditor
                 Application.SetCompatibleTextRenderingDefault(false);
 
                 Operate.DataBase.InitDB();
-                Operate.SystemConfig.LoadSystemConfig_FromDB();                
+                Operate.SystemConfig.LoadSystemConfig_FromDB();
 
-                System.Security.Principal.WindowsIdentity identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
-
-                if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
+                StartForm sfForm = new StartForm();
+                if (sfForm.ShowDialog() == DialogResult.OK)
                 {
-                    StartForm sfForm = new StartForm();
-                    if (sfForm.ShowDialog() == DialogResult.OK)
+                    if (Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Proxy)
                     {
-                        if (Operate.SystemConfig.SelectMode == Operate.SystemConfig.SystemMode.Proxy)
-                        {
-                            Application.Run(new ProxyModeForm());
-                        }
+                        Application.Run(new ProxyModeForm());
                     }
-                }
-                else
-                {
-                    #region//如果没有管理员权限，则重新以管理员身份运行
-
-                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                    startInfo.UseShellExecute = true;
-                    startInfo.WorkingDirectory = Environment.CurrentDirectory;
-                    startInfo.FileName = Application.ExecutablePath;
-                    
-                    startInfo.Verb = "runas";
-
-                    try
-                    {
-                        System.Diagnostics.Process.Start(startInfo);
-                    }
-                    catch
-                    {
-                        return;
-                    }
-                   
-                    Application.Exit();
-
-                    #endregion
                 }
             }
             catch (Exception ex)

@@ -1,13 +1,13 @@
-﻿using Owin;
-using System.Web.Http;
-using Microsoft.Owin.StaticFiles;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
+using Microsoft.Owin.StaticFiles;
+using Owin;
+using System;
+using System.IO;
 using System.Net;
 using System.Security.Principal;
 using System.Text;
-using System;
-using Microsoft.Owin;
-using System.IO;
+using System.Web.Http;
 
 namespace WinsockPacketEditor
 {
@@ -21,6 +21,17 @@ namespace WinsockPacketEditor
 
                 app.Use(async (context, next) =>
                 {
+                    var currentPath = context.Request.Path.Value;
+
+                    //无需认证的路径，直接放行
+                    bool isPublicPath = currentPath.StartsWith("/ProxyCap/", StringComparison.OrdinalIgnoreCase);
+                    if (isPublicPath)
+                    {
+                        await next.Invoke();
+                        return;
+                    }
+
+                    //需要认证的路径，进行 HTTP Basic Authentication 验证
                     var authHeader = context.Request.Headers["Authorization"];
 
                     if (authHeader != null && authHeader.StartsWith("Basic"))

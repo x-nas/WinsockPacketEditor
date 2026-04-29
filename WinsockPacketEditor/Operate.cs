@@ -136,6 +136,46 @@ namespace WinsockPacketEditor
 
             #endregion
 
+            #region//程序启动权限
+
+            public static bool IsAdministrator()
+            {
+                try
+                {
+                    var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                    var principal = new System.Security.Principal.WindowsPrincipal(identity);
+
+                    return principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            public static void RestartAsAdmin()
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.UseShellExecute = true;
+                startInfo.WorkingDirectory = Environment.CurrentDirectory;
+                startInfo.FileName = Application.ExecutablePath;
+                startInfo.Verb = "runas";
+
+                try
+                {
+                    Process.Start(startInfo);
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    return;
+                }
+
+                Environment.Exit(0);
+            }
+
+            #endregion
+
             #region//测试版提示
 
             public static void ShowBetaMessage(Form form)
@@ -4320,11 +4360,13 @@ namespace WinsockPacketEditor
                     FilterConfig.List.SaveFilterList_ToDB();
                     SendConfig.List.SaveSendList_ToDB();
                     RobotConfig.List.SaveRobotList_ToDB();
+                    WPCConfig.ServerList.SaveServerList_ToDB();
+                    WPCConfig.NoticeList.SaveNoticeList_ToDB();
                     WareHouseConfig.List.SaveWareHouseList_ToDB();
                 }
                 catch (Exception ex)
                 {
-                    DoLog(nameof(LoadSystemList_FromDB), ex);
+                    DoLog(nameof(SaveSystemList_ToDB), ex);
                 }                
             }
 
@@ -4339,6 +4381,8 @@ namespace WinsockPacketEditor
                     FilterConfig.List.LoadFilterList_FromDB();
                     SendConfig.List.LoadSendList_FromDB();
                     RobotConfig.List.LoadRobotList_FromDB();
+                    WPCConfig.ServerList.LoadServerList_FromDB();
+                    WPCConfig.NoticeList.LoadNoticeList_FromDB();
                     WareHouseConfig.List.LoadWareHouseList_FromDB();
 
                     string DBFilePath = string.Format("{0}\\{1}", DataBase.dbPath, DataBase.dbName);
@@ -22141,6 +22185,620 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//WPC配置
+
+        public static class WPCConfig
+        {
+            #region//获取列表的右键菜单
+
+            public static AntdUI.IContextMenuStripItem[] GetCMS_List()
+            {
+                List<AntdUI.IContextMenuStripItem> menuItems = new List<AntdUI.IContextMenuStripItem>();
+
+                menuItems.Add(new AntdUI.ContextMenuStripItem("置顶", "Ctrl+⬆")
+                {
+                    ID = "Top",
+                    IconSvg = "VerticalAlignTopOutlined",
+                    LocalizationText = "Top",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                menuItems.Add(new AntdUI.ContextMenuStripItem("向上移动", "Alt+⬆")
+                {
+                    ID = "Up",
+                    IconSvg = "ArrowUpOutlined",
+                    LocalizationText = "Up",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItem("向下移动", "Alt+⬇")
+                {
+                    ID = "Down",
+                    IconSvg = "ArrowDownOutlined",
+                    LocalizationText = "Down",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                menuItems.Add(new AntdUI.ContextMenuStripItem("置底", "Ctrl+⬇")
+                {
+                    ID = "Bottom",
+                    IconSvg = "VerticalAlignBottomOutlined",
+                    LocalizationText = "Bottom",
+                });
+                menuItems.Add(new AntdUI.ContextMenuStripItemDivider());
+                menuItems.Add(new AntdUI.ContextMenuStripItem("删除")
+                {
+                    ID = "Delete",
+                    IconSvg = "DeleteOutlined",
+                    LocalizationText = "Delete",
+                });
+
+                return menuItems.ToArray();
+            }
+
+            #endregion
+
+            #region//服务器列表
+
+            public static class ServerList
+            {
+                public static BindingList<ServerInfo> lstServerInfo = new BindingList<ServerInfo>();
+
+                #region//新增服务器
+
+                public static void AddServer(bool IsEnable, Guid SID, string ServerName, string ServerIP, int ServerPort, string ForgotURL, string RegisterURL)
+                {
+                    try
+                    {
+                        if (SID != Guid.Empty && !string.IsNullOrEmpty(ServerName))
+                        {
+                            Operate.WPCConfig.ServerList.ServerToList(new ServerInfo(IsEnable, SID, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddServer), ex);
+                    }
+                }
+
+                private static void ServerToList(ServerInfo si)
+                {
+                    try
+                    {
+                        if (Operate.SystemConfig.InvokeAction != null)
+                        {
+                            Operate.SystemConfig.InvokeAction(() =>
+                            {
+                                WPCConfig.ServerList.lstServerInfo.Add(si);
+                            });
+                        }
+                        else
+                        {
+                            WPCConfig.ServerList.lstServerInfo.Add(si);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ServerToList), ex);
+                    }
+                }
+
+                #endregion                
+
+                #region//编辑服务器
+
+                public static void OpenServerEdit(Form form, ServerInfo si)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("ServerEditForm", "服务器编辑"), new ServerEdit(form, si))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                public static bool UpdateServer_ByServerID(
+                    Guid SID,
+                    bool IsEnable,
+                    string ServerName,
+                    string ServerIP,
+                    int ServerPort,
+                    string ForgotURL,
+                    string RegisterURL)
+                {
+                    try
+                    {
+                        if (SID != null || SID != Guid.Empty)
+                        {
+                            ServerInfo si = WPCConfig.ServerList.lstServerInfo.FirstOrDefault(server => server.SID == SID);
+
+                            if (si != null)
+                            {
+                                si.IsEnable = IsEnable;
+                                si.ServerName = ServerName;
+                                si.ServerIP = ServerIP;
+                                si.ServerPort = ServerPort;
+                                si.ForgotURL = ForgotURL;
+                                si.RegisterURL = RegisterURL;
+
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateServer_ByServerID), ex);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//删除服务器（对话框）
+
+                public static void DeleteServer_Dialog(Form form, List<ServerInfo> siList)
+                {
+                    try
+                    {
+                        if (siList.Count > 0)
+                        {
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miServerList", "发送列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    foreach (ServerInfo si in siList)
+                                    {
+                                        WPCConfig.ServerList.lstServerInfo.Remove(si);
+                                    }
+
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteServer_Dialog), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//获取启用的服务器列表
+
+                public static List<ServerInfo> GetEnabledServers()
+                {
+                    return lstServerInfo.Where(s => s.IsEnable).ToList();
+                }
+
+                #endregion                
+
+                #region//服务器列表的列表操作
+
+                public static void UpdateServerList_ByListAction(Form form, SystemConfig.ListAction listAction, List<ServerInfo> siList)
+                {
+                    try
+                    {
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                foreach (ServerInfo si in siList)
+                                {
+                                    WPCConfig.ServerList.lstServerInfo.Remove(si);
+                                    WPCConfig.ServerList.lstServerInfo.Insert(0, si);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                foreach (ServerInfo si in siList)
+                                {
+                                    int iIndex = WPCConfig.ServerList.lstServerInfo.IndexOf(si);
+                                    if (iIndex > 0)
+                                    {
+                                        WPCConfig.ServerList.lstServerInfo.Remove(si);
+                                        WPCConfig.ServerList.lstServerInfo.Insert(iIndex - 1, si);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                foreach (ServerInfo si in siList)
+                                {
+                                    int iIndex = WPCConfig.ServerList.lstServerInfo.IndexOf(si);
+                                    if (iIndex > -1 && iIndex < WPCConfig.ServerList.lstServerInfo.Count - 1)
+                                    {
+                                        WPCConfig.ServerList.lstServerInfo.Remove(si);
+                                        WPCConfig.ServerList.lstServerInfo.Insert(iIndex + 1, si);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                foreach (ServerInfo si in siList)
+                                {
+                                    WPCConfig.ServerList.lstServerInfo.Remove(si);
+                                    WPCConfig.ServerList.lstServerInfo.Add(si);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Delete:
+
+                                WPCConfig.ServerList.DeleteServer_Dialog(form, siList);
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateServerList_ByListAction), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//清空服务器列表（对话框）
+
+                public static void CleanUpServerList_Dialog(Form form)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.ServerList", "服务器列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    {
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
+                        {
+                            WPCConfig.ServerList.ServerListClear();
+                            return true;
+                        }
+                    });
+                }
+
+                public static void ServerListClear()
+                {
+                    lstServerInfo.Clear();
+                }
+
+                #endregion
+
+                #region//保存服务器列表到数据库
+
+                public static void SaveServerList_ToDB()
+                {
+                    try
+                    {
+                        DataBase.DeleteTable_ServerInfo();
+
+                        foreach (ServerInfo si in WPCConfig.ServerList.lstServerInfo)
+                        {
+                            DataBase.InsertTable_ServerInfo(si);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveServerList_ToDB), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//从数据库加载服务器列表
+
+                public static void LoadServerList_FromDB()
+                {
+                    try
+                    {
+                        DataTable dtServer = DataBase.SelectTable_ServerInfo();
+
+                        foreach (DataRow dataRow in dtServer.Rows)
+                        {
+                            Guid SID = Guid.Parse(dataRow["SID"].ToString());
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                            string ServerName = dataRow["ServerName"].ToString();
+                            string ServerIP = dataRow["ServerIP"].ToString();
+                            int ServerPort = Convert.ToInt32(dataRow["ServerPort"]);
+                            string ForgotURL = dataRow["ForgotURL"].ToString();
+                            string RegisterURL = dataRow["RegisterURL"].ToString();
+
+                            Operate.WPCConfig.ServerList.AddServer(IsEnable, SID, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadServerList_FromDB), ex);
+                    }
+                }
+
+                #endregion
+            }
+
+            #endregion
+
+            #region//公告列表
+
+            public static class NoticeList
+            {
+                public static BindingList<NoticeInfo> lstNoticeInfo = new BindingList<NoticeInfo>();
+
+                #region//新增公告
+
+                public static void AddNotice(Guid NID, int NoticeType, string NoticeTitle, string NoticeContent, string NoticeMore, DateTime NoticeTime)
+                {
+                    try
+                    {
+                        if (NID != Guid.Empty && !string.IsNullOrEmpty(NoticeTitle))
+                        {
+                            Operate.WPCConfig.NoticeList.NoticeToList(new NoticeInfo(NID, NoticeType, NoticeTitle, NoticeContent, NoticeMore, NoticeTime));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddNotice), ex);
+                    }
+                }
+
+                private static void NoticeToList(NoticeInfo ni)
+                {
+                    try
+                    {
+                        if (Operate.SystemConfig.InvokeAction != null)
+                        {
+                            Operate.SystemConfig.InvokeAction(() =>
+                            {
+                                WPCConfig.NoticeList.lstNoticeInfo.Add(ni);
+                            });
+                        }
+                        else
+                        {
+                            WPCConfig.NoticeList.lstNoticeInfo.Add(ni);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(NoticeToList), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//编辑公告
+
+                public static void OpenNoticeEdit(Form form, NoticeInfo ni)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("NoticeEditForm", "公告编辑"), new NoticeEdit(form, ni))
+                    {
+                        Keyboard = false,
+                        MaskClosable = false,
+                        BtnHeight = 0,
+                    });
+                }
+
+                public static bool UpdateNotice_ByNoticeID(
+                    Guid NID,
+                    int NoticeType,
+                    string NoticeTitle,
+                    string NoticeContent,
+                    string NoticeMore,
+                    DateTime NoticeTime)
+                {
+                    try
+                    {
+                        if (NID != null || NID != Guid.Empty)
+                        {
+                            NoticeInfo ni = WPCConfig.NoticeList.lstNoticeInfo.FirstOrDefault(notice => notice.NID == NID);
+
+                            if (ni != null)
+                            {
+                                ni.NoticeType = NoticeType;
+                                ni.NoticeTitle = NoticeTitle;
+                                ni.NoticeContent = NoticeContent;
+                                ni.NoticeMore = NoticeMore;
+                                ni.NoticeTime = NoticeTime;
+
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateNotice_ByNoticeID), ex);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//删除公告（对话框）
+
+                public static void DeleteNotice_Dialog(Form form, List<NoticeInfo> niList)
+                {
+                    try
+                    {
+                        if (niList.Count > 0)
+                        {
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("NoticeList", "公告列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    foreach (NoticeInfo ni in niList)
+                                    {
+                                        WPCConfig.NoticeList.lstNoticeInfo.Remove(ni);
+                                    }
+
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteNotice_Dialog), ex);
+                    }
+                }
+
+                #endregion                                                
+
+                #region//公告列表的列表操作
+
+                public static void UpdateNoticeList_ByListAction(Form form, SystemConfig.ListAction listAction, List<NoticeInfo> niList)
+                {
+                    try
+                    {
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                foreach (NoticeInfo ni in niList)
+                                {
+                                    WPCConfig.NoticeList.lstNoticeInfo.Remove(ni);
+                                    WPCConfig.NoticeList.lstNoticeInfo.Insert(0, ni);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                foreach (NoticeInfo ni in niList)
+                                {
+                                    int iIndex = WPCConfig.NoticeList.lstNoticeInfo.IndexOf(ni);
+                                    if (iIndex > 0)
+                                    {
+                                        WPCConfig.NoticeList.lstNoticeInfo.Remove(ni);
+                                        WPCConfig.NoticeList.lstNoticeInfo.Insert(iIndex - 1, ni);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                foreach (NoticeInfo ni in niList)
+                                {
+                                    int iIndex = WPCConfig.NoticeList.lstNoticeInfo.IndexOf(ni);
+                                    if (iIndex > -1 && iIndex < WPCConfig.NoticeList.lstNoticeInfo.Count - 1)
+                                    {
+                                        WPCConfig.NoticeList.lstNoticeInfo.Remove(ni);
+                                        WPCConfig.NoticeList.lstNoticeInfo.Insert(iIndex + 1, ni);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                foreach (NoticeInfo ni in niList)
+                                {
+                                    WPCConfig.NoticeList.lstNoticeInfo.Remove(ni);
+                                    WPCConfig.NoticeList.lstNoticeInfo.Add(ni);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Delete:
+
+                                WPCConfig.NoticeList.DeleteNotice_Dialog(form, niList);
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateNoticeList_ByListAction), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//清空公告列表（对话框）
+
+                public static void CleanUpNoticeList_Dialog(Form form)
+                {
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.NoticeList", "公告列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    {
+                        Icon = TType.Warn,
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
+                        {
+                            WPCConfig.NoticeList.NoticeListClear();
+                            return true;
+                        }
+                    });
+                }
+
+                public static void NoticeListClear()
+                {
+                    lstNoticeInfo.Clear();
+                }
+
+                #endregion
+
+                #region//保存公告列表到数据库
+
+                public static void SaveNoticeList_ToDB()
+                {
+                    try
+                    {
+                        DataBase.DeleteTable_NoticeInfo();
+
+                        foreach (NoticeInfo ni in WPCConfig.NoticeList.lstNoticeInfo)
+                        {
+                            DataBase.InsertTable_NoticeInfo(ni);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveNoticeList_ToDB), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//从数据库加载公告列表
+
+                public static void LoadNoticeList_FromDB()
+                {
+                    try
+                    {
+                        DataTable dtNotice = DataBase.SelectTable_NoticeInfo();
+
+                        foreach (DataRow dataRow in dtNotice.Rows)
+                        {
+                            Guid NID = Guid.Parse(dataRow["NID"].ToString());
+                            int NoticeType = Convert.ToInt32(dataRow["NoticeType"]);
+                            string NoticeTitle = dataRow["NoticeTitle"].ToString();
+                            string NoticeContent = dataRow["NoticeContent"].ToString();
+                            string NoticeMore = dataRow["NoticeMore"].ToString();
+                            DateTime NoticeTime = Convert.ToDateTime(dataRow["NoticeTime"]);
+
+                            Operate.WPCConfig.NoticeList.AddNotice(NID, NoticeType, NoticeTitle, NoticeContent, NoticeMore, NoticeTime);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadNoticeList_FromDB), ex);
+                    }
+                }
+
+                #endregion                
+            }
+
+            #endregion
+        }
+
+        #endregion
+
         #region//日志配置
 
         public static class LogConfig
@@ -22692,6 +23350,8 @@ namespace WinsockPacketEditor
                     DataBase.CreateTable_ProxyMapRemote();
                     DataBase.CreateTable_WhiteList();
                     DataBase.CreateTable_BlackList();
+                    DataBase.CreateTable_ServerInfo();
+                    DataBase.CreateTable_NoticeInfo();
                 }
                 catch (Exception ex)
                 {
@@ -25478,6 +26138,514 @@ namespace WinsockPacketEditor
                 {
                     Operate.DoLog(nameof(InsertTable_BlackList), ex);
                 }
+            }
+
+            #endregion
+
+            #region//服务器列表
+
+            private static bool CreateTable_ServerInfo()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS ServerInfo (";
+                        sql += "SID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "IsEnable BOOLEAN DEFAULT 1,";
+                        sql += "ServerName TEXT NOT NULL,";
+                        sql += "ServerIP TEXT NOT NULL,";
+                        sql += "ServerPort INTEGER DEFAULT 1080,";
+                        sql += "ForgotURL TEXT,";
+                        sql += "RegisterURL TEXT";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CreateTable_ServerInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_ServerInfo()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM ServerInfo;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_ServerInfo), ex);
+                }
+
+                return dtReturn;
+            }
+
+            public static DataTable SelectTable_ServerInfoBySID(Guid sid)
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM ServerInfo WHERE SID = @SID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@SID", sid.ToString().ToUpper());
+
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_ServerInfoBySID), ex);
+                }
+
+                return dtReturn;
+            }            
+
+            public static bool DeleteTable_ServerInfo(Guid sid)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sql = "DELETE FROM ServerInfo WHERE SID = @SID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@SID", sid.ToString().ToUpper());
+
+                            conn.Open();
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                bReturn = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_ServerInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool DeleteTable_ServerInfo()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sql = "DELETE FROM ServerInfo;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            bReturn = true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_ServerInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool InsertTable_ServerInfo(ServerInfo si)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sqlCheck = @"
+                            SELECT COUNT(1) FROM ServerInfo 
+                            WHERE SID = @SID;";
+
+                        string sql = @"
+                            INSERT INTO ServerInfo (
+                                SID, IsEnable, ServerName, ServerIP, 
+                                ServerPort, ForgotURL, RegisterURL
+                            ) VALUES (
+                                @SID, @IsEnable, @ServerName, @ServerIP, 
+                                @ServerPort, @ForgotURL, @RegisterURL
+                            );";
+
+                        using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn))
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            string sid = si.SID.ToString().ToUpper();
+
+                            cmdCheck.Parameters.AddWithValue("@SID", sid);
+
+                            conn.Open();
+
+                            long existingCount = (long)cmdCheck.ExecuteScalar();
+                            if (existingCount > 0)
+                            {
+                                return false;
+                            }
+
+                            cmd.Parameters.AddWithValue("@SID", sid);
+                            cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
+                            cmd.Parameters.AddWithValue("@ServerName", si.ServerName);
+                            cmd.Parameters.AddWithValue("@ServerIP", si.ServerIP);
+                            cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
+                            cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
+                            cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                bReturn = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_ServerInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool UpdateTable_ServerInfo(ServerInfo si)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sql = @"
+                            UPDATE ServerInfo 
+                            SET 
+                                IsEnable = @IsEnable,
+                                ServerName = @ServerName,
+                                ServerIP = @ServerIP,
+                                ServerPort = @ServerPort,
+                                ForgotURL = @ForgotURL,
+                                RegisterURL = @RegisterURL
+                            WHERE SID = @SID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@SID", si.SID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
+                            cmd.Parameters.AddWithValue("@ServerName", si.ServerName);
+                            cmd.Parameters.AddWithValue("@ServerIP", si.ServerIP);
+                            cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
+                            cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
+                            cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+
+                            conn.Open();
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                bReturn = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(UpdateTable_ServerInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            #endregion
+
+            #region//公告列表
+
+            public static bool CreateTable_NoticeInfo()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS NoticeInfo (";
+                        sql += "NID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "NoticeType INTEGER DEFAULT 1,";
+                        sql += "NoticeTitle TEXT NOT NULL,";
+                        sql += "NoticeContent TEXT NOT NULL,";
+                        sql += "NoticeMore TEXT,";
+                        sql += "NoticeTime TIMESTAMP NOT NULL";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(CreateTable_NoticeInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_NoticeInfo()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM NoticeInfo;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_NoticeInfo), ex);
+                }
+
+                return dtReturn;
+            }
+
+            public static DataTable SelectTable_NoticeInfoByNID(Guid nid)
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM NoticeInfo WHERE NID = @NID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@NID", nid.ToString().ToUpper());
+
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_NoticeInfoByNID), ex);
+                }
+
+                return dtReturn;
+            }
+
+            public static bool DeleteTable_NoticeInfo(Guid nid)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sql = "DELETE FROM NoticeInfo WHERE NID = @NID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@NID", nid.ToString().ToUpper());
+
+                            conn.Open();
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                bReturn = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_NoticeInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool DeleteTable_NoticeInfo()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sql = "DELETE FROM NoticeInfo;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            bReturn = true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_NoticeInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool InsertTable_NoticeInfo(NoticeInfo ni)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sqlCheck = @"
+                            SELECT COUNT(1) FROM NoticeInfo 
+                            WHERE NID = @NID;";
+
+                        string sql = @"
+                            INSERT INTO NoticeInfo (
+                                NID, NoticeType, NoticeTitle, NoticeContent, 
+                                NoticeMore, NoticeTime
+                            ) VALUES (
+                                @NID, @NoticeType, @NoticeTitle, @NoticeContent, 
+                                @NoticeMore, @NoticeTime
+                            );";
+
+                        using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn))
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            string nid = ni.NID.ToString().ToUpper();
+
+                            cmdCheck.Parameters.AddWithValue("@NID", nid);
+
+                            conn.Open();
+
+                            long existingCount = (long)cmdCheck.ExecuteScalar();
+                            if (existingCount > 0)
+                            {
+                                return false;
+                            }
+
+                            cmd.Parameters.AddWithValue("@NID", nid);
+                            cmd.Parameters.AddWithValue("@NoticeType", ni.NoticeType);
+                            cmd.Parameters.AddWithValue("@NoticeTitle", ni.NoticeTitle);
+                            cmd.Parameters.AddWithValue("@NoticeContent", ni.NoticeContent);
+                            cmd.Parameters.AddWithValue("@NoticeMore", string.IsNullOrEmpty(ni.NoticeMore) ? "" : ni.NoticeMore);
+                            cmd.Parameters.AddWithValue("@NoticeTime", ni.NoticeTime);
+
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                bReturn = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_NoticeInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool UpdateTable_NoticeInfo(NoticeInfo ni)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sql = @"
+                            UPDATE NoticeInfo 
+                            SET 
+                                NoticeType = @NoticeType,
+                                NoticeTitle = @NoticeTitle,
+                                NoticeContent = @NoticeContent,
+                                NoticeMore = @NoticeMore,
+                                NoticeTime = @NoticeTime
+                            WHERE NID = @NID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@NID", ni.NID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@NoticeType", ni.NoticeType);
+                            cmd.Parameters.AddWithValue("@NoticeTitle", ni.NoticeTitle);
+                            cmd.Parameters.AddWithValue("@NoticeContent", ni.NoticeContent);
+                            cmd.Parameters.AddWithValue("@NoticeMore", string.IsNullOrEmpty(ni.NoticeMore) ? "" : ni.NoticeMore);
+                            cmd.Parameters.AddWithValue("@NoticeTime", ni.NoticeTime);
+
+                            conn.Open();
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                bReturn = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(UpdateTable_NoticeInfo), ex);
+                }
+
+                return bReturn;
             }
 
             #endregion

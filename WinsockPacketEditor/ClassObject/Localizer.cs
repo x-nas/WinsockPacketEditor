@@ -1053,6 +1053,9 @@ namespace WinsockPacketEditor
                 case "ProxyModeForm.miExtraction":
                     return "Data Extraction";
 
+                case "ProxyModeForm.miWPCConfig":
+                    return "WPC Config";
+
                 case "ProxyModeForm.miSystemLog":
                     return "System Log";
 
@@ -3010,6 +3013,19 @@ namespace WinsockPacketEditor
 
                 case "ProcessSetting.LoadDriver.Error":
                     return "Failed to load driver, please check if it is running with admin privileges";
+
+                #endregion
+
+                #region//WPCConfig
+
+                case "WPCConfig":
+                    return "WPC Config";
+
+                case "WPCConfig.tpServerList":
+                    return "Server List";
+
+                case "WPCConfig.tpNoticeList":
+                    return "Notice List";
 
                 #endregion
 
