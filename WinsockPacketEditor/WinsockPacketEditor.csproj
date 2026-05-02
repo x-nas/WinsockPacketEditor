@@ -237,6 +237,7 @@
     <Compile Include="ClassObject\ProxyUDP.cs" />
     <Compile Include="ClassObject\RobotExecute.cs" />
     <Compile Include="ClassObject\RobotInfo.cs" />
+    <Compile Include="ClassObject\RuleInfo.cs" />
     <Compile Include="ClassObject\SendExecute.cs" />
     <Compile Include="ClassObject\SendInfo.cs" />
     <Compile Include="ClassObject\ServerInfo.cs" />
@@ -502,6 +503,18 @@
     </Compile>
     <Compile Include="Controls\RobotList.Designer.cs">
       <DependentUpon>RobotList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RuleEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RuleEdit.Designer.cs">
+      <DependentUpon>RuleEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RuleList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RuleList.Designer.cs">
+      <DependentUpon>RuleList.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SearchPacket.cs">
       <SubType>UserControl</SubType>
@@ -782,6 +795,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\RobotList.resx">
       <DependentUpon>RobotList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RuleEdit.resx">
+      <DependentUpon>RuleEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RuleList.resx">
+      <DependentUpon>RuleList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SearchPacket.resx">
       <DependentUpon>SearchPacket.cs</DependentUpon>

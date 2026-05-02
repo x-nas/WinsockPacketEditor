@@ -98,6 +98,7 @@ namespace WinsockPacketEditor
                         return new AntdUI.CellLink[]
                         {
                             new AntdUI.CellButton("bEdit", null, AntdUI.TTypeMini.Primary).SetIcon("EditOutlined"),
+                            new AntdUI.CellButton("bRule", null, AntdUI.TTypeMini.Warn).SetIcon("SendOutlined"),
                             new AntdUI.CellButton("bDelete", null, AntdUI.TTypeMini.Error).SetIcon("CloseOutlined"),
                         };
                     },
@@ -190,16 +191,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        public void RefreshServerList()
-        {
-            this.tServerList.Refresh();
-        }
-
-        public void RefreshNoticeList()
-        {
-            this.tNoticeList.Refresh();
-        }
-
         #endregion
 
         #region//列表 - 菜单
@@ -251,6 +242,12 @@ namespace WinsockPacketEditor
                     case "bEdit":
 
                         Operate.WPCConfig.ServerList.OpenServerEdit(this.form, si);
+
+                        break;
+
+                    case "bRule":
+
+                        Operate.WPCConfig.ServerList.OpenRuleList(this.form, si);
 
                         break;
 

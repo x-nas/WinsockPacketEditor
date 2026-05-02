@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -122,7 +123,7 @@ namespace WinsockPacketEditor
 
                 if (this.siSelect == null)
                 {
-                    Operate.WPCConfig.ServerList.AddServer(IsEnable, Guid.NewGuid(), ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL);
+                    Operate.WPCConfig.ServerList.AddServer(IsEnable, Guid.NewGuid(), ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, new BindingList<RuleInfo>());
                 }
                 else
                 {
@@ -133,11 +134,6 @@ namespace WinsockPacketEditor
                 {
                     LocalizationText = "ServerEditForm.Success"
                 });
-
-                if (this.form is InterfaceInfo.IProxyMode pmForm)
-                {
-                    pmForm.RefreshSendList();
-                }
 
                 this.Dispose();
             }

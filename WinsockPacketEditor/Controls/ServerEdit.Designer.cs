@@ -63,7 +63,7 @@
             this.tlpServerEdit.RowCount = 3;
             this.tlpServerEdit.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpServerEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tlpServerEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpServerEdit.Size = new System.Drawing.Size(350, 350);
             this.tlpServerEdit.TabIndex = 3;
             // 
@@ -78,14 +78,14 @@
             this.tlpButton.Controls.Add(this.bSave, 1, 1);
             this.tlpButton.Controls.Add(this.bExit, 3, 1);
             this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 301);
+            this.tlpButton.Location = new System.Drawing.Point(0, 300);
             this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButton.Name = "tlpButton";
             this.tlpButton.RowCount = 3;
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(350, 49);
+            this.tlpButton.Size = new System.Drawing.Size(350, 50);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -149,7 +149,7 @@
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpServerInfo.Size = new System.Drawing.Size(350, 265);
+            this.tlpServerInfo.Size = new System.Drawing.Size(350, 264);
             this.tlpServerInfo.TabIndex = 1;
             // 
             // txtForgotURL
@@ -241,7 +241,7 @@
             this.txtServerName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtServerName.Location = new System.Drawing.Point(123, 2);
             this.txtServerName.Margin = new System.Windows.Forms.Padding(2);
-            this.txtServerName.MaxLength = 20;
+            this.txtServerName.MaxLength = 50;
             this.txtServerName.Name = "txtServerName";
             this.txtServerName.PlaceholderText = "请输入服务器名称";
             this.txtServerName.Size = new System.Drawing.Size(206, 36);

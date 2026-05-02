@@ -24,6 +24,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -22242,13 +22243,14 @@ namespace WinsockPacketEditor
 
                 #region//新增服务器
 
-                public static void AddServer(bool IsEnable, Guid SID, string ServerName, string ServerIP, int ServerPort, string ForgotURL, string RegisterURL)
+                public static void AddServer(bool IsEnable, Guid SID, string ServerName, string ServerIP, int ServerPort, string ForgotURL, string RegisterURL, BindingList<RuleInfo> ServerRInfo)
                 {
                     try
                     {
                         if (SID != Guid.Empty && !string.IsNullOrEmpty(ServerName))
                         {
-                            Operate.WPCConfig.ServerList.ServerToList(new ServerInfo(IsEnable, SID, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL));
+                            ServerInfo si = new ServerInfo(IsEnable, SID, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, ServerRInfo);
+                            Operate.WPCConfig.ServerList.ServerToList(si);
                         }
                     }
                     catch (Exception ex)
@@ -22279,7 +22281,58 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                #endregion                
+                #endregion
+
+                #region//新增规则
+
+                public static void AddRule(Guid SID, RuleInfo rule)
+                {
+                    try
+                    {
+                        if (SID != Guid.Empty && rule != null)
+                        {
+                            ServerInfo si = WPCConfig.ServerList.lstServerInfo.FirstOrDefault(server => server.SID == SID);
+
+                            if (si != null)
+                            {
+                                if (si.ServerRInfo == null)
+                                {
+                                    si.ServerRInfo = new BindingList<RuleInfo>();
+                                }
+
+                                WPCConfig.ServerList.RuleToList(si, rule);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddRule), ex);
+                    }
+                }
+
+                private static void RuleToList(ServerInfo si, RuleInfo rule)
+                {
+                    try
+                    {
+                        if (Operate.SystemConfig.InvokeAction != null)
+                        {
+                            Operate.SystemConfig.InvokeAction(() =>
+                            {
+                                si.ServerRInfo.Add(rule);
+                            });
+                        }
+                        else
+                        {
+                            si.ServerRInfo.Add(rule);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(RuleToList), ex);
+                    }
+                }
+
+                #endregion
 
                 #region//编辑服务器
 
@@ -22331,6 +22384,76 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//编辑规则
+
+                public static void OpenRuleList(Form form, ServerInfo si)
+                {
+                    try
+                    {
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("RuleEditForm", "规则列表"), new RuleList(form, si))
+                        {
+                            Keyboard = false,
+                            MaskClosable = false,
+                            BtnHeight = 0,
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(OpenRuleList), ex);
+                    }
+                }
+
+                public static void OpenRuleEdit(Form form, ServerInfo si, RuleInfo ri)
+                {
+                    try
+                    {
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("RuleEditForm", "规则编辑"), new RuleEdit(form, si, ri))
+                        {
+                            Keyboard = false,
+                            MaskClosable = false,
+                            BtnHeight = 0,
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(OpenRuleEdit), ex);
+                    }
+                }
+
+                public static bool UpdateRule_ByRuleID(Guid SID, Guid RID, bool IsEnable, RuleType RType, string RArgument, RuleAction RAction)
+                {
+                    try
+                    {
+                        if (SID != Guid.Empty && RID != Guid.Empty)
+                        {
+                            ServerInfo si = WPCConfig.ServerList.lstServerInfo.FirstOrDefault(server => server.SID == SID);
+
+                            if (si != null && si.ServerRInfo != null)
+                            {
+                                RuleInfo rule = si.ServerRInfo.FirstOrDefault(r => r.RID == RID);
+
+                                if (rule != null)
+                                {
+                                    rule.IsEnable = IsEnable;
+                                    rule.RType = RType;
+                                    rule.RArgument = RArgument;
+                                    rule.RAction = RAction;
+
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateRule_ByRuleID), ex);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
                 #region//删除服务器（对话框）
 
                 public static void DeleteServer_Dialog(Form form, List<ServerInfo> siList)
@@ -22364,14 +22487,113 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//删除规则（对话框）
+
+                public static void DeleteRule_Dialog(Form form, List<RuleInfo> ruleList)
+                {
+                    try
+                    {
+                        if (ruleList.Count > 0)
+                        {
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("ServerRuleInfo", "服务器规则"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    foreach (RuleInfo rule in ruleList)
+                                    {
+                                        ServerInfo si = WPCConfig.ServerList.lstServerInfo.FirstOrDefault(server => server.ServerRInfo != null && server.ServerRInfo.Contains(rule));
+
+                                        if (si != null)
+                                        {
+                                            si.ServerRInfo.Remove(rule);
+                                        }
+                                    }
+
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(DeleteRule_Dialog), ex);
+                    }
+                }
+
+                #endregion
+
                 #region//获取启用的服务器列表
 
                 public static List<ServerInfo> GetEnabledServers()
                 {
-                    return lstServerInfo.Where(s => s.IsEnable).ToList();
+                    try
+                    {
+                        var enabledServers = Operate.WPCConfig.ServerList.lstServerInfo
+                            .Where(s => s.IsEnable)
+                            .Select(s => new ServerInfo(
+                                s.IsEnable,
+                                s.SID,
+                                s.ServerName,
+                                s.ServerIP,
+                                s.ServerPort,
+                                s.ForgotURL,
+                                s.RegisterURL,
+                                new BindingList<RuleInfo>(
+                                    s.ServerRInfo?.Where(r => r.IsEnable).ToList() ?? new List<RuleInfo>()
+                                )
+                            ))
+                            .ToList();
+
+                        return enabledServers;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetEnabledServers), ex);
+                        return new List<ServerInfo>();
+                    }
                 }
 
-                #endregion                
+                #endregion
+
+                #region//获取启用的规则列表
+
+                public static List<RuleInfo> GetEnabledRulesByServerID(Guid SID)
+                {
+                    try
+                    {
+                        if (SID != Guid.Empty)
+                        {
+                            ServerInfo si = WPCConfig.ServerList.lstServerInfo.FirstOrDefault(server => server.SID == SID);
+
+                            if (si != null && si.ServerRInfo != null)
+                            {
+                                return si.ServerRInfo.Where(r => r.IsEnable).ToList();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetEnabledRulesByServerID), ex);
+                    }
+
+                    return new List<RuleInfo>();
+                }
+
+                #endregion
+
+                #region//获取规则的描述
+
+                public static string GetRuleTypeDescription(RuleType ruleType)
+                {
+                    var field = ruleType.GetType().GetField(ruleType.ToString());
+                    var attribute = field?.GetCustomAttribute<DescriptionAttribute>();
+                    return attribute == null ? ruleType.ToString() : attribute.Description;
+                }
+
+                #endregion
 
                 #region//服务器列表的列表操作
 
@@ -22444,6 +22666,77 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//规则列表的列表操作
+
+                public static void UpdateRuleList_ByListAction(Form form, ServerInfo si, SystemConfig.ListAction listAction, List<RuleInfo> ruleList)
+                {
+                    try
+                    {
+                        switch (listAction)
+                        {
+                            case SystemConfig.ListAction.Top:
+
+                                foreach (RuleInfo rule in ruleList)
+                                {
+                                    si.ServerRInfo.Remove(rule);
+                                    si.ServerRInfo.Insert(0, rule);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Up:
+
+                                foreach (RuleInfo rule in ruleList)
+                                {
+                                    int iIndex = si.ServerRInfo.IndexOf(rule);
+                                    if (iIndex > 0)
+                                    {
+                                        si.ServerRInfo.Remove(rule);
+                                        si.ServerRInfo.Insert(iIndex - 1, rule);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Down:
+
+                                foreach (RuleInfo rule in ruleList)
+                                {
+                                    int iIndex = si.ServerRInfo.IndexOf(rule);
+                                    if (iIndex > -1 && iIndex < si.ServerRInfo.Count - 1)
+                                    {
+                                        si.ServerRInfo.Remove(rule);
+                                        si.ServerRInfo.Insert(iIndex + 1, rule);
+                                    }
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Bottom:
+
+                                foreach (RuleInfo rule in ruleList)
+                                {
+                                    si.ServerRInfo.Remove(rule);
+                                    si.ServerRInfo.Add(rule);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Delete:
+
+                                WPCConfig.ServerList.DeleteRule_Dialog(form, ruleList);
+
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(UpdateRuleList_ByListAction), ex);
+                    }
+                }
+
+                #endregion
+
                 #region//清空服务器列表（对话框）
 
                 public static void CleanUpServerList_Dialog(Form form)
@@ -22464,6 +22757,35 @@ namespace WinsockPacketEditor
                 public static void ServerListClear()
                 {
                     lstServerInfo.Clear();
+                }
+
+                #endregion
+
+                #region//清空规则列表（对话框）
+
+                public static void CleanUpRuleList_Dialog(Form form, ServerInfo si)
+                {
+                    try
+                    {
+                        if (si != null && si.ServerRInfo != null && si.ServerRInfo.Count > 0)
+                        {
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("ServerRuleInfo", "服务器规则"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            {
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
+                                {
+                                    si.ServerRInfo.Clear();
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(CleanUpRuleList_Dialog), ex);
+                    }
                 }
 
                 #endregion
@@ -22497,17 +22819,39 @@ namespace WinsockPacketEditor
                     {
                         DataTable dtServer = DataBase.SelectTable_ServerInfo();
 
-                        foreach (DataRow dataRow in dtServer.Rows)
+                        foreach (DataRow drServer in dtServer.Rows)
                         {
-                            Guid SID = Guid.Parse(dataRow["SID"].ToString());
-                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
-                            string ServerName = dataRow["ServerName"].ToString();
-                            string ServerIP = dataRow["ServerIP"].ToString();
-                            int ServerPort = Convert.ToInt32(dataRow["ServerPort"]);
-                            string ForgotURL = dataRow["ForgotURL"].ToString();
-                            string RegisterURL = dataRow["RegisterURL"].ToString();
+                            Guid SID = Guid.Parse(drServer["SID"].ToString());
+                            bool IsEnable = Convert.ToBoolean(drServer["IsEnable"]);
+                            string ServerName = drServer["ServerName"].ToString();
+                            string ServerIP = drServer["ServerIP"].ToString();
+                            int ServerPort = Convert.ToInt32(drServer["ServerPort"]);
+                            string ForgotURL = drServer["ForgotURL"].ToString();
+                            string RegisterURL = drServer["RegisterURL"].ToString();
 
-                            Operate.WPCConfig.ServerList.AddServer(IsEnable, SID, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL);
+                            BindingList<RuleInfo> Rules = new BindingList<RuleInfo>();
+                            DataTable dtRules = DataBase.SelectTable_ServerRuleInfo(SID);
+
+                            foreach (DataRow drRule in dtRules.Rows)
+                            {
+                                Guid RID = Guid.Parse(drRule["RID"].ToString());
+                                bool RuleIsEnable = Convert.ToBoolean(drRule["IsEnable"]);
+                                RuleType RType = (RuleType)Convert.ToInt32(drRule["RuleType"]);
+                                string RuleArgument = drRule["RuleArgument"].ToString();
+                                RuleAction RAction = (RuleAction)Convert.ToInt32(drRule["RuleAction"]);
+
+                                Rules.Add(new RuleInfo(RuleIsEnable, RID, RType, RuleArgument, RAction));
+                            }
+
+                            WPCConfig.ServerList.AddServer(
+                                IsEnable,
+                                SID,
+                                ServerName,
+                                ServerIP,
+                                ServerPort,
+                                ForgotURL,
+                                RegisterURL,
+                                Rules);
                         }
                     }
                     catch (Exception ex)
@@ -26140,7 +26484,7 @@ namespace WinsockPacketEditor
                 }
             }
 
-            #endregion
+            #endregion            
 
             #region//服务器列表
 
@@ -26160,6 +26504,16 @@ namespace WinsockPacketEditor
                         sql += "ServerPort INTEGER DEFAULT 1080,";
                         sql += "ForgotURL TEXT,";
                         sql += "RegisterURL TEXT";
+                        sql += ");";
+
+                        sql += "CREATE TABLE IF NOT EXISTS ServerRuleInfo (";
+                        sql += "RID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "SID TEXT NOT NULL,";
+                        sql += "IsEnable BOOLEAN DEFAULT 1,";
+                        sql += "RuleType INTEGER DEFAULT 0,";
+                        sql += "RuleArgument TEXT,";
+                        sql += "RuleAction INTEGER DEFAULT 0,";
+                        sql += "FOREIGN KEY (SID) REFERENCES ServerInfo(SID) ON DELETE CASCADE";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -26228,7 +26582,34 @@ namespace WinsockPacketEditor
                 }
 
                 return dtReturn;
-            }            
+            }
+
+            public static DataTable SelectTable_ServerRuleInfo(Guid sid)
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM ServerRuleInfo WHERE SID = @SID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@SID", sid.ToString().ToUpper());
+
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_ServerRuleInfo), ex);
+                }
+
+                return dtReturn;
+            }
 
             public static bool DeleteTable_ServerInfo(Guid sid)
             {
@@ -26238,18 +26619,33 @@ namespace WinsockPacketEditor
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
                     {
-                        string sql = "DELETE FROM ServerInfo WHERE SID = @SID;";
+                        conn.Open();
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
                         {
-                            cmd.Parameters.AddWithValue("@SID", sid.ToString().ToUpper());
+                            // 先删除关联的规则
+                            string sqlDeleteRules = "DELETE FROM ServerRuleInfo WHERE SID = @SID;";
+                            string sqlDeleteServer = "DELETE FROM ServerInfo WHERE SID = @SID;";
 
-                            conn.Open();
-                            int rowsAffected = cmd.ExecuteNonQuery();
-
-                            if (rowsAffected > 0)
+                            using (SQLiteCommand cmdDeleteRules = new SQLiteCommand(sqlDeleteRules, conn, transaction))
+                            using (SQLiteCommand cmdDeleteServer = new SQLiteCommand(sqlDeleteServer, conn, transaction))
                             {
-                                bReturn = true;
+                                string formattedSid = sid.ToString().ToUpper();
+                                cmdDeleteRules.Parameters.AddWithValue("@SID", formattedSid);
+                                cmdDeleteServer.Parameters.AddWithValue("@SID", formattedSid);
+
+                                cmdDeleteRules.ExecuteNonQuery();
+                                int rowsAffected = cmdDeleteServer.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    transaction.Commit();
+                                    bReturn = true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
                             }
                         }
                     }
@@ -26270,10 +26666,78 @@ namespace WinsockPacketEditor
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
                     {
-                        string sql = "DELETE FROM ServerInfo;";
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sqlDeleteRules = "DELETE FROM ServerRuleInfo;";
+                            string sqlDeleteServer = "DELETE FROM ServerInfo;";
+
+                            using (SQLiteCommand cmdDeleteRules = new SQLiteCommand(sqlDeleteRules, conn, transaction))
+                            using (SQLiteCommand cmdDeleteServer = new SQLiteCommand(sqlDeleteServer, conn, transaction))
+                            {
+                                cmdDeleteRules.ExecuteNonQuery();
+                                cmdDeleteServer.ExecuteNonQuery();
+                                transaction.Commit();
+                                bReturn = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_ServerInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool DeleteTable_ServerRuleInfo(Guid rid)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sql = "DELETE FROM ServerRuleInfo WHERE RID = @RID;";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
+                            cmd.Parameters.AddWithValue("@RID", rid.ToString().ToUpper());
+
+                            conn.Open();
+                            int rowsAffected = cmd.ExecuteNonQuery();
+
+                            if (rowsAffected > 0)
+                            {
+                                bReturn = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(DeleteTable_ServerRuleInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool DeleteTable_ServerRuleInfoBySID(Guid sid)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        string sql = "DELETE FROM ServerRuleInfo WHERE SID = @SID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@SID", sid.ToString().ToUpper());
+
                             conn.Open();
                             cmd.ExecuteNonQuery();
                             bReturn = true;
@@ -26282,7 +26746,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(DeleteTable_ServerInfo), ex);
+                    Operate.DoLog(nameof(DeleteTable_ServerRuleInfoBySID), ex);
                 }
 
                 return bReturn;
@@ -26296,47 +26760,68 @@ namespace WinsockPacketEditor
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
                     {
-                        string sqlCheck = @"
-                            SELECT COUNT(1) FROM ServerInfo 
-                            WHERE SID = @SID;";
+                        conn.Open();
 
-                        string sql = @"
-                            INSERT INTO ServerInfo (
-                                SID, IsEnable, ServerName, ServerIP, 
-                                ServerPort, ForgotURL, RegisterURL
-                            ) VALUES (
-                                @SID, @IsEnable, @ServerName, @ServerIP, 
-                                @ServerPort, @ForgotURL, @RegisterURL
-                            );";
-
-                        using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn))
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
                         {
-                            string sid = si.SID.ToString().ToUpper();
+                            string sqlCheck = @"
+                                SELECT COUNT(1) FROM ServerInfo 
+                                WHERE SID = @SID;";
 
-                            cmdCheck.Parameters.AddWithValue("@SID", sid);
+                            string sql = @"
+                                INSERT INTO ServerInfo (
+                                    SID, IsEnable, ServerName, ServerIP, 
+                                    ServerPort, ForgotURL, RegisterURL
+                                ) VALUES (
+                                    @SID, @IsEnable, @ServerName, @ServerIP, 
+                                    @ServerPort, @ForgotURL, @RegisterURL
+                                );";
 
-                            conn.Open();
-
-                            long existingCount = (long)cmdCheck.ExecuteScalar();
-                            if (existingCount > 0)
+                            using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, transaction))
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, transaction))
                             {
-                                return false;
-                            }
+                                string sid = si.SID.ToString().ToUpper();
 
-                            cmd.Parameters.AddWithValue("@SID", sid);
-                            cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
-                            cmd.Parameters.AddWithValue("@ServerName", si.ServerName);
-                            cmd.Parameters.AddWithValue("@ServerIP", si.ServerIP);
-                            cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
-                            cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
-                            cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+                                cmdCheck.Parameters.AddWithValue("@SID", sid);
 
-                            int rowsAffected = cmd.ExecuteNonQuery();
+                                long existingCount = (long)cmdCheck.ExecuteScalar();
+                                if (existingCount > 0)
+                                {
+                                    transaction.Rollback();
+                                    return false;
+                                }
 
-                            if (rowsAffected > 0)
-                            {
-                                bReturn = true;
+                                cmd.Parameters.AddWithValue("@SID", sid);
+                                cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
+                                cmd.Parameters.AddWithValue("@ServerName", si.ServerName);
+                                cmd.Parameters.AddWithValue("@ServerIP", si.ServerIP);
+                                cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
+                                cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
+                                cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+
+                                int rowsAffected = cmd.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    if (si.ServerRInfo != null && si.ServerRInfo.Count > 0)
+                                    {
+                                        foreach (RuleInfo rule in si.ServerRInfo)
+                                        {
+                                            if (!DataBase.InsertTable_ServerRuleInfo(sid, rule, transaction))
+                                            {
+                                                transaction.Rollback();
+                                                return false;
+                                            }
+                                        }
+                                    }
+
+                                    transaction.Commit();
+                                    bReturn = true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
                             }
                         }
                     }
@@ -26349,6 +26834,71 @@ namespace WinsockPacketEditor
                 return bReturn;
             }
 
+            public static bool InsertTable_ServerRuleInfo(Guid sid, RuleInfo rule)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            if (DataBase.InsertTable_ServerRuleInfo(sid.ToString().ToUpper(), rule, transaction))
+                            {
+                                transaction.Commit();
+                                bReturn = true;
+                            }
+                            else
+                            {
+                                transaction.Rollback();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_ServerRuleInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            private static bool InsertTable_ServerRuleInfo(string sid, RuleInfo rule, SQLiteTransaction transaction)
+            {
+                try
+                {
+                    string sql = @"
+                        INSERT INTO ServerRuleInfo (
+                            RID, SID, IsEnable, RuleType, RuleArgument, RuleAction
+                        ) VALUES (
+                            @RID, @SID, @IsEnable, @RuleType, @RuleArgument, @RuleAction
+                        );";
+
+                    using (SQLiteCommand cmd = new SQLiteCommand(sql, transaction.Connection, transaction))
+                    {
+                        string rid = Guid.NewGuid().ToString().ToUpper();
+
+                        cmd.Parameters.AddWithValue("@RID", rid);
+                        cmd.Parameters.AddWithValue("@SID", sid);
+                        cmd.Parameters.AddWithValue("@IsEnable", rule.IsEnable);
+                        cmd.Parameters.AddWithValue("@RuleType", (int)rule.RType);
+                        cmd.Parameters.AddWithValue("@RuleArgument", rule.RArgument);
+                        cmd.Parameters.AddWithValue("@RuleAction", (int)rule.RAction);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(InsertTable_ServerRuleInfo), ex);
+                    return false;
+                }
+            }
+
             public static bool UpdateTable_ServerInfo(ServerInfo si)
             {
                 bool bReturn = false;
@@ -26357,26 +26907,98 @@ namespace WinsockPacketEditor
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
                     {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sql = @"
+                                UPDATE ServerInfo 
+                                SET 
+                                    IsEnable = @IsEnable,
+                                    ServerName = @ServerName,
+                                    ServerIP = @ServerIP,
+                                    ServerPort = @ServerPort,
+                                    ForgotURL = @ForgotURL,
+                                    RegisterURL = @RegisterURL
+                                WHERE SID = @SID;";
+
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, transaction))
+                            {
+                                string sid = si.SID.ToString().ToUpper();
+                                cmd.Parameters.AddWithValue("@SID", sid);
+                                cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
+                                cmd.Parameters.AddWithValue("@ServerName", si.ServerName);
+                                cmd.Parameters.AddWithValue("@ServerIP", si.ServerIP);
+                                cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
+                                cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
+                                cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+
+                                int rowsAffected = cmd.ExecuteNonQuery();
+
+                                if (rowsAffected > 0)
+                                {
+                                    if (si.ServerRInfo != null)
+                                    {
+                                        string sqlDeleteRules = "DELETE FROM ServerRuleInfo WHERE SID = @SID;";
+                                        using (SQLiteCommand cmdDelete = new SQLiteCommand(sqlDeleteRules, conn, transaction))
+                                        {
+                                            cmdDelete.Parameters.AddWithValue("@SID", sid);
+                                            cmdDelete.ExecuteNonQuery();
+                                        }
+
+                                        foreach (RuleInfo rule in si.ServerRInfo)
+                                        {
+                                            if (!DataBase.InsertTable_ServerRuleInfo(sid, rule, transaction))
+                                            {
+                                                transaction.Rollback();
+                                                return false;
+                                            }
+                                        }
+                                    }
+
+                                    transaction.Commit();
+                                    bReturn = true;
+                                }
+                                else
+                                {
+                                    transaction.Rollback();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(UpdateTable_ServerInfo), ex);
+                }
+
+                return bReturn;
+            }
+
+            public static bool UpdateTable_ServerRuleInfo(Guid rid, RuleInfo rule)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(DataBase.conStr))
+                    {
                         string sql = @"
-                            UPDATE ServerInfo 
+                            UPDATE ServerRuleInfo 
                             SET 
                                 IsEnable = @IsEnable,
-                                ServerName = @ServerName,
-                                ServerIP = @ServerIP,
-                                ServerPort = @ServerPort,
-                                ForgotURL = @ForgotURL,
-                                RegisterURL = @RegisterURL
-                            WHERE SID = @SID;";
+                                RuleType = @RuleType,
+                                RuleArgument = @RuleArgument,
+                                RuleAction = @RuleAction
+                            WHERE RID = @RID;";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@SID", si.SID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", si.IsEnable);
-                            cmd.Parameters.AddWithValue("@ServerName", si.ServerName);
-                            cmd.Parameters.AddWithValue("@ServerIP", si.ServerIP);
-                            cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
-                            cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
-                            cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+                            cmd.Parameters.AddWithValue("@RID", rid.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", rule.IsEnable);
+                            cmd.Parameters.AddWithValue("@RuleType", (int)rule.RType);
+                            cmd.Parameters.AddWithValue("@RuleArgument", rule.RArgument);
+                            cmd.Parameters.AddWithValue("@RuleAction", (int)rule.RAction);
 
                             conn.Open();
                             int rowsAffected = cmd.ExecuteNonQuery();
@@ -26390,7 +27012,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Operate.DoLog(nameof(UpdateTable_ServerInfo), ex);
+                    Operate.DoLog(nameof(UpdateTable_ServerRuleInfo), ex);
                 }
 
                 return bReturn;

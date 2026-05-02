@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.ComponentModel;
 
 namespace WinsockPacketEditor
 {
@@ -124,6 +125,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//规则信息
+
+        BindingList<RuleInfo> _ServerRInfo = new BindingList<RuleInfo>();
+
+        public BindingList<RuleInfo> ServerRInfo
+        {
+            get => _ServerRInfo;
+            set
+            {
+                if (_ServerRInfo == value) return;
+                _ServerRInfo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//ServerInfo
 
         public ServerInfo(
@@ -133,7 +151,8 @@ namespace WinsockPacketEditor
             string ServerIP, 
             int ServerPort, 
             string ForgotURL, 
-            string RegisterURL)
+            string RegisterURL,
+            BindingList<RuleInfo> ServerRInfo)
         {
             this._IsEnable = IsEnable;
             this._SID = SID;
@@ -142,6 +161,7 @@ namespace WinsockPacketEditor
             this._ServerPort = ServerPort;
             this._ForgotURL = ForgotURL;
             this._RegisterURL = RegisterURL;
+            this._ServerRInfo = ServerRInfo;
         }
 
         #endregion
