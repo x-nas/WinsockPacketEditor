@@ -90,7 +90,8 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("ServerIP", "服务器IP").SetLocalizationTitleID("Table.WPCConfig.ServerList.Column."),
                 new AntdUI.Column("ServerPort", "服务器端口", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.WPCConfig.ServerList.Column."),
                 new AntdUI.Column("ForgotURL", "找回密码地址", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.WPCConfig.ServerList.Column."),
-                new AntdUI.Column("RegisterURL", "立即注册地址", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.WPCConfig.ServerList.Column."),                
+                new AntdUI.Column("RegisterURL", "立即注册地址", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.WPCConfig.ServerList.Column."),
+                new AntdUI.Column("VerifyURL", "验证地址", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.WPCConfig.ServerList.Column."),
                 new AntdUI.Column("CellLinks", "操作")
                 {
                     Render = (value, record, rowindex)=>

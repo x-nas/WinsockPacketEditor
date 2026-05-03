@@ -33,6 +33,7 @@ namespace WinsockPacketEditor
                 this.nudServerPort.Value = this.siSelect.ServerPort;
                 this.txtForgotURL.Text = this.siSelect.ForgotURL;
                 this.txtRegisterURL.Text = this.siSelect.RegisterURL;
+                this.txtVerifyURL.Text = this.siSelect.VerifyURL;
             }
 
             this.IsEnable_Changed();
@@ -119,15 +120,16 @@ namespace WinsockPacketEditor
                 string ServerIP = this.txtServerIP.Text.Trim();
                 int ServerPort = (int)this.nudServerPort.Value;
                 string ForgotURL = this.txtForgotURL.Text.Trim();
-                string RegisterURL = this.txtRegisterURL.Text.Trim();            
+                string RegisterURL = this.txtRegisterURL.Text.Trim();
+                string VerifyURL = this.txtVerifyURL.Text.Trim();
 
                 if (this.siSelect == null)
                 {
-                    Operate.WPCConfig.ServerList.AddServer(IsEnable, Guid.NewGuid(), ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, new BindingList<RuleInfo>());
+                    Operate.WPCConfig.ServerList.AddServer(IsEnable, Guid.NewGuid(), ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, VerifyURL, new BindingList<RuleInfo>());
                 }
                 else
                 {
-                    Operate.WPCConfig.ServerList.UpdateServer_ByServerID(this.siSelect.SID, IsEnable, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL);
+                    Operate.WPCConfig.ServerList.UpdateServer_ByServerID(this.siSelect.SID, IsEnable, ServerName, ServerIP, ServerPort, ForgotURL, VerifyURL, RegisterURL);
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "服务器信息保存成功", TType.Success)

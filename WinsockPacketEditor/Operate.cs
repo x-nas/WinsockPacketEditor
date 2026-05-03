@@ -22243,13 +22243,22 @@ namespace WinsockPacketEditor
 
                 #region//新增服务器
 
-                public static void AddServer(bool IsEnable, Guid SID, string ServerName, string ServerIP, int ServerPort, string ForgotURL, string RegisterURL, BindingList<RuleInfo> ServerRInfo)
+                public static void AddServer(
+                    bool IsEnable, 
+                    Guid SID, 
+                    string ServerName, 
+                    string ServerIP, 
+                    int ServerPort, 
+                    string ForgotURL, 
+                    string RegisterURL, 
+                    string VerifyURL, 
+                    BindingList<RuleInfo> ServerRInfo)
                 {
                     try
                     {
                         if (SID != Guid.Empty && !string.IsNullOrEmpty(ServerName))
                         {
-                            ServerInfo si = new ServerInfo(IsEnable, SID, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, ServerRInfo);
+                            ServerInfo si = new ServerInfo(IsEnable, SID, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, VerifyURL, ServerRInfo);
                             Operate.WPCConfig.ServerList.ServerToList(si);
                         }
                     }
@@ -22353,7 +22362,8 @@ namespace WinsockPacketEditor
                     string ServerIP,
                     int ServerPort,
                     string ForgotURL,
-                    string RegisterURL)
+                    string RegisterURL,
+                    string VerifyURL)
                 {
                     try
                     {
@@ -22369,6 +22379,7 @@ namespace WinsockPacketEditor
                                 si.ServerPort = ServerPort;
                                 si.ForgotURL = ForgotURL;
                                 si.RegisterURL = RegisterURL;
+                                si.VerifyURL = VerifyURL;
 
                                 return true;
                             }
@@ -22541,6 +22552,7 @@ namespace WinsockPacketEditor
                                 s.ServerPort,
                                 s.ForgotURL,
                                 s.RegisterURL,
+                                s.VerifyURL,
                                 new BindingList<RuleInfo>(
                                     s.ServerRInfo?.Where(r => r.IsEnable).ToList() ?? new List<RuleInfo>()
                                 )
@@ -22828,6 +22840,7 @@ namespace WinsockPacketEditor
                             int ServerPort = Convert.ToInt32(drServer["ServerPort"]);
                             string ForgotURL = drServer["ForgotURL"].ToString();
                             string RegisterURL = drServer["RegisterURL"].ToString();
+                            string VerifyURL = drServer["VerifyURL"].ToString();
 
                             BindingList<RuleInfo> Rules = new BindingList<RuleInfo>();
                             DataTable dtRules = DataBase.SelectTable_ServerRuleInfo(SID);
@@ -22851,6 +22864,7 @@ namespace WinsockPacketEditor
                                 ServerPort,
                                 ForgotURL,
                                 RegisterURL,
+                                VerifyURL,
                                 Rules);
                         }
                     }
@@ -26484,7 +26498,7 @@ namespace WinsockPacketEditor
                 }
             }
 
-            #endregion            
+            #endregion
 
             #region//服务器列表
 
@@ -26503,7 +26517,8 @@ namespace WinsockPacketEditor
                         sql += "ServerIP TEXT NOT NULL,";
                         sql += "ServerPort INTEGER DEFAULT 1080,";
                         sql += "ForgotURL TEXT,";
-                        sql += "RegisterURL TEXT";
+                        sql += "RegisterURL TEXT,";
+                        sql += "VerifyURL TEXT";
                         sql += ");";
 
                         sql += "CREATE TABLE IF NOT EXISTS ServerRuleInfo (";
@@ -26623,7 +26638,6 @@ namespace WinsockPacketEditor
 
                         using (SQLiteTransaction transaction = conn.BeginTransaction())
                         {
-                            // 先删除关联的规则
                             string sqlDeleteRules = "DELETE FROM ServerRuleInfo WHERE SID = @SID;";
                             string sqlDeleteServer = "DELETE FROM ServerInfo WHERE SID = @SID;";
 
@@ -26771,10 +26785,10 @@ namespace WinsockPacketEditor
                             string sql = @"
                                 INSERT INTO ServerInfo (
                                     SID, IsEnable, ServerName, ServerIP, 
-                                    ServerPort, ForgotURL, RegisterURL
+                                    ServerPort, ForgotURL, RegisterURL, VerifyURL
                                 ) VALUES (
                                     @SID, @IsEnable, @ServerName, @ServerIP, 
-                                    @ServerPort, @ForgotURL, @RegisterURL
+                                    @ServerPort, @ForgotURL, @RegisterURL, @VerifyURL
                                 );";
 
                             using (SQLiteCommand cmdCheck = new SQLiteCommand(sqlCheck, conn, transaction))
@@ -26798,6 +26812,7 @@ namespace WinsockPacketEditor
                                 cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
                                 cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
                                 cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+                                cmd.Parameters.AddWithValue("@VerifyURL", string.IsNullOrEmpty(si.VerifyURL) ? "" : si.VerifyURL);
 
                                 int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -26919,7 +26934,8 @@ namespace WinsockPacketEditor
                                     ServerIP = @ServerIP,
                                     ServerPort = @ServerPort,
                                     ForgotURL = @ForgotURL,
-                                    RegisterURL = @RegisterURL
+                                    RegisterURL = @RegisterURL,
+                                    VerifyURL = @VerifyURL
                                 WHERE SID = @SID;";
 
                             using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, transaction))
@@ -26932,6 +26948,7 @@ namespace WinsockPacketEditor
                                 cmd.Parameters.AddWithValue("@ServerPort", si.ServerPort);
                                 cmd.Parameters.AddWithValue("@ForgotURL", string.IsNullOrEmpty(si.ForgotURL) ? "" : si.ForgotURL);
                                 cmd.Parameters.AddWithValue("@RegisterURL", string.IsNullOrEmpty(si.RegisterURL) ? "" : si.RegisterURL);
+                                cmd.Parameters.AddWithValue("@VerifyURL", string.IsNullOrEmpty(si.VerifyURL) ? "" : si.VerifyURL);
 
                                 int rowsAffected = cmd.ExecuteNonQuery();
 

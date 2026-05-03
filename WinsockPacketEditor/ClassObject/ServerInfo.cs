@@ -125,6 +125,23 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//验证链接
+
+        string _VerifyURL;
+
+        public string VerifyURL
+        {
+            get => _VerifyURL;
+            set
+            {
+                if (_VerifyURL == value) return;
+                _VerifyURL = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region//规则信息
 
         BindingList<RuleInfo> _ServerRInfo = new BindingList<RuleInfo>();
@@ -152,6 +169,7 @@ namespace WinsockPacketEditor
             int ServerPort, 
             string ForgotURL, 
             string RegisterURL,
+            string VerifyURL,
             BindingList<RuleInfo> ServerRInfo)
         {
             this._IsEnable = IsEnable;
@@ -161,6 +179,7 @@ namespace WinsockPacketEditor
             this._ServerPort = ServerPort;
             this._ForgotURL = ForgotURL;
             this._RegisterURL = RegisterURL;
+            this._VerifyURL = VerifyURL;
             this._ServerRInfo = ServerRInfo;
         }
 

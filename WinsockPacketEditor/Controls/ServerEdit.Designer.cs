@@ -33,6 +33,8 @@
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
             this.tlpServerInfo = new WinsockPacketEditor.TableLayoutPanelEx();
+            this.txtVerifyURL = new AntdUI.Input();
+            this.lVerifyURL = new AntdUI.Label();
             this.txtForgotURL = new AntdUI.Input();
             this.txtRegisterURL = new AntdUI.Input();
             this.lRegisterURL = new AntdUI.Label();
@@ -127,7 +129,8 @@
             this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
             this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+            this.tlpServerInfo.Controls.Add(this.txtVerifyURL, 2, 5);
+            this.tlpServerInfo.Controls.Add(this.lVerifyURL, 1, 5);
             this.tlpServerInfo.Controls.Add(this.txtForgotURL, 2, 3);
             this.tlpServerInfo.Controls.Add(this.txtRegisterURL, 2, 4);
             this.tlpServerInfo.Controls.Add(this.lRegisterURL, 1, 4);
@@ -142,7 +145,8 @@
             this.tlpServerInfo.Location = new System.Drawing.Point(0, 36);
             this.tlpServerInfo.Margin = new System.Windows.Forms.Padding(0);
             this.tlpServerInfo.Name = "tlpServerInfo";
-            this.tlpServerInfo.RowCount = 6;
+            this.tlpServerInfo.RowCount = 7;
+            this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -151,6 +155,30 @@
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpServerInfo.Size = new System.Drawing.Size(350, 264);
             this.tlpServerInfo.TabIndex = 1;
+            // 
+            // txtVerifyURL
+            // 
+            this.txtVerifyURL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtVerifyURL.Location = new System.Drawing.Point(123, 202);
+            this.txtVerifyURL.Margin = new System.Windows.Forms.Padding(2);
+            this.txtVerifyURL.MaxLength = 20;
+            this.txtVerifyURL.Name = "txtVerifyURL";
+            this.txtVerifyURL.PlaceholderText = "请输入网址";
+            this.txtVerifyURL.PrefixText = "http://";
+            this.txtVerifyURL.Size = new System.Drawing.Size(206, 36);
+            this.txtVerifyURL.TabIndex = 26;
+            // 
+            // lVerifyURL
+            // 
+            this.lVerifyURL.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lVerifyURL.LocalizationText = "ServerEditForm.ServerName";
+            this.lVerifyURL.Location = new System.Drawing.Point(20, 202);
+            this.lVerifyURL.Margin = new System.Windows.Forms.Padding(2);
+            this.lVerifyURL.Name = "lVerifyURL";
+            this.lVerifyURL.Size = new System.Drawing.Size(99, 36);
+            this.lVerifyURL.TabIndex = 25;
+            this.lVerifyURL.Text = "验证地址 :";
+            this.lVerifyURL.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtForgotURL
             // 
@@ -336,5 +364,7 @@
         private AntdUI.Input txtRegisterURL;
         private AntdUI.Label lRegisterURL;
         private AntdUI.Label lForgorURL;
+        private AntdUI.Input txtVerifyURL;
+        private AntdUI.Label lVerifyURL;
     }
 }
