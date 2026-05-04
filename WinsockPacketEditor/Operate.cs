@@ -22347,7 +22347,7 @@ namespace WinsockPacketEditor
 
                 public static void OpenServerEdit(Form form, ServerInfo si)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("ServerEditForm", "服务器编辑"), new ServerEdit(form, si))
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.ServerList.Edit", "服务器编辑"), new ServerEdit(form, si))
                     {
                         Keyboard = false,
                         MaskClosable = false,
@@ -22401,7 +22401,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("RuleEditForm", "规则列表"), new RuleList(form, si))
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.RuleList", "规则列表"), new RuleList(form, si))
                         {
                             Keyboard = false,
                             MaskClosable = false,
@@ -22418,7 +22418,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("RuleEditForm", "规则编辑"), new RuleEdit(form, si, ri))
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.RuleList.Edit", "规则编辑"), new RuleEdit(form, si, ri))
                         {
                             Keyboard = false,
                             MaskClosable = false,
@@ -22473,7 +22473,7 @@ namespace WinsockPacketEditor
                     {
                         if (siList.Count > 0)
                         {
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miServerList", "发送列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.ServerList", "服务器列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                             {
                                 Icon = TType.Warn,
                                 Keyboard = false,
@@ -22506,7 +22506,7 @@ namespace WinsockPacketEditor
                     {
                         if (ruleList.Count > 0)
                         {
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("ServerRuleInfo", "服务器规则"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.RuleList", "规则列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                             {
                                 Icon = TType.Warn,
                                 Keyboard = false,
@@ -22781,7 +22781,7 @@ namespace WinsockPacketEditor
                     {
                         if (si != null && si.ServerRInfo != null && si.ServerRInfo.Count > 0)
                         {
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("ServerRuleInfo", "服务器规则"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.RuleList", "规则列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                             {
                                 Icon = TType.Warn,
                                 Keyboard = false,
@@ -22930,7 +22930,7 @@ namespace WinsockPacketEditor
 
                 public static void OpenNoticeEdit(Form form, NoticeInfo ni)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("NoticeEditForm", "公告编辑"), new NoticeEdit(form, ni))
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.NoticeList.Edit", "公告编辑"), new NoticeEdit(form, ni))
                     {
                         Keyboard = false,
                         MaskClosable = false,
@@ -22982,7 +22982,7 @@ namespace WinsockPacketEditor
                     {
                         if (niList.Count > 0)
                         {
-                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("NoticeList", "公告列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WPCConfig.NoticeList", "公告列表"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                             {
                                 Icon = TType.Warn,
                                 Keyboard = false,

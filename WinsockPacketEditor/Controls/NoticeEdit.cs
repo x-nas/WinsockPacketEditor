@@ -43,27 +43,27 @@ namespace WinsockPacketEditor
             {
                 new AntdUI.SelectItem("活动情报") 
                 {
-                    LocalizationText = "NoticeEdit.NoticeType_1",
+                    LocalizationText = "WPCConfig.NoticeList.NoticeType_1",
                     Tag = "1"
                 },
                 new AntdUI.SelectItem("维护说明")
                 {
-                    LocalizationText = "NoticeEdit.NoticeType_2",
+                    LocalizationText = "WPCConfig.NoticeList.NoticeType_2",
                     Tag = "2"
                 },
                 new AntdUI.SelectItem("电竞赛事")
                 {
-                    LocalizationText = "NoticeEdit.NoticeType_3",
+                    LocalizationText = "WPCConfig.NoticeList.NoticeType_3",
                     Tag = "3"
                 },
                 new AntdUI.SelectItem("限时商城")
                 {
-                    LocalizationText = "NoticeEdit.NoticeType_4",
+                    LocalizationText = "WPCConfig.NoticeList.NoticeType_4",
                     Tag = "4"
                 },
                 new AntdUI.SelectItem("玩家社区")
                 {
-                    LocalizationText = "NoticeEdit.NoticeType_5",
+                    LocalizationText = "WPCConfig.NoticeList.NoticeType_5",
                     Tag = "5"
                 }
             });

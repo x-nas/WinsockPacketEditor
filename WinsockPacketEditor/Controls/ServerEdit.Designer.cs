@@ -66,7 +66,7 @@
             this.tlpServerEdit.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpServerEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpServerEdit.Size = new System.Drawing.Size(350, 350);
+            this.tlpServerEdit.Size = new System.Drawing.Size(450, 350);
             this.tlpServerEdit.TabIndex = 3;
             // 
             // tlpButton
@@ -87,7 +87,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(350, 50);
+            this.tlpButton.Size = new System.Drawing.Size(450, 50);
             this.tlpButton.TabIndex = 17;
             // 
             // bSave
@@ -97,7 +97,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(103, 6);
+            this.bSave.Location = new System.Drawing.Point(153, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -113,7 +113,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(184, 6);
+            this.bExit.Location = new System.Drawing.Point(234, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -125,10 +125,10 @@
             // tlpServerInfo
             // 
             this.tlpServerInfo.ColumnCount = 4;
-            this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
-            this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpServerInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpServerInfo.Controls.Add(this.txtVerifyURL, 2, 5);
             this.tlpServerInfo.Controls.Add(this.lVerifyURL, 1, 5);
             this.tlpServerInfo.Controls.Add(this.txtForgotURL, 2, 3);
@@ -153,26 +153,27 @@
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpServerInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpServerInfo.Size = new System.Drawing.Size(350, 264);
+            this.tlpServerInfo.Size = new System.Drawing.Size(450, 264);
             this.tlpServerInfo.TabIndex = 1;
             // 
             // txtVerifyURL
             // 
             this.txtVerifyURL.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtVerifyURL.Location = new System.Drawing.Point(123, 202);
+            this.txtVerifyURL.LocalizationPlaceholderText = "WPCConfig.ServerList.URL.Input";
+            this.txtVerifyURL.Location = new System.Drawing.Point(125, 202);
             this.txtVerifyURL.Margin = new System.Windows.Forms.Padding(2);
             this.txtVerifyURL.MaxLength = 20;
             this.txtVerifyURL.Name = "txtVerifyURL";
             this.txtVerifyURL.PlaceholderText = "请输入网址";
             this.txtVerifyURL.PrefixText = "http://";
-            this.txtVerifyURL.Size = new System.Drawing.Size(206, 36);
+            this.txtVerifyURL.Size = new System.Drawing.Size(303, 36);
             this.txtVerifyURL.TabIndex = 26;
             // 
             // lVerifyURL
             // 
             this.lVerifyURL.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lVerifyURL.LocalizationText = "ServerEditForm.ServerName";
-            this.lVerifyURL.Location = new System.Drawing.Point(20, 202);
+            this.lVerifyURL.LocalizationText = "WPCConfig.ServerList.VerifyURL";
+            this.lVerifyURL.Location = new System.Drawing.Point(22, 202);
             this.lVerifyURL.Margin = new System.Windows.Forms.Padding(2);
             this.lVerifyURL.Name = "lVerifyURL";
             this.lVerifyURL.Size = new System.Drawing.Size(99, 36);
@@ -183,32 +184,34 @@
             // txtForgotURL
             // 
             this.txtForgotURL.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtForgotURL.Location = new System.Drawing.Point(123, 122);
+            this.txtForgotURL.LocalizationPlaceholderText = "WPCConfig.ServerList.URL.Input";
+            this.txtForgotURL.Location = new System.Drawing.Point(125, 122);
             this.txtForgotURL.Margin = new System.Windows.Forms.Padding(2);
             this.txtForgotURL.MaxLength = 20;
             this.txtForgotURL.Name = "txtForgotURL";
             this.txtForgotURL.PlaceholderText = "请输入网址";
             this.txtForgotURL.PrefixText = "http://";
-            this.txtForgotURL.Size = new System.Drawing.Size(206, 36);
+            this.txtForgotURL.Size = new System.Drawing.Size(303, 36);
             this.txtForgotURL.TabIndex = 24;
             // 
             // txtRegisterURL
             // 
             this.txtRegisterURL.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtRegisterURL.Location = new System.Drawing.Point(123, 162);
+            this.txtRegisterURL.LocalizationPlaceholderText = "WPCConfig.ServerList.URL.Input";
+            this.txtRegisterURL.Location = new System.Drawing.Point(125, 162);
             this.txtRegisterURL.Margin = new System.Windows.Forms.Padding(2);
             this.txtRegisterURL.MaxLength = 20;
             this.txtRegisterURL.Name = "txtRegisterURL";
             this.txtRegisterURL.PlaceholderText = "请输入网址";
             this.txtRegisterURL.PrefixText = "http://";
-            this.txtRegisterURL.Size = new System.Drawing.Size(206, 36);
+            this.txtRegisterURL.Size = new System.Drawing.Size(303, 36);
             this.txtRegisterURL.TabIndex = 23;
             // 
             // lRegisterURL
             // 
             this.lRegisterURL.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRegisterURL.LocalizationText = "ServerEditForm.ServerName";
-            this.lRegisterURL.Location = new System.Drawing.Point(20, 162);
+            this.lRegisterURL.LocalizationText = "WPCConfig.ServerList.RegisterURL";
+            this.lRegisterURL.Location = new System.Drawing.Point(22, 162);
             this.lRegisterURL.Margin = new System.Windows.Forms.Padding(2);
             this.lRegisterURL.Name = "lRegisterURL";
             this.lRegisterURL.Size = new System.Drawing.Size(99, 36);
@@ -219,8 +222,8 @@
             // lForgorURL
             // 
             this.lForgorURL.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lForgorURL.LocalizationText = "ServerEditForm.ServerName";
-            this.lForgorURL.Location = new System.Drawing.Point(20, 122);
+            this.lForgorURL.LocalizationText = "WPCConfig.ServerList.ForgotURL";
+            this.lForgorURL.Location = new System.Drawing.Point(22, 122);
             this.lForgorURL.Margin = new System.Windows.Forms.Padding(2);
             this.lForgorURL.Name = "lForgorURL";
             this.lForgorURL.Size = new System.Drawing.Size(99, 36);
@@ -231,8 +234,8 @@
             // lServerPort
             // 
             this.lServerPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lServerPort.LocalizationText = "ServerEditForm.ServerPort";
-            this.lServerPort.Location = new System.Drawing.Point(20, 82);
+            this.lServerPort.LocalizationText = "WPCConfig.ServerList.ServerPort";
+            this.lServerPort.Location = new System.Drawing.Point(22, 82);
             this.lServerPort.Margin = new System.Windows.Forms.Padding(2);
             this.lServerPort.Name = "lServerPort";
             this.lServerPort.Size = new System.Drawing.Size(99, 36);
@@ -243,8 +246,8 @@
             // lServerName
             // 
             this.lServerName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lServerName.LocalizationText = "ServerEditForm.ServerName";
-            this.lServerName.Location = new System.Drawing.Point(20, 2);
+            this.lServerName.LocalizationText = "WPCConfig.ServerList.ServerName";
+            this.lServerName.Location = new System.Drawing.Point(22, 2);
             this.lServerName.Margin = new System.Windows.Forms.Padding(2);
             this.lServerName.Name = "lServerName";
             this.lServerName.Size = new System.Drawing.Size(99, 36);
@@ -255,8 +258,8 @@
             // lServerIP
             // 
             this.lServerIP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lServerIP.LocalizationText = "ServerEditForm.ServerIP";
-            this.lServerIP.Location = new System.Drawing.Point(20, 42);
+            this.lServerIP.LocalizationText = "WPCConfig.ServerList.ServerIP";
+            this.lServerIP.Location = new System.Drawing.Point(22, 42);
             this.lServerIP.Margin = new System.Windows.Forms.Padding(2);
             this.lServerIP.Name = "lServerIP";
             this.lServerIP.Size = new System.Drawing.Size(99, 36);
@@ -267,31 +270,33 @@
             // txtServerName
             // 
             this.txtServerName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtServerName.Location = new System.Drawing.Point(123, 2);
+            this.txtServerName.LocalizationPlaceholderText = "WPCConfig.ServerList.ServerName.Input";
+            this.txtServerName.Location = new System.Drawing.Point(125, 2);
             this.txtServerName.Margin = new System.Windows.Forms.Padding(2);
             this.txtServerName.MaxLength = 50;
             this.txtServerName.Name = "txtServerName";
             this.txtServerName.PlaceholderText = "请输入服务器名称";
-            this.txtServerName.Size = new System.Drawing.Size(206, 36);
+            this.txtServerName.Size = new System.Drawing.Size(303, 36);
             this.txtServerName.TabIndex = 12;
             this.txtServerName.TextChanged += new System.EventHandler(this.txtServerName_TextChanged);
             // 
             // txtServerIP
             // 
             this.txtServerIP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtServerIP.Location = new System.Drawing.Point(123, 42);
+            this.txtServerIP.LocalizationPlaceholderText = "WPCConfig.ServerList.ServerIP.Input";
+            this.txtServerIP.Location = new System.Drawing.Point(125, 42);
             this.txtServerIP.Margin = new System.Windows.Forms.Padding(2);
             this.txtServerIP.MaxLength = 20;
             this.txtServerIP.Name = "txtServerIP";
             this.txtServerIP.PlaceholderText = "请输入IP地址";
-            this.txtServerIP.Size = new System.Drawing.Size(206, 36);
+            this.txtServerIP.Size = new System.Drawing.Size(303, 36);
             this.txtServerIP.TabIndex = 13;
             this.txtServerIP.TextChanged += new System.EventHandler(this.txtServerIP_TextChanged);
             // 
             // nudServerPort
             // 
             this.nudServerPort.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudServerPort.Location = new System.Drawing.Point(123, 82);
+            this.nudServerPort.Location = new System.Drawing.Point(125, 82);
             this.nudServerPort.Margin = new System.Windows.Forms.Padding(2);
             this.nudServerPort.Maximum = new decimal(new int[] {
             65535,
@@ -305,7 +310,7 @@
             0});
             this.nudServerPort.Name = "nudServerPort";
             this.nudServerPort.SelectionStart = 1;
-            this.nudServerPort.Size = new System.Drawing.Size(206, 36);
+            this.nudServerPort.Size = new System.Drawing.Size(303, 36);
             this.nudServerPort.TabIndex = 17;
             this.nudServerPort.Text = "1080";
             this.nudServerPort.Value = new decimal(new int[] {
@@ -335,7 +340,7 @@
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Name = "ServerEdit";
-            this.Size = new System.Drawing.Size(350, 350);
+            this.Size = new System.Drawing.Size(450, 350);
             this.Load += new System.EventHandler(this.ServerEdit_Load);
             this.tlpServerEdit.ResumeLayout(false);
             this.tlpServerEdit.PerformLayout();

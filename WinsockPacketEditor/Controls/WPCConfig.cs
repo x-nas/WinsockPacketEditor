@@ -113,7 +113,7 @@ namespace WinsockPacketEditor
         {
             this.tNoticeList.Columns = new AntdUI.ColumnCollection
             {
-                new AntdUI.Column("NoticeType", "类型")
+                new AntdUI.Column("NoticeType", "类型", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
                     {
@@ -124,31 +124,31 @@ namespace WinsockPacketEditor
 
                             if(NoticeType == 1)
                             {
-                                cellTag.Text = AntdUI.Localization.Get("NoticeEdit.NoticeType_1", " 活动情报 ");
+                                cellTag.Text = AntdUI.Localization.Get("WPCConfig.NoticeList.NoticeType_1", " 活动情报 ");
                                 cellTag.Fore = Color.FromArgb(56, 189, 248);
                                 cellTag.Back = Color.FromArgb(51, 56, 189, 248);                                
                             }
                             else if(NoticeType == 2)
                             {
-                                cellTag.Text = AntdUI.Localization.Get("NoticeEdit.NoticeType_2", " 维护说明 ");
+                                cellTag.Text = AntdUI.Localization.Get("WPCConfig.NoticeList.NoticeType_2", " 维护说明 ");
                                 cellTag.Fore = Color.FromArgb(251, 191, 36);
                                 cellTag.Back = Color.FromArgb(51, 251, 191, 36);
                             }
                             else if(NoticeType == 3)
                             {
-                                cellTag.Text = AntdUI.Localization.Get("NoticeEdit.NoticeType_3", " 电竞赛事 ");
+                                cellTag.Text = AntdUI.Localization.Get("WPCConfig.NoticeList.NoticeType_3", " 电竞赛事 ");
                                 cellTag.Fore = Color.FromArgb(52, 211, 153);
                                 cellTag.Back = Color.FromArgb(51, 52, 211, 153);
                             }
                             else if(NoticeType == 4)
                             {
-                                cellTag.Text = AntdUI.Localization.Get("NoticeEdit.NoticeType_4", " 限时商城 ");
+                                cellTag.Text = AntdUI.Localization.Get("WPCConfig.NoticeList.NoticeType_4", " 限时商城 ");
                                 cellTag.Fore = Color.FromArgb(192, 132, 252);
                                 cellTag.Back = Color.FromArgb(51, 192, 132, 252);
                             }
                             else if(NoticeType == 5)
                             {
-                                cellTag.Text = AntdUI.Localization.Get("NoticeEdit.NoticeType_5", " 玩家社区 ");
+                                cellTag.Text = AntdUI.Localization.Get("WPCConfig.NoticeList.NoticeType_5", " 玩家社区 ");
                                 cellTag.Fore = Color.FromArgb(56, 189, 248);
                                 cellTag.Back = Color.FromArgb(51, 56, 189, 248);
                             }

@@ -147,6 +147,7 @@
             // txtNoticeMore
             // 
             this.txtNoticeMore.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtNoticeMore.LocalizationPlaceholderText = "WPCConfig.NoticeList.NoticeMore.Input";
             this.txtNoticeMore.Location = new System.Drawing.Point(125, 412);
             this.txtNoticeMore.Margin = new System.Windows.Forms.Padding(2);
             this.txtNoticeMore.MaxLength = 20;
@@ -159,7 +160,7 @@
             // lNoticeMore
             // 
             this.lNoticeMore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lNoticeMore.LocalizationText = "ServerEditForm.NoticeMore";
+            this.lNoticeMore.LocalizationText = "WPCConfig.NoticeList.NoticeMore";
             this.lNoticeMore.Location = new System.Drawing.Point(22, 412);
             this.lNoticeMore.Margin = new System.Windows.Forms.Padding(2);
             this.lNoticeMore.Name = "lNoticeMore";
@@ -171,7 +172,7 @@
             // lNoticeContent
             // 
             this.lNoticeContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lNoticeContent.LocalizationText = "ServerEditForm.NoticeContent";
+            this.lNoticeContent.LocalizationText = "WPCConfig.NoticeList.NoticeContent";
             this.lNoticeContent.Location = new System.Drawing.Point(22, 82);
             this.lNoticeContent.Margin = new System.Windows.Forms.Padding(2);
             this.lNoticeContent.Name = "lNoticeContent";
@@ -183,7 +184,7 @@
             // lNoticeType
             // 
             this.lNoticeType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lNoticeType.LocalizationText = "NoticeEditForm.NoticeType";
+            this.lNoticeType.LocalizationText = "WPCConfig.NoticeList.NoticeType";
             this.lNoticeType.Location = new System.Drawing.Point(22, 2);
             this.lNoticeType.Margin = new System.Windows.Forms.Padding(2);
             this.lNoticeType.Name = "lNoticeType";
@@ -195,7 +196,7 @@
             // lNoticeTitle
             // 
             this.lNoticeTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lNoticeTitle.LocalizationText = "ServerEditForm.NoticeTitle";
+            this.lNoticeTitle.LocalizationText = "WPCConfig.NoticeList.NoticeTitle";
             this.lNoticeTitle.Location = new System.Drawing.Point(22, 42);
             this.lNoticeTitle.Margin = new System.Windows.Forms.Padding(2);
             this.lNoticeTitle.Name = "lNoticeTitle";
@@ -207,6 +208,7 @@
             // txtNoticeTitle
             // 
             this.txtNoticeTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtNoticeTitle.LocalizationPlaceholderText = "WPCConfig.NoticeList.NoticeTitle.Input";
             this.txtNoticeTitle.Location = new System.Drawing.Point(125, 42);
             this.txtNoticeTitle.Margin = new System.Windows.Forms.Padding(2);
             this.txtNoticeTitle.MaxLength = 20;
@@ -229,6 +231,7 @@
             // txtNoticeContent
             // 
             this.txtNoticeContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtNoticeContent.LocalizationPlaceholderText = "WPCConfig.NoticeList.NoticeContent.Input";
             this.txtNoticeContent.Location = new System.Drawing.Point(126, 83);
             this.txtNoticeContent.Multiline = true;
             this.txtNoticeContent.Name = "txtNoticeContent";

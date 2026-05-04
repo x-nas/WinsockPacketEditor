@@ -3133,11 +3133,173 @@ namespace WinsockPacketEditor
                 case "WPCConfig":
                     return "WPC Config";
 
-                case "WPCConfig.tpServerList":
+                case "WPCConfig.ServerList":
                     return "Server List";
 
-                case "WPCConfig.tpNoticeList":
+                case "WPCConfig.ServerList.Edit":
+                    return "Server Edit";
+
+                case "WPCConfig.NoticeList":
                     return "Notice List";
+
+                case "WPCConfig.NoticeList.Edit":
+                    return "Notice Edit";
+
+                case "WPCConfig.RuleList":
+                    return "Rule List";
+
+                case "WPCConfig.RuleList.Edit":
+                    return "Rule Edit";
+
+                case "WPCConfig.ServerList.Add":
+                    return "Add Server List";
+
+                case "WPCConfig.ServerList.Clear":
+                    return "Clear Server List";
+
+                case "WPCConfig.NoticeList.Add":
+                    return "Add Notice List";
+
+                case "WPCConfig.NoticeList.Clear":
+                    return "Clear Notice List";
+
+                case "WPCConfig.RuleList.Add":
+                    return "Add Rule List";
+
+                case "WPCConfig.RuleList.Clear":
+                    return "Clear Rule List";
+
+                case "WPCConfig.ServerList.ServerName":
+                    return "Server Name :";
+
+                case "WPCConfig.ServerList.ServerIP":
+                    return "IP Addr :";
+
+                case "WPCConfig.ServerList.ServerPort":
+                    return "Port :";
+
+                case "WPCConfig.ServerList.ForgotURL":
+                    return "Forgot URL :";
+
+                case "WPCConfig.ServerList.RegisterURL":
+                    return "Register URL :";
+
+                case "WPCConfig.ServerList.VerifyURL":
+                    return "Verify URL :";
+
+                case "WPCConfig.ServerList.ServerName.Input":
+                    return "Input Server Name";
+
+                case "WPCConfig.ServerList.ServerIP.Input":
+                    return "Input Server IP";
+
+                case "WPCConfig.ServerList.URL.Input":
+                    return "Input URL";
+
+                case "WPCConfig.NoticeList.NoticeType":
+                    return "Type :";
+
+                case "WPCConfig.NoticeList.NoticeTitle":
+                    return "Title :";
+
+                case "WPCConfig.NoticeList.NoticeTitle.Input":
+                    return "Input Notice Title";
+
+                case "WPCConfig.NoticeList.NoticeContent":
+                    return "Content :";
+
+                case "WPCConfig.NoticeList.NoticeContent.Input":
+                    return "Input Notice Content";
+
+                case "WPCConfig.NoticeList.NoticeMore":
+                    return "More URL :";
+
+                case "WPCConfig.NoticeList.NoticeMore.Input":
+                    return "Input More URL";
+
+                case "WPCConfig.RuleList.RuleType":
+                    return "Type :";
+
+                case "WPCConfig.RuleList.RuleArgument":
+                    return "Argument :";
+
+                case "WPCConfig.RuleList.RuleArgument.Input":
+                    return "Input Rule Argument";
+
+                case "WPCConfig.RuleList.RuleAction":
+                    return "Action :";
+
+                case "WPCConfig.RuleList.RuleAction.Input":
+                    return "Input Rule Action";
+
+                case "Table.WPCConfig.ServerList.Column.IsEnable":
+                    return "Enable";
+
+                case "Table.WPCConfig.ServerList.Column.ServerName":
+                    return "Server Name";
+
+                case "Table.WPCConfig.ServerList.Column.ServerIP":
+                    return "IP Address";
+
+                case "Table.WPCConfig.ServerList.Column.ServerPort":
+                    return "Port";
+
+                case "Table.WPCConfig.ServerList.Column.ForgotURL":
+                    return "Forgot URL";
+
+                case "Table.WPCConfig.ServerList.Column.RegisterURL":
+                    return "Register URL";
+
+                case "Table.WPCConfig.ServerList.Column.VerifyURL":
+                    return "Verify URL";
+
+                case "Table.WPCConfig.ServerList.Column.CellLinks":
+                    return "Operation";
+
+                case "Table.WPCConfig.NoticeList.Column.NoticeType":
+                    return "Type";
+
+                case "Table.WPCConfig.NoticeList.Column.NoticeTitle":
+                    return "Title";
+
+                case "Table.WPCConfig.NoticeList.Column.NoticeMore":
+                    return "More URL";
+
+                case "Table.WPCConfig.NoticeList.Column.NoticeTime":
+                    return "Publish Time";
+
+                case "Table.WPCConfig.NoticeList.Column.CellLinks":
+                    return "Operation";
+
+                case "Table.WPCConfig.RuleList.Column.IsEnable":
+                    return "Enable";
+
+                case "Table.WPCConfig.RuleList.Column.RType":
+                    return "Type";
+
+                case "Table.WPCConfig.RuleList.Column.RArgument":
+                    return "Argument";
+
+                case "Table.WPCConfig.RuleList.Column.RAction":
+                    return "Action";
+
+                case "Table.WPCConfig.RuleList.Column.CellLinks":
+                    return "Operation";
+
+                case "WPCConfig.NoticeList.NoticeType_1":
+                    return "EVENT";
+
+                case "WPCConfig.NoticeList.NoticeType_2":
+                    return "MAINTENANCE";
+
+                case "WPCConfig.NoticeList.NoticeType_3":
+                    return "ESPORTS";
+
+                case "WPCConfig.NoticeList.NoticeType_4":
+                    return "SHOP";
+
+                case "WPCConfig.NoticeList.NoticeType_5":
+                    return "COMMUNITY";
 
                 #endregion
 

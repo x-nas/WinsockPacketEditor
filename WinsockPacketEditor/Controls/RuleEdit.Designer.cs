@@ -145,6 +145,7 @@
             // 
             this.ddlRuleAction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ddlRuleAction.List = true;
+            this.ddlRuleAction.LocalizationPlaceholderText = "WPCConfig.RuleList.RuleAction.Input";
             this.ddlRuleAction.Location = new System.Drawing.Point(57, 90);
             this.ddlRuleAction.Margin = new System.Windows.Forms.Padding(2);
             this.ddlRuleAction.Name = "ddlRuleAction";
@@ -156,7 +157,7 @@
             // 
             this.lRuleAction.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRuleAction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRuleAction.LocalizationText = "ServerEditForm.ServerPort";
+            this.lRuleAction.LocalizationText = "WPCConfig.RuleList.RuleAction";
             this.lRuleAction.Location = new System.Drawing.Point(22, 90);
             this.lRuleAction.Margin = new System.Windows.Forms.Padding(2);
             this.lRuleAction.Name = "lRuleAction";
@@ -169,7 +170,7 @@
             // 
             this.lRuleType.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRuleType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRuleType.LocalizationText = "ServerEditForm.ServerName";
+            this.lRuleType.LocalizationText = "WPCConfig.RuleList.RuleType";
             this.lRuleType.Location = new System.Drawing.Point(22, 2);
             this.lRuleType.Margin = new System.Windows.Forms.Padding(2);
             this.lRuleType.Name = "lRuleType";
@@ -182,7 +183,7 @@
             // 
             this.lRuleArgument.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lRuleArgument.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRuleArgument.LocalizationText = "ServerEditForm.ServerIP";
+            this.lRuleArgument.LocalizationText = "WPCConfig.RuleList.RuleArgument";
             this.lRuleArgument.Location = new System.Drawing.Point(22, 46);
             this.lRuleArgument.Margin = new System.Windows.Forms.Padding(2);
             this.lRuleArgument.Name = "lRuleArgument";
@@ -194,6 +195,7 @@
             // txtRuleArgument
             // 
             this.txtRuleArgument.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtRuleArgument.LocalizationPlaceholderText = "WPCConfig.RuleList.RuleArgument.Input";
             this.txtRuleArgument.Location = new System.Drawing.Point(57, 46);
             this.txtRuleArgument.Margin = new System.Windows.Forms.Padding(2);
             this.txtRuleArgument.MaxLength = 1000;
@@ -209,7 +211,7 @@
             this.ddlRuleType.Location = new System.Drawing.Point(57, 2);
             this.ddlRuleType.Margin = new System.Windows.Forms.Padding(2);
             this.ddlRuleType.Name = "ddlRuleType";
-            this.ddlRuleType.PlaceholderText = "请选择规则类型";
+            this.ddlRuleType.PlaceholderText = "";
             this.ddlRuleType.Size = new System.Drawing.Size(521, 40);
             this.ddlRuleType.TabIndex = 21;
             // 

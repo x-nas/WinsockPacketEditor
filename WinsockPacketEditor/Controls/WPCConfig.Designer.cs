@@ -100,8 +100,8 @@
             // 
             // tabWPCConfig
             // 
-            this.tabWPCConfig.Controls.Add(this.tpNoticeList);
             this.tabWPCConfig.Controls.Add(this.tpServerList);
+            this.tabWPCConfig.Controls.Add(this.tpNoticeList);
             this.tabWPCConfig.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabWPCConfig.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabWPCConfig.Gap = 20;
@@ -109,7 +109,6 @@
             this.tabWPCConfig.Name = "tabWPCConfig";
             this.tabWPCConfig.Pages.Add(this.tpServerList);
             this.tabWPCConfig.Pages.Add(this.tpNoticeList);
-            this.tabWPCConfig.SelectedIndex = 1;
             this.tabWPCConfig.Size = new System.Drawing.Size(1094, 654);
             this.tabWPCConfig.Style = styleCard1;
             this.tabWPCConfig.TabIndex = 0;
@@ -120,10 +119,9 @@
             // 
             this.tpNoticeList.Controls.Add(this.tNoticeList);
             this.tpNoticeList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpNoticeList.LocalizationText = "WPCConfig.{id}";
+            this.tpNoticeList.LocalizationText = "WPCConfig.NoticeList";
             this.tpNoticeList.Location = new System.Drawing.Point(0, 39);
             this.tpNoticeList.Name = "tpNoticeList";
-            this.tpNoticeList.Showed = true;
             this.tpNoticeList.Size = new System.Drawing.Size(1094, 615);
             this.tpNoticeList.TabIndex = 1;
             this.tpNoticeList.Text = "公告列表";
@@ -151,9 +149,10 @@
             // 
             this.tpServerList.Controls.Add(this.tServerList);
             this.tpServerList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpServerList.LocalizationText = "WPCConfig.{id}";
+            this.tpServerList.LocalizationText = "WPCConfig.ServerList";
             this.tpServerList.Location = new System.Drawing.Point(0, 39);
             this.tpServerList.Name = "tpServerList";
+            this.tpServerList.Showed = true;
             this.tpServerList.Size = new System.Drawing.Size(1094, 615);
             this.tpServerList.TabIndex = 0;
             this.tpServerList.Text = "服务器列表";
