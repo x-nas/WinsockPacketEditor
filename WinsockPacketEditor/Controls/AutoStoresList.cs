@@ -23,7 +23,6 @@ namespace WinsockPacketEditor
 
             this.InitMenu();
             this.InitTable_AutoStores();
-            this.Enable_AutoStores_Changed();
         }
 
         private void InitMenu()
@@ -95,21 +94,7 @@ namespace WinsockPacketEditor
             this.tAutoStores.Refresh();
         }
 
-        #endregion
-
-        #region//启用自动入库
-
-        private void cbEnable_AutoStores_CheckedChanged(object sender, AntdUI.BoolEventArgs e)
-        {
-            this.Enable_AutoStores_Changed();
-        }
-
-        private void Enable_AutoStores_Changed()
-        { 
-            this.ddMenu.Enabled = this.tAutoStores.Enabled = this.cbEnable_AutoStores.Checked;
-        }
-
-        #endregion
+        #endregion        
 
         #region//自动入库 - 菜单
 

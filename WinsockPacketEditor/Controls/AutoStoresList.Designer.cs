@@ -34,10 +34,10 @@
             this.ddMenu = new AntdUI.Dropdown();
             this.cbEnable_AutoStores = new AntdUI.Checkbox();
             this.lEnableNotice = new AntdUI.Label();
+            this.lSplit = new AntdUI.Label();
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
-            this.lSplit = new AntdUI.Label();
             this.tlpAutoStores.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tlpButton.SuspendLayout();
@@ -131,7 +131,6 @@
             this.cbEnable_AutoStores.Size = new System.Drawing.Size(104, 37);
             this.cbEnable_AutoStores.TabIndex = 8;
             this.cbEnable_AutoStores.Text = "启用自动入库";
-            this.cbEnable_AutoStores.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_AutoStores_CheckedChanged);
             // 
             // lEnableNotice
             // 
@@ -143,6 +142,17 @@
             this.lEnableNotice.Size = new System.Drawing.Size(72, 35);
             this.lEnableNotice.TabIndex = 13;
             this.lEnableNotice.Text = "自动入库须知";
+            // 
+            // lSplit
+            // 
+            this.lSplit.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSplit.Location = new System.Drawing.Point(111, 3);
+            this.lSplit.Name = "lSplit";
+            this.lSplit.Size = new System.Drawing.Size(6, 35);
+            this.lSplit.TabIndex = 14;
+            this.lSplit.Text = "-";
+            this.lSplit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tlpButton
             // 
@@ -196,17 +206,6 @@
             this.bExit.Text = "退出";
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
-            // 
-            // lSplit
-            // 
-            this.lSplit.AutoSizeMode = AntdUI.TAutoSize.Width;
-            this.lSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lSplit.Location = new System.Drawing.Point(111, 3);
-            this.lSplit.Name = "lSplit";
-            this.lSplit.Size = new System.Drawing.Size(6, 35);
-            this.lSplit.TabIndex = 14;
-            this.lSplit.Text = "-";
-            this.lSplit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // AutoStoresList
             // 
