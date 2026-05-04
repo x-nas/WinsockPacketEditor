@@ -57,7 +57,7 @@ namespace WinsockPacketEditor
                 Operate.SystemConfig.LoadInjectMode_FromDB();
                 Operate.SystemConfig.LoadProxyMode_FromDB();
                 Operate.SystemConfig.LoadSystemList_FromDB();
-                Operate.WareHouseConfig.WareHouse.LoadAutoStores_FromDB();
+                Operate.WareHouseConfig.List.LoadAutoStores_FromDB();
                 Operate.ProxyConfig.Account.LoadProxyAccountList_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapLocal_FromDB();
                 Operate.ProxyConfig.Mapping.LoadProxyMapRemote_FromDB();
@@ -97,7 +97,7 @@ namespace WinsockPacketEditor
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
             Operate.SystemConfig.SaveSystemList_ToDB();
-            Operate.WareHouseConfig.WareHouse.SaveAutoStores_ToDB();
+            Operate.WareHouseConfig.List.SaveAutoStores_ToDB();
             Operate.ProxyConfig.Mapping.SaveMapLocal_ToDB();
             Operate.ProxyConfig.Mapping.SaveMapRemote_ToDB();
             Operate.ProxyConfig.Proxy.SaveWhiteList_ToDB();

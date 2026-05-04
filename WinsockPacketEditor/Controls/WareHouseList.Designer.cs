@@ -113,6 +113,7 @@
             this.bAutoStores.AutoSizeMode = AntdUI.TAutoSize.Auto;
             this.bAutoStores.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bAutoStores.IconSvg = "ShoppingCartOutlined";
+            this.bAutoStores.LocalizationText = "AutoStores";
             this.bAutoStores.Location = new System.Drawing.Point(3, 3);
             this.bAutoStores.Name = "bAutoStores";
             this.bAutoStores.Size = new System.Drawing.Size(87, 36);

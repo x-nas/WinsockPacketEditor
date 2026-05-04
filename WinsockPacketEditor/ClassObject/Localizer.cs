@@ -962,6 +962,9 @@ namespace WinsockPacketEditor
                 case "Table.PacketList.Column.PacketData":
                     return "Data";
 
+                case "Table.PacketList.Column.PacketBuffer":
+                    return "Data";
+
                 case "Table.PacketList.Column.CellLinks":
                     return "Operation";
 
@@ -1037,6 +1040,9 @@ namespace WinsockPacketEditor
 
                 case "ProxyModeForm.miRobotList":
                     return "Robot List";
+
+                case "ProxyModeForm.miWareHouseList":
+                    return "WareHouse List";
 
                 case "ProxyModeForm.miStatistical":
                     return "Statistical Data";
@@ -1414,6 +1420,112 @@ namespace WinsockPacketEditor
 
                 case "Table.RobotList.Column.CellLinks":
                     return "Operation";
+
+                #endregion
+
+                #region//WareHouse List
+
+                case "WareHouseList":
+                    return "WareHouse List";
+
+                case "WareHouseList.NewWareHouse":
+                    return "WareHouse {0}";
+
+                case "WareHouseList.File":
+                    return "WareHouse List File";
+
+                case "WareHouse.Name":
+                    return "WareHouse Name";
+
+                case "WareHouse.Edit":
+                    return "WareHouse Edit";
+
+                case "AutoStores":
+                    return "Auto Stores";
+
+                case "AutoStores.File":
+                    return "Auto Stores File";
+
+                case "WareHouseList.Add":
+                    return "Add WareHouse";
+
+                case "WareHouseList.Import":
+                    return "Import WareHouse";
+
+                case "WareHouseList.Import.Success":
+                    return "Import WareHouse Success";
+
+                case "WareHouseList.Import.Error":
+                    return "Import WareHouse Error";
+
+                case "WareHouseList.Export":
+                    return "Export WareHouse";
+
+                case "WareHouseList.Export.Success":
+                    return "Export WareHouse Success";
+
+                case "WareHouseList.Export.Error":
+                    return "Export WareHouse Error";
+
+                case "WareHouseList.Clear":
+                    return "Clear WareHouse";
+
+                case "AutoStores.Add":
+                    return "Add AutoStores";
+
+                case "AutoStores.Import":
+                    return "Import AutoStores";
+
+                case "AutoStores.Import.Success":
+                    return "Import AutoStores Success";
+
+                case "AutoStores.Import.Error":
+                    return "Import AutoStores Error";
+
+                case "AutoStores.Export":
+                    return "Export AutoStores";
+
+                case "AutoStores.Export.Success":
+                    return "Export AutoStores Success";
+
+                case "AutoStores.Export.Error":
+                    return "Export AutoStores Error";
+
+                case "AutoStores.Clear":
+                    return "Clear AutoStores";
+
+                case "Table.WareHouseList.Column.WName":
+                    return "WareHouse Name";
+
+                case "Table.WareHouseList.Column.Stores":
+                    return "Stores";
+
+                case "Table.WareHouseList.Column.CellLinks":
+                    return "Operation";
+
+                case "Table.AutoStores.Column.PacketHead":
+                    return "Specify Packet Head";
+
+                case "Table.AutoStores.Column.WID":
+                    return "WareHouse Name";
+
+                case "Table.AutoStores.Column.CellLinks":
+                    return "Operation";
+
+                case "AutoStores.Enable":
+                    return "Enable Auto Stores";
+
+                case "AutoStores.Enable.Notice":
+                    return "It needs to be manually activated after each restart";
+
+                case "AutoStores.Edit":
+                    return "Edit";
+
+                case "AutoStores.PacketHead":
+                    return "Specify Packet Head";
+
+                case "AutoStores.Save.Success":
+                    return "Save AutoStores Success";
 
                 #endregion
 

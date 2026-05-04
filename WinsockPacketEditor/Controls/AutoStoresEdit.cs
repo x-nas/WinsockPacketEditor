@@ -112,7 +112,7 @@ namespace WinsockPacketEditor
 
                     AntdUI.Message.open(new AntdUI.Message.Config(this.form, "自动入库保存成功", TType.Success)
                     {
-                        LocalizationText = "AutoStoresEdit.Success"
+                        LocalizationText = "AutoStores.Save.Success"
                     });
 
                     this.aslForm.RefreshAutoStores();

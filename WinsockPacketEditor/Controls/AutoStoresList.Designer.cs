@@ -33,9 +33,11 @@
             this.tlpMenu = new WinsockPacketEditor.TableLayoutPanelEx();
             this.ddMenu = new AntdUI.Dropdown();
             this.cbEnable_AutoStores = new AntdUI.Checkbox();
+            this.lEnableNotice = new AntdUI.Label();
             this.tlpButton = new WinsockPacketEditor.TableLayoutPanelEx();
             this.bSave = new AntdUI.Button();
             this.bExit = new AntdUI.Button();
+            this.lSplit = new AntdUI.Label();
             this.tlpAutoStores.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tlpButton.SuspendLayout();
@@ -80,13 +82,16 @@
             // 
             // tlpMenu
             // 
-            this.tlpMenu.ColumnCount = 3;
+            this.tlpMenu.ColumnCount = 5;
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-            this.tlpMenu.Controls.Add(this.ddMenu, 2, 0);
+            this.tlpMenu.Controls.Add(this.ddMenu, 4, 0);
             this.tlpMenu.Controls.Add(this.cbEnable_AutoStores, 0, 0);
+            this.tlpMenu.Controls.Add(this.lEnableNotice, 2, 0);
+            this.tlpMenu.Controls.Add(this.lSplit, 1, 0);
             this.tlpMenu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMenu.Location = new System.Drawing.Point(0, 0);
             this.tlpMenu.Margin = new System.Windows.Forms.Padding(0);
@@ -119,7 +124,7 @@
             // 
             this.cbEnable_AutoStores.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.cbEnable_AutoStores.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbEnable_AutoStores.LocalizationText = "Enable";
+            this.cbEnable_AutoStores.LocalizationText = "AutoStores.Enable";
             this.cbEnable_AutoStores.Location = new System.Drawing.Point(2, 2);
             this.cbEnable_AutoStores.Margin = new System.Windows.Forms.Padding(2);
             this.cbEnable_AutoStores.Name = "cbEnable_AutoStores";
@@ -127,6 +132,17 @@
             this.cbEnable_AutoStores.TabIndex = 8;
             this.cbEnable_AutoStores.Text = "启用自动入库";
             this.cbEnable_AutoStores.CheckedChanged += new AntdUI.BoolEventHandler(this.cbEnable_AutoStores_CheckedChanged);
+            // 
+            // lEnableNotice
+            // 
+            this.lEnableNotice.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lEnableNotice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lEnableNotice.ForeColor = System.Drawing.Color.Red;
+            this.lEnableNotice.Location = new System.Drawing.Point(123, 3);
+            this.lEnableNotice.Name = "lEnableNotice";
+            this.lEnableNotice.Size = new System.Drawing.Size(72, 35);
+            this.lEnableNotice.TabIndex = 13;
+            this.lEnableNotice.Text = "自动入库须知";
             // 
             // tlpButton
             // 
@@ -181,6 +197,17 @@
             this.bExit.Type = AntdUI.TTypeMini.Primary;
             this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
+            // lSplit
+            // 
+            this.lSplit.AutoSizeMode = AntdUI.TAutoSize.Width;
+            this.lSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lSplit.Location = new System.Drawing.Point(111, 3);
+            this.lSplit.Name = "lSplit";
+            this.lSplit.Size = new System.Drawing.Size(6, 35);
+            this.lSplit.TabIndex = 14;
+            this.lSplit.Text = "-";
+            this.lSplit.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // AutoStoresList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -211,5 +238,7 @@
         private AntdUI.Dropdown ddMenu;
         private AntdUI.Checkbox cbEnable_AutoStores;
         private AntdUI.Table tAutoStores;
+        private AntdUI.Label lEnableNotice;
+        private AntdUI.Label lSplit;
     }
 }

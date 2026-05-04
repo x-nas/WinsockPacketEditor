@@ -110,6 +110,7 @@
             // 
             this.lWName.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lWName.LocalizationText = "WareHouse.Name";
             this.lWName.Location = new System.Drawing.Point(3, 3);
             this.lWName.Name = "lWName";
             this.lWName.Size = new System.Drawing.Size(55, 35);

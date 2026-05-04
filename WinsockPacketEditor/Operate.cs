@@ -20664,7 +20664,7 @@ namespace WinsockPacketEditor
 
                 public static void OpenWareHouseEdit(Form form, WareHouseInfo whi)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WareHouseEdit", "编辑"), new WareHouseEdit(form, whi))
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("WareHouse.Edit", "编辑"), new WareHouseEdit(form, whi))
                     {
                         Keyboard = false,
                         MaskClosable = false,
@@ -20856,7 +20856,7 @@ namespace WinsockPacketEditor
 
                 public static void OpenAutoStoresEdit(Form form, AutoStoresList aslForm, AutoStoresInfo asiSelect)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AutoStoresEdit", "自动入库编辑"), new AutoStoresEdit(form, aslForm, asiSelect))
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AutoStores.Edit", "自动入库编辑"), new AutoStoresEdit(form, aslForm, asiSelect))
                     {
                         Keyboard = false,
                         MaskClosable = false,
@@ -20892,7 +20892,7 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AutoStoresList", "自动入库"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AutoStores", "自动入库"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                         {
                             Icon = TType.Warn,
                             Keyboard = false,
@@ -20911,55 +20911,6 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(DeleteAutoStores_Dialog), ex);
-                    }
-                }
-
-                #endregion
-
-                #region//保存自动入库到数据库
-
-                public static void SaveAutoStores_ToDB()
-                {
-                    try
-                    {
-                        DataBase.DeleteTable_AutoStores();
-
-                        if (WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
-                        { 
-                            foreach (AutoStoresInfo asi in WareHouseConfig.List.lstAutoStoresInfo)
-                            {
-                                DataBase.InsertTable_AutoStores(asi);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(SaveAutoStores_ToDB), ex);
-                    }
-                }
-
-                #endregion
-
-                #region//从数据库加载自动入库
-
-                public static void LoadAutoStores_FromDB()
-                {
-                    try
-                    {
-                        DataTable dtAutoStores = DataBase.SelectTable_AutoStores();
-
-                        foreach (DataRow dataRow in dtAutoStores.Rows)
-                        {
-                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
-                            string PacketHead = dataRow["PacketHead"].ToString();
-                            Guid WID = Guid.Parse(dataRow["WID"].ToString());
-
-                            WareHouseConfig.WareHouse.AddAutoStores(IsEnable, PacketHead, WID);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(LoadAutoStores_FromDB), ex);
                     }
                 }
 
@@ -21019,7 +20970,7 @@ namespace WinsockPacketEditor
 
                 public static void CleanUpAutoStores_Dialog(Form form)
                 {
-                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("MapSettingsForm.AutoStores", "自动入库"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("AutoStores", "自动入库"), "\r\n" + AntdUI.Localization.Get("SureToDelete", "确定删除数据吗?") + "\r\n\r\n")
                     {
                         Icon = TType.Warn,
                         Keyboard = false,
@@ -21441,7 +21392,7 @@ namespace WinsockPacketEditor
                         if (WareHouseConfig.List.lstWareHouseInfo.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = AntdUI.Localization.Get("WareHouseListFile", "仓库列表文件") + "（*.whp）|*.whp";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("WareHouseList.File", "仓库列表文件") + "（*.whp）|*.whp";
                             sfdSaveFile.RestoreDirectory = true;
 
                             if (!string.IsNullOrEmpty(FileName))
@@ -21454,17 +21405,17 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportWareHouseList", "导出仓库列表"));
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("WareHouseList.Export", "导出仓库列表"));
 
                                     if (WareHouseConfig.List.SaveWareHouseList(FilePath, whiList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportWareHouseList.Success", "导出仓库列表成功");
+                                        string Title = AntdUI.Localization.Get("WareHouseList.Export.Success", "导出仓库列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(nameof(SaveWareHouseList_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportWareHouseList.Error", "导出仓库列表失败");
+                                        string Title = AntdUI.Localization.Get("WareHouseList.Export.Error", "导出仓库列表失败");
                                         string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
@@ -21572,7 +21523,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                        ofdLoadFile.Filter = AntdUI.Localization.Get("WareHouseListFile", "仓库列表文件") + "（*.whp）|*.whp";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("WareHouseList.File", "仓库列表文件") + "（*.whp）|*.whp";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -21582,7 +21533,7 @@ namespace WinsockPacketEditor
                             {
                                 if (WareHouseConfig.List.LoadWareHouseList(form, FilePath, true))
                                 {
-                                    string Title = AntdUI.Localization.Get("ImportWareHouseList.Success", "导入仓库列表成功");
+                                    string Title = AntdUI.Localization.Get("WareHouseList.Import.Success", "导入仓库列表成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                     Operate.DoLog(nameof(LoadWareHouseList_Dialog), Title + ": " + FilePath);
                                 }
@@ -21608,7 +21559,7 @@ namespace WinsockPacketEditor
                             {
                                 if (LoadFromUser)
                                 {
-                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportWareHouseList", "导入仓库列表"), FilePath);
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("WareHouseList.Import", "导入仓库列表"), FilePath);
                                 }
                             }
                             else
@@ -21680,6 +21631,59 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(LoadWareHouseList_FromXDocument), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//保存仓库列表到数据库
+
+                public static void SaveWareHouseList_ToDB()
+                {
+                    try
+                    {
+                        DataBase.DeleteTable_WareHouse();
+
+                        foreach (WareHouseInfo whi in WareHouseConfig.List.lstWareHouseInfo)
+                        {
+                            DataBase.InsertTable_WareHouse(whi);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SaveWareHouseList_ToDB), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//从数据库加载仓库列表
+
+                public static void LoadWareHouseList_FromDB()
+                {
+                    try
+                    {
+                        DataTable dtWareHouse = DataBase.SelectTable_WareHouse();
+                        foreach (DataRow dataRow in dtWareHouse.Rows)
+                        {
+                            Guid WID = Guid.Parse(dataRow["GUID"].ToString());
+                            string WName = dataRow["Name"].ToString();
+                            BindingList<DataInfo> Stores = new BindingList<DataInfo>();
+
+                            DataTable dtStores = DataBase.SelectTable_WareHouseData(WID);
+                            foreach (DataRow row in dtStores.Rows)
+                            {
+                                byte[] PacketBuffer = (byte[])row["Buffer"];
+
+                                WareHouseConfig.WareHouse.AddStores(Stores, PacketBuffer);
+                            }
+
+                            WareHouseConfig.WareHouse.AddWareHouse(WID, WName, Stores);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(LoadWareHouseList_FromDB), ex);
                     }
                 }
 
@@ -21804,7 +21808,7 @@ namespace WinsockPacketEditor
                             if (!string.IsNullOrEmpty(FilePath))
                             {
                                 bool bOK = false;
-                               
+
                                 AntdUI.Spin.open(form, new AntdUI.Spin.Config()
                                 {
                                     Radius = 6,
@@ -21821,7 +21825,7 @@ namespace WinsockPacketEditor
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(nameof(LoadStores_Dialog), Title + ": " + FilePath);
                                     }
-                                });                                
+                                });
                             }
                         }
                     }
@@ -21911,7 +21915,7 @@ namespace WinsockPacketEditor
                         if (WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
-                            sfdSaveFile.Filter = AntdUI.Localization.Get("AutoStoresFile", "自动入库文件") + "（*.pas）|*.pas";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("AutoStores.File", "自动入库文件") + "（*.pas）|*.pas";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -21924,17 +21928,17 @@ namespace WinsockPacketEditor
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("ExportAutoStores", "导出自动入库"));
+                                    var EncryptPassword = SystemConfig.GetEncryptExport(form, AntdUI.Localization.Get("AutoStores.Export", "导出自动入库"));
 
                                     if (WareHouseConfig.List.SaveAutoStores(FilePath, asiList, EncryptPassword.DoEncrypt, EncryptPassword.Password))
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportAutoStores.Success", "导出自动入库成功");
+                                        string Title = AntdUI.Localization.Get("AutoStores.Export.Success", "导出自动入库成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                         Operate.DoLog(nameof(SaveAutoStores_Dialog), Title + ": " + FilePath);
                                     }
                                     else
                                     {
-                                        string Title = AntdUI.Localization.Get("ExportAutoStores.Error", "导出自动入库失败");
+                                        string Title = AntdUI.Localization.Get("AutoStores.Export.Error", "导出自动入库失败");
                                         string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
                                         AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
                                     }
@@ -22021,7 +22025,7 @@ namespace WinsockPacketEditor
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-                        ofdLoadFile.Filter = AntdUI.Localization.Get("AutoStoresFile", "自动入库文件") + "（*.pas）|*.pas";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("AutoStores.File", "自动入库文件") + "（*.pas）|*.pas";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -22031,7 +22035,7 @@ namespace WinsockPacketEditor
                             {
                                 if (WareHouseConfig.List.LoadAutoStores(form, FilePath, true))
                                 {
-                                    string Title = AntdUI.Localization.Get("ImportAutoStores.Success", "导入自动入库成功");
+                                    string Title = AntdUI.Localization.Get("AutoStores.Import.Success", "导入自动入库成功");
                                     AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
                                     Operate.DoLog(nameof(LoadAutoStores_Dialog), Title + ": " + FilePath);
                                 }
@@ -22057,7 +22061,7 @@ namespace WinsockPacketEditor
                             {
                                 if (LoadFromUser)
                                 {
-                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("ImportAutoStores", "导入自动入库"), FilePath);
+                                    xdoc = SystemConfig.GetEncryptImport(form, AntdUI.Localization.Get("AutoStores.Import", "导入自动入库"), FilePath);
                                 }
                             }
                             else
@@ -22127,54 +22131,50 @@ namespace WinsockPacketEditor
 
                 #endregion
 
-                #region//保存仓库列表到数据库
+                #region//保存自动入库到数据库
 
-                public static void SaveWareHouseList_ToDB()
+                public static void SaveAutoStores_ToDB()
                 {
                     try
                     {
-                        DataBase.DeleteTable_WareHouse();
+                        DataBase.DeleteTable_AutoStores();
 
-                        foreach (WareHouseInfo whi in WareHouseConfig.List.lstWareHouseInfo)
+                        if (WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
                         {
-                            DataBase.InsertTable_WareHouse(whi);
+                            foreach (AutoStoresInfo asi in WareHouseConfig.List.lstAutoStoresInfo)
+                            {
+                                DataBase.InsertTable_AutoStores(asi);
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SaveWareHouseList_ToDB), ex);
+                        Operate.DoLog(nameof(SaveAutoStores_ToDB), ex);
                     }
                 }
 
                 #endregion
 
-                #region//从数据库加载仓库列表
+                #region//从数据库加载自动入库
 
-                public static void LoadWareHouseList_FromDB()
+                public static void LoadAutoStores_FromDB()
                 {
                     try
                     {
-                        DataTable dtWareHouse = DataBase.SelectTable_WareHouse();
-                        foreach (DataRow dataRow in dtWareHouse.Rows)
+                        DataTable dtAutoStores = DataBase.SelectTable_AutoStores();
+
+                        foreach (DataRow dataRow in dtAutoStores.Rows)
                         {
-                            Guid WID = Guid.Parse(dataRow["GUID"].ToString());
-                            string WName = dataRow["Name"].ToString();
-                            BindingList<DataInfo> Stores = new BindingList<DataInfo>();
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                            string PacketHead = dataRow["PacketHead"].ToString();
+                            Guid WID = Guid.Parse(dataRow["WID"].ToString());
 
-                            DataTable dtStores = DataBase.SelectTable_WareHouseData(WID);
-                            foreach (DataRow row in dtStores.Rows)
-                            {
-                                byte[] PacketBuffer = (byte[])row["Buffer"];
-
-                                WareHouseConfig.WareHouse.AddStores(Stores, PacketBuffer);
-                            }
-
-                            WareHouseConfig.WareHouse.AddWareHouse(WID, WName, Stores);
+                            WareHouseConfig.WareHouse.AddAutoStores(IsEnable, PacketHead, WID);
                         }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(LoadWareHouseList_FromDB), ex);
+                        Operate.DoLog(nameof(LoadAutoStores_FromDB), ex);
                     }
                 }
 

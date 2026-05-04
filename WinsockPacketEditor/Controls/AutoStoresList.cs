@@ -18,6 +18,7 @@ namespace WinsockPacketEditor
 
         private void AutoStores_Load(object sender, System.EventArgs e)
         {
+            this.lEnableNotice.Text = AntdUI.Localization.Get("AutoStores.Enable.Notice", "每次重启软件后需手动开启");
             this.cbEnable_AutoStores.Checked = Operate.WareHouseConfig.WareHouse.Enable_AutoStores;
 
             this.InitMenu();
@@ -246,7 +247,7 @@ namespace WinsockPacketEditor
 
             AntdUI.Message.open(new AntdUI.Message.Config(this.form, "自动入库保存成功", TType.Success)
             {
-                LocalizationText = "AutoStoresList.Success"
+                LocalizationText = "AutoStores.Save.Success"
             });
 
             this.Dispose();

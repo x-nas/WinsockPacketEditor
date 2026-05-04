@@ -55,7 +55,7 @@
             this.tlpAutoStoresEdit.RowCount = 2;
             this.tlpAutoStoresEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAutoStoresEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpAutoStoresEdit.Size = new System.Drawing.Size(300, 200);
+            this.tlpAutoStoresEdit.Size = new System.Drawing.Size(350, 200);
             this.tlpAutoStoresEdit.TabIndex = 0;
             // 
             // tlpButton
@@ -76,7 +76,7 @@
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(300, 50);
+            this.tlpButton.Size = new System.Drawing.Size(350, 50);
             this.tlpButton.TabIndex = 18;
             // 
             // bSave
@@ -86,7 +86,7 @@
             this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bSave.IconSvg = "SaveOutlined";
             this.bSave.LocalizationText = "Save";
-            this.bSave.Location = new System.Drawing.Point(78, 6);
+            this.bSave.Location = new System.Drawing.Point(103, 6);
             this.bSave.Margin = new System.Windows.Forms.Padding(2);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(63, 37);
@@ -102,7 +102,7 @@
             this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bExit.IconSvg = "LogoutOutlined";
             this.bExit.LocalizationText = "Cancel";
-            this.bExit.Location = new System.Drawing.Point(159, 6);
+            this.bExit.Location = new System.Drawing.Point(184, 6);
             this.bExit.Margin = new System.Windows.Forms.Padding(2);
             this.bExit.Name = "bExit";
             this.bExit.Size = new System.Drawing.Size(63, 37);
@@ -129,13 +129,14 @@
             this.tlpSettingInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSettingInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSettingInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSettingInfo.Size = new System.Drawing.Size(300, 150);
+            this.tlpSettingInfo.Size = new System.Drawing.Size(350, 150);
             this.tlpSettingInfo.TabIndex = 19;
             // 
             // lWareHouse
             // 
             this.lWareHouse.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lWareHouse.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lWareHouse.LocalizationText = "WareHouse.Name";
             this.lWareHouse.Location = new System.Drawing.Point(3, 57);
             this.lWareHouse.Name = "lWareHouse";
             this.lWareHouse.Size = new System.Drawing.Size(55, 33);
@@ -146,6 +147,7 @@
             // 
             this.lPacketHead.AutoSizeMode = AntdUI.TAutoSize.Width;
             this.lPacketHead.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lPacketHead.LocalizationText = "AutoStores.PacketHead";
             this.lPacketHead.Location = new System.Drawing.Point(3, 18);
             this.lPacketHead.Name = "lPacketHead";
             this.lPacketHead.Size = new System.Drawing.Size(55, 33);
@@ -160,7 +162,7 @@
             this.txtPacketHead.Margin = new System.Windows.Forms.Padding(2);
             this.txtPacketHead.Name = "txtPacketHead";
             this.txtPacketHead.PlaceholderText = "请输入十六进制和空格";
-            this.txtPacketHead.Size = new System.Drawing.Size(235, 35);
+            this.txtPacketHead.Size = new System.Drawing.Size(285, 35);
             this.txtPacketHead.TabIndex = 1;
             // 
             // ddlWareHouse
@@ -172,7 +174,7 @@
             this.ddlWareHouse.Margin = new System.Windows.Forms.Padding(2);
             this.ddlWareHouse.Name = "ddlWareHouse";
             this.ddlWareHouse.PlaceholderText = "请选择";
-            this.ddlWareHouse.Size = new System.Drawing.Size(235, 35);
+            this.ddlWareHouse.Size = new System.Drawing.Size(285, 35);
             this.ddlWareHouse.TabIndex = 3;
             // 
             // AutoStoresEdit
@@ -184,7 +186,7 @@
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "AutoStoresEdit";
-            this.Size = new System.Drawing.Size(300, 200);
+            this.Size = new System.Drawing.Size(350, 200);
             this.Load += new System.EventHandler(this.AutoStoresEdit_Load);
             this.tlpAutoStoresEdit.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
