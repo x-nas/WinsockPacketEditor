@@ -52,9 +52,6 @@
             this.btn_setting = new AntdUI.Button();
             this.tabProxyMode = new AntdUI.Tabs();
             this.tpProxyList = new AntdUI.TabPage();
-            this.tpExtraction = new AntdUI.TabPage();
-            this.tpWPCConfig = new AntdUI.TabPage();
-            this.tpSystemLog = new AntdUI.TabPage();
             this.tpClientList = new AntdUI.TabPage();
             this.tpAccountList = new AntdUI.TabPage();
             this.tpFilterList = new AntdUI.TabPage();
@@ -65,6 +62,9 @@
             this.tpComparison = new AntdUI.TabPage();
             this.tpXOR = new AntdUI.TabPage();
             this.tpTranscoding = new AntdUI.TabPage();
+            this.tpExtraction = new AntdUI.TabPage();
+            this.tpWPCConfig = new AntdUI.TabPage();
+            this.tpSystemLog = new AntdUI.TabPage();
             this.timerProxyList = new System.Windows.Forms.Timer(this.components);
             this.timerProxyListInfo = new System.Windows.Forms.Timer(this.components);
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
@@ -165,12 +165,12 @@
             this.tabProxyMode.Controls.Add(this.tpSendList);
             this.tabProxyMode.Controls.Add(this.tpRobotList);
             this.tabProxyMode.Controls.Add(this.tpWareHouseList);
+            this.tabProxyMode.Controls.Add(this.tpWPCConfig);
             this.tabProxyMode.Controls.Add(this.tpStatistical);
             this.tabProxyMode.Controls.Add(this.tpComparison);
             this.tabProxyMode.Controls.Add(this.tpXOR);
             this.tabProxyMode.Controls.Add(this.tpTranscoding);
             this.tabProxyMode.Controls.Add(this.tpExtraction);
-            this.tabProxyMode.Controls.Add(this.tpWPCConfig);
             this.tabProxyMode.Controls.Add(this.tpSystemLog);
             this.tabProxyMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabProxyMode.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -184,12 +184,12 @@
             this.tabProxyMode.Pages.Add(this.tpSendList);
             this.tabProxyMode.Pages.Add(this.tpRobotList);
             this.tabProxyMode.Pages.Add(this.tpWareHouseList);
+            this.tabProxyMode.Pages.Add(this.tpWPCConfig);
             this.tabProxyMode.Pages.Add(this.tpStatistical);
             this.tabProxyMode.Pages.Add(this.tpComparison);
             this.tabProxyMode.Pages.Add(this.tpXOR);
             this.tabProxyMode.Pages.Add(this.tpTranscoding);
             this.tabProxyMode.Pages.Add(this.tpExtraction);
-            this.tabProxyMode.Pages.Add(this.tpWPCConfig);
             this.tabProxyMode.Pages.Add(this.tpSystemLog);
             this.tabProxyMode.Size = new System.Drawing.Size(1331, 770);
             this.tabProxyMode.Style = styleLine1;
@@ -206,36 +206,6 @@
             this.tpProxyList.Size = new System.Drawing.Size(1331, 742);
             this.tpProxyList.TabIndex = 0;
             this.tpProxyList.Text = "代理数据";
-            // 
-            // tpExtraction
-            // 
-            this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpExtraction.Location = new System.Drawing.Point(0, 28);
-            this.tpExtraction.Margin = new System.Windows.Forms.Padding(2);
-            this.tpExtraction.Name = "tpExtraction";
-            this.tpExtraction.Size = new System.Drawing.Size(1331, 742);
-            this.tpExtraction.TabIndex = 15;
-            this.tpExtraction.Text = "数据提取";
-            // 
-            // tpWPCConfig
-            // 
-            this.tpWPCConfig.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpWPCConfig.Location = new System.Drawing.Point(0, 28);
-            this.tpWPCConfig.Margin = new System.Windows.Forms.Padding(2);
-            this.tpWPCConfig.Name = "tpWPCConfig";
-            this.tpWPCConfig.Size = new System.Drawing.Size(1331, 742);
-            this.tpWPCConfig.TabIndex = 22;
-            this.tpWPCConfig.Text = "WPC配置";
-            // 
-            // tpSystemLog
-            // 
-            this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tpSystemLog.Location = new System.Drawing.Point(0, 28);
-            this.tpSystemLog.Margin = new System.Windows.Forms.Padding(2);
-            this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(1331, 742);
-            this.tpSystemLog.TabIndex = 6;
-            this.tpSystemLog.Text = "系统日志";
             // 
             // tpClientList
             // 
@@ -337,6 +307,36 @@
             this.tpTranscoding.TabIndex = 14;
             this.tpTranscoding.Text = "编码转换";
             // 
+            // tpExtraction
+            // 
+            this.tpExtraction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpExtraction.Location = new System.Drawing.Point(0, 28);
+            this.tpExtraction.Margin = new System.Windows.Forms.Padding(2);
+            this.tpExtraction.Name = "tpExtraction";
+            this.tpExtraction.Size = new System.Drawing.Size(1331, 742);
+            this.tpExtraction.TabIndex = 15;
+            this.tpExtraction.Text = "数据提取";
+            // 
+            // tpWPCConfig
+            // 
+            this.tpWPCConfig.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpWPCConfig.Location = new System.Drawing.Point(0, 28);
+            this.tpWPCConfig.Margin = new System.Windows.Forms.Padding(2);
+            this.tpWPCConfig.Name = "tpWPCConfig";
+            this.tpWPCConfig.Size = new System.Drawing.Size(1331, 742);
+            this.tpWPCConfig.TabIndex = 22;
+            this.tpWPCConfig.Text = "WPC配置";
+            // 
+            // tpSystemLog
+            // 
+            this.tpSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tpSystemLog.Location = new System.Drawing.Point(0, 28);
+            this.tpSystemLog.Margin = new System.Windows.Forms.Padding(2);
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.Size = new System.Drawing.Size(1331, 742);
+            this.tpSystemLog.TabIndex = 6;
+            this.tpSystemLog.Text = "系统日志";
+            // 
             // timerProxyList
             // 
             this.timerProxyList.Enabled = true;
@@ -409,30 +409,30 @@
             menuItem7.ID = "miWareHouseList";
             menuItem7.LocalizationText = "ProxyModeForm.{id}";
             menuItem7.Text = "仓库列表";
-            menuItem8.IconSvg = "PieChartOutlined";
-            menuItem8.ID = "miStatistical";
+            menuItem8.IconSvg = "CloudSyncOutlined";
+            menuItem8.ID = "miWPCConfig";
             menuItem8.LocalizationText = "ProxyModeForm.{id}";
-            menuItem8.Text = "统计数据";
-            menuItem9.IconSvg = "DiffOutlined";
-            menuItem9.ID = "miComparison";
+            menuItem8.Text = "WPC配置";
+            menuItem9.IconSvg = "PieChartOutlined";
+            menuItem9.ID = "miStatistical";
             menuItem9.LocalizationText = "ProxyModeForm.{id}";
-            menuItem9.Text = "文本对比";
-            menuItem10.IconSvg = "BuildOutlined";
-            menuItem10.ID = "miXOR";
+            menuItem9.Text = "统计数据";
+            menuItem10.IconSvg = "DiffOutlined";
+            menuItem10.ID = "miComparison";
             menuItem10.LocalizationText = "ProxyModeForm.{id}";
-            menuItem10.Text = "异或计算";
-            menuItem11.IconSvg = "InteractionOutlined";
-            menuItem11.ID = "miTranscoding";
+            menuItem10.Text = "文本对比";
+            menuItem11.IconSvg = "BuildOutlined";
+            menuItem11.ID = "miXOR";
             menuItem11.LocalizationText = "ProxyModeForm.{id}";
-            menuItem11.Text = "编码转换";
-            menuItem12.IconSvg = "DeliveredProcedureOutlined";
-            menuItem12.ID = "miExtraction";
+            menuItem11.Text = "异或计算";
+            menuItem12.IconSvg = "InteractionOutlined";
+            menuItem12.ID = "miTranscoding";
             menuItem12.LocalizationText = "ProxyModeForm.{id}";
-            menuItem12.Text = "数据提取";
-            menuItem13.IconSvg = "CloudSyncOutlined";
-            menuItem13.ID = "miWPCConfig";
+            menuItem12.Text = "编码转换";
+            menuItem13.IconSvg = "DeliveredProcedureOutlined";
+            menuItem13.ID = "miExtraction";
             menuItem13.LocalizationText = "ProxyModeForm.{id}";
-            menuItem13.Text = "WPC配置";
+            menuItem13.Text = "数据提取";
             menuItem14.Badge = "";
             menuItem14.IconSvg = "ExceptionOutlined";
             menuItem14.ID = "miSystemLog";

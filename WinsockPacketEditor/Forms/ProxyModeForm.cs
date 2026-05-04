@@ -727,6 +727,7 @@ namespace WinsockPacketEditor
                 this.mProxyMode.Items[4].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
                 this.mProxyMode.Items[5].Badge = Operate.RobotConfig.List.lstRobotInfo.Count.ToString();
                 this.mProxyMode.Items[6].Badge = Operate.WareHouseConfig.List.lstWareHouseInfo.Count.ToString();
+                this.mProxyMode.Items[7].Badge = Operate.WPCConfig.ServerList.lstServerInfo.Count.ToString();
                 this.mProxyMode.Items[13].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
                 
                 this.RefreshWareHouseList();
