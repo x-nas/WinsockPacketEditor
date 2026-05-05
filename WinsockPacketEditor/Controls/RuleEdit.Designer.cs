@@ -198,7 +198,6 @@
             this.txtRuleArgument.LocalizationPlaceholderText = "WPCConfig.RuleList.RuleArgument.Input";
             this.txtRuleArgument.Location = new System.Drawing.Point(57, 46);
             this.txtRuleArgument.Margin = new System.Windows.Forms.Padding(2);
-            this.txtRuleArgument.MaxLength = 1000;
             this.txtRuleArgument.Name = "txtRuleArgument";
             this.txtRuleArgument.PlaceholderText = "支持批量新增，多个参数 ; 分隔";
             this.txtRuleArgument.Size = new System.Drawing.Size(521, 40);
