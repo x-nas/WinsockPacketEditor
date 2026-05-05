@@ -228,7 +228,7 @@
             this.lForgorURL.Name = "lForgorURL";
             this.lForgorURL.Size = new System.Drawing.Size(99, 36);
             this.lForgorURL.TabIndex = 21;
-            this.lForgorURL.Text = "忘记密码地址 :";
+            this.lForgorURL.Text = "找回密码地址 :";
             this.lForgorURL.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lServerPort

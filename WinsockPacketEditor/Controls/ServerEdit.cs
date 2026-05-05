@@ -129,7 +129,7 @@ namespace WinsockPacketEditor
                 }
                 else
                 {
-                    Operate.WPCConfig.ServerList.UpdateServer_ByServerID(this.siSelect.SID, IsEnable, ServerName, ServerIP, ServerPort, ForgotURL, VerifyURL, RegisterURL);
+                    Operate.WPCConfig.ServerList.UpdateServer_ByServerID(this.siSelect.SID, IsEnable, ServerName, ServerIP, ServerPort, ForgotURL, RegisterURL, VerifyURL);
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "服务器信息保存成功", TType.Success)
