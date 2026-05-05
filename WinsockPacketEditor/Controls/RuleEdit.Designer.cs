@@ -200,7 +200,7 @@
             this.txtRuleArgument.Margin = new System.Windows.Forms.Padding(2);
             this.txtRuleArgument.MaxLength = 1000;
             this.txtRuleArgument.Name = "txtRuleArgument";
-            this.txtRuleArgument.PlaceholderText = "请输入规则参数";
+            this.txtRuleArgument.PlaceholderText = "支持批量新增，多个参数 ; 分隔";
             this.txtRuleArgument.Size = new System.Drawing.Size(521, 40);
             this.txtRuleArgument.TabIndex = 13;
             // 

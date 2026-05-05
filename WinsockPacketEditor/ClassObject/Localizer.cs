@@ -3169,6 +3169,12 @@ namespace WinsockPacketEditor
                 case "WPCConfig.RuleList.Clear":
                     return "Clear Rule List";
 
+                case "WPCConfig.RuleList.Save.Success":
+                    return "Save Rule Success";
+
+                case "WPCConfig.RuleList.Error":
+                    return "Save Rule Error";
+
                 case "WPCConfig.ServerList.ServerName":
                     return "Server Name :";
 
@@ -3224,7 +3230,7 @@ namespace WinsockPacketEditor
                     return "Argument :";
 
                 case "WPCConfig.RuleList.RuleArgument.Input":
-                    return "Input Rule Argument";
+                    return "Support batch addition with multiple parameters ; separate";
 
                 case "WPCConfig.RuleList.RuleAction":
                     return "Action :";

@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace WinsockPacketEditor
@@ -94,7 +95,7 @@ namespace WinsockPacketEditor
             try
             {
                 bool IsEnable = this.cbIsEnable.Checked;
-                string RArgument = this.txtRuleArgument.Text.Trim();
+                string ruleArgument = this.txtRuleArgument.Text.Trim();
 
                 RuleType RType = RuleType.DOMAIN;
                 if (this.ddlRuleType.SelectedValue is RuleType selectedRule)
@@ -104,22 +105,58 @@ namespace WinsockPacketEditor
 
                 RuleAction RAction = RuleAction.DIRECT;
                 if (this.ddlRuleAction.SelectedValue is RuleAction selectedAction)
-                { 
+                {
                     RAction = selectedAction;
-                }                
+                }
 
                 if (this.riSelect == null)
                 {
-                    Operate.WPCConfig.ServerList.AddRule(this.siSelect.SID, new RuleInfo(IsEnable, Guid.NewGuid(), RType, RArgument, RAction));
+                    if (string.IsNullOrEmpty(ruleArgument))
+                    {
+                        Operate.WPCConfig.ServerList.AddRule(this.siSelect.SID, new RuleInfo(IsEnable, Guid.NewGuid(), RType, ruleArgument, RAction));
+                    }
+                    else
+                    {
+                        var arguments = ruleArgument.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(arg => arg.Trim())
+                            .Where(arg => !string.IsNullOrEmpty(arg))
+                            .ToList();
+
+                        foreach (string argument in arguments)
+                        {
+                            Operate.WPCConfig.ServerList.AddRule(this.siSelect.SID, new RuleInfo(IsEnable, Guid.NewGuid(), RType, argument, RAction));
+                        }
+                    }
                 }
                 else
                 {
-                    Operate.WPCConfig.ServerList.UpdateRule_ByRuleID(this.siSelect.SID, this.riSelect.RID, IsEnable, RType, RArgument, RAction);
+                    string updateArgument = ruleArgument;
+
+                    if (!string.IsNullOrEmpty(ruleArgument))
+                    {
+                        var firstArgument = ruleArgument.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(arg => arg.Trim())
+                            .FirstOrDefault(arg => !string.IsNullOrEmpty(arg));
+
+                        if (firstArgument != null)
+                        {
+                            updateArgument = firstArgument;
+                        }
+                    }
+
+                    Operate.WPCConfig.ServerList.UpdateRule_ByRuleID(
+                        this.siSelect.SID,
+                        this.riSelect.RID,
+                        IsEnable,
+                        RType,
+                        updateArgument,
+                        RAction
+                    );
                 }
 
                 AntdUI.Message.open(new AntdUI.Message.Config(this.form, "规则信息保存成功", TType.Success)
                 {
-                    LocalizationText = "RuleEdit.Success"
+                    LocalizationText = "WPCConfig.RuleList.Save.Success"
                 });
 
                 this.Dispose();
@@ -127,6 +164,11 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(bSave_Click), ex);
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "规则信息保存失败", TType.Error)
+                {
+                    LocalizationText = "WPCConfig.RuleList.Error"
+                });
             }
         }
 
