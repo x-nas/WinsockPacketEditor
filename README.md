@@ -14,10 +14,6 @@
 
 </div>
 
-## [⭐] 星星历史
-
-[![Star History Chart](https://api.star-history.com/svg?repos=x-nas/WinsockPacketEditor&type=Date)](https://www.star-history.com/#x-nas/WinsockPacketEditor&Date)
-
 ## [📚] 软件简介
 
 WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适应支持 32 位及 64 位的目标程序，软件支持 SOCKS 代理和进程注入两种模式，并且具有高级滤镜和自动化机器人等功能，开发中使用了 C# 的多线程和消息队列技术，测试拦截了 100 万+的封包不会卡死或退出.
