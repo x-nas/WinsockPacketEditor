@@ -1,5 +1,5 @@
 <div align="center">
-<p><img src="https://www.wpe64.com/web_images/wpe.png" height="150"></p>
+<p><img src="https://www.wpe64.com/assets/img/wpe.ico" height="150"></p>
 
 # Winsock Packet Editor（WPE x64）
 
