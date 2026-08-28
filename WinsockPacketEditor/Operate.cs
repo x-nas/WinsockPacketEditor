@@ -43,7 +43,7 @@ namespace WinsockPacketEditor
 
         public static class SystemConfig
         {
-            public static bool IsBeta = true;
+            public static bool IsBeta = false;
             public static int PID = -1;
             public static int AutoSaveINT = 600000;
             public static string PNAME = string.Empty;
