@@ -1,5 +1,5 @@
 <div align="center">
-<p><img src="https://www.wpe64.com/web_images/wpe.png" height="150"></p>
+<p><img src="https://www.wpe64.com/assets/img/wpe.ico" height="150"></p>
 
 # Winsock Packet Editor（WPE x64）
 
@@ -14,25 +14,17 @@
 
 </div>
 
-## [⭐] 星星历史
-
-[![Star History Chart](https://api.star-history.com/svg?repos=x-nas/WinsockPacketEditor&type=Date)](https://www.star-history.com/#x-nas/WinsockPacketEditor&Date)
-
 ## [📚] 软件简介
 
-WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适应支持 32 位及 64 位的目标程序，软件支持 SOCKS 代理和进程注入两种模式，并且具有高级滤镜和自动化机器人等功能，开发中使用了 C# 的多线程和消息队列技术，测试拦截了 100 万+的封包不会卡死或退出，软件不定期会修复 Bug 和更新功能，每次启动的时候支持在线自动更新.
+WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适应支持 32 位及 64 位的目标程序，软件支持 SOCKS 代理和进程注入两种模式，并且具有高级滤镜和自动化机器人等功能，开发中使用了 C# 的多线程和消息队列技术，测试拦截了 100 万+的封包不会卡死或退出.
 
 WPE x64 支持直接注入 Windows 进程来拦截 Winsock 封包，也可以通过 SOCKS 代理模式来拦截 Winsock 封包.
 
-本软件使用了微软的 VS2022 集成开发环境，.NET Framework 4.8 开发框架，以及 ClickOnce 部署资源。每次版本更新后，都会在启动程序时自动下载最新版本。如果更新服务器不可用，也不会导致程序无法使用。当然，如果您不希望自动更新，也可以在启动时手动关闭自动更新，或者直接下载离线打包版使用。
-
 ## [📚] Introduction
 
-WPE x64 is a Windows software that can intercept and modify WinSock packets, with adaptive support for 32-bit and 64-bit target programs. The software supports two modes: SOCKS proxy and process injection, and has advanced filters and automated robots. It uses C# multi threading and message queue technology in development, and has intercepted over 1 million packets without freezing or exiting. The software fixes bugs and updates periodically, and supports online automatic updates every time it starts.
+WPE x64 is a Windows software that can intercept and modify WinSock packets, with adaptive support for 32-bit and 64-bit target programs. The software supports two modes: SOCKS proxy and process injection, and has advanced filters and automated robots. It uses C# multi threading and message queue technology in development, and has intercepted over 1 million packets without freezing or exiting. 
 
 WPE x64 supports direct injection into Windows processes to intercept Winsock packets, and can also intercept Winsock packets through SOCKS proxy mode.
-
-This software uses Microsoft's VS2022 integrated development environment NET Framework 4.8 development framework, as well as GTK deployment resources. After each version update, the latest version will be automatically downloaded when the program is launched. If the update server is unavailable, it will not cause the program to be unusable. Of course, if you do not want automatic updates, you can manually turn off automatic updates at startup or download the offline packaged version directly for use.
 
 ## [🎖️] 软件特色
 
@@ -88,11 +80,16 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 
 ## [🖼️] 软件界面 Software UI
 
-![Proxy](https://github.com/user-attachments/assets/ba1bfe80-3c1c-4839-aa68-24aa5ddb4738)
+<img width="1200" height="750" alt="Home" src="https://github.com/user-attachments/assets/fbdaba92-edf8-486c-905a-a92ebb523ea2" />
 
-![Process](https://github.com/user-attachments/assets/6bfe3e16-cfc0-42c3-987c-26724363adb2)
+<img width="1450" height="802" alt="PacketList" src="https://github.com/user-attachments/assets/59f26b9d-e6df-4ccd-b3a4-9807d7db5ba8" />
+
+<img width="1450" height="802" alt="Statistical" src="https://github.com/user-attachments/assets/9e5f5330-ebe0-4b3f-92eb-c13ec6329a78" />
+
+<img width="1450" height="802" alt="Robot" src="https://github.com/user-attachments/assets/b7eb16b7-fee1-4381-8b7f-0ab6e49287a4" />
 
 ![111](https://github.com/user-attachments/assets/e33412c1-3a9f-41f8-b23e-aada6a1bb104)
+
 ![222](https://github.com/user-attachments/assets/6c9f6fa8-94a9-4aea-8119-2ebe152ff7c2)
 
 ## [👏] 特别说明 Special Note
