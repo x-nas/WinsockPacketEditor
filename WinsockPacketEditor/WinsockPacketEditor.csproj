@@ -253,6 +253,7 @@
     <Compile Include="ClassObject\FeedPump.cs" />
     <Compile Include="ClassObject\LogFile.cs" />
     <Compile Include="ClassObject\Core\HookHost.cs" />
+    <Compile Include="ClassObject\Core\NotifyProperty.cs" />
     <Compile Include="ClassObject\Core\Ipc\ConfigSnapshot.cs" />
     <Compile Include="ClassObject\Core\Ipc\FilterEngine.cs" />
     <Compile Include="ClassObject\Core\Ipc\IpcProtocol.cs" />

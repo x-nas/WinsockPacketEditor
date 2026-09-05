@@ -307,7 +307,7 @@ namespace WinsockPacketEditor
         滤镜「执行」下拉的候选项。不进推送流，按类型现取。
 
         只出名称与 Id：四份列表的模型（SendInfo / RobotInfo / FilterInfo /
-        WareHouseInfo）都继承 AntdUI.NotifyProperty，出现在外壳能看到的签名上就是 CS0012。
+        WareHouseInfo）都（当年）继承 AntdUI.NotifyProperty，出现在外壳能看到的签名上就是 CS0012。
     */
     public sealed class ExecuteTargetRow
     {

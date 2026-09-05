@@ -8290,7 +8290,7 @@ namespace WinsockPacketEditor
 
                 /*
                     上面那几个方法的参数都是 WhiteListInfo / BlackListInfo，
-                    它们继承 AntdUI.NotifyProperty —— 一出现在外壳能看到的签名上就是 CS0012。
+                    它们（当年）继承 AntdUI.NotifyProperty —— 一出现在外壳能看到的签名上就是 CS0012。
                     与账号、滤镜那几组同一个办法：这里开一组只出基础类型的入口。
 
                     <b>按 IPAddress 定位</b>，不是按下标。这两张表本来就以 IP 串为唯一键
@@ -19639,7 +19639,7 @@ namespace WinsockPacketEditor
                 /// 中间跳过了 None。存进库的是枚举值，所以这里也认枚举值。
                 ///
                 /// 出 名称 + Id 两个基础类型而不是模型本身 —— SendInfo / RobotInfo /
-                /// FilterInfo / WareHouseInfo 全都继承 AntdUI.NotifyProperty，
+                /// FilterInfo / WareHouseInfo 全都（当年）继承 AntdUI.NotifyProperty，
                 /// 一出现在外壳能看到的签名上就是 CS0012。
                 /// </summary>
                 /// <param name="ExcludeFID">滤镜类型专用：要排除的滤镜（一条滤镜不能执行它自己）。</param>
@@ -22192,7 +22192,7 @@ namespace WinsockPacketEditor
                 #region//发送列表 - 外壳入口（只出基础类型，按 Id 收发）
 
                 /*
-                    SendInfo 继承 AntdUI.NotifyProperty，一出现在外壳能看到的签名上就是 CS0012。
+                    SendInfo （当年）继承 AntdUI.NotifyProperty，一出现在外壳能看到的签名上就是 CS0012。
                     所以这一组全部按 <b>Id 字符串</b>收发、只出基础类型与 SendRow DTO ——
                     与账号、滤镜那两组同一个姿势，不给外壳加 AntdUI 引用，也不用反射。
                 */
@@ -24346,7 +24346,7 @@ namespace WinsockPacketEditor
                 #region//外壳入口：按 Id 字符串收发（WPEHybrid 用）
 
                 /*
-                    第 13 次 CS0012：RobotInfo 继承 AntdUI.NotifyProperty，出现在外壳能看到的签名上就编译不过。
+                    第 13 次 CS0012：RobotInfo （当年）继承 AntdUI.NotifyProperty，出现在外壳能看到的签名上就编译不过。
                     照账号 / 滤镜 / 发送 / 仓库那几组的姿势，这一组全部按 <b>Id 字符串</b>收发、只出基础类型与 RobotRow DTO。
                     每个改动动作各自落库：外壳没有 WinForms「关窗统一 SaveSystemList_ToDB」那个时机。
                 */
@@ -25827,7 +25827,7 @@ namespace WinsockPacketEditor
                 #region//外壳入口：按 Id 字符串收发（WPEHybrid 用）
 
                 /*
-                    第 11 次 CS0012：WareHouseInfo / AutoStoresInfo 都继承 AntdUI.NotifyProperty，
+                    第 11 次 CS0012：WareHouseInfo / AutoStoresInfo 都（当年）继承 AntdUI.NotifyProperty，
                     出现在外壳能看到的签名上就编译不过。照账号 / 滤镜 / 发送那三组的姿势，
                     这一组全部按 <b>Id 字符串</b>收发、只出基础类型与 DTO ——
                     不给外壳加 AntdUI 引用，也不用反射。
@@ -27507,7 +27507,7 @@ namespace WinsockPacketEditor
                 #region//外壳入口：按 Id 字符串收发（WPEHybrid 用）
 
                 /*
-                    第 15 次 CS0012：ServerInfo / RuleInfo 都继承 AntdUI.NotifyProperty。
+                    第 15 次 CS0012：ServerInfo / RuleInfo 都（当年）继承 AntdUI.NotifyProperty。
                     规则是 ServerInfo.ServerRInfo 里的嵌套列表，FeedPump 没订阅它，所以规则的每次改动
                     都要 MarkDirty(FeedList.Server)，让列表页的「规则数」跟上；每个改动都落库 —— 外壳没有关窗统一保存那个时机。
                 */
