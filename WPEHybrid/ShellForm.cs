@@ -565,7 +565,18 @@ namespace WPEHybrid
 
                 BeginInvoke(new Action(async () =>
                 {
-                    try { await Operate.SystemConfig.DoHotKey(hotKeyId); }
+                    try
+                    {
+                        /*
+                            注入模式下这些快捷键要在<b>目标进程里</b>执行 ——
+                            两个执行器都在那边（SendPacket 用的是目标的套接字句柄）。
+                            在外壳里跑 DoHotKey 只会拿外壳自己的套接字去发，什么也发不出去。
+                        */
+                        if (this.DispatchHotKeyToTarget(hotKeyId)) { return; }
+
+
+                        await Operate.SystemConfig.DoHotKey(hotKeyId);
+                    }
                     catch (Exception ex) { Operate.DoLog("WndProc.HotKey", ex); }
                 }));
             }
@@ -1194,6 +1205,10 @@ namespace WPEHybrid
                 }
 
                 this.injectLink = link;
+
+                //三份共用列表一变就把快照推给目标（滤镜引擎与两个执行器在那边）
+                FeedPump.ListPushed -= this.OnListPushed;
+                FeedPump.ListPushed += this.OnListPushed;
 
                 //记下这次注入的目标，启动页那张卡上要显示（与 WinForms 的 LastInjection 一致）
                 Operate.SystemConfig.LastInjection = string.IsNullOrEmpty(path)
@@ -2724,12 +2739,33 @@ namespace WPEHybrid
             */
             this.bridge.Register("startSendList", args =>
             {
+                /*
+                    ⚠️ 注入模式下执行器<b>在目标进程里</b>。
+                    在外壳里跑等于拿外壳自己的套接字去发，一个包也发不出去（还静默计成失败）。
+                    「在跑没在跑」也由目标说了算 —— 它随 1 Hz 的 Stats 事件报上来。
+                */
+                var link = this.AttachedLink();
+
+                if (link != null)
+                {
+                    link.StartSendList();
+                    return new { running = link.SendListRunning };
+                }
+
                 Operate.SendConfig.List.StartSendList();
                 return new { running = Operate.SendConfig.List.IsSendListRunning };
             });
 
             this.bridge.Register("stopSendList", args =>
             {
+                var link = this.AttachedLink();
+
+                if (link != null)
+                {
+                    link.StopSendList();
+                    return new { running = link.SendListRunning };
+                }
+
                 Operate.SendConfig.List.StopSendList();
                 return new { running = Operate.SendConfig.List.IsSendListRunning };
             });
@@ -2808,12 +2844,29 @@ namespace WPEHybrid
             */
             this.bridge.Register("startRobotList", args =>
             {
+                //同发送列表：注入模式下执行器在目标里
+                var link = this.AttachedLink();
+
+                if (link != null)
+                {
+                    link.StartRobotList();
+                    return new { running = link.RobotListRunning };
+                }
+
                 Operate.RobotConfig.List.StartRobotList();
                 return new { running = Operate.RobotConfig.List.IsRobotListRunning };
             });
 
             this.bridge.Register("stopRobotList", args =>
             {
+                var link = this.AttachedLink();
+
+                if (link != null)
+                {
+                    link.StopRobotList();
+                    return new { running = link.RobotListRunning };
+                }
+
                 Operate.RobotConfig.List.StopRobotList();
                 return new { running = Operate.RobotConfig.List.IsRobotListRunning };
             });
@@ -4440,6 +4493,96 @@ namespace WPEHybrid
             catch { /* 页面可能正在导航 */ }
         }
 
+        /// <summary>
+        /// 已经附加好的注入链路；没进注入模式、或链路断了就返回 null。
+        ///
+        /// 「执行器该在哪儿跑」全项目只看这一个判断：<b>不为 null 就走目标</b>。
+        /// </summary>
+        private WinsockPacketEditor.Ipc.ShellLink AttachedLink()
+        {
+            var link = this.injectLink;
+            return link != null && link.State == WinsockPacketEditor.Ipc.ShellLink.LinkState.Attached ? link : null;
+        }
+
+        /// <summary>
+        /// 把快捷键转成命令发给目标。已附加就返回 true（表示这一下已经处理掉了）。
+        ///
+        /// 映射<b>逐条照 Operate.SystemConfig.DoHotKey</b>：
+        /// HotKeyType 0 是发送、1 是机器人；9001..9010 按<b>列表下标</b>取第 1..10 条，
+        /// 9011 / 9012 是整表的启动 / 停止。
+        /// 这里换成按 GUID 发过去 —— 两侧的表不保证同序，按下标发会执行错东西。
+        /// </summary>
+        private bool DispatchHotKeyToTarget(int hotKeyId)
+        {
+            var link = this.injectLink;
+
+            if (link == null || link.State != WinsockPacketEditor.Ipc.ShellLink.LinkState.Attached)
+            {
+                return false;
+            }
+
+            bool robot = Operate.SystemConfig.HotKeyType == 1;
+
+            if (hotKeyId == 9011)
+            {
+                if (robot) { link.StartRobotList(); } else { link.StartSendList(); }
+                return true;
+            }
+
+            if (hotKeyId == 9012)
+            {
+                if (robot) { link.StopRobotList(); } else { link.StopSendList(); }
+                return true;
+            }
+
+            int index = hotKeyId - 9001;
+            if (index < 0 || index > 9) { return true; }
+
+            if (robot)
+            {
+                var robots = Operate.RobotConfig.List.lstRobotInfo;
+                if (index >= robots.Count) { return true; }
+
+                //FilterSocket 传 -1：这一路不是滤镜触发的，与 DoRobot_ByIndex 一致
+                link.StartRobot(robots[index].RID, -1);
+                return true;
+            }
+
+            var sends = Operate.SendConfig.List.lstSendInfo;
+            if (index >= sends.Count) { return true; }
+
+            link.StartSend(sends[index].SID);
+            return true;
+        }
+
+        /// <summary>
+        /// 滤镜 / 发送 / 机器人这三份列表一变，目标那边的快照也得跟着换。
+        ///
+        /// 挂在 FeedPump.ListPushed 上而不是在每个改动点插桩 —— 那三份列表的改动点
+        /// 有一百多处、而且并不都在 Operate 里，逐点插桩必然会漏，
+        /// 漏了的表现是「外壳上改了、目标里没生效」，最难查的那一类。
+        /// </summary>
+        private void OnListPushed(FeedList which)
+        {
+            var link = this.injectLink;
+
+            if (link == null || link.State != WinsockPacketEditor.Ipc.ShellLink.LinkState.Attached)
+            {
+                return;
+            }
+
+            //推快照是同步的管道往返，别占住搬运定时器那一拍
+            System.Threading.Tasks.Task.Run(() =>
+            {
+                switch (which)
+                {
+                    case FeedList.Filter: link.TryPush(link.PushFilters); break;
+                    case FeedList.Send: link.TryPush(link.PushSends); break;
+                    case FeedList.Robot: link.TryPush(link.PushRobots); break;
+                }
+            });
+        }
+
         /// <summary>退出时干净地卸钩断开。异常一律吞掉 —— 关窗路径上没有能补救的东西。</summary>
         private void DetachInjectOnExit()
         {
@@ -4454,6 +4597,8 @@ namespace WPEHybrid
 
         private void DisposeInjectLink()
         {
+            FeedPump.ListPushed -= this.OnListPushed;
+
             var link = this.injectLink;
             this.injectLink = null;
 

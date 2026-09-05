@@ -246,6 +246,18 @@ namespace WinsockPacketEditor
             }
         }
 
+        /// <summary>
+        /// 每次整表推之后再叫一声，参数是刚推的那份列表。
+        ///
+        /// 【谁在用】注入模式的外壳：滤镜 / 发送 / 机器人这三份列表<b>目标那边也要有一份</b>
+        /// （滤镜引擎与两个执行器留在目标里），改完就得把对应的快照下推。
+        ///
+        /// 挂在这里而不是在每个改动点插桩，理由与 B9d 订阅 ListChanged 完全一样：
+        /// 那三份列表的改动点有一百多处、而且并不都在 Operate 里，逐点插桩必然会漏，
+        /// 漏了的表现是「外壳上改了、目标里没生效」—— 最难查的那一类。
+        /// </summary>
+        public static event Action<FeedList> ListPushed;
+
         private static void Push(FeedList Which)
         {
             try
@@ -255,6 +267,15 @@ namespace WinsockPacketEditor
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(Push), ex);
+            }
+
+            //推给界面失败也要通知订阅者：目标那份快照与界面那份是两条独立的路
+            Action<FeedList> h = ListPushed;
+
+            if (h != null)
+            {
+                try { h(Which); }
+                catch (Exception ex) { Operate.DoLog(nameof(ListPushed), ex); }
             }
         }
 

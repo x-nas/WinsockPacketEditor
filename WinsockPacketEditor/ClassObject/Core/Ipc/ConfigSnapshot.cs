@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 
 namespace WinsockPacketEditor.Ipc
@@ -228,6 +229,190 @@ namespace WinsockPacketEditor.Ipc
             var bl = Operate.FilterConfig.List.lstFilterInfo;
             bl.Clear();
             foreach (FilterInfo fi in fresh) { bl.Add(fi); }
+        }
+
+        #endregion
+
+        #region//Sends：发送列表整表（含每条的发送集字节）
+
+        /*
+            发送与机器人两个<b>执行器留在目标里</b>（方案第二节）：
+            SendExecute 就是循环调 SendPacket，而套接字句柄属于目标进程；
+            拆成「外壳循环 + 每包一条命令」会让间隔与顺序失真。
+
+            所以整份发送列表要下推，<b>连发送集的字节一起</b>。
+            发送集是人手攒出来的重放序列，几十条顶天（见 CLAUDE.md 的发送编辑），
+            整表推的字节完全可以接受。
+
+            SCollection 里的 PacketInfo 只有五个字段会被执行器读到
+            （PacketSocket / PacketType / PacketFrom / PacketTo / PacketBuffer，
+            核过 SendExecute.Send_DoWork），其余一概不传。
+        */
+
+        public static byte[] EncodeSends()
+        {
+            var list = Operate.SendConfig.List.lstSendInfo;
+
+            var w = new IpcWriter();
+            w.I32(list.Count);
+
+            foreach (SendInfo si in list)
+            {
+                w.Bool(si.IsEnable);
+                w.Guid_(si.SID);
+                w.Str(si.SName);
+                w.Bool(si.SSystemSocket);
+                w.I32(si.SLoopCNT);
+                w.I32(si.SLoopINT);
+                w.Str(si.SNotes);
+
+                var packets = si.SCollection;
+                w.I32(packets == null ? 0 : packets.Count);
+
+                if (packets != null)
+                {
+                    foreach (PacketInfo pi in packets)
+                    {
+                        w.I32(pi.PacketSocket);
+                        w.I32((int)pi.PacketType);
+                        w.Str(pi.PacketFrom);
+                        w.Str(pi.PacketTo);
+                        w.Bytes(pi.PacketBuffer);
+                    }
+                }
+            }
+
+            return w.ToArray();
+        }
+
+        public static void ApplySends(byte[] payload)
+        {
+            var r = new IpcReader(payload);
+            int n = r.I32();
+
+            //运行期计数归目标（执行的副产品，只有执行者知道真值），换快照时按 GUID 迁移
+            var oldCounts = new Dictionary<Guid, long[]>();
+            foreach (SendInfo old in Operate.SendConfig.List.lstSendInfo)
+            {
+                oldCounts[old.SID] = new[] { old.ExecutionCount, old.ExecutionSuccess, old.ExecutionFail };
+            }
+
+            var fresh = new List<SendInfo>(n);
+
+            for (int i = 0; i < n; i++)
+            {
+                bool isEnable = r.Bool();
+                Guid sid = r.Guid_();
+                string name = r.Str();
+                bool sysSocket = r.Bool();
+                int loopCnt = r.I32();
+                int loopInt = r.I32();
+                string notes = r.Str();
+
+                int pn = r.I32();
+                var packets = new BindingList<PacketInfo>();
+
+                for (int k = 0; k < pn; k++)
+                {
+                    var pi = new PacketInfo();
+                    pi.PacketSocket = r.I32();
+                    pi.PacketType = (Operate.PacketConfig.Packet.PacketType)r.I32();
+                    pi.PacketFrom = r.Str();
+                    pi.PacketTo = r.Str();
+                    pi.PacketBuffer = r.Bytes();
+                    packets.Add(pi);
+                }
+
+                var si = new SendInfo(isEnable, sid, name, sysSocket, loopCnt, loopInt, packets, notes);
+
+                long[] keep;
+                if (oldCounts.TryGetValue(sid, out keep))
+                {
+                    si.ExecutionCount = keep[0];
+                    si.ExecutionSuccess = keep[1];
+                    si.ExecutionFail = keep[2];
+                }
+
+                fresh.Add(si);
+            }
+
+            var bl = Operate.SendConfig.List.lstSendInfo;
+            bl.Clear();
+            foreach (SendInfo si in fresh) { bl.Add(si); }
+        }
+
+        #endregion
+
+        #region//Robots：机器人列表整表（含指令集）
+
+        public static byte[] EncodeRobots()
+        {
+            var list = Operate.RobotConfig.List.lstRobotInfo;
+
+            var w = new IpcWriter();
+            w.I32(list.Count);
+
+            foreach (RobotInfo ri in list)
+            {
+                w.Bool(ri.IsEnable);
+                w.Guid_(ri.RID);
+                w.Str(ri.RName);
+
+                var inst = ri.RInstruction;
+                w.I32(inst == null ? 0 : inst.Count);
+
+                if (inst != null)
+                {
+                    foreach (InstructionInfo ii in inst)
+                    {
+                        w.I32((int)ii.InstType);
+                        w.Str(ii.InstContent);
+                    }
+                }
+            }
+
+            return w.ToArray();
+        }
+
+        public static void ApplyRobots(byte[] payload)
+        {
+            var r = new IpcReader(payload);
+            int n = r.I32();
+
+            var oldCounts = new Dictionary<Guid, long>();
+            foreach (RobotInfo old in Operate.RobotConfig.List.lstRobotInfo)
+            {
+                oldCounts[old.RID] = old.ExecutionCount;
+            }
+
+            var fresh = new List<RobotInfo>(n);
+
+            for (int i = 0; i < n; i++)
+            {
+                bool isEnable = r.Bool();
+                Guid rid = r.Guid_();
+                string name = r.Str();
+
+                int cn = r.I32();
+                var inst = new BindingList<InstructionInfo>();
+
+                for (int k = 0; k < cn; k++)
+                {
+                    var type = (Operate.RobotConfig.Robot.InstructionType)r.I32();
+                    inst.Add(new InstructionInfo(type, r.Str()));
+                }
+
+                var ri = new RobotInfo(isEnable, rid, name, inst);
+
+                long keep;
+                if (oldCounts.TryGetValue(rid, out keep)) { ri.ExecutionCount = keep; }
+
+                fresh.Add(ri);
+            }
+
+            var bl = Operate.RobotConfig.List.lstRobotInfo;
+            bl.Clear();
+            foreach (RobotInfo ri in fresh) { bl.Add(ri); }
         }
 
         #endregion

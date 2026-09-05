@@ -34,6 +34,8 @@ namespace WPEHookTest
             if (args.Contains("--matrix")) { return Matrix.Run(args); }
             if (args.Contains("--probe-launch")) { return ProbeLaunch.Run(args); }
             if (args.Contains("--probe-native")) { return ProbeNative.Run(args); }
+            if (args.Contains("--target2")) { return Matrix2.RunTarget2(args); }
+            if (args.Contains("--matrix2")) { return Matrix2.Run(args); }
 
             string outPath = GetArg(args, "--out", null);
 

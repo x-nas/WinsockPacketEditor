@@ -157,9 +157,7 @@ namespace WinsockPacketEditor.Ipc
             SetState(LinkState.Attached);
 
             //连上就把全量快照推下去（方案 3.5：显示已附加，推全量快照）
-            PushHookFlags();
-            PushFilters();
-            PushRuntime();
+            PushAll();
         }
 
         private static bool WaitAll(int timeoutMs, params IAsyncResult[] rs)
@@ -289,6 +287,67 @@ namespace WinsockPacketEditor.Ipc
             to = r.Str();
         }
 
+        #region//执行器（阶段 2）
+
+        /*
+            两个执行器都在目标里跑，外壳只发命令、只显示进度。
+            「在跑没在跑」由目标说了算（随 1 Hz 的 Stats 事件报上来）——
+            worker 会自己跑完，没有任何人通知，外壳若自己记一个 running 会一直显示「发送中」。
+        */
+
+        public void StartSend(Guid sid)
+        {
+            var w = new IpcWriter();
+            w.U8((byte)IpcCommand.StartSend);
+            w.Guid_(sid);
+            CallVoid(w);
+        }
+
+        public void StartSendList()
+        {
+            var w = new IpcWriter();
+            w.U8((byte)IpcCommand.StartSendList);
+            CallVoid(w);
+        }
+
+        public void StopSendList()
+        {
+            var w = new IpcWriter();
+            w.U8((byte)IpcCommand.StopSendList);
+            CallVoid(w);
+        }
+
+        public void StartRobot(Guid rid, int filterSocket)
+        {
+            var w = new IpcWriter();
+            w.U8((byte)IpcCommand.StartRobot);
+            w.Guid_(rid);
+            w.I32(filterSocket);
+            CallVoid(w);
+        }
+
+        public void StartRobotList()
+        {
+            var w = new IpcWriter();
+            w.U8((byte)IpcCommand.StartRobotList);
+            CallVoid(w);
+        }
+
+        public void StopRobotList()
+        {
+            var w = new IpcWriter();
+            w.U8((byte)IpcCommand.StopRobotList);
+            CallVoid(w);
+        }
+
+        /// <summary>目标侧的发送列表在不在跑（随 Stats 事件更新）。</summary>
+        public bool SendListRunning { get; private set; }
+
+        /// <summary>目标侧的机器人列表在不在跑。</summary>
+        public bool RobotListRunning { get; private set; }
+
+        #endregion
+
         public void Detach()
         {
             try
@@ -318,6 +377,18 @@ namespace WinsockPacketEditor.Ipc
         public void PushHookFlags() { PushConfig(ConfigKind.HookFlags, ConfigSnapshot.EncodeHookFlags()); }
         public void PushFilters() { PushConfig(ConfigKind.Filters, ConfigSnapshot.EncodeFilters()); }
         public void PushRuntime() { PushConfig(ConfigKind.Runtime, ConfigSnapshot.EncodeRuntime()); }
+        public void PushSends() { PushConfig(ConfigKind.Sends, ConfigSnapshot.EncodeSends()); }
+        public void PushRobots() { PushConfig(ConfigKind.Robots, ConfigSnapshot.EncodeRobots()); }
+
+        /// <summary>把五类快照全部推一遍（连上时、以及重新附加之后）。</summary>
+        public void PushAll()
+        {
+            PushHookFlags();
+            PushFilters();
+            PushSends();
+            PushRobots();
+            PushRuntime();
+        }
 
         /// <summary>
         /// 推快照时把异常吞掉的版本 —— 给「配置一改就顺手推一次」那些调用点用。
@@ -450,6 +521,10 @@ namespace WinsockPacketEditor.Ipc
                     Dropped = r.I64();
                     break;
 
+                case IpcEvent.Stats:
+                    ApplyStats(r);
+                    break;
+
                 case IpcEvent.HookState:
                     HookInstalled = r.Bool();
                     //三个 Support_* 由目标探测（它才看得到自己的模块表），外壳只是显示
@@ -467,6 +542,79 @@ namespace WinsockPacketEditor.Ipc
                     break;
             }
         }
+
+        /// <summary>
+        /// 把目标报上来的运行期计数写回外壳自己那份模型。
+        ///
+        /// 【为什么按 GUID 而不是按下标】两侧的表<b>不保证同序</b> ——
+        /// 用户可能刚在外壳里排过序或删过一条，而这一包统计是目标按它那份表的顺序发的。
+        /// 按下标写就会把计数安到别人头上，而且不会报错。
+        /// </summary>
+        private void ApplyStats(IpcReader r)
+        {
+            SendListRunning = r.Bool();
+            RobotListRunning = r.Bool();
+
+            int fn = r.I32();
+            for (int i = 0; i < fn; i++)
+            {
+                Guid fid = r.Guid_();
+                long count = r.I64();
+                FilterInfo fi = Operate.FilterConfig.Filter.GetFilter_ByGuid(fid);
+                if (fi != null) { fi.ExecutionCount = count; }
+            }
+
+            int sn = r.I32();
+            for (int i = 0; i < sn; i++)
+            {
+                Guid sid = r.Guid_();
+                long c = r.I64(), ok = r.I64(), fail = r.I64();
+
+                foreach (SendInfo si in Operate.SendConfig.List.lstSendInfo)
+                {
+                    if (si.SID != sid) { continue; }
+                    si.ExecutionCount = c;
+                    si.ExecutionSuccess = ok;
+                    si.ExecutionFail = fail;
+                    break;
+                }
+            }
+
+            int rn = r.I32();
+            for (int i = 0; i < rn; i++)
+            {
+                Guid rid = r.Guid_();
+                long c = r.I64();
+
+                foreach (RobotInfo ri in Operate.RobotConfig.List.lstRobotInfo)
+                {
+                    if (ri.RID != rid) { continue; }
+                    ri.ExecutionCount = c;
+                    break;
+                }
+            }
+
+            /*
+                ⚠️ 计数是<b>就地改属性</b>，不动列表结构 —— BindingList.ListChanged 不会触发，
+                前端副本里的数字一动不动。所以要手动标脏，让 FeedPump 下一拍整表推一次。
+                这与发送列表「跑的时候标脏」是同一个道理（见 CLAUDE.md 的发送列表）。
+
+                只在<b>真有东西在跑</b>的时候标 —— 闲着的时候一分钱不花。
+                停下来那一拍也要补推，让最终计数能到界面。
+            */
+            bool running = SendListRunning || RobotListRunning;
+
+            if (running || _wasRunning)
+            {
+                FeedPump.MarkDirty(FeedList.Filter);
+                FeedPump.MarkDirty(FeedList.Send);
+                FeedPump.MarkDirty(FeedList.Robot);
+            }
+
+            _wasRunning = running;
+        }
+
+        private bool _wasRunning;
 
         #endregion
 

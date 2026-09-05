@@ -384,6 +384,57 @@ namespace WinsockPacketEditor.Ipc
 
         private long _reportedDropped;
 
+        #region//1 Hz 的统计上报
+
+        /// <summary>
+        /// 计数器与执行器状态，1 秒一包。
+        ///
+        /// 【为什么这些数归目标】它们是<b>执行的副产品</b>，只有执行者知道真值 ——
+        /// 滤镜命中次数在目标的收发线程上累加，发送 / 机器人的执行次数在目标的
+        /// BackgroundWorker 里就地 ++。外壳那份是显示用的副本。
+        ///
+        /// 由心跳线程顺带发（它本来就是 1 秒一拍），不另起一条线程。
+        /// </summary>
+        private void SendStats()
+        {
+            var w = new IpcWriter();
+            w.U8((byte)IpcEvent.Stats);
+
+            w.Bool(Operate.SendConfig.List.IsSendListRunning);
+            w.Bool(Operate.RobotConfig.List.IsRobotListRunning);
+
+            //滤镜的执行次数：按 GUID 报，外壳按 GUID 更新自己那份副本
+            var filters = FilterEngine.Filters;
+            w.I32(filters.Count);
+            for (int i = 0; i < filters.Count; i++)
+            {
+                w.Guid_(filters[i].FID);
+                w.I64(filters[i].ExecutionCount);
+            }
+
+            var sends = Operate.SendConfig.List.lstSendInfo;
+            w.I32(sends.Count);
+            foreach (SendInfo si in sends)
+            {
+                w.Guid_(si.SID);
+                w.I64(si.ExecutionCount);
+                w.I64(si.ExecutionSuccess);
+                w.I64(si.ExecutionFail);
+            }
+
+            var robots = Operate.RobotConfig.List.lstRobotInfo;
+            w.I32(robots.Count);
+            foreach (RobotInfo ri in robots)
+            {
+                w.Guid_(ri.RID);
+                w.I64(ri.ExecutionCount);
+            }
+
+            SendEvent(w);
+        }
+
+        #endregion
+
         private void ReportDroppedIfChanged()
         {
             long now = _ring.Dropped;
@@ -475,7 +526,9 @@ namespace WinsockPacketEditor.Ipc
                             case ConfigKind.HookFlags: ConfigSnapshot.ApplyHookFlags(payload); break;
                             case ConfigKind.Filters: ConfigSnapshot.ApplyFilters(payload); break;
                             case ConfigKind.Runtime: ConfigSnapshot.ApplyRuntime(payload); break;
-                            default: return Fail("阶段 1 还不认这类快照: " + kind);
+                            case ConfigKind.Sends: ConfigSnapshot.ApplySends(payload); break;
+                            case ConfigKind.Robots: ConfigSnapshot.ApplyRobots(payload); break;
+                            default: return Fail("不认识的快照类别: " + kind);
                         }
 
                         return Ok();
@@ -544,8 +597,51 @@ namespace WinsockPacketEditor.Ipc
                     ThreadPool.QueueUserWorkItem(_ => { Thread.Sleep(50); Detach(); });
                     return Ok();
 
+                #region//执行器（阶段 2）
+
+                /*
+                    发送与机器人两个执行器<b>留在目标里</b>：
+                    它们最终都是在调 SendPacket，而套接字句柄属于目标进程；
+                    而且滤镜可以触发它们（FilterExecuteType.Send / Robot），
+                    那条路本来就在目标的收发线程上。
+                    外壳只负责启停与显示，不持有执行器 —— 启停的前置条件（列表非空、没在跑）
+                    才不会散成两份。
+                */
+
+                case IpcCommand.StartSend:
+                    Operate.SendConfig.Send.DoSend(r.Guid_());
+                    return Ok();
+
+                case IpcCommand.StartSendList:
+                    Operate.SendConfig.List.StartSendList();
+                    return Ok();
+
+                case IpcCommand.StopSendList:
+                    Operate.SendConfig.List.StopSendList();
+                    return Ok();
+
+                case IpcCommand.StartRobot:
+                    {
+                        Guid rid = r.Guid_();
+                        int filterSocket = r.I32();
+
+                        var parameters = new Dictionary<string, object> { { "FilterSocket", filterSocket } };
+                        Operate.RobotConfig.Robot.DoRobot(rid, parameters);
+                        return Ok();
+                    }
+
+                case IpcCommand.StartRobotList:
+                    Operate.RobotConfig.List.StartRobotList();
+                    return Ok();
+
+                case IpcCommand.StopRobotList:
+                    Operate.RobotConfig.List.StopRobotList();
+                    return Ok();
+
+                #endregion
+
                 default:
-                    return Fail("阶段 1 还不认这个命令: " + cmd);
+                    return Fail("不认识的命令: " + cmd);
             }
         }
 
@@ -668,6 +764,9 @@ namespace WinsockPacketEditor.Ipc
             {
                 Thread.Sleep(1000);
                 if (!_running) { return; }
+
+                //统计顺带在这一拍发（本来就是 1 秒一次），不另起线程
+                try { SendStats(); } catch { /* 管道断了，下面的超时判断会收拾 */ }
 
                 int idle = unchecked(Environment.TickCount - _lastPingTick);
 
