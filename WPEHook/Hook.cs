@@ -63,7 +63,8 @@ namespace WPEHook
             {
                 //连不上就直接放弃：外壳那头的管道是注入前就建好的，
                 //5 秒还连不上说明外壳已经不在了，此时目标里什么都不该留下。
-                WinsockPacketEditor.Ipc.WpeCore.Attach(ipParameters.SessionId, 5000);
+                WinsockPacketEditor.Ipc.WpeCore.Attach(
+                    ipParameters.SessionId, 5000, ipParameters.SuspendedLaunch);
             }
             catch
             {

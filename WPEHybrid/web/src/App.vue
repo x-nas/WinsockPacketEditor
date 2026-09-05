@@ -25,17 +25,18 @@ import { onMounted, ref } from 'vue'
 import { call, inHost, on } from './bridge'
 import { attachUiHost, busy, modalOpen } from './bridge/host'
 import { initLang, isEn, t, toggleLang } from './i18n'
-import { proxyRunning, socks5Addr } from './stores/runtime'
+import { injectHooked, injectTarget, proxyRunning, socks5Addr } from './stores/runtime'
 import StartView from './components/StartView.vue'
 import ProxyView from './components/ProxyView.vue'
 import InstanceView from './components/InstanceView.vue'
+import InjectView from './components/InjectView.vue'
 import BetaNotice from './components/BetaNotice.vue'
 import EncryptPassword from './components/EncryptPassword.vue'
 import ToastStack from './components/ToastStack.vue'
 import BusyMask from './components/BusyMask.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
 
-type View = 'start' | 'proxy' | 'instance'
+type View = 'start' | 'proxy' | 'instance' | 'inject'
 
 const view = ref<View>('start')
 const version = ref('')
@@ -258,6 +259,12 @@ function site(page: string): string {
       -->
       <InstanceView v-else-if="view === 'instance'" @back="view = 'start'" />
 
+      <!--
+        注入模式。与代理模式一样<b>进去就回不来</b> ——
+        进来会附加到目标、装钩子，退回一个写着「Ready」的启动页而钩子还在目标里，是在骗人。
+      -->
+      <InjectView v-else-if="view === 'inject'" />
+
       <ProxyView v-else />
 
       <footer class="statusbar">
@@ -284,6 +291,14 @@ function site(page: string): string {
           <template v-else-if="view === 'instance'">
             <span class="dot mg" />
             Instance <span class="addr">{{ dbInstance || '—' }}</span>
+          </template>
+          <template v-else-if="view === 'inject'">
+            <span class="dot" :class="{ off: !injectHooked }" />
+            Inject <span class="addr">{{ injectTarget || '—' }}</span>
+            <span class="sep">//</span>
+            <span :class="injectHooked ? 'on' : 'off-t'">
+              {{ injectHooked ? t('foot.hooking') : t('foot.stopped') }}
+            </span>
           </template>
           <template v-else>
             <span class="dot" :class="{ off: !proxyRunning }" />

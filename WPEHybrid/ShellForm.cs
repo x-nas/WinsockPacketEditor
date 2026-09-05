@@ -660,6 +660,14 @@ namespace WPEHybrid
                     Operate.ProxyConfig.Proxy.DisableSystemProxy();
                 }
 
+                /*
+                    ⚠️ 注入的目标要断开，理由与系统代理那条同级：
+                    外壳没了而钩子还留在目标里，目标就一直带着 13 个钩子跑。
+                    心跳超时（3 秒）也会让目标自行卸钩，但那是<b>兜底</b>；
+                    正常退出就该干净地收尾，不要让用户的游戏白白多跑三秒钩子。
+                */
+                this.DetachInjectOnExit();
+
                 //远程管理与启动时的 StartRemoteMGT 成对（在 EnsureProxyConfigLoaded 里）
                 Operate.SystemConfig.StopRemoteMGT();
 
@@ -1098,6 +1106,159 @@ namespace WPEHybrid
 
                 return new { ok = true };
             });
+
+            #region//注入模式（B-IPC 阶段 1）
+
+            /*
+                注入模式在外壳里长成什么样：
+                  选目标（进程列表 / 启动并注入）→ 注入 → 开始拦截 → 封包列表。
+
+                与代理模式最大的不同是<b>数据来自另一个进程</b>：钩子与滤镜引擎留在目标里，
+                封包经命名管道过来，由 ShellLink.Ingest 还原成 PacketInfo 进 cqPacketInfo。
+                进队之后的下游（FlushToFeed / DTO / PacketRow / 前端 stores）与代理模式共用。
+            */
+
+            this.bridge.Register("enterInjectMode", args =>
+            {
+                Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.Inject;
+
+                //两种模式要加载的配置是同一套（WinForms 侧 InjectModeForm_Load 与
+                //ProxyModeForm_Load 里那两串逐项相同），所以复用同一个方法
+                EnsureProxyConfigLoaded();
+                FeedPump.MarkAllDirty();
+
+                return new { ok = true };
+            });
+
+            /// 进程列表。枚举几百个进程 + 读 MainModule 是几十毫秒的活，丢后台去。
+            this.bridge.Register("getInjectProcessList", async args =>
+            {
+                return await System.Threading.Tasks.Task.Run(() =>
+                    Operate.ProcessConfig.GetProcessRows());
+            });
+
+            //「启动并注入」要选一个可执行文件。浏览器给不出完整路径，同文件框一个理由。
+            this.bridge.Register("pickTargetExe", async args =>
+            {
+                var pick = new FilePick();
+                pick.Filter = UI.T("ExecutableFile", "可执行文件") + " (*.exe)|*.exe";
+                string path = await UI.PickOpen(pick);
+                return new { path = path };
+            });
+
+            /*
+                注入。pid > -1 = 附加到已运行的进程；否则按 path 挂起启动。
+
+                ⚠️ 挂起启动的命令行要<b>以 exe 路径本身开头</b> —— CreateProcess 会把
+                lpCommandLine 的第一个 token 当 argv[0] 丢掉，只写参数的话第一个参数会凭空消失。
+            */
+            this.bridge.Register("injectAttach", async args =>
+            {
+                EnsureProxyConfigLoaded();
+
+                int pid = args["pid"] == null ? -1 : (int)args["pid"];
+                string path = args["path"] == null ? null : (string)args["path"];
+                string extraArgs = args["args"] == null ? null : (string)args["args"];
+
+                string cmdLine = null;
+
+                if (pid < 0)
+                {
+                    if (string.IsNullOrEmpty(path))
+                    {
+                        return new { ok = false, error = UI.T("Inject.NoTarget", "没有选择目标") };
+                    }
+
+                    cmdLine = "\"" + path + "\"";
+                    if (!string.IsNullOrEmpty(extraArgs)) { cmdLine += " " + extraArgs; }
+                }
+
+                this.DisposeInjectLink();
+
+                var link = new WinsockPacketEditor.Ipc.ShellLink();
+                link.StateChanged += this.OnInjectStateChanged;
+
+                try
+                {
+                    //注入是同步阻塞的（EasyHook 的 Inject/CreateAndInject 就是），丢后台并盖遮罩
+                    //UI.Busy 只有 Func<T> 的重载（要一个返回值），所以补一个 true
+                    await UI.Busy(
+                        UI.T("Loading", "正在加载..."),
+                        () => { link.Attach(pid, path, 15000, cmdLine); return true; });
+                }
+                catch (Exception ex)
+                {
+                    link.Dispose();
+                    Operate.DoLog("injectAttach", ex);
+                    return new { ok = false, error = ex.Message };
+                }
+
+                this.injectLink = link;
+
+                //记下这次注入的目标，启动页那张卡上要显示（与 WinForms 的 LastInjection 一致）
+                Operate.SystemConfig.LastInjection = string.IsNullOrEmpty(path)
+                    ? this.SafeProcessName(link.TargetPid)
+                    : System.IO.Path.GetFileName(path);
+                Operate.SystemConfig.SaveSystemConfig_LastInjection_ToDB();
+
+                return this.InjectStatus();
+            });
+
+            this.bridge.Register("injectStartHook", async args =>
+            {
+                var link = this.injectLink;
+                if (link == null) { return new { ok = false, error = UI.T("Inject.NotAttached", "还没有附加到目标") }; }
+
+                try
+                {
+                    //先把 12 个拦截开关推下去，再装钩 —— 顺序反了的话装的是上一份配置
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        link.PushHookFlags();
+                        link.PushFilters();
+                        link.PushRuntime();
+                        link.StartHook();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("injectStartHook", ex);
+                    return new { ok = false, error = ex.Message };
+                }
+
+                return this.InjectStatus();
+            });
+
+            this.bridge.Register("injectStopHook", async args =>
+            {
+                var link = this.injectLink;
+                if (link == null) { return new { ok = false, error = UI.T("Inject.NotAttached", "还没有附加到目标") }; }
+
+                try { await System.Threading.Tasks.Task.Run(() => link.StopHook()); }
+                catch (Exception ex) { Operate.DoLog("injectStopHook", ex); return new { ok = false, error = ex.Message }; }
+
+                return this.InjectStatus();
+            });
+
+            /*
+                断开。目标卸钩、停执行器、断管道、核心休眠 ——
+                <b>但已抓到的封包一条都不清</b>，用户还要看、还要导出。
+            */
+            this.bridge.Register("injectDetach", async args =>
+            {
+                var link = this.injectLink;
+                if (link == null) { return this.InjectStatus(); }
+
+                try { await System.Threading.Tasks.Task.Run(() => link.Detach()); }
+                catch (Exception ex) { Operate.DoLog("injectDetach", ex); }
+
+                this.DisposeInjectLink();
+                return this.InjectStatus();
+            });
+
+            this.bridge.Register("getInjectStatus", args => this.InjectStatus());
+
+            #endregion
 
             #region//代理服务的启停
 
@@ -4216,6 +4377,12 @@ namespace WPEHybrid
         private bool proxyLoaded;
 
         /// <summary>
+        /// 注入模式的链路（外壳 ↔ 目标进程里的无头核心）。
+        /// 没进过注入模式时是 null。
+        /// </summary>
+        private WinsockPacketEditor.Ipc.ShellLink injectLink;
+
+        /// <summary>
         /// 按需加载代理模式要用的配置与列表。
         ///
         /// 外壳启动时只调了 <c>LoadSystemConfig_FromDB</c>；端口 / 认证 / 映射 / 名单
@@ -4225,6 +4392,79 @@ namespace WPEHybrid
         /// （照「一辈子只调一次」写的），重复调用会把旧行与新行叠在一起。
         /// 多开设置切换实例后也不重来 —— 同一个理由，见 saveInstance 那段说明。
         /// </summary>
+        #region//注入模式的链路
+
+        /// <summary>
+        /// 注入链路的当前状态，喂给界面顶上那条状态条。
+        /// 没附加过就是 idle —— 前端据此显示「选目标」那一屏。
+        /// </summary>
+        private object InjectStatus()
+        {
+            var link = this.injectLink;
+
+            if (link == null)
+            {
+                return new { ok = true, state = "idle", pid = 0, name = "", is64 = false, hooked = false, dropped = 0L, ws1 = false, ws2 = false, msws = false };
+            }
+
+            return new
+            {
+                ok = true,
+                state = link.State.ToString().ToLowerInvariant(),
+                pid = link.TargetPid,
+                name = this.SafeProcessName(link.TargetPid),
+                is64 = link.TargetIs64,
+                hooked = link.HookInstalled,
+                //环满丢掉的条数。界面上要显示「丢弃 N」—— 无声丢包比阻塞更糟
+                dropped = link.Dropped,
+                ws1 = link.SupportWS1,
+                ws2 = link.SupportWS2,
+                msws = link.SupportMsWS,
+            };
+        }
+
+        /// <summary>
+        /// 取进程名。目标可能刚刚没了，这里绝不能抛 ——
+        /// 状态条恰恰是「目标没了」的时候最需要显示的东西。
+        /// </summary>
+        private string SafeProcessName(int pid)
+        {
+            try { return System.Diagnostics.Process.GetProcessById(pid).ProcessName; }
+            catch { return "(" + pid + ")"; }
+        }
+
+        /// <summary>链路状态变了就推给前端（状态条要即时反映「目标没了」）。</summary>
+        private void OnInjectStateChanged(WinsockPacketEditor.Ipc.ShellLink.LinkState state)
+        {
+            try { this.bridge.PushEvent("inject:state", this.InjectStatus()); }
+            catch { /* 页面可能正在导航 */ }
+        }
+
+        /// <summary>退出时干净地卸钩断开。异常一律吞掉 —— 关窗路径上没有能补救的东西。</summary>
+        private void DetachInjectOnExit()
+        {
+            var link = this.injectLink;
+            if (link == null) { return; }
+
+            try { link.Detach(); }
+            catch (Exception ex) { Operate.DoLog(nameof(DetachInjectOnExit), ex); }
+
+            this.DisposeInjectLink();
+        }
+
+        private void DisposeInjectLink()
+        {
+            var link = this.injectLink;
+            this.injectLink = null;
+
+            if (link == null) { return; }
+
+            link.StateChanged -= this.OnInjectStateChanged;
+            try { link.Dispose(); } catch { }
+        }
+
+        #endregion
+
         private void EnsureProxyConfigLoaded()
         {
             if (this.proxyLoaded)

@@ -17,15 +17,17 @@ namespace WinsockPacketEditor.Ipc
     /// </summary>
     public static class ConfigSnapshot
     {
-        #region//HookFlags：13 个入口的开关 + 三个 Support_
+        #region//HookFlags：12 个入口开关
 
+        /*
+            ⚠️ 三个 Support_*（WS1 / WS2 / MsWS）<b>不在这里</b>。
+            它们是「这个目标加载了哪几个 winsock 模块」，只有目标自己看得到 ——
+            由 WpeCore.DetectWinsock 探测，随 HookState 事件报上来。
+            外壳这边那三个字段是给代理模式用的，与目标无关，推下去只会把目标探出来的覆盖掉。
+        */
         public static byte[] EncodeHookFlags()
         {
             var w = new IpcWriter();
-
-            w.Bool(Operate.PacketConfig.Packet.Support_WS1);
-            w.Bool(Operate.PacketConfig.Packet.Support_WS2);
-            w.Bool(Operate.PacketConfig.Packet.Support_MsWS);
 
             w.Bool(Operate.PacketConfig.Packet.HookWS1_Send);
             w.Bool(Operate.PacketConfig.Packet.HookWS1_SendTo);
@@ -46,10 +48,6 @@ namespace WinsockPacketEditor.Ipc
         public static void ApplyHookFlags(byte[] payload)
         {
             var r = new IpcReader(payload);
-
-            Operate.PacketConfig.Packet.Support_WS1 = r.Bool();
-            Operate.PacketConfig.Packet.Support_WS2 = r.Bool();
-            Operate.PacketConfig.Packet.Support_MsWS = r.Bool();
 
             Operate.PacketConfig.Packet.HookWS1_Send = r.Bool();
             Operate.PacketConfig.Packet.HookWS1_SendTo = r.Bool();

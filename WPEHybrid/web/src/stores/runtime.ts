@@ -25,6 +25,19 @@ export const socks5Addr = ref('')
  */
 export const proxyRunning = ref(false)
 
+/*
+  ── 注入模式的运行态 ────────────────────────────────
+
+  底部状态栏要显示「附在哪个目标上、钩子在不在跑」，而那一栏在 App.vue 里、
+  不是 InjectView 的子孙 —— 跨视图共享的运行态一律走这里。
+*/
+
+/** 当前附加的目标（进程名 #PID）。没附加时是空串。 */
+export const injectTarget = ref('')
+
+/** 目标侧的 13 个钩子装上了没有。 */
+export const injectHooked = ref(false)
+
 /**
  * 列表设置（列显隐 + 自动清理）。
  *

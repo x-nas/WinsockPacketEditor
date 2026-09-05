@@ -208,6 +208,17 @@ namespace WinsockPacketEditor
                 /// </summary>
                 public string SessionId { get; set; }
 
+                /// <summary>
+                /// 目标是不是<b>挂起启动</b>创建的（CreateAndInject 那条路）。
+                ///
+                /// 无头核心据此决定装钩之前要不要先 LoadLibrary 三个 winsock DLL：
+                /// 挂起的进程连加载器都没跑过，ws2_32 都还不在，13 个钩子一个也装不上；
+                /// 而对<b>已经在跑</b>的目标就不该硬塞 —— 那会凭空多出一个它本来没有的模块，
+                /// 检测面比老路径还大。已在跑的目标只做探测，与老路径的
+                /// GetInjectWinsockInfo 一致。
+                /// </summary>
+                public bool SuspendedLaunch { get; set; }
+
                 public InjectionParameters()
                 {
                     //
@@ -4770,6 +4781,27 @@ namespace WinsockPacketEditor
                 }
 
                 return piReturn;
+            }
+
+            #endregion
+
+            #region//进程列表（出 DTO，给外壳的注入屏用）
+
+            /// <summary>
+            /// 进程列表的 DTO 版。
+            ///
+            /// 【为什么不复用 ProxyConfig.Proxy.GetProcessRows】那一个是<b>进程设置</b>那屏专用的：
+            /// 它会把结果存进 lastProcessList（「双击添加到名称」要按 Pid 回查），
+            /// 并且 IsCheck 取自 lstSelectProcessName —— 那是「强制转代理」的勾选状态，
+            /// 与注入模式选目标毫无关系。借用它会让两屏互相污染。
+            /// </summary>
+            public static ProcessRow[] GetProcessRows()
+            {
+                List<ProcessInfo> list = GetProcessList() ?? new List<ProcessInfo>();
+
+                var rows = new ProcessRow[list.Count];
+                for (int i = 0; i < list.Count; i++) { rows[i] = ProcessRow.From_(list[i]); }
+                return rows;
             }
 
             #endregion

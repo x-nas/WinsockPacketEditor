@@ -15,7 +15,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
 import { lang, t } from '../i18n'
 
-const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'instance'): void }>()
+const emit = defineEmits<{ (e: 'enter', mode: 'proxy' | 'instance' | 'inject'): void }>()
 
 interface SystemCheck {
   isAdmin: boolean
@@ -59,6 +59,10 @@ async function typeSubtitle(): Promise<void> {
 watch(lang, () => { void typeSubtitle() })
 
 /** 点击 / 回车 / 空格 都走这里。 */
+function enterInject(): void {
+  emit('enter', 'inject')
+}
+
 function enterProxy(): void {
   emit('enter', 'proxy')
 }
@@ -103,12 +107,17 @@ onMounted(async () => {
         aria-disabled 保留：视觉上不做区分，但读屏用户没必要点进一个空操作里，
         它不影响任何像素。title 也留着，鼠标停一下能看到原因。
       -->
+      <!--
+        注入模式：IPC 改造之后可用了。
+        与另外两张卡同构 —— 不再带 aria-disabled / title，它们是「点了没反应」时才需要的。
+      -->
       <div
         class="cd"
         role="button"
         tabindex="0"
-        aria-disabled="true"
-        :title="t('start.inject.why')"
+        @click="enterInject"
+        @keydown.enter.prevent="enterInject"
+        @keydown.space.prevent="enterInject"
       >
         <div class="num">Mode 01</div>
         <div class="t">

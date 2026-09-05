@@ -52,6 +52,11 @@ namespace WinsockPacketEditor.Ipc
         /// <summary>目标侧的钩子装没装上。</summary>
         public bool HookInstalled { get; private set; }
 
+        /// <summary>目标用的是哪几套 WinSock —— 目标自己探的，外壳只显示。</summary>
+        public bool SupportWS1 { get; private set; }
+        public bool SupportWS2 { get; private set; }
+        public bool SupportMsWS { get; private set; }
+
         /// <summary>状态变化时通知外壳（换线程后再动界面）。</summary>
         public event Action<LinkState> StateChanged;
 
@@ -111,7 +116,8 @@ namespace WinsockPacketEditor.Ipc
             {
                 Mode = Operate.SystemConfig.InjectMode.Headless,
                 SessionId = _sessionId,
-                DataBasePath = null,   //无头路径不开库
+                DataBasePath = null,       //无头路径不开库
+                SuspendedLaunch = pid < 0, //挂起启动的目标要先把 winsock 拉进来才装得上钩
             };
 
             if (pid > -1)
@@ -446,6 +452,10 @@ namespace WinsockPacketEditor.Ipc
 
                 case IpcEvent.HookState:
                     HookInstalled = r.Bool();
+                    //三个 Support_* 由目标探测（它才看得到自己的模块表），外壳只是显示
+                    SupportWS1 = r.Bool();
+                    SupportWS2 = r.Bool();
+                    SupportMsWS = r.Bool();
                     break;
 
                 case IpcEvent.Fatal:

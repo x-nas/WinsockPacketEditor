@@ -74,6 +74,12 @@ export interface ProxyRow {
   Action: number // FilterAction，界面据此上色
 }
 
+/**
+ * 封包表能显示的行。两种模式各一种，骨架相同、列不同 ——
+ * PacketList 用它做参数类型，两个消费方（代理数据页 / 注入模式）各自把它收窄。
+ */
+export type PacketListRow = ProxyRow | PacketRow
+
 /** Operate.ProxyConfig.Proxy.DomainType */
 /** 存的是 i18n 键，与 PACKET_TYPE 同理。下标是 C# 枚举的整数值。 */
 export const DOMAIN_TYPE: Record<number, string> = {

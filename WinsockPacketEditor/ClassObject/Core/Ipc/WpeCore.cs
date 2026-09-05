@@ -58,6 +58,9 @@ namespace WinsockPacketEditor.Ipc
         private volatile bool _running;
         private volatile bool _hookInstalled;
 
+        /// <summary>目标是挂起启动创建的 —— 装钩之前要先把 winsock 拉进来，见 <see cref="DetectWinsock"/>。</summary>
+        private bool _suspendedLaunch;
+
         private long _packetSeq;
 
         /// <summary>外壳最后一次心跳到达的时刻（Environment.TickCount）。</summary>
@@ -97,7 +100,7 @@ namespace WinsockPacketEditor.Ipc
         /// <summary>
         /// 连上外壳的三条管道并开始工作。已经装配过就只换管道（重新附加）。
         /// </summary>
-        public static void Attach(string sessionId, int connectTimeoutMs)
+        public static void Attach(string sessionId, int connectTimeoutMs, bool suspendedLaunch)
         {
             lock (_instanceGate)
             {
@@ -106,6 +109,7 @@ namespace WinsockPacketEditor.Ipc
                     _instance = new WpeCore();
                 }
 
+                _instance._suspendedLaunch = suspendedLaunch;
                 _instance.Connect(sessionId, connectTimeoutMs);
             }
         }
@@ -480,7 +484,7 @@ namespace WinsockPacketEditor.Ipc
                 case IpcCommand.StartHook:
                     if (!_hookInstalled)
                     {
-                        EnsureWinsockLoaded();
+                        DetectWinsock();
                         _hook.StartHook();
                         _hookInstalled = true;
 
@@ -566,31 +570,52 @@ namespace WinsockPacketEditor.Ipc
         private static extern IntPtr LoadLibrary(string name);
 
         /// <summary>
+        /// 定下这个目标支持哪几套 WinSock（Support_WS1 / WS2 / MsWS），必要时先把模块拉进来。
+        ///
+        /// 【为什么探测必须在目标里做】它看的是<b>本进程</b>的模块表 ——
+        /// 老路径的 <c>GetInjectWinsockInfo</c> 也是这么写的，位置一直是对的。
+        /// 外壳看不到目标加载了什么，所以这三个标志<b>不走配置快照</b>，由目标自己定，
+        /// 再随 HookState 事件报上去给界面显示。
+        ///
+        /// 【为什么挂起启动要额外 LoadLibrary】
         /// <c>LocalHook.GetProcAddress</c> 要求模块<b>已经加载进本进程</b>，否则抛
         /// DllNotFoundException —— 而 <c>StartHook</c> 把异常吞进日志了，
-        /// 表现是「钩子装上了却一条都抓不到」。
+        /// 表现是「钩子装上了却一条都抓不到」。挂起创建的进程连加载器都没跑过，
+        /// 那一刻连 ws2_32 都还没有，13 个钩子一个都装不上，唤醒之后目标一路裸奔
+        /// （实测就是 0 条包）。这三个都是系统 DLL，目标反正马上就要用，
+        /// 提前拉进来正是「钩子先就位、第一个包也抓得到」的前提。
         ///
-        /// 【为什么无头路径特别需要这一句】
-        /// 老路径在目标里跑整套 WinForms + SQLite + OWIN，那一堆东西顺手就把
-        /// ws2_32 / mswsock 带进来了，所以从来没人撞上。无头核心什么都不加载，
-        /// 于是「挂起启动」的目标在装钩那一刻<b>连 ws2_32 都还没有</b>
-        /// （进程挂着，加载器根本没跑），13 个钩子一个都装不上，
-        /// 唤醒之后目标一路裸奔 —— 实测就是 0 条包。
-        ///
-        /// 这三个都是系统 DLL，目标反正马上就要用；提前拉进来正是
-        /// 「钩子先就位、第一个包也抓得到」的前提。<b>不引入任何 WPE 的依赖。</b>
+        /// 【为什么已在跑的目标不硬塞】那会凭空给它多出一个本来没有的模块，
+        /// 检测面比老路径还大。已在跑的目标只探测，与老路径逐字一致。
         /// </summary>
-        private void EnsureWinsockLoaded()
+        private void DetectWinsock()
         {
             try
             {
-                if (Operate.PacketConfig.Packet.Support_WS2) { LoadLibrary("ws2_32.dll"); }
-                if (Operate.PacketConfig.Packet.Support_WS1) { LoadLibrary("wsock32.dll"); }
-                if (Operate.PacketConfig.Packet.Support_MsWS) { LoadLibrary("mswsock.dll"); }
+                if (_suspendedLaunch)
+                {
+                    LoadLibrary("ws2_32.dll");
+                    LoadLibrary("wsock32.dll");
+                    LoadLibrary("mswsock.dll");
+                }
+
+                bool ws1 = false, ws2 = false, msws = false;
+
+                foreach (System.Diagnostics.ProcessModule m in System.Diagnostics.Process.GetCurrentProcess().Modules)
+                {
+                    string name = m.ModuleName;
+                    if (string.Equals(name, WSock32.ModuleName, StringComparison.OrdinalIgnoreCase)) { ws1 = true; }
+                    if (string.Equals(name, WS2_32.ModuleName, StringComparison.OrdinalIgnoreCase)) { ws2 = true; }
+                    if (string.Equals(name, Mswsock.ModuleName, StringComparison.OrdinalIgnoreCase)) { msws = true; }
+                }
+
+                Operate.PacketConfig.Packet.Support_WS1 = ws1;
+                Operate.PacketConfig.Packet.Support_WS2 = ws2;
+                Operate.PacketConfig.Packet.Support_MsWS = msws;
             }
             catch (Exception ex)
             {
-                SendFatal("预加载 winsock 失败: " + ex.Message);
+                SendFatal("探测 winsock 失败: " + ex.Message);
             }
         }
 
@@ -613,6 +638,12 @@ namespace WinsockPacketEditor.Ipc
             var w = new IpcWriter();
             w.U8((byte)IpcEvent.HookState);
             w.Bool(on);
+
+            //三个 Support_* 是目标自己探出来的，界面上要显示「这个目标用的是哪套 WinSock」
+            w.Bool(Operate.PacketConfig.Packet.Support_WS1);
+            w.Bool(Operate.PacketConfig.Packet.Support_WS2);
+            w.Bool(Operate.PacketConfig.Packet.Support_MsWS);
+
             SendEvent(w);
         }
 

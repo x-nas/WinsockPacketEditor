@@ -19,8 +19,19 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { flagSrc } from '../flags'
 import { listSetting } from '../stores/runtime'
 import { t, type Key } from '../i18n'
-import { rows } from '../stores/packets'
-import { DOMAIN_TYPE, FilterAction, PACKET_TYPE, type Prefs, type ProxyRow } from '../bridge/types'
+import { rows as proxyRows, injectFeed } from '../stores/packets'
+import { DOMAIN_TYPE, FilterAction, PACKET_TYPE, type PacketListRow, type Prefs, type ProxyRow } from '../bridge/types'
+
+/*
+  ── 两种模式共用这一份表 ──────────────────────────────
+
+  代理模式的行是 ProxyRow，注入模式的是 PacketRow（各有独立的 Id 序列）。
+  两者的<b>骨架完全一样</b> —— 定高虚拟滚动、列宽可拖、滤镜配色、多选、跟随底部 ——
+  差别只在「有哪几列」。所以这里只把列定义分岔，其余全部共用。
+
+  抄第二份的代价这个项目吃过：三屏列表样式手抄之后抄歪了四处（见 CLAUDE.md 的 .list-page）。
+*/
+type AnyRow = PacketListRow
 
 /*
   picked 是<b>多选集</b>，selectedId 是「详情面板正在看哪一行」。
@@ -33,14 +44,36 @@ const props = withDefaults(
     selectedId: number | null
     picked?: Set<number>
     follow?: boolean
+    /** 'proxy' = 代理数据（ProxyRow）；'inject' = 注入模式的封包列表（PacketRow）。 */
+    mode?: 'proxy' | 'inject'
   }>(),
-  { follow: true, picked: () => new Set<number>() },
+  { follow: true, picked: () => new Set<number>(), mode: 'proxy' },
 )
 
 const emit = defineEmits<{
-  (e: 'select', row: ProxyRow, ev: MouseEvent, index: number): void
-  (e: 'menu', ev: MouseEvent, row: ProxyRow): void
+  (e: 'select', row: AnyRow, ev: MouseEvent, index: number): void
+  (e: 'menu', ev: MouseEvent, row: AnyRow): void
 }>()
+
+/*
+  当前这一路的行。
+
+  ⚠️ <b>刻意不做成 prop</b>。把数组从父组件传进来的话，父组件自己也得读一次
+  那个 shallowRef —— 于是每帧 triggerRef 都会连带把父组件整棵模板重渲染一遍，
+  而这一屏正是全项目唯一的性能热点。让依赖只挂在这个组件里，父组件一帧都不用重渲染。
+
+  ⚠️⚠️ <b>这里存的是「哪一个 ref」，不是「哪一个数组」。</b>
+  写成 computed(() => 那个数组) 会<b>静默地把整张表变空</b>：
+  Vue 3.4 起 computed 会比较新旧值，相同（===）就不往下传播；
+  而这个 store 的热路径正是「就地 push 同一个数组 + triggerRef」——
+  数组引用永远不变，于是 total / windowRows 一次都不会重算。
+  实测现象是状态条上的「30 条」在涨、表里一行都没有（探针页抓到的）。
+
+  存 ref 本身则没有这个问题：它只在 mode 变化时才换，
+  而 total / windowRows 各自去读 .value，依赖直接挂在 shallowRef 上，triggerRef 照常生效。
+*/
+const feed = computed(() => (props.mode === 'inject' ? injectFeed.rows : proxyRows))
+const rows = { get value(): AnyRow[] { return feed.value.value } }
 
 const ROW_H = 24
 const OVERSCAN = 8
@@ -56,7 +89,31 @@ const OVERSCAN = 8
   两者不能共用一个值 —— 长度列就是反例：数字右对齐便于比大小，
   而它的表头居中才和左右两列的窄表头看齐。
 */
-const columns = computed(() => [
+const columns = computed(() => (props.mode === 'inject' ? injectColumns() : proxyColumns()))
+
+/*
+  注入模式的列。与代理模式的差别来自模型本身：
+  PacketInfo 只有「本机 / 远端」两侧（From / To），没有域名、没有协议类型 ——
+  那两样是 SunnyNet 的中间人那条路才有的东西，钩子这边根本不产生。
+*/
+function injectColumns() {
+  return [
+    { key: 'Id', title: t('col.id'), w: 74, align: 'center', halign: 'center', cls: 'c-dim' },
+    { key: 'Time', title: t('col.time'), w: 136, cls: 'c-meta' },
+    { key: 'Socket', title: t('col.socket'), w: 64, align: 'center', halign: 'center', cls: 'c-dim' },
+    //类型不给固定色 —— 按「请求 / 响应」分色，见 cellClass
+    { key: 'Type', title: t('col.type'), w: 96, align: 'center', halign: 'center' },
+    { key: 'From', title: t('col.from'), w: 158, cls: 'c-local' },
+    { key: 'FromLocation', title: t('col.fromLoc'), w: 88, cls: 'c-local-dim', flag: true },
+    { key: 'To', title: t('col.to'), w: 158, cls: 'c-remote' },
+    { key: 'ToLocation', title: t('col.toLoc'), w: 88, cls: 'c-remote-dim', flag: true },
+    { key: 'Len', title: t('col.len'), w: 62, align: 'right', halign: 'center', cls: 'c-local' },
+    { key: 'Preview', title: t('col.data'), w: 460, cls: 'c-data' },
+  ]
+}
+
+function proxyColumns() {
+  return [
   { key: 'Id', title: t('col.id'), w: 74, align: 'center', halign: 'center', cls: 'c-dim' },
   /*
     时间是 HH:mm:ss:fffffff（16 字符，见 FeedRows 的 PacketTime 格式）。
@@ -85,7 +142,8 @@ const columns = computed(() => [
   { key: 'Len', title: t('col.len'), w: 62, align: 'right', halign: 'center', cls: 'c-local' },
   //数据列是弹性的，这里的 460 是它的<b>最小</b>宽度，实际宽度见 lastWidth
   { key: 'Preview', title: t('col.data'), w: 460, cls: 'c-data' },
-])
+  ]
+}
 
 /*
   最后一列（数据）铺满剩余宽度。
@@ -136,6 +194,8 @@ const shown = computed(() => {
   const s = listSetting.value
   if (!s) return columns.value
 
+  //注入模式的 From / To 与代理模式的 ClientAddr / ServerAddr 是同一件事的两个名字，
+  //所以「列表设置」里那几个开关两边共用，不另开一套。
   const off: Record<string, boolean> = {
     Socket: !s.showSocket,
     Type: !s.showType,
@@ -143,6 +203,10 @@ const shown = computed(() => {
     ClientLocation: !s.showClientLoc,
     ServerAddr: !s.showServerAddr,
     ServerLocation: !s.showServerLoc,
+    From: !s.showClientAddr,
+    FromLocation: !s.showClientLoc,
+    To: !s.showServerAddr,
+    ToLocation: !s.showServerLoc,
     Len: !s.showLen,
   }
 
@@ -304,8 +368,10 @@ function scrollToIndex(i: number): void {
   scrollTop.value = el.scrollTop
 }
 
-// 数据变了：跟随时贴到底；被整表清空时回到顶部
-watch(rows, () => {
+// 数据变了：跟随时贴到底；被整表清空时回到顶部。
+// watch 一个 getter 时 Vue 也按值比较，所以盯的是<b>条数</b>而不是数组本身
+//（数组引用永远不变，盯它一次都不会触发）。
+watch(total, () => {
   if (total.value === 0) {
     const el = scroller.value
     if (el) el.scrollTop = 0
@@ -370,14 +436,14 @@ const REQUEST_TYPES = new Set([0, 1, 2, 3, 8, 9, 13, 14, 17, 19])
  * （「请求 / 响应」是这张表里最值得一眼分辨的语义）。
  * 其余列的固定色已经烘进 cols 里了，不再逐格判。
  */
-function typeClass(r: ProxyRow): string {
+function typeClass(r: AnyRow): string {
   return REQUEST_TYPES.has(r.Type) ? 'c-req' : 'c-resp'
 }
 
-function cellText(r: ProxyRow, key: string): string | number {
+function cellText(r: AnyRow, key: string): string | number {
   //查的是预先展平好的表；映射不到时退回原始数字，好排查是不是 C# 加了新枚举值
   if (key === 'Type') return typeText.value[r.Type] ?? r.Type
-  if (key === 'DomainType') return protoText.value[r.DomainType] ?? r.DomainType
+  if (key === 'DomainType') return protoText.value[(r as ProxyRow).DomainType] ?? (r as ProxyRow).DomainType
   return (r as any)[key]
 }
 

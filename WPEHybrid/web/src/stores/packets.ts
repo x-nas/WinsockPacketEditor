@@ -3,9 +3,9 @@
 // 数据来源：C# 每 10ms 一拍，每拍最多 FeedBatchMax(200) 条，推 feed:append 事件。
 // 上限约 6000 条/秒（B9c 实测），所以这里的每一步都按「每秒几千次」来设计。
 
-import { shallowRef, triggerRef, ref } from 'vue'
+import { shallowRef, triggerRef, ref, type ShallowRef, type Ref } from 'vue'
 import { on } from '../bridge'
-import { FeedList, type ProxyRow } from '../bridge/types'
+import { FeedList, type PacketRow, type ProxyRow } from '../bridge/types'
 
 /*
   ① 用 shallowRef，绝不用 ref([]) / reactive([])
@@ -27,97 +27,135 @@ import { FeedList, type ProxyRow } from '../bridge/types'
      去深度代理五万行 —— 这是给约束①上的保险，不是可有可无的装饰。
 */
 
-/** 全表。始终是<b>同一个数组引用</b>，靠 triggerRef 通知，不做整表复制。 */
-const all: ProxyRow[] = []
-
-export const rows = shallowRef<ProxyRow[]>(all)
-
 /** 推送计数，用于 B10e 的验收实测。 */
-export const stat = ref({
-  received: 0, // 累计收到的行数（不受清空影响）
-  batches: 0,
-  maxBatch: 0,
-  rate: 0, // 行/秒，每 500ms 结算
-  dropped: 0, // C# 侧自动清理掉的行数
-})
+export interface FeedStat {
+  received: number // 累计收到的行数（不受清空影响）
+  batches: number
+  maxBatch: number
+  rate: number // 行/秒，每 500ms 结算
+  dropped: number // C# 侧自动清理掉的行数
+}
 
-let rafId = 0
-let lastRateAt = 0
-let lastRateRows = 0
-
-function scheduleFlush(): void {
-  if (rafId) return
-
-  rafId = requestAnimationFrame(() => {
-    rafId = 0
-    triggerRef(rows)
-  })
+export interface PacketFeed<T> {
+  rows: ShallowRef<T[]>
+  stat: Ref<FeedStat>
+  attach: () => () => void
+  clearLocal: () => void
+  resetStat: () => void
 }
 
 /**
- * 接上 C# 的推送。在 App 挂载时调一次。
- * 返回取消订阅的函数（供热更新时清理，正式运行中不会调）。
+ * 造一路封包推送的接收端。
+ *
+ * 【为什么是工厂】代理模式与注入模式各有一份主列表（FeedList.Proxy / FeedList.Packet），
+ * 两份的 Id 序列互相独立，热路径那四条约束却一模一样。
+ * 抄第二份的话，哪天优化了一边、另一边就悄悄退化了 —— 这个项目里
+ * 「三份手抄抄歪一次」的教训已经有过（见 CLAUDE.md 的 .list-page）。
  */
-export function attachPacketFeed(): () => void {
-  lastRateAt = performance.now()
+export function createPacketFeed<T extends { Id: number }>(list: FeedList): PacketFeed<T> {
+  /** 全表。始终是<b>同一个数组引用</b>，靠 triggerRef 通知，不做整表复制。 */
+  const all: T[] = []
+  const rows = shallowRef<T[]>(all)
 
-  const offAppend = on('feed:append', (d: { list: number; rows: ProxyRow[] }) => {
-    if (d.list !== FeedList.Proxy) return
+  const stat = ref<FeedStat>({ received: 0, batches: 0, maxBatch: 0, rate: 0, dropped: 0 })
 
-    const batch = d.rows
-    const n = batch.length
-    if (!n) return
+  let rafId = 0
+  let lastRateAt = 0
+  let lastRateRows = 0
 
-    for (let i = 0; i < n; i++) {
-      all.push(Object.freeze(batch[i]))
+  function scheduleFlush(): void {
+    if (rafId) return
+
+    rafId = requestAnimationFrame(() => {
+      rafId = 0
+      triggerRef(rows)
+    })
+  }
+
+  /**
+   * 接上 C# 的推送。在 App 挂载时调一次。
+   * 返回取消订阅的函数（供热更新时清理，正式运行中不会调）。
+   */
+  function attach(): () => void {
+    lastRateAt = performance.now()
+
+    const offAppend = on('feed:append', (d: { list: number; rows: T[] }) => {
+      if (d.list !== list) return
+
+      const batch = d.rows
+      const n = batch.length
+      if (!n) return
+
+      for (let i = 0; i < n; i++) {
+        all.push(Object.freeze(batch[i]))
+      }
+
+      const s = stat.value
+      s.received += n
+      s.batches++
+      if (n > s.maxBatch) s.maxBatch = n
+
+      scheduleFlush()
+    })
+
+    const offClear = on('feed:clear', (d: { list: number }) => {
+      if (d.list !== list) return
+
+      // C# 的自动清理是<b>整表清空</b>（不是保留最近 N 条），前端必须原样跟随：
+      // 两侧的内容一旦不一致，点行取字节就会拿到 null。
+      stat.value.dropped += all.length
+      all.length = 0
+      scheduleFlush()
+    })
+
+    const timer = window.setInterval(() => {
+      const now = performance.now()
+      const dt = now - lastRateAt
+      if (dt <= 0) return
+
+      stat.value.rate = Math.round(((stat.value.received - lastRateRows) * 1000) / dt)
+      lastRateRows = stat.value.received
+      lastRateAt = now
+    }, 500)
+
+    return () => {
+      offAppend()
+      offClear()
+      window.clearInterval(timer)
+      if (rafId) cancelAnimationFrame(rafId)
+      rafId = 0
     }
+  }
 
-    const s = stat.value
-    s.received += n
-    s.batches++
-    if (n > s.maxBatch) s.maxBatch = n
-
-    scheduleFlush()
-  })
-
-  const offClear = on('feed:clear', (d: { list: number }) => {
-    if (d.list !== FeedList.Proxy) return
-
-    // C# 的自动清理是<b>整表清空</b>（不是保留最近 N 条），前端必须原样跟随：
-    // 两侧的内容一旦不一致，点行取字节就会拿到 null。
-    stat.value.dropped += all.length
-    all.length = 0
-    scheduleFlush()
-  })
-
-  const timer = window.setInterval(() => {
-    const now = performance.now()
-    const dt = now - lastRateAt
-    if (dt <= 0) return
-
-    stat.value.rate = Math.round(((stat.value.received - lastRateRows) * 1000) / dt)
-    lastRateRows = stat.value.received
-    lastRateAt = now
-  }, 500)
-
-  return () => {
-    offAppend()
-    offClear()
-    window.clearInterval(timer)
-    if (rafId) cancelAnimationFrame(rafId)
-    rafId = 0
+  return {
+    rows,
+    stat,
+    attach,
+    /** 前端侧清空（C# 的 clearPackets 会推 feed:clear，通常不必手动调这个）。 */
+    clearLocal(): void {
+      all.length = 0
+      triggerRef(rows)
+    },
+    resetStat(): void {
+      stat.value = { received: 0, batches: 0, maxBatch: 0, rate: 0, dropped: 0 }
+      lastRateRows = 0
+      lastRateAt = performance.now()
+    },
   }
 }
 
-/** 前端侧清空（C# 的 clearPackets 会推 feed:clear，通常不必手动调这个）。 */
-export function clearLocal(): void {
-  all.length = 0
-  triggerRef(rows)
-}
+/*
+  ── 两路实例 ──────────────────────────────────────────
 
-/** 重置计数器。 */
-export function resetStat(): void {
-  stat.value = { received: 0, batches: 0, maxBatch: 0, rate: 0, dropped: 0 }
-  lastRateRows = 0
-  lastRateAt = performance.now()
-}
+  代理模式那一路保持原来的具名导出，调用点一处都不用改。
+*/
+const proxyFeed = createPacketFeed<ProxyRow>(FeedList.Proxy)
+
+export const rows = proxyFeed.rows
+export const stat = proxyFeed.stat
+export const attachPacketFeed = proxyFeed.attach
+export const clearLocal = proxyFeed.clearLocal
+export const resetStat = proxyFeed.resetStat
+
+/** 注入模式的主列表（对应 WinForms 的 Controls/PacketList.cs）。 */
+export const injectFeed = createPacketFeed<PacketRow>(FeedList.Packet)

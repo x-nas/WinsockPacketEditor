@@ -6,6 +6,17 @@
   // 假宿主：把 WebView2 的 postMessage / message 事件换成本地回环，只为在浏览器里跑封包编辑器
   const sample = (() => { const a = []; for (let i = 0; i < 300; i++) a.push((i * 7 + 3) & 0xff); a[0]=0x16;a[1]=0x03;a[2]=0x01; return btoa(String.fromCharCode(...a)) })();
   let clip = '';
+  //注入模式：装钩之后往 FeedList.Packet 推几条假封包，验的是「注入那一路走的是另一份表」
+  function pushInjectRows() {
+    const rows = Array.from({ length: 30 }, (_, i) => ({
+      Id: 500 + i, Time: '15:02:' + String(i % 60).padStart(2, '0') + ':0000000', Socket: 3464,
+      Type: i % 3 === 0 ? 1 : 5,
+      From: '10.10.10.8:' + (41758 + i), FromLocation: '局域网',
+      To: '101.227.22.133:443', ToLocation: '中国上海',
+      Len: 180 + i, Preview: '16 03 01 00 B4', Action: i % 9 === 0 ? 1 : 0,
+    }));
+    ls.forEach((cb) => cb({ data: { type: 'event', name: 'feed:append', data: { list: 0, rows } } }));
+  }
   const answers = {
     openPacketEdit: (a) => ({ Id: String(a.id), List: a.list, Socket: 3464, Type: 13, From: '10.10.10.8:41758', To: '101.227.22.133:443', Buffer: sample, CanSendBySession: false, SystemSocket: 1284 }),
     clipboardWrite: (a) => { clip = a.text; window.__clip = clip; return { ok: true } },
@@ -50,6 +61,19 @@
     exportBackup: () => ({ ok: true }), importBackup: () => ({ language: 'zh' }),
     getRemoteSetting: () => ({ IsRemote: true, IP: '192.168.1.10', IPs: ['192.168.1.10', '10.0.0.2'], Port: 88, UserName: 'admin', PassWord: 'x', Running: true }), saveRemoteSetting: () => ({ error: '', running: true }),
     setTopMost: (a) => ({ topMost: !!a.on }),
+    // 注入模式：假的进程列表 + 假的链路状态机（附加 → 装钩 → 断开）
+    enterInjectMode: () => ({ ok: true }),
+    getInjectProcessList: () => ([
+      { ProcessName: 'game', ProcessID: 4321, ModuleName: 'game.exe', ProcessPath: 'D:/Games/game.exe' },
+      { ProcessName: 'chrome', ProcessID: 8800, ModuleName: 'chrome.exe', ProcessPath: 'C:/Program Files/chrome.exe' },
+      { ProcessName: 'notepad', ProcessID: 1200, ModuleName: 'notepad.exe', ProcessPath: 'C:/Windows/notepad.exe' },
+    ]),
+    pickTargetExe: () => ({ path: 'D:/Games/launcher.exe' }),
+    injectAttach: (a) => { window.__inj = { state: 'attached', pid: a.pid > 0 ? a.pid : 9999, name: a.pid > 0 ? 'game' : 'launcher', is64: true, hooked: false, dropped: 0, ws1: true, ws2: true, msws: false, ok: true }; return window.__inj },
+    injectStartHook: () => { window.__inj.hooked = true; setTimeout(pushInjectRows, 300); return window.__inj },
+    injectStopHook: () => { window.__inj.hooked = false; return window.__inj },
+    injectDetach: () => { window.__inj = null; return { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false } },
+    getInjectStatus: () => (window.__inj || { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false }),
     getLogCount: (a) => ({ count: a.kind === 0 ? 3 : 0 }),
     //清空走 ask → 自绘确认框，与 C# 的 ClearLog_Dialog 一样
     clearLogs: async (a) => { const ok = await window.__ask('confirm', { title: '日志列表', content: '确定删除所有数据吗', icon: 3 }); if (ok) ls.forEach((cb) => cb({ data: { type: 'event', name: 'feed:clear', data: { list: 2 + (a.kind || 0) } } })); return { ok } },
@@ -130,6 +154,7 @@
   import HotkeySetting from '/src/components/proxy/HotkeySetting.vue'
   import BackupSetting from '/src/components/proxy/BackupSetting.vue'
   import RemoteSetting from '/src/components/proxy/RemoteSetting.vue'
+  import InjectView from '/src/components/InjectView.vue'
   import { useList } from '/src/stores/lists'
   import { FeedList } from '/src/bridge/types'
   // 设置页与 WPC 页要的几份列表副本：直接写进 store
@@ -150,6 +175,8 @@
   const quickPage = location.hash === '#quick'
   const cliPage = location.hash === '#cli'
   const acctPage = location.hash === '#acct'
+  const injectPage = location.hash === '#inject'
+  if (injectPage) attachUiHost()   //注入失败会弹提示
   if (acctPage) {
     //乱序 + 有/无限制 + 有/无到期，用来验排序把「不限制 / 永不过期」排到最后
     useList(5).value = [
@@ -211,6 +238,6 @@
     }, 400);
   }
 
-  createApp({ render: () => acctPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(AccountList)]), h(ToastStack)] : appPage ? [h(App)] : logPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(SystemLog)]), h(ConfirmDialog), h(ToastStack)] : quickPage ? [h('div', { style: 'position:fixed;inset:40px;width:320px' }, [h(QuickPanel)]), h(ToastStack)] : cliPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ClientList)]), h(ToastStack)] : fwPage ? [h(FireWallSetting, { open: true, 'onUpdate:open': () => {} }), h(ConfirmDialog), h(ToastStack)] : tool ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(tool)]), h(ToastStack)] : robot ? [h(RobotEdit, { id: 'R1', onClose: () => { window.__closed = true } }), h(ToastStack)] : modify ? [h(PacketModification, { id: 314, onClose: () => { window.__closed = true } }), h(ToastStack)] : dataPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ProxyData)]), h(ToastStack)] : page ? [h('div', { style: 'position:fixed;inset:40px;display:flex' }, [h(HexPanel, { id: 314, packetType: httpMode ? 17 : 0, highlight: { offset: 9, length: 6 } })]), h(ToastStack)] : [h(PacketEdit, { target: { list: 'proxy', id: 1 }, onClose: () => { window.__closed = true } }), h(ToastStack)] }).mount('#app')
+  createApp({ render: () => injectPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(InjectView)]), h(ConfirmDialog), h(ToastStack)] : acctPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(AccountList)]), h(ToastStack)] : appPage ? [h(App)] : logPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(SystemLog)]), h(ConfirmDialog), h(ToastStack)] : quickPage ? [h('div', { style: 'position:fixed;inset:40px;width:320px' }, [h(QuickPanel)]), h(ToastStack)] : cliPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ClientList)]), h(ToastStack)] : fwPage ? [h(FireWallSetting, { open: true, 'onUpdate:open': () => {} }), h(ConfirmDialog), h(ToastStack)] : tool ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(tool)]), h(ToastStack)] : robot ? [h(RobotEdit, { id: 'R1', onClose: () => { window.__closed = true } }), h(ToastStack)] : modify ? [h(PacketModification, { id: 314, onClose: () => { window.__closed = true } }), h(ToastStack)] : dataPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ProxyData)]), h(ToastStack)] : page ? [h('div', { style: 'position:fixed;inset:40px;display:flex' }, [h(HexPanel, { id: 314, packetType: httpMode ? 17 : 0, highlight: { offset: 9, length: 6 } })]), h(ToastStack)] : [h(PacketEdit, { target: { list: 'proxy', id: 1 }, onClose: () => { window.__closed = true } }), h(ToastStack)] }).mount('#app')
 </script>
 </body></html>

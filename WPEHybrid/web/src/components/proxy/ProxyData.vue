@@ -13,7 +13,7 @@
 */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../../bridge'
-import { FeedList, type Prefs, type ProxyRow, type SendRow, type Stats, type WareHouseRow } from '../../bridge/types'
+import { FeedList, type PacketListRow, type Prefs, type ProxyRow, type SendRow, type Stats, type WareHouseRow } from '../../bridge/types'
 import { t } from '../../i18n'
 import { attachPacketFeed, resetStat, rows } from '../../stores/packets'
 import { useList } from '../../stores/lists'
@@ -147,7 +147,9 @@ async function clearAll(): Promise<void> {
 const { picked, onRowClick, selectAll, clear } =
   useRowPick(rows, (r) => r.Id, { autoPrune: false })
 
-function onSelect(r: ProxyRow, ev: MouseEvent, index: number): void {
+function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
+  //PacketList 两种模式共用，事件签名是并集；这一屏是 mode="proxy"，行一定是 ProxyRow
+  const r = anyRow as ProxyRow
   selected.value = r
   onRowClick(r, ev, index)
 
@@ -277,7 +279,7 @@ const editTarget = ref<{ list: 'proxy' | 'send'; id: number } | null>(null)
 const modifyId = ref<number | null>(null)
 
 //右键只开菜单、不动选中集（与账号 / 滤镜两屏同一条口径）
-function onMenu(ev: MouseEvent, _r: ProxyRow): void {
+function onMenu(ev: MouseEvent, _r: PacketListRow): void {
   menuAt.value = { x: ev.clientX, y: ev.clientY }
 }
 

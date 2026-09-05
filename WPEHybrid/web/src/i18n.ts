@@ -792,6 +792,54 @@ const DICT = {
   'col.time': { zh: '时间', en: 'Time' },
   'col.type': { zh: '类型', en: 'Type' },
   'col.proto': { zh: '协议', en: 'Protocol' },
+  //注入模式的封包列表：PacketInfo 只有「本机 / 远端」两侧，没有客户端 / 服务端之分。
+  //文案照 Localizer.cs 的 PacketList 那几列，不另起译法。
+  //── 注入模式 ─────────────────────────────────────
+  'foot.hooking': { zh: '拦截中', en: 'Hooking' },
+
+  'inject.pick.title': { zh: '选择注入目标', en: 'Select Target' },
+  'inject.pick.lede': {
+    zh: '双击一行注入到已运行的进程；或用「启动并注入」从头拉起一个 —— 后者会在钩子就位之后才唤醒它，连第一个封包都抓得到。',
+    en: 'Double-click a row to inject into a running process, or use Launch & Inject to start one suspended — it is woken only after the hooks are in place, so even the first packet is captured.',
+  },
+  'inject.pick.search': { zh: '搜索进程名或 PID', en: 'Search name or PID' },
+  'inject.pick.refresh': { zh: '刷新', en: 'Refresh' },
+  'inject.pick.loading': { zh: '枚举中…', en: 'Enumerating…' },
+  'inject.pick.launch': { zh: '启动并注入', en: 'Launch & Inject' },
+  'inject.pick.attach': { zh: '注入', en: 'Inject' },
+  'inject.pick.none': { zh: '没有匹配的进程', en: 'No matching process' },
+
+  'inject.col.name': { zh: '进程名', en: 'Process' },
+  'inject.col.pid': { zh: 'PID', en: 'PID' },
+  'inject.col.path': { zh: '路径', en: 'Path' },
+
+  'inject.target': { zh: '目标', en: 'Target' },
+  'inject.rate': { zh: '速率', en: 'Rate' },
+  'inject.rows': { zh: '条', en: 'rows' },
+  'inject.dropped': { zh: '丢弃', en: 'Dropped' },
+  'inject.startHook': { zh: '开始拦截', en: 'Start Hook' },
+  'inject.stopHook': { zh: '停止拦截', en: 'Stop Hook' },
+  'inject.hookSetting': { zh: '拦截设置', en: 'Hook Settings' },
+  'inject.clear': { zh: '清空', en: 'Clear' },
+  'inject.detach': { zh: '断开', en: 'Detach' },
+
+  'inject.state.ok': { zh: '已附加', en: 'Attached' },
+  'inject.state.lost': { zh: '已断开', en: 'Disconnected' },
+
+  'inject.attached': { zh: '已附加到目标', en: 'Attached to target' },
+  'inject.launched': { zh: '已启动并注入', en: 'Launched and injected' },
+  'inject.failed': { zh: '注入失败', en: 'Injection failed' },
+  'inject.lost': { zh: '目标已退出', en: 'Target exited' },
+  'inject.lostHint': {
+    zh: '目标进程已经不在了。已抓到的封包与配置全部保留，可以继续查看和导出。',
+    en: 'The target process is gone. Everything captured so far is kept — you can still browse and export it.',
+  },
+
+  'col.from': { zh: '本机地址', en: 'Local' },
+  'col.fromLoc': { zh: '本机所属地', en: 'Local Loc.' },
+  'col.to': { zh: '远端地址', en: 'Remote' },
+  'col.toLoc': { zh: '远端所属地', en: 'Remote Loc.' },
+
   'col.client': { zh: '客户端', en: 'Client' },
   'col.clientLoc': { zh: '客户端地', en: 'Client Loc.' },
   'col.server': { zh: '服务端', en: 'Server' },
