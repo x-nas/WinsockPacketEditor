@@ -30,6 +30,10 @@ namespace WPEHookTest
             //阶段 0 那个「进程内装钩子」的引擎跑测。
             if (args.Contains("--target")) { return IpcTest.RunTarget(args); }
             if (args.Contains("--shell")) { return IpcTest.RunShell(args); }
+            if (args.Contains("--ghost-shell")) { return Matrix.RunGhostShell(args); }
+            if (args.Contains("--matrix")) { return Matrix.Run(args); }
+            if (args.Contains("--probe-launch")) { return ProbeLaunch.Run(args); }
+            if (args.Contains("--probe-native")) { return ProbeNative.Run(args); }
 
             string outPath = GetArg(args, "--out", null);
 

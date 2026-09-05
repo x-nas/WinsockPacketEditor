@@ -33,8 +33,21 @@ namespace WPEHookTest
         /// 靶子：起一个自收自发的回环，每 50ms 来一轮，直到被杀或到时。
         /// 它自己<b>不装任何钩子</b> —— 钩子由注入进来的无头核心装。
         /// </summary>
+        /// <summary>挂起启动那条路上靶子的 stdout 看不见，只能靠文件留痕。</summary>
+        private static void Trace(string s)
+        {
+            try
+            {
+                File.AppendAllText(
+                    Path.Combine(Path.GetTempPath(), "wpe-target-trace.txt"),
+                    DateTime.Now.ToString("HH:mm:ss.fff") + " [" + Process.GetCurrentProcess().Id + "] " + s + Environment.NewLine);
+            }
+            catch { }
+        }
+
         public static int RunTarget(string[] args)
         {
+            Trace("RunTarget 进来了, argv = " + string.Join(" ", args));
             int seconds = int.Parse(GetArg(args, "--seconds", "30"));
 
             /*
@@ -68,6 +81,7 @@ namespace WPEHookTest
 
             Console.WriteLine("TARGET_READY pid=" + Process.GetCurrentProcess().Id + " port=" + port);
             Console.Out.Flush();
+            Trace("TARGET_READY port=" + port);
 
             var server = new Thread(() => EchoServer(listen));
             server.IsBackground = true;
@@ -88,6 +102,7 @@ namespace WPEHookTest
                 Thread.Sleep(50);
             }
 
+            Trace("跑完 " + round + " 轮，正常退出");
             Native.closesocket(sock);
             Native.closesocket(listen);
             return 0;

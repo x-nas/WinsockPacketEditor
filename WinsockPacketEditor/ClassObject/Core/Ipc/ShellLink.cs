@@ -68,8 +68,6 @@ namespace WinsockPacketEditor.Ipc
         /// <summary>控制通道是「一问一答」，同一时刻只能有一个在途请求。</summary>
         private readonly object _ctlGate = new object();
 
-        /// <summary>CreateAndInject 是挂起启动的，要等「开始拦截」才唤醒（保住老路径的语义）。</summary>
-        private bool _needWakeUp;
 
         #endregion
 
@@ -81,7 +79,15 @@ namespace WinsockPacketEditor.Ipc
         /// <param name="pid">已运行的进程 PID；小于 0 表示走 <paramref name="path"/> 挂起启动。</param>
         /// <param name="path">挂起启动用的可执行文件路径。</param>
         /// <param name="timeoutMs">等目标连上来的超时。</param>
-        public void Attach(int pid, string path, int timeoutMs)
+        /// <param name="commandLine">
+        /// 挂起启动时传给目标的完整命令行（老路径这里一直是空串）。
+        ///
+        /// ⚠️ <b>要以可执行文件路径本身开头</b>，形如 <c>"目标全路径" 参数1 参数2</c>。
+        /// CreateProcess 同时收到 lpApplicationName 与 lpCommandLine 时，
+        /// CRT 仍然把 lpCommandLine 的第一个 token 当 argv[0] 丢掉 ——
+        /// 只写参数的话第一个参数会凭空消失（验证矩阵第 2 项就栽在这儿）。
+        /// </param>
+        public void Attach(int pid, string path, int timeoutMs, string commandLine = null)
         {
             Dispose();
 
@@ -108,8 +114,6 @@ namespace WinsockPacketEditor.Ipc
                 DataBasePath = null,   //无头路径不开库
             };
 
-            _needWakeUp = false;
-
             if (pid > -1)
             {
                 RemoteHooking.Inject(pid, dll, dll, "WPE64", ip);
@@ -118,12 +122,11 @@ namespace WinsockPacketEditor.Ipc
             else
             {
                 int newPid;
-                RemoteHooking.CreateAndInject(path, string.Empty, 0, dll, dll, out newPid, "WPE64", ip);
+                RemoteHooking.CreateAndInject(path, commandLine ?? string.Empty, 0, dll, dll, out newPid, "WPE64", ip);
                 TargetPid = newPid;
 
-                //⚠️ 目标是<b>挂起</b>创建的。唤醒推迟到「开始拦截」，
-                //这样第一个包也抓得到 —— 老路径里这一句在 PacketList.Start_Hook()。
-                _needWakeUp = true;
+                //目标是<b>挂起</b>创建的：唤醒推迟到「开始拦截」，这样钩子装好之前
+                //它一条指令都没跑，第一个包也抓得到。那一句在目标侧（Hook.RunHeadless）。
             }
 
             if (!WaitAll(timeoutMs, aCtl, aPkt, aEvt))
@@ -235,15 +238,13 @@ namespace WinsockPacketEditor.Ipc
         {
             var w = new IpcWriter();
             w.U8((byte)IpcCommand.StartHook);
+            //唤醒挂起启动的目标由<b>目标侧</b>做：WpeCore 处理 StartHook 时置位一个事件，
+            //EasyHook 的 Run 线程收到后调 RemoteHooking.WakeUpProcess()。
+            //外壳这边什么都不用做 —— 试过在这里调、也试过 NtResumeProcess，两条都不行，
+            //原因写在 Hook.RunHeadless 里。
             CallVoid(w);
-
-            if (_needWakeUp)
-            {
-                //顺序要紧：钩子装好了才唤醒，第一个包才抓得到（老路径的语义）
-                RemoteHooking.WakeUpProcess();
-                _needWakeUp = false;
-            }
         }
+
 
         public void StopHook()
         {

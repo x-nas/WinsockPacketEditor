@@ -73,6 +73,30 @@ namespace WPEHook
                 return;
             }
 
+            /*
+                ⚠️ <b>唤醒挂起启动的目标，必须在这条线程上做。</b>
+
+                CreateAndInject 把目标挂起创建，要靠 RemoteHooking.WakeUpProcess() 放行。
+                实测下来别的做法都不行：
+                  · 在<b>外壳</b>里调 —— 作用于外壳自己，目标永远醒不过来；
+                  · 在目标的<b>控制线程</b>里调 —— 静默返回、什么都没发生；
+                  · 外壳用 NtResumeProcess 直接恢复 —— 目标<b>当场死掉</b>
+                    （原生的 curl.exe 与托管靶子都一样，说明 EasyHook 的「挂起」
+                     不只是 OS 的挂起计数，还有它自己的一道闸）。
+                EasyHook 的文档也是这么写的：「call this method in the library Run() method
+                after all hooks have been installed」。
+
+                所以这条线程装配完就挂在「第一次 StartHook」上等，
+                控制线程处理完 StartHook 置位，这里再唤醒 —— 顺序与老路径
+                （PacketList.Start_Hook）完全一致：钩子装好之后才唤醒。
+
+                对已经在跑的进程（Inject 那条路）这一句是空操作，与老路径一样无条件调。
+            */
+            if (WinsockPacketEditor.Ipc.WpeCore.WaitForWakeSignal())
+            {
+                try { EasyHook.RemoteHooking.WakeUpProcess(); } catch { }
+            }
+
             //挂住这条线程，等核心被 Detach 或心跳超时收摊
             WinsockPacketEditor.Ipc.WpeCore.WaitForShutdown();
         }
