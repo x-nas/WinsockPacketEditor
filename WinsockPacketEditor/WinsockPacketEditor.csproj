@@ -253,6 +253,13 @@
     <Compile Include="ClassObject\FeedPump.cs" />
     <Compile Include="ClassObject\LogFile.cs" />
     <Compile Include="ClassObject\Core\HookHost.cs" />
+    <Compile Include="ClassObject\Core\Ipc\ConfigSnapshot.cs" />
+    <Compile Include="ClassObject\Core\Ipc\FilterEngine.cs" />
+    <Compile Include="ClassObject\Core\Ipc\IpcProtocol.cs" />
+    <Compile Include="ClassObject\Core\Ipc\PacketFrame.cs" />
+    <Compile Include="ClassObject\Core\Ipc\PacketRing.cs" />
+    <Compile Include="ClassObject\Core\Ipc\ShellLink.cs" />
+    <Compile Include="ClassObject\Core\Ipc\WpeCore.cs" />
     <Compile Include="ClassObject\Core\IHookHost.cs" />
     <Compile Include="ClassObject\Ui\FeedRows.cs" />
     <Compile Include="ClassObject\Ui\HexState.cs" />

@@ -26,6 +26,11 @@ namespace WPEHookTest
 
         private static int Main(string[] args)
         {
+            //两个 IPC 角色（见 IpcTest.cs）：靶子 / 外壳。不带这两个开关就是
+            //阶段 0 那个「进程内装钩子」的引擎跑测。
+            if (args.Contains("--target")) { return IpcTest.RunTarget(args); }
+            if (args.Contains("--shell")) { return IpcTest.RunShell(args); }
+
             string outPath = GetArg(args, "--out", null);
 
             try

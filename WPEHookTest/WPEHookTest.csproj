@@ -25,6 +25,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WinsockPacketEditor\WinsockPacketEditor.csproj" />
+    <!-- 注入要用 WPEHook.dll：ShellLink 按「主程序所在目录 + WPE64_DLL」找它，
+         不引这一条的话跑测的输出目录里没有这个文件，注入直接失败 -->
+    <ProjectReference Include="..\WPEHook\WPEHook.csproj" />
   </ItemGroup>
 
   <ItemGroup>

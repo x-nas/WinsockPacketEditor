@@ -188,7 +188,25 @@ namespace WinsockPacketEditor
 
             public class InjectionParameters
             {
+                /// <summary>老路径（进程内 WinForms）用它在目标里打开数据库。无头路径不用。</summary>
                 public string DataBasePath { get; set; }
+
+                /// <summary>
+                /// 【B-IPC 阶段 1】目标进程里跑哪一套。
+                ///
+                /// <c>Hook.Run</c> 按它分岔：<b>老的 WinForms 进程内路径一行不动</b>，
+                /// 新的无头路径并排长出来，两条并存到新路径过完验证矩阵为止。
+                /// 这是「避免因 IPC 导致注入不稳定」最实在的保障 —— 出了问题随时切回。
+                /// </summary>
+                public InjectMode Mode { get; set; }
+
+                /// <summary>
+                /// 无头路径用的会话 id，管道名由它拼出来（WPE64-{id}-ctl 等）。
+                ///
+                /// 为什么不用「外壳 PID + 目标 PID」：CreateAndInject 那条路上目标 PID 是
+                /// <b>调用之后</b>才知道的，而管道必须在注入之前就建好、名字塞进这个对象。
+                /// </summary>
+                public string SessionId { get; set; }
 
                 public InjectionParameters()
                 {
@@ -198,7 +216,19 @@ namespace WinsockPacketEditor
                 public InjectionParameters(string DBPath)
                 {
                     DataBasePath = DBPath;
+                    Mode = InjectMode.WinFormsInProc;
                 }
+            }
+
+            /// <summary>注入到目标之后跑哪一套。</summary>
+            [Serializable]
+            public enum InjectMode
+            {
+                /// <summary>改造前的行为：在目标进程里开库、初始化 AntdUI、跑 InjectModeForm。</summary>
+                WinFormsInProc = 0,
+
+                /// <summary>无头核心：只装钩子 + 连管道，界面与数据都在外壳。</summary>
+                Headless = 1,
             }
 
             #endregion
@@ -17389,11 +17419,13 @@ namespace WinsockPacketEditor
                     {
                         if (FID != null && FID != Guid.Empty)
                         {
-                            foreach (FilterInfo fi in FilterConfig.List.lstFilterInfo)
+                            //同 DoFilterList：取一次引用用到底
+                            var filters = Ipc.FilterEngine.Filters;
+                            for (int i = 0; i < filters.Count; i++)
                             {
-                                if (fi.FID == FID)
+                                if (filters[i].FID == FID)
                                 {
-                                    return fi;
+                                    return filters[i];
                                 }
                             }
                         }
@@ -20172,7 +20204,10 @@ namespace WinsockPacketEditor
 
                     try
                     {
-                        var filters = FilterConfig.List.lstFilterInfo;
+                        //【B-IPC 阶段 1】取一次引用用到底。
+                        //无头核心下会拿到一份不可变数组（Volatile 换引用，见 Ipc/FilterEngine），
+                        //外壳 / WinForms 下就是 lstFilterInfo 本身，行为与改造前一致。
+                        var filters = Ipc.FilterEngine.Filters;
                         for (int i = 0; i < filters.Count; i++)
                         {
                             FilterConfig.Filter.FilterAction faDoFilter = FilterConfig.Filter.DoFilter(filters[i], iSocket, bufferSpan, out bNewBuffer, ptType, sAddr);
