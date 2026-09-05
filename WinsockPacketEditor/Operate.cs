@@ -16276,15 +16276,14 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        if (PacketConfig.List.piSelect != null)
-                        {
-                            int Socket = PacketConfig.List.piSelect.PacketSocket;
-                            PacketConfig.Packet.PacketType ptType = PacketConfig.List.piSelect.PacketType;
-                            string From = PacketConfig.List.piSelect.PacketFrom;
-                            string To = PacketConfig.List.piSelect.PacketTo;
-                            byte[] bBuffer = PacketConfig.List.piSelect.PacketBuffer;
+                        //【B-IPC 阶段 0】不再直读 piSelect：改造后封包列表在外壳，
+                        //目标侧读的是随 Runtime 快照下推的那一份副本。
+                        SelectedPacket sp = HookHost.Current.GetSelectedPacket();
 
-                            Operate.PacketConfig.Packet.SendPacket(Socket, ptType, From, To, bBuffer);
+                        if (sp != null)
+                        {
+                            Operate.PacketConfig.Packet.SendPacket(
+                                sp.Socket, sp.PacketType, sp.PacketFrom, sp.PacketTo, sp.PacketBuffer);
                         }
                     }
                     catch (Exception ex)
@@ -18483,18 +18482,12 @@ namespace WinsockPacketEditor
 
                                 case FilterConfig.Filter.FilterExecuteType.WareHouse:
 
-                                    WareHouseInfo whi = WareHouseConfig.WareHouse.GetWareHouse_ByGuid(fi.Execute_GUID);
-                                    if (whi != null)
-                                    {
-                                        if (tempBuffer == null)
-                                        {
-                                            WareHouseConfig.WareHouse.AddStores(whi.Stores, bufferSpan.ToArray());
-                                        }
-                                        else
-                                        {
-                                            WareHouseConfig.WareHouse.AddStores(whi.Stores, tempBuffer);
-                                        }
-                                    }                                   
+                                    //【B-IPC 阶段 0】仓库查找与落库搬进 IHookHost 的实现里。
+                                    //改造后目标进程不再持有仓库（仓库连同 SQLite 一起在外壳），
+                                    //这里只把「哪个仓库 + 哪段字节」送出去。
+                                    HookHost.Current.OnStore(
+                                        fi.Execute_GUID,
+                                        tempBuffer == null ? bufferSpan.ToArray() : tempBuffer);
 
                                     break;
                             }
@@ -28759,28 +28752,30 @@ namespace WinsockPacketEditor
 
             顺序也是有意的：<b>先写文件再入队</b>。真要出事，文件里有就够了。
         */
-        public static async void DoLog(string sFuncName, string sLogContent)
+        /*
+            【B-IPC 阶段 0】两条出口都改走 HookHost：默认实现 InProcHookHost 做的
+            正是上面那两句（先写文件再入队），所以行为逐字未变；
+            无头核心装配之后，目标进程里的日志改成走事件流发给外壳，
+            而目标进程不再打开任何文件 —— 这正是接缝要留在这里的原因。
+        */
+        public static void DoLog(string sFuncName, string sLogContent)
         {
-            LogFile.Write(sFuncName, sLogContent);
-            await LogConfig.Queue.LogToQueueAsync(sFuncName, sLogContent);
+            HookHost.Current.OnLog(sFuncName, sLogContent);
         }
 
-        public static async void DoLog(string sFuncName, Exception ex)
+        public static void DoLog(string sFuncName, Exception ex)
         {
-            string s = ex == null ? "(null)" : ex.ToString();
-
-            LogFile.Write(sFuncName, s);
-            await LogConfig.Queue.LogToQueueAsync(sFuncName, s);
+            HookHost.Current.OnLog(sFuncName, ex == null ? "(null)" : ex.ToString());
         }
 
-        public static async void DoFilterLog(
+        public static void DoFilterLog(
             string FName,
             Operate.FilterConfig.Filter.FilterAction FAction,
             int MatchNum,
             Operate.PacketConfig.Packet.PacketType pType,
             int PacketLen)
         {
-            await LogConfig.Queue.FilterLogToQueueAsync(FName, FAction, MatchNum, pType, PacketLen);
+            HookHost.Current.OnFilterLog(FName, FAction, MatchNum, pType, PacketLen);
         }
 
         public static async void DoProxyLog(Guid AID, string ClientIP, string ServerAddress, string ViaIP)

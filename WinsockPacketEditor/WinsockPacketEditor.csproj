@@ -252,6 +252,8 @@
     <Compile Include="ClassObject\WinSockHook.cs" />
     <Compile Include="ClassObject\FeedPump.cs" />
     <Compile Include="ClassObject\LogFile.cs" />
+    <Compile Include="ClassObject\Core\HookHost.cs" />
+    <Compile Include="ClassObject\Core\IHookHost.cs" />
     <Compile Include="ClassObject\Ui\FeedRows.cs" />
     <Compile Include="ClassObject\Ui\HexState.cs" />
     <Compile Include="ClassObject\Ui\IL10n.cs" />

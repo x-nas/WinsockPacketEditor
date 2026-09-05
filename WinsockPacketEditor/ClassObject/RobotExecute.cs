@@ -176,9 +176,11 @@ namespace WinsockPacketEditor
                                     int iSocket = 0;
                                     if (sContent.Equals("PacketConfig.List"))
                                     {
-                                        if (Operate.PacketConfig.List.piSelect != null)
+                                        //【B-IPC 阶段 0】走 IHookHost，不再直读 piSelect。
+                                        SelectedPacket sp = HookHost.Current.GetSelectedPacket();
+                                        if (sp != null)
                                         {
-                                            iSocket = Operate.PacketConfig.List.piSelect.PacketSocket;                                            
+                                            iSocket = sp.Socket;
                                         }
                                     }
                                     else if (sContent.Equals("FilterSocket"))
