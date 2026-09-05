@@ -102,6 +102,14 @@ namespace WinsockPacketEditor.Ipc
         /// <summary>取某个套接字的本机 / 远端地址。</summary>
         GetSocketInfo = 7,
 
+        /// <summary>
+        /// 诊断：把目标进程<b>当前加载了哪些托管程序集与原生模块</b>报回来。
+        ///
+        /// 这是「阶段 3 到底值不值得做」的量尺 —— 抽 WPECore 的唯一收益就是
+        /// 缩小目标里的程序集足迹（风险清单 R2）。先量一次，别凭猜去动一个三万行的类。
+        /// </summary>
+        GetFootprint = 9,
+
         /// <summary>卸钩 + 停执行器 + 断管道 + 核心休眠。不卸载 CLR（做不到，也不必要）。</summary>
         Detach = 8,
 

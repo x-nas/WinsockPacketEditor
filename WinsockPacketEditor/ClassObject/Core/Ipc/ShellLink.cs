@@ -348,6 +348,28 @@ namespace WinsockPacketEditor.Ipc
 
         #endregion
 
+        /// <summary>
+        /// 诊断：目标进程当前加载了哪些托管程序集与原生模块。
+        /// 用来量「无头核心到底往目标里塞了多少东西」。
+        /// </summary>
+        public void GetFootprint(out List<string[]> assemblies, out List<string> modules)
+        {
+            assemblies = new List<string[]>();
+            modules = new List<string>();
+
+            var w = new IpcWriter();
+            w.U8((byte)IpcCommand.GetFootprint);
+
+            IpcReader r = Call(w);
+            if ((IpcStatus)r.U8() != IpcStatus.Ok) { return; }
+
+            int an = r.I32();
+            for (int i = 0; i < an; i++) { assemblies.Add(new[] { r.Str(), r.Str() }); }
+
+            int mn = r.I32();
+            for (int i = 0; i < mn; i++) { modules.Add(r.Str()); }
+        }
+
         public void Detach()
         {
             try

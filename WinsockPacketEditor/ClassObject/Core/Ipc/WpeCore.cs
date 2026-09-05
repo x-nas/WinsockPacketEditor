@@ -592,6 +592,36 @@ namespace WinsockPacketEditor.Ipc
                         return w.ToArray();
                     }
 
+                case IpcCommand.GetFootprint:
+                    {
+                        var w = new IpcWriter();
+                        w.U8((byte)IpcStatus.Ok);
+
+                        var asms = AppDomain.CurrentDomain.GetAssemblies();
+                        w.I32(asms.Length);
+
+                        foreach (var a in asms)
+                        {
+                            string name;
+                            try { name = a.GetName().Name; } catch { name = "(?)"; }
+
+                            string loc;
+                            try { loc = a.IsDynamic ? "(dynamic)" : a.Location; } catch { loc = "(?)"; }
+
+                            w.Str(name);
+                            w.Str(loc);
+                        }
+
+                        var mods = System.Diagnostics.Process.GetCurrentProcess().Modules;
+                        w.I32(mods.Count);
+                        foreach (System.Diagnostics.ProcessModule m in mods)
+                        {
+                            try { w.Str(m.ModuleName); } catch { w.Str("(?)"); }
+                        }
+
+                        return w.ToArray();
+                    }
+
                 case IpcCommand.Detach:
                     //先把应答发出去，再由控制线程收尾（不然外壳等不到回复）
                     ThreadPool.QueueUserWorkItem(_ => { Thread.Sleep(50); Detach(); });
