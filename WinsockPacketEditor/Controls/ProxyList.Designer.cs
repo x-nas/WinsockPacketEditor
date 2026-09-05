@@ -991,7 +991,7 @@
             this.dgvProxyList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvProxyList.Size = new System.Drawing.Size(1194, 426);
             this.dgvProxyList.TabIndex = 7;
-            this.dgvProxyList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProxyList_CellDoubleClick);
+            this.dgvProxyList.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvProxyList_CellMouseDoubleClick);
             this.dgvProxyList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvProxyList_CellFormatting);
             this.dgvProxyList.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvProxyList_DataError);
             this.dgvProxyList.SelectionChanged += new System.EventHandler(this.dgvProxyList_SelectionChanged);

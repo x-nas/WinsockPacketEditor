@@ -65,7 +65,7 @@ namespace WinsockPacketEditor
                             this.RParameters.Clear();
                         }
 
-                        int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(null, this.RInstruction);
+                        int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(false, this.RInstruction);
                         if (iReturn > -1)
                         {
                             string sLog = string.Format(AntdUI.Localization.Get("System.Robot.Error", "机器人指令 {0} 错误! [{1}]"), iReturn + 1, this.RobotName);
@@ -373,18 +373,15 @@ namespace WinsockPacketEditor
 
                                                     foreach (string sKey in slKeyCode)
                                                     {
-                                                        if (Enum.TryParse(sKey, true, out kCode))
+                                                        if (TryGetVirtualKey(sKey, out vkCode))
                                                         {
-                                                            if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
+                                                            if (vkCode == VirtualKeyCode.CONTROL || vkCode == VirtualKeyCode.MENU || vkCode == VirtualKeyCode.SHIFT)
                                                             {
-                                                                if (vkCode == VirtualKeyCode.CONTROL || vkCode == VirtualKeyCode.MENU || vkCode == VirtualKeyCode.SHIFT)
-                                                                {
-                                                                    ControlKey.Add(vkCode);
-                                                                }
-                                                                else
-                                                                {
-                                                                    NormalKey.Add(vkCode);
-                                                                }
+                                                                ControlKey.Add(vkCode);
+                                                            }
+                                                            else
+                                                            {
+                                                                NormalKey.Add(vkCode);
                                                             }
                                                         }
                                                     }
@@ -556,6 +553,67 @@ namespace WinsockPacketEditor
             {
                 Operate.DoLog(nameof(Robot_RunCompleted), ex);
             }
+        }
+
+        #endregion
+
+        #region//按键名 → 虚拟键
+
+        /*
+            组合按键的内容串是 SystemConfig.ConvertHotkeyToString 拼出来的，形如
+            "Ctrl + Shift + A"、"Alt + 1"、"Ctrl + NumPad5"：修饰键写的是 Ctrl / Alt / Shift
+            （不是 Keys 枚举里的 ControlKey / Menu / ShiftKey），数字写的是 0–9（不是 D0–D9）。
+
+            原来这里直接 Enum.TryParse<Keys> 再按数字塞进 VirtualKeyCode：
+            "Ctrl" 解析失败被丢掉；"Alt" / "Shift" 解析成修饰<b>位</b>（262144 / 65536），
+            而数字串解析枚举<b>不检查该值是否定义</b>，于是被当成普通键按下去；"1" 解析成 Keys.LButton。
+            三条合起来就是：组合按键从来没按对过。这里按内容串的实际写法解。
+        */
+        private static bool TryGetVirtualKey(string sKey, out VirtualKeyCode vkCode)
+        {
+            vkCode = default(VirtualKeyCode);
+
+            string key = (sKey ?? string.Empty).Trim();
+            if (key.Length == 0) { return false; }
+
+            switch (key.ToLowerInvariant())
+            {
+                case "ctrl":
+                case "control":
+                case "controlkey":
+                    vkCode = VirtualKeyCode.CONTROL;
+                    return true;
+
+                case "alt":
+                case "menu":
+                    vkCode = VirtualKeyCode.MENU;
+                    return true;
+
+                case "shift":
+                case "shiftkey":
+                    vkCode = VirtualKeyCode.SHIFT;
+                    return true;
+            }
+
+            if (key.Length == 1)
+            {
+                char c = char.ToUpperInvariant(key[0]);
+                if (c >= '0' && c <= '9') { vkCode = (VirtualKeyCode)(0x30 + (c - '0')); return true; }
+                if (c >= 'A' && c <= 'Z') { vkCode = (VirtualKeyCode)(0x41 + (c - 'A')); return true; }
+            }
+
+            Keys kCode;
+            if (Enum.TryParse(key, true, out kCode))
+            {
+                int code = (int)(kCode & Keys.KeyCode);
+                if (code > 0 && Enum.IsDefined(typeof(VirtualKeyCode), code))
+                {
+                    vkCode = (VirtualKeyCode)code;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion

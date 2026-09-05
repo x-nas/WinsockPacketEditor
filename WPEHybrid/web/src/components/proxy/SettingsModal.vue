@@ -1,0 +1,221 @@
+<script setup lang="ts">
+/*
+  设置弹窗的外壳 —— 12 个设置面板共用这一个。
+
+  对应 WinForms 的 AntdUI.Modal（ProxyList 的 ddMenu 那 12 项各弹一个 UserControl）。
+  这里不用 ant-design-vue 的 a-modal：它自带一整套圆角 + 亮色边框的观感，
+  在这套赛博皮肤里像是从别的程序飞过来的。自己画一个反而更短。
+
+  【为什么单独抽一层】
+  剩下 11 个设置面板（进程 / 过滤 / 拦截 / 列表 / 映射 / 外部代理 / 快捷键 /
+  备份 / 远程管理 / 防火墙 / 系统）结构完全一样：标题 + 内容 + 保存/取消。
+  抽出来之后每个只要写自己的表单。
+
+  【焦点】与 BetaNotice 同一套：打开时给页面其余部分加 :inert，
+  否则 Tab 能走到标题栏的退出按钮上，回车就把程序关了。
+*/
+import { nextTick, ref, watch } from 'vue'
+import { t } from '../../i18n'
+
+const props = defineProps<{
+  open: boolean
+  title: string
+  /** 副标题，通常写这一屏对应的 WinForms 控件名，便于对照 */
+  subtitle?: string
+  busy?: boolean
+  /** 校验失败时由父组件填，显示在底部 */
+  error?: string
+  /**
+   * 只读弹窗：藏掉「保存」，把「取消」改成「关闭」。
+   * 账号的登录记录就是这种 —— 它只是把一份明细摊开看，没有可保存的东西。
+   */
+  readonly?: boolean
+  /** 弹窗宽度（px）。默认 620；装着表格的那几个（进程 / 映射 / 规则）要宽一些 */
+  width?: number
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:open', v: boolean): void
+  (e: 'save'): void
+}>()
+
+const box = ref<HTMLElement | null>(null)
+
+/*
+  打开时把焦点移进弹窗。
+
+  不这样做的话焦点还留在触发它的那个按钮上，Tab 的第一下会跳到弹窗外面 ——
+  而外面此刻是 inert 的，于是焦点直接掉到浏览器地址栏（外壳里就是无处可去）。
+*/
+watch(() => props.open, async (on) => {
+  if (!on) return
+  await nextTick()
+  const el = box.value?.querySelector<HTMLElement>('input, select, button, [tabindex]')
+  el?.focus()
+})
+
+function close(): void {
+  if (props.busy) return
+  emit('update:open', false)
+}
+</script>
+
+<template>
+  <div v-if="props.open" class="mask" @mousedown.self="close">
+    <div ref="box" class="dlg" role="dialog" aria-modal="true" :style="props.width ? { width: props.width + 'px' } : undefined" @keydown.esc="close">
+      <header class="hd">
+        <span class="mk tl" /><span class="mk tr" />
+        <div class="tt">
+          <span class="zh">{{ props.title }}</span>
+          <span v-if="props.subtitle" class="sub">{{ props.subtitle }}</span>
+        </div>
+        <button class="x" :title="t('dlg.cancel')" @click="close">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" /></svg>
+        </button>
+      </header>
+
+      <div class="bd">
+        <slot />
+      </div>
+
+      <footer class="ft">
+        <span v-if="props.error" class="err">
+          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16h.01" /></svg>
+          {{ props.error }}
+        </span>
+        <span class="grow" />
+        <button class="btn" :class="{ primary: props.readonly }" :disabled="props.busy" @click="close">
+          {{ props.readonly ? t('dlg.close') : t('dlg.cancel') }}
+        </button>
+        <button v-if="!props.readonly" class="btn primary" :disabled="props.busy" @click="emit('save')">
+          {{ props.busy ? t('proxy.working') : t('set.save') }}
+        </button>
+        <span class="mk bl" /><span class="mk br" />
+      </footer>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgb(5 5 10 / 78%);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dlg {
+  position: relative;
+  width: 620px;
+  max-width: calc(100vw - 64px);
+  max-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 60px rgb(0 0 0 / 55%);
+}
+
+/* 四角标记：与启动页、测试版提示同一种做法，让弹窗也属于这套语言 */
+.mk { position: absolute; width: 11px; height: 11px; border: 1px solid rgb(0 212 255 / 45%); }
+.mk.tl { top: 6px; left: 6px; border-right: 0; border-bottom: 0; }
+.mk.tr { top: 6px; right: 6px; border-left: 0; border-bottom: 0; }
+.mk.bl { bottom: 6px; left: 6px; border-right: 0; border-top: 0; }
+.mk.br { bottom: 6px; right: 6px; border-left: 0; border-top: 0; }
+
+.hd {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 13px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
+
+.tt .zh {
+  font-family: var(--orbit);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .04em;
+  color: var(--cyan);
+}
+
+.tt .sub {
+  font-family: var(--share);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.x {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.x:hover { color: var(--danger); }
+.x .ico { width: 15px; height: 15px; stroke: currentColor; stroke-width: 2; fill: none; }
+.x:focus-visible { outline-offset: -2px; outline-color: var(--danger); }
+
+.bd { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 0; }
+
+.ft {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.ft .grow { flex: 1; }
+
+.err {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--danger);
+}
+
+.err .ico { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; flex: none; }
+
+.btn {
+  padding: 12px 20px 10px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--gray);
+  font-family: var(--share);
+  font-size: var(--btn-size);
+  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
+  line-height: 1;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
+.btn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); }
+.btn.primary:focus-visible { outline-color: var(--green); }
+</style>

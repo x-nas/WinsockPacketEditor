@@ -24,12 +24,12 @@ namespace WinsockPacketEditor
         {
             if (this.asiSelect == null)
             {
-                Operate.SystemConfig.InitWareHouseInfo(this.ddlWareHouse, Guid.Empty);
+                UiControls.InitWareHouseInfo(this.ddlWareHouse, Guid.Empty);
             }
             else 
             {
                 this.txtPacketHead.Text = this.asiSelect.PacketHead;
-                Operate.SystemConfig.InitWareHouseInfo(this.ddlWareHouse, this.asiSelect.WID);
+                UiControls.InitWareHouseInfo(this.ddlWareHouse, this.asiSelect.WID);
             }            
         }
 

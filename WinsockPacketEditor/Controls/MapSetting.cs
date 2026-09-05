@@ -216,70 +216,89 @@ namespace WinsockPacketEditor
 
         #region//本地映射 - 菜单
 
-        private void ddMenu_MapLocal_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_MapLocal_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu_MapLocal.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu_MapLocal.SelectedValue = null;
 
-                    Operate.ProxyConfig.Mapping.OpenMapLocalEdit(this.form, this, null);
-
-                    break;
-
-                case "Import":
-
-                    Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
+                        case "Add":
+
+                            UiDialogs.OpenMapLocalEdit(this.form, this, null);
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Import, null);
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Export, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.CleanUp, null);
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.ProxyConfig.Mapping.lstMapLocal.Count > 0)
-                    {
-                        Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_MapLocal_SelectedValueChanged), ex);
             }
         }
 
-        private void tMapLocal_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tMapLocal_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is MapLocal ml)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
+                    if (e.Record is MapLocal ml)
+                    {
+                        switch (e.Btn.Id)
+                        {
+                            case "bEdit":
 
-                        Operate.ProxyConfig.Mapping.OpenMapLocalEdit(this.form, this, ml);
+                                UiDialogs.OpenMapLocalEdit(this.form, this, ml);
 
-                        break;
+                                break;
 
-                    case "bDelete":
+                            case "bDelete":
 
-                        Operate.ProxyConfig.Mapping.DeleteMapLocal_Dialog(this.form, ml);
+                                await Operate.ProxyConfig.Mapping.DeleteMapLocal_Dialog(ml);
 
-                        break;
-                }
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tMapLocal_CellButtonClick), ex);
             }
         }
 
         private void tMapLocal_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is MapLocal ml)
             {
-                Operate.ProxyConfig.Mapping.OpenMapLocalEdit(this.form, this, ml);
+                UiDialogs.OpenMapLocalEdit(this.form, this, ml);
             }
         }        
 
@@ -287,49 +306,57 @@ namespace WinsockPacketEditor
 
         #region//本地映射 - 右键菜单
 
-        private void tMapLocal_CellClick(object sender, TableClickEventArgs e)
+        private async void tMapLocal_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.ProxyConfig.Mapping.lstMapLocal.Count == 0)
-                {
-                    return;
-                }
-
-                if (e.Record is MapLocal ml)
-                {
-                    AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tMapLocal, (item) =>
+                    if (e.Button == MouseButtons.Right)
                     {
-                        switch (item.ID)
+                        if (Operate.ProxyConfig.Mapping.lstMapLocal.Count == 0)
                         {
-                            case "Top":
-
-                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, ml);
-
-                                break;
-
-                            case "Up":
-
-                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, ml);
-
-                                break;
-
-                            case "Down":
-
-                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, ml);
-
-                                break;
-
-                            case "Bottom":
-
-                                Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, ml);
-
-                                break;
+                            return;
                         }
 
-                        this.tMapLocal.SelectedIndex = -1;
-                    }, Operate.ProxyConfig.Mapping.GetCMS_Mapping()));
-                }
+                        if (e.Record is MapLocal ml)
+                        {
+                            AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tMapLocal, async (item) =>
+                            {
+                                switch (item.ID)
+                                {
+                                    case "Top":
+
+                                        await Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Top, ml);
+
+                                        break;
+
+                                    case "Up":
+
+                                        await Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Up, ml);
+
+                                        break;
+
+                                    case "Down":
+
+                                        await Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Down, ml);
+
+                                        break;
+
+                                    case "Bottom":
+
+                                        await Operate.ProxyConfig.Mapping.UpdateMapLocal_ByListAction(Operate.SystemConfig.ListAction.Bottom, ml);
+
+                                        break;
+                                }
+
+                                this.tMapLocal.SelectedIndex = -1;
+                            }, Operate.ProxyConfig.Mapping.GetCMS_Mapping().ToAntd()));
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tMapLocal_CellClick), ex);
             }
         }
 
@@ -337,70 +364,89 @@ namespace WinsockPacketEditor
 
         #region//远程映射 - 菜单
 
-        private void ddMenu_MapRemote_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_MapRemote_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu_MapRemote.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu_MapRemote.SelectedValue = null;
 
-                    Operate.ProxyConfig.Mapping.OpenMapRemoteEdit(this.form, this, null);
-
-                    break;
-
-                case "Import":
-
-                    Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.ProxyConfig.Mapping.lstMapRemote.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
+                        case "Add":
+
+                            UiDialogs.OpenMapRemoteEdit(this.form, this, null);
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Import, null);
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.ProxyConfig.Mapping.lstMapRemote.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Export, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.ProxyConfig.Mapping.lstMapRemote.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.CleanUp, null);
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.ProxyConfig.Mapping.lstMapRemote.Count > 0)
-                    {
-                        Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_MapRemote_SelectedValueChanged), ex);
             }
         }
                 
-        private void tMapRemote_CellButtonUp(object sender, TableButtonEventArgs e)
+        private async void tMapRemote_CellButtonUp(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is MapRemote mr)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
+                    if (e.Record is MapRemote mr)
+                    {
+                        switch (e.Btn.Id)
+                        {
+                            case "bEdit":
 
-                        Operate.ProxyConfig.Mapping.OpenMapRemoteEdit(this.form, this, mr);
+                                UiDialogs.OpenMapRemoteEdit(this.form, this, mr);
 
-                        break;
+                                break;
 
-                    case "bDelete":
+                            case "bDelete":
 
-                        Operate.ProxyConfig.Mapping.DeleteMapRemote_Dialog(this.form, mr);
+                                await Operate.ProxyConfig.Mapping.DeleteMapRemote_Dialog(mr);
 
-                        break;
-                }
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tMapRemote_CellButtonUp), ex);
             }
         }
 
         private void tMapRemote_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is MapRemote mr)
             {
-                Operate.ProxyConfig.Mapping.OpenMapRemoteEdit(this.form, this, mr);
+                UiDialogs.OpenMapRemoteEdit(this.form, this, mr);
             }
         }
 
@@ -408,49 +454,57 @@ namespace WinsockPacketEditor
 
         #region//远程映射 - 右键菜单
 
-        private void tMapRemote_CellClick(object sender, TableClickEventArgs e)
+        private async void tMapRemote_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.ProxyConfig.Mapping.lstMapRemote.Count == 0)
-                {
-                    return;
-                }
-
-                if (e.Record is MapRemote mr)
-                {
-                    AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tMapRemote, (item) =>
+                    if (e.Button == MouseButtons.Right)
                     {
-                        switch (item.ID)
+                        if (Operate.ProxyConfig.Mapping.lstMapRemote.Count == 0)
                         {
-                            case "Top":
-
-                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, mr);
-
-                                break;
-
-                            case "Up":
-
-                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, mr);
-
-                                break;
-
-                            case "Down":
-
-                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, mr);
-
-                                break;
-
-                            case "Bottom":
-
-                                Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, mr);
-
-                                break;
+                            return;
                         }
 
-                        this.tMapRemote.SelectedIndex = -1;
-                    }, Operate.ProxyConfig.Mapping.GetCMS_Mapping()));
-                }
+                        if (e.Record is MapRemote mr)
+                        {
+                            AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tMapRemote, async (item) =>
+                            {
+                                switch (item.ID)
+                                {
+                                    case "Top":
+
+                                        await Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Top, mr);
+
+                                        break;
+
+                                    case "Up":
+
+                                        await Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Up, mr);
+
+                                        break;
+
+                                    case "Down":
+
+                                        await Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Down, mr);
+
+                                        break;
+
+                                    case "Bottom":
+
+                                        await Operate.ProxyConfig.Mapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Bottom, mr);
+
+                                        break;
+                                }
+
+                                this.tMapRemote.SelectedIndex = -1;
+                            }, Operate.ProxyConfig.Mapping.GetCMS_Mapping().ToAntd()));
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tMapRemote_CellClick), ex);
             }
         }
 

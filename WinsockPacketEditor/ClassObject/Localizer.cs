@@ -1527,6 +1527,18 @@ namespace WinsockPacketEditor
                 case "AutoStores.Save.Success":
                     return "Save AutoStores Success";
 
+                case "AutoStoresEdit.PacketHead.Error":
+                    return "Packet head is required";
+
+                case "AutoStoresEdit.PacketHead.Hex":
+                    return "Packet head must be hex bytes, e.g. 16 03 01";
+
+                case "AutoStoresEdit.PacketHead.Exists":
+                    return "A rule with this packet head already exists";
+
+                case "AutoStoresEdit.WareHouse.Error":
+                    return "Please pick a warehouse";
+
                 #endregion
 
                 #region//StatisticalData
@@ -1687,6 +1699,39 @@ namespace WinsockPacketEditor
 
                 case "ExtractionData.Successful":
                     return "Data extraction successful";
+
+                case "WPCConfig.ServerList.Name.Empty":
+                    return "Server name is empty";
+
+                case "WPCConfig.ServerList.IP.Empty":
+                    return "Server IP is empty";
+
+                case "WPCConfig.ServerList.Port.Error":
+                    return "Server port is invalid";
+
+                case "WPCConfig.ServerList.Gone":
+                    return "This server is no longer in the list";
+
+                case "WPCConfig.NoticeList.Title.Empty":
+                    return "Notice title is empty";
+
+                case "WPCConfig.NoticeList.Content.Empty":
+                    return "Notice content is empty";
+
+                case "WPCConfig.NoticeList.Gone":
+                    return "This notice is no longer in the list";
+
+                case "MapSettingsForm.Gone":
+                    return "This mapping is no longer in the list";
+
+                case "ProcessSetting.Detect.Fail":
+                    return "Proxy server connection failed";
+
+                case "HotKeyForm.Index.Error":
+                    return "Invalid hotkey slot";
+
+                case "ExtractionData.Parse.Error":
+                    return "Nothing extractable was found in the file, check its format";
 
                 case "ExtractionData.FilterListFile":
                     return "Filter List File";
@@ -2880,6 +2925,36 @@ namespace WinsockPacketEditor
 
                 case "RobotEditForm.LoopINST.Error":
                     return "Loop Instruction Error";
+
+                case "RobotEditForm.Gone":
+                    return "This robot is no longer in the list";
+
+                case "RobotEditForm.INST.Error":
+                    return "Invalid instruction type";
+
+                case "RobotEditForm.Socket.Error":
+                    return "System socket is invalid";
+
+                case "RobotEditForm.Delay.Error":
+                    return "Delay is invalid";
+
+                case "RobotEditForm.Switch.Error":
+                    return "Switch instruction is invalid";
+
+                case "RobotEditForm.KeyBoard.Error":
+                    return "Keyboard instruction is invalid";
+
+                case "RobotEditForm.Mouse.Error":
+                    return "Mouse instruction is invalid";
+
+                case "RobotEditForm.INST.Empty":
+                    return "The instruction set is empty";
+
+                case "RobotEditForm.Robot.Busy":
+                    return "The robot is still running";
+
+                case "RobotEditForm.Robot.StartFail":
+                    return "The robot did not start, check the system log";
 
                 case "RobotEditForm.RName":
                     return "Robot Name:";

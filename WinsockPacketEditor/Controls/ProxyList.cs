@@ -42,6 +42,10 @@ namespace WinsockPacketEditor
                 this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
                 this.PacketList_AutoClear_Changed();
 
+                //B9c：代理列表被自动清理时收拾右侧面板（清理动作本身在 Operate 里做）
+                WinFormsUiFeed.Cleared += this.OnFeedCleared;
+                this.Disposed += (s, ev) => WinFormsUiFeed.Cleared -= this.OnFeedCleared;
+
                 Operate.DoLog(nameof(ProxyList_Load), Operate.ProcessConfig.GetInjectProcessName());
             }
             catch (Exception ex)
@@ -50,8 +54,25 @@ namespace WinsockPacketEditor
             }            
         }
 
+        private void OnFeedCleared(FeedList List)
+        {
+            if (List != FeedList.Proxy)
+            {
+                return;
+            }
+
+            try
+            {
+                this.controlPacketData?.CleanUp_PacketData();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(OnFeedCleared), ex);
+            }
+        }
+
         private void InitMenu()
-        { 
+        {
             this.ddMenu.Items.AddRange(new AntdUI.SelectItem[]
             {
                 new AntdUI.SelectItem("代理设置")
@@ -173,7 +194,7 @@ namespace WinsockPacketEditor
                 this.dgvProxyList.BackgroundColor = 
                     this.dgvProxyList.RowsDefaultCellStyle.BackColor = 
                     this.dgvProxyList.ColumnHeadersDefaultCellStyle.BackColor =
-                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionBackColor = Operate.SystemConfig.Color_40;                
+                    this.dgvProxyList.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiTheme.Color_40;                
 
                 this.dgvProxyList.ForeColor = Color.LimeGreen;
                 this.dgvProxyList.ColumnHeadersDefaultCellStyle.ForeColor =
@@ -222,7 +243,7 @@ namespace WinsockPacketEditor
                 if (e.RowIndex < Operate.ProxyConfig.List.lstProxyInfo.Count)
                 {
                     var filterAction = Operate.ProxyConfig.List.lstProxyInfo[e.RowIndex].FilterAction;
-                    var colors = Operate.SystemConfig.GetFilterColors(filterAction);
+                    var colors = UiTheme.GetFilterColors(filterAction);
                     if (colors.HasValue)
                     {
                         row.DefaultCellStyle.ForeColor = colors.Value.ForeColor;
@@ -241,7 +262,7 @@ namespace WinsockPacketEditor
                         var packetTypeCell = row.Cells["cPacketType"];
                         if (packetTypeCell.Value != null)
                         {
-                            e.Value = Operate.PacketConfig.Packet.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)packetTypeCell.Value);
+                            e.Value = UiImages.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)packetTypeCell.Value);
                             e.FormattingApplied = true;
                         }
                         break;
@@ -266,7 +287,7 @@ namespace WinsockPacketEditor
                         var clientLocationCell = row.Cells["cClientLocation"];
                         if (clientLocationCell.Value != null)
                         {
-                            e.Value = Operate.SystemConfig.GetFlagByLocation(clientLocationCell.Value.ToString());
+                            e.Value = UiImages.GetFlagByLocation(clientLocationCell.Value.ToString());
                             e.FormattingApplied = true;
                         }
                         break;
@@ -275,7 +296,7 @@ namespace WinsockPacketEditor
                         var serverLocationCell = row.Cells["cServerLocation"];
                         if (serverLocationCell.Value != null)
                         {
-                            e.Value = Operate.SystemConfig.GetFlagByLocation(serverLocationCell.Value.ToString());
+                            e.Value = UiImages.GetFlagByLocation(serverLocationCell.Value.ToString());
                             e.FormattingApplied = true;
                         }
                         break;
@@ -379,7 +400,8 @@ namespace WinsockPacketEditor
             }, (config) =>
             {
                 config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
-                bStart = this.Start_Proxy();
+                //启停逻辑已搬进 Operate.ProxyConfig.Proxy（两套 UI 共用），这里只管按钮状态
+                bStart = Operate.ProxyConfig.Proxy.StartProxy();
             }, () =>
             {
                 if (bStart)
@@ -392,7 +414,7 @@ namespace WinsockPacketEditor
 
         private void bProxyStop_Click(object sender, EventArgs e)
         {
-            this.Stop_Proxy();
+            Operate.ProxyConfig.Proxy.StopProxy();
 
             this.bProxyStart.Enabled = true;
             this.bProxyStop.Enabled = false;
@@ -578,11 +600,14 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void dgvProxyList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvProxyList_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            //只响应鼠标左键：CellDoubleClick 的参数不带按键信息，故改用 CellMouseDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.RowIndex >= 0 && e.RowIndex < Operate.ProxyConfig.List.lstProxyInfo.Count)
             {
-                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, Operate.ProxyConfig.List.lstProxyInfo[e.RowIndex]);
+                UiDialogs.OpenPacketEdit(this.form, Operate.ProxyConfig.List.lstProxyInfo[e.RowIndex]);
             }
         }
 
@@ -590,480 +615,247 @@ namespace WinsockPacketEditor
 
         #region//代理列表 - 右键菜单
 
-        private void dgvProxyList_MouseClick(object sender, MouseEventArgs e)
+        private async void dgvProxyList_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.ProxyConfig.List.lstProxyInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(this.dgvProxyList, item =>
-                {
-                    List<ProxyInfo> piList = new List<ProxyInfo>();
-
-                    for (int i = 0; i < dgvProxyList.Rows.Count; i++)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        if (dgvProxyList.Rows[i].Selected)
+                        if (Operate.ProxyConfig.List.lstProxyInfo.Count == 0)
                         {
-                            piList.Add(Operate.ProxyConfig.List.lstProxyInfo[i]);
+                            return;
                         }
-                    }
 
-                    string ListType = string.Empty;
+                        AntdUI.ContextMenuStrip.open(this.dgvProxyList, async item =>
+                        {
+                            List<ProxyInfo> piList = new List<ProxyInfo>();
 
-                    switch (item.ID)
-                    {
-                        case "Edit":
-
-                            if (piList.Count > 0)
+                            for (int i = 0; i < dgvProxyList.Rows.Count; i++)
                             {
-                                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, piList[0]);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (piList.Count > 0)
-                            {
-                                StringBuilder sb = new StringBuilder();
-                                foreach (ProxyInfo pi in piList)
+                                if (dgvProxyList.Rows[i].Selected)
                                 {
-                                    string hexString = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer);
-                                    sb.AppendLine(hexString);
-                                }
-
-                                Clipboard.SetText(sb.ToString());
-
-                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
-                                {
-                                    LocalizationText = "CopyToClipboard"
-                                });
-                            }
-
-                            break;
-
-                        case "ToFilterList":
-
-                            if (piList.Count > 0)
-                            {
-                                bool bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(piList[0], null);
-                                if (bOK)
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表成功", TType.Success)
-                                    {
-                                        LocalizationText = "ToFilterList.Success"
-                                    });
-                                }
-                                else
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表失败", TType.Error)
-                                    {
-                                        LocalizationText = "ToFilterList.Error"
-                                    });
+                                    piList.Add(Operate.ProxyConfig.List.lstProxyInfo[i]);
                                 }
                             }
 
-                            break;
+                            string ListType = string.Empty;
 
-                        case "SYSSocket":
-
-                            if (piList.Count > 0)
+                            switch (item.ID)
                             {
-                                Operate.SystemConfig.SystemSocket = piList[0].PacketSocket;
+                                case "Edit":
 
-                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "设置系统套接字完成", TType.Success)
-                                {
-                                    LocalizationText = "SSocket.Success"
-                                });
-                            }
-
-                            break;
-
-                        case "PacketModification":
-
-                            if (piList.Count > 0)
-                            {
-                                var PacketModification = new PacketModification(this.form, piList[0]);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketModificationForm", "封包数据对比"), PacketModification)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
-                            }
-
-                            break;
-
-                        case "ToExcel":
-
-                            Operate.ProxyConfig.List.SaveProxyList_Dialog(this.form, Operate.PacketConfig.Packet.InjectProcess, piList);
-
-                            break;
-
-                        case "ToTextA":
-
-                            if (piList.Count > 0)
-                            {
-                                if (this.form is InterfaceInfo.IProxyMode proxyForm)
-                                {
-                                    string TextA = string.Empty;
-                                    foreach (ProxyInfo pi in piList)
+                                    if (piList.Count > 0)
                                     {
-                                        TextA += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
+                                        UiDialogs.OpenPacketEdit(this.form, piList[0]);
                                     }
 
-                                    proxyForm.SetTextA(TextA);
+                                    break;
 
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
+                                case "Copy":
+
+                                    if (piList.Count > 0)
                                     {
-                                        LocalizationText = "ToTextA"
-                                    });
-                                }
-                            }
-
-                            break;
-
-                        case "ToTextB":
-
-                            if (piList.Count > 0)
-                            {
-                                if (this.form is InterfaceInfo.IProxyMode proxyForm)
-                                {
-                                    string TextB = string.Empty;
-                                    foreach (ProxyInfo pi in piList)
-                                    {
-                                        TextB += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
-                                    }
-
-                                    proxyForm.SetTextB(TextB);
-
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本B", TType.Success)
-                                    {
-                                        LocalizationText = "ToTextB"
-                                    });
-                                }
-                            }
-
-                            break;
-
-                        case "SelectAll":
-
-                            this.dgvProxyList.SelectAll();
-
-                            break;
-
-                        case "DeSelect":
-
-                            this.dgvProxyList.ClearSelection();
-
-                            break;
-
-                        default:
-
-                            if (piList.Count > 0)
-                            {
-                                if (item.Tag.ToString().Equals("ToSend"))
-                                {
-                                    if (Guid.TryParse(item.ID, out Guid SID))
-                                    {
-                                        SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
-                                        if (si != null && piList.Count > 0)
+                                        StringBuilder sb = new StringBuilder();
+                                        foreach (ProxyInfo pi in piList)
                                         {
-                                            if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
+                                            string hexString = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer);
+                                            sb.AppendLine(hexString);
+                                        }
+
+                                        Clipboard.SetText(sb.ToString());
+
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                                        {
+                                            LocalizationText = "CopyToClipboard"
+                                        });
+                                    }
+
+                                    break;
+
+                                case "ToFilterList":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        bool bOK = Operate.FilterConfig.Filter.AddFilter_ByProxyInfo(piList[0], null);
+                                        if (bOK)
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表成功", TType.Success)
                                             {
-                                                string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到 : {0}"), item.Text);
-                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
-                                            }
-                                            else
+                                                LocalizationText = "ToFilterList.Success"
+                                            });
+                                        }
+                                        else
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表失败", TType.Error)
                                             {
-                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
-                                                {
-                                                    LocalizationText = "ToSendList.Error"
-                                                });
-                                            }
+                                                LocalizationText = "ToFilterList.Error"
+                                            });
                                         }
                                     }
 
-                                    return;
-                                }
+                                    break;
 
-                                if (item.Tag.ToString().Equals("ToWareHouse"))
-                                {
-                                    if (Guid.TryParse(item.ID, out Guid WID))
+                                case "SYSSocket":
+
+                                    if (piList.Count > 0)
                                     {
-                                        WareHouseInfo whi = Operate.WareHouseConfig.WareHouse.GetWareHouse_ByGuid(WID);
-                                        if (whi != null && piList.Count > 0)
+                                        Operate.SystemConfig.SystemSocket = piList[0].PacketSocket;
+
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "设置系统套接字完成", TType.Success)
                                         {
-                                            if (Operate.WareHouseConfig.WareHouse.AddStores_ByProxyInfo(WID, piList))
+                                            LocalizationText = "SSocket.Success"
+                                        });
+                                    }
+
+                                    break;
+
+                                case "PacketModification":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        var PacketModification = new PacketModification(this.form, piList[0]);
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketModificationForm", "封包数据对比"), PacketModification)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            BtnHeight = 0,
+                                        });
+                                    }
+
+                                    break;
+
+                                case "ToExcel":
+
+                                    await Operate.ProxyConfig.List.SaveProxyList_Dialog(Operate.PacketConfig.Packet.InjectProcess, piList);
+
+                                    break;
+
+                                case "ToTextA":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                                        {
+                                            string TextA = string.Empty;
+                                            foreach (ProxyInfo pi in piList)
                                             {
-                                                string sText = string.Format(AntdUI.Localization.Get("ToWareHouse.Success", "已添加到 : {0}"), item.Text);
-                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                                TextA += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
                                             }
-                                            else
+
+                                            proxyForm.SetTextA(TextA);
+
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
                                             {
-                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到仓库出错", TType.Error)
-                                                {
-                                                    LocalizationText = "ToWareHouse.Error"
-                                                });
-                                            }
+                                                LocalizationText = "ToTextA"
+                                            });
                                         }
                                     }
 
-                                    return;
-                                }
-                            }
+                                    break;
 
-                            break;
+                                case "ToTextB":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        if (this.form is InterfaceInfo.IProxyMode proxyForm)
+                                        {
+                                            string TextB = string.Empty;
+                                            foreach (ProxyInfo pi in piList)
+                                            {
+                                                TextB += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
+                                            }
+
+                                            proxyForm.SetTextB(TextB);
+
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本B", TType.Success)
+                                            {
+                                                LocalizationText = "ToTextB"
+                                            });
+                                        }
+                                    }
+
+                                    break;
+
+                                case "SelectAll":
+
+                                    this.dgvProxyList.SelectAll();
+
+                                    break;
+
+                                case "DeSelect":
+
+                                    this.dgvProxyList.ClearSelection();
+
+                                    break;
+
+                                default:
+
+                                    if (piList.Count > 0)
+                                    {
+                                        if (item.Tag.ToString().Equals("ToSend"))
+                                        {
+                                            if (Guid.TryParse(item.ID, out Guid SID))
+                                            {
+                                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                                if (si != null && piList.Count > 0)
+                                                {
+                                                    if (Operate.SendConfig.Send.AddSendCollection_ByProxyInfo(SID, piList))
+                                                    {
+                                                        string sText = string.Format(AntdUI.Localization.Get("ToSendList.Success", "已添加到 : {0}"), item.Text);
+                                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                                    }
+                                                    else
+                                                    {
+                                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送列表出错", TType.Error)
+                                                        {
+                                                            LocalizationText = "ToSendList.Error"
+                                                        });
+                                                    }
+                                                }
+                                            }
+
+                                            return;
+                                        }
+
+                                        if (item.Tag.ToString().Equals("ToWareHouse"))
+                                        {
+                                            if (Guid.TryParse(item.ID, out Guid WID))
+                                            {
+                                                WareHouseInfo whi = Operate.WareHouseConfig.WareHouse.GetWareHouse_ByGuid(WID);
+                                                if (whi != null && piList.Count > 0)
+                                                {
+                                                    if (Operate.WareHouseConfig.WareHouse.AddStores_ByProxyInfo(WID, piList))
+                                                    {
+                                                        string sText = string.Format(AntdUI.Localization.Get("ToWareHouse.Success", "已添加到 : {0}"), item.Text);
+                                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                                    }
+                                                    else
+                                                    {
+                                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到仓库出错", TType.Error)
+                                                        {
+                                                            LocalizationText = "ToWareHouse.Error"
+                                                        });
+                                                    }
+                                                }
+                                            }
+
+                                            return;
+                                        }
+                                    }
+
+                                    break;
+                            }
+                        }, Operate.PacketConfig.List.GetCMS_PacketList().ToAntd());
                     }
-                }, Operate.PacketConfig.List.GetCMS_PacketList());
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(dgvProxyList_MouseClick), ex);
             }
         }
 
         #endregion        
-
-        #region//开始代理
-
-        private bool Start_Proxy()
-        {
-            try
-            {
-                if (!this.InitProxyServer())
-                { 
-                    return false;
-                }                
-
-                return this.InitSocks5Proxy() && this.InitHttpProxy();
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(Start_Proxy), ex);
-            }
-
-            return false;
-        }
-
-        private bool InitProxyServer()
-        {
-            try
-            {
-                if (Operate.ProxyConfig.Proxy.ProxyIP_Auto)
-                {
-                    Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
-                    Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
-                }
-                else
-                {
-                    if (IPAddress.TryParse(Operate.ProxyConfig.Proxy.ProxyIP, out IPAddress proxyIP))
-                    {
-                        Operate.ProxyConfig.Proxy.ProxyTCP_IP = proxyIP;
-                        Operate.ProxyConfig.Proxy.ProxyUDP_IP = proxyIP;
-                    }
-                    else
-                    {
-                        Operate.ProxyConfig.Proxy.ProxyTCP_IP = IPAddress.Any;
-                        Operate.ProxyConfig.Proxy.ProxyUDP_IP = Operate.ProxyConfig.Proxy.ProxyServerIP[0];
-                    }
-                }                
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(InitProxyServer), ex);
-            }
-
-            return false;
-        }
-
-        private bool InitSocks5Proxy()
-        {
-            try
-            {
-                if (Operate.ProxyConfig.Proxy.ProxyServer == null)
-                {
-                    Operate.ProxyConfig.Proxy.ProxyServer = new SocksProxyServer();
-                }
-
-                if (Operate.ProxyConfig.Proxy.ipFilter != null)
-                {
-                    Operate.ProxyConfig.Proxy.ipFilter.Initialize("IPFilter", Operate.ProxyConfig.Proxy.ProxyServer);
-                }
-
-                if (Operate.ProxyConfig.Proxy.ProxyServer.State != ServerState.Running)
-                {
-                    ServerConfig config = new ServerConfig
-                    {
-                        Ip = Operate.ProxyConfig.Proxy.ProxyTCP_IP.ToString(),
-                        Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
-                        Name = "Socks5ProxyServer",
-                        Mode = SocketMode.Tcp,
-
-                        // 连接限制
-                        MaxConnectionNumber = Operate.ProxyConfig.Proxy.MaxConnectionNumber,
-                        ListenBacklog = 1000,
-
-                        // 缓冲区设置
-                        ReceiveBufferSize = 65535,
-                        MaxRequestLength = 1024 * 1024 * 10,
-                        SendingQueueSize = 100,
-
-                        // 超时设置
-                        ClearIdleSession = true,
-                        ClearIdleSessionInterval = 60,
-                        IdleSessionTimeOut = ((int)Operate.ProxyConfig.Proxy.TCPTimeout.TotalSeconds),
-                    };
-
-                    List<IConnectionFilter> connectionFilters = new List<IConnectionFilter>
-                    {
-                        Operate.ProxyConfig.Proxy.ipFilter
-                    };
-
-                    if (Operate.ProxyConfig.Proxy.ProxyServer.Setup(config: config, connectionFilters: connectionFilters))
-                    {
-                        if (Operate.ProxyConfig.Proxy.ProxyServer.Start())
-                        {
-                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "开始 SOCKS5 代理", TType.Success)
-                            {
-                                LocalizationText = "ProxyModeForm.StartSocks5Proxy"
-                            });
-
-                            string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "SOCKS5 代理地址 : TCP [ {0}:{2} ] UDP [ {1}:{2} ]"), Operate.ProxyConfig.Proxy.ProxyTCP_IP, Operate.ProxyConfig.Proxy.ProxyUDP_IP, Operate.ProxyConfig.Proxy.SOCKS5_Port);
-                            Operate.DoLog(nameof(InitSocks5Proxy), sProxyIP);
-
-                            if (Operate.ProxyConfig.Proxy.Enable_Auth)
-                            {
-                                Operate.DoLog(nameof(InitSocks5Proxy), AntdUI.Localization.Get("ProxyModeForm.ProxyServer.Auth", "已启用 SOCKS5 代理服务身份认证"));
-                            }
-
-                            if (Operate.ProxyConfig.Proxy.Enable_ExternalProxy)
-                            {
-                                string sLog = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServer.EXTProxy", "已启用外部代理 [ {0}:{1} ]"), Operate.ProxyConfig.Proxy.ExternalProxy_IP, Operate.ProxyConfig.Proxy.ExternalProxy_Port);
-                                Operate.DoLog(nameof(InitSocks5Proxy), sLog);
-                            }
-
-                            return true;
-                        }
-                        else
-                        {
-                            Operate.ProxyConfig.Proxy.ProxyServer.Dispose();
-                            Operate.ProxyConfig.Proxy.ProxyServer = null;
-
-                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "启动 SOCKS5 代理失败", TType.Error)
-                            {
-                                LocalizationText = "ProxyModeForm.StartSocks5Proxy.Fail"
-                            });
-
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "设置 SOCKS5 代理失败", TType.Error)
-                        {
-                            LocalizationText = "ProxyModeForm.SetupSocks5Proxy.Fail"
-                        });
-
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(InitSocks5Proxy), ex);
-                return false;
-            }            
-        }
-
-        private bool InitHttpProxy()
-        {
-            try
-            {
-                if (!Operate.ProxyConfig.Proxy.Enable_HTTP)
-                {
-                    return true;
-                }
-
-                Operate.ProxyConfig.Proxy.syNet.BindPort(Operate.ProxyConfig.Proxy.HTTP_Port);
-                Operate.ProxyConfig.Proxy.syNet.BindCallback(Operate.ProxyConfig.Proxy.syCallBack);
-
-                if (Operate.ProxyConfig.Proxy.syNet.Start())
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "开始 HTTP 代理", TType.Success)
-                    {
-                        LocalizationText = "ProxyModeForm.StartHTTPProxy"
-                    });
-
-                    string sProxyIP = string.Format(AntdUI.Localization.Get("ProxyModeForm.ProxyServerIP", "HTTP 代理地址 : {0}:{1}"), Operate.ProxyConfig.Proxy.ProxyUDP_IP, Operate.ProxyConfig.Proxy.HTTP_Port);
-                    Operate.DoLog(nameof(InitHttpProxy), sProxyIP);
-                }
-                else
-                {
-                    Operate.DoLog(nameof(InitHttpProxy), Operate.ProxyConfig.Proxy.syNet.GetError());
-                }
-
-                if (Operate.ProxyConfig.Proxy.syCert.LoadX509Certificate(Properties.Resources.Cert_Ca, Properties.Resources.Cert_Key))
-                {
-                    Operate.ProxyConfig.Proxy.syNet.SetCustomCACertificate(Operate.ProxyConfig.Proxy.syCert);
-                }
-
-                if (Operate.ProxyConfig.Proxy.syNet.InstallCertificate())
-                {
-                    Operate.DoLog(nameof(InitHttpProxy), AntdUI.Localization.Get("InstallCertificate.Success", "WPE64 证书安装成功"));
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(InitHttpProxy), ex);
-            }
-
-            return false;
-        }
-
-        #endregion
-
-        #region//停止代理
-
-        private void Stop_Proxy()
-        {
-            try
-            {
-                if (Operate.ProxyConfig.Proxy.ProxyServer != null && Operate.ProxyConfig.Proxy.ProxyServer.State == ServerState.Running)
-                {
-                    Operate.ProxyConfig.Proxy.ProxyServer.Stop();
-                    Operate.ProxyConfig.Proxy.ProxyServer.Dispose();
-                    Operate.ProxyConfig.Proxy.ProxyServer = null;
-
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "停止 SOCKS5 代理", TType.Warn)
-                    {
-                        LocalizationText = "ProxyModeForm.StopProxy"
-                    });
-                }
-
-                if (Operate.ProxyConfig.Proxy.syNet != null && Operate.ProxyConfig.Proxy.Enable_HTTP)
-                {
-                    if (Operate.ProxyConfig.Proxy.syNet.Stop())
-                    {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "停止 HTTP 代理", TType.Warn)
-                        {
-                            LocalizationText = "ProxyModeForm.StopProxy"
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(Stop_Proxy), ex);
-            }
-        }
-
-        #endregion
 
         #region//清空数据
 
@@ -1189,14 +981,8 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                if (Operate.PacketConfig.List.AutoClear)
-                {
-                    if (Operate.ProxyConfig.List.lstProxyInfo.Count > Operate.PacketConfig.List.AutoClear_Value)
-                    {
-                        this.CleanUp_ProxyList();
-                        this.controlPacketData?.CleanUp_PacketData();
-                    }
-                }
+                //B9c：自动清理已移进 Operate.ProxyConfig.List.FlushToFeed，
+                //这里只保留「清空后收拾右侧面板」，由 WinFormsUiFeed.Cleared 事件驱动（见 OnFeedCleared）。
             }
             catch (Exception ex)
             {
@@ -1239,27 +1025,11 @@ namespace WinsockPacketEditor
                 this.lProxyTCP_CNT.Text = Operate.ProxyConfig.Proxy.ProxyServer?.SessionCount.ToString() ?? "0";
                 this.lProxyUDP_CNT.Text = Operate.ProxyConfig.List.cdProxyUDP.Count.ToString();
 
-                Operate.ProxyConfig.Proxy.ProxyOnLineInfo = string.Format(
-                        "{0}/{1}",
-                        Operate.ProxyConfig.Account.GetOnLineProxyAccountCount(Operate.ProxyConfig.Account.lstAccountInfo),
-                        Operate.ProxyConfig.Account.lstAccountInfo.Count);
+                //三个统计字符串的计算已搬进 Operate（两套 UI 共用），这里只负责显示
+                Operate.ProxyConfig.Proxy.RefreshStatInfo();
+
                 this.lProxyAccount_CNT.Text = Operate.ProxyConfig.Proxy.ProxyOnLineInfo;
-
-                Operate.ProxyConfig.Proxy.ProxyBytesInfo = string.Format(
-                    AntdUI.Localization.Get("ProxyModeForm.ProxyBytesInfo", "请求 : {0}  响应 : {1}"),
-                    Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Request, false),
-                    Operate.SystemConfig.GetDisplayBytes(Operate.ProxyConfig.Proxy.Total_Response, false));
                 this.lTotalBytes.Text = Operate.ProxyConfig.Proxy.ProxyBytesInfo;
-
-                decimal dUplink = (decimal)Operate.ProxyConfig.Proxy.ProxySpeed_Uplink / 1024;
-                Operate.ProxyConfig.Proxy.ProxySpeed_Uplink = 0;
-                decimal dDownlink = (decimal)Operate.ProxyConfig.Proxy.ProxySpeed_Downlink / 1024;
-                Operate.ProxyConfig.Proxy.ProxySpeed_Downlink = 0;
-
-                Operate.ProxyConfig.Proxy.ProxySpeedInfo = string.Format(
-                    AntdUI.Localization.Get("ProxyModeForm.ProxySpeedInfo", "上行 : {0} KB/s  下行 : {1} KB/s"),
-                    dUplink.ToString("0.00"),
-                    dDownlink.ToString("0.00"));
                 this.lProxySpeed.Text = Operate.ProxyConfig.Proxy.ProxySpeedInfo;
 
                 Operate.ProxyConfig.Proxy.CloseUDPTimeOut();

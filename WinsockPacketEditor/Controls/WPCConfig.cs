@@ -1,4 +1,5 @@
-﻿using AntdUI;
+﻿using System;
+using AntdUI;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -182,8 +183,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tServerList.BackColor = Operate.SystemConfig.Color_40;
-                this.tServerList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tServerList.BackColor = UiTheme.Color_40;
+                this.tServerList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -196,115 +197,145 @@ namespace WinsockPacketEditor
 
         #region//列表 - 菜单
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "ServerList_Add":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.WPCConfig.ServerList.OpenServerEdit(this.form, null);
-
-                    break;
-
-                case "NoticeList_Add":
-
-                    Operate.WPCConfig.NoticeList.OpenNoticeEdit(this.form, null);
-
-                    break;
-
-                case "ServerList_Clear":
-
-                    if (Operate.WPCConfig.ServerList.lstServerInfo.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.WPCConfig.ServerList.CleanUpServerList_Dialog(this.form);
+                        case "ServerList_Add":
+
+                            UiDialogs.OpenServerEdit(this.form, null);
+
+                            break;
+
+                        case "NoticeList_Add":
+
+                            UiDialogs.OpenNoticeEdit(this.form, null);
+
+                            break;
+
+                        case "ServerList_Clear":
+
+                            if (Operate.WPCConfig.ServerList.lstServerInfo.Count > 0)
+                            {
+                                await Operate.WPCConfig.ServerList.CleanUpServerList_Dialog();
+                            }
+
+                            break;
+
+                        case "NoticeList_Clear":
+
+                            if (Operate.WPCConfig.NoticeList.lstNoticeInfo.Count > 0)
+                            {
+                                await Operate.WPCConfig.NoticeList.CleanUpNoticeList_Dialog();
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "NoticeList_Clear":
-
-                    if (Operate.WPCConfig.NoticeList.lstNoticeInfo.Count > 0)
-                    {
-                        Operate.WPCConfig.NoticeList.CleanUpNoticeList_Dialog(this.form);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
-        private void tServerList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tServerList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is ServerInfo si)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
-
-                        Operate.WPCConfig.ServerList.OpenServerEdit(this.form, si);
-
-                        break;
-
-                    case "bRule":
-
-                        Operate.WPCConfig.ServerList.OpenRuleList(this.form, si);
-
-                        break;
-
-                    case "bDelete":
-
-                        List<ServerInfo> siList = new List<ServerInfo>
+                    if (e.Record is ServerInfo si)
+                    {
+                        switch (e.Btn.Id)
                         {
-                            si
-                        };
+                            case "bEdit":
 
-                        Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, siList);
+                                UiDialogs.OpenServerEdit(this.form, si);
 
-                        break;
-                }
+                                break;
+
+                            case "bRule":
+
+                                UiDialogs.OpenRuleList(this.form, si);
+
+                                break;
+
+                            case "bDelete":
+
+                                List<ServerInfo> siList = new List<ServerInfo>
+                                {
+                                    si
+                                };
+
+                                await Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(Operate.SystemConfig.ListAction.Delete, siList);
+
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tServerList_CellButtonClick), ex);
             }
         }
 
-        private void tNoticeList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tNoticeList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is NoticeInfo ni)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
-
-                        Operate.WPCConfig.NoticeList.OpenNoticeEdit(this.form, ni);
-
-                        break;
-
-                    case "bDelete":
-
-                        List<NoticeInfo> niList = new List<NoticeInfo>
+                    if (e.Record is NoticeInfo ni)
+                    {
+                        switch (e.Btn.Id)
                         {
-                            ni
-                        };
+                            case "bEdit":
 
-                        Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, niList);
+                                UiDialogs.OpenNoticeEdit(this.form, ni);
 
-                        break;
-                }
+                                break;
+
+                            case "bDelete":
+
+                                List<NoticeInfo> niList = new List<NoticeInfo>
+                                {
+                                    ni
+                                };
+
+                                await Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(Operate.SystemConfig.ListAction.Delete, niList);
+
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tNoticeList_CellButtonClick), ex);
             }
         }
 
         private void tServerList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is ServerInfo si)
             {
-                Operate.WPCConfig.ServerList.OpenServerEdit(this.form, si);
+                UiDialogs.OpenServerEdit(this.form, si);
             }
         }
 
         private void tNoticeList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is NoticeInfo ni)
             {
-                Operate.WPCConfig.NoticeList.OpenNoticeEdit(this.form, ni);
+                UiDialogs.OpenNoticeEdit(this.form, ni);
             }
         }
 
@@ -312,145 +343,161 @@ namespace WinsockPacketEditor
 
         #region//服务器列表 - 右键菜单
 
-        private void tServerList_CellClick(object sender, TableClickEventArgs e)
+        private async void tServerList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.WPCConfig.ServerList.lstServerInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tServerList, (item) =>
-                {
-                    List<ServerInfo> siList = new List<ServerInfo>();
-
-                    foreach (int SelectIndex in this.tServerList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        siList.Add(Operate.WPCConfig.ServerList.lstServerInfo[SelectIndex - 1]);
+                        if (Operate.WPCConfig.ServerList.lstServerInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tServerList, async (item) =>
+                        {
+                            List<ServerInfo> siList = new List<ServerInfo>();
+
+                            foreach (int SelectIndex in this.tServerList.SelectedIndexs)
+                            {
+                                siList.Add(Operate.WPCConfig.ServerList.lstServerInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(Operate.SystemConfig.ListAction.Top, siList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(Operate.SystemConfig.ListAction.Up, siList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(Operate.SystemConfig.ListAction.Down, siList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(Operate.SystemConfig.ListAction.Bottom, siList);
+                                    }
+
+                                    break;                        
+
+                                case "Delete":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(Operate.SystemConfig.ListAction.Delete, siList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tServerList.SelectedIndex = -1;
+                        }, Operate.WPCConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, siList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, siList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, siList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, siList);
-                            }
-
-                            break;                        
-
-                        case "Delete":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateServerList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, siList);
-                            }
-
-                            break;
-                    }
-
-                    this.tServerList.SelectedIndex = -1;
-                }, Operate.WPCConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tServerList_CellClick), ex);
             }
         }
 
-        private void tNoticeList_CellClick(object sender, TableClickEventArgs e)
+        private async void tNoticeList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.WPCConfig.NoticeList.lstNoticeInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tNoticeList, (item) =>
-                {
-                    List<NoticeInfo> niList = new List<NoticeInfo>();
-
-                    foreach (int SelectIndex in this.tNoticeList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        niList.Add(Operate.WPCConfig.NoticeList.lstNoticeInfo[SelectIndex - 1]);
+                        if (Operate.WPCConfig.NoticeList.lstNoticeInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tNoticeList, async (item) =>
+                        {
+                            List<NoticeInfo> niList = new List<NoticeInfo>();
+
+                            foreach (int SelectIndex in this.tNoticeList.SelectedIndexs)
+                            {
+                                niList.Add(Operate.WPCConfig.NoticeList.lstNoticeInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (niList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(Operate.SystemConfig.ListAction.Top, niList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (niList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(Operate.SystemConfig.ListAction.Up, niList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (niList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(Operate.SystemConfig.ListAction.Down, niList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (niList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(Operate.SystemConfig.ListAction.Bottom, niList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (niList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(Operate.SystemConfig.ListAction.Delete, niList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tNoticeList.SelectedIndex = -1;
+                        }, Operate.WPCConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (niList.Count > 0)
-                            {
-                                Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, niList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (niList.Count > 0)
-                            {
-                                Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, niList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (niList.Count > 0)
-                            {
-                                Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, niList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (niList.Count > 0)
-                            {
-                                Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, niList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (niList.Count > 0)
-                            {
-                                Operate.WPCConfig.NoticeList.UpdateNoticeList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, niList);
-                            }
-
-                            break;
-                    }
-
-                    this.tNoticeList.SelectedIndex = -1;
-                }, Operate.WPCConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tNoticeList_CellClick), ex);
             }
         }
 

@@ -43,7 +43,7 @@ namespace WinsockPacketEditor
                             {
                                 return new CellText(value?.ToString() ?? string.Empty)
                                 {
-                                    Prefix = Operate.SystemConfig.GetFlagByLocation(aii.IPLocation),
+                                    Prefix = UiImages.GetFlagByLocation(aii.IPLocation),
                                     IconRatio = 1.0F
                                 };
                             }

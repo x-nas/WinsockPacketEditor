@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    空的 data URL，用来<b>挡掉</b>浏览器对 /favicon.ico 的自动请求 ——
+    页面里没有 <link rel="icon"> 时它一定会去要一次，而 wwwroot 里没有这个文件，
+    控制台就固定挂着一条 ERR_FILE_NOT_FOUND。
+
+    这里刻意不放真图标：外壳是无边框窗口，没有标签页也没有标题栏，
+    favicon 一个像素都不会显示出来，放进去只是白占体积。
+  -->
+  <link rel="icon" href="data:," />
+  <title>WPE x64</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

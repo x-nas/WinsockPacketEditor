@@ -62,8 +62,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.udExtraction.Back = Operate.SystemConfig.Color_40;
-                this.txtExtraction.BackColor = Operate.SystemConfig.Color_40;
+                this.udExtraction.Back = UiTheme.Color_40;
+                this.txtExtraction.BackColor = UiTheme.Color_40;
             }
             else
             {

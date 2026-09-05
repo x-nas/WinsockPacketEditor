@@ -22,9 +22,12 @@ namespace WinsockPacketEditor
         #region//窗体事件
 
         public InjectModeForm()
-        {            
+        {
+            UI.Attach(new WinFormsUiHost(this), new AntdL10n());
+            UI.AttachFeed(WinFormsUiFeed.Instance);
+
             InitializeComponent();
-            Theme().Dark(Operate.SystemConfig.Color_30).Light(Operate.SystemConfig.Color_250);
+            Theme().Dark(UiTheme.Color_30).Light(UiTheme.Color_250);
             Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.Inject;
         }
 
@@ -47,7 +50,7 @@ namespace WinsockPacketEditor
 
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {
-                Operate.SystemConfig.StartRemoteMGT(this);
+                Operate.SystemConfig.StartRemoteMGT();
                 Operate.SystemConfig.InitCPUAndMemoryCounter();
                 Operate.SystemConfig.InitListExecute();
                 Operate.SystemConfig.LoadInjectMode_FromDB();
@@ -71,12 +74,12 @@ namespace WinsockPacketEditor
             this.timerAutoSave.Enabled = true;
             this.tabInjectMode.TabMenuVisible = false;
             this.mInjectMode.SelectIndex(0, true);
-            this.colorTheme.Value = Operate.SystemConfig.SystemColor;
+            this.colorTheme.Value = UiTheme.SystemColor;
         }
 
         private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Operate.SystemConfig.StopRemoteMGT(this);
+            Operate.SystemConfig.StopRemoteMGT();
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
@@ -334,7 +337,7 @@ namespace WinsockPacketEditor
 
         public void InitFloatButton()
         {
-            Operate.SystemConfig.InitFloatButton(this);  
+            UiControls.InitFloatButton(this);  
         }        
 
         #endregion
@@ -398,13 +401,13 @@ namespace WinsockPacketEditor
         private void colorTheme_ValueChanged(object sender, AntdUI.ColorEventArgs e)
         {
             setcolor = true;
-            Operate.SystemConfig.SystemColor = e.Value;
+            UI.Prefs.SystemColor = (e.Value).ToRgb();
 
-            AntdUI.Style.SetPrimary(Operate.SystemConfig.SystemColor);
+            AntdUI.Style.SetPrimary(UiTheme.SystemColor);
 
             for (int i = 0; i < this.mInjectMode.Items.Count; i++)
             {
-                this.mInjectMode.Items[i].BadgeBack = Operate.SystemConfig.SystemColor;
+                this.mInjectMode.Items[i].BadgeBack = UiTheme.SystemColor;
             }
 
             Refresh();
@@ -416,7 +419,8 @@ namespace WinsockPacketEditor
 
         private void btn_mode_Click(object sender, EventArgs e)
         {
-            AntdUI.Config.IsDark = !AntdUI.Config.IsDark;
+            UI.Prefs.IsDark = !UI.Prefs.IsDark;
+            WinFormsUiHost.ApplyPrefs();
 
             this.Dark_Changed();
             Refresh();
@@ -455,16 +459,9 @@ namespace WinsockPacketEditor
             {
                 btn_global.Loading = true;
 
-                if (lang.StartsWith("en"))
-                {
-                    AntdUI.Localization.Provider = new Localizer();
-                }
-                else
-                {
-                    AntdUI.Localization.Provider = null;
-                }
-
-                AntdUI.Localization.SetLanguage(lang);
+                //写入唯一真源后统一应用，这样界面上切换的语言会随配置一起持久化
+                UI.Prefs.Language = lang;
+                WinFormsUiHost.ApplyLanguage();
                 this.Text = "WPE x64 - " + AntdUI.Localization.Get("InjectModeForm", "注入模式");
                 this.cPacketList.SetColumnName_PacketList();
                 this.cComparisonText.SetTextInfo();
@@ -484,12 +481,16 @@ namespace WinsockPacketEditor
             var setting = new DisplaySetting();
             if (AntdUI.Modal.open(this, AntdUI.Localization.Get("Setting", "设置"), setting) == DialogResult.OK)
             {
-                AntdUI.Config.Animation = setting.Animation;
-                AntdUI.Config.ShadowEnabled = setting.ShadowEnabled;
-                AntdUI.Config.ShowInWindow = setting.ShowInWindow;
-                AntdUI.Config.ScrollBarHide = setting.ScrollBarHide;
-                AntdUI.Config.TextRenderingHighQuality = setting.TextRenderingHighQuality;
-                if (AntdUI.Config.TextRenderingHighQuality == setting.TextRenderingHighQuality)
+                UI.Prefs.IsAnimation = setting.Animation;
+                UI.Prefs.IsShadowEnabled = setting.ShadowEnabled;
+                UI.Prefs.IsShowInWindow = setting.ShowInWindow;
+                UI.Prefs.IsScrollBarHide = setting.ScrollBarHide;
+                UI.Prefs.IsTextRenderingHighQuality = setting.TextRenderingHighQuality;
+                WinFormsUiHost.ApplyPrefs();
+
+                //注意：这个判断刚赋完值必然成立，所以下面的 Refresh() 从来不会执行。
+                //这是迁移前就存在的写法，B3a 只做搬迁、原样保留，是否修正另议。
+                if (UI.Prefs.IsTextRenderingHighQuality == setting.TextRenderingHighQuality)
                 {
                     return;
                 }
@@ -582,20 +583,10 @@ namespace WinsockPacketEditor
             {
                 this.timerPacketList.Stop();
 
-                if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
-                {
-                    Operate.PacketConfig.List.PacketToList();
-                }
-
-                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.LogToList();
-                }
-
-                if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.FilterLogToList();
-                }
+                //B9c：改为批量搬运。队列空时 FlushToFeed 立刻返回，不再需要外面判空。
+                //自动清理也移进去了，两个消费者（WinForms 与将来的桥）共用一套规则。
+                Operate.PacketConfig.List.FlushToFeed();
+                Operate.LogConfig.List.FlushToFeed();
             }
             catch (Exception ex)
             {

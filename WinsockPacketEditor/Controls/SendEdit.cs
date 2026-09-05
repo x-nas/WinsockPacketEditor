@@ -129,7 +129,7 @@ namespace WinsockPacketEditor
                     this.pLoopINT.Back =
                     this.txtNotes.BackColor =
                     this.tSendCollection.ColumnBack =
-                    Operate.SystemConfig.Color_35;
+                    UiTheme.Color_35;
 
                 this.tSendCollection.ColumnFore = Color.Silver;
                 this.tSendCollection.ForeColor = Color.LimeGreen;
@@ -211,69 +211,88 @@ namespace WinsockPacketEditor
 
         #region//发送集 - 菜单
 
-        private void tSendCollection_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tSendCollection_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is PacketInfo pi)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
-
-                        Operate.PacketConfig.Packet.OpenPacketEdit(this.form, pi);
-
-                        break;
-
-                    case "bDelete":
-
-                        List<PacketInfo> piList = new List<PacketInfo>
+                    if (e.Record is PacketInfo pi)
+                    {
+                        switch (e.Btn.Id)
                         {
-                            pi,
-                        };
+                            case "bEdit":
 
-                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
+                                UiDialogs.OpenPacketEdit(this.form, pi);
 
-                        break;
-                }
+                                break;
+
+                            case "bDelete":
+
+                                List<PacketInfo> piList = new List<PacketInfo>
+                                {
+                                    pi,
+                                };
+
+                                await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
+
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tSendCollection_CellButtonClick), ex);
             }
         }
 
         private void tSendCollection_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is PacketInfo pi)
             {
-                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, pi);
+                UiDialogs.OpenPacketEdit(this.form, pi);
             }
         }
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Import":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Import, this.SendCollection.ToList());
-
-                    break;
-
-                case "Export":
-
-                    if (this.SendCollection.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Export, this.SendCollection.ToList());
+                        case "Import":
+
+                            await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Import, this.SendCollection.ToList());
+
+                            break;
+
+                        case "Export":
+
+                            if (this.SendCollection.Count > 0)
+                            {
+                                await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Export, this.SendCollection.ToList());
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (this.SendCollection.Count > 0)
+                            {
+                                await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, this.SendCollection.ToList());
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (this.SendCollection.Count > 0)
-                    {
-                        Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, this.SendCollection.ToList());
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
@@ -281,125 +300,133 @@ namespace WinsockPacketEditor
 
         #region//发送集 - 右键菜单
 
-        private void tSendCollection_CellClick(object sender, TableClickEventArgs e)
+        private async void tSendCollection_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (this.SendCollection.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendCollection, (item) =>
-                {
-                    List<PacketInfo> piList = new List<PacketInfo>();
-                    foreach (int SelectIndex in this.tSendCollection.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        piList.Add(this.SendCollection[SelectIndex - 1]);
+                        if (this.SendCollection.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendCollection, async (item) =>
+                        {
+                            List<PacketInfo> piList = new List<PacketInfo>();
+                            foreach (int SelectIndex in this.tSendCollection.SelectedIndexs)
+                            {
+                                piList.Add(this.SendCollection[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "cmsTop":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Top, piList);
+                                    }
+
+                                    break;
+
+                                case "cmsUp":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Up, piList);
+                                    }
+
+                                    break;
+
+                                case "cmsDown":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Down, piList);
+                                    }
+
+                                    break;
+
+                                case "cmsBottom":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Bottom, piList);
+                                    }
+
+                                    break;                        
+
+                                case "cmsCopy":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Copy, piList);
+                                        this.tSendCollection.ScrollBar.ValueY = tSendCollection.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "cmsDelete":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tSendCollection.SelectedIndex = -1;
+                        },
+                        new AntdUI.IContextMenuStripItem[]
+                        {
+                            new AntdUI.ContextMenuStripItem("置顶", "Ctrl+⬆")
+                            {
+                                ID = "cmsTop",
+                                IconSvg = "VerticalAlignTopOutlined",
+                                LocalizationText = "Top",
+                            },
+                            new AntdUI.ContextMenuStripItemDivider(),
+                            new AntdUI.ContextMenuStripItem("向上移动", "Alt+⬆")
+                            {
+                                ID = "cmsUp",
+                                IconSvg = "ArrowUpOutlined",
+                                LocalizationText = "Up",
+                            },
+                            new AntdUI.ContextMenuStripItem("向下移动", "Alt+⬇")
+                            {
+                                ID = "cmsDown",
+                                IconSvg = "ArrowDownOutlined",
+                                LocalizationText = "Down",
+                            },
+                            new AntdUI.ContextMenuStripItemDivider(),
+                            new AntdUI.ContextMenuStripItem("置底", "Ctrl+⬇")
+                            {
+                                ID = "cmsBottom",
+                                IconSvg = "VerticalAlignBottomOutlined",
+                                LocalizationText = "Bottom",
+                            },
+                            new AntdUI.ContextMenuStripItemDivider(),                    
+                            new AntdUI.ContextMenuStripItem("复制")
+                            {
+                                ID = "cmsCopy",
+                                IconSvg = "CopyOutlined",
+                                LocalizationText = "Copy",
+                            },
+                            new AntdUI.ContextMenuStripItem("删除")
+                            {
+                                ID = "cmsDelete",
+                                IconSvg = "CloseOutlined",
+                                LocalizationText = "Delete",
+                            },
+                        }));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "cmsTop":
-
-                            if (piList.Count > 0)
-                            {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Top, piList);
-                            }
-
-                            break;
-
-                        case "cmsUp":
-
-                            if (piList.Count > 0)
-                            {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Up, piList);
-                            }
-
-                            break;
-
-                        case "cmsDown":
-
-                            if (piList.Count > 0)
-                            {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Down, piList);
-                            }
-
-                            break;
-
-                        case "cmsBottom":
-
-                            if (piList.Count > 0)
-                            {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Bottom, piList);
-                            }
-
-                            break;                        
-
-                        case "cmsCopy":
-
-                            if (piList.Count > 0)
-                            {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Copy, piList);
-                                this.tSendCollection.ScrollBar.ValueY = tSendCollection.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "cmsDelete":
-
-                            if (piList.Count > 0)
-                            {
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.form, this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
-                            }
-
-                            break;
-                    }
-
-                    this.tSendCollection.SelectedIndex = -1;
-                },
-                new AntdUI.IContextMenuStripItem[]
-                {
-                    new AntdUI.ContextMenuStripItem("置顶", "Ctrl+⬆")
-                    {
-                        ID = "cmsTop",
-                        IconSvg = "VerticalAlignTopOutlined",
-                        LocalizationText = "Top",
-                    },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("向上移动", "Alt+⬆")
-                    {
-                        ID = "cmsUp",
-                        IconSvg = "ArrowUpOutlined",
-                        LocalizationText = "Up",
-                    },
-                    new AntdUI.ContextMenuStripItem("向下移动", "Alt+⬇")
-                    {
-                        ID = "cmsDown",
-                        IconSvg = "ArrowDownOutlined",
-                        LocalizationText = "Down",
-                    },
-                    new AntdUI.ContextMenuStripItemDivider(),
-                    new AntdUI.ContextMenuStripItem("置底", "Ctrl+⬇")
-                    {
-                        ID = "cmsBottom",
-                        IconSvg = "VerticalAlignBottomOutlined",
-                        LocalizationText = "Bottom",
-                    },
-                    new AntdUI.ContextMenuStripItemDivider(),                    
-                    new AntdUI.ContextMenuStripItem("复制")
-                    {
-                        ID = "cmsCopy",
-                        IconSvg = "CopyOutlined",
-                        LocalizationText = "Copy",
-                    },
-                    new AntdUI.ContextMenuStripItem("删除")
-                    {
-                        ID = "cmsDelete",
-                        IconSvg = "CloseOutlined",
-                        LocalizationText = "Delete",
-                    },
-                }));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tSendCollection_CellClick), ex);
             }
         }
 

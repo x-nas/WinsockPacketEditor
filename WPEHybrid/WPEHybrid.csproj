@@ -1,0 +1,138 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    WPE x64 的 WebView2 外壳（B10 引入）。
+
+    【定位】
+    代理模式的新界面：WinForms 薄壳 + WebView2 承载 Vue3 前端，
+    业务逻辑全部复用主工程的 Operate，一行不重写。
+    主程序 WinsockPacketEditor 与注入模式完全不受影响，两套 UI 并存。
+
+    【为什么是 net48 而不是 net8】
+    要 ProjectReference 主工程（net48）就必须同为 net48。
+    迁 net8 需要重写 SOCKS5 服务器（SuperSocket 1.x 只有 net35/40/45，2.0 API 不兼容）
+    与远程管理 Web 服务（Owin 只有 net45），还要拆开 Operate 里 862 处跨模块引用。
+    详见 x-nas/CLAUDE.md 的「为什么不用 .NET 8」。
+
+    【发布】
+    不做单文件。主程序的发布方式本来就是「WinRAR 把整个 Release 目录打成自解压 exe」，
+    多几个 DLL 不改变发布形态。
+  -->
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>WPEHybrid</RootNamespace>
+    <AssemblyName>WPEHybrid</AssemblyName>
+    <!-- 与主工程一致：C# 7.3 -->
+    <LangVersion>7.3</LangVersion>
+    <!--
+      必须显式写死，与主工程 WinsockPacketEditor 保持一致。
+      SDK 会给 net48 工程默认 PlatformTarget=x86（诊断日志里 _UsingDefaultPlatformTarget=true），
+      那样 WPEHybrid.exe 会被编成 32 位进程，而主程序是 64 位 —— 两者用的 SQLite.Interop /
+      SunnyNet 原生 DLL 位数就会不一致。
+      顺带这也修好了 WebView2：PlatformTarget=x86 时它只拷 x86 的 WebView2Loader.dll，
+      置成 AnyCPU 后走 IsManagedPlatformAnyCpu 分支，x86/x64/arm64 三份都会拷。
+    -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <!-- 与主工程一致：清单用 asInvoker，提权在 Program.Main 里靠 RestartAsAdmin 做 -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\WinsockPacketEditor\wpe.ico</ApplicationIcon>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <!-- WebView2 包同时含 WinForms/WPF 两套，压掉 WPF 引入的版本冲突噪声 -->
+    <MSBuildWarningsAsMessages>MSB3277</MSBuildWarningsAsMessages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4129.50" />
+    <!--
+      桥的 JSON 序列化。net48 不自带 System.Text.Json，而主工程本来就带 Newtonsoft 13.0.4，
+      版本对齐即可，不额外引入第三个 JSON 库。
+      （WPEProxyCap.Hybrid 用 System.Text.Json 是因为它是 net8。）
+    -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <!--
+      Operate 有一部分签名用了 Span<byte>(如 GetPacketData_Hex)，net48 下必须显式引用。
+      版本与主工程 packages.config 对齐，避免程序集绑定冲突。
+    -->
+    <PackageReference Include="System.Memory" Version="4.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WinsockPacketEditor\WinsockPacketEditor.csproj" />
+  </ItemGroup>
+
+  <!--
+    SuperSocket.SocketEngine —— 必须显式引用，否则代理服务起不来。
+
+    【为什么 ProjectReference 带不过来】
+    没有任何代码在编译期引用它：SuperSocket 在 AppServerBase.SetupBasic 里用
+    Type.GetType("SuperSocket.SocketEngine...") <b>运行期反射</b>加载。
+    MSBuild 只会把 IL 里真正用到的传递引用拷进来，于是外壳的输出目录里
+    只有 SocketBase 与 Common，一调 Setup 就是 FileNotFoundException。
+
+    主工程输出目录里有它，是因为那边 csproj 里写了显式 Reference。
+    HintPath 与主工程保持一致（packages.config 那套路径），换版本时两处一起改。
+
+    Facility 不用带：它在主工程的引用列表里但代码没用到，
+    SocketEngine 自己也不依赖它（依赖只有 SocketBase / Common + BCL，核过）。
+  -->
+  <ItemGroup>
+    <Reference Include="SuperSocket.SocketEngine, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>..\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketEngine.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+
+    <!--
+      Microsoft.Owin.Host.HttpListener —— 同一类问题，提前放进来。
+
+      Operate.SystemConfig.StartRemoteMGT() 调的是 WebApp.Start<Socket_Web>()，
+      OWIN 在运行期<b>按约定探测</b>服务器宿主程序集，编译期同样没有引用，
+      所以也不会被 ProjectReference 带过来。WinForms 侧进代理模式就会调它，
+      外壳接远程管理时必然撞上同一个 FileNotFoundException。
+    -->
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.4.2.2\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!--
+    前端源码在 web/（Vue3 + Vite + TS + ant-design-vue，与 WPEProxyCap.Hybrid 同一套栈）。
+    node_modules 有上万个文件，SDK 工程的默认 None 通配是 **\*，不排掉会把它整个吞进项目、
+    拖慢每次加载。web/ 下的源码文件仍然可见，只挡掉依赖目录与构建中间产物。
+  -->
+  <ItemGroup>
+    <None Remove="web\node_modules\**" />
+    <None Remove="web\dist\**" />
+  </ItemGroup>
+
+  <!--
+    前端产物：只用内置 wwwroot，不开远程加载（本地抓包工具不该依赖远程服务器）。
+
+    这里刻意<b>不</b>用 Content Include，而是自己整目录镜像过去，原因有两个：
+
+    ① Content 的通配是工程「求值期」展开的。VS 开着的时候跑一次 npm run build，
+       Vite 换了哈希文件名，新文件不在列表里 —— 表现成「改了前端还是旧界面」，很难查。
+
+    ② Vite 的文件名带内容哈希，增量拷贝只会往里加、从不删；几次构建后 bin 里就堆着
+       一串没人引用的旧 js。Release 目录是要打进自解压包的，不能带着死文件。
+
+    只清目录不管拷贝是<b>不行</b>的：内容拷贝靠 .CopyComplete 标记做增量判断，
+    删了目标目录而标记还在，下次构建会判定「已是最新」直接跳过，产出一个没有前端的输出目录。
+    所以清理与拷贝必须在同一个 target 里成对做，不依赖 MSBuild 的增量逻辑。
+    三个小文件，每次构建全量拷的代价可以忽略。
+  -->
+  <Target Name="StageWwwroot" AfterTargets="Build">
+    <ItemGroup>
+      <WwwrootFile Include="wwwroot\**\*" />
+    </ItemGroup>
+    <RemoveDir Directories="$(OutDir)wwwroot" />
+    <Copy SourceFiles="@(WwwrootFile)"
+          DestinationFiles="@(WwwrootFile->'$(OutDir)wwwroot\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+
+</Project>

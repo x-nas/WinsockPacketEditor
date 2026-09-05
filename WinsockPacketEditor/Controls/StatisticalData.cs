@@ -106,7 +106,7 @@ namespace WinsockPacketEditor
                 this.progressDisplay.ForeColor = Color.White;
                 this.progressNoDisplay.Back = Color.FromArgb(80, 47, 79);
                 this.progressNoDisplay.ForeColor = Color.White;
-                this.tStatisticalFilter.ColumnBack = Operate.SystemConfig.Color_35;
+                this.tStatisticalFilter.ColumnBack = UiTheme.Color_35;
             }
             else
             {

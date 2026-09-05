@@ -124,9 +124,12 @@ namespace WinsockPacketEditor
 
         private void tBatchAccounts_CellDoubleClick(object sender, AntdUI.TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is AccountInfo ai)
             {
-                Operate.ProxyConfig.Account.OpenAccountEdit(this.form, ai);
+                UiDialogs.OpenAccountEdit(this.form, ai);
             }
         }
 
@@ -138,7 +141,7 @@ namespace WinsockPacketEditor
                 {
                     case "bEdit":
 
-                        Operate.ProxyConfig.Account.OpenAccountEdit(this.form, ai);
+                        UiDialogs.OpenAccountEdit(this.form, ai);
 
                         break;
 
@@ -317,26 +320,34 @@ namespace WinsockPacketEditor
 
         #region//右键菜单
 
-        private void tBatchAccounts_MouseClick(object sender, MouseEventArgs e)
+        private async void tBatchAccounts_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (this.lstBatchAccounts.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(this.tBatchAccounts, item =>
-                {
-                    switch (item.ID)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        case "ToExcel":
+                        if (this.lstBatchAccounts.Count == 0)
+                        {
+                            return;
+                        }
 
-                            Operate.ProxyConfig.Account.SaveBatchAccounts_Dialog(this.form, DateTime.Now.ToString("yyyy-MM-dd"), this.lstBatchAccounts);
+                        AntdUI.ContextMenuStrip.open(this.tBatchAccounts, async item =>
+                        {
+                            switch (item.ID)
+                            {
+                                case "ToExcel":
 
-                            break;
+                                    await Operate.ProxyConfig.Account.SaveBatchAccounts_Dialog(DateTime.Now.ToString("yyyy-MM-dd"), this.lstBatchAccounts);
+
+                                    break;
+                            }
+                        }, Operate.ProxyConfig.Account.GetCMS_BatchAccounts().ToAntd());
                     }
-                }, Operate.ProxyConfig.Account.GetCMS_BatchAccounts());
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tBatchAccounts_MouseClick), ex);
             }
         }
 

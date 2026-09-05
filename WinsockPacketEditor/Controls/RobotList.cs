@@ -141,8 +141,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tRobotList.BackColor = Operate.SystemConfig.Color_40;
-                this.tRobotList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tRobotList.BackColor = UiTheme.Color_40;
+                this.tRobotList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -210,76 +210,95 @@ namespace WinsockPacketEditor
             Operate.RobotConfig.List.StopRobotList();
         }
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.RobotConfig.Robot.AddRobot_New();
-                    this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
-
-                    break;
-
-                case "Import":
-
-                    Operate.RobotConfig.List.LoadRobotList_Dialog(this.form);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.RobotConfig.List.SaveRobotList_Dialog(this.form, string.Empty, null);
+                        case "Add":
+
+                            Operate.RobotConfig.Robot.AddRobot_New();
+                            this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.RobotConfig.List.LoadRobotList_Dialog();
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                            {
+                                await Operate.RobotConfig.List.SaveRobotList_Dialog(string.Empty, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                            {
+                                await Operate.RobotConfig.List.CleanUpRobotList_Dialog();
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
-                    {
-                        Operate.RobotConfig.List.CleanUpRobotList_Dialog(this.form);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
-        private void tRobotList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tRobotList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is RobotInfo ri)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
-
-                        Operate.RobotConfig.Robot.OpenRobotEdit(this.form, ri);
-
-                        break;
-
-                    case "bDelete":
-
-                        List<RobotInfo> riList = new List<RobotInfo>
+                    if (e.Record is RobotInfo ri)
+                    {
+                        switch (e.Btn.Id)
                         {
-                            ri,
-                        };
+                            case "bEdit":
 
-                        Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, riList);
+                                UiDialogs.OpenRobotEdit(this.form, ri);
 
-                        break;
-                }
+                                break;
+
+                            case "bDelete":
+
+                                List<RobotInfo> riList = new List<RobotInfo>
+                                {
+                                    ri,
+                                };
+
+                                await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Delete, riList);
+
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tRobotList_CellButtonClick), ex);
             }
         }
 
         private void tRobotList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is RobotInfo ri)
             {
-                Operate.RobotConfig.Robot.OpenRobotEdit(this.form, ri);
+                UiDialogs.OpenRobotEdit(this.form, ri);
             }                
         }        
 
@@ -287,93 +306,101 @@ namespace WinsockPacketEditor
 
         #region//机器人列表 - 右键菜单
 
-        private void tRobotList_CellClick(object sender, TableClickEventArgs e)
+        private async void tRobotList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.RobotConfig.List.lstRobotInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRobotList, (item) =>
-                {
-                    List<RobotInfo> riList = new List<RobotInfo>();
-
-                    foreach (int SelectIndex in this.tRobotList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        riList.Add(Operate.RobotConfig.List.lstRobotInfo[SelectIndex - 1]);
+                        if (Operate.RobotConfig.List.lstRobotInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRobotList, async (item) =>
+                        {
+                            List<RobotInfo> riList = new List<RobotInfo>();
+
+                            foreach (int SelectIndex in this.tRobotList.SelectedIndexs)
+                            {
+                                riList.Add(Operate.RobotConfig.List.lstRobotInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Top, riList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Up, riList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Down, riList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Bottom, riList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Copy, riList);
+                                        this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Export, riList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Delete, riList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tRobotList.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, riList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, riList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, riList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, riList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, riList);
-                                this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, riList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, riList);
-                            }
-
-                            break;
-                    }
-
-                    this.tRobotList.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tRobotList_CellClick), ex);
             }
         }
 

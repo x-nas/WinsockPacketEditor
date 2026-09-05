@@ -36,7 +36,7 @@ namespace WinsockPacketEditor
                     this.pXOR_To.Back =
                     this.hbXOR_From.BackColor =
                     this.hbXOR_To.BackColor =
-                    Operate.SystemConfig.Color_40;
+                    UiTheme.Color_40;
 
                 this.hbXOR_From.ForeColor =
                     this.hbXOR_To.ForeColor =
@@ -195,7 +195,7 @@ namespace WinsockPacketEditor
 
                             break;
                     }
-                }, Operate.SystemConfig.GetCMS_XOR(this.hbXOR_From)));
+                }, Operate.SystemConfig.GetCMS_XOR(this.hbXOR_From.ToState()).ToAntd()));
             }
         }
 
@@ -233,7 +233,7 @@ namespace WinsockPacketEditor
 
                             break;
                     }
-                }, Operate.SystemConfig.GetCMS_XOR(this.hbXOR_To)));
+                }, Operate.SystemConfig.GetCMS_XOR(this.hbXOR_To.ToState()).ToAntd()));
             }
         }
 

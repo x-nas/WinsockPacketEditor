@@ -433,7 +433,7 @@ namespace WinsockPacketEditor
                                 {
                                     case Operate.FilterConfig.Filter.FilterMode.Normal:
 
-                                        ((CellText)this.dtFilterNormal.Rows[1][iIndex]).Back = Operate.FilterConfig.Filter.FilterProgression_Color;
+                                        ((CellText)this.dtFilterNormal.Rows[1][iIndex]).Back = UiTheme.FilterProgression_Color;
 
                                         break;
 
@@ -443,14 +443,14 @@ namespace WinsockPacketEditor
                                         {
                                             case Operate.FilterConfig.Filter.FilterStartFrom.Head:
 
-                                                ((CellText)this.dtFilterAdvanced_Modify_Head.Rows[0][iIndex]).Back = Operate.FilterConfig.Filter.FilterProgression_Color;
+                                                ((CellText)this.dtFilterAdvanced_Modify_Head.Rows[0][iIndex]).Back = UiTheme.FilterProgression_Color;
 
                                                 break;
 
                                             case Operate.FilterConfig.Filter.FilterStartFrom.Position:
 
                                                 iIndex += Operate.FilterConfig.Filter.FilterSize_MaxLen;
-                                                ((CellText)this.dtFilterAdvanced_Modify_Position.Rows[0][iIndex]).Back = Operate.FilterConfig.Filter.FilterProgression_Color;
+                                                ((CellText)this.dtFilterAdvanced_Modify_Position.Rows[0][iIndex]).Back = UiTheme.FilterProgression_Color;
 
                                                 break;
                                         }
@@ -486,13 +486,13 @@ namespace WinsockPacketEditor
                                 {
                                     case Operate.FilterConfig.Filter.FilterMode.Normal:
 
-                                        ((CellText)this.dtFilterNormal.Rows[0][iIndex]).Back = Operate.FilterConfig.Filter.FilterExclude_Color;
+                                        ((CellText)this.dtFilterNormal.Rows[0][iIndex]).Back = UiTheme.FilterExclude_Color;
 
                                         break;
 
                                     case Operate.FilterConfig.Filter.FilterMode.Advanced:
 
-                                        ((CellText)this.dtFilterAdvanced_Search.Rows[0][iIndex]).Back = Operate.FilterConfig.Filter.FilterExclude_Color;                                        
+                                        ((CellText)this.dtFilterAdvanced_Search.Rows[0][iIndex]).Back = UiTheme.FilterExclude_Color;                                        
 
                                         break;
                                 }
@@ -525,7 +525,7 @@ namespace WinsockPacketEditor
                                 {
                                     case Operate.FilterConfig.Filter.FilterMode.Normal:
 
-                                        ((CellText)this.dtFilterNormal.Rows[1][iIndex]).Back = Operate.FilterConfig.Filter.FilterRandom_Color;
+                                        ((CellText)this.dtFilterNormal.Rows[1][iIndex]).Back = UiTheme.FilterRandom_Color;
 
                                         break;
 
@@ -535,14 +535,14 @@ namespace WinsockPacketEditor
                                         {
                                             case Operate.FilterConfig.Filter.FilterStartFrom.Head:
 
-                                                ((CellText)this.dtFilterAdvanced_Modify_Head.Rows[0][iIndex]).Back = Operate.FilterConfig.Filter.FilterRandom_Color;
+                                                ((CellText)this.dtFilterAdvanced_Modify_Head.Rows[0][iIndex]).Back = UiTheme.FilterRandom_Color;
 
                                                 break;
 
                                             case Operate.FilterConfig.Filter.FilterStartFrom.Position:
 
                                                 iIndex += Operate.FilterConfig.Filter.FilterSize_MaxLen;
-                                                ((CellText)this.dtFilterAdvanced_Modify_Position.Rows[0][iIndex]).Back = Operate.FilterConfig.Filter.FilterRandom_Color;
+                                                ((CellText)this.dtFilterAdvanced_Modify_Position.Rows[0][iIndex]).Back = UiTheme.FilterRandom_Color;
 
                                                 break;
                                         }
@@ -572,7 +572,7 @@ namespace WinsockPacketEditor
                     this.pFilterModifyFrom.Back = 
                     this.pFilterMode.Back = 
                     this.pFilterProgression.Back = 
-                    Operate.SystemConfig.Color_35;
+                    UiTheme.Color_35;
             }
             else
             {
@@ -598,11 +598,11 @@ namespace WinsockPacketEditor
             {
                 if (e.RowIndex == 1)
                 {
-                    Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, true);
+                    UiControls.VerifyHexCharWithWildcard(verifyArgs, true);
                 }
                 else
                 {
-                    Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, false);
+                    UiControls.VerifyHexCharWithWildcard(verifyArgs, false);
                 }
             };
         }
@@ -612,7 +612,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, true);
+                UiControls.VerifyHexCharWithWildcard(verifyArgs, true);
             };
         }
 
@@ -621,7 +621,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, false);
+                UiControls.VerifyHexCharWithWildcard(verifyArgs, false);
             };
         }
 
@@ -630,7 +630,7 @@ namespace WinsockPacketEditor
             e.Input.MaxLength = 2;
             e.Input.VerifyChar += (inputSender, verifyArgs) =>
             {
-                Operate.SystemConfig.VerifyHexCharWithWildcard(verifyArgs, false);
+                UiControls.VerifyHexCharWithWildcard(verifyArgs, false);
             };
         }
 
@@ -641,7 +641,7 @@ namespace WinsockPacketEditor
                 return true;
             }
 
-            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(this.form, e.Value);
+            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(e.Value);
         }
 
         private bool tFilterAdvanced_Search_CellEndEdit(object sender, TableEndEditEventArgs e)
@@ -651,7 +651,7 @@ namespace WinsockPacketEditor
                 return true;
             }
 
-            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(this.form, e.Value);
+            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(e.Value);
         }
 
         private bool tFilterAdvanced_Modify_Head_CellEndEdit(object sender, TableEndEditEventArgs e)
@@ -661,7 +661,7 @@ namespace WinsockPacketEditor
                 return true;
             }
 
-            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(this.form, e.Value);
+            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(e.Value);
         }
 
         private bool tFilterAdvanced_Modify_Position_CellEndEdit(object sender, TableEndEditEventArgs e)
@@ -671,7 +671,7 @@ namespace WinsockPacketEditor
                 return true;
             }
 
-            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(this.form, e.Value);
+            return Operate.SystemConfig.ValidateHexValueWithWildcardAndShowMessage(e.Value);
         }
 
         #endregion
@@ -745,19 +745,19 @@ namespace WinsockPacketEditor
             {
                 if (this.cbbFilterAction_ExecuteType.SelectedIndex == 0)
                 {
-                    Operate.SystemConfig.InitSendInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
+                    UiControls.InitSendInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
                 }
                 else if(this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
                 {
-                    Operate.SystemConfig.InitRobotInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
+                    UiControls.InitRobotInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
                 }
                 else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 2)
                 {
-                    Operate.SystemConfig.InitFilterInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID, this.fiSelect.FID);
+                    UiControls.InitFilterInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID, this.fiSelect.FID);
                 }
                 else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 3)
                 {
-                    Operate.SystemConfig.InitWareHouseInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
+                    UiControls.InitWareHouseInfo(this.cbbFilterAction_Execute, fiSelect.Execute_GUID);
                 }
             }
             catch (Exception ex)
@@ -1324,11 +1324,11 @@ namespace WinsockPacketEditor
                 switch (item.ID)
                 {
                     case "cmsFilterEdit_Progression_Enable":
-                        ctSelect.Back = Operate.FilterConfig.Filter.FilterProgression_Color;
+                        ctSelect.Back = UiTheme.FilterProgression_Color;
                         break;
 
                     case "cmsFilterEdit_Random_Enable":
-                        ctSelect.Back = Operate.FilterConfig.Filter.FilterRandom_Color;
+                        ctSelect.Back = UiTheme.FilterRandom_Color;
                         ctSelect.Text = string.Empty;
                         break;
 
@@ -1340,7 +1340,7 @@ namespace WinsockPacketEditor
 
                         if (!string.IsNullOrEmpty(ctSelect.Text.Trim()))
                         {
-                            ctSelect.Back = Operate.FilterConfig.Filter.FilterExclude_Color;                            
+                            ctSelect.Back = UiTheme.FilterExclude_Color;                            
                         }
                         else
                         {
@@ -1788,7 +1788,7 @@ namespace WinsockPacketEditor
                     FilterAction_New = Operate.FilterConfig.Filter.FilterAction.NoModify_Display;
                 }
 
-                var FilterExecute = Operate.FilterConfig.Filter.GetFilterExecuteType(this.cbFilterAction_Execute, this.cbbFilterAction_ExecuteType, this.cbbFilterAction_Execute);
+                var FilterExecute = UiControls.GetFilterExecuteType(this.cbFilterAction_Execute, this.cbbFilterAction_ExecuteType, this.cbbFilterAction_Execute);
                 FilterExecuteType_New = FilterExecute.feType;
                 Execute_GUID_New = FilterExecute.gGuid;
 
@@ -1827,7 +1827,7 @@ namespace WinsockPacketEditor
 
                                 if (!String.IsNullOrEmpty(sSearchValue))
                                 {
-                                    if (ctSearch.Back == Operate.FilterConfig.Filter.FilterExclude_Color)
+                                    if (ctSearch.Back == UiTheme.FilterExclude_Color)
                                     {
                                         sbExclude.Append(i).Append(",");
                                     }
@@ -1839,11 +1839,11 @@ namespace WinsockPacketEditor
                             if (dtFilterNormal.Rows[1][i] != null)
                             {
                                 CellText ctModify = (CellText)dtFilterNormal.Rows[1][i];
-                                if (ctModify.Back == Operate.FilterConfig.Filter.FilterProgression_Color)
+                                if (ctModify.Back == UiTheme.FilterProgression_Color)
                                 {
                                     sbProgression.Append(i).Append(",");
                                 }
-                                else if (ctModify.Back == Operate.FilterConfig.Filter.FilterRandom_Color)
+                                else if (ctModify.Back == UiTheme.FilterRandom_Color)
                                 {
                                     sbRandom.Append(i).Append(",");
                                 }
@@ -1869,7 +1869,7 @@ namespace WinsockPacketEditor
 
                                 if (!String.IsNullOrEmpty(sValue))
                                 {
-                                    if (ctSearch.Back == Operate.FilterConfig.Filter.FilterExclude_Color)
+                                    if (ctSearch.Back == UiTheme.FilterExclude_Color)
                                     {
                                         sbExclude.Append(i).Append(",");
                                     }
@@ -1888,11 +1888,11 @@ namespace WinsockPacketEditor
                                     if (dtFilterAdvanced_Modify_Head.Rows[0][i] != null)
                                     {
                                         CellText ctModify = (CellText)dtFilterAdvanced_Modify_Head.Rows[0][i];
-                                        if (ctModify.Back == Operate.FilterConfig.Filter.FilterProgression_Color)
+                                        if (ctModify.Back == UiTheme.FilterProgression_Color)
                                         {
                                             sbProgression.Append(i).Append(",");
                                         }
-                                        else if (ctModify.Back == Operate.FilterConfig.Filter.FilterRandom_Color)
+                                        else if (ctModify.Back == UiTheme.FilterRandom_Color)
                                         {
                                             sbRandom.Append(i).Append(",");
                                         }
@@ -1916,11 +1916,11 @@ namespace WinsockPacketEditor
                                         if (dtFilterAdvanced_Modify_Position.Rows[0][i] != null)
                                         {
                                             CellText ctModify = (CellText)dtFilterAdvanced_Modify_Position.Rows[0][i];
-                                            if (ctModify.Back == Operate.FilterConfig.Filter.FilterProgression_Color)
+                                            if (ctModify.Back == UiTheme.FilterProgression_Color)
                                             {
                                                 sbProgression.Append(iIndex).Append(",");
                                             }
-                                            else if (ctModify.Back == Operate.FilterConfig.Filter.FilterRandom_Color)
+                                            else if (ctModify.Back == UiTheme.FilterRandom_Color)
                                             {
                                                 sbRandom.Append(iIndex).Append(",");
                                             }

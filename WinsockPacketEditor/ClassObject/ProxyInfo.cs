@@ -5,6 +5,19 @@ namespace WinsockPacketEditor
 {
     public class ProxyInfo : NotifyProperty
     {
+        #region//行标识
+
+        private static long _seq;
+
+        /// <summary>
+        /// 运行期自增行号（B9a 引入）。语义与 <see cref="PacketInfo.Id"/> 完全一致：
+        /// 只在本次运行内唯一、不持久化、不跨进程；代理列表按它取完整字节与定位选中行。
+        /// SOCKS5 的收发回调会并发构造 ProxyInfo，所以用 Interlocked 自增。
+        /// </summary>
+        public long Id { get; } = System.Threading.Interlocked.Increment(ref _seq);
+
+        #endregion
+
         #region//时间戳
 
         DateTime _ProxyTime;

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>PacketEdit probe</title>
+<link rel="icon" href="data:,">
+<style>body{margin:0;background:#0A0A0F}#app{position:fixed;inset:0}</style>
+<script>
+  // 假宿主：把 WebView2 的 postMessage / message 事件换成本地回环，只为在浏览器里跑封包编辑器
+  const sample = (() => { const a = []; for (let i = 0; i < 300; i++) a.push((i * 7 + 3) & 0xff); a[0]=0x16;a[1]=0x03;a[2]=0x01; return btoa(String.fromCharCode(...a)) })();
+  let clip = '';
+  const answers = {
+    openPacketEdit: (a) => ({ Id: String(a.id), List: a.list, Socket: 3464, Type: 13, From: '10.10.10.8:41758', To: '101.227.22.133:443', Buffer: sample, CanSendBySession: false, SystemSocket: 1284 }),
+    clipboardWrite: (a) => { clip = a.text; window.__clip = clip; return { ok: true } },
+    clipboardRead: () => ({ text: clip }),
+    savePacketEdit: (a) => { window.__saved = a; return { error: '' } },
+    packetEditToFilter: () => ({ ok: true }),
+    packetEditToSend: () => ({ ok: true }),
+    startPacketSend: (a) => { window.__sent = a; return { error: '' } },
+    stopPacketSend: () => ({ ok: true }),
+    getPacketSendProgress: () => ({ Running: false, Total: 3, Success: 3, Fail: 0 }),
+    // 代理数据页的面板：改写前后各一份，第 3、4 字节不同，改写后多 2 字节
+    // 机器人编辑：一份内存里的指令集，插入 / 移动 / 删除都真的动它，执行时假装每 300ms 走一条
+    openRobotEdit: (a) => ({ Id: String(a.id), Name: '机器人 1' }),
+    closeRobotEdit: () => ({ ok: true }),
+    getRobotInstructions: () => ({ rows: window.__inst.map((x, i) => ({ Index: i, Type: x.t, TypeName: ['发送','延迟','循环开始','循环结束','键盘','鼠标','发送','设置','开关'][x.t], Text: x.c, Content: x.c })) }),
+    addRobotInstruction: (a) => { const it = { t: a.type, c: a.content }; if (a.insertAt >= 0) window.__inst.splice(a.insertAt, 0, it); else window.__inst.push(it); return { error: a.content === 'bad' ? '故意的错误' : '' } },
+    robotInstructionAction: (a) => { const L = window.__inst; const idx = (a.indexes || []).slice().sort((x, y) => x - y); if (a.action === 7) { L.length = 0; return { ok: true } } if (a.action === 6) { idx.reverse().forEach((i) => L.splice(i, 1)); return { ok: true } } if (a.action === 1 && idx[0] > 0) { const [x] = L.splice(idx[0], 1); L.splice(idx[0] - 1, 0, x) } if (a.action === 2 && idx[0] < L.length - 1) { const [x] = L.splice(idx[0], 1); L.splice(idx[0] + 1, 0, x) } if (a.action === 0) { const [x] = L.splice(idx[0], 1); L.unshift(x) } if (a.action === 3) { const [x] = L.splice(idx[0], 1); L.push(x) } return { ok: true } },
+    saveRobotEdit: (a) => { window.__savedRobot = a; return { error: a.name ? '' : '机器人名称为空', badIndex: -1 } },
+    startRobotEdit: (a) => { window.__run = { t0: Date.now(), n: window.__inst.length }; return { error: '', badIndex: -1 } },
+    stopRobotEdit: () => { window.__run = null; return { ok: true } },
+    getRobotEditProgress: () => { const r = window.__run; if (!r) return { Running: false, Index: -1, Total: 0, Trail: '', Result: 'done' }; const i = Math.floor((Date.now() - r.t0) / 300); if (i >= r.n) { window.__run = null; return { Running: false, Index: r.n - 1, Total: r.n, Trail: Array.from({ length: r.n }, (_, k) => k + 1).join(', '), Result: 'done' } } return { Running: true, Index: i, Total: i, Trail: Array.from({ length: i + 1 }, (_, k) => k + 1).join(', ') } },
+    // 四个工具页
+    textDuplicates: (a) => ({ textA: a.a, textB: a.b, rows: [{ Sequence: 'AA BB CC', Length: 3, CountInA: 2, CountInB: 1, PositionsInA: [0, 5], PositionsInB: [2] }] }),
+    transcode: (a) => ({ rows: ['Bytes','ANSI-GBK','UTF7','ANSI-UTF7','UTF8','ANSI-UTF8','UTF16','ANSI-UTF16','UTF32','ANSI-UTF32','Unicode','ANSI-Unicode','base64','ANSI-base64'].map((k, i) => ({ Key: k, Value: i % 2 ? '48 65 6C 6C 6F' : (a.decode ? 'decoded:' : 'encoded:') + a.text })) }),
+    extractPick: (a) => ({ Path: 'C:/demo/session.chlsx', Text: ['AA BB CC DD', 'EE FF'].join(String.fromCharCode(10)), Error: '' }),
+    extractBytes: (a) => ({ Path: a.name, Text: ['[System]', 'UserCount=1'].join(String.fromCharCode(10)), Error: '' }),
+    saveExtraction: (a) => { window.__savedExtract = a; return { path: 'C:/out.txt' } },
+    // 统计 / WPC / 六个设置
+    getFilterStats: () => ({ ProxyTotal: 1280, Execute: 356, Replace: 120, Change: 30, Intercept: 66, Display: 100, NoDisplay: 40 }),
+    getRuleTypes: () => ({ rows: ['DOMAIN','DOMAIN-SUFFIX','DOMAIN-KEYWORD','GEOIP','IP-CIDR','MATCH'].map((n, i) => ({ Value: i, Name: n })) }),
+    getServerRules: () => ({ rows: window.__rules }),
+    saveServerRule: (a) => { window.__rules.push({ Id: 'R' + Date.now(), IsEnable: a.enable, Type: a.type, TypeName: 'DOMAIN', Argument: a.argument, Action: a.ruleAction }); return { error: '' } },
+    serverRuleAction: (a) => { if (a.action === 6) window.__rules = window.__rules.filter((r) => !a.ids.includes(r.Id)); return { ok: true } },
+    saveServer: () => ({ error: '' }), saveNotice: () => ({ error: '' }), setServerEnable: () => ({ ok: true }),
+    getProcessSetting: () => ({ DriverType: 1, IsLoadDriver: false, MustTCP: true, IP: '127.0.0.1', Port: 1080, AppointPort: false, AppointPortContent: '', Auth: false, UserName: '', PassWord: '', CheckedPids: [4321] }),
+    getProcessRows: () => ({ rows: [{ IsCheck: true, ProcessName: 'game', ProcessID: 4321, ModuleName: 'game.exe', ProcessPath: '' }, { IsCheck: false, ProcessName: 'chrome', ProcessID: 8800, ModuleName: 'chrome.exe', ProcessPath: '' }, { IsCheck: false, ProcessName: 'explorer', ProcessID: 1200, ModuleName: 'explorer.exe', ProcessPath: '' }] }),
+    getProcessIcon: () => ({ png: '' }), addSelectProcessName: () => ({ ok: true }), removeSelectProcessName: () => ({ ok: true }),
+    testSocksProxy: () => ({ error: '' }), saveProcessSetting: () => ({ error: '' }),
+    getMapSetting: () => ({ enableLocal: true, enableRemote: false }), saveMapSetting: () => ({ ok: true }), pickLocalFile: () => ({ path: 'C:/data/config.json' }), saveMapLocal: () => ({ error: '' }), saveMapRemote: () => ({ error: '' }),
+    getExtProxySetting: () => ({ Enable: true, IP: '10.0.0.5', Port: 8889, AppointPort: true, AppointPortContent: '80,443', Auth: false, UserName: '', PassWord: '' }), saveExtProxySetting: () => ({ error: '' }),
+    getHotkeySetting: () => ({ Type: 0, Keys: Array.from({ length: 12 }, (_, i) => 'Ctrl + Alt + F' + (i + 1)) }), registerHotkey: (a) => ({ ok: !a.text.includes('F4') }), saveHotkeyType: () => ({ ok: true }),
+    exportBackup: () => ({ ok: true }), importBackup: () => ({ language: 'zh' }),
+    getRemoteSetting: () => ({ IsRemote: true, IP: '192.168.1.10', IPs: ['192.168.1.10', '10.0.0.2'], Port: 88, UserName: 'admin', PassWord: 'x', Running: true }), saveRemoteSetting: () => ({ error: '', running: true }),
+    setTopMost: (a) => ({ topMost: !!a.on }),
+    getLogCount: (a) => ({ count: a.kind === 0 ? 3 : 0 }),
+    //清空走 ask → 自绘确认框，与 C# 的 ClearLog_Dialog 一样
+    clearLogs: async (a) => { const ok = await window.__ask('confirm', { title: '日志列表', content: '确定删除所有数据吗', icon: 3 }); if (ok) ls.forEach((cb) => cb({ data: { type: 'event', name: 'feed:clear', data: { list: 2 + (a.kind || 0) } } })); return { ok } },
+    exportLogs: () => { window.__exported = true; return { ok: true } },
+    filterListAction: (a) => { window.__acted = a; return { ok: true } },
+    sendListAction: (a) => { window.__acted = a; return { ok: true } },
+    robotListAction: (a) => { window.__acted = a; return { ok: true } },
+    wareHouseListAction: (a) => { window.__acted = a; return { ok: true } },
+    addFilter: () => { window.__acted = { add: 1 }; return { ok: true } },
+    setAllFilterEnable: (a) => { window.__acted = a; return { ok: true } },
+    resetFilterCount: () => { window.__acted = { reset: 1 }; return { ok: true } },
+    setListEnable: () => ({ ok: true }),
+    getFireWall: () => ({ enable: true, whiteMode: false, autoWhiteAuthOk: true, autoBlackAuthFail: true, autoBlackUnsupport: false, autoBlackMinutes: 30, autoClearExpiry: true }),
+    saveFireWall: () => ({ error: '' }), saveIPRule: () => ({ error: '' }), ipRuleAction: () => ({ ok: true }),
+    //删除：先经 ask 通道问一句，与 C# 的 DeleteIPRule_Dialog 走的是同一条路
+    deleteIPRule: async (a) => ({ ok: await window.__ask('confirm', { title: a.black ? '黑名单' : '白名单', content: '确定删除数据吗?\r\n' + a.ip, icon: 3 }) }),
+    getPrefs: () => ({ isDark: true, language: 'zh-CN', systemColor: '#1677FF', filter: { replace: { fore: '#000000', back: '#DAA520' }, intercept: { fore: '#FFFFFF', back: '#8B0000' }, change: { fore: '#000000', back: '#1E90FF' }, display: { fore: '#000000', back: '#90EE90' } } }),
+    getListSetting: () => ({ showSocket: true, showType: true, showClientAddr: true, showClientLoc: true, showServerAddr: true, showServerLoc: true, showLen: true, autoClear: true, autoClearValue: 5000 }),
+    getStats: () => ({ queue: 0, list: 40, total: 40, autoClear: true, autoClearValue: 5000, proxyRunning: true, socks5Addr: '0.0.0.0:1080', onlineInfo: '1/3', totalRequest: 1024, totalResponse: 2048, speedUp: 0, speedDown: 0 }),
+    //查找：偶数次命中第 7 行、奇数次没命中，用来同时验「命中」与「没有匹配」两条路
+    searchProxyList: (a) => (a.pattern === 'zzz' ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: null } : a.pattern === 'bad(' ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: '括号不配对' }
+      : a.from > 7 ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: null }
+      : { Found: true, Id: 1007, Index: 7, Offset: 9, Length: 6, Error: null }),
+    getPacketDetail: (a) => { const raw = atob(sample); const mod = raw.slice(0,3) + String.fromCharCode(0x99,0x98) + raw.slice(5) + String.fromCharCode(1, 2); return { id: a.id, packet: btoa(mod), raw: sample, modified: true } },
+  };
+  window.__inst = [{ t: 2, c: '3' }, { t: 1, c: '100' }, { t: 4, c: 'Press|A' }, { t: 3, c: '' }];
+  window.__rules = [{ Id: 'R1', IsEnable: true, Type: 1, TypeName: 'DOMAIN-SUFFIX', Argument: 'example.com', Action: 0 }, { Id: 'R2', IsEnable: false, Type: 5, TypeName: 'MATCH', Argument: '', Action: 2 }];
+  const ls = [];
+  window.__asks = {};
+  window.__ask = (name, args) => new Promise((res) => {
+    const id = 'ask' + (++window.chrome.webview.__askSeq);
+    window.__asks[id] = res;
+    ls.forEach((cb) => cb({ data: { type: 'ask', id, method: name, args } }));
+  });
+  window.chrome = { webview: {
+    addEventListener: (t, cb) => ls.push(cb),
+    //让假应答能反过来向前端提问（C# 的 UI.Confirm / UI.Prompt 走的就是这条）
+    __askSeq: 0,
+    postMessage: (m) => setTimeout(() => {
+      if (m.type === 'answer') { const r = window.__asks[m.id]; if (r) { delete window.__asks[m.id]; r(m.result); } return; }
+      if (m.type !== 'call') return;
+      const done = (ok, result, error) => ls.forEach((cb) => cb({ data: { type: 'result', id: m.id, ok, result, error } }));
+      const fn = answers[m.method];
+      const ok = !!fn;
+      if (!ok) { done(false, null, 'mock: ' + m.method); return; }
+      Promise.resolve(fn(m.args || {})).then((r) => done(true, r, null), (e) => done(false, null, String(e)));
+    }, 5),
+  } };
+</script>
+</head><body><div id="app"></div>
+<script type="module">
+  import { createApp, h } from 'vue'
+  import '/src/style.css'
+  import PacketEdit from '/src/components/proxy/PacketEdit.vue'
+  import ToastStack from '/src/components/ToastStack.vue'
+  import HexPanel from '/src/components/HexPanel.vue'
+  import ProxyData from '/src/components/proxy/ProxyData.vue'
+  import App from '/src/App.vue'
+  import FireWallSetting from '/src/components/proxy/FireWallSetting.vue'
+  import SystemLog from '/src/components/proxy/SystemLog.vue'
+  import QuickPanel from '/src/components/proxy/QuickPanel.vue'
+  import ClientList from '/src/components/proxy/ClientList.vue'
+  import AccountList from '/src/components/proxy/AccountList.vue'
+  import ConfirmDialog from '/src/components/ConfirmDialog.vue'
+  import { attachUiHost } from '/src/bridge/host'
+  import PacketModification from '/src/components/proxy/PacketModification.vue'
+  import RobotEdit from '/src/components/proxy/RobotEdit.vue'
+  import TextCompare from '/src/components/proxy/TextCompare.vue'
+  import XorCalc from '/src/components/proxy/XorCalc.vue'
+  import Transcode from '/src/components/proxy/Transcode.vue'
+  import ExtractData from '/src/components/proxy/ExtractData.vue'
+  import { textA, textB, xorSrc } from '/src/stores/tools'
+  import StatData from '/src/components/proxy/StatData.vue'
+  import WpcConfig from '/src/components/proxy/WpcConfig.vue'
+  import ProcessSetting from '/src/components/proxy/ProcessSetting.vue'
+  import MapSetting from '/src/components/proxy/MapSetting.vue'
+  import ExtProxySetting from '/src/components/proxy/ExtProxySetting.vue'
+  import HotkeySetting from '/src/components/proxy/HotkeySetting.vue'
+  import BackupSetting from '/src/components/proxy/BackupSetting.vue'
+  import RemoteSetting from '/src/components/proxy/RemoteSetting.vue'
+  import { useList } from '/src/stores/lists'
+  import { FeedList } from '/src/bridge/types'
+  // 设置页与 WPC 页要的几份列表副本：直接写进 store
+  useList(FeedList.Filter).value = [{ Id: 'F1', IsEnable: true, Name: '登录包', ExecutionCount: 120, Action: 0 }, { Id: 'F2', IsEnable: false, Name: '心跳', ExecutionCount: 0, Action: 1 }, { Id: 'F3', IsEnable: true, Name: '聊天', ExecutionCount: 236, Action: 2 }]
+  useList(FeedList.Server).value = [{ Id: 'S1', IsEnable: true, Name: '华东节点', IP: '101.227.22.133', Port: 1080, ForgotURL: 'https://wpe64.com/forgot', RegisterURL: 'https://wpe64.com/reg', VerifyURL: '', RuleCount: 2 }, { Id: 'S2', IsEnable: false, Name: '备用', IP: '10.0.0.8', Port: 1081, ForgotURL: '', RegisterURL: '', VerifyURL: '', RuleCount: 0 }]
+  useList(FeedList.Notice).value = [{ Id: 'N1', Type: 1, Title: '周末双倍活动', Content: '……', More: 'https://wpe64.com/news/1', Time: '2026-09-04 18:00:00' }, { Id: 'N2', Type: 2, Title: '例行维护', Content: '……', More: '', Time: '2026-09-03 09:00:00' }]
+  useList(FeedList.SelectProcess).value = [{ IsCheck: false, ProcessName: 'game', ProcessID: 0, ModuleName: 'game.exe', ProcessPath: '' }]
+  useList(FeedList.MapLocal).value = [{ Id: 'L1', IsEnable: true, Protocol: 0, Host: 'cdn.example.com', Port: 80, RemotePath: '/config.json', LocalPath: 'C:\\data\\config.json' }]
+  useList(FeedList.MapRemote).value = [{ Id: 'M1', IsEnable: false, IsCheck: false, ProtocolFrom: 0, HostFrom: 'api.example.com', PortFrom: 80, PathFrom: '/v1', ProtocolTo: 1, HostTo: '127.0.0.1', PortTo: 8443, PathTo: '/v1' }]
+  const older = await Promise.all(['ProxySetting', 'ListSetting', 'LeachSetting', 'HookSetting', 'SystemSetting', 'FireWallSetting'].map((n) => import('/src/components/proxy/' + n + '.vue').then((m) => m.default)))
+  const settingComp = { '#ps': ProcessSetting, '#map': MapSetting, '#xp': ExtProxySetting, '#hk': HotkeySetting, '#bk': BackupSetting, '#rm': RemoteSetting,
+    '#o-proxy': older[0], '#o-list': older[1], '#o-leach': older[2], '#o-hook': older[3], '#o-sys': older[4], '#o-fw': older[5] }[location.hash]
+  const httpMode = location.hash === '#http'
+  const dataPage = location.hash === '#data'
+  const appPage = location.hash === '#app'
+  const fwPage = location.hash === '#fw'
+  const logPage = location.hash === '#log'
+  const quickPage = location.hash === '#quick'
+  const cliPage = location.hash === '#cli'
+  const acctPage = location.hash === '#acct'
+  if (acctPage) {
+    //乱序 + 有/无限制 + 有/无到期，用来验排序把「不限制 / 永不过期」排到最后
+    useList(5).value = [
+      { Id: 'a1', IsCheck: false, IsEnable: true,  UserName: 'zoe',  IsLimitLinks: true,  LimitLinks: 5,  IsLimitDevices: false, LimitDevices: 0, IsExpiry: true,  ExpiryTime: '2026-12-01 00:00:00', CreateTime: '', IsOnLine: false, LoginCount: 2 },
+      { Id: 'a2', IsCheck: false, IsEnable: true,  UserName: 'amy',  IsLimitLinks: false, LimitLinks: 0,  IsLimitDevices: true,  LimitDevices: 2, IsExpiry: false, ExpiryTime: '', CreateTime: '', IsOnLine: true,  LoginCount: 9 },
+      { Id: 'a3', IsCheck: false, IsEnable: false, UserName: 'bob',  IsLimitLinks: true,  LimitLinks: 12, IsLimitDevices: true,  LimitDevices: 1, IsExpiry: true,  ExpiryTime: '2026-10-02 00:00:00', CreateTime: '', IsOnLine: false, LoginCount: 0 },
+    ]
+  }
+  if (logPage || quickPage) attachUiHost()   //清空要弹确认框
+
+  if (quickPage) {
+    //滤镜 / 发送 / 机器人 / 仓库四份，用来验右键菜单的四套动作
+    useList(8).value = [{ Id: 'F1', IsEnable: true, Name: '登录包', ExecutionCount: 120 }, { Id: 'F2', IsEnable: false, Name: '心跳', ExecutionCount: 0 }, { Id: 'F3', IsEnable: true, Name: '聊天', ExecutionCount: 236 }]
+    useList(9).value = [{ Id: 'S1', IsEnable: true, Name: '刷怪', ExecutionCount: 4 }]
+    useList(10).value = [{ Id: 'R1', IsEnable: true, Name: '自动打怪', ExecutionCount: 9 }]
+    useList(11).value = [{ Id: 'W1', Name: '登录包仓库', DataCount: 51 }]
+  }
+
+  if (cliPage) {
+    //故意乱序 + 一个会让字符串排序出错的 IP 对（.9 / .10）
+    useList(6).value = [
+      { AccountId: 'A1', UserName: 'zhang', AuthIP: '10.10.10.10', IPLocation: '局域网', LinksNumber: 3, DevicesNumber: 1, TrafficStatistics: 2048, AuthResult: true, AuthTime: '2026-09-05 08:10:00' },
+      { AccountId: 'A2', UserName: 'anna',  AuthIP: '10.10.10.9',  IPLocation: '局域网', LinksNumber: 12, DevicesNumber: 3, TrafficStatistics: 1048576, AuthResult: true, AuthTime: '2026-09-05 08:02:00' },
+      { AccountId: 'A3', UserName: 'mike',  AuthIP: '203.0.113.7', IPLocation: '美国',   LinksNumber: 1, DevicesNumber: 1, TrafficStatistics: 512, AuthResult: true, AuthTime: '2026-09-05 08:20:00' },
+    ]
+  }
+
+  if (logPage) {
+    setTimeout(() => {
+      const rows = [
+        { Time: '08:00:01:0000000', FuncName: 'StartProxy', Content: 'SOCKS5 已启动 0.0.0.0:1080' },
+        { Time: '08:00:02:0000000', FuncName: 'InitDB', Content: 'Exception: 打不开数据库' },
+        { Time: '08:00:03:0000000', FuncName: 'RefreshAuthList', Content: '认证成功 10.10.10.8' },
+      ]
+      ls.forEach((cb) => cb({ data: { type: 'event', name: 'feed:append', data: { list: 2, rows } } }))
+    }, 400)
+  }
+  if (fwPage) attachUiHost()   //确认框要靠它接 ask
+  if (fwPage) useList(15).value = [
+    { IPAddress: '10.10.10.8', StartIP: 0, EndIP: 0, IPLocation: '局域网', EffectCount: 3, IsExpiry: false, ExpiryTime: '', CreateTime: '2026-09-05 08:00:00' },
+    { IPAddress: '203.0.113.7', StartIP: 0, EndIP: 0, IPLocation: '美国', EffectCount: 0, IsExpiry: true, ExpiryTime: '2026-09-06 08:00:00', CreateTime: '2026-09-05 08:00:00' },
+  ]
+  const page = location.hash === '#panel' || httpMode
+  const modify = location.hash === '#modify'
+  const robot = location.hash === '#robot'
+  const tool = { '#tc': TextCompare, '#xor': XorCalc, '#tr': Transcode, '#ex': ExtractData, '#stat': StatData, '#wpc': WpcConfig }[location.hash] || (settingComp ? { setup: () => () => h(settingComp, { open: true, 'onUpdate:open': () => { window.__closed = true } }) } : null)
+  if (tool) { const NL = String.fromCharCode(10); textA.value = 'AA BB CC 11 22 AA BB CC' + NL + 'Hello World'; textB.value = 'AA 00 CC 11 22 AA BB CC' + NL + 'Hello there'; xorSrc.value = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21]) }
+  if (dataPage) {
+    //走真正的 feed 通道推假数据，形状与 C# 的 ProxyRow 逐字对齐
+    setTimeout(() => {
+      const rows = Array.from({ length: 40 }, (_, i) => ({
+        Id: 1000 + i, Time: '14:45:' + String(i % 60).padStart(2, '0') + ':0000000', Socket: 1200 + i,
+        TheologyID: 0, Type: i % 4 === 0 ? 17 : 9, WebSocketType: 0,
+        ClientAddr: '10.10.10.8:' + (60000 + i), ClientLocation: '局域网', ServerAddr: '93.184.216.34:443',
+        ServerLocation: '美国', ServerDomain: 'example.com', DomainType: i % 4 === 0 ? 1 : 0,
+        Len: 180 + i, Preview: '16 03 01 00 B4', Action: i % 7 === 0 ? 1 : 0,
+      }));
+      ls.forEach((cb) => cb({ data: { type: 'event', name: 'feed:append', data: { list: 1, rows } } }));
+    }, 400);
+  }
+
+  createApp({ render: () => acctPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(AccountList)]), h(ToastStack)] : appPage ? [h(App)] : logPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(SystemLog)]), h(ConfirmDialog), h(ToastStack)] : quickPage ? [h('div', { style: 'position:fixed;inset:40px;width:320px' }, [h(QuickPanel)]), h(ToastStack)] : cliPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ClientList)]), h(ToastStack)] : fwPage ? [h(FireWallSetting, { open: true, 'onUpdate:open': () => {} }), h(ConfirmDialog), h(ToastStack)] : tool ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(tool)]), h(ToastStack)] : robot ? [h(RobotEdit, { id: 'R1', onClose: () => { window.__closed = true } }), h(ToastStack)] : modify ? [h(PacketModification, { id: 314, onClose: () => { window.__closed = true } }), h(ToastStack)] : dataPage ? [h('div', { style: 'position:fixed;inset:0;display:flex' }, [h(ProxyData)]), h(ToastStack)] : page ? [h('div', { style: 'position:fixed;inset:40px;display:flex' }, [h(HexPanel, { id: 314, packetType: httpMode ? 17 : 0, highlight: { offset: 9, length: 6 } })]), h(ToastStack)] : [h(PacketEdit, { target: { list: 'proxy', id: 1 }, onClose: () => { window.__closed = true } }), h(ToastStack)] }).mount('#app')
+</script>
+</body></html>

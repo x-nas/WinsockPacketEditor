@@ -98,70 +98,89 @@ namespace WinsockPacketEditor
 
         #region//自动入库 - 菜单
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.WareHouseConfig.WareHouse.OpenAutoStoresEdit(this.form, this, null);
-
-                    break;
-
-                case "Import":
-
-                    Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
+                        case "Add":
+
+                            UiDialogs.OpenAutoStoresEdit(this.form, this, null);
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(Operate.SystemConfig.ListAction.Import, null);
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
+                            {
+                                await Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(Operate.SystemConfig.ListAction.Export, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
+                            {
+                                await Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(Operate.SystemConfig.ListAction.CleanUp, null);
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
-                    {
-                        Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
-        private void tAutoStores_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tAutoStores_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is AutoStoresInfo asi)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
+                    if (e.Record is AutoStoresInfo asi)
+                    {
+                        switch (e.Btn.Id)
+                        {
+                            case "bEdit":
 
-                        Operate.WareHouseConfig.WareHouse.OpenAutoStoresEdit(this.form, this, asi);
+                                UiDialogs.OpenAutoStoresEdit(this.form, this, asi);
 
-                        break;
+                                break;
 
-                    case "bDelete":
+                            case "bDelete":
 
-                        Operate.WareHouseConfig.WareHouse.DeleteAutoStores_Dialog(this.form, asi);
+                                await Operate.WareHouseConfig.WareHouse.DeleteAutoStores_Dialog(asi);
 
-                        break;
-                }
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tAutoStores_CellButtonClick), ex);
             }
         }
 
         private void tAutoStores_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is AutoStoresInfo asi)
             {
-                Operate.WareHouseConfig.WareHouse.OpenAutoStoresEdit(this.form, this, asi);
+                UiDialogs.OpenAutoStoresEdit(this.form, this, asi);
             }
         }
 
@@ -169,7 +188,7 @@ namespace WinsockPacketEditor
 
         #region//自动入库 - 右键菜单
 
-        private void tAutoStores_CellClick(object sender, TableClickEventArgs e)
+        private async void tAutoStores_CellClick(object sender, TableClickEventArgs e)
         {
             try
             {
@@ -182,37 +201,37 @@ namespace WinsockPacketEditor
 
                     if (e.Record is AutoStoresInfo asi)
                     {
-                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tAutoStores, (item) =>
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tAutoStores, async (item) =>
                         {
                             switch (item.ID)
                             {
                                 case "Top":
 
-                                    Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, asi);
+                                    await Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(Operate.SystemConfig.ListAction.Top, asi);
 
                                     break;
 
                                 case "Up":
 
-                                    Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, asi);
+                                    await Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(Operate.SystemConfig.ListAction.Up, asi);
 
                                     break;
 
                                 case "Down":
 
-                                    Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, asi);
+                                    await Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(Operate.SystemConfig.ListAction.Down, asi);
 
                                     break;
 
                                 case "Bottom":
 
-                                    Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, asi);
+                                    await Operate.WareHouseConfig.List.UpdateAutoStores_ByListAction(Operate.SystemConfig.ListAction.Bottom, asi);
 
                                     break;
                             }
 
                             this.tAutoStores.SelectedIndex = -1;
-                        }, Operate.WareHouseConfig.List.GetCMS_AutoStores()));
+                        }, Operate.WareHouseConfig.List.GetCMS_AutoStores().ToAntd()));
                     }
                 }
             }

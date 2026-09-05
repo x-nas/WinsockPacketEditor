@@ -32,7 +32,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.1.8.%2a</ApplicationVersion>
+    <ApplicationVersion>2.1.9.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -244,11 +244,32 @@
     <Compile Include="ClassObject\Socks5ProxyReceiveFilter.cs" />
     <Compile Include="ClassObject\SocksProxyReceiveFilterFactory.cs" />
     <Compile Include="ClassObject\SocksProxyServer.cs" />
+    <Compile Include="ClassObject\WpeLogFactory.cs" />
     <Compile Include="ClassObject\SocksSwitchReceiveFilter.cs" />
     <Compile Include="ClassObject\SunnyNetCallback.cs" />
     <Compile Include="ClassObject\WareHouseInfo.cs" />
     <Compile Include="ClassObject\WhiteListInfo.cs" />
     <Compile Include="ClassObject\WinSockHook.cs" />
+    <Compile Include="ClassObject\FeedPump.cs" />
+    <Compile Include="ClassObject\LogFile.cs" />
+    <Compile Include="ClassObject\Ui\FeedRows.cs" />
+    <Compile Include="ClassObject\Ui\HexState.cs" />
+    <Compile Include="ClassObject\Ui\IL10n.cs" />
+    <Compile Include="ClassObject\Ui\IUiFeed.cs" />
+    <Compile Include="ClassObject\Ui\IUiHost.cs" />
+    <Compile Include="ClassObject\Ui\MenuNode.cs" />
+    <Compile Include="ClassObject\Ui\PasswordResult.cs" />
+    <Compile Include="ClassObject\Ui\RgbColor.cs" />
+    <Compile Include="ClassObject\Ui\UI.cs" />
+    <Compile Include="ClassObject\Ui\UiPrefs.cs" />
+    <Compile Include="Forms\UiDialogs.cs" />
+    <Compile Include="Forms\UiHost\AntdL10n.cs" />
+    <Compile Include="Forms\UiHost\UiAdapters.cs" />
+    <Compile Include="Forms\UiHost\UiControls.cs" />
+    <Compile Include="Forms\UiHost\UiImages.cs" />
+    <Compile Include="Forms\UiHost\UiTheme.cs" />
+    <Compile Include="Forms\UiHost\WinFormsUiFeed.cs" />
+    <Compile Include="Forms\UiHost\WinFormsUiHost.cs" />
     <Compile Include="Controls\AccountEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>

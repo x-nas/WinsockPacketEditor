@@ -116,8 +116,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tProcessID.BackColor = Operate.SystemConfig.Color_40;
-                this.tProcessID.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tProcessID.BackColor = UiTheme.Color_40;
+                this.tProcessID.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -141,7 +141,7 @@ namespace WinsockPacketEditor
             }, (config) =>
             {
                 config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
-                this.lstProcessID = Operate.ProcessConfig.GetProcessList();
+                this.lstProcessID = UiImages.FillIcons(Operate.ProcessConfig.GetProcessList());
             }, () =>
             {
                 if (Operate.ProxyConfig.Proxy.lstSelectProcessID.Count > 0 && this.lstProcessID.Count > 0)
@@ -302,6 +302,9 @@ namespace WinsockPacketEditor
 
         private void tProcessID_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is ProcessInfo pi)
             {
                 Operate.ProxyConfig.Proxy.lstSelectProcessName.Add(pi);
@@ -314,6 +317,9 @@ namespace WinsockPacketEditor
 
         private void tProcessName_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is ProcessInfo pi)
             {
                 Operate.ProxyConfig.Proxy.lstSelectProcessName.Remove(pi);

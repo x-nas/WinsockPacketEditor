@@ -24,16 +24,27 @@ namespace WinsockPacketEditor
 
         #region//导入备份
 
-        private void bImport_Click(object sender, EventArgs e)
+        private async void bImport_Click(object sender, EventArgs e)
         {
-            Operate.SystemConfig.ImportSystemBackUp_Dialog(this.form);
+            try
+            {
+                    await Operate.SystemConfig.ImportSystemBackUp_Dialog(this.form);
+
+                    //备份里可能带着主题与语言，导入后要把 UI.Prefs 真正应用到 AntdUI
+                    WinFormsUiHost.ApplyAll();
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(bImport_Click), ex);
+            }
         }
 
         #endregion
 
         #region//导出备份
 
-        private void bExport_Click(object sender, EventArgs e)
+        private async void bExport_Click(object sender, EventArgs e)
         {
             try
             {
@@ -49,9 +60,7 @@ namespace WinsockPacketEditor
                 bool SendList = this.cbBackUp_SendList.Checked;
                 bool RobotList = this.cbBackUp_RobotList.Checked;
 
-                Operate.SystemConfig.ExportSystemBackUp_Dialog(
-                    this.form,
-                    FileName,
+                await Operate.SystemConfig.ExportSystemBackUp_Dialog(FileName,
                     SystemConfig,
                     ProxySet,
                     ProxyAccount,

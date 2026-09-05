@@ -39,6 +39,12 @@ namespace WPEHook
 
                 Operate.SystemConfig.LoadSystemConfig_FromDB();
 
+                //配置只落到 UI.Prefs，这里把主题与语言真正应用到 AntdUI（必须早于任何窗体创建）
+                WinFormsUiHost.ApplyAll();
+
+                //登记密码框等表单弹窗的渲染方式，否则 UI.Prompt 取不到工厂、一律返回 null
+                UiDialogs.RegisterPrompts();
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new InjectModeForm());

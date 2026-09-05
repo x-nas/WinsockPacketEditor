@@ -86,13 +86,13 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.hbPacketEdit.BackColor = Operate.SystemConfig.Color_30;
+                this.hbPacketEdit.BackColor = UiTheme.Color_30;
                 this.hbPacketEdit.ForeColor = Color.Silver;
 
                 this.pPacketSocket.Back = 
                     this.pPacketSend.Back = 
                     this.pProgression.Back = 
-                    Operate.SystemConfig.Color_30;
+                    UiTheme.Color_30;
             }
             else
             {
@@ -366,7 +366,7 @@ namespace WinsockPacketEditor
 
                             break;
                     }
-                }, Operate.PacketConfig.Packet.GetCMS_PacketEdit(this.hbPacketEdit)));
+                }, Operate.PacketConfig.Packet.GetCMS_PacketEdit(this.hbPacketEdit.ToState()).ToAntd()));
             }
         }
 

@@ -188,12 +188,12 @@ namespace WinsockPacketEditor
                 if (this.switchSystemProxy.Checked)
                 {
                     Operate.ProxyConfig.Proxy.Enable_SystemProxy = true;
-                    Operate.ProxyConfig.Proxy.EnableSystemProxy(this.form);
+                    Operate.ProxyConfig.Proxy.EnableSystemProxy();
                 }
                 else
                 {
                     Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
-                    Operate.ProxyConfig.Proxy.DisableSystemProxy(this.form);
+                    Operate.ProxyConfig.Proxy.DisableSystemProxy();
                 }
             }
             catch (Exception ex)
@@ -206,7 +206,7 @@ namespace WinsockPacketEditor
 
         #region//导出证书
 
-        private void bExportCert_Click(object sender, EventArgs e)
+        private async void bExportCert_Click(object sender, EventArgs e)
         {
             try
             {
@@ -222,7 +222,7 @@ namespace WinsockPacketEditor
                     CertName = "WPE64";
                 }
 
-                Operate.ProxyConfig.Proxy.SaveCertToFile_Dialog(this.form, CerType, CertName);
+                await Operate.ProxyConfig.Proxy.SaveCertToFile_Dialog(CerType, CertName);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using AntdUI;
+﻿using System;
+using AntdUI;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -95,8 +96,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tWareHouseList.BackColor = Operate.SystemConfig.Color_40;
-                this.tWareHouseList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tWareHouseList.BackColor = UiTheme.Color_40;
+                this.tWareHouseList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -124,76 +125,95 @@ namespace WinsockPacketEditor
             });
         }
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.WareHouseConfig.WareHouse.AddWareHouse_New();
-                    this.tWareHouseList.ScrollBar.ValueY = tWareHouseList.ScrollBar.MaxY;
-
-                    break;
-
-                case "Import":
-
-                    Operate.WareHouseConfig.List.LoadWareHouseList_Dialog(this.form);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.WareHouseConfig.List.SaveWareHouseList_Dialog(this.form, string.Empty, null);
+                        case "Add":
+
+                            Operate.WareHouseConfig.WareHouse.AddWareHouse_New();
+                            this.tWareHouseList.ScrollBar.ValueY = tWareHouseList.ScrollBar.MaxY;
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.WareHouseConfig.List.LoadWareHouseList_Dialog();
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                            {
+                                await Operate.WareHouseConfig.List.SaveWareHouseList_Dialog(string.Empty, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                            {
+                                await Operate.WareHouseConfig.List.CleanUpWareHouseList_Dialog();
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
-                    {
-                        Operate.WareHouseConfig.List.CleanUpWareHouseList_Dialog(this.form);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
-        private void tWareHouseList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tWareHouseList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is WareHouseInfo whi)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
-
-                        Operate.WareHouseConfig.WareHouse.OpenWareHouseEdit(this.form, whi);
-
-                        break;
-
-                    case "bDelete":
-
-                        List<WareHouseInfo> whiList = new List<WareHouseInfo>
+                    if (e.Record is WareHouseInfo whi)
+                    {
+                        switch (e.Btn.Id)
                         {
-                            whi
-                        };
+                            case "bEdit":
 
-                        Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, whiList);
+                                UiDialogs.OpenWareHouseEdit(this.form, whi);
 
-                        break;
-                }
+                                break;
+
+                            case "bDelete":
+
+                                List<WareHouseInfo> whiList = new List<WareHouseInfo>
+                                {
+                                    whi
+                                };
+
+                                await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Delete, whiList);
+
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tWareHouseList_CellButtonClick), ex);
             }
         }
 
         private void tWareHouseList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is WareHouseInfo whi)
             {
-                Operate.WareHouseConfig.WareHouse.OpenWareHouseEdit(this.form, whi);
+                UiDialogs.OpenWareHouseEdit(this.form, whi);
             }
         }
 
@@ -201,92 +221,100 @@ namespace WinsockPacketEditor
 
         #region//仓库列表 - 右键菜单
 
-        private void tWareHouseList_CellClick(object sender, TableClickEventArgs e)
+        private async void tWareHouseList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tWareHouseList, (item) =>
-                {
-                    List<WareHouseInfo> whiList = new List<WareHouseInfo>();
-                    foreach (int SelectIndex in this.tWareHouseList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        whiList.Add(Operate.WareHouseConfig.List.lstWareHouseInfo[SelectIndex - 1]);
+                        if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tWareHouseList, async (item) =>
+                        {
+                            List<WareHouseInfo> whiList = new List<WareHouseInfo>();
+                            foreach (int SelectIndex in this.tWareHouseList.SelectedIndexs)
+                            {
+                                whiList.Add(Operate.WareHouseConfig.List.lstWareHouseInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Top, whiList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Up, whiList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Down, whiList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Bottom, whiList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Copy, whiList);
+                                        this.tWareHouseList.ScrollBar.ValueY = tWareHouseList.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Export, whiList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Delete, whiList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tWareHouseList.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, whiList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, whiList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, whiList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, whiList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, whiList);
-                                this.tWareHouseList.ScrollBar.ValueY = tWareHouseList.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, whiList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, whiList);
-                            }
-
-                            break;
-                    }
-
-                    this.tWareHouseList.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tWareHouseList_CellClick), ex);
             }
         }
 

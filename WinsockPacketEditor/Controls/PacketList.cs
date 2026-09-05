@@ -44,7 +44,28 @@ namespace WinsockPacketEditor
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
             this.PacketList_AutoClear_Changed();
 
+            //B9c：封包列表被自动清理时收拾右侧面板（清理动作本身在 Operate 里做）
+            WinFormsUiFeed.Cleared += this.OnFeedCleared;
+            this.Disposed += (s, ev) => WinFormsUiFeed.Cleared -= this.OnFeedCleared;
+
             Operate.DoLog(nameof(PacketList_Load), this.lProcessName.Text);
+        }
+
+        private void OnFeedCleared(FeedList List)
+        {
+            if (List != FeedList.Packet)
+            {
+                return;
+            }
+
+            try
+            {
+                this.controlPacketData?.CleanUp_PacketData();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(OnFeedCleared), ex);
+            }
         }
 
         private void InitMenu()
@@ -140,7 +161,7 @@ namespace WinsockPacketEditor
                 this.dgvPacketList.BackgroundColor =
                     this.dgvPacketList.RowsDefaultCellStyle.BackColor =
                     this.dgvPacketList.ColumnHeadersDefaultCellStyle.BackColor =
-                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.SelectionBackColor = Operate.SystemConfig.Color_40;
+                    this.dgvPacketList.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiTheme.Color_40;
 
                 this.dgvPacketList.ForeColor = Color.LimeGreen;
                 this.dgvPacketList.ColumnHeadersDefaultCellStyle.ForeColor =
@@ -189,7 +210,7 @@ namespace WinsockPacketEditor
                 if (e.RowIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
                 {
                     var filterAction = Operate.PacketConfig.List.lstPacketInfo[e.RowIndex].FilterAction;
-                    var colors = Operate.SystemConfig.GetFilterColors(filterAction);
+                    var colors = UiTheme.GetFilterColors(filterAction);
                     if (colors.HasValue)
                     {
                         row.DefaultCellStyle.ForeColor = colors.Value.ForeColor;
@@ -208,7 +229,7 @@ namespace WinsockPacketEditor
                         var packetTypeCell = row.Cells["cPacketType"];
                         if (packetTypeCell.Value != null)
                         {
-                            e.Value = Operate.PacketConfig.Packet.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)packetTypeCell.Value);
+                            e.Value = UiImages.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)packetTypeCell.Value);
                             e.FormattingApplied = true;
                         }
                         break;
@@ -233,7 +254,7 @@ namespace WinsockPacketEditor
                         var clientLocationCell = row.Cells["cFromLocation"];
                         if (clientLocationCell.Value != null)
                         {
-                            e.Value = Operate.SystemConfig.GetFlagByLocation(clientLocationCell.Value.ToString());
+                            e.Value = UiImages.GetFlagByLocation(clientLocationCell.Value.ToString());
                             e.FormattingApplied = true;
                         }
                         break;
@@ -242,7 +263,7 @@ namespace WinsockPacketEditor
                         var serverLocationCell = row.Cells["cToLocation"];
                         if (serverLocationCell.Value != null)
                         {
-                            e.Value = Operate.SystemConfig.GetFlagByLocation(serverLocationCell.Value.ToString());
+                            e.Value = UiImages.GetFlagByLocation(serverLocationCell.Value.ToString());
                             e.FormattingApplied = true;
                         }
                         break;
@@ -472,11 +493,14 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void dgvPacketList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvPacketList_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
+            //只响应鼠标左键：CellDoubleClick 的参数不带按键信息，故改用 CellMouseDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.RowIndex >= 0 && e.RowIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
             {
-                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, Operate.PacketConfig.List.lstPacketInfo[e.RowIndex]);
+                UiDialogs.OpenPacketEdit(this.form, Operate.PacketConfig.List.lstPacketInfo[e.RowIndex]);
             }
         }
 
@@ -484,233 +508,241 @@ namespace WinsockPacketEditor
 
         #region//封包列表 - 右键菜单
 
-        private void dgvPacketList_MouseClick(object sender, MouseEventArgs e)
+        private async void dgvPacketList_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.PacketConfig.List.lstPacketInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(this.dgvPacketList, item =>
-                {
-                    List<PacketInfo> piList = new List<PacketInfo>();
-
-                    for (int i = 0; i < dgvPacketList.Rows.Count; i++)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        if (dgvPacketList.Rows[i].Selected)
+                        if (Operate.PacketConfig.List.lstPacketInfo.Count == 0)
                         {
-                            piList.Add(Operate.PacketConfig.List.lstPacketInfo[i]);
+                            return;
                         }
-                    }
 
-                    switch (item.ID)
-                    {
-                        case "Edit":
+                        AntdUI.ContextMenuStrip.open(this.dgvPacketList, async item =>
+                        {
+                            List<PacketInfo> piList = new List<PacketInfo>();
 
-                            if (piList.Count > 0)
+                            for (int i = 0; i < dgvPacketList.Rows.Count; i++)
                             {
-                                Operate.PacketConfig.Packet.OpenPacketEdit(this.form, piList[0]);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (piList.Count > 0)
-                            {
-                                StringBuilder sb = new StringBuilder();
-                                foreach (PacketInfo pi in piList)
+                                if (dgvPacketList.Rows[i].Selected)
                                 {
-                                    string hexString = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer);
-                                    sb.AppendLine(hexString);
-                                }
-
-                                Clipboard.SetText(sb.ToString());
-
-                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
-                                {
-                                    LocalizationText = "CopyToClipboard"
-                                });
-                            }
-
-                            break;
-
-                        case "ToFilterList":
-
-                            if (piList.Count > 0)
-                            {
-                                bool bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(piList[0], null);
-                                if (bOK)
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表成功", TType.Success)
-                                    {
-                                        LocalizationText = "ToFilterList.Success"
-                                    });
-                                }
-                                else
-                                {
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表失败", TType.Error)
-                                    {
-                                        LocalizationText = "ToFilterList.Error"
-                                    });
+                                    piList.Add(Operate.PacketConfig.List.lstPacketInfo[i]);
                                 }
                             }
 
-                            break;
-
-                        case "SYSSocket":
-
-                            if (piList.Count > 0)
+                            switch (item.ID)
                             {
-                                Operate.SystemConfig.SystemSocket = piList[0].PacketSocket;
+                                case "Edit":
 
-                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "设置系统套接字完成", TType.Success)
-                                {
-                                    LocalizationText = "SSocket.Success"
-                                });
-                            }
-
-                            break;
-
-                        case "PacketModification":
-
-                            if (piList.Count > 0)
-                            {
-                                var PacketModification = new PacketModification(this.form, piList[0]);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketModificationForm", "封包数据对比"), PacketModification)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
-                            }
-
-                            break;
-
-                        case "ToExcel":
-
-                            Operate.PacketConfig.List.SavePacketList_Dialog(this.form, Operate.PacketConfig.Packet.InjectProcess, piList);
-
-                            break;
-
-                        case "ToTextA":
-
-                            if (piList.Count > 0)
-                            {
-                                if (this.form is InterfaceInfo.IInjectMode injectForm)
-                                {
-                                    string TextA = string.Empty;
-                                    foreach (PacketInfo pi in piList)
+                                    if (piList.Count > 0)
                                     {
-                                        TextA += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
+                                        UiDialogs.OpenPacketEdit(this.form, piList[0]);
                                     }
 
-                                    injectForm.SetTextA(TextA);
+                                    break;
 
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
+                                case "Copy":
+
+                                    if (piList.Count > 0)
                                     {
-                                        LocalizationText = "ToTextA"
-                                    });
-                                }
-                            }
-
-                            break;
-
-                        case "ToTextB":
-
-                            if (piList.Count > 0)
-                            {
-                                if (this.form is InterfaceInfo.IInjectMode injectForm)
-                                {
-                                    string TextB = string.Empty;
-                                    foreach (PacketInfo pi in piList)
-                                    {
-                                        TextB += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
-                                    }
-
-                                    injectForm.SetTextB(TextB);
-
-                                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本B", TType.Success)
-                                    {
-                                        LocalizationText = "ToTextB"
-                                    });
-                                }
-                            }
-
-                            break;
-
-                        case "SelectAll":
-
-                            this.dgvPacketList.SelectAll();
-
-                            break;
-
-                        case "DeSelect":
-
-                            this.dgvPacketList.ClearSelection();
-
-                            break;
-
-                        default:
-
-                            if (piList.Count > 0)
-                            {
-                                if (item.Tag.ToString().Equals("ToSend"))
-                                {
-                                    if (Guid.TryParse(item.ID, out Guid SID))
-                                    {
-                                        SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
-                                        if (si != null && piList.Count > 0)
+                                        StringBuilder sb = new StringBuilder();
+                                        foreach (PacketInfo pi in piList)
                                         {
-                                            if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                            string hexString = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer);
+                                            sb.AppendLine(hexString);
+                                        }
+
+                                        Clipboard.SetText(sb.ToString());
+
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已复制到剪贴板", TType.Success)
+                                        {
+                                            LocalizationText = "CopyToClipboard"
+                                        });
+                                    }
+
+                                    break;
+
+                                case "ToFilterList":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        bool bOK = Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(piList[0], null);
+                                        if (bOK)
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表成功", TType.Success)
                                             {
-                                                string sText = string.Format(AntdUI.Localization.Get("ToSend.Success", "已添加到 : {0}"), item.Text);
-                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
-                                            }
-                                            else
+                                                LocalizationText = "ToFilterList.Success"
+                                            });
+                                        }
+                                        else
+                                        {
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到滤镜列表失败", TType.Error)
                                             {
-                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送出错", TType.Error)
-                                                {
-                                                    LocalizationText = "ToSend.Error"
-                                                });
-                                            }
+                                                LocalizationText = "ToFilterList.Error"
+                                            });
                                         }
                                     }
 
-                                    return;
-                                }
+                                    break;
 
-                                if (item.Tag.ToString().Equals("ToWareHouse"))
-                                {
-                                    if (Guid.TryParse(item.ID, out Guid WID))
+                                case "SYSSocket":
+
+                                    if (piList.Count > 0)
                                     {
-                                        WareHouseInfo whi = Operate.WareHouseConfig.WareHouse.GetWareHouse_ByGuid(WID);
-                                        if (whi != null && piList.Count > 0)
+                                        Operate.SystemConfig.SystemSocket = piList[0].PacketSocket;
+
+                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "设置系统套接字完成", TType.Success)
                                         {
-                                            if (Operate.WareHouseConfig.WareHouse.AddStores_ByPacketInfo(WID, piList))
+                                            LocalizationText = "SSocket.Success"
+                                        });
+                                    }
+
+                                    break;
+
+                                case "PacketModification":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        var PacketModification = new PacketModification(this.form, piList[0]);
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("PacketModificationForm", "封包数据对比"), PacketModification)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            BtnHeight = 0,
+                                        });
+                                    }
+
+                                    break;
+
+                                case "ToExcel":
+
+                                    await Operate.PacketConfig.List.SavePacketList_Dialog(Operate.PacketConfig.Packet.InjectProcess, piList);
+
+                                    break;
+
+                                case "ToTextA":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        if (this.form is InterfaceInfo.IInjectMode injectForm)
+                                        {
+                                            string TextA = string.Empty;
+                                            foreach (PacketInfo pi in piList)
                                             {
-                                                string sText = string.Format(AntdUI.Localization.Get("ToWareHouse.Success", "已添加到 : {0}"), item.Text);
-                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                                TextA += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
                                             }
-                                            else
+
+                                            injectForm.SetTextA(TextA);
+
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本A", TType.Success)
                                             {
-                                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到仓库出错", TType.Error)
-                                                {
-                                                    LocalizationText = "ToWareHouse.Error"
-                                                });
-                                            }
+                                                LocalizationText = "ToTextA"
+                                            });
                                         }
                                     }
 
-                                    return;
-                                }
-                            }
+                                    break;
 
-                            break;
+                                case "ToTextB":
+
+                                    if (piList.Count > 0)
+                                    {
+                                        if (this.form is InterfaceInfo.IInjectMode injectForm)
+                                        {
+                                            string TextB = string.Empty;
+                                            foreach (PacketInfo pi in piList)
+                                            {
+                                                TextB += Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer) + "\r\n";
+                                            }
+
+                                            injectForm.SetTextB(TextB);
+
+                                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "已添加到文本B", TType.Success)
+                                            {
+                                                LocalizationText = "ToTextB"
+                                            });
+                                        }
+                                    }
+
+                                    break;
+
+                                case "SelectAll":
+
+                                    this.dgvPacketList.SelectAll();
+
+                                    break;
+
+                                case "DeSelect":
+
+                                    this.dgvPacketList.ClearSelection();
+
+                                    break;
+
+                                default:
+
+                                    if (piList.Count > 0)
+                                    {
+                                        if (item.Tag.ToString().Equals("ToSend"))
+                                        {
+                                            if (Guid.TryParse(item.ID, out Guid SID))
+                                            {
+                                                SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                                                if (si != null && piList.Count > 0)
+                                                {
+                                                    if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                                    {
+                                                        string sText = string.Format(AntdUI.Localization.Get("ToSend.Success", "已添加到 : {0}"), item.Text);
+                                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                                    }
+                                                    else
+                                                    {
+                                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到发送出错", TType.Error)
+                                                        {
+                                                            LocalizationText = "ToSend.Error"
+                                                        });
+                                                    }
+                                                }
+                                            }
+
+                                            return;
+                                        }
+
+                                        if (item.Tag.ToString().Equals("ToWareHouse"))
+                                        {
+                                            if (Guid.TryParse(item.ID, out Guid WID))
+                                            {
+                                                WareHouseInfo whi = Operate.WareHouseConfig.WareHouse.GetWareHouse_ByGuid(WID);
+                                                if (whi != null && piList.Count > 0)
+                                                {
+                                                    if (Operate.WareHouseConfig.WareHouse.AddStores_ByPacketInfo(WID, piList))
+                                                    {
+                                                        string sText = string.Format(AntdUI.Localization.Get("ToWareHouse.Success", "已添加到 : {0}"), item.Text);
+                                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, sText, TType.Success));
+                                                    }
+                                                    else
+                                                    {
+                                                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "添加到仓库出错", TType.Error)
+                                                        {
+                                                            LocalizationText = "ToWareHouse.Error"
+                                                        });
+                                                    }
+                                                }
+                                            }
+
+                                            return;
+                                        }
+                                    }
+
+                                    break;
+                            }
+                        }, Operate.PacketConfig.List.GetCMS_PacketList().ToAntd());
                     }
-                }, Operate.PacketConfig.List.GetCMS_PacketList());
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(dgvPacketList_MouseClick), ex);
             }
         }
 
@@ -873,14 +905,8 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                if (Operate.PacketConfig.List.AutoClear)
-                {
-                    if (Operate.PacketConfig.List.lstPacketInfo.Count > Operate.PacketConfig.List.AutoClear_Value)
-                    {
-                        this.CleanUp_PacketList();
-                        this.controlPacketData?.CleanUp_PacketData();
-                    }
-                }
+                //B9c：自动清理已移进 Operate.PacketConfig.List.FlushToFeed，
+                //这里只保留「清空后收拾右侧面板」，由 WinFormsUiFeed.Cleared 事件驱动（见 OnFeedCleared）。
             }
             catch (Exception ex)
             {

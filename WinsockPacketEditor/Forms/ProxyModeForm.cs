@@ -25,9 +25,12 @@ namespace WinsockPacketEditor
         #region//窗体事件
 
         public ProxyModeForm()
-        {            
+        {
+            UI.Attach(new WinFormsUiHost(this), new AntdL10n());
+            UI.AttachFeed(WinFormsUiFeed.Instance);
+
             InitializeComponent();
-            Theme().Dark(Operate.SystemConfig.Color_30).Light(Operate.SystemConfig.Color_250);
+            Theme().Dark(UiTheme.Color_30).Light(UiTheme.Color_250);
             Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.Proxy;
         }
 
@@ -51,7 +54,7 @@ namespace WinsockPacketEditor
 
             AntdUI.Spin.open(this, AntdUI.Localization.Get("Loading", "正在加载..."), config =>
             {
-                Operate.SystemConfig.StartRemoteMGT(this);
+                Operate.SystemConfig.StartRemoteMGT();
                 Operate.SystemConfig.InitCPUAndMemoryCounter();
                 Operate.SystemConfig.InitListExecute();                
                 Operate.SystemConfig.LoadInjectMode_FromDB();
@@ -81,7 +84,7 @@ namespace WinsockPacketEditor
             this.timerAutoSave.Enabled = true;
             this.tabProxyMode.TabMenuVisible = false;            
             this.mProxyMode.SelectIndex(0, true);
-            this.colorTheme.Value = Operate.SystemConfig.SystemColor;
+            this.colorTheme.Value = UiTheme.SystemColor;
         }
 
         private void ProxyModeForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -89,10 +92,10 @@ namespace WinsockPacketEditor
             if (Operate.ProxyConfig.Proxy.Enable_SystemProxy)
             {
                 Operate.ProxyConfig.Proxy.Enable_SystemProxy = false;
-                Operate.ProxyConfig.Proxy.DisableSystemProxy(this);
+                Operate.ProxyConfig.Proxy.DisableSystemProxy();
             }
 
-            Operate.SystemConfig.StopRemoteMGT(this);
+            Operate.SystemConfig.StopRemoteMGT();
             Operate.SystemConfig.SaveSystemConfig_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
             Operate.SystemConfig.SaveProxyMode_ToDB();
@@ -427,7 +430,7 @@ namespace WinsockPacketEditor
 
         public void InitFloatButton()
         {
-            Operate.SystemConfig.InitFloatButton(this);
+            UiControls.InitFloatButton(this);
         }        
 
         public void RefreshProxyData()
@@ -482,13 +485,13 @@ namespace WinsockPacketEditor
         private void colorTheme_ValueChanged(object sender, AntdUI.ColorEventArgs e)
         {
             setcolor = true;
-            Operate.SystemConfig.SystemColor = e.Value;
+            UI.Prefs.SystemColor = (e.Value).ToRgb();
 
-            AntdUI.Style.SetPrimary(Operate.SystemConfig.SystemColor);
+            AntdUI.Style.SetPrimary(UiTheme.SystemColor);
 
             for (int i = 0; i < this.mProxyMode.Items.Count; i++)
             {
-                this.mProxyMode.Items[i].BadgeBack = Operate.SystemConfig.SystemColor;
+                this.mProxyMode.Items[i].BadgeBack = UiTheme.SystemColor;
             }
 
             Refresh();
@@ -500,7 +503,8 @@ namespace WinsockPacketEditor
 
         private void btn_mode_Click(object sender, EventArgs e)
         {
-            AntdUI.Config.IsDark = !AntdUI.Config.IsDark;
+            UI.Prefs.IsDark = !UI.Prefs.IsDark;
+            WinFormsUiHost.ApplyPrefs();
             this.Dark_Changed();
             Refresh();
         }
@@ -541,16 +545,9 @@ namespace WinsockPacketEditor
             {
                 btn_global.Loading = true;
 
-                if (lang.StartsWith("en"))
-                {
-                    AntdUI.Localization.Provider = new Localizer();
-                }
-                else
-                {
-                    AntdUI.Localization.Provider = null;
-                }
-
-                AntdUI.Localization.SetLanguage(lang);
+                //写入唯一真源后统一应用，这样界面上切换的语言会随配置一起持久化
+                UI.Prefs.Language = lang;
+                WinFormsUiHost.ApplyLanguage();
                 this.Text = "WPE x64 - " + AntdUI.Localization.Get("ProxyModeForm", "代理模式");
                 this.cProxyList?.SetColumnName_ProxyList();
                 this.cComparisonText.SetTextInfo();
@@ -570,12 +567,16 @@ namespace WinsockPacketEditor
             var DisplaySetting = new DisplaySetting();
             if (AntdUI.Modal.open(this, AntdUI.Localization.Get("Setting", "设置"), DisplaySetting) == DialogResult.OK)
             {
-                AntdUI.Config.Animation = DisplaySetting.Animation;
-                AntdUI.Config.ShadowEnabled = DisplaySetting.ShadowEnabled;
-                AntdUI.Config.ShowInWindow = DisplaySetting.ShowInWindow;
-                AntdUI.Config.ScrollBarHide = DisplaySetting.ScrollBarHide;
-                AntdUI.Config.TextRenderingHighQuality = DisplaySetting.TextRenderingHighQuality;
-                if (AntdUI.Config.TextRenderingHighQuality == DisplaySetting.TextRenderingHighQuality)
+                UI.Prefs.IsAnimation = DisplaySetting.Animation;
+                UI.Prefs.IsShadowEnabled = DisplaySetting.ShadowEnabled;
+                UI.Prefs.IsShowInWindow = DisplaySetting.ShowInWindow;
+                UI.Prefs.IsScrollBarHide = DisplaySetting.ScrollBarHide;
+                UI.Prefs.IsTextRenderingHighQuality = DisplaySetting.TextRenderingHighQuality;
+                WinFormsUiHost.ApplyPrefs();
+
+                //注意：这个判断刚赋完值必然成立，所以下面的 Refresh() 从来不会执行。
+                //这是迁移前就存在的写法，B3a 只做搬迁、原样保留，是否修正另议。
+                if (UI.Prefs.IsTextRenderingHighQuality == DisplaySetting.TextRenderingHighQuality)
                 {
                     return;
                 }
@@ -680,25 +681,10 @@ namespace WinsockPacketEditor
             {
                 this.timerProxyList.Stop();
 
-                if (Operate.ProxyConfig.Queue.qProxyInfo.Count > 0)
-                {
-                    Operate.ProxyConfig.List.ProxyInfo_ToList();
-                }
-
-                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.LogToList();
-                }
-
-                if (Operate.LogConfig.Queue.cqFilterLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.FilterLogToList();
-                }
-
-                if (Operate.LogConfig.Queue.cqProxyLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.ProxyLogToList();
-                }
+                //B9c：改为批量搬运。队列空时 FlushToFeed 立刻返回，不再需要外面判空。
+                //自动清理也移进去了，两个消费者（WinForms 与将来的桥）共用一套规则。
+                Operate.ProxyConfig.List.FlushToFeed();
+                Operate.LogConfig.List.FlushToFeed();
             }
             catch (Exception ex)
             {

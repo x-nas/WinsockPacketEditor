@@ -45,7 +45,7 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.txtFind.BackColor = Operate.SystemConfig.Color_30;
+                this.txtFind.BackColor = UiTheme.Color_30;
             }
             else
             {

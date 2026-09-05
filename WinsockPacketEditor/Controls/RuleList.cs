@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -93,8 +94,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tRuleList.BackColor = Operate.SystemConfig.Color_40;
-                this.tRuleList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tRuleList.BackColor = UiTheme.Color_40;
+                this.tRuleList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -107,60 +108,79 @@ namespace WinsockPacketEditor
 
         #region//规则列表 - 菜单
 
-        private void ddMenu_SelectedValueChanged(object sender, AntdUI.ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, AntdUI.ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "RuleList_Add":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.WPCConfig.ServerList.OpenRuleEdit(this.form, this.siSelect, null);
-
-                    break;
-
-                case "RuleList_Clear":
-
-                    if (this.siSelect.ServerRInfo.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.WPCConfig.ServerList.CleanUpRuleList_Dialog(this.form, siSelect);
-                    }
+                        case "RuleList_Add":
 
-                    break;
+                            UiDialogs.OpenRuleEdit(this.form, this.siSelect, null);
+
+                            break;
+
+                        case "RuleList_Clear":
+
+                            if (this.siSelect.ServerRInfo.Count > 0)
+                            {
+                                await Operate.WPCConfig.ServerList.CleanUpRuleList_Dialog(siSelect);
+                            }
+
+                            break;
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
-        private void tRuleList_CellButtonClick(object sender, AntdUI.TableButtonEventArgs e)
+        private async void tRuleList_CellButtonClick(object sender, AntdUI.TableButtonEventArgs e)
         {
-            if (e.Record is RuleInfo ri)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
-
-                        Operate.WPCConfig.ServerList.OpenRuleEdit(this.form, this.siSelect, ri);
-
-                        break;
-
-                    case "bDelete":
-
-                        List<RuleInfo> riList = new List<RuleInfo>
+                    if (e.Record is RuleInfo ri)
+                    {
+                        switch (e.Btn.Id)
                         {
-                            ri
-                        };
+                            case "bEdit":
 
-                        Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.form, this.siSelect, Operate.SystemConfig.ListAction.Delete, riList);
+                                UiDialogs.OpenRuleEdit(this.form, this.siSelect, ri);
 
-                        break;
-                }
+                                break;
+
+                            case "bDelete":
+
+                                List<RuleInfo> riList = new List<RuleInfo>
+                                {
+                                    ri
+                                };
+
+                                await Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.siSelect, Operate.SystemConfig.ListAction.Delete, riList);
+
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tRuleList_CellButtonClick), ex);
             }
         }
 
         private void tRuleList_CellDoubleClick(object sender, AntdUI.TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is RuleInfo ri)
             {
-                Operate.WPCConfig.ServerList.OpenRuleEdit(this.form, this.siSelect, ri);
+                UiDialogs.OpenRuleEdit(this.form, this.siSelect, ri);
             }
         }
 
@@ -168,74 +188,82 @@ namespace WinsockPacketEditor
 
         #region//规则列表 - 右键菜单
 
-        private void tRuleList_CellClick(object sender, AntdUI.TableClickEventArgs e)
+        private async void tRuleList_CellClick(object sender, AntdUI.TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (this.siSelect.ServerRInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRuleList, (item) =>
-                {
-                    List<RuleInfo> riList = new List<RuleInfo>();
-
-                    foreach (int SelectIndex in this.tRuleList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        riList.Add(this.siSelect.ServerRInfo[SelectIndex - 1]);
+                        if (this.siSelect.ServerRInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRuleList, async (item) =>
+                        {
+                            List<RuleInfo> riList = new List<RuleInfo>();
+
+                            foreach (int SelectIndex in this.tRuleList.SelectedIndexs)
+                            {
+                                riList.Add(this.siSelect.ServerRInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.siSelect, Operate.SystemConfig.ListAction.Top, riList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.siSelect, Operate.SystemConfig.ListAction.Up, riList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.siSelect, Operate.SystemConfig.ListAction.Down, riList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.siSelect, Operate.SystemConfig.ListAction.Bottom, riList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.siSelect, Operate.SystemConfig.ListAction.Delete, riList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tRuleList.SelectedIndex = -1;
+                        }, Operate.WPCConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.form, this.siSelect, Operate.SystemConfig.ListAction.Top, riList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.form, this.siSelect, Operate.SystemConfig.ListAction.Up, riList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.form, this.siSelect, Operate.SystemConfig.ListAction.Down, riList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.form, this.siSelect, Operate.SystemConfig.ListAction.Bottom, riList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.WPCConfig.ServerList.UpdateRuleList_ByListAction(this.form, this.siSelect, Operate.SystemConfig.ListAction.Delete, riList);
-                            }
-
-                            break;
-                    }
-
-                    this.tRuleList.SelectedIndex = -1;
-                }, Operate.WPCConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tRuleList_CellClick), ex);
             }
         }
 

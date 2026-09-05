@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>headers probe</title>
+<link rel="icon" href="data:,">
+<style>body{margin:0;background:#0A0A0F}#app{position:fixed;inset:0;overflow:auto}.blk{height:220px;display:flex;border-bottom:1px dashed #333;position:relative}.blk>*{flex:1}</style>
+<script>
+  const sample = (() => { const a = []; for (let i = 0; i < 300; i++) a.push((i * 7 + 3) & 0xff); return btoa(String.fromCharCode(...a)) })();
+  const answers = {
+    getRobotMeta: () => ({ running: false }),
+    getSendMeta: () => ({ running: false }),
+    getPacketDetail: (a) => { const raw = atob(sample); const mod = raw.slice(0,3) + String.fromCharCode(0x99,0x98) + raw.slice(5); return { id: a.id, packet: btoa(mod), raw: sample, modified: true } },
+    getPrefs: () => null,
+    openPacketEdit: (a) => ({ Id: String(a.id), List: a.list, Socket: 3464, Type: 13, From: '10.10.10.8:41758', To: '101.227.22.133:443', Buffer: sample, CanSendBySession: false, SystemSocket: 1284 }),
+    getAutoStoresMeta: () => ({ enabled: false }),
+    getFireWallSetting: () => null,
+    getAccountLogins: () => ({ rows: [] }),
+  };
+  const ls = [];
+  window.chrome = { webview: {
+    addEventListener: (t, cb) => ls.push(cb),
+    postMessage: (m) => setTimeout(() => {
+      if (m.type !== 'call') return;
+      const fn = answers[m.method];
+      const ok = !!fn;
+      const result = ok ? fn(m.args || {}) : null;
+      ls.forEach((cb) => cb({ data: { type: 'result', id: m.id, ok, result, error: ok ? null : 'mock: ' + m.method } }));
+    }, 5),
+  } };
+</script>
+</head><body><div id="app"></div>
+<script type="module">
+  import { createApp, h } from 'vue'
+  import '/src/style.css'
+  import RobotList from '/src/components/proxy/RobotList.vue'
+  import SendList from '/src/components/proxy/SendList.vue'
+  import FilterList from '/src/components/proxy/FilterList.vue'
+  import ClientList from '/src/components/proxy/ClientList.vue'
+  import SystemLog from '/src/components/proxy/SystemLog.vue'
+  import QuickPanel from '/src/components/proxy/QuickPanel.vue'
+  import PacketList from '/src/components/PacketList.vue'
+  import HexPanel from '/src/components/HexPanel.vue'
+  import AccountLogins from '/src/components/proxy/AccountLogins.vue'
+  import AccountBatch from '/src/components/proxy/AccountBatch.vue'
+  import AutoStoresSetting from '/src/components/proxy/AutoStoresSetting.vue'
+  import FireWallSetting from '/src/components/proxy/FireWallSetting.vue'
+  import PacketModification from '/src/components/proxy/PacketModification.vue'
+  import PacketEdit from '/src/components/proxy/PacketEdit.vue'
+  const blk = (c, p) => h('div', { class: 'blk' }, [h(c, p || {})])
+  const which = location.hash.slice(1)
+  const ALL = which === 'all'
+  const modal_all = { logins: () => h(AccountLogins, { row: { Id: 'A', User: 'u', Password: '', ExpiryTime: '', LimitLinks: 0, LimitDevices: 0, IsEnable: true, LoginCount: 0, Online: false, IsCheck: false } }),
+    batch: () => h(AccountBatch, { open: true }), auto: () => h(AutoStoresSetting, { open: true }), fw: () => h(FireWallSetting, { open: true }),
+    modify: () => h(PacketModification, { id: 314 }), edit: () => h(PacketEdit, { target: { list: 'proxy', id: 1 } }) }
+  const modal = modal_all[which]
+  createApp({ render: () => ALL ? [blk(RobotList), blk(FilterList), blk(ClientList), blk(SystemLog), blk(PacketList, { prefs: null, selectedId: null }), blk(HexPanel, { id: 314 }), blk(QuickPanel), ...Object.values(modal_all).map((f) => f())] : modal ? [modal()] : [
+    blk(RobotList), blk(SendList), blk(FilterList), blk(ClientList), blk(SystemLog),
+    blk(PacketList, { prefs: null, selectedId: null }),
+    blk(HexPanel, { id: 314 }),
+    blk(QuickPanel),
+  ] }).mount('#app')
+</script>
+</body></html>

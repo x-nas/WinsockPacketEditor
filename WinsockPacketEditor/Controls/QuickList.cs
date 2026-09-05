@@ -22,7 +22,7 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tabQuickList.BackColor = Operate.SystemConfig.Color_40;
+                this.tabQuickList.BackColor = UiTheme.Color_40;
             }
             else
             {
@@ -171,9 +171,12 @@ namespace WinsockPacketEditor
 
         private void tFilterList_CellDoubleClick(object sender, AntdUI.TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is FilterInfo fi)
             {
-                Operate.FilterConfig.Filter.OpenFilterEdit(this.form, fi);
+                UiDialogs.OpenFilterEdit(this.form, fi);
             }
         }        
 
@@ -204,11 +207,19 @@ namespace WinsockPacketEditor
             this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
         }
 
-        private void bFilterList_Delete_Click(object sender, EventArgs e)
+        private async void bFilterList_Delete_Click(object sender, EventArgs e)
         {
-            if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+            try
             {
-                Operate.FilterConfig.List.CleanUpFilterList_Dialog(this.form);
+                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                    {
+                        await Operate.FilterConfig.List.CleanUpFilterList_Dialog();
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(bFilterList_Delete_Click), ex);
             }
         }
 
@@ -216,93 +227,101 @@ namespace WinsockPacketEditor
 
         #region//滤镜列表 - 右键菜单
 
-        private void tFilterList_CellClick(object sender, TableClickEventArgs e)
+        private async void tFilterList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.FilterConfig.List.lstFilterInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tFilterList, (item) =>
-                {
-                    List<FilterInfo> fiList = new List<FilterInfo>();
-
-                    foreach (int SelectIndex in this.tFilterList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        fiList.Add(Operate.FilterConfig.List.lstFilterInfo[SelectIndex - 1]);
+                        if (Operate.FilterConfig.List.lstFilterInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tFilterList, async (item) =>
+                        {
+                            List<FilterInfo> fiList = new List<FilterInfo>();
+
+                            foreach (int SelectIndex in this.tFilterList.SelectedIndexs)
+                            {
+                                fiList.Add(Operate.FilterConfig.List.lstFilterInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Top, fiList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Up, fiList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Down, fiList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Bottom, fiList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Copy, fiList);
+                                        this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Export, fiList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Delete, fiList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tFilterList.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, fiList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, fiList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, fiList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, fiList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, fiList);
-                                this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, fiList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, fiList);
-                            }
-
-                            break;
-                    }
-
-                    this.tFilterList.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tFilterList_CellClick), ex);
             }
         }
 
@@ -368,19 +387,30 @@ namespace WinsockPacketEditor
             this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
         }
 
-        private void bSendList_Delete_Click(object sender, EventArgs e)
+        private async void bSendList_Delete_Click(object sender, EventArgs e)
         {
-            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+            try
             {
-                Operate.SendConfig.List.CleanUpSendList_Dialog(this.form);
+                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                    {
+                        await Operate.SendConfig.List.CleanUpSendList_Dialog();
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(bSendList_Delete_Click), ex);
             }
         }
 
         private void tSendList_CellDoubleClick(object sender, AntdUI.TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is SendInfo si)
             {
-                Operate.SendConfig.Send.OpenSendEdit(this.form, si);
+                UiDialogs.OpenSendEdit(this.form, si);
             }
         }
 
@@ -388,93 +418,101 @@ namespace WinsockPacketEditor
 
         #region//发送列表 - 右键菜单
 
-        private void tSendList_CellClick(object sender, TableClickEventArgs e)
+        private async void tSendList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.SendConfig.List.lstSendInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendList, (item) =>
-                {
-                    List<SendInfo> siList = new List<SendInfo>();
-
-                    foreach (int SelectIndex in this.tSendList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        siList.Add(Operate.SendConfig.List.lstSendInfo[SelectIndex - 1]);
+                        if (Operate.SendConfig.List.lstSendInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendList, async (item) =>
+                        {
+                            List<SendInfo> siList = new List<SendInfo>();
+
+                            foreach (int SelectIndex in this.tSendList.SelectedIndexs)
+                            {
+                                siList.Add(Operate.SendConfig.List.lstSendInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Top, siList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Up, siList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Down, siList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Bottom, siList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Copy, siList);
+                                        this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Export, siList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Delete, siList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tSendList.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, siList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, siList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, siList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, siList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, siList);
-                                this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, siList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, siList);
-                            }
-
-                            break;
-                    }
-
-                    this.tSendList.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tSendList_CellClick), ex);
             }
         }
 
@@ -484,9 +522,12 @@ namespace WinsockPacketEditor
 
         private void tRobotList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is RobotInfo ri)
             {
-                Operate.RobotConfig.Robot.OpenRobotEdit(this.form, ri);
+                UiDialogs.OpenRobotEdit(this.form, ri);
             }
         }
 
@@ -548,11 +589,19 @@ namespace WinsockPacketEditor
             this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
         }
 
-        private void bRobotList_Delete_Click(object sender, EventArgs e)
+        private async void bRobotList_Delete_Click(object sender, EventArgs e)
         {
-            if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+            try
             {
-                Operate.RobotConfig.List.CleanUpRobotList_Dialog(this.form);
+                    if (Operate.RobotConfig.List.lstRobotInfo.Count > 0)
+                    {
+                        await Operate.RobotConfig.List.CleanUpRobotList_Dialog();
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(bRobotList_Delete_Click), ex);
             }
         }
 
@@ -560,93 +609,101 @@ namespace WinsockPacketEditor
 
         #region//机器人列表 - 右键菜单
 
-        private void tRobotList_CellClick(object sender, TableClickEventArgs e)
+        private async void tRobotList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.RobotConfig.List.lstRobotInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRobotList, (item) =>
-                {
-                    List<RobotInfo> riList = new List<RobotInfo>();
-
-                    foreach (int SelectIndex in this.tRobotList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        riList.Add(Operate.RobotConfig.List.lstRobotInfo[SelectIndex - 1]);
+                        if (Operate.RobotConfig.List.lstRobotInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRobotList, async (item) =>
+                        {
+                            List<RobotInfo> riList = new List<RobotInfo>();
+
+                            foreach (int SelectIndex in this.tRobotList.SelectedIndexs)
+                            {
+                                riList.Add(Operate.RobotConfig.List.lstRobotInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Top, riList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Up, riList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Down, riList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Bottom, riList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Copy, riList);
+                                        this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Export, riList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (riList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.List.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Delete, riList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tRobotList.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, riList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, riList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, riList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, riList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, riList);
-                                this.tRobotList.ScrollBar.ValueY = tRobotList.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, riList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (riList.Count > 0)
-                            {
-                                Operate.RobotConfig.List.UpdateRobotList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, riList);
-                            }
-
-                            break;
-                    }
-
-                    this.tRobotList.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tRobotList_CellClick), ex);
             }
         }
 
@@ -660,19 +717,30 @@ namespace WinsockPacketEditor
             this.tWareHouseList.ScrollBar.ValueY = tWareHouseList.ScrollBar.MaxY;
         }
 
-        private void bWareHouseList_Delete_Click(object sender, EventArgs e)
+        private async void bWareHouseList_Delete_Click(object sender, EventArgs e)
         {
-            if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+            try
             {
-                Operate.WareHouseConfig.List.CleanUpWareHouseList_Dialog(this.form);
+                    if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count > 0)
+                    {
+                        await Operate.WareHouseConfig.List.CleanUpWareHouseList_Dialog();
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(bWareHouseList_Delete_Click), ex);
             }
         }
 
         private void tWareHouseList_CellDoubleClick(object sender, AntdUI.TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is WareHouseInfo whi)
             {
-                Operate.WareHouseConfig.WareHouse.OpenWareHouseEdit(this.form, whi);
+                UiDialogs.OpenWareHouseEdit(this.form, whi);
             }
         }
 
@@ -680,93 +748,101 @@ namespace WinsockPacketEditor
 
         #region//仓库列表 - 右键菜单
 
-        private void tWareHouseList_CellClick(object sender, TableClickEventArgs e)
+        private async void tWareHouseList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tWareHouseList, (item) =>
-                {
-                    List<WareHouseInfo> whiList = new List<WareHouseInfo>();
-
-                    foreach (int SelectIndex in this.tWareHouseList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        whiList.Add(Operate.WareHouseConfig.List.lstWareHouseInfo[SelectIndex - 1]);
+                        if (Operate.WareHouseConfig.List.lstWareHouseInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tWareHouseList, async (item) =>
+                        {
+                            List<WareHouseInfo> whiList = new List<WareHouseInfo>();
+
+                            foreach (int SelectIndex in this.tWareHouseList.SelectedIndexs)
+                            {
+                                whiList.Add(Operate.WareHouseConfig.List.lstWareHouseInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Top, whiList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Up, whiList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Down, whiList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Bottom, whiList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Copy, whiList);
+                                        this.tWareHouseList.ScrollBar.ValueY = tWareHouseList.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Export, whiList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (whiList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(Operate.SystemConfig.ListAction.Delete, whiList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tWareHouseList.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, whiList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, whiList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, whiList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, whiList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, whiList);
-                                this.tWareHouseList.ScrollBar.ValueY = tWareHouseList.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, whiList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (whiList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateWareHouseList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, whiList);
-                            }
-
-                            break;
-                    }
-
-                    this.tWareHouseList.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tWareHouseList_CellClick), ex);
             }
         }
 

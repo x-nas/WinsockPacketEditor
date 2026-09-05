@@ -44,11 +44,11 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tStores.ColumnBack = Operate.SystemConfig.Color_35;
+                this.tStores.ColumnBack = UiTheme.Color_35;
                 this.tStores.ColumnFore = Color.Silver;
                 this.tStores.ForeColor = Color.LimeGreen;
 
-                this.hbPacketData.BackColor = Operate.SystemConfig.Color_40;
+                this.hbPacketData.BackColor = UiTheme.Color_40;
                 this.hbPacketData.ForeColor = Color.Silver;
             }
             else
@@ -116,37 +116,45 @@ namespace WinsockPacketEditor
 
         #region//仓储列表 - 菜单
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Import":
+                    this.ddMenu.SelectedValue = null;
 
-                    this.tStores.SuspendLayout();
-                    Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Import, null);
-                    this.tStores.ResumeLayout();                    
-
-                    break;
-
-                case "Export":
-
-                    if (this.Stores.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Export, null);
+                        case "Import":
+
+                            this.tStores.SuspendLayout();
+                            await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Import, null);
+                            this.tStores.ResumeLayout();                    
+
+                            break;
+
+                        case "Export":
+
+                            if (this.Stores.Count > 0)
+                            {
+                                await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Export, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (this.Stores.Count > 0)
+                            {
+                                await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.CleanUp, null);
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (this.Stores.Count > 0)
-                    {
-                        Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.CleanUp, null);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
@@ -154,95 +162,103 @@ namespace WinsockPacketEditor
 
         #region//仓储列表 - 右键菜单
 
-        private void tStores_CellClick(object sender, TableClickEventArgs e)
+        private async void tStores_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (this.Stores.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tStores, (item) =>
-                {
-                    List<DataInfo> diList = new List<DataInfo>();
-                    foreach (DataInfo di in this.Stores)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        if (di.IsCheck)
+                        if (this.Stores.Count == 0)
                         {
-                            diList.Add(di);
-                        }                        
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tStores, async (item) =>
+                        {
+                            List<DataInfo> diList = new List<DataInfo>();
+                            foreach (DataInfo di in this.Stores)
+                            {
+                                if (di.IsCheck)
+                                {
+                                    diList.Add(di);
+                                }                        
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (diList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Top, diList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (diList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Up, diList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (diList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Down, diList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (diList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Bottom, diList);
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (diList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Export, diList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (diList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Copy, diList);
+                                        this.tStores.ScrollBar.ValueY = tStores.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (diList.Count > 0)
+                                    {
+                                        await Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.Stores, Operate.SystemConfig.ListAction.Delete, diList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tStores.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (diList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Top, diList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (diList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Up, diList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (diList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Down, diList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (diList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Bottom, diList);
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (diList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Export, diList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (diList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Copy, diList);
-                                this.tStores.ScrollBar.ValueY = tStores.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (diList.Count > 0)
-                            {
-                                Operate.WareHouseConfig.List.UpdateStores_ByListAction(this.form, this.Stores, Operate.SystemConfig.ListAction.Delete, diList);
-                            }
-
-                            break;
-                    }
-
-                    this.tStores.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tStores_CellClick), ex);
             }
         }
 
@@ -333,7 +349,7 @@ namespace WinsockPacketEditor
 
                             break;
                     }
-                }, Operate.WareHouseConfig.List.GetCMS_StoresData(this.hbPacketData)));
+                }, Operate.WareHouseConfig.List.GetCMS_StoresData(this.hbPacketData.ToState()).ToAntd()));
             }
         }
 

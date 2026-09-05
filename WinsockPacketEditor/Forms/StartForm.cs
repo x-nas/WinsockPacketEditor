@@ -9,16 +9,20 @@ namespace WinsockPacketEditor
     public partial class StartForm : BorderlessForm
     {
         private string WebSiteURL = Operate.SystemConfig.WPE64_URL;
-        private Color cEnter_Dark = Operate.SystemConfig.Color_57;
-        private Color cLeave_Dark = Operate.SystemConfig.Color_50;
-        private Color cEnter_Light = Operate.SystemConfig.Color_250;
+        private Color cEnter_Dark = UiTheme.Color_57;
+        private Color cLeave_Dark = UiTheme.Color_50;
+        private Color cEnter_Light = UiTheme.Color_250;
         private Color cLeave_Light = Color.Transparent;
 
         #region//窗体事件
 
         public StartForm()
         {
-            Operate.SystemConfig.ShowBetaMessage(this);
+            //必须在 ShowBetaMessage 之前：该方法会弹 Modal
+            UI.Attach(new WinFormsUiHost(this), new AntdL10n());
+            UI.AttachFeed(WinFormsUiFeed.Instance);
+
+            UiDialogs.ShowBetaMessage(this);
             InitializeComponent();
         }
 
@@ -99,16 +103,9 @@ namespace WinsockPacketEditor
             {
                 btn_global.Loading = true;
 
-                if (lang.StartsWith("en"))
-                {
-                    AntdUI.Localization.Provider = new Localizer();
-                }
-                else
-                {
-                    AntdUI.Localization.Provider = null;
-                }
-
-                AntdUI.Localization.SetLanguage(lang);
+                //写入唯一真源后统一应用，这样界面上切换的语言会随配置一起持久化
+                UI.Prefs.Language = lang;
+                WinFormsUiHost.ApplyLanguage();
                 Refresh();
                 btn_global.Loading = false;
             }
@@ -120,7 +117,8 @@ namespace WinsockPacketEditor
 
         private void btn_mode_Click(object sender, EventArgs e)
         {
-            AntdUI.Config.IsDark = !AntdUI.Config.IsDark;
+            UI.Prefs.IsDark = !UI.Prefs.IsDark;
+            WinFormsUiHost.ApplyPrefs();
 
             this.Dark_Changed();
             OnSizeChanged(e);
@@ -133,13 +131,13 @@ namespace WinsockPacketEditor
 
             if (Dark)
             {
-                BackColor = Operate.SystemConfig.Color_30;
+                BackColor = UiTheme.Color_30;
                 ForeColor = Color.White;
 
                 this.pMultipleOpen.Back = 
                     this.pInjectMode.Back = 
                     this.pProxyMode.Back =
-                    Operate.SystemConfig.Color_50;
+                    UiTheme.Color_50;
             }
             else
             {
@@ -292,11 +290,19 @@ namespace WinsockPacketEditor
 
         private async void GetWebSiteURL()
         {
-            bool bOK = await Operate.SystemConfig.CheckWebSite(Operate.SystemConfig.WPE64_URL);
-
-            if (!bOK)
+            try
             {
-                this.WebSiteURL = Operate.SystemConfig.WPE64_IP;
+                    bool bOK = await Operate.SystemConfig.CheckWebSite(Operate.SystemConfig.WPE64_URL);
+
+                    if (!bOK)
+                    {
+                        this.WebSiteURL = Operate.SystemConfig.WPE64_IP;
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(GetWebSiteURL), ex);
             }
         }
 

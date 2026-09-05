@@ -1,9 +1,13 @@
 ﻿using AntdUI;
+using System;
 
 namespace WinsockPacketEditor
 {
     public class MapLocal : NotifyProperty
     {
+        /// <summary>运行期 Id，构造时分配、<b>不落库</b>。表里没有主键，外壳按它收发（与 AutoStoresInfo.AID 同一个理由）。</summary>
+        public Guid MID { get; } = Guid.NewGuid();
+
         #region//是否启用
 
         bool _IsEnable;

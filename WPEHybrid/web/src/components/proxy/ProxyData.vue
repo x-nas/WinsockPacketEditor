@@ -1,0 +1,1029 @@
+<script setup lang="ts">
+/*
+  「代理数据」页 —— 对应 WinForms 的 Controls/ProxyList。
+
+  四层结构与 WinForms 一致：
+    ① 运行状态条（RunBar）—— WinForms 里是工具条上两个普通按钮，这里提成一条
+    ② 统计网格 13 项    —— 取值与「计时器 - 更新代理统计信息」逐条对齐
+    ③ 数据表           —— 定高虚拟滚动，B10 那个 PacketList 原样复用
+    ④ 快捷面板 + 十六进制
+
+  【工具条上那几个 Dev 按钮是开发/验收工具，不是产品功能】
+  发布前整块删掉，见 CLAUDE.md「发布前必须清掉的东西」。
+*/
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { call } from '../../bridge'
+import { FeedList, type Prefs, type ProxyRow, type SendRow, type Stats, type WareHouseRow } from '../../bridge/types'
+import { t } from '../../i18n'
+import { attachPacketFeed, resetStat, rows } from '../../stores/packets'
+import { useList } from '../../stores/lists'
+import { pushToast } from '../../stores/toast'
+import { useRowPick } from '../../usePick'
+import { gotoPage, listSetting, proxyRunning } from '../../stores/runtime'
+import { textA, textB } from '../../stores/tools'
+import { runAcceptance } from '../../accept'
+import PacketList from '../PacketList.vue'
+import ContextMenu from '../ContextMenu.vue'
+import { ICON, type MenuItem } from '../menu'
+import HexPanel from '../HexPanel.vue'
+import PacketEdit from './PacketEdit.vue'
+import PacketModification from './PacketModification.vue'
+import ListsPanel from '../ListsPanel.vue'
+import RunBar from './RunBar.vue'
+import QuickPanel from './QuickPanel.vue'
+import ProxySetting from './ProxySetting.vue'
+import ListSetting from './ListSetting.vue'
+import LeachSetting from './LeachSetting.vue'
+import FireWallSetting from './FireWallSetting.vue'
+import HookSetting from './HookSetting.vue'
+import SystemSetting from './SystemSetting.vue'
+import ProcessSetting from './ProcessSetting.vue'
+import MapSetting from './MapSetting.vue'
+import ExtProxySetting from './ExtProxySetting.vue'
+import HotkeySetting from './HotkeySetting.vue'
+import BackupSetting from './BackupSetting.vue'
+import RemoteSetting from './RemoteSetting.vue'
+import ActionColor from './ActionColor.vue'
+import type { SettingKey } from './settings'
+
+const prefs = ref<Prefs | null>(null)
+const stats = ref<Stats | null>(null)
+const selected = ref<ProxyRow | null>(null)
+const selectedId = computed(() => selected.value?.Id ?? null)
+
+/** 当前打开的设置弹窗。null = 没开。12 项里目前只有 proxy 有实现。 */
+const setting = ref<SettingKey | null>(null)
+
+/*
+  正在改配色的那一组动作（图例上点开的），null = 没开。
+  取当前值直接从 prefs 拿 —— 图例画的就是它，不必再往返一次。
+*/
+const colorEdit = ref<string | null>(null)
+
+async function reloadPrefs(): Promise<void> {
+  try {
+    //改完立刻重取：图例与列表的行配色都吃这份 prefs，重取就地生效
+    prefs.value = await call<Prefs>('getPrefs')
+  } catch (e) {
+    console.error('[proxy] 重取界面偏好失败', e)
+  }
+}
+
+const autoRoll = ref(true)
+const autoClear = ref(true)
+const clearAt = ref(5000)
+
+// ▼▼▼ Dev：发布前整块删掉 ▼▼▼
+const listsOpen = ref(false)
+const accepting = ref(false)
+const report = ref<string[]>([])
+const reportOpen = ref(false)
+const reportPass = ref<boolean | null>(null)
+const reportText = computed(() => report.value.join(String.fromCharCode(10)))
+// ▲▲▲ Dev ▲▲▲
+
+let detach: (() => void) | null = null
+let statsTimer = 0
+
+onMounted(async () => {
+  detach = attachPacketFeed()
+
+  try {
+    prefs.value = await call<Prefs>('getPrefs')
+  } catch (e) {
+    console.error('[proxy] 取界面偏好失败', e)
+  }
+
+  //列显隐要在第一帧之前拿到，否则列表先按「全显示」画一遍再跳
+  try {
+    listSetting.value = await call('getListSetting')
+  } catch (e) {
+    console.error('[proxy] 取列表设置失败', e)
+  }
+
+  // 统计单独轮询，不占推送通道
+  statsTimer = window.setInterval(async () => {
+    try {
+      const s = await call<Stats>('getStats')
+      stats.value = s
+      proxyRunning.value = !!(s as any).proxyRunning
+      autoClear.value = !!(s as any).autoClear
+      clearAt.value = (s as any).autoClearValue || clearAt.value
+    } catch {
+      /* 窗口关闭中，忽略 */
+    }
+  }, 500)
+})
+
+onBeforeUnmount(() => {
+  detach?.()
+  window.clearInterval(statsTimer)
+})
+
+async function clearAll(): Promise<void> {
+  selected.value = null
+  picked.value = new Set()
+  await call('clearPackets')
+  resetStat()
+}
+
+/* ── 封包列表的选中与右键菜单 ──────────────────────────────── */
+
+/*
+  两套选中态，别混：
+    selected  详情面板正在看的那一行（只有一行）
+    picked    多选集，右键菜单的动作作用于它
+
+  一行可以既在 picked 里、又是 selected —— 所以行上是两种不同的记号
+  （描边 vs 左边线 + 淡底），见 PacketList 的 .pl-row.sel / .pl-row.pick。
+*/
+/*
+  多选走全项目共用的那份（usePick.ts）。
+
+  ⚠️ <b>autoPrune 必须关掉</b>：那份实现默认挂一个 watch(rows) 来剔除已消失的 Id，
+  而这一屏的 rows 每帧都 triggerRef —— 挂上去等于每秒跑 60 次。
+  这里改成只在列表被清空时清一次（下面那个 watch），代价与收益都对得上。
+*/
+const { picked, onRowClick, selectAll, clear } =
+  useRowPick(rows, (r) => r.Id, { autoPrune: false })
+
+function onSelect(r: ProxyRow, ev: MouseEvent, index: number): void {
+  selected.value = r
+  onRowClick(r, ev, index)
+
+  /*
+    手动点行就把查找的高亮丢掉。
+
+    不丢的话，那个偏移会原样套到新点开的这一条上 —— 十六进制面板只认「圈第 N 到第 M 字节」，
+    并不知道那是上一条封包里的位置，圈出来的会是一段毫不相干的字节，而且看着像是查到的。
+  */
+  searchHit.value = null
+}
+
+/*
+  自动清理会把整表清空，选中集必须跟着清 ——
+  留着已经不存在的 Id 不会报错，但「选了 8 条」却一条都动不了，比空着更费解。
+*/
+watch(() => rows.value.length, (n) => {
+  if (n === 0) clear()
+})
+
+/* ── 查找封包（对应 WinForms 的 Controls/SearchPacket）───────── */
+
+/*
+  WinForms 那边是工具条上一个放大镜按钮，点开一个从顶部滑下来的抽屉，里面四样东西：
+  正则输入 + 文本/十六进制 + 从头/向下 + 「查找下一个」。这里摊平成工具条上的一条 ——
+  抽屉盖住的正是要看的表头那一片，而这几个控件横过来一行就放得下。
+
+  【游标留在前端】C# 侧不存 Search_Index：搜索是「从第 N 行往后找第一条」这一件事，
+  游标是谁在翻页谁的状态。WinForms 把它放在 Operate 里，是因为控件与 Operate 之间没有别的通道。
+
+  【命中之后做三件事】选中那一行（详情面板跟着换）、把它滚进视野、
+  再把命中的那段字节圈出来 —— 第三件靠 C# 一并返回的 Offset / Length，
+  不像 WinForms 那样让十六进制控件自己再找一次。
+*/
+const listRef = ref<InstanceType<typeof PacketList> | null>(null)
+
+const q = ref('')
+const qHex = ref(false)
+const searching = ref(false)
+/** 上一次命中的行在 C# 列表里的下标；「查找下一个」从它 + 1 接着找。−1 = 还没找过 */
+const searchAt = ref(-1)
+/** 命中的那段字节，交给十六进制面板圈出来 */
+const searchHit = ref<{ offset: number; length: number } | null>(null)
+
+interface SearchResult { Found: boolean; Id: number; Index: number; Offset: number; Length: number; Error: string | null }
+
+async function findNext(fromHead = false): Promise<void> {
+  const pattern = q.value.trim()
+  if (!pattern || searching.value) return
+
+  searching.value = true
+
+  try {
+    const from = fromHead ? 0 : searchAt.value + 1
+    let r = await call<SearchResult>('searchProxyList', { pattern, isHex: qHex.value, from })
+
+    if (r?.Error) {
+      pushToast('error', t('sp.badRegex') + ' · ' + r.Error)
+      return
+    }
+
+    /*
+      没找到而且不是从头找的 —— 回到开头再来一次（WinForms 是把「从头开始」做成一个单选项，
+      要用户自己去点；转一圈更符合「查找下一个」的习惯，转完还找不到才算真没有）。
+    */
+    if (!r?.Found && from > 0) {
+      r = await call<SearchResult>('searchProxyList', { pattern, isHex: qHex.value, from: 0 })
+      if (r?.Found) pushToast('info', t('sp.wrapped'))
+    }
+
+    if (!r?.Found) {
+      searchAt.value = -1
+      searchHit.value = null
+      pushToast('warning', t('sp.noMatch'))
+      return
+    }
+
+    searchAt.value = r.Index
+
+    /*
+      滚动用<b>前端副本里的下标</b>，不直接用 C# 给的 Index。
+      两边正常是对齐的（推送是顺序 Append、清空是整表），但真错开一格时，
+      按 Id 找到的那一行才是刚刚选中的那一行 —— 宁可多扫一遍也不要滚到隔壁。
+    */
+    const row = rows.value.find((x) => x.Id === r.Id)
+
+    /*
+      高亮只在<b>确实切到那一行</b>之后才给。找不到那一行（C# 报了命中、前端副本里却没有，
+      通常是这一拍刚好被自动清理了）时必须清空 —— 那个偏移是按命中的那个包算的，
+      套在面板上还显示着的另一条包上会圈出一段无关字节。
+    */
+    searchHit.value = row && r.Offset >= 0 ? { offset: r.Offset, length: r.Length } : null
+
+    if (row) {
+      selected.value = row
+      const i = rows.value.indexOf(row)
+      listRef.value?.scrollToIndex(i >= 0 ? i : r.Index)
+    }
+  } catch (e) {
+    console.error('[sp] 查找封包失败', e)
+    pushToast('error', String(e))
+  } finally {
+    searching.value = false
+  }
+}
+
+/*
+  改了条件就把游标退回开头 —— 沿用旧游标会跳过前面本该命中的行；
+  上一次的高亮也一并丢掉，它标的是上一个条件命中的那一段。
+*/
+watch([q, qHex], () => {
+  searchAt.value = -1
+  searchHit.value = null
+})
+
+function clearSearch(): void {
+  q.value = ''
+  searchAt.value = -1
+  searchHit.value = null
+}
+
+const menuAt = ref<{ x: number; y: number } | null>(null)
+
+/** 封包编辑弹窗的目标；null = 关着 */
+const editTarget = ref<{ list: 'proxy' | 'send'; id: number } | null>(null)
+/** 「查看数据修改」弹窗看的是哪一条；null = 关着 */
+const modifyId = ref<number | null>(null)
+
+//右键只开菜单、不动选中集（与账号 / 滤镜两屏同一条口径）
+function onMenu(ev: MouseEvent, _r: ProxyRow): void {
+  menuAt.value = { x: ev.clientX, y: ev.clientY }
+}
+
+const sends = useList<SendRow>(FeedList.Send)
+const houses = useList<WareHouseRow>(FeedList.WareHouse)
+
+const menuItems = computed<MenuItem[]>(() => {
+  const n = picked.value.size
+  const tag = n ? ' (' + n + ')' : ''
+
+  /*
+    「添加到发送 / 添加到仓库」的子菜单<b>由前端自己拼</b>：
+    这两份列表本来就一直在推（FeedList.Send / FeedList.WareHouse），
+    再让 C# 出一遍 MenuNode 只是多一条要同步的路。
+    列表为空时压暗整项 —— 与 WinForms 的 GetCMS_PacketList 一致。
+  */
+  const toSend: MenuItem = sends.value.length
+    ? {
+        id: 'toSend',
+        label: t('pm.toSend') + tag,
+        icon: ICON.send,
+        sub: sends.value.map((x) => ({ id: 'send:' + x.Id, label: x.Name })),
+      }
+    : { id: 'toSend', label: t('pm.toSend'), icon: ICON.send, disabled: true }
+
+  const toHouse: MenuItem = houses.value.length
+    ? {
+        id: 'toHouse',
+        label: t('pm.toWareHouse') + tag,
+        icon: ICON.house,
+        sub: houses.value.map((x) => ({ id: 'house:' + x.Id, label: x.Name })),
+      }
+    : { id: 'toHouse', label: t('pm.toWareHouse'), icon: ICON.house, disabled: true }
+
+  return [
+    //只编辑第一条 —— 编辑器一次只装一个包，多选也只能拿一条去改
+    { id: 'edit', label: t('pm.edit'), icon: ICON.edit },
+    { id: 'modify', label: t('pm.modify'), icon: ICON.hex },
+    { divider: true },
+
+    { id: 'copy', label: t('lst.copy') + tag, icon: ICON.copy },
+    { divider: true },
+    //与 WinForms 一样一条一行（十六进制），写进文本对比页那两个框；带条数
+    { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
+    { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
+    { divider: true },
+    toSend,
+    /*
+      添加到滤镜只用第一条 —— 与 WinForms 一致（那边也是 piList[0]）：
+      一条滤镜描述的是「怎么匹配、怎么改」，多选几条也只能拿一条去造。
+      所以这一项<b>不带条数</b>，免得看着像会加好几条。
+    */
+    { id: 'toFilter', label: t('pm.toFilter'), icon: ICON.filter },
+    toHouse,
+    { divider: true },
+    { id: 'sysSocket', label: t('pm.setSysSocket'), icon: ICON.check },
+    { divider: true },
+    //ids 为空就是导整张表，所以不选也能点
+    { id: 'excel', label: t('pm.toExcel') + tag, icon: ICON.save },
+    { divider: true },
+    /*
+      这一项<b>永远是全选</b>，不是开关 —— 所以标签不能用「全选 / 取消全选」，
+      那会让人以为再点一次能取消。取消交给下面那一项。
+    */
+    { id: 'selectAll', label: t('pm.selectAll'), icon: ICON.list },
+    { id: 'deselect', label: t('pm.deselect'), icon: ICON.del, disabled: !n },
+  ]
+})
+
+async function onMenuPick(id: string): Promise<void> {
+  const ids = [...picked.value]
+
+  //子菜单：id 形如 "send:<GUID>" / "house:<GUID>"
+  if (id.startsWith('send:') || id.startsWith('house:')) {
+    if (!ids.length) { pushToast('warning', t('lst.needPick')); return }
+
+    const toSend = id.startsWith('send:')
+    const key = id.slice(id.indexOf(':') + 1)
+
+    try {
+      const r = await call<{ count: number }>(
+        toSend ? 'addProxyToSend' : 'addProxyToWareHouse',
+        toSend ? { sid: key, ids } : { wid: key, ids })
+
+      if (r?.count) pushToast('success', t('pm.added') + ' ' + r.count)
+      else pushToast('error', t('pm.addFail'))
+    } catch (e) {
+      console.error('[pm] 添加失败', e)
+    }
+
+    return
+  }
+
+  switch (id) {
+    case 'selectAll':
+      selectAll()
+      return
+
+    case 'deselect':
+      clear()
+      return
+
+    //导出不要求先选：ids 为空时 C# 侧会导整张表
+    case 'excel':
+      try { await call('exportProxyExcel', { ids }) } catch (e) { console.error('[pm] 导出失败', e) }
+      return
+  }
+
+  if (!ids.length) {
+    pushToast('warning', t('lst.needPick'))
+    return
+  }
+
+  try {
+    switch (id) {
+      case 'copy': {
+        const r = await call<{ text: string }>('copyProxyHex', { ids })
+        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
+        await call('clipboardWrite', { text: r.text })
+        pushToast('success', t('pm.copied'))
+        return
+      }
+
+      case 'edit':
+        editTarget.value = { list: 'proxy', id: ids[0] }
+        return
+
+      //添加到文本 A / B：整体替换（WinForms 的 SetTextA 也是替换不是追加），然后切到文本对比页
+      case 'toTextA':
+      case 'toTextB': {
+        const r = await call<{ text: string }>('copyProxyHex', { ids })
+        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
+        if (id === 'toTextA') textA.value = r.text
+        else textB.value = r.text
+        pushToast('success', t(id === 'toTextA' ? 'pm.toTextAOk' : 'pm.toTextBOk'))
+        gotoPage.value = 'diff'
+        return
+      }
+
+      //查看数据修改：也只看第一条
+      case 'modify':
+        modifyId.value = ids[0]
+        return
+
+      case 'toFilter': {
+        const r = await call<{ ok: boolean }>('addProxyToFilter', { id: ids[0] })
+        pushToast(r?.ok ? 'success' : 'error', t(r?.ok ? 'pm.toFilterOk' : 'pm.toFilterFail'))
+        return
+      }
+
+      case 'sysSocket': {
+        const r = await call<{ socket: number }>('setSystemSocketByProxy', { id: ids[0] })
+        if (r?.socket) pushToast('success', t('pm.sysSocketOk') + ' ' + r.socket)
+        else pushToast('error', t('pm.sysSocketFail'))
+        return
+      }
+    }
+  } catch (e) {
+    console.error('[pm] ' + id + ' 失败', e)
+  }
+}
+
+/** 代理总数是六个计数相加，与 WinForms 的算法一致。 */
+const total = computed(() => {
+  const s: any = stats.value
+  if (!s) return 0
+  return (s.tcpReq || 0) + (s.tcpResp || 0) + (s.udpReq || 0)
+    + (s.udpResp || 0) + (s.httpReq || 0) + (s.httpResp || 0)
+})
+
+function n(v: number | undefined): string {
+  return (v ?? 0).toLocaleString()
+}
+
+/*
+  字节数按量级给单位，<b>只给一位小数</b>。
+
+  C# 那份 GetDisplayBytes 的详版是「62.4 KB (63,915 Bytes)」——
+  给 WinForms 的宽标签用正好，塞进这里七分之一屏宽的格子必然溢出（就是这么发现的）。
+  统计格子要的是一眼能读的量级，精确字节数没人在这里读。
+*/
+function bytes(v: number | undefined): string {
+  let x = v ?? 0
+  if (x < 1024) return x + ' B'
+
+  const u = ['KB', 'MB', 'GB', 'TB']
+  let i = -1
+  while (x >= 1024 && i < u.length - 1) { x /= 1024; i++ }
+  return x.toFixed(1) + ' ' + u[i]
+}
+
+/** 速率同理，来源是 C# 算好的 KB/s。 */
+function kbps(v: number | undefined): string {
+  const x = v ?? 0
+  return x >= 1024 ? (x / 1024).toFixed(1) + ' MB/s' : x.toFixed(1) + ' KB/s'
+}
+
+/*
+  上下行拆分，<b>两个值共用一个单位</b>，单位只写一次。
+
+  各自独立换算会出「↑1.2 ↓8.4 MB/s」这种把 KB 当 MB 读的错行 —— 单位取较大那个值的，
+  小的那个跟着换算，才不会骗人。单位写一次是为了塞进七分之一屏宽的格子（实测最紧时约 106px）。
+*/
+function pairKbps(up: number | undefined, down: number | undefined): string {
+  const a = up ?? 0
+  const b = down ?? 0
+  const mb = Math.max(a, b) >= 1024
+
+  const f = (x: number) => (mb ? x / 1024 : x).toFixed(1)
+  return '↑' + f(a) + '  ↓' + f(b) + (mb ? ' MB/s' : ' KB/s')
+}
+
+/*
+  行底色图例。四组与 PacketList 的 colorOf() 一一对应 ——
+  那里按 FilterAction 取 prefs.filter 的某一组打行内样式，这里就把同一组摊出来。
+
+  <b>没有「不显示」那一档</b>：NoModify_NoDisplay 的行根本不进列表，
+  给一个永远看不到的颜色配图例只会让人去找它。
+  colorOf 的 default 分支（未命中滤镜）也不列 —— 那是"没有底色"，不是一种底色。
+*/
+const ROW_LEGEND = computed(() => {
+  const f = prefs.value?.filter
+  if (!f) return []
+
+  return [
+    { key: 'replace', label: 'proxy.act.replace' as const, pair: f.replace },
+    { key: 'change', label: 'proxy.act.change' as const, pair: f.change },
+    { key: 'intercept', label: 'proxy.act.intercept' as const, pair: f.intercept },
+    { key: 'display', label: 'proxy.act.display' as const, pair: f.display },
+  ]
+})
+
+/*
+  统计 13 项。tone 决定数字的颜色：
+    g 绿（常规计数）· c 青（连接/流量）· a 琥珀（值得注意的：滤镜命中、积压、速率）
+*/
+const cells = computed(() => {
+  const s: any = stats.value || {}
+  return [
+    { k: 'Total', z: t('proxy.st.total'), v: n(total.value), tone: 'g' },
+    { k: 'TCP', z: t('proxy.st.tcpConn'), v: n(s.tcpConn), tone: 'c' },
+    { k: 'UDP', z: t('proxy.st.udpConn'), v: n(s.udpConn), tone: 'c' },
+    { k: 'Account', z: t('proxy.st.account'), v: s.onlineInfo || '0/0', tone: 'g' },
+    /*
+      FILTERED = <b>被过滤设置挡掉、没进列表</b>的封包数（Operate 侧的 FilterProxy_CNT，
+      在 FlushToFeed 里 IsShowProxy_ByFilter 判否时自增）。
+      不是 FilterExecute_CNT —— 那是滤镜规则总共执行了多少次，是另一回事，
+      而且滤镜的执行次数现在按条显示在滤镜列表里，不需要再放一个总数在这儿。
+    */
+    { k: 'Filtered', z: t('proxy.st.filter'), v: n(s.filterProxy), tone: 'a' },
+    { k: 'Queue', z: t('proxy.st.queue'), v: n(s.queue), tone: (s.queue || 0) > 5000 ? 'a' : 'g' },
+    /*
+      总流量这一格是双值的：大字给合计，小字给 ↑请求 / ↓响应 的拆分。
+      其余格子的第三行是中文说明，这里换成拆分 —— 上面的 BYTES 已经说清是什么了，
+      而拆分比重复一遍「总流量」有用。
+    */
+    {
+      k: 'Bytes',
+      z: '↑ ' + bytes(s.totalRequest) + ' · ↓ ' + bytes(s.totalResponse),
+      v: bytes((s.totalRequest || 0) + (s.totalResponse || 0)),
+      tone: 'c',
+    },
+    { k: 'TCP Req', z: t('proxy.st.tcpReq'), v: n(s.tcpReq), tone: 'g' },
+    { k: 'TCP Resp', z: t('proxy.st.tcpResp'), v: n(s.tcpResp), tone: 'g' },
+    { k: 'UDP Req', z: t('proxy.st.udpReq'), v: n(s.udpReq), tone: 'g' },
+    { k: 'UDP Resp', z: t('proxy.st.udpResp'), v: n(s.udpResp), tone: 'g' },
+    { k: 'HTTP Req', z: t('proxy.st.httpReq'), v: n(s.httpReq), tone: 'g' },
+    { k: 'HTTP Resp', z: t('proxy.st.httpResp'), v: n(s.httpResp), tone: 'g' },
+    /*
+      实时网速。与总流量那格同一种排法（大字给合计、小字给拆分），
+      两格分别落在两行的末尾，视觉上成对。
+      这里原先是「列表行数」—— 侧栏「代理数据」右侧的计数已经是同一个数，重复了。
+    */
+    {
+      k: 'Speed',
+      z: pairKbps(s.speedUp, s.speedDown),
+      v: kbps((s.speedUp || 0) + (s.speedDown || 0)),
+      tone: 'a',
+    },
+  ]
+})
+
+// ▼▼▼ Dev：发布前整块删掉 ▼▼▼
+async function runAccept(): Promise<void> {
+  accepting.value = true
+  reportOpen.value = true
+  reportPass.value = null
+  report.value = []
+
+  try {
+    const r = await runAcceptance((s) => report.value.push(s))
+    reportPass.value = r.pass
+  } catch (e) {
+    report.value.push(String(e))
+    reportPass.value = false
+  } finally {
+    accepting.value = false
+  }
+}
+// ▲▲▲ Dev ▲▲▲
+</script>
+
+<template>
+  <div class="page">
+    <RunBar @clear="clearAll" @open-setting="setting = $event" />
+
+    <ProxySetting
+      :open="setting === 'proxy'"
+      @update:open="setting = $event ? 'proxy' : null"
+    />
+
+    <ListSetting
+      :open="setting === 'list'"
+      @update:open="setting = $event ? 'list' : null"
+    />
+
+    <LeachSetting
+      :open="setting === 'leach'"
+      @update:open="setting = $event ? 'leach' : null"
+    />
+
+    <FireWallSetting
+      :open="setting === 'firewall'"
+      @update:open="setting = $event ? 'firewall' : null"
+    />
+
+    <HookSetting
+      :open="setting === 'hook'"
+      @update:open="setting = $event ? 'hook' : null"
+    />
+
+    <SystemSetting
+      :open="setting === 'system'"
+      @update:open="setting = $event ? 'system' : null"
+    />
+
+    <ProcessSetting :open="setting === 'process'" @update:open="setting = $event ? 'process' : null" />
+    <MapSetting :open="setting === 'map'" @update:open="setting = $event ? 'map' : null" />
+    <ExtProxySetting :open="setting === 'extproxy'" @update:open="setting = $event ? 'extproxy' : null" />
+    <HotkeySetting :open="setting === 'hotkey'" @update:open="setting = $event ? 'hotkey' : null" />
+    <BackupSetting :open="setting === 'backup'" @update:open="setting = $event ? 'backup' : null" />
+    <RemoteSetting :open="setting === 'remote'" @update:open="setting = $event ? 'remote' : null" />
+
+    <ActionColor
+      :action="colorEdit"
+      :fore="ROW_LEGEND.find((x) => x.key === colorEdit)?.pair.fore || '#ffffff'"
+      :back="ROW_LEGEND.find((x) => x.key === colorEdit)?.pair.back || '#000000'"
+      @close="colorEdit = null"
+      @saved="reloadPrefs"
+    />
+
+    <div class="stats">
+      <div v-for="c in cells" :key="c.k" class="st-c">
+        <div class="k">{{ c.k }}</div>
+        <div class="v" :class="c.tone">{{ c.v }}</div>
+        <div class="z">{{ c.z }}</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="gtool">
+        <!--
+          行底色图例。放在搜索框<b>之前</b>而不是表格下沿：首页高度紧张，
+          单独一条占掉的是封包能看见的行数，而工具条这一行本来就有富余的横向空间。
+
+          <b>色块必须取自 prefs</b>，不能像滤镜编辑那三个那样写死十六进制：
+          那三个是老版传下来的固定约定，而这四组是用户在颜色设置里可改的
+          （C# 的 UiPrefs），写死了改完颜色图例就开始骗人。
+        -->
+        <span v-if="prefs" class="plegend">
+          <!--
+            色块可点：就地改这一组的配色。挑颜色要看着它在表里的样子，
+            隔着「设置 ▾ → 系统设置」挑完再回来看效果是反的 ——
+            所以入口放在图例本身，改完当场就能在下面的表里看到。
+          -->
+          <button
+            v-for="x in ROW_LEGEND"
+            :key="x.key"
+            class="lg"
+            :style="{ background: x.pair.back, color: x.pair.fore }"
+            :title="t('set.colorTip')"
+            @click="colorEdit = x.key"
+          >{{ t(x.label) }}</button>
+        </span>
+
+        <!--
+          查找封包。Enter = 查找下一个，Esc = 清空；右边两个按钮是「文本 / 十六进制」与「从头查找」。
+          没有独立的「向下搜索」单选 —— 主按钮本身就是向下找，找到末尾自己回头再来一圈。
+        -->
+        <span class="search" :class="{ busy: searching }">
+          <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></svg>
+          <input
+            v-model="q"
+            class="sinp"
+            spellcheck="false"
+            :placeholder="t('proxy.search')"
+            @keydown.enter.prevent="findNext(false)"
+            @keydown.esc.prevent="clearSearch"
+          >
+          <button v-if="q" class="sx" :title="t('sp.clear')" @click="clearSearch">×</button>
+        </span>
+
+        <button class="chk" :class="{ on: qHex }" :title="t('sp.modeHint')" @click="qHex = !qHex">
+          <i />{{ qHex ? t('sp.hex') : t('sp.text') }}
+        </button>
+        <button class="tb" :disabled="!q.trim() || searching" @click="findNext(false)">
+          {{ searching ? t('sp.searching') : t('sp.next') }}
+        </button>
+        <button class="tb" :disabled="!q.trim() || searching" :title="t('sp.fromHead')" @click="findNext(true)">
+          {{ t('sp.fromHead') }}
+        </button>
+
+        <button class="chk" :class="{ on: autoRoll }" @click="autoRoll = !autoRoll"><i />{{ t('proxy.autoRoll') }}</button>
+        <!-- 只读显示；改在「设置 ▾ → 列表设置」里，点一下直接跳过去 -->
+        <button class="chk" :class="{ on: autoClear }" :title="t('set.list')" @click="setting = 'list'">
+          <i />{{ t('proxy.autoClear') }}
+        </button>
+        <button class="num" :title="t('set.list')" @click="setting = 'list'">{{ clearAt.toLocaleString() }}</button>
+
+        <!-- ▼▼▼ Dev：发布前整条删掉 ▼▼▼ -->
+        <!--
+          灌包按钮已去掉：代理服务能真跑之后，拿真实流量测比生成的假包更有意义。
+          C# 侧的 devGeneratePackets 仍要留着 —— 验收跑测的第 ③ 项（取字节 p95）在用它。
+        -->
+        <span class="lbl">Dev</span>
+        <button class="tb" @click="listsOpen = true">列表通道</button>
+        <button class="tb" :disabled="accepting" @click="runAccept">{{ accepting ? '跑测中…' : '验收跑测' }}</button>
+        <!-- ▲▲▲ Dev ▲▲▲ -->
+      </div>
+
+      <PacketList
+        ref="listRef"
+        class="list"
+        :prefs="prefs"
+        :selected-id="selectedId"
+        :picked="picked"
+        :follow="autoRoll"
+        @select="onSelect"
+        @menu="onMenu"
+      />
+
+      <ContextMenu :at="menuAt" :items="menuItems" @pick="onMenuPick" @close="menuAt = null" />
+
+      <!-- 封包编辑：保存后 C# 按行 UI.Feed.Update 推回来，这里不用做别的 -->
+      <PacketEdit :target="editTarget" @close="editTarget = null" />
+      <PacketModification :id="modifyId" @close="modifyId = null" />
+
+    </div>
+
+    <div class="lower">
+      <QuickPanel />
+      <!-- packetType 只用来决定默认按文本还是十六进制看（HTTP 那四类默认文本）-->
+      <HexPanel :id="selectedId" :packet-type="selected?.Type ?? null" :highlight="searchHit" />
+    </div>
+
+    <!-- ▼▼▼ Dev：发布前整块删掉 ▼▼▼ -->
+    <ListsPanel v-model:open="listsOpen" />
+
+    <a-drawer
+      v-model:open="reportOpen"
+      title="B10 验收跑测"
+      placement="right"
+      :width="720"
+      :mask-closable="!accepting"
+      :closable="!accepting"
+    >
+      <template #extra>
+        <a-tag v-if="accepting" color="processing">跑测中 · 约 45 秒</a-tag>
+        <a-tag v-else-if="reportPass === true" color="success">全部通过</a-tag>
+        <a-tag v-else-if="reportPass === false" color="error">未通过</a-tag>
+      </template>
+      <pre class="rep">{{ reportText }}</pre>
+    </a-drawer>
+    <!-- ▲▲▲ Dev ▲▲▲ -->
+  </div>
+</template>
+
+<style scoped>
+.page {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px 12px;
+}
+
+/* 统计：7 列 × 2 行，1px 发丝线分隔 */
+.stats {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.st-c { background: var(--card); padding: 6px 11px; min-width: 0; }
+
+.st-c .k {
+  font-family: var(--share);
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.st-c .v {
+  font-family: var(--orbit);
+  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.25;
+  color: var(--green);
+  /* 数字每 500ms 变一次，等宽才不会让整格宽度抖动 */
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.st-c .v.c { color: var(--cyan); }
+.st-c .v.a { color: var(--amber); }
+.st-c .z {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.3;
+  /* 与 .v 同样的兜底：格子只有七分之一屏宽，宁可截断也不要把网格顶变形 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+  数据表。与下半部按 <b>3 : 1</b> 分高度 —— 窗口放大时两边一起长，
+  而不是像原来那样「封包列表独吞、下半部永远 208px」。
+
+  写 flex: 3 1 0 而不是 flex: 3（后者的 basis 是 0%，在这里等价，
+  但显式写出来才看得出比例是按<b>整个高度</b>分的，不是按剩余空间）。
+  min-height 是地板：窗口压到很矮时先保证表头 + 几行可见。
+*/
+.grid {
+  flex: 3 1 0;
+  min-height: 220px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.gtool {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+/*
+  除了搜索框，工具条上的东西一律不许被压缩。
+
+  这一条是加完查找那三个按钮之后补的：flex 项默认可以缩到内容宽度以下，
+  窗口一窄，「查找下一个 / 从头查找」就会被挤成半个字。
+  该让位的只有搜索框（它有 flex: 1 + min-width: 0，缩到只剩图标也还看得懂）。
+*/
+.gtool > .tb,
+.gtool > .chk,
+.gtool > .num,
+.gtool > .lbl,
+.gtool > .plegend { flex: none; white-space: nowrap; }
+
+/*
+  搜索框吃掉工具条的剩余空间 —— 它后面的勾选框与 Dev 按钮因此自动靠右，
+  不再需要一根占位撑杆（原来是 flex: 0 0 250px + 一个 .grow）。
+  min-width: 0 是必须的：flex 项的默认最小宽度是内容宽度，不写它在窄窗口下压不住。
+*/
+.search {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  background: rgb(0 0 0 / 30%);
+  color: var(--muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search .ico { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2; fill: none; flex: none; }
+
+/* 有内容时整个框提亮一档：扫一眼就知道当前列表是不是正被一个查找条件盯着 */
+.search:focus-within { border-color: var(--cyan); color: var(--cyan); }
+.search.busy { border-color: var(--amber); color: var(--amber); }
+
+/*
+  输入框本身不画边框 —— 边框在外面那个 .search 上，
+  图标 / 输入 / 清除按钮共用同一个盒子，看起来才是一个控件而不是三个。
+*/
+.sinp {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gray);
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  outline: none;
+}
+
+.sinp::placeholder { color: var(--muted); }
+
+.sx {
+  flex: none;
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sx:hover { color: var(--danger); }
+
+.chk {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-family: var(--share);
+  font-size: var(--btn-size);
+  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.chk i { width: 12px; height: 12px; border: 1px solid var(--border); display: inline-block; position: relative; }
+.chk.on { color: var(--green); }
+.chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
+.chk:focus-visible { outline-offset: 2px; }
+
+.num {
+  padding: 3px 9px;
+  cursor: pointer;
+  background: rgb(0 0 0 / 30%);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.list { flex: 1; min-height: 0; border: 0; border-radius: 0; }
+
+/*
+  行底色图例。贴在表格下沿、与表同宽，读的时候视线不用离开这张表。
+
+  色块<b>直接用行的配色画</b>（底色 + 文字色），而不是「小方块 + 说明文字」——
+  这样看到的就是行本身的样子，不用在脑子里再做一次映射。
+*/
+/*
+  行底色图例。工具条上一段，<b>不参与收缩</b>（flex: none）——
+  搜索框是 flex: 1，窗口一窄就该由它让位，图例被压扁会让色块变形、字被截断。
+*/
+.plegend { flex: none; display: flex; align-items: center; gap: 4px; }
+
+/* 色块是按钮：点开就改这一组的配色。边框清掉，只留纯色块 */
+.plegend .lg {
+  padding: 2px 8px;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--share);
+  font-size: 9.5px;
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+
+/* 悬停给一道浅描边 —— 不动底色，底色本身就是要展示的东西 */
+.plegend .lg:hover { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 45%); }
+.plegend .lg:focus-visible { outline-offset: 1px; }
+
+/*
+  下半部：快捷面板 + 十六进制。占上半部的 1/3（见 .grid 那段）。
+
+  原来是写死的 208px：窗口拉高时它一动不动，十六进制永远只看得见那么几行。
+  min-height 180 是地板 —— 再矮的话四个页签加上表头就没有内容区了。
+
+  横向：快捷面板从 360 收到 320 —— 它只放「勾选 + 规则名 + 标记」三段，320 绰绰有余，
+  省下的给十六进制（那边每行字节数是按宽度跳档的，多几十像素常常正好够跨过一档）。
+  改成 minmax(300px, 22%) 之后它也跟着窗口长，但涨得比十六进制慢，
+  宽屏下多出来的宽度主要还是给十六进制 —— 那才是真正吃宽度的一侧。
+*/
+.lower {
+  flex: 1 1 0;
+  min-height: 180px;
+  display: grid;
+  grid-template-columns: minmax(300px, 22%) 1fr;
+  gap: 8px;
+}
+
+/* ▼▼▼ Dev 样式：发布前一并删掉 ▼▼▼ */
+.gtool .lbl {
+  font-family: var(--share);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #4b5563;
+}
+
+.tb {
+  padding: 8px 10px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--share);
+  font-size: var(--btn-size);
+  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
+  line-height: 1;
+  letter-spacing: .1em;
+  cursor: pointer;
+}
+
+.tb:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
+.tb:disabled { opacity: .4; cursor: default; }
+
+.rep {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-all;
+  user-select: text;
+}
+/* ▲▲▲ Dev 样式 ▲▲▲ */
+</style>

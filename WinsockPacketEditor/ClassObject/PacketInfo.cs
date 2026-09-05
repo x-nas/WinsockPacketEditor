@@ -5,6 +5,29 @@ namespace WinsockPacketEditor
 {
     public class PacketInfo : NotifyProperty
     {
+        #region//行标识
+
+        private static long _seq;
+
+        /// <summary>
+        /// 运行期自增行号（B9a 引入）。
+        ///
+        /// 【为什么需要】
+        /// 封包列表原本靠数组下标定位（lstPacketInfo[e.RowIndex]），但下标会因自动清理而失效，
+        /// 也无法跨进程传递。改用 Id 之后：
+        ///   · 界面按 Id 取完整字节（GetPacketBufferById / GetRawBufferById）
+        ///   · 界面按 Id 定位选中行
+        ///   · 将来过桥时，前端只收元数据，需要字节时再按 Id 回来取
+        ///
+        /// 【语义】只在本次运行内唯一，不持久化、不跨进程、重启后从 1 重新开始。
+        /// 落库的 SendCollection / WareHouse 用的是显式列名，读回来的实例会拿到新 Id，这是预期行为。
+        ///
+        /// Hook 线程会并发构造 PacketInfo，所以用 Interlocked 自增。
+        /// </summary>
+        public long Id { get; } = System.Threading.Interlocked.Increment(ref _seq);
+
+        #endregion
+
         #region//时间戳
 
         DateTime _PacketTime;

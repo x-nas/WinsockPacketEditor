@@ -1,0 +1,633 @@
+/*
+  外壳配色：与官网 WPEWeb.Cyber 一致（深黑底 + 三霓虹色 + 科技等宽字体）。
+  令牌逐个抄自 WPEWeb.Cyber/assets/css/cyber.css 的 :root，改配色只需要改这一处。
+
+  【字体】三个字族都是从官网搬过来的 latin 子集可变字体（assets/fonts/，SIL OFL 1.1，
+  许可证一并带着）。它们不含中文字形，中文走系统回退 —— 官网上本来就是这个表现。
+  可变字体一个文件覆盖整个字重轴，所以 font-weight 写的是范围而不是单值。
+*/
+
+@font-face {
+  font-family: "Orbitron";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("./assets/fonts/orbitron.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Share Tech Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./assets/fonts/sharetechmono.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("./assets/fonts/jetbrainsmono.woff2") format("woff2");
+}
+
+:root {
+  /* 全项目表头的字号（15 张表共用；各 .vue 里的表头规则都引用它）*/
+  --th-size: 10.5px;
+  /* 全项目表头的高度，与字号一样只在这里定 */
+  --th-h: 30px;
+  /* 全项目按钮文字的字号（工具条 / 弹窗 / 状态条 / 小按钮 / 页签都引用它）*/
+  --btn-size: 10.5px;
+  /* 右键菜单文字的字号（全项目的右键菜单都是 ContextMenu 这一个组件，改这里即全改）*/
+  --menu-size: 11px;
+  /* 标题栏那几枚小字标签（版本号 / BETA / 语言）与底部状态栏整行的字号 */
+  --label-size: 10.5px;
+  color-scheme: dark;
+
+  /* ── 官网令牌，原样 ─────────────────────────────────── */
+  --black: #0a0a0f;
+  --gray: #e0e0e0;
+  --card: #12121a;
+  --panel: #1c1c2e;
+  --muted: #6b7280;
+  --green: #00ff88;
+  --magenta: #ff00ff;
+  --cyan: #00d4ff;
+  --border: #2a2a3a;
+  --danger: #ff3366;
+  --amber: #eab308;
+
+  /*
+    四角标记离页面边缘的距离。官网是 8px，这里取 3px ——
+    官网页面顶部有留白，而这里视口顶到底就是标题栏、底部就是状态栏，
+    8px 会让角标贴着品牌名与状态栏文字。改这一个值即可整体调整。
+  */
+  /*
+    氛围层（游走亮带 .scan / 四角标记 .cn）的层级。
+
+    必须<b>高于所有弹窗</b>：这两层是「整块屏幕的质感」，不是页面内容的装饰。
+    早先它们在 60、弹窗在 999，于是弹窗浮在氛围之上 —— 亮带扫不过弹窗、
+    四角被弹窗盖住，看着像从另一个程序里飞过来的。
+    ant-design-vue 的 Modal 用 1000、message/notification 用 1010 上下，
+    取 2000 一档留出余量。两层都是 pointer-events: none，提多高都不挡操作。
+  */
+  --z-ambience: 2000;
+
+  --corner-inset: 1px;
+
+  /*
+    角标的臂长。
+
+    真正让人觉得挤的不是角标离边多远，而是<b>横臂末端</b>伸到哪里：
+    16px 的臂 + 3px 内边距，臂尖落在 x=19，而标题栏文字从 x=18 起 ——
+    臂尖等于顶着文字，只是纵向差几像素才没真叠上。
+    另一条更关键：臂的<b>下沿</b>不能探进文字所在的那条横带，否则不管水平隔多远，
+    看着都像跟文字挤在一行。实测品牌框顶端在 y=12，臂长 12px 时臂底在 y=13（侵入 2px），
+    收到 10px 后臂底 y=11，正好完全在文字带之上。
+    配合两条栏加大的横向内边距（28px），臂尖与文字水平方向还留着十几像素。
+  */
+  --corner-arm: 10px;
+
+  --orbit: "Orbitron", sans-serif;
+  --mono: "JetBrains Mono", "Microsoft YaHei UI", monospace;
+  --share: "Share Tech Mono", monospace;
+
+  /*
+    ── 旧的 --wpe-* 语义令牌，现在映射到官网配色 ─────────
+    封包列表与十六进制面板是按这套名字写的（B10d）。映射过来而不是逐个改组件，
+    是为了让「配色的唯一真源」始终只有上面那一组官网令牌。
+
+    注意：封包行的<b>行内配色</b>不走这里 —— 那 4 组颜色来自 C# 的 UiPrefs，
+    是用户可配的，见 PacketList.vue 的 colorOf()。
+  */
+  --wpe-bg: var(--black);
+  --wpe-panel: var(--card);
+  --wpe-head: var(--panel);
+  --wpe-fg: var(--gray);
+  --wpe-muted: var(--muted);
+  --wpe-line: var(--border);
+  --wpe-rowline: #1e1e2c;
+  --wpe-accent: var(--green);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html,
+body,
+#app { height: 100%; }
+
+body {
+  background: var(--black);
+  color: var(--gray);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  /* 抓包列表刷得很快，选中文本几乎总是误操作 */
+  user-select: none;
+  overflow: hidden;
+}
+
+::selection { background: rgb(0 255 136 / 30%); color: var(--green); }
+
+/* 十六进制面板与报告里的文本要能选、能复制 */
+pre { user-select: text; }
+
+/*
+  焦点环。
+
+  Chromium 的默认焦点环在深色背景上是一圈白线，会压住我们自己的描边 ——
+  beta 提示那个按钮带 autofocus，弹出来就是白框，点别处失焦后才显出琥珀色，
+  看着像「边框会变色」。这里统一换成与配色一致的绿色描边。
+
+  只改 :focus-visible，不动 :focus —— 鼠标点击不该出现焦点环，键盘操作才需要。
+  焦点<b>不能直接去掉</b>：弹窗按回车确认、Tab 走查界面都依赖它。
+*/
+/*
+  写成具体元素而不是裸 :focus —— 特异性从 (0,1,0) 提到 (0,1,1)，
+  不会被第三方样式表（ant-design-vue 的 reset 等）里同级的规则压住。
+*/
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus { outline: none; }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* 官网的切角，用在需要「非直角」的容器上 */
+.clip {
+  clip-path: polygon(0 10px, 10px 0, calc(100% - 10px) 0, 100% 10px,
+      100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+/* 官网的线性图标基类 */
+.ico {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  flex-shrink: 0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── 全窗氛围层：网格 / CRT / 游走亮带 / 四角标记 ───────── */
+
+.pcb {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(42 42 58 / 10%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(42 42 58 / 10%) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.scan {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  z-index: calc(var(--z-ambience) - 1);   /* 让四角标记压在亮带之上 */
+  pointer-events: none;
+  opacity: .03;
+  background: linear-gradient(to bottom, transparent, #fff, transparent);
+  animation: scan 10s linear infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.cn {
+  position: fixed;
+  width: var(--corner-arm);
+  height: var(--corner-arm);
+  z-index: calc(var(--z-ambience) + 1);
+  pointer-events: none;
+  border-color: rgb(0 255 136 / 30%);
+}
+
+/*
+  窗体本身留着 3px 的缩放内边距（ShellForm 的 Padding，等于 ResizeBorder），
+  所以 --corner-inset 是 1px 时，角标距真实窗口边缘是 4px，既不顶边也点得到边框。
+*/
+.cn.tl { top: var(--corner-inset); left: var(--corner-inset); border-top: 2px solid; border-left: 2px solid; }
+.cn.tr { top: var(--corner-inset); right: var(--corner-inset); border-top: 2px solid; border-right: 2px solid; }
+.cn.bl { bottom: var(--corner-inset); left: var(--corner-inset); border-bottom: 2px solid; border-left: 2px solid; }
+.cn.br { bottom: var(--corner-inset); right: var(--corner-inset); border-bottom: 2px solid; border-right: 2px solid; }
+
+/* 减少动效偏好：关掉扫描线（官网同样处理） */
+@media (prefers-reduced-motion: reduce) {
+  .scan { animation: none; opacity: 0; }
+}
+
+/*
+  拖动列宽时给整页统一光标并禁选。
+
+  必须写在全局表里：这两条作用在 <body> 上，而组件的 scoped 样式加了属性选择器，
+  选不中 body。类由 PacketList 的 startResize / onDragUp 增删。
+*/
+body.col-resizing,
+body.col-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--border); }
+::-webkit-scrollbar-thumb:hover { background: #3a3a4e; }
+
+/* ── 列表页的共用外观 ─────────────────────────────────────────
+   账号 / 滤镜 / 发送（往后还有机器人 / 仓库）这几屏结构相同：
+   工具条 + 定高虚拟滚动表 + 勾选框 + 行内操作按钮。
+
+   这些规则原先在每个 .vue 里各抄一份，结果就是抄着抄着就不一样了 ——
+   禁用透明度 .35 / .4、选中行有没有那条左边线、表头字色、操作按钮有没有边框，
+   三份各不相同。放在这里是<b>唯一真源</b>：新做一屏只要给根元素加 list-page。
+
+   ⚠️ 这里不写 grid-template-columns、gap、以及各列的语义配色 ——
+   那些每屏都不一样，留在各自的 <style scoped> 里。
+
+   ⚠️⚠️ <b>平局时是这个文件赢，不是 scoped 赢。</b>
+   main.ts 里 `import App from './App.vue'` 排在 `import './style.css'` 前面，
+   所以打包出来组件的 scoped 样式在前、这个文件在后 —— 特异度相同时后者生效。
+   scoped 的 `.head` 编译成 `.head[data-v-x]`，与 `.list-page .head` 都是 (0,2,0)，
+   正好是平局。要在某一屏覆盖这里的规则，得<b>提高特异度</b>（例如 `.tbl .head`），
+   照着写一条同名规则是不管用的。
+   （真栽过：发送编辑那张表的表头比内容右移 4px，就是 14px 输给不了 10px。）
+   ────────────────────────────────────────────────────────── */
+
+/* 工具条 */
+.list-page .bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.list-page .grow { flex: 1; }
+
+/* 取账号 / 滤镜两屏原本一致的那份值，不是我另起的 */
+.list-page .btn {
+  flex: none;
+  padding: 9px 13px 7px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--gray);
+  font-family: var(--share);
+  font-size: var(--btn-size);
+  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.list-page .btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
+.list-page .btn:disabled { opacity: .35; cursor: default; }
+
+.list-page .btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
+
+.list-page .btn.primary:hover:not(:disabled) {
+  background: rgb(0 255 136 / 10%);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* 琥珀 = 提醒：用在「会让东西自动发生」的入口上（仓库列表的自动入库），与绿的主动作、红的破坏动作区分开 */
+.list-page .btn.warn { border-color: rgb(234 179 8 / 45%); color: var(--amber); }
+
+.list-page .btn.warn:hover:not(:disabled) {
+  background: rgb(234 179 8 / 10%);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.list-page .btn.danger { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+
+.list-page .btn.danger:hover:not(:disabled) {
+  background: rgb(255 51 102 / 12%);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* 表 */
+.list-page .body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--border);
+  background: #000;
+  /* 滚动时不做像素级平滑，直接跳，帧内工作量更可控 */
+  overflow-anchor: none;
+}
+
+.list-page .spacer { position: relative; }
+
+.list-page .win {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+.list-page .empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+
+.list-page .head,
+.list-page .row {
+  display: grid;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 12.5px;
+}
+
+.list-page .head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: var(--th-h);
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--share);
+  font-size: var(--th-size);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  /*
+    #a8b2c0 而不是 var(--muted)：后者在 --panel 上只有 3.85:1，
+    小字 + 大字距下确实看不清（这是用户提过的），换成 7.8:1。
+  */
+  color: #a8b2c0;
+  white-space: nowrap;
+}
+
+/*
+  六张 .list-page 表共用。
+  表头每格与数据格同名（对齐规则靠这个），于是数据列的字体 / 字号 / 颜色
+  （.notes 12px、.ad / .dt 等宽字、.cnt 青色……）会一并漏进表头，看着就是「备注」「数据」比别的表头大。
+  这里按格子把它们收回来：表头只认表头自己那一份。(0,2,1) 压得过任何单类名的列规则。
+*/
+.list-page .head > span {
+  /*
+    表头字形偏上 2px（像素级实测：Share Tech Mono 10.5px 在 30px 表头里，中文 / 英文的墨迹中心都在盒中心上方约 2px）。
+    格子是 grid / flex 项，内边距只在上面补 4px 就把内容框中心压下 2px，对文本与 flex 居中的格子都成立。
+    改字号 / 字体 / 表头高度后要重新量（dev-headers.html + SVG foreignObject 逐行扫像素那套）。
+  */
+  padding-top: 4px;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+}
+
+/* ── 可排序的表头格（useSort.ts）─────────────────────────────
+   四张表在用：客户端列表 / 账号列表 / 进程设置 / 防火墙名单。
+   <b>不是每一格都可点</b>，所以样式挂在 .so 这个类上而不是所有 span 上 ——
+   可点与不可点必须一眼分得出，否则用户会一个个去试。
+
+   这几条也给弹窗里的小表用（进程设置、防火墙名单不在 .list-page 下），
+   所以选择器不带 .list-page 前缀，只认 .so 本身。
+   ────────────────────────────────────────────────────────── */
+.so { cursor: pointer; user-select: none; }
+.so:hover { color: var(--gray); }
+
+/* 排序中的那一列点亮，箭头跟着它 —— 只靠一个箭头在一排大写小字里太容易看漏 */
+.so.on { color: var(--cyan); }
+
+/*
+  箭头用 em 定宽占位：不占位的话，点一下表头这一格会变宽，
+  整行列宽是 grid 定死的，于是标题会左右跳一下。
+*/
+.so .ar {
+  display: inline-block;
+  width: 1em;
+  margin-left: 2px;
+  font-family: var(--mono);   /* Share Tech Mono 没有 ↑↓ 这两个字形，会掉到别的字体上、基线对不齐 */
+  letter-spacing: 0;
+}
+
+.list-page .row {
+  height: 34px;   /* 必须与各屏的 ROW_H 常量一致，对不上滚动位置会线性漂移 */
+  border-bottom: 1px solid rgb(42 42 58 / 45%);
+  color: #cbd5cc;
+  cursor: default;
+}
+
+.list-page .row:hover { background: rgb(255 255 255 / 4%); }
+
+/* 选中的行给一条左边线 + 淡底，滚动时一眼能看出还剩哪些选着 */
+.list-page .row.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.list-page .row.sel:hover { background: rgb(0 212 255 / 10%); }
+
+/*
+  禁用的行压暗，<b>但勾选框那几格除外</b>。
+
+  它们是这一行仅有的操作入口 —— 尤其「启用」那个，正是用来把这一行重新点亮的控件。
+  跟着一起暗下去等于把出口也藏了：空框本来就只有一圈发丝线，再乘 45% 在黑底上几乎看不见。
+  所以按格子压暗，不对整行用 opacity。
+*/
+.list-page .row.off > span:not(.ck) { opacity: .45; }
+
+/* 勾选框那格用 flex —— inline-flex 按基线对齐会被字体下降部顶高 1px */
+.list-page .head > span.ck,
+.list-page .row > span.ck { display: flex; align-items: center; justify-content: center; }
+
+/* 勾选框 */
+.list-page .chk {
+  display: inline-flex;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.list-page .chk i {
+  width: 13px;
+  height: 13px;
+  border: 1px solid #4b5563;
+  position: relative;
+  display: inline-block;
+}
+
+.list-page .chk:hover i { border-color: var(--muted); }
+.list-page .chk:focus-visible { outline-offset: 2px; }
+.list-page .chk:disabled { opacity: .35; cursor: default; }
+
+/* 绿 = 生效中（启用）。取账号 / 滤镜两屏原本一致的那份值 */
+.list-page .chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.list-page .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
+
+/*
+  这里原先还有一套青色的「选中框」（.chk.sel / .half）。
+  各列表的多选已经全部改成按键（单击 / Ctrl / Shift，见 src/usePick.ts），
+  勾选框列一律撤掉 —— 它和「启用」开关长得一模一样，摆在一起分不出哪个是哪个，
+  而点错的代价不对称：一个只是选中，另一个会立刻让某条规则生效或失效。
+  所以这一套样式连同它的半选态一起删了。<b>剩下的 .chk 只表示「启用」，一律是绿的。</b>
+*/
+
+/* 行内操作按钮 */
+.list-page .ops { display: flex; align-items: center; justify-content: center; gap: 2px; }
+
+.list-page .op {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.list-page .op:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
+.list-page .op.del:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
+.list-page .op:focus-visible { outline-offset: -2px; }
+.list-page .op.del:focus-visible { outline-color: var(--danger); }
+.list-page .op:disabled { opacity: .35; cursor: default; }
+.list-page .op .ico { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+
+/* ── 大编辑器弹窗的外壳 ───────────────────────────────────────
+   滤镜编辑 / 发送编辑（往后还有机器人编辑）共用。以<b>滤镜编辑</b>为准：
+   宽 1180、四角标记 7px 实心青。
+
+   这些原先在两个 .vue 里各抄一份，于是宽度 1180 / 1080、角标 7px / 11px、
+   角标颜色实心 / 45% 透明各不相同 —— 从一个编辑器切到另一个，弹窗会跳一下。
+
+   ⚠️ 内边距的两个数不是随手写的：上 52 给自绘标题栏（44px）让位，
+   下 40 给状态栏（30px + 1px 上边框）让位，两头都是「控件高度 + 约 8px 余量」。
+   底下这条曾经是 20px，弹窗底边正压在状态栏上。
+   ────────────────────────────────────────────────────────── */
+
+.editor-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgb(5 5 10 / 78%);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 20px 40px;
+}
+
+/*
+  给一个目标高度而不是让它按内容撑：这几屏的主体都是表格 / 格子，
+  不给高度的话弹窗只有内容那么高，表永远只有它自己那点尺寸，拉窗口也不长。
+  min(...) 保证矮屏幕下不会顶出可用区。
+*/
+.editor-mask > .dlg {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1180px, 100%);
+  height: min(860px, 100%);
+  max-height: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 50px rgb(0 0 0 / 60%);
+}
+
+.editor-mask .mk { position: absolute; width: 7px; height: 7px; border: 1px solid var(--cyan); }
+.editor-mask .mk.tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.editor-mask .mk.tr { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+.editor-mask .mk.bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+.editor-mask .mk.br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+/*
+  ── 设置弹窗里的表单件（进程 / 映射 / 外部代理 / 快捷键 / 备份 / 远程管理 + WPC 的几个编辑弹窗共用）──
+  早先做的几个设置页各自 scoped 了一份同样的规则；从这一批起收到这里，弹窗根元素挂 setf 即可。
+  弹窗里的小表叫 .tbl / .tr（不叫 .row —— .setf .row 是表单行）。
+*/
+.setf .grp { padding: 10px 20px 4px; font-family: var(--share); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); }
+/* 标签列宽默认 112px；英文标签长的弹窗（系统 / 拦截设置那几个）在 setf 元素上用 --setf-k 覆盖 */
+.setf .row { display: grid; grid-template-columns: var(--setf-k, 112px) 1fr; align-items: center; gap: 12px; padding: 5px 20px; min-height: 32px; }
+.setf .row > .k { font-size: 12.5px; color: var(--muted); }
+.setf .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
+.setf .row.off > .k, .setf .row.off > .v { opacity: .45; }
+.setf .hint { padding: 0 20px; margin: 4px 0 6px; font-size: 11.5px; color: #8a94a6; line-height: 1.5; }
+.setf .hint.warn { color: var(--amber); }
+
+.setf .chk, .setf .rd { display: inline-flex; align-items: center; gap: 7px; padding: 0; background: transparent; border: 0; font-size: 12.5px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.setf .chk:disabled, .setf .rd:disabled { cursor: default; opacity: .5; }
+.setf .chk:focus-visible, .setf .rd:focus-visible { outline-offset: 2px; }
+.setf .rd:focus-visible { outline-color: var(--cyan); }
+.setf .chk i { width: 13px; height: 13px; border: 1px solid #4b5563; position: relative; flex: none; }
+.setf .chk.on { color: #4fa87a; }
+.setf .chk.on i { border-color: #4fa87a; background: rgb(79 168 122 / 14%); }
+.setf .chk.on i::after { content: ""; position: absolute; inset: 2px; background: #4fa87a; }
+.setf .rd i { width: 13px; height: 13px; border: 1px solid #4b5563; border-radius: 50%; position: relative; flex: none; }
+.setf .rd.on { color: var(--cyan); }
+.setf .rd.on i { border-color: var(--cyan); }
+.setf .rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
+
+.setf .inp { flex: 1; min-width: 0; height: 28px; padding: 0 10px; background: rgb(0 0 0 / 30%); border: 1px solid var(--border); color: var(--gray); font-family: var(--mono); font-size: 12.5px; outline: none; }
+.setf .inp:focus { border-color: var(--cyan); }
+.setf .inp:disabled { opacity: .5; }
+.setf .inp.bad { border-color: var(--danger); }
+.setf .inp.num { flex: none; width: 90px; text-align: center; }
+.setf .inp.sm { flex: none; width: 160px; }
+.setf .inp.cap-key { cursor: pointer; caret-color: transparent; }
+.setf .inp.cap-key:focus { border-color: var(--green); box-shadow: inset 0 0 0 1px rgb(0 255 136 / 25%); }
+.setf textarea.inp { height: 84px; padding: 6px 10px; resize: vertical; line-height: 1.5; }
+.setf .inp::placeholder { color: #4b5563; }
+
+.setf .sbtn { flex: none; padding: 8px 11px 6px; background: transparent; border: 1px solid var(--border); color: var(--gray); font-family: var(--share); font-size: var(--btn-size); line-height: 1; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
+.setf .sbtn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
+.setf .sbtn:disabled { opacity: .35; cursor: default; }
+.setf .sbtn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
+.setf .sbtn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
+.setf .sbtn.danger { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+.setf .sbtn.danger:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); color: var(--danger); }
+.setf .sbtn.warn { border-color: rgb(234 179 8 / 45%); color: var(--amber); }
+.setf .sbtn.warn:hover:not(:disabled) { background: rgb(234 179 8 / 10%); border-color: var(--amber); color: var(--amber); }
+
+.setf .tg { flex: none; padding: 5px 7px 3px; border: 1px solid; font-family: var(--share); font-size: 10.5px; line-height: 1; letter-spacing: .06em; }
+.setf .tg.ok { border-color: rgb(0 255 136 / 35%); color: var(--green); }
+.setf .tg.bad { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+.setf .tg.dim { border-color: var(--border); color: #4b5563; }
+.setf .tg.amber { border-color: rgb(234 179 8 / 40%); color: var(--amber); }
+.setf .link { color: var(--cyan); font-family: var(--mono); font-size: 12.5px; cursor: pointer; text-decoration: underline dotted; }
+.setf .link:hover { color: var(--green); }
+
+/* 弹窗里的小表：表头借 .list-page（根元素同时挂 list-page 类），行是 .tr */
+.setf .tbl { margin: 4px 20px 8px; border: 1px solid var(--border); background: #000; display: flex; flex-direction: column; }
+.setf .tbl .tbar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--border); background: var(--card); }
+.setf .tbl .tbar .grow { flex: 1; }
+.setf .tbl .tbody { max-height: 260px; overflow-y: auto; }
+.setf .tbl .empty { padding: 22px; text-align: center; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.setf .tbl .tr { display: grid; align-items: center; gap: 8px; padding: 0 14px; height: 34px; border-bottom: 1px solid rgb(42 42 58 / 45%); font-size: 12.5px; color: #cbd5cc; cursor: default; }
+.setf .tbl .tr:hover { background: rgb(255 255 255 / 4%); }
+.setf .tbl .tr.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.setf .tbl .tr > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.setf .tbl .tr.off > span:not(.ck) { opacity: .45; }
+.setf .tbl .tr > span.ck, .setf .tbl .tr > span.ops { display: flex; align-items: center; justify-content: center; gap: 4px; }

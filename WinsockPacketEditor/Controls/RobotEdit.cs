@@ -70,7 +70,7 @@ namespace WinsockPacketEditor
                         var typeName = Operate.RobotConfig.Robot.GetName_ByInstructionType((Operate.RobotConfig.Robot.InstructionType)value);
                         return new AntdUI.CellText(typeName)
                         {
-                            Fore = Operate.RobotConfig.Robot.GetColor_ByInstructionType((Operate.RobotConfig.Robot.InstructionType)value),
+                            Fore = UiTheme.GetColor_ByInstructionType((Operate.RobotConfig.Robot.InstructionType)value),
                         };
                     },
                 }.SetFixed().SetLocalizationTitleID("Table.RobotINST.Column."),
@@ -208,7 +208,7 @@ namespace WinsockPacketEditor
                     this.pMouseKey.Back =
                     this.pMouseWheel.Back =
                     this.pMouseMove.Back =
-                    Operate.SystemConfig.Color_35;
+                    UiTheme.Color_35;
             }
             else
             {
@@ -455,15 +455,15 @@ namespace WinsockPacketEditor
             {
                 if (this.cbbSwitchType.SelectedIndex == 0)
                 {
-                    Operate.SystemConfig.InitSendInfo(this.cbbSwitchInfo, Guid.Empty);
+                    UiControls.InitSendInfo(this.cbbSwitchInfo, Guid.Empty);
                 }
                 else if (this.cbbSwitchType.SelectedIndex == 1)
                 {
-                    Operate.SystemConfig.InitRobotInfo(this.cbbSwitchInfo, Guid.Empty);
+                    UiControls.InitRobotInfo(this.cbbSwitchInfo, Guid.Empty);
                 }
                 else if (this.cbbSwitchType.SelectedIndex == 2)
                 {
-                    Operate.SystemConfig.InitFilterInfo(this.cbbSwitchInfo, Guid.Empty, Guid.Empty);
+                    UiControls.InitFilterInfo(this.cbbSwitchInfo, Guid.Empty, Guid.Empty);
                 }
             }
             catch (Exception ex)
@@ -725,79 +725,87 @@ namespace WinsockPacketEditor
 
         #region//指令集 - 右键菜单
 
-        private void tRobotINST_CellClick(object sender, TableClickEventArgs e)
+        private async void tRobotINST_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (this.RInstruction.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRobotInstruction, (item) =>
-                {
-                    List<InstructionInfo> iiList = new List<InstructionInfo>();
-                    if (this.tRobotInstruction.SelectedIndex != -1)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        iiList.Add(this.RInstruction[this.tRobotInstruction.SelectedIndex - 1]);
+                        if (this.RInstruction.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tRobotInstruction, async (item) =>
+                        {
+                            List<InstructionInfo> iiList = new List<InstructionInfo>();
+                            if (this.tRobotInstruction.SelectedIndex != -1)
+                            {
+                                iiList.Add(this.RInstruction[this.tRobotInstruction.SelectedIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (iiList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Top, this.RInstruction, iiList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (iiList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Up, this.RInstruction, iiList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (iiList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Down, this.RInstruction, iiList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (iiList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Bottom, this.RInstruction, iiList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (iiList.Count > 0)
+                                    {
+                                        await Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Delete, this.RInstruction, iiList);
+                                    }
+
+                                    break;
+
+                                case "ClearUp":
+
+                                    await Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.CleanUp, this.RInstruction, iiList);
+
+                                    break;
+                            }
+
+                            this.tRobotInstruction.SelectedIndex = -1;
+                        }, Operate.RobotConfig.Robot.GetCMS_RobotInstruction().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (iiList.Count > 0)
-                            {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, this.RInstruction, iiList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (iiList.Count > 0)
-                            {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, this.RInstruction, iiList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (iiList.Count > 0)
-                            {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, this.RInstruction, iiList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (iiList.Count > 0)
-                            {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, this.RInstruction, iiList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (iiList.Count > 0)
-                            {
-                                Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, this.RInstruction, iiList);
-                            }
-
-                            break;
-
-                        case "ClearUp":
-
-                            Operate.RobotConfig.Robot.UpdateInstruction_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, this.RInstruction, iiList);
-
-                            break;
-                    }
-
-                    this.tRobotInstruction.SelectedIndex = -1;
-                }, Operate.RobotConfig.Robot.GetCMS_RobotInstruction()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tRobotINST_CellClick), ex);
             }
         }
 
@@ -954,7 +962,7 @@ namespace WinsockPacketEditor
 
                 if (this.RInstruction.Count > 0)
                 {
-                    int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(this.form, this.RInstruction);
+                    int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(true, this.RInstruction);
                     if (iReturn > -1 && iReturn < tRobotInstruction.ToDataTable().Rows.Count)
                     {
                         this.tRobotInstruction.SelectedIndex = iReturn + 1;

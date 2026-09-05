@@ -45,14 +45,14 @@ namespace WinsockPacketEditor
                     break;
             }
 
-            this.cRepalce_ForeColor.Value = Operate.FilterConfig.Filter.FilterReplace_ForeColor;
-            this.cRepalce_BackColor.Value = Operate.FilterConfig.Filter.FilterReplace_BackColor;
-            this.cIntercept_ForeColor.Value = Operate.FilterConfig.Filter.FilterIntercept_ForeColor;
-            this.cIntercept_BackColor.Value = Operate.FilterConfig.Filter.FilterIntercept_BackColor;
-            this.cChange_ForeColor.Value = Operate.FilterConfig.Filter.FilterChange_ForeColor;
-            this.cChange_BackColor.Value = Operate.FilterConfig.Filter.FilterChange_BackColor;
-            this.cDisplay_ForeColor.Value = Operate.FilterConfig.Filter.FilterDisplay_ForeColor;
-            this.cDisplay_BackColor.Value = Operate.FilterConfig.Filter.FilterDisplay_BackColor;
+            this.cRepalce_ForeColor.Value = UiTheme.FilterReplace_ForeColor;
+            this.cRepalce_BackColor.Value = UiTheme.FilterReplace_BackColor;
+            this.cIntercept_ForeColor.Value = UiTheme.FilterIntercept_ForeColor;
+            this.cIntercept_BackColor.Value = UiTheme.FilterIntercept_BackColor;
+            this.cChange_ForeColor.Value = UiTheme.FilterChange_ForeColor;
+            this.cChange_BackColor.Value = UiTheme.FilterChange_BackColor;
+            this.cDisplay_ForeColor.Value = UiTheme.FilterDisplay_ForeColor;
+            this.cDisplay_BackColor.Value = UiTheme.FilterDisplay_BackColor;
         }
 
         #endregion
@@ -112,14 +112,14 @@ namespace WinsockPacketEditor
                     Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Sequence;
                 }
                 
-                Operate.FilterConfig.Filter.FilterReplace_ForeColor = this.cRepalce_ForeColor.Value;
-                Operate.FilterConfig.Filter.FilterReplace_BackColor = this.cRepalce_BackColor.Value;
-                Operate.FilterConfig.Filter.FilterIntercept_ForeColor = this.cIntercept_ForeColor.Value;
-                Operate.FilterConfig.Filter.FilterIntercept_BackColor = this.cIntercept_BackColor.Value;
-                Operate.FilterConfig.Filter.FilterChange_ForeColor = this.cChange_ForeColor.Value;
-                Operate.FilterConfig.Filter.FilterChange_BackColor = this.cChange_BackColor.Value;
-                Operate.FilterConfig.Filter.FilterDisplay_ForeColor = this.cDisplay_ForeColor.Value;
-                Operate.FilterConfig.Filter.FilterDisplay_BackColor = this.cDisplay_BackColor.Value;
+                UI.Prefs.FilterReplace_ForeColor = (this.cRepalce_ForeColor.Value).ToRgb();
+                UI.Prefs.FilterReplace_BackColor = (this.cRepalce_BackColor.Value).ToRgb();
+                UI.Prefs.FilterIntercept_ForeColor = (this.cIntercept_ForeColor.Value).ToRgb();
+                UI.Prefs.FilterIntercept_BackColor = (this.cIntercept_BackColor.Value).ToRgb();
+                UI.Prefs.FilterChange_ForeColor = (this.cChange_ForeColor.Value).ToRgb();
+                UI.Prefs.FilterChange_BackColor = (this.cChange_BackColor.Value).ToRgb();
+                UI.Prefs.FilterDisplay_ForeColor = (this.cDisplay_ForeColor.Value).ToRgb();
+                UI.Prefs.FilterDisplay_BackColor = (this.cDisplay_BackColor.Value).ToRgb();
 
                 if (this.form is InterfaceInfo.IInjectMode injectForm)
                 {

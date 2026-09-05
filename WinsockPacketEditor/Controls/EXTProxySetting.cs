@@ -237,38 +237,46 @@ namespace WinsockPacketEditor
 
         private async void bExternalProxy_Detection_Click(object sender, EventArgs e)
         {
-            if (!this.CheckExternalProxySet())
+            try
             {
-                return;
-            }
-
-            this.bExternalProxy_Detection.Loading = true;
-
-            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-            {
-                var Result = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
-                    socket,
-                    this.cbExternalProxy_EnableAuth.Checked,
-                    this.txtExternalProxy_IP.Text.Trim(),
-                    ((ushort)this.nudExternalProxy_Port.Value),
-                    this.txtExternalProxy_UserName.Text.Trim(),
-                    this.txtExternalProxy_PassWord.Text.Trim(),
-                    null);
-
-                if (Result.Success)
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理服务器连接成功", TType.Success)
+                    if (!this.CheckExternalProxySet())
                     {
-                        LocalizationText = "EXTProxySettingsForm.Connection"
-                    });
-                }
-                else
-                {
-                    AntdUI.Message.open(new AntdUI.Message.Config(this.form, Result.Error, TType.Error));
-                }
-            }            
+                        return;
+                    }
 
-            this.bExternalProxy_Detection.Loading = false;
+                    this.bExternalProxy_Detection.Loading = true;
+
+                    using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                    {
+                        var Result = await Operate.ProxyConfig.Proxy.EstablishSocksProxyServer(
+                            socket,
+                            this.cbExternalProxy_EnableAuth.Checked,
+                            this.txtExternalProxy_IP.Text.Trim(),
+                            ((ushort)this.nudExternalProxy_Port.Value),
+                            this.txtExternalProxy_UserName.Text.Trim(),
+                            this.txtExternalProxy_PassWord.Text.Trim(),
+                            null);
+
+                        if (Result.Success)
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, "代理服务器连接成功", TType.Success)
+                            {
+                                LocalizationText = "EXTProxySettingsForm.Connection"
+                            });
+                        }
+                        else
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this.form, Result.Error, TType.Error));
+                        }
+                    }            
+
+                    this.bExternalProxy_Detection.Loading = false;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(bExternalProxy_Detection_Click), ex);
+            }
         }
 
         #endregion

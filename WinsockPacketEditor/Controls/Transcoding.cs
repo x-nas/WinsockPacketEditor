@@ -18,8 +18,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.pTranscoding_Result.Back = Operate.SystemConfig.Color_40;
-                this.txtTranscoding.BackColor = Operate.SystemConfig.Color_40;
+                this.pTranscoding_Result.Back = UiTheme.Color_40;
+                this.txtTranscoding.BackColor = UiTheme.Color_40;
             }
             else
             {

@@ -71,7 +71,7 @@ namespace WinsockPacketEditor
                 }, (config) =>
                 {
                     config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
-                    diResult = Operate.SystemConfig.CompareText(this.txtPacketData_Raw, this.txtPacketData_New);
+                    diResult = UiControls.CompareText(this.txtPacketData_Raw, this.txtPacketData_New);
 
                 }, () =>
                 {
@@ -137,7 +137,7 @@ namespace WinsockPacketEditor
             {
                 this.txtPacketData_Raw.BackColor = 
                     this.txtPacketData_New.BackColor = 
-                    Operate.SystemConfig.Color_30;
+                    UiTheme.Color_30;
                 
             }
             else
@@ -166,6 +166,9 @@ namespace WinsockPacketEditor
 
         private void tPacketModification_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is Operate.SystemConfig.DifferenceItem di)
             {
                 this.ScrollToPosition(di.Position, di.Position);

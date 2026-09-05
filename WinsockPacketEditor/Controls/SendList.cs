@@ -180,8 +180,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tSendList.BackColor = Operate.SystemConfig.Color_40;
-                this.tSendList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tSendList.BackColor = UiTheme.Color_40;
+                this.tSendList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -249,76 +249,95 @@ namespace WinsockPacketEditor
             Operate.SendConfig.List.StopSendList();
         }
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.SendConfig.Send.AddSend_New();
-                    this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
-
-                    break;
-
-                case "Import":
-
-                    Operate.SendConfig.List.LoadSendList_Dialog(this.form);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.SendConfig.List.SaveSendList_Dialog(this.form, string.Empty, null);
+                        case "Add":
+
+                            Operate.SendConfig.Send.AddSend_New();
+                            this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.SendConfig.List.LoadSendList_Dialog();
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                            {
+                                await Operate.SendConfig.List.SaveSendList_Dialog(string.Empty, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+                            {
+                                await Operate.SendConfig.List.CleanUpSendList_Dialog();
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.SendConfig.List.lstSendInfo.Count > 0)
-                    {
-                        Operate.SendConfig.List.CleanUpSendList_Dialog(this.form);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
-        private void tSendList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tSendList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is SendInfo si)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
-
-                        Operate.SendConfig.Send.OpenSendEdit(this.form, si);
-
-                        break;
-
-                    case "bDelete":
-
-                        List<SendInfo> siList = new List<SendInfo>
+                    if (e.Record is SendInfo si)
+                    {
+                        switch (e.Btn.Id)
                         {
-                            si
-                        };
+                            case "bEdit":
 
-                        Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, siList);
+                                UiDialogs.OpenSendEdit(this.form, si);
 
-                        break;
-                }
+                                break;
+
+                            case "bDelete":
+
+                                List<SendInfo> siList = new List<SendInfo>
+                                {
+                                    si
+                                };
+
+                                await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Delete, siList);
+
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tSendList_CellButtonClick), ex);
             }
         }
 
         private void tSendList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is SendInfo si)
             {
-                Operate.SendConfig.Send.OpenSendEdit(this.form, si);
+                UiDialogs.OpenSendEdit(this.form, si);
             }                
         }        
 
@@ -326,93 +345,101 @@ namespace WinsockPacketEditor
 
         #region//发送列表 - 右键菜单
 
-        private void tSendList_CellClick(object sender, TableClickEventArgs e)
+        private async void tSendList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.SendConfig.List.lstSendInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendList, (item) =>
-                {
-                    List<SendInfo> siList = new List<SendInfo>();
-
-                    foreach (int SelectIndex in this.tSendList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        siList.Add(Operate.SendConfig.List.lstSendInfo[SelectIndex - 1]);
+                        if (Operate.SendConfig.List.lstSendInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendList, async (item) =>
+                        {
+                            List<SendInfo> siList = new List<SendInfo>();
+
+                            foreach (int SelectIndex in this.tSendList.SelectedIndexs)
+                            {
+                                siList.Add(Operate.SendConfig.List.lstSendInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Top, siList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Up, siList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Down, siList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Bottom, siList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Copy, siList);
+                                        this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Export, siList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (siList.Count > 0)
+                                    {
+                                        await Operate.SendConfig.List.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Delete, siList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tSendList.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, siList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, siList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, siList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, siList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, siList);
-                                this.tSendList.ScrollBar.ValueY = tSendList.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, siList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (siList.Count > 0)
-                            {
-                                Operate.SendConfig.List.UpdateSendList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, siList);
-                            }
-
-                            break;
-                    }
-
-                    this.tSendList.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tSendList_CellClick), ex);
             }
         }
 

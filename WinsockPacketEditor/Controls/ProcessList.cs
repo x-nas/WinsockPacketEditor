@@ -66,8 +66,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tProcessList.BackColor = Operate.SystemConfig.Color_40;
-                this.tProcessList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tProcessList.BackColor = UiTheme.Color_40;
+                this.tProcessList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -117,7 +117,7 @@ namespace WinsockPacketEditor
             }, (config) =>
             {
                 config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
-                processList = Operate.ProcessConfig.GetProcessList();
+                processList = UiImages.FillIcons(Operate.ProcessConfig.GetProcessList());
             }, () =>
             {
                 this.tProcessList.DataSource = processList;

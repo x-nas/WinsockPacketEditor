@@ -51,7 +51,7 @@ namespace WinsockPacketEditor
                         {
                             return new CellText(value?.ToString() ?? string.Empty)
                             {
-                                Prefix = Operate.SystemConfig.GetFlagByLocation(ai.IPLocation),
+                                Prefix = UiImages.GetFlagByLocation(ai.IPLocation),
                                 IconRatio = 1.0F
                             };
                         }
@@ -105,10 +105,10 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.treeClientList.BackColor = Operate.SystemConfig.Color_40;
+                this.treeClientList.BackColor = UiTheme.Color_40;
 
-                this.tAuthList.BackColor = Operate.SystemConfig.Color_40;
-                this.tAuthList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tAuthList.BackColor = UiTheme.Color_40;
+                this.tAuthList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -125,33 +125,48 @@ namespace WinsockPacketEditor
 
         private async void timerClientList_Tick(object sender, EventArgs e)
         {
-            this.timerClientList.Stop();
-
             try
             {
-                if (Operate.ProxyConfig.Proxy.ProxyServer == null || Operate.ProxyConfig.Proxy.ProxyServer.SessionCount == 0)
-                {
-                    this.treeClientList.Items.Clear();
-                    Operate.ProxyConfig.Account.ClearAuthInfo();
-                    Operate.ProxyConfig.Account.SetAllAccounts_OffLine();
+                    this.timerClientList.Stop();
 
-                    return;
-                }
+                    try
+                    {
+                        if (Operate.ProxyConfig.Proxy.ProxyServer == null || Operate.ProxyConfig.Proxy.ProxyServer.SessionCount == 0)
+                        {
+                            this.treeClientList.Items.Clear();
 
-                this.tAuthList.PauseLayout = true;
+                            //清空与全部置离线都在里面，与有会话时走的是同一个方法
+                            await Operate.ProxyConfig.Account.RefreshAuthList();
 
-                this.UpdateClientList();
-                await UpdateAuthList();
+                            return;
+                        }
+
+                        this.tAuthList.PauseLayout = true;
+
+                        this.UpdateClientList();
+
+                        /*
+                            认证列表的维护已搬进 Operate（RefreshAuthList）——
+                            它不只是画界面，lstAuthInfo 与账号的 IsOnLine 全靠它，
+                            而外壳里没有这个控件。两套 UI 现在调同一份。
+                        */
+                        await Operate.ProxyConfig.Account.RefreshAuthList();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(timerClientList_Tick), ex);
+                    }
+                    finally
+                    {
+                        Operate.ProxyConfig.List.ClientNumber = this.treeClientList.Items.Count();
+                        this.tAuthList.PauseLayout = false;
+                        this.timerClientList.Start();
+                    }
             }
             catch (Exception ex)
             {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
                 Operate.DoLog(nameof(timerClientList_Tick), ex);
-            }
-            finally
-            {
-                Operate.ProxyConfig.List.ClientNumber = this.treeClientList.Items.Count();
-                this.tAuthList.PauseLayout = false;
-                this.timerClientList.Start();
             }
         }
 
@@ -185,7 +200,7 @@ namespace WinsockPacketEditor
                             continue;
                         }
 
-                        AntdUI.TreeItem tiRoot = Operate.SystemConfig.FindNodeByName(this.treeClientList, RootName, RootSubTitle);
+                        AntdUI.TreeItem tiRoot = UiControls.FindNodeByName(this.treeClientList, RootName, RootSubTitle);
                         if (tiRoot == null)
                         {
                             tiRoot = new TreeItem(RootName)
@@ -204,7 +219,7 @@ namespace WinsockPacketEditor
                         }
 
                         string ChildSubTitle = Session.ClientPort.ToString();
-                        AntdUI.TreeItem tiChild = Operate.SystemConfig.FindNodeByName(this.treeClientList, sChildName, ChildSubTitle);
+                        AntdUI.TreeItem tiChild = UiControls.FindNodeByName(this.treeClientList, sChildName, ChildSubTitle);
 
                         if (tiChild == null)
                         {
@@ -259,81 +274,6 @@ namespace WinsockPacketEditor
             finally
             {
                 this.treeClientList.PauseLayout = false;
-            }
-        }
-
-        #endregion
-
-        #region//更新代理认证列表（异步）
-
-        private async Task UpdateAuthList()
-        {
-            try
-            {
-                var sessions = Operate.ProxyConfig.Proxy.ProxyServer.GetAllSessions();
-                var SessionList = sessions?.ToList() ?? new List<ProxySession>();
-
-                var groupedSessions = SessionList
-                    .Where(session => session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind)
-                    .GroupBy(session => new { session.AID, session.ClientIP })
-                    .ToList();
-
-                var devicesByAccount = SessionList
-                    .Where(session => session.CommandType != Operate.ProxyConfig.Proxy.CommandType.Bind && session.AID != Guid.Empty)
-                    .GroupBy(session => session.AID)
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.Select(s => s.ClientIP).Distinct().Count()
-                    );
-
-                var currentActiveAIDs = groupedSessions.Select(g => g.Key.AID).Distinct().ToHashSet();
-
-                var locationTasks = groupedSessions.Select(async group =>
-                {
-                    DateTime AuthTime = group.Min(session => session.StartTime);
-                    Guid AID = group.Key.AID;
-                    string AuthIP = group.Key.ClientIP;
-
-                    string IPLocation = await Operate.SystemConfig.GetIPLocation(AuthIP);
-                    int LinksNumber = group.Count();
-                    int DevicesNumber = devicesByAccount.ContainsKey(AID) ? devicesByAccount[AID] : 0;
-
-                    return new { AID, AuthIP, IPLocation, AuthTime, LinksNumber, DevicesNumber };
-                }).ToList();
-
-                var results = await Task.WhenAll(locationTasks);
-
-                var newAuthInfo = new List<AuthInfo>();
-                foreach (var result in results)
-                {
-                    AuthInfo ai = new AuthInfo(result.AID, result.AuthIP, result.IPLocation, true, result.AuthTime);
-                    ai.LinksNumber = result.LinksNumber;
-                    ai.DevicesNumber = result.DevicesNumber;
-                    ai.TrafficStatistics = Operate.ProxyConfig.Account.GetTraffic(result.AID, result.AuthIP);
-                    newAuthInfo.Add(ai);
-                }
-
-                Operate.ProxyConfig.Account.ClearAuthInfo();
-                foreach (var item in newAuthInfo)
-                {
-                    Operate.ProxyConfig.Account.lstAuthInfo.Add(item);
-                }
-
-                foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo.ToList())
-                {
-                    if (currentActiveAIDs.Contains(ai.AID))
-                    {
-                        Operate.ProxyConfig.Account.SetOnline_ByAccountID(ai.AID, true);
-                    }
-                    else
-                    {
-                        Operate.ProxyConfig.Account.SetOnline_ByAccountID(ai.AID, false);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(nameof(UpdateAuthList), ex);
             }
         }
 
@@ -412,7 +352,7 @@ namespace WinsockPacketEditor
 
                             break;
                     }
-                }, Operate.ProxyConfig.Account.GetCMS_AuthList());
+                }, Operate.ProxyConfig.Account.GetCMS_AuthList().ToAntd());
             }
         }
 

@@ -243,8 +243,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tAccountList.BackColor = Operate.SystemConfig.Color_40;
-                this.tAccountList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tAccountList.BackColor = UiTheme.Color_40;
+                this.tAccountList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -266,99 +266,118 @@ namespace WinsockPacketEditor
 
         #region//账号列表 - 菜单
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.ProxyConfig.Account.OpenAccountEdit(this.form, null);
-                    this.InitCalendar_ExpiryTime();
-
-                    break;
-
-                case "BatchAdd":
-
-                    Operate.ProxyConfig.Account.BatchAddAccounts(this.form);
-                    this.InitCalendar_ExpiryTime();
-
-                    break;
-
-                case "Import":
-
-                    Operate.ProxyConfig.Account.LoadAccountList_Dialog(this.form);
-                    this.InitCalendar_ExpiryTime();
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.ProxyConfig.Account.SaveAccount_Dialog(this.form, string.Empty, null);
+                        case "Add":
+
+                            UiDialogs.OpenAccountEdit(this.form, null);
+                            this.InitCalendar_ExpiryTime();
+
+                            break;
+
+                        case "BatchAdd":
+
+                            UiDialogs.BatchAddAccounts(this.form);
+                            this.InitCalendar_ExpiryTime();
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.ProxyConfig.Account.LoadAccountList_Dialog(this.form);
+                            this.InitCalendar_ExpiryTime();
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Account.SaveAccount_Dialog(string.Empty, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, null);
+                                this.InitCalendar_ExpiryTime();
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.ProxyConfig.Account.lstAccountInfo.Count > 0)
-                    {
-                        Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, null);
-                        this.InitCalendar_ExpiryTime();
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
-        private void tAccountList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tAccountList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is AccountInfo ai)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
-
-                        Operate.ProxyConfig.Account.OpenAccountEdit(this.form, ai);
-                        this.InitCalendar_ExpiryTime();
-
-                        break;
-
-                    case "bLocation":
-
-                        var AccountLocation = new AccountLocation(this.form, ai);
-                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LocationForm", "账号登录情况"), AccountLocation)
+                    if (e.Record is AccountInfo ai)
+                    {
+                        switch (e.Btn.Id)
                         {
-                            Keyboard = false,
-                            MaskClosable = false,
-                            BtnHeight = 0,
-                        });
+                            case "bEdit":
 
-                        break;
+                                UiDialogs.OpenAccountEdit(this.form, ai);
+                                this.InitCalendar_ExpiryTime();
 
-                    case "bDelete":
+                                break;
 
-                        List<AccountInfo> aiList = new List<AccountInfo>
-                        {
-                            ai
-                        };
+                            case "bLocation":
 
-                        Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, aiList);
-                        this.InitCalendar_ExpiryTime();
+                                var AccountLocation = new AccountLocation(this.form, ai);
+                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LocationForm", "账号登录情况"), AccountLocation)
+                                {
+                                    Keyboard = false,
+                                    MaskClosable = false,
+                                    BtnHeight = 0,
+                                });
 
-                        break;
-                }
+                                break;
+
+                            case "bDelete":
+
+                                List<AccountInfo> aiList = new List<AccountInfo>
+                                {
+                                    ai
+                                };
+
+                                await Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, aiList);
+                                this.InitCalendar_ExpiryTime();
+
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tAccountList_CellButtonClick), ex);
             }
         }
 
         private void tAccountList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is AccountInfo ai)
             {
-                Operate.ProxyConfig.Account.OpenAccountEdit(this.form, ai);
+                UiDialogs.OpenAccountEdit(this.form, ai);
                 this.InitCalendar_ExpiryTime();
             }
         }        
@@ -367,107 +386,115 @@ namespace WinsockPacketEditor
 
         #region//账号列表 - 右键菜单
 
-        private void tAccountList_CellClick(object sender, TableClickEventArgs e)
+        private async void tAccountList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.ProxyConfig.Account.lstAccountInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tAccountList, (item) =>
-                {
-                    List<AccountInfo> aiList = new List<AccountInfo>();
-                    foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        if (ai.IsCheck)
+                        if (Operate.ProxyConfig.Account.lstAccountInfo.Count == 0)
                         {
-                            aiList.Add(ai);
+                            return;
                         }
-                    }
 
-                    if (aiList.Count == 0)
-                    {
-                        AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请选择账号", TType.Warn)
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tAccountList, async (item) =>
                         {
-                            LocalizationText = "AccountList.Empty"
-                        });
+                            List<AccountInfo> aiList = new List<AccountInfo>();
+                            foreach (AccountInfo ai in Operate.ProxyConfig.Account.lstAccountInfo)
+                            {
+                                if (ai.IsCheck)
+                                {
+                                    aiList.Add(ai);
+                                }
+                            }
 
-                        return;
+                            if (aiList.Count == 0)
+                            {
+                                AntdUI.Message.open(new AntdUI.Message.Config(this.form, "请选择账号", TType.Warn)
+                                {
+                                    LocalizationText = "AccountList.Empty"
+                                });
+
+                                return;
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "ExpiryTime":
+
+                                    if (aiList.Count > 0)
+                                    {
+                                        var ExpiryTime = new ExpiryTime(this.form, aiList);
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("ExpiryTimeForm", "过期时间调整"), ExpiryTime)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            BtnHeight = 0,
+                                        });
+
+                                        this.InitCalendar_ExpiryTime();
+                                    }
+
+                                    break;
+
+                                case "LimitLinks":
+
+                                    if (aiList.Count > 0)
+                                    {
+                                        var LimitLinks = new LimitLinks(this.form, aiList);
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LimitLinksForm", "链接数调整"), LimitLinks)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            BtnHeight = 0,
+                                        });
+                                    }
+
+                                    break;
+
+                                case "LimitDevices":
+
+                                    if (aiList.Count > 0)
+                                    {
+                                        var LimitDevices = new LimitDevices(this.form, aiList);
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LimitDevicesForm", "设备数调整"), LimitDevices)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            BtnHeight = 0,
+                                        });
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (aiList.Count > 0)
+                                    {
+                                        await Operate.ProxyConfig.Account.SaveAccount_Dialog(string.Empty, aiList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (aiList.Count > 0)
+                                    {
+                                        await Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, aiList);
+                                        this.InitCalendar_ExpiryTime();
+                                    }
+
+                                    break;
+                            }
+
+                            this.tAccountList.SelectedIndex = -1;
+                        }, Operate.ProxyConfig.Account.GetCMS_AccountList().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "ExpiryTime":
-
-                            if (aiList.Count > 0)
-                            {
-                                var ExpiryTime = new ExpiryTime(this.form, aiList);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("ExpiryTimeForm", "过期时间调整"), ExpiryTime)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
-
-                                this.InitCalendar_ExpiryTime();
-                            }
-
-                            break;
-
-                        case "LimitLinks":
-
-                            if (aiList.Count > 0)
-                            {
-                                var LimitLinks = new LimitLinks(this.form, aiList);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LimitLinksForm", "链接数调整"), LimitLinks)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
-                            }
-
-                            break;
-
-                        case "LimitDevices":
-
-                            if (aiList.Count > 0)
-                            {
-                                var LimitDevices = new LimitDevices(this.form, aiList);
-                                AntdUI.Modal.open(new AntdUI.Modal.Config(this.form, AntdUI.Localization.Get("LimitDevicesForm", "设备数调整"), LimitDevices)
-                                {
-                                    Keyboard = false,
-                                    MaskClosable = false,
-                                    BtnHeight = 0,
-                                });
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (aiList.Count > 0)
-                            {
-                                Operate.ProxyConfig.Account.SaveAccount_Dialog(this.form, string.Empty, aiList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (aiList.Count > 0)
-                            {
-                                Operate.ProxyConfig.Account.DeleteAccount_Dialog(this.form, aiList);
-                                this.InitCalendar_ExpiryTime();
-                            }
-
-                            break;
-                    }
-
-                    this.tAccountList.SelectedIndex = -1;
-                }, Operate.ProxyConfig.Account.GetCMS_AccountList()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tAccountList_CellClick), ex);
             }
         }
 

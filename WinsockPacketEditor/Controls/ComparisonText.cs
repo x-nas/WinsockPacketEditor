@@ -134,13 +134,13 @@ namespace WinsockPacketEditor
                     this.txtComparison_B.BackColor = 
                     this.txtDuplicate_A.BackColor = 
                     this.txtDuplicate_B.BackColor =
-                    Operate.SystemConfig.Color_40;
+                    UiTheme.Color_40;
 
-                this.tComparison.BackColor = Operate.SystemConfig.Color_40;
-                this.tComparison.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tComparison.BackColor = UiTheme.Color_40;
+                this.tComparison.ColumnBack = UiTheme.Color_40;
 
-                this.tDuplicate.BackColor = Operate.SystemConfig.Color_40;
-                this.tDuplicate.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tDuplicate.BackColor = UiTheme.Color_40;
+                this.tDuplicate.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -208,6 +208,9 @@ namespace WinsockPacketEditor
 
         private void tComparison_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is Operate.SystemConfig.DifferenceItem di)
             {
                 this.ScrollToPosition(di.Position, di.Position);
@@ -220,12 +223,12 @@ namespace WinsockPacketEditor
 
         private void txtComparisonRegex_TextChanged(object sender, EventArgs e)
         {
-            Operate.SystemConfig.FindRegexMatches(this.txtComparisonRegex.Text, this.txtComparison_A, this.txtComparison_B);
+            UiControls.FindRegexMatches(this.txtComparisonRegex.Text, this.txtComparison_A, this.txtComparison_B);
         }
 
         private void bComparisonRegex_Click(object sender, EventArgs e)
         {
-            Operate.SystemConfig.LeachRegexMatches(this.txtComparisonRegex.Text, this.txtComparison_A, this.txtComparison_B);
+            UiControls.LeachRegexMatches(this.txtComparisonRegex.Text, this.txtComparison_A, this.txtComparison_B);
         }
 
         private void bComparison_Click(object sender, EventArgs e)
@@ -244,7 +247,7 @@ namespace WinsockPacketEditor
                 }, (config) =>
                 {
                     config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
-                    diResult = Operate.SystemConfig.CompareText(this.txtComparison_A, this.txtComparison_B);
+                    diResult = UiControls.CompareText(this.txtComparison_A, this.txtComparison_B);
 
                 }, () =>
                 {
@@ -272,12 +275,12 @@ namespace WinsockPacketEditor
 
         private void txtDuplicateRegex_TextChanged(object sender, EventArgs e)
         {
-            Operate.SystemConfig.FindRegexMatches(this.txtDuplicateRegex.Text, this.txtDuplicate_A, this.txtDuplicate_B);
+            UiControls.FindRegexMatches(this.txtDuplicateRegex.Text, this.txtDuplicate_A, this.txtDuplicate_B);
         }
 
         private void bDuplicateRegex_Click(object sender, EventArgs e)
         {
-            Operate.SystemConfig.LeachRegexMatches(this.txtDuplicateRegex.Text, this.txtDuplicate_A, this.txtDuplicate_B);
+            UiControls.LeachRegexMatches(this.txtDuplicateRegex.Text, this.txtDuplicate_A, this.txtDuplicate_B);
         }
 
         private void bDuplicate_Click(object sender, EventArgs e)

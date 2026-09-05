@@ -190,11 +190,11 @@ namespace WinsockPacketEditor
 
                 if (Operate.SystemConfig.IsRemote)
                 {
-                    Operate.SystemConfig.StartRemoteMGT(this.form);
+                    Operate.SystemConfig.StartRemoteMGT();
                 }
                 else
                 {
-                    Operate.SystemConfig.StopRemoteMGT(this.form);
+                    Operate.SystemConfig.StopRemoteMGT();
                 }
 
                 this.Dispose();

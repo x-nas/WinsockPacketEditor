@@ -31,7 +31,7 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.hbPacketData.BackColor = Operate.SystemConfig.Color_40;
+                this.hbPacketData.BackColor = UiTheme.Color_40;
                 this.hbPacketData.ForeColor = Color.Silver;
             }
             else
@@ -501,7 +501,7 @@ namespace WinsockPacketEditor
 
                             break;
                     }
-                }, Operate.PacketConfig.Packet.GetCMS_PacketData(this.hbPacketData)));
+                }, Operate.PacketConfig.Packet.GetCMS_PacketData(this.hbPacketData.ToState()).ToAntd()));
             }
         }
 

@@ -197,70 +197,89 @@ namespace WinsockPacketEditor
 
         #region//白名单 - 菜单
 
-        private void ddMenu_WhiteList_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_WhiteList_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu_WhiteList.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu_WhiteList.SelectedValue = null;
 
-                    Operate.ProxyConfig.Proxy.OpenWhiteListEdit(this.form, this, null);
-
-                    break;
-
-                case "Import":
-
-                    Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
+                        case "Add":
+
+                            UiDialogs.OpenWhiteListEdit(this.form, this, null);
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(Operate.SystemConfig.ListAction.Import, null);
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(Operate.SystemConfig.ListAction.Export, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.ProxyConfig.Proxy.lstWhiteList.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(Operate.SystemConfig.ListAction.CleanUp, null);
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.ProxyConfig.Proxy.lstWhiteList.Count > 0)
-                    {
-                        Operate.ProxyConfig.Proxy.UpdateWhiteList_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_WhiteList_SelectedValueChanged), ex);
             }
         }
 
-        private void tWhiteList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tWhiteList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is WhiteListInfo wli)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
+                    if (e.Record is WhiteListInfo wli)
+                    {
+                        switch (e.Btn.Id)
+                        {
+                            case "bEdit":
 
-                        Operate.ProxyConfig.Proxy.OpenWhiteListEdit(this.form, this, wli);
+                                UiDialogs.OpenWhiteListEdit(this.form, this, wli);
 
-                        break;
+                                break;
 
-                    case "bDelete":
+                            case "bDelete":
 
-                        Operate.ProxyConfig.Proxy.DeleteWhiteList_Dialog(this.form, wli);
+                                await Operate.ProxyConfig.Proxy.DeleteWhiteList_Dialog(wli);
 
-                        break;
-                }
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tWhiteList_CellButtonClick), ex);
             }
         }
 
         private void tWhiteList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is WhiteListInfo wli)
             {
-                Operate.ProxyConfig.Proxy.OpenWhiteListEdit(this.form, this, wli);
+                UiDialogs.OpenWhiteListEdit(this.form, this, wli);
             }
         }
 
@@ -268,70 +287,89 @@ namespace WinsockPacketEditor
 
         #region//黑名单 - 菜单
 
-        private void ddMenu_BlackList_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_BlackList_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu_BlackList.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu_BlackList.SelectedValue = null;
 
-                    Operate.ProxyConfig.Proxy.OpenBlackListEdit(this.form, this, null);
-
-                    break;
-
-                case "Import":
-
-                    Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(this.form, Operate.SystemConfig.ListAction.Import, null);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.ProxyConfig.Proxy.lstBlackList.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, null);
+                        case "Add":
+
+                            UiDialogs.OpenBlackListEdit(this.form, this, null);
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(Operate.SystemConfig.ListAction.Import, null);
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.ProxyConfig.Proxy.lstBlackList.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(Operate.SystemConfig.ListAction.Export, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.ProxyConfig.Proxy.lstBlackList.Count > 0)
+                            {
+                                await Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(Operate.SystemConfig.ListAction.CleanUp, null);
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.ProxyConfig.Proxy.lstBlackList.Count > 0)
-                    {
-                        Operate.ProxyConfig.Proxy.UpdateBlackList_ByListAction(this.form, Operate.SystemConfig.ListAction.CleanUp, null);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_BlackList_SelectedValueChanged), ex);
             }
         }
 
-        private void tBlackList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tBlackList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is BlackListInfo bli)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
+                    if (e.Record is BlackListInfo bli)
+                    {
+                        switch (e.Btn.Id)
+                        {
+                            case "bEdit":
 
-                        Operate.ProxyConfig.Proxy.OpenBlackListEdit(this.form, this, bli);
+                                UiDialogs.OpenBlackListEdit(this.form, this, bli);
 
-                        break;
+                                break;
 
-                    case "bDelete":
+                            case "bDelete":
 
-                        Operate.ProxyConfig.Proxy.DeleteBlackList_Dialog(this.form, bli);
+                                await Operate.ProxyConfig.Proxy.DeleteBlackList_Dialog(bli);
 
-                        break;
-                }
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tBlackList_CellButtonClick), ex);
             }
         }
 
         private void tBlackList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is BlackListInfo bli)
             {
-                Operate.ProxyConfig.Proxy.OpenBlackListEdit(this.form, this, bli);
+                UiDialogs.OpenBlackListEdit(this.form, this, bli);
             }
         }
 

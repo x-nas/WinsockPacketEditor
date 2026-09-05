@@ -239,8 +239,8 @@ namespace WinsockPacketEditor
         {
             if (AntdUI.Config.IsDark)
             {
-                this.tFilterList.BackColor = Operate.SystemConfig.Color_40;
-                this.tFilterList.ColumnBack = Operate.SystemConfig.Color_40;
+                this.tFilterList.BackColor = UiTheme.Color_40;
+                this.tFilterList.ColumnBack = UiTheme.Color_40;
             }
             else
             {
@@ -279,73 +279,92 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
+        private async void ddMenu_SelectedValueChanged(object sender, ObjectNEventArgs e)
         {
-            this.ddMenu.SelectedValue = null;
-
-            switch (e.Value.ToString())
+            try
             {
-                case "Add":
+                    this.ddMenu.SelectedValue = null;
 
-                    Operate.FilterConfig.Filter.AddFilter_New();
-                    this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
-
-                    break;
-
-                case "Import":
-
-                    Operate.FilterConfig.List.LoadFilterList_Dialog(this.form);
-
-                    break;
-
-                case "Export":
-
-                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                    switch (e.Value.ToString())
                     {
-                        Operate.FilterConfig.List.SaveFilterList_Dialog(this.form, string.Empty, null);
+                        case "Add":
+
+                            Operate.FilterConfig.Filter.AddFilter_New();
+                            this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+
+                            break;
+
+                        case "Import":
+
+                            await Operate.FilterConfig.List.LoadFilterList_Dialog();
+
+                            break;
+
+                        case "Export":
+
+                            if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                            {
+                                await Operate.FilterConfig.List.SaveFilterList_Dialog(string.Empty, null);
+                            }
+
+                            break;
+
+                        case "Clear":
+
+                            if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                            {
+                                await Operate.FilterConfig.List.CleanUpFilterList_Dialog();
+                            }
+
+                            break;
                     }
-
-                    break;
-
-                case "Clear":
-
-                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
-                    {
-                        Operate.FilterConfig.List.CleanUpFilterList_Dialog(this.form);
-                    }
-
-                    break;
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(ddMenu_SelectedValueChanged), ex);
             }
         }
 
-        private void tFilterList_CellButtonClick(object sender, TableButtonEventArgs e)
+        private async void tFilterList_CellButtonClick(object sender, TableButtonEventArgs e)
         {
-            if (e.Record is FilterInfo fi)
+            try
             {
-                switch (e.Btn.Id)
-                {
-                    case "bEdit":
+                    if (e.Record is FilterInfo fi)
+                    {
+                        switch (e.Btn.Id)
+                        {
+                            case "bEdit":
 
-                        Operate.FilterConfig.Filter.OpenFilterEdit(this.form, fi);
+                                UiDialogs.OpenFilterEdit(this.form, fi);
 
-                        break;
+                                break;
 
-                    case "bDelete":
+                            case "bDelete":
 
-                        List<FilterInfo> fiList = new List<FilterInfo>();
-                        fiList.Add(fi);
-                        Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, fiList);
+                                List<FilterInfo> fiList = new List<FilterInfo>();
+                                fiList.Add(fi);
+                                await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Delete, fiList);
 
-                        break;
-                }
+                                break;
+                        }
+                    }
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tFilterList_CellButtonClick), ex);
             }
         }
 
         private void tFilterList_CellDoubleClick(object sender, TableClickEventArgs e)
         {
+            //只响应鼠标左键：AntdUI.Table 对任意鼠标键的双击都会抛 CellDoubleClick
+            if (e.Button != MouseButtons.Left) return;
+
             if (e.Record is FilterInfo fi)
             {
-                Operate.FilterConfig.Filter.OpenFilterEdit(this.form, fi);
+                UiDialogs.OpenFilterEdit(this.form, fi);
             }
         }        
 
@@ -353,93 +372,101 @@ namespace WinsockPacketEditor
 
         #region//滤镜列表 - 右键菜单
 
-        private void tFilterList_CellClick(object sender, TableClickEventArgs e)
+        private async void tFilterList_CellClick(object sender, TableClickEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            try
             {
-                if (Operate.FilterConfig.List.lstFilterInfo.Count == 0)
-                {
-                    return;
-                }
-
-                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tFilterList, (item) =>
-                {
-                    List<FilterInfo> fiList = new List<FilterInfo>();
-
-                    foreach (int SelectIndex in this.tFilterList.SelectedIndexs)
+                    if (e.Button == MouseButtons.Right)
                     {
-                        fiList.Add(Operate.FilterConfig.List.lstFilterInfo[SelectIndex - 1]);
+                        if (Operate.FilterConfig.List.lstFilterInfo.Count == 0)
+                        {
+                            return;
+                        }
+
+                        AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tFilterList, async (item) =>
+                        {
+                            List<FilterInfo> fiList = new List<FilterInfo>();
+
+                            foreach (int SelectIndex in this.tFilterList.SelectedIndexs)
+                            {
+                                fiList.Add(Operate.FilterConfig.List.lstFilterInfo[SelectIndex - 1]);
+                            }
+
+                            switch (item.ID)
+                            {
+                                case "Top":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Top, fiList);
+                                    }
+
+                                    break;
+
+                                case "Up":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Up, fiList);
+                                    }
+
+                                    break;
+
+                                case "Down":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Down, fiList);
+                                    }
+
+                                    break;
+
+                                case "Bottom":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Bottom, fiList);
+                                    }
+
+                                    break;
+
+                                case "Copy":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Copy, fiList);
+                                        this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+                                    }
+
+                                    break;
+
+                                case "Export":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Export, fiList);
+                                    }
+
+                                    break;
+
+                                case "Delete":
+
+                                    if (fiList.Count > 0)
+                                    {
+                                        await Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Delete, fiList);
+                                    }
+
+                                    break;
+                            }
+
+                            this.tFilterList.SelectedIndex = -1;
+                        }, Operate.SystemConfig.GetCMS_List().ToAntd()));
                     }
-
-                    switch (item.ID)
-                    {
-                        case "Top":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Top, fiList);
-                            }
-
-                            break;
-
-                        case "Up":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Up, fiList);
-                            }
-
-                            break;
-
-                        case "Down":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Down, fiList);
-                            }
-
-                            break;
-
-                        case "Bottom":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Bottom, fiList);
-                            }
-
-                            break;
-
-                        case "Copy":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Copy, fiList);
-                                this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
-                            }
-
-                            break;
-
-                        case "Export":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Export, fiList);
-                            }
-
-                            break;
-
-                        case "Delete":
-
-                            if (fiList.Count > 0)
-                            {
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this.form, Operate.SystemConfig.ListAction.Delete, fiList);
-                            }
-
-                            break;
-                    }
-
-                    this.tFilterList.SelectedIndex = -1;
-                }, Operate.SystemConfig.GetCMS_List()));
+            }
+            catch (Exception ex)
+            {
+                //async void：await 之后抛出的异常不会被 WinForms 兜住，必须自己捕获
+                Operate.DoLog(nameof(tFilterList_CellClick), ex);
             }
         }
 
