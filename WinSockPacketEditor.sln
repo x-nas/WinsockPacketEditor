@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPEHook", "WPEHook\WPEHook.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPEHookTest", "WPEHookTest\WPEHookTest.csproj", "{3F1A9D22-7C64-4E18-9B05-6A2E4D8C1F73}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPETarget32", "WPETarget32\WPETarget32.csproj", "{5B2E8C71-4A93-4D26-B18F-7C3A9E0D2461}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3F1A9D22-7C64-4E18-9B05-6A2E4D8C1F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F1A9D22-7C64-4E18-9B05-6A2E4D8C1F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F1A9D22-7C64-4E18-9B05-6A2E4D8C1F73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B2E8C71-4A93-4D26-B18F-7C3A9E0D2461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B2E8C71-4A93-4D26-B18F-7C3A9E0D2461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B2E8C71-4A93-4D26-B18F-7C3A9E0D2461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B2E8C71-4A93-4D26-B18F-7C3A9E0D2461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

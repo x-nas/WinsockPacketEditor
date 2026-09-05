@@ -37,6 +37,8 @@ namespace WPEHookTest
             if (args.Contains("--target2")) { return Matrix2.RunTarget2(args); }
             if (args.Contains("--matrix2")) { return Matrix2.Run(args); }
             if (args.Contains("--footprint")) { return Footprint.Run(args); }
+            if (args.Contains("--target3")) { return Matrix3.RunTarget3(args); }
+            if (args.Contains("--matrix3")) { return Matrix3.Run(args); }
 
             string outPath = GetArg(args, "--out", null);
 
