@@ -14,13 +14,24 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { FeedList } from '../../bridge/types'
 import { useList } from '../../stores/lists'
-import { rows } from '../../stores/packets'
+import { injectFeed, rows } from '../../stores/packets'
 import { filterLogs, proxyLogs, sysLogs } from '../../stores/logs'
 import { t } from '../../i18n'
-import type { PageKey } from './pages'
+import type { PageGroup, PageKey } from './pages'
 import { GROUPS } from './pages'
 
-const props = defineProps<{ current: PageKey }>()
+/*
+  两种模式共用这一份侧栏。
+
+  注入模式的 11 页里有 10 页与代理模式是同一个组件、同一份数据源，
+  只有主屏那一页不同（PacketInfo 与 ProxyInfo 各有一套 Id 序列），
+  所以差别只在<b>传进来的 groups</b> 与「主屏计数取哪一路推送」。
+  抄一份 InjectSide 出来，下场是两边慢慢走样 —— 见 CLAUDE.md 的 .list-page。
+*/
+const props = withDefaults(
+  defineProps<{ current: PageKey; groups?: PageGroup[]; mode?: 'proxy' | 'inject' }>(),
+  { groups: () => GROUPS, mode: 'proxy' },
+)
 const emit = defineEmits<{ (e: 'go', page: PageKey): void }>()
 
 /*
@@ -38,7 +49,7 @@ const logCount = ref(0)
 let countTimer = 0
 
 function sample(): void {
-  dataCount.value = rows.value.length
+  dataCount.value = (props.mode === 'inject' ? injectFeed.rows : rows).value.length
   //侧栏那一项对应的是整个日志页，所以给三路之和
   logCount.value = sysLogs.value.length + filterLogs.value.length + proxyLogs.value.length
 }
@@ -58,6 +69,8 @@ onBeforeUnmount(() => window.clearInterval(countTimer))
 */
 const counts = computed<Partial<Record<PageKey, number>>>(() => ({
   data: dataCount.value,
+  //注入模式的主屏。与 data 同一个采样值 —— 两者不会同时出现在一份 groups 里
+  packet: dataCount.value,
   //在线客户端数。RefreshAuthList 每秒重建这份表，所以它跟着变，不必另外采样
   client: useList(FeedList.Auth).value.length,
   account: useList(FeedList.Account).value.length,
@@ -76,7 +89,7 @@ function fmt(n: number | undefined): string {
 
 <template>
   <nav class="side">
-    <template v-for="g in GROUPS" :key="g.cap">
+    <template v-for="g in props.groups" :key="g.cap">
       <div class="sb-cap">{{ g.cap }}</div>
 
       <!--

@@ -1,29 +1,55 @@
 <script setup lang="ts">
 /*
-  注入模式（B-IPC 阶段 1）。对应 WinForms 的 Forms/InjectModeForm + Controls/ProcessList + PacketList。
+  注入模式的外壳 —— 对应 WinForms 的 Forms/InjectModeForm + Controls/ProcessList。
 
   【与代理模式最大的不同】数据来自<b>另一个进程</b>。
   钩子与滤镜引擎留在目标里（滤镜必须在目标的收发线程上同步给出答案，
   每包一次跨进程往返会把目标的每一次 send/recv 都拖慢），
   封包经命名管道过来，由 C# 侧的 ShellLink 还原成 PacketInfo 进 cqPacketInfo。
-  进队之后的下游与代理模式<b>完全共用</b>：FlushToFeed → PacketRow → 这里的表。
+  进队之后的下游与代理模式<b>完全共用</b>：FlushToFeed → PacketRow → 封包页的表。
 
-  所以这一屏只有两个状态：
+  所以这一屏有两个状态：
     ① 还没附加 —— 选目标（进程列表 / 启动并注入）
-    ② 已附加   —— 状态条 + 封包列表 + 十六进制面板
+    ② 已附加   —— 侧栏 11 页（对应 InjectModeForm 那 11 个页签）+ 7 个设置弹窗
+
+  ⚠️ 那 11 页里只有第一页「封包列表」是注入模式独有的，其余 10 页与代理模式
+  <b>是同一个组件、同一份 stores/lists 数据源</b> —— 滤镜 / 发送 / 机器人 / 仓库
+  四个子系统在 Operate 里本来就是两种模式共用的（WinForms 那边也是同一个 UserControl）。
 */
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { call, on } from '../bridge'
-import { FeedList, type PacketListRow, type PacketRow, type Prefs } from '../bridge/types'
+import { FeedList } from '../bridge/types'
 import { injectFeed } from '../stores/packets'
+import { attachListFeed } from '../stores/lists'
+import { loadCountryTable } from '../flags'
+import { gotoPage } from '../stores/runtime'
 import { t } from '../i18n'
 import { pushToast } from '../stores/toast'
-import PacketList from './PacketList.vue'
-import HexPanel from './HexPanel.vue'
-import HookSetting from './proxy/HookSetting.vue'
-import { useRowPick } from '../usePick'
+import { refresh as refreshStatus, setStatus, status, type InjectStatus } from '../stores/inject'
 import { useSort } from '../useSort'
-import { injectHooked, injectTarget } from '../stores/runtime'
+import ProxySide from './proxy/ProxySide.vue'
+import { INJECT_GROUPS, INJECT_PAGES, type PageKey } from './proxy/pages'
+import type { SettingKey } from './proxy/settings'
+import InjectData from './inject/InjectData.vue'
+//注入模式的另外 10 页：与代理模式同一个组件，只是从这边的侧栏进来
+import FilterList from './proxy/FilterList.vue'
+import SendList from './proxy/SendList.vue'
+import RobotList from './proxy/RobotList.vue'
+import WareHouseList from './proxy/WareHouseList.vue'
+import StatData from './proxy/StatData.vue'
+import TextCompare from './proxy/TextCompare.vue'
+import XorCalc from './proxy/XorCalc.vue'
+import Transcode from './proxy/Transcode.vue'
+import ExtractData from './proxy/ExtractData.vue'
+import SystemLog from './proxy/SystemLog.vue'
+//7 个设置弹窗：代理那 12 项的真子集
+import LeachSetting from './proxy/LeachSetting.vue'
+import HookSetting from './proxy/HookSetting.vue'
+import ListSetting from './proxy/ListSetting.vue'
+import HotkeySetting from './proxy/HotkeySetting.vue'
+import BackupSetting from './proxy/BackupSetting.vue'
+import RemoteSetting from './proxy/RemoteSetting.vue'
+import SystemSetting from './proxy/SystemSetting.vue'
 
 interface ProcRow {
   ProcessName: string
@@ -32,61 +58,29 @@ interface ProcRow {
   ProcessPath: string
 }
 
-interface Status {
-  state: 'idle' | 'attaching' | 'attached' | 'disconnected'
-  pid: number
-  name: string
-  is64: boolean
-  hooked: boolean
-  dropped: number
-  ws1: boolean
-  ws2: boolean
-  msws: boolean
-}
-
-const status = ref<Status>({
-  state: 'idle', pid: 0, name: '', is64: false,
-  hooked: false, dropped: 0, ws1: false, ws2: false, msws: false,
-})
-
-/**
- * 每次拿到新状态就同步一份给底部状态栏 ——
- * 那一栏在 App.vue 里，不是这个组件的子孙，跨视图的运行态走 stores/runtime。
- */
-function setStatus(s: Status): void {
-  status.value = s
-  injectHooked.value = !!s.hooked
-  injectTarget.value = s.pid > 0 ? s.name + ' #' + s.pid : ''
-}
-
-const prefs = ref<Prefs | null>(null)
 const procs = ref<ProcRow[]>([])
 const loadingProcs = ref(false)
 const search = ref('')
 const selectedPid = ref<number | null>(null)
 const busy = ref(false)
-const showHook = ref(false)
 
-/** 选中的那一行封包（十六进制面板看的是它）。 */
-const selectedId = ref<number | null>(null)
-const hexBytes = ref<{ packet: Uint8Array | null; raw: Uint8Array | null } | null>(null)
+/** 当前页。附加成功后落在封包列表上（对应 InjectModeForm 的第一个页签）。 */
+const page = ref<PageKey>('packet')
 
-const rows = injectFeed.rows
-const stat = injectFeed.stat
+/** 当前打开的设置弹窗。null = 没开。 */
+const setting = ref<SettingKey | null>(null)
 
-const listRef = ref<InstanceType<typeof PacketList> | null>(null)
-const follow = ref(true)
+const dataRef = ref<InstanceType<typeof InjectData> | null>(null)
 
-/*
-  ⚠️ 必须传 autoPrune: false。共用实现默认挂一个 watch(rows) 剔除已消失的 Id，
-  而这一屏的 rows 每帧都 triggerRef —— 挂上去就是每秒跑 60 次。
-  这里改成只在列表被清空时 clear() 一次（见 clearList）。
-*/
-const pick = useRowPick<PacketRow, number>(rows, (r) => r.Id, { autoPrune: false })
-const picked = pick.picked
+//别处（十六进制面板右键「添加到文本 A / B」）要求切页：切完清掉，下次还能再切同一页
+watch(gotoPage, (k) => {
+  if (!k) return
+  if (INJECT_PAGES.some((p) => p.key === k)) page.value = k as PageKey
+  gotoPage.value = null
+})
 
 /*
-  进程列表按名字搜；排序走全项目那一份 useSort（升 → 降 → 回到原始顺序三档）。
+  进程列表按名字或 PID 搜；排序走全项目那一份 useSort（升 → 降 → 回到原始顺序三档）。
   原始顺序是 GetProcessList 里按进程名排好的，回得去才有意义。
 */
 const filteredProcs = computed(() => {
@@ -97,10 +91,6 @@ const filteredProcs = computed(() => {
   )
 })
 
-/*
-  排序三档：升 → 降 → 回到原始顺序。原始顺序是 GetProcessList 里按进程名排好的，
-  回得去才有意义（用户按 PID 排过一轮之后还想按名字找）。
-*/
 const sorter = useSort<ProcRow>(filteredProcs, {
   ProcessName: (p) => p.ProcessName,
   ProcessID: (p) => p.ProcessID,
@@ -108,17 +98,25 @@ const sorter = useSort<ProcRow>(filteredProcs, {
 
 const shownProcs = sorter.sorted
 
-const disconnected = computed(() => status.value.state === 'disconnected')
 const picking = computed(() => status.value.state === 'idle')
 
 let offState: (() => void) | null = null
 let offFeed: (() => void) | null = null
+let offList: (() => void) | null = null
 let poll = 0
 
 onMounted(async () => {
   offFeed = injectFeed.attach()
 
-  offState = on('inject:state', (d: Status) => {
+  /*
+    14 份中低频列表的接收端在这里挂，而不是在某一页里 ——
+    侧栏的计数用得着它，切到别的页时也不该断掉。
+    ⚠️ 顺序要紧：先订阅再通知 C#。反过来的话 C# 加载完立刻标脏，
+    10ms 后的搬运拍就把整表推出来了，而此刻还没人订阅，那一批直接丢掉。
+  */
+  offList = attachListFeed()
+
+  offState = on('inject:state', (d: InjectStatus) => {
     setStatus(d)
 
     if (d.state === 'disconnected') {
@@ -129,24 +127,27 @@ onMounted(async () => {
 
   try {
     await call('enterInjectMode')
-    prefs.value = await call<Prefs>('getPrefs')
-    setStatus(await call<Status>('getInjectStatus'))
+    await refreshStatus()
   } catch {
     /* 桥没接上（浏览器里跑探针页），下面的按钮点了会各自报错 */
   }
 
+  //国旗用的中文国名对照表，整个会话取一次（约 4KB）
+  void loadCountryTable()
+
   await refreshProcs()
 
   //丢包数与钩子状态只在事件里推，1 秒兜一次底就够（这几个数变得很慢）
-  poll = window.setInterval(async () => {
+  poll = window.setInterval(() => {
     if (status.value.state === 'idle') return
-    try { setStatus(await call<Status>('getInjectStatus')) } catch { /* 断了 */ }
+    void refreshStatus()
   }, 1000)
 })
 
 onBeforeUnmount(() => {
   offState?.()
   offFeed?.()
+  offList?.()
   if (poll) window.clearInterval(poll)
 })
 
@@ -169,6 +170,7 @@ async function attachTo(pid: number): Promise<void> {
     const r = await call<any>('injectAttach', { pid })
     if (!r?.ok) { pushToast('error', r?.error || t('inject.failed')); return }
     setStatus(r)
+    page.value = 'packet'
     pushToast('success', t('inject.attached'))
   } catch (e: any) {
     pushToast('error', String(e?.message || e))
@@ -188,6 +190,7 @@ async function launchAndAttach(): Promise<void> {
     const r = await call<any>('injectAttach', { pid: -1, path: p.path })
     if (!r?.ok) { pushToast('error', r?.error || t('inject.failed')); return }
     setStatus(r)
+    page.value = 'packet'
     pushToast('success', t('inject.launched'))
   } catch (e: any) {
     pushToast('error', String(e?.message || e))
@@ -216,54 +219,30 @@ async function detach(): Promise<void> {
   busy.value = true
 
   try {
-    setStatus(await call<Status>('injectDetach'))
-    selectedId.value = null
-    hexBytes.value = null
+    setStatus(await call<InjectStatus>('injectDetach'))
+    dataRef.value?.onCleared()
+    //回到选目标屏时把当前页退回主屏，下次附加不会停在上次翻到的那一页
+    page.value = 'packet'
   } finally {
     busy.value = false
   }
 }
 
-async function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): Promise<void> {
-  //mode="inject" 时表里的行一定是 PacketRow —— 收窄一下，好用它的字段
-  const row = anyRow as PacketRow
-  pick.onRowClick(row, ev, index)
-  selectedId.value = row.Id
-
-  try {
-    //⚠️ 注入模式的列表是 FeedList.Packet，不是 Proxy —— 两份表各有独立的 Id 序列
-    const d = await call<any>('getPacketDetail', { id: row.Id, list: FeedList.Packet })
-    hexBytes.value = d ? { packet: b64(d.packet), raw: b64(d.raw) } : null
-  } catch {
-    hexBytes.value = null
-  }
-}
-
-function b64(s: string | null): Uint8Array | null {
-  if (!s) return null
-  const bin = atob(s)
-  const out = new Uint8Array(bin.length)
-  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i)
-  return out
-}
-
 async function clearList(): Promise<void> {
   try { await call('clearPackets', { list: FeedList.Packet }) } catch { /* 桥没接上 */ }
   injectFeed.clearLocal()
-  selectedId.value = null
-  hexBytes.value = null
-  pick.clear()
+  dataRef.value?.onCleared()
 }
 
-/** 目标用的是哪几套 WinSock —— 目标自己探的，这里只显示。 */
-const wsText = computed(() => {
-  const s = status.value
-  const on: string[] = []
-  if (s.ws1) on.push('1.1')
-  if (s.ws2) on.push('2.0')
-  if (s.msws) on.push('MS')
-  return on.length ? on.join(' / ') : '—'
-})
+/** 这一页做完没有。占位块靠它决定要不要出现，与代理模式同一套口径。 */
+function isReady(k: PageKey): boolean {
+  return INJECT_PAGES.find((x) => x.key === k)?.ready === true
+}
+
+function titleOf(k: PageKey): string {
+  const p = INJECT_PAGES.find((x) => x.key === k)
+  return p ? t(p.label) : ''
+}
 </script>
 
 <template>
@@ -322,82 +301,52 @@ const wsText = computed(() => {
       </div>
     </div>
 
-    <!-- ══════════ ② 已附加：状态条 + 封包列表 ══════════ -->
+    <!-- ══════════ ② 已附加：侧栏 + 11 页 ══════════ -->
     <div v-else class="workscr">
-      <div class="runbar" :class="{ off: disconnected }">
-        <button
-          class="tb"
-          :class="status.hooked ? 'stop' : 'go'"
-          :disabled="busy || disconnected"
-          @click="toggleHook"
-        >
-          {{ status.hooked ? t('inject.stopHook') : t('inject.startHook') }}
-        </button>
-
-        <div class="meta">
-          <span class="k">{{ t('inject.target') }}</span>
-          <b>{{ status.name }}</b>
-          <span class="dim">#{{ status.pid }} · {{ status.is64 ? 'x64' : 'x86' }}</span>
-        </div>
-
-        <div class="meta">
-          <span class="k">WinSock</span>
-          <b>{{ wsText }}</b>
-        </div>
-
-        <div class="meta">
-          <span class="k">{{ t('inject.rate') }}</span>
-          <b>{{ stat.rate }}/s</b>
-          <span class="dim">{{ rows.length }} {{ t('inject.rows') }}</span>
-        </div>
-
-        <!--
-          丢弃计数：环满时目标丢的是最旧的包。
-          无声丢包比阻塞更糟，所以只要不是 0 就必须显示出来。
-        -->
-        <div v-if="status.dropped > 0" class="meta warn">
-          <span class="k">{{ t('inject.dropped') }}</span>
-          <b>{{ status.dropped }}</b>
-        </div>
-
-        <div class="spacer" />
-
-        <div class="state" :class="status.state">
-          {{ disconnected ? t('inject.state.lost') : t('inject.state.ok') }}
-        </div>
-
-        <button class="tb" @click="showHook = true">{{ t('inject.hookSetting') }}</button>
-        <button class="tb" @click="clearList">{{ t('inject.clear') }}</button>
-        <button class="tb" :disabled="busy" @click="detach">{{ t('inject.detach') }}</button>
-      </div>
+      <ProxySide :current="page" :groups="INJECT_GROUPS" mode="inject" @go="page = $event" />
 
       <!--
-        目标没了的横幅。刻意<b>不清任何数据</b>：抓到的封包、配置、界面全部保留，
-        用户还能继续看、继续导出 —— 这正是 IPC 改造要解决的第一条风险（崩溃不隔离）。
+        封包页用 v-show 保活：切走再切回来若重新挂载，PacketList 的滚动位置与选中行都会重来一遍。
+        日志页同理 —— 它自己维护一份 2000 条的环形缓冲，重新挂载就全没了。
       -->
-      <div v-if="disconnected" class="lostbar">{{ t('inject.lostHint') }}</div>
+      <InjectData
+        v-show="page === 'packet'"
+        ref="dataRef"
+        :busy="busy"
+        @toggle-hook="toggleHook"
+        @clear="clearList"
+        @detach="detach"
+        @open-setting="setting = $event"
+      />
 
-      <div class="body">
-        <PacketList
-          ref="listRef"
-          mode="inject"
-          :prefs="prefs"
-          :selected-id="selectedId"
-          :picked="picked"
-          :follow="follow"
-          @select="onSelect"
-        />
+      <SystemLog v-show="page === 'log'" />
 
-        <HexPanel
-          v-if="selectedId !== null"
-          :id="selectedId"
-          :bytes="hexBytes?.packet || null"
-          :compare="hexBytes?.raw || null"
-        />
+      <!-- 其余各页没有要保住的运行态（列表都在 stores/lists，工具页的状态在 stores/tools）-->
+      <FilterList v-if="page === 'filter'" />
+      <SendList v-if="page === 'send'" />
+      <RobotList v-if="page === 'robot'" />
+      <WareHouseList v-if="page === 'warehouse'" />
+      <StatData v-if="page === 'stat'" />
+      <TextCompare v-if="page === 'diff'" />
+      <XorCalc v-if="page === 'xor'" />
+      <Transcode v-if="page === 'transcode'" />
+      <ExtractData v-if="page === 'extract'" />
+
+      <!-- 「还没做」那一屏：条件读 pages.ts 的 ready，不写成一串 page !== 'x' -->
+      <div v-if="!isReady(page)" class="soon">
+        <div class="eyebrow"><span class="dash" /><span class="lbl">{{ titleOf(page) }}</span></div>
+        <p>{{ t('proxy.notReady') }}</p>
       </div>
     </div>
 
-    <HookSetting v-model:open="showHook" />
+    <!-- 7 个设置弹窗。挂在外壳这一层，切到哪一页都还开着 -->
+    <LeachSetting :open="setting === 'leach'" @update:open="setting = $event ? 'leach' : null" />
+    <HookSetting :open="setting === 'hook'" @update:open="setting = $event ? 'hook' : null" />
+    <ListSetting :open="setting === 'list'" @update:open="setting = $event ? 'list' : null" />
+    <HotkeySetting :open="setting === 'hotkey'" @update:open="setting = $event ? 'hotkey' : null" />
+    <BackupSetting :open="setting === 'backup'" @update:open="setting = $event ? 'backup' : null" />
+    <RemoteSetting :open="setting === 'remote'" @update:open="setting = $event ? 'remote' : null" />
+    <SystemSetting :open="setting === 'system'" @update:open="setting = $event ? 'system' : null" />
   </div>
 </template>
 
@@ -494,80 +443,36 @@ const wsText = computed(() => {
 
 .empty { padding: 24px; text-align: center; color: var(--muted); font-size: 12.5px; }
 
-/* ── 工作屏 ─────────────────────────────── */
+/* ── 工作屏：侧栏 + 内容，与代理模式同一套栅格 ───────────── */
 .workscr {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 196px 1fr;
+}
+
+.soon {
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  min-height: 0;
-  height: 100%;
-}
-
-.runbar {
-  display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 8px 14px;
-  border-bottom: 1px solid var(--border);
-  flex: none;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
 }
 
-.runbar.off { opacity: 0.72; }
+.soon .eyebrow { display: flex; align-items: center; gap: 10px; }
+.soon .eyebrow .dash { width: 32px; height: 1px; background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
 
-.meta { display: flex; align-items: baseline; gap: 6px; font-size: 12px; }
-.meta .k { font-family: var(--share); font-size: var(--label-size); letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
-.meta b { color: var(--gray); font-family: var(--mono); }
-.meta .dim { color: var(--muted); font-size: 11px; }
-.meta.warn b { color: var(--danger); }
-
-.spacer { flex: 1; }
-
-.state {
+.soon .eyebrow .lbl {
   font-family: var(--share);
-  font-size: var(--label-size);
-  letter-spacing: 0.12em;
-  padding: 3px 9px 1px;
-  border: 1px solid var(--border);
+  font-size: 11px;
+  letter-spacing: .3em;
   text-transform: uppercase;
+  color: var(--cyan);
 }
 
-.state.attached { color: var(--green); border-color: rgba(0, 255, 136, 0.4); }
-.state.disconnected { color: var(--danger); border-color: rgba(255, 51, 102, 0.4); }
-
-.lostbar {
-  flex: none;
-  padding: 7px 14px 5px;
-  background: rgba(255, 51, 102, 0.08);
-  border-bottom: 1px solid rgba(255, 51, 102, 0.3);
-  color: var(--danger);
-  font-size: 12px;
-}
-
-.body { display: flex; flex-direction: column; min-height: 0; flex: 1; }
-
-/*
-  「开始 / 停止拦截」那个按钮的悬停要把边框与字色一起写上 ——
-  通用的 .tb:hover:not(:disabled) 是 (0,3,0)，压得过 .tb.go 的 (0,2,0)，
-  只写背景的话点完那一瞬间（鼠标还停在按钮上）绿 / 红按钮会变成青色。
-*/
-.tb {
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  letter-spacing: 0.1em;
-  line-height: 1;
-  padding: 9px 13px 7px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--gray);
-  cursor: pointer;
-  text-transform: uppercase;
-}
-
-.tb:disabled { opacity: 0.4; cursor: default; }
-.tb:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
-
-.tb.go { border-color: rgba(0, 255, 136, 0.5); color: var(--green); }
-.tb.go:hover:not(:disabled) { border-color: var(--green); color: var(--green); background: rgba(0, 255, 136, 0.1); }
-
-.tb.stop { border-color: rgba(255, 51, 102, 0.5); color: var(--danger); }
-.tb.stop:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); background: rgba(255, 51, 102, 0.1); }
+.soon p { font-size: 12.5px; margin: 0; }
 </style>

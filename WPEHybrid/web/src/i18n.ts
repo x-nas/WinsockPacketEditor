@@ -797,6 +797,9 @@ const DICT = {
   //── 注入模式 ─────────────────────────────────────
   'foot.hooking': { zh: '拦截中', en: 'Hooking' },
 
+  //侧栏：注入模式的 11 页。除主屏外的 10 页与代理模式同名，直接复用 proxy.nav.* 那几个键
+  'inject.nav.packet': { zh: '封包列表', en: 'Packet List' },
+
   'inject.pick.title': { zh: '选择注入目标', en: 'Select Target' },
   'inject.pick.lede': {
     zh: '双击一行注入到已运行的进程；或用「启动并注入」从头拉起一个 —— 后者会在钩子就位之后才唤醒它，连第一个封包都抓得到。',

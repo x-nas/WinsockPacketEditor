@@ -27,7 +27,15 @@ const props = withDefaults(defineProps<{
   packetType?: number | null
   /** 「查找封包」命中的那一段字节，取到字节后圈出来；null = 不圈 */
   highlight?: { offset: number; length: number } | null
-}>(), { packetType: null, highlight: null })
+  /**
+   * 这一条封包属于哪份列表。
+   *
+   * <b>两份列表各有一套独立的 Id 序列</b>（ProxyInfo 与 PacketInfo 各自 Interlocked 自增），
+   * 拿注入模式的 Id 去代理表里找，轻则找不到、重则找出另一条包的字节 —— 而且不报错。
+   * 右键那几个动作也吃它（C# 侧的 PacketEditConfig 按同一个串分流）。
+   */
+  list?: 'proxy' | 'packet'
+}>(), { packetType: null, highlight: null, list: 'proxy' })
 
 const detail = ref<PacketDetail | null>(null)
 const ms = ref(0)
@@ -52,7 +60,10 @@ watch(
 
     try {
       // 显式带上通道：封包与代理各有一套独立的 Id 序列，C# 那边要据此选表
-      const d = await call<PacketDetail | null>('getPacketDetail', { id, list: FeedList.Proxy })
+      const d = await call<PacketDetail | null>('getPacketDetail', {
+        id,
+        list: props.list === 'packet' ? FeedList.Packet : FeedList.Proxy,
+      })
       if (mine !== token) return
 
       ms.value = Math.round((performance.now() - t0) * 10) / 10
@@ -189,15 +200,15 @@ async function onPick(id: string): Promise<void> {
   try {
     if (id.startsWith('send:')) {
       const sid = id.slice(5)
-      //list: 'proxy' —— C# 侧按这个决定去代理列表还是发送编辑的工作副本里找那一条
-      const r = await call<{ ok: boolean }>('packetEditToSend', { sid, list: 'proxy', id: pid, buffer: bytesToB64(pickedBytes()) })
+      //list —— C# 侧按这个决定去代理列表、注入模式的封包列表、还是发送编辑的工作副本里找那一条
+      const r = await call<{ ok: boolean }>('packetEditToSend', { sid, list: props.list, id: pid, buffer: bytesToB64(pickedBytes()) })
       const name = sends.value.find((x) => x.Id === sid)?.Name ?? ''
       pushToast(r?.ok ? 'success' : 'error', r?.ok ? t('pm.added') + ' ' + name : t('pm.addFail'))
       return
     }
 
     if (id === 'toFilter') {
-      const r = await call<{ ok: boolean }>('packetEditToFilter', { list: 'proxy', id: pid, buffer: bytesToB64(pickedBytes()) })
+      const r = await call<{ ok: boolean }>('packetEditToFilter', { list: props.list, id: pid, buffer: bytesToB64(pickedBytes()) })
       pushToast(r?.ok ? 'success' : 'error', t(r?.ok ? 'pm.added' : 'pm.addFail'))
       return
     }

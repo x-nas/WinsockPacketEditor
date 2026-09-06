@@ -32,3 +32,18 @@ export const SETTINGS: SettingDef[] = [
   { key: 'firewall', label: 'set.firewall', ready: true },
   { key: 'system', label: 'set.system', ready: true },
 ]
+
+/*
+  注入模式的 7 个设置 —— 与 WinForms 的 PacketList.ddMenu 逐条对应（顺序也一样）。
+
+  它是代理那 12 项的<b>真子集</b>：少的五项（代理设置 / 进程设置 / 映射设置 /
+  外部代理设置 / 防火墙设置）全是 SOCKS5 服务器那条路上的东西，注入模式里没有对应物。
+  所以这里直接从 SETTINGS 里挑，不另写一份定义 —— 抄一份的下场见 CLAUDE.md 的 .list-page。
+*/
+const INJECT_KEYS: SettingKey[] = ['leach', 'hook', 'list', 'hotkey', 'backup', 'remote', 'system']
+
+export const INJECT_SETTINGS: SettingDef[] = INJECT_KEYS.map((k) => {
+  const d = SETTINGS.find((x) => x.key === k)
+  if (!d) throw new Error('未知设置 ' + k)
+  return d
+})

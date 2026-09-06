@@ -13,6 +13,8 @@ export type PageKey =
   | 'filter' | 'send' | 'robot' | 'warehouse'
   | 'stat' | 'diff' | 'xor' | 'transcode' | 'extract'
   | 'wpc' | 'log'
+  // 注入模式的主屏（PacketInfo）。代理模式没有这一页，见文件末尾的 INJECT_GROUPS
+  | 'packet'
 
 export interface PageDef {
   key: PageKey
@@ -69,3 +71,35 @@ export const GROUPS: PageGroup[] = [
 
 /** 扁平查找用。 */
 export const PAGES: PageDef[] = GROUPS.flatMap((g) => g.items)
+
+/*
+  ── 注入模式的 11 页 ──────────────────────────────────
+
+  与 WinForms 的 InjectModeForm.InitControls 逐项对应（那边同样是 Menu + Tabs 两套导航）。
+  除了第一页「封包列表」是注入模式独有的（PacketInfo，另一份 Id 序列），
+  <b>其余 10 页与代理模式是同一个组件、同一份 stores/lists 数据源</b> ——
+  滤镜 / 发送 / 机器人 / 仓库四个子系统在 Operate 里本来就是两种模式共用的。
+
+  所以这里只是另一份导航定义，不是另一套页面。图标沿用代理那份，
+  同一件事在两种模式下长得一样才不会让人以为是两个功能。
+*/
+const P = (k: PageKey): PageDef => {
+  const d = PAGES.find((x) => x.key === k)
+  if (!d) throw new Error('未知页面 ' + k)
+  return d
+}
+
+export const INJECT_GROUPS: PageGroup[] = [
+  {
+    cap: 'Data',
+    items: [
+      // 封包列表：注入模式的主屏，对应 WinForms 的 Controls/PacketList
+      { key: 'packet', label: 'inject.nav.packet', ready: true, icon: '<path d="M4 6h16M4 12h16M4 18h10"/>' },
+    ],
+  },
+  { cap: 'Rules', items: [P('filter'), P('send'), P('robot'), P('warehouse')] },
+  { cap: 'Tools', items: [P('stat'), P('diff'), P('xor'), P('transcode'), P('extract')] },
+  { cap: 'System', items: [P('log')] },
+]
+
+export const INJECT_PAGES: PageDef[] = INJECT_GROUPS.flatMap((g) => g.items)
