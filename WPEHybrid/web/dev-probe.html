@@ -65,7 +65,15 @@
     getLeachSetting: () => ({ notShow: false, checkSocket: false, socketValue: '', checkIP: false, ipValue: '', checkPort: false, portValue: '', checkHead: false, headValue: '', checkData: false, dataValue: '', checkLen: false, lenValue: '', checkType: true, send: true, sendTo: false, recv: true, recvFrom: false, wsaSend: true, wsaSendTo: false, wsaRecv: true, wsaRecvFrom: false, tcpReq: true, tcpResp: true, udpReq: false, udpResp: false }),
     saveLeachSetting: (a) => { window.__leach = a; return { ok: true } },
     // 注入模式：假的进程列表 + 假的链路状态机（附加 → 装钩 → 断开）
-    enterInjectMode: () => ({ ok: true }),
+    enterInjectMode: () => ({ ok: true, lastInjection: 'game.exe' }),
+    //选择窗体：假装 1.2 秒后用户点中了 chrome，中间先推两条悬停
+    pickWindow: () => new Promise((res) => {
+      setTimeout(() => ls.forEach((cb) => cb({ data: { type: 'event', name: 'inject:hover', data: { pid: 8800, name: 'chrome', path: 'C:/Program Files/chrome.exe', title: 'New Tab' } } })), 300)
+      setTimeout(() => ls.forEach((cb) => cb({ data: { type: 'event', name: 'inject:hover', data: { pid: 4321, name: 'game', path: 'D:/Games/game.exe', title: 'MyGame' } } })), 700)
+      window.__cancelPick = () => res({ ok: false, cancelled: true })
+      setTimeout(() => res({ ok: true, pid: 4321, name: 'game', path: 'D:/Games/game.exe', title: 'MyGame' }), 2500)
+    }),
+    cancelPickWindow: () => { if (window.__cancelPick) window.__cancelPick(); return { ok: true } },
     getInjectProcessList: () => ([
       { ProcessName: 'game', ProcessID: 4321, ModuleName: 'game.exe', ProcessPath: 'D:/Games/game.exe' },
       { ProcessName: 'chrome', ProcessID: 8800, ModuleName: 'chrome.exe', ProcessPath: 'C:/Program Files/chrome.exe' },

@@ -58,7 +58,15 @@ interface ProcRow {
   ProcessPath: string
 }
 
+/** 光标下那个窗口属于谁 —— 「选择窗体」进行中时由 C# 每换一个窗口推一次。 */
+interface HoverInfo { pid: number; name: string; path: string; title: string }
+
 const procs = ref<ProcRow[]>([])
+/** 上次注入的目标进程名（WinForms 的 ProcessList 上是一行提示）。 */
+const lastInjection = ref('')
+/** 「选择窗体」进行中；null = 没在选 */
+const hover = ref<HoverInfo | null>(null)
+const pickingWindow = ref(false)
 const loadingProcs = ref(false)
 const search = ref('')
 const selectedPid = ref<number | null>(null)
@@ -100,6 +108,7 @@ const shownProcs = sorter.sorted
 
 const picking = computed(() => status.value.state === 'idle')
 
+let offHover: (() => void) | null = null
 let offState: (() => void) | null = null
 let offFeed: (() => void) | null = null
 let offList: (() => void) | null = null
@@ -116,6 +125,8 @@ onMounted(async () => {
   */
   offList = attachListFeed()
 
+  offHover = on('inject:hover', (d: HoverInfo) => { if (pickingWindow.value) hover.value = d })
+
   offState = on('inject:state', (d: InjectStatus) => {
     setStatus(d)
 
@@ -126,7 +137,8 @@ onMounted(async () => {
   })
 
   try {
-    await call('enterInjectMode')
+    const r = await call<{ lastInjection?: string }>('enterInjectMode')
+    lastInjection.value = r?.lastInjection || ''
     await refreshStatus()
   } catch {
     /* 桥没接上（浏览器里跑探针页），下面的按钮点了会各自报错 */
@@ -145,6 +157,10 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  //选窗口还开着就把全局钩子收掉 —— 这一屏没了，钩子留着没人卸
+  if (pickingWindow.value) void call('cancelPickWindow').catch(() => {})
+
+  offHover?.()
   offState?.()
   offFeed?.()
   offList?.()
@@ -197,6 +213,41 @@ async function launchAndAttach(): Promise<void> {
   } finally {
     busy.value = false
   }
+}
+
+/*
+  「选择窗体」—— 对应 WinForms 的 ProcessList.bSelectForm_Click。
+
+  C# 那边装 WH_MOUSE_LL + WH_KEYBOARD_LL 两个低级钩子，用户在屏幕上点哪个窗口
+  就选中哪个进程；悬停信息经 inject:hover 推过来。选中之后<b>直接注入</b>，
+  与 WinForms 一致（那边是 ShowSelectProcess() 紧跟 DoInject()）。
+*/
+async function pickWindow(): Promise<void> {
+  if (busy.value || pickingWindow.value) return
+
+  pickingWindow.value = true
+  hover.value = null
+
+  try {
+    const r = await call<{ ok: boolean; cancelled?: boolean; error?: string; pid: number; name: string }>('pickWindow')
+
+    if (!r?.ok) {
+      if (r?.error) pushToast('error', r.error)
+      return
+    }
+
+    await attachTo(r.pid)
+  } catch (e: any) {
+    pushToast('error', String(e?.message || e))
+  } finally {
+    pickingWindow.value = false
+    hover.value = null
+  }
+}
+
+function cancelPickWindow(): void {
+  if (!pickingWindow.value) return
+  void call('cancelPickWindow').catch(() => {})
 }
 
 async function toggleHook(): Promise<void> {
@@ -253,6 +304,9 @@ function titleOf(k: PageKey): string {
         <div class="eyebrow">WPE_INJECT // SELECT_TARGET</div>
         <h2>{{ t('inject.pick.title') }}</h2>
         <p class="lede">{{ t('inject.pick.lede') }}</p>
+        <p v-if="lastInjection" class="last">
+          <span class="k">{{ t('inject.pick.last') }}</span><b>{{ lastInjection }}</b>
+        </p>
       </div>
 
       <div class="tools">
@@ -260,9 +314,32 @@ function titleOf(k: PageKey): string {
         <button class="btn" :disabled="loadingProcs" @click="refreshProcs">
           {{ loadingProcs ? t('inject.pick.loading') : t('inject.pick.refresh') }}
         </button>
+        <button class="btn" :disabled="busy || pickingWindow" @click="pickWindow">
+          {{ t('inject.pick.window') }}
+        </button>
         <button class="btn primary" :disabled="busy" @click="launchAndAttach">
           {{ t('inject.pick.launch') }}
         </button>
+      </div>
+
+      <!--
+        选窗口进行中的横幅。刻意<b>不做成全屏遮罩</b>：遮罩会挡住用户要点的那个窗口，
+        而这件事的全部操作都发生在本程序<b>之外</b>。
+      -->
+      <div v-if="pickingWindow" class="pickbar">
+        <span class="dot" />
+        <b>{{ t('inject.pick.picking') }}</b>
+        <span class="hint">{{ t('inject.pick.pickHint') }}</span>
+
+        <span class="hv">
+          <template v-if="hover">
+            {{ hover.name || '?' }} <i>#{{ hover.pid }}</i>
+            · {{ hover.title || t('inject.pick.noTitle') }}
+          </template>
+          <template v-else>{{ t('inject.pick.hoverNone') }}</template>
+        </span>
+
+        <button class="mini" @click="cancelPickWindow">{{ t('inject.pick.cancel') }}</button>
       </div>
 
       <div class="ptable">
@@ -378,6 +455,52 @@ function titleOf(k: PageKey): string {
 .ptitle { margin-bottom: 16px; }
 .ptitle h2 { margin: 6px 0 4px; font-family: var(--orbit, inherit); font-size: 20px; color: var(--gray); }
 .ptitle .lede { margin: 0; color: var(--muted); font-size: 12.5px; }
+
+.ptitle .last { margin: 8px 0 0; display: flex; align-items: baseline; gap: 8px; font-size: 12px; }
+
+.ptitle .last .k {
+  font-family: var(--share);
+  font-size: var(--label-size);
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ptitle .last b { color: var(--cyan); font-family: var(--mono); }
+
+/* 选窗口进行中的横幅 */
+.pickbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border: 1px solid rgb(234 179 8 / 40%);
+  background: rgb(234 179 8 / 8%);
+  font-size: 12px;
+  color: var(--amber);
+}
+
+.pickbar .dot { width: 8px; height: 8px; flex: none; background: var(--amber); box-shadow: 0 0 8px var(--amber); animation: blink 1s steps(1) infinite; }
+
+@keyframes blink { 50% { opacity: .25; } }
+
+.pickbar .hint { color: var(--muted); }
+
+.pickbar .hv {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  font-family: var(--mono);
+  color: var(--gray);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pickbar .hv i { color: var(--muted); font-style: normal; }
 
 .eyebrow {
   font-family: var(--share);

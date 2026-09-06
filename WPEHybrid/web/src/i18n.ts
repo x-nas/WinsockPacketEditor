@@ -812,6 +812,18 @@ const DICT = {
   'inject.pick.attach': { zh: '注入', en: 'Inject' },
   'inject.pick.none': { zh: '没有匹配的进程', en: 'No matching process' },
 
+  //「选择窗体」：装低级鼠标钩子，在屏幕上点哪个窗口就选中哪个进程
+  'inject.pick.window': { zh: '选择窗体', en: 'Pick Window' },
+  'inject.pick.picking': { zh: '正在选择窗体', en: 'Picking a window' },
+  'inject.pick.pickHint': {
+    zh: '把鼠标移到目标程序的窗口上，点一下就选中它；按 Esc 或点回本窗口取消。',
+    en: 'Move the cursor over the target program and click to select it; press Esc or click back here to cancel.',
+  },
+  'inject.pick.cancel': { zh: '取消选择', en: 'Cancel' },
+  'inject.pick.hoverNone': { zh: '把鼠标移到别的窗口上…', en: 'Hover another window…' },
+  'inject.pick.noTitle': { zh: '无标题', en: 'Untitled' },
+  'inject.pick.last': { zh: '上次注入', en: 'Last target' },
+
   'inject.col.name': { zh: '进程名', en: 'Process' },
   'inject.col.pid': { zh: 'PID', en: 'PID' },
   'inject.col.path': { zh: '路径', en: 'Path' },

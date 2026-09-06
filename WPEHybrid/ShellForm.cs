@@ -1154,7 +1154,8 @@ namespace WPEHybrid
                 EnsureProxyConfigLoaded();
                 FeedPump.MarkAllDirty();
 
-                return new { ok = true };
+                //「上次注入」在 WinForms 的 ProcessList 上是一行提示，这里显示在选目标屏的标题下
+                return new { ok = true, lastInjection = Operate.SystemConfig.LastInjection ?? string.Empty };
             });
 
             /// 进程列表。枚举几百个进程 + 读 MainModule 是几十毫秒的活，丢后台去。
@@ -1294,6 +1295,21 @@ namespace WPEHybrid
 
                 this.DisposeInjectLink();
                 return this.InjectStatus();
+            });
+
+            /*
+                「选择窗体」：装两个低级钩子，用户在屏幕上点哪个窗口就选中哪个进程，Esc 取消。
+                对应 WinForms 的 ProcessList.bSelectForm_Click。
+
+                低级钩子要一个消息循环 —— 外壳本身就是个 WinForms 窗体，有。
+                悬停信息经 inject:hover 事件推给前端（换了窗口才推一次，不是每次鼠标移动）。
+            */
+            this.bridge.Register("pickWindow", async args => await this.PickWindowAsync());
+
+            this.bridge.Register("cancelPickWindow", args =>
+            {
+                this.FinishPickWindow(new { ok = false, cancelled = true });
+                return new { ok = true };
             });
 
             this.bridge.Register("getInjectStatus", args => this.InjectStatus());
@@ -4745,6 +4761,9 @@ namespace WPEHybrid
         /// <summary>退出时干净地卸钩断开。异常一律吞掉 —— 关窗路径上没有能补救的东西。</summary>
         private void DetachInjectOnExit()
         {
+            //「选择窗体」还开着的话先收掉：全局低级钩子留在一个已经没了的进程上是系统级的麻烦
+            this.FinishPickWindow(new { ok = false, cancelled = true });
+
             var link = this.injectLink;
             if (link == null) { return; }
 
@@ -4753,6 +4772,207 @@ namespace WPEHybrid
 
             this.DisposeInjectLink();
         }
+
+        #region//「选择窗体」取 PID（对应 WinForms 的 ProcessList.bSelectForm_Click）
+
+        /*
+            装 WH_MOUSE_LL + WH_KEYBOARD_LL 两个低级钩子：
+            鼠标移动时把光标下那个窗口的进程报给前端，左键按下时定下目标，Esc 取消。
+
+            【为什么委托要用字段存着】SetWindowsHookEx 只记住函数指针，
+            托管委托没人引用就会被 GC 掉，然后回调时是个野指针 —— 表现为随机崩溃，
+            而且大概率不在这一行崩。WinForms 那边也是用字段存的（mProc / kProc）。
+
+            【钩子回调跑在 UI 线程上】低级钩子是靠安装线程的消息循环派发的，
+            所以这里可以直接推事件、直接完成那个 TaskCompletionSource，不用切线程。
+            代价是回调必须快 —— 系统有超时（LowLevelHooksTimeout），超了会把钩子踢掉。
+        */
+
+        private User32.HookProc pickMouseProc;
+        private User32.HookProc pickKeyProc;
+        private IntPtr pickMouseHook;
+        private IntPtr pickKeyHook;
+        private IntPtr pickLastHover;
+        private System.Threading.Tasks.TaskCompletionSource<object> pickTcs;
+
+        private System.Threading.Tasks.Task<object> PickWindowAsync()
+        {
+            //已经在选了就把上一次取消掉，免得两套钩子叠着
+            this.FinishPickWindow(new { ok = false, cancelled = true });
+
+            var tcs = new System.Threading.Tasks.TaskCompletionSource<object>();
+            this.pickTcs = tcs;
+            this.pickLastHover = IntPtr.Zero;
+
+            try
+            {
+                this.pickMouseProc = this.PickMouseHook;
+                this.pickKeyProc = this.PickKeyHook;
+
+                using (var proc = System.Diagnostics.Process.GetCurrentProcess())
+                using (var mod = proc.MainModule)
+                {
+                    IntPtr h = Kernel32.GetModuleHandle(mod.ModuleName);
+                    this.pickMouseHook = User32.SetWindowsHookEx(User32.WH_MOUSE_LL, this.pickMouseProc, h, 0);
+                    this.pickKeyHook = User32.SetWindowsHookEx(User32.WH_KEYBOARD_LL, this.pickKeyProc, h, 0);
+                }
+
+                if (this.pickMouseHook == IntPtr.Zero)
+                {
+                    this.FinishPickWindow(new { ok = false, error = UI.T("Inject.PickFailed", "无法监听鼠标，请以管理员身份运行") });
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(PickWindowAsync), ex);
+                this.FinishPickWindow(new { ok = false, error = ex.Message });
+            }
+
+            return tcs.Task;
+        }
+
+        /// <summary>卸钩 + 把结果交给还在等的那个调用。重复调用无害（第二次没有 pending 就直接返回）。</summary>
+        private void FinishPickWindow(object result)
+        {
+            if (this.pickMouseHook != IntPtr.Zero)
+            {
+                try { User32.UnhookWindowsHookEx(this.pickMouseHook); } catch { }
+                this.pickMouseHook = IntPtr.Zero;
+            }
+
+            if (this.pickKeyHook != IntPtr.Zero)
+            {
+                try { User32.UnhookWindowsHookEx(this.pickKeyHook); } catch { }
+                this.pickKeyHook = IntPtr.Zero;
+            }
+
+            this.pickMouseProc = null;
+            this.pickKeyProc = null;
+
+            var tcs = this.pickTcs;
+            this.pickTcs = null;
+            if (tcs != null) { tcs.TrySetResult(result); }
+        }
+
+        private IntPtr PickMouseHook(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            try
+            {
+                if (nCode >= 0 && this.pickTcs != null)
+                {
+                    var st = (User32.MSLLHOOKSTRUCT)System.Runtime.InteropServices.Marshal.PtrToStructure(lParam, typeof(User32.MSLLHOOKSTRUCT));
+
+                    if (wParam == (IntPtr)User32.WM_MOUSEMOVE)
+                    {
+                        IntPtr hWnd = User32.WindowFromPoint(st.pt);
+
+                        //换了窗口才推一次 —— 鼠标移动每秒几百个事件，逐个推会把桥冲垮
+                        if (hWnd != IntPtr.Zero && hWnd != this.pickLastHover)
+                        {
+                            this.pickLastHover = hWnd;
+
+                            int pid;
+                            User32.GetWindowThreadProcessId(hWnd, out pid);
+
+                            try { this.bridge.PushEvent("inject:hover", this.DescribeWindow(pid, hWnd)); }
+                            catch { /* 页面可能正在导航 */ }
+                        }
+                    }
+                    else if (wParam == (IntPtr)User32.WM_LBUTTONDOWN)
+                    {
+                        IntPtr hWnd = User32.WindowFromPoint(st.pt);
+
+                        if (hWnd != IntPtr.Zero)
+                        {
+                            int pid;
+                            User32.GetWindowThreadProcessId(hWnd, out pid);
+
+                            /*
+                                点到外壳自己身上：当成「取消」。
+                                注入自己毫无意义，而用户点回本窗口本来就是想收手 ——
+                                什么都不做的话会像卡住了（WinForms 那边没这一条，是这里补的）。
+                            */
+                            if (pid == System.Diagnostics.Process.GetCurrentProcess().Id)
+                            {
+                                this.BeginInvoke((MethodInvoker)delegate { this.FinishPickWindow(new { ok = false, cancelled = true }); });
+                            }
+                            else
+                            {
+                                object info = this.DescribeWindow(pid, hWnd);
+
+                                /*
+                                    ⚠️ 卸钩不能在回调里就地做 —— 正走在这个钩子链上。
+                                    丢回 UI 线程的下一拍，与 WinForms 的 BeginInvoke 同一个理由。
+                                */
+                                this.BeginInvoke((MethodInvoker)delegate { this.FinishPickWindow(info); });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(PickMouseHook), ex);
+            }
+
+            //不吞事件：只吞下按不吞抬起会让被点的程序留在「按住」状态。与 WinForms 一致
+            return User32.CallNextHookEx(this.pickMouseHook, nCode, wParam, lParam);
+        }
+
+        private IntPtr PickKeyHook(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            try
+            {
+                if (nCode >= 0 && this.pickTcs != null)
+                {
+                    var kb = (User32.KBDLLHOOKSTRUCT)System.Runtime.InteropServices.Marshal.PtrToStructure(lParam, typeof(User32.KBDLLHOOKSTRUCT));
+
+                    if (kb.vkCode == (uint)System.Windows.Forms.Keys.Escape)
+                    {
+                        this.BeginInvoke((MethodInvoker)delegate { this.FinishPickWindow(new { ok = false, cancelled = true }); });
+                        return (IntPtr)1;   //Esc 吞掉，别让它落进正被悬停的那个程序
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(nameof(PickKeyHook), ex);
+            }
+
+            return User32.CallNextHookEx(this.pickKeyHook, nCode, wParam, lParam);
+        }
+
+        /// <summary>
+        /// 光标下那个窗口属于谁。<b>只出基础类型</b>，而且一条都不能抛 ——
+        /// 这是在钩子回调里跑的，抛出去系统会把钩子踢掉。
+        /// </summary>
+        private object DescribeWindow(int pid, IntPtr hWnd)
+        {
+            string name = string.Empty, path = string.Empty, title = string.Empty;
+
+            try
+            {
+                var sb = new System.Text.StringBuilder(256);
+                if (User32.GetWindowText(hWnd, sb, sb.Capacity) > 0) { title = sb.ToString(); }
+            }
+            catch { }
+
+            try
+            {
+                using (var proc = System.Diagnostics.Process.GetProcessById(pid))
+                {
+                    name = proc.ProcessName;
+
+                    //MainModule 对另一位数 / 更高完整性级别的进程会抛，取不到就空着
+                    try { path = proc.MainModule.FileName; } catch { }
+                }
+            }
+            catch { }
+
+            return new { ok = true, pid = pid, name = name, path = path, title = title };
+        }
+
+        #endregion
 
         private void DisposeInjectLink()
         {
