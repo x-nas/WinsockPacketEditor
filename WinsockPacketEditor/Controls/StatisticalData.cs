@@ -149,18 +149,23 @@ namespace WinsockPacketEditor
         {
             try
             {
-                long ProxyTotal_CNT =
-                    Operate.ProxyConfig.Proxy.TCP_Req_CNT +
-                    Operate.ProxyConfig.Proxy.TCP_Resp_CNT +
-                    Operate.ProxyConfig.Proxy.UDP_Req_CNT +
-                    Operate.ProxyConfig.Proxy.UDP_Resp_CNT;
+                /*
+                    七个计数走 Operate.SystemConfig.GetFilterStats()，两套 UI 共用同一份。
 
-                long FilterExec = Operate.FilterConfig.Filter.FilterExecute_CNT;
-                long FilterReplace = Operate.FilterConfig.Filter.FilterReplace_CNT;
-                long FilterChange = Operate.FilterConfig.Filter.FilterChange_CNT;
-                long FilterIntercept = Operate.FilterConfig.Filter.FilterIntercept_CNT;
-                long FilterDisplay = Operate.FilterConfig.Filter.FilterDisplay_CNT;
-                long FilterNoDisplay = Operate.FilterConfig.Filter.FilterNoDisplay_CNT;
+                    这里原先是就地把<b>代理</b>那四个计数器加起来当分母 —— 而这个控件
+                    两种模式共用，于是<b>注入模式下六条进度条的百分比恒为 0</b>
+                    （滤镜确实在执行，分母却一直是 0）。GetFilterStats 按 SelectMode 取分母：
+                    注入模式用 PacketConfig.Packet.TotalPackets。
+                */
+                FilterStatsRow st = Operate.SystemConfig.GetFilterStats();
+
+                long ProxyTotal_CNT = st.ProxyTotal;
+                long FilterExec = st.Execute;
+                long FilterReplace = st.Replace;
+                long FilterChange = st.Change;
+                long FilterIntercept = st.Intercept;
+                long FilterDisplay = st.Display;
+                long FilterNoDisplay = st.NoDisplay;
 
                 decimal dExecute = 0;
                 if (ProxyTotal_CNT > 0)

@@ -1005,17 +1005,33 @@ namespace WPEHybrid
                 socks5Addr = Socks5Address(),
             });
 
-            //清空代理数据列表（前端「清空」按钮）。
-            //封包那份一并清掉：压测生成器和注入模式都可能往里写，留着会让「列表行数」对不上
+            /*
+                清空封包列表。
+
+                <c>list</c> 指定清哪一份（<c>FeedList.Proxy</c> / <c>FeedList.Packet</c>）；
+                <b>不传就两份都清</b> —— 代理数据页那个「清空」一直是这么调的，
+                而压测生成器往封包那份里写，留着会让「列表行数」对不上。
+
+                注入模式必须能只清自己那份：两种模式的列表各有一套 Id 序列，
+                在注入模式点「清空」把代理那份也洗掉，切回去就少了一批数据而且毫无提示。
+            */
             this.bridge.Register("clearPackets", args =>
             {
-                Operate.ProxyConfig.Queue.ClearProxyInfoQueue();
-                Operate.ProxyConfig.List.ClearProxyInfo();
-                UI.Feed.Clear(FeedList.Proxy);
+                int? which = args["list"] == null ? (int?)null : (int)args["list"];
 
-                Operate.PacketConfig.Queue.ClearPacketQueue();
-                Operate.PacketConfig.List.ClearPacketList();
-                UI.Feed.Clear(FeedList.Packet);
+                if (which == null || which.Value == (int)FeedList.Proxy)
+                {
+                    Operate.ProxyConfig.Queue.ClearProxyInfoQueue();
+                    Operate.ProxyConfig.List.ClearProxyInfo();
+                    UI.Feed.Clear(FeedList.Proxy);
+                }
+
+                if (which == null || which.Value == (int)FeedList.Packet)
+                {
+                    Operate.PacketConfig.Queue.ClearPacketQueue();
+                    Operate.PacketConfig.List.ClearPacketList();
+                    UI.Feed.Clear(FeedList.Packet);
+                }
 
                 return new { ok = true };
             });
@@ -1272,6 +1288,49 @@ namespace WPEHybrid
             });
 
             this.bridge.Register("getInjectStatus", args => this.InjectStatus());
+
+            /*
+                注入模式的统计条 —— 对应 WinForms 的 PacketList 那条信息栏
+                （10 个 WinSock 计数 + Total + Queue + 滤镜执行 / 已过滤 + 收发字节）。
+
+                <b>不复用 getStats</b>：那一份全是代理口径（TCP_Req_CNT / SessionCount /
+                proxyRunning…），两种模式的计数器根本不是同一批字段，硬塞进一个方法
+                会变成一堆用不上的 0，而「0」在统计条上是会骗人的。
+
+                这些计数由外壳侧的 ShellLink.Ingest 调 CountPacketInfo 维护
+                —— 按<b>收到的</b>算，与目标侧计数的差就是环丢掉的那些，
+                而那些另有「丢弃 N」在显示，不会无声消失。
+            */
+            this.bridge.Register("getInjectStats", args => new
+            {
+                queue = Operate.PacketConfig.Queue.cqPacketInfo.Count,
+                list = Operate.PacketConfig.List.lstPacketInfo.Count,
+                total = Operate.PacketConfig.Packet.TotalPackets,
+
+                send = Operate.PacketConfig.Packet.Send_CNT,
+                sendTo = Operate.PacketConfig.Packet.SendTo_CNT,
+                recv = Operate.PacketConfig.Packet.Recv_CNT,
+                recvFrom = Operate.PacketConfig.Packet.RecvFrom_CNT,
+                wsaSend = Operate.PacketConfig.Packet.WSASend_CNT,
+                wsaSendTo = Operate.PacketConfig.Packet.WSASendTo_CNT,
+                wsaRecv = Operate.PacketConfig.Packet.WSARecv_CNT,
+                wsaRecvFrom = Operate.PacketConfig.Packet.WSARecvFrom_CNT,
+
+                //滤镜执行次数是目标报上来的（引擎在那边跑）；已过滤是外壳这边 FlushToFeed 数的
+                filterExecute = Operate.FilterConfig.Filter.FilterExecute_CNT,
+                filterPacket = Operate.PacketConfig.Packet.FilterPacket_CNT,
+
+                /*
+                    收发字节。WinForms 的 lSpeedInfo 显示的就是这两个累计值
+                    （方法名叫 GetPacketSpeedInfo，其实与速率无关），出裸数字由前端格式化 ——
+                    与 getStats 里流量那两项同一个理由：C# 拼好的宽标签塞不进统计格子。
+                */
+                totalSend = Operate.PacketConfig.Packet.Total_SendBytes,
+                totalRecv = Operate.PacketConfig.Packet.Total_RecvBytes,
+
+                autoClear = Operate.PacketConfig.List.AutoClear,
+                autoClearValue = (int)Operate.PacketConfig.List.AutoClear_Value,
+            });
 
             #endregion
 

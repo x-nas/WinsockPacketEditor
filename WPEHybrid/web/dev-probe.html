@@ -76,6 +76,7 @@
     injectStartHook: () => { window.__inj.hooked = true; setTimeout(pushInjectRows, 300); return window.__inj },
     injectStopHook: () => { window.__inj.hooked = false; return window.__inj },
     injectDetach: () => { window.__inj = null; return { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false } },
+    getInjectStats: () => ({ queue: 3, list: 40, total: 1280, send: 320, sendTo: 12, recv: 640, recvFrom: 8, wsaSend: 180, wsaSendTo: 0, wsaRecv: 120, wsaRecvFrom: 0, filterExecute: 356, filterPacket: 44, totalSend: 262144, totalRecv: 1048576, autoClear: true, autoClearValue: 5000 }),
     getInjectStatus: () => (window.__inj || { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false }),
     getLogCount: (a) => ({ count: a.kind === 0 ? 3 : 0 }),
     //清空走 ask → 自绘确认框，与 C# 的 ClearLog_Dialog 一样

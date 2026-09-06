@@ -326,7 +326,7 @@ function titleOf(k: PageKey): string {
       <SendList v-if="page === 'send'" />
       <RobotList v-if="page === 'robot'" />
       <WareHouseList v-if="page === 'warehouse'" />
-      <StatData v-if="page === 'stat'" />
+      <StatData v-if="page === 'stat'" mode="inject" />
       <TextCompare v-if="page === 'diff'" />
       <XorCalc v-if="page === 'xor'" />
       <Transcode v-if="page === 'transcode'" />

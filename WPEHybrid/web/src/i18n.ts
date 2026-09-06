@@ -826,6 +826,14 @@ const DICT = {
   'inject.clear': { zh: '清空', en: 'Clear' },
   'inject.detach': { zh: '断开', en: 'Detach' },
 
+  //统计条 14 格。八个 WinSock 计数直接用 pt.* 那一组（与过滤设置的类别同一套口径）
+  'inject.st.total': { zh: '封包总数', en: 'Total packets' },
+  'inject.st.filterExec': { zh: '滤镜执行', en: 'Filter runs' },
+  'inject.st.filtered': { zh: '已过滤', en: 'Filtered out' },
+  'inject.st.queue': { zh: '待入列', en: 'Queued' },
+  'inject.st.dropped': { zh: '丢弃', en: 'Dropped' },
+  'inject.st.rate': { zh: '实时速率', en: 'Live rate' },
+
   'inject.state.ok': { zh: '已附加', en: 'Attached' },
   'inject.state.lost': { zh: '已断开', en: 'Disconnected' },
 
@@ -1028,10 +1036,13 @@ const DICT = {
   // ── 统计数据 ──
   'st.refresh': { zh: '刷新数据', en: 'Refresh' },
   'st.autoHint': { zh: '页面开着时每秒自动刷新', en: 'Refreshes every second while open' },
+  //注入模式下分母是封包总数，不是代理总数（GetFilterStats 按 SelectMode 取）
+  'st.packetTotal': { zh: '封包总数', en: 'Packet total' },
   'st.proxyTotal': { zh: '代理总数', en: 'Proxy total' },
   'st.filterExec': { zh: '滤镜执行', en: 'Filter runs' },
   'st.execute': { zh: '滤镜执行占比', en: 'Filter hit rate' },
   'st.executeHint': { zh: '滤镜执行次数 ÷ 代理封包总数', en: 'filter runs ÷ proxied packets' },
+  'st.executeHintInject': { zh: '滤镜执行次数 ÷ 拦截封包总数', en: 'filter runs ÷ hooked packets' },
   'st.ofExec': { zh: '占滤镜执行次数', en: 'of filter runs' },
   'st.status': { zh: '状态', en: 'Status' },
   'st.share': { zh: '占比', en: 'Share' },

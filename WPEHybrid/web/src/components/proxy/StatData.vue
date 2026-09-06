@@ -14,6 +14,16 @@ import { useList } from '../../stores/lists'
 
 interface Stats { ProxyTotal: number; Execute: number; Replace: number; Change: number; Intercept: number; Display: number; NoDisplay: number }
 
+/*
+  分母的口径按模式换。C# 侧 GetFilterStats 已经按 SelectMode 取了
+  （注入模式用 PacketConfig.Packet.TotalPackets），这里只是把标签说对 ——
+  在注入模式下写着「代理总数」而数字来自封包计数，比不显示更误导。
+
+  ⚠️ WinForms 那个控件两种模式共用、分母写死是代理计数器，所以注入模式下
+  百分比恒为 0。那是个老毛病，这一版两边一起修好了（见 GetFilterStats）。
+*/
+const props = withDefaults(defineProps<{ mode?: 'proxy' | 'inject' }>(), { mode: 'proxy' })
+
 const s = ref<Stats>({ ProxyTotal: 0, Execute: 0, Replace: 0, Change: 0, Intercept: 0, Display: 0, NoDisplay: 0 })
 const filters = useList<FilterRow>(FeedList.Filter)
 const busy = ref(false)
@@ -39,7 +49,13 @@ function pct(a: number, b: number): number {
 }
 
 const gauges = computed(() => [
-  { key: 'st.execute', a: s.value.Execute, b: s.value.ProxyTotal, cls: 'exe', hint: 'st.executeHint' },
+  {
+    key: 'st.execute',
+    a: s.value.Execute,
+    b: s.value.ProxyTotal,
+    cls: 'exe',
+    hint: props.mode === 'inject' ? 'st.executeHintInject' : 'st.executeHint',
+  },
   { key: 'proxy.act.replace', a: s.value.Replace, b: s.value.Execute, cls: 'rep' },
   { key: 'proxy.act.change', a: s.value.Change, b: s.value.Execute, cls: 'chg' },
   { key: 'proxy.act.intercept', a: s.value.Intercept, b: s.value.Execute, cls: 'itc' },
@@ -65,7 +81,7 @@ const totalExec = computed(() => filters.value.reduce((n, f) => n + f.ExecutionC
       <button class="btn primary" :disabled="busy" @click="refresh">{{ t('st.refresh') }}</button>
       <span class="lb">{{ t('st.autoHint') }}</span>
       <span class="grow" />
-      <span class="kv">{{ t('st.proxyTotal') }} <b>{{ s.ProxyTotal }}</b></span>
+      <span class="kv">{{ t(props.mode === 'inject' ? 'st.packetTotal' : 'st.proxyTotal') }} <b>{{ s.ProxyTotal }}</b></span>
       <span class="kv">{{ t('st.filterExec') }} <b class="c">{{ s.Execute }}</b></span>
     </div>
 

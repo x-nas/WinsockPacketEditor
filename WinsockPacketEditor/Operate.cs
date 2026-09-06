@@ -1027,12 +1027,23 @@ namespace WinsockPacketEditor
                 }
             }
 
-            /// <summary>统计数据页的七个计数（照 WinForms 的 StatisticalData.bgwStatistical_DoWork）。</summary>
+            /// <summary>
+            /// 统计数据页的七个计数（照 WinForms 的 StatisticalData.bgwStatistical_DoWork）。
+            ///
+            /// ⚠️ <b>分母按模式取</b>。WinForms 那个控件两种模式共用，而分母写死是代理的四个计数器
+            /// —— 所以在注入模式下六条进度条的百分比<b>恒为 0</b>（那是个老毛病，不是这里新引入的）。
+            /// 注入模式该拿 <c>PacketConfig.Packet.TotalPackets</c>：滤镜执行次数是两种模式共用的，
+            /// 拿它去除一个恒为 0 的分母毫无意义。
+            /// </summary>
             public static FilterStatsRow GetFilterStats()
             {
+                bool inject = SystemConfig.SelectMode == SystemConfig.SystemMode.Inject;
+
                 return new FilterStatsRow
                 {
-                    ProxyTotal = ProxyConfig.Proxy.TCP_Req_CNT + ProxyConfig.Proxy.TCP_Resp_CNT + ProxyConfig.Proxy.UDP_Req_CNT + ProxyConfig.Proxy.UDP_Resp_CNT,
+                    ProxyTotal = inject
+                        ? PacketConfig.Packet.TotalPackets
+                        : ProxyConfig.Proxy.TCP_Req_CNT + ProxyConfig.Proxy.TCP_Resp_CNT + ProxyConfig.Proxy.UDP_Req_CNT + ProxyConfig.Proxy.UDP_Resp_CNT,
                     Execute = FilterConfig.Filter.FilterExecute_CNT,
                     Replace = FilterConfig.Filter.FilterReplace_CNT,
                     Change = FilterConfig.Filter.FilterChange_CNT,
