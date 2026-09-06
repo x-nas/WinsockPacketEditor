@@ -83,6 +83,10 @@
     addPacketToFilter: (a) => { window.__acted = a; return { ok: true } },
     setSystemSocketByPacket: (a) => { window.__acted = a; return { socket: 3464 } },
     exportPacketExcel: (a) => { window.__exported = a; return { ok: true } },
+    //查找：与代理那一路同一套三条分支（命中 / 正则写错 / 没有匹配）
+    searchPacketList: (a) => (a.pattern === 'zzz' ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: null } : a.pattern === 'bad(' ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: '括号不配对' }
+      : a.from > 7 ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: null }
+      : { Found: true, Id: 507, Index: 7, Offset: 9, Length: 6, Error: null }),
     getInjectStats: () => ({ queue: 3, list: 40, total: 1280, send: 320, sendTo: 12, recv: 640, recvFrom: 8, wsaSend: 180, wsaSendTo: 0, wsaRecv: 120, wsaRecvFrom: 0, filterExecute: 356, filterPacket: 44, totalSend: 262144, totalRecv: 1048576, autoClear: true, autoClearValue: 5000 }),
     getInjectStatus: () => (window.__inj || { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false }),
     getLogCount: (a) => ({ count: a.kind === 0 ? 3 : 0 }),

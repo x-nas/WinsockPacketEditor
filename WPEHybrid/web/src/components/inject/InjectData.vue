@@ -26,6 +26,7 @@ import ContextMenu from '../ContextMenu.vue'
 import { ICON, type MenuItem } from '../menu'
 import PacketEdit from '../proxy/PacketEdit.vue'
 import PacketModification from '../proxy/PacketModification.vue'
+import QuickPanel from '../proxy/QuickPanel.vue'
 import InjectBar from './InjectBar.vue'
 import type { SettingKey } from '../proxy/settings'
 
@@ -68,6 +69,13 @@ interface InjectStats {
 
 const stats = ref<InjectStats | null>(null)
 let statsTimer = 0
+
+/*
+  「自动清理」在工具条上<b>只读显示</b>，点它跳到列表设置去改 ——
+  与代理数据页同一条口径：两处都能改反而要同步。
+*/
+const autoClear = computed(() => stats.value?.autoClear ?? true)
+const clearAt = computed(() => stats.value?.autoClearValue ?? 5000)
 
 function n(v: number | undefined): string {
   return (v ?? 0).toLocaleString()
@@ -176,6 +184,98 @@ function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
   pick.onRowClick(row, ev, index)
   selected.value = row
   selectedId.value = row.Id
+
+  /*
+    手动点行就把查找的高亮丢掉。不丢的话那个偏移会原样套到新点开的这一条上 ——
+    面板只认「圈第 N 到第 M 字节」，圈出来的会是一段毫不相干的字节，而且看着像是查到的。
+  */
+  searchHit.value = null
+}
+
+/* ── 查找封包（对应 WinForms 的 Controls/SearchPacket）───────── */
+
+/*
+  与代理数据页那一份逐句对应，只差调 searchPacketList 而不是 searchProxyList。
+
+  【游标留在前端】C# 侧不存 Search_Index：搜索是「从第 N 行往后找第一条」这一件事，
+  游标是谁在翻页谁的状态。
+  【命中之后做三件事】选中那一行、把它滚进视野、再把命中的那段字节圈出来
+  —— 第三件靠 C# 一并返回的 Offset / Length，不像 WinForms 那样让十六进制控件自己再找一次。
+*/
+const q = ref('')
+const qHex = ref(false)
+const searching = ref(false)
+/** 上一次命中的行在 C# 列表里的下标；「查找下一个」从它 + 1 接着找。−1 = 还没找过 */
+const searchAt = ref(-1)
+/** 命中的那段字节，交给十六进制面板圈出来 */
+const searchHit = ref<{ offset: number; length: number } | null>(null)
+
+interface SearchResult { Found: boolean; Id: number; Index: number; Offset: number; Length: number; Error: string | null }
+
+async function findNext(fromHead = false): Promise<void> {
+  const pattern = q.value.trim()
+  if (!pattern || searching.value) return
+
+  searching.value = true
+
+  try {
+    const from = fromHead ? 0 : searchAt.value + 1
+    let r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from })
+
+    if (r?.Error) {
+      pushToast('error', t('sp.badRegex') + ' · ' + r.Error)
+      return
+    }
+
+    //没找到而且不是从头找的 —— 回到开头再来一圈（转完还找不到才算真没有）
+    if (!r?.Found && from > 0) {
+      r = await call<SearchResult>('searchPacketList', { pattern, isHex: qHex.value, from: 0 })
+      if (r?.Found) pushToast('info', t('sp.wrapped'))
+    }
+
+    if (!r?.Found) {
+      searchAt.value = -1
+      searchHit.value = null
+      pushToast('warning', t('sp.noMatch'))
+      return
+    }
+
+    searchAt.value = r.Index
+
+    /*
+      滚动用<b>前端副本里的下标</b>，不直接用 C# 给的 Index。
+      两边正常是对齐的（推送是顺序 Append、清空是整表），但真错开一格时，
+      按 Id 找到的那一行才是刚刚选中的那一行。
+    */
+    const row = rows.value.find((x) => x.Id === r.Id)
+
+    //高亮只在<b>确实切到那一行</b>之后才给 —— 那个偏移是按命中的那个包算的
+    searchHit.value = row && r.Offset >= 0 ? { offset: r.Offset, length: r.Length } : null
+
+    if (row) {
+      selected.value = row
+      selectedId.value = row.Id
+      const i = rows.value.indexOf(row)
+      listRef.value?.scrollToIndex(i >= 0 ? i : r.Index)
+    }
+  } catch (e) {
+    console.error('[sp] 查找封包失败', e)
+    pushToast('error', String(e))
+  } finally {
+    searching.value = false
+  }
+}
+
+//改了条件就把游标退回开头；上一次的高亮也一并丢掉，它标的是上一个条件命中的那一段
+watch([q, qHex], () => {
+  searchAt.value = -1
+  searchHit.value = null
+})
+
+function clearSearch(): void {
+  q.value = ''
+  searchAt.value = -1
+  searchHit.value = null
 }
 
 /* ── 右键菜单（对应 WinForms 的 GetCMS_PacketList）──────────── */
@@ -348,6 +448,7 @@ async function onMenuPick(id: string): Promise<void> {
 function onCleared(): void {
   selected.value = null
   selectedId.value = null
+  searchHit.value = null
   pick.clear()
 }
 
@@ -381,6 +482,42 @@ defineExpose({ onCleared })
     <div v-if="status.state === 'disconnected'" class="lostbar">{{ t('inject.lostHint') }}</div>
 
     <div class="grid">
+      <div class="gtool">
+        <!--
+          查找封包。Enter = 查找下一个，Esc = 清空；右边两个按钮是「文本 / 十六进制」与「从头查找」。
+          没有独立的「向下搜索」单选 —— 主按钮本身就是向下找，找到末尾自己回头再来一圈。
+        -->
+        <span class="search" :class="{ busy: searching }">
+          <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></svg>
+          <input
+            v-model="q"
+            class="sinp"
+            spellcheck="false"
+            :placeholder="t('proxy.search')"
+            @keydown.enter.prevent="findNext(false)"
+            @keydown.esc.prevent="clearSearch"
+          >
+          <button v-if="q" class="sx" :title="t('sp.clear')" @click="clearSearch">×</button>
+        </span>
+
+        <button class="chk" :class="{ on: qHex }" :title="t('sp.modeHint')" @click="qHex = !qHex">
+          <i />{{ qHex ? t('sp.hex') : t('sp.text') }}
+        </button>
+        <button class="tb" :disabled="!q.trim() || searching" @click="findNext(false)">
+          {{ searching ? t('sp.searching') : t('sp.next') }}
+        </button>
+        <button class="tb" :disabled="!q.trim() || searching" :title="t('sp.fromHead')" @click="findNext(true)">
+          {{ t('sp.fromHead') }}
+        </button>
+
+        <button class="chk" :class="{ on: follow }" @click="follow = !follow"><i />{{ t('proxy.autoRoll') }}</button>
+        <!-- 只读显示；改在「设置 ▾ → 列表设置」里，点一下直接跳过去 -->
+        <button class="chk" :class="{ on: autoClear }" :title="t('set.list')" @click="emit('openSetting', 'list')">
+          <i />{{ t('proxy.autoClear') }}
+        </button>
+        <button class="num" :title="t('set.list')" @click="emit('openSetting', 'list')">{{ clearAt.toLocaleString() }}</button>
+      </div>
+
       <PacketList
         ref="listRef"
         class="list"
@@ -401,8 +538,9 @@ defineExpose({ onCleared })
     </div>
 
     <div class="lower">
+      <QuickPanel />
       <!-- packetType 只用来决定默认按文本还是十六进制看（HTTP 那四类默认文本）-->
-      <HexPanel :id="selectedId" list="packet" :packet-type="selected?.Type ?? null" />
+      <HexPanel :id="selectedId" list="packet" :packet-type="selected?.Type ?? null" :highlight="searchHit" />
     </div>
   </div>
 </template>
@@ -484,8 +622,12 @@ defineExpose({ onCleared })
 
 .list { flex: 1; min-height: 0; border: 0; }
 
-.lower { flex: 1 1 0; min-height: 180px; display: flex; min-width: 0; }
-
-/* 十六进制面板要占满这一条 —— 代理那边是两列栅格自然拉伸，这里只有一件东西 */
-.lower > * { flex: 1; min-width: 0; }
+/* 下半部：快捷面板 + 十六进制，与代理数据页同一套栅格与比例 */
+.lower {
+  flex: 1 1 0;
+  min-height: 180px;
+  display: grid;
+  grid-template-columns: minmax(300px, 22%) 1fr;
+  gap: 8px;
+}
 </style>

@@ -10041,8 +10041,11 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                /// <summary>朴素子串查找。needle 通常只有几个字节、haystack 是一个封包，不值得上 KMP。</summary>
-                private static int IndexOfBytes(byte[] Haystack, byte[] Needle)
+                /// <summary>
+                /// 朴素子串查找。needle 通常只有几个字节、haystack 是一个封包，不值得上 KMP。
+                /// internal：注入模式那份 SearchPacket_Shell 用的是同一个实现，抄一份没道理。
+                /// </summary>
+                internal static int IndexOfBytes(byte[] Haystack, byte[] Needle)
                 {
                     if (Haystack == null || Needle == null || Needle.Length == 0 || Needle.Length > Haystack.Length)
                     {
@@ -16092,6 +16095,98 @@ namespace WinsockPacketEditor
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(ExportPacketExcel_ByIds), ex);
+                    }
+                }
+
+                #endregion
+
+                #region//查找封包 - 外壳入口
+
+                /// <summary>
+                /// 从 <paramref name="FromIndex"/> 起按正则扫<b>注入模式</b>的封包列表，返回第一条命中的行。
+                ///
+                /// 与 <c>ProxyConfig.List.SearchProxy_Shell</c> 逐句对应，只差最后取哪张表
+                /// —— <c>SearchForList</c> 的 <c>isPacketList</c> 参数就是为这件事留的。
+                /// 出参只有基础类型；游标（「查找下一个」从第几行接着找）留在前端，
+                /// C# 侧不碰 <c>Search_Index</c>：那是「谁在翻页谁的状态」。
+                /// </summary>
+                public static PacketSearchHit SearchPacket_Shell(string Pattern, bool IsHex, int FromIndex)
+                {
+                    var hit = new PacketSearchHit { Found = false, Id = 0, Index = -1, Offset = -1, Length = 0, Error = null };
+
+                    try
+                    {
+                        if (string.IsNullOrEmpty(Pattern))
+                        {
+                            return hit;
+                        }
+
+                        //先自己校验一次正则：SearchForList 内部把异常吞成 -1，那样分不清「没找到」和「写错了」
+                        try
+                        {
+                            new Regex(Pattern);
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            hit.Error = ex.Message;
+                            return hit;
+                        }
+
+                        if (FromIndex < 0)
+                        {
+                            FromIndex = 0;
+                        }
+
+                        //三样与 WinForms 的 SearchPacket.bSearch_Click 逐句一致
+                        PacketConfig.List.FindOptions.Type = IsHex ? FindType.Hex : FindType.Text;
+                        PacketConfig.List.FindRegex = Pattern;
+                        PacketConfig.List.FindOptions.IsValid = true;
+
+                        int index = PacketConfig.List.SearchForList<PacketInfo>(FromIndex, true);
+
+                        if (index < 0 || index >= lstPacketInfo.Count)
+                        {
+                            return hit;
+                        }
+
+                        PacketInfo pi = lstPacketInfo[index];
+                        if (pi == null)
+                        {
+                            return hit;
+                        }
+
+                        hit.Found = true;
+                        hit.Id = pi.Id;
+                        hit.Index = index;
+
+                        /*
+                            命中字节在包里的偏移。
+
+                            文本模式下不能拿「匹配在字符串里的下标」当字节偏移 —— 那串是 UTF8 解码来的，
+                            一个字符可能占好几个字节，非法字节还会变成替换字符。稳妥的做法是把匹配到的那段
+                            重新编码成字节，再回原始缓冲里找一次；找不到就退回 -1，前端只选中行、不圈字节。
+                        */
+                        byte[] buffer = pi.PacketBuffer;
+                        byte[] needle = IsHex
+                            ? PacketConfig.List.FindOptions.Hex
+                            : SystemConfig.StringToBytes(PacketConfig.Packet.EncodingFormat.UTF8, PacketConfig.List.FindOptions.Text);
+
+                        if (buffer != null && needle != null && needle.Length > 0)
+                        {
+                            int at = ProxyConfig.List.IndexOfBytes(buffer, needle);
+                            if (at >= 0)
+                            {
+                                hit.Offset = at;
+                                hit.Length = needle.Length;
+                            }
+                        }
+
+                        return hit;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SearchPacket_Shell), ex);
+                        return hit;
                     }
                 }
 

@@ -3588,6 +3588,17 @@ namespace WPEHybrid
                     () => Operate.ProxyConfig.List.SearchProxy_Shell(pattern, isHex, from));
             });
 
+            //注入模式那一份。同样跑在 Task.Run 上，同样把游标留给前端
+            this.bridge.Register("searchPacketList", async args =>
+            {
+                string pattern = (string)args["pattern"] ?? string.Empty;
+                bool isHex = args["isHex"] != null && (bool)args["isHex"];
+                int from = args["from"] == null ? 0 : (int)args["from"];
+
+                return await System.Threading.Tasks.Task.Run(
+                    () => Operate.PacketConfig.List.SearchPacket_Shell(pattern, isHex, from));
+            });
+
             #endregion
 
             #region//发送编辑（对应 WinForms 的 Controls/SendEdit）

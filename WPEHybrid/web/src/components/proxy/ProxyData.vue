@@ -758,6 +758,11 @@ async function runAccept(): Promise<void> {
 </template>
 
 <style scoped>
+/*
+  工具条那一套（.gtool / .search / .sinp / .chk / .num / .tb）已经收进
+  style.css —— 注入模式的封包页用的是同一套结构，抄第二份就会开始走样。
+  这里只留这一屏独有的：统计格、图例、下半部的栅格、以及 Dev 那几条。
+*/
 .page {
   flex: 1;
   min-width: 0;
@@ -831,119 +836,6 @@ async function runAccept(): Promise<void> {
   overflow: hidden;
 }
 
-.gtool {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-bottom: 1px solid var(--border);
-  background: var(--panel);
-}
-
-/*
-  除了搜索框，工具条上的东西一律不许被压缩。
-
-  这一条是加完查找那三个按钮之后补的：flex 项默认可以缩到内容宽度以下，
-  窗口一窄，「查找下一个 / 从头查找」就会被挤成半个字。
-  该让位的只有搜索框（它有 flex: 1 + min-width: 0，缩到只剩图标也还看得懂）。
-*/
-.gtool > .tb,
-.gtool > .chk,
-.gtool > .num,
-.gtool > .lbl,
-.gtool > .plegend { flex: none; white-space: nowrap; }
-
-/*
-  搜索框吃掉工具条的剩余空间 —— 它后面的勾选框与 Dev 按钮因此自动靠右，
-  不再需要一根占位撑杆（原来是 flex: 0 0 250px + 一个 .grow）。
-  min-width: 0 是必须的：flex 项的默认最小宽度是内容宽度，不写它在窄窗口下压不住。
-*/
-.search {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  background: rgb(0 0 0 / 30%);
-  color: var(--muted);
-  font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.search .ico { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2; fill: none; flex: none; }
-
-/* 有内容时整个框提亮一档：扫一眼就知道当前列表是不是正被一个查找条件盯着 */
-.search:focus-within { border-color: var(--cyan); color: var(--cyan); }
-.search.busy { border-color: var(--amber); color: var(--amber); }
-
-/*
-  输入框本身不画边框 —— 边框在外面那个 .search 上，
-  图标 / 输入 / 清除按钮共用同一个盒子，看起来才是一个控件而不是三个。
-*/
-.sinp {
-  flex: 1;
-  min-width: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--gray);
-  font-family: Consolas, monospace;
-  font-size: 12px;
-  outline: none;
-}
-
-.sinp::placeholder { color: var(--muted); }
-
-.sx {
-  flex: none;
-  padding: 0 2px;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.sx:hover { color: var(--danger); }
-
-.chk {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.chk i { width: 12px; height: 12px; border: 1px solid var(--border); display: inline-block; position: relative; }
-.chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
-.chk:focus-visible { outline-offset: 2px; }
-
-.num {
-  padding: 3px 9px;
-  cursor: pointer;
-  background: rgb(0 0 0 / 30%);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 11px;
-}
 
 .list { flex: 1; min-height: 0; border: 0; border-radius: 0; }
 
@@ -1002,21 +894,6 @@ async function runAccept(): Promise<void> {
   color: #4b5563;
 }
 
-.tb {
-  padding: 8px 10px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-family: var(--share);
-  font-size: var(--btn-size);
-  /* 显式 1：Share Tech Mono 在 line-height: normal 下会把行距全压在字的下面，字号一大就明显偏上（实测） */
-  line-height: 1;
-  letter-spacing: .1em;
-  cursor: pointer;
-}
-
-.tb:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
-.tb:disabled { opacity: .4; cursor: default; }
 
 .rep {
   margin: 0;
