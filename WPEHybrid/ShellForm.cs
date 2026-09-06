@@ -2031,7 +2031,24 @@ namespace WPEHybrid
                     lenValue = Operate.SystemConfig.CheckLength_Value ?? string.Empty,
 
                     checkType = Operate.SystemConfig.CheckType,
-                    //只出代理模式用得到的四类；注入模式那八个（Send/Recv/WSA*）留给将来 IPC 改造
+
+                    /*
+                        12 个类别一次全给，前端按模式决定显示哪一组
+                        （WinForms 那边是 Inject / Proxy 两个页签，同一份 FilterFunction）。
+
+                        注入那八个覆盖 WinSock 1.1 与 2.0 <b>两套</b>入口 ——
+                        CheckFilterFunction_ByPacketType 的映射表把 WS1_Send / WS2_Send
+                        都指向同一个 Send 标志，所以这里不需要（也不该）分成十六个。
+                    */
+                    send = f.Send,
+                    sendTo = f.SendTo,
+                    recv = f.Recv,
+                    recvFrom = f.RecvFrom,
+                    wsaSend = f.WSASend,
+                    wsaSendTo = f.WSASendTo,
+                    wsaRecv = f.WSARecv,
+                    wsaRecvFrom = f.WSARecvFrom,
+
                     tcpReq = f.TCP_Req,
                     tcpResp = f.TCP_Resp,
                     udpReq = f.UDP_Req,
@@ -2096,13 +2113,33 @@ namespace WPEHybrid
                     /*
                         FilterFunction 是<b>结构体</b>，改字段必须整个取出来改完再写回去 ——
                         直接 CheckType_Value.TCP_Req = x 在这里编译不过（静态字段是值类型副本）。
-                        注入模式那八个原样保留，别在代理模式里把它们清掉。
+
+                        <b>只改前端真的送上来的那几个</b>：两种模式各显示一半类别
+                        （WinForms 是 Inject / Proxy 两个页签），代理模式的弹窗里根本没有
+                        注入那八个的控件，收不到就照原值保留 —— 否则在代理模式里点一次保存，
+                        注入模式的八个类别会被一次清空（那正是 saveListSetting 当年犯过的错）。
                     */
                     var fn = Operate.SystemConfig.CheckType_Value;
-                    fn.TCP_Req = Flag("tcpReq");
-                    fn.TCP_Resp = Flag("tcpResp");
-                    fn.UDP_Req = Flag("udpReq");
-                    fn.UDP_Resp = Flag("udpResp");
+
+                    void Take(string name, ref bool field)
+                    {
+                        if (args[name] != null) { field = (bool)args[name]; }
+                    }
+
+                    Take("send", ref fn.Send);
+                    Take("sendTo", ref fn.SendTo);
+                    Take("recv", ref fn.Recv);
+                    Take("recvFrom", ref fn.RecvFrom);
+                    Take("wsaSend", ref fn.WSASend);
+                    Take("wsaSendTo", ref fn.WSASendTo);
+                    Take("wsaRecv", ref fn.WSARecv);
+                    Take("wsaRecvFrom", ref fn.WSARecvFrom);
+
+                    Take("tcpReq", ref fn.TCP_Req);
+                    Take("tcpResp", ref fn.TCP_Resp);
+                    Take("udpReq", ref fn.UDP_Req);
+                    Take("udpResp", ref fn.UDP_Resp);
+
                     Operate.SystemConfig.CheckType_Value = fn;
 
                     Operate.SystemConfig.SaveSystemConfig_ToDB();

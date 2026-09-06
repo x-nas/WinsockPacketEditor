@@ -8,16 +8,26 @@
   六个条件各自可开关、各带一个值；再加一个「类别」勾选表。
   「过滤方式」两个单选决定命中之后是只显示还是不显示。
 
-  只出代理模式用得到的四个类别（TCP/UDP 各请求响应）。
-  注入模式那八个（Send / Recv / WSA*）留给将来 IPC 改造 —— 现在出来也没法用，
-  而且 C# 侧保存时是取出结构体改完再写回，那八个原样保留、不会被清掉。
+  【类别按模式分流】WinForms 那一屏是 Inject / Proxy 两个页签共 12 个勾选框，
+  同一份 FilterFunction。这里只出当前模式用得到的那一组 ——
+  代理模式下摆着 WSASend 之类的选项没有意义（代理路径上根本不会产生那种类型的包）。
+
+  注入那八个覆盖 WinSock 1.1 与 2.0 <b>两套</b>入口：
+  CheckFilterFunction_ByPacketType 的映射表把 WS1_Send / WS2_Send 都指向同一个 Send 标志。
+
+  ⚠️ 保存时<b>只送当前这一组</b>，C# 侧收不到的字段原样保留 ——
+  否则在代理模式点一次保存就会把注入的八个类别一次清空
+  （saveListSetting 当年就是这么把 12 个拦截开关洗成全开的）。
 */
 import { computed, ref, watch } from 'vue'
 import { call } from '../../bridge'
 import { t, type Key } from '../../i18n'
 import SettingsModal from './SettingsModal.vue'
 
-const props = defineProps<{ open: boolean }>()
+const props = withDefaults(
+  defineProps<{ open: boolean; mode?: 'proxy' | 'inject' }>(),
+  { mode: 'proxy' },
+)
 const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 
 const busy = ref(false)
@@ -32,6 +42,10 @@ interface Form {
   checkData: boolean; dataValue: string
   checkLen: boolean; lenValue: string
   checkType: boolean
+  //注入模式的八个（WS1 与 WS2 共用一个标志）
+  send: boolean; sendTo: boolean; recv: boolean; recvFrom: boolean
+  wsaSend: boolean; wsaSendTo: boolean; wsaRecv: boolean; wsaRecvFrom: boolean
+  //代理模式的四个
   tcpReq: boolean; tcpResp: boolean; udpReq: boolean; udpResp: boolean
 }
 
@@ -44,6 +58,8 @@ const f = ref<Form>({
   checkData: false, dataValue: '',
   checkLen: false, lenValue: '',
   checkType: false,
+  send: true, sendTo: true, recv: true, recvFrom: true,
+  wsaSend: true, wsaSendTo: true, wsaRecv: true, wsaRecvFrom: true,
   tcpReq: true, tcpResp: true, udpReq: true, udpResp: true,
 })
 
@@ -57,12 +73,26 @@ const CONDS: Array<{ on: keyof Form; val: keyof Form; label: Key; ph: Key }> = [
   { on: 'checkLen', val: 'lenValue', label: 'set.leach.len', ph: 'set.leach.lenPh' },
 ]
 
-const TYPES: Array<{ key: keyof Form; label: Key }> = [
+/** 文案沿用封包类型那一组键，与列表「类型」列显示的字逐字一致。 */
+const PROXY_TYPES: Array<{ key: keyof Form; label: Key }> = [
   { key: 'tcpReq', label: 'pt.tcpReq' },
   { key: 'tcpResp', label: 'pt.tcpResp' },
   { key: 'udpReq', label: 'pt.udpReq' },
   { key: 'udpResp', label: 'pt.udpResp' },
 ]
+
+const INJECT_TYPES: Array<{ key: keyof Form; label: Key }> = [
+  { key: 'send', label: 'pt.ws2Send' },
+  { key: 'sendTo', label: 'pt.ws2SendTo' },
+  { key: 'recv', label: 'pt.ws2Recv' },
+  { key: 'recvFrom', label: 'pt.ws2RecvFrom' },
+  { key: 'wsaSend', label: 'pt.wsaSend' },
+  { key: 'wsaSendTo', label: 'pt.wsaSendTo' },
+  { key: 'wsaRecv', label: 'pt.wsaRecv' },
+  { key: 'wsaRecvFrom', label: 'pt.wsaRecvFrom' },
+]
+
+const TYPES = computed(() => (props.mode === 'inject' ? INJECT_TYPES : PROXY_TYPES))
 
 /** 一个条件都没开 = 过滤不生效，界面上说清楚，省得以为设了没用。 */
 const anyOn = computed(() =>
@@ -85,7 +115,14 @@ async function save(): Promise<void> {
   error.value = ''
 
   try {
-    const r = await call<any>('saveLeachSetting', { ...f.value })
+    /*
+      只送当前模式那一组类别。<b>另一组必须整个不出现在报文里</b>（不是送 false）——
+      C# 侧按「字段存不存在」决定改不改，送 false 就是明确要求关掉。
+    */
+    const body: Record<string, unknown> = { ...f.value }
+    for (const x of props.mode === 'inject' ? PROXY_TYPES : INJECT_TYPES) delete body[x.key]
+
+    const r = await call<any>('saveLeachSetting', body)
 
     if (!r?.ok) {
       error.value = r?.error || ''

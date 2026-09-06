@@ -61,6 +61,9 @@
     exportBackup: () => ({ ok: true }), importBackup: () => ({ language: 'zh' }),
     getRemoteSetting: () => ({ IsRemote: true, IP: '192.168.1.10', IPs: ['192.168.1.10', '10.0.0.2'], Port: 88, UserName: 'admin', PassWord: 'x', Running: true }), saveRemoteSetting: () => ({ error: '', running: true }),
     setTopMost: (a) => ({ topMost: !!a.on }),
+    //过滤设置：12 个类别一次全给，前端按模式挑一半显示
+    getLeachSetting: () => ({ notShow: false, checkSocket: false, socketValue: '', checkIP: false, ipValue: '', checkPort: false, portValue: '', checkHead: false, headValue: '', checkData: false, dataValue: '', checkLen: false, lenValue: '', checkType: true, send: true, sendTo: false, recv: true, recvFrom: false, wsaSend: true, wsaSendTo: false, wsaRecv: true, wsaRecvFrom: false, tcpReq: true, tcpResp: true, udpReq: false, udpResp: false }),
+    saveLeachSetting: (a) => { window.__leach = a; return { ok: true } },
     // 注入模式：假的进程列表 + 假的链路状态机（附加 → 装钩 → 断开）
     enterInjectMode: () => ({ ok: true }),
     getInjectProcessList: () => ([

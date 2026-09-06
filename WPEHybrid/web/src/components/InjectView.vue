@@ -340,7 +340,7 @@ function titleOf(k: PageKey): string {
     </div>
 
     <!-- 7 个设置弹窗。挂在外壳这一层，切到哪一页都还开着 -->
-    <LeachSetting :open="setting === 'leach'" @update:open="setting = $event ? 'leach' : null" />
+    <LeachSetting :open="setting === 'leach'" mode="inject" @update:open="setting = $event ? 'leach' : null" />
     <HookSetting :open="setting === 'hook'" @update:open="setting = $event ? 'hook' : null" />
     <ListSetting :open="setting === 'list'" @update:open="setting = $event ? 'list' : null" />
     <HotkeySetting :open="setting === 'hotkey'" @update:open="setting = $event ? 'hotkey' : null" />
