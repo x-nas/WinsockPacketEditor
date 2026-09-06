@@ -9,6 +9,14 @@
   【比 WinForms 少三样】Id / 时间 / 数据不给关：
   Id 是取字节的钥匙（getPacketDetail 靠它），时间和数据是这张表的意义所在，
   关掉等于把列表变成一堆地址。WinForms 允许关，那是历史遗留，不照搬。
+
+  ⚠️ 【列显隐按模式分两套】C# 侧 ProxyConfig.List.IsShow_*（代理，落 ProxyMode 表）与
+  PacketConfig.List.IsShow_*（注入，落 InjectMode 表）是各自独立的十个字段。
+  这个弹窗两种模式共用，靠 mode 决定读写哪一套 —— 不传就是代理。
+  早先没分流，在注入模式关掉一列会把代理那张表的同名列也关掉。
+
+  自动清理相反，它<b>本来就只有一套</b>（PacketConfig.List.AutoClear，代理列表沿用它），
+  所以不跟着 mode 走。
 */
 import { ref, watch } from 'vue'
 import { call } from '../../bridge'
@@ -16,7 +24,7 @@ import { t, type Key } from '../../i18n'
 import { listSetting } from '../../stores/runtime'
 import SettingsModal from './SettingsModal.vue'
 
-const props = defineProps<{ open: boolean }>()
+const props = withDefaults(defineProps<{ open: boolean; mode?: 'proxy' | 'inject' }>(), { mode: 'proxy' })
 const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 
 const busy = ref(false)
@@ -50,7 +58,7 @@ watch(() => props.open, async (on) => {
 
   error.value = ''
   try {
-    form.value = await call<typeof form.value>('getListSetting')
+    form.value = await call<typeof form.value>('getListSetting', { mode: props.mode })
   } catch (e) {
     console.error('[set] 读取列表设置失败', e)
   }
@@ -63,6 +71,7 @@ async function save(): Promise<void> {
   try {
     const r = await call<any>('saveListSetting', {
       ...form.value,
+      mode: props.mode,
       autoClearValue: Number(form.value.autoClearValue),
     })
 

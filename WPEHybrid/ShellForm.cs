@@ -1630,8 +1630,40 @@ namespace WPEHybrid
                 <b>ID / 时间 / 数据三列不给关。</b>Id 是取字节的钥匙（getPacketDetail 靠它），
                 时间和数据是这张表的意义所在，关掉等于把列表变成一堆地址。
                 WinForms 允许关，那是历史遗留，不照搬。
+
+                ⚠️ <b>列显隐是两套字段，按模式分流。</b>WinForms 侧
+                ProxyConfig.List.IsShow_*（代理表，落 ProxyMode）与
+                PacketConfig.List.IsShow_*（注入表，落 InjectMode）是各自独立的十个字段，
+                两种模式各设各的。早先外壳把两边合成一套（都读写代理那份），后果有两条：
+                在注入模式关掉一列会把代理那张表的同名列也关掉；而 WinForms 注入模式里
+                设过的列显隐，外壳既看不到也改不了。
+                这与「拦截设置 / 过滤设置没有模式分支」是同一个病根，一并按模式分流。
+
+                自动清理相反 —— 它<b>本来就只有一套</b>（PacketConfig.List.AutoClear，
+                Operate.cs 的 ProxyConfig.List.FlushToFeed 里注明「代理列表沿用封包列表的
+                AutoClear 配置，这也是迁移前的写法」），所以不分模式。
             */
-            this.bridge.Register("getListSetting", args => new
+
+            /// 前端传来的 mode → 该读写哪一套列显隐。认不出来一律当代理，别写脏值。
+            bool IsInjectList(Newtonsoft.Json.Linq.JObject a)
+            {
+                string m = a["mode"] == null ? null : (string)a["mode"];
+                return string.Equals(m, "packet", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(m, "inject", StringComparison.OrdinalIgnoreCase);
+            }
+
+            this.bridge.Register("getListSetting", args => IsInjectList(args) ? (object)new
+            {
+                showSocket = Operate.PacketConfig.List.IsShow_PacketSocket,
+                showType = Operate.PacketConfig.List.IsShow_PacketType,
+                showClientAddr = Operate.PacketConfig.List.IsShow_ClientAddr,
+                showClientLoc = Operate.PacketConfig.List.IsShow_ClientLocation,
+                showServerAddr = Operate.PacketConfig.List.IsShow_ServerAddr,
+                showServerLoc = Operate.PacketConfig.List.IsShow_ServerLocation,
+                showLen = Operate.PacketConfig.List.IsShow_PacketLen,
+                autoClear = Operate.PacketConfig.List.AutoClear,
+                autoClearValue = (int)Operate.PacketConfig.List.AutoClear_Value,
+            } : new
             {
                 showSocket = Operate.ProxyConfig.List.IsShow_PacketSocket,
                 showType = Operate.ProxyConfig.List.IsShow_PacketType,
@@ -1640,15 +1672,6 @@ namespace WPEHybrid
                 showServerAddr = Operate.ProxyConfig.List.IsShow_ServerAddr,
                 showServerLoc = Operate.ProxyConfig.List.IsShow_ServerLocation,
                 showLen = Operate.ProxyConfig.List.IsShow_PacketLen,
-                /*
-                    自动清理读的是<b>封包列表</b>那份配置，不是代理自己的 ——
-                    代理列表沿用它（Operate.cs 的 FlushToFeed 里有注释写明「这也是迁移前的写法」），
-                    所以落库也得走 SaveInjectMode_ToDB：PacketList_AutoClear 存在 InjectMode 表里。
-
-                    ⚠️ 那张表里还躺着注入模式的 12 个 HookWS* 开关，而 SaveInjectMode_ToDB 是
-                    整表删 + 整表插 —— 所以 EnsureProxyConfigLoaded 里<b>必须</b>先
-                    LoadInjectMode_FromDB()，否则这一次保存会把用户关掉的钩子全部写回 true。
-                */
                 autoClear = Operate.PacketConfig.List.AutoClear,
                 autoClearValue = (int)Operate.PacketConfig.List.AutoClear_Value,
             });
@@ -1662,13 +1685,27 @@ namespace WPEHybrid
 
                 try
                 {
-                    Operate.ProxyConfig.List.IsShow_PacketSocket = Flag("showSocket");
-                    Operate.ProxyConfig.List.IsShow_PacketType = Flag("showType");
-                    Operate.ProxyConfig.List.IsShow_ClientAddr = Flag("showClientAddr");
-                    Operate.ProxyConfig.List.IsShow_ClientLocation = Flag("showClientLoc");
-                    Operate.ProxyConfig.List.IsShow_ServerAddr = Flag("showServerAddr");
-                    Operate.ProxyConfig.List.IsShow_ServerLocation = Flag("showServerLoc");
-                    Operate.ProxyConfig.List.IsShow_PacketLen = Flag("showLen");
+                    //按模式写对应的那一套，别串到另一种模式的表上
+                    if (IsInjectList(args))
+                    {
+                        Operate.PacketConfig.List.IsShow_PacketSocket = Flag("showSocket");
+                        Operate.PacketConfig.List.IsShow_PacketType = Flag("showType");
+                        Operate.PacketConfig.List.IsShow_ClientAddr = Flag("showClientAddr");
+                        Operate.PacketConfig.List.IsShow_ClientLocation = Flag("showClientLoc");
+                        Operate.PacketConfig.List.IsShow_ServerAddr = Flag("showServerAddr");
+                        Operate.PacketConfig.List.IsShow_ServerLocation = Flag("showServerLoc");
+                        Operate.PacketConfig.List.IsShow_PacketLen = Flag("showLen");
+                    }
+                    else
+                    {
+                        Operate.ProxyConfig.List.IsShow_PacketSocket = Flag("showSocket");
+                        Operate.ProxyConfig.List.IsShow_PacketType = Flag("showType");
+                        Operate.ProxyConfig.List.IsShow_ClientAddr = Flag("showClientAddr");
+                        Operate.ProxyConfig.List.IsShow_ClientLocation = Flag("showClientLoc");
+                        Operate.ProxyConfig.List.IsShow_ServerAddr = Flag("showServerAddr");
+                        Operate.ProxyConfig.List.IsShow_ServerLocation = Flag("showServerLoc");
+                        Operate.ProxyConfig.List.IsShow_PacketLen = Flag("showLen");
+                    }
 
                     int keep = args["autoClearValue"] == null ? 5000 : (int)args["autoClearValue"];
 
@@ -1680,7 +1717,11 @@ namespace WPEHybrid
                     Operate.PacketConfig.List.AutoClear = Flag("autoClear");
                     Operate.PacketConfig.List.AutoClear_Value = keep;
 
-                    //列显隐在 ProxyMode 表，自动清理在 InjectMode 表 —— 两处都要落
+                    /*
+                        两张表都要落：代理的列显隐在 ProxyMode 表、注入的列显隐与自动清理
+                        都在 InjectMode 表。不分模式一律两个都存 —— 它们各自是整表重写，
+                        只存一个反而要判断另一个有没有被别处改过，得不偿失。
+                    */
                     Operate.SystemConfig.SaveProxyMode_ToDB();
                     Operate.SystemConfig.SaveInjectMode_ToDB();
                     UI.Toast(UiIcon.Success, UI.T("ListSettingsForm.Success", "列表设置保存成功"));
@@ -3337,6 +3378,71 @@ namespace WPEHybrid
                 「复制」没做：SystemLog 那一页刻意不做虚拟滚动，就是为了能原生选中一段 Ctrl+C 拿走
                 （见组件里的说明），再加一个「复制选中行」得先做出行选中来，不划算。
             */
+
+            /*
+                日志自己的自动清理与自动滚动。
+
+                <b>它与封包列表那一套是两份配置</b>：封包的在 InjectMode 表
+                （PacketList_AutoClear），日志的在 SystemConfig 表（LogList_AutoClear /
+                LogList_AutoClear_Value / LogList_AutoRoll），消费点也不同 ——
+                LogConfig.List.FlushToFeed 里三路日志各自按 AutoClear_Value 整表清空。
+
+                WinForms 侧这三样是 Controls/LogList 工具条上的三个控件，不在「列表设置」里，
+                所以这里也放在日志页的工具条上，不并进那个弹窗。
+                外壳早先一个都没接：功能照常在跑（默认开、5000 条），但用户改不了 ——
+                滤镜日志每秒几十条时想调大到两万条根本没有入口。
+            */
+            this.bridge.Register("getLogSetting", args => new
+            {
+                autoRoll = Operate.LogConfig.List.AutoRoll,
+                autoClear = Operate.LogConfig.List.AutoClear,
+                autoClearValue = (int)Operate.LogConfig.List.AutoClear_Value,
+            });
+
+            this.bridge.Register("saveLogSetting", args =>
+            {
+                try
+                {
+                    /*
+                        「字段出现才改，没出现就不动」—— 自动滚动是点一下就生效的开关，
+                        自动清理那两项要按「保存」，两条路各自只发自己那部分。
+                        一律补齐发全量的话，点一下滚动开关会把用户正在编辑的条数框值也写进去。
+                    */
+                    if (args["autoRoll"] != null)
+                    {
+                        Operate.LogConfig.List.AutoRoll = (bool)args["autoRoll"];
+                    }
+
+                    if (args["autoClear"] != null)
+                    {
+                        Operate.LogConfig.List.AutoClear = (bool)args["autoClear"];
+                    }
+
+                    if (args["autoClearValue"] != null)
+                    {
+                        int keep = (int)args["autoClearValue"];
+
+                        //与列表设置同一条范围，两处的语义是一样的：一张表最多留多少行
+                        if (keep < 100 || keep > 500000)
+                        {
+                            return new { ok = false, error = UI.T("ListSettingsForm.Range", "保留条数需在 100 ~ 500000 之间") };
+                        }
+
+                        Operate.LogConfig.List.AutoClear_Value = keep;
+                    }
+
+                    //这三样都在 SystemConfig 表里，与主题 / 语言 / 快捷键同一张
+                    Operate.SystemConfig.SaveSystemConfig_ToDB();
+
+                    return new { ok = true };
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("saveLogSetting", ex);
+                    return new { ok = false, error = ex.Message };
+                }
+            });
+
             this.bridge.Register("getLogCount", args => new
             {
                 count = Operate.LogConfig.List.GetLogCount(args["kind"] == null ? 0 : (int)args["kind"]),

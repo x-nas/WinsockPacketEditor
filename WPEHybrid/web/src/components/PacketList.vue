@@ -194,8 +194,14 @@ const shown = computed(() => {
   const s = listSetting.value
   if (!s) return columns.value
 
-  //注入模式的 From / To 与代理模式的 ClientAddr / ServerAddr 是同一件事的两个名字，
-  //所以「列表设置」里那几个开关两边共用，不另开一套。
+  /*
+    注入模式的 From / To 与代理模式的 ClientAddr / ServerAddr 是同一件事的两个名字，
+    所以两边映射到同一个开关名。
+
+    但<b>值是分开的</b>：listSetting 由各自的页面按 mode 取（ProxyData 取代理那套、
+    InjectData 取注入那套），C# 侧对应 ProxyConfig.List.IsShow_* 与
+    PacketConfig.List.IsShow_* 两组字段。这里只负责把开关名对上，不管值从哪来。
+  */
   const off: Record<string, boolean> = {
     Socket: !s.showSocket,
     Type: !s.showType,

@@ -46,6 +46,8 @@ export const DICT = {
   },
 
   'foot.tutorial': { zh: '使用教程', en: 'Tutorial' },
+  'foot.gitee': { zh: 'Gitee', en: 'Gitee' },
+  'foot.issues': { zh: '问题反馈', en: 'Feedback' },
   'foot.faq': { zh: '常见问题', en: 'FAQ' },
   'foot.ready': { zh: 'Ready', en: 'Ready' },
   'foot.running': { zh: '运行中', en: 'Running' },
@@ -666,6 +668,8 @@ export const DICT = {
   'log.matchNum': { zh: '匹配数', en: 'Matches' },
   'log.account': { zh: '账号', en: 'Account' },
   'log.ip': { zh: 'IP地址', en: 'IP Address' },
+  //日志自己的自动清理条数（与封包列表那份是两套配置，见 SystemLog.vue）
+  'log.keepHint': { zh: '每路日志最多保留的条数（100 ~ 500000），超出后整表清空', en: 'Max rows kept per log (100–500000); the whole table is cleared past that' },
 
   // ── 代理模式：指标板 ────────────────────────────────
 

@@ -165,7 +165,8 @@ onMounted(async () => {
 
   //列显隐要在第一帧之前拿到，否则列表先按「全显示」画一遍再跳
   if (!listSetting.value) {
-    try { listSetting.value = await call('getListSetting') } catch { /* 桥没接上 */ }
+    //注入模式读注入那一套列显隐（C# 侧是 PacketConfig.List.IsShow_*）
+    try { listSetting.value = await call('getListSetting', { mode: 'inject' }) } catch { /* 桥没接上 */ }
   }
 
   statsTimer = window.setInterval(async () => {
