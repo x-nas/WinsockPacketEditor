@@ -118,6 +118,14 @@ function openMenu(e: MouseEvent): void {
   display: flex;
   align-items: center;
   gap: 14px;
+  /*
+    ⚠️ 换行 + 各项 flex: none。这一条是加了六种语言之后补的：
+    越南语的「Bắt đầu bắt」「Cài đặt ▾」比中文长一半，1280 宽的窗口里
+    刚好把中间那几段元信息挤到要用省略号 —— 而被吃掉的正是目标进程名。
+    宁可让整条状态条折成两行，也不要把它认不出来。
+  */
+  flex-wrap: wrap;
+  row-gap: 8px;
   padding: 9px 14px;
   border: 1px solid var(--border);
   background: var(--card);
@@ -132,7 +140,8 @@ function openMenu(e: MouseEvent): void {
 
 @keyframes beat { 50% { opacity: .35; } }
 
-.meta { display: flex; align-items: baseline; gap: 6px; font-size: 12px; min-width: 0; }
+/* flex: none —— 让它们各占自然宽度；空间不够时由上面的 flex-wrap 折行，而不是逐个压扁 */
+.meta { display: flex; align-items: baseline; gap: 6px; font-size: 12px; min-width: 0; flex: none; }
 
 /* 窗口标题可以很长，让它先被压缩，别把右边的动作按钮挤出去 */
 .meta.win { flex: 0 1 auto; overflow: hidden; }

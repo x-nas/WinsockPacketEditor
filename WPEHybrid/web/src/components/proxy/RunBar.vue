@@ -120,6 +120,14 @@ async function toggle(): Promise<void> {
   display: flex;
   align-items: center;
   gap: 14px;
+  /*
+    ⚠️ 换行 + 各项 flex: none。这一条是加了六种语言之后补的：
+    越南语的「Bắt đầu bắt」「Cài đặt ▾」比中文长一半，1280 宽的窗口里
+    刚好把中间那几段元信息挤到要用省略号 —— 而被吃掉的正是目标进程名。
+    宁可让整条状态条折成两行，也不要把它认不出来。
+  */
+  flex-wrap: wrap;
+  row-gap: 8px;
   padding: 9px 14px;
   border: 1px solid var(--border);
   background: var(--card);

@@ -331,12 +331,19 @@ async function onMenuPick(id: string): Promise<void> {
 .ptabs { flex: none; display: flex; border-bottom: 1px solid var(--border); background: var(--panel); }
 
 /*
-  四个标签必须排成一行（面板固定 320px）。两道保险：
-  左右内边距收到 11px 给长标签留余量；nowrap 让万一超宽时是溢出而不是折行 ——
-  折行会把整条标签栏撑高一倍，把下面的列表挤掉两行。
+  四个标签必须排成一行（面板固定 320px）。三道保险：
+  左右内边距收到 11px 给长标签留余量；nowrap 让它不折行 ——
+  折行会把整条标签栏撑高一倍，把下面的列表挤掉两行；
+  再加 flex-shrink + 省略号，超宽时是<b>一起收窄</b>而不是把最后一个切掉半截
+  （俄语的「Фильтр / Отправка / Робот / Хранилище」比 320px 多出 8px，
+   不给收缩余量的话「Хранилище」正好被面板边缘裁掉）。
 */
 .ptab {
   height: var(--th-h);
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   padding: 2px 11px 0;   /* 定高按钮：上 2 下 0，把偏上 1px 的字形压回中线 */
   background: transparent;
   border: 0;

@@ -278,6 +278,14 @@ body.col-resizing * {
   display: flex;
   align-items: center;
   gap: 8px;
+  /*
+    ⚠️ 换行。加了六种语言之后补的：俄语的
+    「Новая учётная запись / Массовое создание / Сбросить счётчики / Очистить всё」
+    横过来比中文长将近一倍，1280 宽的窗口里最后一颗按钮会被切掉半个字。
+    折成两行比切掉一颗按钮强 —— 下面那张表本来就是弹性高度。
+  */
+  flex-wrap: wrap;
+  row-gap: 6px;
   padding: 7px 12px;
   border: 1px solid var(--border);
   background: var(--card);
@@ -405,6 +413,15 @@ body.col-resizing * {
   letter-spacing: inherit;
   text-transform: inherit;
   color: inherit;
+
+  /*
+    与行格同一条：长了就省略号，不换行。
+    表头高度是写死的 var(--th-h)，一格折成两行会把整条表头顶高，
+    而列宽是按中文的字数定的 —— 「状态」两个字换成「Состояние」就是九个。
+  */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ── 可排序的表头格（useSort.ts）─────────────────────────────
@@ -441,6 +458,17 @@ body.col-resizing * {
 }
 
 .list-page .row:hover { background: rgb(255 255 255 / 4%); }
+
+/*
+  ⚠️ 行里的每一格都<b>不许换行</b>，长了就省略号。
+
+  这几张表是定高虚拟滚动：行高必须与各屏的 ROW_H 常量逐像素一致，一格折成两行
+  就把整行顶高、后面所有行的滚动位置跟着漂。中文写得下的词换成别的语言常常长一倍
+  （「仅显示」→「Только показать」），加了六种语言之后这一条才显形。
+
+  勾选框与操作按钮那两格是 flex 容器、没有文本，这条规则对它们无害。
+*/
+.list-page .row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* 选中的行给一条左边线 + 淡底，滚动时一眼能看出还剩哪些选着 */
 .list-page .row.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }

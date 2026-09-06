@@ -113,8 +113,18 @@ function labelOf(i: number): string {
 
 <style scoped>
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; padding: 2px 20px 6px; }
-.hrow { display: grid; grid-template-columns: 64px 1fr 58px auto; align-items: center; gap: 8px; }
+/*
+  两个固定列宽都乘 --setf-kx（App.vue 按语言给：方块字 1、拉丁 / 西里尔 1.3）——
+  64 是按「快捷键 1 :」四个字定的，俄语的「Клавиша 10 :」要 71px，
+  58 的状态标签装不下「Не назначено」。与设置弹窗标签列同一个令牌。
+*/
+.hrow {
+  display: grid;
+  grid-template-columns: calc(64px * var(--setf-kx, 1)) 1fr calc(58px * var(--setf-kx, 1)) auto;
+  align-items: center;
+  gap: 8px;
+}
 .hrow.ctl { border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 4px; }
-.kl { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.kl { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hk .tg { text-align: center; }
 </style>

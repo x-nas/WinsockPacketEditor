@@ -477,7 +477,9 @@ async function save(): Promise<void> {
 
 .trow { height: 30px; color: #cbd5cc; cursor: default; }
 .trow:hover { background: rgb(255 255 255 / 4%); }
-.trow > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trow > span,
+/* 表头也要：列宽是按中文的字数定的，「过期时间」四个字换成「Истекает」就装不下 */
+.thead > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .ip { color: var(--cyan); font-family: var(--mono); }
 .loc { display: flex; align-items: center; gap: 6px; color: #94a3b8; }
