@@ -65,21 +65,11 @@ const DICT = {
 
   'start.inject.zh': { zh: '注入模式', en: 'Inject Mode' },
   'start.inject.desc': { zh: '以注入进程的方式来拦截封包', en: 'Capture packets by injecting into the process' },
-  'start.inject.why': {
-    zh: '需要先把注入模式改成进程间通讯，UI 才能移出目标进程',
-    en: 'Inject mode must move to IPC first, so the UI can leave the target process',
-  },
-
   'start.proxy.zh': { zh: '代理模式', en: 'Proxy Mode' },
   'start.proxy.desc': { zh: '以代理服务端的方式来拦截封包', en: 'Capture packets by acting as a proxy server' },
 
   'start.inst.zh': { zh: '多开设置', en: 'Instance Settings' },
   'start.inst.desc': { zh: '配置数据库的路径以实现软件多开', en: 'Set the database path to run multiple instances' },
-  'start.inst.why': {
-    zh: 'Vue 版尚未实现，WinForms 侧对应 Controls/DataBaseSetting',
-    en: 'Not implemented in Vue yet; see Controls/DataBaseSetting on the WinForms side',
-  },
-
   'start.check': { zh: 'System Check', en: 'System Check' },
   'start.admin': { zh: '管理员权限', en: 'Administrator' },
   'start.geo': { zh: '国家地理库', en: 'Geo database' },
@@ -610,7 +600,6 @@ const DICT = {
   'acct.expired': { zh: '已过期', en: 'Expired' },
 
   //右键菜单，条目与顺序照 Operate.GetCMS_AccountList
-  'acct.cm.selectAll': { zh: '全选 / 取消全选', en: 'Select all / none' },
   //与 WinForms 的 AccountList.Empty 同一句
   'acct.cm.needPick': { zh: '请先勾选要操作的账号', en: 'Select the accounts to act on first' },
   'acct.cm.adjust': { zh: '批量调整', en: 'Bulk adjust' },
@@ -687,13 +676,6 @@ const DICT = {
   'log.ip': { zh: 'IP地址', en: 'IP Address' },
 
   // ── 代理模式：指标板 ────────────────────────────────
-  'met.rows': { zh: '列表行数', en: 'Rows in list' },
-  'met.total': { zh: '累计收到', en: 'Total received' },
-  'met.trimmed': { zh: '自动清理', en: 'Auto cleared' },
-  'met.rate': { zh: '速率', en: 'Rate' },
-  'met.batch': { zh: '最大批', en: 'Max batch' },
-  'met.queue': { zh: '队列积压', en: 'Queue backlog' },
-  'met.fps': { zh: '帧率', en: 'Frame rate' },
 
   /*
     协议（ProxyConfig.Proxy.DomainType）。

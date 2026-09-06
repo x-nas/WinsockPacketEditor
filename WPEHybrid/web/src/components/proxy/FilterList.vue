@@ -67,7 +67,7 @@ function onScroll(): void {
 /*
   ── 执行模式 ───────────────────────────────────────────────────
 
-  两种，在<b>系统设置</b>里切（Controls/SystemSetting 的 rbFilterSet_*，那一屏还没做）。
+  两种，在<b>系统设置</b>里切（Controls/SystemSetting 的 rbFilterSet_*）。
   语义以 Operate.FilterConfig.List.DoFilterList 为准，不是照标签猜的：
 
     Priority（优先原则）  从上到下，第一个命中的执行完就 return，后面的滤镜不再跑

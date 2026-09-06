@@ -177,7 +177,7 @@ async function exportCert(): Promise<void> {
 
       <!--
         身份认证。开着时客户端必须提供代理账号的用户名密码才能连上；
-        账号在「账号列表」页管理（那一页还没做 Vue 版）。
+        账号在「账号列表」页管理。
       -->
       <div class="row">
         <div class="k">{{ t('set.enableAuth') }}</div>

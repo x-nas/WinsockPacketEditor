@@ -16,12 +16,8 @@ export const gotoPage = ref<string | null>(null)
 export const socks5Addr = ref('')
 
 /**
- * SOCKS5 服务在不在跑。
- *
- * 由 ProxyView 的 getStats 轮询写入。
- * <b>目前恒为 false</b> —— 外壳还起不了代理服务：那段启停逻辑（约 240 行）
- * 还在 Controls/ProxyList.cs 里，没搬进 Operate，外壳复用不了。
- * 搬完之后这里会自动变活，界面不用改。
+ * SOCKS5 服务在不在跑。由 ProxyData 的 getStats 轮询写入，RunBar 的启停按钮也写它。
+ * （启停逻辑早已搬进 Operate.ProxyConfig.Proxy，两套 UI 共用同一份。）
  */
 export const proxyRunning = ref(false)
 
