@@ -14,7 +14,7 @@
 */
 import { computed, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
-import { lang, t } from '../i18n'
+import { lang, normalize, t } from '../i18n'
 import { socks5Addr } from '../stores/runtime'
 
 const emit = defineEmits<{ (e: 'back'): void }>()
@@ -118,10 +118,10 @@ async function save(): Promise<void> {
         · socks5Addr 在状态栏上（新库里的代理配置可能不同）
         · 语言：C# 侧 ApplyAll 已经把 AntdUI 切过去了，前端字典也得跟上，
           否则会出现「弹窗英文、页面中文」。
-      这里不调 toggleLang —— 那个会反过来再写一次 C#，绕一圈还可能把值写反。
+      这里不调 setLang —— 那个会反过来再写一次 C#，绕一圈还可能把值写反。
     */
     socks5Addr.value = r.socks5Addr || ''
-    lang.value = (r.language || '').toLowerCase().startsWith('en') ? 'en' : 'zh'
+    lang.value = normalize(r.language)
 
     emit('back')
   } catch (e) {

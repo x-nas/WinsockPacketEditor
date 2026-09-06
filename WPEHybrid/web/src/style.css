@@ -569,8 +569,15 @@ body.col-resizing * {
   弹窗里的小表叫 .tbl / .tr（不叫 .row —— .setf .row 是表单行）。
 */
 .setf .grp { padding: 10px 20px 4px; font-family: var(--share); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); }
-/* 标签列宽默认 112px；英文标签长的弹窗（系统 / 拦截设置那几个）在 setf 元素上用 --setf-k 覆盖 */
-.setf .row { display: grid; grid-template-columns: var(--setf-k, 112px) 1fr; align-items: center; gap: 12px; padding: 5px 20px; min-height: 32px; }
+/*
+  标签列宽默认 112px；标签长的弹窗（系统 / 拦截设置那几个）在 setf 元素上用 --setf-k 覆盖。
+
+  ⚠️ 再乘一个 --setf-kx：那八个数是按<b>中文</b>的字数定的（「滤镜执行模式」六个字 = 132px），
+  换成俄语的「При нескольких совпадениях」要长一倍，固定宽度下标签会在列里折成两行、
+  行高参差不齐。乘数由 App.vue 按语言给（方块字 1，拉丁 / 西里尔 1.3），
+  这样八个弹窗各自的比例还在，只是整体宽一档 —— 比逐个去改那八个数可靠。
+*/
+.setf .row { display: grid; grid-template-columns: calc(var(--setf-k, 112px) * var(--setf-kx, 1)) 1fr; align-items: center; gap: 12px; padding: 5px 20px; min-height: 32px; }
 .setf .row > .k { font-size: 12.5px; color: var(--muted); }
 .setf .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
 .setf .row.off > .k, .setf .row.off > .v { opacity: .45; }
@@ -650,6 +657,15 @@ body.col-resizing * {
   display: flex;
   align-items: center;
   gap: 8px;
+  /*
+    ⚠️ 允许换行。这一条是加了六种语言之后补的：俄语的
+    「Замена / Подмена / Блокировка / Только показать」四个图例加上
+    「Найти далее」「Искать с начала」，横过来比中文长将近一倍，
+    窗口一窄就把搜索框挤成只剩放大镜。换行之后工具条变成两行，
+    比把唯一的输入框压没了强 —— 下面那张表本来就是弹性高度。
+  */
+  flex-wrap: wrap;
+  row-gap: 6px;
   padding: 6px 10px;
   border-bottom: 1px solid var(--border);
   background: var(--panel);
@@ -674,7 +690,11 @@ body.col-resizing * {
 */
 .gtool .search {
   flex: 1;
-  min-width: 0;
+  /*
+    min-width 不是 0：搜索框是这条工具条上唯一的输入框，压到只剩图标就没法用了。
+    200px 大约能显示 20 个字符，配合上面的 flex-wrap，空间不够时它会换到第二行去。
+  */
+  min-width: 200px;
   display: flex;
   align-items: center;
   gap: 7px;

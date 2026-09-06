@@ -111,7 +111,8 @@ function fmt(n: number | undefined): string {
         @keydown.space.prevent="p.ready && emit('go', p.key)"
       >
         <svg class="ico" viewBox="0 0 24 24" v-html="p.icon" />
-        <span class="t">{{ t(p.label) }}</span>
+        <!-- 加宽之后仍可能被截（比如俄语的「Извлечение данных」），悬停能看到全名 -->
+        <span class="t" :title="t(p.label)">{{ t(p.label) }}</span>
         <span class="n">{{ fmt(counts[p.key]) }}</span>
       </div>
     </template>

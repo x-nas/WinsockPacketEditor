@@ -21,10 +21,10 @@
   <b>多开设置不受这条限制</b>：它不是模式，是启动页上的一屏设置
   （WinForms 那边是浮在 StartForm 上的弹窗），所以它照常能返回。
 */
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { call, inHost, on } from './bridge'
 import { attachUiHost, busy, modalOpen } from './bridge/host'
-import { initLang, isEn, t, toggleLang } from './i18n'
+import { defOf, initLang, isEn, lang, LANGS, setLang, t, type Lang } from './i18n'
 import { injectHooked, injectTarget, proxyRunning, socks5Addr } from './stores/runtime'
 import StartView from './components/StartView.vue'
 import ProxyView from './components/ProxyView.vue'
@@ -35,6 +35,8 @@ import EncryptPassword from './components/EncryptPassword.vue'
 import ToastStack from './components/ToastStack.vue'
 import BusyMask from './components/BusyMask.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
+import ContextMenu from './components/ContextMenu.vue'
+import { ICON, type MenuItem } from './components/menu'
 
 type View = 'start' | 'proxy' | 'instance' | 'inject'
 
@@ -112,6 +114,33 @@ function onTitlebarMouseDown(e: MouseEvent): void {
 */
 const armed = ref<HTMLElement | null>(null)
 
+/*
+  ── 语言下拉 ───────────────────────────────────────────────
+
+  原先是「点一下切一种」的两态开关（中 ⇄ 英）。语言变成六种之后那个手势就废了：
+  想从中文切到俄语要点四下，而且每点一下整个界面就换一种看不懂的文字。
+
+  下拉用的是共用的 ContextMenu（锚在按钮下方，与状态条的「设置 ▾」同一个组件）——
+  不另画一份，贴边翻转 / Esc / 点别处关闭那几条它都做好了。
+*/
+const langAt = ref<{ x: number; y: number; anchor: { left: number; right: number; top: number; bottom: number } } | null>(null)
+
+const langItems = computed<MenuItem[]>(() =>
+  LANGS.map((l) => ({
+    id: l.code,
+    //名字一律用该语言自己的写法：切到看不懂的语言时，自称是唯一还认得出来的东西
+    label: l.label,
+    //当前那一项打勾，其余给地球 —— 只给当前项图标的话，其余项的文字会缩进不齐
+    icon: l.code === lang.value ? ICON.check : ICON.globe,
+  })))
+
+function openLangMenu(e: MouseEvent): void {
+  if (langAt.value) { langAt.value = null; return }
+
+  const b = (e.currentTarget as HTMLElement).getBoundingClientRect()
+  langAt.value = { x: b.left, y: b.bottom + 4, anchor: { left: b.left, right: b.right, top: b.top, bottom: b.bottom } }
+}
+
 function armBtn(e: MouseEvent): void {
   armed.value = e.button === 0 ? (e.currentTarget as HTMLElement) : null
 }
@@ -172,7 +201,15 @@ function site(page: string): string {
 </script>
 
 <template>
-  <div class="win">
+  <!--
+    两个跟语言走的尺寸令牌，都放在最外层 —— 代理与注入两屏、八个设置弹窗都要用同一个值。
+
+      --side-w   侧栏宽度。不加宽的话「Извлечение данных」这类词全靠省略号截断，
+                 一屏四五处 …，很难扫。
+      --setf-kx  设置弹窗标签列的乘数。那几个宽度是按中文字数定的，
+                 俄语标签会在列里折成两行、行高参差不齐。
+  -->
+  <div class="win" :style="{ '--side-w': defOf(lang).wide ? '228px' : '196px', '--setf-kx': defOf(lang).wide ? 1.3 : 1 }">
     <!--
       氛围层：网格底纹 + 游走亮带（四角标记在最上层，见文件末尾）。
 
@@ -199,19 +236,24 @@ function site(page: string): string {
 
         <div class="tbright">
           <!--
-            语言 chip —— 照官网 .chip.lang 的样子：地球图标 + 定宽标签。
+            语言 chip —— 照官网 .chip.lang 的样子：地球图标 + 定宽标签 + 一个小三角。
 
-            标签显示的是<b>当前</b>语言（中文时写 CN），切到哪去由 title 说明，
-            与官网一致。标签定宽是必要的：CN / EN 字宽不同，不定宽会让整条按钮
-            在切换时抖一下，而它右边紧挨着窗口按钮，抖动很显眼。
+            标签显示的是<b>当前</b>语言（中文时写 CN），与官网一致。
+            标签定宽是必要的：CN / EN / JA 字宽不同，不定宽会让整条按钮在切换时抖一下，
+            而它右边紧挨着窗口按钮，抖动很显眼。
+
+            点它弹共用的 ContextMenu 列出六种语言（原先是「点一下切一种」的两态开关，
+            六种语言下那个手势要点四下才到得了俄语）。
           -->
-          <button class="wb lang" :title="t('win.lang')"
-                  @mousedown="armBtn" @click="fireBtn($event, toggleLang)">
+          <button class="wb lang" :class="{ on: langAt !== null }" :title="t('win.lang')"
+                  :aria-haspopup="true" :aria-expanded="langAt !== null"
+                  @mousedown="armBtn" @click="fireBtn($event, () => openLangMenu($event))">
             <svg class="ico" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="9" />
               <path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18" />
             </svg>
-            <i class="lb">{{ t('win.langLabel') }}</i>
+            <i class="lb">{{ defOf(lang).short }}</i>
+            <i class="ar">▾</i>
           </button>
 
           <!--
@@ -311,6 +353,12 @@ function site(page: string): string {
         </div>
       </footer>
     </div>
+
+    <!--
+      语言下拉。挂在 .shell 之外 —— ContextMenu 自己会 Teleport 到 body，
+      这里只是让它和其余浮层排在一起，读起来知道有这么个东西。
+    -->
+    <ContextMenu :at="langAt" :items="langItems" @pick="setLang($event as Lang)" @close="langAt = null" />
 
     <BetaNotice />
 
@@ -478,6 +526,14 @@ function site(page: string): string {
   标签定宽：CN 与 EN 的字宽不同，不定宽的话切换语言时这颗按钮会变窄，
   右边整排窗口按钮跟着平移 —— 在标题栏这种静止区域里非常显眼。
 */
+/* 小三角：与状态条「设置 ▾」同一种提示，告诉人这里是个下拉而不是开关 */
+.wb.lang .ar { font-style: normal; font-size: 9px; color: var(--muted); }
+.wb.lang:hover .ar,
+.wb.lang.on .ar { color: var(--cyan); }
+
+/* 菜单开着时按钮保持高亮，否则鼠标一移开就看不出是谁弹的 */
+.wb.lang.on { color: var(--cyan); background: rgb(0 212 255 / 8%); }
+
 .wb.lang .lb {
   font-family: var(--share);
   font-style: normal;

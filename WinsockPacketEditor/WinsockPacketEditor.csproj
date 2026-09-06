@@ -223,6 +223,12 @@
     <Compile Include="ClassObject\InstructionInfo.cs" />
     <Compile Include="ClassObject\InterfaceInfo.cs" />
     <Compile Include="ClassObject\IPConnectionFilter.cs" />
+    <Compile Include="ClassObject\L10n\L10n.cs" />
+    <Compile Include="ClassObject\L10n\L10nEn.cs" />
+    <Compile Include="ClassObject\L10n\L10nJa.cs" />
+    <Compile Include="ClassObject\L10n\L10nKo.cs" />
+    <Compile Include="ClassObject\L10n\L10nRu.cs" />
+    <Compile Include="ClassObject\L10n\L10nVi.cs" />
     <Compile Include="ClassObject\Localizer.cs" />
     <Compile Include="ClassObject\LogInfo.cs" />
     <Compile Include="ClassObject\MapLocal.cs" />

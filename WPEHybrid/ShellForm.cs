@@ -1100,15 +1100,14 @@ namespace WPEHybrid
             {
                 string lang = args["language"] == null ? null : (string)args["language"];
 
-                //只认这两种。前端传别的一律当中文，避免把配置写成脏值
-                if (string.IsNullOrEmpty(lang) || !lang.StartsWith("en"))
-                {
-                    lang = "zh-CN";
-                }
-                else
-                {
-                    lang = "en-US";
-                }
+                /*
+                    只认这六种，别的一律当中文 —— 配置列里不该出现脏值。
+
+                    清单与前端的 i18n/langs.ts 是<b>同一份</b>（那边的 culture 字段），
+                    与 ClassObject/L10n 的五张表也对得上。三处要一起改，
+                    漏一处的表现是「界面切过去了、弹窗还是中文」。
+                */
+                lang = Normalize(lang);
 
                 UI.Prefs.Language = lang;
                 WinFormsUiHost.ApplyLanguage();
@@ -4778,6 +4777,23 @@ namespace WPEHybrid
                 ws2 = link.SupportWS2,
                 msws = link.SupportMsWS,
             };
+        }
+
+        /// <summary>
+        /// 前端传来的语言码 → 配置列里存的文化名。
+        /// 认不出来的一律回中文，别把脏值写进库。清单见 web/src/i18n/langs.ts。
+        /// </summary>
+        private static string Normalize(string Lang)
+        {
+            string s = (Lang ?? string.Empty).Trim().ToLowerInvariant();
+
+            if (s.StartsWith("en")) { return "en-US"; }
+            if (s.StartsWith("ja")) { return "ja-JP"; }
+            if (s.StartsWith("ko")) { return "ko-KR"; }
+            if (s.StartsWith("vi")) { return "vi-VN"; }
+            if (s.StartsWith("ru")) { return "ru-RU"; }
+
+            return "zh-CN";
         }
 
         /// <summary>

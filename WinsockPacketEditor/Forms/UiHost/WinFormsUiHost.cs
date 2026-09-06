@@ -359,7 +359,7 @@ namespace WinsockPacketEditor
         /// <summary>
         /// 把 UI.Prefs.Language 应用到 AntdUI.Localization。
         ///
-        /// 与迁移前一致：英文挂 Localizer 提供器，其余置空走内置中文；
+        /// 与迁移前同一条口径，只是语言从两种变成六种：有对照表的挂 Localizer，中文置空走兜底；
         /// DefaultLanguage 恒为 "zh-CN"（兜底语言，不随界面语言变）。
         /// 单独成一个方法，是为了让「只改主题」的调用不去触发一次全窗体的重新本地化。
         /// </summary>
@@ -373,14 +373,15 @@ namespace WinsockPacketEditor
                     Lang = "zh-CN";
                 }
 
-                if (Lang.StartsWith("en"))
-                {
-                    AntdUI.Localization.Provider = new Localizer();
-                }
-                else
-                {
-                    AntdUI.Localization.Provider = null;
-                }
+                /*
+                    中文<b>不装 Provider</b>：每一处 UI.T(key, "中文") 都自带中文原文，
+                    AntdUI 在 Provider 为 null 时用的就是那一份。再抄一份中文表进来
+                    只会多出一处要同步的地方。
+
+                    其余五种各有一份对照表（ClassObject/L10n/），认不出来的语言
+                    L10n.Has 返回 false，同样走中文兜底。
+                */
+                AntdUI.Localization.Provider = L10n.Has(Lang) ? new Localizer(Lang) : null;
 
                 AntdUI.Localization.DefaultLanguage = "zh-CN";
                 AntdUI.Localization.SetLanguage(Lang);

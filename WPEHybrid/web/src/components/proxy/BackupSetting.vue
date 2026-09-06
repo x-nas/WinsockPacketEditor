@@ -8,7 +8,7 @@
 */
 import { ref } from 'vue'
 import { call } from '../../bridge'
-import { lang, t } from '../../i18n'
+import { lang, normalize, t } from '../../i18n'
 import { socks5Addr } from '../../stores/runtime'
 import SettingsModal from './SettingsModal.vue'
 
@@ -42,8 +42,8 @@ async function importBackup(): Promise<void> {
   busy.value = true
   try {
     const r = await call<{ language: string }>('importBackup')
-    //直接写 lang，不走 toggleLang —— 后者会反过来再写一次 C#（多开设置那一屏同一个理由）
-    if (r?.language) lang.value = r.language.startsWith('en') ? 'en' : 'zh'
+    //直接写 lang，不走 setLang —— 后者会反过来再写一次 C#（多开设置那一屏同一个理由）
+    if (r?.language) lang.value = normalize(r.language)
     //监听地址可能跟着代理配置一起换了
     try { const s = await call<{ socks5Addr?: string }>('getSystemCheck'); if (s?.socks5Addr) socks5Addr.value = s.socks5Addr } catch { /* 取不到就留旧值 */ }
   } catch (e) {

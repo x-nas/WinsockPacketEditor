@@ -83,6 +83,8 @@ export const ICON = {
   undo: '<path d="M4 9h10a5 5 0 0 1 0 10H8M4 9l4-4M4 9l4 4"/>',
   //执行 / 停止：实心三角与方块，与状态条上那两个按钮同一种画法
   play: '<path d="M8 5l11 7-11 7z"/>',
+  //语言：地球。标题栏那个下拉里，当前语言画 check，其余画它
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/>',
   stop: '<rect x="6" y="6" width="12" height="12" rx="1"/>',
 } as const
 

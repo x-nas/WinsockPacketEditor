@@ -43,22 +43,40 @@ namespace WinsockPacketEditor
 
         private void InitGlobal()
         {
+            /*
+                六种语言 —— 与 Vue 外壳的 web/src/i18n/langs.ts、
+                以及 ClassObject/L10n 的五张对照表<b>是同一份清单</b>，三处要一起改。
+
+                显示名一律用<b>该语言自己的写法</b>：切到看不懂的语言时，
+                「English」「日本語」这样的自称是唯一还认得出来的东西。
+            */
             var globals = new AntdUI.SelectItem[] {
-                new AntdUI.SelectItem("中文","zh-CN"),
-                new AntdUI.SelectItem("English","en-US")
+                new AntdUI.SelectItem("简体中文","zh-CN"),
+                new AntdUI.SelectItem("English","en-US"),
+                new AntdUI.SelectItem("日本語","ja-JP"),
+                new AntdUI.SelectItem("한국어","ko-KR"),
+                new AntdUI.SelectItem("Tiếng Việt","vi-VN"),
+                new AntdUI.SelectItem("Русский","ru-RU")
             };
 
             btn_global.Items.AddRange(globals);
 
-            var lang = AntdUI.Localization.CurrentLanguage;
-            if (lang.StartsWith("en"))
+            //只比前两位：库里可能存着 "en-GB" 这类值，没必要为此加一张别名表
+            string lang = (AntdUI.Localization.CurrentLanguage ?? string.Empty).ToLowerInvariant();
+            AntdUI.SelectItem picked = globals[0];
+
+            foreach (AntdUI.SelectItem it in globals)
             {
-                btn_global.SelectedValue = globals[1].Tag;
+                string tag = ((string)it.Tag).ToLowerInvariant();
+
+                if (lang.StartsWith(tag.Substring(0, 2)))
+                {
+                    picked = it;
+                    break;
+                }
             }
-            else
-            {
-                btn_global.SelectedValue = globals[0].Tag;
-            }
+
+            btn_global.SelectedValue = picked.Tag;
         }
 
         private void SelectedStartMode()

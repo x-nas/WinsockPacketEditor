@@ -573,7 +573,7 @@ function titleOf(k: PageKey): string {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: 196px 1fr;
+  grid-template-columns: var(--side-w, 196px) 1fr;
 }
 
 .soon {

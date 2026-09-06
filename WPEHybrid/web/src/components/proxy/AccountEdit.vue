@@ -246,7 +246,13 @@ async function save(): Promise<void> {
 .row > .k { font-size: 12.5px; color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
-.tip { font-size: 11px; color: #4b5563; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/*
+  ⚠️ 这行提示<b>要换行，不能省略号</b>。中文写得下的一句，换成俄语 / 越南语常常长一倍
+  （「100–500000. При достижении очищается весь список, а не только старые строки」），
+  nowrap + ellipsis 会把后半句直接吃掉，而那半句正是要紧的部分。
+  外面的 .setf .row > .v 已经是 flex-wrap: wrap，让它自己折下去即可。
+*/
+.tip { font-size: 11px; color: #4b5563; line-height: 1.5; }
 
 .chk {
   display: inline-flex;
