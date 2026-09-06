@@ -1226,6 +1226,15 @@ namespace WPEHybrid
                 FeedPump.ListPushed -= this.OnListPushed;
                 FeedPump.ListPushed += this.OnListPushed;
 
+                /*
+                    封包编辑器的「发送」也要交给目标 —— 套接字句柄属于目标进程，
+                    在外壳里调 send() 是个野句柄，一个包也发不出去（还静默计成失败）。
+
+                    与四个执行器在 AttachedLink() 那里分流是同一件事，只是那几个的
+                    分流点在桥方法上，而发送会话跑在 Operate 的后台线程里，桥拦不住。
+                */
+                Operate.PacketEditConfig.SendRouter = link.SendPacket;
+
                 //记下这次注入的目标，启动页那张卡上要显示（与 WinForms 的 LastInjection 一致）
                 Operate.SystemConfig.LastInjection = string.IsNullOrEmpty(path)
                     ? this.SafeProcessName(link.TargetPid)
@@ -3513,6 +3522,48 @@ namespace WPEHybrid
                 return new { ok = true };
             });
 
+            /*
+                注入模式那一份（PacketInfo）。与上面六个<b>逐个对应</b>，
+                区别只在取哪张表 —— 两份列表的 Id 各自独立自增，
+                同一个数字在两份表里是两条不同的包，所以入口必须分开，不能共用。
+            */
+
+            this.bridge.Register("copyPacketHex", args => new
+            {
+                text = Operate.PacketConfig.List.GetPacketHex_ByIds(ReadLongIds(args)),
+            });
+
+            this.bridge.Register("addPacketToSend", args => new
+            {
+                count = Operate.PacketConfig.List.AddToSend_ByPacketIds(
+                    args["sid"] == null ? null : (string)args["sid"], ReadLongIds(args)),
+            });
+
+            this.bridge.Register("addPacketToWareHouse", args => new
+            {
+                count = Operate.PacketConfig.List.AddToWareHouse_ByPacketIds(
+                    args["wid"] == null ? null : (string)args["wid"], ReadLongIds(args)),
+            });
+
+            this.bridge.Register("addPacketToFilter", args => new
+            {
+                ok = Operate.PacketConfig.List.AddToFilter_ByPacketId(
+                    args["id"] == null ? 0L : (long)args["id"]),
+            });
+
+            this.bridge.Register("setSystemSocketByPacket", args => new
+            {
+                socket = Operate.PacketConfig.List.SetSystemSocket_ByPacketId(
+                    args["id"] == null ? 0L : (long)args["id"]),
+            });
+
+            //ids 为空就是导整张表 —— SavePacketListToExcel 本来就这么写的
+            this.bridge.Register("exportPacketExcel", async args =>
+            {
+                await Operate.PacketConfig.List.ExportPacketExcel_ByIds(ReadLongIds(args));
+                return new { ok = true };
+            });
+
             #endregion
 
             #region//查找封包（对应 WinForms 的 Controls/SearchPacket）
@@ -3801,7 +3852,8 @@ namespace WPEHybrid
                 编辑在前端做（十六进制编辑器是纯前端组件），C# 只管：打开时给整段字节、
                 保存时收整段字节、发送会话、右键菜单里要碰 Operate 的两个动作。
                 字节走 base64：byte[] 由 JSON.NET 自动编成 base64 串，收回来用 FromBase64String。
-                list = "proxy"（代理数据列表）/ "send"（发送编辑的工作副本），id 是运行期自增的 long。
+                list = "proxy"（代理数据列表）/ "packet"（注入模式的封包列表）/ "send"（发送编辑的工作副本），
+                id 是运行期自增的 long —— proxy 与 packet 各自独立自增，所以 list 必须一路带下去。
             */
 
             Func<Newtonsoft.Json.Linq.JObject, byte[]> readBytes = a =>
@@ -4694,6 +4746,9 @@ namespace WPEHybrid
         private void DisposeInjectLink()
         {
             FeedPump.ListPushed -= this.OnListPushed;
+
+            //摘掉发送路由，否则断开之后封包编辑还会往一条已经关掉的管道上发
+            Operate.PacketEditConfig.SendRouter = null;
 
             var link = this.injectLink;
             this.injectLink = null;

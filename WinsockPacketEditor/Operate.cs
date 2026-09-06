@@ -15880,6 +15880,223 @@ namespace WinsockPacketEditor
 
                 #endregion
 
+                #region//封包列表右键菜单 - 外壳入口（只出基础类型，按 Id 收发）
+
+                /*
+                    对应 WinForms 的 PacketList.cs 里那个右键菜单（菜单本身由
+                    PacketConfig.List.GetCMS_PacketList 定义、动作在 PacketList 的 switch 里）。
+
+                    这一族与 ProxyConfig.List 里的 *_ByProxyIds <b>逐个对应</b>，
+                    区别只在取哪份列表、以及地址字段的名字：
+                    ProxyInfo 分「客户端 / 服务端」，PacketInfo 分「本机 / 远端」。
+                    合成一份泛型的代价是把两个不相关的模型绑在一起，而它们各自还会长
+                    —— 照着写一份更便宜。
+
+                    <b>菜单结构没走桥</b>：与其余各屏一致，由前端自己拼。这里只出动作。
+                    PacketInfo.Id 是运行期自增的 long，与按行取字节用的是同一个键。
+                */
+
+                /// <summary>Id 数组 → 模型列表，<b>按列表里的先后顺序</b>返回。</summary>
+                internal static List<PacketInfo> PickPackets(IList<long> Ids)   //internal：封包编辑（PacketEditConfig）也按 Id 取同一份
+                {
+                    var picked = new List<PacketInfo>();
+
+                    if (Ids == null || Ids.Count == 0)
+                    {
+                        return picked;
+                    }
+
+                    var want = new HashSet<long>(Ids);
+
+                    foreach (PacketInfo pi in PacketConfig.List.lstPacketInfo)
+                    {
+                        if (want.Contains(pi.Id))
+                        {
+                            picked.Add(pi);
+                        }
+                    }
+
+                    return picked;
+                }
+
+                /// <summary>
+                /// 「复制」：选中那几条的十六进制，每条一行。
+                ///
+                /// 由 C# 拼好整段文本再交给前端写剪贴板 —— 让前端逐条取字节再自己转十六进制，
+                /// 既多几十次往返，格式还会和 WinForms 那份不一致。
+                /// </summary>
+                public static string GetPacketHex_ByIds(IList<long> Ids)
+                {
+                    try
+                    {
+                        var sb = new StringBuilder();
+
+                        foreach (PacketInfo pi in PacketConfig.List.PickPackets(Ids))
+                        {
+                            sb.AppendLine(SystemConfig.BytesToString(
+                                PacketConfig.Packet.EncodingFormat.Hex, pi.PacketBuffer));
+                        }
+
+                        return sb.ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(GetPacketHex_ByIds), ex);
+                        return string.Empty;
+                    }
+                }
+
+                /// <summary>「添加到发送」：把选中那几条追加进某条发送的发送集。返回加了几条。</summary>
+                public static int AddToSend_ByPacketIds(string SID, IList<long> Ids)
+                {
+                    try
+                    {
+                        Guid gid;
+
+                        if (!Guid.TryParse(SID, out gid))
+                        {
+                            return 0;
+                        }
+
+                        List<PacketInfo> picked = PacketConfig.List.PickPackets(Ids);
+
+                        if (picked.Count == 0)
+                        {
+                            return 0;
+                        }
+
+                        if (!SendConfig.Send.AddSendCollection_ByPacketInfo(gid, picked))
+                        {
+                            return 0;
+                        }
+
+                        /*
+                            发送集变了，SendRow 的 PacketCount 跟着变 —— 但那是<b>就地改属性</b>，
+                            不触发 ListChanged，不标脏的话发送列表那一列的数字不会动。
+                        */
+                        SendConfig.List.SaveSendList_ToDB();
+                        FeedPump.MarkDirty(FeedList.Send);
+
+                        return picked.Count;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddToSend_ByPacketIds), ex);
+                        return 0;
+                    }
+                }
+
+                /// <summary>「添加到仓库」。返回加了几条。</summary>
+                public static int AddToWareHouse_ByPacketIds(string WID, IList<long> Ids)
+                {
+                    try
+                    {
+                        Guid gid;
+
+                        if (!Guid.TryParse(WID, out gid))
+                        {
+                            return 0;
+                        }
+
+                        List<PacketInfo> picked = PacketConfig.List.PickPackets(Ids);
+
+                        if (picked.Count == 0)
+                        {
+                            return 0;
+                        }
+
+                        if (!WareHouseConfig.WareHouse.AddStores_ByPacketInfo(gid, picked))
+                        {
+                            return 0;
+                        }
+
+                        FeedPump.MarkDirty(FeedList.WareHouse);
+                        return picked.Count;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddToWareHouse_ByPacketIds), ex);
+                        return 0;
+                    }
+                }
+
+                /// <summary>
+                /// 「添加到滤镜列表」。<b>只用第一条</b> —— 与 WinForms 一致（那边也是 piList[0]）：
+                /// 一条滤镜描述的是「怎么匹配、怎么改」，多选几条也只能拿一条去造。
+                /// </summary>
+                public static bool AddToFilter_ByPacketId(long Id)
+                {
+                    try
+                    {
+                        List<PacketInfo> picked = PacketConfig.List.PickPackets(new List<long> { Id });
+
+                        if (picked.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        if (!FilterConfig.Filter.AddFilter_ByPacketInfo(picked[0], null))
+                        {
+                            return false;
+                        }
+
+                        FilterConfig.List.SaveFilterList_ToDB();
+                        FeedPump.MarkDirty(FeedList.Filter);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(AddToFilter_ByPacketId), ex);
+                        return false;
+                    }
+                }
+
+                /// <summary>
+                /// 「设置系统套接字」：把这一条的套接字号设成全局的。
+                /// 发送编辑里勾「使用系统套接字」用的就是它。返回设成了几号，0 表示没设上。
+                /// </summary>
+                public static int SetSystemSocket_ByPacketId(long Id)
+                {
+                    try
+                    {
+                        List<PacketInfo> picked = PacketConfig.List.PickPackets(new List<long> { Id });
+
+                        if (picked.Count == 0)
+                        {
+                            return 0;
+                        }
+
+                        SystemConfig.SystemSocket = picked[0].PacketSocket;
+                        return SystemConfig.SystemSocket;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SetSystemSocket_ByPacketId), ex);
+                        return 0;
+                    }
+                }
+
+                /// <summary>
+                /// 「导出到 Excel」。<b>Ids 为空时导整张表</b> ——
+                /// 这不是这里的特例，SavePacketListToExcel 本来就是这么写的
+                /// （piList 为空则退回 lstPacketInfo），所以「什么都不选 = 导全部」。
+                /// </summary>
+                public static async Task ExportPacketExcel_ByIds(IList<long> Ids)
+                {
+                    try
+                    {
+                        await PacketConfig.List.SavePacketList_Dialog(
+                            PacketConfig.Packet.InjectProcess,
+                            PacketConfig.List.PickPackets(Ids));
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(ExportPacketExcel_ByIds), ex);
+                    }
+                }
+
+                #endregion
+
                 #region//封包入列表
 
                 /// <summary>
@@ -16471,9 +16688,12 @@ namespace WinsockPacketEditor
         /// 打开 / 保存 / 发送会话 / 右键菜单的「添加到滤镜」「添加到发送」。
         /// 全部按 <b>Id</b> 收发、只出基础类型与 DTO —— 外壳拿不到 ProxyInfo / PacketInfo（CS0012）。
         ///
-        /// 【两种来源】<c>List</c> = "proxy"：代理数据列表里的 ProxyInfo（运行期自增 Id）；
+        /// 【三种来源】<c>List</c> = "proxy"：代理数据列表里的 ProxyInfo（运行期自增 Id）；
+        /// "packet"：注入模式封包列表里的 PacketInfo；
         /// "send"：发送编辑当前打开的那份发送集里的 PacketInfo（同样是运行期自增 Id，改的是工作副本）。
-        /// 注入模式那份 PacketInfo 列表不接 —— 注入模式的 UI 留在 WinForms。
+        ///
+        /// ⚠️ "proxy" 与 "packet" 的 Id 各自独立自增，<b>同一个数字在两份表里是两条不同的包</b>——
+        /// 调用方必须把 List 一起带上，靠 Id 猜表会静默取到另一条。
         ///
         /// 【编辑本身在前端】字节整段交给前端，改完整段交回来；这里不维护编辑状态。
         /// 只有「发送」是个会话：跑在后台线程、可停、可查进度，与发送编辑的执行器同一个模式。
@@ -16481,11 +16701,19 @@ namespace WinsockPacketEditor
         public static class PacketEditConfig
         {
             public const string ListProxy = "proxy";
+            public const string ListPacket = "packet";
             public const string ListSend = "send";
 
             private static ProxyInfo FindProxy(long Id)
             {
                 List<ProxyInfo> picked = ProxyConfig.List.PickProxies(new List<long> { Id });
+                return picked.Count == 0 ? null : picked[0];
+            }
+
+            /// <summary>注入模式封包列表里的那一条。找不到（已被自动清理）返回 null。</summary>
+            private static PacketInfo FindPacket(long Id)
+            {
+                List<PacketInfo> picked = PacketConfig.List.PickPackets(new List<long> { Id });
                 return picked.Count == 0 ? null : picked[0];
             }
 
@@ -16496,20 +16724,24 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    if (List == ListSend)
+                    if (List == ListSend || List == ListPacket)
                     {
-                        PacketInfo pi = SendConfig.Send.FindEditPacket_ById(Id);
+                        PacketInfo pi = List == ListSend
+                            ? SendConfig.Send.FindEditPacket_ById(Id)
+                            : FindPacket(Id);
+
                         if (pi == null) { return new PacketEditRow(); }
 
                         return new PacketEditRow
                         {
                             Id = pi.Id.ToString(),
-                            List = ListSend,
+                            List = List,
                             Socket = pi.PacketSocket,
                             Type = (int)pi.PacketType,
                             From = pi.PacketFrom ?? string.Empty,
                             To = pi.PacketTo ?? string.Empty,
                             Buffer = pi.PacketBuffer ?? new byte[0],
+                            //PacketInfo 没有 TheologyID —— 注入模式与发送集都只能按套接字发
                             CanSendBySession = false,
                             SystemSocket = SystemConfig.SystemSocket,
                         };
@@ -16557,15 +16789,25 @@ namespace WinsockPacketEditor
 
                     string preview = PacketConfig.Packet.GetPacketData_Hex(Bytes, PacketConfig.Packet.PacketData_MaxLen);
 
-                    if (List == ListSend)
+                    if (List == ListSend || List == ListPacket)
                     {
-                        PacketInfo pi = SendConfig.Send.FindEditPacket_ById(Id);
+                        PacketInfo pi = List == ListSend
+                            ? SendConfig.Send.FindEditPacket_ById(Id)
+                            : FindPacket(Id);
+
                         if (pi == null) { return UI.T("PacketEditForm.Gone", "这条封包已经不在列表里了"); }
 
                         pi.PacketSocket = Socket;
                         pi.PacketBuffer = Bytes;
                         pi.PacketLen = Bytes.Length;
                         pi.PacketData = preview;
+
+                        /*
+                            注入模式那份是高频列表，改完要按行推回去 —— 与代理那份一样。
+                            发送集那份是编辑器的工作副本，随发送编辑的「保存」整份写回，这里不推也不落库。
+                        */
+                        if (List == ListPacket) { UI.Feed.Update(FeedList.Packet, PacketRow.From_(pi)); }
+
                         return string.Empty;
                     }
                     else
@@ -16605,9 +16847,12 @@ namespace WinsockPacketEditor
 
                     bool ok;
 
-                    if (List == ListSend)
+                    if (List == ListSend || List == ListPacket)
                     {
-                        PacketInfo pi = SendConfig.Send.FindEditPacket_ById(Id);
+                        PacketInfo pi = List == ListSend
+                            ? SendConfig.Send.FindEditPacket_ById(Id)
+                            : FindPacket(Id);
+
                         ok = pi != null && FilterConfig.Filter.AddFilter_ByPacketInfo(pi, Bytes);
                     }
                     else
@@ -16643,9 +16888,12 @@ namespace WinsockPacketEditor
                     string preview = PacketConfig.Packet.GetPacketData_Hex(Bytes, PacketConfig.Packet.PacketData_MaxLen);
                     bool ok;
 
-                    if (List == ListSend)
+                    if (List == ListSend || List == ListPacket)
                     {
-                        PacketInfo src = SendConfig.Send.FindEditPacket_ById(Id);
+                        PacketInfo src = List == ListSend
+                            ? SendConfig.Send.FindEditPacket_ById(Id)
+                            : FindPacket(Id);
+
                         if (src == null) { return false; }
 
                         PacketInfo copy = new PacketInfo();
@@ -16708,6 +16956,20 @@ namespace WinsockPacketEditor
                 public int Fail;
             }
 
+            /*
+                注入模式下「发送」<b>必须在目标进程里做</b> —— 套接字句柄属于目标，
+                拿到外壳来调 send() 是个野句柄，一个包也发不出去（还静默计成失败）。
+
+                所以外壳在附加时把这个委托指向 ShellLink.SendPacket、断开时置 null。
+                这与四个执行器（发送 / 机器人的启停）在 ShellForm.AttachedLink() 那里分流
+                是同一件事，只是那几个的分流点在桥方法上，而这一条在 Operate 内部
+                —— 封包编辑的发送会话本来就跑在 Operate 的后台线程上，桥拦不住。
+
+                <b>只对 "packet" 那一份生效</b>：代理列表那条路要么走本机套接字、
+                要么走 SunnyNet 会话，两者都在外壳这一侧。
+            */
+            public static Func<int, PacketConfig.Packet.PacketType, string, string, byte[], bool> SendRouter;
+
             private static readonly object sendGate = new object();
             private static CancellationTokenSource sendCts;
             private static Task sendTask;
@@ -16759,9 +17021,12 @@ namespace WinsockPacketEditor
                         PacketConfig.Packet.PacketType type;
                         long theology = 0, wsType = 0;
 
-                        if (List == ListSend)
+                        if (List == ListSend || List == ListPacket)
                         {
-                            PacketInfo pi = SendConfig.Send.FindEditPacket_ById(Id);
+                            PacketInfo pi = List == ListSend
+                                ? SendConfig.Send.FindEditPacket_ById(Id)
+                                : FindPacket(Id);
+
                             if (pi == null) { return UI.T("PacketEditForm.Gone", "这条封包已经不在列表里了"); }
                             from = pi.PacketFrom; to = pi.PacketTo; type = pi.PacketType;
                         }
@@ -16782,6 +17047,9 @@ namespace WinsockPacketEditor
                         int times = Times < 1 ? 1 : Times;
                         int interval = Interval < 0 ? 0 : Interval;
 
+                        //注入模式的封包要交给目标进程发，见 SendRouter 那段说明
+                        bool route = List == ListPacket && SendRouter != null;
+
                         Volatile.Write(ref sendTotal, 0);
                         Volatile.Write(ref sendOk, 0);
                         Volatile.Write(ref sendFail, 0);
@@ -16798,7 +17066,7 @@ namespace WinsockPacketEditor
                                     while (!token.IsCancellationRequested)
                                     {
                                         DoSend(Socket, type, from, to, buf, theology, wsType,
-                                            Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
+                                            Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount, route);
 
                                         if (interval > 0) { Thread.Sleep(interval); }
                                     }
@@ -16808,7 +17076,7 @@ namespace WinsockPacketEditor
                                     for (int i = 0; i < times && !token.IsCancellationRequested; i++)
                                     {
                                         DoSend(Socket, type, from, to, buf, theology, wsType,
-                                            Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
+                                            Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount, route);
 
                                         if (interval > 0) { Thread.Sleep(interval); }
                                     }
@@ -16849,7 +17117,8 @@ namespace WinsockPacketEditor
             private static void DoSend(
                 int Socket, PacketConfig.Packet.PacketType type, string from, string to, byte[] buf,
                 long theology, long wsType,
-                bool Progression, int pos, int step, bool carry, int carryCount)
+                bool Progression, int pos, int step, bool carry, int carryCount,
+                bool route = false)
             {
                 try
                 {
@@ -16901,6 +17170,12 @@ namespace WinsockPacketEditor
                                 ok = false;
                                 break;
                         }
+                    }
+                    else if (route)
+                    {
+                        //注入模式：交给目标进程发（SendRouter → ShellLink → IpcCommand.SendPacket）
+                        Func<int, PacketConfig.Packet.PacketType, string, string, byte[], bool> send = SendRouter;
+                        ok = send != null && send(Socket, type, from, to, buf);
                     }
                     else
                     {

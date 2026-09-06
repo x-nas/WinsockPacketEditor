@@ -76,6 +76,13 @@
     injectStartHook: () => { window.__inj.hooked = true; setTimeout(pushInjectRows, 300); return window.__inj },
     injectStopHook: () => { window.__inj.hooked = false; return window.__inj },
     injectDetach: () => { window.__inj = null; return { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false } },
+    //注入模式封包列表的右键菜单：与代理那一族逐个对应，只是取另一张表
+    copyPacketHex: (a) => ({ text: a.ids.map((i) => 'PK ' + i + ' : 48 45 4C 4C 4F').join(String.fromCharCode(10)) }),
+    addPacketToSend: (a) => { window.__acted = a; return { count: a.ids.length } },
+    addPacketToWareHouse: (a) => { window.__acted = a; return { count: a.ids.length } },
+    addPacketToFilter: (a) => { window.__acted = a; return { ok: true } },
+    setSystemSocketByPacket: (a) => { window.__acted = a; return { socket: 3464 } },
+    exportPacketExcel: (a) => { window.__exported = a; return { ok: true } },
     getInjectStats: () => ({ queue: 3, list: 40, total: 1280, send: 320, sendTo: 12, recv: 640, recvFrom: 8, wsaSend: 180, wsaSendTo: 0, wsaRecv: 120, wsaRecvFrom: 0, filterExecute: 356, filterPacket: 44, totalSend: 262144, totalRecv: 1048576, autoClear: true, autoClearValue: 5000 }),
     getInjectStatus: () => (window.__inj || { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false }),
     getLogCount: (a) => ({ count: a.kind === 0 ? 3 : 0 }),

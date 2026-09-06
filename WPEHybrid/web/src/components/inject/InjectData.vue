@@ -11,14 +11,21 @@
 */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { call } from '../../bridge'
-import type { PacketListRow, PacketRow, Prefs } from '../../bridge/types'
+import { FeedList, type PacketListRow, type PacketRow, type Prefs, type SendRow, type WareHouseRow } from '../../bridge/types'
 import { injectFeed } from '../../stores/packets'
-import { listSetting } from '../../stores/runtime'
+import { gotoPage, listSetting } from '../../stores/runtime'
+import { useList } from '../../stores/lists'
 import { useRowPick } from '../../usePick'
+import { pushToast } from '../../stores/toast'
+import { textA, textB } from '../../stores/tools'
 import { status } from '../../stores/inject'
 import { t } from '../../i18n'
 import PacketList from '../PacketList.vue'
 import HexPanel from '../HexPanel.vue'
+import ContextMenu from '../ContextMenu.vue'
+import { ICON, type MenuItem } from '../menu'
+import PacketEdit from '../proxy/PacketEdit.vue'
+import PacketModification from '../proxy/PacketModification.vue'
 import InjectBar from './InjectBar.vue'
 import type { SettingKey } from '../proxy/settings'
 
@@ -171,6 +178,172 @@ function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
   selectedId.value = row.Id
 }
 
+/* ── 右键菜单（对应 WinForms 的 GetCMS_PacketList）──────────── */
+
+/*
+  与代理数据页那份<b>逐项对应</b>，动作换成 *_ByPacketIds 那一族。
+  两份列表的 Id 各自独立自增，同一个数字在两份表里是两条不同的包 ——
+  所以桥入口必须分开，不能共用。
+
+  菜单结构照旧<b>由前端自己拼</b>：两个子菜单的内容本来就在推送流里
+  （FeedList.Send / FeedList.WareHouse），让 C# 再出一遍 MenuNode 只是多一条要同步的路。
+*/
+const menuAt = ref<{ x: number; y: number } | null>(null)
+
+/** 封包编辑弹窗的目标；null = 关着 */
+const editTarget = ref<{ list: 'proxy' | 'packet' | 'send'; id: number } | null>(null)
+/** 「查看数据修改」弹窗看的是哪一条；null = 关着 */
+const modifyId = ref<number | null>(null)
+
+//右键只开菜单、不动选中集（与其余各屏同一条口径）
+function onMenu(ev: MouseEvent): void {
+  menuAt.value = { x: ev.clientX, y: ev.clientY }
+}
+
+const sends = useList<SendRow>(FeedList.Send)
+const houses = useList<WareHouseRow>(FeedList.WareHouse)
+
+const menuItems = computed<MenuItem[]>(() => {
+  const n = picked.value.size
+  const tag = n ? ' (' + n + ')' : ''
+
+  const toSend: MenuItem = sends.value.length
+    ? {
+        id: 'toSend',
+        label: t('pm.toSend') + tag,
+        icon: ICON.send,
+        sub: sends.value.map((x) => ({ id: 'send:' + x.Id, label: x.Name })),
+      }
+    : { id: 'toSend', label: t('pm.toSend'), icon: ICON.send, disabled: true }
+
+  const toHouse: MenuItem = houses.value.length
+    ? {
+        id: 'toHouse',
+        label: t('pm.toWareHouse') + tag,
+        icon: ICON.house,
+        sub: houses.value.map((x) => ({ id: 'house:' + x.Id, label: x.Name })),
+      }
+    : { id: 'toHouse', label: t('pm.toWareHouse'), icon: ICON.house, disabled: true }
+
+  return [
+    //只编辑第一条 —— 编辑器一次只装一个包，多选也只能拿一条去改
+    { id: 'edit', label: t('pm.edit'), icon: ICON.edit },
+    { id: 'modify', label: t('pm.modify'), icon: ICON.hex },
+    { divider: true },
+
+    { id: 'copy', label: t('lst.copy') + tag, icon: ICON.copy },
+    { divider: true },
+    { id: 'toTextA', label: t('pm.toTextA') + tag, icon: ICON.text },
+    { id: 'toTextB', label: t('pm.toTextB') + tag, icon: ICON.text },
+    { divider: true },
+    toSend,
+    //添加到滤镜只用第一条（与 WinForms 一致），所以<b>不带条数</b>
+    { id: 'toFilter', label: t('pm.toFilter'), icon: ICON.filter },
+    toHouse,
+    { divider: true },
+    { id: 'sysSocket', label: t('pm.setSysSocket'), icon: ICON.check },
+    { divider: true },
+    //ids 为空就是导整张表，所以不选也能点
+    { id: 'excel', label: t('pm.toExcel') + tag, icon: ICON.save },
+    { divider: true },
+    { id: 'selectAll', label: t('pm.selectAll'), icon: ICON.list },
+    { id: 'deselect', label: t('pm.deselect'), icon: ICON.del, disabled: !n },
+  ]
+})
+
+async function onMenuPick(id: string): Promise<void> {
+  const ids = [...picked.value]
+
+  //子菜单：id 形如 "send:<GUID>" / "house:<GUID>"
+  if (id.startsWith('send:') || id.startsWith('house:')) {
+    if (!ids.length) { pushToast('warning', t('lst.needPick')); return }
+
+    const toSend = id.startsWith('send:')
+    const key = id.slice(id.indexOf(':') + 1)
+
+    try {
+      const r = await call<{ count: number }>(
+        toSend ? 'addPacketToSend' : 'addPacketToWareHouse',
+        toSend ? { sid: key, ids } : { wid: key, ids })
+
+      if (r?.count) pushToast('success', t('pm.added') + ' ' + r.count)
+      else pushToast('error', t('pm.addFail'))
+    } catch (e) {
+      console.error('[pm] 添加失败', e)
+    }
+
+    return
+  }
+
+  switch (id) {
+    case 'selectAll':
+      pick.selectAll()
+      return
+
+    case 'deselect':
+      pick.clear()
+      return
+
+    //导出不要求先选：ids 为空时 C# 侧会导整张表
+    case 'excel':
+      try { await call('exportPacketExcel', { ids }) } catch (e) { console.error('[pm] 导出失败', e) }
+      return
+  }
+
+  if (!ids.length) {
+    pushToast('warning', t('lst.needPick'))
+    return
+  }
+
+  try {
+    switch (id) {
+      case 'copy': {
+        const r = await call<{ text: string }>('copyPacketHex', { ids })
+        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
+        await call('clipboardWrite', { text: r.text })
+        pushToast('success', t('pm.copied'))
+        return
+      }
+
+      case 'edit':
+        editTarget.value = { list: 'packet', id: ids[0] }
+        return
+
+      //添加到文本 A / B：整体替换（WinForms 的 SetTextA 也是替换不是追加），然后切到文本对比页
+      case 'toTextA':
+      case 'toTextB': {
+        const r = await call<{ text: string }>('copyPacketHex', { ids })
+        if (!r?.text) { pushToast('error', t('pm.copyFail')); return }
+        if (id === 'toTextA') textA.value = r.text
+        else textB.value = r.text
+        pushToast('success', t(id === 'toTextA' ? 'pm.toTextAOk' : 'pm.toTextBOk'))
+        gotoPage.value = 'diff'
+        return
+      }
+
+      //查看数据修改：也只看第一条
+      case 'modify':
+        modifyId.value = ids[0]
+        return
+
+      case 'toFilter': {
+        const r = await call<{ ok: boolean }>('addPacketToFilter', { id: ids[0] })
+        pushToast(r?.ok ? 'success' : 'error', t(r?.ok ? 'pm.toFilterOk' : 'pm.toFilterFail'))
+        return
+      }
+
+      case 'sysSocket': {
+        const r = await call<{ socket: number }>('setSystemSocketByPacket', { id: ids[0] })
+        if (r?.socket) pushToast('success', t('pm.sysSocketOk') + ' ' + r.socket)
+        else pushToast('error', t('pm.sysSocketFail'))
+        return
+      }
+    }
+  } catch (e) {
+    console.error('[pm] ' + id + ' 失败', e)
+  }
+}
+
 /** 列表被清空（自动清理 / 手动清空）之后收拾右边的面板。 */
 function onCleared(): void {
   selected.value = null
@@ -217,7 +390,14 @@ defineExpose({ onCleared })
         :picked="picked"
         :follow="follow"
         @select="onSelect"
+        @menu="onMenu"
       />
+
+      <ContextMenu :at="menuAt" :items="menuItems" @pick="onMenuPick" @close="menuAt = null" />
+
+      <!-- 封包编辑：保存后 C# 按行 UI.Feed.Update 推回来，这里不用做别的 -->
+      <PacketEdit :target="editTarget" @close="editTarget = null" />
+      <PacketModification :id="modifyId" list="packet" @close="modifyId = null" />
     </div>
 
     <div class="lower">

@@ -27,8 +27,14 @@ import HexView from '../HexView.vue'
 import { ICON, type MenuItem } from '../menu'
 
 const props = defineProps<{
-  /** null = 不开。list：proxy = 代理数据列表；send = 发送编辑的工作副本。id 是运行期自增的 long */
-  target: { list: 'proxy' | 'send'; id: number } | null
+  /**
+   * null = 不开。list：proxy = 代理数据列表；packet = 注入模式的封包列表；
+   * send = 发送编辑的工作副本。id 是运行期自增的 long。
+   *
+   * ⚠️ proxy 与 packet 的 Id <b>各自独立自增</b>，同一个数字在两份表里是两条不同的包 ——
+   * 所以 list 必须一路带到 C#，靠 id 猜表会静默改错东西。
+   */
+  target: { list: 'proxy' | 'packet' | 'send'; id: number } | null
 }>()
 
 const emit = defineEmits<{

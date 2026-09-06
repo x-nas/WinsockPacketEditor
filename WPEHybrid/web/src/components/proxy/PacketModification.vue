@@ -20,7 +20,10 @@ import { FeedList, type PacketDetail } from '../../bridge/types'
 import { t } from '../../i18n'
 import HexView from '../HexView.vue'
 
-const props = defineProps<{ id: number | null }>()
+const props = withDefaults(
+  defineProps<{ id: number | null; list?: 'proxy' | 'packet' }>(),
+  { list: 'proxy' },
+)
 const emit = defineEmits<{ (e: 'close'): void }>()
 
 const detail = ref<PacketDetail | null>(null)
@@ -100,7 +103,10 @@ watch(() => props.id, async (id) => {
   picked.value = -1
 
   try {
-    const d = await call<PacketDetail | null>('getPacketDetail', { id, list: FeedList.Proxy })
+    const d = await call<PacketDetail | null>('getPacketDetail', {
+      id,
+      list: props.list === 'packet' ? FeedList.Packet : FeedList.Proxy,
+    })
     if (!d) { error.value = t('hex.gone'); return }
     detail.value = d
     loaded.value = true
