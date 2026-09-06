@@ -52,6 +52,7 @@ namespace WinsockPacketEditor
             */
             var globals = new AntdUI.SelectItem[] {
                 new AntdUI.SelectItem("简体中文","zh-CN"),
+                new AntdUI.SelectItem("繁體中文","zh-TW"),
                 new AntdUI.SelectItem("English","en-US"),
                 new AntdUI.SelectItem("日本語","ja-JP"),
                 new AntdUI.SelectItem("한국어","ko-KR"),
@@ -61,20 +62,39 @@ namespace WinsockPacketEditor
 
             btn_global.Items.AddRange(globals);
 
-            //只比前两位：库里可能存着 "en-GB" 这类值，没必要为此加一张别名表
+            /*
+                只比前两位：库里可能存着 "en-GB" 这类值，没必要为此加一张别名表。
+
+                ⚠️ 中文是例外 —— zh-CN 与 zh-TW 前两位相同，只比前缀会一律落到简体。
+                所以先整串精确对一遍，对不上再退回前两位。
+            */
             string lang = (AntdUI.Localization.CurrentLanguage ?? string.Empty).ToLowerInvariant();
-            AntdUI.SelectItem picked = globals[0];
+            AntdUI.SelectItem picked = null;
 
             foreach (AntdUI.SelectItem it in globals)
             {
-                string tag = ((string)it.Tag).ToLowerInvariant();
-
-                if (lang.StartsWith(tag.Substring(0, 2)))
+                if (lang == ((string)it.Tag).ToLowerInvariant())
                 {
                     picked = it;
                     break;
                 }
             }
+
+            if (picked == null)
+            {
+                foreach (AntdUI.SelectItem it in globals)
+                {
+                    string tag = ((string)it.Tag).ToLowerInvariant();
+
+                    if (lang.StartsWith(tag.Substring(0, 2)))
+                    {
+                        picked = it;
+                        break;
+                    }
+                }
+            }
+
+            if (picked == null) { picked = globals[0]; }
 
             btn_global.SelectedValue = picked.Tag;
         }

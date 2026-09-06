@@ -374,7 +374,7 @@ async function onMenuPick(id: string): Promise<void> {
   就交给行悬停的底色提示"这一行是可交互的"。
 */
 .qrow { display: flex; align-items: center; gap: 9px; padding: 3px 12px; font-size: 12px; }
-.qrow:hover { background: rgb(255 255 255 / 3%); }
+.qrow:hover { background: rgb(var(--tint-rgb) / 3%); }
 
 /* 只有滤镜那栏双击有反应，让它自己带上文字光标以外的提示 */
 .qrow.edit { user-select: none; }
@@ -408,8 +408,8 @@ async function onMenuPick(id: string): Promise<void> {
   letter-spacing: .12em;
   text-transform: uppercase;
   padding: 4px 6px 2px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */
-  border: 1px solid #3a3a4c;
-  color: #a8b2c0;
+  border: 1px solid var(--border2);
+  color: var(--th-fg);
 }
 
 </style>

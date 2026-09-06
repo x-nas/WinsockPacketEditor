@@ -360,12 +360,12 @@ const TYPE_KEY = { ins: 'tc.inserted', del: 'tc.deleted', mod: 'tc.modified' } a
 
 .sg + .sg { border-left: 1px solid var(--border); }
 .sg:hover { color: var(--gray); }
-.sg.on { background: rgb(0 212 255 / 10%); color: var(--cyan); }
+.sg.on { background: rgb(var(--cyan-rgb) / 10%); color: var(--cyan); }
 
 .inp {
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -393,7 +393,7 @@ const TYPE_KEY = { ins: 'tc.inserted', del: 'tc.deleted', mod: 'tc.modified' } a
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
 }
 
 /* 面板标题：与各表表头同一份令牌 */
@@ -410,7 +410,7 @@ const TYPE_KEY = { ins: 'tc.inserted', del: 'tc.deleted', mod: 'tc.modified' } a
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 .ph > span { padding-top: 4px; }   /* 字形偏上 2px，与各表表头同一份补偿 */
@@ -426,7 +426,7 @@ const TYPE_KEY = { ins: 'tc.inserted', del: 'tc.deleted', mod: 'tc.modified' } a
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
 }
 
 .tbody { flex: 1; min-height: 0; overflow-y: auto; }
@@ -443,9 +443,9 @@ const TYPE_KEY = { ins: 'tc.inserted', del: 'tc.deleted', mod: 'tc.modified' } a
 .hd-diff { grid-template-columns: 56px 90px minmax(80px, 1fr) minmax(80px, 1fr) 110px; }
 .hd-dup { grid-template-columns: 56px minmax(220px, 2fr) 60px 70px 70px minmax(120px, 1fr) minmax(120px, 1fr); }
 
-.row2 { height: 30px; border-bottom: 1px solid rgb(42 42 58 / 45%); color: #cbd5cc; cursor: pointer; }
-.row2:hover { background: rgb(255 255 255 / 4%); }
-.row2.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.row2 { height: 30px; border-bottom: 1px solid rgb(var(--border-rgb) / 45%); color: var(--soft); cursor: pointer; }
+.row2:hover { background: rgb(var(--tint-rgb) / 4%); }
+.row2.sel { background: rgb(var(--cyan-rgb) / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
 
 .row2 > span,
 .head > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -456,12 +456,12 @@ const TYPE_KEY = { ins: 'tc.inserted', del: 'tc.deleted', mod: 'tc.modified' } a
 .head > span.seq, .row2 > span.seq,
 .head > span.pos2, .row2 > span.pos2 { text-align: left; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .pos, .len, .cnt { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--cyan); }
 .va { font-family: var(--mono); color: #f0a3b8; }
-.vb { font-family: var(--mono); color: #6ee7a8; }
-.seq { font-family: var(--mono); color: #6ee7a8; }
-.pos2 { font-family: var(--mono); font-size: 12px; color: #94a3b8; }
+.vb { font-family: var(--mono); color: var(--acc-green2); }
+.seq { font-family: var(--mono); color: var(--acc-green2); }
+.pos2 { font-family: var(--mono); font-size: 12px; color: var(--dim3); }
 
 /* 变更类型标签：新增绿 / 删除红 / 修改琥珀 */
 .tg {
@@ -476,9 +476,9 @@ const TYPE_KEY = { ins: 'tc.inserted', del: 'tc.deleted', mod: 'tc.modified' } a
   font-style: normal;
 }
 
-.row2.ins .tg { color: var(--green); border-color: rgb(0 255 136 / 35%); }
-.row2.del .tg { color: var(--danger); border-color: rgb(255 51 102 / 35%); }
-.row2.mod .tg { color: var(--amber); border-color: rgb(234 179 8 / 40%); }
+.row2.ins .tg { color: var(--green); border-color: rgb(var(--green-rgb) / 35%); }
+.row2.del .tg { color: var(--danger); border-color: rgb(var(--danger-rgb) / 35%); }
+.row2.mod .tg { color: var(--amber); border-color: rgb(var(--amber-rgb) / 40%); }
 
 .more { padding: 10px 14px; font-size: 11.5px; color: var(--muted); text-align: center; }
 </style>

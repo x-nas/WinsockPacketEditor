@@ -214,7 +214,7 @@ onBeforeUnmount(close)
   width: 100%;
   height: 28px;
   padding: 0 8px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -224,7 +224,7 @@ onBeforeUnmount(close)
   outline: none;
 }
 
-.cs-btn:hover:not(:disabled) { border-color: #4b5563; }
+.cs-btn:hover:not(:disabled) { border-color: var(--dim); }
 .cs-btn:focus-visible, .cs.open .cs-btn { border-color: var(--cyan); }
 .cs-btn:disabled { opacity: .45; cursor: default; }
 
@@ -242,7 +242,7 @@ onBeforeUnmount(close)
   z-index: 1500;
   background: var(--card);
   border: 1px solid var(--border);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 55%);
+  box-shadow: 0 10px 30px rgb(var(--shadow-rgb) / 55%);
 }
 
 .cs-scroll { max-height: 240px; overflow-y: auto; padding: 4px 0; }
@@ -267,7 +267,7 @@ onBeforeUnmount(close)
   cursor: pointer;
 }
 
-.cs-opt.hi { background: rgb(0 212 255 / 10%); }
+.cs-opt.hi { background: rgb(var(--cyan-rgb) / 10%); }
 .cs-opt.on { color: var(--cyan); }
 .cs-opt.dis { opacity: .4; cursor: default; }
 

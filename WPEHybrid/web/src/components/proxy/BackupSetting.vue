@@ -10,6 +10,7 @@ import { ref } from 'vue'
 import { call } from '../../bridge'
 import { lang, normalize, t } from '../../i18n'
 import { socks5Addr } from '../../stores/runtime'
+import { initTheme } from '../../stores/theme'
 import SettingsModal from './SettingsModal.vue'
 
 const props = defineProps<{ open: boolean }>()
@@ -41,9 +42,11 @@ async function exportBackup(): Promise<void> {
 async function importBackup(): Promise<void> {
   busy.value = true
   try {
-    const r = await call<{ language: string }>('importBackup')
+    const r = await call<{ language: string; isDark: boolean }>('importBackup')
     //直接写 lang，不走 setLang —— 后者会反过来再写一次 C#（多开设置那一屏同一个理由）
     if (r?.language) lang.value = normalize(r.language)
+    //主题同理：用 initTheme（只应用、不回写），备份里带的那份已经在 C# 侧落库了
+    if (typeof r?.isDark === 'boolean') initTheme(r.isDark)
     //监听地址可能跟着代理配置一起换了
     try { const s = await call<{ socks5Addr?: string }>('getSystemCheck'); if (s?.socks5Addr) socks5Addr.value = s.socks5Addr } catch { /* 取不到就留旧值 */ }
   } catch (e) {
@@ -80,7 +83,7 @@ async function importBackup(): Promise<void> {
 
 <style scoped>
 .groups { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 20px; }
-.g { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border: 1px solid var(--border); background: rgb(0 0 0 / 20%); }
+.g { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border: 1px solid var(--border); background: rgb(var(--inset-rgb) / 20%); }
 .gt { font-family: var(--share); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 2px; }
 .acts { display: flex; align-items: center; gap: 8px; padding: 10px 20px 4px; }
 .acts .grow { flex: 1; }

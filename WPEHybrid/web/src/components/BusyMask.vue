@@ -41,7 +41,7 @@ defineProps<{ text?: string }>()
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(5 5 10 / 72%);
+  background: rgb(var(--scrim-rgb) / 72%);
   backdrop-filter: blur(2px);
 }
 
@@ -91,7 +91,7 @@ defineProps<{ text?: string }>()
   letter-spacing: .22em;
   text-transform: uppercase;
   color: var(--green);
-  text-shadow: 0 0 10px rgb(0 255 136 / 35%);
+  text-shadow: 0 0 10px rgb(var(--green-rgb) / 35%);
 }
 
 /* 关掉动效时不转，但要留下「正在忙」的静态形态 */

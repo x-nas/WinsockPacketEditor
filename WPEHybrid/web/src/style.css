@@ -57,6 +57,69 @@
   --danger: #ff3366;
   --amber: #eab308;
 
+  /* ── 以下是为「浅色模式」补出来的令牌 ───────────────────
+     原先这些值散在 63 个文件里写死（光 #4b5563 就 81 处），
+     换主题时一条都改不动。提成令牌之后，主题只是重定义这一批。
+     浅色那份在文件末尾的 [data-theme="light"] 里。
+  */
+
+  /*
+     强调色的<b>通道值</b>。带透明度的用法一律写成 rgb(var(--x-rgb) / N%)，
+     因为 CSS 里没法把 #00ff88 和一个 alpha 拼起来 —— color-mix() 要 Chromium 111+
+     且写起来长得多，通道令牌是最省的一条路。
+     值必须与上面那几个十六进制<b>逐字对应</b>，改一个要改两处。
+  */
+  --green-rgb: 0 255 136;
+  --cyan-rgb: 0 212 255;
+  --amber-rgb: 234 179 8;
+  --danger-rgb: 255 51 102;
+  --magenta-rgb: 255 0 255;
+  --border-rgb: 42 42 58;
+
+  /*
+     压暗用的三份通道值，<b>按用途分，不按颜色分</b>。
+     深色下三者都是黑、看不出区别；浅色下它们要走不同的方向，
+     合成一份的下场是「页面白了，标题栏和状态栏还是两条黑板」。
+  */
+  --scrim-rgb: 0 0 0;      /* 弹窗遮罩：两套皮肤下都压暗底下的内容 */
+  --chrome-rgb: 10 10 15;  /* 标题栏 / 状态栏 / 侧栏 / 表头这类不透明的面 */
+  --inset-rgb: 0 0 0;      /* 输入框、内嵌小块那层很淡的底（15~34%）*/
+  --shadow-rgb: 0 0 0;     /* box-shadow：浅色下要淡得多，所以单出一份 */
+  /* 悬停时那层极淡的提亮。<b>浅色下要反过来变暗</b>，所以它是令牌不是常量 */
+  --tint-rgb: 255 255 255;
+
+  /*
+     灰阶阶梯，从「最不显眼」到「最显眼」。
+     深色下是由暗到亮，浅色下必须<b>反过来</b>由浅到深 —— 语义是「显眼程度」，
+     不是「亮度」。照着亮度翻会得到一套在白底上全看不见的灰。
+  */
+  --dim: #4b5563;          /* 最不显眼：占位文字、发丝分隔线 */
+  --dim4: #7f8b9c;         /* 备注、次要说明 */
+  --dim2: #8a94a6;         /* 次要文字 */
+  --dim3: #94a3b8;         /* 次要文字（偏冷） */
+  --th-fg: #a8b2c0;        /* 表头字色（对比度量过：深色下 7.8:1）*/
+  --soft: #cbd5cc;         /* 正文里稍弱的一档 */
+  --bright: #e8e8ee;       /* 比 --gray 还亮一档：域名列这类要突出的 */
+
+  --border2: #3a3a4e;      /* 比 --border 明显一点的边：虚线框、图标占位 */
+  --sink: #000;            /* 表格 / 终端块的最深底 */
+  --on-accent: #000;       /* 铺满强调色的格子上的字（十六进制游标）*/
+  --beam: #fff;            /* 氛围层那条游走亮带的颜色 */
+  --beam-op: .03;          /* 它的透明度：浅色下要调高才看得见 */
+
+  --chk-on: #4fa87a;       /* 勾选框「已勾」的绿（比 --green 收敛，成片出现时不刺眼）*/
+  --chk-on-rgb: 79 168 122;
+
+  --acc-green2: #6ee7a8;   /* 绿的第二档：链接、映射目标 */
+  --acc-violet: #a78bfa;   /* 紫：响应类封包、滤镜动作、统计里的「修改」*/
+  --acc-orange: #ff8c00;   /* 橙：统计里的「替换」*/
+
+  /* 公告类型的五色（照 WinForms 的 CellTag）*/
+  --nt1: #38bdf8; --nt1-rgb: 56 189 248;
+  --nt2: #fbbf24; --nt2-rgb: 251 191 36;
+  --nt3: #34d399; --nt3-rgb: 52 211 153;
+  --nt4: #c084fc; --nt4-rgb: 192 132 252;
+
   /*
     四角标记离页面边缘的距离。官网是 8px，这里取 3px ——
     官网页面顶部有留白，而这里视口顶到底就是标题栏、底部就是状态栏，
@@ -127,7 +190,7 @@ body {
   overflow: hidden;
 }
 
-::selection { background: rgb(0 255 136 / 30%); color: var(--green); }
+::selection { background: rgb(var(--green-rgb) / 30%); color: var(--green); }
 
 /* 十六进制面板与报告里的文本要能选、能复制 */
 pre { user-select: text; }
@@ -189,8 +252,8 @@ textarea:focus-visible,
   z-index: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgb(42 42 58 / 10%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(42 42 58 / 10%) 1px, transparent 1px);
+    linear-gradient(rgb(var(--border-rgb) / 10%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--border-rgb) / 10%) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -201,8 +264,8 @@ textarea:focus-visible,
   height: 50%;
   z-index: calc(var(--z-ambience) - 1);   /* 让四角标记压在亮带之上 */
   pointer-events: none;
-  opacity: .03;
-  background: linear-gradient(to bottom, transparent, #fff, transparent);
+  opacity: var(--beam-op);
+  background: linear-gradient(to bottom, transparent, var(--beam), transparent);
   animation: scan 10s linear infinite;
 }
 
@@ -217,7 +280,7 @@ textarea:focus-visible,
   height: var(--corner-arm);
   z-index: calc(var(--z-ambience) + 1);
   pointer-events: none;
-  border-color: rgb(0 255 136 / 30%);
+  border-color: rgb(var(--green-rgb) / 30%);
 }
 
 /*
@@ -250,7 +313,7 @@ body.col-resizing * {
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--black); }
 ::-webkit-scrollbar-thumb { background: var(--border); }
-::-webkit-scrollbar-thumb:hover { background: #3a3a4e; }
+::-webkit-scrollbar-thumb:hover { background: var(--border2); }
 
 /* ── 列表页的共用外观 ─────────────────────────────────────────
    账号 / 滤镜 / 发送（往后还有机器人 / 仓库）这几屏结构相同：
@@ -313,27 +376,27 @@ body.col-resizing * {
 .list-page .btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .list-page .btn:disabled { opacity: .35; cursor: default; }
 
-.list-page .btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
+.list-page .btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
 
 .list-page .btn.primary:hover:not(:disabled) {
-  background: rgb(0 255 136 / 10%);
+  background: rgb(var(--green-rgb) / 10%);
   border-color: var(--green);
   color: var(--green);
 }
 
 /* 琥珀 = 提醒：用在「会让东西自动发生」的入口上（仓库列表的自动入库），与绿的主动作、红的破坏动作区分开 */
-.list-page .btn.warn { border-color: rgb(234 179 8 / 45%); color: var(--amber); }
+.list-page .btn.warn { border-color: rgb(var(--amber-rgb) / 45%); color: var(--amber); }
 
 .list-page .btn.warn:hover:not(:disabled) {
-  background: rgb(234 179 8 / 10%);
+  background: rgb(var(--amber-rgb) / 10%);
   border-color: var(--amber);
   color: var(--amber);
 }
 
-.list-page .btn.danger { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+.list-page .btn.danger { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 
 .list-page .btn.danger:hover:not(:disabled) {
-  background: rgb(255 51 102 / 12%);
+  background: rgb(var(--danger-rgb) / 12%);
   border-color: var(--danger);
   color: var(--danger);
 }
@@ -344,7 +407,7 @@ body.col-resizing * {
   min-height: 0;
   overflow: auto;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
   /* 滚动时不做像素级平滑，直接跳，帧内工作量更可控 */
   overflow-anchor: none;
 }
@@ -387,10 +450,10 @@ body.col-resizing * {
   letter-spacing: .14em;
   text-transform: uppercase;
   /*
-    #a8b2c0 而不是 var(--muted)：后者在 --panel 上只有 3.85:1，
+    var(--th-fg) 而不是 var(--muted)：后者在 --panel 上只有 3.85:1，
     小字 + 大字距下确实看不清（这是用户提过的），换成 7.8:1。
   */
-  color: #a8b2c0;
+  color: var(--th-fg);
   white-space: nowrap;
 }
 
@@ -452,12 +515,12 @@ body.col-resizing * {
 
 .list-page .row {
   height: 34px;   /* 必须与各屏的 ROW_H 常量一致，对不上滚动位置会线性漂移 */
-  border-bottom: 1px solid rgb(42 42 58 / 45%);
-  color: #cbd5cc;
+  border-bottom: 1px solid rgb(var(--border-rgb) / 45%);
+  color: var(--soft);
   cursor: default;
 }
 
-.list-page .row:hover { background: rgb(255 255 255 / 4%); }
+.list-page .row:hover { background: rgb(var(--tint-rgb) / 4%); }
 
 /*
   ⚠️ 行里的每一格都<b>不许换行</b>，长了就省略号。
@@ -471,8 +534,8 @@ body.col-resizing * {
 .list-page .row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* 选中的行给一条左边线 + 淡底，滚动时一眼能看出还剩哪些选着 */
-.list-page .row.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
-.list-page .row.sel:hover { background: rgb(0 212 255 / 10%); }
+.list-page .row.sel { background: rgb(var(--cyan-rgb) / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.list-page .row.sel:hover { background: rgb(var(--cyan-rgb) / 10%); }
 
 /*
   禁用的行压暗，<b>但勾选框那几格除外</b>。
@@ -499,7 +562,7 @@ body.col-resizing * {
 .list-page .chk i {
   width: 13px;
   height: 13px;
-  border: 1px solid #4b5563;
+  border: 1px solid var(--dim);
   position: relative;
   display: inline-block;
 }
@@ -509,7 +572,7 @@ body.col-resizing * {
 .list-page .chk:disabled { opacity: .35; cursor: default; }
 
 /* 绿 = 生效中（启用）。取账号 / 滤镜两屏原本一致的那份值 */
-.list-page .chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.list-page .chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
 .list-page .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 
 /*
@@ -560,7 +623,7 @@ body.col-resizing * {
   position: fixed;
   inset: 0;
   z-index: 999;
-  background: rgb(5 5 10 / 78%);
+  background: rgb(var(--scrim-rgb) / 78%);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
@@ -582,7 +645,7 @@ body.col-resizing * {
   max-height: 100%;
   background: var(--card);
   border: 1px solid var(--border);
-  box-shadow: 0 18px 50px rgb(0 0 0 / 60%);
+  box-shadow: 0 18px 50px rgb(var(--shadow-rgb) / 60%);
 }
 
 .editor-mask .mk { position: absolute; width: 7px; height: 7px; border: 1px solid var(--cyan); }
@@ -609,60 +672,60 @@ body.col-resizing * {
 .setf .row > .k { font-size: 12.5px; color: var(--muted); }
 .setf .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
 .setf .row.off > .k, .setf .row.off > .v { opacity: .45; }
-.setf .hint { padding: 0 20px; margin: 4px 0 6px; font-size: 11.5px; color: #8a94a6; line-height: 1.5; }
+.setf .hint { padding: 0 20px; margin: 4px 0 6px; font-size: 11.5px; color: var(--dim2); line-height: 1.5; }
 .setf .hint.warn { color: var(--amber); }
 
 .setf .chk, .setf .rd { display: inline-flex; align-items: center; gap: 7px; padding: 0; background: transparent; border: 0; font-size: 12.5px; color: var(--muted); cursor: pointer; white-space: nowrap; }
 .setf .chk:disabled, .setf .rd:disabled { cursor: default; opacity: .5; }
 .setf .chk:focus-visible, .setf .rd:focus-visible { outline-offset: 2px; }
 .setf .rd:focus-visible { outline-color: var(--cyan); }
-.setf .chk i { width: 13px; height: 13px; border: 1px solid #4b5563; position: relative; flex: none; }
-.setf .chk.on { color: #4fa87a; }
-.setf .chk.on i { border-color: #4fa87a; background: rgb(79 168 122 / 14%); }
-.setf .chk.on i::after { content: ""; position: absolute; inset: 2px; background: #4fa87a; }
-.setf .rd i { width: 13px; height: 13px; border: 1px solid #4b5563; border-radius: 50%; position: relative; flex: none; }
+.setf .chk i { width: 13px; height: 13px; border: 1px solid var(--dim); position: relative; flex: none; }
+.setf .chk.on { color: var(--chk-on); }
+.setf .chk.on i { border-color: var(--chk-on); background: rgb(var(--chk-on-rgb) / 14%); }
+.setf .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--chk-on); }
+.setf .rd i { width: 13px; height: 13px; border: 1px solid var(--dim); border-radius: 50%; position: relative; flex: none; }
 .setf .rd.on { color: var(--cyan); }
 .setf .rd.on i { border-color: var(--cyan); }
 .setf .rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
 
-.setf .inp { flex: 1; min-width: 0; height: 28px; padding: 0 10px; background: rgb(0 0 0 / 30%); border: 1px solid var(--border); color: var(--gray); font-family: var(--mono); font-size: 12.5px; outline: none; }
+.setf .inp { flex: 1; min-width: 0; height: 28px; padding: 0 10px; background: rgb(var(--inset-rgb) / 30%); border: 1px solid var(--border); color: var(--gray); font-family: var(--mono); font-size: 12.5px; outline: none; }
 .setf .inp:focus { border-color: var(--cyan); }
 .setf .inp:disabled { opacity: .5; }
 .setf .inp.bad { border-color: var(--danger); }
 .setf .inp.num { flex: none; width: 90px; text-align: center; }
 .setf .inp.sm { flex: none; width: 160px; }
 .setf .inp.cap-key { cursor: pointer; caret-color: transparent; }
-.setf .inp.cap-key:focus { border-color: var(--green); box-shadow: inset 0 0 0 1px rgb(0 255 136 / 25%); }
+.setf .inp.cap-key:focus { border-color: var(--green); box-shadow: inset 0 0 0 1px rgb(var(--green-rgb) / 25%); }
 .setf textarea.inp { height: 84px; padding: 6px 10px; resize: vertical; line-height: 1.5; }
-.setf .inp::placeholder { color: #4b5563; }
+.setf .inp::placeholder { color: var(--dim); }
 
 .setf .sbtn { flex: none; padding: 8px 11px 6px; background: transparent; border: 1px solid var(--border); color: var(--gray); font-family: var(--share); font-size: var(--btn-size); line-height: 1; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
 .setf .sbtn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .setf .sbtn:disabled { opacity: .35; cursor: default; }
-.setf .sbtn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.setf .sbtn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
-.setf .sbtn.danger { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
-.setf .sbtn.danger:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); color: var(--danger); }
-.setf .sbtn.warn { border-color: rgb(234 179 8 / 45%); color: var(--amber); }
-.setf .sbtn.warn:hover:not(:disabled) { background: rgb(234 179 8 / 10%); border-color: var(--amber); color: var(--amber); }
+.setf .sbtn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.setf .sbtn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
+.setf .sbtn.danger { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
+.setf .sbtn.danger:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
+.setf .sbtn.warn { border-color: rgb(var(--amber-rgb) / 45%); color: var(--amber); }
+.setf .sbtn.warn:hover:not(:disabled) { background: rgb(var(--amber-rgb) / 10%); border-color: var(--amber); color: var(--amber); }
 
 .setf .tg { flex: none; padding: 5px 7px 3px; border: 1px solid; font-family: var(--share); font-size: 10.5px; line-height: 1; letter-spacing: .06em; }
-.setf .tg.ok { border-color: rgb(0 255 136 / 35%); color: var(--green); }
-.setf .tg.bad { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
-.setf .tg.dim { border-color: var(--border); color: #4b5563; }
-.setf .tg.amber { border-color: rgb(234 179 8 / 40%); color: var(--amber); }
+.setf .tg.ok { border-color: rgb(var(--green-rgb) / 35%); color: var(--green); }
+.setf .tg.bad { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
+.setf .tg.dim { border-color: var(--border); color: var(--dim); }
+.setf .tg.amber { border-color: rgb(var(--amber-rgb) / 40%); color: var(--amber); }
 .setf .link { color: var(--cyan); font-family: var(--mono); font-size: 12.5px; cursor: pointer; text-decoration: underline dotted; }
 .setf .link:hover { color: var(--green); }
 
 /* 弹窗里的小表：表头借 .list-page（根元素同时挂 list-page 类），行是 .tr */
-.setf .tbl { margin: 4px 20px 8px; border: 1px solid var(--border); background: #000; display: flex; flex-direction: column; }
+.setf .tbl { margin: 4px 20px 8px; border: 1px solid var(--border); background: var(--sink); display: flex; flex-direction: column; }
 .setf .tbl .tbar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--border); background: var(--card); }
 .setf .tbl .tbar .grow { flex: 1; }
 .setf .tbl .tbody { max-height: 260px; overflow-y: auto; }
 .setf .tbl .empty { padding: 22px; text-align: center; color: var(--muted); font-size: 12px; line-height: 1.6; }
-.setf .tbl .tr { display: grid; align-items: center; gap: 8px; padding: 0 14px; height: 34px; border-bottom: 1px solid rgb(42 42 58 / 45%); font-size: 12.5px; color: #cbd5cc; cursor: default; }
-.setf .tbl .tr:hover { background: rgb(255 255 255 / 4%); }
-.setf .tbl .tr.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.setf .tbl .tr { display: grid; align-items: center; gap: 8px; padding: 0 14px; height: 34px; border-bottom: 1px solid rgb(var(--border-rgb) / 45%); font-size: 12.5px; color: var(--soft); cursor: default; }
+.setf .tbl .tr:hover { background: rgb(var(--tint-rgb) / 4%); }
+.setf .tbl .tr.sel { background: rgb(var(--cyan-rgb) / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
 .setf .tbl .tr > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .setf .tbl .tr.off > span:not(.ck) { opacity: .45; }
 .setf .tbl .tr > span.ck, .setf .tbl .tr > span.ops { display: flex; align-items: center; justify-content: center; gap: 4px; }
@@ -728,7 +791,7 @@ body.col-resizing * {
   gap: 7px;
   padding: 4px 10px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   color: var(--muted);
   font-size: 12px;
   overflow: hidden;
@@ -792,14 +855,14 @@ body.col-resizing * {
 
 .gtool .chk i { width: 12px; height: 12px; border: 1px solid var(--border); display: inline-block; position: relative; }
 .gtool .chk.on { color: var(--green); }
-.gtool .chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.gtool .chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
 .gtool .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 .gtool .chk:focus-visible { outline-offset: 2px; }
 
 .gtool .num {
   padding: 3px 9px;
   cursor: pointer;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--muted);
   font-family: var(--mono);
@@ -821,3 +884,95 @@ body.col-resizing * {
 
 .gtool .tb:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .gtool .tb:disabled { opacity: .4; cursor: default; }
+
+
+/* ══════════════════════════════════════════════════════════════
+   浅色模式
+
+   【口径】不是把深色「反相」，而是<b>同一套设计换一组值</b>：
+   版式、间距、边框粗细、四角标记、网格底纹、游走亮带全部保留，
+   只有颜色换掉。所以这里只重定义令牌，一条布局规则都没有。
+
+   【为什么霓虹色不能直接用】#00ff88 在白底上对比度只有 1.4:1，
+   当正文字色是看不清的。浅色这份把六个强调色各压暗到 4.5:1 以上
+   （AA 级正文线），色相保持不变 —— 一眼还是那套配色，只是能看清了。
+
+   【灰阶要反过来】--dim 到 --bright 表达的是「显眼程度」不是亮度：
+   深色下越亮越显眼，浅色下越暗越显眼。照亮度翻译会得到一套
+   在白底上全看不见的灰（试过）。
+
+   【怎么生效】App.vue 在 <html> 上写 data-theme="light"，
+   所以选择器挂在 :root 上 —— 令牌要在文档根上才对所有组件（含 Teleport
+   到 body 的右键菜单与弹窗）可见。挂在 .win 上的话，
+   ContextMenu / ToastStack 那几个 Teleport 出去的会拿不到。
+   ══════════════════════════════════════════════════════════════ */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* 底色：三层从外到内 —— 页面、卡片、面板/表头 */
+  --black: #eef1f6;
+  --card: #ffffff;
+  --panel: #e6eaf1;
+  --sink: #ffffff;
+
+  --gray: #16202e;
+  --muted: #5d6b7f;
+  --border: #ccd4e0;
+  --border2: #aeb9c9;
+
+  /*
+     强调色压暗到能当正文用。色相与深色那套一致：
+       绿  #00ff88 → #00753f   青  #00d4ff → #006a99
+       洋红 #ff00ff → #a8009a  红  #ff3366 → #c81340   琥珀 #eab308 → #8a6200
+  */
+  --green: #00753f;
+  --cyan: #006a99;
+  --magenta: #a8009a;
+  --danger: #c81340;
+  --amber: #8a6200;
+
+  --green-rgb: 0 117 63;
+  --cyan-rgb: 0 106 153;
+  --amber-rgb: 138 98 0;
+  --danger-rgb: 200 19 64;
+  --magenta-rgb: 168 0 154;
+  --border-rgb: 204 212 224;
+
+  /* 遮罩仍然压暗（要盖住底下的内容），阴影换成淡蓝灰 —— 白底上的黑影太脏 */
+  --scrim-rgb: 30 41 59;
+  --shadow-rgb: 100 116 139;
+  /*
+     chrome 面<b>反过来</b>：深色下标题栏比页面更暗，浅色下要比页面更亮。
+     照深色那样给个深蓝灰，页面白了而这两条还是黑板 —— 第一版就是这样。
+  */
+  --chrome-rgb: 255 255 255;
+  /* 内嵌底也压暗，但要淡得多：白底上 30% 的深蓝灰是块脏斑 */
+  --inset-rgb: 148 163 184;
+  /* 提亮反过来变暗：白底上「更亮一点」是看不出来的 */
+  --tint-rgb: 22 32 46;
+
+  /* 灰阶反过来：由浅到深 = 由不显眼到显眼 */
+  --dim: #6f7d90;
+  --dim4: #5f6d80;
+  --dim2: #55637a;
+  --dim3: #4d5b70;
+  --th-fg: #3d4a5e;
+  --soft: #26313f;
+  --bright: #0b1522;
+
+  --on-accent: #ffffff;    /* 强调色铺满的格子上改用白字 */
+  --beam: #0b1522;         /* 亮带变成暗带，否则白底上完全看不见 */
+  --beam-op: .05;
+
+  --chk-on: #17794b;
+  --chk-on-rgb: 23 121 75;
+
+  --acc-green2: #0f7a4a;
+  --acc-violet: #6b3fd4;
+  --acc-orange: #a04d00;
+
+  --nt1: #0369a1; --nt1-rgb: 3 105 161;
+  --nt2: #92600a; --nt2-rgb: 146 96 10;
+  --nt3: #04785a; --nt3-rgb: 4 120 90;
+  --nt4: #7c2fd6; --nt4-rgb: 124 47 214;
+}

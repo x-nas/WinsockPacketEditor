@@ -187,6 +187,15 @@ export const DICT = {
   'set.backup': { zh: '备份设置', en: 'BackUp Settings' },
   'set.remote': { zh: '远程管理设置', en: 'Remote MGT Settings' },
   'set.firewall': { zh: '防火墙设置', en: 'FireWall Settings' },
+  //软件设置（标题栏齿轮）—— 语言与深浅色。与那 12 个抓包设置不是一类，见 AppSetting.vue
+  'set.app': { zh: '软件设置', en: 'Preferences' },
+  'set.app.lang': { zh: '界面语言', en: 'Language' },
+  'set.app.langHint': { zh: '页面文字与弹窗文案一起切换，选完立刻生效并记住。', en: 'Switches both page text and dialog messages. Takes effect immediately and is remembered.' },
+  'set.app.theme': { zh: '外观', en: 'Appearance' },
+  'set.app.dark': { zh: '深色', en: 'Dark' },
+  'set.app.light': { zh: '浅色', en: 'Light' },
+  'set.app.themeHint': { zh: '同一套版式换一组配色，与主程序共用这个设置。', en: 'Same layout, different palette. Shared with the main program.' },
+  'set.app.now': { zh: '当前', en: 'Current' },
   'set.system': { zh: '系统设置', en: 'System Settings' },
   'set.lockedHint': {
     zh: '代理服务正在运行 —— 监听相关的设置改了不会生效（SuperSocket 只在启动时读一次）。要修改请先停止服务。',

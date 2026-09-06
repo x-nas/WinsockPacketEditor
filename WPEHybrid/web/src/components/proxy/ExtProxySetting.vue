@@ -102,5 +102,5 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.colon { color: #4b5563; font-family: var(--mono); }
+.colon { color: var(--dim); font-family: var(--mono); }
 </style>

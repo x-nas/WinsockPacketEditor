@@ -134,7 +134,7 @@ async function toggle(): Promise<void> {
 }
 
 /* 服务在跑时左侧透出一层绿光，停着时不透 —— 余光里也能看出状态 */
-.runbar.on { background: linear-gradient(90deg, rgb(0 255 136 / 7%), transparent 45%), var(--card); }
+.runbar.on { background: linear-gradient(90deg, rgb(var(--green-rgb) / 7%), transparent 45%), var(--card); }
 
 .led { width: 9px; height: 9px; background: var(--muted); flex: none; }
 .runbar.on .led { background: var(--green); box-shadow: 0 0 8px var(--green); animation: beat 1.6s steps(1) infinite; }
@@ -190,14 +190,14 @@ async function toggle(): Promise<void> {
 .tb:disabled { opacity: .45; cursor: default; }
 .tb:focus-visible { outline-offset: -2px; }
 
-.tb.go { border-color: rgb(0 255 136 / 45%); color: var(--green); }
+.tb.go { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
 /* 悬停要把边框与字色一起写上：上面那条通用的 .tb:hover 是 (0,3,0)，压得过 .tb.go 的 (0,2,0)，
    不写的话点完一瞬间（鼠标还停在按钮上）绿 / 红按钮会变成青色 —— 与 .list-page .btn.primary:hover 同一个坑 */
-.tb.go:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
+.tb.go:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
 .tb.go:focus-visible { outline-color: var(--green); }
 
-.tb.stop { border-color: rgb(255 51 102 / 45%); color: var(--danger); }
-.tb.stop:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); color: var(--danger); }
+.tb.stop { border-color: rgb(var(--danger-rgb) / 45%); color: var(--danger); }
+.tb.stop:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
 .tb.stop:focus-visible { outline-color: var(--danger); }
 
 /* 「设置」按钮开着菜单时的高亮；菜单本身是共用的 ContextMenu */

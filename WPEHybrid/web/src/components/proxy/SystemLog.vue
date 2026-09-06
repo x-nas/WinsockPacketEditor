@@ -336,8 +336,8 @@ async function doExport(): Promise<void> {
 }
 
 .tb:hover { color: var(--gray); }
-.tb.on { color: var(--cyan); border-color: rgb(0 212 255 / 40%); background: rgb(0 212 255 / 8%); }
-.tb .n { font-family: var(--share); font-size: 10px; color: #4b5563; }
+.tb.on { color: var(--cyan); border-color: rgb(var(--cyan-rgb) / 40%); background: rgb(var(--cyan-rgb) / 8%); }
+.tb .n { font-family: var(--share); font-size: 10px; color: var(--dim); }
 .tb.on .n { color: var(--cyan); }
 .tb:focus-visible { outline-offset: -2px; }
 
@@ -361,7 +361,7 @@ async function doExport(): Promise<void> {
 
 .chk i { width: 12px; height: 12px; border: 1px solid var(--border); position: relative; }
 .chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
 .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 
 /*
@@ -411,7 +411,7 @@ async function doExport(): Promise<void> {
   min-height: 0;
   overflow: auto;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
   /* 日志是拿来读和复制的，这里要放开全局的 user-select: none */
   user-select: text;
 }
@@ -443,20 +443,20 @@ async function doExport(): Promise<void> {
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;   /* 与全项目其它表头同一份，--muted 在 --panel 上只有 3.85:1 */
+  color: var(--th-fg);   /* 与全项目其它表头同一份，--muted 在 --panel 上只有 3.85:1 */
 }
 
 .sys { grid-template-columns: 96px 200px 1fr; }
 .flt { grid-template-columns: 96px 200px 90px 70px 110px 70px; }
 .pxy { grid-template-columns: 96px 140px 150px 1fr; }
 
-.row { color: #cbd5cc; }
-.row:hover { background: rgb(255 255 255 / 4%); }
+.row { color: var(--soft); }
+.row:hover { background: rgb(var(--tint-rgb) / 4%); }
 
 .tm { color: var(--muted); font-variant-numeric: tabular-nums; }
 .fn { color: var(--cyan); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ip { color: #94a3b8; }
-.num { color: #94a3b8; text-align: right; font-variant-numeric: tabular-nums; }
+.ip { color: var(--dim3); }
+.num { color: var(--dim3); text-align: right; font-variant-numeric: tabular-nums; }
 
 /* 内容可能很长（异常堆栈），换行而不是撑出横向滚动条 */
 .ct { white-space: pre-wrap; word-break: break-word; }

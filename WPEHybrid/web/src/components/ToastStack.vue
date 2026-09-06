@@ -95,10 +95,10 @@ const ICON: Record<ToastLevel, string> = {
   min-width: 240px;
   max-width: 420px;
   padding: 10px 14px 10px 16px;
-  background: rgb(10 10 15 / 94%);
+  background: rgb(var(--chrome-rgb) / 94%);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border);
-  box-shadow: 0 8px 28px rgb(0 0 0 / 55%);
+  box-shadow: 0 8px 28px rgb(var(--shadow-rgb) / 55%);
   cursor: pointer;
   /* 条目自己要能点（点一下关掉），所以在这里把事件收回来 */
   pointer-events: auto;
@@ -130,16 +130,16 @@ const ICON: Record<ToastLevel, string> = {
 /* 没有标题时正文就是主角，给它等级色 */
 .tx.solo { color: inherit; }
 
-.tst.success { color: var(--green); border-color: rgb(0 255 136 / 40%); }
+.tst.success { color: var(--green); border-color: rgb(var(--green-rgb) / 40%); }
 .tst.success .bar { background: var(--green); box-shadow: 0 0 8px var(--green); }
 
-.tst.info { color: var(--cyan); border-color: rgb(0 212 255 / 40%); }
+.tst.info { color: var(--cyan); border-color: rgb(var(--cyan-rgb) / 40%); }
 .tst.info .bar { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
 
-.tst.warning { color: var(--amber); border-color: rgb(234 179 8 / 40%); }
+.tst.warning { color: var(--amber); border-color: rgb(var(--amber-rgb) / 40%); }
 .tst.warning .bar { background: var(--amber); box-shadow: 0 0 8px var(--amber); }
 
-.tst.error { color: var(--danger); border-color: rgb(255 51 102 / 40%); }
+.tst.error { color: var(--danger); border-color: rgb(var(--danger-rgb) / 40%); }
 .tst.error .bar { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 
 /* ── 进出场 ─────────────────────────────────────────── */

@@ -159,12 +159,12 @@ async function save(): Promise<void> {
   font-size: 9px;
   letter-spacing: .26em;
   text-transform: uppercase;
-  color: #4b5563;
+  color: var(--dim);
   padding: 0 20px;
   margin: 16px 0 6px;
 }
 
-.hint { margin: 6px 20px 0; font-size: 11.5px; color: #4b5563; line-height: 1.6; }
+.hint { margin: 6px 20px 0; font-size: 11.5px; color: var(--dim); line-height: 1.6; }
 
 .row {
   display: grid;
@@ -179,7 +179,7 @@ async function save(): Promise<void> {
 .row > .v { display: flex; align-items: center; gap: 14px; min-width: 0; }
 
 .modes { display: flex; gap: 22px; padding: 0 20px 4px; }
-.tip { font-size: 11px; color: #4b5563; }
+.tip { font-size: 11px; color: var(--dim); }
 
 .chk {
   display: inline-flex;
@@ -197,7 +197,7 @@ async function save(): Promise<void> {
 .chk.k { justify-self: start; }
 .chk i { width: 13px; height: 13px; border: 1px solid var(--border); position: relative; flex: none; }
 .chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
 .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 .chk:focus-visible { outline-offset: 2px; }
 
@@ -224,7 +224,7 @@ async function save(): Promise<void> {
 .inp {
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);

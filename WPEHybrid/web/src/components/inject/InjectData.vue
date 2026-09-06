@@ -614,8 +614,8 @@ defineExpose({ onCleared })
 .lostbar {
   flex: none;
   padding: 7px 14px 5px;
-  background: rgb(255 51 102 / 8%);
-  border: 1px solid rgb(255 51 102 / 30%);
+  background: rgb(var(--danger-rgb) / 8%);
+  border: 1px solid rgb(var(--danger-rgb) / 30%);
   color: var(--danger);
   font-size: 12px;
 }

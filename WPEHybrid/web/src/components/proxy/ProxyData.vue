@@ -863,7 +863,7 @@ async function runAccept(): Promise<void> {
 }
 
 /* 悬停给一道浅描边 —— 不动底色，底色本身就是要展示的东西 */
-.plegend .lg:hover { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 45%); }
+.plegend .lg:hover { box-shadow: inset 0 0 0 1px rgb(var(--tint-rgb) / 45%); }
 .plegend .lg:focus-visible { outline-offset: 1px; }
 
 /*
@@ -891,7 +891,7 @@ async function runAccept(): Promise<void> {
   font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: #4b5563;
+  color: var(--dim);
 }
 
 

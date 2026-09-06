@@ -175,7 +175,7 @@ const style = computed(() => ({ left: pos.value.x + 'px', top: pos.value.y + 'px
   padding: 4px 0;
   background: var(--panel);
   border: 1px solid var(--border);
-  box-shadow: 0 6px 22px rgb(0 0 0 / 55%);
+  box-shadow: 0 6px 22px rgb(var(--shadow-rgb) / 55%);
 }
 
 /* 四角标记，与设置弹窗同一套记号 */
@@ -200,8 +200,8 @@ const style = computed(() => ({ left: pos.value.x + 'px', top: pos.value.y + 'px
 }
 
 .cm-it:hover:not(:disabled),
-.cm-it.on { background: rgb(0 212 255 / 10%); color: var(--cyan); }
-.cm-it.danger:hover:not(:disabled) { background: rgb(255 51 102 / 12%); color: var(--danger); }
+.cm-it.on { background: rgb(var(--cyan-rgb) / 10%); color: var(--cyan); }
+.cm-it.danger:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); color: var(--danger); }
 .cm-it.off { opacity: .35; cursor: default; }
 .cm-it:focus-visible { outline-offset: -2px; }
 

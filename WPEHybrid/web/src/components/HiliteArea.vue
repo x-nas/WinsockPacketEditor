@@ -123,14 +123,14 @@ defineExpose({ focusAt })
   overflow: auto;
 }
 
-.ha-ta::placeholder { color: #4b5563; }
-.ha-ta::selection { background: rgb(0 212 255 / 28%); }
+.ha-ta::placeholder { color: var(--dim); }
+.ha-ta::selection { background: rgb(var(--cyan-rgb) / 28%); }
 
 /* 差异：A 里被删 / 改的红，B 里新增 / 改的绿 —— 与 WinForms 的 SetStyle 同一套配色语义 */
-.ha-hl :deep(.del) { background: rgb(255 51 102 / 32%); }
-.ha-hl :deep(.ins) { background: rgb(0 255 136 / 26%); }
+.ha-hl :deep(.del) { background: rgb(var(--danger-rgb) / 32%); }
+.ha-hl :deep(.ins) { background: rgb(var(--green-rgb) / 26%); }
 /* 正则命中：青 */
-.ha-hl :deep(.rx) { background: rgb(0 212 255 / 26%); }
+.ha-hl :deep(.rx) { background: rgb(var(--cyan-rgb) / 26%); }
 /* 查重命中的字节：琥珀 */
-.ha-hl :deep(.dup) { background: rgb(234 179 8 / 28%); }
+.ha-hl :deep(.dup) { background: rgb(var(--amber-rgb) / 28%); }
 </style>

@@ -574,7 +574,7 @@ defineExpose({ scrollToBottom, scrollToIndex })
 }
 
 /*
-  表头字与全项目其它表统一：Share Tech Mono 10px、.14em 字距、大写、#a8b2c0
+  表头字与全项目其它表统一：Share Tech Mono 10px、.14em 字距、大写、var(--th-fg)
   （即 style.css 里 .list-page .head 那一份）。原先这张表是 Consolas 12px 加粗 ——
   与其它十来张表并排看就是「有的大有的小」。
   写在 .pl-cell 这一层是因为字体规则在 .pl-cell 上，只改 .pl-head 会被它盖掉。
@@ -585,7 +585,7 @@ defineExpose({ scrollToBottom, scrollToIndex })
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 .pl-spacer {
@@ -637,21 +637,21 @@ defineExpose({ scrollToBottom, scrollToIndex })
   下面 .pl-row.hit .pl-cell 那条就是补这个：让命中行的格子交出自己的颜色、
   回到继承，行内的前景色才落得下来。
 */
-.pl-cell.c-dim { color: #4b5563; }
-.pl-cell.c-meta { color: #6b7280; }
+.pl-cell.c-dim { color: var(--dim); }
+.pl-cell.c-meta { color: var(--muted); }
 
-.pl-cell.c-local { color: #94a3b8; }
+.pl-cell.c-local { color: var(--dim3); }
 .pl-cell.c-local-dim { color: #64748b; }
 
 .pl-cell.c-remote { color: #00d4ff; }
 .pl-cell.c-remote-dim { color: #0e7490; }
 
 /* 域名是这张表里最常被读的一列，给最高亮度 */
-.pl-cell.c-domain { color: #e8e8ee; }
+.pl-cell.c-domain { color: var(--bright); }
 
 /* 方向：出去的琥珀、回来的淡紫。两者与青、绿都拉得开，不会跟别的列混 */
 .pl-cell.c-req { color: #eab308; }
-.pl-cell.c-resp { color: #a78bfa; }
+.pl-cell.c-resp { color: var(--acc-violet); }
 
 /*
   数据列：代码雨绿 + 极淡辉光。
@@ -722,7 +722,7 @@ defineExpose({ scrollToBottom, scrollToIndex })
 
 .pl-cell.c-data {
   color: #35e07a;
-  text-shadow: 0 0 6px rgb(0 255 136 / 22%);
+  text-shadow: 0 0 6px rgb(var(--green-rgb) / 22%);
 }
 
 .pl-row:hover {
@@ -744,7 +744,7 @@ defineExpose({ scrollToBottom, scrollToIndex })
   写 background 会被行内样式压过去，而阴影不会。
 */
 .pl-row.pick {
-  box-shadow: inset 2px 0 0 var(--cyan), inset 0 0 0 999px rgb(0 212 255 / 7%);
+  box-shadow: inset 2px 0 0 var(--cyan), inset 0 0 0 999px rgb(var(--cyan-rgb) / 7%);
 }
 
 .pl-cell {
@@ -779,18 +779,18 @@ defineExpose({ scrollToBottom, scrollToIndex })
   justify-content: center;
   padding: 0;
   border-radius: 50%;
-  background: rgb(10 10 15 / 92%);
+  background: rgb(var(--chrome-rgb) / 92%);
   backdrop-filter: blur(6px);
-  border: 1px solid rgb(234 179 8 / 45%);
+  border: 1px solid rgb(var(--amber-rgb) / 45%);
   color: var(--amber);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 45%);
+  box-shadow: 0 4px 16px rgb(var(--shadow-rgb) / 45%);
   transition: .15s;
 }
 
 .pl-paused:hover {
-  background: rgb(234 179 8 / 16%);
-  box-shadow: 0 0 16px rgb(234 179 8 / 28%);
+  background: rgb(var(--amber-rgb) / 16%);
+  box-shadow: 0 0 16px rgb(var(--amber-rgb) / 28%);
   /* 微微上抬，暗示「点它会动」*/
   transform: translateY(-1px);
 }

@@ -283,7 +283,7 @@ async function onMenuPick(id: string): Promise<void> {
 
 .row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 
 /*
   名称前原先有一枚 13px 的仓库图标（侧栏那枚六边形），这个尺寸下六个角看不出来，
@@ -292,5 +292,5 @@ async function onMenuPick(id: string): Promise<void> {
 .name { color: var(--gray); }
 
 .cnt { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--cyan); }
-.cnt.zero { color: #4b5563; }
+.cnt.zero { color: var(--dim); }
 </style>

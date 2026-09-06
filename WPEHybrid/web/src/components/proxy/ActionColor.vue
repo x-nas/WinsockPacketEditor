@@ -167,7 +167,7 @@ async function save(): Promise<void> {
 .hexv {
   font-family: var(--mono);
   font-size: 12px;
-  color: #8a94a6;
+  color: var(--dim2);
   font-variant-numeric: tabular-nums;
 }
 
@@ -205,6 +205,6 @@ input[type="color"]::-webkit-color-swatch { border: 0; }
 
 .mini:hover { border-color: var(--cyan); color: var(--cyan); }
 
-.mini.warn { border-color: rgb(234 179 8 / 45%); color: var(--amber); }
-.mini.warn:hover:not(:disabled) { background: rgb(234 179 8 / 10%); border-color: var(--amber); color: var(--amber); }
+.mini.warn { border-color: rgb(var(--amber-rgb) / 45%); color: var(--amber); }
+.mini.warn:hover:not(:disabled) { background: rgb(var(--amber-rgb) / 10%); border-color: var(--amber); color: var(--amber); }
 </style>

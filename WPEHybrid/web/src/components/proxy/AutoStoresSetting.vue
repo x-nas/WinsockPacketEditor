@@ -262,7 +262,7 @@ function onMenuPick(id: string): void {
 
 .notice { font-size: 11.5px; color: var(--amber); }
 
-.hint { padding: 0 20px; margin: 4px 0 12px; font-size: 11.5px; color: #8a94a6; line-height: 1.6; }
+.hint { padding: 0 20px; margin: 4px 0 12px; font-size: 11.5px; color: var(--dim2); line-height: 1.6; }
 
 /* 与 FireWallSetting 同一份勾选框写法 */
 .chk {
@@ -278,10 +278,10 @@ function onMenuPick(id: string): void {
   white-space: nowrap;
 }
 
-.chk i { width: 13px; height: 13px; border: 1px solid #4b5563; position: relative; flex: none; }
-.chk.on { color: #4fa87a; }
-.chk.on i { border-color: #4fa87a; background: rgb(79 168 122 / 14%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: #4fa87a; }
+.chk i { width: 13px; height: 13px; border: 1px solid var(--dim); position: relative; flex: none; }
+.chk.on { color: var(--chk-on); }
+.chk.on i { border-color: var(--chk-on); background: rgb(var(--chk-on-rgb) / 14%); }
+.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--chk-on); }
 
 /* ── 规则表 ── */
 
@@ -293,7 +293,7 @@ function onMenuPick(id: string): void {
   font-size: 10.5px;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #8a94a6;
+  color: var(--dim2);
 }
 
 .cap .n { color: var(--cyan); }
@@ -319,7 +319,7 @@ function onMenuPick(id: string): void {
 .tbl {
   margin: 0 20px 6px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 20%);
+  background: rgb(var(--inset-rgb) / 20%);
   max-height: 260px;
   overflow: auto;
 }
@@ -348,15 +348,15 @@ function onMenuPick(id: string): void {
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
   white-space: nowrap;
 }
 
 .empty { padding: 26px 0; text-align: center; color: var(--muted); font-size: 12px; }
 
-.trow { height: 30px; color: #cbd5cc; cursor: default; }
-.trow:hover { background: rgb(255 255 255 / 4%); }
-.trow.aim { background: rgb(0 212 255 / 8%); }
+.trow { height: 30px; color: var(--soft); cursor: default; }
+.trow:hover { background: rgb(var(--tint-rgb) / 4%); }
+.trow.aim { background: rgb(var(--cyan-rgb) / 8%); }
 .trow > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* 禁用的行压暗，但勾选框那格除外 —— 它正是把这一行点亮的控件 */
@@ -365,7 +365,7 @@ function onMenuPick(id: string): void {
 .ck { display: flex; align-items: center; justify-content: center; }
 
 .head { font-family: var(--mono); color: var(--cyan); letter-spacing: .04em; }
-.house { color: #94a3b8; }
+.house { color: var(--dim3); }
 .house.gone { color: var(--danger); font-size: 11.5px; }
 
 .ops { display: flex; align-items: center; justify-content: flex-end; gap: 2px; }

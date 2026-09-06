@@ -156,24 +156,24 @@ function clearAll(): void {
   justify-content: center;
   gap: 14px;
   padding: 24px;
-  border: 1px dashed #3a3a4e;
+  border: 1px dashed var(--border2);
   background:
-    linear-gradient(rgb(0 212 255 / 3%), transparent),
-    repeating-linear-gradient(0deg, transparent 0 39px, rgb(255 255 255 / 2.5%) 39px 40px),
-    repeating-linear-gradient(90deg, transparent 0 39px, rgb(255 255 255 / 2.5%) 39px 40px);
+    linear-gradient(rgb(var(--cyan-rgb) / 3%), transparent),
+    repeating-linear-gradient(0deg, transparent 0 39px, rgb(var(--tint-rgb) / 2.5%) 39px 40px),
+    repeating-linear-gradient(90deg, transparent 0 39px, rgb(var(--tint-rgb) / 2.5%) 39px 40px);
   color: var(--muted);
   cursor: pointer;
   transition: border-color .15s, background-color .15s;
 }
 
-.drop:hover { border-color: #4b5563; }
-.drop.over { border-color: var(--cyan); background-color: rgb(0 212 255 / 5%); color: var(--cyan); }
+.drop:hover { border-color: var(--dim); }
+.drop.over { border-color: var(--cyan); background-color: rgb(var(--cyan-rgb) / 5%); color: var(--cyan); }
 .drop.busy { pointer-events: none; opacity: .6; }
 
 .drop .ico { width: 34px; height: 34px; stroke: currentColor; stroke-width: 1.6; fill: none; opacity: .8; }
 .drop .tx { text-align: center; }
 .drop .t1 { font-size: 13px; color: var(--gray); }
-.drop .t2 { margin-top: 6px; font-size: 11.5px; color: #8a94a6; }
+.drop .t2 { margin-top: 6px; font-size: 11.5px; color: var(--dim2); }
 .drop .t2 b { font-family: var(--mono); font-weight: 400; color: var(--cyan); }
 
 /* 有结果之后收成一条横幅，仍然能接着拖 */
@@ -190,7 +190,7 @@ function clearAll(): void {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
 }
 
 .ph {
@@ -206,7 +206,7 @@ function clearAll(): void {
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
   min-width: 0;
 }
 
@@ -226,7 +226,7 @@ function clearAll(): void {
   border: 0;
   outline: none;
   resize: none;
-  color: #6ee7a8;
+  color: var(--acc-green2);
   caret-color: var(--cyan);
   font-family: var(--mono);
   font-size: 12px;
@@ -234,5 +234,5 @@ function clearAll(): void {
   white-space: pre;
 }
 
-.ft { flex: none; padding: 6px 12px; border-top: 1px solid var(--border); font-size: 11px; color: #8a94a6; }
+.ft { flex: none; padding: 6px 12px; border-top: 1px solid var(--border); font-size: 11px; color: var(--dim2); }
 </style>

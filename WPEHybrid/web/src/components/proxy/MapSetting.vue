@@ -196,7 +196,7 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.lb { font-size: 11.5px; color: #8a94a6; }
+.lb { font-size: 11.5px; color: var(--dim2); }
 .cnt { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 .tbl.dim .tbody { opacity: .55; }
 .ms .tbody { max-height: 190px; }
@@ -204,6 +204,6 @@ async function save(): Promise<void> {
 .ms .head.hr, .ms .tr.hr { grid-template-columns: 50px minmax(200px, 1fr) minmax(200px, 1fr) 72px; }
 .ms .head > span, .ms .tr > span { text-align: left; }
 .url { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
-.url.to { color: #6ee7a8; }
-.file { font-family: var(--mono); font-size: 12px; color: #94a3b8; }
+.url.to { color: var(--acc-green2); }
+.file { font-family: var(--mono); font-size: 12px; color: var(--dim3); }
 </style>

@@ -959,7 +959,7 @@ async function save(): Promise<void> {
   font-size: 9.5px;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: #4b5563;
+  color: var(--dim);
 }
 
 .hd .x { display: inline-flex; padding: 0; background: transparent; border: 0; color: var(--muted); cursor: pointer; }
@@ -973,7 +973,7 @@ async function save(): Promise<void> {
 /*
   分组标题（作用域 / 指定类型 / 递进）。
 
-  原来是 9px + #4b5563，对 --card 只有 <b>2.47:1</b> —— 全弹窗最差的一处，
+  原来是 9px + var(--dim)，对 --card 只有 <b>2.47:1</b> —— 全弹窗最差的一处，
   比正文还小一号却比正文暗得多，等于把「这一组是什么」这句话藏起来。
   提到 10.5px / 6.09:1，并把字距从 .26em 收到 .14em：
   小字上过宽的字距会把字拆散，反而更难认。
@@ -986,7 +986,7 @@ async function save(): Promise<void> {
   font-size: 10.5px;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #8a94a6;
+  color: var(--dim2);
   padding: 0 18px;
   margin: 12px 0 5px;
 }
@@ -1007,7 +1007,7 @@ async function save(): Promise<void> {
 .row > .v.wrap { flex-wrap: wrap; gap: 8px 16px; }
 
 .k2 { font-size: 12.5px; color: var(--muted); }
-.tip { font-size: 11.5px; color: #8a94a6; }
+.tip { font-size: 11.5px; color: var(--dim2); }
 
 /*
   下拉是自绘的 CyberSelect（全项目统一；它自带滚动、键盘首字母跳转与超出视口时的翻转，
@@ -1082,10 +1082,10 @@ async function save(): Promise<void> {
 }
 
 .chk.k { justify-self: start; }
-.chk i { width: 13px; height: 13px; border: 1px solid #4b5563; position: relative; flex: none; }
+.chk i { width: 13px; height: 13px; border: 1px solid var(--dim); position: relative; flex: none; }
 
 /*
-  勾选态用<b>压暗的绿</b>（#4fa87a），不是主色 --green。
+  勾选态用<b>压暗的绿</b>（var(--chk-on)），不是主色 --green。
 
   这一屏的主角是下面那张字节格 —— 它顶着 WinForms 传下来的浅黄 / 黄底色，
   本来就很亮。上面再排一行满饱和的 --green（对底色 15:1），眼睛会先被
@@ -1097,12 +1097,12 @@ async function save(): Promise<void> {
   作用域 / 指定类型 / 递进三组共用这条规则 —— 它们是同一类东西，
   只压一组会变成同一个弹窗里两种深浅的绿。
 */
-.chk.on { color: #4fa87a; }
-.chk.on i { border-color: #4fa87a; background: rgb(79 168 122 / 14%); }
-.chk.on i::after { content: ""; position: absolute; inset: 2px; background: #4fa87a; }
+.chk.on { color: var(--chk-on); }
+.chk.on i { border-color: var(--chk-on); background: rgb(var(--chk-on-rgb) / 14%); }
+.chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--chk-on); }
 .chk:disabled { opacity: .4; cursor: default; }
 
-.rd i { width: 13px; height: 13px; border: 1px solid #4b5563; border-radius: 50%; position: relative; flex: none; }
+.rd i { width: 13px; height: 13px; border: 1px solid var(--dim); border-radius: 50%; position: relative; flex: none; }
 .rd.on { color: var(--cyan); }
 .rd.on i { border-color: var(--cyan); }
 .rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
@@ -1119,7 +1119,7 @@ async function save(): Promise<void> {
   min-width: 0;
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -1130,7 +1130,7 @@ async function save(): Promise<void> {
 
 .inp:focus { border-color: var(--cyan); }
 .inp:disabled { opacity: .4; }
-.inp::placeholder { color: #4b5563; }
+.inp::placeholder { color: var(--dim); }
 .inp.num { flex: none; width: 92px; font-variant-numeric: tabular-nums; }
 
 .mini {
@@ -1154,7 +1154,7 @@ async function save(): Promise<void> {
 .grid {
   margin: 0 18px;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
   overflow-x: auto;
   overflow-y: hidden;
   /* 滚动时不做像素级平滑，帧内工作量更可控 */
@@ -1176,19 +1176,19 @@ async function save(): Promise<void> {
   font-size: 10.5px;
   letter-spacing: .14em;
   /* 与 .grp 同一套标签样式，理由见那里 */
-  color: #8a94a6;
+  color: var(--dim2);
 }
 
 .gtitle + .grid { margin-bottom: 6px; }
 
 /* 偏移表的匹配点：这一列就是「命中的那一位」，标出来才找得回原点 */
-.cell.head.zero { color: var(--cyan); background: rgb(0 212 255 / 12%); }
+.cell.head.zero { color: var(--cyan); background: rgb(var(--cyan-rgb) / 12%); }
 
 .cell {
   width: 46px;
   flex: none;
-  border-right: 1px solid rgb(42 42 58 / 60%);
-  border-bottom: 1px solid rgb(42 42 58 / 60%);
+  border-right: 1px solid rgb(var(--border-rgb) / 60%);
+  border-bottom: 1px solid rgb(var(--border-rgb) / 60%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1206,7 +1206,7 @@ async function save(): Promise<void> {
     没有直接用 --gray（12.7:1）：那样列号会跟格子里的数据一样抢眼，
     表头是刻度、不是内容。
   */
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 /*
@@ -1327,6 +1327,6 @@ async function save(): Promise<void> {
 
 .btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .btn:disabled { opacity: .35; cursor: default; }
-.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.btn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); }
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); }
 </style>

@@ -92,6 +92,6 @@ async function save(): Promise<void> {
 </template>
 
 <style scoped>
-.proto, .colon { color: #4b5563; font-family: var(--mono); font-size: 12px; }
+.proto, .colon { color: var(--dim); font-family: var(--mono); font-size: 12px; }
 .sel { width: 92px; }
 </style>

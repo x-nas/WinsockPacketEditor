@@ -249,9 +249,9 @@ const ACTION_LABEL = ['PROXY', 'REJECT', 'DIRECT']
 .rl .head > span.arg, .rl .tr > span.arg, .rl .head > span.ty, .rl .tr > span.ty { text-align: left; }
 .rl .tbody { max-height: 320px; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .ty { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
-.arg { font-family: var(--mono); font-size: 12px; color: #6ee7a8; }
+.arg { font-family: var(--mono); font-size: 12px; color: var(--acc-green2); }
 .act { font-family: var(--share); font-size: 10.5px; letter-spacing: .08em; }
 .act.a0 { color: var(--cyan); }
 .act.a1 { color: var(--danger); }

@@ -477,8 +477,8 @@ function titleOf(k: PageKey): string {
   gap: 12px;
   margin-bottom: 10px;
   padding: 8px 12px;
-  border: 1px solid rgb(234 179 8 / 40%);
-  background: rgb(234 179 8 / 8%);
+  border: 1px solid rgb(var(--amber-rgb) / 40%);
+  background: rgb(var(--amber-rgb) / 8%);
   font-size: 12px;
   color: var(--amber);
 }
@@ -535,7 +535,7 @@ function titleOf(k: PageKey): string {
   font-size: var(--th-size);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 /* 表头文字比盒中心偏上约 2px，往下补 4px 的上内边距压回正中 */
@@ -545,13 +545,13 @@ function titleOf(k: PageKey): string {
 
 .row {
   height: 30px;
-  border-bottom: 1px solid rgba(42, 42, 58, 0.5);
+  border-bottom: 1px solid rgb(var(--border-rgb) / 50%);
   font-size: 12px;
   cursor: default;
 }
 
-.row:hover { background: rgba(0, 255, 136, 0.05); }
-.row.sel { background: rgba(0, 212, 255, 0.1); }
+.row:hover { background: rgb(var(--green-rgb) / 5%); }
+.row.sel { background: rgb(var(--cyan-rgb) / 10%); }
 
 .row .num { text-align: right; font-family: var(--mono); color: var(--muted); }
 

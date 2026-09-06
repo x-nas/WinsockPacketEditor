@@ -166,7 +166,7 @@ async function save(): Promise<void> {
 
 <style scoped>
 
-.dash { color: #4b5563; }
+.dash { color: var(--dim); }
 
 .inp.dt { flex: none; width: 200px; }
 

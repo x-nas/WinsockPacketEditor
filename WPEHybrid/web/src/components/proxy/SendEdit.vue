@@ -478,7 +478,7 @@ async function save(): Promise<void> {
 
 .tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
 .tt .zh { font-family: var(--orbit); font-size: 14px; color: var(--gray); letter-spacing: .04em; }
-.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #4b5563; }
+.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
 
 .x {
   display: inline-flex;
@@ -529,14 +529,14 @@ async function save(): Promise<void> {
 .row.off > .k { opacity: .45; }
 
 .k2 { font-size: 12.5px; color: var(--muted); }
-.tip { font-size: 11.5px; color: #8a94a6; }
+.tip { font-size: 11.5px; color: var(--dim2); }
 
 .inp {
   flex: 1;
   min-width: 0;
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -561,9 +561,9 @@ async function save(): Promise<void> {
   white-space: nowrap;
 }
 
-.chk i { width: 13px; height: 13px; border: 1px solid #4b5563; position: relative; flex: none; }
+.chk i { width: 13px; height: 13px; border: 1px solid var(--dim); position: relative; flex: none; }
 .chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
 .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 
 .tg {
@@ -577,8 +577,8 @@ async function save(): Promise<void> {
   letter-spacing: .04em;
 }
 
-.tg.ok { border-color: rgb(0 255 136 / 35%); color: var(--green); }
-.tg.bad { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+.tg.ok { border-color: rgb(var(--green-rgb) / 35%); color: var(--green); }
+.tg.bad { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 
 /* 执行条 */
 .runbar {
@@ -588,7 +588,7 @@ async function save(): Promise<void> {
   margin: 8px 18px 6px;
   padding: 7px 12px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 20%);
+  background: rgb(var(--inset-rgb) / 20%);
 }
 
 .grow { flex: 1; }
@@ -617,12 +617,12 @@ async function save(): Promise<void> {
 
 .btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .btn:disabled { opacity: .35; cursor: default; }
-.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.btn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); }
-.btn.danger { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
-.btn.danger:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); }
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); }
+.btn.danger { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
+.btn.danger:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); }
 
-.btn.run { display: inline-flex; align-items: center; gap: 7px; border-color: rgb(0 255 136 / 45%); color: var(--green); }
+.btn.run { display: inline-flex; align-items: center; gap: 7px; border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
 .btn.run .ico {
   /*
     11px 而不是代理状态条那枚的 13px：这个按钮的内容高度是 10.5px 的文字行，
@@ -636,14 +636,14 @@ async function save(): Promise<void> {
   position: relative;
   top: -1px;   /* 按钮上内边距比下多 2px 是给字形的补偿，图标不需要，退回 1px */
 }
-.btn.run.on { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+.btn.run.on { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 
 /*
   悬停要压过公共的 .btn:hover（那条是青色，(0,3,0)）：开始态照 .btn.primary 的绿、
   停止态照 .btn.danger 的红，否则这个绿按钮一悬停就变蓝，与旁边的「新增发送」不一样。
 */
-.btn.run:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
-.btn.run.on:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); color: var(--danger); }
+.btn.run:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
+.btn.run.on:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
 .btn.run.on .ico { animation: pulse 1.1s ease-in-out infinite; }
 
 @keyframes pulse { 50% { opacity: .25; } }
@@ -660,7 +660,7 @@ async function save(): Promise<void> {
   flex-direction: column;
   margin: 0 18px 2px;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
 }
 
 /* 表头在 .tbody 里 sticky（style.css 的 .list-page .head 已经是 sticky + top: 0）*/
@@ -702,16 +702,16 @@ async function save(): Promise<void> {
 
 .row2 {
   height: 30px;
-  border-bottom: 1px solid rgb(42 42 58 / 45%);
-  color: #cbd5cc;
+  border-bottom: 1px solid rgb(var(--border-rgb) / 45%);
+  color: var(--soft);
   cursor: default;
 }
 
-.row2:hover { background: rgb(255 255 255 / 4%); }
-.row2.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.row2:hover { background: rgb(var(--tint-rgb) / 4%); }
+.row2.sel { background: rgb(var(--cyan-rgb) / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
 
 /* 正在发的那一条。间隔为 0 时不会高亮，见脚本里 startPoll 的说明 */
-.row2.run { background: rgb(0 255 136 / 12%); box-shadow: inset 2px 0 0 var(--green); }
+.row2.run { background: rgb(var(--green-rgb) / 12%); box-shadow: inset 2px 0 0 var(--green); }
 
 .row2 > span,
 .head > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -756,12 +756,12 @@ async function save(): Promise<void> {
   justify-content: center;
 }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
-.ty { color: #a78bfa; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
+.ty { color: var(--acc-violet); }
 .so { color: var(--muted); font-variant-numeric: tabular-nums; }
-.ad { color: #94a3b8; font-family: var(--mono); font-size: 12px; }
+.ad { color: var(--dim3); font-family: var(--mono); font-size: 12px; }
 .len { color: var(--cyan); font-variant-numeric: tabular-nums; }
-.dt { color: #6ee7a8; font-family: var(--mono); font-size: 12px; }
+.dt { color: var(--acc-green2); font-family: var(--mono); font-size: 12px; }
 
 .ft {
   flex: none;

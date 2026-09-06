@@ -254,7 +254,7 @@ async function save(): Promise<void> {
 /* 有方向被关掉时才出现 —— 那是「看不到数据」的头号原因 */
 .warn { padding: 0 20px; margin: 2px 0 4px; font-size: 11.5px; color: var(--amber); }
 
-.tip { font-size: 11.5px; color: #8a94a6; }
+.tip { font-size: 11.5px; color: var(--dim2); }
 
 
 </style>

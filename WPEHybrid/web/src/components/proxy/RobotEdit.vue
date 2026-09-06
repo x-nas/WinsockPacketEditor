@@ -665,7 +665,7 @@ async function save(): Promise<void> {
 
 .tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
 .tt .zh { font-family: var(--orbit); font-size: 14px; color: var(--gray); letter-spacing: .04em; }
-.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #4b5563; }
+.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
 
 .x {
   display: inline-flex;
@@ -699,7 +699,7 @@ async function save(): Promise<void> {
   overflow-y: auto;
   overflow-x: hidden;   /* 某一行再超宽也只裁，不出横向滚动条 */
   border-right: 1px solid var(--border);
-  background: rgb(0 0 0 / 18%);
+  background: rgb(var(--inset-rgb) / 18%);
 }
 
 .pal[inert] { opacity: .45; }
@@ -714,7 +714,7 @@ async function save(): Promise<void> {
   padding: 11px 14px 9px;
   background: var(--panel);
   border: 0;
-  color: #a8b2c0;
+  color: var(--th-fg);
   font-family: var(--share);
   font-size: var(--th-size);
   line-height: 1;
@@ -747,7 +747,7 @@ async function save(): Promise<void> {
 .grow { flex: 1; min-width: 0; }
 .lb { flex: none; font-size: 12px; color: var(--muted); white-space: nowrap; }
 
-.note { font-size: 11px; color: #8a94a6; line-height: 1.5; }
+.note { font-size: 11px; color: var(--dim2); line-height: 1.5; }
 .note.tail { padding: 10px 14px 14px; }
 
 .sel { flex: none; }
@@ -759,7 +759,7 @@ async function save(): Promise<void> {
   min-width: 0;
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -777,7 +777,7 @@ async function save(): Promise<void> {
 
 /* 按键捕获框：只读但要能拿焦点，焦点时青边提示「现在按」 */
 .inp.cap-key { cursor: pointer; caret-color: transparent; }
-.inp.cap-key:focus { border-color: var(--green); box-shadow: inset 0 0 0 1px rgb(0 255 136 / 25%); }
+.inp.cap-key:focus { border-color: var(--green); box-shadow: inset 0 0 0 1px rgb(var(--green-rgb) / 25%); }
 
 /* 单选：与全项目的勾选框同一种画法，圆的 */
 .rd {
@@ -794,7 +794,7 @@ async function save(): Promise<void> {
   flex: none;
 }
 
-.rd i { width: 13px; height: 13px; border: 1px solid #4b5563; border-radius: 50%; position: relative; flex: none; }
+.rd i { width: 13px; height: 13px; border: 1px solid var(--dim); border-radius: 50%; position: relative; flex: none; }
 .rd.on { color: var(--gray); }
 .rd.on i { border-color: var(--green); }
 .rd.on i::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--green); }
@@ -823,7 +823,7 @@ async function save(): Promise<void> {
   margin: 8px 18px 6px;
   padding: 7px 12px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 20%);
+  background: rgb(var(--inset-rgb) / 20%);
   min-width: 0;
 }
 
@@ -833,7 +833,7 @@ async function save(): Promise<void> {
 
 .trail { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
 .trail .tl { flex: none; font-size: 12px; color: var(--muted); font-family: var(--share); letter-spacing: .06em; }
-.trail .tv { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); font-size: 12px; color: #6ee7a8; }
+.trail .tv { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); font-size: 12px; color: var(--acc-green2); }
 
 .btn {
   flex: none;
@@ -853,15 +853,15 @@ async function save(): Promise<void> {
 
 .btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .btn:disabled { opacity: .35; cursor: default; }
-.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.btn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
 .btn.mini { padding: 8px 11px 6px; }
 
-.btn.run { display: inline-flex; align-items: center; gap: 7px; border-color: rgb(0 255 136 / 45%); color: var(--green); }
+.btn.run { display: inline-flex; align-items: center; gap: 7px; border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
 .btn.run .ico { width: 11px; height: 11px; margin: -1px 0; flex: none; position: relative; top: -1px; }
-.btn.run.on { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
-.btn.run:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
-.btn.run.on:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); color: var(--danger); }
+.btn.run.on { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
+.btn.run:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
+.btn.run.on:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
 .btn.run.on .ico { animation: pulse 1.1s ease-in-out infinite; }
 
 @keyframes pulse { 50% { opacity: .25; } }
@@ -878,7 +878,7 @@ async function save(): Promise<void> {
   flex-direction: column;
   margin: 0 18px 2px;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
 }
 
 .tbody { flex: 1; min-height: 0; overflow-y: auto; }
@@ -895,15 +895,15 @@ async function save(): Promise<void> {
 
 .row2 {
   height: 30px;
-  border-bottom: 1px solid rgb(42 42 58 / 45%);
-  color: #cbd5cc;
+  border-bottom: 1px solid rgb(var(--border-rgb) / 45%);
+  color: var(--soft);
   cursor: default;
 }
 
-.row2:hover { background: rgb(255 255 255 / 4%); }
-.row2.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
-.row2.run { background: rgb(0 255 136 / 12%); box-shadow: inset 2px 0 0 var(--green); }
-.row2.bad { background: rgb(255 51 102 / 12%); box-shadow: inset 2px 0 0 var(--danger); }
+.row2:hover { background: rgb(var(--tint-rgb) / 4%); }
+.row2.sel { background: rgb(var(--cyan-rgb) / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.row2.run { background: rgb(var(--green-rgb) / 12%); box-shadow: inset 2px 0 0 var(--green); }
+.row2.bad { background: rgb(var(--danger-rgb) / 12%); box-shadow: inset 2px 0 0 var(--danger); }
 
 .row2 > span,
 .head > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -915,7 +915,7 @@ async function save(): Promise<void> {
 .row2 > span.ops { display: flex; align-items: center; justify-content: center; }
 
 .no { color: var(--cyan); font-variant-numeric: tabular-nums; }
-.ct { color: #cbd5cc; }
+.ct { color: var(--soft); }
 
 /* 类型列按指令类型着色，照 UiTheme.GetColor_ByInstructionType（YellowGreen / Khaki / Orchid / LightSeaGreen / LightSkyBlue / Violet / DarkOrange）*/
 .row2.t0 .ty, .row2.t6 .ty { color: #9acd32; }

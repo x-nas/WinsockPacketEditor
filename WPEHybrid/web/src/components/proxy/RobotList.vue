@@ -292,12 +292,12 @@ async function onMenuPick(id: string): Promise<void> {
 .sep { width: 1px; height: 16px; background: var(--border); }
 
 /* 启停：与发送列表同一对图标与配色 */
-.btn.run { display: inline-flex; align-items: center; gap: 7px; border-color: rgb(0 255 136 / 45%); color: var(--green); }
+.btn.run { display: inline-flex; align-items: center; gap: 7px; border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
 .btn.run .ico { width: 11px; height: 11px; margin: -1px 0; flex: none; position: relative; top: -1px; }
-.btn.run.on { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+.btn.run.on { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 .btn.run.on .ico { animation: pulse 1.1s ease-in-out infinite; }
-.btn.run:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
-.btn.run.on:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); color: var(--danger); }
+.btn.run:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
+.btn.run.on:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
 
 @keyframes pulse { 50% { opacity: .25; } }
 
@@ -312,10 +312,10 @@ async function onMenuPick(id: string): Promise<void> {
   gap: 8px;
   padding: 5px 10px;
   border: 1px solid var(--border);
-  border-left: 2px solid #4b5563;
-  background: rgb(0 0 0 / 20%);
+  border-left: 2px solid var(--dim);
+  background: rgb(var(--inset-rgb) / 20%);
   font-size: 11.5px;
-  color: #8a94a6;
+  color: var(--dim2);
 }
 
 /* 只留这一屏独有的：列宽、列间距、最小宽度 */
@@ -336,11 +336,11 @@ async function onMenuPick(id: string): Promise<void> {
 
 .row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .name { color: var(--gray); }
 
 .cnt { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--cyan); }
-.cnt.zero { color: #4b5563; }
+.cnt.zero { color: var(--dim); }
 
 .inst { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--green); }
 .inst.none { color: var(--danger); }

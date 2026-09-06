@@ -75,7 +75,7 @@ watch(() => props.row, async (r) => {
 .tbl {
   margin: 14px 20px 4px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   /* 登录记录可能很多，弹窗自身不长高，让这块自己滚 */
   max-height: 340px;
   overflow: auto;
@@ -102,11 +102,11 @@ watch(() => props.row, async (r) => {
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;   /* 与全项目其它表头同一份，--muted 在 --panel 上只有 3.85:1 */
+  color: var(--th-fg);   /* 与全项目其它表头同一份，--muted 在 --panel 上只有 3.85:1 */
 }
 
-.row { height: 30px; color: #cbd5cc; }
-.row:hover { background: rgb(255 255 255 / 4%); }
+.row { height: 30px; color: var(--soft); }
+.row:hover { background: rgb(var(--tint-rgb) / 4%); }
 
 .empty { padding: 30px 0; text-align: center; color: var(--muted); font-size: 12px; }
 

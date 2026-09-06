@@ -250,7 +250,7 @@ async function exportRows(): Promise<void> {
   font-size: 9px;
   letter-spacing: .26em;
   text-transform: uppercase;
-  color: #4b5563;
+  color: var(--dim);
   padding: 0 20px;
   margin: 16px 0 6px;
 }
@@ -282,8 +282,8 @@ async function exportRows(): Promise<void> {
 .warn {
   margin: 0 20px 6px;
   padding: 6px 11px;
-  border: 1px solid rgb(234 179 8 / 32%);
-  background: rgb(234 179 8 / 7%);
+  border: 1px solid rgb(var(--amber-rgb) / 32%);
+  background: rgb(var(--amber-rgb) / 7%);
   font-size: 11.5px;
   color: var(--amber);
 }
@@ -301,7 +301,7 @@ async function exportRows(): Promise<void> {
 .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
 .k2 { font-size: 12.5px; color: var(--muted); margin-left: 8px; white-space: nowrap; }
-.tip { font-size: 11px; color: #4b5563; }
+.tip { font-size: 11px; color: var(--dim); }
 
 .chk {
   display: inline-flex;
@@ -319,7 +319,7 @@ async function exportRows(): Promise<void> {
 .chk.k { justify-self: start; }
 .chk i { width: 13px; height: 13px; border: 1px solid var(--border); position: relative; flex: none; }
 .chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
 .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 .chk:focus-visible { outline-offset: 2px; }
 
@@ -347,7 +347,7 @@ async function exportRows(): Promise<void> {
   height: 28px;
   min-width: 0;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -358,7 +358,7 @@ async function exportRows(): Promise<void> {
 
 .inp:focus { border-color: var(--cyan); }
 .inp:disabled { opacity: .4; }
-.inp::placeholder { color: #4b5563; }
+.inp::placeholder { color: var(--dim); }
 .inp.num { width: 84px; font-variant-numeric: tabular-nums; }
 .inp.dt { width: 200px; }
 .inp.pf { flex: 1; }
@@ -367,7 +367,7 @@ async function exportRows(): Promise<void> {
 .tbl {
   margin: 0 20px 4px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   /* 999 条也不该把弹窗撑到屏幕外，这块自己滚 */
   max-height: 220px;
   overflow: auto;
@@ -390,23 +390,23 @@ async function exportRows(): Promise<void> {
   height: var(--th-h);
   background: var(--panel);
   border-bottom: 1px solid var(--border);
-  /* 与全项目其它表头同一份：10px · #a8b2c0（原先 9px + --muted，比别的表小一号也暗一档）*/
+  /* 与全项目其它表头同一份：10px · var(--th-fg)（原先 9px + --muted，比别的表小一号也暗一档）*/
   font-family: var(--share);
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
-.drow { height: 26px; color: #cbd5cc; }
-.drow:hover { background: rgb(255 255 255 / 4%); }
+.drow { height: 26px; color: var(--soft); }
+.drow:hover { background: rgb(var(--tint-rgb) / 4%); }
 
 /* 重名的这一条落库时会被挡下，先标出来 */
 .drow.dup .user { color: var(--amber); text-decoration: line-through; }
 
-.empty { padding: 24px 0; text-align: center; color: #4b5563; font-size: 12px; }
+.empty { padding: 24px 0; text-align: center; color: var(--dim); font-size: 12px; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; text-align: center; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; text-align: center; }
 .user { color: var(--gray); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pw { color: var(--green); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; user-select: text; }
 
@@ -419,7 +419,7 @@ async function exportRows(): Promise<void> {
   padding: 0;
   background: transparent;
   border: 1px solid transparent;
-  color: #4b5563;
+  color: var(--dim);
   cursor: pointer;
 }
 

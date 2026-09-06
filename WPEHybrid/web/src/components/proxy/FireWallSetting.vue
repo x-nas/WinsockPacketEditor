@@ -389,7 +389,7 @@ async function save(): Promise<void> {
 
 .k2 { font-size: 12.5px; color: var(--muted); }
 /* 时长后面那句注解，比「分钟」再暗一档，读成旁注而不是第二个标签 */
-.k2.dim { color: #6b7280; }
+.k2.dim { color: var(--muted); }
 
 /* ── 名单 ── */
 
@@ -410,7 +410,7 @@ async function save(): Promise<void> {
   cursor: pointer;
 }
 
-.tab.on { border-color: var(--cyan); color: var(--cyan); background: rgb(0 212 255 / 10%); }
+.tab.on { border-color: var(--cyan); color: var(--cyan); background: rgb(var(--cyan-rgb) / 10%); }
 .tab .n { font-family: var(--share); font-size: 9.5px; opacity: .8; }
 
 .mini {
@@ -438,7 +438,7 @@ async function save(): Promise<void> {
 .tbl {
   margin: 0 20px 6px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 20%);
+  background: rgb(var(--inset-rgb) / 20%);
   max-height: 218px;
   overflow: auto;
 }
@@ -466,7 +466,7 @@ async function save(): Promise<void> {
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
   white-space: nowrap;
 }
 
@@ -475,14 +475,14 @@ async function save(): Promise<void> {
 
 .empty { padding: 26px 0; text-align: center; color: var(--muted); font-size: 12px; }
 
-.trow { height: 30px; color: #cbd5cc; cursor: default; }
-.trow:hover { background: rgb(255 255 255 / 4%); }
+.trow { height: 30px; color: var(--soft); cursor: default; }
+.trow:hover { background: rgb(var(--tint-rgb) / 4%); }
 .trow > span,
 /* 表头也要：列宽是按中文的字数定的，「过期时间」四个字换成「Истекает」就装不下 */
 .thead > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .ip { color: var(--cyan); font-family: var(--mono); }
-.loc { display: flex; align-items: center; gap: 6px; color: #94a3b8; }
+.loc { display: flex; align-items: center; gap: 6px; color: var(--dim3); }
 
 /*
   省略号要挂在<b>内层</b>：.loc 成了 flex 容器之后，text-overflow 对它本身不再起作用，
@@ -492,7 +492,7 @@ async function save(): Promise<void> {
 
 /* 三种原始尺寸（16×12 国旗 / 20×20 组织旗 / 16×16 局域网），定框 + contain 才不会压扁 */
 .flag { width: 16px; height: 16px; object-fit: contain; flex: none; }
-.num { color: #94a3b8; text-align: center; font-variant-numeric: tabular-nums; }
+.num { color: var(--dim3); text-align: center; font-variant-numeric: tabular-nums; }
 /* 表头要跟着数据格一起居中，只居中数据会看着像错位 */
 .thead > span:nth-child(3) { text-align: center; }
 
@@ -525,7 +525,7 @@ async function save(): Promise<void> {
 }
 .exp { color: var(--muted); font-family: var(--mono); font-size: 12px; }
 /* 「永久有效」是句话不是时间戳，等宽字体反而别扭 */
-.exp.never { font-family: inherit; font-size: 12.5px; color: #7f8b9c; }
+.exp.never { font-family: inherit; font-size: 12.5px; color: var(--dim4); }
 
 .ops { display: flex; align-items: center; justify-content: flex-end; gap: 2px; }
 

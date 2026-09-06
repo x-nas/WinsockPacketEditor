@@ -402,7 +402,7 @@ watch(rows, () => {
     10px 的小字压在 3.85 上本来就吃力 —— 这一点在十六进制那张表上已经反馈过一次，
     不在新表里重复。要统一的话该是把另外两张一起提上来，不是把这张压下去。
   */
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 /* 表头全部居中；内容里只有名称与地址两列靠左 —— 与滤镜日志同一条口径 */
@@ -423,18 +423,18 @@ watch(rows, () => {
 
 .empty { padding: 40px 0; text-align: center; color: var(--muted); font-size: 12.5px; }
 
-.row { height: 34px; border-bottom: 1px solid rgb(42 42 58 / 45%); color: #cbd5cc; cursor: pointer; }
-.row:hover { background: rgb(255 255 255 / 4%); }
+.row { height: 34px; border-bottom: 1px solid rgb(var(--border-rgb) / 45%); color: var(--soft); cursor: pointer; }
+.row:hover { background: rgb(var(--tint-rgb) / 4%); }
 
 /* 选中行：左侧一道青色标，与下半部的连接明细呼应 */
-.row.sel { background: rgb(0 212 255 / 10%); box-shadow: inset 2px 0 0 var(--cyan); }
+.row.sel { background: rgb(var(--cyan-rgb) / 10%); box-shadow: inset 2px 0 0 var(--cyan); }
 .row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .tm { color: var(--muted); font-variant-numeric: tabular-nums; }
 .user { color: var(--gray); }
 /* 国旗与文字同格：省一列，滚动时图和文永远对得上（与封包列表同一个理由）*/
-.loc { display: flex; align-items: center; gap: 6px; color: #94a3b8; }
-.num { color: #94a3b8; font-variant-numeric: tabular-nums; }
+.loc { display: flex; align-items: center; gap: 6px; color: var(--dim3); }
+.num { color: var(--dim3); font-variant-numeric: tabular-nums; }
 
 .ip { color: var(--cyan); }
 
@@ -480,7 +480,7 @@ watch(rows, () => {
   font-size: 10.5px;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #8a94a6;
+  color: var(--dim2);
 }
 
 .cip { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
@@ -509,12 +509,12 @@ watch(rows, () => {
   gap: 10px;
   padding: 0 14px;
   height: var(--th-h);
-  /* 与全项目其它表头同一份（10px · .14em · #a8b2c0），不因为是子表就小半号 */
+  /* 与全项目其它表头同一份（10px · .14em · var(--th-fg)），不因为是子表就小半号 */
   font-family: var(--share);
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 .chead > span:nth-child(4) { text-align: center; }
@@ -525,7 +525,7 @@ watch(rows, () => {
 */
 .chead > span { white-space: nowrap; overflow: hidden; }
 
-.crow:hover { background: rgb(255 255 255 / 4%); }
+.crow:hover { background: rgb(var(--tint-rgb) / 4%); }
 .crow > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* 表头默认就靠左，这里不必再写；等宽数字让端口位数不齐时也不会左右晃 */
@@ -537,12 +537,12 @@ watch(rows, () => {
   于是箭头离端口 49px、离目标只有 15px。把列收到 48px（贴着内容），
   两边变成 23 / 15，看着才像"在中间"。
 */
-.carrow { color: #4b5563; text-align: center; }
-.ctarget { color: #e8e8ee; }
-.csrv { color: #94a3b8; }
+.carrow { color: var(--dim); text-align: center; }
+.ctarget { color: var(--bright); }
+.csrv { color: var(--dim3); }
 
 /* 与目标相同时只是一条短横，压暗，别让它看着像有内容 */
-.csrv.same { color: #4b5563; }
+.csrv.same { color: var(--dim); }
 
 /*
   协议：与封包列表的协议列同一套 —— 居中的普通文字，一个暗色，没有边框。
@@ -551,7 +551,7 @@ watch(rows, () => {
   另外那五种按类型分色也去掉了：封包列表里只有「类型」那一格按取值变色
   （请求 / 响应是最值得一眼分辨的语义），协议本身不承担那个作用。
 */
-.cproto { text-align: center; color: #6b7280; }
+.cproto { text-align: center; color: var(--muted); }
 
 /*
   两张表共用。

@@ -132,7 +132,7 @@ function openMenu(e: MouseEvent): void {
 }
 
 /* 钩子装上时左侧透出一层绿光 —— 与代理的 RunBar 同一条视觉约定 */
-.runbar.on { background: linear-gradient(90deg, rgb(0 255 136 / 7%), transparent 45%), var(--card); }
+.runbar.on { background: linear-gradient(90deg, rgb(var(--green-rgb) / 7%), transparent 45%), var(--card); }
 .runbar.off { opacity: .72; }
 
 .led { width: 9px; height: 9px; background: var(--muted); flex: none; }
@@ -172,8 +172,8 @@ function openMenu(e: MouseEvent): void {
   white-space: nowrap;
 }
 
-.state.attached { color: var(--green); border-color: rgb(0 255 136 / 40%); }
-.state.disconnected { color: var(--danger); border-color: rgb(255 51 102 / 40%); }
+.state.attached { color: var(--green); border-color: rgb(var(--green-rgb) / 40%); }
+.state.disconnected { color: var(--danger); border-color: rgb(var(--danger-rgb) / 40%); }
 
 .tb {
   padding: 11px 15px 9px;   /* 上 +1 下 -1：Share Tech Mono 的字形在 em 框里偏上 1px */
@@ -199,12 +199,12 @@ function openMenu(e: MouseEvent): void {
 .tb:focus-visible { outline-offset: -2px; }
 
 /* 悬停要把边框与字色一起写上：通用的 .tb:hover 是 (0,3,0)，压得过 .tb.go 的 (0,2,0) */
-.tb.go { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.tb.go:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
+.tb.go { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.tb.go:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
 .tb.go:focus-visible { outline-color: var(--green); }
 
-.tb.stop { border-color: rgb(255 51 102 / 45%); color: var(--danger); }
-.tb.stop:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); color: var(--danger); }
+.tb.stop { border-color: rgb(var(--danger-rgb) / 45%); color: var(--danger); }
+.tb.stop:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
 .tb.stop:focus-visible { outline-color: var(--danger); }
 
 .tb.on { border-color: var(--cyan); color: var(--cyan); }

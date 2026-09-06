@@ -349,13 +349,13 @@ watch(() => props.id, () => { asText.value = null })
 }
 
 .hx-title {
-  /* 与各表表头同一份字样：--th-size · Share Tech Mono · 大写 · #a8b2c0 */
+  /* 与各表表头同一份字样：--th-size · Share Tech Mono · 大写 · var(--th-fg) */
   padding-top: 4px;   /* 字形偏上 2px（像素实测），与各表表头同一份补偿 */
   font-family: var(--share);
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 .hx-meta {
@@ -425,8 +425,8 @@ watch(() => props.id, () => { asText.value = null })
 .hx-segb.after:hover { color: var(--wpe-accent); }
 .hx-segb.before:hover { color: var(--cyan); }
 
-.hx-segb.after.on { color: var(--wpe-accent); background: rgb(0 255 136 / 12%); }
-.hx-segb.before.on { color: var(--cyan); background: rgb(0 212 255 / 12%); }
+.hx-segb.after.on { color: var(--wpe-accent); background: rgb(var(--green-rgb) / 12%); }
+.hx-segb.before.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 12%); }
 
 .hx-segb:focus-visible { outline-offset: -2px; }
 

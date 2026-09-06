@@ -251,7 +251,7 @@ onMounted(async () => {
   position: relative;
   display: inline-block;
   align-self: flex-start;
-  text-shadow: 0 0 26px rgb(0 255 136 / 40%);
+  text-shadow: 0 0 26px rgb(var(--green-rgb) / 40%);
 }
 
 .glitch::before,
@@ -388,7 +388,7 @@ onMounted(async () => {
 .cd .last b { color: var(--cyan); font-weight: 400; }
 
 /* 系统自检终端 */
-.term { margin: 26px 0 0; background: #000; border: 1px solid var(--border); }
+.term { margin: 26px 0 0; background: var(--sink); border: 1px solid var(--border); }
 
 .term-bar {
   display: flex;
@@ -413,7 +413,7 @@ onMounted(async () => {
 .term-body {
   padding: 12px 16px;
   font-size: 12.5px;
-  color: #cbd5cc;
+  color: var(--soft);
   overflow-x: auto;
 }
 

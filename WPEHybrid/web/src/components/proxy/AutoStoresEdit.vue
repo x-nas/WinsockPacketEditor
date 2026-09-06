@@ -128,7 +128,7 @@ async function save(): Promise<void> {
 .row > .k { font-size: 12.5px; color: var(--muted); }
 .row > .v { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
-.hint { padding: 0 20px 0 124px; margin: 0 0 6px; font-size: 11.5px; color: #8a94a6; }
+.hint { padding: 0 20px 0 124px; margin: 0 0 6px; font-size: 11.5px; color: var(--dim2); }
 .hint.warn { color: var(--amber); padding-left: 20px; margin-top: 6px; }
 
 .inp {
@@ -136,7 +136,7 @@ async function save(): Promise<void> {
   min-width: 0;
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);

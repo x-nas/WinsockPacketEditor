@@ -631,12 +631,12 @@ defineExpose({ cur, nib, col, insertMode, hasSel, selCount, per, selectAll, sele
   与对比份不同的字节：琥珀而不是红 —— 红在这套皮肤里是「拦截 / 出错」，这里只是"这一位被动过"。
   底色只有 20%：密排的等宽字上实心底会连成色块，看不出边界。
 */
-.b.d, .c.d { color: #f9d86f; background: rgb(234 179 8 / 20%); }
+.b.d, .c.d { color: #f9d86f; background: rgb(var(--amber-rgb) / 20%); }
 
-.b.sel, .c.sel { background: rgb(0 212 255 / 18%); color: var(--gray); }
+.b.sel, .c.sel { background: rgb(var(--cyan-rgb) / 18%); color: var(--gray); }
 
 /* 光标：当前字节反白；写了高位还没写低位时只亮低位那一格。只读模式不画光标 —— 看的人没有「正在改哪一位」这回事，只留选区 */
-.b.cur, .c.cur { background: var(--cyan); color: #000; }
+.b.cur, .c.cur { background: var(--cyan); color: var(--on-accent); }
 .b.cur.hi { background: linear-gradient(90deg, transparent 0 1ch, var(--cyan) 1ch 2ch, transparent 2ch); color: var(--cyan); }
 .b.end.cur, .c.end.cur { background: transparent; box-shadow: inset 2px 0 0 var(--cyan); }
 

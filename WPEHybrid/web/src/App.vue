@@ -21,11 +21,12 @@
   <b>多开设置不受这条限制</b>：它不是模式，是启动页上的一屏设置
   （WinForms 那边是浮在 StartForm 上的弹窗），所以它照常能返回。
 */
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { call, inHost, on } from './bridge'
 import { attachUiHost, busy, modalOpen } from './bridge/host'
-import { defOf, initLang, isEn, lang, LANGS, setLang, t, type Lang } from './i18n'
+import { defOf, initLang, isEn, lang, t } from './i18n'
 import { injectHooked, injectTarget, proxyRunning, socks5Addr } from './stores/runtime'
+import { initTheme } from './stores/theme'
 import StartView from './components/StartView.vue'
 import ProxyView from './components/ProxyView.vue'
 import InstanceView from './components/InstanceView.vue'
@@ -35,8 +36,7 @@ import EncryptPassword from './components/EncryptPassword.vue'
 import ToastStack from './components/ToastStack.vue'
 import BusyMask from './components/BusyMask.vue'
 import ConfirmDialog from './components/ConfirmDialog.vue'
-import ContextMenu from './components/ContextMenu.vue'
-import { ICON, type MenuItem } from './components/menu'
+import AppSetting from './components/AppSetting.vue'
 
 type View = 'start' | 'proxy' | 'instance' | 'inject'
 
@@ -65,6 +65,13 @@ onMounted(async () => {
       不为它单开一次 getPrefs。
     */
     initLang(s.language)
+
+    /*
+      主题与语言同一条理由：要在任何像素画出来之前定好。
+      深色是默认，所以 initTheme 只在明确拿到 isDark === false 时才切浅色 ——
+      桥没接上（探针页）时保持深色，不会闪。
+    */
+    initTheme(s.isDark)
 
     version.value = s.version
     isBeta.value = s.isBeta
@@ -117,29 +124,15 @@ const armed = ref<HTMLElement | null>(null)
 /*
   ── 语言下拉 ───────────────────────────────────────────────
 
-  原先是「点一下切一种」的两态开关（中 ⇄ 英）。语言变成六种之后那个手势就废了：
-  想从中文切到俄语要点四下，而且每点一下整个界面就换一种看不懂的文字。
+  这里原先是<b>语言</b>下拉（更早还是「点一下切一种」的两态开关）。
+  加了深浅色之后一个下拉装不下两组选项，而把两个 chip 并排摆在标题栏又太挤
+  —— 右边紧挨着四个窗口按钮。所以收成一个齿轮按钮 + 一屏「软件设置」，
+  语言与主题都在里面，标题栏反而空了一格。
 
-  下拉用的是共用的 ContextMenu（锚在按钮下方，与状态条的「设置 ▾」同一个组件）——
-  不另画一份，贴边翻转 / Esc / 点别处关闭那几条它都做好了。
+  为什么不并进代理模式那 12 个设置：那些管的是抓包行为、只在模式里有意义，
+  而语言与主题在启动页上就要能改，且两种模式共用。见 AppSetting.vue 的说明。
 */
-const langAt = ref<{ x: number; y: number; anchor: { left: number; right: number; top: number; bottom: number } } | null>(null)
-
-const langItems = computed<MenuItem[]>(() =>
-  LANGS.map((l) => ({
-    id: l.code,
-    //名字一律用该语言自己的写法：切到看不懂的语言时，自称是唯一还认得出来的东西
-    label: l.label,
-    //当前那一项打勾，其余给地球 —— 只给当前项图标的话，其余项的文字会缩进不齐
-    icon: l.code === lang.value ? ICON.check : ICON.globe,
-  })))
-
-function openLangMenu(e: MouseEvent): void {
-  if (langAt.value) { langAt.value = null; return }
-
-  const b = (e.currentTarget as HTMLElement).getBoundingClientRect()
-  langAt.value = { x: b.left, y: b.bottom + 4, anchor: { left: b.left, right: b.right, top: b.top, bottom: b.bottom } }
-}
+const appSetOpen = ref(false)
 
 function armBtn(e: MouseEvent): void {
   armed.value = e.button === 0 ? (e.currentTarget as HTMLElement) : null
@@ -236,24 +229,21 @@ function site(page: string): string {
 
         <div class="tbright">
           <!--
-            语言 chip —— 照官网 .chip.lang 的样子：地球图标 + 定宽标签 + 一个小三角。
+            软件设置（语言 + 深浅色）。
 
-            标签显示的是<b>当前</b>语言（中文时写 CN），与官网一致。
-            标签定宽是必要的：CN / EN / JA 字宽不同，不定宽会让整条按钮在切换时抖一下，
+            仍带那个定宽的两字母标签 —— 语言是这里最常改的一项，
+            标签把当前语言直接摆在标题栏上，不用打开弹窗就知道现在是哪种。
+            <b>定宽是必要的</b>：CN / EN / JA 字宽不同，不定宽整条按钮会在切换时抖一下，
             而它右边紧挨着窗口按钮，抖动很显眼。
-
-            点它弹共用的 ContextMenu 列出六种语言（原先是「点一下切一种」的两态开关，
-            六种语言下那个手势要点四下才到得了俄语）。
           -->
-          <button class="wb lang" :class="{ on: langAt !== null }" :title="t('win.lang')"
-                  :aria-haspopup="true" :aria-expanded="langAt !== null"
-                  @mousedown="armBtn" @click="fireBtn($event, () => openLangMenu($event))">
+          <button class="wb lang" :class="{ on: appSetOpen }" :title="t('set.app')"
+                  :aria-haspopup="true" :aria-expanded="appSetOpen"
+                  @mousedown="armBtn" @click="fireBtn($event, () => { appSetOpen = true })">
             <svg class="ico" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18" />
+              <circle cx="12" cy="12" r="3.2" />
+              <path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z" />
             </svg>
             <i class="lb">{{ defOf(lang).short }}</i>
-            <i class="ar">▾</i>
           </button>
 
           <!--
@@ -365,7 +355,7 @@ function site(page: string): string {
       语言下拉。挂在 .shell 之外 —— ContextMenu 自己会 Teleport 到 body，
       这里只是让它和其余浮层排在一起，读起来知道有这么个东西。
     -->
-    <ContextMenu :at="langAt" :items="langItems" @pick="setLang($event as Lang)" @close="langAt = null" />
+    <AppSetting v-model:open="appSetOpen" />
 
     <BetaNotice />
 
@@ -416,7 +406,7 @@ function site(page: string): string {
   justify-content: space-between;
   /* 左 28px 给左上角标的横臂让位；右 8px 让右上角标不贴着关闭按钮 */
   padding: 0 8px 0 28px;
-  background: rgb(10 10 15 / 80%);
+  background: rgb(var(--chrome-rgb) / 80%);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
   user-select: none;
@@ -480,7 +470,7 @@ function site(page: string): string {
   letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--amber);
-  border: 1px solid rgb(234 179 8 / 40%);
+  border: 1px solid rgb(var(--amber-rgb) / 40%);
   padding: 4px 8px 2px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（与按钮同一处理）*/
   /* 原来挂在标题栏右侧、靠 margin-right 与窗口按钮拉开；
      现在跟在版本号后面，间距归 .brand 的 gap 管 */
@@ -500,8 +490,8 @@ function site(page: string): string {
   transition: .15s;
 }
 
-.wb:hover { color: var(--green); background: rgb(0 255 136 / 8%); }
-.wb.close:hover { color: var(--danger); background: rgb(255 51 102 / 12%); }
+.wb:hover { color: var(--green); background: rgb(var(--green-rgb) / 8%); }
+.wb.close:hover { color: var(--danger); background: rgb(var(--danger-rgb) / 12%); }
 
 /*
   窗口保持最前。这是这一排里唯一有「开 / 关」两态的按钮，所以按下去要看得出来 ——
@@ -513,8 +503,8 @@ function site(page: string): string {
 */
 .wb.pin .ico { transform: rotate(-35deg); transition: transform .15s; }
 .wb.pin.on .ico { transform: none; }
-.wb.pin.on { color: var(--amber); background: rgb(234 179 8 / 12%); }
-.wb.pin.on:hover { color: var(--amber); background: rgb(234 179 8 / 20%); }
+.wb.pin.on { color: var(--amber); background: rgb(var(--amber-rgb) / 12%); }
+.wb.pin.on:hover { color: var(--amber); background: rgb(var(--amber-rgb) / 20%); }
 .wb.pin:focus-visible { outline-color: var(--amber); }
 
 /*
@@ -525,7 +515,7 @@ function site(page: string): string {
 */
 .wb.lang { width: auto; gap: 7px; padding: 0 12px; }
 .wb.lang .ico { stroke: var(--cyan); }
-.wb.lang:hover { color: var(--cyan); background: rgb(0 212 255 / 8%); }
+.wb.lang:hover { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
 .wb.lang:hover .ico { stroke: var(--cyan); }
 .wb.lang:focus-visible { outline-color: var(--cyan); }
 
@@ -539,7 +529,7 @@ function site(page: string): string {
 .wb.lang.on .ar { color: var(--cyan); }
 
 /* 菜单开着时按钮保持高亮，否则鼠标一移开就看不出是谁弹的 */
-.wb.lang.on { color: var(--cyan); background: rgb(0 212 255 / 8%); }
+.wb.lang.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
 
 .wb.lang .lb {
   font-family: var(--share);
@@ -585,7 +575,7 @@ function site(page: string): string {
   justify-content: space-between;
   /* 与标题栏同理，给左下/右下角标的横臂让位 */
   padding: 1px 28px 0;   /* 顶部 1px：整行字形实测高 0.75px，这样把它压回中线 */
-  background: rgb(10 10 15 / 90%);
+  background: rgb(var(--chrome-rgb) / 90%);
   border-top: 1px solid var(--border);
   font-family: var(--share);
   font-size: var(--label-size);

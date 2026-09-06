@@ -208,7 +208,7 @@ function close(): void { emit('close') }
 
 .tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
 .tt .zh { font-family: var(--orbit); font-size: 14px; color: var(--gray); letter-spacing: .04em; }
-.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #4b5563; }
+.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
 
 .x {
   display: inline-flex;
@@ -241,7 +241,7 @@ function close(): void { emit('close') }
 .info b { font-family: var(--mono); color: var(--cyan); font-weight: 400; }
 .info b.new { color: var(--green); }
 .info .grow { flex: 1; }
-.info .same { color: #8a94a6; font-size: 11.5px; }
+.info .same { color: var(--dim2); font-size: 11.5px; }
 
 /* 十六进制：外框 + 标题栏归这里，正文是共用的 HexView。上下两块 3 : 2 分高度 */
 .hexed {
@@ -266,7 +266,7 @@ function close(): void { emit('close') }
   border-bottom: 1px solid var(--border);
 }
 
-.hx-title { padding-top: 4px; font-family: var(--share); font-size: var(--th-size); letter-spacing: .14em; text-transform: uppercase; color: #a8b2c0; }
+.hx-title { padding-top: 4px; font-family: var(--share); font-size: var(--th-size); letter-spacing: .14em; text-transform: uppercase; color: var(--th-fg); }
 .hx-meta { padding-top: 2px; font-family: Consolas, monospace; font-size: var(--th-size); color: var(--gray); }
 
 /* 改写前 / 改写后：与代理数据页的面板同一对按钮 */
@@ -288,8 +288,8 @@ function close(): void { emit('close') }
 .hx-segb + .hx-segb { border-left: 1px solid var(--border); }
 .hx-segb.after { color: #5aa080; }
 .hx-segb.before { color: #5b93a6; }
-.hx-segb.after.on { color: var(--green); background: rgb(0 255 136 / 12%); }
-.hx-segb.before.on { color: var(--cyan); background: rgb(0 212 255 / 12%); }
+.hx-segb.after.on { color: var(--green); background: rgb(var(--green-rgb) / 12%); }
+.hx-segb.before.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 12%); }
 
 /* 差异表 */
 .tbl {
@@ -298,7 +298,7 @@ function close(): void { emit('close') }
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
 }
 
 .cap {
@@ -314,13 +314,13 @@ function close(): void { emit('close') }
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
   white-space: nowrap;
   overflow: hidden;
 }
 
 .cap b { font-family: var(--mono); color: var(--cyan); font-weight: 400; }
-.cap .dim { color: #4b5563; letter-spacing: .02em; text-transform: none; overflow: hidden; text-overflow: ellipsis; }
+.cap .dim { color: var(--dim); letter-spacing: .02em; text-transform: none; overflow: hidden; text-overflow: ellipsis; }
 
 .tbody { flex: 1; min-height: 0; overflow: auto; }
 
@@ -334,20 +334,20 @@ function close(): void { emit('close') }
   font-size: 12.5px;
 }
 
-.row2 { height: 30px; border-bottom: 1px solid rgb(42 42 58 / 45%); color: #cbd5cc; cursor: pointer; }
-.row2:hover { background: rgb(255 255 255 / 4%); }
-.row2.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.row2 { height: 30px; border-bottom: 1px solid rgb(var(--border-rgb) / 45%); color: var(--soft); cursor: pointer; }
+.row2:hover { background: rgb(var(--tint-rgb) / 4%); }
+.row2.sel { background: rgb(var(--cyan-rgb) / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
 .row2 > span, .head > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .head > span, .row2 > span { text-align: center; }
 .head > span.hx, .row2 > span.hx { text-align: left; }
 .head > span.kind, .row2 > span.kind { display: flex; align-items: center; justify-content: center; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .pos { font-family: var(--mono); color: var(--cyan); }
-.pos i { font-style: normal; color: #4b5563; }
-.cnt { font-family: var(--mono); color: #94a3b8; }
-.hx { font-family: var(--mono); font-size: 12px; color: #6ee7a8; }
+.pos i { font-style: normal; color: var(--dim); }
+.cnt { font-family: var(--mono); color: var(--dim3); }
+.hx { font-family: var(--mono); font-size: 12px; color: var(--acc-green2); }
 
 .tg {
   padding: 5px 6px 3px;
@@ -358,9 +358,9 @@ function close(): void { emit('close') }
   letter-spacing: .04em;
 }
 
-.tg.modified { border-color: rgb(234 179 8 / 35%); color: var(--amber); }
-.tg.inserted { border-color: rgb(0 255 136 / 35%); color: var(--green); }
-.tg.deleted { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+.tg.modified { border-color: rgb(var(--amber-rgb) / 35%); color: var(--amber); }
+.tg.inserted { border-color: rgb(var(--green-rgb) / 35%); color: var(--green); }
+.tg.deleted { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 
 .empty { padding: 26px 0; text-align: center; color: var(--muted); font-size: 12.5px; }
 
@@ -390,6 +390,6 @@ function close(): void { emit('close') }
   cursor: pointer;
 }
 
-.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.btn.primary:hover { background: rgb(0 255 136 / 10%); border-color: var(--green); }
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); }
 </style>

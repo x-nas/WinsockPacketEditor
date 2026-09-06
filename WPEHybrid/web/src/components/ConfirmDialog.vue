@@ -80,7 +80,7 @@ watch(() => confirmState.value, async (s) => {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgb(5 5 10 / 78%);
+  background: rgb(var(--scrim-rgb) / 78%);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
@@ -92,7 +92,7 @@ watch(() => confirmState.value, async (s) => {
   width: min(420px, calc(100vw - 48px));
   background: var(--card);
   border: 1px solid var(--border);
-  box-shadow: 0 18px 50px rgb(0 0 0 / 60%);
+  box-shadow: 0 18px 50px rgb(var(--shadow-rgb) / 60%);
 }
 
 /* 四角标记，与设置弹窗、右键菜单同一套记号 */
@@ -168,13 +168,13 @@ watch(() => confirmState.value, async (s) => {
 .btn:hover { border-color: var(--cyan); color: var(--cyan); }
 .btn:focus-visible { outline-offset: -2px; }
 
-.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.btn.primary:hover { background: rgb(0 255 136 / 10%); border-color: var(--green); }
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); }
 
 /* 危险确认的主按钮画成红的：它是这个弹窗里唯一会造成后果的按钮 */
 .dlg.error .btn.primary,
-.dlg.warning .btn.primary { border-color: rgb(255 51 102 / 45%); color: var(--danger); }
+.dlg.warning .btn.primary { border-color: rgb(var(--danger-rgb) / 45%); color: var(--danger); }
 
 .dlg.error .btn.primary:hover,
-.dlg.warning .btn.primary:hover { background: rgb(255 51 102 / 12%); border-color: var(--danger); }
+.dlg.warning .btn.primary:hover { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); }
 </style>

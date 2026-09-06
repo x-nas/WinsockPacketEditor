@@ -207,8 +207,8 @@ async function save(): Promise<void> {
 .warn {
   margin: 0 20px 8px;
   padding: 7px 11px;
-  border: 1px solid rgb(234 179 8 / 32%);
-  background: rgb(234 179 8 / 7%);
+  border: 1px solid rgb(var(--amber-rgb) / 32%);
+  background: rgb(var(--amber-rgb) / 7%);
   font-size: 11.5px;
   color: var(--amber);
 }

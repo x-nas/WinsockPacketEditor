@@ -161,7 +161,7 @@ function useOut(): void {
 .inp {
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -183,8 +183,8 @@ function useOut(): void {
   letter-spacing: .04em;
 }
 
-.tg.ok { border-color: rgb(0 255 136 / 35%); color: var(--green); }
-.tg.dim { border-color: var(--border); color: #4b5563; }
+.tg.ok { border-color: rgb(var(--green-rgb) / 35%); color: var(--green); }
+.tg.dim { border-color: var(--border); color: var(--dim); }
 
 .panes {
   flex: 1;
@@ -225,7 +225,7 @@ function useOut(): void {
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 .hx-meta { padding-top: 2px; font-family: Consolas, monospace; font-size: var(--th-size); color: var(--gray); }

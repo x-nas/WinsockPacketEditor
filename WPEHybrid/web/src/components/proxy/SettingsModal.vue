@@ -101,7 +101,7 @@ function close(): void {
   position: fixed;
   inset: 0;
   z-index: 999;
-  background: rgb(5 5 10 / 78%);
+  background: rgb(var(--scrim-rgb) / 78%);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
@@ -117,11 +117,11 @@ function close(): void {
   flex-direction: column;
   background: var(--card);
   border: 1px solid var(--border);
-  box-shadow: 0 18px 60px rgb(0 0 0 / 55%);
+  box-shadow: 0 18px 60px rgb(var(--shadow-rgb) / 55%);
 }
 
 /* 四角标记：与启动页、测试版提示同一种做法，让弹窗也属于这套语言 */
-.mk { position: absolute; width: 11px; height: 11px; border: 1px solid rgb(0 212 255 / 45%); }
+.mk { position: absolute; width: 11px; height: 11px; border: 1px solid rgb(var(--cyan-rgb) / 45%); }
 .mk.tl { top: 6px; left: 6px; border-right: 0; border-bottom: 0; }
 .mk.tr { top: 6px; right: 6px; border-left: 0; border-bottom: 0; }
 .mk.bl { bottom: 6px; left: 6px; border-right: 0; border-top: 0; }
@@ -215,7 +215,7 @@ function close(): void {
 
 .btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .btn:disabled { opacity: .4; cursor: default; }
-.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.btn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); }
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); }
 .btn.primary:focus-visible { outline-color: var(--green); }
 </style>

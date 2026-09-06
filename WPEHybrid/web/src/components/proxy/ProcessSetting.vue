@@ -299,8 +299,8 @@ const DRIVERS = [
 </template>
 
 <style scoped>
-.lb { font-size: 11.5px; color: #8a94a6; }
-.colon { color: #4b5563; font-family: var(--mono); }
+.lb { font-size: 11.5px; color: var(--dim2); }
+.colon { color: var(--dim); font-family: var(--mono); }
 .cap { font-family: var(--share); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--cyan); white-space: nowrap; }
 .cnt { font-family: var(--mono); font-size: 11px; color: var(--muted); }
 
@@ -308,7 +308,7 @@ const DRIVERS = [
 .two > .tbl:first-child { margin-right: 4px; }
 .two > .tbl:last-child { margin-left: 4px; }
 .tbody.tall { height: 250px; max-height: 250px; }
-.tf { padding: 6px 12px; border-top: 1px solid var(--border); font-size: 11px; color: #8a94a6; }
+.tf { padding: 6px 12px; border-top: 1px solid var(--border); font-size: 11px; color: var(--dim2); }
 
 .ps .head.hp, .ps .tr.hp { grid-template-columns: 34px 26px 64px minmax(100px, 1fr); }
 .ps .head.hn, .ps .tr.hn { grid-template-columns: 40px 26px minmax(100px, 1fr) 44px; }
@@ -318,8 +318,8 @@ const DRIVERS = [
 
 .ico { display: flex; align-items: center; justify-content: center; }
 .ico img { width: 16px; height: 16px; image-rendering: auto; }
-.ico .ph { width: 12px; height: 12px; border: 1px solid #3a3a4e; }
+.ico .ph { width: 12px; height: 12px; border: 1px solid var(--border2); }
 .pid { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .name { color: var(--gray); }
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 </style>

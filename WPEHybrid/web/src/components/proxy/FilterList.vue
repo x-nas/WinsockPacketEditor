@@ -398,13 +398,13 @@ async function onMenuPick(id: string): Promise<void> {
   gap: 4px 10px;
   margin: 0;
   padding: 6px 12px;
-  border: 1px solid rgb(0 212 255 / 22%);
-  background: rgb(0 212 255 / 5%);
+  border: 1px solid rgb(var(--cyan-rgb) / 22%);
+  background: rgb(var(--cyan-rgb) / 5%);
   font-size: 11.5px;
   color: var(--muted);
 }
 
-.hint.pri { border-color: rgb(234 179 8 / 30%); background: rgb(234 179 8 / 6%); }
+.hint.pri { border-color: rgb(var(--amber-rgb) / 30%); background: rgb(var(--amber-rgb) / 6%); }
 
 .hint .mk {
   flex: none;
@@ -419,7 +419,7 @@ async function onMenuPick(id: string): Promise<void> {
 
 .hint.pri .mk { border-color: var(--amber); color: var(--amber); }
 .hint .tx { color: var(--gray); }
-.hint .note { color: #4b5563; }
+.hint .note { color: var(--dim); }
 
 /* 除滤镜名外全部居中；带 .row >/.head > 才压得过下面那条通则 */
 /* 九列。滤镜名给 1fr —— 它是唯一长度不可预知的字段 */
@@ -436,9 +436,9 @@ async function onMenuPick(id: string): Promise<void> {
 .head > span.name,
 .row > span.name { text-align: left; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .name { color: var(--gray); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.act { color: #a78bfa; }
+.act { color: var(--acc-violet); }
 
 /*
   执行次数。
@@ -450,7 +450,7 @@ async function onMenuPick(id: string): Promise<void> {
   「这条滤镜到底在不在干活」还是一眼能扫出来，而且比一个徽标多给了具体数字。
 */
 .cnt { color: var(--cyan); font-variant-numeric: tabular-nums; }
-.cnt.zero { color: #4b5563; }
+.cnt.zero { color: var(--dim); }
 
 /* 标签组。行高固定 34px，装不下就横向裁掉，不换行 */
 .tags {
@@ -479,6 +479,6 @@ async function onMenuPick(id: string): Promise<void> {
 .tg.a { color: var(--amber); }
 .tg.c { color: var(--cyan); }
 .tg.r { color: var(--danger); }
-.tg.d { color: #6b7280; }
+.tg.d { color: var(--muted); }
 
 </style>

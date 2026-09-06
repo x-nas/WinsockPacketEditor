@@ -267,7 +267,7 @@ function sizeText(n: number): string {
   line-height: 1;
   color: var(--magenta);
   align-self: flex-start;
-  text-shadow: 0 0 26px rgb(255 0 255 / 35%);
+  text-shadow: 0 0 26px rgb(var(--magenta-rgb) / 35%);
 }
 
 .subtitle {
@@ -300,8 +300,8 @@ function sizeText(n: number): string {
   align-items: flex-start;
   margin: 26px 0 0;
   padding: 13px 16px;
-  border: 1px solid rgb(234 179 8 / 32%);
-  background: linear-gradient(90deg, rgb(234 179 8 / 7%), transparent 60%);
+  border: 1px solid rgb(var(--amber-rgb) / 32%);
+  background: linear-gradient(90deg, rgb(var(--amber-rgb) / 7%), transparent 60%);
 }
 
 .note .bang {
@@ -314,7 +314,7 @@ function sizeText(n: number): string {
   padding-top: 2px;
 }
 
-.note p { font-size: 12.5px; color: #b9b9c4; margin: 0; }
+.note p { font-size: 12.5px; color: var(--dim3); margin: 0; }
 
 /* 表单：整块一个边框，行与行之间发丝线，与卡片网格同一种做法 */
 .form { margin: 22px 0 0; border: 1px solid var(--border); background: var(--card); }
@@ -344,7 +344,7 @@ function sizeText(n: number): string {
   min-width: 0;
   height: 46px;
   padding: 0 14px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 0;
   border-left: 1px solid var(--border);
   color: var(--gray);
@@ -355,10 +355,10 @@ function sizeText(n: number): string {
   user-select: text;
 }
 
-.inp:focus { background: rgb(0 212 255 / 6%); }
+.inp:focus { background: rgb(var(--cyan-rgb) / 6%); }
 .inp.bad { color: var(--danger); }
 .inp.ro { color: var(--muted); background: transparent; }
-.inp::placeholder { color: #4b5563; }
+.inp::placeholder { color: var(--dim); }
 
 .browse {
   height: 46px;
@@ -377,7 +377,7 @@ function sizeText(n: number): string {
   gap: 8px;
 }
 
-.browse:hover:not(:disabled) { background: rgb(0 212 255 / 10%); }
+.browse:hover:not(:disabled) { background: rgb(var(--cyan-rgb) / 10%); }
 .browse:disabled { opacity: .45; cursor: default; }
 
 /* 焦点环画在内侧：输入框与按钮之间只有 1px 发丝线，正偏移会压到邻居 */
@@ -387,7 +387,7 @@ function sizeText(n: number): string {
 .ico.sm { width: 15px; height: 15px; }
 
 /* 预览终端：外壳与启动页的 System Check 完全一致 */
-.term { margin: 22px 0 0; background: #000; border: 1px solid var(--border); }
+.term { margin: 22px 0 0; background: var(--sink); border: 1px solid var(--border); }
 
 .term-bar {
   display: flex;
@@ -409,7 +409,7 @@ function sizeText(n: number): string {
   color: var(--muted);
 }
 
-.term-body { padding: 12px 16px; font-size: 12.5px; color: #cbd5cc; overflow-x: auto; }
+.term-body { padding: 12px 16px; font-size: 12.5px; color: var(--soft); overflow-x: auto; }
 .term-body .l { display: block; white-space: pre; }
 .term-body .g { color: var(--green); }
 .term-body .c { color: var(--muted); }
@@ -437,8 +437,8 @@ function sizeText(n: number): string {
 
 .btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .btn:disabled { opacity: .4; cursor: default; }
-.btn.primary { border-color: rgb(255 0 255 / 45%); color: var(--magenta); }
-.btn.primary:hover:not(:disabled) { background: rgb(255 0 255 / 10%); box-shadow: 0 0 16px rgb(255 0 255 / 20%); }
+.btn.primary { border-color: rgb(var(--magenta-rgb) / 45%); color: var(--magenta); }
+.btn.primary:hover:not(:disabled) { background: rgb(var(--magenta-rgb) / 10%); box-shadow: 0 0 16px rgb(var(--magenta-rgb) / 20%); }
 .btn.primary:focus-visible { outline-color: var(--magenta); }
 
 .acts .grow { flex: 1; }

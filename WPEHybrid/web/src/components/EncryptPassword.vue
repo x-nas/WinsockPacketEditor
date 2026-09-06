@@ -235,7 +235,7 @@ function onKey(e: KeyboardEvent): void {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgb(5 5 10 / 78%);
+  background: rgb(var(--scrim-rgb) / 78%);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
@@ -247,7 +247,7 @@ function onKey(e: KeyboardEvent): void {
   width: min(400px, calc(100vw - 48px));
   background: var(--card);
   border: 1px solid var(--border);
-  box-shadow: 0 18px 50px rgb(0 0 0 / 60%);
+  box-shadow: 0 18px 50px rgb(var(--shadow-rgb) / 60%);
 }
 
 .mk { position: absolute; width: 7px; height: 7px; border: 1px solid var(--cyan); }
@@ -283,7 +283,7 @@ function onKey(e: KeyboardEvent): void {
   min-width: 0;
   height: 30px;
   padding: 0 34px 0 10px;
-  background: rgb(0 0 0 / 34%);
+  background: rgb(var(--inset-rgb) / 34%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -305,7 +305,7 @@ function onKey(e: KeyboardEvent): void {
   padding: 0;
   background: transparent;
   border: 0;
-  color: #4b5563;
+  color: var(--dim);
   cursor: pointer;
 }
 
@@ -345,9 +345,9 @@ function onKey(e: KeyboardEvent): void {
   现在给它正常按钮的分量，只是用琥珀色标出「这条路是有代价的」，
   与绿色的「加密导出」区分开。真正说明后果的是它的 title 和按钮上那三个字。
 */
-.btn.plain { border-color: rgb(234 179 8 / 40%); color: var(--amber); }
-.btn.plain:hover { border-color: var(--amber); background: rgb(234 179 8 / 12%); color: var(--amber); }
+.btn.plain { border-color: rgb(var(--amber-rgb) / 40%); color: var(--amber); }
+.btn.plain:hover { border-color: var(--amber); background: rgb(var(--amber-rgb) / 12%); color: var(--amber); }
 
-.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.btn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); }
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); }
 </style>

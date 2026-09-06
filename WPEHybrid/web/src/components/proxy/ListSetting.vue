@@ -155,6 +155,6 @@ async function save(): Promise<void> {
   nowrap + ellipsis 会把后半句直接吃掉，而那半句正是要紧的部分。
   外面的 .setf .row > .v 已经是 flex-wrap: wrap，让它自己折下去即可。
 */
-.tip { font-size: 11px; color: #4b5563; line-height: 1.5; flex: 1 1 100%; }
+.tip { font-size: 11px; color: var(--dim); line-height: 1.5; flex: 1 1 100%; }
 
 </style>

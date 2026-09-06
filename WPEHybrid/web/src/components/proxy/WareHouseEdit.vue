@@ -356,7 +356,7 @@ async function save(): Promise<void> {
 
 .tt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 12px; }
 .tt .zh { font-family: var(--orbit); font-size: 14px; color: var(--gray); letter-spacing: .04em; }
-.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #4b5563; }
+.tt .sub { font-family: var(--share); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
 
 .x {
   display: inline-flex;
@@ -406,7 +406,7 @@ async function save(): Promise<void> {
   min-width: 0;
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -423,7 +423,7 @@ async function save(): Promise<void> {
   margin: 8px 18px 6px;
   padding: 7px 12px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 20%);
+  background: rgb(var(--inset-rgb) / 20%);
 }
 
 .grow { flex: 1; }
@@ -450,10 +450,10 @@ async function save(): Promise<void> {
 
 .btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
 .btn:disabled { opacity: .35; cursor: default; }
-.btn.primary { border-color: rgb(0 255 136 / 45%); color: var(--green); }
-.btn.primary:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); }
-.btn.danger { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
-.btn.danger:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); }
+.btn.primary { border-color: rgb(var(--green-rgb) / 45%); color: var(--green); }
+.btn.primary:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); }
+.btn.danger { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
+.btn.danger:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); }
 
 /* 仓储数据表：吃掉名称行与工具条之外的全部高度 */
 .tbl {
@@ -463,7 +463,7 @@ async function save(): Promise<void> {
   flex-direction: column;
   margin: 0 18px;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
 }
 
 /* 表头在 .tbody 里 sticky（style.css 的 .list-page .head 已经是 sticky + top: 0）*/
@@ -485,13 +485,13 @@ async function save(): Promise<void> {
 
 .row2 {
   height: 30px;   /* 必须与 ROW_H 一致 */
-  border-bottom: 1px solid rgb(42 42 58 / 45%);
-  color: #cbd5cc;
+  border-bottom: 1px solid rgb(var(--border-rgb) / 45%);
+  color: var(--soft);
   cursor: default;
 }
 
-.row2:hover { background: rgb(255 255 255 / 4%); }
-.row2.sel { background: rgb(0 212 255 / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
+.row2:hover { background: rgb(var(--tint-rgb) / 4%); }
+.row2.sel { background: rgb(var(--cyan-rgb) / 6%); box-shadow: inset 2px 0 0 var(--cyan); }
 
 .row2 > span,
 .head > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -508,13 +508,13 @@ async function save(): Promise<void> {
 .head > span.dt,
 .row2 > span.dt { padding-left: 10px; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .len { color: var(--cyan); font-variant-numeric: tabular-nums; }
-.dt { color: #6ee7a8; font-family: var(--mono); font-size: 12px; }
+.dt { color: var(--acc-green2); font-family: var(--mono); font-size: 12px; }
 
 .empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 12.5px; line-height: 1.8; }
 
-.hint { margin: 8px 18px 0; font-size: 11.5px; color: #8a94a6; }
+.hint { margin: 8px 18px 0; font-size: 11.5px; color: var(--dim2); }
 
 .ft {
   flex: none;

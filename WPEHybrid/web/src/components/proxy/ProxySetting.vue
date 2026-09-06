@@ -246,8 +246,8 @@ async function exportCert(): Promise<void> {
 .lock {
   margin: 10px 20px 4px;
   padding: 8px 12px;
-  border: 1px solid rgb(234 179 8 / 32%);
-  background: rgb(234 179 8 / 7%);
+  border: 1px solid rgb(var(--amber-rgb) / 32%);
+  background: rgb(var(--amber-rgb) / 7%);
   font-size: 12px;
   color: var(--amber);
 }
@@ -260,7 +260,7 @@ async function exportCert(): Promise<void> {
 */
 .tip {
   font-size: 11px;
-  color: #4b5563;
+  color: var(--dim);
   min-width: 0;
   line-height: 1.5;
 }
@@ -275,14 +275,14 @@ async function exportCert(): Promise<void> {
   height: 20px;
   padding: 0;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   cursor: pointer;
   position: relative;
   transition: .15s;
 }
 
 .sw i { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: var(--muted); transition: .15s; }
-.sw.on { border-color: var(--green); background: rgb(0 255 136 / 15%); }
+.sw.on { border-color: var(--green); background: rgb(var(--green-rgb) / 15%); }
 .sw.on i { left: 20px; background: var(--green); box-shadow: 0 0 6px var(--green); }
 .sw:focus-visible { outline-offset: 2px; }
 
@@ -300,5 +300,5 @@ async function exportCert(): Promise<void> {
   cursor: pointer;
 }
 
-.mini:hover { background: rgb(0 212 255 / 10%); }
+.mini:hover { background: rgb(var(--cyan-rgb) / 10%); }
 </style>

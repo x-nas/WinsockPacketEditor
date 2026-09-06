@@ -373,7 +373,7 @@ async function onMenuPick(id: string): Promise<void> {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  border-color: rgb(0 255 136 / 45%);
+  border-color: rgb(var(--green-rgb) / 45%);
   color: var(--green);
 }
 
@@ -391,14 +391,14 @@ async function onMenuPick(id: string): Promise<void> {
   top: -1px;   /* 按钮上内边距比下多 2px 是给字形的补偿，图标不需要，退回 1px */
 }
 
-.btn.run.on { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
+.btn.run.on { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
 
 /*
   悬停要压过公共的 .btn:hover（那条是青色，(0,3,0)）：开始态照 .btn.primary 的绿、
   停止态照 .btn.danger 的红，否则这个绿按钮一悬停就变蓝，与旁边的「新增发送」不一样。
 */
-.btn.run:hover:not(:disabled) { background: rgb(0 255 136 / 10%); border-color: var(--green); color: var(--green); }
-.btn.run.on:hover:not(:disabled) { background: rgb(255 51 102 / 12%); border-color: var(--danger); color: var(--danger); }
+.btn.run:hover:not(:disabled) { background: rgb(var(--green-rgb) / 10%); border-color: var(--green); color: var(--green); }
+.btn.run.on:hover:not(:disabled) { background: rgb(var(--danger-rgb) / 12%); border-color: var(--danger); color: var(--danger); }
 .btn.run.on .ico { animation: pulse 1.1s ease-in-out infinite; }
 
 @keyframes pulse { 50% { opacity: .25; } }
@@ -414,10 +414,10 @@ async function onMenuPick(id: string): Promise<void> {
   gap: 8px;
   padding: 5px 10px;
   border: 1px solid var(--border);
-  border-left: 2px solid #4b5563;
-  background: rgb(0 0 0 / 20%);
+  border-left: 2px solid var(--dim);
+  background: rgb(var(--inset-rgb) / 20%);
   font-size: 11.5px;
-  color: #8a94a6;
+  color: var(--dim2);
 }
 
 /*
@@ -455,9 +455,9 @@ async function onMenuPick(id: string): Promise<void> {
 
 .row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .name { color: var(--gray); }
-.notes { color: #7f8b9c; font-size: 12px; }
+.notes { color: var(--dim4); font-size: 12px; }
 
 .cnt { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
@@ -467,9 +467,9 @@ async function onMenuPick(id: string): Promise<void> {
 .cnt.bad { color: var(--danger); }
 
 /* 0 一律压暗：一屏几十行里，真正有数的那几行才该跳出来 */
-.cnt.zero { color: #4b5563; }
+.cnt.zero { color: var(--dim); }
 
-.pk { font-family: var(--mono); font-variant-numeric: tabular-nums; color: #94a3b8; }
+.pk { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--dim3); }
 
 .pk.none { color: var(--danger); }
 
@@ -489,9 +489,9 @@ async function onMenuPick(id: string): Promise<void> {
   white-space: nowrap;
 }
 
-.tg.ok { border-color: rgb(0 255 136 / 35%); color: var(--green); }
-.tg.wa { border-color: rgb(234 179 8 / 35%); color: var(--amber); }
-.tg.sys { border-color: rgb(255 51 102 / 30%); color: var(--danger); }
-.tg.cus { border-color: rgb(0 255 136 / 35%); color: var(--green); }
+.tg.ok { border-color: rgb(var(--green-rgb) / 35%); color: var(--green); }
+.tg.wa { border-color: rgb(var(--amber-rgb) / 35%); color: var(--amber); }
+.tg.sys { border-color: rgb(var(--danger-rgb) / 30%); color: var(--danger); }
+.tg.cus { border-color: rgb(var(--green-rgb) / 35%); color: var(--green); }
 
 </style>

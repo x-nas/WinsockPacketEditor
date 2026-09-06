@@ -82,7 +82,7 @@ function lines(s: string): string[] {
   position: fixed;
   inset: 0;
   z-index: 999;
-  background: rgb(5 5 10 / 82%);
+  background: rgb(var(--scrim-rgb) / 82%);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
@@ -94,8 +94,8 @@ function lines(s: string): string[] {
   width: 560px;
   padding: 7px 0;
   overflow: hidden;
-  border: 1px solid rgb(234 179 8 / 32%);
-  background: linear-gradient(180deg, rgb(234 179 8 / 7%), rgb(234 179 8 / 0%) 58%), var(--card);
+  border: 1px solid rgb(var(--amber-rgb) / 32%);
+  background: linear-gradient(180deg, rgb(var(--amber-rgb) / 7%), rgb(var(--amber-rgb) / 0%) 58%), var(--card);
 }
 
 /* 上下两条工业警示斜纹 */
@@ -106,7 +106,7 @@ function lines(s: string): string[] {
   left: 0;
   right: 0;
   height: 7px;
-  background: repeating-linear-gradient(45deg, rgb(234 179 8 / 80%) 0 9px, rgb(10 10 15 / 92%) 9px 18px);
+  background: repeating-linear-gradient(45deg, rgb(var(--amber-rgb) / 80%) 0 9px, rgb(var(--chrome-rgb) / 92%) 9px 18px);
 }
 
 .wip::before { top: 0; }
@@ -115,7 +115,7 @@ function lines(s: string): string[] {
 .wip-in { position: relative; padding: 28px 30px 26px; }
 
 /* 四角定位标记 */
-.wip-in > .mk { position: absolute; width: 13px; height: 13px; border: 1px solid rgb(234 179 8 / 55%); }
+.wip-in > .mk { position: absolute; width: 13px; height: 13px; border: 1px solid rgb(var(--amber-rgb) / 55%); }
 .wip-in > .mk.tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
 .wip-in > .mk.tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
 .wip-in > .mk.bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
@@ -127,7 +127,7 @@ function lines(s: string): string[] {
   gap: 8px;
   padding: 4px 11px;
   margin-bottom: 15px;
-  border: 1px solid rgb(234 179 8 / 45%);
+  border: 1px solid rgb(var(--amber-rgb) / 45%);
   font-family: var(--share);
   font-size: 10px;
   letter-spacing: .2em;
@@ -154,7 +154,7 @@ function lines(s: string): string[] {
   margin: 0 0 20px;
   padding: 13px 16px;
   border: 1px solid var(--border);
-  background: rgb(0 0 0 / 34%);
+  background: rgb(var(--inset-rgb) / 34%);
   font-size: 12.5px;
   color: var(--muted);
 }
@@ -179,7 +179,7 @@ function lines(s: string): string[] {
   transition: .15s;
 }
 
-.wip-btn:hover { background: rgb(234 179 8 / 12%); box-shadow: 0 0 16px rgb(234 179 8 / 25%); }
+.wip-btn:hover { background: rgb(var(--amber-rgb) / 12%); box-shadow: 0 0 16px rgb(var(--amber-rgb) / 25%); }
 
 /*
   这个弹窗整体是琥珀色调，全局那圈绿色焦点环在这儿不搭。
@@ -187,7 +187,7 @@ function lines(s: string): string[] {
 */
 .wip-btn:focus-visible {
   outline: none;
-  background: rgb(234 179 8 / 12%);
-  box-shadow: 0 0 16px rgb(234 179 8 / 25%);
+  background: rgb(var(--amber-rgb) / 12%);
+  box-shadow: 0 0 16px rgb(var(--amber-rgb) / 25%);
 }
 </style>

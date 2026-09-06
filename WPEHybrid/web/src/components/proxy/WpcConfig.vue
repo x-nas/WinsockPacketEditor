@@ -234,14 +234,14 @@ function short(u: string): string {
 <style scoped>
 .page { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 12px; }
 .sep { width: 1px; height: 16px; background: var(--border); flex: none; }
-.lb { font-size: 11.5px; color: #8a94a6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.lb { font-size: 11.5px; color: var(--dim2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 
 .seg { display: inline-flex; border: 1px solid var(--border); flex: none; }
 .sg { display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px 7px; background: transparent; border: 0; color: var(--muted); font-family: var(--share); font-size: var(--btn-size); line-height: 1; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; }
-.sg b { font-family: var(--mono); font-weight: 400; font-size: 11px; color: #4b5563; }
+.sg b { font-family: var(--mono); font-weight: 400; font-size: 11px; color: var(--dim); }
 .sg + .sg { border-left: 1px solid var(--border); }
 .sg:hover { color: var(--gray); }
-.sg.on { background: rgb(0 212 255 / 10%); color: var(--cyan); }
+.sg.on { background: rgb(var(--cyan-rgb) / 10%); color: var(--cyan); }
 .sg.on b { color: var(--cyan); }
 
 .head.hs, .row.hs { grid-template-columns: 46px 50px minmax(120px, 1fr) 170px minmax(110px, 1fr) minmax(110px, 1fr) minmax(110px, 1fr) 60px 100px; gap: 8px; min-width: 980px; }
@@ -252,21 +252,21 @@ function short(u: string): string {
 .head > span.name, .row > span.name, .head > span.title, .row > span.title, .head > span.url, .row > span.url, .head > span.more, .row > span.more { text-align: left; }
 .row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .name, .title { color: var(--gray); }
 .addr { font-family: var(--mono); font-size: 12px; color: var(--cyan); }
-.addr i { font-style: normal; color: #4b5563; margin: 0 1px; }
-.url, .more { font-family: var(--mono); font-size: 12px; color: #94a3b8; }
+.addr i { font-style: normal; color: var(--dim); margin: 0 1px; }
+.url, .more { font-family: var(--mono); font-size: 12px; color: var(--dim3); }
 .rules { font-family: var(--mono); color: var(--green); font-variant-numeric: tabular-nums; }
-.rules.none { color: #4b5563; }
+.rules.none { color: var(--dim); }
 .time { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* 公告类型标签：配色照 WinForms 的 CellTag（活动情报蓝 / 维护说明黄 / 电竞赛事绿 / 限时商城紫 / 玩家社区蓝） */
 .nt { display: inline-block; padding: 4px 7px 2px; border: 1px solid; font-family: var(--share); font-size: 10.5px; line-height: 1; letter-spacing: .06em; font-style: normal; }
-.nt.n1, .nt.n5 { color: #38bdf8; border-color: rgb(56 189 248 / 40%); background: rgb(56 189 248 / 10%); }
-.nt.n2 { color: #fbbf24; border-color: rgb(251 191 36 / 40%); background: rgb(251 191 36 / 10%); }
-.nt.n3 { color: #34d399; border-color: rgb(52 211 153 / 40%); background: rgb(52 211 153 / 10%); }
-.nt.n4 { color: #c084fc; border-color: rgb(192 132 252 / 40%); background: rgb(192 132 252 / 10%); }
+.nt.n1, .nt.n5 { color: var(--nt1); border-color: rgb(var(--nt1-rgb) / 40%); background: rgb(var(--nt1-rgb) / 10%); }
+.nt.n2 { color: var(--nt2); border-color: rgb(var(--nt2-rgb) / 40%); background: rgb(var(--nt2-rgb) / 10%); }
+.nt.n3 { color: var(--nt3); border-color: rgb(var(--nt3-rgb) / 40%); background: rgb(var(--nt3-rgb) / 10%); }
+.nt.n4 { color: var(--nt4); border-color: rgb(var(--nt4-rgb) / 40%); background: rgb(var(--nt4-rgb) / 10%); }
 
 .op.rule { color: var(--amber); }
 </style>

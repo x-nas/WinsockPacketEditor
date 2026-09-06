@@ -961,6 +961,39 @@ namespace WPEHybrid
                 };
             });
 
+            /*
+                深色 / 浅色。
+
+                【用的是已有的 UI.Prefs.IsDark】WinForms 顶栏那个暗色开关存的就是它
+                （SystemConfig 表的 IsDark 列，备份 XML 里也带着）。外壳另起一份的话，
+                两套 UI 会各记各的 —— 用户在 WinForms 里切了、进外壳又变回去，
+                而且备份导入之后两边对不上。
+
+                ApplyPrefs() 是<b>给 WinForms 那半边用的</b>：外壳自己的界面是 CSS 令牌
+                在管（style.css 的 :root[data-theme="light"]），与 AntdUI 无关。
+                但同一个进程里 UiDialogs 的几个原生弹窗仍然是 AntdUI 画的，
+                不 Apply 的话它们会停在旧主题上。
+            */
+            this.bridge.Register("setAppearance", args =>
+            {
+                try
+                {
+                    if (args["isDark"] != null)
+                    {
+                        UI.Prefs.IsDark = (bool)args["isDark"];
+                        WinFormsUiHost.ApplyPrefs();
+                        Operate.SystemConfig.SaveSystemConfig_ToDB();
+                    }
+
+                    return new { ok = true, isDark = UI.Prefs.IsDark };
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("setAppearance", ex);
+                    return new { ok = false, error = ex.Message };
+                }
+            });
+
             //连通性自测：C# 反过来问前端一个确认框，把答案回给前端
             //这是本批次的关键验证 —— IUiHost 的 96 处弹窗全走这条路
             this.bridge.Register("selfTestConfirm", async args =>
@@ -3682,7 +3715,13 @@ namespace WPEHybrid
                 var link = this.AttachedLink();
                 if (link != null) { link.TryPush(link.PushAll); }
 
-                return new { language = UI.Prefs.Language ?? string.Empty };
+                /*
+                    语言与主题都要带回去：备份里存着 DefaultLanguage 与 IsDark，
+                    ApplyAll() 只把它们应用到 AntdUI（那是 WinForms 那半边），
+                    <b>外壳自己的界面是前端在管的</b> —— 不回传的话会变成
+                    「弹窗切过去了、页面还是旧语言旧配色」。
+                */
+                return new { language = UI.Prefs.Language ?? string.Empty, isDark = UI.Prefs.IsDark };
             });
 
             //── 远程管理 ──
@@ -4440,6 +4479,12 @@ namespace WPEHybrid
                     isBeta = Operate.SystemConfig.IsBeta,
                     //界面语言的初值。前端拿它决定首屏用哪份字典，切换后走 setLanguage 写回
                     language = UI.Prefs.Language ?? "zh-CN",
+                    /*
+                        深浅色的初值，与语言同一个理由搭这一趟车：
+                        它要在<b>任何像素画出来之前</b>定好，否则浅色用户会先看见
+                        一帧深色再跳成浅色。不为它单开一次 getPrefs。
+                    */
+                    isDark = UI.Prefs.IsDark,
                     lastInjection = Operate.SystemConfig.LastInjection ?? string.Empty,
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
                     socks5Addr = Socks5Address(),
@@ -4892,6 +4937,16 @@ namespace WPEHybrid
         private static string Normalize(string Lang)
         {
             string s = (Lang ?? string.Empty).Trim().ToLowerInvariant();
+
+            /*
+                ⚠️ 繁体要在 zh 之前判，而且不能只看前两位：
+                zh-TW / zh-HK / zh-Hant 是繁体，zh / zh-CN / zh-Hans 是简体。
+                前端传的是 langs.ts 里的 code（"tw" / "zh"），这里也认完整文化名。
+            */
+            if (s == "tw" || (s.StartsWith("zh") && (s.Contains("tw") || s.Contains("hk") || s.Contains("mo") || s.Contains("hant"))))
+            {
+                return "zh-TW";
+            }
 
             if (s.StartsWith("en")) { return "en-US"; }
             if (s.StartsWith("ja")) { return "ja-JP"; }

@@ -122,7 +122,7 @@ function fmt(n: number | undefined): string {
 <style scoped>
 .side {
   border-right: 1px solid var(--border);
-  background: rgb(10 10 15 / 55%);
+  background: rgb(var(--chrome-rgb) / 55%);
   padding: 14px 0 12px;
   overflow-y: auto;
 }
@@ -132,7 +132,7 @@ function fmt(n: number | undefined): string {
   font-size: 9px;
   letter-spacing: .26em;
   text-transform: uppercase;
-  color: #4b5563;
+  color: var(--dim);
   padding: 0 18px;
   margin: 16px 0 7px;
 }
@@ -158,15 +158,15 @@ function fmt(n: number | undefined): string {
 .sb-item .n {
   font-family: var(--share);
   font-size: 10px;
-  color: #4b5563;
+  color: var(--dim);
 }
 
-.sb-item:hover:not(.off) { color: var(--gray); background: rgb(255 255 255 / 3%); }
+.sb-item:hover:not(.off) { color: var(--gray); background: rgb(var(--tint-rgb) / 3%); }
 
 .sb-item.on {
   color: var(--cyan);
   border-left-color: var(--cyan);
-  background: linear-gradient(90deg, rgb(0 212 255 / 10%), transparent 70%);
+  background: linear-gradient(90deg, rgb(var(--cyan-rgb) / 10%), transparent 70%);
 }
 
 .sb-item.on .n { color: var(--cyan); }

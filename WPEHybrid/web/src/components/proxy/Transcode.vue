@@ -110,7 +110,7 @@ function useAsInput(v: string): void {
 }
 
 .sep { width: 1px; height: 16px; background: var(--border); flex: none; }
-.lb { font-size: 11.5px; color: #8a94a6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.lb { font-size: 11.5px; color: var(--dim2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 
 .tg {
   flex: none;
@@ -123,8 +123,8 @@ function useAsInput(v: string): void {
   text-transform: uppercase;
 }
 
-.tg.enc { border-color: rgb(0 255 136 / 35%); color: var(--green); }
-.tg.dec { border-color: rgb(0 212 255 / 35%); color: var(--cyan); }
+.tg.enc { border-color: rgb(var(--green-rgb) / 35%); color: var(--green); }
+.tg.dec { border-color: rgb(var(--cyan-rgb) / 35%); color: var(--cyan); }
 
 .src,
 .out {
@@ -132,7 +132,7 @@ function useAsInput(v: string): void {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  background: #000;
+  background: var(--sink);
 }
 
 .src { flex: 0 0 150px; }
@@ -151,7 +151,7 @@ function useAsInput(v: string): void {
   font-size: var(--th-size);
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: #a8b2c0;
+  color: var(--th-fg);
 }
 
 .ph > span { padding-top: 4px; }
@@ -175,7 +175,7 @@ function useAsInput(v: string): void {
   line-height: 1.6;
 }
 
-.ta::placeholder { color: #4b5563; }
+.ta::placeholder { color: var(--dim); }
 
 .rows { flex: 1; min-height: 0; overflow-y: auto; }
 
@@ -186,10 +186,10 @@ function useAsInput(v: string): void {
   gap: 12px;
   min-height: 34px;
   padding: 6px 14px;
-  border-bottom: 1px solid rgb(42 42 58 / 45%);
+  border-bottom: 1px solid rgb(var(--border-rgb) / 45%);
 }
 
-.r:hover { background: rgb(255 255 255 / 3%); }
+.r:hover { background: rgb(var(--tint-rgb) / 3%); }
 
 /* 成对的两行：原文行与 ANSI（十六进制）行，后者字色压一档，扫下来能看出成对 */
 .k { font-family: var(--share); font-size: 11px; letter-spacing: .1em; color: var(--cyan); }
@@ -200,14 +200,14 @@ function useAsInput(v: string): void {
   font-family: var(--mono);
   font-size: 12px;
   line-height: 1.5;
-  color: #6ee7a8;
+  color: var(--acc-green2);
   word-break: break-all;
   white-space: pre-wrap;
   user-select: text;
 }
 
-.r.ansi .v { color: #94a3b8; }
-.v.none { color: #4b5563; }
+.r.ansi .v { color: var(--dim3); }
+.v.none { color: var(--dim); }
 
 .ops { display: flex; align-items: center; justify-content: center; gap: 4px; }
 

@@ -575,7 +575,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 .inp {
   height: 26px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -585,7 +585,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 }
 
 .inp:focus { border-color: var(--cyan); }
-.inp::placeholder { color: #4b5563; }
+.inp::placeholder { color: var(--dim); }
 
 /* 到期日区间。没填时整块压暗，填了就点亮，一眼能看出筛选是否生效 */
 .rng {
@@ -596,7 +596,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
   border: 1px solid transparent;
 }
 
-.rng.on { border-color: rgb(0 212 255 / 32%); background: rgb(0 212 255 / 6%); }
+.rng.on { border-color: rgb(var(--cyan-rgb) / 32%); background: rgb(var(--cyan-rgb) / 6%); }
 
 .rng .lb {
   font-family: var(--share);
@@ -608,7 +608,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 }
 
 .rng.on .lb { color: var(--cyan); }
-.rng .sep { color: #4b5563; font-size: 11px; }
+.rng .sep { color: var(--dim); font-size: 11px; }
 .rng .n { font-family: var(--share); font-size: 10px; color: var(--cyan); }
 
 /* 清除按钮：搜索框与到期区间共用一套外观，只有定位不同 */
@@ -649,15 +649,15 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
   transform: translateY(-50%);
   pointer-events: none;
   font-size: 11.5px;
-  color: #4b5563;
+  color: var(--dim);
 }
 
 .hint {
   flex: none;
   margin: 0;
   padding: 7px 12px;
-  border: 1px solid rgb(234 179 8 / 32%);
-  background: rgb(234 179 8 / 7%);
+  border: 1px solid rgb(var(--amber-rgb) / 32%);
+  background: rgb(var(--amber-rgb) / 7%);
   font-size: 12px;
   color: var(--amber);
 }
@@ -687,7 +687,7 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 .head > span.user,
 .row > span.user { text-align: left; }
 
-.no { color: #4b5563; font-variant-numeric: tabular-nums; }
+.no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .user { color: var(--gray); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tm { color: var(--muted); font-variant-numeric: tabular-nums; }
 .tm.bad { color: var(--danger); }
@@ -697,12 +697,12 @@ async function io(method: 'importAccounts' | 'exportAccounts'): Promise<void> {
 .st i { width: 6px; height: 6px; border-radius: 50%; flex: none; }
 .st.on { color: var(--green); }
 .st.on i { background: var(--green); box-shadow: 0 0 6px var(--green); }
-.st.no- { color: #4b5563; }
-.st.no- i { background: #3a3a4a; }
+.st.no- { color: var(--dim); }
+.st.no- i { background: var(--border2); }
 
 /* 数值与「无限制」用两种颜色区分：一个是限额，一个是没有限额 */
 .tag { color: var(--cyan); font-variant-numeric: tabular-nums; }
-.tag.un { color: #4b5563; }
+.tag.un { color: var(--dim); }
 
 .op.loc:hover { border-color: var(--amber); color: var(--amber); }
 

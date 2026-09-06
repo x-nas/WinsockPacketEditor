@@ -228,6 +228,7 @@
     <Compile Include="ClassObject\L10n\L10nJa.cs" />
     <Compile Include="ClassObject\L10n\L10nKo.cs" />
     <Compile Include="ClassObject\L10n\L10nRu.cs" />
+    <Compile Include="ClassObject\L10n\L10nTw.cs" />
     <Compile Include="ClassObject\L10n\L10nVi.cs" />
     <Compile Include="ClassObject\Localizer.cs" />
     <Compile Include="ClassObject\LogInfo.cs" />

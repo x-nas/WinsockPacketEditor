@@ -1,8 +1,11 @@
-// 界面文案。六种语言：简体中文 / English / 日本語 / 한국어 / Tiếng Việt / Русский。
+// 界面文案。七种语言：简体中文 / 繁體中文 / English / 日本語 / 한국어 / Tiếng Việt / Русский。
 //
-// 【这一层只是门面】对照表在 i18n/base.ts（中英同键，是基准），
-// 其余四种各一份 i18n/<code>.ts，都声明成 Record<Key, string> ——
-// 往基准里加一个键，四份译文当场编译不过，不会出现半翻译的界面。
+// 【这一层只是门面】对照表在 i18n/base.ts（简体与英文同键，是基准），
+// 其余五种各一份 i18n/<code>.ts，都声明成 Record<Key, string> ——
+// 往基准里加一个键，五份译文当场编译不过，不会出现半翻译的界面。
+//
+// 繁体那份（tw.ts）是<b>生成物</b>：由 base.ts 的 zh 用 opencc 的 twp 转出来，
+// 与 C# 的 ClassObject/L10n/L10nTw.cs 同一套用词。改简体之后要重新生成，别手改。
 //
 // 两边靠 setLanguage 保持同步：用户在这里切换，C# 侧 UI.Prefs.Language 跟着变，
 // 于是 UI.T（弹窗与通知的文案，来自 ClassObject/Localizer.cs）也换语言，
@@ -16,6 +19,7 @@ import { call } from './bridge'
 import { DICT, type Key } from './i18n/base'
 import { cultureOf, defOf, LANGS, normalize, type Lang, type LangDef } from './i18n/langs'
 import { ja } from './i18n/ja'
+import { tw } from './i18n/tw'
 import { ko } from './i18n/ko'
 import { vi } from './i18n/vi'
 import { ru } from './i18n/ru'
@@ -31,11 +35,12 @@ export const lang = ref<Lang>('zh')
  *
  * <b>语义是「不是中文」</b>而不是「是英文」：官网只有中英两版，
  * 日 / 韩 / 越 / 俄的用户点进去看英文页，总好过看中文页。
+ * <b>繁体走中文站</b> —— 繁体读者看简体页远比看英文页顺。
  */
-export const isEn = computed(() => lang.value !== 'zh')
+export const isEn = computed(() => lang.value !== 'zh' && lang.value !== 'tw')
 
-/** 除中英之外的四份译文。中英直接从 DICT 的 zh / en 取，不进这张表。 */
-const EXTRA: Partial<Record<Lang, Record<Key, string>>> = { ja, ko, vi, ru }
+/** 除简体与英文之外的五份译文。那两种直接从 DICT 的 zh / en 取，不进这张表。 */
+const EXTRA: Partial<Record<Lang, Record<Key, string>>> = { tw, ja, ko, vi, ru }
 
 /**
  * 取文案。
@@ -43,9 +48,12 @@ const EXTRA: Partial<Record<Lang, Record<Key, string>>> = { ja, ko, vi, ru }
  * 键写错时返回键名本身而不是空串 —— 界面上会明晃晃地露出 "start.foo"，
  * 比静默显示空白容易发现得多。
  *
- * 【回退链】当前语言 → 英文 → 中文。四份译文都是全量的（类型上强制），
+ * 【回退链】当前语言 → 英文 → 简体。五份译文都是全量的（类型上强制），
  * 所以这条回退平时用不上；它是给「新加了键、译文还没跟上」那半天兜底的，
  * 那时露出英文比露出键名强。
+ *
+ * <b>繁体是例外：当前 → 简体，跳过英文。</b>繁体读者读简体只是字形不同，
+ * 读英文却是换了一门语言。C# 侧的 L10n.Get 也是同一条口径。
  */
 export function t(key: Key): string {
   const e = DICT[key] as { zh: string; en: string } | undefined
@@ -60,6 +68,8 @@ export function t(key: Key): string {
   if (l === 'en') return e.en
 
   const table = EXTRA[l]
+  if (l === 'tw') return (table && table[key]) || e.zh
+
   return (table && table[key]) || e.en || e.zh
 }
 

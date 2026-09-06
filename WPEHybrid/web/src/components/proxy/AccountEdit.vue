@@ -226,7 +226,7 @@ async function save(): Promise<void> {
   font-size: 9px;
   letter-spacing: .26em;
   text-transform: uppercase;
-  color: #4b5563;
+  color: var(--dim);
   padding: 0 20px;
   margin: 16px 0 6px;
 }
@@ -252,7 +252,7 @@ async function save(): Promise<void> {
   nowrap + ellipsis 会把后半句直接吃掉，而那半句正是要紧的部分。
   外面的 .setf .row > .v 已经是 flex-wrap: wrap，让它自己折下去即可。
 */
-.tip { font-size: 11px; color: #4b5563; line-height: 1.5; }
+.tip { font-size: 11px; color: var(--dim); line-height: 1.5; }
 
 .chk {
   display: inline-flex;
@@ -270,7 +270,7 @@ async function save(): Promise<void> {
 .chk.k { justify-self: start; }
 .chk i { width: 13px; height: 13px; border: 1px solid var(--border); position: relative; flex: none; }
 .chk.on { color: var(--green); }
-.chk.on i { border-color: var(--green); background: rgb(0 255 136 / 18%); }
+.chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
 .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 .chk:focus-visible { outline-offset: 2px; }
 
@@ -279,7 +279,7 @@ async function save(): Promise<void> {
   min-width: 0;
   height: 28px;
   padding: 0 10px;
-  background: rgb(0 0 0 / 30%);
+  background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
   color: var(--gray);
   font-family: var(--mono);
@@ -290,7 +290,7 @@ async function save(): Promise<void> {
 
 .inp:focus { border-color: var(--cyan); }
 .inp:disabled { opacity: .4; }
-.inp:read-only { color: var(--muted); background: rgb(0 0 0 / 15%); }
+.inp:read-only { color: var(--muted); background: rgb(var(--inset-rgb) / 15%); }
 .inp.num { flex: none; width: 110px; font-variant-numeric: tabular-nums; }
 .inp.dt { flex: none; width: 200px; }
 
