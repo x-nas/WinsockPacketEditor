@@ -314,6 +314,18 @@ const DICT = {
     en: 'Directions apply to this run only and reset on restart. Unpacking settings are saved.',
   },
 
+  //注入模式那一页：12 个 WinSock 钩子，按 1.1 / 2.0 / WSA 三组
+  'set.grp.hookWs1': { zh: 'Winsock 1.1', en: 'Winsock 1.1' },
+  'set.grp.hookWs2': { zh: 'Winsock 2.0', en: 'Winsock 2.0' },
+  'set.grp.hookWsa': { zh: 'Winsock 2.0 · WSA', en: 'Winsock 2.0 · WSA' },
+  'set.hook.injectHint': {
+    zh: '关掉哪个入口，那个入口就既不进列表也不过滤镜。这 12 个开关会落库，也会立刻推给目标进程。',
+    en: 'A disabled entry point is neither listed nor filtered. These 12 switches are persisted and pushed to the target at once.',
+  },
+  'set.hook.injectWarn': {
+    zh: '有入口被关掉了 —— 那个方向的封包一条都不会出现。',
+    en: 'Some entry points are off — no packet from those directions will show up.',
+  },
   'set.grp.unpack': { zh: '拆包设置', en: 'Packet Unpacking' },
   'set.hook.unpack': { zh: '启用拆包', en: 'Unpacking' },
   'set.hook.unpackHint': {
@@ -829,6 +841,7 @@ const DICT = {
   'inject.col.path': { zh: '路径', en: 'Path' },
 
   'inject.target': { zh: '目标', en: 'Target' },
+  'inject.window': { zh: '窗口', en: 'Window' },
   'inject.rate': { zh: '速率', en: 'Rate' },
   'inject.rows': { zh: '条', en: 'rows' },
   'inject.dropped': { zh: '丢弃', en: 'Dropped' },

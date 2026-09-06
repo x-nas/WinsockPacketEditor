@@ -190,6 +190,16 @@ function onSelect(anyRow: PacketListRow, ev: MouseEvent, index: number): void {
     面板只认「圈第 N 到第 M 字节」，圈出来的会是一段毫不相干的字节，而且看着像是查到的。
   */
   searchHit.value = null
+
+  /*
+    ⚠️ 还要告诉 C#「现在选中的是哪一条」。
+
+    WinForms 侧是表格的 SelectedIndexChanged 顺手做的（PacketList.cs:969），
+    外壳没有那个控件 —— 不设的话两条机器人指令会静默失效：
+    「发送 → 封包列表」（发的就是这一条）与「设置系统套接字 → 封包列表」。
+    C# 那边设完会把 Runtime 快照推给目标（执行器在那边跑）。
+  */
+  void call('setSelectedPacket', { id: row.Id }).catch(() => {})
 }
 
 /* ── 查找封包（对应 WinForms 的 Controls/SearchPacket）───────── */

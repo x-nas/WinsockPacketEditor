@@ -28,7 +28,7 @@ namespace WinsockPacketEditor.Ipc
         /// 协议版本。两端 Hello 时对不上就直接拒绝，<b>不猜、不兼容</b>。
         /// 改了任何一个帧的字段就要 +1。
         /// </summary>
-        public const int Version = 1;
+        public const int Version = 2;
 
         /// <summary>控制通道单帧上限（1 MB）。快照最大的是滤镜表，几十条 × 几百字节，余量足够。</summary>
         public const int MaxControlFrame = 1024 * 1024;

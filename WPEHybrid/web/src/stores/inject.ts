@@ -14,6 +14,8 @@ export interface InjectStatus {
   state: 'idle' | 'attaching' | 'attached' | 'disconnected'
   pid: number
   name: string
+  /** 目标的主窗口标题（没有标题就是主模块名）—— 对应 WinForms 的 lModuleName */
+  module: string
   is64: boolean
   hooked: boolean
   dropped: number
@@ -24,7 +26,7 @@ export interface InjectStatus {
 }
 
 export const status = ref<InjectStatus>({
-  state: 'idle', pid: 0, name: '', is64: false,
+  state: 'idle', pid: 0, name: '', module: '', is64: false,
   hooked: false, dropped: 0, ws1: false, ws2: false, msws: false,
 })
 

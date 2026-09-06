@@ -806,7 +806,17 @@ namespace WPEHybrid
                     还要多推一拍「刚停下」那次：worker 是自己跑完的（发送执行完就结束），
                     停下那一刻的最终计数得让界面收到。
                 */
-                bool running = Operate.SendConfig.List.IsSendListRunning;
+                /*
+                    ⚠️ 注入模式下执行器<b>在目标进程里</b>，外壳这边的 BackgroundWorker 永远是闲的
+                    —— 直接读 IsSendListRunning 会让界面上一直显示「未在执行」，
+                    连带三个计数也不会标脏。附加着的时候要问链路，那个值随目标 1 Hz 的
+                    Stats 事件报上来（与执行器启停在 AttachedLink() 那里分流是同一件事）。
+                */
+                var statLink = this.AttachedLink();
+
+                bool running = statLink != null
+                    ? statLink.SendListRunning
+                    : Operate.SendConfig.List.IsSendListRunning;
 
                 if (running || this.sendWasRunning)
                 {
@@ -817,7 +827,9 @@ namespace WPEHybrid
                 this.sendWasRunning = running;
 
                 //机器人列表同一套：执行次数是 RobotExecute 在后台线程上就地累加的
-                bool robotRunning = Operate.RobotConfig.List.IsRobotListRunning;
+                bool robotRunning = statLink != null
+                    ? statLink.RobotListRunning
+                    : Operate.RobotConfig.List.IsRobotListRunning;
 
                 if (robotRunning || this.robotWasRunning)
                 {
@@ -1228,13 +1240,15 @@ namespace WPEHybrid
                 FeedPump.ListPushed += this.OnListPushed;
 
                 /*
-                    封包编辑器的「发送」也要交给目标 —— 套接字句柄属于目标进程，
-                    在外壳里调 send() 是个野句柄，一个包也发不出去（还静默计成失败）。
+                    所有「发包」都要交给目标 —— 套接字句柄是进程私有的，
+                    在外壳里调 send() 命中的是外壳自己句柄表里碰巧同号的那个东西。
 
-                    与四个执行器在 AttachedLink() 那里分流是同一件事，只是那几个的
-                    分流点在桥方法上，而发送会话跑在 Operate 的后台线程里，桥拦不住。
+                    挂在 PacketConfig.Packet.SendPacket 这一层，一次覆盖四个入口：
+                    封包编辑、发送编辑 / 发送列表、机器人指令、快捷键。
+                    与执行器启停在 AttachedLink() 那里分流是同一件事，
+                    只是那几个的分流点在桥方法上，而这些跑在 Operate 的后台线程里，桥拦不住。
                 */
-                Operate.PacketEditConfig.SendRouter = link.SendPacket;
+                Operate.PacketConfig.Packet.SendRouter = link.SendPacket;
 
                 //记下这次注入的目标，启动页那张卡上要显示（与 WinForms 的 LastInjection 一致）
                 Operate.SystemConfig.LastInjection = string.IsNullOrEmpty(path)
@@ -1862,15 +1876,36 @@ namespace WPEHybrid
                 同一个弹窗里两种存续方式，界面上要说清楚，否则关掉 UDP、重启、
                 发现又开了，只会以为是 bug。
 
-                【只出代理那四个】WinForms 是 tabHookSettings 按宿主窗体选页
-                （HookSetting 26–33），注入模式那 12 个 WinSock 钩子在另一页。
-                与滤镜编辑的「作用域」同一个道理：代理模式的包不走那些钩子。
+                【两种模式各看一页】WinForms 是 tabHookSettings 按宿主窗体选页
+                （HookSetting 26–33）：注入模式那一页是 12 个 WinSock 钩子
+                （WS1.1 四个、WS2.0 四个、WSA 四个），代理模式那一页是这四个方向 + 拆包。
+                这里一次把 16 个都给出去，前端按 mode 挑一页显示。
+
+                ⚠️ 保存时<b>只改前端真的送上来的那几个</b>（按「字段存不存在」判断）——
+                另一组的控件在那一页上根本不存在，送 false 就是明确要求关掉，
+                于是在代理模式点一次保存会把注入的 12 个钩子全关掉。
+                与过滤设置的类别、以及 saveListSetting 当年那个坑是同一件事。
 
                 【拆包】TCP 是流，一次 recv 可能收到好几个应用层包。
                 UnPack_Head 是包头特征字节，UnPack_Length 是长度字段在包里的位置。
             */
             this.bridge.Register("getHookSetting", args => new
             {
+                //注入模式那 12 个（落库，在 InjectMode 表）
+                ws1Send = Operate.PacketConfig.Packet.HookWS1_Send,
+                ws1SendTo = Operate.PacketConfig.Packet.HookWS1_SendTo,
+                ws1Recv = Operate.PacketConfig.Packet.HookWS1_Recv,
+                ws1RecvFrom = Operate.PacketConfig.Packet.HookWS1_RecvFrom,
+                ws2Send = Operate.PacketConfig.Packet.HookWS2_Send,
+                ws2SendTo = Operate.PacketConfig.Packet.HookWS2_SendTo,
+                ws2Recv = Operate.PacketConfig.Packet.HookWS2_Recv,
+                ws2RecvFrom = Operate.PacketConfig.Packet.HookWS2_RecvFrom,
+                wsaSend = Operate.PacketConfig.Packet.HookWSA_Send,
+                wsaSendTo = Operate.PacketConfig.Packet.HookWSA_SendTo,
+                wsaRecv = Operate.PacketConfig.Packet.HookWSA_Recv,
+                wsaRecvFrom = Operate.PacketConfig.Packet.HookWSA_RecvFrom,
+
+                //代理模式那四个（<b>不落库</b>，只在本次运行内有效）+ 拆包（落库，ProxyMode 表）
                 tcpReq = ProxyCfg.HookTCP_Req,
                 tcpResp = ProxyCfg.HookTCP_Resp,
                 udpReq = ProxyCfg.HookUDP_Req,
@@ -1887,8 +1922,59 @@ namespace WPEHybrid
                     return args[name] != null && (bool)args[name];
                 }
 
+                void Take(string name, ref bool field)
+                {
+                    if (args[name] != null) { field = (bool)args[name]; }
+                }
+
                 try
                 {
+                    /*
+                        注入模式那一页：12 个 WinSock 钩子。
+                        没送上来的一个都不动（代理那一页根本没有这些控件）。
+                    */
+                    bool inject = args["ws1Send"] != null;
+
+                    if (inject)
+                    {
+                        Take("ws1Send", ref Operate.PacketConfig.Packet.HookWS1_Send);
+                        Take("ws1SendTo", ref Operate.PacketConfig.Packet.HookWS1_SendTo);
+                        Take("ws1Recv", ref Operate.PacketConfig.Packet.HookWS1_Recv);
+                        Take("ws1RecvFrom", ref Operate.PacketConfig.Packet.HookWS1_RecvFrom);
+                        Take("ws2Send", ref Operate.PacketConfig.Packet.HookWS2_Send);
+                        Take("ws2SendTo", ref Operate.PacketConfig.Packet.HookWS2_SendTo);
+                        Take("ws2Recv", ref Operate.PacketConfig.Packet.HookWS2_Recv);
+                        Take("ws2RecvFrom", ref Operate.PacketConfig.Packet.HookWS2_RecvFrom);
+                        Take("wsaSend", ref Operate.PacketConfig.Packet.HookWSA_Send);
+                        Take("wsaSendTo", ref Operate.PacketConfig.Packet.HookWSA_SendTo);
+                        Take("wsaRecv", ref Operate.PacketConfig.Packet.HookWSA_Recv);
+                        Take("wsaRecvFrom", ref Operate.PacketConfig.Packet.HookWSA_RecvFrom);
+
+                        //这 12 个在 InjectMode 表。WinForms 靠关窗统一保存，外壳没有那个时机
+                        Operate.SystemConfig.SaveInjectMode_ToDB();
+
+                        /*
+                            ⚠️ <b>还要推给目标</b> —— 钩子体在目标进程里，读的是它自己那份标志。
+                            不推的话「保存成功」的提示照弹，而被关掉的方向照抓不误，
+                            要重新装一遍钩子（停止 → 开始）才生效。
+                        */
+                        var link = this.AttachedLink();
+                        if (link != null) { link.TryPush(link.PushHookFlags); }
+                    }
+
+                    //代理模式那一页：四个方向 + 拆包。同样没送就不动
+                    if (args["tcpReq"] == null && !inject)
+                    {
+                        //两组都没送 —— 空报文，什么都不做
+                        return new { ok = true, error = string.Empty };
+                    }
+
+                    if (args["tcpReq"] == null)
+                    {
+                        UI.Toast(UiIcon.Success, UI.T("HookSettingsForm.Success", "拦截设置保存成功"));
+                        return new { ok = true, error = string.Empty };
+                    }
+
                     bool unpack = Flag("unpack");
                     string head = (args["unpackHead"] == null ? string.Empty : (string)args["unpackHead"]).Trim();
                     string len = (args["unpackLength"] == null ? string.Empty : (string)args["unpackLength"]).Trim();
@@ -1996,6 +2082,14 @@ namespace WPEHybrid
 
                     //WinForms 靠退出时统一保存，外壳没有那个时机 —— 直接落库
                     Operate.SystemConfig.SaveSystemConfig_ToDB();
+
+                    /*
+                        这三项<b>全都在 Runtime 快照里</b>：极速模式、列表执行方式（发送 / 机器人
+                        依次还是同时）、滤镜执行方式（DoFilterList 读它，而那个方法跑在目标里）。
+                        不推的话在注入模式下它们是三个拨了不动的开关。
+                    */
+                    this.PushRuntimeToTarget();
+
                     UI.Toast(UiIcon.Success, UI.T("SystemSettingsForm.Success", "系统设置保存成功"));
 
                     return new { ok = true };
@@ -3474,6 +3568,15 @@ namespace WPEHybrid
                 WinFormsUiHost.ApplyAll();
                 FeedPump.MarkAllDirty();
                 this.SaveProxyState();
+
+                /*
+                    备份里什么都有 —— 拦截开关、滤镜 / 发送 / 机器人、极速模式、执行方式。
+                    MarkAllDirty 只会经 ListPushed 带出那三份列表的快照，
+                    <b>拦截开关与 Runtime 得自己补一次</b>，否则导入之后目标还在按旧配置跑。
+                */
+                var link = this.AttachedLink();
+                if (link != null) { link.TryPush(link.PushAll); }
+
                 return new { language = UI.Prefs.Language ?? string.Empty };
             });
 
@@ -3567,10 +3670,30 @@ namespace WPEHybrid
                     args["id"] == null ? 0L : (long)args["id"]),
             });
 
-            this.bridge.Register("setSystemSocketByPacket", args => new
+            this.bridge.Register("setSystemSocketByPacket", args =>
             {
-                socket = Operate.PacketConfig.List.SetSystemSocket_ByPacketId(
-                    args["id"] == null ? 0L : (long)args["id"]),
+                int socket = Operate.PacketConfig.List.SetSystemSocket_ByPacketId(
+                    args["id"] == null ? 0L : (long)args["id"]);
+
+                //系统套接字在 Runtime 快照里，改完要推下去 —— 用它的执行器跑在目标进程
+                this.PushRuntimeToTarget();
+                return new { socket = socket };
+            });
+
+            /*
+                记下「当前选中的那一条封包」。
+
+                WinForms 侧是表格的 SelectedIndexChanged 顺手做的（PacketList.cs:969），
+                外壳没有那个控件 —— 不设的话两条机器人指令会静默失效：
+                「发送 → 封包列表」与「设置系统套接字 → 封包列表」。
+            */
+            this.bridge.Register("setSelectedPacket", args =>
+            {
+                Operate.PacketConfig.List.SetSelectedPacket_ById(
+                    args["id"] == null ? 0L : (long)args["id"]);
+
+                this.PushRuntimeToTarget();
+                return new { ok = true };
             });
 
             //ids 为空就是导整张表 —— SavePacketListToExcel 本来就这么写的
@@ -4632,7 +4755,7 @@ namespace WPEHybrid
 
             if (link == null)
             {
-                return new { ok = true, state = "idle", pid = 0, name = "", is64 = false, hooked = false, dropped = 0L, ws1 = false, ws2 = false, msws = false };
+                return new { ok = true, state = "idle", pid = 0, name = "", module = "", is64 = false, hooked = false, dropped = 0L, ws1 = false, ws2 = false, msws = false };
             }
 
             return new
@@ -4641,6 +4764,12 @@ namespace WPEHybrid
                 state = link.State.ToString().ToLowerInvariant(),
                 pid = link.TargetPid,
                 name = this.SafeProcessName(link.TargetPid),
+                /*
+                    目标的主窗口标题 —— 对应 WinForms 的 lModuleName。
+                    那边取的是 Process.GetCurrentProcess()（界面就在目标里，「当前进程」就是目标），
+                    外壳这边必须按 PID 取，否则拿到的是 WPEHybrid 自己。
+                */
+                module = this.SafeWindowTitle(link.TargetPid),
                 is64 = link.TargetIs64,
                 hooked = link.HookInstalled,
                 //环满丢掉的条数。界面上要显示「丢弃 N」—— 无声丢包比阻塞更糟
@@ -4661,11 +4790,42 @@ namespace WPEHybrid
             catch { return "(" + pid + ")"; }
         }
 
+        /// <summary>
+        /// 目标的主窗口标题，没有标题就退回主模块名（照 WinForms 的 GetInjectModuleName）。
+        /// 同样一条都不能抛。
+        /// </summary>
+        private string SafeWindowTitle(int pid)
+        {
+            try
+            {
+                using (var proc = System.Diagnostics.Process.GetProcessById(pid))
+                {
+                    if (!string.IsNullOrEmpty(proc.MainWindowTitle)) { return proc.MainWindowTitle; }
+
+                    try { return proc.MainModule.ModuleName; } catch { return string.Empty; }
+                }
+            }
+            catch { return string.Empty; }
+        }
+
         /// <summary>链路状态变了就推给前端（状态条要即时反映「目标没了」）。</summary>
         private void OnInjectStateChanged(WinsockPacketEditor.Ipc.ShellLink.LinkState state)
         {
             try { this.bridge.PushEvent("inject:state", this.InjectStatus()); }
             catch { /* 页面可能正在导航 */ }
+        }
+
+        /// <summary>
+        /// 把 Runtime 快照推给目标（附加着才推，没附加是空操作）。
+        ///
+        /// Runtime 里装的是「改了之后目标那边要立刻跟上」的几样：极速模式、系统套接字、
+        /// 列表执行方式、滤镜执行方式、当前选中的封包。它们分散在好几个设置页与右键动作里，
+        /// 所以收成这一个方法，改动点只要记得调它就行。
+        /// </summary>
+        private void PushRuntimeToTarget()
+        {
+            var link = this.AttachedLink();
+            if (link != null) { link.TryPush(link.PushRuntime); }
         }
 
         /// <summary>
@@ -4978,8 +5138,8 @@ namespace WPEHybrid
         {
             FeedPump.ListPushed -= this.OnListPushed;
 
-            //摘掉发送路由，否则断开之后封包编辑还会往一条已经关掉的管道上发
-            Operate.PacketEditConfig.SendRouter = null;
+            //摘掉发送路由，否则断开之后还会往一条已经关掉的管道上发
+            Operate.PacketConfig.Packet.SendRouter = null;
 
             var link = this.injectLink;
             this.injectLink = null;

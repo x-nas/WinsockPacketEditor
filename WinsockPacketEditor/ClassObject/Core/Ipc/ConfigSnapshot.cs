@@ -417,7 +417,7 @@ namespace WinsockPacketEditor.Ipc
 
         #endregion
 
-        #region//Runtime：极速模式 / 系统套接字 / 执行方式 / 当前选中封包
+        #region//Runtime：极速模式 / 系统套接字 / 两种执行方式 / 当前选中封包
 
         public static byte[] EncodeRuntime()
         {
@@ -426,6 +426,13 @@ namespace WinsockPacketEditor.Ipc
             w.Bool(Operate.SystemConfig.SpeedMode);
             w.I32(Operate.SystemConfig.SystemSocket);
             w.I32((int)Operate.SystemConfig.ListExecute);
+
+            /*
+                滤镜执行方式（优先 / 依次）。<b>读它的是 DoFilterList，而那个方法跑在目标里</b>——
+                不推下去的话「系统设置 → 滤镜执行方式」在注入模式下是个拨了不动的开关：
+                外壳这边改了、落库了，目标那边仍按自己的初值走。
+            */
+            w.I32((int)Operate.FilterConfig.Filter.FilterExecute);
 
             //当前选中的封包：机器人指令「设置系统套接字 → 封包列表」与
             //「发送封包列表选中的封包」要读它。目标不再持有封包列表。
@@ -455,6 +462,7 @@ namespace WinsockPacketEditor.Ipc
             Operate.SystemConfig.SpeedMode = r.Bool();
             Operate.SystemConfig.SystemSocket = r.I32();
             Operate.SystemConfig.ListExecute = (Operate.SystemConfig.Execute)r.I32();
+            Operate.FilterConfig.Filter.FilterExecute = (Operate.FilterConfig.Filter.Execute)r.I32();
 
             if (!r.Bool())
             {

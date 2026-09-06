@@ -14642,8 +14642,32 @@ namespace WinsockPacketEditor
 
                 #region//发送封包
 
+                /*
+                    注入模式下「发包」<b>必须在目标进程里做</b> —— 下面这些 send() / sendto()
+                    收的是一个<b>套接字句柄</b>，而句柄是进程私有的。拿目标的句柄在外壳里调，
+                    命中的是外壳自己句柄表里碰巧同号的那个东西（多半什么都不是），
+                    一个包也发不出去，而且 res == -1 会被静默计成「失败」。
+
+                    所以外壳附加到目标时把这个委托指向 ShellLink.SendPacket、断开时置 null。
+                    <b>挂在这一层而不是某个调用点上</b>：发包的入口有四个
+                    —— 封包编辑、发送编辑 / 发送列表（SendExecute）、机器人指令、快捷键 ——
+                    逐个去改必然漏一个，而漏了的表现正是「点了没反应」。
+
+                    目标进程里这个委托永远是 null（那边没人给它赋值），所以
+                    ShellLink → IpcCommand.SendPacket → 目标的 SendPacket 不会绕回来。
+                */
+                public static Func<int, Operate.PacketConfig.Packet.PacketType, string, string, byte[], bool> SendRouter;
+
                 public static unsafe bool SendPacket(int Socket, Operate.PacketConfig.Packet.PacketType packetType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
                 {
+                    Func<int, Operate.PacketConfig.Packet.PacketType, string, string, byte[], bool> route = SendRouter;
+
+                    if (route != null)
+                    {
+                        try { return route(Socket, packetType, sIPFrom, sIPTo, bSendBuffer); }
+                        catch (Exception ex) { Operate.DoLog(nameof(SendPacket) + ".Route", ex); return false; }
+                    }
+
                     bool bReturn = false;
                     IntPtr ipSend = IntPtr.Zero;
 
@@ -15899,6 +15923,31 @@ namespace WinsockPacketEditor
                     PacketInfo.Id 是运行期自增的 long，与按行取字节用的是同一个键。
                 */
 
+                /// <summary>
+                /// 记下「当前选中的那一条封包」。
+                ///
+                /// <b>WinForms 侧是表格的 SelectedIndexChanged 顺手做的</b>（PacketList.cs:969），
+                /// 外壳没有那个控件 —— 不设的话两条机器人指令会静默失效：
+                /// 「发送 → 封包列表」（发的就是这一条）与「设置系统套接字 → 封包列表」。
+                /// 这两条在注入模式下都跑在目标进程里，读的是 Runtime 快照里的这一份，
+                /// 所以调用方设完还要把 Runtime 推下去。
+                ///
+                /// <paramref name="Id"/> 传 0 或找不到时清空（等价于 SelectedIndex = -1）。
+                /// </summary>
+                public static bool SetSelectedPacket_ById(long Id)
+                {
+                    try
+                    {
+                        piSelect = Id == 0 ? null : GetPacketById(Id);
+                        return piSelect != null;
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(nameof(SetSelectedPacket_ById), ex);
+                        return false;
+                    }
+                }
+
                 /// <summary>Id 数组 → 模型列表，<b>按列表里的先后顺序</b>返回。</summary>
                 internal static List<PacketInfo> PickPackets(IList<long> Ids)   //internal：封包编辑（PacketEditConfig）也按 Id 取同一份
                 {
@@ -17051,20 +17100,6 @@ namespace WinsockPacketEditor
                 public int Fail;
             }
 
-            /*
-                注入模式下「发送」<b>必须在目标进程里做</b> —— 套接字句柄属于目标，
-                拿到外壳来调 send() 是个野句柄，一个包也发不出去（还静默计成失败）。
-
-                所以外壳在附加时把这个委托指向 ShellLink.SendPacket、断开时置 null。
-                这与四个执行器（发送 / 机器人的启停）在 ShellForm.AttachedLink() 那里分流
-                是同一件事，只是那几个的分流点在桥方法上，而这一条在 Operate 内部
-                —— 封包编辑的发送会话本来就跑在 Operate 的后台线程上，桥拦不住。
-
-                <b>只对 "packet" 那一份生效</b>：代理列表那条路要么走本机套接字、
-                要么走 SunnyNet 会话，两者都在外壳这一侧。
-            */
-            public static Func<int, PacketConfig.Packet.PacketType, string, string, byte[], bool> SendRouter;
-
             private static readonly object sendGate = new object();
             private static CancellationTokenSource sendCts;
             private static Task sendTask;
@@ -17142,9 +17177,6 @@ namespace WinsockPacketEditor
                         int times = Times < 1 ? 1 : Times;
                         int interval = Interval < 0 ? 0 : Interval;
 
-                        //注入模式的封包要交给目标进程发，见 SendRouter 那段说明
-                        bool route = List == ListPacket && SendRouter != null;
-
                         Volatile.Write(ref sendTotal, 0);
                         Volatile.Write(ref sendOk, 0);
                         Volatile.Write(ref sendFail, 0);
@@ -17161,7 +17193,7 @@ namespace WinsockPacketEditor
                                     while (!token.IsCancellationRequested)
                                     {
                                         DoSend(Socket, type, from, to, buf, theology, wsType,
-                                            Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount, route);
+                                            Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
 
                                         if (interval > 0) { Thread.Sleep(interval); }
                                     }
@@ -17171,7 +17203,7 @@ namespace WinsockPacketEditor
                                     for (int i = 0; i < times && !token.IsCancellationRequested; i++)
                                     {
                                         DoSend(Socket, type, from, to, buf, theology, wsType,
-                                            Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount, route);
+                                            Progression, ProgressionPosition, ProgressionStep, Carry, CarryCount);
 
                                         if (interval > 0) { Thread.Sleep(interval); }
                                     }
@@ -17212,8 +17244,7 @@ namespace WinsockPacketEditor
             private static void DoSend(
                 int Socket, PacketConfig.Packet.PacketType type, string from, string to, byte[] buf,
                 long theology, long wsType,
-                bool Progression, int pos, int step, bool carry, int carryCount,
-                bool route = false)
+                bool Progression, int pos, int step, bool carry, int carryCount)
             {
                 try
                 {
@@ -17266,14 +17297,9 @@ namespace WinsockPacketEditor
                                 break;
                         }
                     }
-                    else if (route)
-                    {
-                        //注入模式：交给目标进程发（SendRouter → ShellLink → IpcCommand.SendPacket）
-                        Func<int, PacketConfig.Packet.PacketType, string, string, byte[], bool> send = SendRouter;
-                        ok = send != null && send(Socket, type, from, to, buf);
-                    }
                     else
                     {
+                        //附加着目标时这一句会被 PacketConfig.Packet.SendRouter 转到目标进程里去发
                         ok = PacketConfig.Packet.SendPacket(Socket, type, from, to, buf);
                     }
 

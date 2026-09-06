@@ -61,6 +61,12 @@ function openMenu(e: MouseEvent): void {
       <span class="dim">#{{ status.pid }} · {{ status.is64 ? 'x64' : 'x86' }}</span>
     </div>
 
+    <!-- 主窗口标题：同名进程开好几个时，这是唯一能分清「注的是哪一个」的东西 -->
+    <div v-if="status.module" class="meta win">
+      <span class="k">{{ t('inject.window') }}</span>
+      <b :title="status.module">{{ status.module }}</b>
+    </div>
+
     <div class="meta">
       <span class="k">WinSock</span>
       <b>{{ wsText(status) }}</b>
@@ -127,6 +133,10 @@ function openMenu(e: MouseEvent): void {
 @keyframes beat { 50% { opacity: .35; } }
 
 .meta { display: flex; align-items: baseline; gap: 6px; font-size: 12px; min-width: 0; }
+
+/* 窗口标题可以很长，让它先被压缩，别把右边的动作按钮挤出去 */
+.meta.win { flex: 0 1 auto; overflow: hidden; }
+.meta.win b { max-width: 22ch; }
 
 .meta .k {
   font-family: var(--share);
