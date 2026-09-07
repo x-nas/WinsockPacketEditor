@@ -22,12 +22,23 @@
        是<b>能弹的</b> —— 改成挂监听会把「为什么这个按钮点不了」这类提示全弄丢，
        而那正是最需要提示的地方。elementFromPoint 对禁用元素照样返回它。
 
-  【为什么等鼠标停下来再算】
-  pointermove 只记坐标、重置计时器，真正的 elementFromPoint + 走 DOM 只在
-  停稳 DELAY 毫秒之后做一次。封包列表每秒重渲染 60 次，这条路径不能跟着动。
+  【每次 pointermove 都要找一次，但只找，不画】
+  <b>不能等停稳再找</b> —— 摘 title 必须赶在原生提示（Chromium 约 300ms）之前，
+  而那要先知道指着谁。所以 elementFromPoint 每次移动都跑一遍，
+  <b>等 DELAY 的只是画盒子那一步</b>。
+
+  代价实测（浏览器里连派 1000 次合成 pointermove）：<b>0.034ms 一次</b>，
+  鼠标移动时最多百来次每秒，与封包列表每秒几千行那条路不在一个量级。
+  真要再省，可以按时间戳节流到 ~60ms 一次 —— 但那要另配一次「停下来补一次」的收尾，
+  为这点开销不值得。
 */
 
-/** 悬停多久才弹。原生大约 500ms，这里略快一点，但别快到扫过去就闪一下。 */
+/**
+ * 悬停多久才弹出盒子。
+ *
+ * ⚠️ 这个值<b>不再需要比原生快</b>（原生实测约 300ms，比它快是做不到的）——
+ * title 在指到的那一刻就摘走了，原生根本没得画。这里只管「扫过去别闪一下」。
+ */
 const DELAY = 380
 
 /** 贴边时离视口留的余量。 */
@@ -99,21 +110,40 @@ function place(el: HTMLElement, b: HTMLElement): void {
   b.style.visibility = 'visible'
 }
 
-function show(el: HTMLElement): void {
-  const text = textOf(el)
-  if (!text) return
+/*
+  ⚠️ <b>摘 title 与画盒子必须是两步，而且摘要立刻做。</b>
 
-  //把 title 摘走，原生提示就没得画了
+  第一版把两件事写在一起、都等 DELAY 之后 —— 结果是<b>原生提示先闪一下</b>：
+  Chromium 大约 300ms 就弹它自己那个，比这里的 380ms 早。
+  于是顺序成了「原生弹出 → 我摘掉 title（Chromium 随即收掉它）→ 我的盒子出来」，
+  看着就是闪一下再换一个。
+
+  现在指到就摘（claim），盒子仍然等停稳 380ms 再画（render）——
+  原生那条路从此没有 title 可画，早晚都轮不到它。
+*/
+function claim(el: HTMLElement): void {
   if (el.hasAttribute('title')) {
+    const text = el.getAttribute('title') || ''
+
+    //空 title 不接管：那是别人用来「关掉继承提示」的写法，摘了反而多事
+    if (!text.trim()) return
+
     el.setAttribute('data-tip', text)
     el.removeAttribute('title')
   }
 
   host = el
+}
+
+function render(): void {
+  if (!host || !host.isConnected) return
+
+  const text = textOf(host)
+  if (!text) return
 
   const b = ensureBox()
   b.textContent = text
-  place(el, b)
+  place(host, b)
 }
 
 function hide(): void {
@@ -135,11 +165,7 @@ function hide(): void {
 
 function schedule(): void {
   window.clearTimeout(timer)
-
-  timer = window.setTimeout(() => {
-    const el = pick(lastX, lastY)
-    if (el && el !== host) show(el)
-  }, DELAY)
+  timer = window.setTimeout(render, DELAY)
 }
 
 export function installTooltip(): void {
@@ -156,9 +182,13 @@ export function installTooltip(): void {
     //还停在同一个目标上：已经弹出来的就别动，正在等的也别重新计时
     if (el === host && host) return
 
-    if (!el) { hide(); return }
-
+    //离开了原来那个：先把它的 title 放回去
     if (host) hide()
+
+    if (!el) return
+
+    //⚠️ 立刻摘，别等计时器 —— 否则原生提示会赶在前面弹出来（见 claim 上面那段）
+    claim(el)
     schedule()
   }, { passive: true, capture: true })
 
