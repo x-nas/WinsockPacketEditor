@@ -41,8 +41,6 @@ export const DICT = {
   },
 
   'foot.tutorial': { zh: '使用教程', en: 'Tutorial' },
-  'foot.gitee': { zh: 'Gitee', en: 'Gitee' },
-  'foot.issues': { zh: '问题反馈', en: 'Feedback' },
   'foot.faq': { zh: '常见问题', en: 'FAQ' },
   'foot.ready': { zh: 'Ready', en: 'Ready' },
   'foot.running': { zh: '运行中', en: 'Running' },

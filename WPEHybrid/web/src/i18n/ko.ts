@@ -17,8 +17,6 @@ export const ko: Record<Key, string> = {
   'win.close': '종료',
   'win.nohost': 'WebView2 호스트 안이 아닙니다 —— WPEHybrid.exe 로 실행하세요.',
   'foot.tutorial': '사용 안내',
-  'foot.gitee': 'Gitee',
-  'foot.issues': '피드백',
   'foot.faq': '자주 묻는 질문',
   'foot.ready': 'Ready',
   'foot.running': '실행 중',

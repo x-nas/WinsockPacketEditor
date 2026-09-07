@@ -18,8 +18,6 @@ export const tw: Record<Key, string> = {
   'win.close': '退出',
   'win.nohost': '不在 WebView2 宿主內 —— 請通過 WPEHybrid.exe 開啟。',
   'foot.tutorial': '使用教程',
-  'foot.gitee': 'Gitee',
-  'foot.issues': '問題反饋',
   'foot.faq': '常見問題',
   'foot.ready': 'Ready',
   'foot.running': '執行中',

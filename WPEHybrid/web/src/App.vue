@@ -315,13 +315,6 @@ function site(page: string): string {
           <a @click="open(site('tutorial.html'))">{{ t('foot.tutorial') }}</a>
           <a @click="open(site('faq.html'))">{{ t('foot.faq') }}</a>
           <a @click="open('https://github.com/x-nas/WinsockPacketEditor')">GitHub</a>
-          <!--
-            这两条是从 WinForms 启动页搬过来的（bGitee_Click / bQA_Click）——
-            早先只搬了官网 / 教程 / GitHub 三条，镜像仓库与问题反馈漏了。
-            GitHub 在国内时常连不上，Gitee 那份镜像是唯一的退路，不该丢。
-          -->
-          <a @click="open('https://gitee.com/X-NAS/WinsockPacketEditor')">{{ t('foot.gitee') }}</a>
-          <a @click="open('https://github.com/x-nas/WinsockPacketEditor/issues')">{{ t('foot.issues') }}</a>
         </div>
         <!--
           右侧放代理服务的监听地址与运行状态 —— 那是代理模式下唯一需要随时能看到、
@@ -357,10 +350,7 @@ function site(page: string): string {
       </footer>
     </div>
 
-    <!--
-      语言下拉。挂在 .shell 之外 —— ContextMenu 自己会 Teleport 到 body，
-      这里只是让它和其余浮层排在一起，读起来知道有这么个东西。
-    -->
+    <!-- 软件设置（语言 + 主题）。挂在 .shell 之外：它自己就是那个把外面置 inert 的弹窗 -->
     <AppSetting v-model:open="appSetOpen" />
 
     <BetaNotice />

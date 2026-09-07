@@ -17,8 +17,6 @@ export const ru: Record<Key, string> = {
   'win.close': 'Выход',
   'win.nohost': 'Запущено вне хоста WebView2 —— откройте через WPEHybrid.exe.',
   'foot.tutorial': 'Руководство',
-  'foot.gitee': 'Gitee',
-  'foot.issues': 'Обратная связь',
   'foot.faq': 'Вопросы и ответы',
   'foot.ready': 'Ready',
   'foot.running': 'Работает',

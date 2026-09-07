@@ -17,8 +17,6 @@ export const ja: Record<Key, string> = {
   'win.close': '終了',
   'win.nohost': 'WebView2 ホスト内で動いていません —— WPEHybrid.exe から起動してください。',
   'foot.tutorial': '使い方',
-  'foot.gitee': 'Gitee',
-  'foot.issues': 'フィードバック',
   'foot.faq': 'よくある質問',
   'foot.ready': 'Ready',
   'foot.running': '実行中',

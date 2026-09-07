@@ -17,8 +17,6 @@ export const vi: Record<Key, string> = {
   'win.close': 'Thoát',
   'win.nohost': 'Không chạy trong máy chủ WebView2 —— hãy mở bằng WPEHybrid.exe.',
   'foot.tutorial': 'Hướng dẫn',
-  'foot.gitee': 'Gitee',
-  'foot.issues': 'Phản hồi',
   'foot.faq': 'Câu hỏi thường gặp',
   'foot.ready': 'Ready',
   'foot.running': 'Đang chạy',
