@@ -18,6 +18,7 @@
 import { computed } from 'vue'
 import { LANGS, defOf, lang, setLang, t, type Lang } from '../i18n'
 import { effective, setTheme, theme, type Theme } from '../stores/theme'
+import CyberSelect from './CyberSelect.vue'
 import SettingsModal from './proxy/SettingsModal.vue'
 
 const props = defineProps<{ open: boolean }>()
@@ -45,6 +46,20 @@ const THEMES: ThemeCard[] = [
 
 const cur = computed(() => defOf(lang.value))
 
+/*
+  语言用下拉，不铺成网格 —— 七个已经占掉三行，再加语言只会更长，
+  而这一屏总共才两组设置。下拉的高度与语言个数无关。
+
+  【label 为什么带两字母前缀】
+  · 名字一律用<b>该语言自己的写法</b>（日本語 而不是 Japanese）——
+    切到一种看不懂的语言之后，自称是屏幕上唯一还认得出来的东西；
+  · 但 CJK 的名字没法按首字母跳，而 CyberSelect 支持「敲首字母跳到下一个匹配项」。
+    前缀补上之后 c/t/e/j/k/v/r 七个各不相同，键盘用户敲一下就到。
+  等宽字体下这两列自然对齐（.cs-btn / .cs-opt 都是 var(--mono)）。
+*/
+const langOptions = computed(() =>
+  LANGS.map((l) => ({ value: l.code, label: l.short + '  ' + l.label })))
+
 function pickLang(code: Lang): void {
   void setLang(code)
 }
@@ -66,23 +81,19 @@ function pickTheme(k: Theme): void {
       <div class="grp">{{ t('set.app.lang') }}</div>
 
       <!--
-        七种语言铺成网格而不是下拉：一共就七个，铺开一眼看全，
-        比「展开 → 找 → 点」少一步。名字一律用该语言自己的写法 ——
-        切到看不懂的语言之后，自称是屏幕上唯一还认得出来的东西。
+        不套 .setf .row：那是「标签列 + 控件」的两栏格，而组标题已经写着「界面语言」，
+        行标签再写一遍就是重复。这一组只有一个控件，直接与下面「外观」那组同构 ——
+        组标题 → 控件 → 提示，三行到底。
       -->
-      <div class="opts lang">
-        <button
-          v-for="l in LANGS"
-          :key="l.code"
-          class="opt"
-          :class="{ on: l.code === lang }"
-          :aria-pressed="l.code === lang"
-          @click="pickLang(l.code)"
-        >
-          <i class="tag">{{ l.short }}</i>
-          <span class="nm">{{ l.label }}</span>
-          <svg v-if="l.code === lang" class="tick" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
-        </button>
+      <div class="one">
+        <CyberSelect
+          class="sel"
+          :model-value="lang"
+          :options="langOptions"
+          @update:model-value="pickLang($event as Lang)"
+        />
+        <!-- 文化名：下拉里只有语言的自称，出问题时要看的是它到底切成了哪个 culture -->
+        <i class="cult">{{ cur.culture }}</i>
       </div>
       <p class="tip">{{ t('set.app.langHint') }}</p>
 
@@ -104,33 +115,40 @@ function pickTheme(k: Theme): void {
           <svg v-if="x.key === theme" class="tick" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
         </button>
       </div>
-      <p class="tip">{{ t('set.app.themeHint') }}</p>
+      <!--
+        跟随系统时把此刻解析成了哪种<b>接在提示语后面</b> —— 只显示「跟随系统」的话，
+        用户没法确认它到底认出了系统是深是浅（这正是这一档最容易被怀疑的地方）。
 
-      <div class="grp">{{ t('set.app.now') }}</div>
-      <div class="row">
-        <div class="k">{{ t('set.app.lang') }}</div>
-        <div class="v">{{ cur.label }} <i class="cult">{{ cur.culture }}</i></div>
-      </div>
-      <div class="row">
-        <div class="k">{{ t('set.app.theme') }}</div>
-        <!--
-          跟随系统时把此刻解析成了哪种一并写出来 —— 只显示「跟随系统」的话，
-          用户没法确认它到底认出了系统是深是浅（这正是这一档最容易被怀疑的地方）。
-        -->
-        <div class="v">
-          {{ t(theme === 'system' ? 'set.app.system' : theme === 'dark' ? 'set.app.dark' : 'set.app.light') }}
-          <i v-if="theme === 'system'" class="cult">{{ t(effective === 'dark' ? 'set.app.dark' : 'set.app.light') }}</i>
-        </div>
-      </div>
+        原先这句在下面单独一组「当前」里，连同「当前语言」一行。
+        语言换成下拉之后那一行就是重复（下拉本身就显示着当前语言），
+        整组去掉，剩下这一句归到它真正解释的那条提示后面。
+      -->
+      <p class="tip">
+        {{ t('set.app.themeHint') }}
+        <b v-if="theme === 'system'" class="now">
+          {{ t('set.app.now') }} · {{ t(effective === 'dark' ? 'set.app.dark' : 'set.app.light') }}
+        </b>
+      </p>
     </div>
   </SettingsModal>
 </template>
 
 <style scoped>
-/* 选项网格。语言七个排三列，主题三个排三列 —— 主题那三张要放得下色带预览 */
+/* 主题三张卡排三列 —— 每张要放得下色带预览 */
 .opts { display: grid; gap: 8px; padding: 2px 20px 4px; }
-.opts.lang { grid-template-columns: repeat(3, 1fr); }
 .opts.theme { grid-template-columns: repeat(3, 1fr); }
+
+/* 单控件那一行：与 .opts 用同一份内边距，控件左沿才和下面的主题卡对齐 */
+.one { display: flex; align-items: center; gap: 10px; padding: 2px 20px 4px; }
+
+/*
+  语言下拉。定宽 190 —— 最长的是「Tiếng Việt」加两字母前缀，
+  给内容宽度会让下拉框随语言变宽，右边那个文化名跟着左右跳。
+*/
+.sel { width: 190px; }
+
+/* 跟随系统时接在提示语后面的「当前 · 深色」 */
+.now { color: var(--cyan); font-weight: 400; white-space: nowrap; }
 
 .opt {
   position: relative;
@@ -153,18 +171,6 @@ function pickTheme(k: Theme): void {
 .opt.on { border-color: var(--cyan); background: rgb(var(--cyan-rgb) / 10%); color: var(--cyan); }
 .opt:focus-visible { outline: 1px solid var(--cyan); outline-offset: -2px; }
 
-/* 两字母角标定宽，各行的语言名起点才对得齐 */
-.tag {
-  flex: none;
-  width: 22px;
-  font-family: var(--share);
-  font-size: 10px;
-  letter-spacing: .1em;
-  color: var(--dim2);
-  font-style: normal;
-}
-
-.opt.on .tag { color: var(--cyan); }
 .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .tick { flex: none; width: 13px; height: 13px; fill: none; stroke: var(--cyan); stroke-width: 2.4; }
