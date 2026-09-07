@@ -5,11 +5,17 @@
   风格取自官网 WPEWeb.Cyber：glitch 标题、eyebrow、发丝分隔的卡片网格、终端自检块。
   配色令牌在 style.css 里，与 cyber.css 的 :root 逐个对应。
 
-  【三个入口现在能做到哪一步】
-    代理模式  可用 —— 切到代理数据列表
-    注入模式  不可用 —— 需要先把注入改成 IPC（UI 移出目标进程），见 CLAUDE.md
-    多开设置  不可用 —— 还没做 Vue 版，WinForms 侧是 Controls/DataBaseSetting
-  不可用的两张卡明确标出原因，不做成「点了没反应」。
+  【卡片网格里只有「模式」】
+  注入 / 代理是两种<b>运行方式</b>，选完就回不去了（照搬主程序：StartForm 设完模式直接 Close）。
+  多开设置不是模式，是一屏设置，所以它<b>不占卡片</b>，降到网格下面那条窄入口里。
+
+  ⚠️ <b>但它也不能搬进标题栏的齿轮。</b>切库只在这一屏是安全的：
+  saveInstance 只重载 LoadSystemConfig_FromDB，那 14 份列表一份都不重载
+  （它们由 enterProxyMode 加载一次，之后 proxyLoaded 就挡住了）。
+  进过模式再切库，内存里还是<b>旧库</b>的列表，而 SaveProxyState 会在关窗与每 10 分钟
+  把它们写进<b>新库</b> —— 多开本来是为了两个实例互不干扰，那样等于开了一条静默污染的路。
+  「还没进模式 ⇒ 列表还没加载 ⇒ 切库无害」这个前提只在启动页成立，
+  WinForms 那边 Controls/DataBaseSetting 也只能从 StartForm 打开，同一个约束。
 */
 import { computed, onMounted, ref, watch } from 'vue'
 import { call } from '../bridge'
@@ -160,29 +166,29 @@ onMounted(async () => {
         <p>{{ t('start.proxy.desc') }}</p>
         <div class="last">Socks5 // <b>0.0.0.0:{{ sys?.socks5Port ?? '—' }}</b></div>
       </div>
-
-      <!-- 多开设置 -->
-      <div
-        class="cd mg"
-        role="button"
-        tabindex="0"
-        @click="enterInstance"
-        @keydown.enter.prevent="enterInstance"
-        @keydown.space.prevent="enterInstance"
-      >
-        <div class="num">Config</div>
-        <div class="t">
-          <svg class="ico" viewBox="0 0 24 24">
-            <ellipse cx="12" cy="6" rx="8" ry="3" />
-            <path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" />
-          </svg>
-          Instance
-        </div>
-        <div class="zh">{{ t('start.inst.zh') }}</div>
-        <p>{{ t('start.inst.desc') }}</p>
-        <div class="last">Instance // <b>{{ sys?.dbInstance || '—' }}</b></div>
-      </div>
     </div>
+
+    <!--
+      多开设置：贴在卡片网格<b>下沿</b>的一条窄入口（共用那圈发丝边，去掉上边框接上去）。
+
+      它与上面两张是「同一件事的两级」——都在这一屏决定「这次怎么跑」，
+      但它不是模式，所以不给它一张同款卡片：高度只有卡片的四分之一，
+      一眼就读得出主次。
+
+      这里可以用<b>真的 &lt;button&gt;</b>（上面两张卡不行）——
+      一行里全是 svg 与 span，都是短语内容，合规范；卡片里是 div/h3/p，
+      塞进 button 不合内容模型，那两张才要 role="button" + tabindex 那套。
+    -->
+    <button class="inst" @click="enterInstance">
+      <svg class="ico" viewBox="0 0 24 24">
+        <ellipse cx="12" cy="6" rx="8" ry="3" />
+        <path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" />
+      </svg>
+      <span class="nm">{{ t('start.inst.zh') }}</span>
+      <span class="ds">{{ t('start.inst.desc') }}</span>
+      <span class="cur">{{ sys?.dbInstance || '—' }}</span>
+      <span class="ar">→</span>
+    </button>
 
     <!-- 系统自检 -->
     <div class="term">
@@ -307,7 +313,7 @@ onMounted(async () => {
 */
 .cards {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -336,7 +342,6 @@ onMounted(async () => {
 
 .cd:hover::after { opacity: 1; right: 18px; }
 .cd.cy::after { color: var(--cyan); }
-.cd.mg::after { color: var(--magenta); }
 
 /*
   焦点环画在<b>内侧</b>：卡片之间只有 1px 的发丝线，正偏移会压到邻居身上。
@@ -345,7 +350,6 @@ onMounted(async () => {
 .cd:focus-visible { outline-offset: -2px; }
 .cd:focus-visible::after { opacity: 1; right: 18px; }
 .cd.cy:focus-visible { outline-color: var(--cyan); }
-.cd.mg:focus-visible { outline-color: var(--magenta); }
 
 .cd .num {
   font-family: var(--share);
@@ -368,7 +372,62 @@ onMounted(async () => {
 }
 
 .cd.cy .t { color: var(--cyan); }
-.cd.mg .t { color: var(--magenta); }
+
+/*
+  多开设置那条窄入口。
+
+  <b>去掉上边框</b>与卡片网格接在一起 —— 网格自己有一圈 1px 的边，
+  这里再来一条就成了 2px 的粗线（.cards 用 gap:1px + 底色画分隔线，正是为了避开这个）。
+  洋红沿用它当卡片时的色相：这一屏三个入口各有一个颜色，换了位置不该换身份。
+*/
+.inst {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 18px 0 20px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-top: 0;
+  background: var(--card);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: .15s;
+}
+
+.inst:hover { background: var(--panel); }
+.inst:hover .nm,
+.inst:hover .ar { color: var(--magenta); }
+/* 焦点环走内侧：它左右都贴着网格的边，正偏移会压到边框上 */
+.inst:focus-visible { outline: 1px solid var(--magenta); outline-offset: -2px; }
+.inst:focus-visible .ar { opacity: 1; }
+
+.inst .ico { width: 15px; height: 15px; stroke: var(--magenta); flex: none; }
+.inst .nm { color: var(--gray); flex: none; transition: .15s; }
+
+/* 说明占满中间；窄屏或俄语这类长文案下截断，别把右边的实例名挤掉 */
+.inst .ds {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--dim4);
+  font-size: 12.5px;
+}
+
+/* 当前实例名 —— 与卡片底部那行 last 同一个作用：这一屏的每个入口都显示一条实测值 */
+.inst .cur {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--magenta);
+}
+
+.inst .ar { flex: none; color: var(--dim); transition: .15s; }
 
 .cd .ico { width: 17px; height: 17px; }
 
