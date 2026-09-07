@@ -266,6 +266,7 @@ namespace WinsockPacketEditor
             d["StartForm.Database.Loaded"] = "База данных загружена: ";
             d["WareHouse.Trimmed"] = "Хранилище превысило лимит {0}, отброшено самых старых: {1}";
             d["List.QueueDropped"] = "Очередь ожидания превысила лимит, отброшено строк: {0} (захват быстрее, чем успевает интерфейс)";
+            d["List.UnknownType"] = "Тип пакета не учтён: {0} ({1}) — он попадает в список, но не входит в общий итог, трафик и скорость";
             d["StartForm.LearnMore"] = "Подробнее";
             d["StartForm.Tutorials"] = "Руководство";
             d["StartForm.OfficialWebsite"] = "Официальный сайт";

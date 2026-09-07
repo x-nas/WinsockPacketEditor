@@ -266,6 +266,7 @@ namespace WinsockPacketEditor
             d["StartForm.Database.Loaded"] = "Database loaded : ";
             d["WareHouse.Trimmed"] = "Warehouse cap {0} reached, dropped the {1} oldest rows";
             d["List.QueueDropped"] = "Pending queue over its cap, dropped {0} rows (capture is faster than the UI can drain)";
+            d["List.UnknownType"] = "Packet type not counted: {0} ({1}) — it reaches the list but is left out of the total, bytes and speed";
             d["StartForm.LearnMore"] = "Learn more";
             d["StartForm.Tutorials"] = "Tutorials";
             d["StartForm.OfficialWebsite"] = "Official Website";

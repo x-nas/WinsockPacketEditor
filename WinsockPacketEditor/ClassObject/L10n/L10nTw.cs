@@ -271,6 +271,7 @@ namespace WinsockPacketEditor
             d["StartForm.Database.Loaded"] = "已載入資料庫 :";
             d["WareHouse.Trimmed"] = "倉庫超過上限 {0} 筆，已捨棄最舊的 {1} 筆";
             d["List.QueueDropped"] = "待入列佇列超過上限，已捨棄 {0} 筆（擷取速率高過介面搬運速率）";
+            d["List.UnknownType"] = "未計入統計的封包類型：{0}（{1}）—— 它進得了列表，但不算進「代理總數」/ 流量 / 速率";
             d["StartForm.LearnMore"] = "瞭解更多";
             d["StartForm.Tutorials"] = "軟體使用教程";
             d["StartForm.OfficialWebsite"] = "官方網站";

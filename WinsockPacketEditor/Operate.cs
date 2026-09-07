@@ -497,10 +497,14 @@ namespace WinsockPacketEditor
             private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, DateTime> dropLogAt =
                 new System.Collections.Concurrent.ConcurrentDictionary<string, DateTime>(StringComparer.Ordinal);
 
-            public static void LogDropped(string Where, int Dropped)
+            /// <summary>
+            /// 同一个 <paramref name="Where"/> 最多每 5 秒记一条。
+            ///
+            /// ⚠️ <b>热路径上的日志必须节流。</b>抓包时每秒几千条封包都走这儿，
+            /// 逐条记会把日志列表冲垮 —— 而且真正有用的信息只是「发生了」和「第一条长什么样」。
+            /// </summary>
+            public static void LogThrottled(string Where, string Text)
             {
-                if (Dropped <= 0) { return; }
-
                 DateTime last;
                 DateTime now = DateTime.Now;
 
@@ -508,7 +512,14 @@ namespace WinsockPacketEditor
 
                 dropLogAt[Where] = now;
 
-                DoLog(Where, string.Format(
+                DoLog(Where, Text);
+            }
+
+            public static void LogDropped(string Where, int Dropped)
+            {
+                if (Dropped <= 0) { return; }
+
+                LogThrottled(Where, string.Format(
                     UI.T("List.QueueDropped", "待入列队列超过上限，丢弃了 {0} 条（抓包速率高过界面搬运速率）"),
                     Dropped));
             }
@@ -9795,6 +9806,27 @@ namespace WinsockPacketEditor
                                     Interlocked.Add(ref ProxyConfig.Proxy.Total_Response, bBuffer.Length);
                                     Interlocked.Add(ref Operate.ProxyConfig.Proxy.ProxySpeed_Downlink, bBuffer.Length);
                                     break;
+
+                                /*
+                                    ⚠️ <b>不认识的类型要出声。</b>
+
+                                    这个 switch 原来没有 default —— 于是 WebSocket（21 / 22）
+                                    悄悄漏了很久：那些封包<b>进得了列表、拿得到序号</b>，
+                                    却不计入「代理总数」、也不计入 BYTES 与实时速率，
+                                    表现只是「最大序号一直跑在总数前面」，不报任何错。
+
+                                    往 PacketType 里加成员时，这里必须跟着加一个 case；
+                                    忘了的话现在至少会在系统日志里说一声（每种类型 5 秒一条）。
+                                    这与前端「PACKET_TYPE 映射表必须覆盖每一个枚举值」是同一条规矩的 C# 侧。
+                                */
+                                default:
+                                    SystemConfig.LogThrottled(
+                                        "ProxyType." + PacketType,
+                                        string.Format(
+                                            UI.T("List.UnknownType",
+                                                "未计入统计的封包类型：{0}（{1}）—— 它进得了列表，但不算进「代理总数」/ 流量 / 速率"),
+                                            (int)PacketType, PacketType));
+                                    break;
                             }                            
 
                             if (!SystemConfig.SpeedMode)
@@ -15958,6 +15990,16 @@ namespace WinsockPacketEditor
                                 case Operate.PacketConfig.Packet.PacketType.WSARecvFrom:
                                     Interlocked.Increment(ref Operate.PacketConfig.Packet.WSARecvFrom_CNT);
                                     Interlocked.Add(ref Operate.PacketConfig.Packet.Total_RecvBytes, packetLength);
+                                    break;
+
+                                //与代理列表那支孪生 switch 同一条规矩：不认识的类型要出声，理由见那边的注释
+                                default:
+                                    Operate.SystemConfig.LogThrottled(
+                                        "PacketType." + ptPacketType,
+                                        string.Format(
+                                            UI.T("List.UnknownType",
+                                                "未计入统计的封包类型：{0}（{1}）—— 它进得了列表，但不算进「代理总数」/ 流量 / 速率"),
+                                            (int)ptPacketType, ptPacketType));
                                     break;
                             }
                         }

@@ -266,6 +266,7 @@ namespace WinsockPacketEditor
             d["StartForm.Database.Loaded"] = "読み込んだデータベース: ";
             d["WareHouse.Trimmed"] = "倉庫が上限 {0} 件に達したため、古い {1} 件を破棄しました";
             d["List.QueueDropped"] = "取り込み待ちキューが上限を超えたため {0} 件を破棄しました（取得速度が画面の処理速度を上回っています）";
+            d["List.UnknownType"] = "集計対象外の種別：{0}（{1}）—— 一覧には入りますが、合計・通信量・速度には含まれません";
             d["StartForm.LearnMore"] = "詳しく見る";
             d["StartForm.Tutorials"] = "使い方";
             d["StartForm.OfficialWebsite"] = "公式サイト";
