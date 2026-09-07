@@ -656,6 +656,8 @@ export const DICT = {
   'log.filter': { zh: '滤镜日志', en: 'Filter Log' },
   'log.proxy': { zh: '代理日志', en: 'Proxy Log' },
   'log.empty': { zh: '暂无日志', en: 'No log entries yet' },
+  //⚠️ 「丢掉最旧的」不是「整表清空」—— 2026-09-07 改成环形之后连文案一起改的
+  'log.keepHint': { zh: '每路日志最多保留的条数（100 ~ 500000），超出后丢掉最旧的', en: 'Max rows kept per log (100–500000); the oldest are dropped past that' },
   //列名照 LogList.cs 里那三组 AntdUI.Column
   'log.module': { zh: '模块', en: 'Module' },
   'log.content': { zh: '日志内容', en: 'Content' },

@@ -29263,8 +29263,12 @@ namespace WinsockPacketEditor
                 /// LogToList / FilterLogToList / ProxyLogToList）。
                 ///
                 /// 三者总是被同一个定时器一起调用，合成一个方法省掉两次调用与三处判空。
-                /// 自动清理沿用日志自己的 LogConfig.List.AutoClear / AutoClear_Value，
-                /// 语义与迁移前一致：<b>整表清空</b>并一并清空队列。
+                /// 自动清理沿用日志自己的 LogConfig.List.AutoClear / AutoClear_Value。
+                ///
+                /// ⚠️ <b>2026-09-07 起是环形（只保留最近 N 条），不再整表清空。</b>
+                /// 与封包 / 代理列表那次改动同一条口径 ——「自动清理 5000 条」读起来
+                /// 就该是「留最近 5000 条」。日志尤其如此：<b>它是拿来往回翻的</b>，
+                /// 整表清空会在你正查问题时把整屏一次抹掉。
                 /// </summary>
                 public static void FlushToFeed()
                 {
@@ -29281,32 +29285,45 @@ namespace WinsockPacketEditor
 
                         if (AutoClear)
                         {
-                            if (lstLogInfo.Count > AutoClear_Value)
-                            {
-                                Queue.ClearLogQueue();
-                                ClearLogList();
-                                UI.Feed.Clear(FeedList.SystemLog);
-                            }
+                            //AutoClear_Value 是 decimal，比较与传参都要显式转
+                            int keep = (int)AutoClear_Value;
 
-                            if (lstFilterLogInfo.Count > AutoClear_Value)
-                            {
-                                Queue.ClearFilterLogQueue();
-                                ClearFilterLogList();
-                                UI.Feed.Clear(FeedList.FilterLog);
-                            }
-
-                            if (lstProxyLogInfo.Count > AutoClear_Value)
-                            {
-                                Queue.ClearProxyLogQueue();
-                                ClearProxyLogList();
-                                UI.Feed.Clear(FeedList.ProxyLog);
-                            }
+                            TrimOne(lstLogInfo, FeedList.SystemLog, Queue.cqLogInfo, "SystemLogQueue", keep);
+                            TrimOne(lstFilterLogInfo, FeedList.FilterLog, Queue.cqFilterLogInfo, "FilterLogQueue", keep);
+                            TrimOne(lstProxyLogInfo, FeedList.ProxyLog, Queue.cqProxyLogInfo, "ProxyLogQueue", keep);
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(nameof(FlushToFeed), ex);
                     }
+                }
+
+                /// <summary>
+                /// 三份日志的裁剪逻辑完全一样，抽出来避免抄三遍。
+                ///
+                /// <b>队列也要自己有界。</b>改成环形之前，「整表清空」是连待入列队列一起清的 ——
+                /// 那是队列唯一的上限。搬运拍每次只搬 <see cref="SystemConfig.FeedBatchMax"/> 条，
+                /// 日志暴涨（导入失败刷屏、SuperSocket 每条连接都打点）时队列会一直长，
+                /// 于是列表有界而队列无界，内存从队列那头漏出去。
+                ///
+                /// ⚠️ 丢弃走 <see cref="SystemConfig.LogDropped"/>（同名 key 最多每 5 秒一条）——
+                /// <b>这条日志本身就写进这三份列表</b>，不节流会自己喂自己。
+                /// </summary>
+                private static void TrimOne<T>(
+                    BindingList<T> List,
+                    FeedList Feed,
+                    ConcurrentQueue<T> Queue,
+                    string Where,
+                    int Keep)
+                {
+                    if (List.Count > Keep)
+                    {
+                        SystemConfig.TrimOldest(List, Keep);
+                        UI.Feed.Trim(Feed, Keep);
+                    }
+
+                    SystemConfig.LogDropped(Where, SystemConfig.TrimQueue(Queue, Keep));
                 }
 
                 /// <summary>三个日志列表的搬运逻辑完全一样，抽出来避免抄三遍。</summary>

@@ -463,6 +463,7 @@ export const ko: Record<Key, string> = {
   'log.filter': '필터 로그',
   'log.proxy': '프록시 로그',
   'log.empty': '아직 로그가 없습니다',
+  'log.keepHint': '로그 한 종류당 최대 보관 행 수(100 ~ 500000). 초과하면 오래된 것부터 삭제합니다',
   'log.module': '모듈',
   'log.content': '내용',
   'log.filterName': '필터 이름',

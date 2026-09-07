@@ -39,22 +39,71 @@ const follow = ref(true)
 const box = ref<HTMLElement | null>(null)
 
 /*
-  ⚠️ <b>自动清理还在跑，只是这一页不再有它的开关</b>（按要求去掉了）。
+  自动清理 —— 对应 WinForms 的 LogList 工具条上那两个控件
+  （cbLogList_AutoClear + txtLogList_AutoClear）。
 
-  它是 C# 侧的事：LogConfig.List.FlushToFeed 每拍按 LogList_AutoClear /
-  LogList_AutoClear_Value 把整表清一次（默认开、5000 条），
-  那是这条队列唯一的背压阀 —— 没有它 BindingList 只涨不消。
-  所以<b>只拆了界面，没动 C# 那半边</b>；值跟着库走（新库就是默认值）。
-  外壳现在改不了这个阈值，WinForms 那边的日志工具条上还有。
+  语义是<b>环形</b>：超过上限就丢掉最旧的、保留最近 N 条，不是整表清空
+  （2026-09-07 与封包 / 代理列表一起改的）。日志尤其需要这样 ——
+  它是拿来往回翻的，整表清空会在你正查问题时把整屏一次抹掉。
 
-  （它与封包列表的自动清理是<b>两份配置</b>：封包那份在 InjectMode 表、
-  改在「列表设置」弹窗里；日志这份在 SystemConfig 表。别混。）
+  ⚠️ <b>它与封包列表的自动清理是两份配置</b>：封包那份在 InjectMode 表
+  （PacketList_AutoClear，改在「列表设置」弹窗里），日志这份在 SystemConfig 表
+  （LogList_AutoClear / LogList_AutoClear_Value），消费点是 LogConfig.List.FlushToFeed。
+  所以放在这一页的工具条上，与 WinForms 一致，不并进那个弹窗。
+
+  开关与条数<b>各自单发</b>（桥那边是「字段出现才改」）：勾选框点一下就存，
+  条数框失焦或按 Enter 才存 —— 一起发的话，点开关会把正在编辑的半截数字也写进去。
+
+  ⚠️ 这里<b>没有</b>自动滚动的开关，那个 2026-09-07 去掉之后没有加回来：
+  跟不跟随由「你现在在不在底部」决定（上面那段），再摆一个落库的开关就是两条真源打架。
 */
+const autoClear = ref(true)
+const autoClearValue = ref(5000)
+const keepInput = ref('5000')
+const keepBad = ref(false)
 
 let detach: (() => void) | null = null
 
-onMounted(() => { detach = attachLogFeed() })
+onMounted(async () => {
+  detach = attachLogFeed()
+
+  try {
+    const s = await call<{ autoClear: boolean; autoClearValue: number }>('getLogSetting')
+    autoClear.value = !!s?.autoClear
+    autoClearValue.value = Number(s?.autoClearValue) || 5000
+    keepInput.value = String(autoClearValue.value)
+  } catch {
+    /* 桥没接上（探针页）时用默认值，不影响这一页的其余部分 */
+  }
+})
 onBeforeUnmount(() => detach?.())
+
+async function toggleAutoClear(): Promise<void> {
+  autoClear.value = !autoClear.value
+  try { await call('saveLogSetting', { autoClear: autoClear.value }) } catch { /* 存不上不影响本次会话 */ }
+}
+
+/** 条数：范围校验在 C# 侧（与列表设置同一条 100~500000），这里只负责别把空串发过去。 */
+async function commitKeep(): Promise<void> {
+  const n = Number(keepInput.value)
+
+  if (!Number.isFinite(n) || n < 100 || n > 500000) {
+    keepBad.value = true
+    return
+  }
+
+  keepBad.value = false
+
+  if (n === autoClearValue.value) return
+
+  try {
+    const r = await call<{ ok: boolean }>('saveLogSetting', { autoClearValue: n })
+    if (r?.ok) autoClearValue.value = n
+    else keepBad.value = true
+  } catch {
+    keepBad.value = true
+  }
+}
 
 const TABS: Array<{ key: TabKey; label: Key }> = [
   { key: 'sys', label: 'log.sys' },
@@ -174,11 +223,25 @@ async function doExport(): Promise<void> {
       <span class="grow" />
 
       <!--
-        工具条上只有这两个。自动滚动改成「在底部就跟随」，不需要开关；
-        自动清理仍在 C# 侧跑着，只是不给阈值入口了（见 script 里的说明）。
+        自动清理 + 条数。与封包列表那一份是两套配置（见 script 里的说明），
+        所以按 WinForms 的原样放在这一页的工具条上，不进「列表设置」弹窗。
 
-        导出的是<b>整张表</b>，不分选中 —— WinForms 那三个 Save*LogList_Dialog 收的也是整个列表。
+        自动滚动没有开关 —— 在底部就跟随，往上翻就停住（tail -f 那一套）。
       -->
+      <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear"><i />{{ t('proxy.autoClear') }}</button>
+      <input
+        v-model="keepInput"
+        class="keep"
+        :class="{ bad: keepBad }"
+        type="number"
+        min="100"
+        max="500000"
+        :disabled="!autoClear"
+        :title="t('log.keepHint')"
+        @blur="commitKeep"
+        @keydown.enter="commitKeep"
+      >
+      <!-- 导出的是<b>整张表</b>，不分选中 —— WinForms 那三个 Save*LogList_Dialog 收的也是整个列表 -->
       <button class="btn" :disabled="!hasRows || busy" @click="doExport">{{ t('pm.toExcel') }}</button>
       <button class="btn" :disabled="!hasRows || busy" @click="doClear">{{ t('proxy.clear') }}</button>
     </div>
@@ -306,6 +369,31 @@ async function doExport(): Promise<void> {
 .chk.on { color: var(--green); }
 .chk.on i { border-color: var(--green); background: rgb(var(--green-rgb) / 18%); }
 .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
+
+/*
+  自动清理的条数框。宽度按最大值 500000（6 位）定死 —— 跟着内容伸缩的话，
+  从 5000 改成 20000 时整条工具条会往右挪一下。
+
+  ⚠️ 数字输入框的上下小箭头（spin button）在这套皮肤里是系统画的浅色控件，
+  与旁边的自绘件对不上，所以两种前缀都关掉。
+*/
+.keep {
+  width: 72px;
+  padding: 6px 8px 4px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--gray);
+  font-family: var(--mono);
+  font-size: var(--btn-size);
+  line-height: 1;
+  text-align: right;
+}
+
+.keep:focus { outline: none; border-color: var(--cyan); }
+.keep:disabled { opacity: .45; cursor: not-allowed; }
+.keep.bad { border-color: var(--danger); color: var(--danger); }
+.keep::-webkit-outer-spin-button,
+.keep::-webkit-inner-spin-button { appearance: none; margin: 0; }
 
 .btn {
   padding: 9px 13px 7px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */

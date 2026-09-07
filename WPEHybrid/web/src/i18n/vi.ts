@@ -463,6 +463,7 @@ export const vi: Record<Key, string> = {
   'log.filter': 'Nhật ký bộ lọc',
   'log.proxy': 'Nhật ký proxy',
   'log.empty': 'Chưa có mục nhật ký nào',
+  'log.keepHint': 'Số dòng tối đa giữ lại cho mỗi loại nhật ký (100 – 500000); vượt quá sẽ bỏ dòng cũ nhất',
   'log.module': 'Mô-đun',
   'log.content': 'Nội dung',
   'log.filterName': 'Bộ lọc',

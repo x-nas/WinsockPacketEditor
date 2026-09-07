@@ -464,6 +464,7 @@ export const tw: Record<Key, string> = {
   'log.filter': '濾鏡日誌',
   'log.proxy': '代理日誌',
   'log.empty': '暫無日誌',
+  'log.keepHint': '每路日誌最多保留的條數（100 ~ 500000），超出後丟棄最舊的',
   'log.module': '模組',
   'log.content': '日誌內容',
   'log.filterName': '濾鏡名稱',

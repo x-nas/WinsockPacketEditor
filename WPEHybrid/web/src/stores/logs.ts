@@ -21,10 +21,15 @@ import { FeedList, type FilterLogRow, type LogRow, type ProxyLogRow } from '../b
 import { on } from '../bridge'
 
 /**
- * 每一路的上限。
+ * 每一路在<b>前端这一侧</b>的上限。
  *
- * 日志没有「自动清理」那套配置（那是封包列表的），所以自己设一个环形上限。
- * 2000 条足够回溯一次启动失败，又不会让 DOM 和内存无限涨。
+ * C# 那边另有一套（LogConfig.List.AutoClear / _Value，默认 5000，可在日志页工具条上改），
+ * 会推 feed:trim 过来。这里的 2000 是<b>更严的那一道</b>，理由与那边不同：
+ * 这一页刻意不做虚拟滚动（为了能原生选中一段 Ctrl+C 拿走），
+ * 所以行数直接等于 DOM 节点数 —— 两千个 div 是 Chromium 还很轻松的量级。
+ *
+ * ⚠️ 两侧上限不一致<b>不要紧</b>：日志行是自包含的，不像封包那样要按 Id 回 C# 取字节，
+ * 所以前端少留几条不会导致「点了取不到」。封包列表那条「两侧必须一致」的约束在这儿不成立。
  */
 const MAX = 2000
 
@@ -69,6 +74,14 @@ function append<T>(all: T[], rows: T[], which: 'sys' | 'filter' | 'proxy'): void
   scheduleFlush(which)
 }
 
+function trim<T>(all: T[], keep: number, which: 'sys' | 'filter' | 'proxy'): void {
+  const drop = all.length - keep
+  if (drop <= 0) return
+
+  all.splice(0, drop)
+  scheduleFlush(which)
+}
+
 /** 订阅三路日志。返回取消订阅的函数。 */
 export function attachLogFeed(): () => void {
   const offs: Array<() => void> = []
@@ -83,6 +96,24 @@ export function attachLogFeed(): () => void {
     if (d.list === FeedList.SystemLog) { sysAll.length = 0; scheduleFlush('sys') }
     else if (d.list === FeedList.FilterLog) { filterAll.length = 0; scheduleFlush('filter') }
     else if (d.list === FeedList.ProxyLog) { proxyAll.length = 0; scheduleFlush('proxy') }
+  }))
+
+  /*
+    自动清理改成环形之后（2026-09-07），C# 侧裁到最近 N 条会推这条过来。
+
+    这里给的是「保留多少条」而不是「删掉多少条」，与封包列表同一条约定：
+    中间丢一次事件也只是某一拍多留几行，下一拍就对齐了，不会永久错位。
+
+    实际上多半是空跑 —— 上面那个 MAX 更严（2000 < 默认 5000），
+    真正裁到的是 append 里那一句。但把上限调到 1000 以下时这条就生效了，
+    而且契约摆在这儿比「反正轮不到它」可靠。
+  */
+  offs.push(on('feed:trim', (d: { list: number; keep: number }) => {
+    const keep = Math.max(0, Number(d.keep) || 0)
+
+    if (d.list === FeedList.SystemLog) trim(sysAll, keep, 'sys')
+    else if (d.list === FeedList.FilterLog) trim(filterAll, keep, 'filter')
+    else if (d.list === FeedList.ProxyLog) trim(proxyAll, keep, 'proxy')
   }))
 
   return () => offs.forEach((f) => f())

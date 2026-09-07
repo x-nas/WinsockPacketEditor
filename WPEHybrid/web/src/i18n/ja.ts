@@ -463,6 +463,7 @@ export const ja: Record<Key, string> = {
   'log.filter': 'フィルターログ',
   'log.proxy': 'プロキシログ',
   'log.empty': 'ログはまだありません',
+  'log.keepHint': 'ログ 1 系統あたりの最大保持行数（100 ～ 500000）。超えると古いものから破棄します',
   'log.module': 'モジュール',
   'log.content': '内容',
   'log.filterName': 'フィルター名',

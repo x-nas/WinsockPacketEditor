@@ -3439,6 +3439,67 @@ namespace WPEHybrid
                 （见组件里的说明），再加一个「复制选中行」得先做出行选中来，不划算。
             */
 
+            /*
+                日志自己的自动清理（上限 + 开关）。
+
+                <b>它与封包列表那一套是两份配置</b>：封包的在 InjectMode 表
+                （PacketList_AutoClear，改在「列表设置」弹窗里），日志的在 SystemConfig 表
+                （LogList_AutoClear / LogList_AutoClear_Value），消费点也不同 ——
+                LogConfig.List.FlushToFeed 里三路日志各自按 AutoClear_Value 裁到最近 N 条。
+
+                WinForms 侧它是 Controls/LogList 工具条上的控件、不在「列表设置」里，
+                所以这里也放在日志页的工具条上，不并进那个弹窗。
+
+                ⚠️ <b>只有自动清理，没有自动滚动。</b>LogList_AutoRoll 那个开关 2026-09-07
+                去掉之后<b>没有加回来</b>：跟不跟随底部由「你现在在不在底部」决定
+                （onScroll 每次重算），那是 tail -f 的行为，再摆一个落库的开关就是两条真源打架。
+                这个字段仍在库里、WinForms 那边还在用，外壳不碰它。
+            */
+            this.bridge.Register("getLogSetting", args => new
+            {
+                autoClear = Operate.LogConfig.List.AutoClear,
+                autoClearValue = (int)Operate.LogConfig.List.AutoClear_Value,
+            });
+
+            this.bridge.Register("saveLogSetting", args =>
+            {
+                try
+                {
+                    /*
+                        「字段出现才改，没出现就不动」—— 与 saveLeachSetting / setAppearance 同一条协议。
+                        勾选框点一下就存、条数框失焦或回车才存，两条路各自只发自己那一半；
+                        一律补齐发全量的话，点开关会把用户正在编辑的半截数字也写进去。
+                    */
+                    if (args["autoClear"] != null)
+                    {
+                        Operate.LogConfig.List.AutoClear = (bool)args["autoClear"];
+                    }
+
+                    if (args["autoClearValue"] != null)
+                    {
+                        int keep = (int)args["autoClearValue"];
+
+                        //与列表设置同一条范围，两处的语义是一样的：一张表最多留多少行
+                        if (keep < 100 || keep > 500000)
+                        {
+                            return new { ok = false, error = UI.T("ListSettingsForm.Range", "保留条数需在 100 ~ 500000 之间") };
+                        }
+
+                        Operate.LogConfig.List.AutoClear_Value = keep;
+                    }
+
+                    //这两样都在 SystemConfig 表里，与主题 / 语言 / 快捷键同一张
+                    Operate.SystemConfig.SaveSystemConfig_ToDB();
+
+                    return new { ok = true };
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("saveLogSetting", ex);
+                    return new { ok = false, error = ex.Message };
+                }
+            });
+
             this.bridge.Register("clearLogs", async args => new
             {
                 ok = await Operate.LogConfig.List.ClearLog_Dialog(args["kind"] == null ? 0 : (int)args["kind"]),

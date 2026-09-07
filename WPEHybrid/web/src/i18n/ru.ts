@@ -463,6 +463,7 @@ export const ru: Record<Key, string> = {
   'log.filter': 'Журнал фильтров',
   'log.proxy': 'Журнал прокси',
   'log.empty': 'Записей пока нет',
+  'log.keepHint': 'Максимум строк на каждый журнал (100–500000); при превышении удаляются самые старые',
   'log.module': 'Модуль',
   'log.content': 'Содержание',
   'log.filterName': 'Фильтр',
