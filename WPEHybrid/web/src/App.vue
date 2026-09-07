@@ -74,7 +74,7 @@ onMounted(async () => {
       又不可用时才兜底。认不出来一律深色（这套皮肤照深色设计），
       所以桥没接上（探针页）时保持深色、不会闪。
     */
-    initTheme(s.themeMode, s.isDark)
+    initTheme(s.themeMode, s.isDark, s.scanLine)
 
     version.value = s.version
     isBeta.value = s.isBeta

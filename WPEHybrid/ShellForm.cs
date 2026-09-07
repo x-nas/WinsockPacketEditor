@@ -950,6 +950,7 @@ namespace WPEHybrid
                 {
                     isDark = p.IsDark,
                     themeMode = ThemeMode(),
+                    scanLine = p.ScanLine,
                     language = p.Language,
                     systemColor = p.SystemColor.Hex,
                     //滤镜标记色：封包列表按 FilterAction 给行上色，与 WinForms 一致
@@ -1002,10 +1003,16 @@ namespace WPEHybrid
                         UI.Prefs.IsDark = (bool)args["isDark"];
                     }
 
+                    //氛围层那条游走亮带。只有外壳有这一层，AntdUI 那半边不认识它
+                    if (args["scan"] != null)
+                    {
+                        UI.Prefs.ScanLine = (bool)args["scan"];
+                    }
+
                     WinFormsUiHost.ApplyPrefs();
                     Operate.SystemConfig.SaveSystemConfig_ToDB();
 
-                    return new { ok = true, isDark = UI.Prefs.IsDark, mode = ThemeMode() };
+                    return new { ok = true, isDark = UI.Prefs.IsDark, mode = ThemeMode(), scan = UI.Prefs.ScanLine };
                 }
                 catch (Exception ex)
                 {
@@ -3672,7 +3679,13 @@ namespace WPEHybrid
                     <b>外壳自己的界面是前端在管的</b> —— 不回传的话会变成
                     「弹窗切过去了、页面还是旧语言旧配色」。
                 */
-                return new { language = UI.Prefs.Language ?? string.Empty, isDark = UI.Prefs.IsDark, themeMode = ThemeMode() };
+                return new
+                {
+                    language = UI.Prefs.Language ?? string.Empty,
+                    isDark = UI.Prefs.IsDark,
+                    themeMode = ThemeMode(),
+                    scanLine = UI.Prefs.ScanLine,
+                };
             });
 
             //── 远程管理 ──
@@ -4481,6 +4494,7 @@ namespace WPEHybrid
                     */
                     themeMode = ThemeMode(),
                     isDark = UI.Prefs.IsDark,
+                    scanLine = UI.Prefs.ScanLine,
                     lastInjection = Operate.SystemConfig.LastInjection ?? string.Empty,
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
                     socks5Addr = Socks5Address(),

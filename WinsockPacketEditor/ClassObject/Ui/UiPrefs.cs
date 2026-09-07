@@ -45,6 +45,18 @@
         /// 所以 WinForms 侧照旧只看 IsDark。
         /// </summary>
         public bool FollowSystemTheme;
+        /// <summary>
+        /// 氛围层那条<b>缓慢上下游走的亮带</b>（`.scan`，10 秒一趟）开不开。
+        ///
+        /// ⚠️ <b>只有 WebView2 外壳用得上</b> —— WinForms 那套界面根本没有这一层。
+        /// 放在这里是因为「界面偏好的唯一真源」就是 UiPrefs：
+        /// 它要落 SystemConfig 表、要进备份、切库时要跟着换，
+        /// 这几件事在别处再造一份只会多出一个要同步的地方。
+        ///
+        /// 默认<b>开</b> —— 它是这套皮肤的一部分，关掉是用户的选择而不是出厂状态。
+        /// </summary>
+        public bool ScanLine = true;
+
         public bool IsAnimation;
         public bool IsShadowEnabled;
         public bool IsShowInWindow = true;

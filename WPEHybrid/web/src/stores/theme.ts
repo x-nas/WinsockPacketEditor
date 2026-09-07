@@ -28,6 +28,18 @@ export type Theme = 'dark' | 'light' | 'system'
 /** 用户<b>选的</b>那一档（三态）。界面上打勾的是它。 */
 export const theme = ref<Theme>('dark')
 
+/*
+  氛围层那条<b>缓慢上下游走的亮带</b>（`.scan`，10 秒一趟）开不开。
+
+  【为什么放在 theme.ts】它和主题是同一类东西 —— 「这个程序长什么样」，
+  同一个真源（C# 的 UI.Prefs）、同一条桥（setAppearance 的稀疏报文）、
+  同一个入口（标题栏齿轮）。单开一个 store 只会多一处要对齐的地方。
+
+  【为什么不用 localStorage】偏好的唯一真源是 UI.Prefs：它要落库、要进备份、
+  多开切库时要跟着换。localStorage 那份在这三件事上都对不上。
+*/
+export const scanLine = ref(true)
+
 /**
  * 系统此刻是不是深色。
  *
@@ -70,6 +82,43 @@ function readSystem(): boolean {
   } catch {
     //拿不到就当深色 —— 这套皮肤是照深色设计的，深色是默认
     return true
+  }
+}
+
+/*
+  ⚠️ <b>开着不写属性、关掉才写</b>，与主题那条同一个道理：
+  `style.css` 里 `.scan` 的默认就是开着的，两边都写等于维护两个入口。
+*/
+function applyScan(): void {
+  try {
+    if (scanLine.value) document.documentElement.removeAttribute('data-scan')
+    else document.documentElement.setAttribute('data-scan', 'off')
+  } catch {
+    /* 非浏览器环境，忽略 */
+  }
+}
+
+/**
+ * 开 / 关游走亮带。
+ *
+ * 与 setTheme 同一条路数：先改本地（同步、界面立刻变），再推 C#；
+ * 落库失败也只是「这次没记住」，不该让界面卡在旧状态上。
+ */
+export async function setScan(on: boolean): Promise<void> {
+  //无条件同步一次：ref 与 <html> 上的属性万一对不上（备份导入、别处改了 DOM），
+  //点当前这一项永远修不回来 —— 与 setTheme 里那条告诫是同一个坑
+  applyScan()
+
+  if (on === scanLine.value) return
+
+  scanLine.value = on
+  applyScan()
+
+  try {
+    //稀疏报文：只送变了的这一项，别把 mode / isDark 一起送
+    await call('setAppearance', { scan: on })
+  } catch (e) {
+    console.error('[theme] 扫描线开关未能写回 C#，本次切换不会被记住', e)
   }
 }
 
@@ -135,7 +184,15 @@ function listen(): void {
  * @param isDark 上次解析出来的实际值。<b>只在「跟随系统」而 matchMedia 又不可用时</b>
  *               才派上用场；能读到系统就以系统为准。
  */
-export function initTheme(mode: string | undefined | null, isDark?: boolean | null): void {
+export function initTheme(
+  mode: string | undefined | null,
+  isDark?: boolean | null,
+  scan?: boolean | null,
+): void {
+  //认不出来就当开着 —— 它是这套皮肤的一部分，默认状态是开
+  scanLine.value = scan !== false
+  applyScan()
+
   theme.value = mode === 'light' || mode === 'system' || mode === 'dark' ? mode : 'dark'
 
   _systemDark.value = mq || typeof window.matchMedia === 'function'

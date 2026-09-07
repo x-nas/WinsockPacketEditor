@@ -3189,6 +3189,7 @@ namespace WinsockPacketEditor
                         new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
                         new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
                         new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
+                        new XElement("ScanLine", UI.Prefs.ScanLine),
                         new XElement("StoresLimit", WareHouseConfig.WareHouse.StoresLimit),
                         new XElement("StoresLimit_Value", WareHouseConfig.WareHouse.StoresLimit_Value),
                         new XElement("CheckNotShow", SystemConfig.CheckNotShow),
@@ -3286,6 +3287,11 @@ namespace WinsockPacketEditor
                         LogConfig.List.AutoClear = Convert.ToBoolean(dtSystemConfig.Rows[0]["LogList_AutoClear"]);
                         LogConfig.List.AutoClear_Value = Convert.ToInt32(dtSystemConfig.Rows[0]["LogList_AutoClear_Value"]);
 
+                        if (dtSystemConfig.Columns.Contains("ScanLine"))
+                        {
+                            UI.Prefs.ScanLine = Convert.ToBoolean(dtSystemConfig.Rows[0]["ScanLine"]);
+                        }
+
                         //新列：老库经 EnsureColumn 补过，但备份导入那条路可能塞进来一张没有这两列的表
                         if (dtSystemConfig.Columns.Contains("StoresLimit"))
                         {
@@ -3356,6 +3362,8 @@ namespace WinsockPacketEditor
                         UI.Prefs.IsTextRenderingHighQuality = false;
                         UI.Prefs.IsDark = true;
                         UI.Prefs.FollowSystemTheme = false;
+
+                        UI.Prefs.ScanLine = true;
 
                         //仓库上限：与字段初值逐个对上（见 UiPrefs 那条同样的告诫）
                         WareHouseConfig.WareHouse.StoresLimit = true;
@@ -3481,6 +3489,12 @@ namespace WinsockPacketEditor
                     if (LogList_AutoRoll != null)
                     {
                         LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
+                    }
+
+                    XElement ScanLine = xeSystemConfig.Element("ScanLine");
+                    if (ScanLine != null)
+                    {
+                        UI.Prefs.ScanLine = Convert.ToBoolean(ScanLine.Value);
                     }
 
                     XElement StoresLimit = xeSystemConfig.Element("StoresLimit");
@@ -29867,6 +29881,7 @@ namespace WinsockPacketEditor
                         sql += "LogList_AutoRoll BOOLEAN DEFAULT 0,";//日志列表自动滚动
                         sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
                         sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
+                        sql += "ScanLine BOOLEAN DEFAULT 1,";//外壳氛围层的游走亮带
                         sql += "StoresLimit BOOLEAN DEFAULT 1,";//仓库上限
                         sql += "StoresLimit_Value INTEGER DEFAULT 5000,";//仓库上限条数
                         sql += "CheckNotShow BOOLEAN DEFAULT 1,";//过滤设置不显示
@@ -29922,6 +29937,7 @@ namespace WinsockPacketEditor
                                 所以每加一列都要在这里补一句 EnsureColumn。
                             */
                             EnsureColumn(conn, "SystemConfig", "ThemeFollowSystem", "BOOLEAN DEFAULT 0");
+                            EnsureColumn(conn, "SystemConfig", "ScanLine", "BOOLEAN DEFAULT 1");
                             EnsureColumn(conn, "SystemConfig", "StoresLimit", "BOOLEAN DEFAULT 1");
                             EnsureColumn(conn, "SystemConfig", "StoresLimit_Value", "INTEGER DEFAULT 5000");
                         }
@@ -30059,6 +30075,7 @@ namespace WinsockPacketEditor
                         sql += "LogList_AutoRoll,";
                         sql += "LogList_AutoClear,";
                         sql += "LogList_AutoClear_Value,";
+                        sql += "ScanLine,";
                         sql += "StoresLimit,";
                         sql += "StoresLimit_Value,";
                         sql += "CheckNotShow,";
@@ -30120,6 +30137,7 @@ namespace WinsockPacketEditor
                         sql += "@LogList_AutoRoll,";
                         sql += "@LogList_AutoClear,";
                         sql += "@LogList_AutoClear_Value,";
+                        sql += "@ScanLine,";
                         sql += "@StoresLimit,";
                         sql += "@StoresLimit_Value,";
                         sql += "@CheckNotShow,";
@@ -30191,6 +30209,7 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
                             cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@ScanLine", UI.Prefs.ScanLine);
                             cmd.Parameters.AddWithValue("@StoresLimit", WareHouseConfig.WareHouse.StoresLimit);
                             cmd.Parameters.AddWithValue("@StoresLimit_Value", WareHouseConfig.WareHouse.StoresLimit_Value);
                             cmd.Parameters.AddWithValue("@CheckNotShow", SystemConfig.CheckNotShow);

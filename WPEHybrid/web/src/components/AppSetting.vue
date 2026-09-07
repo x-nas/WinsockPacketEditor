@@ -27,7 +27,7 @@
 */
 import { computed, ref, watch } from 'vue'
 import { LANGS, defOf, lang, setLang, t, type Lang } from '../i18n'
-import { setTheme, systemIsDark, theme, type Theme } from '../stores/theme'
+import { scanLine, setScan, setTheme, systemIsDark, theme, type Theme } from '../stores/theme'
 import CyberSelect from './CyberSelect.vue'
 import SettingsModal from './proxy/SettingsModal.vue'
 
@@ -63,11 +63,13 @@ const THEMES: ThemeCard[] = [
 */
 const draftLang = ref<Lang>(lang.value)
 const draftTheme = ref<Theme>(theme.value)
+const draftScan = ref(scanLine.value)
 
 watch(() => props.open, (on) => {
   if (!on) return
   draftLang.value = lang.value
   draftTheme.value = theme.value
+  draftScan.value = scanLine.value
 })
 
 const busy = ref(false)
@@ -109,6 +111,7 @@ async function onSave(): Promise<void> {
   try {
     if (draftLang.value !== lang.value) { await setLang(draftLang.value) }
     if (draftTheme.value !== theme.value) { await setTheme(draftTheme.value) }
+    if (draftScan.value !== scanLine.value) { await setScan(draftScan.value) }
 
     emit('update:open', false)
   } finally {
@@ -182,6 +185,19 @@ async function onSave(): Promise<void> {
           {{ t('set.app.now') }} · {{ t(systemIsDark ? 'set.app.dark' : 'set.app.light') }}
         </b>
       </p>
+
+      <div class="grp">{{ t('set.app.ambience') }}</div>
+
+      <!--
+        游走亮带的开关。放在主题下面单成一组 —— 它不是「深还是浅」的一部分，
+        是「这套皮肤的动效要不要」，与主题正交（浅色下同样有这条带子）。
+      -->
+      <div class="one">
+        <button class="chk" :class="{ on: draftScan }" @click="draftScan = !draftScan">
+          <i />{{ t('set.app.scan') }}
+        </button>
+      </div>
+      <p class="tip">{{ t('set.app.scanHint') }}</p>
     </div>
   </SettingsModal>
 </template>

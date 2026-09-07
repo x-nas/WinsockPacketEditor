@@ -289,6 +289,14 @@ textarea:focus-visible,
   animation: scan 10s linear infinite;
 }
 
+/*
+  关掉游走亮带（软件设置里的开关）。
+
+  用 display: none 而不是 opacity: 0 —— 后者那条 10 秒的动画还在跑，
+  合成器每帧仍要处理这一层；display: none 是真的把它从渲染里摘掉。
+*/
+:root[data-scan="off"] .scan { display: none; }
+
 @keyframes scan {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(200%); }
