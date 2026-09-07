@@ -126,7 +126,7 @@ export const ja: Record<Key, string> = {
   'set.firewall': 'ファイアウォール設定',
   'set.app': '環境設定',
   'set.app.lang': '表示言語',
-  'set.app.langHint': '画面の文字とダイアログの文言が同時に切り替わります。選ぶとすぐ反映され、記憶されます。',
+  'set.app.langHint': '画面の文字とダイアログの文言が同時に切り替わります。「保存」を押すと反映され、記憶されます。',
   'set.app.theme': '外観',
   'set.app.dark': 'ダーク',
   'set.app.light': 'ライト',

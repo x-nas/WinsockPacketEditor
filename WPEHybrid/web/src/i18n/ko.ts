@@ -126,7 +126,7 @@ export const ko: Record<Key, string> = {
   'set.firewall': '방화벽 설정',
   'set.app': '환경 설정',
   'set.app.lang': '표시 언어',
-  'set.app.langHint': '화면 문구와 대화 상자 문구가 함께 바뀝니다. 선택하면 즉시 적용되고 기억됩니다.',
+  'set.app.langHint': '화면 문구와 대화 상자 문구가 함께 바뀝니다. ‘저장’을 누르면 적용되고 기억됩니다.',
   'set.app.theme': '모양',
   'set.app.dark': '어두운 테마',
   'set.app.light': '밝은 테마',

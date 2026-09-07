@@ -181,7 +181,7 @@ export const DICT = {
   //软件设置（标题栏齿轮）—— 语言与深浅色。与那 12 个抓包设置不是一类，见 AppSetting.vue
   'set.app': { zh: '软件设置', en: 'Preferences' },
   'set.app.lang': { zh: '界面语言', en: 'Language' },
-  'set.app.langHint': { zh: '页面文字与弹窗文案一起切换，选完立刻生效并记住。', en: 'Switches both page text and dialog messages. Takes effect immediately and is remembered.' },
+  'set.app.langHint': { zh: '页面文字与弹窗文案一起切换。按「保存」后生效并记住。', en: 'Switches both page text and dialog messages. Applied and remembered once you press Save.' },
   'set.app.theme': { zh: '外观', en: 'Appearance' },
   'set.app.dark': { zh: '深色', en: 'Dark' },
   'set.app.light': { zh: '浅色', en: 'Light' },

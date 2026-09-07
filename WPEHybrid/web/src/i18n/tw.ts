@@ -127,7 +127,7 @@ export const tw: Record<Key, string> = {
   'set.firewall': '防火牆設定',
   'set.app': '軟體設定',
   'set.app.lang': '介面語言',
-  'set.app.langHint': '頁面文字與彈出視窗文案一起切換，選完立刻生效並記住。',
+  'set.app.langHint': '頁面文字與彈出視窗文案一起切換。按「儲存」後生效並記住。',
   'set.app.theme': '外觀',
   'set.app.dark': '深色',
   'set.app.light': '淺色',

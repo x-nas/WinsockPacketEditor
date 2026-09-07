@@ -34,7 +34,17 @@ export const theme = ref<Theme>('dark')
  * WebView2 的 PreferredColorScheme 默认是 Auto，会跟着操作系统走，
  * 所以 prefers-color-scheme 在外壳里与在浏览器里一样可信。
  */
-const systemDark = ref(true)
+const _systemDark = ref(true)
+
+/**
+ * 系统<b>此刻</b>是不是深色。只读。
+ *
+ * 与 <see cref="effective"/> 不是一回事：那个是「现在实际生效的主题」，
+ * 而这个不管用户选了哪一档，说的都是系统那边的事。
+ * 设置弹窗里「跟随系统」那一档的提示要的是后者 —— 改成按「保存」才生效之后，
+ * 草稿选了跟随系统但还没保存时，effective 还停在旧主题上，拿它去显示就是错的。
+ */
+export const systemIsDark = computed(() => _systemDark.value)
 
 /**
  * <b>实际</b>生效的主题（两态）—— 界面按它渲染，推给 C# 的也是它。
@@ -42,7 +52,7 @@ const systemDark = ref(true)
  * 「跟随系统」只是一种选择方式，落到像素上仍然只有深浅两种。
  */
 export const effective = computed<'dark' | 'light'>(() => {
-  if (theme.value === 'system') return systemDark.value ? 'dark' : 'light'
+  if (theme.value === 'system') return _systemDark.value ? 'dark' : 'light'
   return theme.value
 })
 
@@ -88,9 +98,9 @@ function applyDocumentTheme(): void {
  */
 function onSystemChange(): void {
   const next = readSystem()
-  if (next === systemDark.value) return
+  if (next === _systemDark.value) return
 
-  systemDark.value = next
+  _systemDark.value = next
   if (theme.value !== 'system') return
 
   applyDocumentTheme()
@@ -128,7 +138,7 @@ function listen(): void {
 export function initTheme(mode: string | undefined | null, isDark?: boolean | null): void {
   theme.value = mode === 'light' || mode === 'system' || mode === 'dark' ? mode : 'dark'
 
-  systemDark.value = mq || typeof window.matchMedia === 'function'
+  _systemDark.value = mq || typeof window.matchMedia === 'function'
     ? readSystem()
     : isDark !== false
 
@@ -155,7 +165,7 @@ export async function setTheme(next: Theme): Promise<void> {
   if (next === theme.value) return
 
   //切进「跟随系统」时先把系统值读新，否则会拿上一次监听到的旧值算 effective
-  if (next === 'system') systemDark.value = readSystem()
+  if (next === 'system') _systemDark.value = readSystem()
 
   theme.value = next
   applyDocumentTheme()

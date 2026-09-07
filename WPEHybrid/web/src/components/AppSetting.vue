@@ -12,12 +12,22 @@
   （右边紧挨着四个窗口按钮）。收进一个齿轮按钮 + 弹窗，标题栏反而空了一格。
 
   用 SettingsModal 这个共用外壳：四角标记 / 焦点管理 / 页脚按钮那几样它都做好了。
-  这一屏<b>没有「保存」</b> —— 两项都是点了立刻生效并落库（与「系统代理」那个
-  滑动开关同一条口径），留个「保存」按钮反而让人以为不按就不算数。
+
+  【这一屏是「改草稿 → 按保存才生效」】
+  早先是点一下立刻生效并落库（与「系统代理」那个滑动开关同一条口径），
+  <b>2026-09-07 按要求改成了保存制</b>，与其余 12 个设置弹窗一致。
+
+  所以下面两个 draft* 是<b>草稿</b>，不是真值：点卡片 / 选下拉只改草稿，
+  onSave 才把改动推给 setLang / setTheme（它们自己会落库并同步到 C#）。
+  取消、按 Esc、点遮罩关掉 —— 都不应用，草稿在下次打开时按当前真值重置。
+
+  ⚠️ 由此带来的一个后果：<b>主题不再有「点了就看见」的即时预览</b>。
+  三张卡上的色带预览就是补这个的 —— 它本来是为了「没切过的人不知道会变成什么样」，
+  改成保存制之后它更要紧了。
 */
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { LANGS, defOf, lang, setLang, t, type Lang } from '../i18n'
-import { effective, setTheme, theme, type Theme } from '../stores/theme'
+import { setTheme, systemIsDark, theme, type Theme } from '../stores/theme'
 import CyberSelect from './CyberSelect.vue'
 import SettingsModal from './proxy/SettingsModal.vue'
 
@@ -44,7 +54,25 @@ const THEMES: ThemeCard[] = [
   { key: 'system', label: 'set.app.system', sw: [DARK_SW[0], DARK_SW[3], LIGHT_SW[3], LIGHT_SW[1]] },
 ]
 
-const cur = computed(() => defOf(lang.value))
+/*
+  草稿。打开弹窗时从当前真值取一份，之后只改它 —— 按「保存」才落到真值上。
+
+  ⚠️ 必须在<b>每次打开时</b>重置，不能只在组件创建时取一次：
+  弹窗是 v-model:open 控制显隐、组件一直挂着的，上一次改完没保存就关掉的话，
+  草稿会留在那儿，下次打开看到的是上次没保存的选择。
+*/
+const draftLang = ref<Lang>(lang.value)
+const draftTheme = ref<Theme>(theme.value)
+
+watch(() => props.open, (on) => {
+  if (!on) return
+  draftLang.value = lang.value
+  draftTheme.value = theme.value
+})
+
+const busy = ref(false)
+
+const cur = computed(() => defOf(draftLang.value))
 
 /*
   语言用下拉，不铺成网格 —— 七个已经占掉三行，再加语言只会更长，
@@ -61,11 +89,31 @@ const langOptions = computed(() =>
   LANGS.map((l) => ({ value: l.code, label: l.short + '  ' + l.label })))
 
 function pickLang(code: Lang): void {
-  void setLang(code)
+  draftLang.value = code
 }
 
 function pickTheme(k: Theme): void {
-  void setTheme(k)
+  draftTheme.value = k
+}
+
+/**
+ * 保存。
+ *
+ * 只推<b>真的变了</b>的那一项：setLang / setTheme 内部各带一次桥往返 + 落库，
+ * 没变还推一遍是白费一次写库，而 setTheme 还会顺带 ApplyPrefs 让 AntdUI 重画。
+ * （两个函数自己也有「值没变就 return」的短路，这里再判一次是为了连 busy 都不必进。）
+ */
+async function onSave(): Promise<void> {
+  busy.value = true
+
+  try {
+    if (draftLang.value !== lang.value) { await setLang(draftLang.value) }
+    if (draftTheme.value !== theme.value) { await setTheme(draftTheme.value) }
+
+    emit('update:open', false)
+  } finally {
+    busy.value = false
+  }
 }
 </script>
 
@@ -74,8 +122,9 @@ function pickTheme(k: Theme): void {
     :open="props.open"
     :title="t('set.app')"
     subtitle="Appearance"
-    readonly
+    :busy="busy"
     @update:open="emit('update:open', $event)"
+    @save="onSave"
   >
     <div class="setf">
       <div class="grp">{{ t('set.app.lang') }}</div>
@@ -88,7 +137,7 @@ function pickTheme(k: Theme): void {
       <div class="one">
         <CyberSelect
           class="sel"
-          :model-value="lang"
+          :model-value="draftLang"
           :options="langOptions"
           @update:model-value="pickLang($event as Lang)"
         />
@@ -104,29 +153,33 @@ function pickTheme(k: Theme): void {
           v-for="x in THEMES"
           :key="x.key"
           class="opt th"
-          :class="{ on: x.key === theme, sys: x.key === 'system' }"
-          :aria-pressed="x.key === theme"
+          :class="{ on: x.key === draftTheme, sys: x.key === 'system' }"
+          :aria-pressed="x.key === draftTheme"
           @click="pickTheme(x.key)"
         >
           <span class="prev">
             <i v-for="(c, i) in x.sw" :key="i" class="sw" :style="{ background: c }" />
           </span>
           <span class="nm">{{ t(x.label) }}</span>
-          <svg v-if="x.key === theme" class="tick" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
+          <svg v-if="x.key === draftTheme" class="tick" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg>
         </button>
       </div>
       <!--
-        跟随系统时把此刻解析成了哪种<b>接在提示语后面</b> —— 只显示「跟随系统」的话，
-        用户没法确认它到底认出了系统是深是浅（这正是这一档最容易被怀疑的地方）。
+        选中「跟随系统」时，把<b>系统此刻是深是浅</b>接在提示语后面 ——
+        只显示「跟随系统」的话，用户没法确认它到底认出来没有
+        （这正是这一档最容易被怀疑的地方）。
 
-        原先这句在下面单独一组「当前」里，连同「当前语言」一行。
-        语言换成下拉之后那一行就是重复（下拉本身就显示着当前语言），
-        整组去掉，剩下这一句归到它真正解释的那条提示后面。
+        ⚠️ 读的是 systemIsDark 而不是 effective：后者是「现在实际生效的主题」，
+        而这里草稿刚选上跟随系统、还没按保存，effective 仍停在旧主题上，
+        拿它显示就是错的。这一句说的是系统那边的事，与应用了没有无关。
+
+        原先这句在下面单独一组「当前」里，连同「当前语言」一行；
+        语言换成下拉之后那一行就是重复，整组去掉了。
       -->
       <p class="tip">
         {{ t('set.app.themeHint') }}
-        <b v-if="theme === 'system'" class="now">
-          {{ t('set.app.now') }} · {{ t(effective === 'dark' ? 'set.app.dark' : 'set.app.light') }}
+        <b v-if="draftTheme === 'system'" class="now">
+          {{ t('set.app.now') }} · {{ t(systemIsDark ? 'set.app.dark' : 'set.app.light') }}
         </b>
       </p>
     </div>

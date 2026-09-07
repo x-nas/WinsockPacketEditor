@@ -126,7 +126,7 @@ export const vi: Record<Key, string> = {
   'set.firewall': 'Cài đặt tường lửa',
   'set.app': 'Tuỳ chọn',
   'set.app.lang': 'Ngôn ngữ',
-  'set.app.langHint': 'Đổi cả chữ trên trang lẫn trong hộp thoại. Có hiệu lực ngay và được ghi nhớ.',
+  'set.app.langHint': 'Đổi cả chữ trên trang lẫn trong hộp thoại. Có hiệu lực và được ghi nhớ sau khi bấm Lưu.',
   'set.app.theme': 'Giao diện',
   'set.app.dark': 'Tối',
   'set.app.light': 'Sáng',
