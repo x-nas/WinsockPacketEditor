@@ -1177,7 +1177,18 @@ namespace WPEHybrid
                 totalResponse = Operate.ProxyConfig.Proxy.Total_Response,
                 speedUp = Operate.ProxyConfig.Proxy.ProxySpeed_UpKBps,
                 speedDown = Operate.ProxyConfig.Proxy.ProxySpeed_DownKBps,
-                socks5Addr = Socks5Address(),
+                /*
+                    ⚠️ <b>这里刻意不出 socks5Addr。</b>它要走 GetLocalIPAddress()，
+                    而那是 NetworkInterface.GetAllNetworkInterfaces() —— 本机实测 <b>70ms</b>（6 张网卡）。
+                    getStats 是代理数据页每 500ms 轮询一次的，等于每秒替 UI 线程背 140ms：
+                    拖窗口时就是<b>每半秒卡一下</b>（2026-09-07 查出来的那个）。
+
+                    而且这个字段<b>压根没人用</b>：前端的 socks5Addr 是 stores/runtime 里的共享 ref，
+                    由 getSystemCheck（启动）/ saveProxySetting / startProxy / saveInstance 各自更新，
+                    ProxyData 那个轮询从来没读过它，bridge/types.ts 的 Stats 里也没有这一项。
+
+                    <b>要在高频路径上取本机 IP，先给 GetLocalIPAddress 加缓存再说。</b>
+                */
             });
 
             /*
