@@ -282,20 +282,80 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+/*
+  这一屏的竖直呼吸量全部提成令牌，窗口一矮就整屏往里收（下面两个 @media）。
+
+  【为什么必须这么做】外壳的默认窗口是 <b>ClientSize 1280×800，那是设备像素</b>；
+  页面拿到的是 CSS 像素 = 设备像素 ÷ 缩放比。所以同一个「默认大小」的窗口，
+  在 100% 缩放下有 800 CSS 高，125% 只剩 640，150% 只剩 533 ——
+  而标题栏 46 + 状态栏 30 还要先扣掉 76。
+  照 800 那档排版，缩放一开就出滚动条：这一屏是「一眼看完、选一种模式」的，
+  出滚动条比挤一点糟得多。
+
+  ⚠️ 改这一屏的任何间距都改令牌，别直接写死值 —— 写死的那处在矮窗口下不会跟着收，
+  而它省下的那几像素往往正是压垮的最后一根。
+*/
 .start {
+  --g-eyebrow: 16px;   /* eyebrow 与标题之间 */
+  --g-sub: 14px;       /* 标题与副标题之间 */
+  --g-rack: 34px;      /* 副标题与机架之间 */
+  --g-term: 26px;      /* 机架与自检终端之间 */
+  --slot: 10px;        /* 机架的内边距 ＝ 槽缝，两者必须同值 */
+  --cd-py: 16px;       /* 卡片的上下内边距 */
+  --cd-ry: 12px;       /* 卡片里三处竖直间距（状态行 / 标题行 / 描述）*/
+  --term-py: 12px;     /* 终端正文的上下内边距 */
+  --inst-h: 40px;      /* 多开那条窄行的高度 */
+  --title: clamp(32px, 3.6vw, 46px);
+
   position: relative;
   z-index: 10;
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /*
+    safe 是必需的：普通的 center 在内容装不下时会把<b>上半截推到滚动区外</b>，
+    那一截既滚不到也点不着。safe 在溢出时自动退回 start 对齐。
+  */
+  justify-content: safe center;
   padding: 0 56px;
   overflow: auto;
 }
 
+/* 1280×800 在 125% 缩放下的那一档（CSS 640 高）*/
+@media (max-height: 690px) {
+  .start {
+    --g-eyebrow: 12px;
+    --g-sub: 11px;
+    --g-rack: 26px;
+    --g-term: 21px;
+    --slot: 9px;
+    --cd-py: 14px;
+    --cd-ry: 10px;
+    --term-py: 10px;
+    --inst-h: 38px;
+    --title: clamp(30px, 3.4vw, 42px);
+  }
+}
+
+/* 150% 缩放（CSS 533 高）以及被拖到很矮的窗口 */
+@media (max-height: 590px) {
+  .start {
+    --g-eyebrow: 6px;
+    --g-sub: 7px;
+    --g-rack: 14px;
+    --g-term: 12px;
+    --slot: 7px;
+    --cd-py: 10px;
+    --cd-ry: 7px;
+    --term-py: 7px;
+    --inst-h: 34px;
+    --title: clamp(24px, 2.8vw, 32px);
+  }
+}
+
 /* eyebrow：绿色短横 + 代号 */
-.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: var(--g-eyebrow); }
 .eyebrow .dash { width: 32px; height: 1px; background: var(--green); box-shadow: 0 0 6px var(--green); }
 .eyebrow .lbl {
   font-family: var(--share);
@@ -311,7 +371,7 @@ onMounted(async () => {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -.02em;
-  font-size: clamp(32px, 3.6vw, 46px);
+  font-size: var(--title);
   line-height: 1;
   color: var(--green);
   position: relative;
@@ -345,7 +405,7 @@ onMounted(async () => {
 }
 
 .subtitle {
-  margin: 14px 0 0;
+  margin: var(--g-sub) 0 0;
   font-family: var(--share);
   font-size: 13px;
   letter-spacing: .16em;
@@ -375,16 +435,16 @@ onMounted(async () => {
   透出页面底色则两套皮肤下「腔比卡深」都成立（深 #0a0a0f vs #12121a、浅 #eef1f6 vs #ffffff）。
 */
 .rack {
-  margin: 34px 0 0;
-  padding: 10px;
+  margin: var(--g-rack) 0 0;
+  padding: var(--slot);
   border: 1px solid var(--border);
 }
 
-/* 槽缝与机架的内边距取同一个值，卡片到框的距离才处处一样 */
+/* 槽缝与机架的内边距取同一个值（同一个令牌），卡片到框的距离才处处一样 */
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: var(--slot);
 }
 
 .cd {
@@ -392,7 +452,7 @@ onMounted(async () => {
   overflow: hidden;
   background: var(--card);
   border: 1px solid var(--border);
-  padding: 17px 16px 15px;
+  padding: var(--cd-py) 16px calc(var(--cd-py) - 2px);
   cursor: pointer;
   transition: background .15s, border-color .15s;
 }
@@ -456,7 +516,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: var(--cd-ry);
 }
 
 .cd .num {
@@ -496,7 +556,7 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 11px;
-  margin-bottom: 11px;
+  margin-bottom: var(--cd-ry);
 }
 
 /*
@@ -548,7 +608,7 @@ onMounted(async () => {
 /* <i> 只是拿来当行内容器，斜体要关掉 */
 .zh { display: block; margin-top: 4px; font-size: 13px; font-style: normal; color: var(--gray); }
 
-.cd p { position: relative; margin: 0 0 13px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+.cd p { position: relative; margin: 0 0 var(--cd-ry); font-size: 13px; line-height: 1.55; color: var(--muted); }
 
 /* 读数条 + 右端箭头同在一行：箭头另起一行会平白多 20px 高 */
 .foot { position: relative; display: flex; align-items: center; gap: 10px; }
@@ -608,9 +668,9 @@ onMounted(async () => {
   align-items: center;
   gap: 10px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: var(--slot);
   padding: 0 16px 0 18px;
-  height: 40px;
+  height: var(--inst-h);
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--muted);
@@ -654,13 +714,13 @@ onMounted(async () => {
 .inst .ar { flex: none; color: var(--dim); transition: .15s; }
 
 /* 系统自检终端 */
-.term { margin: 26px 0 0; background: var(--sink); border: 1px solid var(--border); }
+.term { margin: var(--g-term) 0 0; background: var(--sink); border: 1px solid var(--border); }
 
 .term-bar {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
+  padding: calc(var(--term-py) - 4px) 14px;
   background: var(--panel);
   border-bottom: 1px solid var(--border);
 }
@@ -677,7 +737,7 @@ onMounted(async () => {
 }
 
 .term-body {
-  padding: 12px 16px;
+  padding: var(--term-py) 16px;
   font-size: 12.5px;
   color: var(--soft);
   overflow-x: auto;
