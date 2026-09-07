@@ -465,7 +465,6 @@ export const vi: Record<Key, string> = {
   'log.filterName': 'Bộ lọc',
   'log.action': 'Hành động',
   'log.matchNum': 'Số lần khớp',
-  'log.keepHint': 'Số dòng tối đa giữ lại cho mỗi loại nhật ký (100 – 500000); vượt quá sẽ xoá toàn bảng',
   'log.account': 'Tài khoản',
   'log.ip': 'Địa chỉ IP',
   'dt.socket': 'Socket',

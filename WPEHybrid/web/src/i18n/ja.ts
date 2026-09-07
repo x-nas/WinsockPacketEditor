@@ -465,7 +465,6 @@ export const ja: Record<Key, string> = {
   'log.filterName': 'フィルター名',
   'log.action': '動作',
   'log.matchNum': '一致数',
-  'log.keepHint': 'ログ 1 系統あたりの最大保持行数（100 ～ 500000）。超えると表全体を消去します',
   'log.account': 'アカウント',
   'log.ip': 'IP アドレス',
   'dt.socket': 'ソケット',

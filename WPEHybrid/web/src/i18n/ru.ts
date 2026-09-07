@@ -465,7 +465,6 @@ export const ru: Record<Key, string> = {
   'log.filterName': 'Фильтр',
   'log.action': 'Действие',
   'log.matchNum': 'Совпадений',
-  'log.keepHint': 'Максимум строк на каждый журнал (100–500000); при превышении таблица очищается целиком',
   'log.account': 'Учётная запись',
   'log.ip': 'IP-адрес',
   'dt.socket': 'Сокет',

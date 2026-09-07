@@ -468,7 +468,6 @@ export const tw: Record<Key, string> = {
   'log.matchNum': '匹配數',
   'log.account': '賬號',
   'log.ip': 'IP地址',
-  'log.keepHint': '每路日誌最多保留的條數（100 ~ 500000），超出後整表清空',
   'dt.socket': '通訊端',
   'dt.http': 'HTTP',
   'dt.https': 'HTTPS',

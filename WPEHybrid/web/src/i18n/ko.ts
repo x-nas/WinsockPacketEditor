@@ -465,7 +465,6 @@ export const ko: Record<Key, string> = {
   'log.filterName': '필터 이름',
   'log.action': '동작',
   'log.matchNum': '일치 수',
-  'log.keepHint': '로그 한 종류당 최대 보관 행 수(100 ~ 500000). 초과하면 표 전체를 지웁니다',
   'log.account': '계정',
   'log.ip': 'IP 주소',
   'dt.socket': '소켓',

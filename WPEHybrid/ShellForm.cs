@@ -987,7 +987,7 @@ namespace WPEHybrid
                 try
                 {
                     /*
-                        「字段出现才改」—— 与 saveLeachSetting / saveLogSetting 同一条协议。
+                        「字段出现才改」—— 与 saveLeachSetting / saveHookSetting 同一条协议。
                         跟随系统时系统主题一变，前端只送新的 isDark，不重复送 mode。
                     */
                     if (args["mode"] != null)
@@ -3419,70 +3419,6 @@ namespace WPEHybrid
                 「复制」没做：SystemLog 那一页刻意不做虚拟滚动，就是为了能原生选中一段 Ctrl+C 拿走
                 （见组件里的说明），再加一个「复制选中行」得先做出行选中来，不划算。
             */
-
-            /*
-                日志自己的自动清理与自动滚动。
-
-                <b>它与封包列表那一套是两份配置</b>：封包的在 InjectMode 表
-                （PacketList_AutoClear），日志的在 SystemConfig 表（LogList_AutoClear /
-                LogList_AutoClear_Value / LogList_AutoRoll），消费点也不同 ——
-                LogConfig.List.FlushToFeed 里三路日志各自按 AutoClear_Value 整表清空。
-
-                WinForms 侧这三样是 Controls/LogList 工具条上的三个控件，不在「列表设置」里，
-                所以这里也放在日志页的工具条上，不并进那个弹窗。
-                外壳早先一个都没接：功能照常在跑（默认开、5000 条），但用户改不了 ——
-                滤镜日志每秒几十条时想调大到两万条根本没有入口。
-            */
-            this.bridge.Register("getLogSetting", args => new
-            {
-                autoRoll = Operate.LogConfig.List.AutoRoll,
-                autoClear = Operate.LogConfig.List.AutoClear,
-                autoClearValue = (int)Operate.LogConfig.List.AutoClear_Value,
-            });
-
-            this.bridge.Register("saveLogSetting", args =>
-            {
-                try
-                {
-                    /*
-                        「字段出现才改，没出现就不动」—— 自动滚动是点一下就生效的开关，
-                        自动清理那两项要按「保存」，两条路各自只发自己那部分。
-                        一律补齐发全量的话，点一下滚动开关会把用户正在编辑的条数框值也写进去。
-                    */
-                    if (args["autoRoll"] != null)
-                    {
-                        Operate.LogConfig.List.AutoRoll = (bool)args["autoRoll"];
-                    }
-
-                    if (args["autoClear"] != null)
-                    {
-                        Operate.LogConfig.List.AutoClear = (bool)args["autoClear"];
-                    }
-
-                    if (args["autoClearValue"] != null)
-                    {
-                        int keep = (int)args["autoClearValue"];
-
-                        //与列表设置同一条范围，两处的语义是一样的：一张表最多留多少行
-                        if (keep < 100 || keep > 500000)
-                        {
-                            return new { ok = false, error = UI.T("ListSettingsForm.Range", "保留条数需在 100 ~ 500000 之间") };
-                        }
-
-                        Operate.LogConfig.List.AutoClear_Value = keep;
-                    }
-
-                    //这三样都在 SystemConfig 表里，与主题 / 语言 / 快捷键同一张
-                    Operate.SystemConfig.SaveSystemConfig_ToDB();
-
-                    return new { ok = true };
-                }
-                catch (Exception ex)
-                {
-                    Operate.DoLog("saveLogSetting", ex);
-                    return new { ok = false, error = ex.Message };
-                }
-            });
 
             this.bridge.Register("clearLogs", async args => new
             {

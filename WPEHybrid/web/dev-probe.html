@@ -124,9 +124,6 @@
     //记下来给脚本断言用；「字段出现才改」的稀疏协议在这里也照着走
     setAppearance: (a) => { if (a.mode != null) window.__themeMode = a.mode; if (a.isDark != null) window.__isDark = a.isDark; return { ok: true, isDark: !!window.__isDark, mode: window.__themeMode || 'dark' } },
     getListSetting: () => ({ showSocket: true, showType: true, showClientAddr: true, showClientLoc: true, showServerAddr: true, showServerLoc: true, showLen: true, autoClear: true, autoClearValue: 5000 }),
-    //日志自己的那一套（LogList_AutoClear / _Value / AutoRoll），与上面那份是两回事
-    getLogSetting: () => ({ autoRoll: false, autoClear: true, autoClearValue: 5000 }),
-    saveLogSetting: () => ({ ok: true }),
     getStats: () => ({ queue: 0, list: 40, total: 40, autoClear: true, autoClearValue: 5000, proxyRunning: true, socks5Addr: '0.0.0.0:1080', onlineInfo: '1/3', totalRequest: 1024, totalResponse: 2048, speedUp: 0, speedDown: 0 }),
     //查找：偶数次命中第 7 行、奇数次没命中，用来同时验「命中」与「没有匹配」两条路
     searchProxyList: (a) => (a.pattern === 'zzz' ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: null } : a.pattern === 'bad(' ? { Found: false, Id: 0, Index: -1, Offset: -1, Length: 0, Error: '括号不配对' }
