@@ -5497,8 +5497,19 @@ namespace WPEHybrid
 
                 tLoad = swLoad.Elapsed.TotalMilliseconds;
 
-                //监听地址要有可选的本机 IP，InitProxyServer 会取 ProxyServerIP[0]
-                Operate.ProxyConfig.Proxy.ProxyServerIP = Operate.SystemConfig.GetLocalIPAddress();
+                /*
+                    监听地址要有可选的本机 IP，InitProxyServer 会取 ProxyServerIP[0]。
+
+                    ⚠️ <b>丢后台，不占进模式这一下。</b>GetLocalIPAddress() 里是
+                    NetworkInterface.GetAllNetworkInterfaces()，本机实测 <b>70~80ms</b>。
+                    赋的是一个数组引用，写入是原子的；而 InitProxyServer 本来就有
+                    「表为空先自己补一次」的兜底，所以哪怕用户在这 80ms 内就点了「开始代理」也不会出事。
+                */
+                System.Threading.Tasks.Task.Run(() =>
+                {
+                    try { Operate.ProxyConfig.Proxy.ProxyServerIP = Operate.SystemConfig.GetLocalIPAddress(); }
+                    catch (Exception ex) { Operate.DoLog("EnsureProxyConfigLoaded.IP", ex); }
+                });
 
                 tNic = swLoad.Elapsed.TotalMilliseconds - tLoad;
 

@@ -12417,6 +12417,37 @@ namespace WinsockPacketEditor
                     try
                     {
                         DataTable dtProxyAccount = DataBase.SelectTable_ProxyAccount();
+
+                        /*
+                            登录记录<b>整张表一次读完，再按账号分桶</b>。
+
+                            原来是每个账号一次 SelectTable_ProxyAccountIPInfo(AID) ——
+                            那是个 N+1，而且每次都新开一个 SQLiteConnection。
+                            2026-09-07 实测：1019 个账号、<b>那张表还是空的</b>，
+                            光开连接就花掉 <b>1183ms</b>，占了「进代理模式」那一秒多的绝大部分。
+
+                            分桶用 OrdinalIgnoreCase：库里存的是大写无括号的 GUID
+                            （SelectTable_ProxyAccountIPInfo 那个重载查的时候也 ToUpper 了），
+                            但别的写入路径未必都守得住，比大小写更安全。
+                        */
+                        DataTable dtAllIPInfo = DataBase.SelectTable_ProxyAccountIPInfo();
+
+                        var ipByAccount = new Dictionary<string, List<DataRow>>(StringComparer.OrdinalIgnoreCase);
+
+                        foreach (DataRow drIP in dtAllIPInfo.Rows)
+                        {
+                            string key = (drIP["GUID"] ?? string.Empty).ToString();
+
+                            List<DataRow> bucket;
+                            if (!ipByAccount.TryGetValue(key, out bucket))
+                            {
+                                bucket = new List<DataRow>();
+                                ipByAccount[key] = bucket;
+                            }
+
+                            bucket.Add(drIP);
+                        }
+
                         foreach (DataRow drProxyAccount in dtProxyAccount.Rows)
                         {
                             Guid AID = Guid.Parse(drProxyAccount["GUID"].ToString());
@@ -12432,13 +12463,17 @@ namespace WinsockPacketEditor
                             DateTime CreateTime = Convert.ToDateTime(drProxyAccount["CreateTime"]);
 
                             BindingList<AccountIPInfo> AIPInfo = new BindingList<AccountIPInfo>();
-                            DataTable dtAIPInfo = DataBase.SelectTable_ProxyAccountIPInfo(AID);
-                            foreach (DataRow drIPInfo in dtAIPInfo.Rows)
-                            {
-                                DateTime LoginTime = Convert.ToDateTime(drIPInfo["LoginTime"]);
-                                string LoginIP = drIPInfo["LoginIP"].ToString();
 
-                                ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP);
+                            List<DataRow> myIPInfo;
+                            if (ipByAccount.TryGetValue(AID.ToString().ToUpper(), out myIPInfo))
+                            {
+                                foreach (DataRow drIPInfo in myIPInfo)
+                                {
+                                    DateTime LoginTime = Convert.ToDateTime(drIPInfo["LoginTime"]);
+                                    string LoginIP = drIPInfo["LoginIP"].ToString();
+
+                                    ProxyConfig.Account.AddAccountIPInfo(AIPInfo, LoginTime, LoginIP);
+                                }
                             }
 
                             ProxyConfig.Account.AddProxyAccount(
@@ -31660,6 +31695,41 @@ namespace WinsockPacketEditor
                 catch (Exception ex)
                 {
                     Operate.DoLog(nameof(SelectTable_ProxyAccount), ex);
+                }
+
+                return dtReturn;
+            }
+
+            /// <summary>
+            /// 整张登录记录表一次读完。
+            ///
+            /// ⚠️ <b>加载账号列表时必须用这个，不要按账号一条条查。</b>
+            /// 下面那个按 GUID 的重载每调一次就开一个新连接，而开连接才是大头 ——
+            /// 2026-09-07 实测：1019 个账号、<b>而且那张表当时是空的</b>，
+            /// 逐个查花了 <b>1183ms</b>（1.16ms/个，全在开连接上）。
+            /// 那正是「进代理模式卡一秒」的来源。
+            ///
+            /// 按 GUID 的那个重载留着：点「登录记录」时按需取一条账号的记录，
+            /// 一次一个连接完全合理。
+            /// </summary>
+            public static DataTable SelectTable_ProxyAccountIPInfo()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        using (SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM ProxyAccountIPInfo;", conn))
+                        {
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(nameof(SelectTable_ProxyAccountIPInfo), ex);
                 }
 
                 return dtReturn;
