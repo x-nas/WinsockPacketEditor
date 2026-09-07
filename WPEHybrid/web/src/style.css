@@ -805,6 +805,38 @@ body.col-resizing * {
 .gtool > .plegend { flex: none; white-space: nowrap; }
 
 /*
+  自绘的悬停提示（`tooltip.ts` 在用，全项目一个实例）。
+
+  ⚠️ <b>必须 pointer-events: none</b> —— 它是贴着目标画的，一旦吃鼠标事件，
+  盖住目标的那一刻就等于「鼠标离开了目标」，提示会当场开始闪。
+
+  z-index 1600：压得过右键菜单（1500）与弹窗遮罩（999），
+  低于氛围层（2000，那两层本来就 pointer-events: none）。
+  提示要能盖在右键菜单上 —— 菜单项自己也可能带 title。
+
+  与 .cm 同一套外观（panel 底 + 1px 边 + 同一条阴影），
+  外加左边一道青色细线，让它一眼看出是「说明」不是「菜单」。
+*/
+.tipbox {
+  position: fixed;
+  z-index: 1600;
+  display: none;
+  max-width: 340px;
+  padding: 6px 10px 5px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--cyan);
+  box-shadow: 0 6px 22px rgb(var(--shadow-rgb) / 55%);
+  color: var(--gray);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.5;
+  /* 长句要能折行；换行符照原样显示（有几条文案是分行写的） */
+  white-space: pre-wrap;
+  pointer-events: none;
+}
+
+/*
   ⚠️ <b>勾选框与它后面那个条数框要一起换行。</b>
   工具条是 flex-wrap 的，两者各自是一个 flex 项 ——
   正好卡在换行点上时，条数框会被甩到第二行、挨着不相干的东西

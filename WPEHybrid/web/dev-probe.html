@@ -174,6 +174,7 @@
   import AccountList from '/src/components/proxy/AccountList.vue'
   import ConfirmDialog from '/src/components/ConfirmDialog.vue'
   import { attachUiHost } from '/src/bridge/host'
+  import { installTooltip } from '/src/tooltip'
   import PacketModification from '/src/components/proxy/PacketModification.vue'
   import RobotEdit from '/src/components/proxy/RobotEdit.vue'
   import TextCompare from '/src/components/proxy/TextCompare.vue'
@@ -202,6 +203,8 @@
   const older = await Promise.all(['ProxySetting', 'ListSetting', 'LeachSetting', 'HookSetting', 'SystemSetting', 'FireWallSetting'].map((n) => import('/src/components/proxy/' + n + '.vue').then((m) => m.default)))
   const settingComp = { '#ps': ProcessSetting, '#map': MapSetting, '#xp': ExtProxySetting, '#hk': HotkeySetting, '#bk': BackupSetting, '#rm': RemoteSetting,
     '#o-proxy': older[0], '#o-list': older[1], '#o-leach': older[2], '#o-hook': older[3], '#o-sys': older[4], '#o-fw': older[5] }[location.hash]
+  installTooltip()   //自绘悬停提示，产品里由 main.ts 装，这儿要自己来一次才验得到
+
   const httpMode = location.hash === '#http'
   const dataPage = location.hash === '#data'
   const appPage = location.hash === '#app'

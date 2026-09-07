@@ -686,7 +686,19 @@ async function runAccept(): Promise<void> {
     />
 
     <div class="stats">
-      <div v-for="c in cells" :key="c.k" class="st-c">
+      <!--
+        整格挂提示，不是只挂在数字上：格子是<b>固定宽度</b>的（七分之一屏），
+        标题与数字都靠省略号兜底，三行都可能被截。
+
+        实测：1280 CSS 宽时格子 156px，十亿都放得下；
+        但 <b>125% 缩放下只有 1024 CSS 宽，格子 120px</b>，「100,000,000」要 128px —— 截断。
+        去掉千分位也救不回来（Orbitron 的数字不等宽，999999999 仍要 127px）。
+
+        <b>按要求不改字号、也不换成 100.0M 那种单位</b>：这一格的意义就是给一个
+        能对得上的准确数（「最大序号 == 代理总数」那条自检要拿它去比），
+        换成约数就没法比了。改成挂提示，截断时把完整的一行给出来。
+      -->
+      <div v-for="c in cells" :key="c.k" class="st-c" :title="c.z + ' · ' + c.v">
         <div class="k">{{ c.k }}</div>
         <div class="v" :class="c.tone">{{ c.v }}</div>
         <div class="z">{{ c.z }}</div>

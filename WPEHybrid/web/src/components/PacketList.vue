@@ -89,6 +89,17 @@ const OVERSCAN = 8
   两者不能共用一个值 —— 长度列就是反例：数字右对齐便于比大小，
   而它的表头居中才和左右两列的窄表头看齐。
 */
+/*
+  ⚠️ <b>序号列 84px 是量出来的，别随手改回 74。</b>
+
+  序号是 ProxyInfo.Id / PacketInfo.Id —— 运行期自增、<b>停止再开始代理也不复位</b>，
+  只有重启程序才归零，所以抓一整天很容易上到九位十位。
+  74px 时实测（Consolas 12px）：8 位刚好放下，<b>9 位（一亿）开始截断</b>成省略号。
+  84px 装得下 10 位（10 位实测占 82px），约 43 亿 ——
+  按 3000 包/秒连续抓要 16 天才用得完。代价是最后那个弹性的「数据」列少 10px。
+
+  列宽本来就能拖（表头右边界那条 7px 手柄），这里改的只是默认值。
+*/
 const columns = computed(() => (props.mode === 'inject' ? injectColumns() : proxyColumns()))
 
 /*
@@ -98,7 +109,7 @@ const columns = computed(() => (props.mode === 'inject' ? injectColumns() : prox
 */
 function injectColumns() {
   return [
-    { key: 'Id', title: t('col.id'), w: 74, align: 'center', halign: 'center', cls: 'c-dim' },
+    { key: 'Id', title: t('col.id'), w: 84, align: 'center', halign: 'center', cls: 'c-dim' },
     { key: 'Time', title: t('col.time'), w: 136, cls: 'c-meta' },
     { key: 'Socket', title: t('col.socket'), w: 64, align: 'center', halign: 'center', cls: 'c-dim' },
     //类型不给固定色 —— 按「请求 / 响应」分色，见 cellClass
@@ -114,7 +125,7 @@ function injectColumns() {
 
 function proxyColumns() {
   return [
-  { key: 'Id', title: t('col.id'), w: 74, align: 'center', halign: 'center', cls: 'c-dim' },
+  { key: 'Id', title: t('col.id'), w: 84, align: 'center', halign: 'center', cls: 'c-dim' },
   /*
     时间是 HH:mm:ss:fffffff（16 字符，见 FeedRows 的 PacketTime 格式）。
     Consolas 12px 每字约 6.6px、Cascadia Mono 约 7.2px，取宽的那个算：
