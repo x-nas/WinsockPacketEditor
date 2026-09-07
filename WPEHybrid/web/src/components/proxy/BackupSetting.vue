@@ -6,7 +6,7 @@
   外壳那边随即应用偏好、整表重推、落库（见 ShellForm 的 importBackup）；备份里可能带着语言，页面字典要跟着切。
   这个弹窗没有「保存」——两个动作各自就是终点。
 */
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { call } from '../../bridge'
 import { lang, normalize, t } from '../../i18n'
 import { socks5Addr } from '../../stores/runtime'
@@ -41,6 +41,28 @@ const GROUPS = [
   { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList'], ['autoStores', 'bk.autoStores'], ['wareHouse', 'bk.wareHouse', 'bk.wareHouseHint']] },
   { key: 'bk.grp.wpc', items: [['wpcServer', 'bk.wpcServer'], ['wpcNotice', 'bk.wpcNotice']] },
 ] as const
+
+/*
+  ⚠️ <b>组内排两列，只给放得下的语言开。</b>
+
+  格子宽是算出来又量过的：弹窗 620 − .groups 两侧内边距 40 = 580，外层 columns:2 扣掉 10 的列缝
+  → 每列 285；组的边框 2 + 内边距 24 → 255；组内两列再扣 10 的缝 → <b>每格 122.5</b>。
+
+  逐语言量过 14 条标签的最宽那条（13px 勾选框 + 7px 间隙 + 文字，量的是真实渲染不是 canvas 估值）：
+
+  | 放得下 | 放不下 |
+  |---|---|
+  | 简 95 · 繁 95 · 韩 114.5 | 越 154.9 · 英 161.8 · 日 170 · 俄 217.6 |
+
+  放不下的那四种<b>不是截断，是折行</b> —— 而折行之后「3 行 × 两行高」比原来「5 行 × 一行高」
+  还要高，等于白折腾。所以它们保持一列，这一屏在那几种语言下本来也没有空白可省。
+
+  ⚠️ 判据是<b>量出来的宽度</b>，不是现成的 `defOf(lang).wide`（那面标的是 en/vi/ru）——
+  日语不 wide 却放不下，韩语的三条「…설정」是 114.5、离 122.5 只剩 8px。
+  改了这几条文案或改了弹窗宽度，回来重新量一遍再定这张名单。
+*/
+const TWO_COL = new Set(['zh', 'tw', 'ko'])
+const twoCol = computed(() => TWO_COL.has(lang.value))
 
 type FKey = keyof typeof f.value
 
@@ -79,7 +101,7 @@ async function importBackup(): Promise<void> {
     <div class="setf bk">
       <p class="hint">{{ t('bk.hint') }}</p>
 
-      <div class="groups">
+      <div class="groups" :class="{ two: twoCol }">
         <div v-for="g in GROUPS" :key="g.key" class="g">
           <div class="gt">{{ t(g.key) }}</div>
           <button
@@ -138,6 +160,24 @@ async function importBackup(): Promise<void> {
   break-inside: avoid;
 }
 .gt { font-family: var(--share); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 2px; }
+
+/*
+  组内两列（判据与量法见上面 twoCol 那段注释）。5 项的组从 5 行变 3 行，两个长组各省两行。
+  内边距从 14 收到 12、列缝取 10，都是为了把格子从 121.5 挤到 122.5 —— 韩语最长那条 114.5 差得不多。
+*/
+.groups.two .g { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; padding: 12px; }
+.groups.two .gt { grid-column: 1 / -1; }
+
+/*
+  ⚠️ <b>标签在这里必须允许折行。</b>`.setf .chk` 是 nowrap 的（那是给定高表行准备的），
+  半宽格子里一旦有哪条超了，nowrap 会让它<b>压到右边那一列的字上</b>，而不是安静地换行。
+  今天量过的三种语言都是一行放得下，所以这条现在不改变任何像素；
+  它是给「以后哪条文案变长了」留的软着陆。
+  align-items 跟着从 center 改成 flex-start，否则真折了行勾选框会跑到两行的正中间。
+*/
+.groups.two .chk { align-items: flex-start; white-space: normal; text-align: left; }
+/* 勾选框 13px 高，跟首行文字的中心对齐：12.5px × 1.4 行高 ≈ 17.5，(17.5 − 13) ÷ 2 ≈ 2 */
+.groups.two .chk i { margin-top: 2px; }
 .acts { display: flex; align-items: center; gap: 8px; padding: 11px 20px 4px; }   /* 上边距是量着定的：日语最长的那几条差 1px 就会出滚动条 */
 .acts .grow { flex: 1; }
 
