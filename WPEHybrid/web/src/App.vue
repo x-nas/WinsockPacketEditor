@@ -232,21 +232,24 @@ function site(page: string): string {
 
         <div class="tbright">
           <!--
-            软件设置（语言 + 深浅色）。
+            软件设置（语言 + 主题）。
 
-            仍带那个定宽的两字母标签 —— 语言是这里最常改的一项，
-            标签把当前语言直接摆在标题栏上，不用打开弹窗就知道现在是哪种。
-            <b>定宽是必要的</b>：CN / EN / JA 字宽不同，不定宽整条按钮会在切换时抖一下，
-            而它右边紧挨着窗口按钮，抖动很显眼。
+            <b>只有齿轮，没有文字标签。</b>这颗按钮曾经是语言 chip，改成齿轮之后
+            还留着那个两字母标签（CN / EN / JA…），但那时它已经名不副实了：
+            按钮打开的是「软件设置」，里面装着语言<b>和</b>主题，只把语言摆在外面
+            既说不全、也让人以为这仍是一颗语言按钮。
+            而且它本来就多余 —— 整个界面就是那种语言，标签没多说任何事。
+
+            aria-haspopup 用 dialog 不用 true：true 的语义是「弹菜单」，
+            这里弹的是模态弹窗，读屏软件报的词不一样。
           -->
-          <button class="wb lang" :class="{ on: appSetOpen }" :title="t('set.app')"
-                  :aria-haspopup="true" :aria-expanded="appSetOpen"
+          <button class="wb gear" :class="{ on: appSetOpen }" :title="t('set.app')"
+                  aria-haspopup="dialog" :aria-expanded="appSetOpen"
                   @mousedown="armBtn" @click="fireBtn($event, () => { appSetOpen = true })">
             <svg class="ico" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="3.2" />
               <path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z" />
             </svg>
-            <i class="lb">{{ defOf(lang).short }}</i>
           </button>
 
           <!--
@@ -511,42 +514,25 @@ function site(page: string): string {
 .wb.pin:focus-visible { outline-color: var(--amber); }
 
 /*
-  语言按钮：比其余三个宽，因为要装下图标 + 语言标签。
-  形态照官网的 .chip.lang（地球图标是青色、标签是当前语言），
-  但骨架仍用 .wb —— 它和窗口按钮同排同高，做成官网那种带边框的 chip
-  会在这一排里显得格格不入。
+  设置齿轮。尺寸与其余几个窗口按钮完全一致（.wb 的 44 x 46），只是换个色相：
+  <b>青色</b>把它与右边那三个窗口控制分开 —— 那三个的 hover 是绿的，
+  再配上中间那条分隔线，一眼能读出「这颗不是窗口控制」。
+
+  以前它是宽按钮（图标 + 两字母语言标签），标签去掉之后自然回到方形，
+  连带那条「定宽免得切语言时整排按钮平移」的讲究也不需要了。
 */
-.wb.lang { width: auto; gap: 7px; padding: 0 12px; }
-.wb.lang .ico { stroke: var(--cyan); }
-.wb.lang:hover { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
-.wb.lang:hover .ico { stroke: var(--cyan); }
-.wb.lang:focus-visible { outline-color: var(--cyan); }
+.wb.gear .ico { stroke: var(--cyan); }
+.wb.gear:hover { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
+.wb.gear:hover .ico { stroke: var(--cyan); }
+.wb.gear:focus-visible { outline-color: var(--cyan); }
+
+/* 弹窗开着时按钮保持高亮，否则鼠标一移开就看不出是谁弹的 */
+.wb.gear.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
 
 /*
-  标签定宽：CN 与 EN 的字宽不同，不定宽的话切换语言时这颗按钮会变窄，
-  右边整排窗口按钮跟着平移 —— 在标题栏这种静止区域里非常显眼。
+  分隔线。左边两个（设置齿轮、窗口置顶）点了不会让窗口消失，
+  右边三个（最小化 / 最大化 / 退出）会 —— 别读成一组，尤其别让「退出」显得和它们同类。
 */
-/* 小三角：与状态条「设置 ▾」同一种提示，告诉人这里是个下拉而不是开关 */
-.wb.lang .ar { font-style: normal; font-size: 9px; color: var(--muted); }
-.wb.lang:hover .ar,
-.wb.lang.on .ar { color: var(--cyan); }
-
-/* 菜单开着时按钮保持高亮，否则鼠标一移开就看不出是谁弹的 */
-.wb.lang.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 8%); }
-
-.wb.lang .lb {
-  font-family: var(--share);
-  font-style: normal;
-  font-size: var(--label-size);
-  /* 行高收到 1 + 顶部 2px：默认行高把行距压在字下面、字形本身又偏上，实测两者合计高 2.4px；顶部 3px 让盒子长 3、居中后内容下移 1.5，正好补回 */
-  line-height: 1;
-  padding-top: 3px;
-  letter-spacing: .14em;
-  min-width: 20px;
-  text-align: center;
-}
-
-/* 与窗口按钮之间的分隔：语言是设置，那三个是窗口控制，别读成一组 */
 .tbsep {
   width: 1px;
   height: 16px;
