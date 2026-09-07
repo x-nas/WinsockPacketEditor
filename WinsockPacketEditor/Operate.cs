@@ -3100,6 +3100,7 @@ namespace WinsockPacketEditor
                         new XElement("IsScrollBarHide", UI.Prefs.IsScrollBarHide),
                         new XElement("IsTextRenderingHighQuality", UI.Prefs.IsTextRenderingHighQuality),
                         new XElement("IsDark", UI.Prefs.IsDark),
+                        new XElement("ThemeFollowSystem", UI.Prefs.FollowSystemTheme),
                         new XElement("DefaultLanguage", UI.Prefs.Language),
                         new XElement("LastInjection", SystemConfig.LastInjection),
                         new XElement("Remote_IsEnable", SystemConfig.IsRemote),
@@ -3183,7 +3184,17 @@ namespace WinsockPacketEditor
                         UI.Prefs.IsShowInWindow = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsShowInWindow"]);
                         UI.Prefs.IsScrollBarHide = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsScrollBarHide"]);
                         UI.Prefs.IsTextRenderingHighQuality = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsTextRenderingHighQuality"]);
-                        UI.Prefs.IsDark = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsDark"]);                        
+                        UI.Prefs.IsDark = Convert.ToBoolean(dtSystemConfig.Rows[0]["IsDark"]);
+                        /*
+                            这一列是后加的。EnsureColumn 会给老库补上，但备份导入的
+                            那条路可能塞进来一张没有这列的表，所以这里再兜一次 ——
+                            读不到就是「不跟随系统」，与列的默认值一致。
+                        */
+                        if (dtSystemConfig.Columns.Contains("ThemeFollowSystem"))
+                        {
+                            UI.Prefs.FollowSystemTheme = Convert.ToBoolean(dtSystemConfig.Rows[0]["ThemeFollowSystem"]);
+                        }
+                        
                         Lang = dtSystemConfig.Rows[0]["DefaultLanguage"].ToString();
                         SystemConfig.LastInjection = dtSystemConfig.Rows[0]["LastInjection"].ToString();
                         SystemConfig.IsRemote = Convert.ToBoolean(dtSystemConfig.Rows[0]["Remote_IsEnable"]);
@@ -3284,6 +3295,13 @@ namespace WinsockPacketEditor
                     if (xeIsTextRenderingHighQuality != null)
                     {
                         UI.Prefs.IsTextRenderingHighQuality = Convert.ToBoolean(xeIsTextRenderingHighQuality.Value);
+                    }
+
+                    //老版本导出的备份里没有这个节点，取不到就是「不跟随系统」
+                    XElement xeFollowSystem = xeSystemConfig.Element("ThemeFollowSystem");
+                    if (xeFollowSystem != null)
+                    {
+                        UI.Prefs.FollowSystemTheme = Convert.ToBoolean(xeFollowSystem.Value);
                     }
 
                     XElement xeIsDark = xeSystemConfig.Element("IsDark");
@@ -29391,13 +29409,22 @@ namespace WinsockPacketEditor
                         sql += "FilterChange_BackColor INTEGER,";//换包背景颜色
                         sql += "FilterChange_ForeColor INTEGER,";//换包字体颜色
                         sql += "FilterDisplay_BackColor INTEGER,";//只显示背景颜色
-                        sql += "FilterDisplay_ForeColor INTEGER";//只显示字体颜色
+                        sql += "FilterDisplay_ForeColor INTEGER,";//只显示字体颜色
+                        sql += "ThemeFollowSystem BOOLEAN DEFAULT 0";//系统设置 - 主题跟随系统
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
                             conn.Open();
                             cmd.ExecuteNonQuery();
+
+                            /*
+                                ⚠️ 上面那句是 CREATE TABLE <b>IF NOT EXISTS</b> ——
+                                对已经存在的库<b>一列都不会加</b>。而读配置那边是
+                                Rows[0]["列名"] 直接索引，缺列当场抛。
+                                所以每加一列都要在这里补一句 EnsureColumn。
+                            */
+                            EnsureColumn(conn, "SystemConfig", "ThemeFollowSystem", "BOOLEAN DEFAULT 0");
                         }
                     }
 
@@ -29409,6 +29436,57 @@ namespace WinsockPacketEditor
                 }
 
                 return bReturn;
+            }
+
+            /// <summary>
+            /// 给已存在的表补一列（没有就加，有就什么都不做）。
+            ///
+            /// 【为什么需要它】所有 CreateTable_* 用的都是 CREATE TABLE <b>IF NOT EXISTS</b>：
+            /// 新库会照新结构建，<b>老库一列都不会加</b>。而各处读配置是
+            /// <c>Rows[0]["列名"]</c> 直接索引，缺列不是返回 null 而是直接抛 ——
+            /// 表现成「升级之后一启动就报错」。
+            ///
+            /// SQLite 的 ALTER TABLE 只支持 ADD COLUMN，且不支持 IF NOT EXISTS，
+            /// 所以先用 PRAGMA table_info 查一遍。整个过程幂等，每次启动跑一遍不要钱。
+            ///
+            /// <b>以后往任何一张表加列，都在对应的 CreateTable_* 末尾补一句这个。</b>
+            /// </summary>
+            private static void EnsureColumn(SQLiteConnection Conn, string Table, string Column, string Declare)
+            {
+                try
+                {
+                    bool exists = false;
+
+                    using (SQLiteCommand cmd = new SQLiteCommand("PRAGMA table_info(" + Table + ");", Conn))
+                    using (SQLiteDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            //第 2 列（name）是列名，比较不分大小写 —— SQLite 的列名本来就不区分
+                            if (string.Equals(Convert.ToString(r["name"]), Column, StringComparison.OrdinalIgnoreCase))
+                            {
+                                exists = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (exists) { return; }
+
+                    string sql = "ALTER TABLE " + Table + " ADD COLUMN " + Column + " " + Declare + ";";
+
+                    using (SQLiteCommand cmd = new SQLiteCommand(sql, Conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    Operate.DoLog(nameof(EnsureColumn), "已为老库补列：" + Table + "." + Column);
+                }
+                catch (Exception ex)
+                {
+                    //补不上就记一条，别把启动整个拦下来 —— 缺列的后果由读取那边的兜底兜住
+                    Operate.DoLog(nameof(EnsureColumn), ex);
+                }
             }
 
             public static DataTable SelectTable_SystemConfig()
@@ -29519,7 +29597,8 @@ namespace WinsockPacketEditor
                         sql += "FilterChange_BackColor,";
                         sql += "FilterChange_ForeColor,";
                         sql += "FilterDisplay_BackColor,";
-                        sql += "FilterDisplay_ForeColor";
+                        sql += "FilterDisplay_ForeColor,";
+                        sql += "ThemeFollowSystem";
                         sql += ") VALUES (";
                         sql += "@IsAnimation,";
                         sql += "@IsShadowEnabled,";
@@ -29577,7 +29656,8 @@ namespace WinsockPacketEditor
                         sql += "@FilterChange_BackColor,";
                         sql += "@FilterChange_ForeColor,";
                         sql += "@FilterDisplay_BackColor,";
-                        sql += "@FilterDisplay_ForeColor";
+                        sql += "@FilterDisplay_ForeColor,";
+                        sql += "@ThemeFollowSystem";
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -29587,7 +29667,14 @@ namespace WinsockPacketEditor
                             cmd.Parameters.AddWithValue("@IsShowInWindow", UI.Prefs.IsShowInWindow);
                             cmd.Parameters.AddWithValue("@IsScrollBarHide", UI.Prefs.IsScrollBarHide);
                             cmd.Parameters.AddWithValue("@IsTextRenderingHighQuality", UI.Prefs.IsTextRenderingHighQuality);
+                            /*
+                                IsDark 存的是<b>解析后的实际主题</b>，不是「用户选了什么」——
+                                跟随系统时它是那一刻系统给出的值。这样 WinForms 那半边
+                                （AntdUI 只认深浅两态）拿到的一直是个能用的值。
+                                「是不是跟着系统走」由 ThemeFollowSystem 单独记。
+                            */
                             cmd.Parameters.AddWithValue("@IsDark", UI.Prefs.IsDark);
+                            cmd.Parameters.AddWithValue("@ThemeFollowSystem", UI.Prefs.FollowSystemTheme);
                             cmd.Parameters.AddWithValue("@DefaultLanguage", UI.Prefs.Language);
                             cmd.Parameters.AddWithValue("@LastInjection", SystemConfig.LastInjection);
                             cmd.Parameters.AddWithValue("@Remote_IsEnable", SystemConfig.IsRemote);

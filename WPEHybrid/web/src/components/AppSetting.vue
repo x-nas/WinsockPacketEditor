@@ -17,21 +17,30 @@
 */
 import { computed } from 'vue'
 import { LANGS, defOf, lang, setLang, t, type Lang } from '../i18n'
-import { setTheme, theme, type Theme } from '../stores/theme'
+import { effective, setTheme, theme, type Theme } from '../stores/theme'
 import SettingsModal from './proxy/SettingsModal.vue'
 
 const props = defineProps<{ open: boolean }>()
 const emit = defineEmits<{ (e: 'update:open', v: boolean): void }>()
 
 /*
-  两个主题各画一张小预览：三条色带（底 / 卡片 / 强调）加一条假标题栏。
-  只写「深色 / 浅色」四个字的话，没切过的人不知道会变成什么样；
+  三个主题各画一张小预览：四条色带（底 / 卡片 / 面板 / 强调）。
+  只写「深色 / 浅色」几个字的话，没切过的人不知道会变成什么样；
   色块一眼就说清了。用的是写死的十六进制而不是令牌 ——
-  这两张图要<b>同时</b>显示两套配色，令牌只能给出当前那一套。
+  这几张图要<b>同时</b>显示两套配色，而令牌只能给出当前那一套。
+
+  「跟随系统」那张把两套各取一半拼起来（左深右浅），一眼就能读出
+  「这一档不固定，看系统」。它<b>没有自己的配色</b>，落到像素上仍然只有深浅两种。
 */
-const THEMES: Array<{ key: Theme; label: 'set.app.dark' | 'set.app.light'; sw: string[] }> = [
-  { key: 'dark', label: 'set.app.dark', sw: ['#0a0a0f', '#12121a', '#1c1c2e', '#00ff88'] },
-  { key: 'light', label: 'set.app.light', sw: ['#eef1f6', '#ffffff', '#e6eaf1', '#00874a'] },
+type ThemeCard = { key: Theme; label: 'set.app.dark' | 'set.app.light' | 'set.app.system'; sw: string[] }
+
+const DARK_SW = ['#0a0a0f', '#12121a', '#1c1c2e', '#00ff88']
+const LIGHT_SW = ['#eef1f6', '#ffffff', '#e6eaf1', '#00874a']
+
+const THEMES: ThemeCard[] = [
+  { key: 'dark', label: 'set.app.dark', sw: DARK_SW },
+  { key: 'light', label: 'set.app.light', sw: LIGHT_SW },
+  { key: 'system', label: 'set.app.system', sw: [DARK_SW[0], DARK_SW[3], LIGHT_SW[3], LIGHT_SW[1]] },
 ]
 
 const cur = computed(() => defOf(lang.value))
@@ -84,7 +93,7 @@ function pickTheme(k: Theme): void {
           v-for="x in THEMES"
           :key="x.key"
           class="opt th"
-          :class="{ on: x.key === theme }"
+          :class="{ on: x.key === theme, sys: x.key === 'system' }"
           :aria-pressed="x.key === theme"
           @click="pickTheme(x.key)"
         >
@@ -104,17 +113,24 @@ function pickTheme(k: Theme): void {
       </div>
       <div class="row">
         <div class="k">{{ t('set.app.theme') }}</div>
-        <div class="v">{{ t(theme === 'dark' ? 'set.app.dark' : 'set.app.light') }}</div>
+        <!--
+          跟随系统时把此刻解析成了哪种一并写出来 —— 只显示「跟随系统」的话，
+          用户没法确认它到底认出了系统是深是浅（这正是这一档最容易被怀疑的地方）。
+        -->
+        <div class="v">
+          {{ t(theme === 'system' ? 'set.app.system' : theme === 'dark' ? 'set.app.dark' : 'set.app.light') }}
+          <i v-if="theme === 'system'" class="cult">{{ t(effective === 'dark' ? 'set.app.dark' : 'set.app.light') }}</i>
+        </div>
       </div>
     </div>
   </SettingsModal>
 </template>
 
 <style scoped>
-/* 选项网格。语言七个排三列，主题两个排两列 —— 主题那两张要放得下色带预览 */
+/* 选项网格。语言七个排三列，主题三个排三列 —— 主题那三张要放得下色带预览 */
 .opts { display: grid; gap: 8px; padding: 2px 20px 4px; }
 .opts.lang { grid-template-columns: repeat(3, 1fr); }
-.opts.theme { grid-template-columns: repeat(2, 1fr); }
+.opts.theme { grid-template-columns: repeat(3, 1fr); }
 
 .opt {
   position: relative;
@@ -153,12 +169,19 @@ function pickTheme(k: Theme): void {
 
 .tick { flex: none; width: 13px; height: 13px; fill: none; stroke: var(--cyan); stroke-width: 2.4; }
 
-/* 主题预览：四条色带并排，宽度按令牌的层次递减 */
+/* 主题预览：四条色带并排，宽度按令牌的层次递减（底色占得最多、强调色只是一道） */
 .opt.th { flex-direction: column; align-items: stretch; gap: 9px; padding: 11px; }
 .prev { display: flex; height: 26px; border: 1px solid var(--border); overflow: hidden; }
 .sw { flex: 1; }
 .sw:first-child { flex: 2; }
 .sw:last-child { flex: .5; }
+
+/*
+  「跟随系统」那张是<b>两套配色各占一半</b>（深底 + 深色强调 | 浅色强调 + 浅底），
+  所以四条要等宽 —— 沿用上面那套递减权重会把右边的浅色压成一道细缝，
+  看着就不像「一半一半」了。
+*/
+.opt.sys .sw:first-child, .opt.sys .sw:last-child { flex: 1; }
 .opt.th .nm { flex: none; }
 .opt.th .tick { position: absolute; right: 9px; bottom: 11px; }
 

@@ -116,6 +116,14 @@
     //删除：先经 ask 通道问一句，与 C# 的 DeleteIPRule_Dialog 走的是同一条路
     deleteIPRule: async (a) => ({ ok: await window.__ask('confirm', { title: a.black ? '黑名单' : '白名单', content: '确定删除数据吗?\r\n' + a.ip, icon: 3 }) }),
     getPrefs: () => ({ isDark: true, language: 'zh-CN', systemColor: '#1677FF', filter: { replace: { fore: '#000000', back: '#DAA520' }, intercept: { fore: '#FFFFFF', back: '#8B0000' }, change: { fore: '#000000', back: '#1E90FF' }, display: { fore: '#000000', back: '#90EE90' } } }),
+    /*
+      首屏那趟车。#app 模式下 App.vue 第一件事就是调它 ——
+      不给应答的话主题与语言都会落到默认值，验不了「跟随系统」这一档。
+      themeMode 与 isDark 是两个值：前者是用户选的那一档，后者是解析后的实际主题。
+    */
+    getSystemCheck: () => ({ version: '2.1.8', isBeta: true, dbInstance: 'WPE64DB', socks5Addr: '0.0.0.0:1080', nativeDrag: true, language: 'zh-CN', themeMode: window.__themeMode || 'dark', isDark: (window.__themeMode || 'dark') !== 'light' }),
+    //记下来给脚本断言用；「字段出现才改」的稀疏协议在这里也照着走
+    setAppearance: (a) => { if (a.mode != null) window.__themeMode = a.mode; if (a.isDark != null) window.__isDark = a.isDark; return { ok: true, isDark: !!window.__isDark, mode: window.__themeMode || 'dark' } },
     getListSetting: () => ({ showSocket: true, showType: true, showClientAddr: true, showClientLoc: true, showServerAddr: true, showServerLoc: true, showLen: true, autoClear: true, autoClearValue: 5000 }),
     //日志自己的那一套（LogList_AutoClear / _Value / AutoRoll），与上面那份是两回事
     getLogSetting: () => ({ autoRoll: false, autoClear: true, autoClearValue: 5000 }),

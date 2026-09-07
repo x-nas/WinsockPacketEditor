@@ -419,6 +419,13 @@ namespace WinsockPacketEditor
 
         private void btn_mode_Click(object sender, EventArgs e)
         {
+            /*
+                顶栏这个开关是<b>明确的选择</b>，所以要把「跟随系统」摘掉。
+                不摘的话：在这里点成深色，下次进外壳仍显示「跟随系统」并按系统
+                重新解析一遍 —— 用户刚做的选择被自己的配置吃掉了。
+                WinForms 侧没有第三档，也不需要有；它只负责在被点到时说清「我选定了」。
+            */
+            UI.Prefs.FollowSystemTheme = false;
             UI.Prefs.IsDark = !UI.Prefs.IsDark;
             WinFormsUiHost.ApplyPrefs();
 

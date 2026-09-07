@@ -20,7 +20,26 @@
     /// </summary>
     public sealed class UiPrefs
     {
+        /// <summary>
+        /// 当前<b>实际</b>用的是不是深色。
+        ///
+        /// 跟随系统时这里存的是「那一刻系统给出来的值」，不是用户选的三态之一 ——
+        /// WinForms 那半边（AntdUI 只认深浅两态）读的就是它，得始终是个能直接用的值。
+        /// 用户到底选了哪一档由 <see cref="FollowSystemTheme"/> 补充说明。
+        /// </summary>
         public bool IsDark;
+
+        /// <summary>
+        /// 主题是不是「跟随系统」。
+        ///
+        /// 这是 <see cref="IsDark"/> 之外多出来的一个比特：两个字段合起来才是三态
+        /// （false + false = 浅色、false + true = 深色、true + 任意 = 跟随系统）。
+        /// 单开一个枚举也行，但那样 WinForms 那边每个读 IsDark 的地方都要改。
+        ///
+        /// <b>只有 WebView2 外壳认这一档</b>：AntdUI 没有「跟随系统」的概念，
+        /// 所以 WinForms 侧照旧只看 IsDark。
+        /// </summary>
+        public bool FollowSystemTheme;
         public bool IsAnimation;
         public bool IsShadowEnabled;
         public bool IsShowInWindow = true;

@@ -194,7 +194,8 @@ export const DICT = {
   'set.app.theme': { zh: '外观', en: 'Appearance' },
   'set.app.dark': { zh: '深色', en: 'Dark' },
   'set.app.light': { zh: '浅色', en: 'Light' },
-  'set.app.themeHint': { zh: '同一套版式换一组配色，与主程序共用这个设置。', en: 'Same layout, different palette. Shared with the main program.' },
+  'set.app.system': { zh: '跟随系统', en: 'Follow system' },
+  'set.app.themeHint': { zh: '同一套版式换一组配色，与主程序共用这个设置。跟随系统时随操作系统的深浅设置一起变。', en: 'Same layout, different palette. Shared with the main program. “Follow system” tracks the OS light/dark setting.' },
   'set.app.now': { zh: '当前', en: 'Current' },
   'set.system': { zh: '系统设置', en: 'System Settings' },
   'set.lockedHint': {

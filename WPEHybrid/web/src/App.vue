@@ -68,10 +68,13 @@ onMounted(async () => {
 
     /*
       主题与语言同一条理由：要在任何像素画出来之前定好。
-      深色是默认，所以 initTheme 只在明确拿到 isDark === false 时才切浅色 ——
-      桥没接上（探针页）时保持深色，不会闪。
+
+      两个值一起给：themeMode 是用户选的那一档（深 / 浅 / 跟随系统），
+      isDark 是上次解析出来的实际值 —— 只在「跟随系统」而 matchMedia
+      又不可用时才兜底。认不出来一律深色（这套皮肤照深色设计），
+      所以桥没接上（探针页）时保持深色、不会闪。
     */
-    initTheme(s.isDark)
+    initTheme(s.themeMode, s.isDark)
 
     version.value = s.version
     isBeta.value = s.isBeta

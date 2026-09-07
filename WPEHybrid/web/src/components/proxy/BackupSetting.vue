@@ -42,11 +42,11 @@ async function exportBackup(): Promise<void> {
 async function importBackup(): Promise<void> {
   busy.value = true
   try {
-    const r = await call<{ language: string; isDark: boolean }>('importBackup')
+    const r = await call<{ language: string; isDark: boolean; themeMode: string }>('importBackup')
     //直接写 lang，不走 setLang —— 后者会反过来再写一次 C#（多开设置那一屏同一个理由）
     if (r?.language) lang.value = normalize(r.language)
     //主题同理：用 initTheme（只应用、不回写），备份里带的那份已经在 C# 侧落库了
-    if (typeof r?.isDark === 'boolean') initTheme(r.isDark)
+    if (r?.themeMode) initTheme(r.themeMode, r.isDark)
     //监听地址可能跟着代理配置一起换了
     try { const s = await call<{ socks5Addr?: string }>('getSystemCheck'); if (s?.socks5Addr) socks5Addr.value = s.socks5Addr } catch { /* 取不到就留旧值 */ }
   } catch (e) {

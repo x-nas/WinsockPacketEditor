@@ -948,6 +948,7 @@ namespace WPEHybrid
                 return new
                 {
                     isDark = p.IsDark,
+                    themeMode = ThemeMode(),
                     language = p.Language,
                     systemColor = p.SystemColor.Hex,
                     //滤镜标记色：封包列表按 FilterAction 给行上色，与 WinForms 一致
@@ -962,12 +963,19 @@ namespace WPEHybrid
             });
 
             /*
-                深色 / 浅色。
+                主题：深色 / 浅色 / 跟随系统。
 
                 【用的是已有的 UI.Prefs.IsDark】WinForms 顶栏那个暗色开关存的就是它
                 （SystemConfig 表的 IsDark 列，备份 XML 里也带着）。外壳另起一份的话，
                 两套 UI 会各记各的 —— 用户在 WinForms 里切了、进外壳又变回去，
                 而且备份导入之后两边对不上。
+
+                【三态怎么存】IsDark 是 bool，装不下三态，所以拆成两个字段：
+                  · IsDark            —— <b>解析后的实际主题</b>。跟随系统时存的是
+                                         那一刻系统给出的值，所以 WinForms 那半边
+                                         （AntdUI 只认深浅两态）拿到的一直是能用的值。
+                  · FollowSystemTheme —— 「这个值是不是跟着系统走出来的」。
+                前端每次系统主题变了都会再调一次这里，把新解析出来的 isDark 送过来。
 
                 ApplyPrefs() 是<b>给 WinForms 那半边用的</b>：外壳自己的界面是 CSS 令牌
                 在管（style.css 的 :root[data-theme="light"]），与 AntdUI 无关。
@@ -978,14 +986,25 @@ namespace WPEHybrid
             {
                 try
                 {
+                    /*
+                        「字段出现才改」—— 与 saveLeachSetting / saveLogSetting 同一条协议。
+                        跟随系统时系统主题一变，前端只送新的 isDark，不重复送 mode。
+                    */
+                    if (args["mode"] != null)
+                    {
+                        UI.Prefs.FollowSystemTheme =
+                            string.Equals((string)args["mode"], "system", StringComparison.OrdinalIgnoreCase);
+                    }
+
                     if (args["isDark"] != null)
                     {
                         UI.Prefs.IsDark = (bool)args["isDark"];
-                        WinFormsUiHost.ApplyPrefs();
-                        Operate.SystemConfig.SaveSystemConfig_ToDB();
                     }
 
-                    return new { ok = true, isDark = UI.Prefs.IsDark };
+                    WinFormsUiHost.ApplyPrefs();
+                    Operate.SystemConfig.SaveSystemConfig_ToDB();
+
+                    return new { ok = true, isDark = UI.Prefs.IsDark, mode = ThemeMode() };
                 }
                 catch (Exception ex)
                 {
@@ -3721,7 +3740,7 @@ namespace WPEHybrid
                     <b>外壳自己的界面是前端在管的</b> —— 不回传的话会变成
                     「弹窗切过去了、页面还是旧语言旧配色」。
                 */
-                return new { language = UI.Prefs.Language ?? string.Empty, isDark = UI.Prefs.IsDark };
+                return new { language = UI.Prefs.Language ?? string.Empty, isDark = UI.Prefs.IsDark, themeMode = ThemeMode() };
             });
 
             //── 远程管理 ──
@@ -4480,10 +4499,15 @@ namespace WPEHybrid
                     //界面语言的初值。前端拿它决定首屏用哪份字典，切换后走 setLanguage 写回
                     language = UI.Prefs.Language ?? "zh-CN",
                     /*
-                        深浅色的初值，与语言同一个理由搭这一趟车：
+                        主题的初值，与语言同一个理由搭这一趟车：
                         它要在<b>任何像素画出来之前</b>定好，否则浅色用户会先看见
                         一帧深色再跳成浅色。不为它单开一次 getPrefs。
+
+                        两个值一起给：themeMode 是用户选的那一档（三态），
+                        isDark 是上次解析出来的实际值 —— 跟随系统时前端会用
+                        matchMedia 自己重新解析，这个值只在解析不出来时兜底。
                     */
+                    themeMode = ThemeMode(),
                     isDark = UI.Prefs.IsDark,
                     lastInjection = Operate.SystemConfig.LastInjection ?? string.Empty,
                     socks5Port = Operate.ProxyConfig.Proxy.SOCKS5_Port,
@@ -4928,6 +4952,19 @@ namespace WPEHybrid
                 ws2 = link.SupportWS2,
                 msws = link.SupportMsWS,
             };
+        }
+
+        /// <summary>
+        /// 两个字段 → 前端认的那三档。
+        ///
+        /// 「跟随系统」优先：那一档下 IsDark 只是上次解析出来的快照，
+        /// 前端会用 matchMedia 自己重新解析，不该被这个快照反过来定住。
+        /// </summary>
+        private static string ThemeMode()
+        {
+            if (UI.Prefs.FollowSystemTheme) { return "system"; }
+
+            return UI.Prefs.IsDark ? "dark" : "light";
         }
 
         /// <summary>
