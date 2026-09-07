@@ -362,9 +362,10 @@ export const DICT = {
     en: 'No., Time, Domain and Data are always shown — No. is the key used to fetch bytes, the other three are what the table is for.',
   },
   'set.grp.autoClear': { zh: '自动清理', en: 'Auto Clear' },
-  'set.autoClearOn': { zh: '超出后整表清空', en: 'Clear the whole list when exceeded' },
+  //⚠️ 2026-09-07 起是环形（保留最近 N 条），别再写「整表清空」—— 那次改了行为、漏改了这两条文案
+  'set.autoClearOn': { zh: '超出后丢掉最旧的', en: 'Drop the oldest rows when exceeded' },
   'set.keepRows': { zh: '保留条数', en: 'Keep rows' },
-  'set.keepRowsHint': { zh: '100 ~ 500000。到达后整表清空，不是只删旧的', en: '100–500000. The whole list is cleared, not just the oldest rows' },
+  'set.keepRowsHint': { zh: '100 ~ 500000。超出后只保留最新的这么多条', en: '100–500000. Only the newest rows are kept past that' },
 
   // 过滤设置
   'set.leach.lead': {
@@ -657,6 +658,8 @@ export const DICT = {
   'log.proxy': { zh: '代理日志', en: 'Proxy Log' },
   'log.empty': { zh: '暂无日志', en: 'No log entries yet' },
   //⚠️ 「丢掉最旧的」不是「整表清空」—— 2026-09-07 改成环形之后连文案一起改的
+  //⚠️ 与 proxy.autoClear 分开：两处控件长得一样、管的却是两份配置（日志 / 封包列表）
+  'log.autoClear': { zh: '日志自动清理', en: 'Auto-clear logs' },
   'log.keepHint': { zh: '每路日志最多保留的条数（100 ~ 500000），超出后丢掉最旧的', en: 'Max rows kept per log (100–500000); the oldest are dropped past that' },
   //列名照 LogList.cs 里那三组 AntdUI.Column
   'log.module': { zh: '模块', en: 'Module' },

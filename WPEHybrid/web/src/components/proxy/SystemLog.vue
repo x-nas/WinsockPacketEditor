@@ -228,7 +228,7 @@ async function doExport(): Promise<void> {
 
         自动滚动没有开关 —— 在底部就跟随，往上翻就停住（tail -f 那一套）。
       -->
-      <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear"><i />{{ t('proxy.autoClear') }}</button>
+      <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear"><i />{{ t('log.autoClear') }}</button>
       <input
         v-model="keepInput"
         class="keep"
