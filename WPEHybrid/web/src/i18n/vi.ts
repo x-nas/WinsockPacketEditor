@@ -893,7 +893,7 @@ export const vi: Record<Key, string> = {
   'bk.wpcNotice': 'Thông báo',
   'bk.import': 'Nhập bản sao lưu',
   'bk.export': 'Xuất bản sao lưu',
-  'bk.importHint': 'Việc nhập sẽ thay toàn bộ cấu hình và các danh sách hiện tại, đồng thời lưu ngay xuống cơ sở dữ liệu.',
+  'bk.importHint': 'Nhập chỉ thay những mục có trong bản sao lưu; những gì không có trong đó được giữ nguyên. Thay xong lưu ngay xuống cơ sở dữ liệu.',
   'rm.enable': 'Quản trị từ xa',
   'rm.running': 'Đang chạy',
   'rm.stopped': 'Chưa chạy',

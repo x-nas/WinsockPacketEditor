@@ -747,6 +747,7 @@ namespace WinsockPacketEditor
             d["BackUpSettingsForm.Import.Success"] = "システムバックアップを読み込みました";
             d["BackUpSettingsForm.Export"] = "システムバックアップの書き出し";
             d["BackUpSettingsForm.Encrypt.NoPassword"] = "暗号化が指定されましたがパスワードがないため、エクスポートを中止しました";
+            d["BackUpSettingsForm.Export.SectionFailed"] = "次のセクションを生成できなかったため（原因は上の例外ログを参照）、エクスポートを中止しました：{0}";
             d["BackUpSettingsForm.Export.Success"] = "システムバックアップを書き出しました";
             d["BackUpSettingsForm.Export.Fail"] = "システムバックアップの書き出しに失敗しました";
             d["MultipleOpenSetting"] = "多重起動の設定";

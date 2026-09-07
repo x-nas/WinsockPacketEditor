@@ -893,7 +893,7 @@ export const ko: Record<Key, string> = {
   'bk.wpcNotice': '공지',
   'bk.import': '백업 가져오기',
   'bk.export': '백업 내보내기',
-  'bk.importHint': '가져오면 현재 설정과 각 목록이 통째로 바뀌고 즉시 데이터베이스에도 저장됩니다.',
+  'bk.importHint': '가져오기는 백업에 들어 있는 항목만 바꾸며, 들어 있지 않은 것은 그대로 둡니다. 바뀐 내용은 즉시 데이터베이스에 저장됩니다.',
   'rm.enable': '원격 관리',
   'rm.running': '실행 중',
   'rm.stopped': '실행 중이 아님',

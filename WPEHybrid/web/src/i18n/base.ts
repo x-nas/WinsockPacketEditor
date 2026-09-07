@@ -1203,7 +1203,7 @@ export const DICT = {
   'bk.wpcNotice': { zh: '公告', en: 'Notices' },
   'bk.import': { zh: '导入备份', en: 'Import backup' },
   'bk.export': { zh: '导出备份', en: 'Export backup' },
-  'bk.importHint': { zh: '导入会整份替换当前配置与各份列表，并立即落库。', en: 'Importing replaces the current configuration and lists in full and stores them at once.' },
+  'bk.importHint': { zh: '导入只替换备份里带有的项，备份里没有的保持不动；替换后立即落库。', en: 'Importing replaces only the parts present in the backup; anything not in it is left untouched. Changes are stored at once.' },
 
   // ── 远程管理 ──
   'rm.enable': { zh: '远程管理', en: 'Remote management' },

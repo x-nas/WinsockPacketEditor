@@ -747,6 +747,7 @@ namespace WinsockPacketEditor
             d["BackUpSettingsForm.Import.Success"] = "Резервная копия импортирована";
             d["BackUpSettingsForm.Export"] = "Экспорт резервной копии";
             d["BackUpSettingsForm.Encrypt.NoPassword"] = "Запрошено шифрование, но пароль не задан — экспорт отменён";
+            d["BackUpSettingsForm.Export.SectionFailed"] = "Не удалось построить следующие разделы (причина — в журнале исключений выше), экспорт отменён: {0}";
             d["BackUpSettingsForm.Export.Success"] = "Резервная копия экспортирована";
             d["BackUpSettingsForm.Export.Fail"] = "Ошибка экспорта резервной копии";
             d["MultipleOpenSetting"] = "Настройка нескольких копий";

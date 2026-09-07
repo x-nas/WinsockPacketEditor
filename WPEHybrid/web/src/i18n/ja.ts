@@ -893,7 +893,7 @@ export const ja: Record<Key, string> = {
   'bk.wpcNotice': 'お知らせ',
   'bk.import': 'バックアップを読み込む',
   'bk.export': 'バックアップを書き出す',
-  'bk.importHint': '読み込むと、現在の設定と各リストがまるごと置き換わり、その場でデータベースにも保存されます。',
+  'bk.importHint': '読み込みでは、バックアップに入っている項目だけが置き換わります。入っていないものはそのままです。置き換えた内容はその場でデータベースにも保存されます。',
   'rm.enable': 'リモート管理',
   'rm.running': '実行中',
   'rm.stopped': '停止中',

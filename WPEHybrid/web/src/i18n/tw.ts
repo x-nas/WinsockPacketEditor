@@ -894,7 +894,7 @@ export const tw: Record<Key, string> = {
   'bk.wpcNotice': '公告',
   'bk.import': '匯入備份',
   'bk.export': '匯出備份',
-  'bk.importHint': '匯入會整份替換當前配置與各份列表，並立即落庫。',
+  'bk.importHint': '匯入只替換備份裡帶有的項目，備份裡沒有的保持不動；替換後立即落庫。',
   'rm.enable': '遠端管理',
   'rm.running': '執行中',
   'rm.stopped': '未執行',

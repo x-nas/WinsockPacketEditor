@@ -4488,63 +4488,65 @@ namespace WinsockPacketEditor
 
                     XElement xeBackUp = new XElement("WPE64_BackUp");
 
+                    /*
+                        ⚠️ <b>「这一节没写进去」有两种原因，必须分开对待。</b>
+
+                        ① <b>列表本来就是空的</b> —— 下面各列表节前面那句 `Count > 0`。
+                           空列表写个空壳没意义，跳过是对的，也是既定语义：导入端是
+                           「节在就先清空再装、节不在就一个字都不动」，所以<b>源端为空不会</b>
+                           把目标机上的同名列表清掉（弹窗底下那句提示已按这个口径改过）。
+                        ② <b>`Get*_XML` 返回了 null</b> —— 那十五个方法一律是
+                           `try { 拼 } catch { 记日志 } return null`，<b>返回 null 只可能是抛异常了</b>。
+
+                        原来两种情况共用同一条静默路径（`if (xe != null) { Add }`），于是第 ② 种
+                        表现成「导出报成功，可备份里少了一整节」，用户毫无察觉 —— 真撞到过：
+                        `ProxyConfig.Proxy` 的静态构造按<b>工作目录</b>找 `IPLocation/qqwry.dat`，
+                        找不到就把 `GetProxyMode_XML` 整个带崩，代理设置那一节静静地没了。
+                        三个配置节（SystemConfig / ProxyMode / InjectMode）尤其危险：
+                        它们<b>没有</b>第 ① 层守卫，null 是它们唯一的缺席理由。
+
+                        现在把失败的节名收起来，<b>在写文件之前</b>统一判失败 ——
+                        放在 `Save` 之前，磁盘上就不会留下半份备份，也就不用再去删
+                        （与下面「要求加密却没密码」那条不同：那条是写完了才发现，只能删）。
+                        节名取的是<b>XML 元素名</b>，日志里看到哪个，就直接去 .sb 里找哪个。
+                    */
+                    List<string> broken = new List<string>();
+
+                    Action<string, XElement> add = (Name, xe) =>
+                    {
+                        if (xe == null) { broken.Add(Name); return; }
+
+                        xeBackUp.Add(xe);
+                    };
+
                     //系统设置
                     if (Parts.SystemConfig)
                     {
-                        XElement xeSystemConfig = SystemConfig.GetSystemConfig_XML();
-                        if (xeSystemConfig != null)
-                        {
-                            xeBackUp.Add(xeSystemConfig);
-                        }
+                        add("SystemConfig", SystemConfig.GetSystemConfig_XML());
                     }
 
                     //代理设置
                     if (Parts.ProxySet)
                     {
-                        XElement xeProxyConfig = SystemConfig.GetProxyMode_XML();
-                        if (xeProxyConfig != null)
-                        {
-                            xeBackUp.Add(xeProxyConfig);
-                        }
+                        add("ProxyMode", SystemConfig.GetProxyMode_XML());
                     }
 
                     //代理账号
-                    if (Parts.ProxyAccount)
+                    if (Parts.ProxyAccount && ProxyConfig.Account.lstAccountInfo.Count > 0)
                     {
-                        if (ProxyConfig.Account.lstAccountInfo.Count > 0)
-                        {
-                            XElement xeProxyAccount = ProxyConfig.Account.GetAccountList_XML(ProxyConfig.Account.lstAccountInfo.ToList());
-                            if (xeProxyAccount != null)
-                            {
-                                xeBackUp.Add(xeProxyAccount);
-                            }
-                        }
+                        add("ProxyAccountList", ProxyConfig.Account.GetAccountList_XML(ProxyConfig.Account.lstAccountInfo.ToList()));
                     }
 
                     //白名单
-                    if (Parts.WhiteList)
+                    if (Parts.WhiteList && ProxyConfig.Proxy.lstWhiteList.Count > 0)
                     {
-                        if (ProxyConfig.Proxy.lstWhiteList.Count > 0)
-                        {
-                            XElement xeWhiteList = ProxyConfig.Proxy.GetWhiteList_XML(ProxyConfig.Proxy.lstWhiteList);
-                            if (xeWhiteList != null)
-                            {
-                                xeBackUp.Add(xeWhiteList);
-                            }
-                        }
+                        add("WhiteList", ProxyConfig.Proxy.GetWhiteList_XML(ProxyConfig.Proxy.lstWhiteList));
                     }
 
                     //黑名单
-                    if (Parts.BlackList)
+                    if (Parts.BlackList && ProxyConfig.Proxy.lstBlackList.Count > 0)
                     {
-                        if (ProxyConfig.Proxy.lstBlackList.Count > 0)
-                        {
-                            XElement xeBlackList = ProxyConfig.Proxy.GetBlackList_XML(ProxyConfig.Proxy.lstBlackList);
-                            if (xeBlackList != null)
-                            {
-                                xeBackUp.Add(xeBlackList);
-                            }
-                        }
+                        add("BlackList", ProxyConfig.Proxy.GetBlackList_XML(ProxyConfig.Proxy.lstBlackList));
                     }
 
                     /*
@@ -4559,71 +4561,38 @@ namespace WinsockPacketEditor
                         //本地映射
                         if (ProxyConfig.Mapping.lstMapLocal.Count > 0)
                         {
-                            XElement xeMapLocal = ProxyConfig.Mapping.GetMapLocal_XML(ProxyConfig.Mapping.lstMapLocal);
-                            if (xeMapLocal != null)
-                            {
-                                xeBackUp.Add(xeMapLocal);
-                            }
+                            add("MapLocal", ProxyConfig.Mapping.GetMapLocal_XML(ProxyConfig.Mapping.lstMapLocal));
                         }
 
                         //远程映射
                         if (ProxyConfig.Mapping.lstMapRemote.Count > 0)
                         {
-                            XElement xeMapRemote = ProxyConfig.Mapping.GetMapRemote_XML(ProxyConfig.Mapping.lstMapRemote);
-                            if (xeMapRemote != null)
-                            {
-                                xeBackUp.Add(xeMapRemote);
-                            }
+                            add("MapRemote", ProxyConfig.Mapping.GetMapRemote_XML(ProxyConfig.Mapping.lstMapRemote));
                         }
                     }
 
                     //注入设置
                     if (Parts.InjectSet)
                     {
-                        XElement xeInjectionConfig = SystemConfig.GetInjectMode_XML();
-                        if (xeInjectionConfig != null)
-                        {
-                            xeBackUp.Add(xeInjectionConfig);
-                        }
+                        add("InjectMode", SystemConfig.GetInjectMode_XML());
                     }
 
                     //滤镜列表
-                    if (Parts.FilterList)
+                    if (Parts.FilterList && FilterConfig.List.lstFilterInfo.Count > 0)
                     {
-                        if (FilterConfig.List.lstFilterInfo.Count > 0)
-                        {
-                            XElement xeFilterList = FilterConfig.List.GetFilterList_XML(FilterConfig.List.lstFilterInfo.ToList());
-                            if (xeFilterList != null)
-                            {
-                                xeBackUp.Add(xeFilterList);
-                            }
-                        }
+                        add("FilterList", FilterConfig.List.GetFilterList_XML(FilterConfig.List.lstFilterInfo.ToList()));
                     }
 
                     //发送列表
-                    if (Parts.SendList)
+                    if (Parts.SendList && SendConfig.List.lstSendInfo.Count > 0)
                     {
-                        if (SendConfig.List.lstSendInfo.Count > 0)
-                        {
-                            XElement xeSendList = SendConfig.List.GetSendList_XML(SendConfig.List.lstSendInfo.ToList());
-                            if (xeSendList != null)
-                            {
-                                xeBackUp.Add(xeSendList);
-                            }
-                        }
+                        add("SendList", SendConfig.List.GetSendList_XML(SendConfig.List.lstSendInfo.ToList()));
                     }
 
                     //机器人列表
-                    if (Parts.RobotList)
+                    if (Parts.RobotList && RobotConfig.List.lstRobotInfo.Count > 0)
                     {
-                        if (RobotConfig.List.lstRobotInfo.Count > 0)
-                        {
-                            XElement xeRobotList = RobotConfig.List.GetRobotList_XML(RobotConfig.List.lstRobotInfo.ToList());
-                            if (xeRobotList != null)
-                            {
-                                xeBackUp.Add(xeRobotList);
-                            }
-                        }
+                        add("RobotList", RobotConfig.List.GetRobotList_XML(RobotConfig.List.lstRobotInfo.ToList()));
                     }
 
                     /*
@@ -4632,29 +4601,15 @@ namespace WinsockPacketEditor
                         所以它是<b>单独一个勾选项</b>，默认不勾；用户要带就带，别混在「列表清单」里
                         让人不知不觉导出一个几百 MB 的文件。
                     */
-                    if (Parts.WareHouse)
+                    if (Parts.WareHouse && WareHouseConfig.List.lstWareHouseInfo.Count > 0)
                     {
-                        if (WareHouseConfig.List.lstWareHouseInfo.Count > 0)
-                        {
-                            XElement xeWareHouse = WareHouseConfig.List.GetWareHouseList_XML(WareHouseConfig.List.lstWareHouseInfo.ToList());
-                            if (xeWareHouse != null)
-                            {
-                                xeBackUp.Add(xeWareHouse);
-                            }
-                        }
+                        add("WareHouseList", WareHouseConfig.List.GetWareHouseList_XML(WareHouseConfig.List.lstWareHouseInfo.ToList()));
                     }
 
                     //自动入库规则（包头 → 仓库），与仓库分开勾：规则很小，仓库很大
-                    if (Parts.AutoStores)
+                    if (Parts.AutoStores && WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
                     {
-                        if (WareHouseConfig.List.lstAutoStoresInfo.Count > 0)
-                        {
-                            XElement xeAutoStores = WareHouseConfig.List.GetAutoStores_XML(WareHouseConfig.List.lstAutoStoresInfo);
-                            if (xeAutoStores != null)
-                            {
-                                xeBackUp.Add(xeAutoStores);
-                            }
-                        }
+                        add("AutoStores", WareHouseConfig.List.GetAutoStores_XML(WareHouseConfig.List.lstAutoStoresInfo));
                     }
 
                     /*
@@ -4662,28 +4617,30 @@ namespace WinsockPacketEditor
                         （/ProxyCap/GetServerList 与 /GetNoticeList 下发的就是它们），
                         重配代价最大，却一直不在备份里。
                     */
-                    if (Parts.WpcServer)
+                    if (Parts.WpcServer && WPCConfig.ServerList.lstServerInfo.Count > 0)
                     {
-                        if (WPCConfig.ServerList.lstServerInfo.Count > 0)
-                        {
-                            XElement xeServerList = WPCConfig.ServerList.GetServerList_XML(WPCConfig.ServerList.lstServerInfo);
-                            if (xeServerList != null)
-                            {
-                                xeBackUp.Add(xeServerList);
-                            }
-                        }
+                        add("ServerList", WPCConfig.ServerList.GetServerList_XML(WPCConfig.ServerList.lstServerInfo));
                     }
 
-                    if (Parts.WpcNotice)
+                    if (Parts.WpcNotice && WPCConfig.NoticeList.lstNoticeInfo.Count > 0)
                     {
-                        if (WPCConfig.NoticeList.lstNoticeInfo.Count > 0)
-                        {
-                            XElement xeNoticeList = WPCConfig.NoticeList.GetNoticeList_XML(WPCConfig.NoticeList.lstNoticeInfo);
-                            if (xeNoticeList != null)
-                            {
-                                xeBackUp.Add(xeNoticeList);
-                            }
-                        }
+                        add("NoticeList", WPCConfig.NoticeList.GetNoticeList_XML(WPCConfig.NoticeList.lstNoticeInfo));
+                    }
+
+                    /*
+                        有分节生成失败就别写文件了 —— 一份「缺了整节却看着正常」的备份
+                        比没有备份更糟：用户拿它去恢复，那一节的设置一声不响地保持旧值。
+                        调用方（ExportSystemBackUp_Dialog）收到 false 会弹「导出失败 · 请检查系统日志」，
+                        上面那条日志里写着是哪一节。
+                    */
+                    if (broken.Count > 0)
+                    {
+                        Operate.DoLog(nameof(ExportSystemBackUp), string.Format(
+                            UI.T("BackUpSettingsForm.Export.SectionFailed",
+                                 "以下分节生成失败（原因见上面的异常日志），已放弃导出：{0}"),
+                            string.Join("、", broken)));
+
+                        return false;
                     }
 
                     xdoc.Add(xeBackUp);

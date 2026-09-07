@@ -747,6 +747,7 @@ namespace WinsockPacketEditor
             d["BackUpSettingsForm.Import.Success"] = "시스템 백업을 가져왔습니다";
             d["BackUpSettingsForm.Export"] = "시스템 백업 내보내기";
             d["BackUpSettingsForm.Encrypt.NoPassword"] = "암호화가 요청되었지만 비밀번호가 없어 내보내기를 중단했습니다";
+            d["BackUpSettingsForm.Export.SectionFailed"] = "다음 섹션을 만들지 못해(원인은 위의 예외 로그 참조) 내보내기를 중단했습니다: {0}";
             d["BackUpSettingsForm.Export.Success"] = "시스템 백업을 내보냈습니다";
             d["BackUpSettingsForm.Export.Fail"] = "시스템 백업을 내보내지 못했습니다";
             d["MultipleOpenSetting"] = "다중 실행 설정";
