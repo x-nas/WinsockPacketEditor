@@ -79,6 +79,11 @@ namespace WPEHybrid
             this.Push("feed:clear", new { list = (int)List });
         }
 
+        public void Trim(FeedList List, int Keep)
+        {
+            this.Push("feed:trim", new { list = (int)List, keep = Keep });
+        }
+
         private void Push(string Name, object Data)
         {
             try

@@ -440,6 +440,81 @@ namespace WinsockPacketEditor
 
             #region//获取本机的本地IP地址
 
+            #region//列表 / 队列裁剪（封包与代理两条主列表共用）
+
+            /*
+                自动清理的两半。2026-09-07 从「整表清空」改成「只留最近 N 条」，
+                封包列表与代理列表两条路各调一次，逻辑放这儿共用。
+
+                【为什么不是各写一份】那两个 FlushToFeed 本来就是一对孪生代码，
+                这个项目里「手抄抄着抄着就不一样了」的教训已经有过好几回。
+            */
+
+            /// <summary>
+            /// 从<b>最旧的那头</b>删到只剩 Keep 条。返回删了几条。
+            ///
+            /// ⚠️ 成本是 O(删除条数 × 列表长度) —— RemoveAt(0) 每次都要把后面所有元素前移。
+            /// 一拍最多进 FeedBatchMax(200) 条，所以一拍最多删 200 次；
+            /// 列表 5000 条时约 1M 次指针搬移，实测量级 0.5~1ms/拍，只在「列表满 + 高速率」时才付。
+            ///
+            /// 不用「拷贝尾巴再整表换掉」：那样 WinForms 侧绑着的表格会收到一次 Reset，
+            /// 用户的滚动位置与选中行每拍都被打回原点 —— 比逐条删糟得多。
+            /// </summary>
+            public static int TrimOldest<T>(BindingList<T> List, int Keep)
+            {
+                if (List == null || Keep < 0) { return 0; }
+
+                int drop = List.Count - Keep;
+
+                if (drop <= 0) { return 0; }
+
+                for (int i = 0; i < drop; i++) { List.RemoveAt(0); }
+
+                return drop;
+            }
+
+            /// <summary>
+            /// 待入列队列的上限：超了就从队头丢，返回丢了几条。
+            ///
+            /// ⚠️ <b>这是背压阀，不能省。</b>原来「整表清空」时是连队列一起清的 ——
+            /// 队列本身没有上限，而搬运拍每次只搬 FeedBatchMax 条，
+            /// 抓包速率高过搬运速率时它会一直涨。改成裁剪之后列表有界了，
+            /// 队列得自己有个界，否则内存会从队列这头漏出去。
+            /// </summary>
+            public static int TrimQueue<T>(ConcurrentQueue<T> Queue, int Max)
+            {
+                if (Queue == null || Max <= 0) { return 0; }
+
+                int dropped = 0;
+                T ignored;
+
+                while (Queue.Count > Max && Queue.TryDequeue(out ignored)) { dropped++; }
+
+                return dropped;
+            }
+
+            /// <summary>丢包日志的节流：同一个名字最多每 5 秒记一条，别把日志刷爆。</summary>
+            private static readonly System.Collections.Concurrent.ConcurrentDictionary<string, DateTime> dropLogAt =
+                new System.Collections.Concurrent.ConcurrentDictionary<string, DateTime>(StringComparer.Ordinal);
+
+            public static void LogDropped(string Where, int Dropped)
+            {
+                if (Dropped <= 0) { return; }
+
+                DateTime last;
+                DateTime now = DateTime.Now;
+
+                if (dropLogAt.TryGetValue(Where, out last) && (now - last).TotalSeconds < 5) { return; }
+
+                dropLogAt[Where] = now;
+
+                DoLog(Where, string.Format(
+                    UI.T("List.QueueDropped", "待入列队列超过上限，丢弃了 {0} 条（抓包速率高过界面搬运速率）"),
+                    Dropped));
+            }
+
+            #endregion
+
             public static IPAddress[] GetLocalIPAddress()
             {
                 return NetworkInterface.GetAllNetworkInterfaces()
@@ -10244,13 +10319,27 @@ namespace WinsockPacketEditor
                             FeedPump.MarkDirty(FeedList.WareHouse);
                         }
 
-                        //自动清理：整表清空 + 清空队列，与迁移前一致
-                        //（代理列表沿用封包列表的 AutoClear 配置，这也是迁移前的写法）
-                        if (PacketConfig.List.AutoClear && lstProxyInfo.Count > PacketConfig.List.AutoClear_Value)
+                        /*
+                            自动清理：<b>只留最近 N 条</b>（2026-09-07 从整表清空改的）。
+                            「自动清理 5000 条」读起来就该是「留最近 5000 条」，
+                            而不是「攒到 5000 就全没」—— 后者会让列表每隔一两秒闪一次。
+
+                            代理列表沿用封包列表的 AutoClear 配置，这是迁移前就有的写法。
+                        */
+                        if (PacketConfig.List.AutoClear)
                         {
-                            ProxyConfig.Queue.ClearProxyInfoQueue();
-                            ClearProxyInfo();
-                            UI.Feed.Clear(FeedList.Proxy);
+                            //AutoClear_Value 是 decimal（NumericUpDown 那边留下的），这里要显式转
+                            int keep = (int)PacketConfig.List.AutoClear_Value;
+
+                            if (lstProxyInfo.Count > keep)
+                            {
+                                SystemConfig.TrimOldest(lstProxyInfo, keep);
+                                UI.Feed.Trim(FeedList.Proxy, keep);
+                            }
+
+                            //队列也要有界 —— 原来靠整表清空时顺手清掉它，见 TrimQueue 的说明
+                            SystemConfig.LogDropped("ProxyQueue",
+                                SystemConfig.TrimQueue(ProxyConfig.Queue.qProxyInfo, keep));
                         }
                     }
                     catch (Exception ex)
@@ -16414,13 +16503,24 @@ namespace WinsockPacketEditor
                             }
                         }
 
-                        //自动清理：与迁移前逐字一致 —— 整表清空，并一并清空待入列队列
-                        //（清队列是唯一的背压阀：队列本身无上限，不清会无限涨）
-                        if (AutoClear && lstPacketInfo.Count > AutoClear_Value)
+                        /*
+                            自动清理：<b>只留最近 N 条</b>（2026-09-07 从整表清空改的）。
+                            与代理列表那一份逐条对应，改一处就要改另一处。
+                        */
+                        if (AutoClear)
                         {
-                            PacketConfig.Queue.ClearPacketQueue();
-                            ClearPacketList();
-                            UI.Feed.Clear(FeedList.Packet);
+                            //AutoClear_Value 是 decimal（NumericUpDown 那边留下的），这里要显式转
+                            int keep = (int)AutoClear_Value;
+
+                            if (lstPacketInfo.Count > keep)
+                            {
+                                SystemConfig.TrimOldest(lstPacketInfo, keep);
+                                UI.Feed.Trim(FeedList.Packet, keep);
+                            }
+
+                            //队列也要有界 —— 原来靠整表清空时顺手清掉它，见 TrimQueue 的说明
+                            SystemConfig.LogDropped("PacketQueue",
+                                SystemConfig.TrimQueue(PacketConfig.Queue.cqPacketInfo, keep));
                         }
                     }
                     catch (Exception ex)

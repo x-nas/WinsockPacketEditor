@@ -265,6 +265,7 @@ namespace WinsockPacketEditor
             d["StartForm.MultipleOpen.Text"] = "Set DB to achieve multi opening";
             d["StartForm.Database.Loaded"] = "Database loaded : ";
             d["WareHouse.Trimmed"] = "Warehouse cap {0} reached, dropped the {1} oldest rows";
+            d["List.QueueDropped"] = "Pending queue over its cap, dropped {0} rows (capture is faster than the UI can drain)";
             d["StartForm.LearnMore"] = "Learn more";
             d["StartForm.Tutorials"] = "Tutorials";
             d["StartForm.OfficialWebsite"] = "Official Website";

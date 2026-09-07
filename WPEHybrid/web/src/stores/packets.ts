@@ -98,10 +98,31 @@ export function createPacketFeed<T extends { Id: number }>(list: FeedList): Pack
       scheduleFlush()
     })
 
+    /*
+      自动清理不再走 feed:clear，走这条：<b>只留最近 keep 条</b>（2026-09-07 改的）。
+
+      ⚠️ <b>两侧必须裁掉同样的行。</b>C# 那边删了前 M 条，这里也删前 M 条 ——
+      内容一旦不一致，点行取字节就会拿到 null。
+      报文里给的是「保留多少条」而不是「删掉多少条」：各自算差值，
+      中间丢一次事件也只是某一拍多留几行，下一拍就对齐了，不会永久错位。
+
+      splice(0, drop) 是 O(表长) 的一次搬移，与 push 那条约束不冲突 ——
+      它一拍最多来一次，不是每条封包一次。
+    */
+    const offTrim = on('feed:trim', (d: { list: number; keep: number }) => {
+      if (d.list !== list) return
+
+      const drop = all.length - d.keep
+      if (drop <= 0) return
+
+      all.splice(0, drop)
+      stat.value.dropped += drop
+      scheduleFlush()
+    })
     const offClear = on('feed:clear', (d: { list: number }) => {
       if (d.list !== list) return
 
-      // C# 的自动清理是<b>整表清空</b>（不是保留最近 N 条），前端必须原样跟随：
+      // 用户点「清空」、切库这些走这条。自动清理走 feed:trim，见上面。
       // 两侧的内容一旦不一致，点行取字节就会拿到 null。
       stat.value.dropped += all.length
       all.length = 0
@@ -121,6 +142,7 @@ export function createPacketFeed<T extends { Id: number }>(list: FeedList): Pack
     return () => {
       offAppend()
       offClear()
+      offTrim()
       window.clearInterval(timer)
       if (rafId) cancelAnimationFrame(rafId)
       rafId = 0

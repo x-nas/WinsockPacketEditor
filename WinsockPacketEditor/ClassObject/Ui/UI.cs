@@ -62,6 +62,7 @@ namespace WinsockPacketEditor
             public void Update(FeedList List, object Row) { }
             public void Remove(FeedList List, string Id) { }
             public void Clear(FeedList List) { }
+            public void Trim(FeedList List, int Keep) { }
         }
 
         public static bool Attached

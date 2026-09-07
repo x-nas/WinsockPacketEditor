@@ -66,6 +66,15 @@ namespace WinsockPacketEditor
             //空实现：行已经从 BindingList 里摘掉了，ListChanged 会让表格自己刷新
         }
 
+        /// <summary>
+        /// WinForms 侧什么都不用做：界面直接绑着模型列表，
+        /// 调用方（FlushToFeed）已经把最旧的那几条从 BindingList 里删掉了，表格自己会跟上。
+        ///
+        /// 也<b>刻意不发 Cleared 事件</b> —— 那个事件是给「整表没了、右侧十六进制面板要收拾」用的，
+        /// 而裁剪只是掉了最旧的几行，选中的那行多半还在。
+        /// </summary>
+        public void Trim(FeedList List, int Keep) { }
+
         public void Clear(FeedList List)
         {
             try

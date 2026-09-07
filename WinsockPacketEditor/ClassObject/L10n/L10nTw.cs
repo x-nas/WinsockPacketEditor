@@ -270,6 +270,7 @@ namespace WinsockPacketEditor
             d["StartForm.MultipleOpen.Text"] = "配置資料庫的路徑以實現軟體多開";
             d["StartForm.Database.Loaded"] = "已載入資料庫 :";
             d["WareHouse.Trimmed"] = "倉庫超過上限 {0} 筆，已捨棄最舊的 {1} 筆";
+            d["List.QueueDropped"] = "待入列佇列超過上限，已捨棄 {0} 筆（擷取速率高過介面搬運速率）";
             d["StartForm.LearnMore"] = "瞭解更多";
             d["StartForm.Tutorials"] = "軟體使用教程";
             d["StartForm.OfficialWebsite"] = "官方網站";
