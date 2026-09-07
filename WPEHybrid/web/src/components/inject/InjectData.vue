@@ -650,17 +650,12 @@ defineExpose({ onCleared })
   125% 缩放下这一屏只有约 564px 可用，而它要 626px）。
 */
 @media (max-height: 760px) {
-  .grid { min-height: 170px; }
+  .grid { min-height: 150px; }
   .lower { min-height: 140px; }
-  .st-c { padding: 3px 11px; }
-  .st-c .v { font-size: 15px; }
 }
 
 @media (max-height: 660px) {
-  .grid { min-height: 140px; }
+  .grid { min-height: 120px; }
   .lower { min-height: 120px; }
-  .st-c { padding: 2px 10px; }
-  .st-c .v { font-size: 14px; line-height: 1.15; }
-  .st-c .z { line-height: 1.15; }
 }
 </style>

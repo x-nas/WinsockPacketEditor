@@ -913,21 +913,13 @@ async function runAccept(): Promise<void> {
   一滚就等于把正在看的那半屏推走了。滚动条只配当地板，不配当方案。
 */
 @media (max-height: 760px) {
-  .grid { min-height: 170px; }
+  .grid { min-height: 150px; }
   .lower { min-height: 140px; }
-
-  /* 统计格是这一屏最大的固定块（两行 126px），先收它 */
-  .st-c { padding: 3px 11px; }
-  .st-c .v { font-size: 15px; }
 }
 
 @media (max-height: 660px) {
-  .grid { min-height: 140px; }
+  .grid { min-height: 120px; }
   .lower { min-height: 120px; }
-
-  .st-c { padding: 2px 10px; }
-  .st-c .v { font-size: 14px; line-height: 1.15; }
-  .st-c .z { line-height: 1.15; }
 }
 
 /* ▼▼▼ Dev 样式：发布前一并删掉 ▼▼▼ */
