@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -582,13 +581,6 @@ namespace WPEHybrid
                 }));
             }
 
-            /*
-                诊断：模态移动循环的进出。拖标题栏 / 拉边框都会走这一对消息，
-                中间那段时间里 WM_TIMER 照常派发 —— 定时器的耗时就是拖动的顿挫。
-            */
-            if (m.Msg == WM_ENTERSIZEMOVE) { this.BeginMoveProbe(); }
-            else if (m.Msg == WM_EXITSIZEMOVE && this.inMoveLoop) { this.EndMoveProbe(); }
-
             base.WndProc(ref m);
 
             if (m.Msg != WM_NCHITTEST || (int)m.Result != HTCLIENT)
@@ -799,96 +791,12 @@ namespace WPEHybrid
         private bool sendWasRunning;
         private bool robotWasRunning;
 
-        #region//拍耗时实测（临时诊断，发布前删；见 CLAUDE.md「拖窗口时的 1 Hz 顿挫」）
-
-        /*
-            要回答的问题：拖标题栏时那个「每秒卡一下」是不是统计拍造成的。
-
-            为什么会是它：Forms.Timer 是挂在 <b>UI 线程</b>上的 WM_TIMER，而拖标题栏会让
-            窗口进入 Windows 的<b>模态移动循环</b> —— 那个循环照常派发 WM_TIMER，
-            于是这一拍是在拖动过程中执行的，它花多久拖动就停多久。
-
-            量法：拖动期间把两条定时器的每一拍都记下来，松手时（WM_EXITSIZEMOVE）
-            汇总成<b>一行</b>日志。一拍一条会把系统日志刷爆，而且拖动本身就那么几秒。
-        */
-
-        private const int WM_ENTERSIZEMOVE = 0x0231;
-        private const int WM_EXITSIZEMOVE = 0x0232;
-
-        /// <summary>正在拖动 / 缩放窗口（在模态移动循环里）。</summary>
-        private bool inMoveLoop;
-
-        private readonly Stopwatch swTick = new Stopwatch();
-        private DateTime moveBeganAt;
-
-        //拖动期间的统计拍：次数 / 最慢一拍的总耗时 / 那一拍的分段明细
-        private int mvStatN;
-        private double mvStatMax;
-        private string mvStatWorst = string.Empty;
-
-        //拖动期间的搬运拍（10ms 那条）：次数 / 最慢一拍 / 累计
-        private int mvFlushN;
-        private double mvFlushMax;
-        private double mvFlushSum;
-
-        /// <summary>单拍超过它就单独记一条，拖不拖动都记 —— 用来看平时的基线。</summary>
-        private const double SlowStatMs = 5;
-
-        /*
-            进代理 / 注入模式那一下的耗时。
-
-            那一刻做的事：EnsureProxyConfigLoaded（8 份列表从库里读 + 取本机 IP +
-            挂执行器 + 注册快捷键 + 起远程管理）→ FeedPump.MarkAllDirty() →
-            紧接着的搬运拍要把<b>14 份列表整表</b>推过桥。
-            哪一段占大头得量出来，别猜。
-        */
-        private DateTime probeEnterAt = DateTime.MinValue;
-        private DateTime probeEnterUntil = DateTime.MinValue;
-
-        private void BeginMoveProbe()
-        {
-            this.inMoveLoop = true;
-            this.moveBeganAt = DateTime.Now;
-            this.mvStatN = 0;
-            this.mvStatMax = 0;
-            this.mvStatWorst = string.Empty;
-            this.mvFlushN = 0;
-            this.mvFlushMax = 0;
-            this.mvFlushSum = 0;
-        }
-
-        private void EndMoveProbe()
-        {
-            this.inMoveLoop = false;
-
-            double secs = (DateTime.Now - this.moveBeganAt).TotalSeconds;
-
-            Operate.DoLog("拖动实测", string.Format(
-                "拖了 {0:0.0}s ｜ 统计拍 {1} 次，最慢 {2:0.0}ms（{3}）｜ 搬运拍 {4} 次，最慢 {5:0.0}ms，合计 {6:0}ms",
-                secs,
-                this.mvStatN,
-                this.mvStatMax,
-                string.IsNullOrEmpty(this.mvStatWorst) ? "-" : this.mvStatWorst,
-                this.mvFlushN,
-                this.mvFlushMax,
-                this.mvFlushSum));
-        }
-
-        #endregion
-
         private async void OnStatTick(object sender, EventArgs e)
         {
-            //诊断：这一拍每段花了多久。tSync 是「await 之前」，也就是真正堵住消息循环的那一截
-            var sw = Stopwatch.StartNew();
-            double tStat = 0, tUdp = 0, tSync = 0;
-
             try
             {
                 Operate.ProxyConfig.Proxy.RefreshStatInfo();
-                tStat = sw.Elapsed.TotalMilliseconds;
-
                 Operate.ProxyConfig.Proxy.CloseUDPTimeOut();
-                tUdp = sw.Elapsed.TotalMilliseconds - tStat;
 
                 /*
                     发送列表在跑时，三个计数是在后台线程上就地累加的 ——
@@ -931,8 +839,6 @@ namespace WPEHybrid
 
                 this.robotWasRunning = robotRunning;
 
-                tSync = sw.Elapsed.TotalMilliseconds;
-
                 //里面要查 IP 归属地，是异步的；这一拍慢一点不影响上面两个
                 await Operate.ProxyConfig.Account.RefreshAuthList();
             }
@@ -941,39 +847,11 @@ namespace WPEHybrid
                 //async void：await 之后抛的异常不会被 WinForms 兜住，必须自己捕获
                 Operate.DoLog(nameof(OnStatTick), ex);
             }
-            finally
-            {
-                /*
-                    ⚠️ total 跨过了 await，里面含<b>等 IP 归属地的时间</b>，不全是占着 UI 线程；
-                    真正堵住消息循环的是 sync 那一截，加上 await 回来之后重建 lstAuthInfo 的部分
-                    （那部分也在 UI 线程上，落在 total − sync 里，与等待混在一起分不开）。
-                */
-                double total = sw.Elapsed.TotalMilliseconds;
-
-                string detail = string.Format(
-                    "stat {0:0.0} / udp {1:0.0} / sync {2:0.0} / total {3:0.0}ms",
-                    tStat, tUdp, tSync, total);
-
-                if (this.inMoveLoop)
-                {
-                    this.mvStatN++;
-
-                    if (total > this.mvStatMax)
-                    {
-                        this.mvStatMax = total;
-                        this.mvStatWorst = detail;
-                    }
-                }
-
-                if (total > SlowStatMs) { Operate.DoLog("统计拍慢", detail); }
-            }
         }
+
 
         private void OnFlushTick(object sender, EventArgs e)
         {
-            //诊断：Restart 是几十纳秒，无条件量；记不记日志才是有条件的
-            this.swTick.Restart();
-
             try
             {
                 this.timerFlush.Stop();
@@ -992,28 +870,6 @@ namespace WPEHybrid
             finally
             {
                 this.timerFlush.Start();
-
-                double ms = this.swTick.Elapsed.TotalMilliseconds;
-
-                if (this.inMoveLoop)
-                {
-                    this.mvFlushN++;
-                    this.mvFlushSum += ms;
-
-                    if (ms > this.mvFlushMax) { this.mvFlushMax = ms; }
-                }
-
-                /*
-                    进模式之后的三秒：慢拍逐条记。
-                    MarkAllDirty 之后的第一拍要把 14 份列表整表序列化推过桥，
-                    如果「进代理模式卡一秒」是它，这里会看得一清二楚。
-                */
-                if (ms > 5 && DateTime.Now < this.probeEnterUntil)
-                {
-                    Operate.DoLog("进模式·搬运拍", string.Format(
-                        "进模式后 +{0:0}ms，这一拍 {1:0.0}ms",
-                        (DateTime.Now - this.probeEnterAt).TotalMilliseconds, ms));
-                }
             }
         }
 
@@ -1336,22 +1192,8 @@ namespace WPEHybrid
                 */
                 Operate.SystemConfig.SelectMode = Operate.SystemConfig.SystemMode.Proxy;
 
-                //诊断：整段有多久，以及后面三秒里搬运拍慢在哪
-                var swEnter = Stopwatch.StartNew();
-
                 EnsureProxyConfigLoaded();
-                double tCfg = swEnter.Elapsed.TotalMilliseconds;
-
                 FeedPump.MarkAllDirty();
-
-                this.probeEnterAt = DateTime.Now;
-                this.probeEnterUntil = this.probeEnterAt.AddSeconds(3);
-
-                Operate.DoLog("进模式·桥", string.Format(
-                    "enterProxyMode 配置 {0:0.0} / 标脏 {1:0.0} / 合计 {2:0.0}ms",
-                    tCfg,
-                    swEnter.Elapsed.TotalMilliseconds - tCfg,
-                    swEnter.Elapsed.TotalMilliseconds));
 
                 return new { ok = true };
             });
@@ -5465,10 +5307,6 @@ namespace WPEHybrid
 
             this.proxyLoaded = true;
 
-            //诊断：这一路每段花了多久（见「进模式那一秒」）
-            var swLoad = Stopwatch.StartNew();
-            double tLoad = 0, tNic = 0, tExec = 0, tHotkey = 0, tRemote = 0;
-
             try
             {
                 /*
@@ -5495,8 +5333,6 @@ namespace WPEHybrid
                 Operate.ProxyConfig.Proxy.LoadWhiteList_FromDB();
                 Operate.ProxyConfig.Proxy.LoadBlackList_FromDB();
 
-                tLoad = swLoad.Elapsed.TotalMilliseconds;
-
                 /*
                     监听地址要有可选的本机 IP，InitProxyServer 会取 ProxyServerIP[0]。
 
@@ -5511,8 +5347,6 @@ namespace WPEHybrid
                     catch (Exception ex) { Operate.DoLog("EnsureProxyConfigLoaded.IP", ex); }
                 });
 
-                tNic = swLoad.Elapsed.TotalMilliseconds - tLoad;
-
                 /*
                     ⚠️ 发送列表 / 机器人列表的执行器要在这里挂上 DoWork。
 
@@ -5522,12 +5356,8 @@ namespace WPEHybrid
                 */
                 Operate.SystemConfig.InitListExecute();
 
-                tExec = swLoad.Elapsed.TotalMilliseconds - tLoad - tNic;
-
                 //全局快捷键要挂在一个窗口句柄上，WinForms 是 ProxyModeForm_Load 里做的；派发在 WndProc 的 WM_HOTKEY 分支
                 Operate.SystemConfig.InitHotKeys(this.Handle);
-
-                tHotkey = swLoad.Elapsed.TotalMilliseconds - tLoad - tNic - tExec;
 
                 /*
                     远程管理要跟着进代理模式一起起来。
@@ -5537,8 +5367,6 @@ namespace WPEHybrid
                     于是勾过「启用」的用户重启外壳后管理台并不在线，而设置页上写着「运行中」。
                 */
                 Operate.SystemConfig.StartRemoteMGT();
-
-                tRemote = swLoad.Elapsed.TotalMilliseconds - tLoad - tNic - tExec - tHotkey;
 
                 /*
                     远程管理台首页的 CPU / 内存来自这个性能计数器（SystemInfo_Controller
@@ -5553,12 +5381,6 @@ namespace WPEHybrid
             catch (Exception ex)
             {
                 Operate.DoLog(nameof(EnsureProxyConfigLoaded), ex);
-            }
-            finally
-            {
-                Operate.DoLog("进模式·加载", string.Format(
-                    "读库 {0:0.0} / 取本机IP {1:0.0} / 挂执行器 {2:0.0} / 快捷键 {3:0.0} / 远程管理 {4:0.0} / 合计 {5:0.0}ms",
-                    tLoad, tNic, tExec, tHotkey, tRemote, swLoad.Elapsed.TotalMilliseconds));
             }
         }
 
