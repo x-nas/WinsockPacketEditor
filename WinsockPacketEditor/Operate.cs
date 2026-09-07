@@ -11649,6 +11649,20 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
+                        /*
+                            ⚠️ <b>空表直接返回，别调 Clear()。</b>
+
+                            BindingList.Clear() 是<b>无条件</b>抛 ListChanged(Reset) 的 ——
+                            表本来就空也照抛。而 FeedPump 订阅着这个事件，一抛就把
+                            FeedList.Auth 标脏，下一个 10ms 搬运拍就把整张认证表
+                            （空的）序列化推过桥、前端跟着更新一次副本。
+
+                            这个方法在代理<b>没启动</b>时被 RefreshAuthList 每秒调一次，
+                            于是闲着的时候每秒也在推一条空表。量过：这一拍总共才 0.1ms，
+                            不是性能问题，但那是一次完全没有信息量的跨进程往返。
+                        */
+                        if (ProxyConfig.Account.lstAuthInfo.Count == 0) { return; }
+
                         ProxyConfig.Account.lstAuthInfo.Clear();
                     }
                     catch (Exception ex)
@@ -12063,19 +12077,41 @@ namespace WinsockPacketEditor
                 {
                     try
                     {
-                        var onlineAccounts = Operate.ProxyConfig.Account.lstAccountInfo?
-                            .Where(ai => ai != null && ai.IsOnLine)
-                            .ToList();
+                        var all = Operate.ProxyConfig.Account.lstAccountInfo;
 
-                        if (onlineAccounts?.Count > 0)
+                        if (all == null) { return; }
+
+                        /*
+                            先扫一遍，<b>真有在线的才分配那个 List</b>。
+
+                            原来是 Where(...).ToList()：代理没启动时这个方法被
+                            RefreshAuthList 每秒调一次，于是一个在线账号都没有也照样
+                            每秒扫一遍全表 + 分配一个 List。账号是拿来卖的，几万个是真实规模。
+
+                            快照仍然要留着 —— 下面的循环会改属性并推行，
+                            边遍历 BindingList 边动它不是好习惯。
+                        */
+                        List<AccountInfo> onlineAccounts = null;
+
+                        for (int i = 0; i < all.Count; i++)
                         {
-                            foreach (var ai in onlineAccounts)
-                            {
-                                ai.IsOnLine = false;
+                            AccountInfo one = all[i];
 
-                                //同 RefreshAuthList：改属性不触发 ListChanged，得自己推
-                                ProxyConfig.Account.PushAccountRow(ai);
-                            }
+                            if (one == null || !one.IsOnLine) { continue; }
+
+                            if (onlineAccounts == null) { onlineAccounts = new List<AccountInfo>(); }
+
+                            onlineAccounts.Add(one);
+                        }
+
+                        if (onlineAccounts == null) { return; }
+
+                        foreach (var ai in onlineAccounts)
+                        {
+                            ai.IsOnLine = false;
+
+                            //同 RefreshAuthList：改属性不触发 ListChanged，得自己推
+                            ProxyConfig.Account.PushAccountRow(ai);
                         }
                     }
                     catch (Exception ex)
