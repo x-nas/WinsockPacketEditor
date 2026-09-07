@@ -19,7 +19,17 @@ export interface LangDef {
   /** 下拉里显示的名字。<b>一律用该语言自己的写法</b> —— 切到看不懂的语言时，
    *  「English」「日本語」这样的自称是唯一还认得出来的东西 */
   label: string
-  /** 标题栏 chip 上那两个字母。定宽，切换时整排窗口按钮才不会平移 */
+  /**
+   * 两个字母的身份标记，显示在下拉每一项的名字前面。
+   *
+   * 原先它在标题栏的语言 chip 上（那颗按钮已经换成设置齿轮、标签也去掉了），
+   * 现在只剩下拉在用，作用有两个：给一列对得齐的视觉锚点，
+   * 以及让 CyberSelect 的「敲首字母跳到下一个匹配项」在 CJK 名字上也能用
+   * —— 七个首字母 e/j/k/r/v/c/t 各不相同。
+   *
+   * ⚠️ <b>它不是排序键</b>：CN / TW 是地区码而不是语言码，
+   * 按它排会把两种中文拆到列表两头。排序看 culture，见 LANGS 上面那段。
+   */
   short: string
   /**
    * 这门语言的字比汉字宽多少。
@@ -33,15 +43,41 @@ export interface LangDef {
   wide?: boolean
 }
 
+/*
+  ⚠️ <b>按 BCP-47 语言标记（culture）的字母序排</b>：
+  en-US · ja-JP · ko-KR · ru-RU · vi-VN · zh-CN · zh-TW。
+
+  这是语言选择器的通行做法，选它有三条实在的理由：
+
+  · <b>加语言时没有争议</b>。按什么排一旦要靠"觉得"，每加一种都要重新讨论一次；
+    按标记排则位置是算出来的 —— 插进它该在的地方就行。
+  · <b>不以某一种语言为中心</b>。原先是简体在最前（产品的默认语言），
+    那是"我的语言优先"的排法，不是国际惯例。
+  · <b>同一门语言的变体天然相邻</b>。zh-CN 与 zh-TW 排在一起，
+    不会被别的语言隔开 —— 按显示名或按 short 排都会把它俩拆散。
+
+  <b>顺序不是随手排的，别按"看着顺眼"重排。</b>
+  short 那一列（EN JA KO RU VI CN TW）因此不是字母序 —— 它是身份标记不是排序键，
+  CN / TW 是地区码、不是语言码，拿它排会把两种中文拆开。
+*/
 export const LANGS: LangDef[] = [
-  { code: 'zh', culture: 'zh-CN', label: '简体中文', short: 'CN' },
-  { code: 'tw', culture: 'zh-TW', label: '繁體中文', short: 'TW' },
   { code: 'en', culture: 'en-US', label: 'English', short: 'EN', wide: true },
   { code: 'ja', culture: 'ja-JP', label: '日本語', short: 'JA' },
   { code: 'ko', culture: 'ko-KR', label: '한국어', short: 'KO' },
-  { code: 'vi', culture: 'vi-VN', label: 'Tiếng Việt', short: 'VI', wide: true },
   { code: 'ru', culture: 'ru-RU', label: 'Русский', short: 'RU', wide: true },
+  { code: 'vi', culture: 'vi-VN', label: 'Tiếng Việt', short: 'VI', wide: true },
+  { code: 'zh', culture: 'zh-CN', label: '简体中文', short: 'CN' },
+  { code: 'tw', culture: 'zh-TW', label: '繁體中文', short: 'TW' },
 ]
+
+/**
+ * 认不出来时回落到哪一种。
+ *
+ * <b>不能写成 LANGS[0]</b> —— 那是"列表第一项"，而列表现在按语言标记排序，
+ * 第一项是 English。回落必须钉在<b>简体</b>上：它是产品的默认语言，
+ * 也是 base.ts 里 zh 字段的那一份（其余语言缺键时最终也落回它）。
+ */
+const FALLBACK: LangDef = LANGS.find((x) => x.code === 'zh')!
 
 /**
  * C# 给的 "ja-JP" / "en-US" / "zh-TW" → 这里的短码。认不出来的一律回简体。
@@ -75,5 +111,5 @@ export function cultureOf(code: Lang): string {
 }
 
 export function defOf(code: Lang): LangDef {
-  return LANGS.find((x) => x.code === code) || LANGS[0]
+  return LANGS.find((x) => x.code === code) || FALLBACK
 }
