@@ -33,7 +33,12 @@ const f = ref({
 const GROUPS = [
   { key: 'bk.grp.system', items: [['systemConfig', 'bk.systemConfig'], ['injectSet', 'bk.injectSet']] },
   { key: 'bk.grp.proxy', items: [['proxySet', 'bk.proxySet'], ['proxyAccount', 'bk.proxyAccount'], ['whiteList', 'bk.whiteList'], ['blackList', 'bk.blackList'], ['proxyMapping', 'bk.proxyMapping']] },
-  { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList'], ['autoStores', 'bk.autoStores'], ['wareHouse', 'bk.wareHouse']] },
+  /*
+    ⚠️ 第三个元素是<b>悬停说明</b>（可选）。仓库那一项要交代「可能很大」，
+    但把这句写进标签会在俄语下把格子撑破 —— 实测「Хранилище (с пакетами…」被截掉了尾巴。
+    标签只留名字，说明交给提示（自绘的那套，见 tooltip.ts）。
+  */
+  { key: 'bk.grp.lists', items: [['filterList', 'bk.filterList'], ['sendList', 'bk.sendList'], ['robotList', 'bk.robotList'], ['autoStores', 'bk.autoStores'], ['wareHouse', 'bk.wareHouse', 'bk.wareHouseHint']] },
   { key: 'bk.grp.wpc', items: [['wpcServer', 'bk.wpcServer'], ['wpcNotice', 'bk.wpcNotice']] },
 ] as const
 
@@ -77,7 +82,14 @@ async function importBackup(): Promise<void> {
       <div class="groups">
         <div v-for="g in GROUPS" :key="g.key" class="g">
           <div class="gt">{{ t(g.key) }}</div>
-          <button v-for="[k, lb] in g.items" :key="k" class="chk" :class="{ on: f[k] }" @click="f[k] = !f[k]"><i />{{ t(lb) }}</button>
+          <button
+            v-for="[k, lb, tip] in g.items"
+            :key="k"
+            class="chk"
+            :class="{ on: f[k] }"
+            :title="tip ? t(tip) : undefined"
+            @click="f[k] = !f[k]"
+          ><i />{{ t(lb) }}</button>
         </div>
       </div>
 
@@ -93,9 +105,56 @@ async function importBackup(): Promise<void> {
 </template>
 
 <style scoped>
-.groups { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 20px; }
-.g { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border: 1px solid var(--border); background: rgb(var(--inset-rgb) / 20%); }
+/*
+  ⚠️ <b>两列走多列流式（columns），不是 2×2 网格。</b>
+
+  网格的行高由该行最高的那组撑：四组里「系统运行」与「WPC 配置」各只有 2 项，
+  却被拉成和 5 项的那两组一样高（实测各 181px，四组一共 380px）——
+  <b>一半是空的</b>。1024×640（也就是 1280×800 @125%）下内容 483px、可用 403px，
+  溢出 80px，弹窗就出滚动条了。
+
+  多列会按高度自己平衡：短的两组各自贴着长的那组下面填进去，实测降到约 280px。
+  代价是<b>组的上下沿不再左右对齐</b> —— 这一屏是一堆勾选框，对齐没有信息量，
+  比空半格划算。
+
+  break-inside: avoid 是必须的：不加的话一组会被拦腰断到下一列去。
+*/
+.groups {
+  columns: 2;
+  column-gap: 10px;
+  padding: 4px 20px 0;
+  /* 每列最后一组的 margin-bottom 抵掉，否则底下白多 10px（这一屏正好差这么多） */
+  margin-bottom: -10px;
+}
+
+.g {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  background: rgb(var(--inset-rgb) / 20%);
+  break-inside: avoid;
+}
 .gt { font-family: var(--share); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 2px; }
-.acts { display: flex; align-items: center; gap: 8px; padding: 10px 20px 4px; }
+.acts { display: flex; align-items: center; gap: 8px; padding: 11px 20px 4px; }   /* 上边距是量着定的：日语最长的那几条差 1px 就会出滚动条 */
 .acts .grow { flex: 1; }
+
+/*
+  矮视口再收一档 —— 与启动页、数据页那两处同一个思路。
+
+  弹窗高度是 SettingsModal 的 `calc(100vh - 120px)`，而窗口的 CSS 高 = 设备像素 ÷ 缩放比：
+  1280×800 在 100% 下是 800、125% 下 640、<b>150% 下只有 533</b>。
+  前两档收完之后是 0 溢出；150% 那一档 14 个勾选项确实塞不下，
+  这一档只把它压到「滚一点点」，滚动条在这儿当地板是认的
+  —— 把窗口拉大或最大化就又不用滚了（1080 ÷ 1.5 = 720，够）。
+*/
+@media (max-height: 620px) {
+  .bk .hint { margin: 2px 0; }
+  .groups { padding: 0 20px; }
+  .g { gap: 5px; padding: 8px 12px; margin-bottom: 7px; }
+  .groups { margin-bottom: -7px; }
+  .acts { padding: 10px 20px 2px; }
+}
 </style>

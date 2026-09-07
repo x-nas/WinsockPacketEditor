@@ -1197,7 +1197,8 @@ export const DICT = {
   'bk.robotList': { zh: '机器人列表', en: 'Robot list' },
   'bk.autoStores': { zh: '自动入库规则', en: 'Auto-store rules' },
   //⚠️ 这一项默认<b>不勾</b>：仓储封包是原始字节，几万条就是十几 MB，文案里点明了
-  'bk.wareHouse': { zh: '仓库（含封包，可能很大）', en: 'WareHouse (with packets, can be large)' },
+  'bk.wareHouse': { zh: '仓库', en: 'WareHouse' },
+  'bk.wareHouseHint': { zh: '仓储封包是原始字节，自动入库开着抓一阵能到几万条 —— 备份会因此大出很多，所以默认不勾', en: 'Stored packets are raw bytes; with auto-store on this can reach tens of thousands and bloat the backup, so it is off by default' },
   'bk.wpcServer': { zh: '节点与规则', en: 'Servers and rules' },
   'bk.wpcNotice': { zh: '公告', en: 'Notices' },
   'bk.import': { zh: '导入备份', en: 'Import backup' },
