@@ -75,7 +75,25 @@ export function call<T = any>(method: string, args: Record<string, unknown> = {}
   const id = `c${++seq}`
   return new Promise<T>((resolve, reject) => {
     pending.set(id, { resolve, reject })
-    webview.postMessage({ type: 'call', id, method, args })
+
+    /*
+      postMessage 抛了就把这条从在途表里摘掉再 reject。
+
+      不这么写的话，这个 Promise <b>永远不会 settle</b>：登记在先、发送在后，
+      发送失败就再也不会有 result 回来。调用方那句 await 就此挂住 ——
+      表现是「按了保存没反应、也不报错」，而 C# 侧压根没收到过这条调用。
+      （C# 那个方向有超时 + FailAllPending 兜着，这边没有，见 WebBridge.AskAsync。）
+
+      <b>刻意不加统一超时</b>：这条通道上有一批调用天生就要等人 ——
+      导入导出会弹原生文件框、账号导入还要先问密码，几分钟都算正常。
+      一刀切的超时会把这些正常路径判成失败。
+    */
+    try {
+      webview.postMessage({ type: 'call', id, method, args })
+    } catch (err) {
+      pending.delete(id)
+      reject(err instanceof Error ? err : new Error(String(err)))
+    }
   })
 }
 

@@ -99,6 +99,11 @@ export const DOMAIN_TYPE: Record<number, string> = {
   下标就是 C# 枚举的整数值，改 C# 那个枚举的顺序时这里必须跟着改。
 
   WSARecvEx（11）与 WSARecv（10）指向同一个键 —— C# 侧也是共用一个文案键。
+
+  ⚠️ <b>这张表必须覆盖 C# 枚举的每一个取值。</b>漏掉的那个值查出来是 undefined，
+  「类型」列就是<b>一片空白</b>，而且不报任何错。21 / 22（WebSocket 请求 / 响应）
+  就这么漏过一次 —— 它们由 SunnyNetCallback 在代理模式的 WebSocket 中间人那条路上产出，
+  平时抓 TCP/UDP 撞不上，一抓 WebSocket 就整列空。
 */
 export const PACKET_TYPE: Record<number, string> = {
   0: 'pt.ws1Send',
@@ -122,6 +127,8 @@ export const PACKET_TYPE: Record<number, string> = {
   18: 'pt.httpResp',
   19: 'pt.httpsReq',
   20: 'pt.httpsResp',
+  21: 'pt.wsReq',
+  22: 'pt.wsResp',
 }
 
 /** Operate.FilterConfig.Filter.FilterAction */

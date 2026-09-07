@@ -78,8 +78,14 @@ export function registerForm(formId: string, render: FormRenderer): void {
   forms.set(formId, render)
 }
 
-/** 当前正在渲染的弹窗（App.vue 据此挂载对应组件）。 */
-export const activeForm = shallowRef<{ id: string; arg: any } | null>(null)
+/*
+  当前正在渲染的弹窗。
+
+  <b>不导出</b>：组件不是靠读它来决定挂不挂载的 —— 各表单组件在自己的 setup 里
+  registerForm 一次，是否显示由它自己拿到的 arg 决定（见 EncryptPassword / BetaNotice）。
+  外面唯一需要知道的是「有没有弹窗开着」，那是下面的 modalOpen。
+*/
+const activeForm = shallowRef<{ id: string; arg: any } | null>(null)
 
 /**
  * 是否有模态弹窗在显示。

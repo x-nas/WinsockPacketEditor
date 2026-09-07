@@ -1,21 +1,17 @@
-// 十六进制渲染。抽成独立模块是为了让验收跑测能量到<b>与面板完全相同</b>的那份工作量
-// —— 只测桥的往返而不含格式化，量出来的数会偏乐观。
+// 十六进制渲染的共用件：每行放几个字节、列号表头、base64 → 文本。
+//
+// HexView 用的是前三个；dump 只剩验收跑测在用（面板早已换成 HexView 的格子模型，
+// 不再走整块文本）。当初抽成独立模块，是为了让跑测量到与面板<b>相同</b>的那份工作量
+// —— 那个前提现在只对「格式化本身」还成立，见 CLAUDE.md 的提醒。
 
 /** 每行默认字节数。宽度算不出来时（首帧、面板被隐藏）退回它。 */
 export const DEFAULT_PER_LINE = 16
 
 /**
- * 一行占多少个字符。
- *
- * 布局：偏移(8) + 两空格 + 十六进制(每字节 "XX " 共 3) + 一空格 + ASCII(每字节 1)
- * 也就是 11 + 4N。反过来解 N 就是 perLineFor 的算法。
- */
-export function lineChars(perLine: number): number {
-  return 11 + perLine * 4
-}
-
-/**
  * 给定可用宽度（字符数），算每行放几个字节。
+ *
+ * 一行的字符数是 <b>11 + 4N</b>：偏移(8) + 两空格 + 十六进制(每字节 "XX " 共 3)
+ * + 一空格 + ASCII(每字节 1)。下面就是反过来解这个 N。
  *
  * <b>向下取到 2 的倍数。</b>这个粒度改过两轮，理由都是同一条线：
  *   8  最早取 8，是为了「能心算第几列是第几字节」；
@@ -84,82 +80,4 @@ export function dump(b64: string | null, perLine: number = DEFAULT_PER_LINE): st
 
 export function byteLen(b64: string | null): number {
   return b64 ? atob(b64).length : 0
-}
-
-/** dump 的一段：`d` 为真表示这一段的字节与另一份不同。 */
-export interface HexSeg {
-  t: string
-  d: boolean
-  /** 这一段是行首的偏移（行号）—— 面板把它画成与列号同一种灰，不与字节合并 */
-  o?: boolean
-}
-
-/**
- * 与 dump 排版完全一致，但把结果切成若干段，标出<b>与 other 不同</b>的字节。
- *
- * 【为什么不是逐字节一个 span】改写后的包常常是整段连续不同（换包动作会替换整个包），
- * 逐字节切会给 4KB 的包造出八千个节点。这里把相邻同状态的字符<b>合并成一段</b>，
- * 于是「整包都变了」只出两三段，「改了三个字节」也只出几段 —— DOM 规模跟
- * <b>差异块的个数</b>成正比，而不是跟包长成正比。
- *
- * 【长度不等也算差异】换包会改变包长，长出来的那一截在另一份里根本不存在，
- * 按「不同」标出来才说得通。
- *
- * other 为 null 时整份都标成相同 —— 没有可比的对象，不是「全都变了」。
- */
-export function dumpDiff(
-  b64: string | null,
-  other: string | null,
-  perLine: number = DEFAULT_PER_LINE,
-): HexSeg[] {
-  if (!b64) return []
-
-  const n = perLine > 0 ? perLine : DEFAULT_PER_LINE
-  const bin = atob(b64)
-  const ref = other ? atob(other) : null
-  const len = bin.length
-  const hexWidth = n * 3
-
-  const segs: HexSeg[] = []
-
-  //合并相邻同状态的字符，段数才不会随包长膨胀
-  function push(t: string, d: boolean, o = false): void {
-    if (!t) return
-
-    const last = segs[segs.length - 1]
-    //行号自成一段：它要用另一种颜色画，不能并进前后的字节里
-    if (last && last.d === d && !o && !last.o) { last.t += t; return }
-
-    segs.push(o ? { t, d, o: true } : { t, d })
-  }
-
-  const differs = (i: number): boolean => {
-    if (!ref) return false
-    return i >= ref.length || ref.charCodeAt(i) !== bin.charCodeAt(i)
-  }
-
-  for (let off = 0; off < len; off += n) {
-    const end = Math.min(off + n, len)
-
-    push(off.toString(16).padStart(8, '0').toUpperCase() + '  ', false, true)
-
-    let width = 0
-
-    for (let i = off; i < end; i++) {
-      push(bin.charCodeAt(i).toString(16).padStart(2, '0').toUpperCase() + ' ', differs(i))
-      width += 3
-    }
-
-    //最后一行不满时补齐，ASCII 栏才对得上
-    push(' '.repeat(hexWidth - width) + ' ', false)
-
-    for (let i = off; i < end; i++) {
-      const c = bin.charCodeAt(i)
-      push(c >= 0x20 && c < 0x7f ? bin[i] : '.', differs(i))
-    }
-
-    if (end < len) push('\n', false)
-  }
-
-  return segs
 }

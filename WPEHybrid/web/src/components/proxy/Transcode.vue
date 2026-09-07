@@ -193,7 +193,7 @@ function useAsInput(v: string): void {
 
 /* 成对的两行：原文行与 ANSI（十六进制）行，后者字色压一档，扫下来能看出成对 */
 .k { font-family: var(--share); font-size: 11px; letter-spacing: .1em; color: var(--cyan); }
-.r.ansi .k { color: #7cc4d8; }
+.r.ansi .k { color: var(--cyan-soft); }
 
 .v {
   min-width: 0;

@@ -10,6 +10,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    // 增量信息也丢进 node_modules，别在 web/ 根目录留一个没人看的 .tsbuildinfo
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
     "jsx": "preserve",
     "strict": true,
     "noUnusedLocals": true,

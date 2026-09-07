@@ -112,13 +112,3 @@ export async function setLang(next: Lang): Promise<void> {
   }
 }
 
-/**
- * 在清单里顺次切到下一种。
- *
- * 留着它是因为标题栏的语言 chip 在改成下拉之前是「点一下切一种」，
- * 而键盘用户仍然可以只按一下就换语言（下拉要 Enter 展开再选）。
- */
-export async function cycleLang(): Promise<void> {
-  const i = LANGS.findIndex((x) => x.code === lang.value)
-  await setLang(LANGS[(i + 1) % LANGS.length].code)
-}

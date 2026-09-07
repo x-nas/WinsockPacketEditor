@@ -8,6 +8,13 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "composite": true,
+    /*
+      这个子工程只是拿来类型检查 vite.config.ts 的，产物没人要。
+      composite 工程<b>不允许 noEmit</b>（TS 会报 TS6310），所以改成把产物丢进 node_modules，
+      别让它落在 web/ 下 —— 原先它会生成 vite.config.js 与 vite.config.d.ts，
+      而 Vite 找配置时 <b>.js 排在 .ts 前面</b>，从此改 .ts 不重新编译就悄悄不生效，且不报任何错。
+    */
+    "outDir": "./node_modules/.tmp/node-config",
     "strict": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo"
   },

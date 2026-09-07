@@ -1,3 +1,8 @@
 node_modules/
 dist/
 *.tsbuildinfo
+
+# vue-tsc -b 曾经把 vite.config.ts 编译成这两个文件丢在这儿。
+# Vite 找配置时 .js 排在 .ts 前面，留着它们等于让旧配置悄悄盖住新配置。
+vite.config.js
+vite.config.d.ts

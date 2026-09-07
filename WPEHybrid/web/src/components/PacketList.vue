@@ -130,8 +130,13 @@ function proxyColumns() {
     整列恒为 0 不只是白占宽度，0 看着还像一个真实的会话号，比空着更误导。
     将来给 ProxySession 补上自增会话 ID 时再加回来。
   */
-  //类型不给固定色 —— 它按「请求 / 响应」分色，见 cellClass
-  { key: 'Type', title: t('col.type'), w: 96, align: 'center', halign: 'center' },
+  /*
+    类型不给固定色 —— 它按「请求 / 响应」分色，见 cellClass。
+
+    宽度比注入模式那份多 16px：代理模式会出现 WebSocket 请求 / 响应
+    （SunnyNet 的 WebSocket 中间人那条路），是全部类型名里最长的一个，96 装不下。
+  */
+  { key: 'Type', title: t('col.type'), w: 112, align: 'center', halign: 'center' },
   { key: 'DomainType', title: t('col.proto'), w: 82, align: 'center', halign: 'center', cls: 'c-meta' },
   { key: 'ClientAddr', title: t('col.client'), w: 158, cls: 'c-local' },
   { key: 'ClientLocation', title: t('col.clientLoc'), w: 88, cls: 'c-local-dim', flag: true },
@@ -643,21 +648,25 @@ defineExpose({ scrollToBottom, scrollToIndex })
 .pl-cell.c-local { color: var(--dim3); }
 .pl-cell.c-local-dim { color: #64748b; }
 
-.pl-cell.c-remote { color: #00d4ff; }
-.pl-cell.c-remote-dim { color: #0e7490; }
+/*
+  远端侧这一对<b>必须走令牌</b>：#00d4ff 就是深色的 --cyan，白底上只有 1.77，
+  整列服务端地址等于看不见（浅色模式上线时漏了这一处，后来量出来的）。
+*/
+.pl-cell.c-remote { color: var(--cyan); }
+.pl-cell.c-remote-dim { color: var(--remote2); }
 
 /* 域名是这张表里最常被读的一列，给最高亮度 */
 .pl-cell.c-domain { color: var(--bright); }
 
 /* 方向：出去的琥珀、回来的淡紫。两者与青、绿都拉得开，不会跟别的列混 */
-.pl-cell.c-req { color: #eab308; }
+.pl-cell.c-req { color: var(--amber); }
 .pl-cell.c-resp { color: var(--acc-violet); }
 
 /*
   数据列：代码雨绿 + 极淡辉光。
 
-  #35e07a 比主色 --green(#00ff88) 更偏正绿、压暗一档 —— 这是整屏最密的文字，
-  满饱和的荧光绿读十六进制串很累。它在 #12121a 上对比度约 8.4:1，远高于 AA 的 4.5。
+  --acc-data 深色下是 #35e07a：比主色 --green(#00ff88) 更偏正绿、压暗一档 ——
+  这是整屏最密的文字，满饱和的荧光绿读十六进制串很累。
   辉光只加在这一列：其余列要精确辨认字形，发光会把边缘糊掉。
 */
 /*
@@ -721,7 +730,7 @@ defineExpose({ scrollToBottom, scrollToIndex })
 .pl-row.hit .pl-cell { color: inherit; }
 
 .pl-cell.c-data {
-  color: #35e07a;
+  color: var(--acc-data);
   text-shadow: 0 0 6px rgb(var(--green-rgb) / 22%);
 }
 

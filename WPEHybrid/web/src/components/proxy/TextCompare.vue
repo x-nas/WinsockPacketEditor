@@ -458,7 +458,7 @@ const TYPE_KEY = { ins: 'tc.inserted', del: 'tc.deleted', mod: 'tc.modified' } a
 
 .no { color: var(--dim); font-variant-numeric: tabular-nums; }
 .pos, .len, .cnt { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--cyan); }
-.va { font-family: var(--mono); color: #f0a3b8; }
+.va { font-family: var(--mono); color: var(--pink); }
 .vb { font-family: var(--mono); color: var(--acc-green2); }
 .seq { font-family: var(--mono); color: var(--acc-green2); }
 .pos2 { font-family: var(--mono); font-size: 12px; color: var(--dim3); }

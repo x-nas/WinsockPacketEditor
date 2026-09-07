@@ -99,7 +99,6 @@
       : { Found: true, Id: 507, Index: 7, Offset: 9, Length: 6, Error: null }),
     getInjectStats: () => ({ queue: 3, list: 40, total: 1280, send: 320, sendTo: 12, recv: 640, recvFrom: 8, wsaSend: 180, wsaSendTo: 0, wsaRecv: 120, wsaRecvFrom: 0, filterExecute: 356, filterPacket: 44, totalSend: 262144, totalRecv: 1048576, autoClear: true, autoClearValue: 5000 }),
     getInjectStatus: () => (window.__inj || { ok: true, state: 'idle', pid: 0, name: '', is64: false, hooked: false, dropped: 0, ws1: false, ws2: false, msws: false }),
-    getLogCount: (a) => ({ count: a.kind === 0 ? 3 : 0 }),
     //清空走 ask → 自绘确认框，与 C# 的 ClearLog_Dialog 一样
     clearLogs: async (a) => { const ok = await window.__ask('confirm', { title: '日志列表', content: '确定删除所有数据吗', icon: 3 }); if (ok) ls.forEach((cb) => cb({ data: { type: 'event', name: 'feed:clear', data: { list: 2 + (a.kind || 0) } } })); return { ok } },
     exportLogs: () => { window.__exported = true; return { ok: true } },
@@ -261,14 +260,29 @@
   const tool = { '#tc': TextCompare, '#xor': XorCalc, '#tr': Transcode, '#ex': ExtractData, '#stat': StatData, '#wpc': WpcConfig }[location.hash] || (settingComp ? { setup: () => () => h(settingComp, { open: true, 'onUpdate:open': () => { window.__closed = true } }) } : null)
   if (tool) { const NL = String.fromCharCode(10); textA.value = 'AA BB CC 11 22 AA BB CC' + NL + 'Hello World'; textB.value = 'AA 00 CC 11 22 AA BB CC' + NL + 'Hello there'; xorSrc.value = new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x21]) }
   if (dataPage) {
-    //走真正的 feed 通道推假数据，形状与 C# 的 ProxyRow 逐字对齐
+    /*
+      走真正的 feed 通道推假数据，形状与 C# 的 ProxyRow 逐字对齐。
+
+      两处刻意的取值，别改回去：
+
+      ① Action <b>大多数是 4（None）</b>。早先写的是「i % 7 ? 1 : 0」——
+         0 是 Replace、1 是 Intercept，<b>两个都算命中</b>，于是 40 行全是命中行。
+         命中行的格子走 .pl-row.hit .pl-cell { color: inherit }，
+         「按列分层」那套语义配色<b>一次都没被画出来过</b> ——
+         浅色模式下三列不可读就是这么漏过去的。现在只留几行命中。
+
+      ② 类型里带上 <b>21 / 22（WebSocket 请求 / 响应）</b>。
+         它们由 SunnyNetCallback 在 WebSocket 中间人那条路上产出，
+         平时抓 TCP/UDP 撞不上；PACKET_TYPE 漏了这两个值时「类型」列是空白且不报错。
+    */
     setTimeout(() => {
+      const TYPES = [9, 17, 13, 15, 21, 22];
       const rows = Array.from({ length: 40 }, (_, i) => ({
         Id: 1000 + i, Time: '14:45:' + String(i % 60).padStart(2, '0') + ':0000000', Socket: 1200 + i,
-        TheologyID: 0, Type: i % 4 === 0 ? 17 : 9, WebSocketType: 0,
+        TheologyID: 0, Type: TYPES[i % TYPES.length], WebSocketType: i % 6 >= 4 ? 1 : 0,
         ClientAddr: '10.10.10.8:' + (60000 + i), ClientLocation: '局域网', ServerAddr: '93.184.216.34:443',
         ServerLocation: '美国', ServerDomain: 'example.com', DomainType: i % 4 === 0 ? 1 : 0,
-        Len: 180 + i, Preview: '16 03 01 00 B4', Action: i % 7 === 0 ? 1 : 0,
+        Len: 180 + i, Preview: '16 03 01 00 B4', Action: i % 11 === 0 ? 1 : 4,
       }));
       ls.forEach((cb) => cb({ data: { type: 'event', name: 'feed:append', data: { list: 1, rows } } }));
     }, 400);

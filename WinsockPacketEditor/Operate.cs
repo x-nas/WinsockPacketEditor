@@ -28877,25 +28877,6 @@ namespace WinsockPacketEditor
                     }
                 }
 
-                /// <summary>这一路日志现在有多少条。前端用它决定「导出 / 清空」要不要压暗。</summary>
-                public static int GetLogCount(int Kind)
-                {
-                    try
-                    {
-                        switch ((LogKind)Kind)
-                        {
-                            case LogKind.Filter: return lstFilterLogInfo.Count;
-                            case LogKind.Proxy: return lstProxyLogInfo.Count;
-                            default: return lstLogInfo.Count;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(nameof(GetLogCount), ex);
-                        return 0;
-                    }
-                }
-
                 #endregion
 
                 #region//获取日志列表的右键菜单

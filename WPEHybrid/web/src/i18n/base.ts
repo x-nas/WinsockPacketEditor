@@ -35,11 +35,6 @@ export const DICT = {
   'win.max': { zh: '最大化', en: 'Maximize' },
   'win.restore': { zh: '还原', en: 'Restore' },
   'win.close': { zh: '退出', en: 'Exit' },
-  /*
-    语言ボタン的 title。原先写的是「切换到 English」——那是两种语言时代的说法，
-    点一下就切过去。现在是六种语言的下拉，标题只说明这颗按钮是干什么的。
-  */
-  'win.lang': { zh: '界面语言', en: 'Interface language' },
   'win.nohost': {
     zh: '不在 WebView2 宿主内 —— 请通过 WPEHybrid.exe 打开。',
     en: 'Not inside the WebView2 host — please launch WPEHybrid.exe.',
@@ -141,7 +136,6 @@ export const DICT = {
   'proxy.st.account': { zh: '在线/账号', en: 'Online/total' },
   'proxy.st.filter': { zh: '已过滤', en: 'Filtered out' },
   'proxy.st.queue': { zh: '缓存区', en: 'Queue' },
-  'proxy.st.bytes': { zh: '总流量', en: 'Total bytes' },
   'proxy.st.tcpReq': { zh: 'TCP 请求', en: 'TCP req' },
   'proxy.st.tcpResp': { zh: 'TCP 响应', en: 'TCP resp' },
   'proxy.st.udpReq': { zh: 'UDP 请求', en: 'UDP req' },
@@ -161,7 +155,6 @@ export const DICT = {
   'sp.noMatch': { zh: '没有匹配的封包', en: 'No matching packet' },
   'sp.wrapped': { zh: '已到末尾，从头继续', en: 'Reached the end, wrapped to start' },
   'sp.badRegex': { zh: '正则表达式有误', en: 'Invalid regular expression' },
-  'sp.hit': { zh: '命中', en: 'Match' },
   'sp.clear': { zh: '清除查找（Esc）', en: 'Clear search (Esc)' },
   'proxy.autoRoll': { zh: '自动滚动', en: 'Auto scroll' },
   'proxy.autoClear': { zh: '自动清理', en: 'Auto clear' },
@@ -522,14 +515,6 @@ export const DICT = {
   'flt.e.clearCells': { zh: '清空内容', en: 'Clear cells' },
 
   'flt.e.funcs': { zh: '作用于哪些封包', en: 'Applies to' },
-  'flt.fn.send': { zh: 'Send', en: 'Send' },
-  'flt.fn.recv': { zh: 'Recv', en: 'Recv' },
-  'flt.fn.sendTo': { zh: 'SendTo', en: 'SendTo' },
-  'flt.fn.recvFrom': { zh: 'RecvFrom', en: 'RecvFrom' },
-  'flt.fn.wsaSend': { zh: 'WSASend', en: 'WSASend' },
-  'flt.fn.wsaRecv': { zh: 'WSARecv', en: 'WSARecv' },
-  'flt.fn.wsaSendTo': { zh: 'WSASendTo', en: 'WSASendTo' },
-  'flt.fn.wsaRecvFrom': { zh: 'WSARecvFrom', en: 'WSARecvFrom' },
 
   'flt.e.headPh': { zh: '如 AABB 或 AA BB', en: 'e.g. AABB or AA BB' },
   //占位符直接示范各自正则允许的写法 —— 现在保存会按格式卡，光写「套接字编号」等于没说
@@ -601,7 +586,6 @@ export const DICT = {
   'acct.offline': { zh: '离线', en: 'Offline' },
   'acct.unlimited': { zh: '无限制', en: 'Unlimited' },
   'acct.never': { zh: '永不过期', en: 'Never' },
-  'acct.expired': { zh: '已过期', en: 'Expired' },
 
   //右键菜单，条目与顺序照 Operate.GetCMS_AccountList
   //与 WinForms 的 AccountList.Empty 同一句
@@ -726,6 +710,8 @@ export const DICT = {
   'pt.httpResp': { zh: 'HTTP 响应', en: 'HTTP Res' },
   'pt.httpsReq': { zh: 'HTTPS 请求', en: 'HTTPS Req' },
   'pt.httpsResp': { zh: 'HTTPS 响应', en: 'HTTPS Res' },
+  'pt.wsReq': { zh: 'WebSocket 请求', en: 'WebSocket Req' },
+  'pt.wsResp': { zh: 'WebSocket 响应', en: 'WebSocket Res' },
 
   // ── 代理模式：数据列表 ──────────────────────────────
   //与 WinForms 的 cID.HeaderText / cPacketSocket.HeaderText 一致
@@ -741,7 +727,6 @@ export const DICT = {
   'snd.disableAll': { zh: '全部禁用', en: 'Disable all' },
   'snd.start': { zh: '开始发送', en: 'Start' },
   'snd.stop': { zh: '停止', en: 'Stop' },
-  'snd.running': { zh: '发送中', en: 'Sending' },
   'snd.runHint': {
     zh: '按列表顺序执行已启用的发送；执行方式（依次 / 同时）在系统设置里。',
     en: 'Runs the enabled sends in list order. Sequential or simultaneous is set in System Settings.',
@@ -835,7 +820,6 @@ export const DICT = {
   'inject.dropped': { zh: '丢弃', en: 'Dropped' },
   'inject.startHook': { zh: '开始拦截', en: 'Start Hook' },
   'inject.stopHook': { zh: '停止拦截', en: 'Stop Hook' },
-  'inject.hookSetting': { zh: '拦截设置', en: 'Hook Settings' },
   'inject.clear': { zh: '清空', en: 'Clear' },
   'inject.detach': { zh: '断开', en: 'Detach' },
 

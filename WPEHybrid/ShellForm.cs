@@ -1013,17 +1013,6 @@ namespace WPEHybrid
                 }
             });
 
-            //连通性自测：C# 反过来问前端一个确认框，把答案回给前端
-            //这是本批次的关键验证 —— IUiHost 的 96 处弹窗全走这条路
-            this.bridge.Register("selfTestConfirm", async args =>
-            {
-                bool ok = await UI.Confirm(
-                    UI.T("SelfTest", "连通性自测"),
-                    UI.T("SelfTestContent", "这个确认框是 C# 发起、前端渲染的。点「确定」验证回路。"));
-
-                return new { answered = ok };
-            });
-
             //运行状态：前端用来显示队列积压、列表长度
             this.bridge.Register("getStats", args => new
             {
@@ -3493,11 +3482,6 @@ namespace WPEHybrid
                     Operate.DoLog("saveLogSetting", ex);
                     return new { ok = false, error = ex.Message };
                 }
-            });
-
-            this.bridge.Register("getLogCount", args => new
-            {
-                count = Operate.LogConfig.List.GetLogCount(args["kind"] == null ? 0 : (int)args["kind"]),
             });
 
             this.bridge.Register("clearLogs", async args => new

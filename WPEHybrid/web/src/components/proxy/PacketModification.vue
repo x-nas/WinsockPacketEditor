@@ -286,8 +286,8 @@ function close(): void { emit('close') }
 }
 
 .hx-segb + .hx-segb { border-left: 1px solid var(--border); }
-.hx-segb.after { color: #5aa080; }
-.hx-segb.before { color: #5b93a6; }
+.hx-segb.after { color: var(--green-soft); }
+.hx-segb.before { color: var(--cyan-soft2); }
 .hx-segb.after.on { color: var(--green); background: rgb(var(--green-rgb) / 12%); }
 .hx-segb.before.on { color: var(--cyan); background: rgb(var(--cyan-rgb) / 12%); }
 
