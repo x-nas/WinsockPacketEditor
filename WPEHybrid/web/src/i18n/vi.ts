@@ -240,8 +240,6 @@ export const vi: Record<Key, string> = {
   'set.resetColor': 'Khôi phục',
   'set.grp.cols': 'Cột hiển thị',
   'set.colsHint': 'Số thứ tự / Thời gian / Tên miền / Dữ liệu luôn hiển thị —— số thứ tự là khóa để lấy byte, ba cột kia chính là ý nghĩa của bảng này.',
-  'set.grp.autoClear': 'Tự xóa',
-  'set.autoClearOn': 'Bỏ dòng cũ nhất khi vượt ngưỡng',
   'set.keepRows': 'Số dòng giữ lại',
   'set.keepRowsHint': '100 – 500000. Vượt ngưỡng chỉ giữ lại bấy nhiêu dòng mới nhất',
   'set.leach.lead': 'Quyết định gói tin nào vào danh sách —— khác với bộ lọc, ở đây chỉ nhận hay bỏ, không sửa nội dung.',

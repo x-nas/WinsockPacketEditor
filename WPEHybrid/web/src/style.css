@@ -887,15 +887,34 @@ body.col-resizing * {
 .gtool .chk.on i::after { content: ""; position: absolute; inset: 2px; background: var(--green); }
 .gtool .chk:focus-visible { outline-offset: 2px; }
 
+/*
+  自动清理的条数框（代理数据页 / 注入数据页共用）。
+
+  2026-09-07 之前它是个<b>只读按钮</b>，点了跳去「列表设置」弹窗；
+  现在设置就在这儿，它成了真的 <input>。
+
+  宽度按最大值 500000（6 位）定死 —— 跟着内容伸缩的话，
+  从 5000 改成 20000 时它右边的东西会整体挪一下。
+
+  ⚠️ 数字输入框的上下小箭头（spin button）在这套皮肤里是系统画的浅色控件，
+  与旁边的自绘件对不上，所以两种前缀都关掉。
+*/
 .gtool .num {
-  padding: 3px 9px;
-  cursor: pointer;
+  width: 64px;
+  padding: 3px 6px;
   background: rgb(var(--inset-rgb) / 30%);
   border: 1px solid var(--border);
-  color: var(--muted);
+  color: var(--gray);
   font-family: var(--mono);
   font-size: 11px;
+  text-align: right;
 }
+
+.gtool .num:focus { outline: none; border-color: var(--cyan); }
+.gtool .num:disabled { opacity: .45; cursor: not-allowed; }
+.gtool .num.bad { border-color: var(--danger); color: var(--danger); }
+.gtool .num::-webkit-outer-spin-button,
+.gtool .num::-webkit-inner-spin-button { appearance: none; margin: 0; }
 
 .gtool .tb {
   padding: 8px 10px 6px;   /* 上 +1 下 -1：字形在 em 框里偏上 1px（上伸 9 / 下伸 3，实测），补回来 */

@@ -240,8 +240,6 @@ export const ja: Record<Key, string> = {
   'set.resetColor': '既定に戻す',
   'set.grp.cols': '表示する列',
   'set.colsHint': '番号 / 時刻 / ドメイン / データは常に表示されます —— 番号はバイト取得の鍵、残り 3 つはこの表そのものの意味です。',
-  'set.grp.autoClear': '自動クリア',
-  'set.autoClearOn': '上限を超えたら古いものから破棄',
   'set.keepRows': '保持する件数',
   'set.keepRowsHint': '100 ～ 500000。超えると最新のこの件数だけを保持します',
   'set.leach.lead': 'どのパケットを一覧に入れるかを決めます ——「フィルター」とは違い、ここは受け取るかどうかだけを扱い、内容は変えません。',

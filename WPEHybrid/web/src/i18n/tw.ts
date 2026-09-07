@@ -241,8 +241,6 @@ export const tw: Record<Key, string> = {
   'set.resetColor': '還原',
   'set.grp.cols': '顯示哪些列',
   'set.colsHint': '序號 / 時間 / 域名 / 資料始終顯示 —— 序號是取位元組的鑰匙，另外三個是這張表的意義所在。',
-  'set.grp.autoClear': '自動清理',
-  'set.autoClearOn': '超出後丟棄最舊的',
   'set.keepRows': '保留條數',
   'set.keepRowsHint': '100 ~ 500000。超出後只保留最新的這麼多條',
   'set.leach.lead': '決定哪些封包進入列表 —— 與「濾鏡」不同，這裡只管收不收，不改內容。',

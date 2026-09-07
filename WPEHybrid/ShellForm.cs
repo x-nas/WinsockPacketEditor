@@ -1028,8 +1028,6 @@ namespace WPEHybrid
                 queue = Operate.ProxyConfig.Queue.qProxyInfo.Count,
                 list = Operate.ProxyConfig.List.lstProxyInfo.Count,
                 total = Operate.PacketConfig.Packet.TotalPackets,
-                autoClear = Operate.PacketConfig.List.AutoClear,
-                autoClearValue = (int)Operate.PacketConfig.List.AutoClear_Value,
                 //启停逻辑已搬进 Operate，这里直接问它要状态（原先是反射读 SuperSocket 的 ServerState）
                 proxyRunning = Operate.ProxyConfig.Proxy.IsRunning,
 
@@ -1425,9 +1423,6 @@ namespace WPEHybrid
                 */
                 totalSend = Operate.PacketConfig.Packet.Total_SendBytes,
                 totalRecv = Operate.PacketConfig.Packet.Total_RecvBytes,
-
-                autoClear = Operate.PacketConfig.List.AutoClear,
-                autoClearValue = (int)Operate.PacketConfig.List.AutoClear_Value,
             });
 
             #endregion
@@ -1736,6 +1731,57 @@ namespace WPEHybrid
                 autoClearValue = (int)Operate.PacketConfig.List.AutoClear_Value,
             });
 
+            /*
+                封包 / 代理列表的自动清理。
+
+                ⚠️ <b>2026-09-07 从「列表设置」弹窗搬到了数据页的工具条上</b>，理由是
+                「设置摆在哪儿，就代表它管哪张表」—— 日志那份一直在日志页的工具条上，
+                而这一份藏在弹窗里，两个长得一样的「自动清理」谁都会以为是同一个。
+                搬完之后「列表设置」回到只管列显隐，与 WinForms 那边一致。
+
+                <b>它本来就只有一套</b>（PacketConfig.List.AutoClear，Operate.cs 的
+                ProxyConfig.List.FlushToFeed 里注明「代理列表沿用封包列表的 AutoClear 配置」），
+                所以<b>不按模式分流</b> —— 与列显隐那一对相反，别顺手给它加 mode。
+
+                稀疏报文（字段出现才改），与 saveLogSetting / setAppearance 同一条协议：
+                勾选框点一下就存、条数框失焦或回车才存。一律发全量的话，
+                点开关会把用户正在编辑的半截数字也写进去。
+
+                初值不用单独取：两个数据页挂载时本来就调了 getListSetting，那里带着这两项。
+            */
+            this.bridge.Register("saveListAutoClear", args =>
+            {
+                try
+                {
+                    if (args["autoClear"] != null)
+                    {
+                        Operate.PacketConfig.List.AutoClear = (bool)args["autoClear"];
+                    }
+
+                    if (args["autoClearValue"] != null)
+                    {
+                        int keep = (int)args["autoClearValue"];
+
+                        if (keep < 100 || keep > 500000)
+                        {
+                            return new { ok = false, error = UI.T("ListSettingsForm.Range", "保留条数需在 100 ~ 500000 之间") };
+                        }
+
+                        Operate.PacketConfig.List.AutoClear_Value = keep;
+                    }
+
+                    //这两项在 InjectMode 表里（代理列表沿用同一份，所以不写 ProxyMode 表）
+                    Operate.SystemConfig.SaveInjectMode_ToDB();
+
+                    return new { ok = true };
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog("saveListAutoClear", ex);
+                    return new { ok = false, error = ex.Message };
+                }
+            });
+
             this.bridge.Register("saveListSetting", args =>
             {
                 bool Flag(string name)
@@ -1767,19 +1813,9 @@ namespace WPEHybrid
                         Operate.ProxyConfig.List.IsShow_PacketLen = Flag("showLen");
                     }
 
-                    int keep = args["autoClearValue"] == null ? 5000 : (int)args["autoClearValue"];
-
-                    if (keep < 100 || keep > 500000)
-                    {
-                        return new { ok = false, error = UI.T("ListSettingsForm.Range", "保留条数需在 100 ~ 500000 之间") };
-                    }
-
-                    Operate.PacketConfig.List.AutoClear = Flag("autoClear");
-                    Operate.PacketConfig.List.AutoClear_Value = keep;
-
                     /*
-                        两张表都要落：代理的列显隐在 ProxyMode 表、注入的列显隐与自动清理
-                        都在 InjectMode 表。不分模式一律两个都存 —— 它们各自是整表重写，
+                        两张表都要落：代理的列显隐在 ProxyMode 表、注入的在 InjectMode 表。
+                        不分模式一律两个都存 —— 它们各自是整表重写，
                         只存一个反而要判断另一个有没有被别处改过，得不偿失。
                     */
                     Operate.SystemConfig.SaveProxyMode_ToDB();

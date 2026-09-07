@@ -41,6 +41,14 @@ const COLS: Array<{ key: keyof typeof form.value; label: Key }> = [
   { key: 'showLen', label: 'col.len' },
 ]
 
+/*
+  ⚠️ <b>这一屏只管列显隐了</b>（2026-09-07）。
+
+  自动清理搬去了数据页的工具条 —— 「设置摆在哪儿就代表它管哪张表」：
+  日志那份一直在日志页的工具条上，而这一份原先藏在弹窗里，
+  两个长得一模一样的「自动清理」谁都会以为是同一个（真被问过）。
+  搬完之后这一屏与 WinForms 的「列表设置」一致，那边本来也只管列显隐。
+*/
 const form = ref({
   showSocket: true,
   showType: true,
@@ -49,8 +57,6 @@ const form = ref({
   showServerAddr: true,
   showServerLoc: true,
   showLen: true,
-  autoClear: true,
-  autoClearValue: 5000,
 })
 
 watch(() => props.open, async (on) => {
@@ -58,7 +64,14 @@ watch(() => props.open, async (on) => {
 
   error.value = ''
   try {
-    form.value = await call<typeof form.value>('getListSetting', { mode: props.mode })
+    /*
+      ⚠️ <b>只挑这七列，别把整个应答直接赋给 form</b>。
+      getListSetting 仍然带着 autoClear / autoClearValue（数据页的工具条要拿初值），
+      整个赋过来的话它们会混进 form，保存时又被原样推回共享状态，
+      在这一屏留下两个没人显示、却会被写回去的字段。
+    */
+    const s = await call<any>('getListSetting', { mode: props.mode })
+    for (const c of COLS) form.value[c.key] = !!s?.[c.key]
   } catch (e) {
     console.error('[set] 读取列表设置失败', e)
   }
@@ -69,19 +82,19 @@ async function save(): Promise<void> {
   error.value = ''
 
   try {
-    const r = await call<any>('saveListSetting', {
-      ...form.value,
-      mode: props.mode,
-      autoClearValue: Number(form.value.autoClearValue),
-    })
+    const r = await call<any>('saveListSetting', { ...form.value, mode: props.mode })
 
     if (!r?.ok) {
       error.value = r?.error || ''
       return
     }
 
-    //列表要立刻按新的列显隐重画，所以把结果写进共享状态
-    listSetting.value = { ...form.value, autoClearValue: Number(form.value.autoClearValue) }
+    /*
+      列表要立刻按新的列显隐重画，所以把结果写进共享状态。
+      ⚠️ 是<b>合并</b>不是整体替换 —— 那份状态里还有自动清理两项（工具条在用），
+      整体替换会把它们抹成 undefined，工具条的勾选框当场变成未勾。
+    */
+    listSetting.value = { ...(listSetting.value as any), ...form.value }
     emit('update:open', false)
   } catch (e) {
     console.error('[set] 保存列表设置失败', e)
@@ -116,25 +129,6 @@ async function save(): Promise<void> {
       ><i />{{ t(c.label) }}</button>
     </div>
 
-    <div class="grp">{{ t('set.grp.autoClear') }}</div>
-
-    <div class="row">
-      <div class="k">{{ t('proxy.autoClear') }}</div>
-      <div class="v">
-        <button class="chk" :class="{ on: form.autoClear }" @click="form.autoClear = !form.autoClear">
-          <i />{{ t('set.autoClearOn') }}
-        </button>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="k">{{ t('set.keepRows') }}</div>
-      <div class="v">
-        <input v-model.number="form.autoClearValue" class="inp num" type="number"
-               min="100" max="500000" :disabled="!form.autoClear">
-        <span class="tip">{{ t('set.keepRowsHint') }}</span>
-      </div>
-    </div>
     </div>
   </SettingsModal>
 </template>

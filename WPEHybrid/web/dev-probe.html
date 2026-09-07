@@ -103,6 +103,7 @@
     clearLogs: async (a) => { const ok = await window.__ask('confirm', { title: '日志列表', content: '确定删除所有数据吗', icon: 3 }); if (ok) ls.forEach((cb) => cb({ data: { type: 'event', name: 'feed:clear', data: { list: 2 + (a.kind || 0) } } })); return { ok } },
     exportLogs: () => { window.__exported = true; return { ok: true } },
     getLogSetting: () => ({ autoClear: true, autoClearValue: 5000 }),
+    saveListAutoClear: () => ({ ok: true }),
     saveLogSetting: () => ({ ok: true }),
     filterListAction: (a) => { window.__acted = a; return { ok: true } },
     sendListAction: (a) => { window.__acted = a; return { ok: true } },

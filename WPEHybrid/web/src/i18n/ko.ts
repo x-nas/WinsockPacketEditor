@@ -240,8 +240,6 @@ export const ko: Record<Key, string> = {
   'set.resetColor': '기본값으로',
   'set.grp.cols': '표시할 열',
   'set.colsHint': '번호 / 시각 / 도메인 / 데이터는 항상 표시됩니다 —— 번호는 바이트를 가져오는 열쇠이고, 나머지 셋은 이 표의 존재 이유입니다.',
-  'set.grp.autoClear': '자동 정리',
-  'set.autoClearOn': '한도를 넘으면 오래된 것부터 삭제',
   'set.keepRows': '보관 행 수',
   'set.keepRowsHint': '100 ~ 500000. 초과하면 최신 항목만 이만큼 보관합니다',
   'set.leach.lead': '어떤 패킷을 목록에 넣을지 정합니다 —— 「필터」와 달리 여기서는 받을지 말지만 정하고 내용은 바꾸지 않습니다.',

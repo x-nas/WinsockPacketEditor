@@ -64,7 +64,6 @@ interface InjectStats {
   wsaSend: number; wsaSendTo: number; wsaRecv: number; wsaRecvFrom: number
   filterExecute: number; filterPacket: number
   totalSend: number; totalRecv: number
-  autoClear: boolean; autoClearValue: number
 }
 
 const stats = ref<InjectStats | null>(null)
@@ -74,8 +73,54 @@ let statsTimer = 0
   「自动清理」在工具条上<b>只读显示</b>，点它跳到列表设置去改 ——
   与代理数据页同一条口径：两处都能改反而要同步。
 */
-const autoClear = computed(() => stats.value?.autoClear ?? true)
-const clearAt = computed(() => stats.value?.autoClearValue ?? 5000)
+/*
+  自动清理 —— 2026-09-07 从「列表设置」弹窗搬到这条工具条上。
+
+  「设置摆在哪儿，就代表它管哪张表」：日志那份一直在日志页的工具条上，
+  而这一份原先藏在弹窗里，两个长得一模一样的「自动清理」谁都会以为是同一个。
+  在这儿它紧挨着它真正会裁的那张表。
+
+  ⚠️ <b>封包列表与代理列表共用这一份配置</b>（PacketConfig.List.AutoClear，
+  InjectMode 表），所以桥方法 saveListAutoClear <b>不带 mode</b> ——
+  与列显隐那一对相反，别顺手给它加。
+
+  ⚠️ 初值走 getListSetting（挂载时本来就调了），<b>不再从 500ms 的统计轮询里拿</b>：
+  轮询会在用户正在输入时把条数框冲掉，而且那两个字段本来就是白搭在热路径上的。
+
+  开关与条数各自单发（桥那边是「字段出现才改」）：勾选框点一下就存，
+  条数框失焦或按 Enter 才存 —— 一起发的话，点开关会把正在编辑的半截数字也写进去。
+*/
+const autoClear = ref(true)
+const clearAt = ref(5000)
+const keepInput = ref('5000')
+const keepBad = ref(false)
+
+async function toggleAutoClear(): Promise<void> {
+  autoClear.value = !autoClear.value
+  try { await call('saveListAutoClear', { autoClear: autoClear.value }) } catch { /* 存不上不影响本次会话 */ }
+}
+
+/** 条数：范围校验在 C# 侧（100~500000），这里只负责别把空串发过去。 */
+async function commitKeep(): Promise<void> {
+  const n = Number(keepInput.value)
+
+  if (!Number.isFinite(n) || n < 100 || n > 500000) {
+    keepBad.value = true
+    return
+  }
+
+  keepBad.value = false
+
+  if (n === clearAt.value) return
+
+  try {
+    const r = await call<{ ok: boolean }>('saveListAutoClear', { autoClearValue: n })
+    if (r?.ok) clearAt.value = n
+    else keepBad.value = true
+  } catch {
+    keepBad.value = true
+  }
+}
 
 function n(v: number | undefined): string {
   return (v ?? 0).toLocaleString()
@@ -164,10 +209,16 @@ onMounted(async () => {
   }
 
   //列显隐要在第一帧之前拿到，否则列表先按「全显示」画一遍再跳
-  if (!listSetting.value) {
-    //注入模式读注入那一套列显隐（C# 侧是 PacketConfig.List.IsShow_*）
-    try { listSetting.value = await call('getListSetting', { mode: 'inject' }) } catch { /* 桥没接上 */ }
-  }
+  //注入模式读注入那一套列显隐（C# 侧是 PacketConfig.List.IsShow_*）
+  try {
+    const s = await call<any>('getListSetting', { mode: 'inject' })
+    if (!listSetting.value) listSetting.value = s
+
+    //自动清理的初值搭同一趟车。它<b>不分模式</b>，两种模式是同一份配置
+    autoClear.value = !!s?.autoClear
+    clearAt.value = Number(s?.autoClearValue) || 5000
+    keepInput.value = String(clearAt.value)
+  } catch { /* 桥没接上 */ }
 
   statsTimer = window.setInterval(async () => {
     try { stats.value = await call<InjectStats>('getInjectStats') } catch { /* 窗口关闭中 */ }
@@ -522,11 +573,26 @@ defineExpose({ onCleared })
         </button>
 
         <button class="chk" :class="{ on: follow }" @click="follow = !follow"><i />{{ t('proxy.autoRoll') }}</button>
-        <!-- 只读显示；改在「设置 ▾ → 列表设置」里，点一下直接跳过去 -->
-        <button class="chk" :class="{ on: autoClear }" :title="t('set.list')" @click="emit('openSetting', 'list')">
+        <!--
+          自动清理 —— 就摆在它管的那张表上面（见 script 里的说明）。
+          与日志页工具条上那个是<b>两份配置</b>，所以文案也分开：
+          这儿是「自动清理」，那儿是「日志自动清理」。
+        -->
+        <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear">
           <i />{{ t('proxy.autoClear') }}
         </button>
-        <button class="num" :title="t('set.list')" @click="emit('openSetting', 'list')">{{ clearAt.toLocaleString() }}</button>
+        <input
+          v-model="keepInput"
+          class="num"
+          :class="{ bad: keepBad }"
+          type="number"
+          min="100"
+          max="500000"
+          :disabled="!autoClear"
+          :title="t('set.keepRowsHint')"
+          @blur="commitKeep"
+          @keydown.enter="commitKeep"
+        >
       </div>
 
       <PacketList

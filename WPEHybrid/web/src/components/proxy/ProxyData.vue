@@ -70,8 +70,57 @@ async function reloadPrefs(): Promise<void> {
 }
 
 const autoRoll = ref(true)
+
+/*
+  自动清理 —— 2026-09-07 从「列表设置」弹窗搬到这条工具条上。
+
+  「设置摆在哪儿，就代表它管哪张表」：日志那份一直在日志页的工具条上，
+  而这一份原先藏在弹窗里，两个长得一模一样的「自动清理」谁都会以为是同一个。
+  在这儿它紧挨着它真正会裁的那张表。
+
+  ⚠️ <b>封包列表与代理列表共用这一份配置</b>（PacketConfig.List.AutoClear，
+  InjectMode 表），所以桥方法 saveListAutoClear <b>不带 mode</b> ——
+  与列显隐那一对相反，别顺手给它加。
+
+  ⚠️ 初值走 getListSetting（挂载时本来就调了），<b>不再从 500ms 的 getStats 里拿</b>：
+  轮询会在用户正在输入时把条数框冲掉，而且那两个字段本来就是白搭在热路径上的。
+
+  开关与条数各自单发（桥那边是「字段出现才改」）：勾选框点一下就存，
+  条数框失焦或按 Enter 才存 —— 一起发的话，点开关会把正在编辑的半截数字也写进去。
+*/
 const autoClear = ref(true)
 const clearAt = ref(5000)
+const keepInput = ref('5000')
+const keepBad = ref(false)
+
+
+
+async function toggleAutoClear(): Promise<void> {
+  autoClear.value = !autoClear.value
+  try { await call('saveListAutoClear', { autoClear: autoClear.value }) } catch { /* 存不上不影响本次会话 */ }
+}
+
+/** 条数：范围校验在 C# 侧（100~500000），这里只负责别把空串发过去。 */
+async function commitKeep(): Promise<void> {
+  const n = Number(keepInput.value)
+
+  if (!Number.isFinite(n) || n < 100 || n > 500000) {
+    keepBad.value = true
+    return
+  }
+
+  keepBad.value = false
+
+  if (n === clearAt.value) return
+
+  try {
+    const r = await call<{ ok: boolean }>('saveListAutoClear', { autoClearValue: n })
+    if (r?.ok) clearAt.value = n
+    else keepBad.value = true
+  } catch {
+    keepBad.value = true
+  }
+}
 
 // ▼▼▼ Dev：发布前整块删掉 ▼▼▼
 const listsOpen = ref(false)
@@ -96,7 +145,13 @@ onMounted(async () => {
 
   //列显隐要在第一帧之前拿到，否则列表先按「全显示」画一遍再跳
   try {
-    listSetting.value = await call('getListSetting')
+    const s = await call<any>('getListSetting')
+    listSetting.value = s
+
+    //自动清理的初值搭同一趟车，不另开一条桥
+    autoClear.value = !!s?.autoClear
+    clearAt.value = Number(s?.autoClearValue) || 5000
+    keepInput.value = String(clearAt.value)
   } catch (e) {
     console.error('[proxy] 取列表设置失败', e)
   }
@@ -107,8 +162,6 @@ onMounted(async () => {
       const s = await call<Stats>('getStats')
       stats.value = s
       proxyRunning.value = !!(s as any).proxyRunning
-      autoClear.value = !!(s as any).autoClear
-      clearAt.value = (s as any).autoClearValue || clearAt.value
     } catch {
       /* 窗口关闭中，忽略 */
     }
@@ -694,11 +747,26 @@ async function runAccept(): Promise<void> {
         </button>
 
         <button class="chk" :class="{ on: autoRoll }" @click="autoRoll = !autoRoll"><i />{{ t('proxy.autoRoll') }}</button>
-        <!-- 只读显示；改在「设置 ▾ → 列表设置」里，点一下直接跳过去 -->
-        <button class="chk" :class="{ on: autoClear }" :title="t('set.list')" @click="setting = 'list'">
+        <!--
+          自动清理 —— 就摆在它管的那张表上面（见 script 里的说明）。
+          与日志页工具条上那个是<b>两份配置</b>，所以文案也分开：
+          这儿是「自动清理」，那儿是「日志自动清理」。
+        -->
+        <button class="chk" :class="{ on: autoClear }" @click="toggleAutoClear">
           <i />{{ t('proxy.autoClear') }}
         </button>
-        <button class="num" :title="t('set.list')" @click="setting = 'list'">{{ clearAt.toLocaleString() }}</button>
+        <input
+          v-model="keepInput"
+          class="num"
+          :class="{ bad: keepBad }"
+          type="number"
+          min="100"
+          max="500000"
+          :disabled="!autoClear"
+          :title="t('set.keepRowsHint')"
+          @blur="commitKeep"
+          @keydown.enter="commitKeep"
+        >
 
         <!-- ▼▼▼ Dev：发布前整条删掉 ▼▼▼ -->
         <!--

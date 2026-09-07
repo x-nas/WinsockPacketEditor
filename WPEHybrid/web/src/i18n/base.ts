@@ -361,10 +361,8 @@ export const DICT = {
     zh: '序号 / 时间 / 域名 / 数据始终显示 —— 序号是取字节的钥匙，另外三个是这张表的意义所在。',
     en: 'No., Time, Domain and Data are always shown — No. is the key used to fetch bytes, the other three are what the table is for.',
   },
-  'set.grp.autoClear': { zh: '自动清理', en: 'Auto Clear' },
-  //⚠️ 2026-09-07 起是环形（保留最近 N 条），别再写「整表清空」—— 那次改了行为、漏改了这两条文案
-  'set.autoClearOn': { zh: '超出后丢掉最旧的', en: 'Drop the oldest rows when exceeded' },
   'set.keepRows': { zh: '保留条数', en: 'Keep rows' },
+  //⚠️ 现在是数据页工具条上那个条数框的 title（自动清理已从「列表设置」搬走）
   'set.keepRowsHint': { zh: '100 ~ 500000。超出后只保留最新的这么多条', en: '100–500000. Only the newest rows are kept past that' },
 
   // 过滤设置
